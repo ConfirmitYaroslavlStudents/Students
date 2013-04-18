@@ -1,61 +1,64 @@
-//0. remove random start position from rotate
-//   rotate in both diretions
-//1. create randomize function
-//2. create object with rotate and randomize funcs ( use closure)
-//3. chain calls myObj('css selector').randomize().rotate();
-//4. rename file
-//5. global newIndex
+
 //6. read articles
 
 
+// 1. no div #list, use existing parents
+// 2. declare private var - selected nodes list
+// 3. 
 YUI().use('node', function (Y) {
 
     function transformer(cssSelector) {
+        var result = {};
 
-        this.rotate = function (direction) {
-            var nodelist = Y.all(cssSelector);
+        result.rotateLeft = function () {
+            var nodelist = Y.all(cssSelector),
+                firstNode = nodelist.item(0);
 
-            if (direction == undefined)
-                direction = 1;
+            for (i = 0; i < nodelist.size()-1 ; i++) {
+                var previousNode = Y.all(cssSelector).item(i);
+                previousNode.replace(Y.all(cssSelector).item(i + 1).cloneNode(true));
+            }
 
-            Y.all(cssSelector).remove();
-
-            for (var i = 0; i < nodelist.size() ; i++) {
-                var newIndex = ((i + nodelist.size() + direction) % nodelist.size());
-                Y.one('#list').appendChild(nodelist.item(newIndex));
-            };
+            Y.all(cssSelector).item(nodelist.size() - 1).replace(firstNode);
 
             return this;
         };
 
-        this.randomize = function () {
+        result.rotateRight = function () {
             var nodelist = Y.all(cssSelector),
-                nodeArray = [];
+                lastNode = nodelist.item(nodelist.size() - 1);
 
-            for (var i = 0; i < nodelist.size() ; i++) {
-                var currentList = Y.all(cssSelector);
-                var random = Math.floor((Math.random() * (currentList.size() - 1)));
-                var node = currentList.item(random);
-                nodeArray.push(node);
-                node.remove();
+            for (i = nodelist.size()-1; i > 0; i--) {
+                var previousNode = Y.all(cssSelector).item(i);
+
+                previousNode.replace(Y.all(cssSelector).item(i-1).cloneNode(true));
             }
-            for (var i = 0; i < nodeArray.length; i++)
-                Y.one('#list').appendChild(nodeArray[i]);
-        }
 
-    }
+            Y.all(cssSelector).item(0).replace(lastNode);
 
-    Y.one('#btRotateRight').on('click', function () {
-        new transformer('a').rotate(-1);
-    });
-
-    Y.one('#btRotateLeft').on('click', function () {
-        new transformer('a').rotate(1);
-    });
+            return result;
+        };
 
 
-    Y.one('#btRandomize').on('click', function () {
-        new transformer('a').rotate().randomize();
-    });
+        result.randomize = function () {
+            var nodelist = Y.all(cssSelector);
 
+            for (i = 0; i < nodelist.size() ; i++) {
+                var random = Math.floor((Math.random() * (nodelist.size() - 1))),
+                    node = Y.all(cssSelector).item(i),
+                    randomNode = Y.all(cssSelector).item(random);
+
+                if (i == random)
+                    continue;
+                
+                node.replace(Y.all(cssSelector).item(random).cloneNode(true));
+                randomNode.replace(node);
+            }
+
+            return result;
+        };
+
+        return result;
+    };
+    window.transformer=transformer;
 });

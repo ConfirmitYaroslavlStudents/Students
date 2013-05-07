@@ -1,105 +1,104 @@
 //6. read articles
 
-// 
-// 1. transformer undefind in page;
-// 2. Recalculation nodelist;
-// 3. do not use cloneNode;
-// 4. read about xml;
+// 0. Onclick going to call the constructor and creation new object.
+// 1. Call function check and checkOfSend with the same object.
+// 2. Operation "check" one, but it use two methods;
+
+// preventDefault in native js.
+// form.onsubmit = function () { return false } ???
+
+// fiddler: construct post request to ya.ru;
 
 function transformer(cssSelector) {
     var result = {};
 
     YUI().use('node', function (Y) {
-
-        var nodelist = Y.all(cssSelector);
+        var nodelist = Y.all(cssSelector),
+            nodelistSize = nodelist.size(),
+            temp = Y.Node.create('temp');
 
         function replaceNodes(node1, node2) {
             if (node1 == node2)
                 return;
-
-            var temp = Y.Node.create('temp');
 
             node1.replace(temp);
             node2.replace(node1);
             temp.replace(node2);
         }
 
-        result.rotateLeft = function () {
-            for (var i = 0; i < nodelist.size() - 1 ; i++)
-                replaceNodes(Y.all(cssSelector).item(i), Y.all(cssSelector).item(i + 1));
+        result.rotateRight = function () {
+            for (var i = 0; i < nodelistSize - 1 ; i++)
+                replaceNodes(nodelist.item(i), nodelist.item(i + 1));
 
             return result;
         };
 
-        result.rotateRight = function () {
-            for (var i = nodelist.size() - 1; i > 0; i--)
-                replaceNodes(Y.all(cssSelector).item(i), Y.all(cssSelector).item(i - 1));
+        result.rotateLeft = function () {
+            for (var i = nodelistSize - 1; i > 0; i--)
+                replaceNodes(nodelist.item(i), nodelist.item(i - 1));
 
             return result;
         };
 
 
         result.randomize = function () {
-            for (var i = 0; i < nodelist.size() - 1; i++) {
-                var random = Math.floor((Math.random() * (nodelist.size() - 1)));
+            for (var i = 0; i < nodelistSize - 1; i++) {
+                var random = Math.floor((Math.random() * (nodelistSize - 1)));
 
-                replaceNodes(Y.all(cssSelector).item(i), Y.all(cssSelector).item(random));
+                replaceNodes(nodelist.item(i), nodelist.item(random));
             }
 
             return result;
         };
 
+
+        var currentCheckedListCount = 0;
+
         result.check = function (config) {
-            var counter = 0,
-                value;
 
-            if (config.type == 'equal')
-                value = config.count;
-            else
-                value = config.maxCount;
+            Y.all(cssSelector).on('click', function (e) {
 
-            for (var i = 0; i < nodelist.size() ; i++)
-                if (nodelist.item(i).get('checked') == true) {
-                    counter++;
+                var value;
 
-                    if (counter == value) {
-                        for (var j = 0; j < nodelist.size() ; j++) {
-                            if (nodelist.item(j).get('checked') !== true)
-                                nodelist.item(j).set('disabled', 'true');
-                        }
+                (config.type == 'equal') ? (value = config.count) : (value = config.maxCount);
+
+                if (e.target.get('checked') !== true)
+                    currentCheckedListCount--;
+                else
+                    currentCheckedListCount++;
+
+                if (currentCheckedListCount == value) {
+                    for (var i = 0; i < nodelistSize ; i++) {
+                        if (nodelist.item(i).get('checked') !== true)
+                            nodelist.item(i).set('disabled', 'true');
                     }
-                    else
-                        for (var p = 0; p < nodelist.size() ; p++)
-                            nodelist.item(p).set('disabled', false);
                 }
-        }
+                else
+                    for (var i = 0; i < nodelistSize ; i++)
+                        nodelist.item(i).set('disabled', false);
+            });
 
-        result.checkOfSend = function (e,config) {
-            var counter = 0;
+            Y.one('input[type=submit]').on('click', function (e) {
 
-            for (var i = 0; i < nodelist.size() ; i++) {
-                if (nodelist.item(i).get('checked') == true)
-                    counter++;
-            }
-            if (config.type == 'equal') {
-                if (config.count == counter) {
-                    alert('form is send!');
-                    return true;
+                if (config.type == 'equal') {
+                    if (config.count == currentCheckedListCount) {
+                        alert('form is send!');
+                        return true;
+                    }
+                    alert('You must check ' + config.count + ' fields');
                 }
-                alert('You must check ' + config.count + ' fields');
-                e.preventDefault();
-            }
-            else {
-                if (config.minCount <= counter && counter <= config.maxCount) {
-                    alert('form is send!');
-                    return true;
+                else {
+                    if (config.minCount <= currentCheckedListCount && currentCheckedListCount <= config.maxCount) {
+                        alert('form is send!');
+                        return true;
+                    }
+                    alert('You must check ' + config.minCount + ' to ' + config.maxCount + ' fields');
                 }
-                alert('You must check ' + config.minCount + ' to ' + config.maxCount + ' fields');
                 e.preventDefault();
-            }
+
+            });
 
         }
-
 
     });
 

@@ -38,32 +38,25 @@
         <script src="transformer.js"></script>
         <script>
             YUI().use('node', function (Y) {
+
+                var t = transformer('a');
                 Y.one('#btRotateRight').on('click', function () {
-                    transformer('a').rotateRight();
+                    t.rotateRight();
                 });
 
                 Y.one('#btRotateLeft').on('click', function () {
-                    transformer('a').rotateLeft();
+                    t.rotateLeft();
                 });
 
                 Y.one('#btRandomize').on('click', function () {
-                    transformer('a').randomize();
+                    t.randomize();
                 });
 
-                //Y.all('input[type=checkbox]').on('click', function () {
-                //    transformer('input[type=checkbox]').check({ type: "equal", count: 2 });
-                //});
-                Y.all('input[type=checkbox]').on('click', function () {
-                    transformer('input[type=checkbox]').check({ type: "interval", minCount: 2, maxCount: 4 });
-                    });
+                transformer('input[type=checkbox]').check({ type: "interval", minCount: 2, maxCount: 3 });
 
-                //Y.one('form').on('submit', function (e) {
-                //    transformer('input[type=checkbox]').checkOfSend(e,{ type: "equal", count: 2 });
-                //});
-                Y.one('form').on('submit', function (e) {
-                    transformer('input[type=checkbox]').checkOfSend(e,{ type: "interval", minCount: 2, maxCount:4 });
-                });
             });
+
+            
         </script>
     </body>
 </html>

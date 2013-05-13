@@ -1,3 +1,7 @@
+//1. Source graph destroed;
+//2. Class graph not adjustable;
+//3. Copy not work;
+
 YUI().use('node', function (Y) {
 
     var graph = Y.Node.create('<div>');
@@ -20,124 +24,141 @@ Array.prototype.remove = function (from, to) {
     return this.push.apply(this, rest);
 };
 
-var Graph = {
+function createGraph() {
 
-    V: [
-        {
-            id: 'A',
-        },
-        {
-            id: 'B',
-        },
-        {
-            id: 'C',
-        },
-        {
-            id: 'D',
-        },
-        {
-            id: 'E',
-        },
-        {
-            id: 'F',
-        },
-        {
-            id: 'G',
-        }
-    ],
+    var Graph = {
+        V: [],
+        E: [],
+        copyE: [],
 
-    E: [],
+        addVertex: function (id) {
+            this.V.push({
+                'id': id
+            });
+        },
 
-    
-    copy: function (vertex) {
-        var _self = this;
-        var tree = {
-            node: 'root',
-            children: [
-                {
-                    node: vertex,
-                    children: []
-                }]
-        };
+        addEdge: function (left, right) {
+            this.E.push({
+                'left': this.V[left],
+                'right': this.V[right]
+            })
+        },
 
-        search(tree);
-        
-        function search(treeNode) {
-            var childrenVertices = [];
-            treeNodeChildren = treeNode.children.slice();
-            while (treeNodeChildren.length > 0) {
-                lookUp(treeNodeChildren, childrenVertices);
-                treeNodeChildren = childrenVertices.slice();
-                childrenVertices = [];
+        copy: function (vertex) {
+            var _self = this;
+            var tree = {
+                node: 'root',
+                children: [
+                    {
+                        node: vertex,
+                        children: []
+                    }
+                ]
+            };
+
+            search(tree);
+
+            function copyingVertex(vertex) {
+                var copyVertex = {
+                    id: vertex.id
+                };
+                return copyVertex;
             }
-        };
 
-        function lookUp(treeNodeChildren, childrensVertices) {
-            if (treeNodeChildren.length > 0) {
-                var treeNode = treeNodeChildren.pop();
-                for (i = 0; i < _self.E.length; i++) {
-                    if (_self.E[i].left == treeNode.node) {
-                        var el = { node: _self.E[i].right, children: [] };
-                        childrensVertices.push(el);
-                        treeNode.children.push(el);
+            function makeEdgesCopy() {
+                _self.copyE = [];
 
-                        if (check(treeNode, treeNodeChildren)) {
-                            _self.E.remove(i);
-                            i--;
-                        }
-                        continue;
-                    }
-                    if (_self.E[i].right == treeNode.node) {
-                        var el = { node: _self.E[i].left, children: [] };
-                        childrensVertices.push(el);
-                        treeNode.children.push(el);
+                for (var i = 0; i < _self.E.length; i++)
+                    _self.copyE.push(copyingEdge(_self.E[i]));
+            }
 
-                        if (check(treeNode, treeNodeChildren)) {
-                            _self.E.remove(i);
-                            i--;
-                        }
-                        continue;
-                    }
+            function copyingEdge(edge) {
+                copyEdge = {
+                    right: edge.right,
+                    left: edge.left
                 }
-                lookUp(treeNodeChildren, childrensVertices);
-                alert(treeNode.node.id);
+                return copyEdge;
             }
-        };
 
-        function check(treeNode, treeNodes) {
-            for (var i = 0; i < treeNodes.length; i++) {
-                if (treeNode.node == treeNodes[i].node) return false;
+            function search(treeNode) {
+                var childrenVertices = [];
+                treeNodeChildren = treeNode.children.slice();
+
+                makeEdgesCopy();
+
+                while (treeNodeChildren.length > 0) {
+                    lookUp(treeNodeChildren, childrenVertices);
+                    treeNodeChildren = childrenVertices.slice();
+                    childrenVertices = [];
+                }
+            };
+
+            function lookUp(treeNodeChildren, childrensVertices) {
+
+                if (treeNodeChildren.length > 0) {
+                    var treeNode = treeNodeChildren.pop();
+                    for (i = 0; i < _self.copyE.length; i++) {
+                        if (_self.copyE[i].left.id == treeNode.node.id) {
+                            var el = { node: copyingVertex(_self.copyE[i].right), children: [] };
+                            childrensVertices.push(el);
+                            treeNode.children.push(el);
+
+                            if (check(treeNode, treeNodeChildren)) {
+                                _self.copyE.remove(i);
+                                i--;
+                            }
+                            continue;
+                        }
+                        if (_self.copyE[i].right.id == treeNode.node.id) {
+                            var el = { node: copyingVertex(_self.copyE[i].left), children: [] };
+                            childrensVertices.push(el);
+                            treeNode.children.push(el);
+
+                            if (check(treeNode, treeNodeChildren)) {
+                                _self.copyE.remove(i);
+                                i--;
+                            }
+                            continue;
+                        }
+                    }
+                    lookUp(treeNodeChildren, childrensVertices);
+                    alert(treeNode.node.id);
+                }
+            };
+
+            function check(treeNode, treeNodes) {
+                for (var i = 0; i < treeNodes.length; i++) {
+                    if (treeNode.node.id == treeNodes[i].node.id) return false;
+                }
+                return true;
+            };
+
+            return tree;
+
+        },
+
+
+        dump: function (treeNode, container) {
+            var output = document.getElementById(container);
+
+            print(treeNode, 0);
+
+            function print(treenode, deep) {
+                printTreeNode(treenode, deep);
+
+                for (var i = 0; i < treenode.children.length; i++) {
+                    print(treenode.children[i], deep + 1);
+                }
             }
-            return true;
-        };
+            function printTreeNode(treeNode, deep) {
+                var symbol = '&#8627;';
+                for (var i = 0; i < deep; i++)
+                    symbol += '-';
 
-        return tree;
+                output.innerHTML += symbol + treeNode.node.id + '<br/>';
+            }
+        }
+    }
 
-    },
-
-    addEdge: function (left, right) {
-        this.E.push({
-            'left': left,
-            'right': right
-        })
-    },
-    addVertex: function (id) {
-        this.V.push({
-            'id': id
-        });
-    },
-
-    init: function () {
-        this.addEdge(this.V[0], this.V[1]); // A--B
-        this.addEdge(this.V[0], this.V[2]); // A--C
-        this.addEdge(this.V[1], this.V[3]); // B--D
-        this.addEdge(this.V[2], this.V[3]); // C--D
-        this.addEdge(this.V[3], this.V[4]); // D--E
-        this.addEdge(this.V[3], this.V[5]); // D--F
-        this.addEdge(this.V[4], this.V[6]); // E--G
-        this.addEdge(this.V[5], this.V[6]); // F--G
-    },
-
+    return Graph;
 }
-
-Graph.init();

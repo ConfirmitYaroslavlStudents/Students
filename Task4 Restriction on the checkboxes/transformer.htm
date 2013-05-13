@@ -39,17 +39,17 @@
         <script>
             YUI().use('node', function (Y) {
 
-                var t = transformer('a');
+                var mixLinks = transformer('a');
                 Y.one('#btRotateRight').on('click', function () {
-                    t.rotateRight();
+                    mixLinks.rotateRight();
                 });
 
                 Y.one('#btRotateLeft').on('click', function () {
-                    t.rotateLeft();
+                    mixLinks.rotateLeft();
                 });
 
                 Y.one('#btRandomize').on('click', function () {
-                    t.randomize();
+                    mixLinks.randomize();
                 });
 
                 transformer('input[type=checkbox]').check({ type: "interval", minCount: 2, maxCount: 3 });

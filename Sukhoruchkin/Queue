@@ -1,0 +1,134 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+
+namespace MyQueue
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Queue<int> myQueue = new Queue<int>();
+            myQueue.Enqueue(123);
+            Console.WriteLine("Count="+ myQueue.Count);
+            myQueue.Enqueue(12);
+            Console.WriteLine("Count="+ myQueue.Count);
+            myQueue.Clear();
+            Console.WriteLine("Count="+ myQueue.Count);
+            myQueue.Enqueue(1);
+            Console.WriteLine("First="+ myQueue.Peek());
+            myQueue.Enqueue(2);
+            myQueue.Enqueue(3);
+            for (int i = 0; i < myQueue.Count; i++)
+            {
+                Console.WriteLine(myQueue.ToArray()[i]);
+            }
+            Console.ReadLine();
+        }
+    }
+    class Queue<T>
+    {
+        private int _count;
+        private Element<T> _first;
+        private Element<T> _now;
+        public int Count
+        { get { return _count; } }
+        public Queue()
+        {
+            this._count = 0;
+            this._first = new Element<T>();
+            this._now = null;
+        }
+        public void Enqueue(T item)
+        {
+            if (_count==0)
+            {
+                _first = new Element<T>(item, new Element<T>());
+                _now = _first;
+            }
+            else
+            {
+                Element<T> temp = new Element<T>(item, new Element<T>());
+                _now.Next = temp;
+                _now = temp;
+            }
+            _count++;
+        }
+        public T Dequeue()
+        {
+            if (_count == 0)
+            {
+                throw new InvalidOperationException("Queue empty.");
+            }
+            else
+            {
+                T temp = _first.Value;
+                if (_count == 1)
+                {
+                    _first = null;
+                }
+                else
+                {
+                    _first = _first.Next;
+                }
+                _count--;
+                return temp;
+            }
+        }
+        public void Clear()
+        {
+            _count = 0;
+            _first = null;
+            _now = null;
+        }
+        public T Peek()
+        {
+            if (_count == 0)
+            {
+                throw new InvalidOperationException("Queue empty.");
+            }
+            else
+            {
+                return _first.Value;
+            }
+        }
+        public T[] ToArray()
+        {
+            Element<T> temp = _first;
+            T[] tempArray = new T[_count];
+            int i = 0;
+            while (temp.Next != null)
+            {
+                tempArray[i] = temp.Value;
+                temp = temp.Next;
+                i++;
+            }
+            return tempArray;
+        }
+    }
+    public class Element<T>
+    {
+        private T _value;
+        private Element<T> _next;
+        public Element()
+        {
+            this._next = null;
+        }
+        public Element(T value, Element<T> next)
+        {
+            this._value = value;
+            this._next = next;
+        }
+        public T Value
+        {
+            get { return _value; }
+            set { _value = value; }
+        }
+        public Element<T> Next
+        {
+            get { return _next; }
+            set { _next = value; }
+        }
+    }
+}

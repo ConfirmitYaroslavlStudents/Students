@@ -1,0 +1,5 @@
+C:\Users\800379\Desktop\Работа\StackProject\StackProject\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\800379\Desktop\Работа\StackProject\StackProject\bin\Debug\StackProject.exe
+C:\Users\800379\Desktop\Работа\StackProject\StackProject\bin\Debug\StackProject.pdb
+C:\Users\800379\Desktop\Работа\StackProject\StackProject\obj\x86\Debug\StackProject.exe
+C:\Users\800379\Desktop\Работа\StackProject\StackProject\obj\x86\Debug\StackProject.pdb

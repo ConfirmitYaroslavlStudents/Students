@@ -7,27 +7,27 @@ namespace StackProject
 {
     public class StackElement<T>
     {
-        public StackElement<T> Previous;
-        public T Value { get; set; }
-        public StackElement(T Value, StackElement<T> Previous)
+        public StackElement<T> Previous { get; private set; }
+        public T Value { get; private set; }
+        public StackElement(T value, StackElement<T> previous)
         {
-            this.Value = Value;
-            this.Previous = Previous;
+            this.Value = value;
+            this.Previous = previous;
         }
     }
-    public class MyStack<T>
+    public class Stack<T>
     {
         public int Length { get; private set; }
-        public StackElement<T> Current;
-        public MyStack()
+        private StackElement<T> _peek;
+        public Stack()
         {
             this.Length = 0;
-            this.Current = null;
+            this._peek = null;
         }
         public void Push(T NewElement)
         {
-            StackElement<T> Temp = new StackElement<T>(NewElement, Current);
-            Current = Temp;
+            StackElement<T> temp = new StackElement<T>(NewElement, _peek);
+            _peek = temp;
             Length++;
         }
         public T Peek()
@@ -38,21 +38,22 @@ namespace StackProject
             }
             else
             {
-                return Current.Value;
+                return _peek.Value;
             }
         }
         public T Pop()
         {
-            if (Length > 0)
+            if (Length <= 0)
             {
-                T Temp = Current.Value;
-                Current = Current.Previous;
-                Length--;
-                return Temp;
+                throw new InvalidOperationException("MyStack is Emty");
+
             }
             else
             {
-                throw new InvalidOperationException("MyStack is Emty");
+                T temp = _peek.Value;
+                _peek = _peek.Previous;
+                Length--;
+                return temp;
             }
         }
     }
@@ -60,7 +61,7 @@ namespace StackProject
     {
         static void Main(string[] args)
         {
-            MyStack<int> Example = new MyStack<int>();
+            Stack<int> Example = new Stack<int>();
             Example.Push(124);
             Example.Push(605);
             Example.Push(89);
@@ -72,7 +73,7 @@ namespace StackProject
             }
             Example.Push(194);
             Console.WriteLine(Example.Peek());
-            MyStack<string> SecondExample = new MyStack<string>();
+            Stack<string> SecondExample = new Stack<string>();
             SecondExample.Push("know");
             SecondExample.Push("don`t");
             SecondExample.Push("i");

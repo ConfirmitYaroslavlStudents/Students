@@ -24,9 +24,9 @@ namespace StackProject
             this.Length = 0;
             this._peek = null;
         }
-        public void Push(T NewElement)
+        public void Push(T newElement)
         {
-            StackElement<T> temp = new StackElement<T>(NewElement, _peek);
+            StackElement<T> temp = new StackElement<T>(newElement, _peek);
             _peek = temp;
             Length++;
         }

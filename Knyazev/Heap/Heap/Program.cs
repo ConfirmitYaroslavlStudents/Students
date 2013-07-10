@@ -3,81 +3,100 @@ using System.Collections.Generic;
 
 namespace Heap
 {
-	class MinHeap<T> where T : IComparable
+	class HeapIsEmptyException : Exception { }
+
+	class Heap<T> where T : IComparable
 	{
 		private List<T> _heap;
+		private IComparer<T> _comparer = Comparer<T>.Default;
 
-		public MinHeap()
+		public Heap()
 		{
 			_heap = new List<T>();
 		}
-
-		public void Add(T elem)
+		public Heap(IComparer<T> userComparer) : this()
 		{
-			int ind_elem = _heap.Count;
-			_heap.Add(elem);
+			if (userComparer != null)
+				_comparer = userComparer;
+		}
+		public Heap(IEnumerable<T> collection)
+		{
+			_heap = new List<T>(collection);
+			_heap.Sort();
+		}
+		public Heap(IEnumerable<T> collection, IComparer<T> userComparer)
+		{
+			_heap = new List<T>(collection);
+			if (userComparer != null)
+				_comparer = userComparer;
+			_heap.Sort(_comparer);
+		}
 
-			while (ind_elem > 0 && elem.CompareTo(_heap[ind_elem / 2]) < 0)
+		public void Add(T newElement)
+		{
+			int indexNewElement = _heap.Count;
+			_heap.Add(newElement);
+
+			while (indexNewElement > 0 && _comparer.Compare(newElement, _heap[indexNewElement / 2]) < 0)
 			{
-				Swap(ind_elem, ind_elem / 2);
-				ind_elem /= 2;
+				Swap(indexNewElement, indexNewElement / 2);
+				indexNewElement /= 2;
 			}
 		}
-		public T DeleteMinimum()
+		public T DeleteTop()
 		{
 			if (_heap.Count > 0)
 			{
-				T min = _heap[0];
+				T topElement = _heap[0];
 
 				_heap[0] = _heap[_heap.Count - 1];
-				_heap.RemoveRange(_heap.Count - 1, 1);
-				int ind_new_root = 0;
-				int ind_smallest = FindSmallestSonIndex(ind_new_root);
+				_heap.RemoveAt(_heap.Count - 1);
 
-				while (ind_new_root < ind_smallest)
+				int indexNewRoot = 0;
+				int indexAimSon = FindAimSonIndex(indexNewRoot);
+				while (indexNewRoot < indexAimSon)
 				{
-					Swap(ind_new_root, ind_smallest);
-					ind_new_root = ind_smallest;
-					ind_smallest = FindSmallestSonIndex(ind_new_root);
+					Swap(indexNewRoot, indexAimSon);
+					indexNewRoot = indexAimSon;
+					indexAimSon = FindAimSonIndex(indexNewRoot);
 				}
 
-				return min;
+				return topElement;
 			}
 			else
-				return default(T);
+				throw new HeapIsEmptyException();
 		}
 
-		private void Swap(int ind_elem1, int ind_elem2)
+		private void Swap(int indexElement1, int indexElement2)
 		{
-			T temp = _heap[ind_elem1];
-			_heap[ind_elem1] = _heap[ind_elem2];
-			_heap[ind_elem2] = temp;
+			T temp = _heap[indexElement1];
+			_heap[indexElement1] = _heap[indexElement2];
+			_heap[indexElement2] = temp;
 		}
-		private int FindSmallestSonIndex(int ind_parent)
+		private int FindAimSonIndex(int indexParent)
 		{
-			int ind_smallest = ind_parent;
-			int ind_left_son = (ind_parent + 1) * 2 - 1;
-			int ind_right_son = (ind_parent + 1) * 2;
+			int indexAim = indexParent;
+			int indexLeftSon = (indexParent + 1) * 2 - 1;
+			int indexRightSon = (indexParent + 1) * 2;
+			if (indexLeftSon < _heap.Count && _comparer.Compare(_heap[indexLeftSon], _heap[indexParent]) < 0)
+				indexAim = indexLeftSon;
+			if (indexRightSon < _heap.Count && _comparer.Compare(_heap[indexRightSon], _heap[indexAim]) < 0)
+				indexAim = indexRightSon;
 
-			if (ind_left_son < _heap.Count && _heap[ind_left_son].CompareTo(_heap[ind_parent]) < 0)
-				ind_smallest = ind_left_son;
-			if (ind_right_son < _heap.Count && _heap[ind_right_son].CompareTo(_heap[ind_smallest]) < 0)
-				ind_smallest = ind_right_son;
-
-			return ind_smallest;
+			return indexAim;
 		}
 
-		public T Minimum
+		public T Top
 		{
 			get
 			{
 				if (_heap.Count > 0)
 					return _heap[0];
 				else
-					return default(T);
+					throw new HeapIsEmptyException();
 			}
 		}
-		public int Size
+		public int Count
 		{
 			get { return _heap.Count; }
 		}
@@ -85,16 +104,44 @@ namespace Heap
 
 	class Program
 	{
+		class MyComparer : IComparer<int>
+		{
+			public int Compare(int a, int b)
+			{
+				return b - a;
+			}
+		}
+
 		static void Main()
 		{
-			MinHeap<int> H = new MinHeap<int>();
-			H.Add(7);
-			H.Add(3);
-			H.Add(5);
-			H.Add(1);
+			Heap<int> testHeap = new Heap<int>();
+			testHeap.Add(7);
+			testHeap.Add(3);
+			testHeap.Add(5);
+			testHeap.Add(1);
+			Console.WriteLine("Using default int comparer. We have MinHeap.");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
 
-			while (H.Size > 0)
-			Console.WriteLine(H.DeleteMinimum());
+			testHeap = new Heap<int>(new MyComparer());
+			testHeap.Add(7);
+			testHeap.Add(3);
+			testHeap.Add(5);
+			testHeap.Add(1);
+			Console.WriteLine("Using my int comparer. We have MaxHeap.");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
+
+			Queue<int> testQueue = new Queue<int>(new int[] { 10, -3, 5, 0, -25 });
+			testHeap = new Heap<int>(testQueue);
+			Console.WriteLine("We get heap from queue with default comparer (MinHeap).");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
+
+			testHeap = new Heap<int>(testQueue, new MyComparer());
+			Console.WriteLine("We get heap from queue with my comparer (MaxHeap).");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
 		}
 	}
 }

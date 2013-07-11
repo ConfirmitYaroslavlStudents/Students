@@ -1,0 +1,5 @@
+C:\Users\800379\Desktop\job\PostfixNotation\PostfixNotation\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\800379\Desktop\job\PostfixNotation\PostfixNotation\bin\Debug\PostfixNotation.exe
+C:\Users\800379\Desktop\job\PostfixNotation\PostfixNotation\bin\Debug\PostfixNotation.pdb
+C:\Users\800379\Desktop\job\PostfixNotation\PostfixNotation\obj\x86\Debug\PostfixNotation.exe
+C:\Users\800379\Desktop\job\PostfixNotation\PostfixNotation\obj\x86\Debug\PostfixNotation.pdb

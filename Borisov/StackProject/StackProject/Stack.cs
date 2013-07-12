@@ -100,7 +100,7 @@ namespace StackProject
             {
                 get
                 {
-                    if (_index == -1)
+                    if (_index == _stack.Length)
                     {
                         throw new InvalidOperationException("MyStack is Emty");
                     }
@@ -114,7 +114,7 @@ namespace StackProject
             {
                 get
                 {
-                    if (_index == -1)
+                    if (_index == _stack.Length)
                     {
                         throw new InvalidOperationException("MyStack is Emty");
                     }

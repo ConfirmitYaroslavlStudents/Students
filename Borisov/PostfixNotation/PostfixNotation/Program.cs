@@ -11,6 +11,9 @@ namespace PostfixNotation
         {
             Console.WriteLine(MakePostfixNotation("a+(b-c)*d"));
             Console.WriteLine(MakePostfixNotation("3+4*2/(1-5)^2"));
+            Console.WriteLine(MakePostfixNotation("a+b-c"));
+            Console.WriteLine(MakePostfixNotation("89+45^12"));
+            Console.WriteLine(MakePostfixNotation("alpha+gamma^omega+12*16"));
             Console.ReadKey();
         }
         static string MakePostfixNotation(string function)
@@ -39,7 +42,7 @@ namespace PostfixNotation
                     {
                         if (operation_stack.Count != 0)
                         {
-                            while (GetPriority(operation_stack.Peek()) >= GetPriority(function[i] + ""))
+                            while ((operation_stack.Count != 0)&&(GetPriority(operation_stack.Peek()) >= GetPriority(function[i] + "")))
                             {
                                 postfix_notation = postfix_notation + operation_stack.Pop()+" ";
                             }
@@ -61,7 +64,13 @@ namespace PostfixNotation
                     }
                     else
                     {
-                        postfix_notation = postfix_notation + function[i] + " ";
+                        while (i < function.Length && !operation.Contains(function[i] + ""))
+                        {
+                            postfix_notation = postfix_notation + function[i];
+                            ++i;
+                        }
+                        postfix_notation = postfix_notation + " ";
+                        i--;
                     }
                 }
             }

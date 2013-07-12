@@ -5,3 +5,6 @@ C:\Users\800379\Desktop\Работа\StackProject\StackProject\obj\x86\Debug\Sta
 C:\Users\800379\Desktop\Работа\StackProject\StackProject\obj\x86\Debug\StackProject.pdb
 C:\Users\800379\Desktop\job\Students\Borisov\StackProject\StackProject\obj\x86\Debug\StackProject.exe
 C:\Users\800379\Desktop\job\Students\Borisov\StackProject\StackProject\obj\x86\Debug\StackProject.pdb
+C:\Users\800379\Desktop\job\Students\Borisov\StackProject\StackProject\bin\Debug\StackProject.exe
+C:\Users\800379\Desktop\job\Students\Borisov\StackProject\StackProject\bin\Debug\StackProject.pdb
+C:\Users\800379\Desktop\job\Students\Borisov\StackProject\StackProject\obj\x86\Debug\ResolveAssemblyReference.cache

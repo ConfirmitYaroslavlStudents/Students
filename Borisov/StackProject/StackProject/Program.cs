@@ -5,58 +5,7 @@ using System.Text;
 
 namespace StackProject
 {
-    public class StackElement<T>
-    {
-        public StackElement<T> Previous { get; private set; }
-        public T Value { get; private set; }
-        public StackElement(T value, StackElement<T> previous)
-        {
-            this.Value = value;
-            this.Previous = previous;
-        }
-    }
-    public class Stack<T>
-    {
-        public int Length { get; private set; }
-        private StackElement<T> _peek;
-        public Stack()
-        {
-            this.Length = 0;
-            this._peek = null;
-        }
-        public void Push(T newElement)
-        {
-            StackElement<T> temp = new StackElement<T>(newElement, _peek);
-            _peek = temp;
-            Length++;
-        }
-        public T Peek()
-        {
-            if (Length == 0)
-            {
-                throw new InvalidOperationException("MyStack is Emty");
-            }
-            else
-            {
-                return _peek.Value;
-            }
-        }
-        public T Pop()
-        {
-            if (Length <= 0)
-            {
-                throw new InvalidOperationException("MyStack is Emty");
-
-            }
-            else
-            {
-                T temp = _peek.Value;
-                _peek = _peek.Previous;
-                Length--;
-                return temp;
-            }
-        }
-    }
+   
     class Program
     {
         static void Main(string[] args)
@@ -84,6 +33,16 @@ namespace StackProject
             {
                 Console.WriteLine(SecondExample.Pop());
             }
+            Stack<string> ThirdExample = new Stack<string>();
+            ThirdExample.Push("!!!");
+            ThirdExample.Push("Go");
+            ThirdExample.Push("3");
+            ThirdExample.Push("2");
+            ThirdExample.Push("1");
+            foreach (string t in ThirdExample)
+            {
+                Console.WriteLine(t);
+            }           
             Console.ReadKey();
         }
     }

@@ -9,3 +9,4 @@ C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\obj\Debug\Heap.exe
 C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\obj\Debug\Heap.pdb
 C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\bin\Debug\Heap.exe
 C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\bin\Debug\Heap.pdb
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\obj\Debug\Heap.csprojResolveAssemblyReference.cache

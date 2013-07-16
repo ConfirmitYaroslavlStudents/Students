@@ -1,0 +1,6 @@
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\bin\Release\Heap.exe.config
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\bin\Release\Heap.exe
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\bin\Release\Heap.pdb
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\obj\Release\Heap.exe
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\obj\Release\Heap.pdb
+C:\Users\darknyaz\Documents\GitHub\Students\Knyazev\Heap\Heap\obj\Release\Heap.csprojResolveAssemblyReference.cache

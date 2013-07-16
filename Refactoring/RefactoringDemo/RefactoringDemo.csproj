@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B617032-4008-4168-A09F-C6F750012880}</ProjectGuid>
+    <ProjectGuid>{3533C381-B526-4E66-8877-AE857F1953B3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Heap</RootNamespace>
-    <AssemblyName>Heap</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>RefactoringDemo</RootNamespace>
+    <AssemblyName>RefactoringDemo</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,18 +36,26 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SortingTimeTest.cs" />
+    <Compile Include="Steps\Step4\Customer.cs" />
+    <Compile Include="Steps\Step4\Movie.cs" />
+    <Compile Include="Steps\Step4\Rental.cs" />
+    <Compile Include="Steps\Step3\Customer.cs" />
+    <Compile Include="Steps\Step3\Movie.cs" />
+    <Compile Include="Steps\Step3\Rental.cs" />
+    <Compile Include="Steps\Step1\Customer.cs" />
+    <Compile Include="Steps\Step1\Movie.cs" />
+    <Compile Include="Steps\Step1\Rental.cs" />
+    <Compile Include="Steps\Step2\Customer.cs" />
+    <Compile Include="Steps\Step2\Movie.cs" />
+    <Compile Include="Steps\Step2\Rental.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

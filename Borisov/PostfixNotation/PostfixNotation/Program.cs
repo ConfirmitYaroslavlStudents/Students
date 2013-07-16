@@ -43,9 +43,9 @@ namespace PostfixNotation
         }
         private static void NumberCharProcedure(string function, ref string postfixNotation, string[] operations, ref int i)
         {
-            if ((int)'0' <= (int)function[i] && (int)function[i] <= (int)'9')
+            if (0 <= (int)function[i] && (int)function[i] <= 9)
             {
-                while (i < function.Length && (int)'0' <= (int)function[i] && (int)function[i] <= (int)'9')
+                while (i < function.Length && 0 <= (int)function[i] && (int)function[i] <= 9)
                 {
                     postfixNotation = postfixNotation + function[i];
                     ++i;

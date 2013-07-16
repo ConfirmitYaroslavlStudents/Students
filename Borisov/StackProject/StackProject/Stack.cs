@@ -6,6 +6,95 @@ using System.Text;
 
 namespace StackProject
 {
+    public class StackEnumerator<T> : IEnumerator<T>, IDisposable, IEnumerator
+    {
+        private T[] _stackArray;
+        private Stack<T> _stack;
+        private T _currentElement;
+        private int _index = -1;
+        public StackEnumerator(Stack<T> stack)
+        {
+            _stackArray = new T[stack.Length];
+            int length = stack.Length;
+            for (int i = 0; i < length; i++)
+            {
+                _stackArray[i] = stack.Pop();
+            }
+
+            for (int i = length-1; i >= 0; i--)
+            {
+                stack.Push(_stackArray[i]);
+            }
+            this._stack = stack;
+            this._index = -1;
+            this._currentElement = default(T);
+        }
+        public T Current
+        {
+            get
+            {
+                if (_index == _stack.Length)
+                {
+                    throw new InvalidOperationException("MyStack is Emty");
+                }
+                else
+                {
+                    return this._currentElement;
+                }
+            }
+        }
+        object IEnumerator.Current
+        {
+            get
+            {
+                if (_index == _stack.Length)
+                {
+                    throw new InvalidOperationException("MyStack is Emty");
+                }
+                else
+                {
+                    return (object)this._currentElement;
+                }
+
+            }
+        }
+        public void Dispose()
+        {
+            this._index = _stack.Length;
+        }
+        void IEnumerator.Reset()
+        {
+            this._index = -1;
+            this._currentElement = default(T);
+        }
+        public bool MoveNext()
+        {
+            if (this._index == -1)
+            {
+                this._index = 0;
+                bool canMove = this._index >= 0;
+                if (canMove)
+                {
+                    this._currentElement = this._stackArray[_index];
+                }
+                return canMove;
+            }
+            else
+            {
+                if (this._index == _stack.Length)
+                {
+                    return false;
+                }
+                bool canMove = ++this._index <= _stack.Length - 1;
+                if (canMove)
+                {
+                    this._currentElement = this._stackArray[_index];
+                }
+                return canMove;
+            }
+
+        }
+    }
     public class Stack<T> : IEnumerable<T>, IEnumerable
     {
         private class StackElement
@@ -57,112 +146,19 @@ namespace StackProject
                 return temp;
             }
         }
-        private T ToArray_index(int index)
+        public StackEnumerator<T> GetEnumerator()
         {
-            T[] temp = new T[index + 1];
-
-            for (int i = 0; i <= index; i++)
-            {
-                temp[i] = Pop();
-            }
-            T element = temp[index];
-            for (int i = index; i >= 0; i--)
-            {
-                Push(temp[i]);
-            }
-            return element;
-
-        }
-        public Stack<T>.Enumerator GetEnumerator()
-        {
-            return new Stack<T>.Enumerator(this);
+            return new StackEnumerator<T>(this);
         }
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return (IEnumerator<T>)new Stack<T>.Enumerator(this);
+            return (IEnumerator<T>)new StackEnumerator<T>(this);
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return (IEnumerator)new Stack<T>.Enumerator(this);
+            return (IEnumerator)new StackEnumerator<T>(this);
         }
-        public class Enumerator : IEnumerator<T>, IDisposable, IEnumerator
-        {
-            private Stack<T> _stack;
-            private T currentElement;
-            private int _index = -1;
-            public Enumerator(Stack<T> stack)
-            {
-                this._stack = stack;
-                this._index = -1;
-                this.currentElement = default(T);
-            }
-            public T Current
-            {
-                get
-                {
-                    if (_index == _stack.Length)
-                    {
-                        throw new InvalidOperationException("MyStack is Emty");
-                    }
-                    else
-                    {
-                        return this.currentElement;
-                    }
-                }
-            }
-            object IEnumerator.Current
-            {
-                get
-                {
-                    if (_index == _stack.Length)
-                    {
-                        throw new InvalidOperationException("MyStack is Emty");
-                    }
-                    else
-                    {
-                        return (object)this.currentElement;
-                    }
-
-                }
-            }
-            public void Dispose()
-            {
-                this._index = _stack.Length;
-            }
-            void IEnumerator.Reset()
-            {
-                this._index = -1;
-                this.currentElement = default(T);
-            }
-            public bool MoveNext()
-            {
-                if (this._index == -1)
-                {
-                    this._index = 0;
-                    bool can_move = this._index >= 0;
-                    if (can_move)
-                    {
-                        this.currentElement = this._stack.ToArray_index(_index);
-                    }
-                    return can_move;
-                }
-                else
-                {
-                    if (this._index == _stack.Length)
-                    {
-                        return false;
-                    }
-                    bool can_move = ++this._index <= _stack.Length - 1;
-                    if (can_move)
-                    {
-                        this.currentElement = this._stack.ToArray_index(_index);
-                    }
-                    return can_move;
-                }
-
-            }
-
-        }
+    
 
     }
 }

@@ -18,88 +18,91 @@ namespace PostfixNotation
         }
         static string MakePostfixNotation(string function)
         {
-            string postfix_notation = "";
-            string []operation=new string[7]{"+","-","*","(",")","/","^"};
-            Stack<string> operation_stack= new Stack<string>();
+            string postfixNotation = "";
+            string[] operations = new string[7] { "(", ")", "+", "-", "*", "/", "^" };
+            Stack<string> operationStack= new Stack<string>();
             for (int i = 0; i < function.Length; i++)
             {
-                if (operation.Contains(function[i] + ""))
+                if (operations.Contains(function[i].ToString()))
                 {
-                    if (function[i]+"" == "(")
-                    {
-                        operation_stack.Push(function[i]+"");
-                    }
-                    else if (function[i] + "" == ")")
-                    {
-                       
-                        while (operation_stack.Peek() != "(")
-                        {
-                            postfix_notation = postfix_notation + operation_stack.Pop() + " ";
-                        }
-                        operation_stack.Pop();
-                    }
-                    else 
-                    {
-                        if (operation_stack.Count != 0)
-                        {
-                            while ((operation_stack.Count != 0)&&(GetPriority(operation_stack.Peek()) >= GetPriority(function[i] + "")))
-                            {
-                                postfix_notation = postfix_notation + operation_stack.Pop()+" ";
-                            }
-                        }
-                        operation_stack.Push(function[i] + "");
-                    }
+                    postfixNotation = OperationProcedure(function, postfixNotation, operationStack,operations, i);
                 }
                 else
                 {
-                    if ('0' <= function[i] && function[i] <= '9')
-                    {
-                        while (i < function.Length && '0' <= function[i] && function[i] <= '9')
-                        {
-                            postfix_notation = postfix_notation + function[i];
-                            ++i;
-                        }
-                        postfix_notation = postfix_notation + " ";
-                        i--;
-                    }
-                    else
-                    {
-                        while (i < function.Length && !operation.Contains(function[i] + ""))
-                        {
-                            postfix_notation = postfix_notation + function[i];
-                            ++i;
-                        }
-                        postfix_notation = postfix_notation + " ";
-                        i--;
-                    }
+                    NumberCharProcedure(function, ref postfixNotation, operations, ref i);
                 }
             }
 
-            int length = operation_stack.Count;
+            int length = operationStack.Count;
             for (int i = 0; i < length; i++)
             {
-                postfix_notation = postfix_notation + operation_stack.Pop()+" ";
+                postfixNotation = postfixNotation + operationStack.Pop()+" ";
             }
 
+            return postfixNotation;
+        }
+        private static void NumberCharProcedure(string function, ref string postfixNotation, string[] operations, ref int i)
+        {
+            if ((int)'0' <= (int)function[i] && (int)function[i] <= (int)'9')
+            {
+                while (i < function.Length && (int)'0' <= (int)function[i] && (int)function[i] <= (int)'9')
+                {
+                    postfixNotation = postfixNotation + function[i];
+                    ++i;
+                }
+                postfixNotation = postfixNotation + " ";
+                i--;
+            }
+            else
+            {
+                while (i < function.Length && !operations.Contains(function[i].ToString()))
+                {
+                    postfixNotation = postfixNotation + function[i];
+                    ++i;
+                }
+                postfixNotation = postfixNotation + " ";
+                i--;
+            }
+        }
+        private static string OperationProcedure(string function, string postfix_notation, Stack<string> operationStack, string[] operations,int i)
+        {
+            if (function[i] == '(')
+            {
+                operationStack.Push(function[i].ToString());
+            }
+            else if (function[i] == ')')
+            {
+
+                while (operationStack.Peek() != "(")
+                {
+                    postfix_notation = postfix_notation + operationStack.Pop() + " ";
+                }
+                operationStack.Pop();
+            }
+            else
+            {
+                if (operationStack.Count != 0)
+                {
+                    while ((operationStack.Count != 0) && (GetPriority(operationStack.Peek(), operations) >= GetPriority(function[i].ToString(), operations)))
+                    {
+                        postfix_notation = postfix_notation + operationStack.Pop() + " ";
+                    }
+                }
+                operationStack.Push(function[i].ToString());
+            }
             return postfix_notation;
         }
-        static int GetPriority(string operation)
+        private static int GetPriority(string operation, string[] operations)
         {
-            switch (operation)
+            int i = 0;
+            for (i = 0; i < operations.Length; i++)
             {
-                case "^":
-                    return 3;
-                case "+":
-                    return 1;
-                case "-":
-                    return 1;
-                case "*":
-                    return 2;
-                case "/":
-                    return 2;
-                default:
-                    return 0;
+                if(operations[i]==operation)
+                {
+                    break;
+                }
             }
+            return i/2;
         }
     }
 }

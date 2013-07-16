@@ -84,17 +84,13 @@ namespace Heap
 			else
 				throw new HeapIsEmptyException();
 		}
-		public HeapEnumerator GetEnumerator()
+		public IEnumerator<T> GetEnumerator()
 		{
-			return new HeapEnumerator(this);
-		}
-		IEnumerator<T> IEnumerable<T>.GetEnumerator()
-		{
-			return (IEnumerator<T>)new HeapEnumerator(this);
+			return _heap.GetEnumerator();
 		}
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return (IEnumerator)new HeapEnumerator(this);
+			return (IEnumerator)_heap.GetEnumerator();
 		}
 
 		private void Swap(int firstElementIndex, int secondElementIndex)
@@ -129,52 +125,6 @@ namespace Heap
 		public int Count
 		{
 			get { return _heap.Count; }
-		}
-
-		private T this[int index]
-		{
-			get { return _heap[index]; }
-		}
-
-		public class HeapEnumerator : IEnumerator<T> 
-		{
-			private Heap<T> _heap;
-			private int _currentIndex;
-			private T _currentHeapElement;
-
-			public HeapEnumerator(Heap<T> heap)
-			{
-				_heap = heap;
-				_currentIndex = -1;
-				_currentHeapElement = default(T);
-			}
-
-			public bool MoveNext()
-			{
-				++_currentIndex;
-				if (_currentIndex < _heap.Count)
-				{
-					_currentHeapElement = _heap[_currentIndex];
-					return true;
-				}
-				else
-					return false;
-			}
-			public void Reset() 
-			{ 
-				_currentIndex = -1;
-				_currentHeapElement = default(T);
-			}
-			public void Dispose() { }
-
-			public T Current
-			{
-				get { return _currentHeapElement; }
-			}
-			object IEnumerator.Current
-			{
-				get { return _currentHeapElement; }
-			}
 		}
 	}
 
@@ -250,48 +200,48 @@ namespace Heap
 
 		static void Main()
 		{
-			//Heap<int> testHeap = new Heap<int>();
-			//testHeap.Add(7);
-			//testHeap.Add(3);
-			//testHeap.Add(5);
-			//testHeap.Add(1);
-			//Console.WriteLine("Using default int comparer. We have MinHeap.");
-			//while (testHeap.Count > 0)
-			//	Console.WriteLine(testHeap.DeleteTop());
+			Heap<int> testHeap = new Heap<int>();
+			testHeap.Add(7);
+			testHeap.Add(3);
+			testHeap.Add(5);
+			testHeap.Add(1);
+			Console.WriteLine("Using default int comparer. We have MinHeap.");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
 
-			//testHeap = new Heap<int>(new MyIntComparer());
-			//testHeap.Add(7);
-			//testHeap.Add(3);
-			//testHeap.Add(5);
-			//testHeap.Add(1);
-			//Console.WriteLine("Using my int comparer. We have MaxHeap.");
-			//while (testHeap.Count > 0)
-			//	Console.WriteLine(testHeap.DeleteTop());
+			testHeap = new Heap<int>(new MyIntComparer());
+			testHeap.Add(7);
+			testHeap.Add(3);
+			testHeap.Add(5);
+			testHeap.Add(1);
+			Console.WriteLine("Using my int comparer. We have MaxHeap.");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
 
-			//Queue<int> testQueue = new Queue<int>(new int[] { 10, -3, 5, 0, -25 });
-			//testHeap = new Heap<int>(testQueue);
-			//Console.WriteLine("We get heap from queue with default int comparer (MinHeap).");
-			//while (testHeap.Count > 0)
-			//	Console.WriteLine(testHeap.DeleteTop());
+			Queue<int> testQueue = new Queue<int>(new int[] { 10, -3, 5, 0, -25 });
+			testHeap = new Heap<int>(testQueue);
+			Console.WriteLine("We get heap from queue with default int comparer (MinHeap).");
+			while (testHeap.Count > 0)
+				Console.WriteLine(testHeap.DeleteTop());
 
-			//testHeap = new Heap<int>(testQueue, new MyIntComparer());
-			//Console.WriteLine("We get heap from queue with my int comparer (MaxHeap).");
-			//// Now Heap is IEnumerable<T>
-			//foreach (int a in testHeap)
-			//	Console.WriteLine(a);
+			testHeap = new Heap<int>(testQueue, new MyIntComparer());
+			Console.WriteLine("We get heap from queue with my int comparer (MaxHeap).");
+			// Now Heap is IEnumerable<T>
+			foreach (int a in testHeap)
+				Console.WriteLine(a);
 
-			//string[] testArray = { "10", "2", "1", "1001" };
-			//HeapSort<string>(testArray);
-			//Console.WriteLine("We sorted array with default string comparer.");
-			//for (int i = 0; i < testArray.Length - 1; ++i)
-			//	Console.Write(testArray[i].ToString() + " ");
-			//Console.WriteLine(testArray[testArray.Length - 1]);
+			string[] testArray = { "10", "2", "1", "1001" };
+			HeapSort<string>(testArray);
+			Console.WriteLine("We sorted array with default string comparer.");
+			for (int i = 0; i < testArray.Length - 1; ++i)
+				Console.Write(testArray[i].ToString() + " ");
+			Console.WriteLine(testArray[testArray.Length - 1]);
 
-			//HeapSort<string>(testArray, new MyStringComparar());
-			//Console.WriteLine("We sorted array with my string comparer.");
-			//for (int i = 0; i < testArray.Length - 1; ++i)
-			//	Console.Write(testArray[i].ToString() + " ");
-			//Console.WriteLine(testArray[testArray.Length - 1]);
+			HeapSort<string>(testArray, new MyStringComparar());
+			Console.WriteLine("We sorted array with my string comparer.");
+			for (int i = 0; i < testArray.Length - 1; ++i)
+				Console.Write(testArray[i].ToString() + " ");
+			Console.WriteLine(testArray[testArray.Length - 1]);
 
 			for (int i = 0; i < 5; ++i)
 				HeapSortTimeTest();

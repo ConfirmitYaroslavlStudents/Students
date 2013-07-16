@@ -8,15 +8,15 @@ Sorting an array of 10000 elements.
 HeapSort time: 0,007 seconds.
 QuickSort time: 0,001 seconds.
 Sorting an array of 100000 elements.
-HeapSort time: 0,095006 seconds.
-QuickSort time: 0,013001 seconds.
+HeapSort time: 0,095005 seconds.
+QuickSort time: 0,012001 seconds.
 Sorting an array of 1000000 elements.
-HeapSort time: 1,271073 seconds.
-QuickSort time: 0,144008 seconds.
+HeapSort time: 1,338077 seconds.
+QuickSort time: 0,150009 seconds.
 Sorting an array of 10000000 elements.
-HeapSort time: 18,062033 seconds.
-QuickSort time: 1,674096 seconds.
+HeapSort time: 18,668068 seconds.
+QuickSort time: 1,778102 seconds.
 Sorting an array of 100000000 elements.
-HeapSort time: 251,109363 seconds.
-QuickSort time: 19,161096 seconds.
+HeapSort time: 259,348834 seconds.
+QuickSort time: 19,917139 seconds.
 

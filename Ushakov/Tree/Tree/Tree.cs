@@ -6,23 +6,51 @@ using System.Threading.Tasks;
 
 namespace Tree
 {
-    class Node<T> where T: IComparable
+    class Tree<T>:IEnumerable<T> where T:IComparable
     {
-        public T Value { get; set; }
-        public Node<T> Parent { get; set; }
-        public Node<T> Left { get; set; }
-        public Node<T> Right { get; set; }
-
-        public Node(T value, Node<T> parent)
+        private class Node<T> where T : IComparable
         {
-            this.Value = value;
-            Parent = parent;
-            Left = null;
-            Right = null;
+            public T Value { get; set; }
+            public Node<T> Left { get; set; }
+            public Node<T> Right { get; set; }
+            public int Height { get; private set; }
+
+            public Node(T value)
+            {
+                this.Value = value;
+                Left = null;
+                Right = null;
+                Height = 1;
+            }
+
+            public void SetHeight()
+            {
+                if (Left == null && Right == null)
+                {
+                    Height = 1;
+                    return;
+                }
+                if (Left == null)
+                {
+                    Height = Right.Height+1;
+                    return;
+                }
+                if (Right == null)
+                {
+                    Height = Left.Height+1;
+                    return;
+                }
+                Height = Math.Max(Left.Height, Right.Height)+1;
+            }
+
+            public int GetBalanceFactor()
+            {
+                return (Right != null ? Right.Height : 0) -
+                    (Left != null ? Left.Height : 0);
+            }
+
         }
-    }
-    class Tree<T> where T:IComparable
-    {
+
         Node<T> _root;
 
         public Tree()
@@ -32,111 +60,68 @@ namespace Tree
 
         public void Add(T element)
         {
-            if (_root == null)
-            {
-                _root = new Node<T>(element, null);
-            }
-            else
-            {
-                AddNext(element, _root);
-            }
+            _root = Add(element, _root);
         }
 
-        private void AddNext(T element, Node<T> currentNode)
+        private Node<T> Add(T element, Node<T> currentNode)
         {
-            if (element.CompareTo(currentNode.Value) >= 0)
-                if (currentNode.Right != null)
-                    AddNext(element, currentNode.Right);
-                else
-                    currentNode.Right = new Node<T>(element, currentNode);
+            if (currentNode == null)
+                return new Node<T>(element);
+            if (currentNode.Value.CompareTo(element) < 0)
+                currentNode.Right = Add(element, currentNode.Right);
             else
-                if (currentNode.Left != null)
-                    AddNext(element, currentNode.Left);
-                else
-                    currentNode.Left = new Node<T>(element, currentNode);
+                currentNode.Left = Add(element, currentNode.Left);
+
+            currentNode.SetHeight();
+            return BalanceTree(currentNode);
         }
 
         public void Remove(T element)
         {
-            Node<T> node = SearchElement(element, _root);
-            if (node != null)
-                DeleteNode(node);
-            return;
+            _root = DeleteNode(element, _root);
+            if (_root != null)
+                _root = BalanceTree(_root);
         }
 
-        private Node<T> SearchElement(T element, Node<T> currentNode)
+        Node<T> FindMin(Node<T> node) 
         {
-            if (currentNode.Value.CompareTo(element) == 0)
-                return currentNode;
-            if (element.CompareTo(currentNode.Value) > 0 && currentNode.Right != null)
-                return SearchElement(element, currentNode.Right);
-            if (element.CompareTo(currentNode.Value) < 0 && currentNode.Left != null)
-                return SearchElement(element, currentNode.Left);
-            
-            return null;
+            return (node.Left != null) ? FindMin(node.Left) : node;
         }
 
-        private void DeleteNode(Node<T> node)
+        Node<T> RemoveMin(Node<T> node)
         {
-            if (node.Parent == null)
-            {
-                if (node.Right != null)
-                {
-                    _root = node.Right;
-                    node.Right.Parent = null;
-                    AddLeft(node.Right, node.Left);
-                }
-                else
-                {
-                    _root = node.Left;
-                    if (node.Left != null)
-                        node.Left.Parent = null;
-                }
-            }
+            if (node.Left == null)
+                return node.Right;
+            node.Left = RemoveMin(node.Left);
+
+            node.SetHeight();
+            return BalanceTree(node);
+        }
+
+        private Node<T> DeleteNode(T element, Node<T> node)
+        {
+            if (node == null)
+                return null;
+            if (element.CompareTo(node.Value) > 0)
+                node.Right = DeleteNode(element, node.Right);
             else
-            {
-                if (node.Parent.Left == node)
-                {
-                    if (node.Right != null)
-                    {
-                        node.Parent.Left = node.Right;
-                        node.Right.Parent = node.Parent;
-                        AddLeft(node.Right, node.Left);
-                    }
-                    else
-                    {
-                        node.Parent.Left = node.Left;
-                        if (node.Left != null)
-                            node.Left.Parent = node.Parent;
-                    }
-                }
+                if (element.CompareTo(node.Value) < 0)
+                    node.Left = DeleteNode(element, node.Left);
                 else
                 {
-                    if (node.Right != null)
-                    {
-                        node.Parent.Right = node.Right;
-                        node.Right.Parent = node.Parent;
-                        AddLeft(node.Right, node.Left);
-                    }
-                    else
-                    {
-                        node.Parent.Right = node.Left;
-                        if (node.Left != null)
-                            node.Left.Parent = node.Parent;
-                    }
+                    if (node.Right == null)
+                        return node.Left;
+                    Node<T> min = FindMin(node.Right);
+                    min.Right = RemoveMin(node.Right);
+                    min.Left = node.Left;
+                    return BalanceTree(min);
                 }
-            } 
+
+            node.SetHeight();
+            return BalanceTree(node);
         }
 
-        private void AddLeft(Node<T> node, Node<T> left)
-        {
-            while (node.Left != null)
-                node = node.Left;
-            node.Left = left;
-            if (left != null)
-                node.Left.Parent = node;
-        }
-
+        #region traversings
         public List<T> DirectTraversing()
         {
             if (_root != null)
@@ -192,6 +177,74 @@ namespace Tree
                 SymmetricTraversing(valueList, currentNode.Right);
             
             return valueList;
+        }
+        #endregion
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return DirectTraversing().GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return DirectTraversing().GetEnumerator();
+        }
+
+        private Node<T> RotateRight(Node<T> node)
+        {
+            Node<T> left = node.Left;
+            node.Left = left.Right;
+            left.Right = node;
+            node.SetHeight();
+            left.SetHeight();
+            return left;
+        }
+
+        private Node<T> RotateLeft(Node<T> node)
+        {
+            Node<T> right = node.Right;
+            node.Right = right.Left;
+            right.Left = node;
+            node.SetHeight();
+            right.SetHeight();
+            return right;
+        }
+
+        private Node<T> BalanceTree(Node<T> node)
+        {
+            if (node.GetBalanceFactor() >= 2)
+            {
+                if (node.Right.GetBalanceFactor() < 0)
+                    node.Right = RotateRight(node.Right);
+                return RotateLeft(node);
+            }
+
+            if (node.GetBalanceFactor() <= -2)
+            {
+                if (node.Left.GetBalanceFactor() > 0)
+                    node.Left = RotateLeft(node.Left);
+                return RotateRight(node);
+            }
+
+            return node;
+        }
+
+        //убрать потом!!!
+        public void PrintTree()
+        {
+            Print(_root, 0);
+        }
+
+        private void Print(Node<T> node, int level)
+        {
+            if (node != null)
+            {
+                Print(node.Left, level + 1);
+                for (int i = 0; i < level; i++)
+                    Console.Write("\t");
+                Console.WriteLine(node.Value.ToString());
+                Print(node.Right, level + 1);
+            }
         }
     }
 }

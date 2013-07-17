@@ -12,88 +12,83 @@ namespace StackProject
         private Stack<T> _stack;
         private T _currentElement;
         private int _index = -1;
+
         public StackEnumerator(Stack<T> stack)
         {
             _stackArray = new T[stack.Length];
+
             int length = stack.Length;
             for (int i = 0; i < length; i++)
             {
                 _stackArray[i] = stack.Pop();
             }
 
-            for (int i = length-1; i >= 0; i--)
+            for (int i = length - 1; i >= 0; i--)
             {
                 stack.Push(_stackArray[i]);
             }
+
             this._stack = stack;
             this._index = -1;
             this._currentElement = default(T);
         }
+
         public T Current
         {
             get
             {
                 if (_index == _stack.Length)
-                {
+
                     throw new InvalidOperationException("MyStack is Empty");
-                }
+
                 else
-                {
+
                     return this._currentElement;
-                }
+
             }
         }
+
         object IEnumerator.Current
         {
             get
             {
                 if (_index == _stack.Length)
-                {
+
                     throw new InvalidOperationException("MyStack is Empty");
-                }
+
                 else
-                {
+
                     return (object)this._currentElement;
-                }
+
 
             }
         }
+
         public void Dispose()
         {
             this._index = _stack.Length;
         }
+
         void IEnumerator.Reset()
         {
             this._index = -1;
             this._currentElement = default(T);
         }
+
         public bool MoveNext()
         {
-            if (this._index == -1)
+            ++this._index;
+            bool canMove = this._index >= 0 && this._index <= _stack.Length - 1;
+
+            if (canMove)
             {
-                this._index = 0;
-                bool canMove = this._index >= 0;
-                if (canMove)
-                {
-                    this._currentElement = this._stackArray[_index];
-                }
-                return canMove;
-            }
-            else
-            {
-                if (this._index == _stack.Length)
-                {
-                    return false;
-                }
-                bool canMove = ++this._index <= _stack.Length - 1;
-                if (canMove)
-                {
-                    this._currentElement = this._stackArray[_index];
-                }
-                return canMove;
+                this._currentElement = this._stackArray[_index];
             }
 
+            return canMove;
+
         }
+
     }
     public class Stack<T> : IEnumerable<T>, IEnumerable
     {
@@ -101,6 +96,7 @@ namespace StackProject
         {
             public StackElement Previous { get; private set; }
             public T Value { get; set; }
+
             public StackElement(T value, StackElement previous)
             {
                 this.Value = value;
@@ -109,17 +105,20 @@ namespace StackProject
         }
         public int Length { get; private set; }
         private StackElement _peek;
+
         public Stack()
         {
             this.Length = 0;
             this._peek = null;
         }
+
         public void Push(T newElement)
         {
             StackElement temp = new StackElement(newElement, _peek);
             _peek = temp;
             Length++;
         }
+
         public T Peek()
         {
             if (Length == 0)
@@ -131,6 +130,7 @@ namespace StackProject
                 return _peek.Value;
             }
         }
+
         public T Pop()
         {
             if (Length <= 0)
@@ -146,19 +146,21 @@ namespace StackProject
                 return temp;
             }
         }
+
         public StackEnumerator<T> GetEnumerator()
         {
             return new StackEnumerator<T>(this);
         }
+
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             return (IEnumerator<T>)new StackEnumerator<T>(this);
         }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return (IEnumerator)new StackEnumerator<T>(this);
         }
-    
 
     }
 }

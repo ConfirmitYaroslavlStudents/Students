@@ -35,7 +35,7 @@ namespace StackProject
             {
                 if (_index == _stack.Length)
                 {
-                    throw new InvalidOperationException("MyStack is Emty");
+                    throw new InvalidOperationException("MyStack is Empty");
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace StackProject
             {
                 if (_index == _stack.Length)
                 {
-                    throw new InvalidOperationException("MyStack is Emty");
+                    throw new InvalidOperationException("MyStack is Empty");
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace StackProject
         {
             if (Length == 0)
             {
-                throw new InvalidOperationException("MyStack is Emty");
+                throw new InvalidOperationException("MyStack is Empty");
             }
             else
             {
@@ -135,7 +135,7 @@ namespace StackProject
         {
             if (Length <= 0)
             {
-                throw new InvalidOperationException("MyStack is Emty");
+                throw new InvalidOperationException("MyStack is Empty");
 
             }
             else

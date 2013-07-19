@@ -11,32 +11,23 @@ namespace MineSweeper
 {
     public partial class MainMineSweeperForm : Form
     {
-		private const int GameButtonSize = 25;
-
-		private GameField _gameField;
 		private readonly Point StartingFormPosition = new Point(20, 50);
-
-		public Button[] GameButtons { get; set; }
-		public int VerticalGameButtonsNumber { get; private set; }
-		public int HorizontalGameButtonsNumber { get; private set; }
-		public int MinesNumber { get; private set; }
+		private const int GameButtonSize = 25;
+		
+		private Button[] _gameButtons;
+		private Game _game;
+		private GameSettings _gameSettings;
 
         public MainMineSweeperForm()
         {
             InitializeComponent();
-
-			VerticalGameButtonsNumber = 10;
-			HorizontalGameButtonsNumber = 10;
-			MinesNumber = 10;
-			GameButtons = new Button[VerticalGameButtonsNumber * HorizontalGameButtonsNumber];
-
 			NewGame();
         }
 
 		private void ClearForm()
 		{
-			if (GameButtons != null)
-				foreach (Button button in GameButtons)
+			if (_gameButtons != null)
+				foreach (Button button in _gameButtons)
 					this.Controls.Remove(button);
 		}
 
@@ -54,13 +45,13 @@ namespace MineSweeper
 		private void InitializeButtons()
 		{
 			Point location = new Point(StartingFormPosition.X, StartingFormPosition.Y);
-			for (int i = 0; i < VerticalGameButtonsNumber; ++i)
+			for (int i = 0; i < _gameSettings.GameFieldHeight; ++i)
 			{
-				for (int j = 0; j < HorizontalGameButtonsNumber; ++j)
+				for (int j = 0; j < _gameSettings.GameFieldWidth; ++j)
 				{
-					int buttonIndex = i * HorizontalGameButtonsNumber + j;
-					GameButtons[buttonIndex] = MakeNewGameButton(location);
-					this.Controls.Add(GameButtons[buttonIndex]);
+					int buttonIndex = i * _gameSettings.GameFieldWidth + j;
+					_gameButtons[buttonIndex] = MakeNewGameButton(location);
+					this.Controls.Add(_gameButtons[buttonIndex]);
 
 					location.X += GameButtonSize;
 				}
@@ -74,59 +65,85 @@ namespace MineSweeper
 		{
 			ClearForm();
 
-			InitializeButtons();
+			_gameSettings = new GameSettings(10, 10, 10);
+			_gameButtons = new Button[_gameSettings.GameFieldHeight * _gameSettings.GameFieldWidth];
+			_game = new Game(_gameSettings);
 
-			_gameField = new GameField(this);
+			InitializeButtons();
 		}
 
 		private void EndGame(string lastWords)
 		{
-			_gameField.EndGame();
+			_game.EndGame();
+
+			foreach (Button button in _gameButtons)
+			{
+				button.Enabled = false;
+				button.BackColor = Color.Silver;
+			}
+
 			Invalidate();
 			MessageBox.Show(lastWords, "Game over.");
 		}
 
 		private void GameButtonMouseClick(object sender, MouseEventArgs e)
         {
-			int rowIndex = GameButtons.ToList().IndexOf((Button)sender) / HorizontalGameButtonsNumber;
-			int columnIndex = GameButtons.ToList().IndexOf((Button)sender) % HorizontalGameButtonsNumber;
+			int buttonIndex = _gameButtons.ToList().IndexOf((Button)sender);
+			int rowIndex = buttonIndex / _gameSettings.GameFieldWidth;
+			int columnIndex = buttonIndex % _gameSettings.GameFieldWidth;
 
 			if (e.Button == MouseButtons.Right)
-				_gameField.RemarkCell(rowIndex, columnIndex);
+				RefreshButton(_game.RemarkCell(rowIndex, columnIndex));
 			else
-				_gameField.OpenCell(rowIndex, columnIndex);
+				RefreshButtons(_game.OpenCell(rowIndex, columnIndex));
 
-			if (_gameField.State != GameState.PlayerLose)
-				_gameField.PlayerWinCheck();
+			if (_game.State != GameState.PlayerLose)
+			{
+				if (_game.PlayerWins())
+				{
+					EndGame("You are win!");
+					return;
+				}
+			}
 			else
 			{
 				EndGame("You are lose!");
 				return;
 			}
 
-			if (_gameField.State == GameState.PlayerWin)
-			{
-				EndGame("You are win!");
-				return;
-			}
-
 			Invalidate();
         }
-		
+
+		private void RefreshButtons(List<Point> buttonsLocationsList)
+		{
+			foreach (Point location in buttonsLocationsList)
+				RefreshButton(location);
+		}
+
+		private void RefreshButton(Point location)
+		{
+			int buttonIndex = location.X * _gameSettings.GameFieldHeight + location.Y;
+			if (_game.Field[location.X, location.Y].IsOpened)
+			{
+				_gameButtons[buttonIndex].Enabled = false;
+				_gameButtons[buttonIndex].BackColor = Color.Silver;
+			}
+		}
+
 		private void MainMineSweeperForm_Paint(object sender, PaintEventArgs e)
 		{
-			for (int i = 0; i < VerticalGameButtonsNumber; ++i)
-				for (int j = 0; j < HorizontalGameButtonsNumber; ++j)
+			for (int i = 0; i < _gameSettings.GameFieldHeight; ++i)
+				for (int j = 0; j < _gameSettings.GameFieldWidth; ++j)
 				{
-					if (_gameField[i, j].IsOpened && _gameField[i, j].Value > 0)
-						GameButtons[i * HorizontalGameButtonsNumber + j].Text = _gameField[i, j].Value.ToString();
-					else if (_gameField[i, j].IsMarked)
-						GameButtons[i * HorizontalGameButtonsNumber + j].Text = "P";
-					else if ((_gameField.State == GameState.PlayerLose || _gameField.State == GameState.PlayerWin) &&
-						_gameField[i, j].IsMine && !_gameField[i, j].IsMarked)
-						GameButtons[i * HorizontalGameButtonsNumber + j].Text = "X";
+					if (_game.Field[i, j].IsOpened && _game.Field[i, j].Value > 0)
+						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = _game.Field[i, j].Value.ToString();
+					else if (_game.Field[i, j].IsMarked)
+						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = "P";
+					else if ((_game.State == GameState.PlayerLose || _game.State == GameState.PlayerWin) &&
+						_game.Field[i, j].IsMine && !_game.Field[i, j].IsMarked)
+						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = "X";
 					else
-						GameButtons[i * HorizontalGameButtonsNumber + j].Text = "";
+						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = "";
 				}
 		}
 
@@ -134,6 +151,5 @@ namespace MineSweeper
 		{
 			NewGame();
 		}
-
     }
 }

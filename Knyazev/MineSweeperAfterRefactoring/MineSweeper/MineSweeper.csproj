@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FieldElement.cs" />
+    <Compile Include="GameSettings.cs" />
     <Compile Include="MainMineSweeperForm.cs">
       <SubType>Form</SubType>
     </Compile>

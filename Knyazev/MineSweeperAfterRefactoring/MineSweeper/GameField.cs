@@ -1,32 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace MineSweeper
 {
 	enum GameState { GameInProcess, PlayerLose, PlayerWin }
 
-	class GameField
+	class Game
 	{
-		private GameCell[,] _gameField;
-		private MainMineSweeperForm _gameForm;
-
+		private GameSettings _settings;
 		public GameState State { get; private set; }
+		public GameCell[,] Field { get; private set; }
 
-		public GameField(MainMineSweeperForm gameForm)
+		public Game(GameSettings gameSettings)
 		{
-			_gameForm = gameForm;
-			_gameField = new GameCell[_gameForm.VerticalGameButtonsNumber, _gameForm.HorizontalGameButtonsNumber];
+			_settings = gameSettings;
+			Field = new GameCell[_settings.GameFieldHeight, _settings.GameFieldWidth];
 
 			Random randomGenerator = new Random();
-			for (int i = 0; i < _gameForm.MinesNumber; i++)
+			for (int i = 0; i < _settings.MinesNumber; i++)
 			{
 				while (true)
 				{
-					int row = randomGenerator.Next(_gameForm.VerticalGameButtonsNumber);
-					int column = randomGenerator.Next(_gameForm.HorizontalGameButtonsNumber);
-					if (!_gameField[row, column].IsMine)
+					int row = randomGenerator.Next(_settings.GameFieldHeight);
+					int column = randomGenerator.Next(_settings.GameFieldWidth);
+					if (!Field[row, column].IsMine)
 					{
-						_gameField[row, column].IsMine = true;
+						Field[row, column].IsMine = true;
 						break;
 					}
 				}
@@ -35,45 +35,51 @@ namespace MineSweeper
 			SetGameFieldElementsValues();
 		}
 
-		public void OpenCell(int rowIndex, int columnIndex)
+		public List<Point> OpenCell(int rowIndex, int columnIndex)
 		{
-			if (!_gameField[rowIndex, columnIndex].IsOpened && !_gameField[rowIndex, columnIndex].IsMarked)
-			{
-				if (!_gameField[rowIndex, columnIndex].IsMine)
-				{
-					_gameField[rowIndex, columnIndex].IsOpened = true;
-					int buttonIndex = rowIndex * _gameForm.VerticalGameButtonsNumber + columnIndex;
-					_gameForm.GameButtons[buttonIndex].Enabled = false;
-					_gameForm.GameButtons[buttonIndex].BackColor = Color.Silver;
+			List<Point> result = new List<Point>();
+			OpenCells(result, rowIndex, columnIndex);
+			return result;
+		}
 
-					if (_gameField[rowIndex, columnIndex].Value == 0)
+		private void OpenCells(List<Point> changedCells, int rowIndex, int columnIndex)
+		{
+			changedCells.Add(new Point(rowIndex, columnIndex));
+
+			if (!Field[rowIndex, columnIndex].IsOpened && !Field[rowIndex, columnIndex].IsMarked)
+			{
+				if (!Field[rowIndex, columnIndex].IsMine)
+				{
+					Field[rowIndex, columnIndex].IsOpened = true;
+
+					if (Field[rowIndex, columnIndex].Value == 0)
 					{
 						if (rowIndex > 0)
 						{
 							if (columnIndex > 0)
-								OpenCell(rowIndex - 1, columnIndex - 1);
+								OpenCells(changedCells, rowIndex - 1, columnIndex - 1);
 
-							OpenCell(rowIndex - 1, columnIndex);
+							OpenCells(changedCells, rowIndex - 1, columnIndex);
 
-							if (columnIndex + 1 < _gameForm.HorizontalGameButtonsNumber)
-								OpenCell(rowIndex - 1, columnIndex + 1);
+							if (columnIndex + 1 < _settings.GameFieldWidth)
+								OpenCells(changedCells, rowIndex - 1, columnIndex + 1);
 						}
 
 						if (columnIndex > 0)
-							OpenCell(rowIndex, columnIndex - 1);
+							OpenCells(changedCells, rowIndex, columnIndex - 1);
 
-						if (columnIndex + 1 < _gameForm.HorizontalGameButtonsNumber)
-							OpenCell(rowIndex, columnIndex + 1);
+						if (columnIndex + 1 < _settings.GameFieldWidth)
+							OpenCells(changedCells, rowIndex, columnIndex + 1);
 
-						if (rowIndex + 1 < _gameForm.VerticalGameButtonsNumber)
+						if (rowIndex + 1 < _settings.GameFieldHeight)
 						{
 							if (columnIndex > 0)
-								OpenCell(rowIndex + 1, columnIndex - 1);
+								OpenCells(changedCells, rowIndex + 1, columnIndex - 1);
 
-							OpenCell(rowIndex + 1, columnIndex);
+							OpenCells(changedCells, rowIndex + 1, columnIndex);
 
-							if (columnIndex + 1 < _gameForm.HorizontalGameButtonsNumber)
-								OpenCell(rowIndex + 1, columnIndex + 1);
+							if (columnIndex + 1 < _settings.GameFieldWidth)
+								OpenCells(changedCells, rowIndex + 1, columnIndex + 1);
 						}
 					}
 				}
@@ -81,69 +87,68 @@ namespace MineSweeper
 					State = GameState.PlayerLose;
 			}
 		}
-		public void RemarkCell(int rowIndex, int columnIndex)
+
+		public Point RemarkCell(int rowIndex, int columnIndex)
 		{
-			_gameField[rowIndex, columnIndex].IsMarked = !_gameField[rowIndex, columnIndex].IsMarked;
+			Field[rowIndex, columnIndex].IsMarked = !Field[rowIndex, columnIndex].IsMarked;
+			return new Point(rowIndex, columnIndex);
 		}
-		public void PlayerWinCheck()
+
+		public bool PlayerWins()
 		{
 			int openCellsCount = 0;
-			for (int i = 0; i < _gameForm.VerticalGameButtonsNumber; ++i)
-				for (int j = 0; j < _gameForm.HorizontalGameButtonsNumber; ++j)
-					if (_gameField[i, j].IsOpened)
+			for (int i = 0; i < _settings.GameFieldHeight; ++i)
+				for (int j = 0; j < _settings.GameFieldWidth; ++j)
+					if (Field[i, j].IsOpened)
 					++openCellsCount;
 
-			if (openCellsCount == (_gameForm.HorizontalGameButtonsNumber * _gameForm.VerticalGameButtonsNumber - _gameForm.MinesNumber))
+			if (openCellsCount == (_settings.GameFieldWidth * _settings.GameFieldHeight - _settings.MinesNumber))
+			{
 				State = GameState.PlayerWin;
+				return true;
+			}
+
+			return false;
 		}
+
 		public void EndGame()
 		{
-			for (int i = 0; i < _gameForm.VerticalGameButtonsNumber; ++i)
-				for (int j = 0; j < _gameForm.HorizontalGameButtonsNumber; ++j)
-				{
-					_gameField[i, j].IsOpened = true;
-					int buttonIndex = i * _gameForm.HorizontalGameButtonsNumber + j;
-					_gameForm.GameButtons[buttonIndex].Enabled = false;
-					_gameForm.GameButtons[buttonIndex].BackColor = Color.Silver;
-				}
+			for (int i = 0; i < _settings.GameFieldHeight; ++i)
+				for (int j = 0; j < _settings.GameFieldWidth; ++j)
+					Field[i, j].IsOpened = true;
 		}
 
 		private void SetGameFieldElementsValues()
 		{
-			for (int i = 0; i < _gameForm.VerticalGameButtonsNumber; ++i)
-				for (int j = 0; j < _gameForm.HorizontalGameButtonsNumber; ++j)
-					if (!_gameField[i, j].IsMine)
+			for (int i = 0; i < _settings.GameFieldHeight; ++i)
+				for (int j = 0; j < _settings.GameFieldWidth; ++j)
+					if (!Field[i, j].IsMine)
 					{
 						if (i > 0)
 						{
-							if (j > 0 && _gameField[i - 1, j - 1].IsMine)
-								++_gameField[i, j].Value;
-							if (_gameField[i - 1, j].IsMine)
-								++_gameField[i, j].Value;
-							if (j + 1 < _gameForm.HorizontalGameButtonsNumber && _gameField[i - 1, j + 1].IsMine)
-								++_gameField[i, j].Value;
+							if (j > 0 && Field[i - 1, j - 1].IsMine)
+								++Field[i, j].Value;
+							if (Field[i - 1, j].IsMine)
+								++Field[i, j].Value;
+							if (j + 1 < _settings.GameFieldWidth && Field[i - 1, j + 1].IsMine)
+								++Field[i, j].Value;
 						}
 
-						if (j > 0 && _gameField[i, j - 1].IsMine)
-							++_gameField[i, j].Value;
-						if (j + 1 < _gameForm.HorizontalGameButtonsNumber && _gameField[i, j + 1].IsMine)
-							++_gameField[i, j].Value;
+						if (j > 0 && Field[i, j - 1].IsMine)
+							++Field[i, j].Value;
+						if (j + 1 < _settings.GameFieldWidth && Field[i, j + 1].IsMine)
+							++Field[i, j].Value;
 
-						if (i + 1 < _gameForm.VerticalGameButtonsNumber)
+						if (i + 1 < _settings.GameFieldHeight)
 						{
-							if (j > 0 && _gameField[i + 1, j - 1].IsMine)
-								++_gameField[i, j].Value;
-							if (_gameField[i + 1, j].IsMine)
-								++_gameField[i, j].Value;
-							if (j + 1 < _gameForm.HorizontalGameButtonsNumber && _gameField[i + 1, j + 1].IsMine)
-								++_gameField[i, j].Value;
+							if (j > 0 && Field[i + 1, j - 1].IsMine)
+								++Field[i, j].Value;
+							if (Field[i + 1, j].IsMine)
+								++Field[i, j].Value;
+							if (j + 1 < _settings.GameFieldWidth && Field[i + 1, j + 1].IsMine)
+								++Field[i, j].Value;
 						}
 					}
-		}
-
-		public GameCell this[int index1, int index2]
-		{
-			get { return _gameField[index1, index2]; }
 		}
 	}
 }

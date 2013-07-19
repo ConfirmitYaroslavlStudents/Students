@@ -12,8 +12,10 @@ namespace Tree
         {
             Tree<int> intTree = new Tree<int>();
             Random rnd = new Random();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
+            {
                 intTree.Add(rnd.Next(20));
+            }
 
             List<int> valueList = intTree.DirectTraversing();
             Console.Write("Прямой обход: ");
@@ -27,17 +29,18 @@ namespace Tree
             Console.Write("Симметричный обход: ");
             PrintList<int>(valueList);
 
+            intTree.PrintTree();
             Console.WriteLine("Удаление элементнов дерева (вывод результата при симметричном обходе)");
             while (valueList.Count > 0)
             {
                 int removeIndex = rnd.Next(valueList.Count);
-                Console.WriteLine(valueList[removeIndex]);
+                Console.WriteLine("Удаляемый эл-т: "+valueList[removeIndex]);
                 intTree.Remove(valueList[removeIndex]);
 
                 valueList = intTree.SymmetricTraversing();
                 PrintList<int>(valueList);
             }
-
+            
             Console.ReadLine();
         }
 

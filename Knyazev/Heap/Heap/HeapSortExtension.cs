@@ -15,9 +15,9 @@ namespace Heap
 				array[array.Length - sortingHeap.Count] = sortingHeap.DeleteTop();
 		}
 
-		public static void HeapSort<T>(this T[] array, IComparer<T> comparar)
+		public static void HeapSort<T>(this T[] array, IComparer<T> comparer)
 		{
-			var sortingHeap = new Heap<T>(array.Length, comparar);
+			var sortingHeap = new Heap<T>(array.Length, comparer);
 
 			foreach (T arrayElement in array)
 				sortingHeap.Add(arrayElement);

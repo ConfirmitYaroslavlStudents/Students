@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,10 +25,14 @@ namespace Queue
             {
                 Console.WriteLine(exampleArray[i]);
             }
+            foreach (int iteam in myQueue)
+            {
+                Console.Write(iteam+" ");
+            }
             Console.ReadLine();
         }
     }
-    class Queue<T>
+    class Queue<T> : IEnumerable<T>, IEnumerable
     {
         private int _count;
         private Element<T> _first;
@@ -105,8 +110,86 @@ namespace Queue
             }
             return queueArray;
         }
+        public T GetElement(int index)
+        {
+            Element<T> queueElement = _first;
+            for (int i = 0; i < index; i++)
+            {
+                queueElement = queueElement.Next;
+            }
+            return queueElement.Value;
+        }
+        public Queue<T>.Enumerator GetEnumerator()
+        {
+            return new Queue<T>.Enumerator(this);
+        }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return (IEnumerator<T>)new Queue<T>.Enumerator(this);
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator)new Queue<T>.Enumerator(this);
+        }
+        public class Enumerator : IEnumerator<T>, IDisposable, IEnumerator
+        {
+            private Queue<T> _queue;
+            private int _index;
+            private T _currentElement;
+            public Enumerator(Queue<T> queue)
+            {
+                this._queue = queue;
+                this._index = -1;
+                this._currentElement = default(T);
+            }
+            public T Current
+            {
+                get
+                {
+                    if (this._index < 0)
+                    {
+                        throw new InvalidOperationException("EnumNotStarted.");
+                    }
+                    return this._currentElement;
+                }
+            }
+            object IEnumerator.Current
+            {
+                get
+                {
+                    if (this._index < 0)
+                    {
+                        throw new InvalidOperationException("EnumNotStarted.");
+                    }
+                    return (object)this._currentElement;
+                }
+            }
+            public void Dispose()
+            {
+                this._index = -1;
+                this._currentElement = default(T);
+            }
+            public bool MoveNext()
+            {
+                if (this._index == _queue._count - 1)
+                {
+                    return false;
+                }
+                else
+                {
+                    this._currentElement = this._queue.GetElement(++_index);
+                    return true;
+                }
+            }
+            void IEnumerator.Reset()
+            {
+                this._index = -1;
+                this._currentElement = default(T);
+            }
+
+        }
     }
-    public class Element<T>
+    class Element<T>
     {
         private T _value;
         private Element<T> _next;

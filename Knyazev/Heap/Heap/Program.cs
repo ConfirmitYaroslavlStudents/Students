@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using System.Diagnostics;
 
 namespace Heap
 {
@@ -37,7 +36,6 @@ namespace Heap
 			else
 				_comparer = Comparer<T>.Default;
 			_heap.Sort(_comparer);
-			
 		}
 		public Heap(int capacity)
 		{
@@ -134,7 +132,7 @@ namespace Heap
 		{
 			public int Compare(int a, int b)
 			{
-				return b - a;
+				return -a.CompareTo(b);
 			}
 		}
 
@@ -146,61 +144,31 @@ namespace Heap
 			}
 		}
 
-		static void HeapSort<T>(T[] array)
-		{
-			Heap<T> sortingHeap = new Heap<T>(array.Length);
-
-			foreach (T arrayElement in array)
-				sortingHeap.Add(arrayElement);
-
-			while (sortingHeap.Count > 0)
-				array[array.Length - sortingHeap.Count] = sortingHeap.DeleteTop();
-		}
-
-		static void HeapSort<T>(T[] array, IComparer<T> comparar)
-		{
-			Heap<T> sortingHeap = new Heap<T>(array.Length, comparar);
-
-			foreach (T arrayElement in array)
-				sortingHeap.Add(arrayElement);
-
-			while (sortingHeap.Count > 0)
-				array[array.Length - sortingHeap.Count] = sortingHeap.DeleteTop();
-		}
-
 		static void HeapSortTimeTest()
 		{
-			StringWriter result = new StringWriter();
-
 			for (int i = 100; i <= 100000000; i *= 10)
 			{
-				TimeSpan sortingTime = new TimeSpan();
-
-				int[] testArray = SortingTimeTest.GenerateIntArray(i);
-				int[] testArrayCopy = new int[i];
+				var stopwatch = new Stopwatch();
+				var testArray = SortingTimeTest.GenerateIntArray(i);
+				var testArrayCopy = new int[i];
 				testArray.CopyTo(testArrayCopy, 0);
 
-				result.WriteLine("Sorting an array of {0} elements.", i);
-				result.Write("HeapSort time: ");
-				DateTime beforeSorting = DateTime.Now;
-				HeapSort<int>(testArray);
-				sortingTime = (DateTime.Now - beforeSorting);
-				result.WriteLine("{0:0.######} seconds.", sortingTime.TotalSeconds);
+				Console.WriteLine("Sorting an array of {0} elements.", i);
+				stopwatch.Start();
+				testArray.HeapSort();
+				stopwatch.Stop();
+				Console.WriteLine("HeapSort time: {0:0.######} seconds.", (double)stopwatch.ElapsedMilliseconds / 1000);
 
-				result.Write("QuickSort time: ");
-				beforeSorting = DateTime.Now;
-				Array.Sort<int>(testArrayCopy);
-				sortingTime = (DateTime.Now - beforeSorting);
-				result.WriteLine("{0:0.######} seconds.", sortingTime.TotalSeconds);
+				stopwatch.Restart();
+				Array.Sort(testArrayCopy);
+				stopwatch.Stop();
+				Console.WriteLine("QuickSort time: {0:0.######} seconds.", (double)stopwatch.ElapsedMilliseconds / 1000);
 			}
-
-			using (StreamWriter SW = new StreamWriter("test3.txt"))
-				SW.WriteLine(result);
 		}
 
 		static void Main()
 		{
-			Heap<int> testHeap = new Heap<int>();
+			var testHeap = new Heap<int>();
 			testHeap.Add(7);
 			testHeap.Add(3);
 			testHeap.Add(5);
@@ -218,7 +186,7 @@ namespace Heap
 			while (testHeap.Count > 0)
 				Console.WriteLine(testHeap.DeleteTop());
 
-			Queue<int> testQueue = new Queue<int>(new int[] { 10, -3, 5, 0, -25 });
+			var testQueue = new Queue<int>(new int[] { 10, -3, 5, 0, -25 });
 			testHeap = new Heap<int>(testQueue);
 			Console.WriteLine("We get heap from queue with default int comparer (MinHeap).");
 			while (testHeap.Count > 0)
@@ -230,21 +198,20 @@ namespace Heap
 			foreach (int a in testHeap)
 				Console.WriteLine(a);
 
-			string[] testArray = { "10", "2", "1", "1001" };
-			HeapSort<string>(testArray);
+			var testArray = new []{ "10", "2", "1", "1001" };
+			testArray.HeapSort();
 			Console.WriteLine("We sorted array with default string comparer.");
 			for (int i = 0; i < testArray.Length - 1; ++i)
 				Console.Write(testArray[i].ToString() + " ");
 			Console.WriteLine(testArray[testArray.Length - 1]);
 
-			HeapSort<string>(testArray, new MyStringComparar());
+			testArray.HeapSort(new MyStringComparar());
 			Console.WriteLine("We sorted array with my string comparer.");
 			for (int i = 0; i < testArray.Length - 1; ++i)
 				Console.Write(testArray[i].ToString() + " ");
 			Console.WriteLine(testArray[testArray.Length - 1]);
 
-			for (int i = 0; i < 5; ++i)
-				HeapSortTimeTest();
+			HeapSortTimeTest();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace HelpKsyu
 {
-	partial class SCCInfoForm
+	partial class StrongConnectedComponentInfoForm
 	{
 		/// <summary>
 		/// Required designer variable.

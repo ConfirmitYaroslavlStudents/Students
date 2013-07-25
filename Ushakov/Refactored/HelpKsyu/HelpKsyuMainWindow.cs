@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using Tao.OpenGl;
 using Tao.FreeGlut;
 using Tao.Platform.Windows;
@@ -14,214 +13,242 @@ using DirectGraph;
 
 namespace HelpKsyu
 {
-	public partial class HelpKsyuMainWindow : Form
-	{
-		#region LittleTrickWithConsole
+    public partial class HelpKsyuMainWindow : Form
+    {
+        public struct RGBColor
+        {
+            public byte R, G, B;
 
-		[DllImport("kernel32.dll")]
-		public static extern Boolean AllocConsole();
+            public RGBColor(byte r, byte g, byte b)
+            {
+                R = r;
+                G = g;
+                B = b;
+            }
+        };
 
-		[DllImport("kernel32.dll")]
-		public static extern Boolean FreeConsole();
+        struct Vertex2D
+        {
+            public int Index, X, Y;
 
-		#endregion
+            public Vertex2D(int index, int x, int y)
+            {
+                this.Index = index;
+                this.X = x;
+                this.Y = y;
+            }
+        };
 
-		public struct RGBAColor
-		{
-			public byte R, G, B, A;
+        class Vector2DInfo
+        {
+            internal struct DoublePoint
+            {
+                public double X { get; set; }
+                public double Y { get; set; }
+            }
 
-			public RGBAColor(byte r, byte g, byte b, byte a)
-			{
-				R = r;
-				G = g;
-				B = b;
-				A = a;
-			}
-		};
+            public Point Begin { get; private set; }
+            public Point End { get; private set; }
+            public DoublePoint LeftArrowPoint { get; private set; }
+            public DoublePoint RightArrowPoint { get; private set; }
 
-		struct Vertex2D
-		{
-			public int v, x, y;
+            public Vector2DInfo(Point begin, Point end)
+            {
+                Begin = begin;
+                End = end;
 
-			public Vertex2D(int v, int x, int y)
-			{
-				this.v = v;
-				this.x = x;
-				this.y = y;
-			}
-		};
+                CalculateArrowPoints(begin, end);
+            }
 
-		DirectedGraph Graph;
-		internal KosarajuAlgorithm StrongConnectedComponentGraph;
-		Vertex2D[] VertexCoords;
-		internal RGBAColor[] StrongConnectedComponentColors;
-        StrongConnectedComponentInfo SCCInfo;
+            private void CalculateArrowPoints(Point begin, Point end)
+            {
+                double deltaX = begin.X - end.X;
+                double deltaY = begin.Y - end.Y;
+                double length = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+                deltaX /= length;
+                deltaY /= length;
 
-		public HelpKsyuMainWindow()
-		{
-			InitializeComponent();
+                double leftArrowPointX = 6.5 * deltaX + deltaY;
+                double leftArrowPointY = 6.5 * deltaY - deltaX;
+                double rightArrowPointX = 6.5 * deltaX - deltaY;
+                double rightArrowPointY = 6.5 * deltaY + deltaX;
 
-			DisplayForGraph.InitializeContexts();
-			// инициализация Glut 
-			Glut.glutInit();
-			Glut.glutInitDisplayMode(Glut.GLUT_RGB | Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH);
+                length = Math.Sqrt(leftArrowPointX * leftArrowPointX + leftArrowPointY * leftArrowPointY);
+                leftArrowPointX /= length;
+                leftArrowPointY /= length;
+                length = Math.Sqrt(rightArrowPointX * rightArrowPointX + rightArrowPointY * rightArrowPointY);
+                rightArrowPointX /= length;
+                rightArrowPointY /= length;
 
-			// очитка окна 
-			Gl.glClearColor(255, 255, 255, 1);
+                LeftArrowPoint = new DoublePoint(){X = leftArrowPointX*25, Y = leftArrowPointY*25};
+                RightArrowPoint = new DoublePoint() {X = rightArrowPointX * 25, Y = rightArrowPointY * 25 };
+            }
+        };
 
-			// установка порта вывода в соотвествии с размерами элемента DsplForGraph
-			Gl.glViewport(0, 0, DisplayForGraph.Width, DisplayForGraph.Height);
+        DirectedGraph Graph;
+        internal KosarajuAlgorithm StrongConnectedComponentGraph;
+        Vertex2D[] VertexCoords;
+        internal RGBColor[] StrongConnectedComponentColors;
+        StrongConnectedComponentInfo strongConnectedComponentInfo;
+        Random rnd = new Random();
 
-			// настройка проекции 
-			Gl.glMatrixMode(Gl.GL_PROJECTION);
-			Gl.glLoadIdentity();
+        public HelpKsyuMainWindow()
+        {
+            InitializeComponent();
 
-			// теперь необходимо корректно настроить 2D ортогональную проекцию 
-			Glu.gluOrtho2D(0, DisplayForGraph.Height, 0, DisplayForGraph.Width);
+            DisplayForGraph.InitializeContexts();
+            InitOpenGL();
+        }
 
-			// установка объектно-видовой матрицы 
-			Gl.glMatrixMode(Gl.GL_MODELVIEW);
-			Gl.glLoadIdentity();
-		}
+        private void InitOpenGL()
+        {
+            Glut.glutInit();
+            Glut.glutInitDisplayMode(Glut.GLUT_RGB | Glut.GLUT_DOUBLE | Glut.GLUT_DEPTH);
+            Gl.glClearColor(255, 255, 255, 1);
+            Gl.glViewport(0, 0, DisplayForGraph.Width, DisplayForGraph.Height);
+            Gl.glMatrixMode(Gl.GL_PROJECTION);
+            Gl.glLoadIdentity();
+            Glu.gluOrtho2D(0, DisplayForGraph.Height, 0, DisplayForGraph.Width);
+            Gl.glMatrixMode(Gl.GL_MODELVIEW);
+            Gl.glLoadIdentity();
+        }
 
-		private void ReadGraphFromAConsole_Click(object sender, EventArgs e)
-		{
-			AllocConsole();
+        private void ReadGraphFromAConsole_Click(object sender, EventArgs e)
+        {
+            Graph = DirectedGraphReader.ReadFromConsole();
+        }
 
-			Graph = new DirectedGraph();
-			Graph.ReadFromConsole();
+        private void ReadGraphFromATextFile_Click(object sender, EventArgs e)
+        {
+            openInputTxt.ShowDialog();
+            string fileName = openInputTxt.FileName;
 
-			FreeConsole();
-		}
+            Graph = DirectedGraphReader.ReadFromTxtFile(fileName);
+        }
 
-		private void ReadGraphFromATextFile_Click(object sender, EventArgs e)
-		{
-			openInputTxt.ShowDialog();
-			string fileName = openInputTxt.FileName;
+        private void ShowGraphs_Click(object sender, EventArgs e)
+        {
+            GenStrongConnectedComponentGraph();
 
-			Graph = new DirectedGraph();
-			Graph.ReadFromTxtFile(fileName);
-		}
+            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
+            Gl.glLoadIdentity();
 
-		private void ShowGraphs_Click(object sender, EventArgs e)
-		{
-			StrongConnectedComponentGraph = new KosarajuAlgorithm(Graph);
-            StrongConnectedComponentColors = new RGBAColor[StrongConnectedComponentGraph.StrongConnectedComponentCount];
+            for (int i = 0; i < StrongConnectedComponentGraph.StrongConnectedComponentCount; ++i)
+            {
+                Gl.glColor3ub(StrongConnectedComponentColors[i].R,
+                              StrongConnectedComponentColors[i].G,
+                              StrongConnectedComponentColors[i].B);
 
-            SCCInfo = new StrongConnectedComponentInfo(StrongConnectedComponentGraph, StrongConnectedComponentColors);
+                DrawStrongConnectedComponentVertices(i);
+                DrawStrongConnectedComponentEdges(i);
+            }
 
-			VertexCoords = new Vertex2D[Graph.VerticesCount];
-			Random rndm = new Random();
-			for (int i = 0; i < Graph.VerticesCount; ++i)
-			{
-				VertexCoords[i].v = i + 1;
-				VertexCoords[i].x = rndm.Next(8, DisplayForGraph.Height - 23);
-				VertexCoords[i].y = rndm.Next(8, DisplayForGraph.Width - 23);
-			}
+            DrawEdgesBetweenConnectedComponents();
 
-			// очищаем буфер цвета 
-			Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
+            for (int i = 0; i < Graph.VerticesCount; ++i)
+                PrintText2D(VertexCoords[i].X + 2, VertexCoords[i].Y + 2, (VertexCoords[i].Index).ToString());
 
-			// очищаем текущую матрицу 
-			Gl.glLoadIdentity();
-			
-			for (int i = 0; i < StrongConnectedComponentGraph.StrongConnectedComponentCount; ++i)
-			{
-				byte r = (byte)rndm.Next(25, 255);
-				byte g = (byte)rndm.Next(25, 255);
-				byte b = (byte)rndm.Next(25, 255);
-				byte a = 255;
-				Gl.glColor4ub(r, g, b, a);
-				StrongConnectedComponentColors[i] = new RGBAColor(r, g, b, a);
+            Gl.glFlush();
+            DisplayForGraph.Invalidate();
+        }
 
-				Gl.glPointSize(13);
-				Gl.glEnable(Gl.GL_POINT_SMOOTH);
-				Gl.glBegin(Gl.GL_POINTS);
+        private void GenStrongConnectedComponentGraph()
+        {
+            StrongConnectedComponentGraph = new KosarajuAlgorithm(Graph);
+            GenStrongConnectedComponentColors();
 
-				for (int j = 0; j < StrongConnectedComponentGraph.SCCVerticesCount(i); ++j)
-					Gl.glVertex2i(VertexCoords[StrongConnectedComponentGraph.GetVertex(i, j)].x, VertexCoords[StrongConnectedComponentGraph.GetVertex(i, j)].y);
+            strongConnectedComponentInfo = new StrongConnectedComponentInfo(StrongConnectedComponentGraph, StrongConnectedComponentColors);
 
-				Gl.glEnd();
+            GenVertexCoord();
+        }
 
-				Gl.glLineWidth(2);
-				for (int j = 0; j < StrongConnectedComponentGraph.SCCEdgesCount(i); ++j)
-					PrintVector2D(StrongConnectedComponentGraph.GetEdge(i, j));
-			}
+        private void DrawEdgesBetweenConnectedComponents()
+        {
+            Gl.glColor3i(0, 0, 0);
+            for (int i = 0; i < Graph.VerticesCount; ++i)
+                for (int j = 0; j < Graph.GetVertexDegree(i); ++j)
+                    if (!StrongConnectedComponentGraph.StrongConnect(Graph.GetEdge(i, j).Begin, Graph.GetEdge(i, j).End))
+                        PrintVector2D(Graph.GetEdge(i, j));
+        }
 
-			Gl.glColor3i(0, 0, 0);
-			for (int i = 0; i < Graph.VerticesCount; ++i)
-				for (int j = 0; j < Graph.GetVertexDegree(i); ++j)
-					if (!StrongConnectedComponentGraph.StrongConnect(Graph.GetEdge(i, j).Begin, Graph.GetEdge(i, j).End))
-						PrintVector2D(Graph.GetEdge(i, j));
+        private void DrawStrongConnectedComponentEdges(int i)
+        {
+            Gl.glLineWidth(2);
+            for (int j = 0; j < StrongConnectedComponentGraph.StrongConnectedComponentEdgesCount(i); ++j)
+                PrintVector2D(StrongConnectedComponentGraph.GetEdge(i, j));
+        }
 
-			// расставляем номера у точек
-			for (int i = 0; i < Graph.VerticesCount; ++i)
-				PrintText2D(VertexCoords[i].x + 2, VertexCoords[i].y + 2, (VertexCoords[i].v).ToString());
+        private void DrawStrongConnectedComponentVertices(int i)
+        {
+            Gl.glPointSize(13);
+            Gl.glEnable(Gl.GL_POINT_SMOOTH);
+            Gl.glBegin(Gl.GL_POINTS);
 
-			// дожидаемся конца визуализации кадра 
-			Gl.glFlush();
+            for (int j = 0; j < StrongConnectedComponentGraph.StrongConnegtionComponentVerticesCount(i); ++j)
+                Gl.glVertex2i(VertexCoords[StrongConnectedComponentGraph.GetVertex(i, j)].X, VertexCoords[StrongConnectedComponentGraph.GetVertex(i, j)].Y);
 
-			// посылаем сигнал перерисовки элемента DsplForGraph. 
-			DisplayForGraph.Invalidate();
-		}
+            Gl.glEnd();
+        }
 
-		private void PrintText2D(int x, int y, string text)
-		{
-			// устанавливаем чёрный цвет
-			Gl.glColor3i(0, 0, 0);
+        private void GenStrongConnectedComponentColors()
+        {
+            StrongConnectedComponentColors = new RGBColor[StrongConnectedComponentGraph.StrongConnectedComponentCount];
 
-			// устанавливаем позицию вывода растровых символов 
-			// в переданных координатах x и y. 
-			Gl.glRasterPos2d(x, y);
+            for (int i = 0; i < StrongConnectedComponentGraph.StrongConnectedComponentCount; ++i)
+                StrongConnectedComponentColors[i] = new RGBColor((byte)rnd.Next(25, 255),
+                                                                 (byte)rnd.Next(25, 255),
+                                                                 (byte)rnd.Next(25, 255));
+        }
 
-			// в цикле foreach перебираем значения из массива text, 
-			// который содержит значение строки для визуализации 
-			foreach (char charForDraw in text)
-				Glut.glutBitmapCharacter(Glut.GLUT_BITMAP_HELVETICA_18, charForDraw);
-		}
+        private void GenVertexCoord()
+        {
+            VertexCoords = new Vertex2D[Graph.VerticesCount];
+            for (int i = 0; i < Graph.VerticesCount; ++i)
+            {
+                VertexCoords[i].Index = i + 1;
+                VertexCoords[i].X = rnd.Next(8, DisplayForGraph.Height - 23);
+                VertexCoords[i].Y = rnd.Next(8, DisplayForGraph.Width - 23);
+            }
+        }
 
-		private void PrintVector2D(DirectedEdge edge)
-		{
-            double deltaX = VertexCoords[edge.Begin].x - VertexCoords[edge.End].x;
-            double deltaY = VertexCoords[edge.Begin].y - VertexCoords[edge.End].y;
-			double length = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-			deltaX /= length;
-			deltaY /= length;
+        private void PrintText2D(int x, int y, string text)
+        {
+            Gl.glColor3i(0, 0, 0);
+            Gl.glRasterPos2d(x, y);
 
-			double leftArrowPointX = 6.5 * deltaX + deltaY;
-			double leftArrowPointY = 6.5 * deltaY - deltaX;
-			double rightArrowPointX = 6.5 * deltaX - deltaY;
-			double rightArrowPointY = 6.5 * deltaY + deltaX;
-			
-            length = Math.Sqrt(leftArrowPointX * leftArrowPointX + leftArrowPointY * leftArrowPointY);
-			leftArrowPointX /= length;
-			leftArrowPointY /= length;
-			length = Math.Sqrt(rightArrowPointX * rightArrowPointX + rightArrowPointY * rightArrowPointY);
-			rightArrowPointX /= length;
-			rightArrowPointY /= length;
+            foreach (char charForDraw in text)
+                Glut.glutBitmapCharacter(Glut.GLUT_BITMAP_HELVETICA_18, charForDraw);
+        }
 
-			Gl.glBegin(Gl.GL_LINES);
-                Gl.glVertex2d(VertexCoords[edge.Begin].x, VertexCoords[edge.Begin].y);
-                Gl.glVertex2d(VertexCoords[edge.End].x, VertexCoords[edge.End].y);
+        private void PrintVector2D(DirectedEdge edge)
+        {
+            Vector2DInfo vectorInfo = new Vector2DInfo(new Point(VertexCoords[edge.Begin].X, VertexCoords[edge.Begin].Y),
+                                                       new Point(VertexCoords[edge.End].X, VertexCoords[edge.End].Y));
+            
+            Gl.glBegin(Gl.GL_LINES);
+            Gl.glVertex2d(vectorInfo.Begin.X, vectorInfo.Begin.Y);
+            Gl.glVertex2d(vectorInfo.End.X, vectorInfo.End.Y);
 
-                Gl.glVertex2d(VertexCoords[edge.End].x, VertexCoords[edge.End].y);
-                Gl.glVertex2d(VertexCoords[edge.End].x + 25 * leftArrowPointX, VertexCoords[edge.End].y + 25 * leftArrowPointY);
-           
-                Gl.glVertex2d(VertexCoords[edge.End].x, VertexCoords[edge.End].y);
-                Gl.glVertex2d(VertexCoords[edge.End].x + 25 * rightArrowPointX, VertexCoords[edge.End].y + 25 * rightArrowPointY);
-			Gl.glEnd();
-		}
+            Gl.glVertex2d(vectorInfo.End.X, vectorInfo.End.Y);
+            Gl.glVertex2d(vectorInfo.End.X + vectorInfo.LeftArrowPoint.X,
+                          vectorInfo.End.Y + vectorInfo.LeftArrowPoint.Y);
 
-		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			ExitForm exitForm = new ExitForm();
-			exitForm.ShowDialog();
-		}
+            Gl.glVertex2d(vectorInfo.End.X, vectorInfo.End.Y);
+            Gl.glVertex2d(vectorInfo.End.X + vectorInfo.RightArrowPoint.X,
+                          vectorInfo.End.Y + vectorInfo.RightArrowPoint.Y);
+            Gl.glEnd();
+        }
 
-		private void fullSCCsInfoToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			SCCInfoForm strongConnectedComponentInfo = new SCCInfoForm(SCCInfo);
-			strongConnectedComponentInfo.Show();
-		}
-	}
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExitForm exitForm = new ExitForm();
+            exitForm.ShowDialog();
+        }
+
+        private void fullSCCsInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var strongConnectedComponentInfoForm = new StrongConnectedComponentInfoForm(strongConnectedComponentInfo);
+            strongConnectedComponentInfoForm.Show();
+        }
+    }
 }

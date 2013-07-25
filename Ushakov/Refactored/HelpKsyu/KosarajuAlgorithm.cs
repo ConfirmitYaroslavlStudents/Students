@@ -63,12 +63,12 @@ namespace HelpKsyu
 			return _strongConnectedComponentEdges[strongConnectedComponent][ind];
 		}
 
-		public int SCCVerticesCount(int strongConnectedComponent)
+		public int StrongConnegtionComponentVerticesCount(int strongConnectedComponent)
 		{
 			return _strongConnectedComponentVertices[strongConnectedComponent].Count;
 		}
 
-		public int SCCEdgesCount(int strongConnectedComponent)
+		public int StrongConnectedComponentEdgesCount(int strongConnectedComponent)
 		{
 			return _strongConnectedComponentEdges[strongConnectedComponent].Count;
 		}

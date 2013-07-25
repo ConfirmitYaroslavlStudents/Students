@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace DirectGraph
 {
@@ -57,88 +56,35 @@ namespace DirectGraph
 
 		#region Methods
 
-		public void ReadFromConsole()
+		public void AddEdge(DirectedEdge edge)
 		{
-			Console.Write("Enter a number of vertices, please: ");
-			VerticesCount = int.Parse(Console.ReadLine());
-
-			Console.Write("Enter a number of edges, please: ");
-			EdgesCount = int.Parse(Console.ReadLine());
-
-			Graph = new List<DirectedEdge>[VerticesCount];
-			for (int i = 0; i < VerticesCount; ++i)
-				Graph[i] = new List<DirectedEdge>();
-
-			string[] sprts = { " " };
-			for (int i = 0; i < EdgesCount; ++i)
-			{
-				Console.Write("Enter begin and end of {0} edge, please: ", i + 1);
-
-				string s;
-				s = Console.ReadLine();
-
-				string[] spr_s = s.Split(sprts, StringSplitOptions.RemoveEmptyEntries);
-
-				DirectedEdge t = new DirectedEdge(int.Parse(spr_s[0]) - 1, int.Parse(spr_s[1]) - 1);
-
-				Graph[t.Begin].Add(t);
-			}
-		}
-
-		public void ReadFromTxtFile(string file)
-		{
-			StreamReader data;
-			data = new StreamReader(file);
-			string s = data.ReadToEnd();
-
-			string[] sprts = { " ", "\r\n" };
-			string[] spr_s = s.Split(sprts, StringSplitOptions.RemoveEmptyEntries);
-
-			VerticesCount = int.Parse(spr_s[0]);
-			EdgesCount = int.Parse(spr_s[1]);
-
-			Graph = new List<DirectedEdge>[VerticesCount];
-			for (int i = 0; i < VerticesCount; ++i)
-				Graph[i] = new List<DirectedEdge>();
-
-			for (int i = 0; i < EdgesCount; ++i)
-			{
-				DirectedEdge t = new DirectedEdge(int.Parse(spr_s[i * 2 + 2]) - 1, int.Parse(spr_s[i * 2 + 3]) - 1);
-				Graph[t.Begin].Add(t);
-			}
-		}
-
-		public void AddEdge(DirectedEdge edg)
-		{
-			Graph[edg.Begin].Add(edg);
+			Graph[edge.Begin].Add(edge);
 			++EdgesCount;
 		}
 
-		public int GetVertexDegree(int vrt)
+		public int GetVertexDegree(int vertex)
 		{
-			return Graph[vrt].Count;
+			return Graph[vertex].Count;
 		}
 
-		public DirectedEdge GetEdge(int vrt, int ind)
+		public DirectedEdge GetEdge(int vertex, int edgeIndex)
 		{
-			return this[vrt, ind];
+			return this[vertex, edgeIndex];
 		}
 
 		public DirectedGraph Transposition()
 		{
-			DirectedGraph res = new DirectedGraph(VerticesCount);
+			DirectedGraph result = new DirectedGraph(VerticesCount);
 			for (int i = 0; i < VerticesCount; ++i)
 				for (int j = 0; j < GetVertexDegree(i); ++j)
-					res.AddEdge(GetEdge(i, j).Reverse());
+					result.AddEdge(GetEdge(i, j).Reverse());
 
-			return res;
+			return result;
 		}
 
 		#endregion
 
-		#region Properties
-
-		List<DirectedEdge> this[int i]
+		internal List<DirectedEdge> this[int i]
 		{
 			get { return Graph[i]; }
 		}
@@ -147,8 +93,5 @@ namespace DirectGraph
 		{
 			get { return Graph[i][j]; }
 		}
-
-		#endregion
-
 	}
 }

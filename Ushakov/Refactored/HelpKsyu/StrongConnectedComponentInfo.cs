@@ -8,10 +8,10 @@ namespace HelpKsyu
     public class StrongConnectedComponentInfo
     {
         public KosarajuAlgorithm StrongConnectedComponent { get; set; }
-        public HelpKsyuMainWindow.RGBAColor[] VertexColors { get; set; }
+        public HelpKsyuMainWindow.RGBColor[] VertexColors { get; set; }
 
         public StrongConnectedComponentInfo(KosarajuAlgorithm strongConnectedComponent,
-            HelpKsyuMainWindow.RGBAColor[] vertexColors)
+            HelpKsyuMainWindow.RGBColor[] vertexColors)
         {
             StrongConnectedComponent = strongConnectedComponent;
             VertexColors = vertexColors;

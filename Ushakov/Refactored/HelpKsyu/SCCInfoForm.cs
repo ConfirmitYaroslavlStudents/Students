@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace HelpKsyu
 {
-	public partial class SCCInfoForm : Form
+	public partial class StrongConnectedComponentInfoForm : Form
 	{
         StrongConnectedComponentInfo SCCInfo;
 
-		public SCCInfoForm(StrongConnectedComponentInfo sccInfo)
+		public StrongConnectedComponentInfoForm(StrongConnectedComponentInfo sccInfo)
 		{
             InitializeComponent();
             SCCInfo = sccInfo;
@@ -21,6 +21,7 @@ namespace HelpKsyu
 
 		private void SCCInfoFormLoad(object sender, EventArgs e)
 		{
+            byte DEFAULT_ALPHA = 255;
 			for (int i = 0; i < SCCInfo.StrongConnectedComponent.StrongConnectedComponentCount; ++i)
 			{
 				DataGridViewRow tableRow = new DataGridViewRow();
@@ -30,12 +31,12 @@ namespace HelpKsyu
 
 				DataGridViewTextBoxCell color = new DataGridViewTextBoxCell();
 				color.Style.BackColor = System.Drawing.Color.FromArgb
-						(SCCInfo.VertexColors[i].A, SCCInfo.VertexColors[i].R, SCCInfo.VertexColors[i].G, SCCInfo.VertexColors[i].B);
+						(DEFAULT_ALPHA, SCCInfo.VertexColors[i].R, SCCInfo.VertexColors[i].G, SCCInfo.VertexColors[i].B);
 				
                 DataGridViewTextBoxCell vertices = new DataGridViewTextBoxCell();
-                for (int j = 0; j < SCCInfo.StrongConnectedComponent.SCCVerticesCount(i) - 1; ++j)
+                for (int j = 0; j < SCCInfo.StrongConnectedComponent.StrongConnegtionComponentVerticesCount(i) - 1; ++j)
 					vertices.Value += (SCCInfo.StrongConnectedComponent.GetVertex(i, j) + 1).ToString() + ", ";
-				vertices.Value += (SCCInfo.StrongConnectedComponent.GetVertex(i, SCCInfo.StrongConnectedComponent.SCCVerticesCount(i) - 1) + 1).ToString();
+				vertices.Value += (SCCInfo.StrongConnectedComponent.GetVertex(i, SCCInfo.StrongConnectedComponent.StrongConnegtionComponentVerticesCount(i) - 1) + 1).ToString();
 
 				tableRow.Cells.Add(numCell);
 				tableRow.Cells.Add(color);

@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>5lWRvPfucUk.ico</ApplicationIcon>
+    <ApplicationIcon>ApplicationIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -114,7 +114,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="5lWRvPfucUk.ico" />
+    <Content Include="ApplicationIcon.ico" />
     <None Include="yV8Ne0Unnb4.jpg" />
   </ItemGroup>
   <ItemGroup>

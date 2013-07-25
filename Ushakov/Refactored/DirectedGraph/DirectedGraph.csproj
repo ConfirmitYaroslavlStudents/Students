@@ -8,7 +8,7 @@
     <ProjectGuid>{F9A93960-D094-4A2B-8C1E-7425F0F12ED9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DirectedGraph</RootNamespace>
+    <RootNamespace>DirectGraph</RootNamespace>
     <AssemblyName>DirectedGraph</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

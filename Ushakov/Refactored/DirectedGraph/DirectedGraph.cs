@@ -4,106 +4,73 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace DirectedGraph
+namespace DirectGraph
 {
-	public struct DEdge
+	public class DirectedEdge
 	{
-		int bgn, end;
+        public int Begin { get; set; }
+        public int End { get; set; }
 
-		#region Constructors
-
-		public DEdge(int b, int e)
+		public DirectedEdge(int begin, int end)
 		{
-			bgn = b;
-			end = e;
+			Begin = begin;
+			End = end;
 		}
 
-		public DEdge(DEdge edg)
+		public DirectedEdge(DirectedEdge edge)
 		{
-			bgn = edg.Begin;
-			end = edg.End;
+			Begin = edge.Begin;
+			End = edge.End;
 		}
 
-		#endregion
-
-		#region Methods
-
-		public DEdge Reverse()
-		{
-			DEdge res = new DEdge();
-			res.Begin = End;
-			res.End = Begin;
-			return res;
-		}
-
-		#endregion
-
-		#region Properties
-
-		public int Begin
-		{
-			get { return bgn; }
-			set { bgn = value; }
-		}
-
-		public int End
-		{
-			get { return end; }
-			set { end = value; }
-		}
-
-		#endregion
+        public DirectedEdge Reverse()
+        {
+            return new DirectedEdge(End, Begin);
+        }
 	};
 
-	public class DGraph
+	public class DirectedGraph
 	{
-		#region Fields
+        public int VerticesCount { get; set; }
+        public int EdgesCount { get; set; }
+        List<DirectedEdge>[] Graph;
 
-		int vrt_num, edg_num;
-		List<DEdge>[] G;
+		public DirectedGraph() { }
 
-		#endregion
-
-		#region Constructors
-
-		public DGraph() { }
-
-		public DGraph(int vn) : this()
+		public DirectedGraph(int verticesCount) : this()
 		{
-			vrt_num = vn;
-			G = new List<DEdge>[vrt_num];
-			for (int i = 0; i < vrt_num; ++i)
-				G[i] = new List<DEdge>();
+			VerticesCount = verticesCount;
+			Graph = new List<DirectedEdge>[VerticesCount];
+			for (int i = 0; i < VerticesCount; ++i)
+				Graph[i] = new List<DirectedEdge>();
 		}
 
-		public DGraph(DGraph g) : this(g.VerticesCount)
+		public DirectedGraph(DirectedGraph g) : this(g.VerticesCount)
 		{
 			for (int i = 0; i < g.VerticesCount; ++i)
 				for (int j = 0; j < g[i].Count; ++j)
 				{
-					G[i].Add(g[i, j]);
-					++edg_num;
+					Graph[i].Add(g[i, j]);
+					++EdgesCount;
 				}
 		}
-
-		#endregion
 
 		#region Methods
 
 		public void ReadFromConsole()
 		{
 			Console.Write("Enter a number of vertices, please: ");
-			vrt_num = int.Parse(Console.ReadLine());
+			VerticesCount = int.Parse(Console.ReadLine());
 
 			Console.Write("Enter a number of edges, please: ");
-			edg_num = int.Parse(Console.ReadLine());
+			EdgesCount = int.Parse(Console.ReadLine());
 
-			G = new List<DEdge>[VerticesCount];
+			Graph = new List<DirectedEdge>[VerticesCount];
 			for (int i = 0; i < VerticesCount; ++i)
-				G[i] = new List<DEdge>();
+				Graph[i] = new List<DirectedEdge>();
 
 			string[] sprts = { " " };
-			for (int i = 0; i < edg_num; ++i)
+			for (int i = 0; i < EdgesCount; ++i)
 			{
 				Console.Write("Enter begin and end of {0} edge, please: ", i + 1);
 
@@ -112,9 +79,9 @@ namespace DirectedGraph
 
 				string[] spr_s = s.Split(sprts, StringSplitOptions.RemoveEmptyEntries);
 
-				DEdge t = new DEdge(int.Parse(spr_s[0]) - 1, int.Parse(spr_s[1]) - 1);
+				DirectedEdge t = new DirectedEdge(int.Parse(spr_s[0]) - 1, int.Parse(spr_s[1]) - 1);
 
-				G[t.Begin].Add(t);
+				Graph[t.Begin].Add(t);
 			}
 		}
 
@@ -127,41 +94,41 @@ namespace DirectedGraph
 			string[] sprts = { " ", "\r\n" };
 			string[] spr_s = s.Split(sprts, StringSplitOptions.RemoveEmptyEntries);
 
-			vrt_num = int.Parse(spr_s[0]);
-			edg_num = int.Parse(spr_s[1]);
+			VerticesCount = int.Parse(spr_s[0]);
+			EdgesCount = int.Parse(spr_s[1]);
 
-			G = new List<DEdge>[VerticesCount];
+			Graph = new List<DirectedEdge>[VerticesCount];
 			for (int i = 0; i < VerticesCount; ++i)
-				G[i] = new List<DEdge>();
+				Graph[i] = new List<DirectedEdge>();
 
-			for (int i = 0; i < edg_num; ++i)
+			for (int i = 0; i < EdgesCount; ++i)
 			{
-				DEdge t = new DEdge(int.Parse(spr_s[i * 2 + 2]) - 1, int.Parse(spr_s[i * 2 + 3]) - 1);
-				G[t.Begin].Add(t);
+				DirectedEdge t = new DirectedEdge(int.Parse(spr_s[i * 2 + 2]) - 1, int.Parse(spr_s[i * 2 + 3]) - 1);
+				Graph[t.Begin].Add(t);
 			}
 		}
 
-		public void AddEdge(DEdge edg)
+		public void AddEdge(DirectedEdge edg)
 		{
-			G[edg.Begin].Add(edg);
-			++edg_num;
+			Graph[edg.Begin].Add(edg);
+			++EdgesCount;
 		}
 
-		public int VertexDegree(int vrt)
+		public int GetVertexDegree(int vrt)
 		{
-			return G[vrt].Count;
+			return Graph[vrt].Count;
 		}
 
-		public DEdge GetEdge(int vrt, int ind)
+		public DirectedEdge GetEdge(int vrt, int ind)
 		{
 			return this[vrt, ind];
 		}
 
-		public DGraph Transposition()
+		public DirectedGraph Transposition()
 		{
-			DGraph res = new DGraph(VerticesCount);
+			DirectedGraph res = new DirectedGraph(VerticesCount);
 			for (int i = 0; i < VerticesCount; ++i)
-				for (int j = 0; j < VertexDegree(i); ++j)
+				for (int j = 0; j < GetVertexDegree(i); ++j)
 					res.AddEdge(GetEdge(i, j).Reverse());
 
 			return res;
@@ -171,26 +138,14 @@ namespace DirectedGraph
 
 		#region Properties
 
-		public int VerticesCount
+		List<DirectedEdge> this[int i]
 		{
-			get { return vrt_num; }
-			set { vrt_num = value; }
+			get { return Graph[i]; }
 		}
 
-		public int EdgesCount
+		DirectedEdge this[int i, int j]
 		{
-			get { return edg_num; }
-			set { edg_num = value; }
-		}
-
-		List<DEdge> this[int i]
-		{
-			get { return G[i]; }
-		}
-
-		DEdge this[int i, int j]
-		{
-			get { return G[i][j]; }
+			get { return Graph[i][j]; }
 		}
 
 		#endregion

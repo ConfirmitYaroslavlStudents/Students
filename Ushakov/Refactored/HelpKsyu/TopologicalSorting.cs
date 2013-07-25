@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DirectedGraph;
+using DirectGraph;
 
 namespace HelpKsyu
 {
@@ -14,7 +14,7 @@ namespace HelpKsyu
 
 		public TopologicalSorting() { }
 
-		public TopologicalSorting(DGraph Graph)
+		public TopologicalSorting(DirectedGraph Graph)
 		{
 			_topologicalSort = new List<int>();
 			bool[] was = new bool[Graph.VerticesCount];
@@ -28,11 +28,11 @@ namespace HelpKsyu
 
 		#region AuxiliaryAlgorithms
 
-		void DFS(int vertex, ref bool[] was, DGraph Graph)
+		void DFS(int vertex, ref bool[] was, DirectedGraph Graph)
 		{
 			was[vertex] = true;
 
-			for (int i = 0; i < Graph.VertexDegree(vertex); ++i)
+			for (int i = 0; i < Graph.GetVertexDegree(vertex); ++i)
 				if (!was[Graph.GetEdge(vertex, i).End])
 					DFS(Graph.GetEdge(vertex, i).End, ref was, Graph);
 

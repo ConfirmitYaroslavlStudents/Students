@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using Tao.OpenGl;
 using Tao.FreeGlut;
 using Tao.Platform.Windows;
-using DirectedGraph;
+using DirectGraph;
 
 namespace HelpKsyu
 {
@@ -51,7 +51,7 @@ namespace HelpKsyu
 			}
 		};
 
-		DGraph Graph;
+		DirectedGraph Graph;
 		internal KosarajuAlgorithm StrongConnectedComponentGraph;
 		Vertex2D[] VertexCoords;
 		internal RGBAColor[] StrongConnectedComponentColors;
@@ -88,7 +88,7 @@ namespace HelpKsyu
 		{
 			AllocConsole();
 
-			Graph = new DGraph();
+			Graph = new DirectedGraph();
 			Graph.ReadFromConsole();
 
 			FreeConsole();
@@ -99,7 +99,7 @@ namespace HelpKsyu
 			openInputTxt.ShowDialog();
 			string fileName = openInputTxt.FileName;
 
-			Graph = new DGraph();
+			Graph = new DirectedGraph();
 			Graph.ReadFromTxtFile(fileName);
 		}
 
@@ -150,7 +150,7 @@ namespace HelpKsyu
 
 			Gl.glColor3i(0, 0, 0);
 			for (int i = 0; i < Graph.VerticesCount; ++i)
-				for (int j = 0; j < Graph.VertexDegree(i); ++j)
+				for (int j = 0; j < Graph.GetVertexDegree(i); ++j)
 					if (!StrongConnectedComponentGraph.StrongConnect(Graph.GetEdge(i, j).Begin, Graph.GetEdge(i, j).End))
 						PrintVector2D(Graph.GetEdge(i, j));
 
@@ -180,7 +180,7 @@ namespace HelpKsyu
 				Glut.glutBitmapCharacter(Glut.GLUT_BITMAP_HELVETICA_18, charForDraw);
 		}
 
-		private void PrintVector2D(DEdge edge)
+		private void PrintVector2D(DirectedEdge edge)
 		{
             double deltaX = VertexCoords[edge.Begin].x - VertexCoords[edge.End].x;
             double deltaY = VertexCoords[edge.Begin].y - VertexCoords[edge.End].y;

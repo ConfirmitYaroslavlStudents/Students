@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DirectedGraph;
+using DirectGraph;
 
 namespace HelpKsyu
 {
@@ -12,7 +12,7 @@ namespace HelpKsyu
 
         public int StrongConnectedComponentCount { get; set; }
 		private List<List<int>> _strongConnectedComponentVertices;
-		private List<List<DEdge>> _strongConnectedComponentEdges;
+		private List<List<DirectedEdge>> _strongConnectedComponentEdges;
 
 		#endregion
 
@@ -20,23 +20,23 @@ namespace HelpKsyu
 
 		public KosarajuAlgorithm() { }
 
-		public KosarajuAlgorithm(DGraph Graph)
+		public KosarajuAlgorithm(DirectedGraph Graph)
 		{
 			TopologicalSorting topologicalSortedGraph = new TopologicalSorting(Graph);
 
-			DGraph transposedGraph = Graph.Transposition();
+			DirectedGraph transposedGraph = Graph.Transposition();
 
 			int[] mark = new int[Graph.VerticesCount];
 			for (int i = 0; i < Graph.VerticesCount; ++i)
 				mark[i] = -1;
 
-			_strongConnectedComponentEdges = new List<List<DEdge>>();
+			_strongConnectedComponentEdges = new List<List<DirectedEdge>>();
 			_strongConnectedComponentVertices = new List<List<int>>();
 
 			for (int i = transposedGraph.VerticesCount - 1; i >= 0; --i)
 				if (mark[topologicalSortedGraph[i]] == -1)
 				{
-					List<DEdge> edges = new List<DEdge>();
+					List<DirectedEdge> edges = new List<DirectedEdge>();
 					_strongConnectedComponentEdges.Add(edges);
 
 					List<int> vertices = new List<int>();
@@ -58,7 +58,7 @@ namespace HelpKsyu
 			return _strongConnectedComponentVertices[scc][ind];
 		}
 
-		public DEdge GetEdge(int strongConnectedComponent, int ind)
+		public DirectedEdge GetEdge(int strongConnectedComponent, int ind)
 		{
 			return _strongConnectedComponentEdges[strongConnectedComponent][ind];
 		}
@@ -86,12 +86,12 @@ namespace HelpKsyu
 
 		#region AuxiliaryAlgorithms
 
-		void AddStrongConnectedComponent(int vertex, ref int[] mark, DGraph Graph)
+		void AddStrongConnectedComponent(int vertex, ref int[] mark, DirectedGraph Graph)
 		{
 			mark[vertex] = StrongConnectedComponentCount;
 			_strongConnectedComponentVertices[StrongConnectedComponentCount].Add(vertex);
 
-			for (int i = 0; i < Graph.VertexDegree(vertex); ++i)
+			for (int i = 0; i < Graph.GetVertexDegree(vertex); ++i)
 				if (mark[Graph.GetEdge(vertex, i).End] == StrongConnectedComponentCount || mark[Graph.GetEdge(vertex, i).End] == -1)
 				{
 					_strongConnectedComponentEdges[StrongConnectedComponentCount].Add(Graph.GetEdge(vertex, i).Reverse());

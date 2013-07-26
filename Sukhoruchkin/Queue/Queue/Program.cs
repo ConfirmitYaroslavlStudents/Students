@@ -110,7 +110,7 @@ namespace Queue
             }
             return queueArray;
         }
-        public T GetElement(int index)
+        private T GetElement(int index)
         {
             Element<T> queueElement = _first;
             for (int i = 0; i < index; i++)
@@ -136,11 +136,13 @@ namespace Queue
             private Queue<T> _queue;
             private int _index;
             private T _currentElement;
+            private T[] _elementsInQueue;
             public Enumerator(Queue<T> queue)
             {
                 this._queue = queue;
                 this._index = -1;
                 this._currentElement = default(T);
+                this._elementsInQueue = _queue.ToArray();
             }
             public T Current
             {
@@ -177,7 +179,7 @@ namespace Queue
                 }
                 else
                 {
-                    this._currentElement = this._queue.GetElement(++_index);
+                    this._currentElement = _elementsInQueue[++_index];
                     return true;
                 }
             }

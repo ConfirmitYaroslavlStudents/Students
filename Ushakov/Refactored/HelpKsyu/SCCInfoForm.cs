@@ -34,9 +34,9 @@ namespace HelpKsyu
 						(DEFAULT_ALPHA, SCCInfo.VertexColors[i].R, SCCInfo.VertexColors[i].G, SCCInfo.VertexColors[i].B);
 				
                 DataGridViewTextBoxCell vertices = new DataGridViewTextBoxCell();
-                for (int j = 0; j < SCCInfo.StrongConnectedComponent.StrongConnegtionComponentVerticesCount(i) - 1; ++j)
+                for (int j = 0; j < SCCInfo.StrongConnectedComponent.GetStrongConnegtionComponentVerticesCount(i) - 1; ++j)
 					vertices.Value += (SCCInfo.StrongConnectedComponent.GetVertex(i, j) + 1).ToString() + ", ";
-				vertices.Value += (SCCInfo.StrongConnectedComponent.GetVertex(i, SCCInfo.StrongConnectedComponent.StrongConnegtionComponentVerticesCount(i) - 1) + 1).ToString();
+				vertices.Value += (SCCInfo.StrongConnectedComponent.GetVertex(i, SCCInfo.StrongConnectedComponent.GetStrongConnegtionComponentVerticesCount(i) - 1) + 1).ToString();
 
 				tableRow.Cells.Add(numCell);
 				tableRow.Cells.Add(color);

@@ -47,12 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationSettings.cs" />
     <Compile Include="DoodleJump.cs" />
-    <Compile Include="ListTetradi.cs">
+    <Compile Include="GameMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListTetradi.Designer.cs">
-      <DependentUpon>ListTetradi.cs</DependentUpon>
+    <Compile Include="GameMainWindow.Designer.cs">
+      <DependentUpon>GameMainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Lose.cs">
       <SubType>Form</SubType>
@@ -77,8 +78,8 @@
       <DependentUpon>Records.cs</DependentUpon>
     </Compile>
     <Compile Include="Step.cs" />
-    <EmbeddedResource Include="ListTetradi.resx">
-      <DependentUpon>ListTetradi.cs</DependentUpon>
+    <EmbeddedResource Include="GameMainWindow.resx">
+      <DependentUpon>GameMainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Lose.resx">
       <DependentUpon>Lose.cs</DependentUpon>
@@ -113,10 +114,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Кнопка4.gif" />
+    <None Include="BackButton.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Кнопка5.gif" />
+    <None Include="MenuButton.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

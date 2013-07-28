@@ -54,8 +54,6 @@ namespace DirectGraph
 				}
 		}
 
-		#region Methods
-
 		public void AddEdge(DirectedEdge edge)
 		{
 			Graph[edge.Begin].Add(edge);
@@ -81,8 +79,6 @@ namespace DirectGraph
 
 			return result;
 		}
-
-		#endregion
 
 		internal List<DirectedEdge> this[int i]
 		{

@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdditionalStructures.cs" />
     <Compile Include="HelpKsyuMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

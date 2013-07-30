@@ -17,7 +17,7 @@ namespace DoodleJump
         public Menu()
         {
             InitializeComponent();
-            DoodlJumperMenu = new DoodleJump(menuDoodle.Location.X, menuDoodle.Location.X + 26, menuDoodle.Location.Y + 36, false, menuDoodle, false);
+            DoodlJumperMenu = new DoodleJump(menuDoodle.Location.X, menuDoodle.Location.X + ApplicationSettings.DoodleLength, menuDoodle.Location.Y + ApplicationSettings.DoodleHight, false, menuDoodle, false);
 
         }
 
@@ -46,7 +46,7 @@ namespace DoodleJump
         private void PlayButton_Click(object sender, EventArgs e)
         {
             this.Visible = false;
-            ListTetradi l = new ListTetradi(this);
+            GameMainWindow l = new GameMainWindow(this);
             l.Show();
         }
 

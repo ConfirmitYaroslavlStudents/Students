@@ -19,9 +19,16 @@ namespace DoodleJump
         {
             this.menu = form;
             InitializeComponent();
-            DoodlJumperRecords = new DoodleJump(DoodleRecords.Location.X, DoodleRecords.Location.X + 26, DoodleRecords.Location.Y + 36, false, DoodleRecords, false);
+            DoodlJumperRecords = new DoodleJump(DoodleRecords.Location.X, DoodleRecords.Location.X + ApplicationSettings.DoodleLength, DoodleRecords.Location.Y + ApplicationSettings.DoodleHight, false, DoodleRecords, false);
+            RecordsCreation();
 
-            records = Higtscore();
+
+        }
+
+        private void RecordsCreation()
+        {
+
+            records = GetHigtscore();
 
             records.Sort(Record.RecordCompare);
 
@@ -39,11 +46,9 @@ namespace DoodleJump
                     RecordsBox.Items.Add(((records.Count - i).ToString() + " " + records.ElementAt(i).score + " " + records.ElementAt(i).name + " " + records.ElementAt(i).now.ToShortDateString()));
                 }
             }
-
-
         }
 
-        private List<Record> Higtscore()
+        private List<Record> GetHigtscore()
         {
             System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Record>));
             System.IO.StreamReader file = new System.IO.StreamReader("Records.xml");

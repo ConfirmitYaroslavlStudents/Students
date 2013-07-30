@@ -25,7 +25,7 @@ namespace DoodleJump
             this.menu = form;
             InitializeComponent();
 
-            DoodlJumperLose = new DoodleJump(LoseDoodle.Location.X, LoseDoodle.Location.X + 26, LoseDoodle.Location.Y + 36, false, LoseDoodle, false);
+            DoodlJumperLose = new DoodleJump(LoseDoodle.Location.X, LoseDoodle.Location.X + ApplicationSettings.DoodleLength, LoseDoodle.Location.Y + ApplicationSettings.DoodleHight, false, LoseDoodle, false);
          
             records = Higtscore();
 
@@ -80,7 +80,7 @@ namespace DoodleJump
         {
             SaveRecord();
             this.Close();
-            ListTetradi l = new ListTetradi(menu);
+            GameMainWindow l = new GameMainWindow(menu);
             l.Show();
         }
 

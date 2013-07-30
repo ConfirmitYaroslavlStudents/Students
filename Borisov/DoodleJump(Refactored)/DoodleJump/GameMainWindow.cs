@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace DoodleJump
 {
-    public partial class ListTetradi : Form
+    public partial class GameMainWindow : Form
     {
         private DoodleJump DoodlJumper;
         private List<Step>[] steps;
@@ -20,9 +20,9 @@ namespace DoodleJump
         private int hightjump = 0;
         private int score = 0;
         private Form menu;
-        public ListTetradi(Form f)
+        public GameMainWindow(Form form)
         {
-            this.menu = f;
+            this.menu = form;
             InitializeComponent();
             maxStepGet();
             stepsGet();
@@ -36,8 +36,8 @@ namespace DoodleJump
             {
                 if ((p.Name != DoodleJumper.Name) && (p.GetType() == typeof(Label)))
                 {
-                    if (p.Top / 250 > maxstep)
-                        maxstep = p.Top / 250;
+                    if (p.Top / ApplicationSettings.StepsCount > maxstep)
+                        maxstep = p.Top / ApplicationSettings.StepsCount;
                 }
 
             }
@@ -57,9 +57,9 @@ namespace DoodleJump
                 {
                     for (int j = 0; j <= maxstep; j++)
                     {
-                        if (p.Top / 250 == j)
+                        if (p.Top / ApplicationSettings.StepsCount == j)
                         {
-                            steps[j].Add(new Step(p.Location.X, p.Location.X + 45, p.Location.Y, (Label)p, p.BackColor == Color.Black, false));
+                            steps[j].Add(new Step(p.Location.X, p.Location.X + ApplicationSettings.StepsLength, p.Location.Y, (Label)p, p.BackColor == Color.Black, false));
                         }
 
                     }
@@ -82,8 +82,8 @@ namespace DoodleJump
 
         private void DoodleJumerGoToRight()
         {
-            DoodleJumper.Left += 3;
-            if (DoodleJumper.Location.X > 250)
+            DoodleJumper.Left += ApplicationSettings.LeftRightIncrease;
+            if (DoodleJumper.Location.X > ApplicationSettings.RightBorder)
             {
                 DoodleJumper.Left = 0;
             }
@@ -91,10 +91,10 @@ namespace DoodleJump
 
         private void DoodleJumerGoToLeft()
         {
-            DoodleJumper.Left -= 3;
-            if (DoodleJumper.Location.X + 26 <= 0)
+            DoodleJumper.Left -= ApplicationSettings.LeftRightIncrease;
+            if (DoodleJumper.Location.X + ApplicationSettings.DoodleLength <= 0)
             {
-                DoodleJumper.Left = 250;
+                DoodleJumper.Left = ApplicationSettings.RightBorder;
             }
         }
 
@@ -103,14 +103,14 @@ namespace DoodleJump
             LoseFormCalling();
 
 
-            if (DoodlJumper.FlyFaza == false)
+            if (DoodlJumper.FlyPhase == false)
             {
                 FlyingUp();
             }
 
             DropOnStep();
 
-            if ((DoodlJumper.FlyFaza == true) && (DoodlJumper.lose != true))
+            if ((DoodlJumper.FlyPhase == true) && (DoodlJumper.lose != true))
             {
                 FlyingDown();
             }
@@ -131,17 +131,17 @@ namespace DoodleJump
         private void LoseFormCalling()
         {
 
-            if ((DoodlJumper.lose == true) && (lose < 100))
+            if ((DoodlJumper.lose == true) && (lose < ApplicationSettings.LoseNumber))
             {
                 DoodleJumper.Top += 1;
                 if (DoodleJumper.Top < 0)
                     DoodleJumper.Visible = false;
-                System.Threading.Thread.Sleep(4);
+                System.Threading.Thread.Sleep(ApplicationSettings.Sleep);
                 step = this.AutoScrollPosition.Y;
-                this.AutoScrollPosition = new Point(this.AutoScrollPosition.X, (-1) * step + 7);
+                this.AutoScrollPosition = new Point(this.AutoScrollPosition.X, (-1) * step + ApplicationSettings.ScrollNumber);
                 DoodleJumper.Refresh();
                 lose++;
-                if (lose == 100)
+                if (lose == ApplicationSettings.LoseNumber)
                 {
 
                     Lose loseform = new Lose(score, menu);
@@ -154,35 +154,36 @@ namespace DoodleJump
         private void FlyingUp()
         {
             hightjump = 0;
-            DoodleJumper.Top += 2;
-            if ((DoodleJumper.Location.Y - 36 > 290) && (DoodlJumper.lose != true))
+            DoodleJumper.Top += ApplicationSettings.TopIncrease;
+            if ((DoodleJumper.Location.Y - ApplicationSettings.DoodleHight > ApplicationSettings.LabelTopBorder) && (DoodlJumper.lose != true))
             {
                 foreach (Control p in Controls)
                 {
-                    if ((p.Name != DoodleJumper.Name) && (p.GetType() == typeof(Label)) && (p.Location.Y > DoodleJumper.Location.Y - 100))
+                    if ((p.Name != DoodleJumper.Name) && (p.GetType() == typeof(Label))
+                        && (p.Location.Y > DoodleJumper.Location.Y - ApplicationSettings.LoseNumber))
                     {
                         p.Visible = false;
                     }
                 }
                 DoodlJumper.lose = true;
             }
-            System.Threading.Thread.Sleep(4);
+            System.Threading.Thread.Sleep(ApplicationSettings.Sleep);
         }
 
         private void FlyingDown()
         {
 
-            DoodleJumper.Top -= 2;
-            System.Threading.Thread.Sleep(4);
+            DoodleJumper.Top -= ApplicationSettings.TopIncrease;
+            System.Threading.Thread.Sleep(ApplicationSettings.Sleep);
             hightjump++;
             step = this.AutoScrollPosition.Y;
-            if (DoodleJumper.Top < 200)
+            if (DoodleJumper.Top < ApplicationSettings.StepsRightBorder)
             {
-                this.AutoScrollPosition = new Point(this.AutoScrollPosition.X, (-1) * step - 3);
+                this.AutoScrollPosition = new Point(this.AutoScrollPosition.X, (-1) * step - ApplicationSettings.LeftRightIncrease);
             }
-            if (hightjump == 45)
+            if (hightjump == ApplicationSettings.MaximumHight)
             {
-                DoodlJumper.FlyFaza = false;
+                DoodlJumper.FlyPhase = false;
             }
         }
 
@@ -190,16 +191,19 @@ namespace DoodleJump
         {
             if (!DoodlJumper.lose)
             {
-                foreach (Step s in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + 36) / 250])
+                foreach (Step step in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + ApplicationSettings.DoodleHight) / ApplicationSettings.StepsCount])
                 {
 
-                    if (((DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + 36) == s.y) && (DoodleJumper.Location.X < s.x2) && (DoodleJumper.Location.X + 26 > s.x1))
+                    if (((DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + ApplicationSettings.DoodleHight) == step.y)
+                        && (DoodleJumper.Location.X < step.x2) && (DoodleJumper.Location.X + ApplicationSettings.DoodleLength > step.x1))
                     {
-                        DoodlJumper.FlyFaza = true;
+                        DoodlJumper.FlyPhase = true;
                     }
-                    if (((DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + 37) == s.y) && (DoodleJumper.Location.X < s.x2) && (DoodleJumper.Location.X + 26 > s.x1) && (DoodlJumper.FlyFaza == false))
+                    if (((DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + ApplicationSettings.DoodleHight+1) == step.y)
+                        && (DoodleJumper.Location.X < step.x2) && (DoodleJumper.Location.X + ApplicationSettings.DoodleLength > step.x1) 
+                        && (DoodlJumper.FlyPhase == false))
                     {
-                        s.label.Visible = false;
+                        step.label.Visible = false;
                     }
                 }
             }
@@ -209,14 +213,14 @@ namespace DoodleJump
         {
             if (DoodlJumper.lose != true)
 
-                foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + 51) / 250])
+                foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + ApplicationSettings.ScrollSecondNumber) / ApplicationSettings.StepsCount])
                 {
                     if ((p.role == true) && (p.left == true))
                     {
                         p.label.Left++;
                         p.x1++;
                         p.x2++;
-                        if (p.label.Left > 200)
+                        if (p.label.Left > ApplicationSettings.StepsRightBorder)
                         {
                             p.left = false;
                         }
@@ -226,20 +230,20 @@ namespace DoodleJump
                         p.label.Left--;
                         p.x1--;
                         p.x2--;
-                        if (p.label.Left < 30)
+                        if (p.label.Left < ApplicationSettings.StepsLeftBorder)
                         {
                             p.left = true;
                         }
                     }
                 }
-            foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y - 200) / 250])
+            foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y - ApplicationSettings.StepsRightBorder) / ApplicationSettings.StepsCount])
             {
                 if ((p.role == true) && (p.left == true))
                 {
                     p.label.Left++;
                     p.x1++;
                     p.x2++;
-                    if (p.label.Left > 200)
+                    if (p.label.Left > ApplicationSettings.StepsRightBorder)
                     {
                         p.left = false;
                     }
@@ -249,7 +253,7 @@ namespace DoodleJump
                     p.label.Left--;
                     p.x1--;
                     p.x2--;
-                    if (p.label.Left < 30)
+                    if (p.label.Left < ApplicationSettings.StepsLeftBorder)
                     {
                         p.left = true;
                     }
@@ -262,12 +266,12 @@ namespace DoodleJump
             DoodleJumper.Refresh();
             if (DoodlJumper.lose != true)
             {
-                foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + 36) / 250])
+                foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + ApplicationSettings.DoodleHight) / ApplicationSettings.StepsCount])
                 {
                     p.label.Refresh();
 
                 }
-                foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y - 214) / 250])
+                foreach (Step p in steps[(DoodleJumper.Top + (-1) * this.AutoScrollPosition.Y + ApplicationSettings.DoodleHight - ApplicationSettings.RightBorder) / ApplicationSettings.StepsCount])
                 {
                     p.label.Refresh();
 
@@ -280,8 +284,8 @@ namespace DoodleJump
             Graphics g = e.Graphics;
             if (DoodlJumper.lose != true)
             {
-                g.DrawString("Score:" + (4672 + this.AutoScrollPosition.Y).ToString(), new Font("Arial", 10), Brushes.Black, new RectangleF(0, 0, 100, 18));
-                score = (4672 + this.AutoScrollPosition.Y);
+                g.DrawString("Score:" + (ApplicationSettings.GameHight + this.AutoScrollPosition.Y).ToString(), new Font("Arial", 10), Brushes.Black, new RectangleF(0, 0, 100, 18));
+                score = (ApplicationSettings.GameHight + this.AutoScrollPosition.Y);
             }
         }
 
@@ -289,7 +293,7 @@ namespace DoodleJump
         {
             if (i == 0)
             {
-                this.AutoScrollPosition = new Point(0, DoodleJumper.Location.Y - 250);
+                this.AutoScrollPosition = new Point(0, DoodleJumper.Location.Y - ApplicationSettings.RightBorder);
                 this.Refresh();
             }
             i++;

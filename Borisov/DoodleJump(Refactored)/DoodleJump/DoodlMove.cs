@@ -11,32 +11,31 @@ namespace DoodleJump
 
         public void DoodlJumperMove(DoodleJump DoodlJumper, System.Windows.Forms.Label DoodleLabel, ref int hight)
         {
-            if (DoodlJumper.FlyFaza == false)
+            if (DoodlJumper.FlyPhase == false)
             {
-                DoodleLabel.Top += 2;
-                System.Threading.Thread.Sleep(4);
-                if (DoodleLabel.Top + 36 > 350)
+                DoodleLabel.Top += ApplicationSettings.TopIncrease;
+                System.Threading.Thread.Sleep(ApplicationSettings.Sleep);
+                if (DoodleLabel.Top + ApplicationSettings.DoodleHight > ApplicationSettings.TopBorder)
                 {
                     DoodleLabel.Top = 0;
                 }
             }
-            if ((DoodleLabel.Top + 36 == 294) && (DoodlJumper.FlyFaza == false) && (DoodleLabel.Location.X < 73) && (DoodleLabel.Location.X + 35 > 28))
+            if (((DoodleLabel.Top + ApplicationSettings.DoodleHight == ApplicationSettings.LabelTopBorder) || 
+                (DoodleLabel.Top + ApplicationSettings.DoodleHight == ApplicationSettings.LabelTopBorder + 1)) &&
+                (DoodlJumper.FlyPhase == false) && (DoodleLabel.Location.X < ApplicationSettings.MinimumLabelRightPosition) &&
+                (DoodleLabel.Location.X + ApplicationSettings.DoodleHight > ApplicationSettings.MinimumLabelHight))
             {
-                DoodlJumper.FlyFaza = true;
+                DoodlJumper.FlyPhase = true;
             }
-            if ((DoodleLabel.Top + 36 == 295) && (DoodlJumper.FlyFaza == false) && (DoodleLabel.Location.X < 73) && (DoodleLabel.Location.X + 35 > 28))
+            if (DoodlJumper.FlyPhase == true)
             {
-                DoodlJumper.FlyFaza = true;
-            }
-            if (DoodlJumper.FlyFaza == true)
-            {
-                DoodleLabel.Top -= 2;
-                System.Threading.Thread.Sleep(4);
+                DoodleLabel.Top -= ApplicationSettings.TopIncrease;
+                System.Threading.Thread.Sleep(ApplicationSettings.Sleep);
                 hight++;
             }
-            if (hight == 45)
+            if (hight == ApplicationSettings.MaximumHight)
             {
-                DoodlJumper.FlyFaza = false;
+                DoodlJumper.FlyPhase = false;
                 hight = 0;
             }
         }

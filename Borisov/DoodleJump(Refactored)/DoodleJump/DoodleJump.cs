@@ -10,18 +10,18 @@ namespace DoodleJump
 {
     public class DoodleJump
     {
-        public int X_left;
-        public int X_right;
-        public int Y_down;
-        public bool FlyFaza;
+        public int XLeft;
+        public int XRight;
+        public int YDown;
+        public bool FlyPhase;
         public Label DoodleJumper;
         public bool lose;
-        public DoodleJump(int x_left, int x_right, int y_down,bool flyfaza,Label doodlejumper,bool lose)
+        public DoodleJump(int xLeft, int xRight, int yDown, bool flyPhase, Label doodlejumper, bool lose)
         {
-            this.X_left = x_left;
-            this.X_right = x_right;
-            this.Y_down = y_down;
-            this.FlyFaza = flyfaza;
+            this.XLeft = xLeft;
+            this.XRight = xRight;
+            this.YDown = yDown;
+            this.FlyPhase = flyPhase;
             this.DoodleJumper = doodlejumper;
             this.lose = lose;
 

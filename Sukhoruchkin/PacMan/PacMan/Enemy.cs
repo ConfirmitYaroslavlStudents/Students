@@ -12,9 +12,7 @@ namespace PacMan
     public class Enemy
     {
         private Point _enemyCoordinate;
-        private List<Point> _enemyRoute;
-        private int _enemyStep = 0;
-        private static Timer _enemyTimer;
+        private EnemyArtificialIntelligence _enemyAI;
 
         public Point EnemyCoordinate
         {
@@ -22,23 +20,15 @@ namespace PacMan
             set { _enemyCoordinate = value; }
         }
 
-        public Enemy(Point enemyCoordinate)
+        public Enemy(Point enemyCoordinate,EnemyArtificialIntelligence enemyAI)
         {
             this._enemyCoordinate = enemyCoordinate;
-            this._enemyRoute = new List<Point>();
-            _enemyTimer = new Timer(moveEnemy, null, 500, 500);
+            this._enemyAI = enemyAI;
+
         }
-        public void AddPointToRoute(Point newPoint)
+        public void MoveEnemy(Point pacManCoordinate)
         {
-            _enemyRoute.Add(newPoint);
-        }
-        public void moveEnemy(object sender)
-        {
-            _enemyCoordinate = _enemyRoute[_enemyStep];
-            _enemyStep++;
-            if (_enemyStep == _enemyRoute.Count)
-                _enemyStep = 0;
-            
+            _enemyCoordinate = _enemyAI.GetNextStep(_enemyCoordinate,pacManCoordinate);
         }
     }
 }

@@ -29,35 +29,9 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
-            this.MenuLabel = new System.Windows.Forms.Label();
-            this.menuDoodle = new System.Windows.Forms.Label();
             this.RecordsButton = new System.Windows.Forms.Button();
             this.PlayButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // MenuLabel
-            // 
-            this.MenuLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.MenuLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MenuLabel.Location = new System.Drawing.Point(28, 294);
-            this.MenuLabel.Name = "MenuLabel";
-            this.MenuLabel.Size = new System.Drawing.Size(45, 10);
-            this.MenuLabel.TabIndex = 39;
-            // 
-            // menuDoodle
-            // 
-            this.menuDoodle.AllowDrop = true;
-            this.menuDoodle.BackColor = System.Drawing.Color.White;
-            this.menuDoodle.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.menuDoodle.ForeColor = System.Drawing.Color.Cornsilk;
-            this.menuDoodle.Image = ((System.Drawing.Image)(resources.GetObject("menuDoodle.Image")));
-            this.menuDoodle.Location = new System.Drawing.Point(33, 196);
-            this.menuDoodle.Name = "menuDoodle";
-            this.menuDoodle.Size = new System.Drawing.Size(35, 36);
-            this.menuDoodle.TabIndex = 40;
-            this.menuDoodle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MenuDoodle_MouseDown);
-            this.menuDoodle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MenuDoodle_MouseMove);
-            this.menuDoodle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MenuDoodle_MouseUp);
             // 
             // RecordsButton
             // 
@@ -109,15 +83,12 @@
             this.ClientSize = new System.Drawing.Size(265, 337);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.RecordsButton);
-            this.Controls.Add(this.menuDoodle);
-            this.Controls.Add(this.MenuLabel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Menu";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DoodleJump!";
             this.Activated += new System.EventHandler(this.Menu_Activated);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Menu_Paint);
@@ -127,8 +98,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label MenuLabel;
-        public System.Windows.Forms.Label menuDoodle;
         private System.Windows.Forms.Button RecordsButton;
         private System.Windows.Forms.Button PlayButton;
     }

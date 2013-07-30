@@ -31,8 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Lose));
             this.PlayAgainButton = new System.Windows.Forms.Button();
             this.MenuButton = new System.Windows.Forms.Button();
-            this.LoseDoodle = new System.Windows.Forms.Label();
-            this.LooseLabel = new System.Windows.Forms.Label();
             this.NameBox = new System.Windows.Forms.TextBox();
             this.NameLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -77,26 +75,6 @@
             this.MenuButton.UseVisualStyleBackColor = false;
             this.MenuButton.Click += new System.EventHandler(this.MenuButton_Click);
             // 
-            // LoseDoodle
-            // 
-            this.LoseDoodle.BackColor = System.Drawing.Color.White;
-            this.LoseDoodle.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.LoseDoodle.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.LoseDoodle.Image = ((System.Drawing.Image)(resources.GetObject("LoseDoodle.Image")));
-            this.LoseDoodle.Location = new System.Drawing.Point(21, 198);
-            this.LoseDoodle.Name = "LoseDoodle";
-            this.LoseDoodle.Size = new System.Drawing.Size(35, 36);
-            this.LoseDoodle.TabIndex = 41;
-            // 
-            // LooseLabel
-            // 
-            this.LooseLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.LooseLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LooseLabel.Location = new System.Drawing.Point(21, 294);
-            this.LooseLabel.Name = "LooseLabel";
-            this.LooseLabel.Size = new System.Drawing.Size(45, 10);
-            this.LooseLabel.TabIndex = 42;
-            // 
             // NameBox
             // 
             this.NameBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -129,8 +107,6 @@
             this.ClientSize = new System.Drawing.Size(265, 337);
             this.Controls.Add(this.NameLabel);
             this.Controls.Add(this.NameBox);
-            this.Controls.Add(this.LooseLabel);
-            this.Controls.Add(this.LoseDoodle);
             this.Controls.Add(this.MenuButton);
             this.Controls.Add(this.PlayAgainButton);
             this.DoubleBuffered = true;
@@ -152,8 +128,6 @@
 
         private System.Windows.Forms.Button PlayAgainButton;
         private System.Windows.Forms.Button MenuButton;
-        public System.Windows.Forms.Label LoseDoodle;
-        private System.Windows.Forms.Label LooseLabel;
         private System.Windows.Forms.TextBox NameBox;
         private System.Windows.Forms.Label NameLabel;
     }

@@ -29,30 +29,9 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Records));
-            this.DoodleRecords = new System.Windows.Forms.Label();
-            this.RecordsLabel = new System.Windows.Forms.Label();
             this.BackButton = new System.Windows.Forms.Button();
             this.RecordsBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
-            // 
-            // DoodleRecords
-            // 
-            this.DoodleRecords.BackColor = System.Drawing.Color.White;
-            this.DoodleRecords.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.DoodleRecords.Image = ((System.Drawing.Image)(resources.GetObject("DoodleRecords.Image")));
-            this.DoodleRecords.Location = new System.Drawing.Point(33, 170);
-            this.DoodleRecords.Name = "DoodleRecords";
-            this.DoodleRecords.Size = new System.Drawing.Size(35, 36);
-            this.DoodleRecords.TabIndex = 41;
-            // 
-            // RecordsLabel
-            // 
-            this.RecordsLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.RecordsLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RecordsLabel.Location = new System.Drawing.Point(26, 294);
-            this.RecordsLabel.Name = "RecordsLabel";
-            this.RecordsLabel.Size = new System.Drawing.Size(45, 10);
-            this.RecordsLabel.TabIndex = 42;
             // 
             // BackButton
             // 
@@ -96,15 +75,12 @@
             this.ClientSize = new System.Drawing.Size(265, 337);
             this.Controls.Add(this.RecordsBox);
             this.Controls.Add(this.BackButton);
-            this.Controls.Add(this.RecordsLabel);
-            this.Controls.Add(this.DoodleRecords);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Records";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Records";
             this.Activated += new System.EventHandler(this.Records_Activated);
             this.ResumeLayout(false);
@@ -113,8 +89,6 @@
 
         #endregion
 
-        public System.Windows.Forms.Label DoodleRecords;
-        private System.Windows.Forms.Label RecordsLabel;
         private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.ListBox RecordsBox;
     }

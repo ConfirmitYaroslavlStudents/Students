@@ -11,12 +11,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DoodleJump
 {
-    public partial class Lose : Form
+    public partial class Lose : BaseForm
     {
-        private List<Record> records;
-        private DoodleJump DoodlJumperLose;
+        private List<Record> _records;
         private int _score;
-        private int _hight = 0;
         private int _hightscore = 0;
         private Form _menu;
         public Lose(int score, Form form)
@@ -24,10 +22,7 @@ namespace DoodleJump
             this._score = score;
             this._menu = form;
             InitializeComponent();
-
-            DoodlJumperLose = new DoodleJump(LoseDoodle.Location.X, LoseDoodle.Location.X + ApplicationSettings.DoodleLength, LoseDoodle.Location.Y + ApplicationSettings.DoodleHight, false, LoseDoodle, false);
-         
-            records = GetHigtscore();
+            _records = GetHigtscore();
 
         }
 
@@ -35,13 +30,13 @@ namespace DoodleJump
         {
             System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Record>));
             System.IO.StreamReader file = new System.IO.StreamReader("Records.xml");
-            records = (List<Record>)reader.Deserialize(file);
-            foreach (Record r in records)
+            _records = (List<Record>)reader.Deserialize(file);
+            foreach (Record r in _records)
             {
                 if (r.score > _hightscore)
                     _hightscore = r.score;
             }
-            return records;
+            return _records;
         }
 
         private void Lose_Paint(object sender, PaintEventArgs e)
@@ -56,13 +51,11 @@ namespace DoodleJump
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            DoodlMove temp = new DoodlMove();
-            temp.DoodlJumperMove(DoodlJumperLose, LoseDoodle, ref _hight);
-
+            base.OnPaint(e);
+            base.DoodleBase.Refresh();
             DrawStrings(e);
 
-            LoseDoodle.Refresh();
-
+           
         }
 
         private void DrawStrings(PaintEventArgs e)
@@ -84,7 +77,7 @@ namespace DoodleJump
 
         private void SaveRecord()
         {
-            records.Add(new Record(NameBox.Text, _score, DateTime.Now));
+            _records.Add(new Record(NameBox.Text, _score, DateTime.Now));
             if (!File.Exists("Records.xml"))
             {
                 var myFile = File.Create("Records.xml");
@@ -92,7 +85,7 @@ namespace DoodleJump
             }
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Record>));
             System.IO.StreamWriter file = new System.IO.StreamWriter("Records.xml");
-            writer.Serialize(file, records);
+            writer.Serialize(file, _records);
             file.Close();
         }
 

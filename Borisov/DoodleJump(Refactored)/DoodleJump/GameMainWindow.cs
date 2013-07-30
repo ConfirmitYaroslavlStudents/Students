@@ -155,7 +155,7 @@ namespace DoodleJump
         {
             _hightjump = 0;
             DoodleJumper.Top += ApplicationSettings.TopIncrease;
-            if ((DoodleJumper.Location.Y - ApplicationSettings.DoodleHight > ApplicationSettings.LabelTopBorder) && (_DoodlJumper.Lose != true))
+            if ((DoodleJumper.Location.Y - ApplicationSettings.DoodleHight > ApplicationSettings.BaseLabelPositionY) && (_DoodlJumper.Lose != true))
             {
                 foreach (Control p in Controls)
                 {

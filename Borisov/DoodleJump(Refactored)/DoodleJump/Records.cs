@@ -9,20 +9,15 @@ using System.Windows.Forms;
 
 namespace DoodleJump
 {
-    public partial class Records : Form
+    public partial class Records : BaseForm
     {
         private List<Record> _records;
-        private DoodleJump _DoodlJumperRecords;
-        private int _hight = 0;
         private Form _menu;
         public Records(Form form)
         {
             this._menu = form;
             InitializeComponent();
-            _DoodlJumperRecords = new DoodleJump(DoodleRecords.Location.X, DoodleRecords.Location.X + ApplicationSettings.DoodleLength, DoodleRecords.Location.Y + ApplicationSettings.DoodleHight, false, DoodleRecords, false);
             RecordsCreation();
-
-
         }
 
         private void RecordsCreation()
@@ -58,13 +53,13 @@ namespace DoodleJump
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            DoodlMove temp = new DoodlMove();
-            temp.DoodlJumperMove(_DoodlJumperRecords, DoodleRecords, ref _hight);
+
+            base.OnPaint(e);
 
             Graphics g = e.Graphics;
             g.DrawString("Records:", new Font("Segoe Script", 20), Brushes.Magenta, new RectangleF(20, 20, 200, 50));
 
-            DoodleRecords.Refresh();
+            base.DoodleBase.Refresh();
 
         }
 

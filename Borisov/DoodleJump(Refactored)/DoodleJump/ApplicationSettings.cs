@@ -25,7 +25,7 @@ namespace DoodleJump
         public const int StepsLength = 45;
         public const int StepsRightBorder = 200;
         public const int TopBorder = 350;
-        public const int TopIncrease = 2;            
+        public const int TopIncrease = 2;
     }
-   
+
 }

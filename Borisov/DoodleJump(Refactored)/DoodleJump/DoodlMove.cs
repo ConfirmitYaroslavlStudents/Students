@@ -7,7 +7,7 @@ namespace DoodleJump
 {
     internal class DoodlMove
     {
-        public  DoodlMove(){}
+        public DoodlMove() { }
 
         public void DoodlJumperMove(DoodleJump DoodlJumper, System.Windows.Forms.Label DoodleLabel, ref int hight)
         {
@@ -20,7 +20,7 @@ namespace DoodleJump
                     DoodleLabel.Top = 0;
                 }
             }
-            if (((DoodleLabel.Top + ApplicationSettings.DoodleHight == ApplicationSettings.LabelTopBorder) || 
+            if (((DoodleLabel.Top + ApplicationSettings.DoodleHight == ApplicationSettings.LabelTopBorder) ||
                 (DoodleLabel.Top + ApplicationSettings.DoodleHight == ApplicationSettings.LabelTopBorder + 1)) &&
                 (DoodlJumper.FlyPhase == false) && (DoodleLabel.Location.X < ApplicationSettings.MinimumLabelRightPosition) &&
                 (DoodleLabel.Location.X + ApplicationSettings.DoodleHight > ApplicationSettings.MinimumLabelHight))

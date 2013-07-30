@@ -12,8 +12,8 @@ namespace DoodleJump
     public partial class Menu : Form
     {
         private DoodleJump DoodlJumperMenu;
-        private int hight = 0;
-        private bool isDragging;
+        private int _hight = 0;
+        private bool _isDragging;
         public Menu()
         {
             InitializeComponent();
@@ -24,7 +24,7 @@ namespace DoodleJump
         protected override void OnPaint(PaintEventArgs e)
         {
             DoodlMove temp = new DoodlMove();
-            temp.DoodlJumperMove(DoodlJumperMenu, menuDoodle, ref hight);
+            temp.DoodlJumperMove(DoodlJumperMenu, menuDoodle, ref _hight);
 
             Graphics g = e.Graphics;
             g.DrawString("DoodleJump!", new Font("Segoe Script", 20), Brushes.Magenta, new RectangleF(20, 20, 200, 50));
@@ -60,17 +60,17 @@ namespace DoodleJump
 
         private void MenuDoodle_MouseDown(object sender, MouseEventArgs e)
         {
-            isDragging = true;
+            _isDragging = true;
         }
 
         private void MenuDoodle_MouseUp(object sender, MouseEventArgs e)
         {
-            isDragging = false;
+            _isDragging = false;
         }
 
         private void MenuDoodle_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDragging)
+            if (_isDragging)
             {
                 menuDoodle.Location = this.PointToClient(Control.MousePosition);
             }

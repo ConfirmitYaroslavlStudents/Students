@@ -11,15 +11,15 @@ namespace DoodleJump
 {
     public partial class Records : Form
     {
-        private List<Record> records;
-        private DoodleJump DoodlJumperRecords;
-        private int hight = 0;
-        private Form menu;
+        private List<Record> _records;
+        private DoodleJump _DoodlJumperRecords;
+        private int _hight = 0;
+        private Form _menu;
         public Records(Form form)
         {
-            this.menu = form;
+            this._menu = form;
             InitializeComponent();
-            DoodlJumperRecords = new DoodleJump(DoodleRecords.Location.X, DoodleRecords.Location.X + ApplicationSettings.DoodleLength, DoodleRecords.Location.Y + ApplicationSettings.DoodleHight, false, DoodleRecords, false);
+            _DoodlJumperRecords = new DoodleJump(DoodleRecords.Location.X, DoodleRecords.Location.X + ApplicationSettings.DoodleLength, DoodleRecords.Location.Y + ApplicationSettings.DoodleHight, false, DoodleRecords, false);
             RecordsCreation();
 
 
@@ -28,22 +28,22 @@ namespace DoodleJump
         private void RecordsCreation()
         {
 
-            records = GetHigtscore();
+            _records = GetHigtscore();
 
-            records.Sort(Record.RecordCompare);
+            _records.Sort(Record.RecordCompare);
 
-            if (records.Count <= 10)
+            if (_records.Count <= 10)
             {
-                for (int i = records.Count - 1; i >= 0; i--)
+                for (int i = _records.Count - 1; i >= 0; i--)
                 {
-                    RecordsBox.Items.Add(((records.Count - i).ToString() + " " + records.ElementAt(i).score + " " + records.ElementAt(i).name + " " + records.ElementAt(i).now.ToShortDateString()));
+                    RecordsBox.Items.Add(((_records.Count - i).ToString() + " " + _records.ElementAt(i).score + " " + _records.ElementAt(i).name + " " + _records.ElementAt(i).now.ToShortDateString()));
                 }
             }
             else
             {
-                for (int i = records.Count - 1; i >= records.Count - 10; i--)
+                for (int i = _records.Count - 1; i >= _records.Count - 10; i--)
                 {
-                    RecordsBox.Items.Add(((records.Count - i).ToString() + " " + records.ElementAt(i).score + " " + records.ElementAt(i).name + " " + records.ElementAt(i).now.ToShortDateString()));
+                    RecordsBox.Items.Add(((_records.Count - i).ToString() + " " + _records.ElementAt(i).score + " " + _records.ElementAt(i).name + " " + _records.ElementAt(i).now.ToShortDateString()));
                 }
             }
         }
@@ -52,14 +52,14 @@ namespace DoodleJump
         {
             System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Record>));
             System.IO.StreamReader file = new System.IO.StreamReader("Records.xml");
-            records = (List<Record>)reader.Deserialize(file);
-            return records;
+            _records = (List<Record>)reader.Deserialize(file);
+            return _records;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             DoodlMove temp = new DoodlMove();
-            temp.DoodlJumperMove(DoodlJumperRecords, DoodleRecords, ref hight);
+            temp.DoodlJumperMove(_DoodlJumperRecords, DoodleRecords, ref _hight);
 
             Graphics g = e.Graphics;
             g.DrawString("Records:", new Font("Segoe Script", 20), Brushes.Magenta, new RectangleF(20, 20, 200, 50));
@@ -76,7 +76,7 @@ namespace DoodleJump
         private void BackButton_Click(object sender, EventArgs e)
         {
             this.Close();
-            menu.Show();
+            _menu.Show();
         }
     }
 }

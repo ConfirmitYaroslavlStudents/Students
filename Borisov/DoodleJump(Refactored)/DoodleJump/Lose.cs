@@ -15,34 +15,32 @@ namespace DoodleJump
     {
         private List<Record> records;
         private DoodleJump DoodlJumperLose;
-        private int score;
-        private int hight = 0;
-        private int hightscore = 0;
-        private Form menu;
+        private int _score;
+        private int _hight = 0;
+        private int _hightscore = 0;
+        private Form _menu;
         public Lose(int score, Form form)
         {
-            this.score = score;
-            this.menu = form;
+            this._score = score;
+            this._menu = form;
             InitializeComponent();
 
             DoodlJumperLose = new DoodleJump(LoseDoodle.Location.X, LoseDoodle.Location.X + ApplicationSettings.DoodleLength, LoseDoodle.Location.Y + ApplicationSettings.DoodleHight, false, LoseDoodle, false);
          
-            records = Higtscore();
-
-            foreach (Record r in records)
-            {
-                if (r.score > hightscore)
-                    hightscore = r.score;
-            }
-
+            records = GetHigtscore();
 
         }
 
-        private List<Record> Higtscore()
+        private List<Record> GetHigtscore()
         {
             System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Record>));
             System.IO.StreamReader file = new System.IO.StreamReader("Records.xml");
             records = (List<Record>)reader.Deserialize(file);
+            foreach (Record r in records)
+            {
+                if (r.score > _hightscore)
+                    _hightscore = r.score;
+            }
             return records;
         }
 
@@ -59,7 +57,7 @@ namespace DoodleJump
         protected override void OnPaint(PaintEventArgs e)
         {
             DoodlMove temp = new DoodlMove();
-            temp.DoodlJumperMove(DoodlJumperLose, LoseDoodle, ref hight);
+            temp.DoodlJumperMove(DoodlJumperLose, LoseDoodle, ref _hight);
 
             DrawStrings(e);
 
@@ -71,8 +69,8 @@ namespace DoodleJump
         {
             Graphics g = e.Graphics;
             g.DrawString("Game Over!", new Font("Segoe Script", 20), Brushes.Gold, new RectangleF(40, 20, 200, 50));
-            g.DrawString("You score: " + (score).ToString(), new Font("Segoe Script", 20), Brushes.Indigo, new RectangleF(10, 60, 400, 100));
-            g.DrawString("Hightscore: " + hightscore.ToString(), new Font("Segoe Script", 15), Brushes.Indigo, new RectangleF(10, 100, 400, 100));
+            g.DrawString("You score: " + (_score).ToString(), new Font("Segoe Script", 20), Brushes.Indigo, new RectangleF(10, 60, 400, 100));
+            g.DrawString("Hightscore: " + _hightscore.ToString(), new Font("Segoe Script", 15), Brushes.Indigo, new RectangleF(10, 100, 400, 100));
             g.DrawString("You name: ", new Font("Segoe Script", 15), Brushes.Indigo, new RectangleF(10, 130, 400, 100));
         }
 
@@ -80,13 +78,13 @@ namespace DoodleJump
         {
             SaveRecord();
             this.Close();
-            GameMainWindow l = new GameMainWindow(menu);
+            GameMainWindow l = new GameMainWindow(_menu);
             l.Show();
         }
 
         private void SaveRecord()
         {
-            records.Add(new Record(NameBox.Text, score, DateTime.Now));
+            records.Add(new Record(NameBox.Text, _score, DateTime.Now));
             if (!File.Exists("Records.xml"))
             {
                 var myFile = File.Create("Records.xml");
@@ -109,7 +107,7 @@ namespace DoodleJump
         {
             SaveRecord();
             this.Close();
-            menu.Show();
+            _menu.Show();
         }
     }
 }

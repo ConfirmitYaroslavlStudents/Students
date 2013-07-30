@@ -15,7 +15,7 @@ namespace DoodleJump
         public int YDown;
         public bool FlyPhase;
         public Label DoodleJumper;
-        public bool lose;
+        public bool Lose;
         public DoodleJump(int xLeft, int xRight, int yDown, bool flyPhase, Label doodlejumper, bool lose)
         {
             this.XLeft = xLeft;
@@ -23,7 +23,7 @@ namespace DoodleJump
             this.YDown = yDown;
             this.FlyPhase = flyPhase;
             this.DoodleJumper = doodlejumper;
-            this.lose = lose;
+            this.Lose = lose;
 
         }
     }

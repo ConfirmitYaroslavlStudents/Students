@@ -1335,8 +1335,8 @@
             this.Name = "ListTetradi";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DoodleJump!";
-            this.Activated += new System.EventHandler(this.ListTetradi_Activated);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListTetradi_KeyDown);
+            this.Activated += new System.EventHandler(this.GameMainWindow_Activated);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameMainWindow_KeyDown);
             this.ResumeLayout(false);
 
         }

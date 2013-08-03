@@ -6,56 +6,58 @@ using System.Threading.Tasks;
 
 namespace Tree
 {
-    class Tree<T>:IEnumerable<T> where T:IComparable
+    class Node<T> where T : IComparable
     {
-        private class Node<T> where T : IComparable
+        public T Value { get; set; }
+        public Node<T> Left { get; set; }
+        public Node<T> Right { get; set; }
+        public int Height { get; private set; }
+
+        public Node(T value)
         {
-            public T Value { get; set; }
-            public Node<T> Left { get; set; }
-            public Node<T> Right { get; set; }
-            public int Height { get; private set; }
-
-            public Node(T value)
-            {
-                this.Value = value;
-                Left = null;
-                Right = null;
-                Height = 1;
-            }
-
-            public void SetHeight()
-            {
-                if (Left == null && Right == null)
-                {
-                    Height = 1;
-                    return;
-                }
-                if (Left == null)
-                {
-                    Height = Right.Height+1;
-                    return;
-                }
-                if (Right == null)
-                {
-                    Height = Left.Height+1;
-                    return;
-                }
-                Height = Math.Max(Left.Height, Right.Height)+1;
-            }
-
-            public int GetBalanceFactor()
-            {
-                return (Right != null ? Right.Height : 0) -
-                    (Left != null ? Left.Height : 0);
-            }
-
+            this.Value = value;
+            Left = null;
+            Right = null;
+            Height = 1;
         }
 
-        Node<T> _root;
+        public void SetHeight()
+        {
+            if (Left == null && Right == null)
+            {
+                Height = 1;
+                return;
+            }
+            if (Left == null)
+            {
+                Height = Right.Height + 1;
+                return;
+            }
+            if (Right == null)
+            {
+                Height = Left.Height + 1;
+                return;
+            }
+            Height = Math.Max(Left.Height, Right.Height) + 1;
+        }
+
+        public int GetBalanceFactor()
+        {
+            return (Right != null ? Right.Height : 0) -
+                (Left != null ? Left.Height : 0);
+        }
+    }
+
+    class Tree<T> : IEnumerable<T> where T : IComparable
+    {
+        private Node<T> _root;
+
+        public ITraversing<T> Traversing { get; set; }
 
         public Tree()
         {
             _root = null;
+            Traversing = new DirectTraversing<T>();
         }
 
         public void Add(T element)
@@ -83,12 +85,12 @@ namespace Tree
                 _root = BalanceTree(_root);
         }
 
-        Node<T> FindMin(Node<T> node) 
+        private Node<T> FindMin(Node<T> node)
         {
             return (node.Left != null) ? FindMin(node.Left) : node;
         }
 
-        Node<T> RemoveMin(Node<T> node)
+        private Node<T> RemoveMin(Node<T> node)
         {
             if (node.Left == null)
                 return node.Right;
@@ -119,75 +121,6 @@ namespace Tree
 
             node.SetHeight();
             return BalanceTree(node);
-        }
-
-        #region traversings
-        public List<T> DirectTraversing()
-        {
-            if (_root != null)
-                return DirectTraversing(new List<T>(), _root);
-            else
-                return new List<T>();
-        }
-
-        private List<T> DirectTraversing(List<T> valueList, Node<T> currentNode)
-        {
-            valueList.Add(currentNode.Value);
-            if (currentNode.Left != null)
-                DirectTraversing(valueList, currentNode.Left);
-            if (currentNode.Right != null)
-                DirectTraversing(valueList, currentNode.Right);
-            
-            return valueList;
-        }
-
-        public List<T> ReverseTraversing()
-        {
-            if (_root != null)
-                return ReverseTraversing(new List<T>(), _root);
-            else
-                return new List<T>();
-        }
-
-        private List<T> ReverseTraversing(List<T> valueList, Node<T> currentNode)
-        {
-            if (currentNode.Left != null)
-                ReverseTraversing(valueList, currentNode.Left);
-            if (currentNode.Right != null)
-                ReverseTraversing(valueList, currentNode.Right);
-            valueList.Add(currentNode.Value);
-            
-            return valueList;
-        }
-
-        public List<T> SymmetricTraversing()
-        {
-            if (_root != null)
-                return SymmetricTraversing(new List<T>(), _root);
-            else
-                return new List<T>();
-        }
-
-        private List<T> SymmetricTraversing(List<T> valueList, Node<T> currentNode)
-        {
-            if (currentNode.Left != null)
-                SymmetricTraversing(valueList, currentNode.Left);
-            valueList.Add(currentNode.Value);
-            if (currentNode.Right != null)
-                SymmetricTraversing(valueList, currentNode.Right);
-            
-            return valueList;
-        }
-        #endregion
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return DirectTraversing().GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return DirectTraversing().GetEnumerator();
         }
 
         private Node<T> RotateRight(Node<T> node)
@@ -229,8 +162,24 @@ namespace Tree
             return node;
         }
 
+
+        public List<T> Traverse()
+        {
+            return Traversing.Traverse(_root);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return Traverse().GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return Traverse().GetEnumerator();
+        }
+
         //убрать потом!!!
-        public void PrintTree()
+     /*   public void PrintTree()
         {
             Print(_root, 0);
         }
@@ -245,6 +194,6 @@ namespace Tree
                 Console.WriteLine(node.Value.ToString());
                 Print(node.Right, level + 1);
             }
-        }
+        }*/
     }
 }

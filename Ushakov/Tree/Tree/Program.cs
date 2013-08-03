@@ -17,31 +17,23 @@ namespace Tree
                 intTree.Add(rnd.Next(20));
             }
 
-            List<int> valueList = intTree.DirectTraversing();
-            Console.Write("Прямой обход: ");
-            PrintList<int>(valueList);
 
-            valueList = intTree.ReverseTraversing();
-            Console.Write("Обратный обход: ");
-            PrintList<int>(valueList);
+            PrintTreeTraversing(intTree, "Прямой обход (по умолчанию): ");
 
-            valueList = intTree.SymmetricTraversing();
-            Console.Write("Симметричный обход: ");
-            PrintList<int>(valueList);
-
-            intTree.PrintTree();
-            Console.WriteLine("Удаление элементнов дерева (вывод результата при симметричном обходе)");
-            while (valueList.Count > 0)
-            {
-                int removeIndex = rnd.Next(valueList.Count);
-                Console.WriteLine("Удаляемый эл-т: "+valueList[removeIndex]);
-                intTree.Remove(valueList[removeIndex]);
-
-                valueList = intTree.SymmetricTraversing();
-                PrintList<int>(valueList);
-            }
+            intTree.Traversing = new ReverseTraversing<int>();
+            PrintTreeTraversing(intTree, "Обратный обход: ");
+            
+            intTree.Traversing = new SymmetricTraversing<int>();
+            PrintTreeTraversing(intTree, "Симметричный обход: ");
             
             Console.ReadLine();
+        }
+
+        private static void PrintTreeTraversing(Tree<int> intTree, string TraversingName)
+        {
+            List<int> valueList = intTree.Traverse();
+            Console.Write(TraversingName);
+            PrintList<int>(valueList);
         }
 
         static void PrintList<T>(List<T> valueList)

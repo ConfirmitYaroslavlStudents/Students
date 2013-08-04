@@ -9,7 +9,7 @@ namespace StackWithUseArray
 {
     public class Stack<T> : IEnumerable<T>, IEnumerable
     {
-        private T[] _array;
+        protected T[] _array;
         public int Length { get; private set; }
 
         public Stack()
@@ -54,86 +54,20 @@ namespace StackWithUseArray
 
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public virtual IEnumerator<T> GetEnumerator()
         {
-            return new StackEnumerator(this);
+            for (int i = 0; i < Length; i++)
+            {
+                yield return _array[Length-i-1];
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return (IEnumerator)new StackEnumerator(this);
+            return _array.GetEnumerator();
         }
 
-        public class StackEnumerator : IEnumerator<T>, IDisposable, IEnumerator
-        {
-            private T _currentElement;
-            private int _index = -1;
-            private Stack<T> _stack;
-
-            public StackEnumerator(Stack<T> stack)
-            {
-                this._stack = stack;
-                this._index = -1;
-                this._currentElement = default(T);
-            }
-
-            public T Current
-            {
-                get
-                {
-                    if (_index == _stack.Length)
-
-                        throw new InvalidOperationException("MyStack is Empty");
-
-                    else
-
-                        return this._currentElement;
-
-                }
-            }
-
-            object IEnumerator.Current
-            {
-                get
-                {
-                    if (_index == _stack.Length)
-
-                        throw new InvalidOperationException("MyStack is Empty");
-
-                    else
-
-                        return (object)this._currentElement;
-
-
-                }
-            }
-
-            public void Dispose()
-            {
-                this._index = _stack.Length;
-            }
-
-            void IEnumerator.Reset()
-            {
-                this._index = -1;
-                this._currentElement = default(T);
-            }
-
-            public bool MoveNext()
-            {
-                ++this._index;
-                bool canMove = this._index >= 0 && this._index <= _stack.Length - 1;
-
-                if (canMove)
-                {
-                    _currentElement = _stack._array[_stack.Length-_index-1];
-                }
-
-                return canMove;
-
-            }
-
-        }
+       
     }
 
     

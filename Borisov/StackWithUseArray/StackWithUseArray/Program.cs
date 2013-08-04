@@ -9,6 +9,7 @@ namespace StackWithUseArray
     {
         static void Main(string[] args)
         {
+            
             Stack<int> Example = new Stack<int>();
             Example.Push(124);
             Example.Push(605);
@@ -39,6 +40,18 @@ namespace StackWithUseArray
             ThirdExample.Push("2");
             ThirdExample.Push("1");
             foreach (string t in ThirdExample)
+            {
+                Console.WriteLine(t);
+            }
+
+
+            Stack<int> Example105 = new Adapter<int>();
+            Example105.Push(2);
+            Example105.Push(4);
+            Example105.Push(8);
+            Example105.Push(16);
+            Example105.Push(32);
+            foreach (int t in Example105)
             {
                 Console.WriteLine(t);
             }

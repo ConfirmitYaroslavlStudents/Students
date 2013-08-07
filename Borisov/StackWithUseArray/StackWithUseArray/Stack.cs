@@ -56,10 +56,7 @@ namespace StackWithUseArray
 
         public virtual IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < Length; i++)
-            {
-                yield return _array[Length-i-1];
-            }
+            return new EnumeratorAdapter<T>(_array, Length);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

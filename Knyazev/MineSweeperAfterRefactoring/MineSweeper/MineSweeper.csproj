@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FieldElement.cs" />
+    <Compile Include="Cell.cs" />
+    <Compile Include="CellAroundMethod.cs" />
+    <Compile Include="GameCell.cs" />
     <Compile Include="GameSettings.cs" />
     <Compile Include="MainMineSweeperForm.cs">
       <SubType>Form</SubType>

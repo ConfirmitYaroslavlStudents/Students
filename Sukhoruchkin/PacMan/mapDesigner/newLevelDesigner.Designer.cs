@@ -1,6 +1,6 @@
 ﻿namespace mapDesigner
 {
-    partial class newLevelDesigner
+    partial class NewLevelDesigner
     {
         /// <summary>
         /// Required designer variable.
@@ -74,7 +74,7 @@
             this.clear.Location = new System.Drawing.Point(103, 241);
             this.clear.Name = "clear";
             this.clear.Size = new System.Drawing.Size(75, 23);
-            this.clear.TabIndex = 4;
+            this.clear.TabIndex = 5;
             this.clear.Text = "Clear";
             this.clear.UseVisualStyleBackColor = true;
             this.clear.Click += new System.EventHandler(this.clear_Click);
@@ -84,7 +84,7 @@
             this.exit.Location = new System.Drawing.Point(197, 241);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(75, 23);
-            this.exit.TabIndex = 5;
+            this.exit.TabIndex = 6;
             this.exit.Text = "Exit";
             this.exit.UseVisualStyleBackColor = true;
             this.exit.Click += new System.EventHandler(this.exit_Click);
@@ -94,12 +94,12 @@
             this.save.Location = new System.Drawing.Point(12, 241);
             this.save.Name = "save";
             this.save.Size = new System.Drawing.Size(75, 23);
-            this.save.TabIndex = 6;
+            this.save.TabIndex = 4;
             this.save.Text = "Save";
             this.save.UseVisualStyleBackColor = true;
             this.save.Click += new System.EventHandler(this.save_Click);
             // 
-            // newLevelDesigner
+            // NewLevelDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -111,11 +111,11 @@
             this.Controls.Add(this.pacMan);
             this.Controls.Add(this.wall);
             this.DoubleBuffered = true;
-            this.Name = "newLevelDesigner";
+            this.Name = "NewLevelDesigner";
             this.Text = "newLevelDesigner";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.newLevelDesigner_FormClosing);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.newLevelDesigner_Paint);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.newLevelDesigner_MouseClick);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewLevelDesigner_FormClosing);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.NewLevelDesigner_Paint);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NewLevelDesigner_MouseClick);
             this.ResumeLayout(false);
             this.PerformLayout();
 

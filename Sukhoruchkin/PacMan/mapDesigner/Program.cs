@@ -16,7 +16,7 @@ namespace mapDesigner
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mapDesigner());
+            Application.Run(new MapDesigner());
         }
     }
 }

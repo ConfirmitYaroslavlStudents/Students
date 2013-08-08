@@ -11,7 +11,10 @@ namespace Queue
     {
         static void Main(string[] args)
         {
-            Queue<int> myQueue = new Queue<int>();
+            Queue<int> myQueue = Queue<int>.GetQueue();
+            Queue<int> myQueue2 = Queue<int>.GetQueue();
+            if (myQueue == myQueue2)
+                Console.WriteLine("тождество");
             myQueue.Enqueue(1);
             Console.WriteLine(myQueue.Dequeue());
             myQueue.Enqueue(3);
@@ -39,11 +42,15 @@ namespace Queue
         private Element<T> _last;
         public int Count
         { get { return _count; } }
-        public Queue()
+        private Queue()
         {
             this._count = 0;
             this._first = null;
             this._last = null;
+        }
+        public static Queue<T> GetQueue()
+        {
+             return Singleton<Queue<T>>.Instance; 
         }
         public void Enqueue(T item)
         {

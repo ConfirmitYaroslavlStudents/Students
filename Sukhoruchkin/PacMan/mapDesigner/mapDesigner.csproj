@@ -44,25 +44,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mapDesigner.cs">
+    <Compile Include="MapDesigner.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mapDesigner.Designer.cs">
-      <DependentUpon>mapDesigner.cs</DependentUpon>
+    <Compile Include="MapDesigner.Designer.cs">
+      <DependentUpon>MapDesigner.cs</DependentUpon>
     </Compile>
-    <Compile Include="newLevelDesigner.cs">
+    <Compile Include="NewLevelDesigner.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="newLevelDesigner.Designer.cs">
-      <DependentUpon>newLevelDesigner.cs</DependentUpon>
+    <Compile Include="NewLevelDesigner.Designer.cs">
+      <DependentUpon>NewLevelDesigner.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="mapDesigner.resx">
-      <DependentUpon>mapDesigner.cs</DependentUpon>
+    <EmbeddedResource Include="MapDesigner.resx">
+      <DependentUpon>MapDesigner.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="newLevelDesigner.resx">
-      <DependentUpon>newLevelDesigner.cs</DependentUpon>
+    <EmbeddedResource Include="NewLevelDesigner.resx">
+      <DependentUpon>NewLevelDesigner.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

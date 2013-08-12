@@ -35,7 +35,7 @@ namespace DoodleJump
         {
             _onBorder = new List<bool>();
             _rungs = new List<Rung>();
-            var myFile = new StreamReader("../../Map.txt");
+            var myFile = new StreamReader("Resources/Map.txt");
             char[] delimited = { ' ', ',', '\t' };
             string temp = myFile.ReadLine();
 
@@ -209,7 +209,7 @@ namespace DoodleJump
         private void Drawing(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.DrawImage(new Bitmap("../../Джампер1.bmp"), _doodlJumper.Left, _doodlJumper.Top + this.AutoScrollPosition.Y);
+            g.DrawImage(new Bitmap("Resources/Jumper.bmp"), _doodlJumper.Left, _doodlJumper.Top + this.AutoScrollPosition.Y);
 
             DrawRungs(g);
 

@@ -1,6 +1,6 @@
 ﻿namespace mapDesigner
 {
-    partial class mapDesigner
+    partial class MapDesigner
     {
         /// <summary>
         /// Required designer variable.
@@ -69,25 +69,25 @@
             // 
             // OK
             // 
-            this.OK.Location = new System.Drawing.Point(88, 72);
+            this.OK.Location = new System.Drawing.Point(88, 71);
             this.OK.Name = "OK";
-            this.OK.Size = new System.Drawing.Size(75, 23);
+            this.OK.Size = new System.Drawing.Size(75, 20);
             this.OK.TabIndex = 3;
             this.OK.Text = "OK";
             this.OK.UseVisualStyleBackColor = true;
             this.OK.Click += new System.EventHandler(this.OK_Click);
             // 
-            // mapDesigner
+            // MapDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 107);
+            this.ClientSize = new System.Drawing.Size(267, 103);
             this.Controls.Add(this.OK);
             this.Controls.Add(this.numberOfLines);
             this.Controls.Add(this.numberOfColumns);
             this.Controls.Add(this.numberOfColumnsLabel);
             this.Controls.Add(this.numberOfLinesLabel);
-            this.Name = "mapDesigner";
+            this.Name = "MapDesigner";
             this.Text = "mapDesigner";
             this.ResumeLayout(false);
             this.PerformLayout();

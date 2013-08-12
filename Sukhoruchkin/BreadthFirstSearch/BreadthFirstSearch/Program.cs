@@ -23,9 +23,8 @@ namespace BreadthFirstRound
             tree.Add(60);
             tree.Add(80);
             var BFS = new BreadthFirstRound<int>(tree, 3);
-            BFS.EventAfterGettingIntoNewNode = PrintCurrentNode;
+            BFS.EventAfterGettingIntoNewNode += PrintCurrentNode;
             BFS.Start();
-            Console.ReadLine();
         }
         static void PrintCurrentNode(int node)
         {

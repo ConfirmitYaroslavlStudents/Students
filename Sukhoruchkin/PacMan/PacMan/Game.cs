@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Threading;
 
+
 namespace PacMan
 {
     public class Game
@@ -14,11 +15,13 @@ namespace PacMan
         private Enemy _enemy;
         private Timer _enemyTimer;
         private Map _map;
-        public int _currentLevel;
+        private int _currentLevel;
+        private int _numberLevels;
 
         public Game(int currentLevel)
         {
             this._currentLevel = currentLevel;
+            this._numberLevels = ConsiderNumberLevels();
 
             Wall levelWall = new Wall();
             levelWall.WallCordinate = ReadNewMapOnFile();
@@ -31,7 +34,7 @@ namespace PacMan
             this._pacMan = new PacMan(new Point(infoByPacManAndEnemy.X, infoByPacManAndEnemy.Y));
             EnemyArtificialIntelligence _enemyAI = new EnemyArtificialIntelligence(_map.LevelFood.FoodCoordinates);
             this._enemy = new Enemy(new Point(infoByPacManAndEnemy.Width, infoByPacManAndEnemy.Height),_enemyAI);
-            _enemyTimer = new Timer(MakeMoveEnemy, null, 500, 500);
+            _enemyTimer = new Timer(MakeMoveEnemy, null, 0, GameSettings.EnemySpeed);
         }
         public PacMan PacMan
         {
@@ -45,25 +48,28 @@ namespace PacMan
         {
             get { return _map; }
         }
+        public int CurrentLevel
+        {
+            get { return _currentLevel; }
+            set { _currentLevel = value; }
+        }
 
+        public bool IsLevelComplete()
+        {
+            return _map.LevelFood.FoodCoordinates.Count == 0;
+        }
         public bool IsWin()
         {
-            if (_map.LevelFood.FoodCoordinates.Count == 0)
-            {
-                return true;
-            }
-            return false;
+            return _currentLevel > _numberLevels;
         }
         public bool IsLoose()
         {
-            if (_pacMan.PacManCoordinate == _enemy.EnemyCoordinate)
-                return true;
-            return false;
+            return _pacMan.PacManCoordinate == _enemy.EnemyCoordinate;
         }
         public List<Rectangle> ReadNewMapOnFile()
         {
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Rectangle>));
-            System.IO.StreamReader file = new System.IO.StreamReader("levels/" + _currentLevel.ToString() + ".xml");
+            var reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Rectangle>));
+            var file = new System.IO.StreamReader("../../levels/" + _currentLevel.ToString() + ".xml");
             List<Rectangle> newMap = (List<Rectangle>)reader.Deserialize(file);
             return newMap;
         }
@@ -83,11 +89,38 @@ namespace PacMan
         }
         private bool IsNewPacManLocationInMap(Point newLocation)
         {
-            if (newLocation.X >= 0 && newLocation.X < _map.NumberColimns * 50 && newLocation.Y >= 0 && newLocation.Y < _map.NumberLines * 50) 
+            if (newLocation.X >= 0 && newLocation.X < _map.NumberColimns * GameSettings.WidthCell && newLocation.Y >= 0 && newLocation.Y < _map.NumberLines * GameSettings.HeightCell) 
             {
                 return true;
             }
             return false;
+        }
+        private int ConsiderNumberLevels()
+        {
+            return new System.IO.DirectoryInfo("../../levels/").GetFiles("*.*", System.IO.SearchOption.AllDirectories).Length;
+        }
+        public void KeyDown(string keyCode)
+        {
+            if (keyCode=="A")
+            {
+                Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X - _pacMan.PacManStepInPixels, _pacMan.PacManCoordinate.Y);
+                MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateLeft, _pacMan.mouthCoordinateLeft);
+            }
+            if (keyCode == "D")
+            {
+                Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X + _pacMan.PacManStepInPixels, _pacMan.PacManCoordinate.Y);
+                MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateRight, _pacMan.mouthCoordinateRight);
+            }
+            if (keyCode == "W")
+            {
+                Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X, _pacMan.PacManCoordinate.Y - _pacMan.PacManStepInPixels);
+                MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateTop, _pacMan.mouthCoordinateTop);
+            }
+            if (keyCode == "S")
+            {
+                Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X, _pacMan.PacManCoordinate.Y + _pacMan.PacManStepInPixels);
+                MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateDown, _pacMan.mouthCoordinateDown);
+            }
         }
     }
 }

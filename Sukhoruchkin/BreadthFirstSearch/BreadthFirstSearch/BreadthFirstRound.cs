@@ -15,13 +15,7 @@ namespace BreadthFirstRound
         private Tree<T> _tree;
         private bool _nodeIsHaveChildren;
         private Node<T> _parentNode;
-        public delegate void myDelegat(T node);
-        private event myDelegat _eventAfterGettingIntoNewNode;
-
-        public myDelegat EventAfterGettingIntoNewNode
-        {
-            set { _eventAfterGettingIntoNewNode += value; }
-        }
+        public Action<T> EventAfterGettingIntoNewNode;
         
         public BreadthFirstRound(Tree<T> tree, T inputNode)
         {
@@ -36,8 +30,8 @@ namespace BreadthFirstRound
             while (_queue.Count > 0)
             {
                 _nodeInGraph = _queue.Dequeue();
-                if (_eventAfterGettingIntoNewNode != null)
-                    _eventAfterGettingIntoNewNode(_nodeInGraph.Value);
+
+                Event();
 
                 NewParentNode();
                 AddNewNodeInQuque(_nodeInGraph.Parent);
@@ -73,6 +67,11 @@ namespace BreadthFirstRound
                     _parentNode = _parentQueue.Dequeue();
                 }
             }
+        }
+        private void Event()
+        {
+            if (EventAfterGettingIntoNewNode != null)
+                    EventAfterGettingIntoNewNode(_nodeInGraph.Value);
         }
     }
 }

@@ -54,6 +54,7 @@
       <DependentUpon>GameOnWindowsForms.cs</DependentUpon>
     </Compile>
     <Compile Include="EnemyArtificialIntelligence.cs" />
+    <Compile Include="GameSettings.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="PacMan.cs" />
     <Compile Include="Program.cs" />

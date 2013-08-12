@@ -17,6 +17,13 @@ namespace MineSweeper
 			_settings = gameSettings;
 			Field = new GameCell[_settings.GameFieldHeight, _settings.GameFieldWidth];
 
+			SetMines();
+
+			SetGameFieldElementsValues();
+		}
+
+		private void SetMines()
+		{
 			Random randomGenerator = new Random();
 			for (int i = 0; i < _settings.MinesNumber; i++)
 			{
@@ -31,67 +38,35 @@ namespace MineSweeper
 					}
 				}
 			}
-
-			SetGameFieldElementsValues();
 		}
 
-		public List<Point> OpenCell(int rowIndex, int columnIndex)
+		public List<Cell> OpenCell(int rowIndex, int columnIndex)
 		{
-			List<Point> result = new List<Point>();
+			List<Cell> result = new List<Cell>();
 			OpenCells(result, rowIndex, columnIndex);
 			return result;
 		}
 
-		private void OpenCells(List<Point> changedCells, int rowIndex, int columnIndex)
+		private void OpenCells(List<Cell> openedCells, int rowIndex, int columnIndex)
 		{
-			changedCells.Add(new Point(rowIndex, columnIndex));
+			openedCells.Add(new Cell(rowIndex, columnIndex));
 
 			if (!Field[rowIndex, columnIndex].IsOpened && !Field[rowIndex, columnIndex].IsMarked)
 			{
 				if (!Field[rowIndex, columnIndex].IsMine)
 				{
-					Field[rowIndex, columnIndex].IsOpened = true;
-
-					if (Field[rowIndex, columnIndex].Value == 0)
-					{
-						if (rowIndex > 0)
-						{
-							if (columnIndex > 0)
-								OpenCells(changedCells, rowIndex - 1, columnIndex - 1);
-
-							OpenCells(changedCells, rowIndex - 1, columnIndex);
-
-							if (columnIndex + 1 < _settings.GameFieldWidth)
-								OpenCells(changedCells, rowIndex - 1, columnIndex + 1);
-						}
-
-						if (columnIndex > 0)
-							OpenCells(changedCells, rowIndex, columnIndex - 1);
-
-						if (columnIndex + 1 < _settings.GameFieldWidth)
-							OpenCells(changedCells, rowIndex, columnIndex + 1);
-
-						if (rowIndex + 1 < _settings.GameFieldHeight)
-						{
-							if (columnIndex > 0)
-								OpenCells(changedCells, rowIndex + 1, columnIndex - 1);
-
-							OpenCells(changedCells, rowIndex + 1, columnIndex);
-
-							if (columnIndex + 1 < _settings.GameFieldWidth)
-								OpenCells(changedCells, rowIndex + 1, columnIndex + 1);
-						}
-					}
+					var openCellsMethod = new OpenCellsMathod(Field, openedCells);
+					openCellsMethod.CellCalculation(new Cell(rowIndex, columnIndex));
 				}
 				else
 					State = GameState.PlayerLose;
 			}
 		}
 
-		public Point RemarkCell(int rowIndex, int columnIndex)
+		public Cell RemarkCell(int rowIndex, int columnIndex)
 		{
 			Field[rowIndex, columnIndex].IsMarked = !Field[rowIndex, columnIndex].IsMarked;
-			return new Point(rowIndex, columnIndex);
+			return new Cell(rowIndex, columnIndex);
 		}
 
 		public bool PlayerWins()
@@ -122,33 +97,81 @@ namespace MineSweeper
 		{
 			for (int i = 0; i < _settings.GameFieldHeight; ++i)
 				for (int j = 0; j < _settings.GameFieldWidth; ++j)
-					if (!Field[i, j].IsMine)
-					{
-						if (i > 0)
-						{
-							if (j > 0 && Field[i - 1, j - 1].IsMine)
-								++Field[i, j].Value;
-							if (Field[i - 1, j].IsMine)
-								++Field[i, j].Value;
-							if (j + 1 < _settings.GameFieldWidth && Field[i - 1, j + 1].IsMine)
-								++Field[i, j].Value;
-						}
+				{
+					var openCellsMethod = new SetValueMathod(Field);
+					openCellsMethod.CellCalculation(new Cell(i, j));
+				}
 
-						if (j > 0 && Field[i, j - 1].IsMine)
-							++Field[i, j].Value;
-						if (j + 1 < _settings.GameFieldWidth && Field[i, j + 1].IsMine)
-							++Field[i, j].Value;
+		}
 
-						if (i + 1 < _settings.GameFieldHeight)
-						{
-							if (j > 0 && Field[i + 1, j - 1].IsMine)
-								++Field[i, j].Value;
-							if (Field[i + 1, j].IsMine)
-								++Field[i, j].Value;
-							if (j + 1 < _settings.GameFieldWidth && Field[i + 1, j + 1].IsMine)
-								++Field[i, j].Value;
-						}
-					}
+		class OpenCellsMathod : CellAroundMethod
+		{
+			private List<Cell> _openedCells;
+
+			public OpenCellsMathod(GameCell[,] field, List<Cell> openedCells)
+			{
+				Field = field;
+				_openedCells = openedCells;
+			}
+
+			protected override void UnconditionalAction(Cell currentCell)
+			{
+				((GameCell[,])Field)[currentCell.Row, currentCell.Column].IsOpened = true;
+				_openedCells.Add(currentCell);
+			}
+
+			protected override bool NeedCheckNeighbors(Cell currentCell)
+			{
+				if (((GameCell[,])Field)[currentCell.Row, currentCell.Column].Value == 0)
+					return true;
+				else
+					return false;
+			}
+
+			protected override bool Condition(Cell currentCell, Cell neighbourCell)
+			{
+				if (!((GameCell[,])Field)[neighbourCell.Row, neighbourCell.Column].IsOpened && !((GameCell[,])Field)[neighbourCell.Row, neighbourCell.Column].IsMine
+					&& !((GameCell[,])Field)[neighbourCell.Row, neighbourCell.Column].IsMarked)
+					return true;
+				else
+					return false;
+			}
+
+			protected override void ConditionalAction(Cell currentCell, Cell neighbourCell)
+			{
+				CellCalculation(neighbourCell);
+			}
+		}
+
+		class SetValueMathod : CellAroundMethod
+		{
+			public SetValueMathod(GameCell[,] field)
+			{
+				Field = field;
+			}
+			
+			protected override void UnconditionalAction(Cell currentCell) { }
+
+			protected override bool NeedCheckNeighbors(Cell currentCell) 
+			{
+				if (!((GameCell[,])Field)[currentCell.Row, currentCell.Column].IsMine)
+					return true;
+				else
+					return false;
+			}
+
+			protected override bool Condition(Cell currentCell, Cell neighbourCell)
+			{
+				if (((GameCell[,])Field)[neighbourCell.Row, neighbourCell.Column].IsMine)
+					return true;
+				else
+					return false;
+			}
+
+			protected override void ConditionalAction(Cell currentCell, Cell neighbourCell)
+			{
+				++((GameCell[,])Field)[currentCell.Row, currentCell.Column].Value;
+			}
 		}
 	}
 }

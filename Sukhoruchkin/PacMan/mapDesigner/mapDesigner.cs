@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace mapDesigner
 {
-    public partial class mapDesigner : Form
+    public partial class MapDesigner : Form
     {
-        public mapDesigner()
+        public MapDesigner()
         {
             InitializeComponent();
         }
@@ -21,7 +21,7 @@ namespace mapDesigner
         {
             if (IsNumber(numberOfLines.Text) && IsNumber(numberOfColumns.Text))
             {
-                newLevelDesigner levelDesigner = new newLevelDesigner(int.Parse(numberOfLines.Text), int.Parse(numberOfColumns.Text),this);
+                NewLevelDesigner levelDesigner = new NewLevelDesigner(int.Parse(numberOfLines.Text), int.Parse(numberOfColumns.Text), this);
                 this.Visible = false;
                 levelDesigner.Show();
             }
@@ -32,15 +32,9 @@ namespace mapDesigner
         }
         private bool IsNumber(string numberString)
         {
-            try
-            {
-                int.Parse(numberString);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            int result;
+            int.TryParse(numberString, out result);
+            return result > 0;
         }
     }
 }

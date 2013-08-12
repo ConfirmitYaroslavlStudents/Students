@@ -114,16 +114,16 @@ namespace MineSweeper
 			Invalidate();
         }
 
-		private void RefreshButtons(List<Point> buttonsLocationsList)
+		private void RefreshButtons(List<Cell> buttonsLocationsList)
 		{
-			foreach (Point location in buttonsLocationsList)
+			foreach (Cell location in buttonsLocationsList)
 				RefreshButton(location);
 		}
 
-		private void RefreshButton(Point location)
+		private void RefreshButton(Cell location)
 		{
-			int buttonIndex = location.X * _gameSettings.GameFieldHeight + location.Y;
-			if (_game.Field[location.X, location.Y].IsOpened)
+			int buttonIndex = location.Row * _gameSettings.GameFieldHeight + location.Column;
+			if (_game.Field[location.Row, location.Column].IsOpened)
 			{
 				_gameButtons[buttonIndex].Enabled = false;
 				_gameButtons[buttonIndex].BackColor = Color.Silver;

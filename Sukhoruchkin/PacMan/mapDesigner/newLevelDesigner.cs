@@ -11,7 +11,7 @@ using System.IO;
 
 namespace mapDesigner
 {
-    public partial class newLevelDesigner : Form
+    public partial class NewLevelDesigner : Form
     {
         private int _numberLines;
         private int _numberColumns;
@@ -20,12 +20,13 @@ namespace mapDesigner
         private Point _pacManCoordinate;
         private Point _enemyCoordinate;
         private Form _parentForm;
+        private int _numerLevel;
 
-        public newLevelDesigner(int numberLines, int numberColumns, Form parentForm)
+        public NewLevelDesigner(int numberLines, int numberColumns, Form parentForm)
         {
             InitializeComponent();
             this._parentForm = parentForm;
-            this.Width = numberColumns * 50 +18;
+            this.Width = numberColumns * 50 + 18;
             this.Height = numberLines * 50 + 90;
 
             wall.Top = this.Height - 80;
@@ -37,6 +38,7 @@ namespace mapDesigner
 
             this._numberColumns = numberColumns;
             this._numberLines = numberLines;
+            this._numerLevel = 1;
 
             this._allRectanglesInMap = new List<Rectangle>();
             this._wallCoordinates = new List<Rectangle>();
@@ -46,11 +48,11 @@ namespace mapDesigner
             {
                 for (int j = 0; j < _numberColumns; j++)
                 {
-                    _allRectanglesInMap.Add(new Rectangle(50 * j , 50 * i , 50, 50));
+                    _allRectanglesInMap.Add(new Rectangle(50 * j, 50 * i, 50, 50));
                 }
             }
         }
-        private bool isNotWall(Rectangle rect)
+        private bool IsNotWall(Rectangle rect)
         {
             foreach (Rectangle rectangle in _wallCoordinates)
             {
@@ -59,7 +61,7 @@ namespace mapDesigner
             }
             return true;
         }
-        private void newLevelDesigner_Paint(object sender, PaintEventArgs e)
+        private void NewLevelDesigner_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             foreach (Rectangle rect in _allRectanglesInMap)
@@ -74,12 +76,12 @@ namespace mapDesigner
             g.FillEllipse(Brushes.Indigo, _enemyCoordinate.X, _enemyCoordinate.Y, 50, 50);
 
         }
-        private void newLevelDesigner_MouseClick(object sender, MouseEventArgs e)
+        private void NewLevelDesigner_MouseClick(object sender, MouseEventArgs e)
         {
             if (wall.Checked)
                 MouseClickWall(e);
             if (pacMan.Checked)
-                MouseClickPacManOrEnemy(e,true);
+                MouseClickPacManOrEnemy(e, true);
             if (enemy.Checked)
                 MouseClickPacManOrEnemy(e, false);
         }
@@ -89,7 +91,7 @@ namespace mapDesigner
             {
                 if (rect.Contains(new Point(e.X, e.Y)))
                 {
-                    if (isNotWall(rect))
+                    if (IsNotWall(rect))
                     {
                         _wallCoordinates.Add(rect);
                     }
@@ -102,17 +104,17 @@ namespace mapDesigner
             }
             Invalidate();
         }
-        private void MouseClickPacManOrEnemy(MouseEventArgs e,bool ItIsPacMan)
+        private void MouseClickPacManOrEnemy(MouseEventArgs e, bool ItIsPacMan)
         {
             foreach (Rectangle rect in _allRectanglesInMap)
             {
                 if (rect.Contains(new Point(e.X, e.Y)))
                 {
-                    if (isNotWall(rect) && ItIsPacMan)
+                    if (IsNotWall(rect) && ItIsPacMan)
                     {
                         _pacManCoordinate = new Point(rect.X, rect.Y);
                     }
-                    if (isNotWall(rect) && !ItIsPacMan) 
+                    if (IsNotWall(rect) && !ItIsPacMan)
                     {
                         _enemyCoordinate = new Point(rect.X, rect.Y);
                     }
@@ -123,18 +125,18 @@ namespace mapDesigner
         }
         private void save_Click(object sender, EventArgs e)
         {
-            var myFile = File.Create("newLevel.xml");
-            myFile.Close();
-            var file = new System.IO.StreamWriter("newLevel.xml");
-            var writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Rectangle>));
-            _wallCoordinates.Add(new Rectangle(_pacManCoordinate.X, _pacManCoordinate.Y, _enemyCoordinate.X, _enemyCoordinate.Y));
-            _wallCoordinates.Add(new Rectangle(_numberColumns, _numberLines, 0, 0));
-            writer.Serialize(file, _wallCoordinates);
-            file.Close();
+            using (Stream fStream = new FileStream(_numerLevel.ToString() + ".xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                var writer = new System.Xml.Serialization.XmlSerializer(typeof(List<Rectangle>));
+                _wallCoordinates.Add(new Rectangle(_pacManCoordinate.X, _pacManCoordinate.Y, _enemyCoordinate.X, _enemyCoordinate.Y));
+                _wallCoordinates.Add(new Rectangle(_numberColumns, _numberLines, 0, 0));
+                writer.Serialize(fStream, _wallCoordinates);
+            }
+            _numerLevel++;
         }
         private void clear_Click(object sender, EventArgs e)
         {
-            _enemyCoordinate = new Point(-50,-50);
+            _enemyCoordinate = new Point(-50, -50);
             _pacManCoordinate = new Point();
             _wallCoordinates.Clear();
             Invalidate();
@@ -145,7 +147,7 @@ namespace mapDesigner
             _parentForm.Close();
         }
 
-        private void newLevelDesigner_FormClosing(object sender, FormClosingEventArgs e)
+        private void NewLevelDesigner_FormClosing(object sender, FormClosingEventArgs e)
         {
             _parentForm.Close();
         }

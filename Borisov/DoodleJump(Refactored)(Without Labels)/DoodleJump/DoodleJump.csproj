@@ -54,6 +54,7 @@
     <Compile Include="BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calculator.cs" />
     <Compile Include="DoodleJump.cs" />
     <Compile Include="GameMainWindow.cs">
       <SubType>Form</SubType>
@@ -126,6 +127,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MenuButton.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Jumper.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Map.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

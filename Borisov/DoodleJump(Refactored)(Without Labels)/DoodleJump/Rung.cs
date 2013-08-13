@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DoodleJump
 {
-    class Rung
+    public class Rung
     {
         public int Left;
         public int Top;

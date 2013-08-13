@@ -24,7 +24,7 @@ namespace DoodleJump
             DoodlJumperMove();
 
             Graphics g = e.Graphics;
-            g.DrawImage(new Bitmap("../../Джампер1.bmp"), _doodlJumper.Left, _doodlJumper.Top + this.AutoScrollPosition.Y);
+            g.DrawImage(new Bitmap("Resources/Jumper.bmp"), _doodlJumper.Left, _doodlJumper.Top + this.AutoScrollPosition.Y);
             g.FillRectangle(Brushes.LimeGreen, ApplicationSettings.BaseLabelPositionX, ApplicationSettings.BaseLabelPositionY, ApplicationSettings.RungsLength, ApplicationSettings.RungsHight);
             Invalidate();
 

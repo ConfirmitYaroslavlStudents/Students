@@ -54,6 +54,7 @@
     <Compile Include="BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calculator.cs" />
     <Compile Include="DoodleJump.cs" />
     <Compile Include="GameMainWindow.cs">
       <SubType>Form</SubType>

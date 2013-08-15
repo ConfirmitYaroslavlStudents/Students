@@ -16,10 +16,9 @@ namespace PacMan
         private Point _pacManCoordinate;
         private Point _eyeCoordinate;
         private Point _mouthCoordinate;
-        private bool _openOrClosedMouth=true;
+        private bool _openOrClosedMouth = true;
         private static System.Threading.Timer _pacManMouthTimer;
 
-        private const int _pacManStepInPixels = 50;
         public readonly Point eyeCoordinateLeft = new Point(15, 5);
         public readonly Point eyeCoordinateRight = new Point(25, 5);
         public readonly Point eyeCoordinateTop = new Point(35, 15);
@@ -45,7 +44,7 @@ namespace PacMan
         }
         public int PacManStepInPixels
         {
-            get { return _pacManStepInPixels; }
+            get { return GameSettings.CellSize; }
         }
 
         public PacMan(Point pacManCoordinate)
@@ -53,7 +52,7 @@ namespace PacMan
             this._pacManCoordinate = pacManCoordinate;
             this._eyeCoordinate = new Point(_pacManCoordinate.X + eyeCoordinateTop.X, _pacManCoordinate.Y + eyeCoordinateTop.Y);
             this._mouthCoordinate = mouthCoordinateTop;
-            _pacManMouthTimer = new System.Threading.Timer(MouthState, null, 300, 300);
+            _pacManMouthTimer = new System.Threading.Timer(MouthState, null, 0, GameSettings.PacManMouthSpeed);
         }
 
         public void DoStep(Point newLocation)

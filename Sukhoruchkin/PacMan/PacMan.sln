@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacMan", "PacMan\PacMan.csproj", "{FDF51270-7C51-499A-ACDD-E2A3A71DE5C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mapDesigner", "mapDesigner\mapDesigner.csproj", "{71466938-6249-477A-81D4-6D5D6BD81F48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapDesigner", "mapDesigner\MapDesigner.csproj", "{71466938-6249-477A-81D4-6D5D6BD81F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

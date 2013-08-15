@@ -50,20 +50,20 @@ namespace PacMan
         }
         private Food InitialiazeFood()
         {
-            Point temp = new Point(0, 0);
+            Point foodCoordinate = new Point();
             Food result = new Food();
             for (int j = 0; j < _numberColumns; j++)
             {
                 for (int k = 0; k < _numberLines; k++)
                 {
-                    if (IsFood(temp))
+                    if (IsFood(foodCoordinate))
                     {
-                        result.Add(temp);
+                        result.Add(foodCoordinate);
                     }
-                    temp.Y = temp.Y + 50;
+                    foodCoordinate.Y = foodCoordinate.Y + GameSettings.CellSize;
                 }
-                temp.Y = 0;
-                temp.X = temp.X + 50;
+                foodCoordinate.Y = 0;
+                foodCoordinate.X = foodCoordinate.X + GameSettings.CellSize;
             }
             return result;
         }

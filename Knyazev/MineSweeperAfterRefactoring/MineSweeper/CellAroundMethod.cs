@@ -7,7 +7,13 @@ namespace MineSweeper
 {
 	abstract class CellAroundMethod
 	{
-		protected Array Field;
+		protected int Height, Width;
+
+		public CellAroundMethod(int height, int width)
+		{
+			Height = height;
+			Width = width;
+		}
 
 		public void CellCalculation(Cell currentCell)
 		{
@@ -32,7 +38,7 @@ namespace MineSweeper
 					if (Condition(currentCell, neighbourCell))
 						ConditionalAction(currentCell, neighbourCell);
 
-					if (currentCell.Column + 1 < Field.GetLength(1))
+					if (currentCell.Column + 1 < Width)
 					{
 						neighbourCell.Column = currentCell.Column + 1;
 						if (Condition(currentCell, neighbourCell))
@@ -48,14 +54,14 @@ namespace MineSweeper
 					if (Condition(currentCell, neighbourCell))
 						ConditionalAction(currentCell, neighbourCell);
 				}
-				if (currentCell.Column + 1 < Field.GetLength(1))
+				if (currentCell.Column + 1 < Width)
 				{
 					neighbourCell.Column = currentCell.Column + 1;
 					if (Condition(currentCell, neighbourCell))
 						ConditionalAction(currentCell, neighbourCell);
 				}
 
-				if (currentCell.Row + 1 < Field.GetLength(0))
+				if (currentCell.Row + 1 < Height)
 				{
 					neighbourCell.Row = currentCell.Row + 1;
 
@@ -70,7 +76,7 @@ namespace MineSweeper
 					if (Condition(currentCell, neighbourCell))
 						ConditionalAction(currentCell, neighbourCell);
 
-					if (currentCell.Column + 1 < Field.GetLength(1))
+					if (currentCell.Column + 1 < Width)
 					{
 						neighbourCell.Column = currentCell.Column + 1;
 						if (Condition(currentCell, neighbourCell))

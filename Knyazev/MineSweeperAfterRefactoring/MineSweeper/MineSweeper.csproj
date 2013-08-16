@@ -56,9 +56,11 @@
     <Compile Include="MainMineSweeperForm.Designer.cs">
       <DependentUpon>MainMineSweeperForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameField.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="OpenCellsMathod.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetValueMathod.cs" />
     <EmbeddedResource Include="MainMineSweeperForm.resx">
       <DependentUpon>MainMineSweeperForm.cs</DependentUpon>
     </EmbeddedResource>

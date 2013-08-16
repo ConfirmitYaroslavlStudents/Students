@@ -95,7 +95,7 @@ namespace MineSweeper
 			if (e.Button == MouseButtons.Right)
 				RefreshButton(_game.RemarkCell(rowIndex, columnIndex));
 			else
-				RefreshButtons(_game.OpenCell(rowIndex, columnIndex));
+				RefreshButtons(_game.OpenCells(rowIndex, columnIndex));
 
 			if (_game.State != GameState.PlayerLose)
 			{
@@ -134,7 +134,6 @@ namespace MineSweeper
 		{
 			for (int i = 0; i < _gameSettings.GameFieldHeight; ++i)
 				for (int j = 0; j < _gameSettings.GameFieldWidth; ++j)
-				{
 					if (_game.Field[i, j].IsOpened && _game.Field[i, j].Value > 0)
 						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = _game.Field[i, j].Value.ToString();
 					else if (_game.Field[i, j].IsMarked)
@@ -144,7 +143,6 @@ namespace MineSweeper
 						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = "X";
 					else
 						_gameButtons[i * _gameSettings.GameFieldWidth + j].Text = "";
-				}
 		}
 
 		private void newGameButton_Click(object sender, EventArgs e)

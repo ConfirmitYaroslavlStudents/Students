@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Heap.Tests
 {
 	[TestClass]
-	public class HeapMethodsTests
+	public class HeapTests
 	{
 		[TestMethod]
 		public void AddElementIncreaseHeapSize()
@@ -87,6 +87,55 @@ namespace Heap.Tests
 			heap.DeleteTop();
 
 			Assert.AreEqual(heap.Top, 2);
+		}
+
+		[TestMethod]
+		public void SortingBadArray()
+		{
+			var array = new[] { 5, 4, 3, 2, 1 };
+
+			array.HeapSort();
+
+			for (int i = 1; i <= 5; ++i)
+				Assert.AreEqual(array[i - 1], i);
+		}
+
+		[TestMethod]
+		public void SortingSomeArray()
+		{
+			var array = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
+			var arrayCopy = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
+
+			array.HeapSort();
+			Array.Sort(arrayCopy);
+
+			for (int i = 0; i < array.Length; ++i)
+				Assert.AreEqual(array[i], arrayCopy[i]);
+		}
+
+		[TestMethod]
+		public void SortingSomeArrayWhenMaxComparerUsing()
+		{
+			var array = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
+			var arrayCopy = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
+
+			var comparer = new MyIntComparer();
+			array.HeapSort(comparer);
+			Array.Sort(arrayCopy, comparer);
+
+			for (int i = 0; i < array.Length; ++i)
+				Assert.AreEqual(array[i], arrayCopy[i]);
+		}
+
+		[TestMethod]
+		public void SortingWithoutChanges()
+		{
+			var array = new[] { 1, 2, 3, 4, 5 };
+
+			array.HeapSort();
+
+			for (int i = 1; i <= 5; ++i)
+				Assert.AreEqual(array[i - 1], i);
 		}
 	}
 

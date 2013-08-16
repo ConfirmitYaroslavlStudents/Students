@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Threading;
+using Level;
 
 
 namespace PacMan
@@ -12,37 +13,43 @@ namespace PacMan
     public class Game
     {
         private PacMan _pacMan;
-        private Enemy _enemy;
+        private Enemys _enemys;
         private Timer _enemyTimer;
         private Map _map;
         private int _currentLevel;
         private int _numberLevels;
+        private enum _stepDirection
+        {
+            Down,
+            Top,
+            Right,
+            Left
+        }
 
         public Game(int currentLevel)
         {
             this._currentLevel = currentLevel;
             this._numberLevels = ConsiderNumberLevels();
 
-            Wall levelWall = new Wall();
-            levelWall.WallCordinate = ReadNewMapOnFile();
-            Rectangle infoByPacManAndEnemy = levelWall.WallCordinate[levelWall.WallCordinate.Count - 2];
-            Rectangle infoByColumnAndLine = levelWall.WallCordinate[levelWall.WallCordinate.Count - 1];
-            levelWall.WallCordinate.Remove(infoByPacManAndEnemy);
-            levelWall.WallCordinate.Remove(infoByColumnAndLine);
+            Level.Level LevelInfo = new Level.Level();
+            LevelInfo = ReadNewLevelOnFile();
 
-            this._map = new Map(levelWall, infoByColumnAndLine.X, infoByColumnAndLine.Y);
-            this._pacMan = new PacMan(new Point(infoByPacManAndEnemy.X, infoByPacManAndEnemy.Y));
+            _pacMan = new PacMan(LevelInfo.pacMan);
+            Wall levelWall = new Wall();
+            levelWall.WallCordinate = LevelInfo.wall;
+            this._map = new Map(levelWall, LevelInfo.numberColumns, LevelInfo.numberLines);
+            this._pacMan = new PacMan(LevelInfo.pacMan);
             EnemyArtificialIntelligence _enemyAI = new EnemyArtificialIntelligence(_map.LevelFood.FoodCoordinates);
-            this._enemy = new Enemy(new Point(infoByPacManAndEnemy.Width, infoByPacManAndEnemy.Height),_enemyAI);
+            this._enemys = new Enemys(LevelInfo.enemys, _enemyAI);
             _enemyTimer = new Timer(MakeMoveEnemy, null, 0, GameSettings.EnemySpeed);
         }
         public PacMan PacMan
         {
             get { return _pacMan; }
         }
-        public Enemy Enemy
+        public Enemys Enemys
         {
-            get { return _enemy; }
+            get { return _enemys; }
         }
         public Map Map
         {
@@ -64,14 +71,19 @@ namespace PacMan
         }
         public bool IsLoose()
         {
-            return _pacMan.PacManCoordinate == _enemy.EnemyCoordinate;
+            foreach (Point enemyCoordinate in _enemys.EnemyCoordinates)
+            {
+                if (_pacMan.PacManCoordinate == enemyCoordinate)
+                    return true;
+            }
+            return false;
         }
-        public List<Rectangle> ReadNewMapOnFile()
+        public Level.Level ReadNewLevelOnFile()
         {
-            var reader = new System.Xml.Serialization.XmlSerializer(typeof(List<Rectangle>));
-            var file = new System.IO.StreamReader("../../levels/" + _currentLevel.ToString() + ".xml");
-            List<Rectangle> newMap = (List<Rectangle>)reader.Deserialize(file);
-            return newMap;
+            var reader = new System.Xml.Serialization.XmlSerializer(typeof(Level.Level));
+            var file = new System.IO.StreamReader("levels/" + _currentLevel.ToString() + ".xml");
+            Level.Level newLevel = (Level.Level)reader.Deserialize(file);
+            return newLevel;
         }
         public void MakeMovePacMan(Point newPacManLocation,Point eyeCoordinate, Point mouthCoordinate)
         {
@@ -85,7 +97,7 @@ namespace PacMan
         }
         private void MakeMoveEnemy(object sender)
         {
-            _enemy.MoveEnemy(_pacMan.PacManCoordinate);
+            _enemys.MoveEnemy(_pacMan.PacManCoordinate);
         }
         private bool IsNewPacManLocationInMap(Point newLocation)
         {
@@ -97,26 +109,26 @@ namespace PacMan
         }
         private int ConsiderNumberLevels()
         {
-            return new System.IO.DirectoryInfo("../../levels/").GetFiles("*.*", System.IO.SearchOption.AllDirectories).Length;
+            return new System.IO.DirectoryInfo("levels/").GetFiles("*.*", System.IO.SearchOption.AllDirectories).Length;
         }
-        public void KeyDown(string keyCode)
+        public void KeyDown(int directionNumber)
         {
-            if (keyCode=="A")
+            if (directionNumber == (int)_stepDirection.Left)
             {
                 Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X - _pacMan.PacManStepInPixels, _pacMan.PacManCoordinate.Y);
                 MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateLeft, _pacMan.mouthCoordinateLeft);
             }
-            if (keyCode == "D")
+            if (directionNumber == (int)_stepDirection.Right)
             {
                 Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X + _pacMan.PacManStepInPixels, _pacMan.PacManCoordinate.Y);
                 MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateRight, _pacMan.mouthCoordinateRight);
             }
-            if (keyCode == "W")
+            if (directionNumber == (int)_stepDirection.Top)
             {
                 Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X, _pacMan.PacManCoordinate.Y - _pacMan.PacManStepInPixels);
                 MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateTop, _pacMan.mouthCoordinateTop);
             }
-            if (keyCode == "S")
+            if (directionNumber == (int)_stepDirection.Down)
             {
                 Point newPacManLocation = new Point(_pacMan.PacManCoordinate.X, _pacMan.PacManCoordinate.Y + _pacMan.PacManStepInPixels);
                 MakeMovePacMan(newPacManLocation, _pacMan.eyeCoordinateDown, _pacMan.mouthCoordinateDown);

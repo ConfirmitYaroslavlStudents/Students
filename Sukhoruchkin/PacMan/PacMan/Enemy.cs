@@ -9,26 +9,29 @@ using System.Threading;
 
 namespace PacMan
 {
-    public class Enemy
+    public class Enemys
     {
-        private Point _enemyCoordinate;
+        private List<Point> _enemyCoordinates;
         private EnemyArtificialIntelligence _enemyAI;
 
-        public Point EnemyCoordinate
+        public List<Point> EnemyCoordinates
         {
-            get { return _enemyCoordinate;}
-            set { _enemyCoordinate = value; }
+            get { return _enemyCoordinates;}
+            set { _enemyCoordinates = value; }
         }
 
-        public Enemy(Point enemyCoordinate,EnemyArtificialIntelligence enemyAI)
+        public Enemys(List<Point> enemyCoordinates, EnemyArtificialIntelligence enemyAI)
         {
-            this._enemyCoordinate = enemyCoordinate;
+            this._enemyCoordinates = enemyCoordinates;
             this._enemyAI = enemyAI;
 
         }
         public void MoveEnemy(Point pacManCoordinate)
         {
-            _enemyCoordinate = _enemyAI.GetNextStep(_enemyCoordinate,pacManCoordinate);
+            for (int i = 0; i < _enemyCoordinates.Count; i++)
+            {
+                _enemyCoordinates[i] = _enemyAI.GetNextStep(_enemyCoordinates[i], pacManCoordinate);
+            }
         }
     }
 }

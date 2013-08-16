@@ -34,10 +34,10 @@ namespace PacMan
         {
             foreach (Node node in _graph)
             {
-                node.Down = GetNeighbor(new Point(0, 50), node);
-                node.Top = GetNeighbor(new Point(0, -50), node);
-                node.Left = GetNeighbor(new Point(-50, 0), node);
-                node.Right = GetNeighbor(new Point(50, 0), node);
+                node.Down = GetNeighbor(new Point(0, GameSettings.CellSize), node);
+                node.Top = GetNeighbor(new Point(0, -GameSettings.CellSize), node);
+                node.Left = GetNeighbor(new Point(-GameSettings.CellSize, 0), node);
+                node.Right = GetNeighbor(new Point(GameSettings.CellSize, 0), node);
             }
         }
         private Node GetNeighbor(Point offset,Node currentNode)

@@ -28,16 +28,20 @@ namespace PacMan
         private void Game_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            foreach (Rectangle r in _newGame.Map.LevelWall.WallCordinate)
+            foreach (Rectangle wallCoordinate in _newGame.Map.LevelWall.WallCordinate)
             {
-                g.FillRectangle(Brushes.Aquamarine, r);
+                g.FillRectangle(Brushes.Aquamarine, wallCoordinate);
             }
-            foreach (Point p in _newGame.Map.LevelFood.FoodCoordinates)
+            foreach (Point foodcoordinate in _newGame.Map.LevelFood.FoodCoordinates)
             {
-                g.FillEllipse(Brushes.White, p.X + 20, p.Y + 20, 10, 10);
+                g.FillEllipse(Brushes.White, foodcoordinate.X + 20, foodcoordinate.Y + 20, 10, 10);
             }
-            g.FillEllipse(Brushes.Indigo, _newGame.Enemy.EnemyCoordinate.X, _newGame.Enemy.EnemyCoordinate.Y, GameSettings.PacManHeight, GameSettings.PacManWidth);
-            g.FillEllipse(Brushes.Yellow, _newGame.PacMan.PacManCoordinate.X, _newGame.PacMan.PacManCoordinate.Y, GameSettings.EnemyHeight, GameSettings.EnemyWidth);
+            foreach (Point enemyCoordinate in _newGame.Enemys.EnemyCoordinates)
+            {
+                g.FillEllipse(Brushes.Indigo, enemyCoordinate.X, enemyCoordinate.Y, GameSettings.EnemyHeight, GameSettings.EnemyWidth);
+            }
+           
+            g.FillEllipse(Brushes.Yellow, _newGame.PacMan.PacManCoordinate.X, _newGame.PacMan.PacManCoordinate.Y, GameSettings.PacManHeight, GameSettings.PacManWidth);
             g.FillEllipse(Brushes.Black, _newGame.PacMan.EyeCoordinate.X, _newGame.PacMan.EyeCoordinate.Y, 10, 10);
             if (_newGame.PacMan.IsOpenMouth())
                 g.FillPie(Brushes.Black, _newGame.PacMan.PacManCoordinate.X, _newGame.PacMan.PacManCoordinate.Y, GameSettings.PacManHeight, GameSettings.PacManWidth, _newGame.PacMan.MouthCoordinate.X, _newGame.PacMan.MouthCoordinate.Y);
@@ -62,7 +66,22 @@ namespace PacMan
         }
         private void Game_KeyDown(object sender, KeyEventArgs e)
         {
-           _newGame.KeyDown(e.KeyCode.ToString());
+            if (e.KeyCode.ToString() == "A")
+            {
+                _newGame.KeyDown(3);
+            }
+            if (e.KeyCode.ToString() == "D")
+            {
+                _newGame.KeyDown(2);
+            }
+            if (e.KeyCode.ToString() == "W")
+            {
+                _newGame.KeyDown(1);
+            }
+            if (e.KeyCode.ToString() == "S")
+            {
+                _newGame.KeyDown(0);
+            }
         }
     }
 }

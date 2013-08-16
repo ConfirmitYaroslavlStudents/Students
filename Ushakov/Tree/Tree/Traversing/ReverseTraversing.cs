@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tree
 {
-    internal class ReverseTraversing<T> : Traversing<T> where T : IComparable
+    public class ReverseTraversing<T> : Traversing<T> where T : IComparable
     {
         protected override List<T> Traverse(List<T> valueList, Node<T> currentNode)
         {

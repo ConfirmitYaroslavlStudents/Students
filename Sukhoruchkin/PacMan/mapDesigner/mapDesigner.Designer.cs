@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.numberOfLinesLabel = new System.Windows.Forms.Label();
             this.numberOfColumnsLabel = new System.Windows.Forms.Label();
             this.numberOfColumns = new System.Windows.Forms.TextBox();
             this.numberOfLines = new System.Windows.Forms.TextBox();
             this.OK = new System.Windows.Forms.Button();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // numberOfLinesLabel
@@ -59,6 +62,8 @@
             this.numberOfColumns.Name = "numberOfColumns";
             this.numberOfColumns.Size = new System.Drawing.Size(100, 20);
             this.numberOfColumns.TabIndex = 2;
+            this.numberOfColumns.Validating += new System.ComponentModel.CancelEventHandler(this.numberOfColumns_Validating);
+            this.numberOfColumns.Validated += new System.EventHandler(this.numberOfColumns_Validated);
             // 
             // numberOfLines
             // 
@@ -66,6 +71,8 @@
             this.numberOfLines.Name = "numberOfLines";
             this.numberOfLines.Size = new System.Drawing.Size(100, 20);
             this.numberOfLines.TabIndex = 1;
+            this.numberOfLines.Validating += new System.ComponentModel.CancelEventHandler(this.numberOfLines_Validating);
+            this.numberOfLines.Validated += new System.EventHandler(this.numberOfLines_Validated);
             // 
             // OK
             // 
@@ -77,11 +84,15 @@
             this.OK.UseVisualStyleBackColor = true;
             this.OK.Click += new System.EventHandler(this.OK_Click);
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // MapDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 103);
+            this.ClientSize = new System.Drawing.Size(279, 103);
             this.Controls.Add(this.OK);
             this.Controls.Add(this.numberOfLines);
             this.Controls.Add(this.numberOfColumns);
@@ -89,6 +100,7 @@
             this.Controls.Add(this.numberOfLinesLabel);
             this.Name = "MapDesigner";
             this.Text = "mapDesigner";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,6 +113,7 @@
         private System.Windows.Forms.TextBox numberOfColumns;
         private System.Windows.Forms.TextBox numberOfLines;
         private System.Windows.Forms.Button OK;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }
 

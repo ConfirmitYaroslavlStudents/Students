@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tree
 {
-    internal abstract class Traversing<T> where T : IComparable
+    public abstract class Traversing<T> where T : IComparable
     {
         public List<T> Traverse(Node<T> node)
         {

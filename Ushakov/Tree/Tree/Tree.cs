@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tree
 {
-    class Tree<T> : IEnumerable<T> where T : IComparable
+    public class Tree<T> : IEnumerable<T> where T : IComparable
     {
         private Node<T> _root;
 
@@ -135,23 +135,5 @@ namespace Tree
         {
             return Traverse().GetEnumerator();
         }
-
-        //убрать потом!!!
-     /*   public void PrintTree()
-        {
-            Print(_root, 0);
-        }
-
-        private void Print(Node<T> node, int level)
-        {
-            if (node != null)
-            {
-                Print(node.Left, level + 1);
-                for (int i = 0; i < level; i++)
-                    Console.Write("\t");
-                Console.WriteLine(node.Value.ToString());
-                Print(node.Right, level + 1);
-            }
-        }*/
     }
 }

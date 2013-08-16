@@ -4,35 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Win32;
 
 namespace TimeLocker
 {
     class RemainingTimeController
     {
         private const double DEFAULT_INTERVAL = 1000;
+        
+        public event ElapsedEventHandler TimeOut;
 
-        public event EventHandler TimeOut;
-
-        private int _remaningSecondsToLock;
-        private Timer _countdownTimer;
+        public int RemaningSecondsToLock { get; private set; }
+        private System.Timers.Timer _countdownTimer;
 
         public RemainingTimeController(int secondsToLock)
         {
-            _remaningSecondsToLock = secondsToLock;
+            RemaningSecondsToLock = secondsToLock;
 
-            _countdownTimer = new Timer(DEFAULT_INTERVAL);
+            _countdownTimer = new System.Timers.Timer(DEFAULT_INTERVAL);
             _countdownTimer.Elapsed += DecRemaningSecondsToLock;
             _countdownTimer.Start();
+
+            SystemEvents.SessionSwitch += SessionSwitchEvent;
         }
 
         private void DecRemaningSecondsToLock(object o, ElapsedEventArgs e)
         {
-            _remaningSecondsToLock--;
-            if (_remaningSecondsToLock == 0)
+            RemaningSecondsToLock--;
+            if (RemaningSecondsToLock == 0)
+            {
+                ChangeTimerEvent();
+            }
+        }
+
+        private void ChangeTimerEvent()
+        {
+            _countdownTimer.Elapsed -= DecRemaningSecondsToLock;
+            _countdownTimer.Elapsed += TimeOut; ;
+        }
+
+        private void SessionSwitchEvent(object o, SessionSwitchEventArgs e)
+        {
+            if (e.Reason == SessionSwitchReason.SessionLock)
             {
                 _countdownTimer.Stop();
-                if (TimeOut != null)
-                    TimeOut(new object(), new EventArgs());
+                return;
+            }
+
+            if (e.Reason == SessionSwitchReason.SessionUnlock)
+            {
+                _countdownTimer.Start();
+                return;
             }
         }
     }

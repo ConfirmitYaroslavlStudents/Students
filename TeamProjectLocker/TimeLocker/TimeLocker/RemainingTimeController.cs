@@ -11,15 +11,17 @@ namespace TimeLocker
     class RemainingTimeController
     {
         private const double DEFAULT_INTERVAL = 1000;
+      //  private TimeSpan ONE_SECOND;// = new TimeSpan(0, 0, 1);
         
         public event ElapsedEventHandler TimeOut;
 
-        public int RemaningSecondsToLock { get; private set; }
+        public TimeSpan RemaningTimeToLock { get; private set; }
         private System.Timers.Timer _countdownTimer;
 
-        public RemainingTimeController(int secondsToLock)
+        public RemainingTimeController(TimeSpan TimeToLock)
         {
-            RemaningSecondsToLock = secondsToLock;
+        //    ONE_SECOND = new TimeSpan(0, 0, 1);
+            RemaningTimeToLock = TimeToLock;
 
             _countdownTimer = new System.Timers.Timer(DEFAULT_INTERVAL);
             _countdownTimer.Elapsed += DecRemaningSecondsToLock;
@@ -30,8 +32,8 @@ namespace TimeLocker
 
         private void DecRemaningSecondsToLock(object o, ElapsedEventArgs e)
         {
-            RemaningSecondsToLock--;
-            if (RemaningSecondsToLock == 0)
+            RemaningTimeToLock -= TimeSpan.FromSeconds(1);
+            if (RemaningTimeToLock == TimeSpan.Zero)
             {
                 ChangeTimerEvent();
             }

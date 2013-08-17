@@ -12,18 +12,19 @@ namespace TimeLocker
         [DllImport("user32.dll", EntryPoint = "LockWorkStation")]
         static extern bool LockWorkStation();
 
-        private const int DEFAULT_TIMEOUT = 7200;
+        private TimeSpan _timout;
         private RemainingTimeController _timeController;
 
         public Locker()
         {
-            _timeController = new RemainingTimeController(DEFAULT_TIMEOUT);
+            _timout = new TimeSpan(2, 0, 0);
+            _timeController = new RemainingTimeController(_timout);
             _timeController.TimeOut += Lock;
         }
 
-        public int GetRemainingTime()
+        public TimeSpan GetRemainingTime()
         {
-            return _timeController.RemaningSecondsToLock;
+            return _timeController.RemaningTimeToLock;
         }
 
         private void Lock(object o, EventArgs e)

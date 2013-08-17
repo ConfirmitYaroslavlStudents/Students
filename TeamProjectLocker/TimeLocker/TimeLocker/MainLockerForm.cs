@@ -17,7 +17,7 @@ namespace TimeLocker
         public MainLockerForm()
         {
             InitializeComponent();
-            locker = new Locker();
+            locker = new Locker(Properties.Settings.Default.maxAllowedTime);
 
             printRemaingTimeTimer = new Timer();
             printRemaingTimeTimer.Interval = 1000;

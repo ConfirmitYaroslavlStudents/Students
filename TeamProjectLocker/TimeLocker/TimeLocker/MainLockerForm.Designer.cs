@@ -48,7 +48,7 @@
             this.ClientSize = new System.Drawing.Size(380, 138);
             this.Controls.Add(this.RemaingTimeDisplay);
             this.Name = "MainLockerForm";
-            this.Text = "MainLockerForm";
+            this.Text = "Remaining timi at current day";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -7,211 +7,115 @@ namespace FizzBuzz.Tests
 	public class FizzBuzzerTests
 	{
 		[TestMethod]
-		public void Pass2GetString2()
+		public void Pass7GetString7()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(7);
 
-			Assert.AreEqual(fizzBuzzer.ToString(2), "2");
+			Assert.AreEqual(result, "7");
 		}
 
 		[TestMethod]
-		public void Pass3GetStringHarder()
+		public void Pass3GetStringFizz()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(3);
 
-			Assert.AreEqual(fizzBuzzer.ToString(3), "Harder");
+			Assert.AreEqual(result, "Fizz");
 		}
 
 		[TestMethod]
-		public void Pass5GetStringBetter()
+		public void Pass5GetStringBuzz()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(5);
 
-			Assert.AreEqual(fizzBuzzer.ToString(5), "Better");
+			Assert.AreEqual(result, "Buzz");
 		}
 
 		[TestMethod]
-		public void Pass7GetStringFaster()
+		public void Pass7GetStringFasterWhenPair7FasterAdded()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
 			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(7);
 
-			Assert.AreEqual(fizzBuzzer.ToString(7), "Faster");
+			Assert.AreEqual(result, "Faster");
 		}
 
 		[TestMethod]
-		public void Pass11GetStringStronger()
+		public void Pass15GetStringFizzBuzz()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(15);
 
-			Assert.AreEqual(fizzBuzzer.ToString(11), "Stronger");
+			Assert.AreEqual(result, "Fizz Buzz");
 		}
 
 		[TestMethod]
-		public void Pass15GetStringHarderBetter()
+		public void Pass21GetStringFizzFasterWhenPair7FasterAdded()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
 			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(21);
 
-			Assert.AreEqual(fizzBuzzer.ToString(15), "Harder Better");
+			Assert.AreEqual(result, "Fizz Faster");
 		}
 
 		[TestMethod]
-		public void Pass21GetStringHarderFaster()
+		public void Pass105GetStringFizzBuzzFasterWhenPair7FasterAdded()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
 			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(105);
 
-			Assert.AreEqual(fizzBuzzer.ToString(21), "Harder Faster");
+			Assert.AreEqual(result, "Fizz Buzz Faster");
 		}
 
 		[TestMethod]
-		public void Pass33GetStringHarderStronger()
+		public void Pass3GetString3WhenKey3Deleted()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			fizzBuzzer.DeleteNumberStringPair(3);
+			var result = fizzBuzzer.ToString(3);
 
-			Assert.AreEqual(fizzBuzzer.ToString(33), "Harder Stronger");
+			Assert.AreEqual(result, "3");
 		}
 
 		[TestMethod]
-		public void Pass35GetStringBetterFaster()
+		public void Pass3GetStringHarderWhenKey3DeletedAndPair3HarderAdded()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
+			fizzBuzzer.DeleteNumberStringPair(3);
 			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
+			var result = fizzBuzzer.ToString(3);
 
-			Assert.AreEqual(fizzBuzzer.ToString(35), "Better Faster");
+			Assert.AreEqual(result, "Harder");
 		}
 
-		[TestMethod]
-		public void Pass55GetStringBetterStronger()
+		[TestMethod, ExpectedException(typeof(ZeroCanNotBeKeyException))]
+		public void ZeroCanNotBeKey()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(55), "Better Stronger");
+			fizzBuzzer.AddNumberStringPair(0, "Zero");
 		}
 
-		[TestMethod]
-		public void Pass77GetStringFasterStronger()
+		[TestMethod, ExpectedException(typeof(FizzBuzzerHasThisKeyException))]
+		public void FizzBuzzerCanNotContain2SameKeys()
 		{
 			var fizzBuzzer = new FizzBuzzer();
 
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(77), "Faster Stronger");
-		}
-
-		[TestMethod]
-		public void Pass105GetStringHarderBetterFaster()
-		{
-			var fizzBuzzer = new FizzBuzzer();
-
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(105), "Harder Better Faster");
-		}
-
-		[TestMethod]
-		public void Pass165GetStringHarderBetterStronger()
-		{
-			var fizzBuzzer = new FizzBuzzer();
-
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(165), "Harder Better Stronger");
-		}
-
-		[TestMethod]
-		public void Pass231GetStringHarderFasterStronger()
-		{
-			var fizzBuzzer = new FizzBuzzer();
-
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(231), "Harder Faster Stronger");
-		}
-
-		[TestMethod]
-		public void Pass385GetStringBetterFasterStronger()
-		{
-			var fizzBuzzer = new FizzBuzzer();
-
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(385), "Better Faster Stronger");
-		}
-
-		[TestMethod]
-		public void Pass1155GetStringHarderBetterFasterStronger()
-		{
-			var fizzBuzzer = new FizzBuzzer();
-
-			fizzBuzzer.AddNumberStringPair(3, "Harder");
-			fizzBuzzer.AddNumberStringPair(5, "Better");
-			fizzBuzzer.AddNumberStringPair(7, "Faster");
-			fizzBuzzer.AddNumberStringPair(11, "Stronger");
-
-			Assert.AreEqual(fizzBuzzer.ToString(1155), "Harder Better Faster Stronger");
+			fizzBuzzer.AddNumberStringPair(3, "Tree");
 		}
 	}
 }

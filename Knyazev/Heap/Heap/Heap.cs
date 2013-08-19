@@ -16,18 +16,21 @@ namespace Heap
 			_heap = new List<T>();
 			_comparer = Comparer<T>.Default;
 		}
+
 		public Heap(IComparer<T> userComparer)
 			: this()
 		{
 			if (userComparer != null)
 				_comparer = userComparer;
 		}
+
 		public Heap(IEnumerable<T> collection)
 		{
 			_heap = new List<T>(collection);
 			_comparer = Comparer<T>.Default;
 			_heap.Sort();
 		}
+
 		public Heap(IEnumerable<T> collection, IComparer<T> userComparer)
 		{
 			_heap = new List<T>(collection);
@@ -37,11 +40,13 @@ namespace Heap
 				_comparer = Comparer<T>.Default;
 			_heap.Sort(_comparer);
 		}
+
 		public Heap(int capacity)
 		{
 			_heap = new List<T>(capacity);
 			_comparer = Comparer<T>.Default;
 		}
+
 		public Heap(int capacity, IComparer<T> userComparer)
 			: this(capacity)
 		{
@@ -60,6 +65,7 @@ namespace Heap
 				newElementIndex /= 2;
 			}
 		}
+
 		public T DeleteTop()
 		{
 			if (_heap.Count > 0)
@@ -83,10 +89,12 @@ namespace Heap
 			else
 				throw new HeapIsEmptyException();
 		}
+
 		public IEnumerator<T> GetEnumerator()
 		{
 			return _heap.GetEnumerator();
 		}
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return (IEnumerator)_heap.GetEnumerator();
@@ -98,6 +106,7 @@ namespace Heap
 			_heap[firstElementIndex] = _heap[secondElementIndex];
 			_heap[secondElementIndex] = temp;
 		}
+
 		private int FindAimSonIndex(int parentIndex)
 		{
 			int aimIndex = parentIndex;
@@ -121,6 +130,7 @@ namespace Heap
 					throw new HeapIsEmptyException();
 			}
 		}
+
 		public int Count
 		{
 			get { return _heap.Count; }

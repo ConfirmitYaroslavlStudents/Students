@@ -18,10 +18,7 @@ namespace TimeLocker
         {
             InitializeComponent();
 
-            //пусть пока так будет, потом на нормальную инициализацию поменять
-            //в идеале вообще написать загрузчик для всего этого дела,
-            //который все сохраненные данные загрузит и по уму обработает
-            locker = new Locker(Properties.Settings.Default.maxAllowedTime, Properties.Settings.Default.maxAllowedTime);
+            locker = LockerLoader.GetLocker();
 
             printRemaingTimeTimer = new Timer();
             printRemaingTimeTimer.Interval = 1000;

@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSaver.cs" />
     <Compile Include="Locker.cs" />
+    <Compile Include="LockerLoader.cs" />
     <Compile Include="MainLockerForm.cs">
       <SubType>Form</SubType>
     </Compile>

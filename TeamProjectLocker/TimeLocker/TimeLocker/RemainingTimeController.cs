@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using Microsoft.Win32;
 
 namespace TimeLocker
 {
@@ -23,8 +22,6 @@ namespace TimeLocker
         {
             _maxAllowedTime = maxAllowedTime;
             RemaningTimeToLock = CalculateRemainingTimeToLock(remainingTime);
-            
-            SystemEvents.SessionSwitch += SessionSwitchEvent;
 
             _countdownTimer = new Timer(COUNTDOWNTIMER_INTERVAL);
             _countdownTimer.Elapsed += DecRemaningSecondsToLock;
@@ -42,6 +39,16 @@ namespace TimeLocker
                 return deltaTime + _maxAllowedTime;
         }
 
+        public void StartTimer()
+        {
+            _countdownTimer.Start();
+        }
+
+        public void StopTimer()
+        {
+            _countdownTimer.Stop();
+        }
+
         private void DecRemaningSecondsToLock(object o, ElapsedEventArgs e)
         {
             RemaningTimeToLock -= TimeSpan.FromSeconds(1);
@@ -55,21 +62,6 @@ namespace TimeLocker
         {
             _countdownTimer.Elapsed -= DecRemaningSecondsToLock;
             _countdownTimer.Elapsed += TimeOut; ;
-        }
-
-        private void SessionSwitchEvent(object o, SessionSwitchEventArgs e)
-        {
-            if (e.Reason == SessionSwitchReason.SessionLock)
-            {
-                _countdownTimer.Stop();
-                return;
-            }
-
-            if (e.Reason == SessionSwitchReason.SessionUnlock)
-            {
-                _countdownTimer.Start();
-                return;
-            }
-        }
+        }        
     }
 }

@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.RemaingTimeDisplay = new System.Windows.Forms.Label();
+            this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // RemaingTimeDisplay
@@ -41,14 +43,25 @@
             this.RemaingTimeDisplay.Size = new System.Drawing.Size(0, 91);
             this.RemaingTimeDisplay.TabIndex = 0;
             // 
+            // trayIcon
+            // 
+            this.trayIcon.Text = "TimeLocker";
+            this.trayIcon.Visible = true;
+            this.trayIcon.Click += new System.EventHandler(this.trayIcon_Click);
+            // 
             // MainLockerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 138);
             this.Controls.Add(this.RemaingTimeDisplay);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainLockerForm";
-            this.Text = "Remaining timi at current day";
+            this.ShowInTaskbar = false;
+            this.Text = "Remaining time at current day";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainLockerForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -57,6 +70,7 @@
         #endregion
 
         private System.Windows.Forms.Label RemaingTimeDisplay;
+        private System.Windows.Forms.NotifyIcon trayIcon;
     }
 }
 

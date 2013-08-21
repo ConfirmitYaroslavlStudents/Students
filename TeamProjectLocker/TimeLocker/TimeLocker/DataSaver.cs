@@ -9,10 +9,10 @@ namespace TimeLocker
 {
     class DataSaver
     {
-        public void SaveSessionData(TimeSpan remainingTime)
+        public static void SaveSessionData(TimeSpan remainingTime)
         {
-            DateTime currentDate = DateTime.Now;
-            using (StreamWriter sessionData = new StreamWriter("LastSession.dat", false))
+            var currentDate = DateTime.Now;
+            using (var sessionData = new StreamWriter("LastSession.dat", false))
             {
                 sessionData.WriteLine(currentDate.Date.ToString());
                 sessionData.WriteLine(remainingTime.ToString(@"hh\:mm\:ss"));

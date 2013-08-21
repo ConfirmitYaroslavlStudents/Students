@@ -18,7 +18,8 @@ namespace TimeLocker
         {
             InitializeComponent();
 
-            locker = LockerLoader.GetLocker();
+            trayIcon.Icon = new System.Drawing.Icon("App.ico");
+            locker = Locker.GetInstance();
 
             printRemaingTimeTimer = new Timer();
             printRemaingTimeTimer.Interval = 1000;
@@ -32,6 +33,19 @@ namespace TimeLocker
                 RemaingTimeDisplay.Text = locker.GetRemainingTime().ToString(@"hh\:mm\:ss");
             else
                 RemaingTimeDisplay.Text = (locker.GetRemainingTime() - locker.MaxAllowedTime).ToString(@"hh\:mm\:ss");
+        }
+
+        private void trayIcon_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void MainLockerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

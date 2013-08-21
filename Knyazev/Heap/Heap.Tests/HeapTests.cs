@@ -18,6 +18,16 @@ namespace Heap.Tests
 		}
 
 		[TestMethod]
+		public void Add2ReallyAdd2()
+		{
+			var heap = new Heap<int>();
+
+			heap.Add(2);
+
+			Assert.AreEqual(heap.Top, 2);
+		}
+
+		[TestMethod]
 		public void MinElementInTop1()
 		{
 			var heap = new Heap<int>();
@@ -61,6 +71,26 @@ namespace Heap.Tests
 			Assert.AreEqual(heap.Count, 0);
 		}
 
+		[TestMethod, ExpectedException(typeof(HeapIsEmptyException))]
+		public void DeleteElementFromEmptyHeapLeadsToException()
+		{
+			var heap = new Heap<int>();
+
+			heap.DeleteTop();
+		}
+
+		[TestMethod]
+		public void DeletedElementIsAnElementInTop()
+		{
+			var heap = new Heap<int>();
+
+			heap.Add(3);
+			heap.Add(2);
+			var element = heap.DeleteTop();
+
+			Assert.AreEqual(element, 2);
+		}
+
 		[TestMethod]
 		public void MinInTopAfterDelete()
 		{
@@ -90,56 +120,36 @@ namespace Heap.Tests
 		}
 
 		[TestMethod]
-		public void SortingBadArray()
+		public void HeapFromCollectionConstructorWorksRight()
 		{
-			var array = new[] { 5, 4, 3, 2, 1 };
+			var list = new List<int>(new[] { 2, 4, -2, 0, 1, 7 });
+			var heap = new Heap<int>(list);
 
-			array.HeapSort();
+			list.Sort();
+			var listFromHeap = new List<int>();
+			foreach (var element in heap)
+				listFromHeap.Add(element);
 
-			for (int i = 1; i <= 5; ++i)
-				Assert.AreEqual(array[i - 1], i);
+			CollectionAssert.AreEqual(list, listFromHeap);
 		}
 
 		[TestMethod]
-		public void SortingSomeArray()
+		public void HeapFromCollectionConstructorWorksRightWhenMaxComparerUsing()
 		{
-			var array = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
-			var arrayCopy = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
-
-			array.HeapSort();
-			Array.Sort(arrayCopy);
-
-			for (int i = 0; i < array.Length; ++i)
-				Assert.AreEqual(array[i], arrayCopy[i]);
-		}
-
-		[TestMethod]
-		public void SortingSomeArrayWhenMaxComparerUsing()
-		{
-			var array = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
-			var arrayCopy = new[] { -5, 5, -10, -4, 11, 0, 1, -9, 9, 7 };
-
 			var comparer = new MyIntComparer();
-			array.HeapSort(comparer);
-			Array.Sort(arrayCopy, comparer);
+			var list = new List<int>(new[] { 2, 4, -2, 0, 1, 7 });
+			var heap = new Heap<int>(list, comparer);
 
-			for (int i = 0; i < array.Length; ++i)
-				Assert.AreEqual(array[i], arrayCopy[i]);
-		}
+			list.Sort(comparer);
+			var listFromHeap = new List<int>();
+			foreach (var element in heap)
+				listFromHeap.Add(element);
 
-		[TestMethod]
-		public void SortingWithoutChanges()
-		{
-			var array = new[] { 1, 2, 3, 4, 5 };
-
-			array.HeapSort();
-
-			for (int i = 1; i <= 5; ++i)
-				Assert.AreEqual(array[i - 1], i);
+			CollectionAssert.AreEqual(list, listFromHeap);
 		}
 	}
 
-	class MyIntComparer : IComparer<int>
+	public class MyIntComparer : IComparer<int>
 	{
 		public int Compare(int a, int b)
 		{

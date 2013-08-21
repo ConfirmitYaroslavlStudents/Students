@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace FizzBuzz
 {
+	public class ZeroCanNotBeKeyException : Exception { }
+	public class FizzBuzzerHasThisKeyException : Exception { }
+
 	public class FizzBuzzer
 	{
 		private Dictionary<int, string> _numberStringPairs;
@@ -10,10 +13,17 @@ namespace FizzBuzz
 		public FizzBuzzer()
 		{
 			_numberStringPairs = new Dictionary<int, string>();
+			_numberStringPairs.Add(3, "Fizz");
+			_numberStringPairs.Add(5, "Buzz");
 		}
 
 		public void AddNumberStringPair(int number, string numberString)
 		{
+			if (_numberStringPairs.ContainsKey(number))
+				throw new FizzBuzzerHasThisKeyException();
+			else if (number == 0)
+				throw new ZeroCanNotBeKeyException();
+
 			_numberStringPairs.Add(number, numberString);
 		}
 

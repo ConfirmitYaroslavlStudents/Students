@@ -47,7 +47,7 @@
             // 
             this.trayIcon.Text = "TimeLocker";
             this.trayIcon.Visible = true;
-            this.trayIcon.Click += new System.EventHandler(this.trayIcon_Click);
+            this.trayIcon.Click += new System.EventHandler(this.TrayIconClick);
             // 
             // MainLockerForm
             // 
@@ -61,7 +61,7 @@
             this.ShowInTaskbar = false;
             this.Text = "Remaining time at current day";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainLockerForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainLockerFormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

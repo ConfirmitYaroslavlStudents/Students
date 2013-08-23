@@ -25,11 +25,7 @@ namespace Heap
 		}
 
 		public Heap(IEnumerable<T> collection)
-		{
-			_heap = new List<T>(collection);
-			_comparer = Comparer<T>.Default;
-			_heap.Sort();
-		}
+			: this(collection, Comparer<T>.Default) { }
 
 		public Heap(IEnumerable<T> collection, IComparer<T> userComparer)
 		{

@@ -168,6 +168,8 @@ namespace Heap.Tests
 
 			while (listEnumerator.MoveNext() && heapEnumerator.MoveNext())
 				Assert.AreEqual(listEnumerator.Current, heapEnumerator.Current);
+
+			Assert.AreEqual(listEnumerator.MoveNext(), heapEnumerator.MoveNext());
 		}
 	}
 

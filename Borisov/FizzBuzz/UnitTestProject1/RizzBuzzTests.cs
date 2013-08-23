@@ -57,7 +57,7 @@ namespace UnitTestProject1
         public void PassDivisibleBy2GetCoconut()
         {
             var fizzBuzz = new FizzBuzzer();
-            fizzBuzz.Rules.Add(2, "Coconut");
+            fizzBuzz.AddRule(2, "Coconut");
             var result = fizzBuzz.ToString(2);
 
             Assert.AreEqual("Coconut", result);
@@ -67,7 +67,7 @@ namespace UnitTestProject1
         public void PassDivisibleBy7GetBanana()
         {
             var fizzBuzz = new FizzBuzzer();
-            fizzBuzz.Rules.Add(7, "Banana");
+            fizzBuzz.AddRule(7, "Banana");
             var result = fizzBuzz.ToString(7);
 
             Assert.AreEqual("Banana", result);
@@ -77,8 +77,8 @@ namespace UnitTestProject1
         public void PassDivisibleBy2And3And5And7GetCoconutFizzBuzzBanana()
         {
             var fizzBuzz = new FizzBuzzer();
-            fizzBuzz.Rules.Add(2, "Coconut");
-            fizzBuzz.Rules.Add(7, "Banana");
+            fizzBuzz.AddRule(2, "Coconut");
+            fizzBuzz.AddRule(7, "Banana");
             var result = fizzBuzz.ToString(210);
 
             Assert.AreEqual("Coconut Fizz Buzz Banana", result);

@@ -8,7 +8,7 @@ namespace FizzBuzz
 {
     public class FizzBuzzer
     {
-        public SortedDictionary<int, string> Rules { get; set; }
+       private SortedDictionary<int, string> Rules { get; set; }
 
         public FizzBuzzer()
         {
@@ -16,7 +16,10 @@ namespace FizzBuzz
            Rules.Add(3, "Fizz");
            Rules.Add(5, "Buzz");
         }
-
+        public void AddRule(int number, string word)
+        {
+            Rules.Add(number, word);
+        }
         public string ToString(int number)
         {
             var result = new List<string>();

@@ -43,6 +43,14 @@ namespace StackTests
             var result = stack.Peek();
             Assert.AreEqual(1, result);
         }
+        [TestMethod]
+        public void PushGetPeek()
+        {
+            var stack = new Stack<String>();
+            stack.Push("eeee");
+            var result = stack.Peek();
+            Assert.AreEqual("eeee", result);
+        }
 
         [TestMethod]
         public void PassForeachGetArray()
@@ -58,8 +66,8 @@ namespace StackTests
                 result[i] = temp;
                 i--;
             }
-            for(i=stack.Length-1;i>0;i--)
-            Assert.AreEqual(stack._array[i], result[i]);
+            for (i = 0; i < stack.Length; i++)
+                Assert.AreEqual(i+1, result[i]);
         }
     }
 }

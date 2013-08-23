@@ -9,7 +9,7 @@ namespace StackLibrary
 {
     public class Stack<T> : IEnumerable<T>, IEnumerable
     {
-        public T[] _array;
+        private T[] _array;
         public int Length { get; private set; }
 
         public Stack()

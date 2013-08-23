@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace TimeLocker
 {
-    class RemainingTimeController
+    public sealed class RemainingTimeController
     {
-        private const double COUNTDOWNTIMER_INTERVAL = 1000;
-        
-        public event ElapsedEventHandler TimeOut;
+        const double COUNTDOWNTIMER_INTERVAL = 1000;
 
-        public TimeSpan RemaningTimeToLock { get; private set; }
+		Timer _countdownTimer;
 
-        private Timer _countdownTimer;
-        private TimeSpan _maxAllowedTime;
+        public TimeSpan RemainingTimeToLock { get; private set; }
 
-        public RemainingTimeController(TimeSpan remainingTime, TimeSpan maxAllowedTime)
+		public event ElapsedEventHandler TimeOut;
+
+        public RemainingTimeController(TimeSpan remainingTime)
         {
-            _maxAllowedTime = maxAllowedTime;
-            RemaningTimeToLock = CalculateRemainingTimeToLock(remainingTime);
+            RemainingTimeToLock = CalculateRemainingTimeToLock(remainingTime);
 
             _countdownTimer = new Timer(COUNTDOWNTIMER_INTERVAL);
             _countdownTimer.Elapsed += DecRemaningSecondsToLock;
@@ -36,7 +30,7 @@ namespace TimeLocker
             if (deltaTime > remainingTimeToLock)
                 return remainingTimeToLock;
             else
-                return deltaTime + _maxAllowedTime;
+                return deltaTime + Properties.Settings.Default.MaxAllowedTime;
         }
 
         public void StartTimer()
@@ -51,17 +45,16 @@ namespace TimeLocker
 
         private void DecRemaningSecondsToLock(object o, ElapsedEventArgs e)
         {
-            RemaningTimeToLock -= TimeSpan.FromSeconds(1);
-            if (RemaningTimeToLock == TimeSpan.Zero)
-            {
+            RemainingTimeToLock -= TimeSpan.FromSeconds(1);
+
+            if (RemainingTimeToLock == TimeSpan.Zero)
                 ChangeTimerEvent();
-            }
         }
 
         private void ChangeTimerEvent()
         {
             _countdownTimer.Elapsed -= DecRemaningSecondsToLock;
-            _countdownTimer.Elapsed += TimeOut; ;
+            _countdownTimer.Elapsed += TimeOut;
         }        
     }
 }

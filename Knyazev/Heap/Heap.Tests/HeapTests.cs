@@ -105,6 +105,14 @@ namespace Heap.Tests
 			Assert.AreEqual(heap.Top, 1);
 		}
 
+		[TestMethod, ExpectedException(typeof(HeapIsEmptyException))]
+		public void TopElementOfEmptyHeapLeadsToException()
+		{
+			var heap = new Heap<int>();
+
+			var top = heap.Top;
+		}
+
 		[TestMethod]
 		public void MaxInTopAfterDeleteWhenMaxComparerUsing()
 		{
@@ -146,6 +154,20 @@ namespace Heap.Tests
 				listFromHeap.Add(element);
 
 			CollectionAssert.AreEqual(list, listFromHeap);
+		}
+
+		[TestMethod]
+		public void GetEnumeratorReturnCorrectEnumerator()
+		{
+			var list = new List<int>(new[] { 2, 4, -2, 0, 1, 7 });
+			var heap = new Heap<int>(list);
+
+			list.Sort();
+			var listEnumerator = list.GetEnumerator();
+			var heapEnumerator = heap.GetEnumerator();
+
+			while (listEnumerator.MoveNext() && heapEnumerator.MoveNext())
+				Assert.AreEqual(listEnumerator.Current, heapEnumerator.Current);
 		}
 	}
 

@@ -44,8 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSaver.cs" />
+    <Compile Include="LastSessionSynchronizer.cs" />
     <Compile Include="Locker.cs" />
+    <Compile Include="LockStatusChangedHandler.cs" />
+    <Compile Include="LockStatusChangedReason.cs" />
+    <Compile Include="Locktimer.cs" />
     <Compile Include="MainLockerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -55,6 +58,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemainingTimeController.cs" />
+    <Compile Include="LockStatusChangedEventArgs.cs" />
+    <Compile Include="WindowsLocker.cs" />
     <EmbeddedResource Include="MainLockerForm.resx">
       <DependentUpon>MainLockerForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -12,40 +12,43 @@ namespace TimeLocker
 {
     public partial class MainLockerForm : Form
     {
-        Timer printRemaingTimeTimer;
-        Locker locker;
+        Timer _printRemaingTimeTimer;
+        Locktimer _lockTimer;
+		WindowsLocker _windowsLocker;
+
         public MainLockerForm()
         {
             InitializeComponent();
 
-            trayIcon.Icon = new System.Drawing.Icon("App.ico");
-            locker = Locker.GetInstance();
+			trayIcon.Icon = new System.Drawing.Icon("App.ico");
 
-            printRemaingTimeTimer = new Timer();
-            printRemaingTimeTimer.Interval = 1000;
-            printRemaingTimeTimer.Tick += printRemaingTime;
-            printRemaingTimeTimer.Start();
+			_windowsLocker = new WindowsLocker();
+
+			_lockTimer = new Locktimer(_windowsLocker);
+
+            _printRemaingTimeTimer = new Timer();
+            _printRemaingTimeTimer.Interval = 1000;
+            _printRemaingTimeTimer.Tick += PrintRemaingTime;
+            _printRemaingTimeTimer.Start();
         }
 
-        private void printRemaingTime(object o, EventArgs e)
+        private void PrintRemaingTime(object o, EventArgs e)
         {
-            if (locker.GetRemainingTime() < locker.MaxAllowedTime)
-                RemaingTimeDisplay.Text = locker.GetRemainingTime().ToString(@"hh\:mm\:ss");
-            else
-                RemaingTimeDisplay.Text = (locker.GetRemainingTime() - locker.MaxAllowedTime).ToString(@"hh\:mm\:ss");
+			RemaingTimeDisplay.Text = _lockTimer.GetRemainingTime().ToString(@"hh\:mm\:ss");
         }
 
-        private void trayIcon_Click(object sender, EventArgs e)
+        private void TrayIconClick(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
         }
 
-        private void MainLockerForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainLockerFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-            }
+			if (e.CloseReason == CloseReason.UserClosing)
+			{
+				//e.Cancel = true;
+				this.WindowState = FormWindowState.Minimized;
+			}
         }
     }
 }

@@ -25,7 +25,7 @@ namespace TimeLocker.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:01:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("01:00:00")]
         public global::System.TimeSpan MaxAllowedTime {
             get {
                 return ((global::System.TimeSpan)(this["MaxAllowedTime"]));

@@ -20,10 +20,10 @@ namespace TimeLocker
 
         public TimeSpan GetRemainingTime()
         {
-			if (_timeController.RemaningTimeToLock < Properties.Settings.Default.MaxAllowedTime)
-				return _timeController.RemaningTimeToLock;
+			if (_timeController.RemainingTimeToLock < Properties.Settings.Default.MaxAllowedTime)
+				return _timeController.RemainingTimeToLock;
 			else
-				return _timeController.RemaningTimeToLock - Properties.Settings.Default.MaxAllowedTime;
+				return _timeController.RemainingTimeToLock - Properties.Settings.Default.MaxAllowedTime;
         }
 
 		public static TimeSpan GetMaxAllowedTime()
@@ -33,7 +33,7 @@ namespace TimeLocker
 
         private void SaveData(object o, EventArgs e)
         {
-			var remaningTimeToLock = _timeController.RemaningTimeToLock;
+			var remaningTimeToLock = _timeController.RemainingTimeToLock;
 			if (remaningTimeToLock > Properties.Settings.Default.MaxAllowedTime)
 				remaningTimeToLock -= Properties.Settings.Default.MaxAllowedTime;
 

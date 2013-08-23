@@ -51,7 +51,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="LastSessionSynchronizerTests.cs" />
+    <Compile Include="LocktimerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemainingTimeControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TimeLocker\TimeLocker.csproj">

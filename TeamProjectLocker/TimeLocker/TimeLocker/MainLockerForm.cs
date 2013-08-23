@@ -46,7 +46,7 @@ namespace TimeLocker
         {
 			if (e.CloseReason == CloseReason.UserClosing)
 			{
-				//e.Cancel = true;
+				e.Cancel = true;
 				this.WindowState = FormWindowState.Minimized;
 			}
         }

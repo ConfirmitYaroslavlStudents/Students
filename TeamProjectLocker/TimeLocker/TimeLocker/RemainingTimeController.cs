@@ -9,13 +9,13 @@ namespace TimeLocker
 
 		Timer _countdownTimer;
 
-        public TimeSpan RemaningTimeToLock { get; private set; }
+        public TimeSpan RemainingTimeToLock { get; private set; }
 
 		public event ElapsedEventHandler TimeOut;
 
         public RemainingTimeController(TimeSpan remainingTime)
         {
-            RemaningTimeToLock = CalculateRemainingTimeToLock(remainingTime);
+            RemainingTimeToLock = CalculateRemainingTimeToLock(remainingTime);
 
             _countdownTimer = new Timer(COUNTDOWNTIMER_INTERVAL);
             _countdownTimer.Elapsed += DecRemaningSecondsToLock;
@@ -45,9 +45,9 @@ namespace TimeLocker
 
         private void DecRemaningSecondsToLock(object o, ElapsedEventArgs e)
         {
-            RemaningTimeToLock -= TimeSpan.FromSeconds(1);
+            RemainingTimeToLock -= TimeSpan.FromSeconds(1);
 
-            if (RemaningTimeToLock == TimeSpan.Zero)
+            if (RemainingTimeToLock == TimeSpan.Zero)
                 ChangeTimerEvent();
         }
 

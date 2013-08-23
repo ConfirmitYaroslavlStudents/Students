@@ -5,7 +5,7 @@ namespace TimeLocker
 {
 	public static class LastSessionSynchronizer
     {
-		const string LAST_SESSION_DATA_WAY = "LastSession.dat";
+		public const string LAST_SESSION_DATA_WAY = "LastSession.dat";
 
         public static void SaveSessionData(TimeSpan remainingTime)
         {
@@ -14,7 +14,7 @@ namespace TimeLocker
 			using (var sessionData = new StreamWriter(LAST_SESSION_DATA_WAY, false))
             {
                 sessionData.WriteLine(currentDate.Date.ToString());
-                sessionData.WriteLine(remainingTime.ToString(@"hh:mm:ss"));
+                sessionData.WriteLine(remainingTime.ToString(@"hh\:mm\:ss"));
             }
         }
 

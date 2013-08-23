@@ -26,6 +26,11 @@ namespace TimeLocker
 				return _timeController.RemaningTimeToLock - Properties.Settings.Default.MaxAllowedTime;
         }
 
+		public static TimeSpan GetMaxAllowedTime()
+		{
+			return Properties.Settings.Default.MaxAllowedTime;
+		}
+
         private void SaveData(object o, EventArgs e)
         {
 			var remaningTimeToLock = _timeController.RemaningTimeToLock;

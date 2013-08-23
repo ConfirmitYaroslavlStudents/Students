@@ -7,6 +7,6 @@ namespace TimeLocker
 		public abstract event LockStatusChangedHandler LockStatusChanged;
 		public abstract event EventHandler SystemShutdown;
 
-		public abstract bool LockSystem();
+		public abstract void LockSystem();
 	}
 }

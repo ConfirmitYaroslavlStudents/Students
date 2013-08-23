@@ -12,16 +12,15 @@ namespace TimeLocker
 		public override event LockStatusChangedHandler LockStatusChanged;
 		public override event EventHandler SystemShutdown;
 
-
 		public WindowsLocker()
 		{
 			SystemEvents.SessionSwitch += SessionSwitch;
 			SystemEvents.SessionEnding += SessionEnding;
 		}
 
-		public override bool LockSystem()
+		public override void LockSystem()
 		{
-			return LockWorkStation();
+			LockWorkStation();
 		}
 
 		void SessionSwitch(object o, SessionSwitchEventArgs e)

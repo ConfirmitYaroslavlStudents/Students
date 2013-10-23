@@ -17,7 +17,7 @@ namespace AutocompleteControl
 
         private int _maxResults;
         private int _minQueryLength;
-        private int _queryDelay = 100;
+        private int _queryDelay;
         private string _resultFilters;
         private string _resultHighlighter;
 

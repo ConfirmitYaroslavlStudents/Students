@@ -25,6 +25,12 @@
         </label>
         <br />
         <ac:AutocompleteClass ID="acColours" runat="server" />
+
+        <br />
+        <br />
+        <br />
+
+        <asp:Button ID="GoToAJAXpage" OnClick="GoToAJAXpage_Click" runat="server" Text="Go To The AJAX Page" />
     </form>
 </body>
 </html>

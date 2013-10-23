@@ -10,7 +10,7 @@
 namespace AutocompleteProject {
     
     
-    public partial class MainForm {
+    public partial class AJAX {
         
         /// <summary>
         /// form control.
@@ -22,21 +22,12 @@ namespace AutocompleteProject {
         protected global::System.Web.UI.HtmlControls.HtmlForm form;
         
         /// <summary>
-        /// acNumbers control.
+        /// GoToDefaultPage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AutocompleteControl.AutocompleteClass acNumbers;
-        
-        /// <summary>
-        /// acColours control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AutocompleteControl.AutocompleteClass acColours;
+        protected global::System.Web.UI.WebControls.Button GoToDefaultPage;
     }
 }

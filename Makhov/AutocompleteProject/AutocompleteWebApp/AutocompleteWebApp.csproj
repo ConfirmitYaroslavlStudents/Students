@@ -38,9 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutocompleteControl.Fakes">
-      <HintPath>FakesAssemblies\AutocompleteControl.Fakes.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Web.DynamicData" />
@@ -61,10 +58,19 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AJAX.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="test.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AJAX.aspx.cs">
+      <DependentUpon>AJAX.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AJAX.aspx.designer.cs">
+      <DependentUpon>AJAX.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -83,7 +89,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyControl\AutocompleteControl.csproj">
+    <ProjectReference Include="..\AutocompleteControl\AutocompleteControl.csproj">
       <Project>{211e9129-1d7e-4316-974e-d03cca991345}</Project>
       <Name>AutocompleteControl</Name>
     </ProjectReference>

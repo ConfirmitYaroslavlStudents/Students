@@ -13,48 +13,44 @@ namespace AutocompleteControl
 {
     public class AutocompleteClass : TextBox
     {
-        private List<string> _dataSource;
+        const string loadYUI_scriptKey = "loadYUI_scriptKey";
 
-        private int _maxResults;
-        private int _minQueryLength;
-        private int _queryDelay;
-        private string _resultFilters;
-        private string _resultHighlighter;
+        public enum Filters { charMatch, phraseMatch, startsWith, subWordMatch, wordMatch };
+
+        private List<string> _dataSource;
 
         //Maximum number of results to display. A value of 0 or less will allow an unlimited number of results
         [DefaultValue(0)]
-        public int maxResults { get { return _maxResults; } set { _maxResults = value; } }
+        public int MaxResults { get; set; }
 
         //Minimum number of characters that must be entered before a query event will be fired.
         //A value of 0 allows empty queries; a negative value will effectively disable all query events
         //and turn AutoComplete off
         [DefaultValue(1)]
-        public int minQueryLength { get { return _minQueryLength; } set { _minQueryLength = value; } }
+        public int MinQueryLength { get; set; }
 
         //Number of milliseconds to wait after user input before triggering a query event.
         //If new input occurs before this delay is over, the previous input event will be ignored
         //and a new delay will begin
         [DefaultValue(100)]
-        public int queryDelay { get { return _queryDelay; } set { _queryDelay = value; } }
+        public int QueryDelay { get; set; }
 
         //Result filter name, function, or array of filter names and/or functions:
-        //charMatch, phraseMatch, phraseMatch, subWordMatch, wordMatch
-        [DefaultValue("startsWith")]
-        public string resultFilters { get { return _resultFilters; } set { _resultFilters = value; } }
+        [DefaultValue(Filters.startsWith)]
+        public Filters ResultFilters { get; set; }
 
         //Result highlighter name or function:
-        //charMatch, phraseMatch, phraseMatch, subWordMatch, wordMatch
-        [DefaultValue("startsWith")]
-        public string resultHighlighter { get { return _resultHighlighter; } set { _resultHighlighter = value; } }
+        [DefaultValue(Filters.startsWith)]
+        public Filters ResultHighlighter { get; set; }
 
         //Constructor
         public AutocompleteClass()
         {
-            _maxResults = 0;
-            _minQueryLength = 1;
-            _queryDelay = 100;
-            _resultFilters = "startsWith";
-            _resultHighlighter = "startsWith";
+            MaxResults = 0;
+            MinQueryLength = 1;
+            QueryDelay = 100;
+            ResultFilters = Filters.startsWith;
+            ResultHighlighter = Filters.startsWith;
         }
 
         //Set data source for autocomplete control
@@ -71,29 +67,25 @@ namespace AutocompleteControl
             base.OnLoad(e);
 
             StringBuilder scriptText = new StringBuilder("");
-            string scriptKey = "";
 
             //Load the YUI lib if we haven't already loaded it
-            if (!Page.ClientScript.IsClientScriptBlockRegistered(this.GetType(), "loadYUI"))
+            if (!Page.ClientScript.IsClientScriptBlockRegistered(this.GetType(), loadYUI_scriptKey))
             {
-                scriptKey = "loadYUI_scriptKey";
-
                 scriptText.Append("<script type=\"text/javascript\" src=\"");
                 scriptText.Append("http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js");
                 scriptText.Append("\"></script>\n");
 
-                Page.ClientScript.RegisterClientScriptBlock(this.GetType(), scriptKey, scriptText.ToString());
+                Page.ClientScript.RegisterClientScriptBlock(this.GetType(), loadYUI_scriptKey, scriptText.ToString());
 
                 scriptText.Clear();
-                scriptKey = "";
             }
             //Load complete
 
             //Implementing autocomplete
-            scriptKey = this.ClientID + "_scriptKey";
+            string scriptKey = ClientID + "_scriptKey";
 
             scriptText.Append("<script type=\"text/javascript\">\n");
-            scriptText.Append("YUI().use(['autocomplete', 'autocomplete-filters', 'autocomplete-highlighters'], function (Y) {\n\n");
+            scriptText.Append("YUI().use(['autocomplete', 'autocomplete-filters', 'autocomplete-highlighters'], function (Y) {\n");
 
             scriptText.Append("var dataList = []\n");
             foreach(var dataElement in _dataSource)
@@ -101,21 +93,18 @@ namespace AutocompleteControl
                 scriptText.Append("dataList.push('" + dataElement.ToString() + "');\n");
             }
             
-            scriptText.Append("Y.one('#" + this.ClientID + "').plug(Y.Plugin.AutoComplete, {\n");
-            scriptText.Append("maxResults: " + this.maxResults.ToString() + ",\n");
-            scriptText.Append("minQueryLength: " + this.minQueryLength.ToString() + ",\n");
-            scriptText.Append("queryDelay: " + this.queryDelay.ToString() + ",\n");
-            scriptText.Append("resultFilters: '" + this.resultFilters + "',\n");
-            scriptText.Append("resultHighlighter: '" + this.resultHighlighter + "',\n");
+            scriptText.Append("Y.one('#" + ClientID + "').plug(Y.Plugin.AutoComplete, {\n");
+            scriptText.Append("maxResults: " + MaxResults + ",\n");
+            scriptText.Append("minQueryLength: " + MinQueryLength + ",\n");
+            scriptText.Append("queryDelay: " + QueryDelay + ",\n");
+            scriptText.Append("resultFilters: '" + ResultFilters + "',\n");
+            scriptText.Append("resultHighlighter: '" + ResultHighlighter + "',\n");
             scriptText.Append("source: dataList\n");
             scriptText.Append("});\n");
             scriptText.Append("})\n");
             scriptText.Append("</script>");
-            
-            Page.ClientScript.RegisterClientScriptBlock(this.GetType(), scriptKey, scriptText.ToString());
 
-            scriptText.Clear();
-            scriptKey = "";
+            Page.ClientScript.RegisterClientScriptBlock(this.GetType(), scriptKey, scriptText.ToString());
             //Implementing complete
         }
 

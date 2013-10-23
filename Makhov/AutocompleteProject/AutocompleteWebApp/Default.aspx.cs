@@ -29,5 +29,10 @@ namespace AutocompleteProject
 
             acColours.SetSource(colours);
         }
+
+        protected void GoToAJAXpage_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("AJAX.aspx");
+        }
     }
 }

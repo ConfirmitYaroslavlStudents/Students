@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Collections;
 
 namespace AutocompleteControl
 {
     public class AutocompleteClass : TextBox
     {
-        private List<string> source;
+        private List<string> _dataSource;
 
-        private int _maxResults = 0;
-        private int _minQueryLength = 1;
+        private int _maxResults;
+        private int _minQueryLength;
         private int _queryDelay = 100;
-        private string _resultFilters = "startsWith";
-        private string _resultHighlighter = "startsWith";
+        private string _resultFilters;
+        private string _resultHighlighter;
 
         //Maximum number of results to display. A value of 0 or less will allow an unlimited number of results
         [DefaultValue(0)]
@@ -46,9 +47,23 @@ namespace AutocompleteControl
         [DefaultValue("startsWith")]
         public string resultHighlighter { get { return _resultHighlighter; } set { _resultHighlighter = value; } }
 
-        public void GetSource(List<string> inputList)
+        //Constructor
+        public AutocompleteClass()
         {
-            this.source = inputList;
+            _maxResults = 0;
+            _minQueryLength = 1;
+            _queryDelay = 100;
+            _resultFilters = "startsWith";
+            _resultHighlighter = "startsWith";
+        }
+
+        //Set data source for autocomplete control
+        public void SetSource(IEnumerable dataSource)
+        {
+            _dataSource = new List<string>();
+
+            foreach (var elem in dataSource)
+                _dataSource.Add(elem.ToString());
         }
   
         protected override void OnLoad(EventArgs e)
@@ -80,10 +95,10 @@ namespace AutocompleteControl
             scriptText.Append("<script type=\"text/javascript\">\n");
             scriptText.Append("YUI().use(['autocomplete', 'autocomplete-filters', 'autocomplete-highlighters'], function (Y) {\n\n");
 
-            scriptText.Append("var array = []\n");
-            foreach(string str in source)
+            scriptText.Append("var dataList = []\n");
+            foreach(var dataElement in _dataSource)
             {
-                scriptText.Append("array.push('" + str + "');\n");
+                scriptText.Append("dataList.push('" + dataElement.ToString() + "');\n");
             }
             
             scriptText.Append("Y.one('#" + this.ClientID + "').plug(Y.Plugin.AutoComplete, {\n");
@@ -92,7 +107,7 @@ namespace AutocompleteControl
             scriptText.Append("queryDelay: " + this.queryDelay.ToString() + ",\n");
             scriptText.Append("resultFilters: '" + this.resultFilters + "',\n");
             scriptText.Append("resultHighlighter: '" + this.resultHighlighter + "',\n");
-            scriptText.Append("source: array\n");
+            scriptText.Append("source: dataList\n");
             scriptText.Append("});\n");
             scriptText.Append("})\n");
             scriptText.Append("</script>");

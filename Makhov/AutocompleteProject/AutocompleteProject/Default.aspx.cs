@@ -11,21 +11,23 @@ namespace AutocompleteProject
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Numbers sourse for MyControl
+            //Numbers sourse for AutocompleteControl
             List<string> numbers = new List<string>
             {
                 "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
                 "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eihteen", "nineteen", "twenty"
             };
-            
-            acNumbers.GetSource(numbers);
 
+            acNumbers.SetSource(numbers);
+
+            //Colours sourse for AutocompleteControl
             List<string> colours = new List<string>
             {
-                "Aqua", "Black", "Blue", "Brown", "Gray", "White", "Gold", "Green", "Yellow", "Orange", "Red"
+                "Aqua", "Azure", "Black", "Blue", "Brown", "Chocolate", "Gold", "Gray", "Green", "Indigo",
+                "Lime", "Maroon", "Olive", "Orange", "Pink", "Purple", "Red", "Salmon", "White", "Yellow"
             };
 
-            acColours.GetSource(colours);
+            acColours.SetSource(colours);
         }
     }
 }

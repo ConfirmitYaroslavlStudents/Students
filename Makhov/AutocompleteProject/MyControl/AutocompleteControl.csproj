@@ -7,8 +7,8 @@
     <ProjectGuid>{211E9129-1D7E-4316-974E-D03CCA991345}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyControl</RootNamespace>
-    <AssemblyName>MyControl</AssemblyName>
+    <RootNamespace>AutocompleteControl</RootNamespace>
+    <AssemblyName>AutocompleteControl</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Nonshipping>true</Nonshipping>
@@ -40,7 +40,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyControlClass.cs" />
+    <Compile Include="AutocompleteClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

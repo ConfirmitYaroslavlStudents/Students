@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutocompleteProject", "AutocompleteProject\AutocompleteProject.csproj", "{A01A1CFA-331B-4EA0-871C-31304299A62E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutocompleteWebApp", "AutocompleteProject\AutocompleteWebApp.csproj", "{A01A1CFA-331B-4EA0-871C-31304299A62E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyControl", "MyControl\MyControl.csproj", "{211E9129-1D7E-4316-974E-D03CCA991345}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutocompleteControl", "MyControl\AutocompleteControl.csproj", "{211E9129-1D7E-4316-974E-D03CCA991345}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

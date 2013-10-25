@@ -85,23 +85,36 @@ namespace AutocompleteControl
             string scriptKey = ClientID + "_scriptKey";
 
             scriptText.Append("<script type=\"text/javascript\">\n");
-            scriptText.Append("YUI().use(['autocomplete', 'autocomplete-filters', 'autocomplete-highlighters'], function (Y) {\n");
 
-            scriptText.Append("var dataList = []\n");
-            foreach(var dataElement in _dataSource)
+            scriptText.Append("YUI().use(['autocomplete', 'autocomplete-filters', 'autocomplete-highlighters'], function (Y) {\n");
+            scriptText.Append("var inputNode = Y.one('#" + ClientID + "');\n");
+
+            scriptText.Append("var dataList = [];\n");
+            foreach (var dataElement in _dataSource)
             {
                 scriptText.Append("dataList.push('" + dataElement.ToString() + "');\n");
             }
-            
-            scriptText.Append("Y.one('#" + ClientID + "').plug(Y.Plugin.AutoComplete, {\n");
+
+            scriptText.Append("inputNode.plug(Y.Plugin.AutoComplete, {\n");
+            scriptText.Append("allowTrailingDelimiter: true,\n");
+            scriptText.Append("queryDelimiter: ',',\n");
             scriptText.Append("maxResults: " + MaxResults + ",\n");
             scriptText.Append("minQueryLength: " + MinQueryLength + ",\n");
             scriptText.Append("queryDelay: " + QueryDelay + ",\n");
-            scriptText.Append("resultFilters: '" + ResultFilters + "',\n");
-            scriptText.Append("resultHighlighter: '" + ResultHighlighter + "',\n");
-            scriptText.Append("source: dataList\n");
+            scriptText.Append("source: dataList,\n");
+            scriptText.Append("resultHighlighter: '" + ResultFilters + "',\n");
+
+            scriptText.Append("resultFilters: ['" + ResultFilters + "', function (query, results) {\n");
+            scriptText.Append("var selected = inputNode.get('value').split(/\\s*,\\s*/);\n");
+            scriptText.Append("selected = Y.Array.hash(selected);\n");
+            scriptText.Append("return Y.Array.filter(results, function (result) {\n");
+            scriptText.Append("return !selected.hasOwnProperty(result.text);\n");
             scriptText.Append("});\n");
-            scriptText.Append("})\n");
+            scriptText.Append("}]\n");
+
+            scriptText.Append("});\n");
+            scriptText.Append("});\n");
+
             scriptText.Append("</script>");
 
             Page.ClientScript.RegisterClientScriptBlock(this.GetType(), scriptKey, scriptText.ToString());

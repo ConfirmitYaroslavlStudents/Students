@@ -1,6 +1,0 @@
-D:\projects\C#\Confirmit\Tree\Tree\bin\Debug\Tree.exe.config
-D:\projects\C#\Confirmit\Tree\Tree\bin\Debug\Tree.exe
-D:\projects\C#\Confirmit\Tree\Tree\bin\Debug\Tree.pdb
-D:\projects\C#\Confirmit\Tree\Tree\obj\Debug\Tree.csprojResolveAssemblyReference.cache
-D:\projects\C#\Confirmit\Tree\Tree\obj\Debug\Tree.exe
-D:\projects\C#\Confirmit\Tree\Tree\obj\Debug\Tree.pdb

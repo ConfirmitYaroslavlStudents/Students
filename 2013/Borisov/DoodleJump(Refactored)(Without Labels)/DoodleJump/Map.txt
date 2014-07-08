@@ -1,0 +1,232 @@
+120 1303 Red
+
+45 1497 Red
+
+112 1603 Red
+
+171 1697 Red
+
+43 1819 Red
+
+101 1997 Red
+
+61 2189 Red
+
+66 1270 Black
+
+153 1334 Black
+
+80 1386 Black
+
+95 1460 Green
+
+163 1528 Green
+
+61 1580 Green
+
+124 1640 Green
+
+24 1680 Green
+
+12 1764 Green
+
+95 1736 Green
+
+183 1782 Green
+
+183 1908 Green
+
+28 1907 Green
+
+110 1836 Black
+
+159 1970 Black
+
+43 2016 Black
+
+115 2072 Black
+
+174 5091 Green
+
+172 2172 Green
+
+101 2132 Green
+
+51 2350 Green
+
+176 2316 Green
+
+131 2246 Green
+
+111 2550 Green
+
+176 2450 Green
+
+193 2512 Green
+
+100 2410 Green
+
+103 2982 Black
+
+24 2716 Black
+
+127 2666 Black
+
+60 2602 Black
+
+47 2794 Black
+
+103 2842 Black
+
+159 2888 Black
+
+103 2934 Black
+
+25 3024 Black
+
+47 2967 Red
+
+118 3003 Red
+
+89 3477 Red
+
+43 3291 Red
+
+163 3387 Red
+
+181 3058 Green
+
+130 3108 Green
+
+47 3150 Green
+
+31 3354 Black
+
+163 3308 Black
+
+66 3248 Black
+
+152 3202 Black
+
+117 3556 Black
+
+31 3498 Black
+
+152 3458 Black
+
+66 3418 Black
+
+84 4068 Black
+
+111 4580 Black
+
+103 5063 Green
+
+77 4796 Black
+
+193 3594 Green
+
+193 3654 Green
+
+108 3811 Red
+
+108 3863 Red
+
+108 3885 Red
+
+32 3769 Red
+
+117 3653 Red
+
+117 3770 Green
+
+21 3724 Green
+
+181 3700 Green
+
+193 3914 Green
+
+3 3842 Green
+
+202 3810 Green
+
+108 3945 Red
+
+108 3925 Red
+
+108 3905 Red
+
+108 3989 Red
+
+108 3967 Red
+
+108 4013 Red
+
+84 4195 Red
+
+44 4429 Red
+
+203 4036 Green
+
+12 3976 Green
+
+193 4236 Green
+
+149 4176 Green
+
+44 4136 Green
+
+182 4102 Green
+
+149 4328 Green
+
+68 4252 Green
+
+90 4464 Green
+
+170 4406 Green
+
+44 4368 Green
+
+44 4624 Green
+
+184 4598 Green
+
+111 4644 Green
+
+68 4554 Green
+
+152 4554 Green
+
+24 4512 Green
+
+115 4948 Green
+
+77 4898 Green
+
+193 4922 Green
+
+27 4850 Green
+
+193 4826 Green
+
+135 4866 Green
+
+152 4772 Green
+
+55 4770 Green
+
+152 4992 Green
+
+193 4714 Green
+
+68 4696 Green
+
+152 4672 Green
+
+103 4818 Green
+
+36 4980 Green
+
+152 4493 Red
+

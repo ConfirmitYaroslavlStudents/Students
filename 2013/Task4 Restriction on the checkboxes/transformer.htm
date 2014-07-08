@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>Random mixing elements</title>
+        <script src="http://yui.yahooapis.com/3.9.1/build/yui/yui-min.js">
+        </script>
+
+    </head>
+    <body>
+        <div style="float:left">
+            <div id="1">
+                <a href="#">1 link</a>
+                <a href="#">2 link</a>
+                <a href="#">3 link</a>
+            </div>
+            <div id="2">
+                <a href="#">4 link</a>
+                <a href="#">5 link</a>
+                <a href="#">6 link</a>
+            </div><br />
+            <ul>
+                <li><a href="#">7li</a></li>
+                <li><a href="#">8li</a></li>
+            </ul>
+            <input type="button" id="btRotateRight" value="Rotate to right!" />
+            <input type="button" id="btRotateLeft" value="Rotate to left!" />
+            <input type="button" id="btRandomize" value="Random mix!"/>
+        </div>
+
+        <form style="border:2px solid black; width:300px; float:left; margin:20px;">
+            <input type="checkbox" id="cb1" value="cb1"/><span>1</span><br />
+            <input type="checkbox" id="cb2" value="cb2"/><span>2</span><br />
+            <input type="checkbox" id="cb3" value="cb3"/><span>3</span><br />
+            <input type="checkbox" id="cb4" value="cb4"/><span>4</span><br />
+            <input type="checkbox" id="cb5" value="cb5"/><span>5</span><br />
+            <input type="submit" value="Send!"/>
+        </form>
+        
+        <script src="transformer.js"></script>
+        <script>
+            YUI().use('node', function (Y) {
+
+                var mixLinks = transformer('a');
+                Y.one('#btRotateRight').on('click', function () {
+                    mixLinks.rotateRight();
+                });
+
+                Y.one('#btRotateLeft').on('click', function () {
+                    mixLinks.rotateLeft();
+                });
+
+                Y.one('#btRandomize').on('click', function () {
+                    mixLinks.randomize();
+                });
+
+                transformer('input[type=checkbox]').check({ type: "interval", minCount: 2, maxCount: 3 });
+
+            });
+
+            
+        </script>
+    </body>
+</html>

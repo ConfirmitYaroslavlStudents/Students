@@ -6,7 +6,7 @@ namespace Set
 {
     public class Set<T> : IEnumerable<T>
     {
-        private const int MaxArrayLength = 0X7FEFFFFF;
+        private const int MaxArrayLength = 2146435071;
         private const int DefaultCapacity = 4;
         private static readonly T[] EmptyArray = new T[0];
 

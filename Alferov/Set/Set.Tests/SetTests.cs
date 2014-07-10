@@ -7,7 +7,7 @@ namespace Set.Tests
     public class SetTests
     {
         [Fact]
-        public void CreateEmptySetAndAddElementsSuccessful()
+        public void Add_SimpleValues_AddedSuccessful()
         {
             var set = new Set<int>();
             var expectedSet = new Set<int>(new[] { 1, 2 });
@@ -18,7 +18,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void InitializeByNullAndGetExceptionSuccessful()
+        public void Set_NullValue_ArgumentNullExceptionThrown()
         {
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
@@ -28,7 +28,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void InitializeByNegativeCapacityAndGetExceptionSuccessful()
+        public void Set_NegativeValue_ArgumentOutOfRangeExceptionThrown()
         {
             Assert.Throws(typeof (ArgumentOutOfRangeException), () =>
             {
@@ -37,7 +37,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void InitializeByCollectionAndEnumerateSuccessful()
+        public void Set_DublicateValues_CorrectSet()
         {
             var set = new Set<int>(new[] { 1, 3, 5, 5, 7, 7, 3, 1 });
             var expectedSet = new Set<int>(new[] { 1, 3, 5, 7 });
@@ -45,7 +45,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void ClearSetSuccessful()
+        public void Clear_NoParams_ClearedSuccessful()
         {
             var set = new Set<int>(new[] { 0, 2, 4 });
             set.Clear();
@@ -55,7 +55,7 @@ namespace Set.Tests
         [Theory]
         [InlineData(5, true)]
         [InlineData(4, false)]
-        public void PassElementContains(int element, bool expected)
+        public void Contains_DataDrivenValues_AllShouldPass(int element, bool expected)
         {
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             bool actual = set.Contains(element);
@@ -66,7 +66,7 @@ namespace Set.Tests
         [InlineData(5, new[] { 1, 3, 7, 9 })]
         [InlineData(1, new[] { 3, 5, 7, 9 })]
         [InlineData(9, new[] { 1, 3, 5, 7 })]
-        public void RemoveElementSuccessful(int element, int[] expected)
+        public void Remove_DataDrivenValues_AllShouldPass(int element, int[] expected)
         {
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             var expectedSet = new Set<int>(expected);
@@ -78,7 +78,7 @@ namespace Set.Tests
         [InlineData(new int[0], new[] { 1, 3 }, new[] { 1, 3 })]
         [InlineData(new[] { 1, 3, 5, 7 }, new[] { 5, 9, 3, 11, 7, 1 }, new[] { 1, 3, 5, 7, 9, 11 })]
         [InlineData(new[] { 1, 3 }, new[] { 5, 9 }, new[] { 1, 3, 5, 9 })]
-        public void UninonWithOtherSetSuccessful(int[] firstArray, int[] secondArray, int[] expected)
+        public void UnionWith_OtherSet_AllShouldPass(int[] firstArray, int[] secondArray, int[] expected)
         {
             var firstSet = new Set<int>(firstArray);
             var secondSet = new Set<int>(secondArray);
@@ -91,7 +91,7 @@ namespace Set.Tests
         [InlineData(new int[0], new[] { 1, 3 }, new int[0])]
         [InlineData(new[] { 1, 3, 5, 7 }, new int[0], new int[0])]
         [InlineData(new[] { 1, 3, 5, 7, 9 }, new[] { 11, 7, 13, 3, 9, 15 }, new[] { 3, 7, 9 })]
-        public void IntersectWithOtherSetSuccessful(int[] firstArray, int[] secondArray, int[] expected)
+        public void IntersectWith_OtherSet_AllShouldPass(int[] firstArray, int[] secondArray, int[] expected)
         {
             var firstSet = new Set<int>(firstArray);
             var secondSet = new Set<int>(secondArray);
@@ -105,7 +105,7 @@ namespace Set.Tests
         [InlineData(new int[0], new[] { 1, 3 }, new int[0])]
         [InlineData(new[] { 1, 3, 5, 7 }, new int[0], new[] { 1, 3, 5, 7 })]
         [InlineData(new[] { 1, 3, 5, 7, 9 }, new[] { 11, 7, 13, 3, 9, 15 }, new[] { 1, 5 })]
-        public void ExceptWithOtherSetSuccessful(int[] firstArray, int[] secondArray, int[] expected)
+        public void ExceptWith_OtherSet_AllShouldPass(int[] firstArray, int[] secondArray, int[] expected)
         {
             var firstSet = new Set<int>(firstArray);
             var secondSet = new Set<int>(secondArray);
@@ -115,7 +115,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void ExceptWithSelfSuccessful()
+        public void ExceptWith_Self_ShouldPass()
         {
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             var expectedSet = new Set<int>();
@@ -127,7 +127,7 @@ namespace Set.Tests
         [InlineData(new int[0], new[] { 1, 3 }, new[] { 1, 3 })]
         [InlineData(new[] { 1, 3, 5, 7 }, new int[0], new[] { 1, 3, 5, 7 })]
         [InlineData(new[] { 1, 3, 5, 7, 9 }, new[] { 11, 7, 13, 3, 9, 15 }, new[] { 1, 5, 11, 13, 15 })]
-        public void SymmetricExceptWithOtherSetSuccessful(int[] firstArray, int[] secondArray, int[] expected)
+        public void SymmetricExceptWith_OtherSet_AllShouldPass(int[] firstArray, int[] secondArray, int[] expected)
         {
             var firstSet = new Set<int>(firstArray);
             var secondSet = new Set<int>(secondArray);
@@ -137,7 +137,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void SymmetricExceptWithSelfSuccessful()
+        public void SymmetricExceptWith_Self_ShouldPass()
         {
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             var expectedSet = new Set<int>();
@@ -149,7 +149,7 @@ namespace Set.Tests
         [InlineData(new int[0], new[] { 1, 3 }, true)]
         [InlineData(new[] { 1, 3, 5, 7 }, new [] {1, 7}, false)]
         [InlineData(new[] { 1, 3, 5, 7, 9 }, new[] { 11, 7, 13, 3, 9, 15, 1, 5 }, true)]
-        public void IsSubsetOfOtherSetSuccessful(int[] firstArray, int[] secondArray, bool expected)
+        public void IsSubsetOf_OtherSet_AllShouldPass(int[] firstArray, int[] secondArray, bool expected)
         {
             var firstSet = new Set<int>(firstArray);
             var secondSet = new Set<int>(secondArray);

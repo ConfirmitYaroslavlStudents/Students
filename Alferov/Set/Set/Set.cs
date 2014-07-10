@@ -18,6 +18,7 @@ namespace Set
         #endregion
 
         #region Properties
+
         public int Capacity
         {
             get { return _items.Length; }
@@ -56,6 +57,7 @@ namespace Set
         #endregion
 
         #region Methods
+
         public Set()
         {
             _items = EmptyArray;
@@ -75,7 +77,7 @@ namespace Set
         {
             if (collection == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("collection");
             }
 
             _size = 0;
@@ -103,12 +105,22 @@ namespace Set
             return true;
         }
 
+        
+        /// <summary>
+        /// Ensures that the capacity of this set is at least the given minimum
+        /// value. If the currect capacity of the set is less than minCapacity, the
+        /// capacity is increased to twice the current capacity or to minCapacity,
+        /// whichever is larger.
+        /// </summary>
+        /// <param name="minCapacity">The minimum capacity.</param>
         private void EnsureCapacity(int minCapacity)
         {
             if (_items.Length < minCapacity)
             {
                 int newCapacity = _items.Length == 0 ? DefaultCapacity : _items.Length * 2;
 
+                // Allow the set to grow to maximum possible capacity (~2G elements(MaxArrayLength)) before encountering overflow.
+                // Note that this check works even when newCapacity overflowed thanks to the (uint) cast
                 if ((uint)newCapacity > MaxArrayLength)
                 {
                     newCapacity = MaxArrayLength;
@@ -297,6 +309,7 @@ namespace Set
                 }
             }
         }
+
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < _size; ++i)

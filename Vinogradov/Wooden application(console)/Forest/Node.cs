@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wooden_application_console_
+namespace Forest
 {
-    public class Node<T>
+    internal class Node<T>
     {
         public T Value { set; get; }
         public Node<T> LeftNode { set; get; }

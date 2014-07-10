@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wooden_application_console_
+namespace Forest
 {
     public class Tree<T>
     {
+
+
         public int Count { private set; get; }
         private Node<T> _headNode;
 
@@ -113,7 +115,7 @@ namespace Wooden_application_console_
             Node<T> previousNode = tempNode;
             bool right = false;
             Node<T> RightNodeAfterRemoteNode, LeftNodeAfterRemoteNode;
-            if (value.GetHashCode() == tempNode.Value.GetHashCode()&&Count!=1)
+            if (value.GetHashCode() == tempNode.Value.GetHashCode() && Count != 1)
             {
                 RightNodeAfterRemoteNode = tempNode.RightNode;
                 LeftNodeAfterRemoteNode = tempNode.LeftNode;

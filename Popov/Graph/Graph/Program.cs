@@ -16,7 +16,7 @@ namespace Graph
             gr.AddVertex("C", new HashSet<string>(new string[] { "A" }));
             gr.AddVertex("D", new HashSet<string>(new string[] { "C", "B" }));
             
-            foreach (var vertex in gr.SetVertex)
+            foreach (var vertex in gr)
             {
                 Console.WriteLine();
                 Console.Write(vertex.Key + " With ");

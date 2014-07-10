@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Graph
 {
-    class Graph<T>
+    class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>
     {
         
         private Dictionary<T, HashSet<T>> _setVertex;  
@@ -79,6 +79,19 @@ namespace Graph
         public Dictionary<T, HashSet<T>> SetVertex
         {
             get { return _setVertex; }
+        }
+
+        IEnumerator<KeyValuePair<T, HashSet<T>>> IEnumerable<KeyValuePair<T, HashSet<T>>>.GetEnumerator()
+        {
+            foreach (var temp in _setVertex)
+            {
+                yield return temp;
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return (this as IEnumerable<T>).GetEnumerator();
         }
     }
 }

@@ -1,18 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace QueueLib
 {
-    public class Queue<T>
+    public class Queue<T>:IEnumerable<T>
     {
+        private class Item<TI>
+        {
+            private readonly TI _value;
+
+            public Item(TI value)
+            {
+                _value = value;
+            }
+
+            public TI Value
+            {
+                get { return _value; }
+            }
+
+            public Item<T> Next { get; set; }
+        }
         private Item<T> _first;
         private Item<T> _last;
         public int Count { get; private set; }
 
         public Queue()
         {
-            _first = null;
-            _last = null;
-            Count = 0;
+            Clear();
         }
 
         public void Enqueue(T value)
@@ -33,26 +48,48 @@ namespace QueueLib
 
         public T Dequeue()
         {
-            try
+            if (Count == 0) throw new InvalidOperationException("Queue is Empty");
+            T value = _first.Value;
+            if (Count != 1)
             {
-                T value = _first.Value;
-                if (Count != 1)
-                {
-                    _first = _first.Next;
-                }
-                else
-                {
-                    _first = null;
-                    _last = null;
-                }
-                Count--;
-                return value;
+                _first = _first.Next;
             }
-            catch (Exception)
-            {                
-                throw new InvalidOperationException("Queue is Empty");
+            else
+            {
+                _first = null;
+                _last = null;
+            }
+            Count--;
+            return value;
+        }
+
+        public T Peek()
+        {
+            if (Count == 0) throw new InvalidOperationException("Queue is Empty");
+            return _first.Value;
+        }
+
+        public void Clear()
+        {
+            _first = null;
+            _last = null;
+            Count = 0;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var temp = _first;
+            yield return temp.Value;
+            while (temp.Next != null)
+            {
+                temp = temp.Next;
+                yield return temp.Value;
             }
         }
 
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

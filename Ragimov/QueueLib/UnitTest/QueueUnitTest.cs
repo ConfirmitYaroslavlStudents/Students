@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using QueueOnArray;
+using QueueLib;
 
 
 namespace UnitTest

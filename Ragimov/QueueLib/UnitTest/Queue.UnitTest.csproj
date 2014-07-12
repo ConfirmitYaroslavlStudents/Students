@@ -54,13 +54,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\QueueOnArray\QueueOnArray\QueueOnArray.csproj">
-      <Project>{a8ce5b9c-9c54-4fb7-aa64-58815255a536}</Project>
-      <Name>QueueOnArray</Name>
-    </ProjectReference>
     <ProjectReference Include="..\QueueLib\QueueLib.csproj">
       <Project>{fdedc6b6-5eae-4ada-b3ce-f6164a0a96f3}</Project>
       <Name>QueueLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QueueOnArray\QueueOnArray.csproj">
+      <Project>{af8fb435-566a-4a54-b41d-06f74cb3c057}</Project>
+      <Name>QueueOnArray</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

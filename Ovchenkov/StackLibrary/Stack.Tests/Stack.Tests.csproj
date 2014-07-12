@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE4D54A2-EBD7-4128-9ED8-7556E9F2E701}</ProjectGuid>
+    <ProjectGuid>{77290973-8688-4CA0-BB1F-00CF189243DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTestForStack</RootNamespace>
-    <AssemblyName>UnitTestForStack</AssemblyName>
+    <RootNamespace>Stack.Tests</RootNamespace>
+    <AssemblyName>Stack.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,14 +50,23 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TestsForStackLibrary.cs" />
+    <Compile Include="StackTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StackArrayLibrary\StackArrayLibrary.csproj">
+      <Project>{b94b169f-f7e2-4e30-9f4f-267ba1dd029c}</Project>
+      <Name>StackArrayLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StackLibrary\StackLibrary.csproj">
       <Project>{3d78df71-5d6c-4f08-bcbe-823bed45f6e3}</Project>
       <Name>StackLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OrderedTest1.orderedtest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

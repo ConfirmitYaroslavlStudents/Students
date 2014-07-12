@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("UnitTestForStack")]
+[assembly: AssemblyTitle("StackArrayLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("UnitTestForStack")]
+[assembly: AssemblyProduct("StackArrayLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("625c19c5-d765-4d7d-a321-cc00e2fec3f7")]
+[assembly: Guid("7dc3edbb-75dd-4e53-8810-eb871aa80afe")]
 
 // Version information for an assembly consists of the following four values:
 //

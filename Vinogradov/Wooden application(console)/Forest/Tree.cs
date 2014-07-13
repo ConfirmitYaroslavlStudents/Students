@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Forest
 {
-    public class Tree<T>
+    public class Tree<T> where T:IComparable
     {
-
-
         public int Count { private set; get; }
         private Node<T> _headNode;
 
@@ -73,7 +71,7 @@ namespace Forest
             Node<T> tempNode = _headNode;
             while (true)
             {
-                if (value.GetHashCode() > tempNode.Value.GetHashCode())
+                if (value.CompareTo(tempNode.Value)>0)
                 {
                     if (tempNode.RightNode == null)
                     {
@@ -87,7 +85,7 @@ namespace Forest
                         continue;
                     }
                 }
-                if (value.GetHashCode() < tempNode.Value.GetHashCode())
+                if (value.CompareTo(tempNode.Value) < 0)
                 {
                     if (tempNode.LeftNode == null)
                     {
@@ -111,24 +109,28 @@ namespace Forest
 
         public void Remove(T value)
         {
+            if (_headNode == null)
+            {
+                throw new InvalidOperationException();
+            }
             Node<T> tempNode = _headNode;
             Node<T> previousNode = tempNode;
             bool right = false;
-            Node<T> RightNodeAfterRemoteNode, LeftNodeAfterRemoteNode;
+            Node<T> rightNodeAfterRemoteNode, leftNodeAfterRemoteNode;
             if (value.GetHashCode() == tempNode.Value.GetHashCode() && Count != 1)
             {
-                RightNodeAfterRemoteNode = tempNode.RightNode;
-                LeftNodeAfterRemoteNode = tempNode.LeftNode;
-                _headNode = RightNodeAfterRemoteNode;
-                tempNode = GetMostLeftNode(RightNodeAfterRemoteNode);
-                tempNode.LeftNode = LeftNodeAfterRemoteNode;
+                rightNodeAfterRemoteNode = tempNode.RightNode;
+                leftNodeAfterRemoteNode = tempNode.LeftNode;
+                _headNode = rightNodeAfterRemoteNode;
+                tempNode = GetMostLeftNode(rightNodeAfterRemoteNode);
+                tempNode.LeftNode = leftNodeAfterRemoteNode;
                 Count--;
             }
             else
             {
                 while (true)
                 {
-                    if (value.GetHashCode() > tempNode.Value.GetHashCode())
+                    if (value.CompareTo(tempNode.Value) > 0)
                     {
                         if (tempNode.RightNode == null)
                         {
@@ -142,7 +144,7 @@ namespace Forest
                             continue;
                         }
                     }
-                    if (value.GetHashCode() < tempNode.Value.GetHashCode())
+                    if (value.CompareTo(tempNode.Value) < 0)
                     {
                         if (tempNode.LeftNode == null)
                         {
@@ -159,32 +161,32 @@ namespace Forest
                     Count--;
                     break;
                 }
-                RightNodeAfterRemoteNode = tempNode.RightNode;
-                LeftNodeAfterRemoteNode = tempNode.LeftNode;
+                rightNodeAfterRemoteNode = tempNode.RightNode;
+                leftNodeAfterRemoteNode = tempNode.LeftNode;
 
-                if (RightNodeAfterRemoteNode == null && LeftNodeAfterRemoteNode != null)
+                if (rightNodeAfterRemoteNode == null && leftNodeAfterRemoteNode != null)
                 {
                     if (right)
                     {
-                        previousNode.RightNode = LeftNodeAfterRemoteNode;
+                        previousNode.RightNode = leftNodeAfterRemoteNode;
                     }
                     else
                     {
-                        previousNode.LeftNode = LeftNodeAfterRemoteNode;
+                        previousNode.LeftNode = leftNodeAfterRemoteNode;
                     }
                 }
-                if (RightNodeAfterRemoteNode != null && LeftNodeAfterRemoteNode == null)
+                if (rightNodeAfterRemoteNode != null && leftNodeAfterRemoteNode == null)
                 {
                     if (right)
                     {
-                        previousNode.RightNode = RightNodeAfterRemoteNode;
+                        previousNode.RightNode = rightNodeAfterRemoteNode;
                     }
                     else
                     {
-                        previousNode.LeftNode = RightNodeAfterRemoteNode;
+                        previousNode.LeftNode = rightNodeAfterRemoteNode;
                     }
                 }
-                if (RightNodeAfterRemoteNode == null && LeftNodeAfterRemoteNode == null)
+                if (rightNodeAfterRemoteNode == null && leftNodeAfterRemoteNode == null)
                 {
                     if (Count == 1)
                     {
@@ -202,18 +204,18 @@ namespace Forest
                         }
                     }
                 }
-                if (RightNodeAfterRemoteNode != null && LeftNodeAfterRemoteNode != null)
+                if (rightNodeAfterRemoteNode != null && leftNodeAfterRemoteNode != null)
                 {
                     if (right)
                     {
-                        previousNode.RightNode = RightNodeAfterRemoteNode;
+                        previousNode.RightNode = rightNodeAfterRemoteNode;
                     }
                     else
                     {
-                        previousNode.LeftNode = RightNodeAfterRemoteNode;
+                        previousNode.LeftNode = rightNodeAfterRemoteNode;
                     }
-                    tempNode = GetMostLeftNode(RightNodeAfterRemoteNode);
-                    tempNode.LeftNode = LeftNodeAfterRemoteNode;
+                    tempNode = GetMostLeftNode(rightNodeAfterRemoteNode);
+                    tempNode.LeftNode = leftNodeAfterRemoteNode;
                 }
             }
         }
@@ -226,6 +228,47 @@ namespace Forest
                 tempNode = tempNode.LeftNode;
             }
             return tempNode;
+        }
+
+        #endregion
+
+        #region contains
+
+        public bool Contains(T value)
+        {
+            if (_headNode == null)
+            {
+                throw new InvalidOperationException();
+            }
+            Node<T> tempNode = _headNode;
+            while (true)
+            {
+                if (value.CompareTo(tempNode.Value) > 0)
+                {
+                    if (tempNode.RightNode == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        tempNode = tempNode.RightNode;
+                        continue;
+                    }
+                }
+                if (value.CompareTo(tempNode.Value) < 0)
+                {
+                    if (tempNode.LeftNode == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        tempNode = tempNode.LeftNode;
+                        continue;
+                    }
+                }
+                return true;
+            }
         }
 
         #endregion

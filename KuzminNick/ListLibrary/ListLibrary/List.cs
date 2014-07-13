@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace ListLibrary
 {
-    internal class List<T> : IEnumerable<T>, IList<T>
+    public class List<T> : IEnumerable<T>, IList<T>
     {
         private T[] _elements;
         private int _count;
@@ -62,26 +62,12 @@ namespace ListLibrary
 
         public void Add(T element)
         {
-            if (_count == Capacity)
+            if (Count == Capacity)
             {
                 Capacity = Capacity * 2;
             }
-            _elements[_count] = element;
-            _count++;
-        }
-
-        public void RemoveAt(int index)
-        {
-            if (index >= _count)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-            if (index < _count)
-            {
-                Array.Copy(_elements, index + 1, _elements, index, _count - index);
-            }
-            _elements[_count] = default(T);
-            _count--;
+            _elements[Count] = element;
+            Count++;
         }
 
         public Boolean Remove(T element)
@@ -94,6 +80,20 @@ namespace ListLibrary
             }
             return false;
         }
+
+        public void RemoveAt(int index)
+        {
+            if (index >= Count || index < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            else
+            {
+                Count--;
+                Array.Copy(_elements, index + 1, _elements, index, Count - index);
+                _elements[Count] = default(T);  
+            }                    
+        }        
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -131,17 +131,18 @@ namespace ListLibrary
         {
             get
             {
-                if (index < Count)
+                if (index < Count && index >= 0)
                     return _elements[index];
                 else
-                    throw new ArgumentOutOfRangeException();
+                    throw new IndexOutOfRangeException();
             }
+
             set
             {
-                if (index < Count)
+                if (index < Count && index >= 0)
                     _elements[index] = value;
                 else
-                    throw new NotImplementedException();
+                    throw new IndexOutOfRangeException();
             }
         }
 
@@ -155,7 +156,6 @@ namespace ListLibrary
             }
         }
 
-        // Протестить случай с null
         public bool Contains(T item)
         {
             for (int i = 0; i < Count; i++)
@@ -163,31 +163,15 @@ namespace ListLibrary
                     return true;
 
             return false;
-
-            //if (item == null)
-            //{
-            //    for(int i = 0; i < Count; i++)
-            //        if (_elements[i] == null)
-            //            return true;
-
-            //    return false;
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < Count; i++)
-            //        if (Equals(_elements[i], item))
-            //            return true;
-
-            //    return false;
-            //}
-        }
+        }        
         
-        // Проверить, что если:
-        // ьзовать массив размерности больше 2
-        // поместить массив null
-        // некорректный индекс
         public void CopyTo(T[] destinationArray, int indexDestinationArray)
         {
+            if (destinationArray == null)
+                throw new ArgumentNullException();
+            if ((destinationArray.Length - indexDestinationArray) < Count)
+                throw new ArgumentOutOfRangeException();
+            
             Array.Copy(_elements, 0, destinationArray, indexDestinationArray, Count);
         }
 

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("KuzminNickListRealization")]
+[assembly: AssemblyTitle("ListLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("KuzminNickListRealization")]
+[assembly: AssemblyProduct("ListLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2da0fdcf-68da-42e6-a81e-73c7a6a2fea4")]
+[assembly: Guid("e1bbbf8e-b135-462a-9440-49bc98f44755")]
 
 // Version information for an assembly consists of the following four values:
 //

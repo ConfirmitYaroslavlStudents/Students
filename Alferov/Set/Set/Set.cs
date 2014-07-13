@@ -1,87 +1,70 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Set.Utils;
 
 namespace Set
 {
-    public class Set<T> : IEnumerable<T>
+    public class Set<T> : IEnumerable<T> where T : IComparable<T>
     {
         private const int MaxArrayLength = 2146435071;
-        private const int DefaultCapacity = 4;
-        private static readonly T[] EmptyArray = new T[0];
-
-        #region Fields
+        private const int DefaultCapacity = 16;
 
         private T[] _items;
-        private int _size; 
-
-        #endregion
-
-        #region Properties
+        private int _size;
+        private readonly StatisticsCollector _collector;
 
         public int Capacity
         {
             get { return _items.Length; }
-            set
+            private set
             {
-                if (value < _size)
-                {
-                    throw new ArgumentOutOfRangeException("value");
-                }
+                var newItems = new T[value];
 
-                if (value != _items.Length)
+                if (_size > 0)
                 {
-                    if (value > 0)
-                    {
-                        var newItems = new T[value];
+                    Array.Copy(_items, 0, newItems, 0, _size);
 
-                        if (_size > 0)
-                        {
-                            Array.Copy(_items, 0, newItems, 0, _size);
-                        }
-                        _items = newItems;
-                    }
-                    else
+                    if (_collector != null)
                     {
-                        _items = EmptyArray;
+                        _collector.Statistics += _size;
                     }
                 }
+                _items = newItems;
             }
         }
 
         public int Count
         {
             get { return _size; }
-        } 
-
-        #endregion
-
-        #region Methods
-
-        public Set()
-        {
-            _items = EmptyArray;
         }
 
-        public Set(int capacity)
+        public Set(StatisticsCollector collector = null)
+        {
+            _collector = collector;
+            _items = new T[DefaultCapacity];
+        }
+
+        public Set(int capacity, StatisticsCollector collector = null)
         {
             if (capacity < 0)
             {
                 throw new ArgumentOutOfRangeException("capacity");
             }
 
-            _items = capacity == 0 ? EmptyArray : new T[capacity];
+            _collector = collector;
+            _items = capacity > DefaultCapacity ? new T[capacity] : new T[DefaultCapacity];
         }
 
-        public Set(IEnumerable<T> collection)
+        public Set(IEnumerable<T> collection, StatisticsCollector collector = null)
         {
             if (collection == null)
             {
                 throw new ArgumentNullException("collection");
             }
 
-            _size = 0;
-            _items = EmptyArray;
+            _items = new T[DefaultCapacity];
+            _collector = collector;
 
             foreach (var item in collection)
             {
@@ -102,37 +85,27 @@ namespace Set
             }
 
             _items[_size++] = item;
+
             return true;
         }
 
-        
-        /// <summary>
-        /// Ensures that the capacity of this set is at least the given minimum
-        /// value. If the currect capacity of the set is less than minCapacity, the
-        /// capacity is increased to twice the current capacity or to minCapacity,
-        /// whichever is larger.
-        /// </summary>
-        /// <param name="minCapacity">The minimum capacity.</param>
         private void EnsureCapacity(int minCapacity)
         {
-            if (_items.Length < minCapacity)
+            if (minCapacity > MaxArrayLength)
             {
-                int newCapacity = _items.Length == 0 ? DefaultCapacity : _items.Length * 2;
-
-                // Allow the set to grow to maximum possible capacity (~2G elements(MaxArrayLength)) before encountering overflow.
-                // Note that this check works even when newCapacity overflowed thanks to the (uint) cast
-                if ((uint)newCapacity > MaxArrayLength)
-                {
-                    newCapacity = MaxArrayLength;
-                }
-
-                if (newCapacity < minCapacity)
-                {
-                    newCapacity = minCapacity;
-                }
-
-                Capacity = newCapacity;
+                throw new InvalidOperationException();
             }
+
+            int newCapacity = _items.Length * 2;
+
+            // Allow the set to grow to maximum possible capacity (~2G elements(MaxArrayLength)) before encountering overflow.
+            // Note that this check works even when newCapacity overflowed thanks to the (uint) cast
+            if ((uint)newCapacity > MaxArrayLength)
+            {
+                newCapacity = MaxArrayLength;
+            }
+
+            Capacity = newCapacity;
         }
 
         public void Clear()
@@ -140,6 +113,12 @@ namespace Set
             if (_size > 0)
             {
                 Array.Clear(_items, 0, _size);
+                
+                if (_collector != null)
+                {
+                    _collector.Statistics += _size;
+                }
+
                 _size = 0;
             }
         }
@@ -158,10 +137,9 @@ namespace Set
                 return false;
             }
 
-            EqualityComparer<T> c = EqualityComparer<T>.Default;
             for (int i = 0; i < _size; ++i)
             {
-                if (c.Equals(_items[i], item))
+                if (item.CompareTo(_items[i]) == 0)
                 {
                     return true;
                 }
@@ -182,8 +160,19 @@ namespace Set
             if (index < _size)
             {
                 Array.Copy(_items, index + 1, _items, index, _size - index);
+
+                if (_collector != null)
+                {
+                    _collector.Statistics += (_size - index);
+                }
             }
             _items[_size] = default(T);
+
+            if (_collector != null)
+            {
+                ++_collector.Statistics;
+            }
+
             return true;
         }
 
@@ -321,8 +310,6 @@ namespace Set
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        } 
-
-        #endregion
+        }
     }
 }

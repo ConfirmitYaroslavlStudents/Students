@@ -1,4 +1,5 @@
 ﻿using System;
+using Set.Utils;
 using Xunit;
 using Xunit.Extensions;
 
@@ -22,9 +23,17 @@ namespace Set.Tests
         {
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
-                int[] intArray = null;
-                var set = new Set<int>(intArray);
+                int[] collection = null;
+                var set = new Set<int>(collection);
             });
+        }
+
+        [Fact]
+        public void Set_CollectionWithoutItems_SizeOfSetShouldBeZero()
+        {
+            var set = new Set<int>(new int[0]);
+            int actual = set.Count;
+            Assert.Equal(0, actual);
         }
 
         [Fact]
@@ -155,6 +164,22 @@ namespace Set.Tests
             var secondSet = new Set<int>(secondArray);
             bool actual = firstSet.IsSubsetOf(secondSet);
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void StatisticsCollector_NoParams_ShouldGetRightStatistics()
+        {
+            var statCollector = new StatisticsCollector();
+            var set = new Set<int>(new[] { 1, 3, 5, 7, 9 }, statCollector);
+            set.Remove(5);
+            set.Remove(1);
+            set.Remove(9);
+
+            set.Add(11);
+            set.Remove(11);
+
+            set.Clear();
+            Assert.Equal(11, statCollector.Statistics);
         }
     }
 }

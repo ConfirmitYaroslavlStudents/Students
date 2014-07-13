@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace ListLibrary
 {
-    internal class List<T>
+    internal class List<T> : IEnumerable<T>, IList<T>
     {
         private T[] _elements;
         private int _count;
@@ -28,9 +30,9 @@ namespace ListLibrary
         {
             get { return _elements.Length; }
 
-            set
+            private set
             {
-                if (value < _count)
+                if (value < Count)
                 {
                     throw new ArgumentException();
                 }
@@ -49,6 +51,13 @@ namespace ListLibrary
         public int Count
         {
             get { return _count; }
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException();
+                else
+                    _count = value;
+            }
         }
 
         public void Add(T element)
@@ -84,6 +93,116 @@ namespace ListLibrary
                 return true;
             }
             return false;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Count; i++)
+                yield return _elements[i];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public int IndexOf(T item)
+        {
+            for (int i = 0; i < Count; i++)
+                if (Equals(_elements[i], item))
+                    return i;
+
+            return -1;
+        }
+
+        // Отрефакторить +1
+        public void Insert(int indexInsertedItem, T item)
+        {
+            if (Count < indexInsertedItem)
+                throw new ArgumentOutOfRangeException();
+
+            if (Count == Capacity)
+                Capacity = Capacity * 2;
+
+            Array.Copy(_elements, indexInsertedItem, _elements, indexInsertedItem + 1, Count - indexInsertedItem);
+        }
+
+        public T this[int index]
+        {
+            get
+            {
+                if (index < Count)
+                    return _elements[index];
+                else
+                    throw new ArgumentOutOfRangeException();
+            }
+            set
+            {
+                if (index < Count)
+                    _elements[index] = value;
+                else
+                    throw new NotImplementedException();
+            }
+        }
+
+        public void Clear()
+        {
+            if (Count > 0)
+            {
+                _elements = new T[5];
+                Count = 0;
+                Capacity = 5;
+            }
+        }
+
+        // Протестить случай с null
+        public bool Contains(T item)
+        {
+            for (int i = 0; i < Count; i++)
+                if (Equals(_elements[i], item))
+                    return true;
+
+            return false;
+
+            //if (item == null)
+            //{
+            //    for(int i = 0; i < Count; i++)
+            //        if (_elements[i] == null)
+            //            return true;
+
+            //    return false;
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < Count; i++)
+            //        if (Equals(_elements[i], item))
+            //            return true;
+
+            //    return false;
+            //}
+        }
+        
+        // Проверить, что если:
+        // ьзовать массив размерности больше 2
+        // поместить массив null
+        // некорректный индекс
+        public void CopyTo(T[] destinationArray, int indexDestinationArray)
+        {
+            Array.Copy(_elements, 0, destinationArray, indexDestinationArray, Count);
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public string Print()
+        {
+            string allElementsInStringFormat = String.Empty;
+            for (int i = 0; i < Count; i++)
+                allElementsInStringFormat += _elements[i].ToString() + Environment.NewLine;
+
+            return allElementsInStringFormat;
         }
     }
 }

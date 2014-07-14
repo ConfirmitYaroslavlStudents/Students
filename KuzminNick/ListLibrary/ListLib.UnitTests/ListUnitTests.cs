@@ -11,7 +11,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessPropertyCountAfterRemoving()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             list.RemoveAt(1); 
@@ -30,7 +30,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessRemoveMethod()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             list.Remove(2);
@@ -43,7 +43,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessEnumerator()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             int temp = 0;
@@ -57,7 +57,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessIndexOfMethod()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             Assert.AreEqual(5, list.IndexOf(5));
@@ -67,7 +67,7 @@ namespace ListLib.UnitTests
         public void List_IndexOfNotIncludedElementInCollection()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             Assert.AreEqual(-1, list.IndexOf(34));
@@ -99,7 +99,7 @@ namespace ListLib.UnitTests
         public void List_NegetiveValueOfIndexerSetMethod()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             list[-2] = 10;
@@ -109,7 +109,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessClearMethod()
         {
             var list = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i);
 
             list.Clear();
@@ -132,7 +132,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessOfCopyingInArray()
         {
             var list = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i);
 
             var intArray = new int[10];
@@ -146,7 +146,7 @@ namespace ListLib.UnitTests
         public void List_NegativeIndexCopyingInArray()
         {
             var list = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i);
 
             var intArray = new int[10];
@@ -158,7 +158,7 @@ namespace ListLib.UnitTests
         public void List_ExceptionNullArray()
         {
             var list = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i);
 
             int[] intArray = null;  
@@ -171,7 +171,7 @@ namespace ListLib.UnitTests
         public void List_UncorrectIndexCopyingArray()
         {
             var list = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i);
 
             var intArray = new int[10];

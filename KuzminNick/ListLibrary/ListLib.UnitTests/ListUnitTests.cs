@@ -46,8 +46,8 @@ namespace ListLib.UnitTests
             for (var i = 0; i < 10; i++)
                 list.Add(i);
 
-            int temp = 0;
-            foreach (int i in list)
+            var temp = 0;
+            foreach (var i in list)
                 temp = i;
 
             Assert.AreEqual(9, temp);
@@ -163,7 +163,7 @@ namespace ListLib.UnitTests
 
             int[] intArray = null;  
          
-            list.CopyTo(destinationArray: intArray, indexDestinationArray: 1);
+            list.CopyTo(intArray, indexDestinationArray: 1);
         }
 
         [TestMethod]
@@ -177,7 +177,6 @@ namespace ListLib.UnitTests
             var intArray = new int[10];
 
             list.CopyTo(intArray, 8);
-            Assert.AreEqual(1, intArray[9]);
         }
 
         [TestMethod]

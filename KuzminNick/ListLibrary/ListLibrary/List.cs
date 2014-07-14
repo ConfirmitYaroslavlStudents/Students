@@ -34,15 +34,12 @@ namespace ListLibrary
                 {
                     throw new ArgumentException();
                 }
-                if (_elements.Length < value)
-                {
-                    if (value > 0)
-                    {
-                        var tempArray = new T[value];
-                        Array.Copy(_elements, 0, tempArray, 0, _count);
-                        _elements = tempArray;
-                    }
-                }
+                if (_elements.Length >= value) return;
+                if (value <= 0) return;
+
+                var tempArray = new T[value];
+                Array.Copy(_elements, 0, tempArray, 0, _count);
+                _elements = tempArray;
             }
         }
 
@@ -70,13 +67,11 @@ namespace ListLibrary
 
         public Boolean Remove(T element)
         {
-            int index = Array.IndexOf(_elements, element, 0, _count);
-            if (index >= 0)
-            {
-                RemoveAt(index);
-                return true;
-            }
-            return false;
+            var index = Array.IndexOf(_elements, element, 0, _count);
+            if (index < 0) return false;
+
+            RemoveAt(index);
+            return true;
         }
 
         public void RemoveAt(int index)
@@ -93,7 +88,7 @@ namespace ListLibrary
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
                 yield return _elements[i];
         }
 
@@ -104,7 +99,7 @@ namespace ListLibrary
 
         public int IndexOf(T item)
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
                 if (Equals(_elements[i], item))
                     return i;
 
@@ -143,12 +138,11 @@ namespace ListLibrary
 
         public void Clear()
         {
-            if (Count > 0)
-            {
-                _elements = new T[5];
-                Count = 0;
-                Capacity = 5;
-            }
+            if (Count <= 0) return;
+
+            _elements = new T[5];
+            Count = 0;
+            Capacity = 5;
         }
 
         public bool Contains(T item)
@@ -164,7 +158,7 @@ namespace ListLibrary
         {
             if (destinationArray == null)
                 throw new ArgumentNullException();
-            if ( ! IsPlacedInNewArray(destinationArray, indexDestinationArray))
+            if ((destinationArray.Length - indexDestinationArray) < Count)
                 throw new ArgumentOutOfRangeException();
             
             Array.Copy(_elements, 0, destinationArray, indexDestinationArray, Count);
@@ -182,8 +176,8 @@ namespace ListLibrary
 
         public string Print()
         {
-            string allElementsInStringFormat = String.Empty;
-            for (int i = 0; i < Count; i++)
+            var allElementsInStringFormat = String.Empty;
+            for (var i = 0; i < Count; i++)
                 allElementsInStringFormat += _elements[i].ToString() + Environment.NewLine;
 
             return allElementsInStringFormat;

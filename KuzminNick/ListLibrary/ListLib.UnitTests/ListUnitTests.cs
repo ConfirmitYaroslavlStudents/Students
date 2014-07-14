@@ -88,7 +88,7 @@ namespace ListLib.UnitTests
         public void List_NegetiveValueOfIndexerGetMethod()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             var temp = list[-2];
@@ -120,7 +120,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessContainsMethodForNullElement()
         {
             var list = new List<string>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i.ToString());
 
             list.Add(null);
@@ -191,7 +191,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessOfCountProperty()
         {
             var list = new List<int>();
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
                 list.Add(i);
 
             Assert.AreEqual(5, list.Count);

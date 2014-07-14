@@ -8,17 +8,6 @@ namespace ListLib.UnitTests
     public class ListUnitTests
     {
         [TestMethod]
-        public void List_CorrectnessPropertyCountAfterRemoving()
-        {
-            var list = new List<int>();
-            for (var i = 0; i < 10; i++)
-                list.Add(i);
-
-            list.RemoveAt(1); 
-            Assert.AreEqual(9, list.Count);
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void List_NegativeIndexRemovingElement()
         {
@@ -155,7 +144,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void List_ExceptionNullArray()
+        public void List_CopyingInNullArray()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)

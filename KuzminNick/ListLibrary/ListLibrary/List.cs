@@ -158,7 +158,7 @@ namespace ListLibrary
         {
             if (destinationArray == null)
                 throw new ArgumentNullException();
-            if ((destinationArray.Length - indexDestinationArray) < Count)
+            if ( !(IsPlacedInNewArray(destinationArray, indexDestinationArray)) )
                 throw new ArgumentOutOfRangeException();
             
             Array.Copy(_elements, 0, destinationArray, indexDestinationArray, Count);

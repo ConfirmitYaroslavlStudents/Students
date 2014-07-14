@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace ListLibrary
 {
-    public class List<T> : IEnumerable<T>, IList<T>
+    public class List<T> : IList<T>
     {
         private T[] _elements;
         private int _count;
@@ -20,10 +20,8 @@ namespace ListLibrary
             {
                 throw new ArgumentOutOfRangeException();
             }
-            else
-            {
-                _elements = new T[size];
-            }
+
+            _elements = new T[size];
         }
 
         public int Capacity
@@ -40,7 +38,7 @@ namespace ListLibrary
                 {
                     if (value > 0)
                     {
-                        T[] tempArray = new T[value];
+                        var tempArray = new T[value];
                         Array.Copy(_elements, 0, tempArray, 0, _count);
                         _elements = tempArray;
                     }
@@ -55,8 +53,8 @@ namespace ListLibrary
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException();
-                else
-                    _count = value;
+
+                _count = value;
             }
         }
 
@@ -72,7 +70,7 @@ namespace ListLibrary
 
         public Boolean Remove(T element)
         {
-            int index = Array.IndexOf<T>(_elements, element, 0, _count);
+            int index = Array.IndexOf(_elements, element, 0, _count);
             if (index >= 0)
             {
                 RemoveAt(index);
@@ -87,12 +85,10 @@ namespace ListLibrary
             {
                 throw new ArgumentOutOfRangeException();
             }
-            else
-            {
-                Count--;
-                Array.Copy(_elements, index + 1, _elements, index, Count - index);
-                _elements[Count] = default(T);  
-            }                    
+
+            Count--;
+            Array.Copy(_elements, index + 1, _elements, index, Count - index);
+            _elements[Count] = default(T);
         }        
 
         public IEnumerator<T> GetEnumerator()
@@ -115,7 +111,6 @@ namespace ListLibrary
             return -1;
         }
 
-        // Отрефакторить +1
         public void Insert(int indexInsertedItem, T item)
         {
             if (Count < indexInsertedItem)
@@ -133,8 +128,8 @@ namespace ListLibrary
             {
                 if (index < Count && index >= 0)
                     return _elements[index];
-                else
-                    throw new IndexOutOfRangeException();
+
+                throw new IndexOutOfRangeException();
             }
 
             set
@@ -158,7 +153,7 @@ namespace ListLibrary
 
         public bool Contains(T item)
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
                 if (Equals(_elements[i], item))
                     return true;
 
@@ -169,10 +164,15 @@ namespace ListLibrary
         {
             if (destinationArray == null)
                 throw new ArgumentNullException();
-            if ((destinationArray.Length - indexDestinationArray) < Count)
+            if ( ! IsPlacedInNewArray(destinationArray, indexDestinationArray))
                 throw new ArgumentOutOfRangeException();
             
             Array.Copy(_elements, 0, destinationArray, indexDestinationArray, Count);
+        }
+
+        private bool IsPlacedInNewArray(T[] destinationArray, int indexDestinationArray)
+        {
+            return Count > (destinationArray.Length - indexDestinationArray);
         }
 
         public bool IsReadOnly

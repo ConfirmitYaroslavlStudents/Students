@@ -22,8 +22,7 @@ namespace ListLib.UnitTests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void List_NegativeIndexRemovingElement()
         {
-            var list = new List<int>();
-            list.Add(5);
+            var list = new List<int> {5};
             list.RemoveAt(-3);
         }
 
@@ -78,7 +77,7 @@ namespace ListLib.UnitTests
         public void List_CorrectnessOfIndexer()
         {
             var list = new List<int>();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             Assert.AreEqual(6, list[6]);
@@ -92,7 +91,7 @@ namespace ListLib.UnitTests
             for (int i = 0; i < 10; i++)
                 list.Add(i);
 
-            int temp = list[-2];
+            var temp = list[-2];
         }
 
         [TestMethod]
@@ -136,7 +135,7 @@ namespace ListLib.UnitTests
             for (int i = 0; i < 5; i++)
                 list.Add(i);
 
-            int[] intArray = new int[10];
+            var intArray = new int[10];
             list.CopyTo(intArray, 2);
 
             Assert.AreEqual(1, intArray[3]);
@@ -150,7 +149,7 @@ namespace ListLib.UnitTests
             for (int i = 0; i < 5; i++)
                 list.Add(i);
 
-            int[] intArray = new int[10];
+            var intArray = new int[10];
             list.CopyTo(intArray, -2);
         }
 
@@ -164,7 +163,7 @@ namespace ListLib.UnitTests
 
             int[] intArray = null;  
          
-            list.CopyTo(intArray, 1);
+            list.CopyTo(destinationArray: intArray, indexDestinationArray: 1);
         }
 
         [TestMethod]
@@ -175,7 +174,7 @@ namespace ListLib.UnitTests
             for (int i = 0; i < 5; i++)
                 list.Add(i);
 
-            int[] intArray = new int[10];
+            var intArray = new int[10];
 
             list.CopyTo(intArray, 8);
             Assert.AreEqual(1, intArray[9]);

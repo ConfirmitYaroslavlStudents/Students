@@ -34,18 +34,18 @@ namespace ListLibrary
                 {
                     throw new ArgumentException();
                 }
-                if (_elements.Length >= value) return;
-                if (value <= 0) return;
+                if (_elements.Length >= value || value <= 0) return;
 
-                var tempArray = new T[value];
-                Array.Copy(_elements, 0, tempArray, 0, _count);
-                _elements = tempArray;
+                var extendableArray = new T[value];
+                Array.Copy(_elements, 0, extendableArray, 0, _count);
+                _elements = extendableArray;
             }
         }
 
         public int Count
         {
             get { return _count; }
+
             private set
             {
                 if (value < 0)
@@ -82,7 +82,8 @@ namespace ListLibrary
             }
 
             Count--;
-            Array.Copy(_elements, index + 1, _elements, index, Count - index);
+            var indexOfElementAfterRemoved = index + 1;
+            Array.Copy(_elements, indexOfElementAfterRemoved, _elements, destinationIndex: index, length: Count - index);
             _elements[Count] = default(T);
         }        
 
@@ -121,7 +122,7 @@ namespace ListLibrary
         {
             get
             {
-                if (index < Count && index >= 0)
+                if (IsCorrectIndex(index))
                     return _elements[index];
 
                 throw new IndexOutOfRangeException();
@@ -129,11 +130,16 @@ namespace ListLibrary
 
             set
             {
-                if (index < Count && index >= 0)
+                if (IsCorrectIndex(index))
                     _elements[index] = value;
                 else
                     throw new IndexOutOfRangeException();
             }
+        }
+
+        private bool IsCorrectIndex(int index)
+        {
+            return index < Count && index >= 0;
         }
 
         public void Clear()
@@ -166,7 +172,7 @@ namespace ListLibrary
 
         private bool IsPlacedInNewArray(T[] destinationArray, int indexDestinationArray)
         {
-            return Count > (destinationArray.Length - indexDestinationArray);
+            return Count < (destinationArray.Length - indexDestinationArray);
         }
 
         public bool IsReadOnly
@@ -178,7 +184,7 @@ namespace ListLibrary
         {
             var allElementsInStringFormat = String.Empty;
             for (var i = 0; i < Count; i++)
-                allElementsInStringFormat += _elements[i].ToString() + Environment.NewLine;
+                allElementsInStringFormat += _elements[i] + Environment.NewLine;
 
             return allElementsInStringFormat;
         }

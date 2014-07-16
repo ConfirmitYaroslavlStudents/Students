@@ -41,7 +41,7 @@ namespace UnitTestProjectForMyTree
         [TestMethod]
         public void RemoveNodeInTheThickOfThings()
         {
-            var birch = new Tree<int>(new int[] { 30, 40, 20, 25, 26, 10, 6, 3 });
+            var birch = new Tree<int>(new int[] { 30, 40, 20, 25, 26, 10, 11, 3 });
             birch.Remove(20);
         }
 

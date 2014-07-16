@@ -122,7 +122,10 @@ namespace StackArrayLibrary
 
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IEnumerable<T>)_elements).GetEnumerator();
+            for (int i = 0; i < _count; ++i)
+            {
+                yield return _elements[i];
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

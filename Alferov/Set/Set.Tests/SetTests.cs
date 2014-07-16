@@ -167,7 +167,7 @@ namespace Set.Tests
         }
 
         [Fact]
-        public void StatisticsCollector_NoParams_ShouldGetRightStatistics()
+        public void StatisticsCollector_MainSetMethodsCalls_ShouldGetRightStatistics()
         {
             var statCollector = new StatisticsCollector();
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 }, statCollector);
@@ -175,8 +175,8 @@ namespace Set.Tests
             set.Remove(1);
             set.Remove(9);
 
-            set.Add(11);
-            set.Remove(11);
+            set.Add(15);
+            set.Remove(15);
 
             set.Clear();
             Assert.Equal(11, statCollector.Statistics);

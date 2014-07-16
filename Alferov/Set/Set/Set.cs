@@ -27,7 +27,7 @@ namespace Set
 
                     if (_collector != null)
                     {
-                        _collector.Statistics += _size;
+                        _collector.ChangeStatistics(_size);
                     }
                 }
                 _items = newItems;
@@ -116,7 +116,7 @@ namespace Set
                 
                 if (_collector != null)
                 {
-                    _collector.Statistics += _size;
+                    _collector.ChangeStatistics(_size);
                 }
 
                 _size = 0;
@@ -163,14 +163,14 @@ namespace Set
 
                 if (_collector != null)
                 {
-                    _collector.Statistics += (_size - index);
+                    _collector.ChangeStatistics(_size - index);
                 }
             }
             _items[_size] = default(T);
 
             if (_collector != null)
             {
-                ++_collector.Statistics;
+                _collector.ChangeStatistics(1);
             }
 
             return true;

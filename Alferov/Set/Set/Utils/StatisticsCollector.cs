@@ -2,6 +2,11 @@
 {
     public class StatisticsCollector
     {
-        public int Statistics { get; internal set; }
+        public int Statistics { get; private set; }
+
+        internal void ChangeStatistics(int delta)
+        {
+            Statistics += delta;
+        }
     }
 }

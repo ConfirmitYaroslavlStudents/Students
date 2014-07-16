@@ -1,20 +1,20 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using StackLibrary;
-using StackArrayLibrary;
+using StackLibrary;
+//using StackArrayLibrary;
 
 namespace Stack.Tests
 {
     [TestClass]
     public class StackTest
     {
-
         [TestMethod]
         public void Stack_Count_LengthPlusAfterPush()
         {
             var stack = new Stack<int>();
             stack.Push(1);
             var result = stack.Count;
+
             Assert.AreEqual(1, result);
         }
 
@@ -25,6 +25,7 @@ namespace Stack.Tests
             stack.Push(1);
             stack.Pop();
             var result = stack.Count;
+
             Assert.AreEqual(0, result);
         }
 
@@ -34,6 +35,7 @@ namespace Stack.Tests
             var stack = new Stack<string>();
             stack.Push("test");
             var result = stack.Pop();
+
             Assert.AreEqual("test", result);
         }
 
@@ -43,6 +45,7 @@ namespace Stack.Tests
             var stack = new Stack<String>();
             stack.Push("test");
             var result = stack.Peek();
+
             Assert.AreEqual("test", result);
         }
 
@@ -67,10 +70,12 @@ namespace Stack.Tests
         {
             var stack = new Stack<int>();
             int[] mass = { 73, 3, 7, 37 };
+
             for (int i = 0; i < mass.Length; ++i)
                 stack.Push(mass[i]);
             stack.Clear();
             var result = stack.Count;
+
             Assert.AreEqual(0, result);
         }
 
@@ -80,6 +85,7 @@ namespace Stack.Tests
             var stack = new Stack<int>();
             int[] mass = {73, 3, 7, 37};
             var expectedStack = new Stack<int>(mass);
+
             for (int i = 0; i < mass.Length; ++i)
                 stack.Push(mass[i]);
 
@@ -108,14 +114,14 @@ namespace Stack.Tests
         public void Stack_Contains_ContainsWithNull()
         {
             var stack = new Stack<string>();
-            string[] mass = { "34", "hgf", "hf", "hfghf", null };
+            string[] mass = { "34", "cartoon", "raccoon", "joke", null };
             for (int i = 0; i < mass.Length; ++i)
                 stack.Push(mass[i]);
 
             bool actual = stack.Contains(null);
             Assert.AreEqual(true, actual);
 
-            actual = stack.Contains("hgf");
+            actual = stack.Contains("joke");
             Assert.AreEqual(true, actual);
         }
 

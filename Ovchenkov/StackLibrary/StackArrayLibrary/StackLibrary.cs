@@ -8,19 +8,9 @@ namespace StackArrayLibrary
     {
         private const int DefaultSize = 8;
 
-        #region Fields
-        
-        private int _count;
         private T[] _elements;
-        
-        #endregion
 
-        #region Properties
-
-        public int Count
-        {
-            get { return _count; }
-        }
+        public int Count { get; private set; }
 
         public T this[int i]
         {
@@ -30,13 +20,9 @@ namespace StackArrayLibrary
             }
         }
 
-        #endregion
-
-        #region Constructors
-
         public Stack()
         {
-            _count = 0;
+            Count = 0;
             _elements = new T[DefaultSize];
         }
 
@@ -47,7 +33,7 @@ namespace StackArrayLibrary
                 throw new ArgumentNullException("collection");
             }
 
-            _count = 0;
+            Count = 0;
             _elements = new T[DefaultSize];
 
             foreach (var element in collection)
@@ -62,55 +48,51 @@ namespace StackArrayLibrary
             {
                 throw new ArgumentOutOfRangeException("capacity");
             }
-            _count = 0;
+            Count = 0;
             _elements = capacity > DefaultSize ? new T[capacity] : new T[DefaultSize];
         }
 
-        #endregion
-
-        #region Methods
-
         public void Push(T element)
         {
-            if (_count == _elements.Length)
+            if (Count == _elements.Length)
             {
                 var newArray = new T[2 * _elements.Length];
-                Array.Copy(_elements, 0, newArray, 0, _count);
+                Array.Copy(_elements, 0, newArray, 0, Count);
                 _elements = newArray;
             }
-            _elements[_count++] = element;
+            _elements[Count++] = element;
         }
 
         public T Pop()
         {
-            if (_count == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException();
             }
-            return _elements[--_count];
+            return _elements[--Count];
         }
 
         public T Peek()
         {
-            if (_count == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException();
             }
-            return _elements[_count - 1];
+            return _elements[Count - 1];
         }
 
         public void Clear()
         {
-            if (_count > 0)
+            if (Count > 0)
             {
-                Array.Clear(_elements, 0, _count);
-                _count = 0;
+                Array.Clear(_elements, 0, Count);
+                Count = 0;
             }
         }
 
         public bool Contains(T element)
         {
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < Count; ++i)
             {
                 if (Equals(_elements[i], element))
                 {
@@ -122,7 +104,7 @@ namespace StackArrayLibrary
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < Count; ++i)
             {
                 yield return _elements[i];
             }
@@ -132,8 +114,6 @@ namespace StackArrayLibrary
         {
             return GetEnumerator();
         }
-
-        #endregion
     }
 }
 

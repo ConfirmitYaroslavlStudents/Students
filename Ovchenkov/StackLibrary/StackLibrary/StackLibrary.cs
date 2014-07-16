@@ -1,35 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace StackLibrary
 {
     public class Stack<T> : IEnumerable<T>
     {
-        #region SubClass
 
-        private class Element<T>
+        private class Element<TValue>
         {
-            public T Value { get; set; }
-            public Element<T> Next { get; set; }
+            public TValue Value { get; set; }
+            public Element<TValue> Next { get; set; }
         }
       
-        #endregion
-
-        #region Fields
-
         private Element<T> _top;
-        private int _count;
 
-        #endregion
-
-        #region Properties
-
-        public int Count
-        {
-            get { return _count; }
-        }
+        public int Count { get; private set; }
 
         public T this[int i]
         {
@@ -38,58 +24,49 @@ namespace StackLibrary
                 var elemnt = _top;
                 for (int j = 0; j < i; ++j)
                     elemnt = elemnt.Next;
+
                 return elemnt.Value;
             }
         }
 
-        #endregion
-
-        #region Constructors
-
         public Stack()
         {
             _top = null;
-            _count = 0;
+            Count = 0;
         }
 
         public Stack(IEnumerable<T> collection)
         {
             _top = null;
-            _count = 0;
+            Count = 0;
             foreach (var element in collection)
             {
                 Push(element);
             }
-           
         }
-
-        #endregion
-
-        #region Methods
 
         public void Push(T element)
         {
-
             var temp = new Element<T> {Value = element, Next = _top};
             _top = temp;
-            _count++;
+            Count++;
         }
 
         public T Pop()
         {
-            if (_count == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException();
             }
             var value = _top.Value;
             _top = _top.Next;
-            _count--;
+            Count--;
             return value;
         }
 
         public T Peek()
         {
-            if (_count == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException();
             }
@@ -99,7 +76,7 @@ namespace StackLibrary
         public void Clear()
         {
             _top = null;
-            _count = 0;
+            Count = 0;
         }
 
         public bool Contains(T element)
@@ -130,8 +107,6 @@ namespace StackLibrary
         {
             return GetEnumerator();
         }
-
-        #endregion
     }
 }
 

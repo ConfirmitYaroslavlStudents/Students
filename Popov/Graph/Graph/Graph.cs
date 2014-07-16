@@ -1,32 +1,39 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Graph
 {
-    class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>
+    public class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>
     {
-        
-        private Dictionary<T, HashSet<T>> _setVertex;  
-      
+
+        private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
+
+
         /// <param name="setVertex"> Set vertex with their edges </param>
-        public Graph(Dictionary<T, HashSet<T>> setVertex) 
-        { 
-            this._setVertex = setVertex;           
-        }  
-      
+        public Graph(Dictionary<T, HashSet<T>> setVertex)
+        {
+            _vertexDictionary = setVertex;
+        }
+
         /// <param name="vertex"> isolated vertex </param>
         public Graph(T vertex)
         {
-            this._setVertex = new Dictionary<T, HashSet<T>>();
-            this._setVertex.Add(vertex, new HashSet<T>());
+            _vertexDictionary = new Dictionary<T, HashSet<T>> { { vertex, new HashSet<T>() } };
         }
 
         public Graph()
         {
-            this._setVertex = new Dictionary<T, HashSet<T>>();
+            _vertexDictionary = new Dictionary<T, HashSet<T>>();
+        }
+
+        public void AddVertex(T vertex)
+        {
+            if (!_vertexDictionary.ContainsKey(vertex))
+            {
+                _vertexDictionary.Add(vertex, new HashSet<T>());
+            }
         }
 
         /// <summary>
@@ -34,19 +41,15 @@ namespace Graph
         /// </summary>               
         public void AddVertex(T vertex, HashSet<T> edges)
         {
-            if (!_setVertex.ContainsKey(vertex))
+            if (!_vertexDictionary.ContainsKey(vertex))
             {
-                _setVertex.Add(vertex, edges);
+                _vertexDictionary.Add(vertex, edges);
                 foreach (var temp in edges)
                 {
-                    _setVertex[temp].Add(vertex);
+                    _vertexDictionary[temp].Add(vertex);
                 }
             }
-            else
-            {
-                throw new Exception("Adding of the already existing vertices");
-            }
-        
+
         }
 
         /// <summary>
@@ -54,44 +57,146 @@ namespace Graph
         /// </summary>           
         public void RemoveVertex(T vertex)
         {
-            if (_setVertex.ContainsKey(vertex))
+            if (!_vertexDictionary.ContainsKey(vertex)) return;
+
+            foreach (var temp in _vertexDictionary[vertex])
             {
-                foreach (var temp in _setVertex[vertex])
+                if (_vertexDictionary[temp].Contains(vertex))
                 {
-                    if (_setVertex[temp].Contains(vertex))
-                    {
-                        _setVertex[temp].Remove(vertex);
-                    }
+                    _vertexDictionary[temp].Remove(vertex);
                 }
-                _setVertex.Remove(vertex);
+            }
+            _vertexDictionary.Remove(vertex);
+        }
+
+        /// <summary>
+        /// View graph in width and showing progress
+        /// </summary>
+        /// <param name="vertex">The top which starts</param>
+        public void ViewWidth(T vertex)
+        {
+            if (_vertexDictionary.ContainsKey(vertex))
+            {
+                Console.WriteLine();
+                Console.Write("View in width :  ");
+
+                var queueVertex = new Queue<T>();
+                var vertexList  = new List<T>();
+                var flagInsertSpace = false;
+                queueVertex.Enqueue(vertex);
+                vertexList.Add(vertex);
+                Console.Write(vertex+" : ");
+
+                while (queueVertex.Count != 0)
+                {
+                    var top = queueVertex.Dequeue();
+                    foreach (var item in _vertexDictionary[top])
+                    {
+                        if ((!vertexList.Contains(item)) && (!queueVertex.Contains(item)))
+                        {
+                            queueVertex.Enqueue(item);
+                            vertexList.Add(item);
+                            Console.Write(item + " ");
+                            flagInsertSpace = true;
+                        }
+                    }
+
+                    if (!flagInsertSpace) continue;
+                    Console.Write(" : ");
+                    flagInsertSpace = false;
+                }
+                Console.WriteLine();
             }
             else
             {
-                throw new Exception("Remove of not existing vertex");
+                throw new KeyNotFoundException("Such vertex don't exist");
             }
         }
 
+        /// <summary>
+        /// View graph in depth and showing progress
+        /// </summary>
+        /// <param name="vertex">The top which starts</param>
+        public void ViewDepth(T vertex)
+        {
+            if (_vertexDictionary.ContainsKey(vertex))
+            {
+                var stackVertex = new Stack<T>();
+                var vertexList = new List<T>();
+                var flagInsertSpace = false;
+                stackVertex.Push(vertex);
+                vertexList.Add(vertex);
+
+                Console.WriteLine();
+                Console.Write("View in depth :  ");
+                Console.Write(vertex + " : ");
+                while (stackVertex.Count != 0)
+                {
+                    var top = stackVertex.Pop();
+
+                    foreach (var item in _vertexDictionary[top])
+                    {
+                        if ((!vertexList.Contains(item)) && (!stackVertex.Contains(item)))
+                        {
+                            stackVertex.Push(item);
+                            vertexList.Add(item);
+                            Console.Write(item + " ");
+                            flagInsertSpace = true;
+                        }
+                    }
+                    if (!flagInsertSpace) continue;
+                    Console.Write(" : ");
+                    flagInsertSpace = false;
+
+                }
+                Console.WriteLine();
+            }
+            else
+            {
+                throw new KeyNotFoundException("Such vertex don't exist");
+            }
+        }
+
+        /// <summary>
+        /// Convert to bool matric, which called as matrix adjacency
+        /// </summary>
+        /// <returns></returns>
+        public bool[,] ToAdjacencyMatrixy()
+        {
+            var matric = new bool[Count,Count];
+            var listKeys = _vertexDictionary.Keys.ToList();
+            for (var i = 0; i < listKeys.Count(); ++i)
+            {
+                foreach (var vertex in _vertexDictionary[listKeys[i]])
+                {
+                    var j = listKeys.IndexOf(vertex);
+                    matric[i, j] = true;
+                    matric[j, i] = true;
+                }
+            }
+            return matric;
+        }
+
+
         public int Count
         {
-            get { return _setVertex.Count(); }
+            get { return _vertexDictionary.Count(); }
         }
 
         public Dictionary<T, HashSet<T>> SetVertex
         {
-            get { return _setVertex; }
+            get { return _vertexDictionary; }
         }
 
-        IEnumerator<KeyValuePair<T, HashSet<T>>> IEnumerable<KeyValuePair<T, HashSet<T>>>.GetEnumerator()
+
+        public IEnumerator<KeyValuePair<T, HashSet<T>>> GetEnumerator()
         {
-            foreach (var temp in _setVertex)
-            {
-                yield return temp;
-            }
+            return ((IEnumerable<KeyValuePair<T, HashSet<T>>>)_vertexDictionary).GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return (this as IEnumerable<T>).GetEnumerator();
+            return _vertexDictionary.GetEnumerator();
         }
     }
 }

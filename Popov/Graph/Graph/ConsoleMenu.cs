@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Graph
 {
-    class ConsoleMenu
+    public class ConsoleMenu
     {
         private readonly List<KeyValuePair<string, Action>> _menuList;
 

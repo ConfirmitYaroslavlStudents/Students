@@ -12,16 +12,17 @@ namespace Graph
         static void Main(string[] args)
         {
             var gr = new Graph<string>("A");
-            gr.AddVertex("B", new HashSet<string>(new []{"A"}));
-            gr.AddVertex("C", new HashSet<string>(new [] { "A" }));
-            gr.AddVertex("D", new HashSet<string>(new [] { "C"}));
-            gr.AddVertex("H", new HashSet<string>(new [] { "D" }));
-            gr.AddVertex("R", new HashSet<string>(new [] { "C" }));
-            gr.AddVertex("M", new HashSet<string>(new [] { "D" }));
-            gr.AddVertex("K", new HashSet<string>(new [] { "B" }));
+            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            gr.AddVertex("C", new HashSet<string>(new[] { "A" }));
+            gr.AddVertex("D", new HashSet<string>(new[] { "C" }));
+            gr.AddVertex("H", new HashSet<string>(new[] { "D" }));
+            gr.AddVertex("R", new HashSet<string>(new[] { "C" }));
+            gr.AddVertex("M", new HashSet<string>(new[] { "D" }));
+            gr.AddVertex("K", new HashSet<string>(new[] { "B" }));
+
             
             var menu = new ConsoleMenu();
-            
+
             menu.AddCommand("Print graph to console", () => PrintToConsole(gr));
             menu.AddCommand("Print graph to console as matrix", () => PrintToConsoleMatrix(gr));
             menu.AddCommand("View process going graph in width", () => gr.ViewWidth("C"));
@@ -49,6 +50,8 @@ namespace Graph
             }
             catch (Exception) { }
 
+            
+            
 
         }
 
@@ -67,10 +70,10 @@ namespace Graph
         {
             var matric = gr.ToAdjacencyMatrixy();
 
-            for (var i = 0; i < matric.GetUpperBound(0); ++i)
+            for (var i = 0; i < matric.GetLength(0); ++i)
             {
                 Console.WriteLine();
-                for (var j = 0; j < matric.GetUpperBound(1); ++j)
+                for (var j = 0; j < matric.GetLength(1); ++j)
                 {
                     Console.Write(matric[i, j] ? "1 " : "0 ");
                 }

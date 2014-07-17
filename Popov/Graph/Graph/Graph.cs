@@ -5,8 +5,49 @@ using System.Linq;
 
 namespace Graph
 {
-    public class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>
+    public class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>, IEquatable<Graph<T>>
     {
+        public bool Equals(Graph<T> other)
+        {
+            if (Count != other.Count)
+                return false;
+            var firstArray = _vertexDictionary.ToArray();
+            var secondArray = other._vertexDictionary.ToArray();
+            for (var i = 0; i < firstArray.Count(); ++i)
+            {
+                if ((!firstArray[i].Key.Equals(secondArray[i].Key))
+                    || (!EqualsHashSet(firstArray[i].Value, secondArray[i].Value)))
+                    return false;
+            }
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return (_vertexDictionary != null ? _vertexDictionary.GetHashCode() : 0);
+        }
+
+        public bool EqualsHashSet(HashSet<T> first, HashSet<T> second)
+        {
+            if (first.Count != second.Count)
+                return false;
+            var firstArray = first.ToArray();
+            var secondArray = second.ToArray();
+            for (var i = 0; i < firstArray.Count(); ++i)
+            {
+                if (!firstArray[i].Equals(secondArray[i]))
+                    return false;
+            }
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var temp = obj as Graph<T>;
+            return temp != null && temp.Equals(this);
+        }
+
+
 
         private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
 
@@ -188,7 +229,7 @@ namespace Graph
             get { return _vertexDictionary; }
         }
 
-
+        
         public IEnumerator<KeyValuePair<T, HashSet<T>>> GetEnumerator()
         {
             return ((IEnumerable<KeyValuePair<T, HashSet<T>>>)_vertexDictionary).GetEnumerator();

@@ -10,6 +10,26 @@ namespace UnitTestProjectForRefreshingCache
     public class RefreshingCacheTests
     {
         [TestMethod]
+        public void ContainsTrue()
+        {
+            var tempRefreshingCache = new RefreshingCache<int, string>();
+            tempRefreshingCache.Add(0, "hello");
+            tempRefreshingCache.Add(1, "world");
+            var result = tempRefreshingCache.Contains(0);
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void ContainsFalse()
+        {
+            var tempRefreshingCache = new RefreshingCache<int, string>();
+            tempRefreshingCache.Add(0, "hello");
+            tempRefreshingCache.Add(1, "world");
+            var result = tempRefreshingCache.Contains(3);
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
         public void AddAndCount()
         {
             var tempRefreshingCache = new RefreshingCache<int, string>();
@@ -51,7 +71,7 @@ namespace UnitTestProjectForRefreshingCache
             Thread.Sleep(5000);
             tempRefreshingCache.Add(1, "B");
             Thread.Sleep(10000);
-            //var valueString = tempRefreshingCache.Get(0);
+            var valueString = tempRefreshingCache.GetValue(0);
             var result = tempRefreshingCache.FastCache.Count;
             Assert.AreEqual(2, result);
         }

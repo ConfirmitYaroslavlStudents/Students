@@ -84,17 +84,29 @@ namespace RefreshingCacheLibrary
             }
             else
             {
-                if (SlowCache.ContainsKey(key))
-                {
+                //if (SlowCache.ContainsKey(key))
+                //{
                     FastCache[key] = SlowCache[key];
                     livesOfItemsInFastCache[key] = numberOflivesBeforeItemMove;
                     SlowCache.Remove(key);
                     return FastCache[key];
-                }
+                //}
                 //else
                 //{
-                //    throw new Exception(string.Format("not found {0}",key));
+                //    throw new Exception(string.Format("not found {0}", key));
                 //}
+            }
+        }
+        //==========================================================================
+        public bool Contains(TKey key)
+        {
+            if (FastCache.ContainsKey(key) || SlowCache.ContainsKey(key))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

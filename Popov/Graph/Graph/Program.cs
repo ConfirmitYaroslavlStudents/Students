@@ -20,7 +20,7 @@ namespace Graph
             gr.AddVertex("M", new HashSet<string>(new[] { "D" }));
             gr.AddVertex("K", new HashSet<string>(new[] { "B" }));
 
-            
+
             var menu = new ConsoleMenu();
 
             menu.AddCommand("Print graph to console", () => PrintToConsole(gr));

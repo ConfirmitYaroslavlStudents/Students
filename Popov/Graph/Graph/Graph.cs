@@ -16,7 +16,7 @@ namespace Graph
             for (var i = 0; i < firstArray.Count(); ++i)
             {
                 if ((!firstArray[i].Key.Equals(secondArray[i].Key))
-                    || (!EqualsHashSet(firstArray[i].Value, secondArray[i].Value)))
+                    || (!firstArray[i].Value.SequenceEqual(secondArray[i].Value)))
                     return false;
             }
             return true;
@@ -27,20 +27,6 @@ namespace Graph
             return (_vertexDictionary != null ? _vertexDictionary.GetHashCode() : 0);
         }
 
-        public bool EqualsHashSet(HashSet<T> first, HashSet<T> second)
-        {
-            if (first.Count != second.Count)
-                return false;
-            var firstArray = first.ToArray();
-            var secondArray = second.ToArray();
-            for (var i = 0; i < firstArray.Count(); ++i)
-            {
-                if (!firstArray[i].Equals(secondArray[i]))
-                    return false;
-            }
-            return true;
-        }
-
         public override bool Equals(object obj)
         {
             var temp = obj as Graph<T>;
@@ -48,7 +34,17 @@ namespace Graph
         }
 
 
+        public IEnumerator<KeyValuePair<T, HashSet<T>>> GetEnumerator()
+        {
+            return ((IEnumerable<KeyValuePair<T, HashSet<T>>>)_vertexDictionary).GetEnumerator();
+        }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _vertexDictionary.GetEnumerator();
+        }
+
+        
         private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
 
 
@@ -69,6 +65,10 @@ namespace Graph
             _vertexDictionary = new Dictionary<T, HashSet<T>>();
         }
 
+        /// <summary>
+        /// Add new isolated vertex
+        /// </summary>
+        /// <param name="vertex"></param>
         public void AddVertex(T vertex)
         {
             if (!_vertexDictionary.ContainsKey(vertex))
@@ -227,17 +227,6 @@ namespace Graph
         public Dictionary<T, HashSet<T>> SetVertex
         {
             get { return _vertexDictionary; }
-        }
-
-        
-        public IEnumerator<KeyValuePair<T, HashSet<T>>> GetEnumerator()
-        {
-            return ((IEnumerable<KeyValuePair<T, HashSet<T>>>)_vertexDictionary).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _vertexDictionary.GetEnumerator();
         }
     }
 }

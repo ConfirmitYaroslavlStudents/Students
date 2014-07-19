@@ -64,6 +64,7 @@ namespace MenuForConsole
                         {
                             Console.Clear();
                             _actions[current].Invoke();
+                            Console.ReadLine();
                             rewrite = true;
                         }
                         break;

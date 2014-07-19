@@ -1,6 +1,6 @@
 ﻿namespace Forest
 {
-    internal class Node<T>
+    public class Node<T>
     {
         public T Value { set; get; }
         public Node<T> LeftNode { set; get; }

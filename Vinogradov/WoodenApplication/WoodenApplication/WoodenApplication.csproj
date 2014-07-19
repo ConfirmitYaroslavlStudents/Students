@@ -7,7 +7,7 @@
     <ProjectGuid>{FDA66C7B-B642-457D-AF8A-10C41E9BB169}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wooden_application_console_</RootNamespace>
+    <RootNamespace>WoodenApplication</RootNamespace>
     <AssemblyName>Wooden application%28console%29</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

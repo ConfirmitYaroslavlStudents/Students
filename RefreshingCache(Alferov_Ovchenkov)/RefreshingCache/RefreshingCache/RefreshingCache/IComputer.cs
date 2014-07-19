@@ -1,6 +1,6 @@
 ﻿namespace RefreshingCache
 {
-    public interface IComputer<TKey, TValue>
+    public interface IComputer<in TKey, out TValue>
     {
         TValue GetData(TKey key);
     }

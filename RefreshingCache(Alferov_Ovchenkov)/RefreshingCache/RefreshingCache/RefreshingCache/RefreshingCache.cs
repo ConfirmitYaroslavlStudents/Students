@@ -1,33 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 namespace RefreshingCache
 {
     public class RefreshingCache<TKey, TValue>
     {
-        private const int MaxCacheSize = 16;
-        private const int MaxTimeLimit = 500;
+        private readonly int _maxCacheSize;
+        private readonly int _maxTimeLimit;
 
         private class Entry
         {
+            private readonly long _creationTime;
+            private readonly long _expirationTime;
+
             public TValue Value { get; private set; }
             public long LastAccessTime { get; set; }
 
-            public Entry(TValue value, TKey key, TimerCallback handler)
+            public Entry(TValue value, long expirationTime, ITime time)
             {
                 Value = value;
-                var delayTime = new TimeSpan(0, 0, 0, 0, MaxTimeLimit);
-                var intervalTime = new TimeSpan(0, 0, 0, 0, 0);
-                new Timer(handler, key, delayTime, intervalTime);
+                _expirationTime = expirationTime;
+                _creationTime = time.CurrentTime;
+            }
+
+            public bool CheckExpiration(ITime time)
+            {
+                return (time.CurrentTime - _creationTime >= _expirationTime);
             }
         }
 
+        private readonly ITime _cacheTime;
         private readonly IComputer<TKey, TValue> _computer;
         private readonly Dictionary<TKey, Entry> _data;
-        private readonly Stopwatch _mainTimer;
 
         public TValue this[TKey key]
         {
@@ -37,7 +42,7 @@ namespace RefreshingCache
                 {
                     AddData(key, _computer.GetData(key));
                 }
-                _data[key].LastAccessTime = _mainTimer.ElapsedMilliseconds;
+                _data[key].LastAccessTime = _cacheTime.CurrentTime;
                 return _data[key].Value;
             }
         }
@@ -47,33 +52,62 @@ namespace RefreshingCache
             get { return _data.Count; }
         }
 
-        public RefreshingCache(IComputer<TKey, TValue> computer)
+        public RefreshingCache(int maxCacheSize, int maxTimeLimit, IComputer<TKey, TValue> computer, ITime cacheTime)
         {
+            _maxCacheSize = maxCacheSize;
+            _maxTimeLimit = maxTimeLimit;
+
             _data = new Dictionary<TKey, Entry>();
 
             if (computer == null)
             {
                 throw new ArgumentNullException("computer");
             }
+
+            if (cacheTime == null)
+            {
+                throw new ArgumentNullException("cacheTime");
+            }
+
             _computer = computer;
-            _mainTimer = new Stopwatch();
-            _mainTimer.Start();
+            _cacheTime = cacheTime;
         }
 
         private void AddData(TKey key, TValue value)
         {
-            if (_data.Count == MaxCacheSize)
+            if (_data.Count == _maxCacheSize)
             {
-                var minKey = GetMinimalLastAccessTime();
-                RemoveEntry(minKey);
+                var expirationDataKey = GetExpirationDataKey();
+
+                if (expirationDataKey != null)
+                {
+                    RemoveEntry((TKey)expirationDataKey);
+                }
+                else
+                {
+                    var minKey = GetLeastRecentlyUsedKey();
+                    RemoveEntry(minKey);
+                }
             }
-            _data.Add(key, new Entry(value, key, TimerOnTickHandler));
+            _data.Add(key, new Entry(value, _maxTimeLimit, _cacheTime));
         }
 
-        private TKey GetMinimalLastAccessTime()
+        private object GetExpirationDataKey()
         {
-            var min = _data.First().Value.LastAccessTime;
-            TKey minKey = _data.First().Key;
+            foreach (var keyValuePair in _data)
+            {
+                if (keyValuePair.Value.CheckExpiration(_cacheTime))
+                {
+                    return keyValuePair.Key;
+                }
+            }
+            return null;
+        }
+
+        private TKey GetLeastRecentlyUsedKey()
+        {
+            var min = _cacheTime.CurrentTime;
+            var minKey = _data.First().Key;
 
             foreach (var keyValuePair in _data)
             {
@@ -85,12 +119,6 @@ namespace RefreshingCache
             }
 
             return minKey;
-        }
-
-        private void TimerOnTickHandler(object state)
-        {
-            var key = (TKey)state;
-            RemoveEntry(key);
         }
 
         private void RemoveEntry(TKey key)

@@ -1,58 +1,82 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
 using Xunit;
 
 namespace RefreshingCache.Tests
 {
     public class RefreshingCacheTests
     {
+        private const int CacheSize = 16;
+        private const int ExpirationTime = 1000;
+        private const int TimeUpperThanMax = 1001;
+        private const int TimeLowerThanMax = 999;
+
         private class Computer : IComputer<int, string>
         {
+            public string LastData { get; private set; }
             public string GetData(int key)
             {
-                return key.ToString(CultureInfo.InvariantCulture);
+                LastData = key.ToString(CultureInfo.InvariantCulture);
+                return LastData;
             }
+        }
+
+        private class Time : ITime
+        {
+            public long CurrentTime { get; set; }
         }
 
         [Fact]
         public void RefreshingCacheIndexer_SimpleIntegerValue_ShouldPass()
         {
-            const int timeLowerThanMax = 400;
+            var systemTime = new Time();
+            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), systemTime);
 
-            var cache = new RefreshingCache<int, string>(new Computer());
             var actual = cache[0];
-            Thread.Sleep(timeLowerThanMax);
+            systemTime.CurrentTime = TimeLowerThanMax;
 
             Assert.Equal("0", actual);
         }
 
         [Fact]
-        public void RefreshingCacheCount_WhenTimeIsUp_ShouldPass()
+        public void RefreshingCacheIndexer_WhenTimeIsUp_ShouldPass()
         {
-            const int timeUpperThanMax = 600;
+            var systemTime = new Time();
+            var computer = new Computer();
+            
+            string temp;
+            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, computer, systemTime);
 
-            var cache = new RefreshingCache<int, string>(new Computer());
-            for (int i = 0; i < 5; ++i)
+            for (int i = 0; i < 16; ++i)
             {
-                var temp = cache[i];
+                ++systemTime.CurrentTime;
+                temp = cache[i];
             }
-            Thread.Sleep(timeUpperThanMax);
 
-            Assert.Equal(0, cache.Count);
+            systemTime.CurrentTime = TimeUpperThanMax;
+           
+            //we add new data with key "17". It replaces data with key "0" because our time expired. 
+            temp = cache[17];
+            
+            //And when we try get data with key "0", cache gets it from computer.
+            temp = cache[0];
+
+            Assert.Equal("0", computer.LastData);
         }
 
         [Fact]
         public void RefreshingCacheIndexer_WhenCacheSizeIncreaseUpperMaxSize_ShouldPass()
         {
-            const int maxCacheSize = 16;
-            var cache = new RefreshingCache<int, string>(new Computer());
+            var systemTime = new Time();
+
+            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), systemTime);
             for (int i = 0; i < 20; ++i)
             {
+                ++systemTime.CurrentTime;
                 var temp = cache[i];
             }
 
-            Assert.Equal(maxCacheSize, cache.Count);
+            Assert.Equal(CacheSize, cache.Count);
         }
 
         [Fact]
@@ -61,7 +85,17 @@ namespace RefreshingCache.Tests
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
                 Computer computer = null;
-                var cache = new RefreshingCache<int, string>(computer);
+                new RefreshingCache<int, string>(CacheSize, ExpirationTime, computer, new Time());
+            });
+        }
+
+        [Fact]
+        public void RefreshingCache_NullReferenceInITimeParam_ArgumentNullExceptionThrown()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () =>
+            {
+                Time time = null;
+                new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), time);
             });
         }
     }

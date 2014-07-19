@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IComputer.cs" />
+    <Compile Include="ITime.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RefreshingCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

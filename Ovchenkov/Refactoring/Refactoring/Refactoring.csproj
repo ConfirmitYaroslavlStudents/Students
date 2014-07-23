@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B94B169F-F7E2-4E30-9F4F-267BA1DD029C}</ProjectGuid>
+    <ProjectGuid>{A38ABCD1-2FEE-45C0-8211-AE2C1D3446D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StackArrayLibrary</RootNamespace>
-    <AssemblyName>StackArrayLibrary</AssemblyName>
+    <RootNamespace>Refactoring</RootNamespace>
+    <AssemblyName>Refactoring</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,14 +34,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StackLibrary.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="Movie.cs" />
+    <Compile Include="Price.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StackInterface\StackInterface.csproj">
-      <Project>{38fb3223-59ae-47e2-8fc3-db7bd9344a59}</Project>
-      <Name>StackInterface</Name>
-    </ProjectReference>
+    <Compile Include="Rental.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

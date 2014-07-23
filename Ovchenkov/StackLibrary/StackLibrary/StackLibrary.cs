@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using StackInterface;
 
 namespace StackLibrary
 {
-    public class Stack<T> : IEnumerable<T>
+    public class Stack<T> : IEnumerable<T>, IStack<T>
     {
 
         private class Element<TValue>

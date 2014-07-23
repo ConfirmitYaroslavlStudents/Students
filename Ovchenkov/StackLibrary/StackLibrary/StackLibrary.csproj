@@ -37,6 +37,12 @@
     <Compile Include="StackLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StackInterface\StackInterface.csproj">
+      <Project>{38fb3223-59ae-47e2-8fc3-db7bd9344a59}</Project>
+      <Name>StackInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using StackInterface;
 
 namespace StackArrayLibrary
 {
-    public class Stack<T> : IEnumerable<T>
+    public class Stack<T> : IEnumerable<T>, IStack<T>
     {
         private const int DefaultSize = 8;
 
@@ -18,6 +19,7 @@ namespace StackArrayLibrary
             {
                 return _elements[i];
             }
+
         }
 
         public Stack()

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackArrayLibrary", "StackA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stack.Tests", "Stack.Tests\Stack.Tests.csproj", "{77290973-8688-4CA0-BB1F-00CF189243DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackInterface", "StackInterface\StackInterface.csproj", "{38FB3223-59AE-47E2-8FC3-DB7BD9344A59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{77290973-8688-4CA0-BB1F-00CF189243DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77290973-8688-4CA0-BB1F-00CF189243DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77290973-8688-4CA0-BB1F-00CF189243DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38FB3223-59AE-47E2-8FC3-DB7BD9344A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38FB3223-59AE-47E2-8FC3-DB7BD9344A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38FB3223-59AE-47E2-8FC3-DB7BD9344A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38FB3223-59AE-47E2-8FC3-DB7BD9344A59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

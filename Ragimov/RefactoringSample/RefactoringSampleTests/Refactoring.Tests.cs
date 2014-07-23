@@ -67,5 +67,56 @@ namespace RefactoringSampleTests
 
             Assert.AreEqual(expectedstatement, customerNemo.Statement());
         }
+
+        [TestMethod]
+        public void ManyCustomers_RentedMultipleMovies_Shouldpass()
+        {
+            const string name = "Nemo";
+            const string name2 = "Neo";
+
+            var customerNemo = new Customer(name);
+            var customerNeo = new Customer(name2);
+
+            var mrNobody = new Rental(new PriceRegular(), "Mr.Nobody");
+            mrNobody.DaysRented = 1;
+
+
+            var movie2 = new Rental(new PriceNewRelease(), "Another movie for Nemo");
+            movie2.DaysRented = 1;
+
+            var matrix = new Rental(new PriceChildren(), "The Matrix");
+            matrix.DaysRented = 1;
+
+            customerNemo.Rentals.Add(mrNobody);
+            customerNemo.Rentals.Add(movie2);
+
+            customerNeo.Rentals.Add(matrix);
+            customerNeo.Rentals.Add(movie2);
+
+
+
+
+
+            var statementNemo = String.Format("Учет аренды для {0}{1}", name, Environment.NewLine);
+
+            statementNemo += String.Format("\t {0} \t {1} {2}", mrNobody.Movie.Title, 2.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
+            statementNemo += String.Format("\t {0} \t {1} {2}", movie2.Movie.Title, 3.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
+
+            statementNemo += String.Format("Сумма задолженности составляет {0}{1}", 5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
+            statementNemo += String.Format("Вы заработали {0} за активность", 2.ToString(CultureInfo.InvariantCulture));
+
+            Assert.AreEqual(statementNemo, customerNemo.Statement());
+
+
+            var statementNeo = String.Format("Учет аренды для {0}{1}", name2, Environment.NewLine);
+
+            statementNeo += String.Format("\t {0} \t {1} {2}", matrix.Movie.Title, 1.5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
+            statementNeo += String.Format("\t {0} \t {1} {2}", movie2.Movie.Title, 3.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
+
+            statementNeo += String.Format("Сумма задолженности составляет {0}{1}", 4.5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
+            statementNeo += String.Format("Вы заработали {0} за активность", 2.ToString(CultureInfo.InvariantCulture));
+
+            Assert.AreEqual(statementNeo, customerNeo.Statement());
+        }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using QueueInterface;
 
 namespace QueueLib
 {
-    public class Queue<T>:IEnumerable<T>
+    public class Queue<T> : IQueueable<T>
     {
         private class Item<TI>
         {

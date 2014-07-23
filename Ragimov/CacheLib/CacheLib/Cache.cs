@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace CacheLib
 {
@@ -9,33 +9,39 @@ namespace CacheLib
         private readonly Dictionary<TKey, CacheValue> _dictionary;
         public int Size { get; private set; }
         public int Count { get; private set; }
-        public int LifeTime { get; private set; }
+        public int AbsoluteExpiration { get; private set; }
+        public int SlidingExpiration { get; private set; }
         private readonly IStorage<TKey, TValue> _storage;
+        private readonly IDateTimeProvider _dateTime;
 
         private class CacheValue
         {
-            public TValue Value { get; set; }
+            public TValue Value { get; private set; }
+            public DateTime CreationTime { get; private set; }
             public DateTime LastAccess { get; set; }
-            public CacheValue(TValue value)
+            public CacheValue(TValue value,IDateTimeProvider dateTime)
             {
-                LastAccess = DateTime.Now;
+                CreationTime = dateTime.GetTime();
+                LastAccess = dateTime.GetTime();
                 Value = value;
             }
         }
 
-        public Cache(int size, int lifetime, IStorage<TKey,TValue> storage )
+        public Cache(int size, int slidingexpiration, int absoluteexpiration, IStorage<TKey, TValue> storage, IDateTimeProvider dateTime)
         {
             Size = size;
-            LifeTime = lifetime;
+            AbsoluteExpiration = absoluteexpiration;
+            SlidingExpiration = slidingexpiration;
             Count = 0;
             _dictionary = new Dictionary<TKey, CacheValue>(size);
             _storage = storage;
+            _dateTime = dateTime;
         }
 
         public void Add(TKey key, TValue value)
         {
-            var data = new CacheValue(value);
-
+            RemoveExpired();
+            var data = new CacheValue(value,_dateTime);
             if (!Exist(key))
             {
                 if (Size <= Count)
@@ -43,19 +49,11 @@ namespace CacheLib
                     RemoveOldest();
                 }
             }
-            Console.WriteLine(key + " " + data.Value);
-
-            _dictionary[key] = data;
             Count++;
-
-            Task.Run(async delegate
-            {
-                await Task.Delay(LifeTime);
-                Expire(key);
-            });
+            _dictionary[key] = data;
         }
 
-        private void Expire(TKey key)
+        private void Remove(TKey key)
         {
             _dictionary.Remove(key);
             Count--;
@@ -68,8 +66,8 @@ namespace CacheLib
 
         private void RemoveOldest()
         {
-            var min = DateTime.Now;
-            var minkey = default(TKey);
+            var min = _dictionary.First().Value.LastAccess;
+            var minkey = _dictionary.First().Key;
             foreach (var key in _dictionary.Keys)
             {
                 if (_dictionary[key].LastAccess < min)
@@ -78,7 +76,21 @@ namespace CacheLib
                     minkey = key;
                 }
             }
-            Expire(minkey);
+            Remove(minkey);
+        }
+
+        private void RemoveExpired()
+        {
+            var time = _dateTime.GetTime();
+            var keys = new TKey[_dictionary.Keys.Count];
+            _dictionary.Keys.CopyTo(keys,0);
+            foreach (var key in keys)
+            {
+                if (_dictionary[key].CreationTime.AddMilliseconds(AbsoluteExpiration) < time || _dictionary[key].LastAccess.AddMilliseconds(SlidingExpiration) < time)
+                {
+                    Remove(key);
+                }
+            }
         }
 
         public TValue this[TKey key]
@@ -87,7 +99,7 @@ namespace CacheLib
             {
                 if (_dictionary.ContainsKey(key))
                 {
-                    _dictionary[key].LastAccess = DateTime.Now;
+                    _dictionary[key].LastAccess = _dateTime.GetTime();
                 }
                 else
                 {

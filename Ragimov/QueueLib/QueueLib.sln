@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queue.UnitTest", "UnitTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueOnArray", "QueueOnArray\QueueOnArray.csproj", "{AF8FB435-566A-4A54-B41D-06F74CB3C057}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueInterface", "QueueInterface\QueueInterface.csproj", "{99E90C49-FB0F-417D-84AA-1E32B4237CAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AF8FB435-566A-4A54-B41D-06F74CB3C057}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF8FB435-566A-4A54-B41D-06F74CB3C057}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF8FB435-566A-4A54-B41D-06F74CB3C057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99E90C49-FB0F-417D-84AA-1E32B4237CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99E90C49-FB0F-417D-84AA-1E32B4237CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99E90C49-FB0F-417D-84AA-1E32B4237CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99E90C49-FB0F-417D-84AA-1E32B4237CAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

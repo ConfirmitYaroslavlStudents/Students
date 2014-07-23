@@ -1,90 +1,104 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using QueueLib;
-
+using System.Collections.Generic;
+using QueueInterface;
+using Xunit.Extensions;
+using Assert = Xunit.Assert;
 
 namespace UnitTest
 {
-    [TestClass]
+
     public class QueueUnitTest
     {
-        [TestMethod]
-        public void Queue_EnqueuedDequeued()
+        public static IEnumerable<object[]> QueueTestData
         {
-            var queue = new Queue<int>();
+            get
+            {
+                yield return new object[] { new QueueLib.Queue<int>()};
+                yield return new object[] { new QueueOnArray.Queue<int>()};
+            }
+        }
+
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_EnqueuedDequeued(IQueueable<int> queue)
+        {
             queue.Enqueue(42);
-            Assert.AreEqual(42, queue.Dequeue());
+            Assert.Equal(42, queue.Dequeue());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Queue_DeletedFromEmpty_ShouldThrowInvalidOperation()
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_DeletedFromEmpty_ShouldThrowInvalidOperation(IQueueable<int> queue)
         {
-            var queue = new Queue<int>();
-            queue.Dequeue();
+            Assert.Throws(typeof(InvalidOperationException), () =>
+            {
+                queue.Dequeue();
+            });
         }
 
-        [TestMethod]
-        public void Queue_CountIsProperlyChanged()
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_CountIsProperlyChanged(IQueueable<int> queue)
         {
-            var queue = new Queue<int>();
             queue.Enqueue(42);
             queue.Enqueue(37);
             queue.Enqueue(queue.Dequeue());
-            Assert.AreEqual(2, queue.Count);
+            Assert.Equal(2, queue.Count);
         }
 
-        [TestMethod]
-        public void Queue_MultipleItemsStored()
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_MultipleItemsStored(IQueueable<int> queue)
         {
-            var queue = new Queue<int>();
             queue.Enqueue(42);
             queue.Enqueue(37);
             queue.Enqueue(100500);
-            Assert.AreEqual(42, queue.Dequeue());
-            Assert.AreEqual(37, queue.Dequeue());
-            Assert.AreEqual(100500, queue.Dequeue());
+            Assert.Equal(42, queue.Dequeue());
+            Assert.Equal(37, queue.Dequeue());
+            Assert.Equal(100500, queue.Dequeue());
         }
 
-        [TestMethod]
-        public void Queue_Cleared()
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_Cleared(IQueueable<int> queue)
         {
-            var queue = new Queue<int>();
-            queue.Enqueue(42);
-            queue.Enqueue(37);
-            queue.Enqueue(100500);
-            queue.Clear();
-            Assert.AreEqual(0,queue.Count);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Queue_PeekedFromClear_ShouldThrowInvalidOperation()
-        {
-            var queue = new Queue<int>();
             queue.Enqueue(42);
             queue.Enqueue(37);
             queue.Enqueue(100500);
             queue.Clear();
-            queue.Peek();
+            Assert.Equal(0, queue.Count);
         }
 
-        [TestMethod]
-        public void Queue_PeekedAndDequeuedAreEqual()
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_PeekedFromClear_ShouldThrowInvalidOperation(IQueueable<int> queue)
         {
-            var queue = new Queue<int>();
+            Assert.Throws(typeof(InvalidOperationException), () =>
+            {
+                queue.Enqueue(42);
+                queue.Enqueue(37);
+                queue.Enqueue(100500);
+                queue.Clear();
+                queue.Peek();
+            });
+        }
+
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_PeekedAndDequeuedAreEqual(IQueueable<int> queue)
+        {
             queue.Enqueue(42);
             queue.Enqueue(37);
             queue.Enqueue(100500);
             var temp = queue.Peek();
-            Assert.AreEqual(temp,queue.Dequeue());
+            Assert.Equal(temp, queue.Dequeue());
         }
 
-        [TestMethod]
-        public void Queue_IEnumerableImplemented()
+        [Theory]
+        [PropertyData("QueueTestData")]
+        public void Queue_IEnumerableImplemented(IQueueable<int> queue)
         {
-            var queue = new Queue<int>();
-            int[] array = {42, 37, 100500};
+            int[] array = { 42, 37, 100500 };
             foreach (var t in array)
             {
                 queue.Enqueue(t);
@@ -92,7 +106,7 @@ namespace UnitTest
             var i = 0;
             foreach (var temp in queue)
             {
-                Assert.AreEqual(temp,array[i]);
+                Assert.Equal(temp, array[i]);
                 i++;
             }
         }

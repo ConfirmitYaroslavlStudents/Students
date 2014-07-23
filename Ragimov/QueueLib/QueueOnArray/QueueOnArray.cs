@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using QueueInterface;
 
 namespace QueueOnArray
 {
-    public class Queue<T> : IEnumerable<T>
+    public class Queue<T> : IQueueable<T>
     {
         public int Count { get; private set; }
         private T[] _array;
         private int _front;
-
+        private int _back;
         public Queue()
         {
             Clear();
@@ -20,19 +21,20 @@ namespace QueueOnArray
              * On the first item added, it's set to length of 4.  Whenever you add an item >=length, the capacity is doubled.*/
             //http://social.msdn.microsoft.com/Forums/en-US/84789320-4dc2-4f8f-947a-23c087fd5150/stackqueue-size-limit-and-explosion?forum=csharplanguage
 
-            if (Count == _array.Length + _front)
+            if (Count == _array.Length)
             {
                 Array.Resize(ref _array, _array.Length * 2);
             }
-            _array[_front + Count] = value;
+            _array[_back++%_array.Length] = value;
             Count++;
         }
 
         public T Dequeue()
         {
             if (Count == 0) throw new InvalidOperationException("Queue is Empty");
-            var value = _array[_front];
-            _array[_front] = default(T);
+            var first = _front%_array.Length;
+            var value = _array[first];
+            _array[first] = default(T);
             _front++;
             Count--;
             return value;
@@ -48,6 +50,7 @@ namespace QueueOnArray
         {
             Count = 0;
             _front = 0;
+            _back = 0;
             _array = new T[4];
         }
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
 
 namespace CacheLib.UnitTests
 {
@@ -10,7 +9,8 @@ namespace CacheLib.UnitTests
         public void Cache_DataAddedAndReceived_ShouldPass()
         {
             var storage = new PiStorage();
-            var cache = new Cache<int, string>(16,1000,storage);
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);
 
             cache.Add(1,"One");
             cache.Add(2,"Two");
@@ -23,27 +23,50 @@ namespace CacheLib.UnitTests
         public void Cache_ReceivedBeforeExpired_ShouldPass()
         {
             var storage = new PiStorage();
-            var cache = new Cache<int, string>(16, 1000, storage);
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);
 
             cache.Add(1, "One");
             cache.Add(2, "Two");
 
-            Thread.Sleep(900);
+            datetime.AddTime(900);
 
             Assert.AreEqual("One", cache[1]);
             Assert.AreEqual("Two", cache.Get(2));
         }
 
         [TestMethod]
-        public void Cache_ReceivedAfterExpired_ShouldPass()
+        public void Cache_ReceivedAfterSlideExpired_ShouldPass()
         {
             var storage = new PiStorage();
-            var cache = new Cache<int, string>(16, 1000, storage);
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);
 
             cache.Add(1, "One");
             cache.Add(2, "Two");
 
-            Thread.Sleep(1500);
+            datetime.AddTime(1500);
+            cache.Get(1);
+            cache.Add(3,"Three");
+
+            Assert.AreEqual("One", cache[1]);
+            Assert.AreEqual("Pi", cache.Get(2));
+        }
+
+        [TestMethod]
+        public void Cache_ReceivedAfterAbsoluteExpired_ShouldPass()
+        {
+            var storage = new PiStorage();
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16, 1000, 10000, storage, datetime);
+
+            cache.Add(1, "One");
+            cache.Add(2, "Two");
+
+            datetime.AddTime(10101);
+            cache.Get(1);
+            cache.Get(2);
+            cache.Add(3, "Three");
 
             Assert.AreEqual("Pi", cache[1]);
             Assert.AreEqual("Pi", cache.Get(2));
@@ -53,10 +76,11 @@ namespace CacheLib.UnitTests
         public void Cache_AddedInFull_ShouldPass()
         {
             var storage = new PiStorage();
-            var cache = new Cache<int, string>(2, 1000, storage);
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(2,1000,10000,storage,datetime);
 
             cache.Add(1, "One");
-            Thread.Sleep(10);
+            datetime.AddTime(300);
             cache.Add(2, "Two");
 
             cache.Add(3,"Three");
@@ -70,16 +94,19 @@ namespace CacheLib.UnitTests
         public void Cache_AddedDeletedDataFromStorage_ShouldPass()
         {
             var storage = new PiStorage();
-            var cache = new Cache<int, string>(2, 1000, storage);
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(2,1000,10000,storage,datetime);
 
             cache.Add(1, "One");
-            Thread.Sleep(10);
+            datetime.AddTime(400);
             cache.Add(2, "Two");
-            Thread.Sleep(10);
+            datetime.AddTime(400);
             cache.Add(3, "Three");
 
             Assert.AreEqual("Pi", cache[1]); //Indexer and Get will add deleted data from storage
+            datetime.AddTime(0);
             Assert.AreEqual("Pi", cache.Get(2));
+            datetime.AddTime(0);
             Assert.AreEqual("Pi", cache[3]);
         }
     }

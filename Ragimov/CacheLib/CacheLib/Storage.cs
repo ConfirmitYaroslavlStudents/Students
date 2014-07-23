@@ -4,6 +4,7 @@
     {
         TValue Get (TKey key);
     }
+
     public class PiStorage:IStorage<int,string>
     {
         public string Get(int key)

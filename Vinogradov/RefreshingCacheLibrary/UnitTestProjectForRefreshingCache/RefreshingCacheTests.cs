@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
-
 using RefreshingCacheLibrary;
 
 namespace UnitTestProjectForRefreshingCache
@@ -12,68 +10,49 @@ namespace UnitTestProjectForRefreshingCache
         [TestMethod]
         public void ContainsTrue()
         {
-            var tempRefreshingCache = new RefreshingCache<int, string>();
-            tempRefreshingCache.Add(0, "hello");
-            tempRefreshingCache.Add(1, "world");
-            var result = tempRefreshingCache.Contains(0);
+            var myDatabase = new SlowDatabase();
+            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
+            var stringOne = myRefreshingCache.GetValue(0);
+            var result = myRefreshingCache.Contains(0);
             Assert.AreEqual(true, result);
         }
 
         [TestMethod]
         public void ContainsFalse()
         {
-            var tempRefreshingCache = new RefreshingCache<int, string>();
-            tempRefreshingCache.Add(0, "hello");
-            tempRefreshingCache.Add(1, "world");
-            var result = tempRefreshingCache.Contains(3);
+            var myDatabase = new SlowDatabase();
+            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
+            var stringOne = myRefreshingCache.GetValue(0);
+            var result = myRefreshingCache.Contains(1);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void AddAndCount()
+        public void GetAllAndContainsFirst()
         {
-            var tempRefreshingCache = new RefreshingCache<int, string>();
-            tempRefreshingCache.Add(0, "hello");
-            tempRefreshingCache.Add(1, "world");
-            var result = tempRefreshingCache.FastCache.Keys.Count;
-            Assert.AreEqual(2, result);
-        }
-
-        [TestMethod]
-        public void AddElevenAndCount()
-        {
-            var tempRefreshingCache = new RefreshingCache<int, string>();
-            for (int i = 0; i < 11; i++)
+            var myDatabase = new SlowDatabase();
+            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
+            string currentValue;
+            for (int i = 0; i < 12; i++)
             {
-                tempRefreshingCache.Add(i, i.ToString() + "A");
+                currentValue = myRefreshingCache.GetValue(i);
             }
-            var result = tempRefreshingCache.FastCache.Count;
-            Assert.AreEqual(10, result);
+            var result = myRefreshingCache.Contains(0);
+            Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void AddSleepAddSleepCount()
+        public void MoveElement()
         {
-            var tempRefreshingCache = new RefreshingCache<int, string>();
-            tempRefreshingCache.Add(0, "A");
-            Thread.Sleep(5000);
-            tempRefreshingCache.Add(1, "B");
-            Thread.Sleep(10000);
-            var result = tempRefreshingCache.FastCache.Count;
-            Assert.AreEqual(1, result);
-        }
-
-        [TestMethod]
-        public void AddSleepAddSleepGetCount()
-        {
-            var tempRefreshingCache = new RefreshingCache<int, string>();
-            tempRefreshingCache.Add(0, "A");
-            Thread.Sleep(5000);
-            tempRefreshingCache.Add(1, "B");
-            Thread.Sleep(10000);
-            var valueString = tempRefreshingCache.GetValue(0);
-            var result = tempRefreshingCache.FastCache.Count;
-            Assert.AreEqual(2, result);
+            var myDatabase = new SlowDatabase();
+            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
+            var currentValue = myRefreshingCache.GetValue(10); ;
+            for (int i = 0; i < 99; i++)
+            {
+                myRefreshingCache.Refresh();
+            }
+            var result = myRefreshingCache.Contains(0);
+            Assert.AreEqual(false, result);
         }
     }
 }

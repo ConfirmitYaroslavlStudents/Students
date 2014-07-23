@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RefreshingCacheLibrary;
 
 namespace TestApp
 {
@@ -10,7 +7,15 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-
+            var myDatabase = new SlowDatabase();
+            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
+            string currentValue;
+            for (int i = 0; i < 12; i++)
+            {
+                currentValue = myRefreshingCache.GetValue(i);
+            }
+            var result = myRefreshingCache.Contains(0);
+            Console.ReadLine();
         }
     }
 }

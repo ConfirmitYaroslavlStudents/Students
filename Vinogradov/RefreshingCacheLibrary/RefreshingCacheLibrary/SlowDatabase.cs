@@ -1,21 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using RefreshingCacheLibrary;
 
 namespace RefreshingCacheLibrary
 {
-    internal class SlowDatabase<TKey, TValue> : ICanGetValue<TKey, TValue>
+    public class SlowDatabase : ICanGetValue<int, string>
     {
-        private Dictionary<TKey, TValue> slowBigCache;
+        private Dictionary<int, string> slowBigCache;
 
         public SlowDatabase()
         {
-            slowBigCache = new Dictionary<TKey, TValue>();
+            slowBigCache = new Dictionary<int, string>();
+            slowBigCache[0] = "zero";
+            slowBigCache[1] = "one";
+            slowBigCache[2] = "two";
+            slowBigCache[3] = "three";
+            slowBigCache[4] = "four";
+            slowBigCache[5] = "five";
+            slowBigCache[6] = "six";
+            slowBigCache[7] = "seven";
+            slowBigCache[8] = "eight ";
+            slowBigCache[9] = "nine";
+            slowBigCache[10] = "Allons-Y";
+            slowBigCache[11] = "Geronimo";
         }
 
-        public TValue GetValue(TKey key)
+        public string GetValue(int key)
         {
             if (slowBigCache.ContainsKey(key))
             {
@@ -23,7 +32,7 @@ namespace RefreshingCacheLibrary
             }
             else
             {
-                return default (TValue);
+                return default(string);
             }
         }
     }

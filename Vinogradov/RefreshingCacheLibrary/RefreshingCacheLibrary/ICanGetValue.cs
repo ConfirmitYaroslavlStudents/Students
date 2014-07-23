@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RefreshingCacheLibrary
+﻿namespace RefreshingCacheLibrary
 {
     public interface ICanGetValue<TKey, TValue>
     {

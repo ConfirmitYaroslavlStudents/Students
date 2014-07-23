@@ -6,7 +6,7 @@ namespace Stack.Tests
 {
     public class StackNunitTests
     {
-        private static readonly int[] MassOfNumber = { 73, 3, 7, 37 };
+        private static readonly int[] MassOfNumber = {73, 3, 7, 37};
 
         private readonly object[] _simpleTestData =
         {
@@ -18,7 +18,7 @@ namespace Stack.Tests
             new object[] {new StackArrayLibrary.Stack<int>(), new StackArrayLibrary.Stack<int>(MassOfNumber)},
             new object[] {new StackLibrary.Stack<int>(), new StackLibrary.Stack<int>(MassOfNumber)}
         };
-     
+
         [Test]
         [TestCaseSource("_simpleTestData")]
         public void Stack_Count_LengthPlusAfterPush(IStack<string> stack)
@@ -79,7 +79,7 @@ namespace Stack.Tests
         [TestCaseSource("_simpleTestData")]
         public void Stack_Clear_CountMustBeZeroAfterClear(IStack<string> stack)
         {
-            string[] mass = { "73", "3", "7", "37" };
+            string[] mass = {"73", "3", "7", "37"};
 
             foreach (var element in mass)
                 stack.Push(element);
@@ -106,13 +106,13 @@ namespace Stack.Tests
         [TestCaseSource("_simpleTestData")]
         public void Stack_Contains_ContainsMustReturnTrue(IStack<string> stack)
         {
-            string[] mass = { "73", "3", "7", "37" };
+            string[] mass = {"73", "3", "7", "37"};
             foreach (var elememt in mass)
                 stack.Push(elememt);
 
             bool actual = stack.Contains("73");
             Assert.AreEqual(true, actual);
-            
+
             actual = stack.Contains("703");
             Assert.AreEqual(false, actual);
         }
@@ -121,7 +121,7 @@ namespace Stack.Tests
         [TestCaseSource("_simpleTestData")]
         public void Stack_Contains_ContainsWithNull(IStack<string> stack)
         {
-            string[] mass = { "37", "cartoon", "raccoon", "joke", null };
+            string[] mass = {"37", "cartoon", "raccoon", "joke", null};
             foreach (var element in mass)
                 stack.Push(element);
 
@@ -130,6 +130,21 @@ namespace Stack.Tests
 
             actual = stack.Contains("joke");
             Assert.AreEqual(true, actual);
+        }
+
+        [Test]
+        [TestCaseSource("_simpleTestData")]
+        public void Stack_IEnumerable_IEnumerableMustWorking(IStack<string> stack)
+        {
+            string[] mass = {"37", "cartoon", "raccoon", "joke", null};
+            foreach (var element in mass)
+                stack.Push(element);
+            var i = 0;
+
+            foreach (var element in stack)
+            {
+                Assert.AreEqual(element, stack[i++]);
+            }
         }
     }
 }

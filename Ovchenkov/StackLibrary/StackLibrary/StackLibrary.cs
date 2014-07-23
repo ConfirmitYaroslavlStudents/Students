@@ -5,7 +5,7 @@ using StackInterface;
 
 namespace StackLibrary
 {
-    public class Stack<T> : IEnumerable<T>, IStack<T>
+    public class Stack<T> : IStack<T>
     {
 
         private class Element<TValue>
@@ -97,7 +97,7 @@ namespace StackLibrary
             yield return _top.Value;
 
             var stackElement = _top;
-            while (stackElement != null)
+            while (stackElement.Next != null)
             {
                 stackElement = stackElement.Next;
                 yield return stackElement.Value;

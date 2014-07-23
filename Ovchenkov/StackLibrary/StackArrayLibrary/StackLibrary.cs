@@ -5,7 +5,7 @@ using StackInterface;
 
 namespace StackArrayLibrary
 {
-    public class Stack<T> : IEnumerable<T>, IStack<T>
+    public class Stack<T> : IStack<T>
     {
         private const int DefaultSize = 8;
 

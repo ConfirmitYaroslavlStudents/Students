@@ -1,6 +1,8 @@
-﻿namespace StackInterface
+﻿using System.Collections.Generic;
+
+namespace StackInterface
 {
-    public interface IStack<T>
+    public interface IStack<T> : IEnumerable<T>
     {
 
         int Count { get; }

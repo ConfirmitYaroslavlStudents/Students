@@ -156,6 +156,19 @@ namespace Stack.Tests
             Assert.Equal(true, actual);
         }
 
-        
+        [Theory]
+        [PropertyData("SampleTestData")]
+        public void Stack_IEnumerable_IEnumerableMustWorking(IStack<string> stack)
+        {
+            string[] mass = { "37", "cartoon", "raccoon", "joke", null };
+            foreach (var element in mass)
+                stack.Push(element);
+            var i = 0;
+
+            foreach (var element in stack)
+            {
+                Assert.Equal(element, stack[i++]);
+            }
+        }
     }
 }

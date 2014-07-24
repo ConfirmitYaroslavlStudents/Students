@@ -5,15 +5,15 @@ namespace RefactoringDemo.Steps.Step1
     {
         public abstract double GetCharge(int daysRented);
 
-        public int GetFrequentRenterPoints(int daysRented)
+        public int GetProfit(int daysRented)
         {
             return 1;
         }
     }
 
-    internal class ChildrensPrice : Price
+    public class ChildrensPrice : Price
     {
-        public override double GetCharge(int daysRented)
+       public override double GetCharge(int daysRented)
         {
             double result = 0;
             result += 2;
@@ -23,7 +23,7 @@ namespace RefactoringDemo.Steps.Step1
         }
     }
 
-    internal class RegularPrice : Price
+    public class RegularPrice : Price
     {
         public override double GetCharge(int daysRented)
         {
@@ -33,7 +33,7 @@ namespace RefactoringDemo.Steps.Step1
         }
     }
 
-    internal class NewReleasePrice : Price
+    public class NewReleasePrice : Price
     {
         public override double GetCharge(int daysRented)
         {
@@ -43,7 +43,7 @@ namespace RefactoringDemo.Steps.Step1
                 result += (daysRented - 3) * 1.5;
             return result;
         }
-        public new int GetFrequentRenterPoints(int daysRented)
+        public new int GetProfit(int daysRented)
         {
             return (daysRented > 1) ? 2: 1;
         }

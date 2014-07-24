@@ -37,7 +37,7 @@ namespace RefactoringDemo.Steps.Step1
             }
 
             result += "Сумма задолженности составляет " + GetTotalCharge() + "\n";
-            result += "Вы заработали " + GetTotalFrequentRenterPoints() + " за активность";
+            result += "Вы заработали " + GetProfit() + " за активность";
             return result;
         }
 
@@ -45,9 +45,9 @@ namespace RefactoringDemo.Steps.Step1
         {
             return Rentals.Sum(rental => rental.GetCharge());
         }
-        private double GetTotalFrequentRenterPoints()
+        private double GetProfit()
         {
-            return Rentals.Sum(rental => rental.GetFrequentRenterPoints());
+            return Rentals.Sum(rental => rental.GetProfit());
         }
     }
 }

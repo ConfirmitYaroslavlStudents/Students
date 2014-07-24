@@ -20,11 +20,11 @@ namespace RefactoringDemo.Steps.Step1
             get; 
             set;
         }
-        
 
-        public int GetFrequentRenterPoints()
+
+        public int GetProfit()
         {
-            return Movie.GetFrequentRenterPoints(DaysRented);
+            return Movie.GetProfit(DaysRented);
         }
 
         public double GetCharge()

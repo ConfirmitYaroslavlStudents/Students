@@ -32,9 +32,9 @@ namespace RefactoringDemo.Steps.Step1
             return PriceCode.GetCharge(daysRented);
         }
 
-        public int GetFrequentRenterPoints(int daysRented)
+        public int GetProfit(int daysRented)
         {
-            return PriceCode.GetFrequentRenterPoints(daysRented);
+            return PriceCode.GetProfit(daysRented);
         }
     }
 }

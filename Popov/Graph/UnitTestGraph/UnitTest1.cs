@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Graph;
+
 namespace UnitTestGraph
 {
     [TestClass]
@@ -36,18 +38,18 @@ namespace UnitTestGraph
         }
 
         [TestMethod]
-        public void TestMatricEquals()
+        public void TestMatrixEquals()
         {
             var gr = new Graph<string>("A");
             gr.AddVertex("B",new HashSet<string>(new[]{"A"}));
-            var matricGraph = gr.ToAdjacencyMatrixy();
-            bool[,] matric = {{false, true}, {true, false}};
+            var matrixGraph = gr.ToAdjacencyMatrix();
+            bool[,] matrix = {{false, true}, {true, false}};
             bool flagEquals = true;
-            for (var i = 0; i < matric.GetLength(0);++i)
+            for (var i = 0; i < matrix.GetLength(0);++i)
             {
-                for (var j = 0; j < matric.GetLength(1); j++)
+                for (var j = 0; j < matrix.GetLength(1); j++)
                 {
-                    if (!matric[i, j].Equals(matricGraph[i, j]))
+                    if (!matrix[i, j].Equals(matrixGraph[i, j]))
                     {
                         flagEquals = false;
                     }
@@ -67,6 +69,47 @@ namespace UnitTestGraph
             Assert.AreEqual(menu.Count, 1);
         }
 
+        [TestMethod]
+        public void TestViewInDepth()
+        {
+            var gr = new Graph<string>("A");
+            gr.AddVertex("B", new HashSet<string>(new[]{"A"}));
+            int count =0;
+            gr.ViewDepth("A",(s => count++), new List<string>());
+            Assert.AreEqual(count, gr.Count);
+        }
 
+        [TestMethod]
+        public void TestViewInWidth()
+        {
+            var gr = new Graph<string>("A");
+            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            int count = 0;
+            gr.ViewWidth("A", (s => count++), new List<string>());
+            Assert.AreEqual(count, gr.Count);
+        }
+
+        [TestMethod]
+        public void TestCountHashSet()
+        {
+            var gr = new Graph<string>("A");
+            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            gr.AddVertex("C", new HashSet<string>(new[] { "A" }));
+            gr.AddVertex("D", new HashSet<string>(new[] { "C" }));
+            Assert.AreEqual(gr.Count, gr.VertexSet.Count);
+        }
+
+        [TestMethod]
+        public void TestViewUnconnectedGraph()
+        {
+            var gr = new Graph<string>("A");
+            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            gr.AddVertex("C");
+            int countForViewWidth = 0;
+            int countForViewDepth = 0;
+            gr.ViewWidth("A", (s => countForViewWidth++), new List<string>());
+            gr.ViewWidth("A", (s => countForViewDepth++), new List<string>());
+            Assert.AreEqual(countForViewWidth, countForViewDepth, gr.Count);
+        }
     }
 }

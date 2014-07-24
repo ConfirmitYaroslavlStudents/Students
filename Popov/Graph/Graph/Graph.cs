@@ -48,13 +48,12 @@ namespace Graph
         private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
 
 
-        /// <param name="setVertex"> Set vertex with their edges </param>
+        
         public Graph(Dictionary<T, HashSet<T>> setVertex)
         {
             _vertexDictionary = setVertex;
         }
-
-        /// <param name="vertex"> isolated vertex </param>
+       
         public Graph(T vertex)
         {
             _vertexDictionary = new Dictionary<T, HashSet<T>> { { vertex, new HashSet<T>() } };
@@ -65,10 +64,7 @@ namespace Graph
             _vertexDictionary = new Dictionary<T, HashSet<T>>();
         }
 
-        /// <summary>
-        /// Add new isolated vertex
-        /// </summary>
-        /// <param name="vertex"></param>
+       
         public void AddVertex(T vertex)
         {
             if (!_vertexDictionary.ContainsKey(vertex))
@@ -77,9 +73,7 @@ namespace Graph
             }
         }
 
-        /// <summary>
-        /// Add vertex to the graph
-        /// </summary>               
+        
         public void AddVertex(T vertex, HashSet<T> edges)
         {
             if (!_vertexDictionary.ContainsKey(vertex))
@@ -93,9 +87,7 @@ namespace Graph
 
         }
 
-        /// <summary>
-        /// Remove vertex of the graph
-        /// </summary>           
+       
         public void RemoveVertex(T vertex)
         {
             if (!_vertexDictionary.ContainsKey(vertex)) return;
@@ -111,28 +103,34 @@ namespace Graph
         }
 
         /// <summary>
-        /// View graph in width and showing progress
+        /// View graph in width
         /// </summary>
         /// <param name="vertex">The top which starts</param>
         /// <param name="action">The action running with each item</param>
-        public void ViewWidth(T vertex, Action<T> action)
+        /// <param name="vertexList">List using vertex in recursion</param>
+        public void ViewWidth(T vertex, Action<T> action, List<T> vertexList)
         {
             if (_vertexDictionary.ContainsKey(vertex))
             {
                 var queueVertex = new Queue<T>();
-                var vertexList  = new List<T>();
+                
                 queueVertex.Enqueue(vertex);
                 vertexList.Add(vertex);
                 while (queueVertex.Count != 0)
                 {
                     var top = queueVertex.Dequeue();
+                    action.Invoke(top);
                     foreach (var item in _vertexDictionary[top])
                     {
                         if ((vertexList.Contains(item)) || (queueVertex.Contains(item))) continue;
                         queueVertex.Enqueue(item);
                         vertexList.Add(item);
-                        action.Invoke(item);
                     }
+                }
+                if (vertexList.Count < _vertexDictionary.Count)
+                {
+                    var remainingVertex = _vertexDictionary.First(x => !vertexList.Contains(x.Key)).Key;
+                    ViewWidth(remainingVertex, action, vertexList);
                 }
             }
             else
@@ -142,28 +140,33 @@ namespace Graph
         }
 
         /// <summary>
-        /// View graph in depth and showing progress
+        /// View graph in depth
         /// </summary>
         /// <param name="vertex">The top which starts</param>
         /// <param name="action">The action running with each item</param>
-        public void ViewDepth(T vertex, Action<T> action)
+        /// <param name="vertexList">List using vertex in recursion</param>
+        public void ViewDepth(T vertex, Action<T> action, List<T> vertexList)
         {
             if (_vertexDictionary.ContainsKey(vertex))
             {
                 var stackVertex = new Stack<T>();
-                var vertexList = new List<T>();
                 stackVertex.Push(vertex);
                 vertexList.Add(vertex);
                 while (stackVertex.Count != 0)
                 {
                     var top = stackVertex.Pop();
+                    action.Invoke(top);
                     foreach (var item in _vertexDictionary[top])
                     {
                         if ((vertexList.Contains(item)) || (stackVertex.Contains(item))) continue;
                         stackVertex.Push(item);
                         vertexList.Add(item);
-                        action.Invoke(item);
                     }
+                }
+                if (vertexList.Count < _vertexDictionary.Count)
+                {
+                    var remainingVertex = _vertexDictionary.First(x => !vertexList.Contains(x.Key)).Key;
+                    ViewDepth(remainingVertex, action, vertexList);
                 }
             }
             else
@@ -171,25 +174,21 @@ namespace Graph
                 throw new KeyNotFoundException("Such vertex don't exist");
             }
         }
-
-        /// <summary>
-        /// Convert to bool matric, which called as matrix adjacency
-        /// </summary>
-        /// <returns></returns>
-        public bool[,] ToAdjacencyMatrixy()
+       
+        public bool[,] ToAdjacencyMatrix()
         {
-            var matric = new bool[Count,Count];
+            var matrix = new bool[Count, Count];
             var listKeys = _vertexDictionary.Keys.ToList();
             for (var i = 0; i < listKeys.Count(); ++i)
             {
                 foreach (var vertex in _vertexDictionary[listKeys[i]])
                 {
                     var j = listKeys.IndexOf(vertex);
-                    matric[i, j] = true;
-                    matric[j, i] = true;
+                    matrix[i, j] = true;
+                    matrix[j, i] = true;
                 }
             }
-            return matric;
+            return matrix;
         }
 
 
@@ -198,7 +197,7 @@ namespace Graph
             get { return _vertexDictionary.Count(); }
         }
 
-        public Dictionary<T, HashSet<T>> SetVertex
+        public Dictionary<T, HashSet<T>> VertexSet
         {
             get { return _vertexDictionary; }
         }

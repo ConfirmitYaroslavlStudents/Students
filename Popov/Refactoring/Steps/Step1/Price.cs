@@ -5,7 +5,7 @@ namespace RefactoringDemo.Steps.Step1
     {
         public abstract double GetCharge(int daysRented);
 
-        public int GetProfit(int daysRented)
+        public int GetBonusProfit(int daysRented)
         {
             return 1;
         }
@@ -43,7 +43,7 @@ namespace RefactoringDemo.Steps.Step1
                 result += (daysRented - 3) * 1.5;
             return result;
         }
-        public new int GetProfit(int daysRented)
+        public new int GetBonusProfit(int daysRented)
         {
             return (daysRented > 1) ? 2: 1;
         }

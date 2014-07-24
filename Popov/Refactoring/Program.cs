@@ -6,7 +6,7 @@ namespace RefactoringDemo
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var temp = new Customer("Sergey",new List<Rental>());
             temp.Rentals.Add(new Rental(new Movie("Noi",new NewReleasePrice()), 10));

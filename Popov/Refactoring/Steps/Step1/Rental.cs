@@ -22,9 +22,9 @@ namespace RefactoringDemo.Steps.Step1
         }
 
 
-        public int GetProfit()
+        public int GetBonusProfit()
         {
-            return Movie.GetProfit(DaysRented);
+            return Movie.GetBonusProfit(DaysRented);
         }
 
         public double GetCharge()

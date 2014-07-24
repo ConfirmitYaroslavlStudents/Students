@@ -39,7 +39,7 @@ namespace Set.Tests
         [Fact]
         public void Set_NegativeValue_ArgumentOutOfRangeExceptionThrown()
         {
-            Assert.Throws(typeof (ArgumentOutOfRangeException), () =>
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () =>
             {
                 var set = new Set<int>(-5);
             });
@@ -156,7 +156,7 @@ namespace Set.Tests
 
         [Theory]
         [InlineData(new int[0], new[] { 1, 3 }, true)]
-        [InlineData(new[] { 1, 3, 5, 7 }, new [] {1, 7}, false)]
+        [InlineData(new[] { 1, 3, 5, 7 }, new[] { 1, 7 }, false)]
         [InlineData(new[] { 1, 3, 5, 7, 9 }, new[] { 11, 7, 13, 3, 9, 15, 1, 5 }, true)]
         public void IsSubsetOf_OtherSet_AllShouldPass(int[] firstArray, int[] secondArray, bool expected)
         {
@@ -169,17 +169,20 @@ namespace Set.Tests
         [Fact]
         public void StatisticsCollector_MainSetMethodsCalls_ShouldGetRightStatistics()
         {
-            var statCollector = new StatisticsCollector();
-            var set = new Set<int>(new[] { 1, 3, 5, 7, 9 }, statCollector);
-            set.Remove(5);
-            set.Remove(1);
-            set.Remove(9);
+            var statisticsCollector = new StatisticsCollector();
+            var set = new Set<int>(new[] { 1, 3, 5, 7, 9 }, statisticsCollector);
+            set -= 5;
+            set -= 1;
+            set -= 9;
 
-            set.Add(15);
-            set.Remove(15);
+            set += 15;
+            set -= 15;
+
+            set += new Set<int>(new[] { 11, 15, 17 }, statisticsCollector);
+            set -= new Set<int>(new[] { 3, 11 }, statisticsCollector);
 
             set.Clear();
-            Assert.Equal(11, statCollector.Statistics);
+            Assert.Equal(58, statisticsCollector.Statistics);
         }
     }
 }

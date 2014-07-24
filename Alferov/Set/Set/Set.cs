@@ -12,7 +12,7 @@ namespace Set
 
         private T[] _items;
         private int _size;
-        private readonly StatisticsCollector _collector;
+        private readonly StatisticsCollector _statisticsCollector;
 
         public int Capacity
         {
@@ -25,9 +25,9 @@ namespace Set
                 {
                     Array.Copy(_items, 0, newItems, 0, _size);
 
-                    if (_collector != null)
+                    if (_statisticsCollector != null)
                     {
-                        _collector.ChangeStatistics(_size);
+                        _statisticsCollector.ChangeStatistics(_size);
                     }
                 }
                 _items = newItems;
@@ -39,24 +39,24 @@ namespace Set
             get { return _size; }
         }
 
-        public Set(StatisticsCollector collector = null)
+        public Set(StatisticsCollector statisticsCollector = null)
         {
-            _collector = collector;
+            _statisticsCollector = statisticsCollector;
             _items = new T[DefaultCapacity];
         }
 
-        public Set(int capacity, StatisticsCollector collector = null)
+        public Set(int capacity, StatisticsCollector statisticsCollector = null)
         {
             if (capacity < 0)
             {
                 throw new ArgumentOutOfRangeException("capacity");
             }
 
-            _collector = collector;
+            _statisticsCollector = statisticsCollector;
             _items = capacity > DefaultCapacity ? new T[capacity] : new T[DefaultCapacity];
         }
 
-        public Set(IEnumerable<T> collection, StatisticsCollector collector = null)
+        public Set(IEnumerable<T> collection, StatisticsCollector statisticsCollector = null)
         {
             if (collection == null)
             {
@@ -64,7 +64,7 @@ namespace Set
             }
 
             _items = new T[DefaultCapacity];
-            _collector = collector;
+            _statisticsCollector = statisticsCollector;
 
             foreach (var item in collection)
             {
@@ -86,7 +86,19 @@ namespace Set
 
             _items[_size++] = item;
 
+            if (_statisticsCollector != null)
+            {
+                _statisticsCollector.ChangeStatistics(1);
+            }
+
             return true;
+        }
+
+        public static Set<T> operator +(Set<T> set, T item)
+        {
+            var resultSet = new Set<T>(set, set._statisticsCollector);
+            resultSet.Add(item);
+            return resultSet;
         }
 
         private void EnsureCapacity(int minCapacity)
@@ -114,9 +126,9 @@ namespace Set
             {
                 Array.Clear(_items, 0, _size);
                 
-                if (_collector != null)
+                if (_statisticsCollector != null)
                 {
-                    _collector.ChangeStatistics(_size);
+                    _statisticsCollector.ChangeStatistics(_size);
                 }
 
                 _size = 0;
@@ -161,19 +173,26 @@ namespace Set
             {
                 Array.Copy(_items, index + 1, _items, index, _size - index);
 
-                if (_collector != null)
+                if (_statisticsCollector != null)
                 {
-                    _collector.ChangeStatistics(_size - index);
+                    _statisticsCollector.ChangeStatistics(_size - index);
                 }
             }
             _items[_size] = default(T);
 
-            if (_collector != null)
+            if (_statisticsCollector != null)
             {
-                _collector.ChangeStatistics(1);
+                _statisticsCollector.ChangeStatistics(1);
             }
 
             return true;
+        }
+
+        public static Set<T> operator -(Set<T> set, T item)
+        {
+            var resultSet = new Set<T>(set, set._statisticsCollector);
+            resultSet.Remove(item);
+            return resultSet;
         }
 
         public void UnionWith(Set<T> other)
@@ -187,6 +206,13 @@ namespace Set
             {
                 Add(item);
             }
+        }
+
+        public static Set<T> operator +(Set<T> firstSet, Set<T> secondSet)
+        {
+            var resultSet = new Set<T>(firstSet, firstSet._statisticsCollector);
+            resultSet.UnionWith(secondSet);
+            return resultSet;
         }
 
         public void IntersectWith(Set<T> other)
@@ -241,6 +267,13 @@ namespace Set
             {
                 Remove(element);
             }
+        }
+
+        public static Set<T> operator -(Set<T> firstSet, Set<T> secondSet)
+        {
+            var resultSet = new Set<T>(firstSet, firstSet._statisticsCollector);
+            resultSet.ExceptWith(secondSet);
+            return resultSet;
         }
 
         public bool IsSubsetOf(Set<T> other)

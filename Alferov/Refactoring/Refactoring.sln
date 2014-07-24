@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refactoring", "Refactoring\Refactoring.csproj", "{3C4B938B-CA96-4A2C-B26D-F3D21E7722CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refactoring.Tests", "Refactoring.Tests\Refactoring.Tests.csproj", "{A0C5967E-D602-43DA-BE7A-CF8ADC9746F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C4B938B-CA96-4A2C-B26D-F3D21E7722CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4B938B-CA96-4A2C-B26D-F3D21E7722CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4B938B-CA96-4A2C-B26D-F3D21E7722CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4B938B-CA96-4A2C-B26D-F3D21E7722CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0C5967E-D602-43DA-BE7A-CF8ADC9746F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0C5967E-D602-43DA-BE7A-CF8ADC9746F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0C5967E-D602-43DA-BE7A-CF8ADC9746F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0C5967E-D602-43DA-BE7A-CF8ADC9746F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

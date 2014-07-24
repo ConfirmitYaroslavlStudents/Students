@@ -1,6 +1,8 @@
 ﻿
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Cashe;
+using Cache;
+using System.Diagnostics;
 
 namespace UnitTestCashe
 {
@@ -10,76 +12,54 @@ namespace UnitTestCashe
         [TestMethod]
         public void TestEqualsKeys()
         {
-            var temp = new Cashe<int, string>();
-            for (var i = 0; i < 20; ++i)
+            var temp = new Cache<int, string>(new TestClassForCache());
+            Assert.AreEqual(temp[1],"1 HZ");
+                
+        }
+
+        [TestMethod]
+        public void TestSpeed()
+        {
+            var testCache = new Cache<int, string>(new TestClassForCache());
+            var timewatch = new Stopwatch();
+            string temp = null;
+            timewatch.Start();
+            for (var i = 0; i < 10; ++i)
             {
-                temp.Add(i, i+" letter");
+                temp = testCache[i];
             }
-            Assert.AreEqual(temp[2], 2 + " letter");            
+            var firstTime = timewatch.Elapsed;
+            timewatch.Restart();
+            for (var i = 0; i < 10; ++i)
+            {
+                temp = testCache[i];
+            }
+            var secondTime = timewatch.Elapsed;
+            Assert.AreEqual(firstTime.CompareTo(secondTime) == 1, true);
+        }
+
+        [TestMethod]
+        public void TestCapacity()
+        {
+            var testCache = new Cache<int, string>(new TestClassForCache());
+             Assert.AreEqual(testCache.Capacity, testCache.DefaultCapacity);
         }
 
         [TestMethod]
         public void TestCount()
         {
-            var temp = new Cashe<int, string>();
-            for (var i = 0; i < 20; ++i)
-            {
-                temp.Add(i, i + " letter");
-            }
-            Assert.AreEqual(temp.Count, 20);
+            var cache = new Cache<int, string>(new TestClassForCache());
+            var temp = cache[10];
+            Assert.AreEqual(cache.GetCount(),1);
         }
 
         [TestMethod]
-        public void TestRemoveElement()
+        public void TestTimeLive()
         {
-            var temp = new Cashe<int, string>();
-            for (var i = 0; i < 20; ++i)
-            {
-                temp.Add(i, i + " letter");
-            }
-            temp.Remove(0);
-            Assert.AreEqual(temp.ContainsKey(0), false);
+            var cache = new Cache<int, string>(new TestClassForCache(),10,new TimeSpan(0,0,2));
+            Assert.AreEqual(cache.TimeLive, new TimeSpan(0,0,2));
         }
-
-        [TestMethod]
-        public void TestRemoveElementAndEqualsCount()
-        {
-            const int length = 20;
-            var temp = new Cashe<int, string>();
-            for (var i = 0; i < length; ++i)
-            {
-                temp.Add(i, i + " letter");
-            }
-            temp.Remove(0);
-            Assert.AreEqual(temp.Count, length-1);
-        }
-
-        [TestMethod]
-        public void TestChangeCapacity()
-        {
-            const int length = 20;
-            var temp = new Cashe<int, string>();
-            for (var i = 0; i < length; ++i)
-            {
-                temp.Add(i, i + " letter");
-            }
-            temp.Capacity = 5;
-            Assert.AreEqual(temp.Capacity, 5);
-        }
-
-        [TestMethod]
-        public void TestClear()
-        {
-            var temp = new Cashe<int, string>();
-            for (var i = 0; i < 20; ++i)
-            {
-                temp.Add(i, i + " letter");
-            }
-            temp.ClearOrInitial();
-            Assert.AreEqual(temp.Count, 0);
-        }
-
-
+        
 
     }
 }

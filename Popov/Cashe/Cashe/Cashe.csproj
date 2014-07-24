@@ -7,7 +7,7 @@
     <ProjectGuid>{20E1832A-DE71-4A48-8D76-0A5B20FFAC95}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cashe</RootNamespace>
+    <RootNamespace>Cache</RootNamespace>
     <AssemblyName>Cashe</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cashe.cs" />
+    <Compile Include="Cache.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

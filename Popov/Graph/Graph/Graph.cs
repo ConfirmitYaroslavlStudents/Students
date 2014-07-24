@@ -114,39 +114,26 @@ namespace Graph
         /// View graph in width and showing progress
         /// </summary>
         /// <param name="vertex">The top which starts</param>
-        public void ViewWidth(T vertex)
+        /// <param name="action">The action running with each item</param>
+        public void ViewWidth(T vertex, Action<T> action)
         {
             if (_vertexDictionary.ContainsKey(vertex))
             {
-                Console.WriteLine();
-                Console.Write("View in width :  ");
-
                 var queueVertex = new Queue<T>();
                 var vertexList  = new List<T>();
-                var flagInsertSpace = false;
                 queueVertex.Enqueue(vertex);
                 vertexList.Add(vertex);
-                Console.Write(vertex+" : ");
-
                 while (queueVertex.Count != 0)
                 {
                     var top = queueVertex.Dequeue();
                     foreach (var item in _vertexDictionary[top])
                     {
-                        if ((!vertexList.Contains(item)) && (!queueVertex.Contains(item)))
-                        {
-                            queueVertex.Enqueue(item);
-                            vertexList.Add(item);
-                            Console.Write(item + " ");
-                            flagInsertSpace = true;
-                        }
+                        if ((vertexList.Contains(item)) || (queueVertex.Contains(item))) continue;
+                        queueVertex.Enqueue(item);
+                        vertexList.Add(item);
+                        action.Invoke(item);
                     }
-
-                    if (!flagInsertSpace) continue;
-                    Console.Write(" : ");
-                    flagInsertSpace = false;
                 }
-                Console.WriteLine();
             }
             else
             {
@@ -158,39 +145,26 @@ namespace Graph
         /// View graph in depth and showing progress
         /// </summary>
         /// <param name="vertex">The top which starts</param>
-        public void ViewDepth(T vertex)
+        /// <param name="action">The action running with each item</param>
+        public void ViewDepth(T vertex, Action<T> action)
         {
             if (_vertexDictionary.ContainsKey(vertex))
             {
                 var stackVertex = new Stack<T>();
                 var vertexList = new List<T>();
-                var flagInsertSpace = false;
                 stackVertex.Push(vertex);
                 vertexList.Add(vertex);
-
-                Console.WriteLine();
-                Console.Write("View in depth :  ");
-                Console.Write(vertex + " : ");
                 while (stackVertex.Count != 0)
                 {
                     var top = stackVertex.Pop();
-
                     foreach (var item in _vertexDictionary[top])
                     {
-                        if ((!vertexList.Contains(item)) && (!stackVertex.Contains(item)))
-                        {
-                            stackVertex.Push(item);
-                            vertexList.Add(item);
-                            Console.Write(item + " ");
-                            flagInsertSpace = true;
-                        }
+                        if ((vertexList.Contains(item)) || (stackVertex.Contains(item))) continue;
+                        stackVertex.Push(item);
+                        vertexList.Add(item);
+                        action.Invoke(item);
                     }
-                    if (!flagInsertSpace) continue;
-                    Console.Write(" : ");
-                    flagInsertSpace = false;
-
                 }
-                Console.WriteLine();
             }
             else
             {

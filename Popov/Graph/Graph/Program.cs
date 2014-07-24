@@ -25,8 +25,8 @@ namespace Graph
 
             menu.AddCommand("Print graph to console", () => PrintToConsole(gr));
             menu.AddCommand("Print graph to console as matrix", () => PrintToConsoleMatrix(gr));
-            menu.AddCommand("View process going graph in width", () => gr.ViewWidth("C"));
-            menu.AddCommand("View process going graph in depth", () => gr.ViewDepth("C"));
+            menu.AddCommand("View process going graph in width", () => gr.ViewWidth("C", s => Console.Write(s + " ")));
+            menu.AddCommand("View process going graph in depth", () => gr.ViewDepth("C", s => Console.Write(s + " ")));
             menu.Show();
 
 
@@ -51,11 +51,11 @@ namespace Graph
             catch (Exception) { }
 
             
-            
+
 
         }
 
-        static void PrintToConsole<T>(IEnumerable<KeyValuePair<T, HashSet<T>>> gr)
+       static void PrintToConsole<T>(IEnumerable<KeyValuePair<T, HashSet<T>>> gr)
         {
             foreach (var vertex in gr)
             {

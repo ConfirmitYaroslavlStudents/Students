@@ -7,8 +7,8 @@ namespace RefreshingCache.Tests
     public class RefreshingCacheTests
     {
         private const int CacheSize = 16;
-        private const int Lifetime = 1000;
-        private const int TimeMoreThanMax = 1001;
+        private const long ExpirationTime = 1000;
+        private const long TimeMoreThanMax = 1001;
 
         private class Computer : IComputer<int, string>
         {
@@ -29,7 +29,7 @@ namespace RefreshingCache.Tests
         public void RefreshingCacheIndexer_SimpleIntegerValue_ShouldPass()
         {
             var systemTime = new Time();
-            var cache = new RefreshingCache<int, string>(CacheSize, Lifetime, new Computer(), systemTime);
+            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), systemTime);
             var actual = cache[0];
 
             Assert.Equal("0", actual);
@@ -42,7 +42,7 @@ namespace RefreshingCache.Tests
             var computer = new Computer();
             
             string temp;
-            var cache = new RefreshingCache<int, string>(CacheSize, Lifetime, computer, systemTime);
+            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, computer, systemTime);
 
             for (int i = 0; i < 16; ++i)
             {
@@ -66,7 +66,7 @@ namespace RefreshingCache.Tests
         {
             var systemTime = new Time();
 
-            var cache = new RefreshingCache<int, string>(CacheSize, Lifetime, new Computer(), systemTime);
+            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), systemTime);
             for (int i = 0; i < 20; ++i)
             {
                 ++systemTime.CurrentTime;
@@ -82,7 +82,7 @@ namespace RefreshingCache.Tests
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
                 Computer computer = null;
-                new RefreshingCache<int, string>(CacheSize, Lifetime, computer, new Time());
+                new RefreshingCache<int, string>(CacheSize, ExpirationTime, computer, new Time());
             });
         }
 
@@ -92,7 +92,7 @@ namespace RefreshingCache.Tests
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
                 Time time = null;
-                new RefreshingCache<int, string>(CacheSize, Lifetime, new Computer(), time);
+                new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), time);
             });
         }
     }

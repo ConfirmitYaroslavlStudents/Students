@@ -4,29 +4,29 @@ using System.Linq;
 
 namespace RefreshingCache
 {
-    public class RefreshingCache<TKey, TValue>
+    public class RefreshingCache<TKey, TValue> : IComputer<TKey, TValue>
     {
         private readonly int _maxCacheSize;
-        private readonly int _maxLifetime;
+        private readonly long _expirationTime;
 
         private class Entry
         {
             private readonly long _creationTime;
-            private readonly long _lifetime;
+            private readonly long _expirationTime;
 
             public TValue Value { get; private set; }
             public long LastAccessTime { get; set; }
 
-            public Entry(TValue value, long lifetime, ITime time)
+            public Entry(TValue value, long expirationTime, ITime time)
             {
                 Value = value;
-                _lifetime = lifetime;
+                _expirationTime = expirationTime;
                 _creationTime = time.CurrentTime;
             }
 
             public bool IsExpired(ITime time)
             {
-                return (time.CurrentTime - _creationTime >= _lifetime);
+                return (time.CurrentTime - _creationTime >= _expirationTime);
             }
         }
 
@@ -52,10 +52,10 @@ namespace RefreshingCache
             get { return _data.Count; }
         }
 
-        public RefreshingCache(int maxCacheSize, int maxLifetime, IComputer<TKey, TValue> computer, ITime cacheTime)
+        public RefreshingCache(int maxCacheSize, long expirationTime, IComputer<TKey, TValue> computer, ITime cacheTime)
         {
             _maxCacheSize = maxCacheSize;
-            _maxLifetime = maxLifetime;
+            _expirationTime = expirationTime;
 
             _data = new Dictionary<TKey, Entry>();
 
@@ -77,31 +77,27 @@ namespace RefreshingCache
         {
             if (_data.Count == _maxCacheSize)
             {
-                var expirationDataKey = GetExpirationDataKey();
-
-                if (expirationDataKey != null)
-                {
-                    RemoveEntry((TKey)expirationDataKey);
-                }
-                else
+                if (!RemoveExpirationData())
                 {
                     var minKey = GetLeastRecentlyUsedKey();
                     RemoveEntry(minKey);
                 }
             }
-            _data.Add(key, new Entry(value, _maxLifetime, _cacheTime));
+            _data.Add(key, new Entry(value, _expirationTime, _cacheTime));
         }
 
-        private object GetExpirationDataKey()
+        private bool RemoveExpirationData()
         {
             foreach (var keyValuePair in _data)
             {
                 if (keyValuePair.Value.IsExpired(_cacheTime))
                 {
-                    return keyValuePair.Key;
+                    RemoveEntry(keyValuePair.Key);
+                    return true;
                 }
             }
-            return null;
+
+            return false;
         }
 
         private TKey GetLeastRecentlyUsedKey()
@@ -124,6 +120,11 @@ namespace RefreshingCache
         private void RemoveEntry(TKey key)
         {
             _data.Remove(key);
+        }
+
+        public TValue GetData(TKey key)
+        {
+            return this[key];
         }
     }
 }

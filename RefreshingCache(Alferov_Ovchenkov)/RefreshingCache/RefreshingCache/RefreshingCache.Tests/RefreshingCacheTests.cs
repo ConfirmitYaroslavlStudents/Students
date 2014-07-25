@@ -7,9 +7,8 @@ namespace RefreshingCache.Tests
     public class RefreshingCacheTests
     {
         private const int CacheSize = 16;
-        private const int ExpirationTime = 1000;
-        private const int TimeUpperThanMax = 1001;
-        private const int TimeLowerThanMax = 999;
+        private const int Lifetime = 1000;
+        private const int TimeMoreThanMax = 1001;
 
         private class Computer : IComputer<int, string>
         {
@@ -30,10 +29,8 @@ namespace RefreshingCache.Tests
         public void RefreshingCacheIndexer_SimpleIntegerValue_ShouldPass()
         {
             var systemTime = new Time();
-            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), systemTime);
-
+            var cache = new RefreshingCache<int, string>(CacheSize, Lifetime, new Computer(), systemTime);
             var actual = cache[0];
-            systemTime.CurrentTime = TimeLowerThanMax;
 
             Assert.Equal("0", actual);
         }
@@ -45,7 +42,7 @@ namespace RefreshingCache.Tests
             var computer = new Computer();
             
             string temp;
-            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, computer, systemTime);
+            var cache = new RefreshingCache<int, string>(CacheSize, Lifetime, computer, systemTime);
 
             for (int i = 0; i < 16; ++i)
             {
@@ -53,12 +50,12 @@ namespace RefreshingCache.Tests
                 temp = cache[i];
             }
 
-            systemTime.CurrentTime = TimeUpperThanMax;
+            systemTime.CurrentTime = TimeMoreThanMax;
            
             //we add new data with key "17". It replaces data with key "0" because our time expired. 
             temp = cache[17];
             
-            //And when we try get data with key "0", cache gets it from computer.
+            //And when we try get data with key "0", cache gets it from computer, because it was deleted early.
             temp = cache[0];
 
             Assert.Equal("0", computer.LastData);
@@ -69,7 +66,7 @@ namespace RefreshingCache.Tests
         {
             var systemTime = new Time();
 
-            var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), systemTime);
+            var cache = new RefreshingCache<int, string>(CacheSize, Lifetime, new Computer(), systemTime);
             for (int i = 0; i < 20; ++i)
             {
                 ++systemTime.CurrentTime;
@@ -85,7 +82,7 @@ namespace RefreshingCache.Tests
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
                 Computer computer = null;
-                new RefreshingCache<int, string>(CacheSize, ExpirationTime, computer, new Time());
+                new RefreshingCache<int, string>(CacheSize, Lifetime, computer, new Time());
             });
         }
 
@@ -95,7 +92,7 @@ namespace RefreshingCache.Tests
             Assert.Throws(typeof(ArgumentNullException), () =>
             {
                 Time time = null;
-                new RefreshingCache<int, string>(CacheSize, ExpirationTime, new Computer(), time);
+                new RefreshingCache<int, string>(CacheSize, Lifetime, new Computer(), time);
             });
         }
     }

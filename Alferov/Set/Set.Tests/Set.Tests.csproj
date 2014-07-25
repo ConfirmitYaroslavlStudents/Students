@@ -41,10 +41,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="xunit">
-      <HintPath>..\..\..\..\..\xunit-build-1705\xunit.dll</HintPath>
+      <HintPath>packages\xunit\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions">
-      <HintPath>..\..\..\..\..\xunit-build-1705\xunit.extensions.dll</HintPath>
+      <HintPath>packages\xunit\xunit.extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>

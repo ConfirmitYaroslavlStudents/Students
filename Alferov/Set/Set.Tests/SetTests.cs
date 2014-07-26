@@ -15,6 +15,7 @@ namespace Set.Tests
             set.Add(1);
             set.Add(2);
             set.Add(2);
+
             Assert.Equal(expectedSet, set);
         }
 
@@ -50,6 +51,7 @@ namespace Set.Tests
         {
             var set = new Set<int>(new[] { 1, 3, 5, 5, 7, 7, 3, 1 });
             var expectedSet = new Set<int>(new[] { 1, 3, 5, 7 });
+
             Assert.Equal(expectedSet, set);
         }
 
@@ -58,6 +60,7 @@ namespace Set.Tests
         {
             var set = new Set<int>(new[] { 0, 2, 4 });
             set.Clear();
+
             Assert.Equal(0, set.Count);
         }
 
@@ -68,6 +71,7 @@ namespace Set.Tests
         {
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             bool actual = set.Contains(element);
+
             Assert.Equal(expected, actual);
         }
 
@@ -80,6 +84,7 @@ namespace Set.Tests
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             var expectedSet = new Set<int>(expected);
             set.Remove(element);
+
             Assert.Equal(expectedSet, set);
         }
 
@@ -93,6 +98,7 @@ namespace Set.Tests
             var secondSet = new Set<int>(secondArray);
             var expectedSet = new Set<int>(expected);
             firstSet.UnionWith(secondSet);
+
             Assert.Equal(expectedSet, firstSet);
         }
 
@@ -106,6 +112,7 @@ namespace Set.Tests
             var secondSet = new Set<int>(secondArray);
             var expectedSet = new Set<int>(expected);
             firstSet.IntersectWith(secondSet);
+
             Assert.Equal(expectedSet, firstSet);
         }
 
@@ -120,6 +127,7 @@ namespace Set.Tests
             var secondSet = new Set<int>(secondArray);
             var expectedSet = new Set<int>(expected);
             firstSet.ExceptWith(secondSet);
+
             Assert.Equal(expectedSet, firstSet);
         }
 
@@ -129,6 +137,7 @@ namespace Set.Tests
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             var expectedSet = new Set<int>();
             set.ExceptWith(set);
+
             Assert.Equal(expectedSet, set);
         }
 
@@ -142,6 +151,7 @@ namespace Set.Tests
             var secondSet = new Set<int>(secondArray);
             var expectedSet = new Set<int>(expected);
             firstSet.SymmetricExceptWith(secondSet);
+
             Assert.Equal(expectedSet, firstSet);
         }
 
@@ -151,6 +161,7 @@ namespace Set.Tests
             var set = new Set<int>(new[] { 1, 3, 5, 7, 9 });
             var expectedSet = new Set<int>();
             set.ExceptWith(set);
+
             Assert.Equal(expectedSet, set);
         }
 
@@ -163,7 +174,18 @@ namespace Set.Tests
             var firstSet = new Set<int>(firstArray);
             var secondSet = new Set<int>(secondArray);
             bool actual = firstSet.IsSubsetOf(secondSet);
+
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void StatisticsCollector_NullStatisticsCollector_ShouldGetRightStatistics()
+        {
+            var set = new Set<int>(new[] {1, 3, 5, 7, 9});
+            set.Add(5);
+            set.Remove(7);
+
+            Assert.Equal(0, set.StatisticsCollector.Statistics);
         }
 
         [Fact]
@@ -182,6 +204,7 @@ namespace Set.Tests
             set -= new Set<int>(new[] { 3, 11 }, statisticsCollector);
 
             set.Clear();
+
             Assert.Equal(58, statisticsCollector.Statistics);
         }
     }

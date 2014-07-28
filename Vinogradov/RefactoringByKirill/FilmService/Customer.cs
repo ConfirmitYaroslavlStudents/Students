@@ -1,46 +1,31 @@
 ﻿using System.Collections.Generic;
-using FilmService.KindsOfMovies;
+using FilmService.KindsOfGenerators;
 
 namespace FilmService
 {
     public class Customer
     {
-        public Customer(string name)
+        public StatementGenerator CurrentStatementGenerator
         {
-            Name = name;
-            Rentals = new List<Rental>();
-        }
-
-        public string Name
-        {
-            get; 
+            get;
             set;
         }
-
+        public string Name
+        {
+            get;
+            set;
+        }
         public List<Rental> Rentals
         {
-            get; 
+            get;
             private set;
         }
 
-        public string Statement()
+        public Customer(string name, StatementGenerator currentStatementGenerator)
         {
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
-            string result = "Учет аренды для " + Name + "\n";
-            foreach (var rental in Rentals)
-            {
-                var thisAmount = rental.Movie.CurrentCalculator.Calculate(rental.DaysRented);
-
-                frequentRenterPoints+=rental.GetPoints();
-
-                result += "\t" + rental.Movie.Title + "\t" + thisAmount + "\n";
-                totalAmount += thisAmount;
-            }
-
-            result += "Сумма задолженности составляет " + totalAmount + "\n";
-            result += "Вы заработали " + frequentRenterPoints + " за активность";
-            return result;
+            Name = name;
+            Rentals = new List<Rental>();
+            CurrentStatementGenerator = currentStatementGenerator;
         }
     }
 }

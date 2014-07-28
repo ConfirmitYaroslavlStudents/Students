@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RefreshingCacheLibrary;
 
-namespace RefreshingCacheLibrary
+namespace UnitTestProjectForRefreshingCache
 {
     public class SlowDatabase : ICanGetValue<int, string>
     {
@@ -24,7 +25,8 @@ namespace RefreshingCacheLibrary
             slowBigCache[11] = "Geronimo";
         }
 
-        public string GetValue(int key)
+
+        public string GetValue(int key, DateTime now)
         {
             if (slowBigCache.ContainsKey(key))
             {
@@ -34,6 +36,11 @@ namespace RefreshingCacheLibrary
             {
                 return default(string);
             }
+        }
+
+        public bool Contains(int key)
+        {
+            return slowBigCache.ContainsKey(key);
         }
     }
 }

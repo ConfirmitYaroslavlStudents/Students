@@ -9,21 +9,17 @@ namespace FilmService
             get;
             set;
         }
-
         public int DaysRented
         {
             get;
             set;
         }
 
-        public int GetPoints()
+        public Rental(Movie movie, int daysRented)
         {
-            var addedPoints = 1;
-            if (Movie.CurrentCalculator is CalculatorForNewReleaseMovie && DaysRented > 1)
-            {
-                addedPoints++;
-            }
-            return addedPoints;
+            Movie = movie;
+            DaysRented = daysRented;
         }
+
     }
 }

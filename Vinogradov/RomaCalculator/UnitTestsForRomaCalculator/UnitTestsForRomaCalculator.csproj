@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ECAD1465-CAED-4BD4-B339-C98C8EBF0D53}</ProjectGuid>
+    <ProjectGuid>{54EA8BD5-7369-42CE-8587-5860BDF370F5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTestProjectForRefreshingCache</RootNamespace>
-    <AssemblyName>UnitTestProjectForRefreshingCache</AssemblyName>
+    <RootNamespace>UnitTestsForRomaCalculator</RootNamespace>
+    <AssemblyName>UnitTestsForRomaCalculator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,14 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="RefreshingCacheTests.cs" />
+    <Compile Include="RomaCalculatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SlowDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RefreshingCacheLibrary\RefreshingCacheLibrary.csproj">
-      <Project>{8e84a080-3262-451a-8de9-615114e615dd}</Project>
-      <Name>RefreshingCacheLibrary</Name>
+    <ProjectReference Include="..\RomaCalculator\RomaCalculator.csproj">
+      <Project>{41da0793-a9e8-4f78-a195-94c62ed1dbaf}</Project>
+      <Name>RomaCalculator</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -5,68 +5,84 @@ using System.Runtime.Remoting.Messaging;
 
 namespace RefreshingCacheLibrary
 {
-    public class FastRefreshingCache<TKey, TValue>
+    public class FastRefreshingCache<TKey, TValue> : ICanGetValue<TKey, TValue>
     {
-        private int fastCacheCapacity = 10;
-        private int lifetimeInMilliseconds = 1;
-        private Dictionary<TKey, TValue> fastCache;
-        private Dictionary<TKey, DateTime> additionLog;
+        private int _fastCacheCapacity;
+        private int _lifetimeInMilliseconds;
+        private Dictionary<TKey, TValue> _fastCache;
+        private Dictionary<TKey, DateTime> _additionLog;
         private ICanGetValue<TKey,TValue> _currentSlowDatabase;
 
-        public FastRefreshingCache(ICanGetValue<TKey, TValue> currentSlowDatabase)
+        public int Count
         {
-            fastCache = new Dictionary<TKey, TValue>();
-            additionLog = new Dictionary<TKey, DateTime>();
+            get { return _fastCache.Count; }
+        }
+
+        public FastRefreshingCache(ICanGetValue<TKey, TValue> currentSlowDatabase, int lifetimeInMilliseconds, int fastCacheCapacity)
+        {
+            _fastCache = new Dictionary<TKey, TValue>();
+            _additionLog = new Dictionary<TKey, DateTime>();
             _currentSlowDatabase = currentSlowDatabase;
-        }
-
-        public TValue GetValue(TKey key)
-        {
-            var keyForOldest=Refresh();
-            if (!fastCache.ContainsKey(key))
+            if (lifetimeInMilliseconds <= 0)
             {
-                if (fastCache.Count == fastCacheCapacity)
-                {
-                    additionLog.Remove(keyForOldest);
-                    fastCache.Remove(keyForOldest);
-                }
+                _lifetimeInMilliseconds = 1000;
             }
-            additionLog[key] = DateTime.Now;
-            fastCache[key] = _currentSlowDatabase.GetValue(key);
-            return fastCache[key];
+            else
+            {
+                _lifetimeInMilliseconds = lifetimeInMilliseconds;
+            }
+            if (fastCacheCapacity <= 0)
+            {
+                _fastCacheCapacity = 1000;
+            }
+            else
+            {
+                _fastCacheCapacity = fastCacheCapacity;
+            }
         }
 
-        public TKey Refresh()
+        public TValue GetValue(TKey key,DateTime now)
         {
-            var now = DateTime.Now;
+            Refresh(true,now);
+            _additionLog[key] = now;
+            _fastCache[key] = _currentSlowDatabase.GetValue(key,now);
+            return _fastCache[key];
+        }
+
+        private void Refresh(bool removeOldest, DateTime now)
+        {
             DateTime timeOfCreation;
-            var listOfKeys = fastCache.Keys.ToList();
+            var listOfKeys = _fastCache.Keys.ToList();
             var oldest = new DateTime(9999, 1, 1);
             TKey keyForOldest = default (TKey);
             for (int i = 0; i < listOfKeys.Count; i++)
             {
-                timeOfCreation = additionLog[listOfKeys[i]];
-                timeOfCreation = timeOfCreation.AddMilliseconds(lifetimeInMilliseconds);
+                timeOfCreation = _additionLog[listOfKeys[i]];
+                timeOfCreation = timeOfCreation.AddMilliseconds(_lifetimeInMilliseconds);
                 if (timeOfCreation < now)
                 {
-                    fastCache.Remove(listOfKeys[i]);
-                    additionLog.Remove(listOfKeys[i]);
+                    _fastCache.Remove(listOfKeys[i]);
+                    _additionLog.Remove(listOfKeys[i]);
                 }
                 else
                 {
                     if (timeOfCreation < oldest)
                     {
                         keyForOldest = listOfKeys[i];
-                        oldest = additionLog[keyForOldest];
+                        oldest = _additionLog[keyForOldest];
                     }
                 }
             }
-            return keyForOldest;
+            if (_fastCache.Count == _fastCacheCapacity && removeOldest)
+            {
+                _fastCache.Remove(keyForOldest);
+                _additionLog.Remove(keyForOldest);
+            }
         }
 
         public bool Contains(TKey key)
         {
-            return fastCache.ContainsKey(key);
+            return _fastCache.ContainsKey(key);
         }
     }
 }

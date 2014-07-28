@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using RefreshingCacheLibrary;
 
@@ -11,9 +12,9 @@ namespace UnitTestProjectForRefreshingCache
         public void ContainsTrue()
         {
             var myDatabase = new SlowDatabase();
-            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
-            var stringOne = myRefreshingCache.GetValue(0);
-            var result = myRefreshingCache.Contains(0);
+            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase,1000,10);
+            myRefreshingCache.GetValue(10,DateTime.Now);
+            var result = myRefreshingCache.Contains(10);
             Assert.AreEqual(true, result);
         }
 
@@ -21,9 +22,9 @@ namespace UnitTestProjectForRefreshingCache
         public void ContainsFalse()
         {
             var myDatabase = new SlowDatabase();
-            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
-            var stringOne = myRefreshingCache.GetValue(0);
-            var result = myRefreshingCache.Contains(1);
+            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
+            var stringOne = myRefreshingCache.GetValue(10,DateTime.Now);
+            var result = myRefreshingCache.Contains(11);
             Assert.AreEqual(false, result);
         }
 
@@ -31,28 +32,46 @@ namespace UnitTestProjectForRefreshingCache
         public void GetAllAndContainsFirst()
         {
             var myDatabase = new SlowDatabase();
-            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
-            string currentValue;
+            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
             for (int i = 0; i < 12; i++)
             {
-                currentValue = myRefreshingCache.GetValue(i);
+                myRefreshingCache.GetValue(i,DateTime.Now);
             }
             var result = myRefreshingCache.Contains(0);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void MoveElement()
+        public void WhereWasElement()
         {
             var myDatabase = new SlowDatabase();
-            var myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase);
-            var currentValue = myRefreshingCache.GetValue(10); ;
-            for (int i = 0; i < 99; i++)
+            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
+            var before = myRefreshingCache.Contains(10);
+            var currentValue = myRefreshingCache.GetValue(10,DateTime.Now);
+            var after = myRefreshingCache.Contains(10);
+            bool result=false;
+            if (before == false && after == true)
             {
-                myRefreshingCache.Refresh();
+                result = true;
             }
-            var result = myRefreshingCache.Contains(0);
-            Assert.AreEqual(false, result);
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void StorageLife()
+        {
+            var myDatabase = new SlowDatabase();
+            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
+            myRefreshingCache.GetValue(0, DateTime.Now);
+            myRefreshingCache.GetValue(5, DateTime.Now.AddMilliseconds(1500));
+            var zero = myRefreshingCache.Contains(0);
+            var five = myRefreshingCache.Contains(5);
+            bool result = false;
+            if (zero == false && five == true)
+            {
+                result = true;
+            }
+            Assert.AreEqual(true, result);
         }
     }
 }

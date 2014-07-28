@@ -1,8 +1,8 @@
-﻿namespace FilmService
+﻿namespace FilmService.KindsOfMovies
 {
     public abstract class CalculatorForMovie
     {
-        internal double result = 0.0;
         public abstract double Calculate(int daysRented);
+        public abstract int GetPoints();
     }
 }

@@ -87,109 +87,18 @@ namespace RomaCalculator
                     result.Append("-");
                     arabNumber = -arabNumber;
                 }
+                var arab = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+                var roman = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+                var index = 0;
                 while (arabNumber != 0)
                 {
-                    if (arabNumber / 1000 != 0)
+                    index = 0;
+                    while ((index != 13) && (arabNumber >= arab[index]))
                     {
-                        result.Append("M");
-                        arabNumber -= 1000;
+                        index++;
                     }
-                    else
-                    {
-                        if (arabNumber / 900 != 0)
-                        {
-                            result.Append("CM");
-                            arabNumber -= 900;
-                        }
-                        else
-                        {
-                            if (arabNumber / 500 != 0)
-                            {
-                                result.Append("D");
-                                arabNumber -= 500;
-                            }
-                            else
-                            {
-                                if (arabNumber / 400 != 0)
-                                {
-                                    result.Append("CD");
-                                    arabNumber -= 400;
-                                }
-                                else
-                                {
-                                    if (arabNumber / 100 != 0)
-                                    {
-                                        result.Append("C");
-                                        arabNumber -= 100;
-                                    }
-                                    else
-                                    {
-                                        if (arabNumber / 90 != 0)
-                                        {
-                                            result.Append("XC");
-                                            arabNumber -= 90;
-                                        }
-                                        else
-                                        {
-                                            if (arabNumber / 50 != 0)
-                                            {
-                                                result.Append("L");
-                                                arabNumber -= 50;
-                                            }
-                                            else
-                                            {
-                                                if (arabNumber / 40 != 0)
-                                                {
-                                                    result.Append("XL");
-                                                    arabNumber -= 40;
-                                                }
-                                                else
-                                                {
-                                                    if (arabNumber / 10 != 0)
-                                                    {
-                                                        result.Append("X");
-                                                        arabNumber -= 10;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (arabNumber / 9 != 0)
-                                                        {
-                                                            result.Append("IX");
-                                                            arabNumber -= 9;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (arabNumber / 5 != 0)
-                                                            {
-                                                                result.Append("V");
-                                                                arabNumber -= 5;
-                                                            }
-                                                            else
-                                                            {
-                                                                if (arabNumber / 4 != 0)
-                                                                {
-                                                                    result.Append("IV");
-                                                                    arabNumber -= 4;
-                                                                }
-                                                                else
-                                                                {
-                                                                    if (arabNumber / 1 != 0)
-                                                                    {
-                                                                        result.Append("I");
-                                                                        arabNumber -= 1;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    arabNumber -= arab[index - 1];
+                    result.Append(roman[index - 1]);
                 }
             }
             return result.ToString();

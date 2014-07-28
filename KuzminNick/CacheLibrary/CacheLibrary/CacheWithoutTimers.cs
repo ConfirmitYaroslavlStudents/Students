@@ -2,35 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using CacheLibrary;
+using CacheWithoutTimers;
 
 namespace CacheLibraryWithoutTimers
 {
-    public class CacheWithoutTimers<T>
+    public class CacheWithoutTimers<T> : IDataBase<T>
     {
         private readonly Dictionary<string, Element<T>> _cache;
         private int _capacity;
         private readonly int _limitTimeStoringInCacheInSeconds;
         private readonly Stopwatch _cacheStopwatch = new Stopwatch();
         private readonly IDataBase<T> _slowDataBase;
-
-        public CacheWithoutTimers(IDataBase<T> slowDataBase)
-        {
-            _cache = new Dictionary<string, Element<T>>();
-            _capacity = 10;
-            _limitTimeStoringInCacheInSeconds = 5;
-            _slowDataBase = slowDataBase;
-            _cacheStopwatch.Start();
-        }
-
-        public CacheWithoutTimers(int capacity, IDataBase<T> slowDataBase)
-        {
-            _cache = new Dictionary<string, Element<T>>();
-            _capacity = capacity;
-            _limitTimeStoringInCacheInSeconds = 5;
-            _slowDataBase = slowDataBase;
-            _cacheStopwatch.Start();
-        }
 
         public CacheWithoutTimers(int capacity, int limitTimeStoringInCacheInSeconds, IDataBase<T> slowDataBase)
         {
@@ -41,6 +23,14 @@ namespace CacheLibraryWithoutTimers
             _cacheStopwatch.Start();
         }
 
+        public CacheWithoutTimers(IDataBase<T> slowDataBase) 
+            : this(10, 5, slowDataBase)
+        { }
+
+        public CacheWithoutTimers(int capacity, IDataBase<T> slowDataBase)
+            : this(capacity, 5, slowDataBase)
+        { }
+
         public int Capacity
         {
             get { return _capacity; }
@@ -48,36 +38,44 @@ namespace CacheLibraryWithoutTimers
             {
                 if (value > 0 && value > _capacity)
                     _capacity = value;
-
-                throw new ArgumentOutOfRangeException();
+                else
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        public int CurrentSize
+        public int Count
         {
             get { return _cache.Count; }
         }
-
-        private string IdentifierMostUsedElement { get; set; }
-
-        public Element<T> GetItemByIdentifier(string identifier, ref string typeOfStorage)
+        
+        public T GetItemById(string id)
         {
-            if (!_cache.ContainsKey(identifier))
-            {
-                typeOfStorage = "Taken from Slow DataBase";
-                var elementFromRemotingDataBase = GetItemFromRemotingDataBase(identifier);
-                AddItem(elementFromRemotingDataBase);
-                return elementFromRemotingDataBase;
-            }
-
-            typeOfStorage = "Taken from Cache";
-            _cache[identifier].FrequencyUsage++;
-            return _cache[identifier];
+            return GetElementById(id).Value;
         }
 
-        private Element<T> GetItemFromRemotingDataBase(string identifier)
+        public Element<T> GetElementById(string id)
         {
-            return _slowDataBase.GetItemByIdentifier(identifier);
+            if (_cache.ContainsKey(id))
+            {
+                _cache[id].FrequencyUsage++;
+                _cache[id].TimeOfLastUsingInSeconds = _cacheStopwatch.Elapsed.Seconds;
+                _cache[id].TypeOfStorage = "Cache";
+                return _cache[id];
+            }
+
+            var itemFromDataBase = GetItemFromRemoteDataBase(id);
+            var element = new Element<T>(id, itemFromDataBase)
+            {
+                TimeOfLastUsingInSeconds = _cacheStopwatch.Elapsed.Seconds,
+                TypeOfStorage = "Data Base"
+            };
+            AddItem(element);
+            return element;
+        }
+
+        private T GetItemFromRemoteDataBase(string identifier)
+        {
+            return _slowDataBase.GetItemById(identifier);
         }
 
         private void AddItem(Element<T> element)
@@ -94,26 +92,22 @@ namespace CacheLibraryWithoutTimers
 
         private bool CacheIsFull()
         {
-            return Capacity == CurrentSize;
+            return Capacity == Count;
         }
 
         private string FindKeyLeastUsedElement(string keyJustAddedElement)
         {
-            var keyRemovedElement = IdentifierMostUsedElement;
+            var keyRemovedElement = String.Empty;
+            var minFrequencyUsage = int.MaxValue;
             foreach (var item in _cache)
             {
                 if (item.Key == keyJustAddedElement)
                     continue;
 
-                if (item.Value.FrequencyUsage == 0)
+                if (item.Value.FrequencyUsage < minFrequencyUsage)
                 {
                     keyRemovedElement = item.Key;
-                    break;
-                }
-
-                if (item.Value.FrequencyUsage < _cache[keyRemovedElement].FrequencyUsage)
-                {
-                    keyRemovedElement = item.Key;
+                    minFrequencyUsage = item.Value.FrequencyUsage;
                 }
             }
             return keyRemovedElement;
@@ -121,12 +115,11 @@ namespace CacheLibraryWithoutTimers
 
         private void RemoveOutdateElementsFromCache()
         {
-            var keysRemovingElements = GetKeysRemovingElements();
+            var keysRemovingElements = GetKeysOfRemovingElements();
             RemoveElementsByKeys(keysRemovingElements);
-            IdentifierMostUsedElement = GetIdentifierMostUsedElement();
         }
 
-        private List<string> GetKeysRemovingElements()
+        private List<string> GetKeysOfRemovingElements()
         {
             return _cache
                 .Where(pair => IsExceededStorageLimit(pair))
@@ -144,23 +137,11 @@ namespace CacheLibraryWithoutTimers
 
         private bool IsExceededStorageLimit(KeyValuePair<string, Element<T>> pair)
         {
-            return pair.Value.TimeLastUsingInSeconds - _cacheStopwatch.Elapsed.Seconds >=
+            return pair.Value.TimeOfLastUsingInSeconds - _cacheStopwatch.Elapsed.Seconds >=
                    _limitTimeStoringInCacheInSeconds;
         }
-        private string GetIdentifierMostUsedElement()
-        {
-            var updatedIdentifierMostUsedElement = IdentifierMostUsedElement;
-            foreach (var element in _cache)
-            {
-                if (element.Value.FrequencyUsage > _cache[IdentifierMostUsedElement].FrequencyUsage)
-                {
-                    updatedIdentifierMostUsedElement = element.Value.Identifier;
-                }
-            }
-            return updatedIdentifierMostUsedElement;
-        }
 
-        public string GetAllElementsCacheInStringFormat()
+        public string GetAllElementsOfCacheInStringFormat()
         {
             var allElementsInStringFormat = "";
             foreach (var cacheElement in _cache)

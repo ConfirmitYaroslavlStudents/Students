@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CacheWithoutTimers">
-      <HintPath>..\CacheWithoutTimers\bin\Debug\CacheWithoutTimers.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -53,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CacheLibrary\CacheLibrary.csproj">
-      <Project>{7C5C1644-B799-4E9C-80B0-04DB3CD0DDDE}</Project>
-      <Name>CacheLibrary</Name>
+      <Project>{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}</Project>
+      <Name>CacheWithoutTimers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

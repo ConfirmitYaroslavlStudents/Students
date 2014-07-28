@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7C5C1644-B799-4E9C-80B0-04DB3CD0DDDE}</ProjectGuid>
+    <ProjectGuid>{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CacheLibrary</RootNamespace>
@@ -40,8 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache.cs" />
+    <Compile Include="CacheWithoutTimers.cs" />
+    <Compile Include="DataBase.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="GeneratorRandomStrings.cs" />
+    <Compile Include="IDataBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

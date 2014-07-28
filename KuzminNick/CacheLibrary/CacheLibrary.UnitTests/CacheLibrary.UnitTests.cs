@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Policy;
 using CacheLibraryWithoutTimers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,31 +7,56 @@ namespace CacheLibrary.UnitTests
     [TestClass]
     public class UnitTests
     {
-        [TestMethod]
-        public void CacheLibraryWithoutTimers_CorrectnessGettingFromDataBaseAndAddingInCache()
+        private static DataBase<string> GenerateDataBaseOfRandomStringElements(int amountOfElements)
         {
-            var generatorRandomStrings = new GeneratorRandomStrings(20);
-            Assert.AreEqual(20, generatorRandomStrings.GetCount());
-
+            var generatorRandomStrings = new GeneratorRandomStrings(amountOfElements);
             var dataBase = new DataBase<string>();
             dataBase.InitializeDataBase(generatorRandomStrings.StringDictionary);
+            return dataBase;
+        }
 
-            var cacheWithoutTimers = new CacheWithoutTimers<string>(dataBase);
+        [TestMethod]
+        public void CacheUnitTest_CorrectnessOfAddingElementsInCache()
+        {
+            var dataBase = GenerateDataBaseOfRandomStringElements(12);
+            var cacheWithoutTimers = new CacheWithoutTimers<string>(5, dataBase);
             var listOfIdentifiers = dataBase.GetListOfIdentifiers();
-            var typeStorageForCurrentElement = String.Empty;
+            Console.WriteLine("----------------");
+
             foreach (var identifier in listOfIdentifiers)
             {
-                var element = cacheWithoutTimers.GetItemByIdentifier(identifier, ref typeStorageForCurrentElement);
-                Console.WriteLine("{0} - {1}", element, typeStorageForCurrentElement);
+                Console.WriteLine("id = '{0}', value = '{1}'",
+                         identifier, cacheWithoutTimers.GetElementById(identifier));
             }
+            Console.WriteLine("----------------");
 
-            dataBase.Clear();
-            var identifierTestElement = "Test".GetHashCode().ToString();
-            var testElement = new Element<string>(identifierTestElement, "Test");
-            dataBase.AddItem(testElement);
+            foreach (var identifier in listOfIdentifiers)
+            {
+                Console.WriteLine("id = '{0}', value = '{1}'",
+                         identifier, cacheWithoutTimers.GetElementById(identifier));
+            }
+        }
 
-            var testElementGettingFromDataBase = cacheWithoutTimers.GetItemByIdentifier(identifierTestElement, ref typeStorageForCurrentElement);
-            Console.WriteLine("{0} - {1}", testElementGettingFromDataBase, typeStorageForCurrentElement);
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CacheUnitTest_ExceptionOf_UncorrectChangingCapacityValueOfCache()
+        {
+            var dataBase = new DataBase<string>();
+            var cacheWithoutTimers = new CacheWithoutTimers<string>(10, dataBase);
+            cacheWithoutTimers.Capacity = 5;
+        }
+
+        [TestMethod]
+        public void CacheUnitTest_CorrectnessOfAddingElementsInCache_WithCapacityEqualOne()
+        {
+            var dataBase = GenerateDataBaseOfRandomStringElements(12);
+            var cacheWithoutTimers = new CacheWithoutTimers<string>(1, dataBase);
+            var listOfIdentifiers = dataBase.GetListOfIdentifiers();
+            foreach (var identifier in listOfIdentifiers)
+            {
+                Console.WriteLine("id = '{0}', value = '{1}'",
+                    identifier, cacheWithoutTimers.GetElementById(identifier));
+            }
         }
     }
 }

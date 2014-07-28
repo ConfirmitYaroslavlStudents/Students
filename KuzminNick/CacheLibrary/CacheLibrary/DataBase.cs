@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CacheLibrary;
+using CacheWithoutTimers;
 
 namespace CacheLibraryWithoutTimers
 {
@@ -23,9 +23,9 @@ namespace CacheLibraryWithoutTimers
             _dataBase.Add(item.Identifier, item);
         }
 
-        public Element<T> GetItemByIdentifier(string identifier)
+        public T GetItemById(string id)
         {
-            return _dataBase[identifier];
+            return _dataBase[id].Value;
         }
 
         public void Clear()

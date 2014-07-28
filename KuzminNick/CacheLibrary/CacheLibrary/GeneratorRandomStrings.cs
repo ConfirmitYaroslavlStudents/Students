@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CacheLibrary;
+using CacheWithoutTimers;
 
 namespace CacheLibraryWithoutTimers
 {
@@ -41,17 +41,10 @@ namespace CacheLibraryWithoutTimers
             var identifier = randomString.GetHashCode().ToString();
             var newElement =
                 new Element<string>(identifier, randomString);
+            //TODO !!!
+            //TODO !!!
+            Console.WriteLine(newElement);
             return newElement;
-        }
-
-        private Element<string> GenerateUniqueRandomElement(Random randomizerId)
-        {
-            var randomUniqueElement = GenerateRandomElement(randomizerId);
-            while (!_stringDictionary.ContainsValue(randomUniqueElement))
-            {
-                randomUniqueElement = GenerateRandomElement(randomizerId);
-            }
-            return randomUniqueElement;
         }
     }
 }

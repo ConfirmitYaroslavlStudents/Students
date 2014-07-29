@@ -38,7 +38,7 @@ namespace CacheLib
             _dateTime = dateTime;
         }
 
-        public void Add(TKey key, TValue value)
+        private void Add(TKey key, TValue value)
         {
             RemoveExpired();
             var data = new CacheValue(value,_dateTime);

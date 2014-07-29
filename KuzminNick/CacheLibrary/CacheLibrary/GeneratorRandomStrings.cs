@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using CacheWithoutTimers;
 
-namespace CacheLibraryWithoutTimers
+namespace CacheLibrary
 {
     public class GeneratorRandomStrings
     {
@@ -13,8 +11,6 @@ namespace CacheLibraryWithoutTimers
         {
             get { return _stringDictionary; }
         }
-
-        private readonly Random _randomizerId = new Random();
 
         public int GetCount()
         {
@@ -30,20 +26,17 @@ namespace CacheLibraryWithoutTimers
         {
             for (var i = 0; i < amount; i++)
             {
-                var newElement = GenerateRandomElement(_randomizerId);
-                _stringDictionary.Add(newElement.Identifier, newElement);
+                var newElement = GenerateRandomElement();
+                _stringDictionary.Add(newElement.Id, newElement);
             }
         }
 
-        private Element<string> GenerateRandomElement(Random randomizerId)
+        private Element<string> GenerateRandomElement()
         {
             var randomString = Path.GetRandomFileName();
             var identifier = randomString.GetHashCode().ToString();
             var newElement =
                 new Element<string>(identifier, randomString);
-            //TODO !!!
-            //TODO !!!
-            Console.WriteLine(newElement);
             return newElement;
         }
     }

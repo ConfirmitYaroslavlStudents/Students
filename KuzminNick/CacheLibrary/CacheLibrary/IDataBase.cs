@@ -1,4 +1,4 @@
-﻿namespace CacheLibraryWithoutTimers
+﻿namespace CacheLibrary
 {
     public interface IDataBase<T>
     {

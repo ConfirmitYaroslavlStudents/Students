@@ -1,48 +1,58 @@
-﻿namespace CacheWithoutTimers
+﻿using System;
+
+namespace CacheLibrary
 {
+    public enum TypesOfStorage { DataBase, Cache };
+
     public class Element<T>
     {
-        private T _value;
-        private readonly string _identifier;
-        private int _frequenceUsage;
+        private readonly string _id;
+        private int _frequencyUsage;
         private int _timeOfLastUsingInSeconds;
 
-        public Element(string identifier, T value)
+        public Element(string id, T value)
         {
-            _identifier = identifier;
+            _id = id;
             FrequencyUsage = 0;
             Value = value;
-            TypeOfStorage = "Data Base";
+            TypeOfStorage = TypesOfStorage.DataBase;
         }
 
-        public T Value
+        public string Id
         {
-            get { return _value; }
-            set { _value = value; }
+            get { return _id; }
         }
 
-        public string Identifier
-        {
-            get { return _identifier; }
-        }
+        public T Value { get; set; }
 
         public int FrequencyUsage
         {
-            get { return _frequenceUsage; }
-            set { _frequenceUsage = value; }
+            get { return _frequencyUsage; }
+            private set { _frequencyUsage = value; }
+        }
+
+        public void IncFrequencyUsage()
+        {
+            FrequencyUsage++;
         }
 
         public int TimeOfLastUsingInSeconds
         {
             get { return _timeOfLastUsingInSeconds; }
-            set { _timeOfLastUsingInSeconds = value; }
+            set 
+            {
+                if (value >= 0)
+                    _timeOfLastUsingInSeconds = value;
+                else
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        public string TypeOfStorage { get; set; }
+        public TypesOfStorage TypeOfStorage { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Value of Element = '{0}', Id = '{1}', Type of Storage = '{2}'", Value, Identifier, TypeOfStorage);
+            return string.Format("Value of Element = '{0}', Id = '{1}', Type of Storage = '{2}'", Value, Id, TypeOfStorage);
         }
     }
 }

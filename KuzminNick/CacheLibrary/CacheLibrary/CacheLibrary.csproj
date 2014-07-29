@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheWithoutTimers.cs" />
+    <Compile Include="Cache.cs" />
     <Compile Include="DataBase.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="GeneratorRandomStrings.cs" />

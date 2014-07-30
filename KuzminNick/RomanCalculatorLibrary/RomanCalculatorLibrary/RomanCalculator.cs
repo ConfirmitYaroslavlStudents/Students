@@ -26,30 +26,7 @@ namespace RomanCalculatorLibrary
                 }
                 else
                 {
-                    int secondNumber, firstNumber = 0;
-                    try
-                    {
-                        secondNumber = int.Parse(stack.Pop());
-                        firstNumber = int.Parse(stack.Pop());
-                    }
-                    catch 
-                    {
-                        throw new InvalidOperationException("Uncorrect Arithmetic Expression");
-                    }
-                    switch (elementOfExpression)
-                    {
-                        case "+": resultOfCurrentOperation = firstNumber + secondNumber; break;
-                        case "-": resultOfCurrentOperation = firstNumber - secondNumber; break;
-                        case "*": resultOfCurrentOperation = firstNumber * secondNumber; break;
-                        case "/":
-                            {
-                                if (firstNumber % secondNumber != 0)
-                                    throw new ArgumentException();
-
-                                resultOfCurrentOperation = firstNumber / secondNumber; break;
-                            }
-                        case "^": resultOfCurrentOperation = (int)Math.Pow(firstNumber, secondNumber); break;
-                    }
+                    resultOfCurrentOperation = CalculateCurrentOperation(stack, elementOfExpression, resultOfCurrentOperation);
                     stack.Push(resultOfCurrentOperation.ToString());
                 }
             }
@@ -61,6 +38,44 @@ namespace RomanCalculatorLibrary
             var resultInRomatFormat = _parser.ConvertArabicNumberToRoman(resultInArarbicFormat);
 
             return resultInRomatFormat;
+        }
+
+        private static int CalculateCurrentOperation(Stack<string> stack, string elementOfExpression, int resultOfCurrentOperation)
+        {
+            int secondNumber, firstNumber = 0;
+            try
+            {
+                secondNumber = int.Parse(stack.Pop());
+                firstNumber = int.Parse(stack.Pop());
+            }
+            catch
+            {
+                throw new InvalidOperationException("Uncorrect Arithmetic Expression");
+            }
+            switch (elementOfExpression)
+            {
+                case "+":
+                    resultOfCurrentOperation = firstNumber + secondNumber;
+                    break;
+                case "-":
+                    resultOfCurrentOperation = firstNumber - secondNumber;
+                    break;
+                case "*":
+                    resultOfCurrentOperation = firstNumber*secondNumber;
+                    break;
+                case "/":
+                {
+                    if (firstNumber%secondNumber != 0)
+                        throw new ArgumentException();
+
+                    resultOfCurrentOperation = firstNumber/secondNumber;
+                    break;
+                }
+                case "^":
+                    resultOfCurrentOperation = (int) Math.Pow(firstNumber, secondNumber);
+                    break;
+            }
+            return resultOfCurrentOperation;
         }
     }
 }

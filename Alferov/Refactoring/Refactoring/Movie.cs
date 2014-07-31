@@ -50,6 +50,7 @@
             return result;
         }
     }
+
     public class NewReleaseMovie : Movie
     {
         public NewReleaseMovie(string title)

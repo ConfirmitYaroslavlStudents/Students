@@ -1,44 +1,57 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Web.Script.Serialization;
+using System.Xml.Serialization;
+using Refactoring.Utils;
 
 namespace Refactoring
 {
+    [DataContract]
     public class Customer
     {
-        public string Name { get; private set; }
+        [XmlIgnore]
+        [ScriptIgnore]
         public List<Rental> Rentals { get; private set; }
+
+        [DataMember]
+        public Dictionary<string, double> Movies { get; private set; }
+
+        [DataMember]
+        public string Name { get; private set; }
+
+        [DataMember]
+        public double TotalAmount { get; private set; }
+
+        [DataMember]
+        public int FrequentRenterPoints { get; private set; }
+
+        private Customer(){}
 
         public Customer(string name)
         {
             Name = name;
             Rentals = new List<Rental>();
+            Movies = new Dictionary<string, double>();
         }
 
         public Customer(string name, IEnumerable<Rental> rentals)
         {
             Name = name;
             Rentals = new List<Rental>(rentals);
+            Movies = new Dictionary<string, double>();
         }
 
-        public string GetStatement()
+        public string GetStatement(CustomerFormatter formatter)
         {
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
-            
-            var result = new StringBuilder(string.Format("Учет аренды для {0}\n", Name));
-            
             foreach (var rental in Rentals)
             {
                 double thisAmount = rental.GetCharge();
-                frequentRenterPoints += rental.GetFrequentPoints();
-
-                result.AppendFormat("\t{0}\t{1}\n", rental.Movie.Title, thisAmount);
-                totalAmount += thisAmount;
+                FrequentRenterPoints += rental.GetFrequentPoints();
+                Movies.Add(rental.Movie.Title, thisAmount);
+                TotalAmount += thisAmount;
             }
 
-            result.AppendFormat("Сумма задолженности составляет {0}\n", totalAmount);
-            result.AppendFormat("Вы заработали {0} за активность", frequentRenterPoints);
-            return result.ToString();
+            return formatter.Serialize(this);
         }
     }
 }

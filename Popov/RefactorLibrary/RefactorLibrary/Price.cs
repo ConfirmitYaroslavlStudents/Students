@@ -1,5 +1,5 @@
 ﻿
-namespace RefactoringDemo.Steps.Step1
+namespace RefactorLibrary
 {
     public abstract class Price
     {
@@ -43,6 +43,7 @@ namespace RefactoringDemo.Steps.Step1
                 result += (daysRented - 3) * 1.5;
             return result;
         }
+
         public override int GetBonusProfit(int daysRented)
         {
             return (daysRented > 1) ? 2: 1;

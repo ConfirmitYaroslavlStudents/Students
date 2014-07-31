@@ -1,14 +1,12 @@
-﻿using System.Threading;
-using Cache;
+﻿using Cache;
 
 namespace UnitTestCashe
 {
-    class TestClassForCache : ICashe<int,string>
+    class TestClassForCache : IGettingValue<int,string>
     {
-        public string GetValue(int key)
+        public string this[int key]
         {
-            
-            return key + " HZ";
+           get { return key + " HZ"; }
         }
     }
 }

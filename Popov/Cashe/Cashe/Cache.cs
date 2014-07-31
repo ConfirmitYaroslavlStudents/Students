@@ -4,11 +4,7 @@ using System.Linq;
 
 namespace Cache
 {
-    public interface ICashe<TKey, TValue> 
-    {
-        TValue GetValue(TKey key);
-    }
-
+   
     class Element<T>
     {
         private DateTime _timeLastUse;
@@ -45,32 +41,55 @@ namespace Cache
         }
     }
 
-    public class Cache<TKey, TValue> where TValue : class
+    public class Cache<TKey, TValue> : 
+            IGettingValue<TKey, TValue>, 
+            ICheckCantainsKeyInCache<TKey>, 
+            IGetNumberIncludeCache, 
+            IMakeElementsInCacheOld
+
     {
-        private readonly ICashe<TKey, TValue> _storage;
-        private readonly Dictionary<TKey, Element<TValue>> _cashe;
+        private readonly IGettingValue<TKey, TValue> _storage;
+        private readonly Dictionary<TKey, Element<TValue>> _cache;
         private int _capacity;
         private readonly TimeSpan _timeLive;
         private const int Defaultcapacity   = 10;
         private readonly TimeSpan _defaultTimeLive   = new TimeSpan(0, 0, 5);
-        
 
-        public Cache(ICashe<TKey, TValue> storage)
+
+        int IGetNumberIncludeCache.NumberIncludeCahce { get; set; }
+
+        int IGetNumberIncludeCache.NumberIncludeStorage { get; set; }
+
+        bool ICheckCantainsKeyInCache<TKey>.ContainsInCache(TKey key)
+        {
+            return _cache.ContainsKey(key);
+        }
+
+        void IMakeElementsInCacheOld.MakeElementsOld(int numberElements)
+        {
+            for (var i = 1; i <= numberElements; ++i)
+            {
+                RemoveOldPairFromCache();
+            }
+        }
+
+
+        public Cache(IGettingValue<TKey, TValue> storage)
         {
             _storage = storage;
-            _cashe = new Dictionary<TKey, Element<TValue>>();
+            _cache = new Dictionary<TKey, Element<TValue>>();
             _capacity = Defaultcapacity;
             _timeLive = _defaultTimeLive;
         }
 
-        public Cache( ICashe<TKey, TValue> storage, int capacity)
+        public Cache( IGettingValue<TKey, TValue> storage, int capacity)
             : this(storage)
         {
             _capacity = capacity;
             _timeLive = _defaultTimeLive;
         }
 
-        public Cache(ICashe<TKey, TValue> storage, int capacity, TimeSpan timeLive)
+        public Cache(IGettingValue<TKey, TValue> storage, int capacity, TimeSpan timeLive)
             : this(storage, capacity)
         {
             _timeLive = timeLive;
@@ -81,14 +100,16 @@ namespace Cache
         {
             get
             {
-                RemoveAllOldPairFromCashe();
-                if (_cashe.ContainsKey(key))
+                RemoveAllOldPairFromCache();
+                if (_cache.ContainsKey(key))
                 {
-                    RefreshValueInCashe(key);
-                    return _cashe[key].Value;
+                    ++ (this as IGetNumberIncludeCache).NumberIncludeCahce;
+                    RefreshValueInCache(key);
+                    return _cache[key].Value;
                 }
-                AddNewValueInCashe(key, _storage.GetValue(key));
-                return _cashe[key].Value;
+                ++ (this as IGetNumberIncludeCache).NumberIncludeStorage;
+                AddNewValueInCache(key, _storage[key]);
+                return _cache[key].Value;
 
             }
         }
@@ -101,14 +122,14 @@ namespace Cache
                 if (value < 1)
                     throw new ArgumentOutOfRangeException("Capacity must be greater than 1");
 
-                if ((value >= _capacity) || (_cashe.Count <= _capacity))
+                if ((value >= _capacity) || (_cache.Count <= _capacity))
                 {
                     _capacity = value;
                 }
                 else
                 {
                     for (var i = 0; i < _capacity - value; ++i)
-                        RemoveOldPairFromCashe();
+                        RemoveOldPairFromCache();
                     _capacity = value;
                 }
             }
@@ -126,51 +147,51 @@ namespace Cache
 
         public int GetCount()
         {
-            return _cashe.Count; 
+            return _cache.Count; 
         }
 
-        void RemoveOldPairFromCashe()
+        void RemoveOldPairFromCache()
         {
-            if (_cashe.Count > 0)
+            if (_cache.Count > 0)
             {
-                var maxOldValue = _cashe.First();
-                foreach (var pair in _cashe)
+                var maxOldValue = _cache.First();
+                foreach (var pair in _cache)
                 {
                     if (pair.Value.TimeUsage < maxOldValue.Value.TimeUsage)
                     {
                         maxOldValue = pair;
                     }
                 }
-                _cashe.Remove(maxOldValue.Key);
+                _cache.Remove(maxOldValue.Key);
             }
         }
         
-        void RefreshValueInCashe(TKey key)
+        void RefreshValueInCache(TKey key)
         {
-            _cashe[key].TimeUsage = DateTime.Now;
+            _cache[key].TimeUsage = DateTime.Now;
         }
         
-        void RemoveAllOldPairFromCashe()
+        void RemoveAllOldPairFromCache()
         {
-            var collectKeys = (from pair in _cashe
-                               where DateTime.Now - pair.Value.TimeUsage > pair.Value.TimeLive
+            var collectKeys = (from pair in _cache
+                               where DateTime.Now - pair.Value.TimeUsage > _timeLive
                                select pair.Key).ToArray();
             foreach (var key in collectKeys)
             {
-                _cashe.Remove(key);
+                _cache.Remove(key);
             }
         }
 
-        void AddNewValueInCashe(TKey key, TValue value)
+        void AddNewValueInCache(TKey key, TValue value)
         {
-            if (_cashe.Count >= _capacity)
+            if (_cache.Count >= _capacity)
             {
-                RemoveOldPairFromCashe();
-                _cashe.Add(key, new Element<TValue>(value, _timeLive));
+                RemoveOldPairFromCache();
+                _cache.Add(key, new Element<TValue>(value, _timeLive));
             }
             else
             {
-                _cashe.Add(key, new Element<TValue>(value, _timeLive));
+                _cache.Add(key, new Element<TValue>(value, _timeLive));
             }
         }
         

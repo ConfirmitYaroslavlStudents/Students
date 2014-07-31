@@ -28,9 +28,9 @@ namespace Graph
             menu.AddCommand("Print graph to console", () => Print(gr));
             menu.AddCommand("Print graph to console as matrix", () => PrintTMatrix(gr));
             menu.AddCommand("View process going graph in width",
-                () => gr.ViewWidth("T", s => Trace.Write(s + " "), new List<string>()));
+                () => gr.ViewWidth("T", s => Trace.Write(s + " ")));
             menu.AddCommand("View process going graph in depth",
-                () => gr.ViewDepth("T", s => Trace.Write(s + " "), new List<string>()));
+                () => gr.ViewDepth("T", s => Trace.Write(s + " ")));
             menu.Show();
 
             

@@ -47,7 +47,6 @@ namespace Graph
         
         private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
 
-
         
         public Graph(Dictionary<T, HashSet<T>> setVertex)
         {
@@ -87,7 +86,6 @@ namespace Graph
 
         }
 
-       
         public void RemoveVertex(T vertex)
         {
             if (!_vertexDictionary.ContainsKey(vertex)) return;
@@ -107,8 +105,11 @@ namespace Graph
         /// </summary>
         /// <param name="vertex">The top which starts</param>
         /// <param name="action">The action running with each item</param>
-        /// <param name="vertexList">List using vertex in recursion</param>
-        public void ViewWidth(T vertex, Action<T> action, List<T> vertexList)
+        public void ViewWidth(T vertex, Action<T> action)
+        {
+            RecursionViewWidth(vertex,action, new List<T>());
+        }
+        private void RecursionViewWidth(T vertex, Action<T> action, List<T> vertexList)
         {
             if (_vertexDictionary.ContainsKey(vertex))
             {
@@ -130,7 +131,7 @@ namespace Graph
                 if (vertexList.Count < _vertexDictionary.Count)
                 {
                     var remainingVertex = _vertexDictionary.First(x => !vertexList.Contains(x.Key)).Key;
-                    ViewWidth(remainingVertex, action, vertexList);
+                    RecursionViewWidth(remainingVertex, action, vertexList);
                 }
             }
             else
@@ -144,8 +145,11 @@ namespace Graph
         /// </summary>
         /// <param name="vertex">The top which starts</param>
         /// <param name="action">The action running with each item</param>
-        /// <param name="vertexList">List using vertex in recursion</param>
-        public void ViewDepth(T vertex, Action<T> action, List<T> vertexList)
+        public void ViewDepth(T vertex, Action<T> action)
+        {
+            RecursionViewDepth(vertex, action, new List<T>());
+        }
+        private void RecursionViewDepth(T vertex, Action<T> action, List<T> vertexList)
         {
             if (_vertexDictionary.ContainsKey(vertex))
             {
@@ -166,7 +170,7 @@ namespace Graph
                 if (vertexList.Count < _vertexDictionary.Count)
                 {
                     var remainingVertex = _vertexDictionary.First(x => !vertexList.Contains(x.Key)).Key;
-                    ViewDepth(remainingVertex, action, vertexList);
+                    RecursionViewDepth(remainingVertex, action, vertexList);
                 }
             }
             else

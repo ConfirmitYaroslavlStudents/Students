@@ -7,26 +7,26 @@ namespace RefreshingCache
     public class RefreshingCache<TKey, TValue> : IComputer<TKey, TValue>
     {
         private readonly int _maxCacheSize;
-        private readonly long _expirationTime;
 
         private class Entry
         {
             private readonly long _creationTime;
-            private readonly long _expirationTime;
+
+            // ReSharper disable once StaticFieldInGenericType
+            public static long ExpirationTime;
 
             public TValue Value { get; private set; }
             public long LastAccessTime { get; set; }
 
-            public Entry(TValue value, long expirationTime, ITime time)
+            public Entry(TValue value, ITime time)
             {
                 Value = value;
-                _expirationTime = expirationTime;
                 _creationTime = time.CurrentTime;
             }
 
             public bool IsExpired(ITime time)
             {
-                return (time.CurrentTime - _creationTime >= _expirationTime);
+                return (time.CurrentTime - _creationTime >= ExpirationTime);
             }
         }
 
@@ -55,7 +55,7 @@ namespace RefreshingCache
         public RefreshingCache(int maxCacheSize, long expirationTime, IComputer<TKey, TValue> computer, ITime cacheTime)
         {
             _maxCacheSize = maxCacheSize;
-            _expirationTime = expirationTime;
+            Entry.ExpirationTime = expirationTime;
 
             _data = new Dictionary<TKey, Entry>();
 
@@ -83,7 +83,7 @@ namespace RefreshingCache
                     RemoveEntry(minKey);
                 }
             }
-            _data.Add(key, new Entry(value, _expirationTime, _cacheTime));
+            _data.Add(key, new Entry(value, _cacheTime));
         }
 
         private bool RemoveExpirationData()

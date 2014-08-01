@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Refactoring.Utils;
+﻿using Refactoring.Utils;
 using Xunit;
 using Xunit.Extensions;
 
@@ -59,17 +58,11 @@ namespace Refactoring.Tests
                 new Rental(newReleaseMovie, 3)
             });
 
-            var sb = new StringBuilder(string.Format("Учет аренды для {0}\n", customerName));
-            sb.AppendFormat("\t{0}\t{1}\n", regularMovie.Title, 6.5);
-            sb.AppendFormat("\t{0}\t{1}\n", childrensMovie.Title, 3);
-            sb.AppendFormat("\t{0}\t{1}\n", newReleaseMovie.Title, 9);
-            sb.AppendFormat("Сумма задолженности составляет {0}\n", 18.5);
-            sb.AppendFormat("Вы заработали {0} за активность", 4);
+            var stringFormatter = new StringFormatter();
+            string serializedData = customer.GetStatement(stringFormatter);
+            Customer actual = stringFormatter.Deserialize(serializedData);
 
-            string expected = sb.ToString();
-            string actual = customer.GetStatement(new StringFormatter());
-
-            Assert.Equal(expected, actual);
+            Assert.True(customer.Equals(actual));
         }
 
         [Fact]
@@ -87,10 +80,11 @@ namespace Refactoring.Tests
                 new Rental(newReleaseMovie, 3)
             });
 
-            const string expected = "{\"Movies\":{\"Harry Potter\":6.5,\"The Lion King\":3,\"Van Helsing\":9},\"Name\":\"Romnaka\",\"TotalAmount\":18.5,\"FrequentRenterPoints\":4}";
-            string actual = customer.GetStatement(new JsonFormatter());
+            var jsonFormatter = new JsonFormatter();
+            string serializedData = customer.GetStatement(jsonFormatter);
+            Customer actual = jsonFormatter.Deserialize(serializedData);
 
-            Assert.Equal(expected, actual);
+            Assert.True(customer.Equals(actual));
         }
 
 
@@ -109,10 +103,11 @@ namespace Refactoring.Tests
                 new Rental(newReleaseMovie, 3)
             });
 
-            const string expected = "<Customer xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Refactoring\">\r\n  <FrequentRenterPoints>4</FrequentRenterPoints>\r\n  <Movies xmlns:d2p1=\"http://schemas.microsoft.com/2003/10/Serialization/Arrays\">\r\n    <d2p1:KeyValueOfstringdouble>\r\n      <d2p1:Key>Harry Potter</d2p1:Key>\r\n      <d2p1:Value>6.5</d2p1:Value>\r\n    </d2p1:KeyValueOfstringdouble>\r\n    <d2p1:KeyValueOfstringdouble>\r\n      <d2p1:Key>The Lion King</d2p1:Key>\r\n      <d2p1:Value>3</d2p1:Value>\r\n    </d2p1:KeyValueOfstringdouble>\r\n    <d2p1:KeyValueOfstringdouble>\r\n      <d2p1:Key>Van Helsing</d2p1:Key>\r\n      <d2p1:Value>9</d2p1:Value>\r\n    </d2p1:KeyValueOfstringdouble>\r\n  </Movies>\r\n  <Name>Romnaka</Name>\r\n  <TotalAmount>18.5</TotalAmount>\r\n</Customer>";
-            string actual = customer.GetStatement(new XmlFormatter());
+            var xmlFormatter = new XmlFormatter();
+            string serializedData = customer.GetStatement(xmlFormatter);
+            Customer actual = xmlFormatter.Deserialize(serializedData);
 
-            Assert.Equal(expected, actual);
+            Assert.True(customer.Equals(actual));
         }
     }
 }

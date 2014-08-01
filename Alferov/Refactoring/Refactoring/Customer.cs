@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 using System.Xml.Serialization;
@@ -7,7 +8,7 @@ using Refactoring.Utils;
 namespace Refactoring
 {
     [DataContract]
-    public class Customer
+    public class Customer : IEquatable<Customer>
     {
         [XmlIgnore]
         [ScriptIgnore]
@@ -20,10 +21,10 @@ namespace Refactoring
         public string Name { get; private set; }
 
         [DataMember]
-        public double TotalAmount { get; private set; }
+        public double TotalAmount { get; set; }
 
         [DataMember]
-        public int FrequentRenterPoints { get; private set; }
+        public int FrequentRenterPoints { get; set; }
 
         private Customer(){}
 
@@ -41,7 +42,7 @@ namespace Refactoring
             Movies = new Dictionary<string, double>();
         }
 
-        public string GetStatement(CustomerFormatter formatter)
+        public string GetStatement(ICustomerFormatter formatter)
         {
             foreach (var rental in Rentals)
             {
@@ -52,6 +53,33 @@ namespace Refactoring
             }
 
             return formatter.Serialize(this);
+        }
+
+        public bool Equals(Customer other)
+        {
+            const double eps = 0.000001;
+
+            if (Name != other.Name ||
+                Math.Abs(TotalAmount - other.TotalAmount) > eps ||
+                Math.Abs(FrequentRenterPoints - other.FrequentRenterPoints) > eps)
+            {
+                return false;
+            }
+
+            if (other.Movies.Count != Movies.Count)
+            {
+                return false;
+            }
+
+            foreach (var key in Movies.Keys)
+            {
+                if (!other.Movies.ContainsKey(key) || Math.Abs(other.Movies[key] - Movies[key]) > eps)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

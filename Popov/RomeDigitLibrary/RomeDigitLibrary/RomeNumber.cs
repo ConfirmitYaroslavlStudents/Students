@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 
@@ -7,6 +8,8 @@ namespace RomeDigitLibrary
 {
     public class RomeNumber : IEquatable<RomeNumber>
     {
+      
+
         private readonly string _romeNumber;
         private readonly static Dictionary<uint, string> _rulesConvertToRome;
         private readonly static Dictionary<char, uint> _rulesConvertToTen;
@@ -53,7 +56,8 @@ namespace RomeDigitLibrary
             var firstRomeDigit = _romeNumber[0];
             var i = 1;
             uint result= 0;
-            while ((firstRomeDigit != '!') && (i < _romeNumber.Length))
+            const char symbolEnd = '!';
+            while ((firstRomeDigit != symbolEnd) && (i < _romeNumber.Length))
             {
                 var secondRomeDigit = _romeNumber[i];
                 CheckExistValueRulesConvertToTen(firstRomeDigit);
@@ -67,7 +71,7 @@ namespace RomeDigitLibrary
                 {
                     CheckExistRule(firstRomeDigit + secondRomeDigit.ToString());
                     result += RulesConvertToTen[secondRomeDigit] - RulesConvertToTen[firstRomeDigit];
-                    firstRomeDigit = '!';
+                    firstRomeDigit = symbolEnd;
                     if (i < _romeNumber.Length - 1)
                     {
                         ++i;
@@ -76,7 +80,7 @@ namespace RomeDigitLibrary
                 }
                 ++i;
             }
-            if (firstRomeDigit != '!')
+            if (firstRomeDigit != symbolEnd)
             {
                 CheckExistValueRulesConvertToTen(firstRomeDigit);
                 result += RulesConvertToTen[firstRomeDigit];
@@ -84,6 +88,25 @@ namespace RomeDigitLibrary
             return result;
         }
 
+        private static void CheckExistValueRulesConvertToTen(char key)
+        {
+            if (!RulesConvertToTen.ContainsKey(key))
+            {
+                throw new FormatException("Incorrect entry of the Roman number");
+            }
+        }
+
+        private static void CheckExistRule(string rule)
+        {
+            if (!RulesConvertToRome.ContainsValue(rule))
+                throw new FormatException("Incorrect entry of the Roman number");
+        }
+
+        
+        public override int GetHashCode()
+        {
+            return (_romeNumber != null ? _romeNumber.GetHashCode() : 0);
+        }
 
         public override string ToString()
         {
@@ -135,36 +158,20 @@ namespace RomeDigitLibrary
         }
 
         
-        private static void CheckExistValueRulesConvertToTen(char key)
-        {
-            if (!RulesConvertToTen.ContainsKey(key))
-            {
-                throw new FormatException("Incorrect entry of the Roman number");
-            }
-        }
-
-        private static void CheckExistRule(string rule)
-        {
-            if (!RulesConvertToRome.ContainsValue(rule))
-                throw new FormatException("Incorrect entry of the Roman number");
-        }
-
-
+       
         public static RomeNumber ConvertUIntToRomeNumber(uint number)
         {
             var result = "";
             while (number != 0)
             {
-                var firstDigit = uint.Parse(number.ToString().First().ToString());
-                var tens = AddSymbolZero(number.ToString().Length - 1);
-                firstDigit *= uint.Parse(tens);
-                if (RulesConvertToRome.ContainsKey(firstDigit))
+                var incompleteNumber = MaximumPowerTen(number);
+                if (RulesConvertToRome.ContainsKey(incompleteNumber))
                 {
-                    result += RulesConvertToRome[firstDigit];
-                    number -= firstDigit;
+                    result += RulesConvertToRome[incompleteNumber];
+                    number -= incompleteNumber;
                     continue;
                 }
-                var approximateNumber = RulesConvertToRome.FirstOrDefault(rule => firstDigit / rule.Key == 1).Key;
+                var approximateNumber = RulesConvertToRome.FirstOrDefault(rule => IsAproximateEqualOne(incompleteNumber, rule)).Key;
                 if (approximateNumber != 0)
                 {
                     result += RulesConvertToRome[approximateNumber];
@@ -172,8 +179,8 @@ namespace RomeDigitLibrary
                 }
                 else
                 {
-                    approximateNumber = RulesConvertToRome.Last(rule => IsAproximate(firstDigit, rule.Key)).Key;
-                    for (var j = 0; j < firstDigit / approximateNumber; ++j)
+                    approximateNumber = RulesConvertToRome.Last(rule => IsAproximateBeforeTen(incompleteNumber, rule.Key)).Key;
+                    for (var j = 0; j < incompleteNumber / approximateNumber; ++j)
                     {
                         result += RulesConvertToRome[approximateNumber];
                         number -= approximateNumber;
@@ -183,14 +190,31 @@ namespace RomeDigitLibrary
             return new RomeNumber(result);
         }
 
+        
+        private static uint MaximumPowerTen(uint number)
+        {
+            var firstDigit = FirstSymbolToUInt(number);
+            var tens = AddSymbolZero(number.ToString(CultureInfo.InvariantCulture).Length - 1);
+            firstDigit *= uint.Parse(tens);
+            return firstDigit;
+        }
 
-        private static bool IsAproximate(uint nominator, uint denominator)
+        private static uint FirstSymbolToUInt(uint number)
+        {
+            var firstSymbol = number.ToString(CultureInfo.InvariantCulture).First().ToString(CultureInfo.InvariantCulture);
+            return uint.Parse(firstSymbol);
+        }
+
+        private static bool IsAproximateEqualOne(uint incompleteNumber, KeyValuePair<uint, string> rule)
+        {
+            return incompleteNumber / rule.Key == 1;
+        }
+
+        private static bool IsAproximateBeforeTen(uint nominator, uint denominator)
         {
             return ((nominator / denominator > 1) && (nominator / denominator < 10));
         }
 
-        /// <param name="number">Number zero</param>
-        /// <returns></returns>
         private static string AddSymbolZero(int number)
         {
             var tens = "1";
@@ -200,8 +224,6 @@ namespace RomeDigitLibrary
             }
             return tens;
         }
-
         
     }
-    
 }

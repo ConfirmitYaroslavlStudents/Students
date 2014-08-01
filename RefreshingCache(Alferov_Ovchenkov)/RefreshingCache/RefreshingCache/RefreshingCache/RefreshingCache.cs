@@ -4,11 +4,14 @@ using System.Linq;
 
 namespace RefreshingCache
 {
-    public class RefreshingCache<TKey, TValue> : IComputer<TKey, TValue>
+    public class RefreshingCache<TKey, TValue> : IDataStorage<TKey, TValue>
     {
+        private readonly ITime _cacheTime;
+        private readonly IDataStorage<TKey, TValue> _dataStorage;
+        private readonly Dictionary<TKey, Entry> _data;
         private readonly int _maxCacheSize;
 
-        private class Entry
+        public class Entry
         {
             private readonly long _creationTime;
 
@@ -30,17 +33,13 @@ namespace RefreshingCache
             }
         }
 
-        private readonly ITime _cacheTime;
-        private readonly IComputer<TKey, TValue> _computer;
-        private readonly Dictionary<TKey, Entry> _data;
-
         public TValue this[TKey key]
         {
             get
             {
                 if (!_data.ContainsKey(key))
                 {
-                    AddData(key, _computer.GetData(key));
+                    AddData(key, _dataStorage.GetData(key));
                 }
                 _data[key].LastAccessTime = _cacheTime.CurrentTime;
                 return _data[key].Value;
@@ -52,16 +51,16 @@ namespace RefreshingCache
             get { return _data.Count; }
         }
 
-        public RefreshingCache(int maxCacheSize, long expirationTime, IComputer<TKey, TValue> computer, ITime cacheTime)
+        public RefreshingCache(int maxCacheSize, long expirationTime, IDataStorage<TKey, TValue> dataStorage, ITime cacheTime)
         {
             _maxCacheSize = maxCacheSize;
             Entry.ExpirationTime = expirationTime;
 
             _data = new Dictionary<TKey, Entry>();
 
-            if (computer == null)
+            if (dataStorage == null)
             {
-                throw new ArgumentNullException("computer");
+                throw new ArgumentNullException("dataStorage");
             }
 
             if (cacheTime == null)
@@ -69,7 +68,7 @@ namespace RefreshingCache
                 throw new ArgumentNullException("cacheTime");
             }
 
-            _computer = computer;
+            _dataStorage = dataStorage;
             _cacheTime = cacheTime;
         }
 
@@ -84,6 +83,11 @@ namespace RefreshingCache
                 }
             }
             _data.Add(key, new Entry(value, _cacheTime));
+        }
+        
+        public TValue GetData(TKey key)
+        {
+            return this[key];
         }
 
         private bool RemoveExpirationData()
@@ -120,11 +124,6 @@ namespace RefreshingCache
         private void RemoveEntry(TKey key)
         {
             _data.Remove(key);
-        }
-
-        public TValue GetData(TKey key)
-        {
-            return this[key];
         }
     }
 }

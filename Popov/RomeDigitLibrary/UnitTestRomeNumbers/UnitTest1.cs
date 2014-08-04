@@ -1,138 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RomeDigitLibrary;
 
 
 namespace UnitTestRomeNumbers
 {
-    [TestClass]
-    public class UnitTest1
+    static class InstanceRomeNumber
     {
-        [TestMethod]
-        public void TestMethod1()
+        public static RomeNumber GetInstance(string Rome)
         {
-            var a = new RomeNumber("XV");
-            Assert.AreEqual((uint)15, a.ToUint32());
+            return new RomeNumber(Rome);
+        }
+    }
+
+    [TestClass]
+    public class TestRomeNumber
+    {
+
+        [TestMethod]
+        public void TestInstance()
+        {
+            var equalsDictionary = new Dictionary<uint, uint>
+            {
+                {InstanceRomeNumber.GetInstance("XV").ToUint32(), 15},
+                {InstanceRomeNumber.GetInstance("XVIII").ToUint32(), 18},
+                {InstanceRomeNumber.GetInstance("XIX").ToUint32(), 19},
+                {InstanceRomeNumber.GetInstance("C").ToUint32(), 100},
+                {InstanceRomeNumber.GetInstance("CCC").ToUint32(), 300},
+                {InstanceRomeNumber.GetInstance("CMXCIX").ToUint32(), 999},
+                {InstanceRomeNumber.GetInstance("MMMMMMIX").ToUint32(), 6009},
+                {InstanceRomeNumber.GetInstance("MMMMMMMMMMMMMM").ToUint32(),14000},
+                {InstanceRomeNumber.GetInstance("MCMLXXXVIII").ToUint32(),1988}
+            };
+            foreach (var pair in equalsDictionary)
+            {
+                Assert.AreEqual(pair.Key,pair.Value);
+            }
         }
 
         [TestMethod]
-        public void TestMethod2()
+        public void TestRome()
         {
-            var a = new RomeNumber("XVIII");
-            Assert.AreEqual((uint)18, a.ToUint32());
+            var equalsDictionary = new Dictionary<RomeNumber, RomeNumber>
+            {
+                {InstanceRomeNumber.GetInstance("X"), RomeNumber.ConvertUIntToRomeNumber(10)},
+                {InstanceRomeNumber.GetInstance("XI"), RomeNumber.ConvertUIntToRomeNumber(11)},
+                {InstanceRomeNumber.GetInstance("CXI"), RomeNumber.ConvertUIntToRomeNumber(111)},
+                {InstanceRomeNumber.GetInstance("IV"), RomeNumber.ConvertUIntToRomeNumber(4)},
+                {InstanceRomeNumber.GetInstance("MCMXCIX"), RomeNumber.ConvertUIntToRomeNumber(1999)},
+                {InstanceRomeNumber.GetInstance("MMM"), RomeNumber.ConvertUIntToRomeNumber(3000)},
+                {InstanceRomeNumber.GetInstance("MMMCC"), RomeNumber.ConvertUIntToRomeNumber(3200)},
+                {InstanceRomeNumber.GetInstance("MCMLXXXVIII"), RomeNumber.ConvertUIntToRomeNumber(1988)}
+            };
+            foreach (var pair in equalsDictionary)
+            {
+                Assert.AreEqual(pair.Key, pair.Value);
+            }
         }
-
-        [TestMethod]
-        public void TestMethod3()
-        {
-            var a = new RomeNumber("XIX");
-            Assert.AreEqual((uint)19, a.ToUint32());
-        }
-
-        [TestMethod]
-        public void TestMethod4()
-        {
-            var a = new RomeNumber("C");
-            Assert.AreEqual((uint)100, a.ToUint32());
-        }
-
-        [TestMethod]
-        public void TestMethod5()
-        {
-            var a = new RomeNumber("CCC");
-            Assert.AreEqual((uint)300, a.ToUint32());
-        }
-
-        [TestMethod]
-        public void TestMethod6()
-        {
-            var a = new RomeNumber("CMXCIX");
-            Assert.AreEqual((uint)999, a.ToUint32());
-        }
-
-        [TestMethod]
-        public void TestMethod7()
-        {
-            var a = new RomeNumber("MMMMMMIX");
-            Assert.AreEqual((uint)6009, a.ToUint32());
-        }
-
-
-        [TestMethod]
-        public void TestRomeNumber1()
-        {
-            var a = new RomeNumber("X");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(10));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber2()
-        {
-            var a = new RomeNumber("XI");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(11));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber3()
-        {
-            var a = new RomeNumber("CXI");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(111));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber4()
-        {
-            var a = new RomeNumber("IV");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(4));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber5()
-        {
-            var a = new RomeNumber("MCMXCIX");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(1999));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber6()
-        {
-            var a = new RomeNumber("MMM");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(3000));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber7()
-        {
-            var a = new RomeNumber("MMMCC");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(3200));
-        }
-
-        [TestMethod]
-        public void TestRomeNumber8()
-        {
-            var a = new RomeNumber("MCMLXXXVIII");
-            Assert.AreEqual(a, RomeNumber.ConvertUIntToRomeNumber(1988));
-        }
-
-        [TestMethod]
-        public void TestConverToUint1()
-        {
-            var a = new RomeNumber("MMMMMMMMMMMMMM");
-            Assert.AreEqual(a.ToUint32(), (uint)14000);
-        }
-
-        [TestMethod]
-        public void TestConverToUint2()
-        {
-            var a = new RomeNumber("MCMLXXXVIII");
-            Assert.AreEqual(a.ToUint32(), (uint)1988);
-        }
+        
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
         public void TestExeptionConverToUint1()
         {
-            var a = new RomeNumber("XXHaa");
+            var a = InstanceRomeNumber.GetInstance("XXHaa");
             var temp = a.ToUint32();
         }
 
@@ -140,51 +72,34 @@ namespace UnitTestRomeNumbers
         [ExpectedException(typeof(FormatException))]
         public void TestExeptionConverToUint2()
         {
-            var a = new RomeNumber("IC");
+            var a = InstanceRomeNumber.GetInstance("IC");
             var temp = a.ToUint32();
         }
 
         [TestMethod]
-        public void TestOperator1()
+        public void TestAddition()
         {
-            var first = new RomeNumber("X");
-            var second = new RomeNumber("V");
+            var first = InstanceRomeNumber.GetInstance("X");
+            var second = InstanceRomeNumber.GetInstance("V");
             
             Assert.AreEqual(first + second, RomeNumber.ConvertUIntToRomeNumber(15));
         }
 
         [TestMethod]
-        public void TestOperator2()
+        public void TestSubtraction()
         {
-            var first = new RomeNumber("XX");
-            var second = new RomeNumber("VIII");
+            var first = InstanceRomeNumber.GetInstance("XX");
+            var second = InstanceRomeNumber.GetInstance("VIII");
 
             Assert.AreEqual(first - second, RomeNumber.ConvertUIntToRomeNumber(12));
         }
 
         [TestMethod]
-        public void TestOperator3()
+        public void TestMultiply()
         {
-            var first = new RomeNumber("IV");
-            var second = new RomeNumber("XIV");
+            var first = InstanceRomeNumber.GetInstance("IV");
+            var second = InstanceRomeNumber.GetInstance("XIV");
             Assert.AreEqual(first * second, RomeNumber.ConvertUIntToRomeNumber(56));
-        }
-
-        [TestMethod]
-        public void TestOperator4()
-        {
-            var first = new RomeNumber("LXIV");
-            var second = new RomeNumber("VIII");
-            Assert.AreEqual(first / second, RomeNumber.ConvertUIntToRomeNumber(8));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ContextMarshalException))]
-        public void TestZeroExeption()
-        {
-            var first = new RomeNumber("V");
-            var second = new RomeNumber("X");
-            var temp = first/second;
         }
     }
 }

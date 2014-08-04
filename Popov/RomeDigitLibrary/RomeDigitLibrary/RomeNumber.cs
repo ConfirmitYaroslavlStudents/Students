@@ -8,42 +8,8 @@ namespace RomeDigitLibrary
 {
     public class RomeNumber : IEquatable<RomeNumber>
     {
-      
-
         private readonly string _romeNumber;
-        private readonly static Dictionary<uint, string> _rulesConvertToRome;
-        private readonly static Dictionary<char, uint> _rulesConvertToTen;
 
-
-        static Dictionary<uint, string> RulesConvertToRome 
-        {
-            get { return _rulesConvertToRome; }
-        }
-
-        static Dictionary<char, uint> RulesConvertToTen 
-        {
-            get { return _rulesConvertToTen; }
-        }
-        
-
-        static RomeNumber()
-        {
-            _rulesConvertToRome = new Dictionary<uint, string> 
-            { 
-            { 1, "I" },{ 4, "IV"},{ 5, "V" },
-            { 9, "IX"},{10, "X"},{40, "XL"},
-            {50, "L"},{90, "XC"},{100, "C"},
-            {400, "CD"},{500, "D"},{900, "CM"},
-            {1000, "M"}
-            };
-
-            _rulesConvertToTen = new Dictionary<char, uint>
-            {
-                {'I', 1},{'V', 5},{'X', 10},
-                {'L', 50},{'C', 100},{'D', 500},
-                {'M', 1000}
-            };
-        }
 
         public RomeNumber(string number)
         {
@@ -60,17 +26,17 @@ namespace RomeDigitLibrary
             while ((firstRomeDigit != symbolEnd) && (i < _romeNumber.Length))
             {
                 var secondRomeDigit = _romeNumber[i];
-                CheckExistValueRulesConvertToTen(firstRomeDigit);
-                CheckExistValueRulesConvertToTen(secondRomeDigit);
-                if (RulesConvertToTen[firstRomeDigit] >= RulesConvertToTen[secondRomeDigit])
+                RulesConvertRomeNumber.CheckExistValueTen(firstRomeDigit);
+                RulesConvertRomeNumber.CheckExistValueTen(secondRomeDigit);
+                if (RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit] >= RulesConvertRomeNumber.RulesConvertToTen[secondRomeDigit])
                 {
-                    result += RulesConvertToTen[firstRomeDigit];
+                    result += RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
                     firstRomeDigit = secondRomeDigit;
                 }
                 else
                 {
-                    CheckExistRule(firstRomeDigit + secondRomeDigit.ToString());
-                    result += RulesConvertToTen[secondRomeDigit] - RulesConvertToTen[firstRomeDigit];
+                    RulesConvertRomeNumber.CheckExistRule(firstRomeDigit + secondRomeDigit.ToString(CultureInfo.InvariantCulture));
+                    result += RulesConvertRomeNumber.RulesConvertToTen[secondRomeDigit] - RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
                     firstRomeDigit = symbolEnd;
                     if (i < _romeNumber.Length - 1)
                     {
@@ -82,32 +48,12 @@ namespace RomeDigitLibrary
             }
             if (firstRomeDigit != symbolEnd)
             {
-                CheckExistValueRulesConvertToTen(firstRomeDigit);
-                result += RulesConvertToTen[firstRomeDigit];
+                RulesConvertRomeNumber.CheckExistValueTen(firstRomeDigit);
+                result += RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
             }
             return result;
         }
-
-        private static void CheckExistValueRulesConvertToTen(char key)
-        {
-            if (!RulesConvertToTen.ContainsKey(key))
-            {
-                throw new FormatException("Incorrect entry of the Roman number");
-            }
-        }
-
-        private static void CheckExistRule(string rule)
-        {
-            if (!RulesConvertToRome.ContainsValue(rule))
-                throw new FormatException("Incorrect entry of the Roman number");
-        }
-
         
-        public override int GetHashCode()
-        {
-            return (_romeNumber != null ? _romeNumber.GetHashCode() : 0);
-        }
-
         public override string ToString()
         {
             return _romeNumber;
@@ -147,17 +93,6 @@ namespace RomeDigitLibrary
             return ConvertUIntToRomeNumber(result);
         }
 
-        public static RomeNumber operator /(RomeNumber number1, RomeNumber number2)
-        {
-            var result = number1.ToUint32() / number2.ToUint32();
-            if (result != 0)
-            {
-                return ConvertUIntToRomeNumber(result);
-            }
-            throw new ContextMarshalException("The conversion of zero in Roman numbers are not supported");
-        }
-
-        
        
         public static RomeNumber ConvertUIntToRomeNumber(uint number)
         {
@@ -165,24 +100,24 @@ namespace RomeDigitLibrary
             while (number != 0)
             {
                 var incompleteNumber = MaximumPowerTen(number);
-                if (RulesConvertToRome.ContainsKey(incompleteNumber))
+                if (RulesConvertRomeNumber.RulesConvertToRome.ContainsKey(incompleteNumber))
                 {
-                    result += RulesConvertToRome[incompleteNumber];
+                    result += RulesConvertRomeNumber.RulesConvertToRome[incompleteNumber];
                     number -= incompleteNumber;
                     continue;
                 }
-                var approximateNumber = RulesConvertToRome.FirstOrDefault(rule => IsAproximateEqualOne(incompleteNumber, rule)).Key;
+                var approximateNumber = RulesConvertRomeNumber.RulesConvertToRome.FirstOrDefault(rule => IsAproximateEqualOne(incompleteNumber, rule)).Key;
                 if (approximateNumber != 0)
                 {
-                    result += RulesConvertToRome[approximateNumber];
+                    result += RulesConvertRomeNumber.RulesConvertToRome[approximateNumber];
                     number -= approximateNumber;
                 }
                 else
                 {
-                    approximateNumber = RulesConvertToRome.Last(rule => IsAproximateBeforeTen(incompleteNumber, rule.Key)).Key;
+                    approximateNumber = RulesConvertRomeNumber.RulesConvertToRome.Last(rule => IsAproximateBeforeTen(incompleteNumber, rule.Key)).Key;
                     for (var j = 0; j < incompleteNumber / approximateNumber; ++j)
                     {
-                        result += RulesConvertToRome[approximateNumber];
+                        result += RulesConvertRomeNumber.RulesConvertToRome[approximateNumber];
                         number -= approximateNumber;
                     }
                 }

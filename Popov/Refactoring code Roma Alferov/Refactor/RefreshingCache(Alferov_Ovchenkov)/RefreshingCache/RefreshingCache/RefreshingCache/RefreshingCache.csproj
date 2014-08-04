@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8D1356C7-D505-4C78-A8AB-CB51ED570569}</ProjectGuid>
+    <ProjectGuid>{20DCC218-53B5-40AB-9442-B2B2C796384E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RomeDigitLibrary</RootNamespace>
-    <AssemblyName>RomeDigitLibrary</AssemblyName>
+    <RootNamespace>RefreshingCache</RootNamespace>
+    <AssemblyName>RefreshingCache</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,16 +32,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RomeNumber.cs" />
+    <Compile Include="IComputer.cs" />
+    <Compile Include="ITime.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="RefreshingCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RulesConvertRomeNumber.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

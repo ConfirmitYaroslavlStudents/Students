@@ -6,7 +6,7 @@ using Cache;
 namespace UnitTestCashe
 {
     [TestClass]
-    public class UnitTest1
+    public class TestCache
     {
         [TestMethod]
         public void TestEqualsKeys()

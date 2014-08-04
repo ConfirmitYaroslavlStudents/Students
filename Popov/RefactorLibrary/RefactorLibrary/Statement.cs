@@ -20,15 +20,7 @@ namespace RefactorLibrary
             Title = rent.Movie.Title;
             Charge = rent.GetCharge();
         }
-
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return ((Title != null ? Title.GetHashCode() : 0) * 397) ^ Charge.GetHashCode();
-            }
-        }
+        
 
         public override bool Equals(object obj)
         {
@@ -87,20 +79,7 @@ namespace RefactorLibrary
             result += "Вы заработали " + _earnings + " за активность";
             return result;
         }
-
-
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = (_nameClient != null ? _nameClient.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _debtAmount.GetHashCode();
-                hashCode = (hashCode * 397) ^ _earnings.GetHashCode();
-                hashCode = (hashCode * 397) ^ (_listTitleCharge != null ? _listTitleCharge.GetHashCode() : 0);
-                return hashCode;
-            }
-        }
+        
 
         public override bool Equals(object obj)
         {
@@ -124,9 +103,6 @@ namespace RefactorLibrary
                 (_earnings == other._earnings) &&
                 (_listTitleCharge.SequenceEqual(other._listTitleCharge))
                 );
-
         }
     }
-
-
 }

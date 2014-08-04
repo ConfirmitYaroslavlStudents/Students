@@ -7,6 +7,9 @@ namespace Graph
 {
     public class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>, IEquatable<Graph<T>>
     {
+        private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
+
+
         public bool Equals(Graph<T> other)
         {
             if (Count != other.Count)
@@ -21,12 +24,7 @@ namespace Graph
             }
             return true;
         }
-
-        public override int GetHashCode()
-        {
-            return (_vertexDictionary != null ? _vertexDictionary.GetHashCode() : 0);
-        }
-
+        
         public override bool Equals(object obj)
         {
             var temp = obj as Graph<T>;
@@ -43,10 +41,7 @@ namespace Graph
         {
             return _vertexDictionary.GetEnumerator();
         }
-
-        
-        private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
-
+       
         
         public Graph(Dictionary<T, HashSet<T>> setVertex)
         {
@@ -201,7 +196,7 @@ namespace Graph
             get { return _vertexDictionary.Count(); }
         }
 
-        public Dictionary<T, HashSet<T>> VertexSet
+        public Dictionary<T, HashSet<T>> SetVertex
         {
             get { return _vertexDictionary; }
         }

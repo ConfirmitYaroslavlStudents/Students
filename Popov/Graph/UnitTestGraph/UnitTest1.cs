@@ -74,8 +74,8 @@ namespace UnitTestGraph
         {
             var gr = new Graph<string>("A");
             gr.AddVertex("B", new HashSet<string>(new[]{"A"}));
-            int count =0;
-            gr.ViewDepth("A",(s => count++), new List<string>());
+            var count = 0;
+            gr.ViewDepth("A",(s => count++));
             Assert.AreEqual(count, gr.Count);
         }
 
@@ -85,7 +85,7 @@ namespace UnitTestGraph
             var gr = new Graph<string>("A");
             gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
             int count = 0;
-            gr.ViewWidth("A", (s => count++), new List<string>());
+            gr.ViewWidth("A", (s => count++));
             Assert.AreEqual(count, gr.Count);
         }
 
@@ -96,7 +96,7 @@ namespace UnitTestGraph
             gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
             gr.AddVertex("C", new HashSet<string>(new[] { "A" }));
             gr.AddVertex("D", new HashSet<string>(new[] { "C" }));
-            Assert.AreEqual(gr.Count, gr.VertexSet.Count);
+            Assert.AreEqual(gr.Count, gr.SetVertex.Count);
         }
 
         [TestMethod]
@@ -107,8 +107,8 @@ namespace UnitTestGraph
             gr.AddVertex("C");
             int countForViewWidth = 0;
             int countForViewDepth = 0;
-            gr.ViewWidth("A", (s => countForViewWidth++), new List<string>());
-            gr.ViewWidth("A", (s => countForViewDepth++), new List<string>());
+            gr.ViewWidth("A", (s => countForViewWidth++));
+            gr.ViewWidth("A", (s => countForViewDepth++));
             Assert.AreEqual(countForViewWidth, countForViewDepth, gr.Count);
         }
     }

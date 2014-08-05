@@ -5,44 +5,55 @@ using Graph;
 
 namespace UnitTestGraph
 {
+    static class InstanceGraph<T>
+    {
+        public static Graph<T> GetGraph(T vertex)
+        {
+            return new Graph<T>(vertex);
+        }
+        public static Graph<T> GetGraph()
+        {
+            return new Graph<T>();
+        }
+    }
     [TestClass]
     public class UnitTest1
     {
         [TestMethod]
         public void TestCountEquals()
         {
-            var gr = new Graph<int>(1);
-            gr.AddVertex(2,new HashSet<int>(new[]{1}));
-            gr.RemoveVertex(2);
-            var gr2 = new Graph <int> (1);
-            Assert.AreEqual(gr.Count,gr2.Count);
+            var graph = InstanceGraph<int>.GetGraph(1);
+            graph.AddVertex(2,new HashSet<int>(new[]{1}));
+            graph.RemoveVertex(2);
+            var graph2 = InstanceGraph<int>.GetGraph (1);
+            Assert.AreEqual(graph.Count,graph2.Count);
         }
 
         [TestMethod]
         public void TestRemoveAdding()
         {
-            var gr = new Graph<int>(1);
-            var gr2 = new Graph<int>(1);
-            gr.AddVertex(2, new HashSet<int>(new[] { 1 }));
-            gr.RemoveVertex(2);
-            Assert.AreEqual(gr,gr2);
+            var graph = InstanceGraph<int>.GetGraph(1);
+            var graph2 = InstanceGraph<int>.GetGraph(1);
+            graph.AddVertex(2, new HashSet<int>(new[] { 1 }));
+            graph.RemoveVertex(2);
+            Assert.AreEqual(graph,graph2);
         }
 
         [TestMethod]
         public void TestAddingIsolatedVertex()
         {
-            var gr = new Graph<string>("A");
-            var gr2 = new Graph<string>();
-            gr2.AddVertex("A");           
-            Assert.AreEqual(gr, gr2);
+            var graph = InstanceGraph<string>.GetGraph("A");
+            var graph2 = InstanceGraph<string>.GetGraph();
+            graph2.AddVertex("A");           
+            Assert.AreEqual(graph, graph2);
         }
 
         [TestMethod]
         public void TestMatrixEquals()
         {
-            var gr = new Graph<string>("A");
-            gr.AddVertex("B",new HashSet<string>(new[]{"A"}));
-            var matrixGraph = gr.ToAdjacencyMatrix();
+            var graph = InstanceGraph<string>.GetGraph("A");
+            graph.AddVertex("B",new HashSet<string>(new[]{"A"}));
+            var matrixGraph = graph.ToAdjacencyMatrix();
             bool[,] matrix = {{false, true}, {true, false}};
             bool flagEquals = true;
             for (var i = 0; i < matrix.GetLength(0);++i)
@@ -72,44 +83,44 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestViewInDepth()
         {
-            var gr = new Graph<string>("A");
-            gr.AddVertex("B", new HashSet<string>(new[]{"A"}));
+            var graph = InstanceGraph<string>.GetGraph("A");
+            graph.AddVertex("B", new HashSet<string>(new[]{"A"}));
             var count = 0;
-            gr.ViewDepth("A",(s => count++));
-            Assert.AreEqual(count, gr.Count);
+            graph.ViewDepth("A",(s => count++));
+            Assert.AreEqual(count, graph.Count);
         }
 
         [TestMethod]
         public void TestViewInWidth()
         {
-            var gr = new Graph<string>("A");
-            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            var graph = InstanceGraph<string>.GetGraph("A");
+            graph.AddVertex("B", new HashSet<string>(new[] { "A" }));
             int count = 0;
-            gr.ViewWidth("A", (s => count++));
-            Assert.AreEqual(count, gr.Count);
+            graph.ViewWidth("A", (s => count++));
+            Assert.AreEqual(count, graph.Count);
         }
 
         [TestMethod]
         public void TestCountHashSet()
         {
-            var gr = new Graph<string>("A");
-            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
-            gr.AddVertex("C", new HashSet<string>(new[] { "A" }));
-            gr.AddVertex("D", new HashSet<string>(new[] { "C" }));
-            Assert.AreEqual(gr.Count, gr.SetVertex.Count);
+            var graph = InstanceGraph<string>.GetGraph("A");
+            graph.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            graph.AddVertex("C", new HashSet<string>(new[] { "A" }));
+            graph.AddVertex("D", new HashSet<string>(new[] { "C" }));
+            Assert.AreEqual(graph.Count, graph.SetVertex.Count);
         }
 
         [TestMethod]
         public void TestViewUnconnectedGraph()
         {
-            var gr = new Graph<string>("A");
-            gr.AddVertex("B", new HashSet<string>(new[] { "A" }));
-            gr.AddVertex("C");
-            int countForViewWidth = 0;
-            int countForViewDepth = 0;
-            gr.ViewWidth("A", (s => countForViewWidth++));
-            gr.ViewWidth("A", (s => countForViewDepth++));
-            Assert.AreEqual(countForViewWidth, countForViewDepth, gr.Count);
+            var graph = InstanceGraph<string>.GetGraph("A");
+            graph.AddVertex("B", new HashSet<string>(new[] { "A" }));
+            graph.AddVertex("C");
+            var countForViewWidth = 0;
+            var countForViewDepth = 0;
+            graph.ViewWidth("A", (s => countForViewWidth++));
+            graph.ViewWidth("A", (s => countForViewDepth++));
+            Assert.AreEqual(countForViewWidth, countForViewDepth, graph.Count);
         }
     }
 }

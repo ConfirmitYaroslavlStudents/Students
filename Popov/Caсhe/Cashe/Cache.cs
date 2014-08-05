@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Cache
 {
-   
     class Element<T>
     {
         private DateTime _timeLastUse;
@@ -52,8 +51,8 @@ namespace Cache
         private readonly Dictionary<TKey, Element<TValue>> _cache;
         private int _capacity;
         private readonly TimeSpan _timeLive;
-        private const int Defaultcapacity   = 10;
-        private readonly TimeSpan _defaultTimeLive   = new TimeSpan(0, 0, 5);
+        private const int Defaultcapacity = 10;
+        private readonly TimeSpan _defaultTimeLive = new TimeSpan(0, 0, 5);
 
 
         int IGetNumberIncludeCache.NumberIncludeCahce { get; set; }
@@ -103,16 +102,25 @@ namespace Cache
                 RemoveAllOldPairFromCache();
                 if (_cache.ContainsKey(key))
                 {
-                    ++ (this as IGetNumberIncludeCache).NumberIncludeCahce;
+                    IncrementIncludeCache();
                     RefreshValueInCache(key);
                     return _cache[key].Value;
                 }
-                ++ (this as IGetNumberIncludeCache).NumberIncludeStorage;
+                IncrementIncludeStorage();
                 AddNewValueInCache(key, _storage[key]);
                 return _cache[key].Value;
 
             }
         }
+        private void IncrementIncludeStorage()
+        {
+            ++ (this as IGetNumberIncludeCache).NumberIncludeStorage;
+        }
+        private void IncrementIncludeCache()
+        {
+            ++ (this as IGetNumberIncludeCache).NumberIncludeCahce;
+        }
+
 
         public int Capacity
         {
@@ -129,7 +137,7 @@ namespace Cache
                 else
                 {
                     for (var i = 0; i < _capacity - value; ++i)
-                        RemoveOldPairFromCache();
+                    RemoveOldPairFromCache();
                     _capacity = value;
                 }
             }
@@ -152,18 +160,17 @@ namespace Cache
 
         void RemoveOldPairFromCache()
         {
-            if (_cache.Count > 0)
+            if (_cache.Count <= 0) return;
+
+            var maxOldValue = _cache.First();
+            foreach (var pair in _cache)
             {
-                var maxOldValue = _cache.First();
-                foreach (var pair in _cache)
+                if (pair.Value.TimeUsage < maxOldValue.Value.TimeUsage)
                 {
-                    if (pair.Value.TimeUsage < maxOldValue.Value.TimeUsage)
-                    {
-                        maxOldValue = pair;
-                    }
+                    maxOldValue = pair;
                 }
-                _cache.Remove(maxOldValue.Key);
             }
+            _cache.Remove(maxOldValue.Key);
         }
         
         void RefreshValueInCache(TKey key)

@@ -26,8 +26,8 @@ namespace RomeDigitLibrary
             while ((firstRomeDigit != symbolEnd) && (i < _romeNumber.Length))
             {
                 var secondRomeDigit = _romeNumber[i];
-                RulesConvertRomeNumber.CheckExistValueTen(firstRomeDigit);
-                RulesConvertRomeNumber.CheckExistValueTen(secondRomeDigit);
+                RulesConvertRomeNumber.CheckExistRule(firstRomeDigit);
+                RulesConvertRomeNumber.CheckExistRule(secondRomeDigit);
                 if (RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit] >= RulesConvertRomeNumber.RulesConvertToTen[secondRomeDigit])
                 {
                     result += RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
@@ -48,7 +48,7 @@ namespace RomeDigitLibrary
             }
             if (firstRomeDigit != symbolEnd)
             {
-                RulesConvertRomeNumber.CheckExistValueTen(firstRomeDigit);
+                RulesConvertRomeNumber.CheckExistRule(firstRomeDigit);
                 result += RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
             }
             return result;
@@ -99,7 +99,7 @@ namespace RomeDigitLibrary
             var result = "";
             while (number != 0)
             {
-                var incompleteNumber = MaximumPowerTen(number);
+                var incompleteNumber = MaximumMathPowerTen(number);
                 if (RulesConvertRomeNumber.RulesConvertToRome.ContainsKey(incompleteNumber))
                 {
                     result += RulesConvertRomeNumber.RulesConvertToRome[incompleteNumber];
@@ -126,7 +126,7 @@ namespace RomeDigitLibrary
         }
 
         
-        private static uint MaximumPowerTen(uint number)
+        private static uint MaximumMathPowerTen(uint number)
         {
             var firstDigit = FirstSymbolToUInt(number);
             var tens = AddSymbolZero(number.ToString(CultureInfo.InvariantCulture).Length - 1);

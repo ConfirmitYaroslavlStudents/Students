@@ -28,17 +28,15 @@ namespace RomeDigitLibrary
             };
         }
 
-        public static void CheckExistValueTen(char key)
-        {
-            if (!RulesConvertToTen.ContainsKey(key))
-            {
-                throw new FormatException("Incorrect entry of the Roman number");
-            }
-        }
-
+       
         public static void CheckExistRule(string rule)
         {
             if (!RulesConvertToRome.ContainsValue(rule))
+                throw new FormatException("Incorrect entry of the Roman number");
+        }
+        public static void CheckExistRule(char rule)
+        {
+            if (!RulesConvertToTen.ContainsKey(rule))
                 throw new FormatException("Incorrect entry of the Roman number");
         }
     }

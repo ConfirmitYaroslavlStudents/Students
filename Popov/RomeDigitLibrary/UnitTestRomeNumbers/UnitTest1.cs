@@ -19,7 +19,7 @@ namespace UnitTestRomeNumbers
     {
 
         [TestMethod]
-        public void TestInstance()
+        public void TestConvertToUint()
         {
             var equalsDictionary = new Dictionary<uint, uint>
             {
@@ -40,7 +40,7 @@ namespace UnitTestRomeNumbers
         }
 
         [TestMethod]
-        public void TestRome()
+        public void TestConvertUIntToRomeNumber()
         {
             var equalsDictionary = new Dictionary<RomeNumber, RomeNumber>
             {
@@ -58,7 +58,13 @@ namespace UnitTestRomeNumbers
                 Assert.AreEqual(pair.Key, pair.Value);
             }
         }
-        
+
+        [TestMethod]
+        public void TestToString()
+        {
+            const string Rn = "XI";
+            Assert.AreEqual(InstanceRomeNumber.GetInstance(Rn).ToString(),Rn);
+        }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]

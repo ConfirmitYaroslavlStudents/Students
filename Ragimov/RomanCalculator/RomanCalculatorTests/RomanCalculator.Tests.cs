@@ -28,7 +28,7 @@ namespace RomanCalculatorTests
          InlineData("II * III", "VI", 6)]
         public void Calculate_FromExpression_ShouldPass(string expression, string expected, int indecimal)
         {
-            RomanNumeral actual = RomanNumeral.CalculateExpression(expression);
+            var actual = new RomanCalc().CalculateExpression(expression);
             Assert.Equal(expected, actual.Roman);
             Assert.Equal(indecimal, actual.Value);
         }
@@ -43,7 +43,7 @@ namespace RomanCalculatorTests
          InlineData("MCMLXXXIX + III", "MCMXCII", 1992)]
         public void Calculate_UnusualExpression_ShouldPass(string expression, string expected, int indecimal)
         {
-            var actual = RomanNumeral.CalculateExpression(expression);
+            var actual = new RomanCalc().CalculateExpression(expression);
             Assert.Equal(expected, actual.Roman);
             Assert.Equal(indecimal, actual.Value);
         }
@@ -56,7 +56,7 @@ namespace RomanCalculatorTests
          InlineData("V - V")]
         public void Calculate_FromExpression_NotNaturalResult_ShouldThrowInvalidOperation(string expression)
         {
-            Assert.Throws(typeof (InvalidOperationException), () => { RomanNumeral.CalculateExpression(expression); });
+            Assert.Throws(typeof (InvalidOperationException), () => { new RomanCalc().CalculateExpression(expression); });
         }
 
         [Theory,
@@ -67,7 +67,7 @@ namespace RomanCalculatorTests
          InlineData("V ? LIII")]
         public void Calculate_FromExpression_UndefinedOperation_ShouldThrowInvalidOperation(string expression)
         {
-            Assert.Throws(typeof (InvalidOperationException), () => { RomanNumeral.CalculateExpression(expression); });
+            Assert.Throws(typeof (InvalidOperationException), () => { new RomanCalc().CalculateExpression(expression); });
         }
 
         [Theory,
@@ -83,7 +83,7 @@ namespace RomanCalculatorTests
          InlineData("Привет, как дела?")]
         public void Calculate_FromExpression_IncorrectInput_ShouldThrowInvalidData(string expression)
         {
-            Assert.Throws(typeof (InvalidDataException), () => { RomanNumeral.CalculateExpression(expression); });
+            Assert.Throws(typeof (InvalidDataException), () => { new RomanCalc().CalculateExpression(expression); });
         }
     }
 }

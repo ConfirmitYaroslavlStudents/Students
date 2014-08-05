@@ -2,9 +2,9 @@
 {
     public class Rental
     {
-        public Rental(PriceType priceType,string title)
+        public Rental(Movie movie)
         {
-            Movie = new Movie(priceType,title);
+            Movie = movie;
         }
 
         public Movie Movie

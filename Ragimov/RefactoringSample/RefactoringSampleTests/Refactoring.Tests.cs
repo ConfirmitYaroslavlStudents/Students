@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefactoringSample;
 
@@ -9,45 +13,45 @@ namespace RefactoringSampleTests
     [TestClass]
     public class RefactoringTests
     {
-        public bool IsInStatement(string statement,string value)
+        public bool CheckStatement(Statement statement,Dictionary<string, double> moviePrices,string name, double totalAmount, int frequencyPoints)
         {
-            if (statement.IndexOf(value, StringComparison.Ordinal) != -1)
-            {
-                    return true;
-            }
-            return false;
+            return statement.MoviePrices.SequenceEqual(moviePrices) && statement.Name == name && statement.TotalAmount.CompareTo(totalAmount) == 0 &&
+                   statement.FrequentRenterPoints == frequencyPoints;
         }
 
-        public List<string> GetStatementsToString(Customer customer)
+        public bool CheckStandartStringStatement(string statement, Dictionary<string, double> moviePrices, string name, double totalAmount, int frequencyPoints)
         {
-            var statementsToString = new List<string>
+            var result = new StringBuilder();
+            result.Append(String.Format("Учет аренды для {0}{1}", name, Environment.NewLine));
+
+            foreach (var movie in moviePrices.Keys)
             {
-                new Statement(customer).StandartString(),
-                new Statement(customer).JsonToString()
-            };
-            return statementsToString;
+
+                result.Append(String.Format("\t {0} \t {1} {2}", movie, moviePrices[movie].ToString(CultureInfo.InvariantCulture), Environment.NewLine));
+            }
+
+            result.Append(String.Format("Сумма задолженности составляет {0}{1}", totalAmount.ToString(CultureInfo.InvariantCulture), Environment.NewLine));
+            result.Append(String.Format("Вы заработали {0} за активность", frequencyPoints.ToString(CultureInfo.InvariantCulture)));
+            return (statement == result.ToString());
         }
+
+        public bool CheckJson(MemoryStream statement, Dictionary<string, double> moviePrices, string name, double totalAmount, int frequencyPoints)
+        {
+            statement.Position = 0;
+            var ser = new DataContractJsonSerializer(typeof(Statement));
+            return CheckStatement((Statement)ser.ReadObject(statement), moviePrices, name,totalAmount,frequencyPoints);
+        }
+
         [TestMethod]
         public void Customer_RentedNothing_Shouldpass()
         {
             const string name = "Nemo";
 
+            var statement = new Statement(new Customer(name));
 
-            var statementsToString = GetStatementsToString(new Customer(name));
-
-            foreach (var statement in statementsToString)
-            {
-                Assert.IsTrue(IsInStatement(statement, name));
-                Assert.IsTrue(IsInStatement(statement, 0.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 0.ToString(CultureInfo.InvariantCulture))); 
-            }
-
-            //Old test
-            var expectedstatement = String.Format("Учет аренды для {0}{1}", name, Environment.NewLine);
-            expectedstatement += String.Format("Сумма задолженности составляет {0}{1}", 0.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            expectedstatement += string.Format("Вы заработали {0} за активность", 0.ToString(CultureInfo.InvariantCulture));
-
-            Assert.AreEqual(expectedstatement, new Statement(new Customer(name)).StandartString());
+            Assert.IsTrue(CheckStatement(statement, new Dictionary<string, double>(), name, 0, 0));
+            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statement).Result,new Dictionary<string, double>(),name,0,0 ));
+            Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, new Dictionary<string, double>(), name, 0, 0));
         }
 
         [TestMethod]
@@ -56,29 +60,19 @@ namespace RefactoringSampleTests
             const string name = "Nemo";
 
             var customerNemo = new Customer(name);
-            var mrNobody = new Rental(new PriceRegular(), "Mr.Nobody");
-            mrNobody.DaysRented = 1;
+            var mrNobody = new RentalBuilder().Build(new PriceRegular(), "Mr.Nobody",1);
             customerNemo.Rentals.Add(mrNobody);
 
+            var statement = new Statement(customerNemo);
 
-            var statementsToString = GetStatementsToString(customerNemo);
+            var movieDict = new Dictionary<string, double>();
+            movieDict["Mr.Nobody"] = 2;
+            const int total = 2;
+            const int frequency = 1;
 
-            foreach (var statement in statementsToString)
-            {
-                Assert.IsTrue(IsInStatement(statement, name));
-                Assert.IsTrue(IsInStatement(statement, mrNobody.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, 2.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 1.ToString(CultureInfo.InvariantCulture)));
-            }
-
-            //Old test
-            var expectedstatement = String.Format("Учет аренды для {0}{1}", name, Environment.NewLine);
-            expectedstatement += String.Format("\t {0} \t {1} {2}", mrNobody.Movie.Title, 2.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-
-            expectedstatement += String.Format("Сумма задолженности составляет {0}{1}", 2.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            expectedstatement += String.Format("Вы заработали {0} за активность", 1.ToString(CultureInfo.InvariantCulture));
-
-            Assert.AreEqual(expectedstatement, new Statement(customerNemo).StandartString());
+            Assert.IsTrue(CheckStatement(statement, movieDict, name,total,frequency));
+            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statement).Result, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, movieDict, name, total,frequency));
         }
 
         [TestMethod]
@@ -87,45 +81,30 @@ namespace RefactoringSampleTests
             const string name = "Nemo";
 
             var customerNemo = new Customer(name);
-            var mrNobody = new Rental(new PriceRegular(), "Mr.Nobody");
+            var mrNobody = new RentalBuilder().Build(new PriceRegular(), "Mr.Nobody",5);
             mrNobody.DaysRented = 5;
             customerNemo.Rentals.Add(mrNobody);
 
-            var movie2 = new Rental(new PriceNewRelease(), "Another movie for Nemo");
+            var movie2 = new RentalBuilder().Build(new PriceNewRelease(), "Another movie for Nemo",10);
             movie2.DaysRented = 10;
             customerNemo.Rentals.Add(movie2);
 
-            var movie3 = new Rental(new PriceChildren(), "Third Movie for Nemo");
+            var movie3 = new RentalBuilder().Build(new PriceChildren(), "Third Movie for Nemo", 23);
             movie3.DaysRented = 23;
             customerNemo.Rentals.Add(movie3);
 
+            var statement = new Statement(customerNemo);
 
-            var statementsToString = GetStatementsToString(customerNemo);
+            var movieDict = new Dictionary<string, double>();
+            movieDict["Mr.Nobody"] = 6.5;
+            movieDict["Another movie for Nemo"] = 30;
+            movieDict["Third Movie for Nemo"] = 31.5;
+            const int total = 68;
+            const int frequency = 4;
 
-            foreach (var statement in statementsToString)
-            {
-                Assert.IsTrue(IsInStatement(statement, name));
-                Assert.IsTrue(IsInStatement(statement, mrNobody.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, movie2.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, movie3.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, 6.5.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 30.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 31.5.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 68.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 4.ToString(CultureInfo.InvariantCulture)));
-            }
-
-            //Old test
-            var expectedstatement = String.Format("Учет аренды для {0}{1}", name, Environment.NewLine);
-
-            expectedstatement += String.Format("\t {0} \t {1} {2}", mrNobody.Movie.Title, 6.5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            expectedstatement += String.Format("\t {0} \t {1} {2}", movie2.Movie.Title, 30.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            expectedstatement += String.Format("\t {0} \t {1} {2}", movie3.Movie.Title, 31.5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-
-            expectedstatement += String.Format("Сумма задолженности составляет {0}{1}", 68.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            expectedstatement += String.Format("Вы заработали {0} за активность", 4.ToString(CultureInfo.InvariantCulture));
-
-            Assert.AreEqual(expectedstatement, new Statement(customerNemo).StandartString());
+            Assert.IsTrue(CheckStatement(statement, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statement).Result, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, movieDict, name, total, frequency));
         }
 
         [TestMethod]
@@ -137,14 +116,14 @@ namespace RefactoringSampleTests
             var customerNemo = new Customer(name);
             var customerNeo = new Customer(name2);
 
-            var mrNobody = new Rental(new PriceRegular(), "Mr.Nobody");
+            var mrNobody = new RentalBuilder().Build(new PriceRegular(), "Mr.Nobody",1);
             mrNobody.DaysRented = 1;
 
 
-            var movie2 = new Rental(new PriceNewRelease(), "Another movie for Nemo");
+            var movie2 = new RentalBuilder().Build(new PriceNewRelease(), "Another movie for Nemo",1);
             movie2.DaysRented = 1;
 
-            var matrix = new Rental(new PriceChildren(), "The Matrix");
+            var matrix = new RentalBuilder().Build(new PriceChildren(), "The Matrix",1);
             matrix.DaysRented = 1;
 
             customerNemo.Rentals.Add(mrNobody);
@@ -153,54 +132,29 @@ namespace RefactoringSampleTests
             customerNeo.Rentals.Add(matrix);
             customerNeo.Rentals.Add(movie2);
 
+            var statementNemo = new Statement(customerNemo);
 
-            var statementsToString = GetStatementsToString(customerNemo);
+            var movieDict = new Dictionary<string, double>();
+            movieDict["Mr.Nobody"] = 2;
+            movieDict["Another movie for Nemo"] = 3;
+            const int total = 5;
+            const int frequency = 2;
 
-            foreach (var statement in statementsToString)
-            {
-                Assert.IsTrue(IsInStatement(statement, name));
-                Assert.IsTrue(IsInStatement(statement, mrNobody.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, movie2.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, 2.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 3.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 5.ToString(CultureInfo.InvariantCulture)));
-            }
+            Assert.IsTrue(CheckStatement(statementNemo, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statementNemo).Result, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckJson(new JsonStatement(statementNemo).Result, movieDict, name, total, frequency));
 
-            statementsToString = GetStatementsToString(customerNeo);
+            var statementNeo = new Statement(customerNeo);
 
-            foreach (var statement in statementsToString)
-            {
-                Assert.IsTrue(IsInStatement(statement, name2));
-                Assert.IsTrue(IsInStatement(statement, matrix.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, movie2.Movie.Title));
-                Assert.IsTrue(IsInStatement(statement, 1.5.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 3.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 4.5.ToString(CultureInfo.InvariantCulture)));
-                Assert.IsTrue(IsInStatement(statement, 2.ToString(CultureInfo.InvariantCulture)));
-            }
+            var movieDictNeo = new Dictionary<string, double>();
+            movieDictNeo["The Matrix"] = 1.5;
+            movieDictNeo["Another movie for Nemo"] = 3;
+            const double totalNeo = 4.5;
+            const int frequencyNeo = 2;
 
-
-            //Old test
-            var statementNemo = String.Format("Учет аренды для {0}{1}", name, Environment.NewLine);
-
-            statementNemo += String.Format("\t {0} \t {1} {2}", mrNobody.Movie.Title, 2.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            statementNemo += String.Format("\t {0} \t {1} {2}", movie2.Movie.Title, 3.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-
-            statementNemo += String.Format("Сумма задолженности составляет {0}{1}", 5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            statementNemo += String.Format("Вы заработали {0} за активность", 2.ToString(CultureInfo.InvariantCulture));
-
-            Assert.AreEqual(statementNemo, new Statement(customerNemo).StandartString());
-
-
-            var statementNeo = String.Format("Учет аренды для {0}{1}", name2, Environment.NewLine);
-
-            statementNeo += String.Format("\t {0} \t {1} {2}", matrix.Movie.Title, 1.5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            statementNeo += String.Format("\t {0} \t {1} {2}", movie2.Movie.Title, 3.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-
-            statementNeo += String.Format("Сумма задолженности составляет {0}{1}", 4.5.ToString(CultureInfo.InvariantCulture), Environment.NewLine);
-            statementNeo += String.Format("Вы заработали {0} за активность", 2.ToString(CultureInfo.InvariantCulture));
-
-            Assert.AreEqual(statementNeo, new Statement(customerNeo).StandartString());
+            Assert.IsTrue(CheckStatement(statementNeo, movieDictNeo, name2, totalNeo, frequencyNeo));
+            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statementNeo).Result, movieDictNeo, name2, totalNeo, frequencyNeo));
+            Assert.IsTrue(CheckJson(new JsonStatement(statementNeo).Result, movieDictNeo, name2, totalNeo, frequencyNeo));
         }
     }
 }

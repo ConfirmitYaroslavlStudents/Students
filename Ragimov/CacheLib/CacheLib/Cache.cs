@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CacheLib
 {
-    public class Cache<TKey,TValue>
+    public class Cache<TKey,TValue>:IStorage<TKey,TValue>
     {
         private readonly Dictionary<TKey, CacheValue> _dictionary;
         public int Size { get; private set; }

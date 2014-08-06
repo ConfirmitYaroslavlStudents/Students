@@ -81,7 +81,7 @@ namespace RefreshingCache
         {
             if (_data.Count == _maxCacheSize)
             {
-                if (!RemoveExpirationData())
+                if (!RemoveExpirationData())//Сравнивать не результат а count кэша (для того чтобы узнать изменилась или нет)
                 {
                     var minKey = GetLeastRecentlyUsedKey();
                     RemoveEntry(minKey);
@@ -90,7 +90,7 @@ namespace RefreshingCache
             _data.Add(key, new Entry(value, _cacheTime));
         }
 
-        private bool RemoveExpirationData()
+        private bool RemoveExpirationData()//Может быть сделать void который просто удаляет старые значения
         {
             foreach (var keyValuePair in _data)
             {

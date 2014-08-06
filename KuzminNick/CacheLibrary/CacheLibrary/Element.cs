@@ -7,7 +7,6 @@ namespace CacheLibrary
     public class Element<T>
     {
         private readonly string _id;
-        private int _frequencyUsage;
         private int _timeOfLastUsingInSeconds;
 
         public Element(string id, T value)
@@ -25,13 +24,9 @@ namespace CacheLibrary
 
         public T Value { get; set; }
 
-        public int FrequencyUsage
-        {
-            get { return _frequencyUsage; }
-            private set { _frequencyUsage = value; }
-        }
+        public int FrequencyUsage { get; private set; }
 
-        public void IncFrequencyUsage()
+        public void IncrementFrequencyUsage()
         {
             FrequencyUsage++;
         }

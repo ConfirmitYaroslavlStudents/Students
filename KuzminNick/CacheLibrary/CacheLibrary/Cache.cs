@@ -11,14 +11,14 @@ namespace CacheLibrary
         private int _capacity;
         private int _limitTimeStoringInCacheInSeconds;
         private readonly Stopwatch _cacheStopwatch = new Stopwatch();
-        private readonly IDataBase<T> _slowDataBase;
+        private readonly IDataBase<T> _dataBase;
 
-        public Cache(int capacity, int limitTimeStoringInCacheInSeconds, IDataBase<T> slowDataBase)
+        public Cache(int capacity, int limitTimeStoringInCacheInSeconds, IDataBase<T> dataBase)
         {
             _cache = new Dictionary<string, Element<T>>();
             Capacity = capacity;
             LimitTimeStoringInCacheInSeconds = limitTimeStoringInCacheInSeconds;
-            _slowDataBase = slowDataBase;
+            _dataBase = dataBase;
             _cacheStopwatch.Start();
         }
 
@@ -66,11 +66,9 @@ namespace CacheLibrary
 
         public Element<T> GetElementById(string id)
         {
-            Console.WriteLine("STOPWATCH ='{0}'", _cacheStopwatch.Elapsed.Seconds);
-
             if (_cache.ContainsKey(id))
             {
-                _cache[id].IncFrequencyUsage();
+                _cache[id].IncrementFrequencyUsage();
                 _cache[id].TimeOfLastUsingInSeconds = _cacheStopwatch.Elapsed.Seconds;
                 _cache[id].TypeOfStorage = TypesOfStorage.Cache;
                 return _cache[id];
@@ -88,7 +86,7 @@ namespace CacheLibrary
 
         private T GetItemFromRemoteDataBase(string identifier)
         {
-            return _slowDataBase.GetItemById(identifier);
+            return _dataBase.GetItemById(identifier);
         }
 
         private void AddItem(Element<T> element)
@@ -103,6 +101,33 @@ namespace CacheLibrary
             _cache.Add(element.Id, element);
         }
 
+        private void RemoveOutdateElementsFromCache()
+        {
+            var keysRemovingElements = GetKeysOfRemovingElements();
+            RemoveElementsByKeys(keysRemovingElements);
+        }
+        private List<string> GetKeysOfRemovingElements()
+        {
+            return _cache
+                .Where(IsExceededLimitOfStoring)
+                .Select(pair => pair.Key)
+                .ToList();
+        }
+        private bool IsExceededLimitOfStoring(KeyValuePair<string, Element<T>> pair)
+        {
+            return pair.Value.TimeOfLastUsingInSeconds - _cacheStopwatch.Elapsed.Seconds >=
+                   _limitTimeStoringInCacheInSeconds;
+        }
+
+        private void RemoveElementsByKeys(List<string> keysRemovingElements)
+        {
+            foreach (var keyRemovingElement in keysRemovingElements)
+            {
+                _cache[keyRemovingElement].TypeOfStorage = TypesOfStorage.DataBase;
+                _cache.Remove(keyRemovingElement);
+            }
+        }
+
         private bool CacheIsFull()
         {
             return Capacity == Count;
@@ -110,8 +135,8 @@ namespace CacheLibrary
 
         private string FindKeyLeastUsedElement(string keyJustAddedElement)
         {
-            var keyRemovedElement = _cache.First().Key;
             var minFrequencyUsage = int.MaxValue;
+            var keyRemovedElement = _cache.First().Key;
             foreach (var item in _cache)
             {
                 if (item.Key == keyJustAddedElement) continue;
@@ -129,42 +154,14 @@ namespace CacheLibrary
             return keyRemovedElement;
         }
 
-        private void RemoveOutdateElementsFromCache()
-        {
-            var keysRemovingElements = GetKeysOfRemovingElements();
-            RemoveElementsByKeys(keysRemovingElements);
-        }
-
-        private List<string> GetKeysOfRemovingElements()
-        {
-            return _cache
-                .Where(pair => IsExceededStorageLimit(pair))
-                .Select(pair => pair.Key)
-                .ToList();
-        }
-
-        private void RemoveElementsByKeys(List<string> keysRemovingElements)
-        {
-            foreach (var keyRemovingElement in keysRemovingElements)
-            {
-                _cache[keyRemovingElement].TypeOfStorage = TypesOfStorage.DataBase;
-                _cache.Remove(keyRemovingElement);
-            }
-        }
-
-        private bool IsExceededStorageLimit(KeyValuePair<string, Element<T>> pair)
-        {
-            return pair.Value.TimeOfLastUsingInSeconds - _cacheStopwatch.Elapsed.Seconds >=
-                   _limitTimeStoringInCacheInSeconds;
-        }
-
         public string GetAllElementsOfCacheInStringFormat()
         {
             var allElementsInStringFormat = "";
+            var terminalSign = "|";
             foreach (var cacheElement in _cache)
             {
                 Element<T> element = cacheElement.Value;
-                allElementsInStringFormat += "|" + element.Value;
+                allElementsInStringFormat += terminalSign + element.Value;
             }
 
             return allElementsInStringFormat;

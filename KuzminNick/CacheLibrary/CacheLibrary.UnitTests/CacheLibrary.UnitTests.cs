@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CacheLibrary.UnitTests
 {
     [TestClass]
-    public class UnitTests
+    public class CacheUnitTests
     {
         private static DataBase<string> GenerateDataBaseOfRandomStringElements(int amountOfElements)
         {
@@ -17,7 +17,7 @@ namespace CacheLibrary.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CacheUnitTest_DecreaseValueOfCacheCapacity_ExceptionThrow()
+        public void Capacity_DecreaseValueOfCacheCapacity_ExceptionThrow()
         {
             var dataBase = new DataBase<string>();
             var cache = new Cache<string>(10, dataBase);
@@ -26,7 +26,7 @@ namespace CacheLibrary.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CacheUnitTest_NegativeValueOfCacheCapacity_ExceptionThrow()
+        public void Capacity_NegativeValue_ExceptionThrow()
         {
             var dataBase = new DataBase<string>();
             var cache = new Cache<string>(10, dataBase);
@@ -34,7 +34,7 @@ namespace CacheLibrary.UnitTests
         }
 
         [TestMethod]
-        public void CacheUnitTest_CorrectGettingElementsFromCacheAndDataBase()
+        public void TypesOfStorage_CorrectGettingElementsFromCacheAndDataBase()
         {
             var dataBase = GenerateDataBaseOfRandomStringElements(3);
             var cache = new Cache<string>(2, dataBase);
@@ -56,7 +56,7 @@ namespace CacheLibrary.UnitTests
             Assert.AreEqual(expectedTypeStorageOfSecondElement, actualTypeStorageOfSecondElement, "Second Element From Data Base");
             Assert.AreEqual(expectedTypeStorageOfThirdElement, actualTypeStorageOfThirdElement, "Third Element From Data Base");
 
-            RepeatedRequestAndCachingLastTwoElements(cache, listOfId);
+            RepeatedRequestToLastTwoElements(cache, listOfId);
 
             expectedTypeStorageOfFirstElement = TypesOfStorage.DataBase;
             expectedTypeStorageOfSecondElement = TypesOfStorage.Cache;
@@ -71,7 +71,7 @@ namespace CacheLibrary.UnitTests
             Assert.AreEqual(expectedTypeStorageOfThirdElement, actualTypeStorageOfThirdElement, "Third Element From Cache");
         }
 
-        private static void RepeatedRequestAndCachingLastTwoElements(Cache<string> cache, List<string> listOfId)
+        private static void RepeatedRequestToLastTwoElements(Cache<string> cache, List<string> listOfId)
         {
             var someInformationAboutSecondElement = cache.GetElementById(listOfId[1]);
             var someInformationAboutThirdElement = cache.GetElementById(listOfId[2]);
@@ -79,7 +79,7 @@ namespace CacheLibrary.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CacheUnitTest_NegativeValueOfTimeLimitStoringInCache_ExceptionThrow()
+        public void Constructor_NegativeValueOfTimeLimitStoringInCache_ExceptionThrow()
         {
             var dataBase = new DataBase<string>();
             var negativeValueOfTimeLimitStoringInCache = -5;

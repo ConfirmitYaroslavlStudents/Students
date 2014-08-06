@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ListLibrary;
 
 namespace ListLib.UnitTests
 {
     [TestClass]
-    public class ListUnitTests
+    public class ListLibraryUnitTests
     {
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void List_ConstructorNegativeSize()
+        public void ListConstructor_NegativeValueOfSizeArray_ExceptionThrown()
         {
             var list = new List<int>(-9);
         }
 
         [TestMethod]
-        public void List_CorrectnessOfCountProperty()
+        public void Add_CorrectValueOfCount()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -26,7 +25,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void List_CorrectnessRemoveMethod()
+        public void Remove_CorrectValueOfCount()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -40,14 +39,14 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void List_RemovingElementByNegativeIndex()
+        public void RemoveAt_RemovingElementByNegativeIndex_ExceptionThrown()
         {
             var list = new List<int> {5};
             list.RemoveAt(-3);
         }
 
         [TestMethod]
-        public void List_CorrectnessEnumerator()
+        public void Foreach_CorrectFunctioningOfEnumerator()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -61,7 +60,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void List_CorrectnessGettingElementBy_IndexOf_Method()
+        public void IndexOf_CorrectGettingElementByIndex()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -71,7 +70,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void List_IndexOfElement_NotIncludedInCollection()
+        public void IndexOf_IndexOfElementNotIncludedInCollection()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -81,7 +80,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void List_CorrectnessOfIndexer()
+        public void IndexerGetAccessor_CorrectValue()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -91,8 +90,20 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
+        public void IndexerSetAccessor_CorrectValue()
+        {
+            var list = new List<int>();
+            for (var i = 0; i < 10; i++)
+                list.Add(i);
+
+            list[5] = 25;
+
+            Assert.AreEqual(25, list[5]);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void List_NegetiveValueOfIndexer_GetMethod()
+        public void IndexerSetAccessor_NegetiveValueOfIndexer_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -103,7 +114,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void List_NegetiveValueOfIndexer_SetMethod()
+        public void IndexerGetAccessor_NegetiveValueOfIndexer_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -113,7 +124,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void List_CorrectnessClearMethod()
+        public void Clear_CorrectValueOfCount()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -124,19 +135,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void List_Correctness_ContainsMethod_ForNullElement()
-        {
-            var list = new List<string>();
-            for (var i = 0; i < 5; i++)
-                list.Add(i.ToString(CultureInfo.InvariantCulture));
-
-            list.Add(null);
-
-            Assert.AreEqual(true, list.Contains(null));
-        }
-
-        [TestMethod]
-        public void List_CorrectnessOfMethod_CopyTo()
+        public void CopyTo_CorrectCopyingOfArray()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -150,7 +149,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void List_NegativeIndexWhenCopyingInArray()
+        public void CopyTo_NegativeIndexWhenCopyingInArray_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -162,7 +161,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void List_IndexOutsideAllowableRangeOfValuesWhenCopyingInArray()
+        public void CopyTo_IndexOutsideAllowableRangeWhenCopyingInArray_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -175,7 +174,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void List_CopyingInNullArray()
+        public void CopyTo_CopyingInNullArray_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -183,7 +182,7 @@ namespace ListLib.UnitTests
 
             int[] intArray = null;  
          
-            list.CopyTo(destinationArray: intArray, indexDestinationArray: 1);
+            list.CopyTo(destinationArray: intArray, indexForInsertingDestinationArray: 1);
         }
     }
 }

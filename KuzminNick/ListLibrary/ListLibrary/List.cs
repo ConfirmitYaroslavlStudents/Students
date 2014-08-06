@@ -10,18 +10,18 @@ namespace ListLibrary
         private int _count;
 
         public List()
-        {
-            _elements = new T[5];
-        }
+            : this(5)
+        { }
 
         public List(int size)
         {
-            if (size < 0)
+            if (size <= 0)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
             _elements = new T[size];
+            Count = 0;
         }
 
         public int Capacity
@@ -30,14 +30,13 @@ namespace ListLibrary
 
             private set
             {
-                if (value < Count)
+                if (value < Count || value <= 0)
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentOutOfRangeException();
                 }
-                if (_elements.Length >= value || value <= 0) return;
 
                 var extendableArray = new T[value];
-                Array.Copy(_elements, 0, extendableArray, 0, _count);
+                Array.Copy(_elements, 0, extendableArray, 0, Count);
                 _elements = extendableArray;
             }
         }
@@ -82,8 +81,8 @@ namespace ListLibrary
             }
 
             Count--;
-            var indexOfElementAfterRemoved = index + 1;
-            Array.Copy(_elements, indexOfElementAfterRemoved, _elements, destinationIndex: index, length: Count - index);
+            var indexOfNextElement = index + 1;
+            Array.Copy(_elements, indexOfNextElement, _elements, destinationIndex: index, length: Count - index);
             _elements[Count] = default(T);
         }        
 
@@ -109,13 +108,16 @@ namespace ListLibrary
 
         public void Insert(int indexInsertedItem, T item)
         {
-            if (Count < indexInsertedItem)
+            if (indexInsertedItem >= Count)
                 throw new ArgumentOutOfRangeException();
 
             if (Count == Capacity)
                 Capacity = Capacity * 2;
 
-            Array.Copy(_elements, indexInsertedItem, _elements, indexInsertedItem + 1, Count - indexInsertedItem);
+            var indexOfNextElement = indexInsertedItem + 1;
+            var lengthRestOfArray = Count - indexInsertedItem;
+
+            Array.Copy(_elements, indexInsertedItem, _elements, indexOfNextElement, lengthRestOfArray);
         }
 
         public T this[int index]
@@ -148,7 +150,6 @@ namespace ListLibrary
 
             _elements = new T[5];
             Count = 0;
-            Capacity = 5;
         }
 
         public bool Contains(T item)
@@ -160,14 +161,14 @@ namespace ListLibrary
             return false;
         }        
         
-        public void CopyTo(T[] destinationArray, int indexDestinationArray)
+        public void CopyTo(T[] destinationArray, int indexForInsertingDestinationArray)
         {
             if (destinationArray == null)
                 throw new ArgumentNullException();
-            if ( !(IsPlacedInNewArray(destinationArray, indexDestinationArray)) )
+            if ( !(IsPlacedInNewArray(destinationArray, indexForInsertingDestinationArray)) )
                 throw new ArgumentOutOfRangeException();
             
-            Array.Copy(_elements, 0, destinationArray, indexDestinationArray, Count);
+            Array.Copy(_elements, 0, destinationArray, indexForInsertingDestinationArray, Count);
         }
 
         private bool IsPlacedInNewArray(T[] destinationArray, int indexDestinationArray)

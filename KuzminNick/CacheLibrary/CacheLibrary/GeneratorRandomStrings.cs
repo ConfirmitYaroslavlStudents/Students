@@ -34,9 +34,9 @@ namespace CacheLibrary
         private Element<string> GenerateRandomElement()
         {
             var randomString = Path.GetRandomFileName();
-            var identifier = randomString.GetHashCode().ToString();
+            var id = randomString.GetHashCode().ToString();
             var newElement =
-                new Element<string>(identifier, randomString);
+                new Element<string>(id, randomString);
             return newElement;
         }
     }

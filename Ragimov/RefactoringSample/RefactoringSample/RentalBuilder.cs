@@ -10,9 +10,9 @@
         {
             return new Rental(movie){DaysRented = daysRented};
         }
-        public Rental Build(PriceProvider priceType, string title, int daysRented)
+        public Rental Build(PriceProvider priceType, string title,int daysRented)
         {
-            return new Rental(new Movie(priceType, title)) { DaysRented = daysRented };
+            return new Rental(new Movie(priceType,title)) { DaysRented = daysRented };
         }
     }
 }

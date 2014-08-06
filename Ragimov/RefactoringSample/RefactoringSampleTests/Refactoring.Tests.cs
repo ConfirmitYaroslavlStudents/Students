@@ -107,7 +107,6 @@ namespace RefactoringSampleTests
             Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, movieDict, name, total, frequency));
         }
 
-        //It is so long test. It is so difficult for understanding it
         [TestMethod]
         public void ManyCustomers_RentedMultipleMovies_Shouldpass()
         {
@@ -119,6 +118,7 @@ namespace RefactoringSampleTests
 
             var mrNobody = new RentalBuilder().Build(new PriceRegular(), "Mr.Nobody",1);
             mrNobody.DaysRented = 1;
+
 
             var movie2 = new RentalBuilder().Build(new PriceNewRelease(), "Another movie for Nemo",1);
             movie2.DaysRented = 1;

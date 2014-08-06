@@ -25,7 +25,7 @@ namespace QueueOnArray
             {
                 Array.Resize(ref _array, _array.Length * 2);
             }
-            _array[_back++%_array.Length] = value;//needs more space
+            _array[_back++%_array.Length] = value;
             Count++;
         }
 
@@ -51,7 +51,7 @@ namespace QueueOnArray
             Count = 0;
             _front = 0;
             _back = 0;
-            _array = new T[4];//4 to const
+            _array = new T[4];
         }
 
         public IEnumerator<T> GetEnumerator()

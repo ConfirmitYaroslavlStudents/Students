@@ -26,9 +26,7 @@ namespace CacheLib
                 Value = value;
             }
         }
-		
-		//slidingexpiration -> slidingExpiration
-		//absoluteexpiration -> absoluteExpiration
+
         public Cache(int size, int slidingexpiration, int absoluteexpiration, IStorage<TKey, TValue> storage, IDateTimeProvider dateTime)
         {
             Size = size;

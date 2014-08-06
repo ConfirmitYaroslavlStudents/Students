@@ -7,7 +7,7 @@ namespace CacheLib
     {
         TValue Get (TKey key);
     }
-    //PiStorage:IStorage<int,string> -> PiStorage : IStorage<int,string>
+
     public class PiStorage:IStorage<int,string>
     {
         public string Get(int key)
@@ -18,7 +18,6 @@ namespace CacheLib
 
     public class AsteriskStorage : IStorage<int, string>
     {
-        //private Dictionary<int, string> _dictionary -> private readonly Dictionary<int, string> _dictionary;
         private Dictionary<int, string> _dictionary;
 
         public AsteriskStorage()

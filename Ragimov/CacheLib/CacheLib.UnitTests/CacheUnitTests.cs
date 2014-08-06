@@ -9,9 +9,8 @@ namespace CacheLib.UnitTests
         public void Cache_DataAddedAndReceived_ShouldPass()
         {
             var storage = new AsteriskStorage();
-            //datetime -> dateTime
-            var datetime = new ChangeableTime(); //this magic number to const
-            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);// needs more space
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);
 
             cache.Get(1);
             cache.Get(2);
@@ -24,9 +23,8 @@ namespace CacheLib.UnitTests
         public void Cache_ReceivedBeforeExpired_ShouldPass()
         {
             var storage = new AsteriskStorage();
-            //datetime -> dateTime
-            var datetime = new ChangeableTime();//this magic number to const
-            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);// needs more space
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);
 
             cache.Get(1);
             cache.Get(2);
@@ -41,9 +39,8 @@ namespace CacheLib.UnitTests
         public void Cache_ReceivedAfterSlideExpired_ShouldPass()
         {
             var storage = new AsteriskStorage();
-            //datetime -> dateTime
-            var datetime = new ChangeableTime();//this magic number to const
-            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);// needs more space
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(16,1000,10000,storage,datetime);
 
             cache.Get(1);
             cache.Get(2);
@@ -61,8 +58,7 @@ namespace CacheLib.UnitTests
         public void Cache_ReceivedAfterAbsoluteExpired_ShouldPass()
         {
             var storage = new AsteriskStorage();
-            //datetime -> dateTime
-            var datetime = new ChangeableTime();//this magic number to const
+            var datetime = new ChangeableTime();
             var cache = new Cache<int, string>(16, 1000, 10000, storage, datetime);
 
             cache.Get(1);
@@ -82,9 +78,8 @@ namespace CacheLib.UnitTests
         public void Cache_AddedInFull_ShouldPass()
         {
             var storage = new AsteriskStorage();
-            //datetime -> dateTime
-            var datetime = new ChangeableTime();//this magic number to const
-            var cache = new Cache<int, string>(2,1000,10000,storage,datetime);// needs more space
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(2,1000,10000,storage,datetime);
 
             cache.Get(1);
             datetime.AddTime(300);
@@ -102,9 +97,8 @@ namespace CacheLib.UnitTests
         public void Cache_AddedDeletedDataFromStorage_ShouldPass()
         {
             var storage = new AsteriskStorage();
-            //datetime -> dateTime
-            var datetime = new ChangeableTime();//this magic number to const
-            var cache = new Cache<int, string>(2,1000,10000,storage,datetime);// needs more space
+            var datetime = new ChangeableTime();
+            var cache = new Cache<int, string>(2,1000,10000,storage,datetime);
 
             cache.Get(1);
             datetime.AddTime(400);

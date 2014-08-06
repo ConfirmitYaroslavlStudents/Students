@@ -40,7 +40,7 @@ namespace RefreshingCache.Tests
         {
             var systemTime = new Time();
             var dataStorage = new DataStorage();
-            
+
             string temp;
             var cache = new RefreshingCache<int, string>(CacheSize, ExpirationTime, dataStorage, systemTime);
 
@@ -51,10 +51,10 @@ namespace RefreshingCache.Tests
             }
 
             systemTime.CurrentTime = TimeMoreThanMax;
-           
+
             //we add new data with key "17". It replaces data with key "0" because our time expired. 
             temp = cache[17];
-            
+
             //And when we try get data with key "0", cache gets it from dataStorage, because it was deleted early.
             temp = cache[0];
 
@@ -62,7 +62,7 @@ namespace RefreshingCache.Tests
         }
 
         [Fact]
-        public void RefreshingCacheIndexer_WhenCacheSizeIncreaseUpperMaxSize_ShouldPass()
+        public void RefreshingCacheIndexer_WhenCacheSizeMoreThanMaxSize_ShouldPass()
         {
             var systemTime = new Time();
 

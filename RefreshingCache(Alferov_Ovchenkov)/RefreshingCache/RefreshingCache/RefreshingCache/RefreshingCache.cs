@@ -71,6 +71,11 @@ namespace RefreshingCache
             _dataStorage = dataStorage;
             _cacheTime = cacheTime;
         }
+        
+        public TValue GetData(TKey key)
+        {
+            return this[key];
+        }
 
         private void AddData(TKey key, TValue value)
         {
@@ -83,11 +88,6 @@ namespace RefreshingCache
                 }
             }
             _data.Add(key, new Entry(value, _cacheTime));
-        }
-        
-        public TValue GetData(TKey key)
-        {
-            return this[key];
         }
 
         private bool RemoveExpirationData()

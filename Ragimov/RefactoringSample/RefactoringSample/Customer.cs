@@ -21,7 +21,5 @@ namespace RefactoringSample
             get;
             private set;
         }
-
-
     }
 }

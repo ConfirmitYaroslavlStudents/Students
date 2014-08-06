@@ -99,7 +99,7 @@ namespace UnitTest
         public void Queue_IEnumerableImplemented(IQueueable<int> queue)
         {
             int[] array = { 42, 37, 100500 };
-            foreach (var t in array)
+            foreach (var t in array) //t -> temp
             {
                 queue.Enqueue(t);
             }

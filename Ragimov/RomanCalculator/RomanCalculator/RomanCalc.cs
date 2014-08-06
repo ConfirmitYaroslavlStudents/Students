@@ -3,7 +3,7 @@ using System.IO;
 
 namespace RomanCalculator
 {
-    public class RomanCalc
+    public class RomanCalc //Why is not full name?
     {
         public RomanNumeral Operation(RomanNumeral a, string op, RomanNumeral b)
         {

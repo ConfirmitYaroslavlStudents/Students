@@ -6,7 +6,7 @@ namespace RefactoringSample
     [DataContract]
     public class Statement
     {
-        public readonly Customer Customer;
+        public readonly Customer Customer; //Andrey can use other fields for do all, what he do in StatementFormatters
 
         [DataMember]
         public string Name;

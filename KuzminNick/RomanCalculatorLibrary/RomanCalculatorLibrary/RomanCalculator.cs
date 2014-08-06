@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ParsingInputDataOfCalculator;
 
 namespace RomanCalculatorLibrary
 {
@@ -11,11 +10,20 @@ namespace RomanCalculatorLibrary
         public string CalculateExpression(string expression)
         {
             var reversePolishSignature = _parser.ConvertInputStringToReversePolishSignature(expression);
+            var resultInArarbicFormat = GetResultOfCalculationInArabicFormat(reversePolishSignature);
 
+            if(resultInArarbicFormat <= 0)
+                throw new ArgumentException("Not positive result of calculation");
+
+            var resultInRomatFormat = _parser.ConvertArabicNumberToRoman(resultInArarbicFormat);
+
+            return resultInRomatFormat;
+        }
+
+        private int GetResultOfCalculationInArabicFormat(string reversePolishSignature)
+        {
             var stack = new Stack<string>();
             var resultOfCurrentOperation = 0;
-            var resultInArarbicFormat = 0;
-
             var listElementsOfExpression = _parser.InitializeListOfElements(reversePolishSignature);
 
             foreach (var elementOfExpression in listElementsOfExpression)
@@ -30,19 +38,12 @@ namespace RomanCalculatorLibrary
                     stack.Push(resultOfCurrentOperation.ToString());
                 }
             }
-
-            resultInArarbicFormat = int.Parse(stack.Pop());
-            if(resultInArarbicFormat <= 0)
-                throw new ArgumentException("Not positive result of calculation");
-
-            var resultInRomatFormat = _parser.ConvertArabicNumberToRoman(resultInArarbicFormat);
-
-            return resultInRomatFormat;
+            return int.Parse(stack.Pop());
         }
 
-        private static int CalculateCurrentOperation(Stack<string> stack, string elementOfExpression, int resultOfCurrentOperation)
+        private static int CalculateCurrentOperation(Stack<string> stack, string symbolOfOperation, int resultOfCurrentOperation)
         {
-            int secondNumber, firstNumber = 0;
+            int secondNumber, firstNumber;
             try
             {
                 secondNumber = int.Parse(stack.Pop());
@@ -52,7 +53,8 @@ namespace RomanCalculatorLibrary
             {
                 throw new InvalidOperationException("Uncorrect Arithmetic Expression");
             }
-            switch (elementOfExpression)
+
+            switch (symbolOfOperation)
             {
                 case "+":
                     resultOfCurrentOperation = firstNumber + secondNumber;
@@ -66,7 +68,7 @@ namespace RomanCalculatorLibrary
                 case "/":
                 {
                     if (firstNumber%secondNumber != 0)
-                        throw new ArgumentException();
+                        throw new ArgumentException("The result of division is not integer");
 
                     resultOfCurrentOperation = firstNumber/secondNumber;
                     break;

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ParsingInputDataOfCalculator
+namespace RomanCalculatorLibrary
 {
     public class ParserArithmeticExpression
     {
         private class CharacterElement
         {
-            public string CharValue { get; set; }
-            public TypeOfSign TypeOfSign { get; set; }
+            public string CharValue { get; private set; }
+            public TypeOfSign TypeOfSign { get; private set; }
 
             public CharacterElement(String charValue, TypeOfSign typeOfSign)
             {
@@ -30,7 +30,7 @@ namespace ParsingInputDataOfCalculator
 
         public String ConvertInputStringToReversePolishSignature(String expression)
         {
-            if (!IsCorrectAmountOfBrackets(expression))
+            if (!IsCorrectAmountOfBrackets(expression) || IsContainTerminalSign(expression))
                 throw new ArgumentException("Uncorrect Format of expression");
 
             var listOfCharacterElements = GetAllCharacterElementsOfInputString(expression);
@@ -61,6 +61,14 @@ namespace ParsingInputDataOfCalculator
             return isCorrectInputData;
         }
 
+        private Boolean IsContainTerminalSign(String expression)
+        {
+            if (expression.Contains("$"))
+                return true;
+
+            return false;
+        }
+
         private List<CharacterElement> GetAllCharacterElementsOfInputString(string inputArrayElements)
         {
             var listOfCharacterElements = new List<CharacterElement>();
@@ -72,7 +80,34 @@ namespace ParsingInputDataOfCalculator
             return listOfCharacterElements;
         }
 
-        //TODO refactoring
+        private TypeOfSign GetTypeOfSign(String currentChar)
+        {
+            switch (currentChar)
+            {
+                case "(":
+                    return TypeOfSign.OpeningBracket;
+                case ")":
+                    return TypeOfSign.ClosingBracket;
+                case "+":
+                case "-":
+                    return TypeOfSign.AdditionSubtraction;
+                case "*":
+                case "/":
+                    return TypeOfSign.MultiplicationDivision;
+                case "^":
+                    return TypeOfSign.Involution;
+                default:
+                    return TypeOfSign.Letter;
+            }
+        }
+
+        private void AddRemainingCharacterElementsFromStack(Stack<CharacterElement> stack,
+            ref string resultingReversePolishSignature)
+        {
+            while (stack.Count != 0)
+                resultingReversePolishSignature += stack.Pop().CharValue;
+        }
+
         private string ParsingCurrentCharacterElement(CharacterElement item,
             Stack<CharacterElement> stack, ref bool isPreviousCharIsLetter)
         {
@@ -135,11 +170,9 @@ namespace ParsingInputDataOfCalculator
             return resultingReversePolishSignature;
         }
 
-        private void AddRemainingCharacterElementsFromStack(Stack<CharacterElement> stack,
-            ref string resultingReversePolishSignature)
+        private bool PeekOfStackIsBracket(Stack<CharacterElement> stack)
         {
-            while (stack.Count != 0)
-                resultingReversePolishSignature += stack.Pop().CharValue;
+            return stack.Peek().CharValue != ")" && stack.Peek().CharValue != "(";
         }
 
         public List<string> InitializeListOfElements(string reversePolishSignature)
@@ -151,15 +184,8 @@ namespace ParsingInputDataOfCalculator
             {
                 if (reversePolishSignature[i] == terminalSign && i != reversePolishSignature.Length - 1)
                 {
-                    var currentElementOfExpression = String.Empty;
-                    do
-                    {
-                        i++;
-                        if (reversePolishSignature[i] != terminalSign)
-                            currentElementOfExpression += reversePolishSignature[i];
-                    } while (reversePolishSignature[i] != terminalSign);
-
-                    var arabicNumber = ConvertRomanNumberToArabic(currentElementOfExpression).ToString();
+                    var currentRomanNumber = ParseCurrentRomanNumber(ref i, reversePolishSignature, terminalSign);
+                    var arabicNumber = ConvertRomanNumberToArabic(currentRomanNumber).ToString();
                     listElementsOfExpression.Add(arabicNumber);
                 }
                 else if (IsSignOfOperation(reversePolishSignature[i].ToString()))
@@ -171,44 +197,17 @@ namespace ParsingInputDataOfCalculator
             return listElementsOfExpression;
         }
 
-        public static bool IsSignOfOperation(string sign)
+        private string ParseCurrentRomanNumber(ref int i, string reversePolishSignature, char terminalSign)
         {
-            switch (sign)
+            var currentElementOfExpression = String.Empty;
+            do
             {
-                case "+": return true;
-                case "-": return true;
-                case "*": return true;
-                case "/": return true;
-                case "^": return true;
-            }
+                i++;
+                if (reversePolishSignature[i] != terminalSign)
+                    currentElementOfExpression += reversePolishSignature[i];
+            } while (reversePolishSignature[i] != terminalSign);
 
-            return false;
-        }
-
-        private bool PeekOfStackIsBracket(Stack<CharacterElement> stack)
-        {
-            return stack.Peek().CharValue != ")" && stack.Peek().CharValue != "(";
-        }
-
-        private TypeOfSign GetTypeOfSign(String currentChar)
-        {
-            switch (currentChar)
-            {
-                case "(":
-                    return TypeOfSign.OpeningBracket;
-                case ")":
-                    return TypeOfSign.ClosingBracket;
-                case "+":
-                case "-":
-                    return TypeOfSign.AdditionSubtraction;
-                case "*":
-                case "/":
-                    return TypeOfSign.MultiplicationDivision;
-                case "^":
-                    return TypeOfSign.Involution;
-                default:
-                    return TypeOfSign.Letter;
-            }
+            return currentElementOfExpression;
         }
 
         public int ConvertRomanNumberToArabic(string romanFormatNumber)
@@ -272,11 +271,23 @@ namespace ParsingInputDataOfCalculator
             if (firstDigit == 'I')
                 return 1;
 
-            throw new ArgumentException();
+            throw new ArgumentException("Uncorrect input data");
         }
 
-        // TODO testing
-        // Taken ready outsider implementation
+        public static bool IsSignOfOperation(string sign)
+        {
+            switch (sign)
+            {
+                case "+": return true;
+                case "-": return true;
+                case "*": return true;
+                case "/": return true;
+                case "^": return true;
+            }
+
+            return false;
+        }
+
         public string ConvertArabicNumberToRoman(int number)
         {
             var result = String.Empty;
@@ -284,12 +295,13 @@ namespace ParsingInputDataOfCalculator
             string[] romanDigits = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
             while (number > 0)
             {
-                for (var i = digitsValues.Count() - 1; i >= 0; i--)
+                var indexMaxDivisorOfCurrentNumber = digitsValues.Count() - 1;
+                for (; indexMaxDivisorOfCurrentNumber >= 0; indexMaxDivisorOfCurrentNumber--)
                 {
-                    if (number / digitsValues[i] >= 1)
+                    if (number / digitsValues[indexMaxDivisorOfCurrentNumber] >= 1)
                     {
-                        number -= digitsValues[i];
-                        result += romanDigits[i];
+                        number -= digitsValues[indexMaxDivisorOfCurrentNumber];
+                        result += romanDigits[indexMaxDivisorOfCurrentNumber];
                         break;
                     }
                 }

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ParsingInputDataOfCalculator;
-using RomanCalculatorLibrary;
 
-namespace RomanCalculatorUnitTests
+namespace RomanCalculator.UnitTests
 {
+    using RomanCalculatorLibrary;
     [TestClass]
     public class RomanCalculatorUnitTests
     {
@@ -49,7 +48,7 @@ namespace RomanCalculatorUnitTests
         }
 
         [TestMethod]
-        public void RomanCalculatorUnitTest_CorrectnessConvertingArabicNumbersToRoman()
+        public void ConvertRomanNumberToArabic_CorrectValue()
         {
             if (!IsInitializedDictionary)
                 InitializeDictionary();
@@ -66,7 +65,7 @@ namespace RomanCalculatorUnitTests
         }
 
         [TestMethod]
-        public void RomanCalculatorUnitTest_CorrectnessOfConvertingArithmeticExpression_InReversePolishSignatureWithTerminalSigns()
+        public void ConvertInputStringToReversePolishSignature_CorrectValue()
         {
             var parser = new ParserArithmeticExpression();
             const string inputArithmeticExpression = "(VII*IX)*(IX+(LVII*I))";
@@ -77,9 +76,9 @@ namespace RomanCalculatorUnitTests
         }
 
         [TestMethod]
-        public void RomanCalculatorUnitTest_CorrectnessCalculationOfArithmeticExpression_InRomanFormat()
+        public void CalculateExpression_CorrectValueOfCalculation()
         {
-            var romanCalculator = new RomanCalculator();
+            var romanCalculator = new RomanCalculatorLibrary.RomanCalculator();
             const string inputArithmeticExpression = "(IX+(XVII*IV))-(VII*IX)";
             var actualResultOfCalculationInRomanFormat = romanCalculator.CalculateExpression(inputArithmeticExpression);
             const string expectedResultInRomanFormat = "XIV";
@@ -88,7 +87,7 @@ namespace RomanCalculatorUnitTests
         }
 
         [TestMethod]
-        public void RomanCalculatorUnitTest_CorrectnessCalculationOfArithmeticExpression2_InRomanFormat()
+        public void CalculateExpression_CorrectValueOfCalculation2()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(LXII*III)-(IV+(III*(XIV/VII)+III*II))";
@@ -100,7 +99,7 @@ namespace RomanCalculatorUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RomanCalculatorUnitTest_UncorrectArithmeticExpression_ExceptionThrow()
+        public void CalculateExpression_UncorrectArithmeticExpression_ExceptionThrown()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(IX+(XVII**IV))-(VII*IX)";
@@ -112,7 +111,7 @@ namespace RomanCalculatorUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void RomanCalculatorUnitTest_UncorrectArithmeticExpression2_ExceptionThrow()
+        public void CalculateExpression_UncorrectArithmeticExpression_ExceptionThrown2()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(V++2)";
@@ -120,8 +119,8 @@ namespace RomanCalculatorUnitTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void RomanCalculatorUnitTest_UncorrectArithmeticExpressionWithTerminalSign_ExceptionThrow()
+        [ExpectedException(typeof(ArgumentException))]
+        public void CalculateExpression_UncorrectArithmeticExpressionWithTerminalSign_ExceptionThrown()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(V$2)";
@@ -130,7 +129,7 @@ namespace RomanCalculatorUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void RomanCalculatorUnitTest_UncorrectAmountOfBrackets_ExceptionThrow()
+        public void CalculateExpression_UncorrectAmountOfBrackets_ExceptionThrown()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(IX+(XVII*IV))-(VII*IX)(((";
@@ -139,7 +138,7 @@ namespace RomanCalculatorUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void RomanCalculatorUnitTest_UncorrectRomanNumber_ExceptionThrow()
+        public void CalculateExpression_UncorrectRomanNumber_ExceptionThrown()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(IX+F)";
@@ -148,7 +147,7 @@ namespace RomanCalculatorUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void RomanCalculatorUnitTest_UncorrectDivision_ExceptionThrow()
+        public void CalculateExpression_ResultOfDivisionIsNotInteger_ExceptionThrown()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(IX/IV)";
@@ -157,7 +156,7 @@ namespace RomanCalculatorUnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void RomanCalculatorUnitTest_NotPositiveResultOfCalculation_ExceptionThrow()
+        public void CalculateExpression_NotPositiveResultOfCalculation_ExceptionThrown()
         {
             var romanCalculator = new RomanCalculator();
             const string inputArithmeticExpression = "(IX-L)";

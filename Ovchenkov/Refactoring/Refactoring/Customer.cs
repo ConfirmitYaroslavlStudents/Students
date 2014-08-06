@@ -4,6 +4,18 @@ namespace Refactoring
 {
     public class Customer
     {
+        public string Name
+        {
+            get;
+            set;
+        }
+
+        public List<Rental> Rentals
+        {
+            get;
+            private set;
+        }
+
         public Customer(string name)
         {
             Name = name;
@@ -21,18 +33,6 @@ namespace Refactoring
         {
             Name = name;
             Rentals = new List<Rental>(rentals);
-        }
-
-        public string Name
-        {
-            get;
-            set;
-        }
-
-        public List<Rental> Rentals
-        {
-            get;
-            private set;
         }
 
         public void AddRental(Rental rental)

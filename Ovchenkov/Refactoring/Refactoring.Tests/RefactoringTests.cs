@@ -50,7 +50,7 @@ namespace Refactoring.Tests
         {
             using (Stream stream = new MemoryStream())
             {
-                byte[] data = Encoding.UTF8.GetBytes(statement);
+                var data = Encoding.UTF8.GetBytes(statement);
                 stream.Write(data, 0, data.Length);
                 stream.Position = 0;
                 var dataContractSerializer = new DataContractJsonSerializer(typeof(Statement));

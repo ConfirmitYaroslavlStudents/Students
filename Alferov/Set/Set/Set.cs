@@ -5,7 +5,8 @@ using Set.Utils;
 
 namespace Set
 {
-    public class Set<T> : IEnumerable<T> where T : IComparable<T>
+    public class Set<T> : IEnumerable<T> where T : IComparable<T>//Может лучше реализовать интерфейс IEquatable<T>, так как используется 
+                                                                 //только для сравнение на равенство
     {
         private const int MaxArrayLength = 2146435071;
         private const int DefaultCapacity = 16;
@@ -80,7 +81,8 @@ namespace Set
             return GetEnumerator();
         }
 
-        public bool Add(T item)
+        public bool Add(T item)//Функция ничего ничего не должна изменять а только возвращать. 
+                               //И название метода больше подходит для процедуры нежели для функции 
         {
             if (Contains(item))
             {
@@ -114,7 +116,8 @@ namespace Set
             }
         }
 
-        public bool Contains(T item)
+        public bool Contains(T item)//Функция ничего ничего не должна изменять а только возвращать. 
+                                    //И название метода больше подходит для процедуры нежели для функции 
         {
             if (item == null)
             {
@@ -129,18 +132,19 @@ namespace Set
                 return false;
             }
 
-            for (int i = 0; i < _size; ++i)
+            for (int i = 0; i < _size; ++i)//Может быть Array.Exist(то и то)
             {
-                if (item.CompareTo(_items[i]) == 0)
+                if (item.CompareTo(_items[i]) == 0)//Может лучше item.Equals(_items[i]) и использовать интерфейс IEquatable<T>
                 {
                     return true;
                 }
             }
-
+            
             return false;
         }
 
-        public bool Remove(T item)
+        public bool Remove(T item)//Функция ничего ничего не должна изменять а только возвращать. 
+                                  //И название метода больше подходит для процедуры нежели для функции 
         {
             int index = Array.IndexOf(_items, item, 0, _size);
 
@@ -209,7 +213,7 @@ namespace Set
             }
 
             int i = 0;
-            while (i < _size)
+            while (i < _size)//Может быть переделать под for (int i = 0,....) чтобы избавиться от локальной переменной
             {
                 if (!other.Contains(_items[i]))
                 {

@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheLibrary", "CacheLibrary\CacheLibrary.csproj", "{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheLibrary.UnitTests", "CacheLibrary.UnitTests\CacheLibrary.UnitTests.csproj", "{E70377E8-0757-453B-AD51-14E587D1A5BA}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = CacheLibrary.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46D92C20-11AE-446C-B61F-7E55D0A4CCF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70377E8-0757-453B-AD51-14E587D1A5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70377E8-0757-453B-AD51-14E587D1A5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70377E8-0757-453B-AD51-14E587D1A5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70377E8-0757-453B-AD51-14E587D1A5BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

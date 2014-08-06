@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 
 namespace Refactoring
 {
@@ -9,6 +8,19 @@ namespace Refactoring
         {
             Name = name;
             Rentals = new List<Rental>();
+        }
+
+        public Customer(string name, Rental rental)
+        {
+            Name = name;
+            Rentals = new List<Rental>();
+            AddRental(rental);
+        }
+
+        public Customer(string name, IEnumerable<Rental> rentals)
+        {
+            Name = name;
+            Rentals = new List<Rental>(rentals);
         }
 
         public string Name
@@ -26,27 +38,6 @@ namespace Refactoring
         public void AddRental(Rental rental)
         {
             Rentals.Add(rental);
-        }
-
-        public string Statement()
-        {
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
-            string result = "Учет аренды для " + Name + "\n";
-
-            foreach (var rental in Rentals)
-            {
-                var thisAmount = rental.GetPrice();
-
-                frequentRenterPoints += rental.GetFrequentPoints();
-
-                result += "\t" + rental.Movie.Title + "\t" + thisAmount.ToString(CultureInfo.InvariantCulture) + "\n";
-                totalAmount += thisAmount;
-            }
-
-            result += "Сумма задолженности составляет " + totalAmount.ToString(CultureInfo.InvariantCulture) + "\n";
-            result += "Вы заработали " + frequentRenterPoints.ToString(CultureInfo.InvariantCulture) + " за активность";
-            return result;
         }
     }
 }

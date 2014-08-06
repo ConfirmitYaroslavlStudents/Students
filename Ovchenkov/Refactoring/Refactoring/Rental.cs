@@ -15,6 +15,12 @@ namespace Refactoring
             set;
         }
 
+        public Rental(Movie movie, int daysRented)
+        {
+            Movie = movie;
+            DaysRented = daysRented;
+        }
+
         public double GetPrice()
         {
             return Movie.GetPrice(DaysRented);

@@ -17,7 +17,7 @@ namespace StackArrayLibrary
         {
             get
             {
-                return _elements[i];
+                return _elements[Count - i - 1];
             }
 
         }
@@ -108,7 +108,7 @@ namespace StackArrayLibrary
         {
             for (int i = 0; i < Count; ++i)
             {
-                yield return _elements[i];
+                yield return _elements[Count - i - 1];
             }
         }
 

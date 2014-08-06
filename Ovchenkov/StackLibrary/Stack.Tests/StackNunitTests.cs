@@ -8,136 +8,128 @@ namespace Stack.Tests
     {
         private static readonly int[] MassOfNumber = {73, 3, 7, 37};
 
-        private readonly object[] _simpleTestData =
+        public readonly object[] StackTestData =
         {
-            new StackArrayLibrary.Stack<string>(), new StackLibrary.Stack<string>()
+            new StackArrayLibrary.Stack<int>(), new StackLibrary.Stack<int>()
         };
 
-        private readonly object[] _testDataWithCollection =
+        public readonly object[] StackTestDataForConstructorWithCollection =
         {
-            new object[] {new StackArrayLibrary.Stack<int>(), new StackArrayLibrary.Stack<int>(MassOfNumber)},
-            new object[] {new StackLibrary.Stack<int>(), new StackLibrary.Stack<int>(MassOfNumber)}
+            new StackArrayLibrary.Stack<int>(MassOfNumber), new StackLibrary.Stack<int>(MassOfNumber)
         };
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack_Count_LengthPlusAfterPush(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack_Count_LengthPlusAfterPush(IStack<int> stack)
         {
-            stack.Push("1");
+            const int countOfElement = 1;
+            const int element = 37;
+
+            stack.Push(element);
             var result = stack.Count;
-            Assert.AreEqual(1, result);
+
+            Assert.AreEqual(countOfElement, result);
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack_Count_LengthMinusAfterPop(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack_Count_LengthMinusAfterPop(IStack<int> stack)
         {
-            stack.Push("1");
+            const int countOfElement = 0;
+            const int element = 37;
+
+            stack.Push(element);
             stack.Pop();
             var result = stack.Count;
 
-            Assert.AreEqual(0, result);
+            Assert.AreEqual(countOfElement, result);
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack__PushPop_InitialValueAndReturnValueMustBeEqual(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack__PushPop_InitialValueAndReturnValueMustBeEqual(IStack<int> stack)
         {
-            stack.Push("test");
+            const int element = 37;
+
+            stack.Push(element);
             var result = stack.Pop();
 
-            Assert.AreEqual("test", result);
+            Assert.AreEqual(element, result);
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack__PushPeek_InitialValueAndReturnValueMustBeEqual(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack__PushPeek_InitialValueAndReturnValueMustBeEqual(IStack<int> stack)
         {
-            stack.Push("test");
+            const int element = 37;
+
+            stack.Push(element);
             var result = stack.Peek();
 
-            Assert.AreEqual("test", result);
+            Assert.AreEqual(element, result);
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
+        [TestCaseSource("StackTestData")]
         [ExpectedException(typeof (InvalidOperationException))]
-        public void Stack_Peek_WhenStackIsEmptyShouldThrowInvalidOperationException(IStack<string> stack)
+        public void Stack_Peek_WhenStackIsEmptyShouldThrowInvalidOperationException(IStack<int> stack)
         {
             stack.Peek();
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
+        [TestCaseSource("StackTestData")]
         [ExpectedException(typeof (InvalidOperationException))]
-        public void Stack_Pop_WhenStackIsEmptyShouldThrowInvalidOperationException(IStack<string> stack)
+        public void Stack_Pop_WhenStackIsEmptyShouldThrowInvalidOperationException(IStack<int> stack)
         {
             stack.Pop();
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack_Clear_CountMustBeZeroAfterClear(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack_Clear_CountMustBeZeroAfterClear(IStack<int> stack)
         {
-            string[] mass = {"73", "3", "7", "37"};
+            const int countOfElement = 0;
 
-            foreach (var element in mass)
+            foreach (var element in MassOfNumber)
                 stack.Push(element);
             stack.Clear();
             var result = stack.Count;
 
-            Assert.AreEqual(0, result);
+            Assert.AreEqual(countOfElement, result);
         }
 
         [Test]
-        [TestCaseSource("_testDataWithCollection")]
-        public void Stack_Constructor_CollectionMustBeInStack(IStack<int> actualStack, IStack<int> expectedStack)
+        [TestCaseSource("StackTestDataForConstructorWithCollection")]
+        public void Stack_Constructor_CollectionMustBeInStack(IStack<int> stack)
         {
-            foreach (var element in MassOfNumber)
-                actualStack.Push(element);
-
-            for (int i = 0; i < actualStack.Count; ++i)
+            for (var i = 0; i < stack.Count; ++i)
             {
-                Assert.AreEqual(actualStack[i], expectedStack[i]);
+                Assert.AreEqual(stack[i], MassOfNumber[MassOfNumber.Length - i - 1]);
             }
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack_Contains_ContainsMustReturnTrue(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack_Contains_ContainsMustWork(IStack<int> stack)
         {
-            string[] mass = {"73", "3", "7", "37"};
-            foreach (var elememt in mass)
+            const int numberIsNotFromMass = 703;
+
+            foreach (var elememt in MassOfNumber)
                 stack.Push(elememt);
 
-            bool actual = stack.Contains("73");
+            var actual = stack.Contains(MassOfNumber[0]);
             Assert.AreEqual(true, actual);
 
-            actual = stack.Contains("703");
+            actual = stack.Contains(numberIsNotFromMass);
             Assert.AreEqual(false, actual);
         }
 
         [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack_Contains_ContainsWithNull(IStack<string> stack)
+        [TestCaseSource("StackTestData")]
+        public void Stack_IEnumerable_IEnumerableMustWorking(IStack<int> stack)
         {
-            string[] mass = {"37", "cartoon", "raccoon", "joke", null};
-            foreach (var element in mass)
-                stack.Push(element);
-
-            bool actual = stack.Contains(null);
-            Assert.AreEqual(true, actual);
-
-            actual = stack.Contains("joke");
-            Assert.AreEqual(true, actual);
-        }
-
-        [Test]
-        [TestCaseSource("_simpleTestData")]
-        public void Stack_IEnumerable_IEnumerableMustWorking(IStack<string> stack)
-        {
-            string[] mass = {"37", "cartoon", "raccoon", "joke", null};
-            foreach (var element in mass)
+            foreach (var element in MassOfNumber)
                 stack.Push(element);
             var i = 0;
 

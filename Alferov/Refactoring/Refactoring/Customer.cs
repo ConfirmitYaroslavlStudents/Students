@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web.Script.Serialization;
-using System.Xml.Serialization;
 using Refactoring.Utils;
 
 namespace Refactoring
 {
     [DataContract]
     public class Customer : IEquatable<Customer>
-    {
-        [XmlIgnore]
-        [ScriptIgnore]
+    { 
+        [DataMember]
         public List<Rental> Rentals { get; private set; }
 
         [DataMember]
@@ -26,8 +23,6 @@ namespace Refactoring
         [DataMember]
         public int FrequentRenterPoints { get; set; }
 
-        private Customer(){}
-
         public Customer(string name)
         {
             Name = name;
@@ -41,19 +36,8 @@ namespace Refactoring
             Rentals = new List<Rental>(rentals);
             Movies = new Dictionary<string, double>();
         }
-
-        public string GetStatement(ICustomerFormatter formatter)
-        {
-            foreach (var rental in Rentals)
-            {
-                double thisAmount = rental.GetCharge();
-                FrequentRenterPoints += rental.GetFrequentPoints();
-                Movies.Add(rental.Movie.Title, thisAmount);
-                TotalAmount += thisAmount;
-            }
-
-            return formatter.Serialize(this);
-        }
+        
+        private Customer() {}
 
         public bool Equals(Customer other)
         {
@@ -71,7 +55,7 @@ namespace Refactoring
                 return false;
             }
 
-            foreach (var key in Movies.Keys)
+            foreach (string key in Movies.Keys)
             {
                 if (!other.Movies.ContainsKey(key) || Math.Abs(other.Movies[key] - Movies[key]) > eps)
                 {
@@ -80,6 +64,19 @@ namespace Refactoring
             }
 
             return true;
+        }
+
+        public string GetStatement(ICustomerFormatter formatter)
+        {
+            foreach (Rental rental in Rentals)
+            {
+                double thisAmount = rental.GetCharge();
+                FrequentRenterPoints += rental.GetFrequentPoints();
+                Movies.Add(rental.Movie.Title, thisAmount);
+                TotalAmount += thisAmount;
+            }
+
+            return formatter.Serialize(this);
         }
     }
 }

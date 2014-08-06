@@ -38,10 +38,10 @@ namespace Refactoring.Utils
                 customer.Movies.Add(movieTitles[i].ToString().Trim('\t'), Convert.ToDouble(moviePrices[i].ToString().Trim('\t', '\n')));
             }
 
-            var totalAmounAsString = Regex.Match(serializedData, @" \d+[,.]?(\d+)?\n", RegexOptions.Compiled).ToString().TrimEnd('\n');
+            string totalAmounAsString = Regex.Match(serializedData, @" \d+[,.]?(\d+)?\n", RegexOptions.Compiled).ToString().TrimEnd('\n');
             customer.TotalAmount = Convert.ToDouble(totalAmounAsString);
             customer.FrequentRenterPoints = Convert.ToInt32(Regex.Match(serializedData, @" (\d+) ", RegexOptions.Compiled).ToString());
-     
+
             return customer;
         }
     }

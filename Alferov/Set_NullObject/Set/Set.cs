@@ -10,9 +10,14 @@ namespace Set
         private const int MaxArrayLength = 2146435071;
         private const int DefaultCapacity = 16;
 
-        private ArrayHelper<T> _arrayHelper;
         private T[] _items;
         private int _size;
+        private readonly AbstractStatisticsCollector _statisticsCollector = new NullStatisticsCollector();
+
+        public AbstractStatisticsCollector StatisticsCollector
+        {
+            get { return _statisticsCollector; }
+        }
 
         public int Capacity
         {
@@ -23,7 +28,8 @@ namespace Set
 
                 if (_size > 0)
                 {
-                    _arrayHelper.Copy(_items, 0, newItems, 0, _size);
+                    Array.Copy(_items, 0, newItems, 0, _size);
+                    StatisticsCollector.ChangeStatistics(_size);
                 }
 
                 _items = newItems;
@@ -34,17 +40,20 @@ namespace Set
         {
             get { return _size; }
         }
-        
-        public Set(ArrayHelper<T> arrayHelper)
+
+        public Set()
         {
-            InitializeArrayHelper(arrayHelper);
             _items = new T[DefaultCapacity];
         }
 
-        public Set(int capacity, ArrayHelper<T> arrayHelper)
+        public Set(AbstractStatisticsCollector statisticsCollector)
+            : this()
         {
-            InitializeArrayHelper(arrayHelper);
+            _statisticsCollector = statisticsCollector;
+        }
 
+        public Set(int capacity)
+        {
             if (capacity < 0)
             {
                 throw new ArgumentOutOfRangeException("capacity");
@@ -53,31 +62,21 @@ namespace Set
             _items = capacity > DefaultCapacity ? new T[capacity] : new T[DefaultCapacity];
         }
 
-        public Set(IEnumerable<T> collection, ArrayHelper<T> arrayHelper)
-            : this(arrayHelper)
+        public Set(int capacity, AbstractStatisticsCollector statisticsCollector)
+            : this(capacity)
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException("collection");
-            }
-
-            foreach (T item in collection)
-            {
-                Add(item);
-            }
+            _statisticsCollector = statisticsCollector;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public Set(IEnumerable<T> collection)
         {
-            for (int i = 0; i < _size; ++i)
-            {
-                yield return _items[i];
-            }
+            InitializeByCollection(collection);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public Set(IEnumerable<T> collection, AbstractStatisticsCollector statisticsCollector)
         {
-            return GetEnumerator();
+            _statisticsCollector = statisticsCollector;
+            InitializeByCollection(collection);
         }
 
         public bool Add(T item)
@@ -92,14 +91,15 @@ namespace Set
                 EnsureCapacity(_size + 1);
             }
 
-            _arrayHelper.ChangeItem(_items, _size++, item);
+            _items[_size++] = item;
+            StatisticsCollector.ChangeStatistics(1);
 
             return true;
         }
 
         public static Set<T> operator +(Set<T> set, T item)
         {
-            var resultSet = new Set<T>(set, set._arrayHelper);
+            var resultSet = new Set<T>(set, set.StatisticsCollector);
             resultSet.Add(item);
 
             return resultSet;
@@ -109,7 +109,8 @@ namespace Set
         {
             if (_size > 0)
             {
-                _arrayHelper.Clear(_items, 0, _size);
+                Array.Clear(_items, 0, _size);
+                StatisticsCollector.ChangeStatistics(_size);
                 _size = 0;
             }
         }
@@ -153,17 +154,19 @@ namespace Set
 
             if (index < _size)
             {
-                _arrayHelper.Copy(_items, index + 1, _items, index, _size - index);
+                Array.Copy(_items, index + 1, _items, index, _size - index);
+                StatisticsCollector.ChangeStatistics(_size - index);
             }
 
-            _arrayHelper.ChangeItem(_items, _size, default(T));
+            _items[_size] = default(T);
+            StatisticsCollector.ChangeStatistics(1);
 
             return true;
         }
 
         public static Set<T> operator -(Set<T> set, T item)
         {
-            var resultSet = new Set<T>(set, set._arrayHelper);
+            var resultSet = new Set<T>(set, set.StatisticsCollector);
             resultSet.Remove(item);
 
             return resultSet;
@@ -184,7 +187,7 @@ namespace Set
 
         public static Set<T> operator +(Set<T> firstSet, Set<T> secondSet)
         {
-            var resultSet = new Set<T>(firstSet, firstSet._arrayHelper);
+            var resultSet = new Set<T>(firstSet, firstSet.StatisticsCollector);
             resultSet.UnionWith(secondSet);
 
             return resultSet;
@@ -246,7 +249,7 @@ namespace Set
 
         public static Set<T> operator -(Set<T> firstSet, Set<T> secondSet)
         {
-            var resultSet = new Set<T>(firstSet, firstSet._arrayHelper);
+            var resultSet = new Set<T>(firstSet, firstSet.StatisticsCollector);
             resultSet.ExceptWith(secondSet);
 
             return resultSet;
@@ -307,17 +310,20 @@ namespace Set
                 }
             }
         }
-        
-        private void InitializeArrayHelper(ArrayHelper<T> arrayHelper)
-        {
-            if (arrayHelper == null)
-            {
-                throw new ArgumentNullException("arrayHelper");
-            }
 
-            _arrayHelper = arrayHelper;
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < _size; ++i)
+            {
+                yield return _items[i];
+            }
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        
         private void EnsureCapacity(int minCapacity)
         {
             if (minCapacity > MaxArrayLength)
@@ -325,16 +331,31 @@ namespace Set
                 throw new InvalidOperationException();
             }
 
-            int newCapacity = _items.Length*2;
+            int newCapacity = _items.Length * 2;
 
             // Allow the set to grow to maximum possible capacity (~2G elements(MaxArrayLength)) before encountering overflow.
             // Note that this check works even when newCapacity overflowed thanks to the (uint) cast
-            if ((uint) newCapacity > MaxArrayLength)
+            if ((uint)newCapacity > MaxArrayLength)
             {
                 newCapacity = MaxArrayLength;
             }
 
             Capacity = newCapacity;
+        }
+        
+        private void InitializeByCollection(IEnumerable<T> collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
+
+            _items = new T[DefaultCapacity];
+
+            foreach (var item in collection)
+            {
+                Add(item);
+            }
         }
     }
 }

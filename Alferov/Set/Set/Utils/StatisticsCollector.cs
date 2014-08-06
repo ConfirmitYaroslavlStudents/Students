@@ -1,17 +1,12 @@
 ﻿namespace Set.Utils
 {
-    public class StatisticsCollector : AbstractStatisticsCollector
+    public class StatisticsCollector
     {
-        private int _statistics;
+        public int Statistics { get; private set; }
 
-        public override int Statistics
+        internal void CollectStatistics(int value)
         {
-            get { return _statistics; }
-        }
-
-        internal override void ChangeStatistics(int delta)
-        {
-            _statistics += delta;
+            Statistics += value;
         }
     }
 }

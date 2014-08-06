@@ -87,7 +87,6 @@ namespace Refactoring.Tests
             Assert.True(customer.Equals(actual));
         }
 
-
         [Fact]
         public void XmlFormatter_WhenCustomerHaveMultipleRentals_ShouldPass()
         {

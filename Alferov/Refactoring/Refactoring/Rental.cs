@@ -1,9 +1,14 @@
-﻿namespace Refactoring
+﻿using System.Runtime.Serialization;
+
+namespace Refactoring
 {
+    [DataContract]
     public class Rental
     {
+        [DataMember]
         public Movie Movie { get; private set; }
 
+        [DataMember]
         public int DaysRented { get; private set; }
 
         public Rental(Movie movie, int daysRented)
@@ -11,6 +16,8 @@
             Movie = movie;
             DaysRented = daysRented;
         }
+        
+        private Rental() {}
 
         public double GetCharge()
         {
@@ -19,7 +26,7 @@
 
         public int GetFrequentPoints()
         {
-            var result = 1;
+            int result = 1;
 
             if (Movie is NewReleaseMovie && DaysRented > 1)
             {

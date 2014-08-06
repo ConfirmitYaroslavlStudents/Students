@@ -32,7 +32,7 @@ namespace RomanCalculator.Tests
         [Theory]
         [InlineData(""),
          InlineData(null)]
-        public void ToArabic_NullOrEmptyNumber_ArgumentNullExceptionThrown(string romanNumber)
+        public void ToArabic_NullOrEmptyRomanNumber_ArgumentNullExceptionThrown(string romanNumber)
         {
             Assert.Throws(typeof(ArgumentNullException), () =>
             {

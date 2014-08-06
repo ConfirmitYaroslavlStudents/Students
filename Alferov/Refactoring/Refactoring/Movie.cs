@@ -1,7 +1,11 @@
-﻿namespace Refactoring
+﻿using System.Runtime.Serialization;
+
+namespace Refactoring
 {
+    [DataContract]
     public abstract class Movie
     {
+        [DataMember]
         public string Title { get; private set; }
 
         protected Movie(string title)
@@ -9,9 +13,12 @@
             Title = title;
         }
 
+        protected Movie() {}
+
         public abstract double GetPrice(int daysRented);
     }
 
+    [DataContract]
     public class RegularMovie : Movie
     {
         public RegularMovie(string title) : base(title)
@@ -24,13 +31,14 @@
 
             if (daysRented > 2)
             {
-                result += (daysRented - 2) * 1.5;
+                result += (daysRented - 2)*1.5;
             }
-                
+
             return result;
         }
     }
 
+    [DataContract]
     public class ChildrensMovie : Movie
     {
         public ChildrensMovie(string title)
@@ -44,13 +52,14 @@
 
             if (daysRented > 3)
             {
-                result += (daysRented - 3) * 1.5;
+                result += (daysRented - 3)*1.5;
             }
-                
+
             return result;
         }
     }
 
+    [DataContract]
     public class NewReleaseMovie : Movie
     {
         public NewReleaseMovie(string title)
@@ -60,7 +69,7 @@
 
         public override double GetPrice(int daysRented)
         {
-            return daysRented * 3;
+            return daysRented*3;
         }
     }
 }

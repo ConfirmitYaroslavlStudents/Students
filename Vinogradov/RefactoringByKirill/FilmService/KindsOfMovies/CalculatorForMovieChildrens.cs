@@ -1,8 +1,8 @@
 ﻿namespace FilmService.KindsOfMovies
 {
-    public class CalculatorForMovieChildrens : CalculatorForMovie
+    public class CalculatorForMovieChildrens : ICalculatorForMovie
     {
-        public override double Calculate(int daysRented)
+        public double Calculate(int daysRented)
         {
             double result = 0;
             result += 1.5;
@@ -11,7 +11,7 @@
             return result;
         }
 
-        public override int GetPoints()
+        public int GetPoints()
         {
             return 1;
         }

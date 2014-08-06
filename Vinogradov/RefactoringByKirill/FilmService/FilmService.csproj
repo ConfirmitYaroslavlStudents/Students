@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,13 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataForStatement.cs" />
     <Compile Include="KindsOfGenerators\StatementGenerator.cs" />
     <Compile Include="KindsOfGenerators\StatementGeneratorJSON.cs" />
     <Compile Include="KindsOfGenerators\StatementGeneratorString.cs" />
     <Compile Include="KindsOfMovies\CalculatorForMovieChildrens.cs" />
     <Compile Include="KindsOfMovies\CalculatorForMovieNewRelease.cs" />
     <Compile Include="KindsOfMovies\CalculatorForMovieRegular.cs" />
-    <Compile Include="KindsOfMovies\CalculatorForMovie.cs" />
+    <Compile Include="KindsOfMovies\ICalculatorForMovie.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

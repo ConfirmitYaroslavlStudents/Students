@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using RomaCalculator.KindsOfOperators;
 
@@ -6,6 +7,15 @@ namespace RomaCalculator
 {
     public class Calculator
     {
+        private Dictionary<string, IOperator> operators;
+
+        public Calculator()
+        {
+            operators = new Dictionary<string, IOperator>();
+            operators["+"] = new Addition();
+            operators["-"] = new Subtraction();
+            operators["*"] = new Multiplication();
+        }
         public string Calculate(string operandA, string operandB, IOperator operatorForAAndB)
         {
 
@@ -15,6 +25,12 @@ namespace RomaCalculator
             var answerForExpression = operatorForAAndB.CalculateIt(A, B);
 
             return ConvertFromArabToRomanNumber(answerForExpression);
+        }
+        public string Calculate(string expression)
+        {
+            var separetedExpression = expression.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+
+            return Calculate(separetedExpression[0], separetedExpression[2], operators[separetedExpression[1]]);
         }
 
         public int ConvertFromRomanToArabDigit(char romanDigit)
@@ -49,28 +65,39 @@ namespace RomaCalculator
             {
                 abacus.Add(ConvertFromRomanToArabDigit(romanNumber[i]));
             }
+
             while (abacus.Count != 0)
             {
                 previousCount = abacus.Count;
-                for (int i = 0; i < abacus.Count - 1; i++)
-                {
-                    if (abacus[i] < abacus[i + 1])
-                    {
-                        abacus[i] = abacus[i + 1] - abacus[i];
-                        abacus.RemoveAt(i + 1);
-                        i = abacus.Count;
-                    }
-                }
-                if (abacus.Count == previousCount)
-                {
-                    foreach (var item in abacus)
-                    {
-                        result += item;
-                    }
-                    abacus.Clear();
-                }
+
+                SubtractThatPossible(abacus);
+
+                AddUpAllIfPossible(abacus, previousCount, ref result);
             }
             return result;
+        }
+        private void AddUpAllIfPossible(List<int> abacus, int previousCount, ref int result)
+        {
+            if (abacus.Count == previousCount)
+            {
+                foreach (var item in abacus)
+                {
+                    result += item;
+                }
+                abacus.Clear();
+            }
+        }
+        private void SubtractThatPossible(List<int> abacus)
+        {
+            for (int i = 0; i < abacus.Count - 1; i++)
+            {
+                if (abacus[i] < abacus[i + 1])
+                {
+                    abacus[i] = abacus[i + 1] - abacus[i];
+                    abacus.RemoveAt(i + 1);
+                    i = abacus.Count;
+                }
+            }
         }
 
         public string ConvertFromArabToRomanNumber(int arabNumber)
@@ -87,21 +114,31 @@ namespace RomaCalculator
                     result.Append("-");
                     arabNumber = -arabNumber;
                 }
-                var arab = new int[] { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
-                var roman = new string[] { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
-                var index = 0;
-                while (arabNumber != 0)
-                {
-                    index = 0;
-                    while ((index != 13) && (arabNumber >= arab[index]))
-                    {
-                        index++;
-                    }
-                    arabNumber -= arab[index - 1];
-                    result.Append(roman[index - 1]);
-                }
+                MakeRomanNumber(arabNumber, result);
             }
             return result.ToString();
+        }
+        private void MakeRomanNumber(int arabNumber, StringBuilder result)
+        {
+            var arab = new int[] {1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
+            var roman = new string[] {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
+            var index = 0;
+            while (arabNumber != 0)
+            {
+                index = 0;
+
+                FindNecessaryNumber(arabNumber, ref index, arab);
+
+                arabNumber -= arab[index - 1];
+                result.Append(roman[index - 1]);
+            }
+        }
+        private void FindNecessaryNumber(int arabNumber, ref int index, int[] arab)
+        {
+            while ((index != 13) && (arabNumber >= arab[index]))
+            {
+                index++;
+            }
         }
     }
 }

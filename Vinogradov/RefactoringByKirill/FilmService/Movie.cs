@@ -4,7 +4,7 @@ namespace FilmService
 {
     public class Movie
     {
-        public CalculatorForMovie CurrentCalculator
+        public ICalculatorForMovie CurrentCalculator
         {
             get; 
             set;
@@ -15,7 +15,7 @@ namespace FilmService
             set;
         }
 
-        public Movie(string title, CalculatorForMovie currentCalculator)
+        public Movie(string title, ICalculatorForMovie currentCalculator)
         {
             CurrentCalculator = currentCalculator;
             Title = title;

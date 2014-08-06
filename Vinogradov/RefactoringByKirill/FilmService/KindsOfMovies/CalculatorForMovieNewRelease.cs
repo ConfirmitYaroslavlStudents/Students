@@ -1,15 +1,15 @@
 ﻿namespace FilmService.KindsOfMovies
 {
-    public class CalculatorForMovieNewRelease : CalculatorForMovie
+    public class CalculatorForMovieNewRelease : ICalculatorForMovie
     {
-        public override double Calculate(int daysRented)
+        public double Calculate(int daysRented)
         {
             double result = 0;
             result += daysRented * 3;
             return result;
         }
 
-        public override int GetPoints()
+        public int GetPoints()
         {
             return 2;
         }

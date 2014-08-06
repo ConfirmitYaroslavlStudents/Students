@@ -1,24 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Json;
 using FilmService;
 using FilmService.KindsOfGenerators;
 using FilmService.KindsOfMovies;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
+using System.Runtime.Serialization.Json;
 using System.Xml;
 
-namespace RefactoringByKirill
+namespace UnitTestsForFilmService
 {
-    class Program
+    [TestClass]
+    public class FilmServiseTests
     {
-        static void Main(string[] args)
+        [TestMethod]
+        public void SerializeAndDeserialize()
         {
             var user = new Customer("Igor", new StatementGeneratorJSON());
             user.Rentals.Add(new Rental(new Movie("Edge of Tomorrow", new CalculatorForMovieNewRelease()), 5));
             user.Rentals.Add(new Rental(new Movie("Gravity", new CalculatorForMovieRegular()), 2));
             user.CurrentStatementGenerator.FormDataForStatement(user.Name, user.Rentals);
-            var path = "userSerialize.txt";
+            var path = "userSerialize123.txt";
             user.CurrentStatementGenerator.Generate(path);
+
 
             var JsonSerializer = new DataContractJsonSerializer(typeof(DataForStatement));
             DataForStatement deserializeData;
@@ -26,15 +30,7 @@ namespace RefactoringByKirill
             {
                 deserializeData = JsonSerializer.ReadObject(input) as DataForStatement;
             }
-            if (user.CurrentStatementGenerator.CurrentData.Equals(deserializeData))
-            {
-                Console.Write("eqels");
-            }
-            else
-            {
-                Console.Write("Noooooooooooooooooooo");
-            }
-            Console.ReadLine();
+            Assert.AreEqual<DataForStatement>(user.CurrentStatementGenerator.CurrentData, deserializeData);
         }
     }
 }

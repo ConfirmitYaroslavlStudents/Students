@@ -1,27 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace FilmService.KindsOfGenerators
 {
     public class StatementGeneratorString:StatementGenerator
     {
-        public override string Generate(string name, List<Rental> rentals)
+        public override void Generate(string path)
         {
-            double totalAmount = 0;
-            var frequentRenterPoints = 0;
-            var result = "Учет аренды для " + name + "\n";
-            foreach (var rental in rentals)
+            var result = "Учет аренды для " + CurrentData.Name + "\n";
+            foreach (var item in CurrentData.RentalsData)
             {
-                var thisAmount = rental.Movie.CurrentCalculator.Calculate(rental.DaysRented);
-
-                frequentRenterPoints += rental.Movie.CurrentCalculator.GetPoints();
-
-                result += "\t" + rental.Movie.Title + "\t" + thisAmount + "\n";
-                totalAmount += thisAmount;
+                result += "\t" + item.Key + "\t" + item.Value + "\n";
             }
-
-            result += "Сумма задолженности составляет " + totalAmount + "\n";
-            result += "Вы заработали " + frequentRenterPoints + " за активность";
-            return result;
+            result += "Сумма задолженности составляет " + CurrentData.TotalAmount + "\n";
+            result += "Вы заработали " + CurrentData.FrequentRenterPoints + " за активность";
+            using (var output = new StreamWriter(path, true))
+            {
+                output.Write(result);
+            }
         }
     }
 }

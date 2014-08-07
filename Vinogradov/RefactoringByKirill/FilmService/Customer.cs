@@ -5,6 +5,7 @@ namespace FilmService
 {
     public class Customer
     {
+        //Change the format of properties(code should be formatted), make setters private as possible
         public StatementGenerator CurrentStatementGenerator
         {
             get;

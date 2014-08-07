@@ -8,6 +8,7 @@ namespace UnitTestProjectForRefreshingCache
     [TestClass]
     public class RefreshingCacheTests
     {
+        //Names of tests must be refactored, naming constants should be introduced
         [TestMethod]
         public void ContainsTrue()
         {

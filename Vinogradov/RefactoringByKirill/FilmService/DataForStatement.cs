@@ -16,19 +16,22 @@ namespace FilmService
         [DataMember]
         public int FrequentRenterPoints { get; set; }
 
+        //Should remove initialization by default values of types, maybe change constructor signature(by additing name parametr in ctor)
         public DataForStatement()
         {
-            Name = "";
+            Name = ""; 
             RentalsData = new Dictionary<string, double>();
             TotalAmount = 0;
             FrequentRenterPoints = 0;
         }
 
+        //Should be deleted
         public static bool operator ==(DataForStatement a, DataForStatement b)
         {
             return true;
         }
 
+        //Should be deleted
         public static bool operator !=(DataForStatement a, DataForStatement b)
         {
             return !(a == b);
@@ -43,6 +46,7 @@ namespace FilmService
             return false;
         }
 
+        //Should be removed variables that are not meaningful(f1, f2, f2)
         public bool Equals(DataForStatement other)
         {
             var f1 = Name.Equals(other.Name);

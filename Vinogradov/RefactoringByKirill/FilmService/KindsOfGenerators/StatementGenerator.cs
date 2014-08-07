@@ -2,6 +2,7 @@
 
 namespace FilmService.KindsOfGenerators
 {
+    //Implement resharper's tips
     public abstract class StatementGenerator
     {
         public DataForStatement CurrentData { get; internal set; }

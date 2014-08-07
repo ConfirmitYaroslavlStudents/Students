@@ -7,6 +7,7 @@ namespace RefreshingCacheLibrary
 {
     public class FastRefreshingCache<TKey, TValue> : ICanGetValue<TKey, TValue>
     {
+        //Implement resharper's tips
         private int _fastCacheCapacity;
         private int _lifetimeInMilliseconds;
         private Dictionary<TKey, TValue> _fastCache;
@@ -23,8 +24,11 @@ namespace RefreshingCacheLibrary
             _fastCache = new Dictionary<TKey, TValue>();
             _additionLog = new Dictionary<TKey, DateTime>();
             _currentSlowDatabase = currentSlowDatabase;
+
+            //Convert to ternary operator
             if (lifetimeInMilliseconds <= 0)
             {
+                //Why 1000? Create constant
                 _lifetimeInMilliseconds = 1000;
             }
             else
@@ -33,6 +37,7 @@ namespace RefreshingCacheLibrary
             }
             if (fastCacheCapacity <= 0)
             {
+                //Why 1000? Create constant
                 _fastCacheCapacity = 1000;
             }
             else
@@ -41,6 +46,7 @@ namespace RefreshingCacheLibrary
             }
         }
 
+        //Remove now variable from this method(e.g. create filed time with CurrentTime property)
         public TValue GetValue(TKey key,DateTime now)
         {
             Refresh(true,now);
@@ -49,10 +55,13 @@ namespace RefreshingCacheLibrary
             return _fastCache[key];
         }
 
+        //Remove now variable from this method(e.g. create filed time with CurrentTime property)
         private void Refresh(bool removeOldest, DateTime now)
         {
             DateTime timeOfCreation;
             var listOfKeys = _fastCache.Keys.ToList();
+
+            //Create constan for 9999, 1, 1
             var oldest = new DateTime(9999, 1, 1);
             TKey keyForOldest = default (TKey);
             for (int i = 0; i < listOfKeys.Count; i++)

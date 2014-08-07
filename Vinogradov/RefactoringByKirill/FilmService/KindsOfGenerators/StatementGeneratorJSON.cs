@@ -5,6 +5,7 @@ namespace FilmService.KindsOfGenerators
 {
     public class StatementGeneratorJSON : StatementGenerator
     {
+        //Change local variables naming
         public override void Generate(string path)
         {
             var streamForJSON = new MemoryStream();

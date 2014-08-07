@@ -2,6 +2,7 @@
 
 namespace FilmService
 {
+    //Implement resharper's tips
     public class Movie
     {
         public ICalculatorForMovie CurrentCalculator

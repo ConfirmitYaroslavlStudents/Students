@@ -16,6 +16,7 @@ namespace RomaCalculator
             operators["-"] = new Subtraction();
             operators["*"] = new Multiplication();
         }
+
         public string Calculate(string operandA, string operandB, IOperator operatorForAAndB)
         {
 
@@ -26,6 +27,7 @@ namespace RomaCalculator
 
             return ConvertFromArabToRomanNumber(answerForExpression);
         }
+
         public string Calculate(string expression)
         {
             var separetedExpression = expression.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
@@ -33,6 +35,7 @@ namespace RomaCalculator
             return Calculate(separetedExpression[0], separetedExpression[2], operators[separetedExpression[1]]);
         }
 
+        //Create Dictionary
         public int ConvertFromRomanToArabDigit(char romanDigit)
         {
             switch (romanDigit)
@@ -55,6 +58,7 @@ namespace RomaCalculator
                     return int.MaxValue;
             }
         }
+
         public int ConvertFromRomanToArabNumber(string romanNumber)
         {
             int result = 0;
@@ -76,6 +80,7 @@ namespace RomaCalculator
             }
             return result;
         }
+
         private void AddUpAllIfPossible(List<int> abacus, int previousCount, ref int result)
         {
             if (abacus.Count == previousCount)
@@ -87,6 +92,7 @@ namespace RomaCalculator
                 abacus.Clear();
             }
         }
+
         private void SubtractThatPossible(List<int> abacus)
         {
             for (int i = 0; i < abacus.Count - 1; i++)
@@ -118,6 +124,8 @@ namespace RomaCalculator
             }
             return result.ToString();
         }
+
+        //return StringBuilder result
         private void MakeRomanNumber(int arabNumber, StringBuilder result)
         {
             var arab = new int[] {1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
@@ -133,6 +141,7 @@ namespace RomaCalculator
                 result.Append(roman[index - 1]);
             }
         }
+
         private void FindNecessaryNumber(int arabNumber, ref int index, int[] arab)
         {
             while ((index != 13) && (arabNumber >= arab[index]))

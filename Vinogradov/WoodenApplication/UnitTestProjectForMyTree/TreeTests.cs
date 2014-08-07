@@ -4,6 +4,7 @@ using Forest;
 
 namespace UnitTestProjectForMyTree
 {
+    //Rename all tests
     [TestClass]
     public class TreeTests
     {

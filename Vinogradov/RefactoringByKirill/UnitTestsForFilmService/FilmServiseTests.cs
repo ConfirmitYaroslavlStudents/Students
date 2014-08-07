@@ -10,6 +10,7 @@ using System.Xml;
 
 namespace UnitTestsForFilmService
 {
+    //Should be more tests. Maybe use standart MS naming style
     [TestClass]
     public class FilmServiseTests
     {

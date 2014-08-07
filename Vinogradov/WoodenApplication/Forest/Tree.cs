@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Forest
 {
+    //Order of terms: public and then private( e.g. methods in your case), rename methods(e.g. Prefix -> GetPrefix)
     public class Tree<T> where T : IComparable
     {
         public int Count { private set; get; }
@@ -12,14 +13,18 @@ namespace Forest
 
         public Tree()
         {
+            //unnecessary code
             Count = 0;
             _headNode = null;
         }
+
+        //Rename list -> ?
         public Tree(IEnumerable<T> list)
         {
+            //!list.Any() is unnecessary, throw new ArgumentNullException("list")
             if (list == null || !list.Any())
             {
-                Count = 0;
+                Count = 0; //unnecessary
                 return;
             }
             foreach (var value in list)
@@ -39,6 +44,8 @@ namespace Forest
                 FindAndAdd(value);
             }
         }
+
+        //remove duplicate code(add AddRange in ctor)
         public void AddRange(IEnumerable<T> list)
         {
             if (list == null || !list.Any())
@@ -50,11 +57,13 @@ namespace Forest
                 Add(value);
             }
         }
+
         private void CreateFirstNode(T value)
         {
             _headNode = new Node<T>(value, null);
             Count = 1;
         }
+
         private void FindAndAdd(T value)
         {
             var targetNode = _headNode;
@@ -102,6 +111,7 @@ namespace Forest
                 }
             }
         }
+
         private Node<T> TransformChildren(Node<T> targetNode)
         {
             var rightNodeAfterRemoteNode = targetNode.RightNode;
@@ -127,11 +137,14 @@ namespace Forest
             }
             return null;
         }
+
         private bool FindDirectionDesiredChild(Node<T> targetNode)
         {
             if (targetNode.Parent != null)
             {
                 var parent = targetNode.Parent;
+
+                //return (targetNode.Value.CompareTo(parent.Value) > 0)
                 if (targetNode.Value.CompareTo(parent.Value) > 0)
                 {
                     return true;
@@ -201,11 +214,14 @@ namespace Forest
             return Search(value, ref targetode);
         }
 
+        //Rename
         public void Horizontal(Action<Node<T>> actionWithNode)
         {
             _actionWithNode = actionWithNode;
             RecursionForHorizontal(_headNode);
         }
+
+        //Rename
         private void RecursionForHorizontal(Node<T> currentNode)
         {
             var queueOfNodes= new Queue<Node<T>>();
@@ -227,11 +243,13 @@ namespace Forest
             }
         }
 
+        //rename(should be verb)
         public void Prefix(Action<Node<T>> actionWithNode)
         {
             _actionWithNode = actionWithNode;
             RecursionForPrefix(_headNode);
         }
+
         private void RecursionForPrefix(Node<T> currentNode)
         {
             _actionWithNode.Invoke(currentNode);

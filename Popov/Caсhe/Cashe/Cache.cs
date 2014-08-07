@@ -6,6 +6,7 @@ namespace Cache
 {
     class Element<T>
     {
+        //абстрактность времени(ITime)
         private DateTime _timeLastUse;
         private readonly TimeSpan _timeLive;
        
@@ -40,6 +41,7 @@ namespace Cache
         }
     }
 
+    //класс достаточно большой, можно вынести в отдельный файл
     public class Cache<TKey, TValue> : 
             IGettingValue<TKey, TValue>, 
             ICheckCantainsKeyInCache<TKey>, 

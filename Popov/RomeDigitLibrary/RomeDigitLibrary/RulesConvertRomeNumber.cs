@@ -7,7 +7,9 @@ namespace RomeDigitLibrary
     public static class RulesConvertRomeNumber
     {
         public static Dictionary<uint, string> RulesConvertToRome { get; private set; }
-        public static Dictionary<char, uint> RulesConvertToTen { get; private set; }
+
+        //изменить имя, используя ToArab
+        public static Dictionary<char, uint> RulesConvertToTen { get; private set; } 
 
         static RulesConvertRomeNumber()
         {
@@ -19,7 +21,7 @@ namespace RomeDigitLibrary
             {400, "CD"},{500, "D"},{900, "CM"},
             {1000, "M"}
             };
-
+            
             RulesConvertToTen = new Dictionary<char, uint>
             {
                 {'I', 1},{'V', 5},{'X', 10},

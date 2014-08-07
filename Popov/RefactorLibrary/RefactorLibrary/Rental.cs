@@ -22,7 +22,7 @@ namespace RefactorLibrary
             set;
         }
 
-
+        
         public int GetBonusProfit()
         {
             return Movie.GetBonusProfit(DaysRented);

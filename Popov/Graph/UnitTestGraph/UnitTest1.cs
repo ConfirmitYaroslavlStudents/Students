@@ -5,6 +5,7 @@ using Graph;
 
 namespace UnitTestGraph
 {
+    //название класса-фабрики изменить
     static class InstanceGraph<T>
     {
         public static Graph<T> GetGraph(T vertex)
@@ -17,7 +18,7 @@ namespace UnitTestGraph
         }
     }
     [TestClass]
-    public class UnitTest1
+    public class UnitTest1//"UnitTest1" - плохое название и названия тестов тоже
     {
         [TestMethod]
         public void TestCountEquals()
@@ -64,7 +65,6 @@ namespace UnitTestGraph
                     {
                         flagEquals = false;
                     }
-                    
                 }
             }
             Assert.AreEqual(flagEquals,true);

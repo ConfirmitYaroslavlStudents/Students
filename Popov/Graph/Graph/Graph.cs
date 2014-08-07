@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Graph
 {
+    //YAGNI не соблюдён, сравнение не требовалось, энумератор туда же
     public class Graph<T> : IEnumerable<KeyValuePair<T, HashSet<T>>>, IEquatable<Graph<T>>
     {
         private readonly Dictionary<T, HashSet<T>> _vertexDictionary;
@@ -104,6 +105,9 @@ namespace Graph
         {
             RecursionViewWidth(vertex,action, new List<T>());
         }
+
+        //разбить на большее количество методов, большая вложенность
+        //например вынести while в метод с трмя переменными
         private void RecursionViewWidth(T vertex, Action<T> action, List<T> vertexList)
         {
             if (_vertexDictionary.ContainsKey(vertex))
@@ -144,6 +148,8 @@ namespace Graph
         {
             RecursionViewDepth(vertex, action, new List<T>());
         }
+
+        //то же самое, что и с предыдущей рекурсией
         private void RecursionViewDepth(T vertex, Action<T> action, List<T> vertexList)
         {
             if (_vertexDictionary.ContainsKey(vertex))
@@ -174,6 +180,7 @@ namespace Graph
             }
         }
        
+        //foreach в for - это слишком, вынести в метод
         public bool[,] ToAdjacencyMatrix()
         {
             var matrix = new bool[Count, Count];
@@ -190,7 +197,7 @@ namespace Graph
             return matrix;
         }
 
-
+        //порядок: поля, св-ва,...
         public int Count
         {
             get { return _vertexDictionary.Count(); }

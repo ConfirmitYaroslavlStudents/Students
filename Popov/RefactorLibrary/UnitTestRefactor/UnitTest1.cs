@@ -8,6 +8,7 @@ using Formatting = Newtonsoft.Json.Formatting;
 
 namespace UnitTestRefactor
 {
+    //снова названия методов и файла
     [TestClass]
     public class UnitTest1
     {

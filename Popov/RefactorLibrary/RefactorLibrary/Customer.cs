@@ -17,7 +17,7 @@ namespace RefactorLibrary
             Rentals = rentals;
         }
 
-
+        //модификатор доступа set и оформление
         public string Name
         {
             get; 
@@ -30,7 +30,7 @@ namespace RefactorLibrary
             private set;
         }
 
-        
+        //Customer, Rental и Movie не должны уметь считать, SRP
         internal double GetTotalCharge()
         {
             return Rentals.Sum(rental => rental.GetCharge());

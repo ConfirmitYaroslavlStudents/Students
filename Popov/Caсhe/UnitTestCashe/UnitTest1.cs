@@ -5,6 +5,7 @@ using Cache;
 
 namespace UnitTestCashe
 {
+    //снова названия методов и файла
     [TestClass]
     public class TestCache
     {

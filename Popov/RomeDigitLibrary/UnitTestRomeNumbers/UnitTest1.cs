@@ -6,6 +6,7 @@ using RomeDigitLibrary;
 
 namespace UnitTestRomeNumbers
 {
+    //переименовать фабрику и "UnitTest1"
     static class InstanceRomeNumber
     {
         public static RomeNumber GetInstance(string Rome)

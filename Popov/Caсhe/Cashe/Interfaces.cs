@@ -1,5 +1,6 @@
 ﻿namespace Cache
 {
+    //сделать то, что советует решарпер
     public interface IGettingValue<TKey, TValue>
     {
         TValue this[TKey key] { get; }

@@ -6,8 +6,6 @@ namespace RefactoringSample
     [DataContract]
     public class Statement
     {
-        public readonly Customer Customer;
-
         [DataMember]
         public string Name;
         [DataMember]
@@ -19,16 +17,14 @@ namespace RefactoringSample
         public readonly Dictionary<string, double> MoviePrices;
 
         public Statement(Customer customer)
-        {
-            Customer = customer;
-            
+        {          
             MoviePrices = new Dictionary<string, double>();
 
             TotalAmount = 0;
             FrequentRenterPoints = 0;
-            Name = Customer.Name;
+            Name = customer.Name;
 
-            foreach (var rental in Customer.Rentals)
+            foreach (var rental in customer.Rentals)
             {
                 var thisAmount = rental.GetCharge();
 

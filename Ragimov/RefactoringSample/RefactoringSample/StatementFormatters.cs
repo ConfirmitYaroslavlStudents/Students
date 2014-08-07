@@ -11,9 +11,8 @@ namespace RefactoringSample
         public string Result;
         public StringStatement(Statement statement)
         {
-            var customer = statement.Customer;
             var result = new StringBuilder();
-            result.Append(String.Format("Учет аренды для {0}{1}", customer.Name, Environment.NewLine));
+            result.Append(String.Format("Учет аренды для {0}{1}", statement.Name, Environment.NewLine));
 
             foreach (var movie in statement.MoviePrices.Keys)
             {

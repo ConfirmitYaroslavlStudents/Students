@@ -5,7 +5,7 @@ using Set.Utils;
 
 namespace Set
 {
-    public class Set<T> : IEnumerable<T> where T : IComparable<T>
+    public class Set<T> : IEnumerable<T> where T : IEquatable<T>
     {
         private const int MaxArrayLength = 2146435071;
         private const int DefaultCapacity = 16;
@@ -79,11 +79,11 @@ namespace Set
             InitializeByCollection(collection);
         }
 
-        public bool Add(T item)
+        public void Add(T item)
         {
             if (Contains(item))
             {
-                return false;
+                return;
             }
 
             if (_size == _items.Length)
@@ -93,8 +93,6 @@ namespace Set
 
             _items[_size++] = item;
             StatisticsCollector.ChangeStatistics(1);
-
-            return true;
         }
 
         public static Set<T> operator +(Set<T> set, T item)
@@ -117,22 +115,9 @@ namespace Set
 
         public bool Contains(T item)
         {
-            if (item == null)
-            {
-                for (int i = 0; i < _size; ++i)
-                {
-                    if (_items[i] == null)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
             for (int i = 0; i < _size; ++i)
             {
-                if (item.CompareTo(_items[i]) == 0)
+                if (item.Equals(_items[i]))
                 {
                     return true;
                 }

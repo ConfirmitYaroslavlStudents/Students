@@ -36,7 +36,8 @@ namespace RomanCalculator
                 }
                 ++i;
 
-                if ((repeatCount > 3 && (romanDigit == "I" || romanDigit == "X" || romanDigit == "C" || romanDigit == "M")))
+                if ((repeatCount > 3 && (romanDigit == "I" || romanDigit == "X" || romanDigit == "C" || romanDigit == "M")) ||
+                    repeatCount >= 2 && romanDigit.Length == 2)
                 {
                     throw new ArgumentOutOfRangeException("romanNumber");
                 }

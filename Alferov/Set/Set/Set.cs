@@ -5,8 +5,7 @@ using Set.Utils;
 
 namespace Set
 {
-    public class Set<T> : IEnumerable<T> where T : IComparable<T>//Может лучше реализовать интерфейс IEquatable<T>, так как используется 
-                                                                 //только для сравнение на равенство
+    public class Set<T> : IEnumerable<T> where T : IEquatable<T>
     {
         private const int MaxArrayLength = 2146435071;
         private const int DefaultCapacity = 16;
@@ -35,7 +34,7 @@ namespace Set
         {
             get { return _size; }
         }
-        
+
         public Set(ArrayHelper<T> arrayHelper)
         {
             InitializeArrayHelper(arrayHelper);
@@ -81,12 +80,11 @@ namespace Set
             return GetEnumerator();
         }
 
-        public bool Add(T item)//Функция ничего ничего не должна изменять а только возвращать. 
-                               //И название метода больше подходит для процедуры нежели для функции 
+        public void Add(T item)
         {
             if (Contains(item))
             {
-                return false;
+                return;
             }
 
             if (_size == _items.Length)
@@ -95,8 +93,6 @@ namespace Set
             }
 
             _arrayHelper.ChangeItem(_items, _size++, item);
-
-            return true;
         }
 
         public static Set<T> operator +(Set<T> set, T item)
@@ -116,35 +112,20 @@ namespace Set
             }
         }
 
-        public bool Contains(T item)//Функция ничего ничего не должна изменять а только возвращать. 
-                                    //И название метода больше подходит для процедуры нежели для функции 
+        public bool Contains(T item)
         {
-            if (item == null)
+            for (int i = 0; i < _size; ++i)
             {
-                for (int i = 0; i < _size; ++i)
-                {
-                    if (_items[i] == null)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            for (int i = 0; i < _size; ++i)//Может быть Array.Exist(то и то)
-            {
-                if (item.CompareTo(_items[i]) == 0)//Может лучше item.Equals(_items[i]) и использовать интерфейс IEquatable<T>
+                if (item.Equals(_items[i]))
                 {
                     return true;
                 }
             }
-            
+
             return false;
         }
 
-        public bool Remove(T item)//Функция ничего ничего не должна изменять а только возвращать. 
-                                  //И название метода больше подходит для процедуры нежели для функции 
+        public bool Remove(T item)
         {
             int index = Array.IndexOf(_items, item, 0, _size);
 
@@ -212,15 +193,13 @@ namespace Set
                 return;
             }
 
-            int i = 0;
-            while (i < _size)//Может быть переделать под for (int i = 0,....) чтобы избавиться от локальной переменной
+            for (int i = 0; i < _size; ++i)
             {
                 if (!other.Contains(_items[i]))
                 {
                     Remove(_items[i]);
                     continue;
                 }
-                ++i;
             }
         }
 
@@ -311,7 +290,7 @@ namespace Set
                 }
             }
         }
-        
+
         private void InitializeArrayHelper(ArrayHelper<T> arrayHelper)
         {
             if (arrayHelper == null)
@@ -329,11 +308,11 @@ namespace Set
                 throw new InvalidOperationException();
             }
 
-            int newCapacity = _items.Length*2;
+            int newCapacity = _items.Length * 2;
 
             // Allow the set to grow to maximum possible capacity (~2G elements(MaxArrayLength)) before encountering overflow.
             // Note that this check works even when newCapacity overflowed thanks to the (uint) cast
-            if ((uint) newCapacity > MaxArrayLength)
+            if ((uint)newCapacity > MaxArrayLength)
             {
                 newCapacity = MaxArrayLength;
             }

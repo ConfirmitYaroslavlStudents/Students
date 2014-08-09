@@ -46,7 +46,8 @@ namespace RomanCalculator.Tests
          InlineData("MVC * I"),
          InlineData("I + VM"),
          InlineData("V - V"),
-         InlineData("V - VI")]
+         InlineData("V - VI"),
+         InlineData("CMCM + I")]
         public void CalculateExpression_IncorrectArguments_ArgumentOutOfRangeExceptionThrown(string expression)
         {
             Assert.Throws(typeof(ArgumentOutOfRangeException), () =>

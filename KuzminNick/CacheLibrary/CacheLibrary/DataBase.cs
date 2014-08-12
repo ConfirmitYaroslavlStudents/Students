@@ -7,7 +7,10 @@ namespace CacheLibrary
     {
         private Dictionary<string, Element<T>> _dataBase = new Dictionary<string, Element<T>>();
 
-        public void InitializeDataBase(Dictionary<string, Element<T>> dataBase)
+        public DataBase()
+        { }
+
+        public DataBase(Dictionary<string, Element<T>> dataBase)
         {
             _dataBase = dataBase;
         }
@@ -17,19 +20,14 @@ namespace CacheLibrary
             return _dataBase.Select(element => element.Key).ToList();
         }
 
-        public void AddItem(Element<T> item)
-        {
-            _dataBase.Add(item.Id, item);
-        }
-
         public T GetItemById(string id)
         {
             return _dataBase[id].Value;
         }
 
-        public void Clear()
+        public Element<T> GetElementById(string id)
         {
-            _dataBase.Clear();
+            return _dataBase[id];
         }
     }
 }

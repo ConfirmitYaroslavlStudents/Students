@@ -4,8 +4,10 @@ using System.Linq;
 
 namespace RomanCalculatorLibrary
 {
-    public class ParserArithmeticExpression
+    public class ArithmeticExpressionParser
     {
+        private readonly ConverterOfNumbers _converterOfNumbers = new ConverterOfNumbers();
+
         private class CharacterElement
         {
             public string CharValue { get; private set; }
@@ -26,6 +28,11 @@ namespace RomanCalculatorLibrary
             MultiplicationDivision = 3,
             Involution = 4,
             Letter = 5
+        }
+
+        public ConverterOfNumbers ConverterOfNumbers
+        {
+            get { return _converterOfNumbers; }
         }
 
         public String ConvertInputStringToReversePolishSignature(String expression)
@@ -63,13 +70,10 @@ namespace RomanCalculatorLibrary
 
         private Boolean IsContainTerminalSign(String expression)
         {
-            if (expression.Contains("$"))
-                return true;
-
-            return false;
+            return expression.Contains("$");
         }
 
-        private List<CharacterElement> GetAllCharacterElementsOfInputString(string inputArrayElements)
+        private IEnumerable<CharacterElement> GetAllCharacterElementsOfInputString(string inputArrayElements)
         {
             var listOfCharacterElements = new List<CharacterElement>();
             for (var i = 0; i < inputArrayElements.Length; i++)
@@ -185,7 +189,7 @@ namespace RomanCalculatorLibrary
                 if (reversePolishSignature[i] == terminalSign && i != reversePolishSignature.Length - 1)
                 {
                     var currentRomanNumber = ParseCurrentRomanNumber(ref i, reversePolishSignature, terminalSign);
-                    var arabicNumber = ConvertRomanNumberToArabic(currentRomanNumber).ToString();
+                    var arabicNumber = _converterOfNumbers.ConvertRomanNumberToArabic(currentRomanNumber).ToString();
                     listElementsOfExpression.Add(arabicNumber);
                 }
                 else if (IsSignOfOperation(reversePolishSignature[i].ToString()))
@@ -210,70 +214,6 @@ namespace RomanCalculatorLibrary
             return currentElementOfExpression;
         }
 
-        public int ConvertRomanNumberToArabic(string romanFormatNumber)
-        {
-            var result = 0;
-
-            var stack = new Stack<int>();
-            var listOfArabicDigits = new List<int>();
-            foreach (var currentCharOfRomanNumber in romanFormatNumber)
-                listOfArabicDigits.Add(ConvertRomanDigitToArabic(currentCharOfRomanNumber));
-
-            foreach (var currentArabicDigit in listOfArabicDigits)
-            {
-                if (stack.Count != 0)
-                {
-                    if (currentArabicDigit < stack.Peek())
-                    {
-                        result += stack.Sum();
-                        stack.Clear();
-                        stack.Push(currentArabicDigit);
-                    }
-                    else if (currentArabicDigit == stack.Peek())
-                    {
-                        stack.Push(currentArabicDigit);
-                    }
-                    else
-                    {
-                        var subtrahend = stack.Sum();
-                        var minuend = currentArabicDigit;
-                        var currentArabicDigitAfterSubtraction = minuend - subtrahend;
-                        result += currentArabicDigitAfterSubtraction;
-                        stack.Clear();
-                    }
-                }
-                else
-                {
-                    stack.Push(currentArabicDigit);
-                }
-            }
-
-            var remainingDigits = stack.Sum();
-            result += remainingDigits;
-
-            return result;
-        }
-
-        private int ConvertRomanDigitToArabic(char firstDigit)
-        {
-            if (firstDigit == 'M')
-                return 1000;
-            if (firstDigit == 'D')
-                return 500;
-            if (firstDigit == 'C')
-                return 100;
-            if (firstDigit == 'L')
-                return 50;
-            if (firstDigit == 'X')
-                return 10;
-            if (firstDigit == 'V')
-                return 5;
-            if (firstDigit == 'I')
-                return 1;
-
-            throw new ArgumentException("Uncorrect input data");
-        }
-
         public static bool IsSignOfOperation(string sign)
         {
             switch (sign)
@@ -286,27 +226,6 @@ namespace RomanCalculatorLibrary
             }
 
             return false;
-        }
-
-        public string ConvertArabicNumberToRoman(int number)
-        {
-            var result = String.Empty;
-            int[] digitsValues = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
-            string[] romanDigits = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
-            while (number > 0)
-            {
-                var indexMaxDivisorOfCurrentNumber = digitsValues.Count() - 1;
-                for (; indexMaxDivisorOfCurrentNumber >= 0; indexMaxDivisorOfCurrentNumber--)
-                {
-                    if (number / digitsValues[indexMaxDivisorOfCurrentNumber] >= 1)
-                    {
-                        number -= digitsValues[indexMaxDivisorOfCurrentNumber];
-                        result += romanDigits[indexMaxDivisorOfCurrentNumber];
-                        break;
-                    }
-                }
-            }
-            return result;
         }
     }
 }

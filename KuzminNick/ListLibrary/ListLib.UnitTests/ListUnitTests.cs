@@ -11,11 +11,11 @@ namespace ListLib.UnitTests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ListConstructor_NegativeValueOfSizeArray_ExceptionThrown()
         {
-            var list = new List<int>(-9);
+            new List<int>(-9);
         }
 
         [TestMethod]
-        public void Add_CorrectValueOfCount()
+        public void Add_CountIsProperlyChanged_AfterAddingElements()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -25,7 +25,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void Remove_CorrectValueOfCount()
+        public void Remove_CountIsProperlyChanged_AfterAddingAndRemovingElements()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -46,7 +46,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void Foreach_CorrectFunctioningOfEnumerator()
+        public void Foreach_VariableIsProperlyChangedByEnumerator()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -60,7 +60,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void IndexOf_CorrectGettingElementByIndex()
+        public void IndexOf_ElementIsProperlyObtainedByIndex()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -70,7 +70,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void IndexOf_IndexOfElementNotIncludedInCollection()
+        public void IndexOf_IndexOfElementNotIncludedInCollection_IsProperlyObtained()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -80,7 +80,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void IndexerGetAccessor_CorrectValue()
+        public void IndexerGetAccessor_ElementIsProperlyObtainedByIndexer()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
@@ -90,14 +90,13 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void IndexerSetAccessor_CorrectValue()
+        public void IndexerSetAccessor_ElementIsProperlyChangedByIndexer()
         {
             var list = new List<int>();
             for (var i = 0; i < 10; i++)
                 list.Add(i);
 
             list[5] = 25;
-
             Assert.AreEqual(25, list[5]);
         }
 
@@ -124,7 +123,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void Clear_CorrectValueOfCount()
+        public void Clear_CountIsProperlyChangedAfterCleaningOfCollection()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -135,7 +134,7 @@ namespace ListLib.UnitTests
         }
 
         [TestMethod]
-        public void CopyTo_CorrectCopyingOfArray()
+        public void CopyTo_ArrayIsProperlyChanged_AfterCopyingFromList()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -149,7 +148,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CopyTo_NegativeIndexWhenCopyingInArray_ExceptionThrown()
+        public void CopyTo_NegativeIndexOfInsertingCollectionInArray_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)
@@ -161,7 +160,7 @@ namespace ListLib.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CopyTo_IndexOutsideAllowableRangeWhenCopyingInArray_ExceptionThrown()
+        public void CopyTo_ListIsNotPlacedInLengthOfArray_ExceptionThrown()
         {
             var list = new List<int>();
             for (var i = 0; i < 5; i++)

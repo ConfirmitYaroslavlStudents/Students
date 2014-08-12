@@ -10,7 +10,7 @@ namespace ListLibrary
         private int _count;
 
         public List()
-            : this(5)
+            : this(4)
         { }
 
         public List(int size)
@@ -171,9 +171,9 @@ namespace ListLibrary
             Array.Copy(_elements, 0, destinationArray, indexForInsertingDestinationArray, Count);
         }
 
-        private bool IsPlacedInNewArray(T[] destinationArray, int indexDestinationArray)
+        private bool IsPlacedInNewArray(ICollection<T> destinationArray, int indexDestinationArray)
         {
-            return Count < (destinationArray.Length - indexDestinationArray);
+            return Count < (destinationArray.Count - indexDestinationArray);
         }
 
         public bool IsReadOnly

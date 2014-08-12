@@ -7,7 +7,7 @@ namespace CacheLibrary
     public class Element<T>
     {
         private readonly string _id;
-        private int _timeOfLastUsingInSeconds;
+        private long _timeOfLastUsingInTicks;
 
         public Element(string id, T value)
         {
@@ -31,13 +31,13 @@ namespace CacheLibrary
             FrequencyUsage++;
         }
 
-        public int TimeOfLastUsingInSeconds
+        public long TimeOfLastUsingInTicks
         {
-            get { return _timeOfLastUsingInSeconds; }
+            get { return _timeOfLastUsingInTicks; }
             set 
             {
                 if (value >= 0)
-                    _timeOfLastUsingInSeconds = value;
+                    _timeOfLastUsingInTicks = value;
                 else
                     throw new ArgumentOutOfRangeException();
             }
@@ -47,7 +47,9 @@ namespace CacheLibrary
 
         public override string ToString()
         {
-            return string.Format("Value of Element = '{0}', Id = '{1}', Type of Storage = '{2}'", Value, Id, TypeOfStorage);
+            return string.Format("Value of Element = '{0}', Id = '{1}', Type of Storage = '{2}', " +
+                                 "Time Of Last Using In Ticks = '{3}', frequency = '{4}'", 
+                                 Value, Id, TypeOfStorage, TimeOfLastUsingInTicks, FrequencyUsage);
         }
     }
 }

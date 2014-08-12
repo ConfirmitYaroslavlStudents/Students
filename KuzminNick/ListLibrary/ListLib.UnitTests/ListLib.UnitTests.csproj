@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ListLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ListLibrary\bin\Debug\ListLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -56,6 +52,12 @@
   <ItemGroup>
     <Compile Include="ListUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ListLibrary\ListLibrary.csproj">
+      <Project>{3d6895f2-0596-4613-9889-6dcca01d6cb5}</Project>
+      <Name>ListLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CacheLibrary.UnitTests
@@ -7,83 +6,59 @@ namespace CacheLibrary.UnitTests
     [TestClass]
     public class CacheUnitTests
     {
-        private static DataBase<string> GenerateDataBaseOfRandomStringElements(int amountOfElements)
+        private DataBase<string> InitializeDataBase(int amountOfElements)
         {
-            var generatorRandomStrings = new GeneratorRandomStrings(amountOfElements);
-            var dataBase = new DataBase<string>();
-            dataBase.InitializeDataBase(generatorRandomStrings.StringDictionary);
+            var generatorRandomStrings = new DataBaseGenerator(amountOfElements);
+            var dataBase = new DataBase<string>(generatorRandomStrings.StringDictionary);
             return dataBase;
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Capacity_DecreaseValueOfCacheCapacity_ExceptionThrow()
+        public void Capacity_DecreaseValueOfCacheCapacity_ExceptionThrown()
         {
             var dataBase = new DataBase<string>();
-            var cache = new Cache<string>(10, dataBase);
+            var cache = new CacheBuilder<string>().Build(capacity: 10, slowDataBase: dataBase);
             cache.Capacity = 5;
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Capacity_NegativeValue_ExceptionThrow()
+        public void Capacity_NegativeValue_ExceptionThrown()
         {
             var dataBase = new DataBase<string>();
-            var cache = new Cache<string>(10, dataBase);
+            var cache = new CacheBuilder<string>().Build(capacity: 10, slowDataBase: dataBase);
             cache.Capacity = -15;
         }
 
         [TestMethod]
-        public void TypesOfStorage_CorrectGettingElementsFromCacheAndDataBase()
+        public void TypesOfStorage_ElementsAreProperlyObtainedFromCacheAndDataBase()
         {
-            var dataBase = GenerateDataBaseOfRandomStringElements(3);
-            var cache = new Cache<string>(2, dataBase);
+            var dataBase = InitializeDataBase(amountOfElements: 5);
+            var cache = new CacheBuilder<string>().Build(capacity: 3, timeOfExpirationInTicks: 1000, slowDataBase: dataBase);
             var listOfId = dataBase.GetListOfId();
-            var elements = new List<Element<string>>();
 
-            foreach (var identifier in listOfId)
-                elements.Add(cache.GetElementById(identifier));
+            for (var i = 0; i < 5; i++)
+                cache.GetElementById(listOfId[i]);
 
-            var expectedTypeStorageOfFirstElement = TypesOfStorage.DataBase;
-            var expectedTypeStorageOfSecondElement = TypesOfStorage.DataBase;
-            var expectedTypeStorageOfThirdElement = TypesOfStorage.DataBase;
+            for (var i = 2; i >= 0; i--)
+                cache.GetElementById(listOfId[i]);
 
-            var actualTypeStorageOfFirstElement = elements[0].TypeOfStorage;
-            var actualTypeStorageOfSecondElement = elements[1].TypeOfStorage;
-            var actualTypeStorageOfThirdElement = elements[2].TypeOfStorage;
+            var listOfElementsInCache = cache.GetListOfElementsLocatedInCache();
 
-            Assert.AreEqual(expectedTypeStorageOfFirstElement, actualTypeStorageOfFirstElement, "First Element From Data Base");
-            Assert.AreEqual(expectedTypeStorageOfSecondElement, actualTypeStorageOfSecondElement, "Second Element From Data Base");
-            Assert.AreEqual(expectedTypeStorageOfThirdElement, actualTypeStorageOfThirdElement, "Third Element From Data Base");
-
-            RepeatedRequestToLastTwoElements(cache, listOfId);
-
-            expectedTypeStorageOfFirstElement = TypesOfStorage.DataBase;
-            expectedTypeStorageOfSecondElement = TypesOfStorage.Cache;
-            expectedTypeStorageOfThirdElement = TypesOfStorage.Cache;
-
-            actualTypeStorageOfFirstElement = elements[0].TypeOfStorage;
-            actualTypeStorageOfSecondElement = elements[1].TypeOfStorage;
-            actualTypeStorageOfThirdElement = elements[2].TypeOfStorage;
-
-            Assert.AreEqual(expectedTypeStorageOfFirstElement, actualTypeStorageOfFirstElement, "First Element From Data Base");
-            Assert.AreEqual(expectedTypeStorageOfSecondElement, actualTypeStorageOfSecondElement, "Second Element From Cache");
-            Assert.AreEqual(expectedTypeStorageOfThirdElement, actualTypeStorageOfThirdElement, "Third Element From Cache");
-        }
-
-        private static void RepeatedRequestToLastTwoElements(Cache<string> cache, List<string> listOfId)
-        {
-            var someInformationAboutSecondElement = cache.GetElementById(listOfId[1]);
-            var someInformationAboutThirdElement = cache.GetElementById(listOfId[2]);
+            const int amountOfElementsInCache = 1;
+            Assert.AreEqual(amountOfElementsInCache, listOfElementsInCache.Count);
+            const string valueOfElementInCache = "two";
+            Assert.AreEqual(valueOfElementInCache, listOfElementsInCache[0].Value);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void Constructor_NegativeValueOfTimeLimitStoringInCache_ExceptionThrow()
+        public void Constructor_NegativeValueOfTimeLimitStoringInCache_ExceptionThrown()
         {
             var dataBase = new DataBase<string>();
-            var negativeValueOfTimeLimitStoringInCache = -5;
-            var cache = new Cache<string>(10, negativeValueOfTimeLimitStoringInCache, dataBase);
+            const int negativeValueOfTimeLimitStoringInCache = -5;
+            new CacheBuilder<string>().Build(capacity: 10, timeOfExpirationInTicks: negativeValueOfTimeLimitStoringInCache, slowDataBase: dataBase);
         }
     }
 }

@@ -41,9 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="CacheBuilder.cs" />
     <Compile Include="DataBase.cs" />
     <Compile Include="Element.cs" />
-    <Compile Include="GeneratorRandomStrings.cs" />
     <Compile Include="IDataBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

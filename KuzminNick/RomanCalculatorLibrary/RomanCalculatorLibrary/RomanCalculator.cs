@@ -5,17 +5,17 @@ namespace RomanCalculatorLibrary
 {
     public class RomanCalculator
     {
-        private readonly ParserArithmeticExpression _parser = new ParserArithmeticExpression();
+        private readonly ArithmeticExpressionParser _arithmeticExpressionParser = new ArithmeticExpressionParser();
 
         public string CalculateExpression(string expression)
         {
-            var reversePolishSignature = _parser.ConvertInputStringToReversePolishSignature(expression);
+            var reversePolishSignature = _arithmeticExpressionParser.ConvertInputStringToReversePolishSignature(expression);
             var resultInArarbicFormat = GetResultOfCalculationInArabicFormat(reversePolishSignature);
 
             if(resultInArarbicFormat <= 0)
                 throw new ArgumentException("Not positive result of calculation");
 
-            var resultInRomatFormat = _parser.ConvertArabicNumberToRoman(resultInArarbicFormat);
+            var resultInRomatFormat = _arithmeticExpressionParser.ConverterOfNumbers.ConvertArabicNumberToRoman(resultInArarbicFormat);
 
             return resultInRomatFormat;
         }
@@ -24,11 +24,11 @@ namespace RomanCalculatorLibrary
         {
             var stack = new Stack<string>();
             var resultOfCurrentOperation = 0;
-            var listElementsOfExpression = _parser.InitializeListOfElements(reversePolishSignature);
+            var listElementsOfExpression = _arithmeticExpressionParser.InitializeListOfElements(reversePolishSignature);
 
             foreach (var elementOfExpression in listElementsOfExpression)
             {
-                if (!ParserArithmeticExpression.IsSignOfOperation(elementOfExpression))
+                if (!ArithmeticExpressionParser.IsSignOfOperation(elementOfExpression))
                 {
                     stack.Push(elementOfExpression);
                 }
@@ -44,15 +44,10 @@ namespace RomanCalculatorLibrary
         private static int CalculateCurrentOperation(Stack<string> stack, string symbolOfOperation, int resultOfCurrentOperation)
         {
             int secondNumber, firstNumber;
-            try
-            {
-                secondNumber = int.Parse(stack.Pop());
-                firstNumber = int.Parse(stack.Pop());
-            }
-            catch
-            {
+            var isCorrectParsedSecondNumber = int.TryParse(stack.Pop(), out secondNumber);
+            var isCorrectParsedFirstNumber = int.TryParse(stack.Pop(), out firstNumber);
+            if(!isCorrectParsedFirstNumber || !isCorrectParsedSecondNumber)
                 throw new InvalidOperationException("Uncorrect Arithmetic Expression");
-            }
 
             switch (symbolOfOperation)
             {

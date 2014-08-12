@@ -4,17 +4,16 @@ using System.Linq;
 
 namespace Cache
 {
-    class Element<T>
+    public class Element<T>
     {
-        //абстрактность времени(ITime)
+        private readonly ITime<T> _timeCache;
         private DateTime _timeLastUse;
-        private readonly TimeSpan _timeLive;
-       
-        public Element(T value, TimeSpan timeLive)
+
+        public Element(T value, ITime<T> time)
         {
             Value = value;
-            _timeLastUse = DateTime.Now;
-            _timeLive = timeLive;
+            _timeLastUse = time.CurrenTime;
+            _timeCache = time;
         }
 
         public T Value { get; private set; }
@@ -37,92 +36,40 @@ namespace Cache
 
         public TimeSpan TimeLive
         {
-            get { return _timeLive; }
+            get { return _timeCache.TimeLive; }
         }
+
+       
     }
 
-    //класс достаточно большой, можно вынести в отдельный файл
-    public class Cache<TKey, TValue> : 
-            IGettingValue<TKey, TValue>, 
-            ICheckCantainsKeyInCache<TKey>, 
-            IGetNumberIncludeCache, 
-            IMakeElementsInCacheOld
 
+    public class Cache<TKey, TValue> :
+        IGettingValue<TKey, TValue>,
+        IGetNumberIncludeCache
     {
-        private readonly IGettingValue<TKey, TValue> _storage;
-        private readonly Dictionary<TKey, Element<TValue>> _cache;
-        private int _capacity;
-        private readonly TimeSpan _timeLive;
         private const int Defaultcapacity = 10;
-        private readonly TimeSpan _defaultTimeLive = new TimeSpan(0, 0, 5);
+        private readonly Dictionary<TKey, Element<TValue>> _cache;
+        private readonly TimeSpan _timeLive;
+        private readonly IGettingValue<TKey, TValue> _storage;
+        private readonly ITime<TValue> _time;
+        private int _capacity;
 
 
-        int IGetNumberIncludeCache.NumberIncludeCahce { get; set; }
-
-        int IGetNumberIncludeCache.NumberIncludeStorage { get; set; }
-
-        bool ICheckCantainsKeyInCache<TKey>.ContainsInCache(TKey key)
-        {
-            return _cache.ContainsKey(key);
-        }
-
-        void IMakeElementsInCacheOld.MakeElementsOld(int numberElements)
-        {
-            for (var i = 1; i <= numberElements; ++i)
-            {
-                RemoveOldPairFromCache();
-            }
-        }
-
-
-        public Cache(IGettingValue<TKey, TValue> storage)
+        public Cache(IGettingValue<TKey, TValue> storage, ITime<TValue> time)
         {
             _storage = storage;
             _cache = new Dictionary<TKey, Element<TValue>>();
             _capacity = Defaultcapacity;
-            _timeLive = _defaultTimeLive;
+            _timeLive = time.TimeLive;
+            _time = time;
         }
 
-        public Cache( IGettingValue<TKey, TValue> storage, int capacity)
-            : this(storage)
+        public Cache(IGettingValue<TKey, TValue> storage, ITime<TValue> time, int capacity)
+            : this(storage, time)
         {
             _capacity = capacity;
-            _timeLive = _defaultTimeLive;
         }
-
-        public Cache(IGettingValue<TKey, TValue> storage, int capacity, TimeSpan timeLive)
-            : this(storage, capacity)
-        {
-            _timeLive = timeLive;
-        }
-
-
-        public TValue this[TKey key]
-        {
-            get
-            {
-                RemoveAllOldPairFromCache();
-                if (_cache.ContainsKey(key))
-                {
-                    IncrementIncludeCache();
-                    RefreshValueInCache(key);
-                    return _cache[key].Value;
-                }
-                IncrementIncludeStorage();
-                AddNewValueInCache(key, _storage[key]);
-                return _cache[key].Value;
-
-            }
-        }
-        private void IncrementIncludeStorage()
-        {
-            ++ (this as IGetNumberIncludeCache).NumberIncludeStorage;
-        }
-        private void IncrementIncludeCache()
-        {
-            ++ (this as IGetNumberIncludeCache).NumberIncludeCahce;
-        }
-
+        
 
         public int Capacity
         {
@@ -138,8 +85,9 @@ namespace Cache
                 }
                 else
                 {
-                    for (var i = 0; i < _capacity - value; ++i)
-                    RemoveOldPairFromCache();
+                    for (int i = 0; i < _capacity - value; ++i)
+                        RemoveOldPairFromCache();
+
                     _capacity = value;
                 }
             }
@@ -155,54 +103,87 @@ namespace Cache
             get { return _timeLive; }
         }
 
-        public int GetCount()
+        public bool ContainsInCache(TKey key)
         {
-            return _cache.Count; 
+            return _cache.ContainsKey(key);
         }
 
-        void RemoveOldPairFromCache()
+        int IGetNumberIncludeCache.NumberIncludeCahce { get; set; }
+
+        int IGetNumberIncludeCache.NumberIncludeStorage { get; set; }
+
+        public TValue this[TKey key]
+        {
+            get
+            {
+                RemoveAllOldPairFromCache();
+                if (_cache.ContainsKey(key))
+                {
+                    IncrementIncludeCache();
+                    RefreshValueInCache(key);
+                    return _cache[key].Value;
+                }
+                IncrementIncludeStorage();
+                AddNewValueInCache(key, _storage[key]);
+                return _cache[key].Value;
+            }
+        }
+        
+        private void IncrementIncludeStorage()
+        {
+            ++ (this as IGetNumberIncludeCache).NumberIncludeStorage;
+        }
+
+        private void IncrementIncludeCache()
+        {
+            ++ (this as IGetNumberIncludeCache).NumberIncludeCahce;
+        }
+
+        public int GetCount()
+        {
+            RemoveAllOldPairFromCache();
+            return _cache.Count;
+        }
+
+        private void RemoveOldPairFromCache()
         {
             if (_cache.Count <= 0) return;
 
             var maxOldValue = _cache.First();
-            foreach (var pair in _cache)
+            foreach (var pair in _cache.Where(pair => pair.Value.TimeUsage < maxOldValue.Value.TimeUsage))
             {
-                if (pair.Value.TimeUsage < maxOldValue.Value.TimeUsage)
-                {
-                    maxOldValue = pair;
-                }
+                maxOldValue = pair;
             }
             _cache.Remove(maxOldValue.Key);
         }
-        
-        void RefreshValueInCache(TKey key)
+
+        private void RefreshValueInCache(TKey key)
         {
-            _cache[key].TimeUsage = DateTime.Now;
+            _cache[key].TimeUsage = _time.CurrenTime;
         }
-        
-        void RemoveAllOldPairFromCache()
+
+        private void RemoveAllOldPairFromCache()
         {
-            var collectKeys = (from pair in _cache
-                               where DateTime.Now - pair.Value.TimeUsage > _timeLive
-                               select pair.Key).ToArray();
-            foreach (var key in collectKeys)
+            TKey[] collectKeys = (from pair in _cache
+                where _time.IsOldElement(pair.Value)
+                select pair.Key).ToArray();
+            foreach (TKey key in collectKeys)
             {
                 _cache.Remove(key);
             }
         }
 
-        void AddNewValueInCache(TKey key, TValue value)
+        private void AddNewValueInCache(TKey key, TValue value)
         {
             if (_cache.Count >= _capacity)
             {
                 RemoveOldPairFromCache();
-                _cache.Add(key, new Element<TValue>(value, _timeLive));
+                _cache.Add(key, new Element<TValue>(value, _time));
             }
             else
             {
-                _cache.Add(key, new Element<TValue>(value, _timeLive));
+                _cache.Add(key, new Element<TValue>(value, _time));
             }
         }
-        
     }
 }

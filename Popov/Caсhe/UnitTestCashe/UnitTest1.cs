@@ -1,26 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cache;
 
 
 namespace UnitTestCashe
 {
-    //снова названия методов и файла
     [TestClass]
     public class TestCache
     {
         [TestMethod]
         public void TestEqualsKeys()
         {
-            var temp = new Cache<int, string>(new TestClassForCache());
-            Assert.AreEqual(temp[1], "1 HZ");
-
+            var temp = new Cache<int, string>(new TestClasses(), new TimeForCache());
+            Assert.AreEqual(temp[1], "1");
         }
         
         [TestMethod]
         public void TestCapacity()
         {
-            var testCache = new Cache<int, string>(new TestClassForCache());
+            var testCache = new Cache<int, string>(new TestClasses(), new TimeForCache());
             Assert.AreEqual(testCache.Capacity, testCache.DefaultCapacity);
         }
 
@@ -28,7 +27,7 @@ namespace UnitTestCashe
         public void TestCount()
         {
             const int capacity = 10;
-            var cache = new Cache<int, string>(new TestClassForCache(),capacity,TimeSpan.MaxValue);
+            var cache = new Cache<int, string>(new TestClasses(), new TimeForCache(), capacity);
             var temp = cache[capacity];
             Assert.AreEqual(cache.GetCount(), 1);
         }
@@ -37,15 +36,15 @@ namespace UnitTestCashe
         public void TestTimeLive()
         {
             const int capacity = 10;
-            var cache = new Cache<int, string>(new TestClassForCache(), capacity, new TimeSpan(0, 0, 2));
-            Assert.AreEqual(cache.TimeLive, new TimeSpan(0, 0, 2));
+            var cache = new Cache<int, string>(new TestClasses(), new TimeForCache(), capacity);
+            Assert.AreEqual(cache.TimeLive, new TimeForCache().TimeLive);
         }
 
         [TestMethod]
         public void TestIncludeCache()
         {
             const int capacity = 10;
-            var cache = new Cache<int, string>(new TestClassForCache(), capacity, TimeSpan.MaxValue);
+            var cache = new Cache<int, string>(new TestClasses(), new TimeForCache(), capacity);
             var temp = cache[capacity];
             for (var i = 1; i <= capacity; ++i)
             {
@@ -58,7 +57,7 @@ namespace UnitTestCashe
         public void TestIncludeStorage()
         {
             const int capacity = 10;
-            var cache = new Cache<int, string>(new TestClassForCache(), capacity, TimeSpan.MaxValue);
+            var cache = new Cache<int, string>(new TestClasses(), new TimeForCache(), capacity);
             for (var i = 1; i <= capacity; ++i)
             {
                 var temp = cache[i];
@@ -70,13 +69,13 @@ namespace UnitTestCashe
         public void TestOverflowCache()
         {
             const int capcity = 10;
-            var cache = new Cache<int, string>(new TestClassForCache(), capcity, TimeSpan.MaxValue);
+            var cache = new Cache<int, string>(new TestClasses(), new TimeForCacheOverflowElement(), capcity);
             var temp = cache[0];
             for (var i = 1; i <= capcity; ++i)
             {
                 temp = cache[i];
             }
-            Assert.IsFalse((cache as ICheckCantainsKeyInCache<int>).ContainsInCache(0));
+            Assert.IsFalse(cache.ContainsInCache(0));
         }
 
         [TestMethod]
@@ -84,15 +83,14 @@ namespace UnitTestCashe
         {
            
             const int capacity = 10;
-            const int numberOldElements = 7;
-            var cache = new Cache<int, string>(new TestClassForCache(), capacity, TimeSpan.MaxValue);
+            
+            var cache = new Cache<int, string>(new TestClasses(), new TimeForCacheOldElement(), capacity);
             for (var i = 1; i <= capacity; ++i)
             {
                 var temp = cache[i];
             }
            
-            (cache as IMakeElementsInCacheOld).MakeElementsOld(numberOldElements);
-            Assert.AreEqual(cache.GetCount(), capacity - numberOldElements);
+            Assert.AreEqual(cache.GetCount(), 0);
 
         }
 

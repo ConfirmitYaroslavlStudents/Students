@@ -17,7 +17,7 @@ namespace RefactorLibrary
         public string Title
         {
             get { return _title; } 
-            set
+            private set
             {
                 if (value == null) throw new ArgumentNullException("value");
                 Title = value;
@@ -27,12 +27,12 @@ namespace RefactorLibrary
 
         public Price PriceCode { get; set; }
 
-        public double GetCharge(int daysRented)
+        internal double GetCharge(int daysRented)
         {
             return PriceCode.GetCharge(daysRented);
         }
 
-        public int GetBonusProfit(int daysRented)
+        internal int GetBonusProfit(int daysRented)
         {
             return PriceCode.GetBonusProfit(daysRented);
         }

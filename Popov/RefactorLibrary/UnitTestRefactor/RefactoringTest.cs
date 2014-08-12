@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefactorLibrary;
 using Newtonsoft.Json;
@@ -8,9 +6,8 @@ using Formatting = Newtonsoft.Json.Formatting;
 
 namespace UnitTestRefactor
 {
-    //снова названия методов и файла
     [TestClass]
-    public class UnitTest1
+    public class RefactoringTest
     {
         [TestMethod]
         public void TestEqualsStatement()
@@ -18,6 +15,7 @@ namespace UnitTestRefactor
             var obj1 = new Customer("Sergey", new List<Rental>());
             obj1.Rentals.Add(new Rental(new Movie("Noi", new NewReleasePrice()), 10));
             var st1 = new Statement(obj1);
+            
 
             var obj2 = new Customer("Sergey", new List<Rental>());
             obj2.Rentals.Add(new Rental(new Movie("Noi", new NewReleasePrice()), 10));
@@ -107,7 +105,5 @@ namespace UnitTestRefactor
             var rental = new Rental(new Movie("unknow", new ChildrensPrice()), daysRented);
             Assert.AreEqual(rental.DaysRented, daysRented);
         }
-
-
     }
 }

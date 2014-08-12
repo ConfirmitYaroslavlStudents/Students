@@ -13,22 +13,22 @@ namespace RefactorLibrary
         public Movie Movie
         {
             get; 
-            set;
+            private set;
         }
 
         public int DaysRented
         {
             get; 
-            set;
+            private set;
         }
 
         
-        public int GetBonusProfit()
+        internal int GetBonusProfit()
         {
             return Movie.GetBonusProfit(DaysRented);
         }
 
-        public double GetCharge()
+        internal double GetCharge()
         {
             return Movie.GetCharge(DaysRented);
         }

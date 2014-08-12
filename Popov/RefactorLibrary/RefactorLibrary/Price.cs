@@ -3,9 +3,9 @@ namespace RefactorLibrary
 {
     public abstract class Price
     {
-        public abstract double GetCharge(int daysRented);
+        internal abstract double GetCharge(int daysRented);
 
-        public virtual int GetBonusProfit(int daysRented)
+        internal virtual int GetBonusProfit(int daysRented)
         {
             return 1;
         }
@@ -13,7 +13,7 @@ namespace RefactorLibrary
 
     public class ChildrensPrice : Price
     {
-       public override double GetCharge(int daysRented)
+        internal override double GetCharge(int daysRented)
         {
             double result = 0;
             result += 2;
@@ -25,7 +25,7 @@ namespace RefactorLibrary
 
     public class RegularPrice : Price
     {
-        public override double GetCharge(int daysRented)
+        internal override double GetCharge(int daysRented)
         {
             double result = 0;
             result += daysRented * 3;
@@ -35,7 +35,7 @@ namespace RefactorLibrary
 
     public class NewReleasePrice : Price
     {
-        public override double GetCharge(int daysRented)
+        internal override double GetCharge(int daysRented)
         {
             double result = 0;
             result += 1.5;
@@ -44,7 +44,7 @@ namespace RefactorLibrary
             return result;
         }
 
-        public override int GetBonusProfit(int daysRented)
+        internal override int GetBonusProfit(int daysRented)
         {
             return (daysRented > 1) ? 2: 1;
         }

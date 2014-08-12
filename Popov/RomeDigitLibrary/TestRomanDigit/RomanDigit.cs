@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RomeDigitLibrary;
 
-
-namespace UnitTestRomeNumbers
+namespace TestRomanDigit
 {
-    //переименовать фабрику и "UnitTest1"
     static class InstanceRomeNumber
     {
         public static RomeNumber GetInstance(string Rome)
@@ -16,27 +14,26 @@ namespace UnitTestRomeNumbers
     }
 
     [TestClass]
-    public class TestRomeNumber
+    public class RomanDigit
     {
-
         [TestMethod]
         public void TestConvertToUint()
         {
             var equalsDictionary = new Dictionary<uint, uint>
             {
-                {InstanceRomeNumber.GetInstance("XV").ToUint32(), 15},
-                {InstanceRomeNumber.GetInstance("XVIII").ToUint32(), 18},
-                {InstanceRomeNumber.GetInstance("XIX").ToUint32(), 19},
-                {InstanceRomeNumber.GetInstance("C").ToUint32(), 100},
-                {InstanceRomeNumber.GetInstance("CCC").ToUint32(), 300},
-                {InstanceRomeNumber.GetInstance("CMXCIX").ToUint32(), 999},
-                {InstanceRomeNumber.GetInstance("MMMMMMIX").ToUint32(), 6009},
-                {InstanceRomeNumber.GetInstance("MMMMMMMMMMMMMM").ToUint32(),14000},
-                {InstanceRomeNumber.GetInstance("MCMLXXXVIII").ToUint32(),1988}
+                {InstanceRomeNumber.GetInstance("XV").ArabNumber, 15},
+                {InstanceRomeNumber.GetInstance("XVIII").ArabNumber, 18},
+                {InstanceRomeNumber.GetInstance("XIX").ArabNumber, 19},
+                {InstanceRomeNumber.GetInstance("C").ArabNumber, 100},
+                {InstanceRomeNumber.GetInstance("CCC").ArabNumber, 300},
+                {InstanceRomeNumber.GetInstance("CMXCIX").ArabNumber, 999},
+                {InstanceRomeNumber.GetInstance("MMMMMMIX").ArabNumber, 6009},
+                {InstanceRomeNumber.GetInstance("MMMMMMMMMMMMMM").ArabNumber,14000},
+                {InstanceRomeNumber.GetInstance("MCMLXXXVIII").ArabNumber,1988}
             };
             foreach (var pair in equalsDictionary)
             {
-                Assert.AreEqual(pair.Key,pair.Value);
+                Assert.AreEqual(pair.Key, pair.Value);
             }
         }
 
@@ -64,7 +61,7 @@ namespace UnitTestRomeNumbers
         public void TestToString()
         {
             const string Rn = "XI";
-            Assert.AreEqual(InstanceRomeNumber.GetInstance(Rn).ToString(),Rn);
+            Assert.AreEqual(InstanceRomeNumber.GetInstance(Rn).ToString(), Rn);
         }
 
         [TestMethod]
@@ -72,7 +69,7 @@ namespace UnitTestRomeNumbers
         public void TestExeptionConverToUint1()
         {
             var a = InstanceRomeNumber.GetInstance("XXHaa");
-            var temp = a.ToUint32();
+            var temp = a.ArabNumber;
         }
 
         [TestMethod]
@@ -80,7 +77,7 @@ namespace UnitTestRomeNumbers
         public void TestExeptionConverToUint2()
         {
             var a = InstanceRomeNumber.GetInstance("IC");
-            var temp = a.ToUint32();
+            var temp = a.ArabNumber;
         }
 
         [TestMethod]
@@ -88,7 +85,7 @@ namespace UnitTestRomeNumbers
         {
             var first = InstanceRomeNumber.GetInstance("X");
             var second = InstanceRomeNumber.GetInstance("V");
-            
+
             Assert.AreEqual(first + second, RomeNumber.ConvertUIntToRomeNumber(15));
         }
 

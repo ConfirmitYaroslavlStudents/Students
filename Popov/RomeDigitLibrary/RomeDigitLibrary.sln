@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomeDigitLibrary", "RomeDigitLibrary\RomeDigitLibrary.csproj", "{8D1356C7-D505-4C78-A8AB-CB51ED570569}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestRomeNumbers", "UnitTestRomeNumbers\UnitTestRomeNumbers.csproj", "{E6DA5F41-5C13-4246-A02A-3AD28765D0D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRomanDigit", "TestRomanDigit\TestRomanDigit.csproj", "{F2F03355-BFED-49A4-9F42-F7F963EC7592}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{8D1356C7-D505-4C78-A8AB-CB51ED570569}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D1356C7-D505-4C78-A8AB-CB51ED570569}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D1356C7-D505-4C78-A8AB-CB51ED570569}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6DA5F41-5C13-4246-A02A-3AD28765D0D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6DA5F41-5C13-4246-A02A-3AD28765D0D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6DA5F41-5C13-4246-A02A-3AD28765D0D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6DA5F41-5C13-4246-A02A-3AD28765D0D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F03355-BFED-49A4-9F42-F7F963EC7592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F03355-BFED-49A4-9F42-F7F963EC7592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F03355-BFED-49A4-9F42-F7F963EC7592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F03355-BFED-49A4-9F42-F7F963EC7592}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,9 +7,8 @@ namespace RomeDigitLibrary
     public static class RulesConvertRomeNumber
     {
         public static Dictionary<uint, string> RulesConvertToRome { get; private set; }
-
-        //изменить имя, используя ToArab
-        public static Dictionary<char, uint> RulesConvertToTen { get; private set; } 
+        
+        public static Dictionary<char, uint> RulesConvertToArab { get; private set; } 
 
         static RulesConvertRomeNumber()
         {
@@ -22,7 +21,7 @@ namespace RomeDigitLibrary
             {1000, "M"}
             };
             
-            RulesConvertToTen = new Dictionary<char, uint>
+            RulesConvertToArab = new Dictionary<char, uint>
             {
                 {'I', 1},{'V', 5},{'X', 10},
                 {'L', 50},{'C', 100},{'D', 500},
@@ -38,7 +37,7 @@ namespace RomeDigitLibrary
         }
         public static void CheckExistRule(char rule)
         {
-            if (!RulesConvertToTen.ContainsKey(rule))
+            if (!RulesConvertToArab.ContainsKey(rule))
                 throw new FormatException("Incorrect entry of the Roman number");
         }
     }

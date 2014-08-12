@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 
 namespace RomeDigitLibrary
@@ -9,50 +10,56 @@ namespace RomeDigitLibrary
     public class RomeNumber : IEquatable<RomeNumber>
     {
         private readonly string _romeNumber;
+        public uint ArabNumber { get; private set; }
 
 
         public RomeNumber(string number)
         {
             _romeNumber = number;
+            ArabNumber = ToUint32();
         }
 
-        //можно использовать более тривиальный тип и название адекватнее
-        //если придерживаться того, что входные данные корректны, то можно не делать проверки, коих много
-        //переименовать i
-        //сделать, чтобя сразу же переводилось в арабское число и хранилось внутри - это позволит избежать конвертации каждый раз при использовании
-        public UInt32 ToUint32()
+       
+        private UInt32 ToUint32()
         {
-            var firstRomeDigit = _romeNumber[0];
-            var i = 1;
+            char firstRomeDigit = _romeNumber[0];
+            int i = 1;
             uint result= 0;
             const char symbolEnd = '!';
-            while ((firstRomeDigit != symbolEnd) && (i < _romeNumber.Length))
+            bool noEnd = (firstRomeDigit != symbolEnd) && (i < _romeNumber.Length);
+
+            while (noEnd)
             {
-                var secondRomeDigit = _romeNumber[i];
+                char secondRomeDigit = _romeNumber[i];
                 RulesConvertRomeNumber.CheckExistRule(firstRomeDigit);
                 RulesConvertRomeNumber.CheckExistRule(secondRomeDigit);
-                if (RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit] >= RulesConvertRomeNumber.RulesConvertToTen[secondRomeDigit])
+                if (RulesConvertRomeNumber.RulesConvertToArab[firstRomeDigit] >= RulesConvertRomeNumber.RulesConvertToArab[secondRomeDigit])
                 {
-                    result += RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
+                    result += RulesConvertRomeNumber.RulesConvertToArab[firstRomeDigit];
                     firstRomeDigit = secondRomeDigit;
                 }
                 else
                 {
                     RulesConvertRomeNumber.CheckExistRule(firstRomeDigit + secondRomeDigit.ToString(CultureInfo.InvariantCulture));
-                    result += RulesConvertRomeNumber.RulesConvertToTen[secondRomeDigit] - RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
+                    result += RulesConvertRomeNumber.RulesConvertToArab[secondRomeDigit] - RulesConvertRomeNumber.RulesConvertToArab[firstRomeDigit];
                     firstRomeDigit = symbolEnd;
                     if (i < _romeNumber.Length - 1)
                     {
                         ++i;
                         firstRomeDigit = _romeNumber[i];
                     }
+
                 }
+                
                 ++i;
+                noEnd = (firstRomeDigit != symbolEnd) && (i < _romeNumber.Length);
             }
-            if (firstRomeDigit != symbolEnd)
+
+            noEnd = firstRomeDigit != symbolEnd;
+            if (noEnd)
             {
                 RulesConvertRomeNumber.CheckExistRule(firstRomeDigit);
-                result += RulesConvertRomeNumber.RulesConvertToTen[firstRomeDigit];
+                result += RulesConvertRomeNumber.RulesConvertToArab[firstRomeDigit];
             }
             return result;
         }
@@ -76,13 +83,13 @@ namespace RomeDigitLibrary
 
         public static RomeNumber operator +(RomeNumber number1, RomeNumber number2)
         {
-            var result = number1.ToUint32() + number2.ToUint32();
+            uint result = number1.ToUint32() + number2.ToUint32();
             return ConvertUIntToRomeNumber(result);
         }
 
         public static RomeNumber operator -(RomeNumber number1, RomeNumber number2)
         {
-            var result = number1.ToUint32() - number2.ToUint32();
+            uint result = number1.ToUint32() - number2.ToUint32();
             if (result > 0)
             {
                 return ConvertUIntToRomeNumber(result);
@@ -92,54 +99,56 @@ namespace RomeDigitLibrary
 
         public static RomeNumber operator *(RomeNumber number1, RomeNumber number2)
         {
-            var result = number1.ToUint32() * number2.ToUint32();
+            uint result = number1.ToUint32() * number2.ToUint32();
             return ConvertUIntToRomeNumber(result);
         }
 
        
         public static RomeNumber ConvertUIntToRomeNumber(uint number)
         {
-            var result = "";
+            var result = new StringBuilder();
             while (number != 0)
             {
-                var incompleteNumber = MaximumMathPowerTen(number);
+                uint incompleteNumber = MaximumMathPowerTen(number);
                 if (RulesConvertRomeNumber.RulesConvertToRome.ContainsKey(incompleteNumber))
                 {
-                    result += RulesConvertRomeNumber.RulesConvertToRome[incompleteNumber];
+                    result.Append(RulesConvertRomeNumber.RulesConvertToRome[incompleteNumber]);
                     number -= incompleteNumber;
                     continue;
                 }
-                var approximateNumber = RulesConvertRomeNumber.RulesConvertToRome.FirstOrDefault(rule => IsAproximateEqualOne(incompleteNumber, rule)).Key;
+                uint approximateNumber = RulesConvertRomeNumber.RulesConvertToRome.FirstOrDefault(rule => IsAproximateEqualOne(incompleteNumber, rule)).Key;
                 if (approximateNumber != 0)
                 {
-                    result += RulesConvertRomeNumber.RulesConvertToRome[approximateNumber];
+                    result.Append(RulesConvertRomeNumber.RulesConvertToRome[approximateNumber]);
                     number -= approximateNumber;
                 }
                 else
                 {
                     approximateNumber = RulesConvertRomeNumber.RulesConvertToRome.Last(rule => IsAproximateBeforeTen(incompleteNumber, rule.Key)).Key;
-                    for (var j = 0; j < incompleteNumber / approximateNumber; ++j)
+                    for (int j = 0; j < incompleteNumber / approximateNumber; ++j)
                     {
-                        result += RulesConvertRomeNumber.RulesConvertToRome[approximateNumber];
+                        result.Append(RulesConvertRomeNumber.RulesConvertToRome[approximateNumber]);
                         number -= approximateNumber;
                     }
                 }
             }
-            return new RomeNumber(result);
+            return new RomeNumber(result.ToString());
         }
 
         
+
+
         private static uint MaximumMathPowerTen(uint number)
         {
-            var firstDigit = FirstSymbolToUInt(number);
-            var tens = AddSymbolZero(number.ToString(CultureInfo.InvariantCulture).Length - 1);
+            uint firstDigit = FirstSymbolToUInt(number);
+            string tens = AddSymbolZero(number.ToString(CultureInfo.InvariantCulture).Length - 1);
             firstDigit *= uint.Parse(tens);
             return firstDigit;
         }
 
         private static uint FirstSymbolToUInt(uint number)
         {
-            var firstSymbol = number.ToString(CultureInfo.InvariantCulture).First().ToString(CultureInfo.InvariantCulture);
+            string firstSymbol = number.ToString(CultureInfo.InvariantCulture).First().ToString(CultureInfo.InvariantCulture);
             return uint.Parse(firstSymbol);
         }
 
@@ -155,8 +164,8 @@ namespace RomeDigitLibrary
 
         private static string AddSymbolZero(int number)
         {
-            var tens = "1";
-            for (var j = 0; j < number; ++j)
+            string tens = "1";
+            for (int j = 0; j < number; ++j)
             {
                 tens += "0";
             }

@@ -18,7 +18,7 @@ namespace Colors
 
         private static IDictionary<String, Delegate> GetMethodsDictionary(TProc processor)
         {
-            var map = new Dictionary<String, Delegate>();
+            var methodsDictionary = new Dictionary<String, Delegate>();
 
             foreach (var methodInfo in typeof(TProc).GetMethods())
             {
@@ -37,12 +37,12 @@ namespace Colors
                 {
                     throw new ArgumentException("Incorrect number of parameters");
                 }
-                map.Add(argumentMethodPair.Item1, argumentMethodPair.Item2);
+                methodsDictionary.Add(argumentMethodPair.Item1, argumentMethodPair.Item2);
             }
-            return map;
+            return methodsDictionary;
         }
 
-        private static Tuple<String, Delegate > AddMethodWithOneArgument(TProc processor, ParameterInfo argument, MethodInfo methodInfo)
+        private static Tuple<String, Delegate> AddMethodWithOneArgument(TProc processor, ParameterInfo argument, MethodInfo methodInfo)
         {
             var argumentType = argument.ParameterType;
             var method = 

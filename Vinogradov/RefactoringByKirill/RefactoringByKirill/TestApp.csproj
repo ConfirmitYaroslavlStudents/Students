@@ -7,7 +7,7 @@
     <ProjectGuid>{96E25ABE-79CE-4E54-84D6-17DF5691E7E1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RefactoringByKirill</RootNamespace>
+    <RootNamespace>TestApp</RootNamespace>
     <AssemblyName>RefactoringByKirill</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatementFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

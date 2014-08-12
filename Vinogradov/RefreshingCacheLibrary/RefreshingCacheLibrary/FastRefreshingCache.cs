@@ -1,73 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 
 namespace RefreshingCacheLibrary
 {
-    public class FastRefreshingCache<TKey, TValue> : ICanGetValue<TKey, TValue>
+    public class FastRefreshingCache<TKey, TValue> : IDataStorage<TKey, TValue>
     {
-        //Implement resharper's tips
-        private int _fastCacheCapacity;
-        private int _lifetimeInMilliseconds;
-        private Dictionary<TKey, TValue> _fastCache;
-        private Dictionary<TKey, DateTime> _additionLog;
-        private ICanGetValue<TKey,TValue> _currentSlowDatabase;
+        private const int defaultFastCacheCapacity = 10;
+        private const int defaultLifetime = 1000;
+        private readonly int _fastCacheCapacity;
+        private readonly int _lifetime;
+        private readonly Dictionary<TKey, TValue> _fastCache;
+        private readonly Dictionary<TKey, int> _additionLog;
+        private readonly IDataStorage<TKey,TValue> _currentSlowDatabase;
+        private ITime _time;
 
         public int Count
         {
             get { return _fastCache.Count; }
         }
 
-        public FastRefreshingCache(ICanGetValue<TKey, TValue> currentSlowDatabase, int lifetimeInMilliseconds, int fastCacheCapacity)
+        public FastRefreshingCache(ITime time,IDataStorage<TKey, TValue> currentSlowDatabase, int lifetimeInMilliseconds, int fastCacheCapacity)
         {
+            _time = time;
             _fastCache = new Dictionary<TKey, TValue>();
-            _additionLog = new Dictionary<TKey, DateTime>();
+            _additionLog = new Dictionary<TKey, int>();
             _currentSlowDatabase = currentSlowDatabase;
 
-            //Convert to ternary operator
-            if (lifetimeInMilliseconds <= 0)
-            {
-                //Why 1000? Create constant
-                _lifetimeInMilliseconds = 1000;
-            }
-            else
-            {
-                _lifetimeInMilliseconds = lifetimeInMilliseconds;
-            }
-            if (fastCacheCapacity <= 0)
-            {
-                //Why 1000? Create constant
-                _fastCacheCapacity = 1000;
-            }
-            else
-            {
-                _fastCacheCapacity = fastCacheCapacity;
-            }
+            _lifetime = lifetimeInMilliseconds <= 0 ? defaultLifetime : lifetimeInMilliseconds;
+            _fastCacheCapacity = fastCacheCapacity <= 0 ? defaultFastCacheCapacity : fastCacheCapacity;
         }
 
-        //Remove now variable from this method(e.g. create filed time with CurrentTime property)
-        public TValue GetValue(TKey key,DateTime now)
+        public FastRefreshingCache(ITime time, IDataStorage<TKey, TValue> currentSlowDatabase):
+            this(time,currentSlowDatabase,defaultLifetime,defaultFastCacheCapacity)
+        { }
+        public TValue GetValue(TKey key)
         {
-            Refresh(true,now);
-            _additionLog[key] = now;
-            _fastCache[key] = _currentSlowDatabase.GetValue(key,now);
+            Refresh(true);
+            _additionLog[key] = _time.CurrentTime;
+            _fastCache[key] = _currentSlowDatabase.GetValue(key);
             return _fastCache[key];
         }
 
-        //Remove now variable from this method(e.g. create filed time with CurrentTime property)
-        private void Refresh(bool removeOldest, DateTime now)
+        private void Refresh(bool removeOldest)
         {
-            DateTime timeOfCreation;
+            int timeOfCreation;
+            var oldest = _time.MaxTime;
             var listOfKeys = _fastCache.Keys.ToList();
+            var now = _time.CurrentTime;
 
-            //Create constan for 9999, 1, 1
-            var oldest = new DateTime(9999, 1, 1);
             TKey keyForOldest = default (TKey);
             for (int i = 0; i < listOfKeys.Count; i++)
             {
                 timeOfCreation = _additionLog[listOfKeys[i]];
-                timeOfCreation = timeOfCreation.AddMilliseconds(_lifetimeInMilliseconds);
+                timeOfCreation += _lifetime;
                 if (timeOfCreation < now)
                 {
                     _fastCache.Remove(listOfKeys[i]);

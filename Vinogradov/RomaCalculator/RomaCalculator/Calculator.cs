@@ -7,14 +7,14 @@ namespace RomaCalculator
 {
     public class Calculator
     {
-        private Dictionary<string, IOperator> operators;
+        private readonly Dictionary<string, IOperator> _operators;
 
         public Calculator()
         {
-            operators = new Dictionary<string, IOperator>();
-            operators["+"] = new Addition();
-            operators["-"] = new Subtraction();
-            operators["*"] = new Multiplication();
+            _operators = new Dictionary<string, IOperator>();
+            _operators["+"] = new Addition();
+            _operators["-"] = new Subtraction();
+            _operators["*"] = new Multiplication();
         }
 
         public string Calculate(string operandA, string operandB, IOperator operatorForAAndB)
@@ -27,15 +27,13 @@ namespace RomaCalculator
 
             return ConvertFromArabToRomanNumber(answerForExpression);
         }
-
         public string Calculate(string expression)
         {
             var separetedExpression = expression.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
 
-            return Calculate(separetedExpression[0], separetedExpression[2], operators[separetedExpression[1]]);
+            return Calculate(separetedExpression[0], separetedExpression[2], _operators[separetedExpression[1]]);
         }
 
-        //Create Dictionary
         public int ConvertFromRomanToArabDigit(char romanDigit)
         {
             switch (romanDigit)
@@ -61,8 +59,8 @@ namespace RomaCalculator
 
         public int ConvertFromRomanToArabNumber(string romanNumber)
         {
-            int result = 0;
-            int previousCount = 0;
+            var result = 0;
+            var previousCount = 0;
             var abacus = new List<int>();
 
             for (int i = 0; i < romanNumber.Length; i++)
@@ -76,12 +74,12 @@ namespace RomaCalculator
 
                 SubtractThatPossible(abacus);
 
-                AddUpAllIfPossible(abacus, previousCount, ref result);
+                result = AddUpAllIfPossible(abacus, previousCount, result);
             }
             return result;
         }
 
-        private void AddUpAllIfPossible(List<int> abacus, int previousCount, ref int result)
+        private int AddUpAllIfPossible(List<int> abacus, int previousCount, int result)
         {
             if (abacus.Count == previousCount)
             {
@@ -91,6 +89,7 @@ namespace RomaCalculator
                 }
                 abacus.Clear();
             }
+            return result;
         }
 
         private void SubtractThatPossible(List<int> abacus)
@@ -120,34 +119,32 @@ namespace RomaCalculator
                     result.Append("-");
                     arabNumber = -arabNumber;
                 }
-                MakeRomanNumber(arabNumber, result);
+                result = MakeRomanNumber(arabNumber, result);
             }
             return result.ToString();
         }
-
-        //return StringBuilder result
-        private void MakeRomanNumber(int arabNumber, StringBuilder result)
+        private StringBuilder MakeRomanNumber(int arabNumber, StringBuilder result)
         {
             var arab = new int[] {1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
             var roman = new string[] {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
-            var index = 0;
+            int index;
             while (arabNumber != 0)
             {
-                index = 0;
-
-                FindNecessaryNumber(arabNumber, ref index, arab);
+                index = FindNecessaryNumber(arabNumber, arab);
 
                 arabNumber -= arab[index - 1];
                 result.Append(roman[index - 1]);
             }
+            return result;
         }
-
-        private void FindNecessaryNumber(int arabNumber, ref int index, int[] arab)
+        private int FindNecessaryNumber(int arabNumber, int[] arab)
         {
+            var index = 0;
             while ((index != 13) && (arabNumber >= arab[index]))
             {
                 index++;
             }
+            return index;
         }
     }
 }

@@ -1,15 +1,13 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Forest;
 
 namespace UnitTestProjectForMyTree
 {
-    //Rename all tests
     [TestClass]
     public class TreeTests
     {
         [TestMethod]
-        public void CreationOfTheFirstType()
+        public void UseFirstConstructorForTree()
         {
             var birch = new Tree<int>();
             birch.Add(15);
@@ -20,13 +18,13 @@ namespace UnitTestProjectForMyTree
         }
 
         [TestMethod]
-        public void CreationOfTheSecondType()
+        public void UseSecondConstructorForTree()
         {
             var birch = new Tree<int>(new int[] { 10, 8, 7, 15, 9 });
         }
 
         [TestMethod]
-        public void RemoveHead()
+        public void RemoveHeadNode()
         {
             var birch = new Tree<int>(new int[] { 10,17,23 });
             birch.Remove(10);
@@ -47,14 +45,6 @@ namespace UnitTestProjectForMyTree
         }
 
         [TestMethod]
-        [ExpectedException(typeof (InvalidOperationException))]
-        public void RemoveWhenTreeIsEmpty()
-        {
-            var birch = new Tree<int>();
-            birch.Remove(5);
-        }
-
-        [TestMethod]
         public void RemoveNon_existentNode()
         {
             var birch = new Tree<int>(new int[] { 10, 17, 23 });
@@ -71,15 +61,7 @@ namespace UnitTestProjectForMyTree
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ContainsWhenTreeIsEmpty()
-        {
-            var birch = new Tree<int>();
-            birch.Contains(5);
-        }
-
-        [TestMethod]
-        public void ContainsFalse()
+        public void ContainsNonexistentRlement_False()
         {
             var birch = new Tree<int>(new int[] { 10, 8, 7, 15, 9 });
             var result = birch.Contains(5);
@@ -87,7 +69,7 @@ namespace UnitTestProjectForMyTree
         }
 
         [TestMethod]
-        public void ContainsTrue()
+        public void ContainsExistentElement_True()
         {
             var birch = new Tree<int>(new int[] { 10, 8, 7, 15, 9 });
             var result = birch.Contains(9);

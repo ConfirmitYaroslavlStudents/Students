@@ -1,6 +1,6 @@
 ﻿namespace FilmService.KindsOfMovies
 {
-    public class CalculatorForMovieChildrens : ICalculatorForMovie
+    public class Childrens : ICalculator
     {
         public double Calculate(int daysRented)
         {

@@ -1,6 +1,6 @@
 ﻿namespace FilmService.KindsOfMovies
 {
-    public interface ICalculatorForMovie
+    public interface ICalculator
     {
         double Calculate(int daysRented);
         int GetPoints();

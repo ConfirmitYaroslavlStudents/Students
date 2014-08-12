@@ -40,14 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataForStatement.cs" />
-    <Compile Include="KindsOfGenerators\StatementGenerator.cs" />
-    <Compile Include="KindsOfGenerators\StatementGeneratorJSON.cs" />
-    <Compile Include="KindsOfGenerators\StatementGeneratorString.cs" />
-    <Compile Include="KindsOfMovies\CalculatorForMovieChildrens.cs" />
-    <Compile Include="KindsOfMovies\CalculatorForMovieNewRelease.cs" />
-    <Compile Include="KindsOfMovies\CalculatorForMovieRegular.cs" />
-    <Compile Include="KindsOfMovies\ICalculatorForMovie.cs" />
+    <Compile Include="DataStore.cs" />
+    <Compile Include="KindsOfStatements\CompositeStatement.cs" />
+    <Compile Include="KindsOfStatements\Statement.cs" />
+    <Compile Include="KindsOfStatements\StatementInJSON.cs" />
+    <Compile Include="KindsOfStatements\StatementInString.cs" />
+    <Compile Include="KindsOfMovies\Childrens.cs" />
+    <Compile Include="KindsOfMovies\NewRelease.cs" />
+    <Compile Include="KindsOfMovies\Regular.cs" />
+    <Compile Include="KindsOfMovies\ICalculator.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

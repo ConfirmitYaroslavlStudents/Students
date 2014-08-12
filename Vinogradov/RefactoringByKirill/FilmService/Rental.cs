@@ -1,19 +1,9 @@
-﻿using FilmService.KindsOfMovies;
-
-namespace FilmService
+﻿namespace FilmService
 {
     public class Rental
     {
-        public Movie Movie
-        {
-            get;
-            set;
-        }
-        public int DaysRented
-        {
-            get;
-            set;
-        }
+        public Movie Movie { get; set; }
+        public int DaysRented { get; set; }
 
         public Rental(Movie movie, int daysRented)
         {

@@ -54,11 +54,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="OrderedTest.orderedtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Forest\Forest.csproj">
       <Project>{f79828ad-85dd-4523-9b89-20f74e4f90d2}</Project>
       <Name>Forest</Name>

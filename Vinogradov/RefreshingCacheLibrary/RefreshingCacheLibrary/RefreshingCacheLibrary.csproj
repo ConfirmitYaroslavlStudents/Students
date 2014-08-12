@@ -40,7 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FastRefreshingCache.cs" />
-    <Compile Include="ICanGetValue.cs" />
+    <Compile Include="IDataStorage.cs" />
+    <Compile Include="ITime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

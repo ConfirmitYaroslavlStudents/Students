@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RefreshingCacheLibrary;
 
 namespace UnitTestProjectForRefreshingCache
@@ -8,71 +6,66 @@ namespace UnitTestProjectForRefreshingCache
     [TestClass]
     public class RefreshingCacheTests
     {
-        //Names of tests must be refactored, naming constants should be introduced
         [TestMethod]
-        public void ContainsTrue()
+        public void ContainsElement_True()
         {
             var myDatabase = new SlowDatabase();
-            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase,1000,10);
-            myRefreshingCache.GetValue(10,DateTime.Now);
+            var alphaMachine = new TheTimeMachine();
+            IDataStorage<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(alphaMachine, myDatabase);
+            myRefreshingCache.GetValue(10);
             var result = myRefreshingCache.Contains(10);
             Assert.AreEqual(true, result);
         }
 
         [TestMethod]
-        public void ContainsFalse()
+        public void ContainsElement_False()
         {
             var myDatabase = new SlowDatabase();
-            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
-            var stringOne = myRefreshingCache.GetValue(10,DateTime.Now);
+            var alphaMachine = new TheTimeMachine();
+            IDataStorage<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(alphaMachine, myDatabase);
+            myRefreshingCache.GetValue(10);
             var result = myRefreshingCache.Contains(11);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void GetAllAndContainsFirst()
+        public void ContainsFirstAfterGetingAll_False()
         {
             var myDatabase = new SlowDatabase();
-            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
+            var alphaMachine = new TheTimeMachine();
+            IDataStorage<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(alphaMachine, myDatabase);
             for (int i = 0; i < 12; i++)
             {
-                myRefreshingCache.GetValue(i,DateTime.Now);
+                myRefreshingCache.GetValue(i);
             }
             var result = myRefreshingCache.Contains(0);
             Assert.AreEqual(false, result);
         }
 
         [TestMethod]
-        public void WhereWasElement()
+        public void VerifyTheLocationOfTheRequestedItem_ElementIsMovedToTheCache()
         {
             var myDatabase = new SlowDatabase();
-            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
+            var alphaMachine = new TheTimeMachine();
+            IDataStorage<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(alphaMachine, myDatabase);
             var before = myRefreshingCache.Contains(10);
-            var currentValue = myRefreshingCache.GetValue(10,DateTime.Now);
+            myRefreshingCache.GetValue(10);
             var after = myRefreshingCache.Contains(10);
-            bool result=false;
-            if (before == false && after == true)
-            {
-                result = true;
-            }
-            Assert.AreEqual(true, result);
+            Assert.AreEqual(true, !before && after);
         }
 
         [TestMethod]
-        public void StorageLife()
+        public void ItemShouldBeRemovedAtTheExpirationOfStandardPeriod()
         {
             var myDatabase = new SlowDatabase();
-            ICanGetValue<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(myDatabase, 1000, 10);
-            myRefreshingCache.GetValue(0, DateTime.Now);
-            myRefreshingCache.GetValue(5, DateTime.Now.AddMilliseconds(1500));
+            var alphaMachine = new TheTimeMachine();
+            IDataStorage<int, string> myRefreshingCache = new FastRefreshingCache<int, string>(alphaMachine, myDatabase);
+            myRefreshingCache.GetValue(0);
+            alphaMachine.ChangeTo(1500);
+            myRefreshingCache.GetValue(5);
             var zero = myRefreshingCache.Contains(0);
             var five = myRefreshingCache.Contains(5);
-            bool result = false;
-            if (zero == false && five == true)
-            {
-                result = true;
-            }
-            Assert.AreEqual(true, result);
+            Assert.AreEqual(true, !zero && five);
         }
     }
 }

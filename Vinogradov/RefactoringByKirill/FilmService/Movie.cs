@@ -2,21 +2,12 @@
 
 namespace FilmService
 {
-    //Implement resharper's tips
     public class Movie
     {
-        public ICalculatorForMovie CurrentCalculator
-        {
-            get; 
-            set;
-        }
-        public string Title
-        {
-            get;
-            set;
-        }
+        public ICalculator CurrentCalculator { get; set; }
+        public string Title { get; set; }
 
-        public Movie(string title, ICalculatorForMovie currentCalculator)
+        public Movie(string title, ICalculator currentCalculator)
         {
             CurrentCalculator = currentCalculator;
             Title = title;

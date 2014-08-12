@@ -1,6 +1,6 @@
 ﻿namespace RomaCalculator.KindsOfOperators
 {
-    public class Addition:IOperator
+    public class Addition : IOperator
     {
         public int CalculateIt(int a, int b)
         {

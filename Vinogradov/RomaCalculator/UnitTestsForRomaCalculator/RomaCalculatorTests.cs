@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RomaCalculator;
-using RomaCalculator.KindsOfOperators;
 
 namespace UnitTestsForRomaCalculator
 {
     [TestClass]
     public class RomaCalculatorTests
     {
-        //Need more tests
         [TestMethod]
         public void TestFactory()
         {
@@ -20,6 +17,22 @@ namespace UnitTestsForRomaCalculator
             testExpressions["III - III"] = "zero";
             testExpressions["VII * V"] = "XXXV";
             testExpressions["XII * XII"] = "CXLIV";
+
+            testExpressions["I + I"] = "II";
+            testExpressions["XL + CM"] = "CMXL";
+            testExpressions["MCCLIX + DXIV"] = "MDCCLXXIII";
+            testExpressions["CD + XLIII"] = "CDXLIII";
+            testExpressions["II + III"] = "V";
+            testExpressions["II - I"] = "I";
+            testExpressions["CMXL - DCXIV"] = "CCCXXVI";
+            testExpressions["MCCLIX - DXIV"] = "DCCXLV";
+            testExpressions["X - I"] = "IX";
+            testExpressions["V - III"] = "II";
+            testExpressions["I * I"] = "I";
+            testExpressions["II * CMXLI"] = "MDCCCLXXXII";
+            testExpressions["MCCLIX * II"] = "MMDXVIII";
+            testExpressions["LVII * XLIII"] = "MMCDLI";
+            testExpressions["II * III"] = "VI";
 
             var Roman = new Calculator();
 

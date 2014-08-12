@@ -4,33 +4,19 @@ using System.Linq;
 
 namespace Forest
 {
-    //Order of terms: public and then private( e.g. methods in your case), rename methods(e.g. Prefix -> GetPrefix)
     public class Tree<T> where T : IComparable
     {
-        public int Count { private set; get; }
+        public int Count { get; private set; }
         private Node<T> _headNode;
         private Action<Node<T>> _actionWithNode;
 
         public Tree()
         {
-            //unnecessary code
-            Count = 0;
-            _headNode = null;
-        }
 
-        //Rename list -> ?
-        public Tree(IEnumerable<T> list)
+        }
+        public Tree(IEnumerable<T> collection)
         {
-            //!list.Any() is unnecessary, throw new ArgumentNullException("list")
-            if (list == null || !list.Any())
-            {
-                Count = 0; //unnecessary
-                return;
-            }
-            foreach (var value in list)
-            {
-                Add(value);
-            }
+            AddRange(collection);
         }
 
         public void Add(T value)
@@ -44,15 +30,13 @@ namespace Forest
                 FindAndAdd(value);
             }
         }
-
-        //remove duplicate code(add AddRange in ctor)
-        public void AddRange(IEnumerable<T> list)
+        public void AddRange(IEnumerable<T> collection)
         {
-            if (list == null || !list.Any())
+            if (collection == null)
             {
                 return;
             }
-            foreach (var value in list)
+            foreach (var value in collection)
             {
                 Add(value);
             }
@@ -84,29 +68,28 @@ namespace Forest
 
         public void Remove(T value)
         {
-            if (_headNode == null)
+            if (_headNode != null)
             {
-                throw new InvalidOperationException();
-            }
-            var targetNode = _headNode;
-            var contains = Search(value, ref targetNode);
-            if (contains)
-            {
-                --Count;
-                if (targetNode.Parent == null)
+                var targetNode = _headNode;
+                var contains = Search(value, ref targetNode);
+                if (contains)
                 {
-                    _headNode = TransformChildren(targetNode);
-                }
-                else
-                {
-                    var right = FindDirectionDesiredChild(targetNode);
-                    if (right)
+                    --Count;
+                    if (targetNode.Parent == null)
                     {
-                        targetNode.Parent.RightNode=TransformChildren(targetNode);
+                        _headNode = TransformChildren(targetNode);
                     }
                     else
                     {
-                        targetNode.Parent.LeftNode = TransformChildren(targetNode);
+                        var right = FindDirectionDesiredChild(targetNode);
+                        if (right)
+                        {
+                            targetNode.Parent.RightNode = TransformChildren(targetNode);
+                        }
+                        else
+                        {
+                            targetNode.Parent.LeftNode = TransformChildren(targetNode);
+                        }
                     }
                 }
             }
@@ -140,25 +123,11 @@ namespace Forest
 
         private bool FindDirectionDesiredChild(Node<T> targetNode)
         {
-            if (targetNode.Parent != null)
-            {
-                var parent = targetNode.Parent;
-
-                //return (targetNode.Value.CompareTo(parent.Value) > 0)
-                if (targetNode.Value.CompareTo(parent.Value) > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                throw new Exception("targetNode.Parent == null");
-            }
+            if (targetNode.Parent == null) throw new Exception("targetNode.Parent == null");
+            var parent = targetNode.Parent;
+            return targetNode.Value.CompareTo(parent.Value) > 0;
         }
+
         private Node<T> GetMostLeftNode(Node<T> node)
         {
             var mostLeftNode = node;
@@ -214,17 +183,14 @@ namespace Forest
             return Search(value, ref targetode);
         }
 
-        //Rename
-        public void Horizontal(Action<Node<T>> actionWithNode)
+        public void MakeHorizontalBypass(Action<Node<T>> actionWithNode)
         {
             _actionWithNode = actionWithNode;
-            RecursionForHorizontal(_headNode);
+            DipThroughRecursionForHorizontal(_headNode);
         }
-
-        //Rename
-        private void RecursionForHorizontal(Node<T> currentNode)
+        private void DipThroughRecursionForHorizontal(Node<T> currentNode)
         {
-            var queueOfNodes= new Queue<Node<T>>();
+            var queueOfNodes = new Queue<Node<T>>();
             for (int i = 0; i < Count; i++)
             {
                 _actionWithNode.Invoke(currentNode);
@@ -243,58 +209,56 @@ namespace Forest
             }
         }
 
-        //rename(should be verb)
-        public void Prefix(Action<Node<T>> actionWithNode)
+        public void MakePrefixBypass(Action<Node<T>> actionWithNode)
         {
             _actionWithNode = actionWithNode;
-            RecursionForPrefix(_headNode);
+            DipThroughRecursionForPrefix(_headNode);
         }
-
-        private void RecursionForPrefix(Node<T> currentNode)
+        private void DipThroughRecursionForPrefix(Node<T> currentNode)
         {
             _actionWithNode.Invoke(currentNode);
             if (currentNode.LeftNode != null)
             {
-                RecursionForPrefix(currentNode.LeftNode);
+                DipThroughRecursionForPrefix(currentNode.LeftNode);
             }
             if (currentNode.RightNode != null)
             {
-                RecursionForPrefix(currentNode.RightNode);
+                DipThroughRecursionForPrefix(currentNode.RightNode);
             }
         }
 
-        public void Infix(Action<Node<T>> actionWithNode)
+        public void MakeInfixBypass(Action<Node<T>> actionWithNode)
         {
             _actionWithNode = actionWithNode;
-            RecursionForInfix(_headNode);
+            DipThroughRecursionForInfix(_headNode);
         }
-        private void RecursionForInfix(Node<T> currentNode)
+        private void DipThroughRecursionForInfix(Node<T> currentNode)
         {
             if (currentNode.LeftNode != null)
             {
-                RecursionForInfix(currentNode.LeftNode);
+                DipThroughRecursionForInfix(currentNode.LeftNode);
             }
             _actionWithNode.Invoke(currentNode);
             if (currentNode.RightNode != null)
             {
-                RecursionForInfix(currentNode.RightNode);
+                DipThroughRecursionForInfix(currentNode.RightNode);
             }
         }
 
-        public void Postfix(Action<Node<T>> actionWithNode)
+        public void MakePostfixBypass(Action<Node<T>> actionWithNode)
         {
             _actionWithNode = actionWithNode;
-            RecursionForPostfix(_headNode);
+            DipThroughRecursionForPostfix(_headNode);
         }
-        private void RecursionForPostfix(Node<T> currentNode)
+        private void DipThroughRecursionForPostfix(Node<T> currentNode)
         {
             if (currentNode.LeftNode != null)
             {
-                RecursionForPostfix(currentNode.LeftNode);
+                DipThroughRecursionForPostfix(currentNode.LeftNode);
             }
             if (currentNode.RightNode != null)
             {
-                RecursionForPostfix(currentNode.RightNode);
+                DipThroughRecursionForPostfix(currentNode.RightNode);
             }
             _actionWithNode.Invoke(currentNode);
         }

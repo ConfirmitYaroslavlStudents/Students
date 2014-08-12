@@ -9,8 +9,6 @@
         public Node(T value, Node<T> parent)
         {
             Value = value;
-            LeftNode = null; //unnecessary initialization
-            RightNode = null;
             Parent = parent;
         }
     }

@@ -1,12 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using RefreshingCacheLibrary;
-using System.Collections.Generic;
 
-namespace TestApp
+namespace UnitTestProjectForRefreshingCache
 {
-    public class SlowDatabase : ICanGetValue<int, string>
+    public class SlowDatabase : IDataStorage<int, string>
     {
-        private Dictionary<int, string> _slowBigCache;
+        private readonly Dictionary<int, string> _slowBigCache;
 
         public SlowDatabase()
         {
@@ -25,16 +24,10 @@ namespace TestApp
             _slowBigCache[11] = "Geronimo";
         }
 
-        public string GetValue(int key, DateTime now)
+
+        public string GetValue(int key)
         {
-            if (_slowBigCache.ContainsKey(key))
-            {
-                return _slowBigCache[key];
-            }
-            else
-            {
-                return default(string);
-            }
+            return _slowBigCache.ContainsKey(key) ? _slowBigCache[key] : default(string);
         }
 
         public bool Contains(int key)

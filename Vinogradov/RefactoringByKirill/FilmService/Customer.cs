@@ -1,32 +1,26 @@
 ﻿using System.Collections.Generic;
-using FilmService.KindsOfGenerators;
+using FilmService.KindsOfStatements;
 
 namespace FilmService
 {
     public class Customer
     {
-        //Change the format of properties(code should be formatted), make setters private as possible
-        public StatementGenerator CurrentStatementGenerator
-        {
-            get;
-            set;
-        }
-        public string Name
-        {
-            get;
-            set;
-        }
-        public List<Rental> Rentals
-        {
-            get;
-            private set;
-        }
+        public DataStore CurrentDataStore { get; private set; }
+        public Statement StatementGenerator { get; private set; }
+        public string Name { get; set; }
+        public List<Rental> Rentals { get; private set; }
 
-        public Customer(string name, StatementGenerator currentStatementGenerator)
+        public Customer(string name, Statement statementGenerator)
         {
             Name = name;
             Rentals = new List<Rental>();
-            CurrentStatementGenerator = currentStatementGenerator;
+            StatementGenerator = statementGenerator;
+            CurrentDataStore = new DataStore();
+        }
+
+        public void RequestAndSetDataStore()
+        {
+            CurrentDataStore.FormDataStore(Name,Rentals);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Colors
             _methodsDictionary = GetMethodsDictionary(processor);
         }
 
-        private IDictionary<String, Delegate> GetMethodsDictionary(TProc processor)
+        private static IDictionary<String, Delegate> GetMethodsDictionary(TProc processor)
         {
             var map = new Dictionary<String, Delegate>();
 
@@ -35,8 +35,7 @@ namespace Colors
                 }
                 else
                 {
-                    throw new ArgumentException(String.Format(
-                        "Метод '{0}' имеет некоректное количество параметров", methodInfo.Name));
+                    throw new ArgumentException("Incorrect number of parameters");
                 }
                 map.Add(argumentMethodPair.Item1, argumentMethodPair.Item2);
             }
@@ -45,12 +44,12 @@ namespace Colors
 
         private static Tuple<String, Delegate > AddMethodWithOneArgument(TProc processor, ParameterInfo argument, MethodInfo methodInfo)
         {
-            var argumentType = argument.ParameterType.ToString();
+            var argumentType = argument.ParameterType;
             var method = 
                 Delegate.CreateDelegate(typeof(ProcessDelegate<>).MakeGenericType(typeof(TProc),
                 argument.ParameterType), processor, methodInfo);
 
-            return new Tuple<String, Delegate>(argumentType, method);
+            return new Tuple<String, Delegate>(argumentType.ToString(), method);
         }
 
         private static Tuple<String, Delegate> AddMethodWithTwoArguments(TProc processor, ParameterInfo[] arguments, MethodInfo methodInfo)
@@ -65,20 +64,18 @@ namespace Colors
 
         public void Process<TColorOne, TColorTwo>(TColorOne colorOne, TColorTwo colorTwo)
         {
-            Delegate del;
             var key = new Tuple<TColorOne, TColorTwo>(colorOne, colorTwo).ToString();
-            if (!_methodsDictionary.TryGetValue(key, out del))
-                throw new ApplicationException(string.Format("Тип не содержится в интерфейсе посетителя"));
+            if (!_methodsDictionary.ContainsKey(key))
+                throw new ArgumentException(string.Format("Invalid type"));
 
            _methodsDictionary[key].DynamicInvoke(colorOne, colorTwo);
         }
 
         public void Process<TColor>(TColor color)
         {
-            Delegate del;
             var key = color.ToString();
-            if (!_methodsDictionary.TryGetValue(key, out del))
-                throw new ApplicationException(string.Format("Тип не содержится в интерфейсе посетителя"));
+            if (!_methodsDictionary.ContainsKey(key))
+                throw new ArgumentException(string.Format("Invalid type"));
 
             _methodsDictionary[key].DynamicInvoke(color);
         }

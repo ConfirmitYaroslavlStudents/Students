@@ -37,7 +37,7 @@
     <Compile Include="Colors.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="ProcessHelper.cs" />
-    <Compile Include="Icolor.cs" />
+    <Compile Include="IСolor.cs" />
     <Compile Include="IProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

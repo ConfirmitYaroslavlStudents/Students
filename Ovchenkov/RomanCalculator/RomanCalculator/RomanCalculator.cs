@@ -5,7 +5,7 @@ namespace RomanCalculator
 {
     public static class RomanCalculator
     {
-        public static NaturalNumber CalculateExpression(string expression)
+        public static string CalculateExpression(string expression)
         {
             var expressionParts = expression.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -14,32 +14,36 @@ namespace RomanCalculator
                 throw new InvalidDataException("Invalid expression!");
             }
 
-            var firstNumber = new NaturalNumber(expressionParts[0]);
-            var secondNumber = new NaturalNumber(expressionParts[2]);
+            var firstNumber = Parser.ToArabic(expressionParts[0]);
+            var secondNumber = Parser.ToArabic(expressionParts[2]);
             var operation = expressionParts[1];
 
             return GetResult(operation, firstNumber, secondNumber);
         }
 
-        private static NaturalNumber GetResult(string operation, NaturalNumber firstNaturalNumber, NaturalNumber secondNaturalNumber)
+        private static string GetResult(string operation, int firstNumber, int secondNumber)
         {
-            NaturalNumber result;
+            int result;
             switch (operation)
             {
                 case "+":
-                    result = firstNaturalNumber + secondNaturalNumber;
+                    result = firstNumber + secondNumber;
                     break;
                 case "-":
-                    result = firstNaturalNumber - secondNaturalNumber;
+                    if (firstNumber - secondNumber <= 0)
+                    {
+                        throw new InvalidOperationException("Result outside the set of natural numbers");
+                    }
+                    result = firstNumber - secondNumber;
                     break;
                 case "*":
-                    result = firstNaturalNumber*secondNaturalNumber;
+                    result = firstNumber*secondNumber;
                     break;
                 default:
                     throw new InvalidOperationException("Invalid operation");
             }
 
-            return result;
+            return Parser.ToRoman(result);
         }
     }
 }

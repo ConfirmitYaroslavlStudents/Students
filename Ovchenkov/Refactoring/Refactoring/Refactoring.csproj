@@ -38,13 +38,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Customer.cs" />
-    <Compile Include="IStatementFormater.cs" />
+    <Compile Include="Statement\IStatementFormater.cs" />
     <Compile Include="Movie.cs" />
+    <Compile Include="Factories\MovieFactory.cs" />
     <Compile Include="Price.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Rental.cs" />
-    <Compile Include="Statement.cs" />
-    <Compile Include="StatementFormatters.cs" />
+    <Compile Include="Factories\RentalFactory.cs" />
+    <Compile Include="Statement\Statement.cs" />
+    <Compile Include="Statement\StatementData.cs" />
+    <Compile Include="Statement\StatementFormatters.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\StatementTemplate.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<statementTemplate>
+  Учет аренды для <CustomerName/>.
+  <Movies/>
+  Сумма задолженности составляет : <TotalAmount/>.
+  Вы заработали <FrequentRenterPoints/> за активность.
+</statementTemplate> 

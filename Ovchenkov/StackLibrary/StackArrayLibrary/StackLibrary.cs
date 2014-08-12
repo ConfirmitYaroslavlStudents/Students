@@ -17,7 +17,8 @@ namespace StackArrayLibrary
         {
             get
             {
-                return _elements[Count - i - 1];
+                var indexOfTopElememt = Count - 1;
+                return _elements[indexOfTopElememt - i];
             }
 
         }

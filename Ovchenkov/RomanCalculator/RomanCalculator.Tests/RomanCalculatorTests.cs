@@ -8,31 +8,30 @@ namespace RomanCalculator.Tests
     public class RomanCalculatorTests
     {
         [Theory]
-         [InlineData("I + I", "II", 2),
-         InlineData("III + III", "VI", 6),
-         InlineData("IV + VI", "X", 10),
-         InlineData("CD + XLIII", "CDXLIII", 443),
-         InlineData("XL + CM", "CMXL", 940),
-         InlineData("DCLXVI + DCCLXXVII", "MCDXLIII", 1443)]
+         [InlineData("I + I", "II"),
+         InlineData("III + III", "VI"),
+         InlineData("IV + VI", "X"),
+         InlineData("CD + XLIII", "CDXLIII"),
+         InlineData("XL + CM", "CMXL"),
+         InlineData("DCLXVI + DCCLXXVII", "MCDXLIII")]
 
-         [InlineData("II - I", "I", 1),
-         InlineData("VI - III", "III", 3),
-         InlineData("X - IV", "VI", 6),
-         InlineData("X - I", "IX", 9),
-         InlineData("MCCLIX - DXIV", "DCCXLV", 745),
-         InlineData("MCDXLIII - DCCLXXVII", "DCLXVI", 666)]
+         [InlineData("II - I", "I"),
+         InlineData("VI - III", "III"),
+         InlineData("X - IV", "VI"),
+         InlineData("X - I", "IX"),
+         InlineData("MCCLIX - DXIV", "DCCXLV"),
+         InlineData("MCDXLIII - DCCLXXVII", "DCLXVI")]
         
-         [InlineData("I * I", "I", 1),
-         InlineData("III * III", "IX", 9),
-         InlineData("II * DCCLXXVII", "MDLIV", 1554),
-         InlineData("DCCLXXVII * II", "MDLIV", 1554),
-         InlineData("LVII * XLIII", "MMCDLI", 2451)]
-        public void RomanCalculator_SimpleExpressions_ShouldPass(string expression, string expectedRoman, int expectedArabic)
+         [InlineData("I * I", "I"),
+         InlineData("III * III", "IX"),
+         InlineData("II * DCCLXXVII", "MDLIV"),
+         InlineData("DCCLXXVII * II", "MDLIV"),
+         InlineData("LVII * XLIII", "MMCDLI")]
+        public void RomanCalculator_SimpleExpressions_ShouldPass(string expression, string expectedRoman)
         {
             var actual = RomanCalculator.CalculateExpression(expression);
 
-            Assert.Equal(expectedRoman, actual.Roman);
-            Assert.Equal(expectedArabic, actual.Arabic);
+            Assert.Equal(expectedRoman, actual);
         }
 
         [Theory,

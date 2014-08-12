@@ -5,8 +5,8 @@ using Graph;
 
 namespace UnitTestGraph
 {
-    //название класса-фабрики изменить
-    static class InstanceGraph<T>
+    
+    static class FactoryGraph<T>
     {
         public static Graph<T> GetGraph(T vertex)
         {
@@ -18,23 +18,23 @@ namespace UnitTestGraph
         }
     }
     [TestClass]
-    public class UnitTest1//"UnitTest1" - плохое название и названия тестов тоже
+    public class UnitTest1
     {
         [TestMethod]
         public void TestCountEquals()
         {
-            var graph = InstanceGraph<int>.GetGraph(1);
+            var graph = FactoryGraph<int>.GetGraph(1);
             graph.AddVertex(2,new HashSet<int>(new[]{1}));
             graph.RemoveVertex(2);
-            var graph2 = InstanceGraph<int>.GetGraph (1);
+            var graph2 = FactoryGraph<int>.GetGraph (1);
             Assert.AreEqual(graph.Count,graph2.Count);
         }
 
         [TestMethod]
         public void TestRemoveAdding()
         {
-            var graph = InstanceGraph<int>.GetGraph(1);
-            var graph2 = InstanceGraph<int>.GetGraph(1);
+            var graph = FactoryGraph<int>.GetGraph(1);
+            var graph2 = FactoryGraph<int>.GetGraph(1);
             graph.AddVertex(2, new HashSet<int>(new[] { 1 }));
             graph.RemoveVertex(2);
             Assert.AreEqual(graph,graph2);
@@ -43,8 +43,8 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestAddingIsolatedVertex()
         {
-            var graph = InstanceGraph<string>.GetGraph("A");
-            var graph2 = InstanceGraph<string>.GetGraph();
+            var graph = FactoryGraph<string>.GetGraph("A");
+            var graph2 = FactoryGraph<string>.GetGraph();
             graph2.AddVertex("A");           
             Assert.AreEqual(graph, graph2);
         }
@@ -52,7 +52,7 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestMatrixEquals()
         {
-            var graph = InstanceGraph<string>.GetGraph("A");
+            var graph = FactoryGraph<string>.GetGraph("A");
             graph.AddVertex("B",new HashSet<string>(new[]{"A"}));
             var matrixGraph = graph.ToAdjacencyMatrix();
             bool[,] matrix = {{false, true}, {true, false}};
@@ -83,7 +83,7 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestViewInDepth()
         {
-            var graph = InstanceGraph<string>.GetGraph("A");
+            var graph = FactoryGraph<string>.GetGraph("A");
             graph.AddVertex("B", new HashSet<string>(new[]{"A"}));
             var count = 0;
             graph.ViewDepth("A",(s => count++));
@@ -93,7 +93,7 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestViewInWidth()
         {
-            var graph = InstanceGraph<string>.GetGraph("A");
+            var graph = FactoryGraph<string>.GetGraph("A");
             graph.AddVertex("B", new HashSet<string>(new[] { "A" }));
             int count = 0;
             graph.ViewWidth("A", (s => count++));
@@ -103,7 +103,7 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestCountHashSet()
         {
-            var graph = InstanceGraph<string>.GetGraph("A");
+            var graph = FactoryGraph<string>.GetGraph("A");
             graph.AddVertex("B", new HashSet<string>(new[] { "A" }));
             graph.AddVertex("C", new HashSet<string>(new[] { "A" }));
             graph.AddVertex("D", new HashSet<string>(new[] { "C" }));
@@ -113,7 +113,7 @@ namespace UnitTestGraph
         [TestMethod]
         public void TestViewUnconnectedGraph()
         {
-            var graph = InstanceGraph<string>.GetGraph("A");
+            var graph = FactoryGraph<string>.GetGraph("A");
             graph.AddVertex("B", new HashSet<string>(new[] { "A" }));
             graph.AddVertex("C");
             var countForViewWidth = 0;

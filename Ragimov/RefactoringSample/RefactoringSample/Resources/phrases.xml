@@ -1,0 +1,6 @@
+<Phrases>
+  <Rental>Учет аренды для {0}{1}</Rental>
+  <Movie>\t {0} \t {1} {2}</Movie>
+  <Total>Сумма задолженности составляет {0}{1}</Total>
+  <Points>Вы заработали {0} за активность</Points>
+</Phrases>

@@ -2,7 +2,7 @@
 {
     public class Movie
     {
-        public Movie(PriceProvider priceType,string title)
+        public Movie(PriceProvider priceType, string title)
         {
             PriceType = priceType;
             Title = title;

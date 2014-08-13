@@ -13,6 +13,9 @@ namespace RefactoringSampleTests
     [TestClass]
     public class RefactoringTests
     {
+        public StringStatementGenerator StringStatement = new StringStatementGenerator();
+        public JsonStatementGenerator JsonStatement = new JsonStatementGenerator();
+        public CompositeStatementGenerator Composite = new CompositeStatementGenerator();
         public bool CheckStatement(Statement statement,Dictionary<string, double> moviePrices,string name, double totalAmount, int frequencyPoints)
         {
             return statement.MoviePrices.SequenceEqual(moviePrices) && statement.Name == name && statement.TotalAmount.CompareTo(totalAmount) == 0 &&
@@ -42,16 +45,27 @@ namespace RefactoringSampleTests
             return CheckStatement((Statement)ser.ReadObject(statement), moviePrices, name,totalAmount,frequencyPoints);
         }
 
+        public bool CheckComposite(CompositeStatement compositeStatement, string stringStatement,
+            MemoryStream jsonStatement)
+        {
+            return (compositeStatement.StringStatement.Equals(stringStatement) &&
+                    compositeStatement.JsonStatement.ToString() == jsonStatement.ToString());
+        }
+
         [TestMethod]
         public void Customer_RentedNothing_Shouldpass()
         {
             const string name = "Nemo";
 
             var statement = new Statement(new Customer(name));
+            var stringStatement = StringStatement.Create(statement);
+            var jsonStatement = JsonStatement.Create(statement);
 
             Assert.IsTrue(CheckStatement(statement, new Dictionary<string, double>(), name, 0, 0));
-            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statement).Result,new Dictionary<string, double>(),name,0,0 ));
-            Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, new Dictionary<string, double>(), name, 0, 0));
+            Assert.IsTrue(CheckStandartStringStatement(stringStatement, new Dictionary<string, double>(), name, 0, 0));
+            Assert.IsTrue(CheckJson(jsonStatement, new Dictionary<string, double>(), name, 0, 0));
+
+            Assert.IsTrue(CheckComposite(Composite.Create(statement),stringStatement,jsonStatement));
         }
 
         [TestMethod]
@@ -69,10 +83,13 @@ namespace RefactoringSampleTests
             movieDict["Mr.Nobody"] = 2;
             const int total = 2;
             const int frequency = 1;
-
+            var stringStatement = StringStatement.Create(statement);
+            var jsonStatement = JsonStatement.Create(statement);
             Assert.IsTrue(CheckStatement(statement, movieDict, name,total,frequency));
-            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statement).Result, movieDict, name, total, frequency));
-            Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, movieDict, name, total,frequency));
+            Assert.IsTrue(CheckStandartStringStatement(stringStatement, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckJson(jsonStatement, movieDict, name, total,frequency));
+
+            Assert.IsTrue(CheckComposite(Composite.Create(statement), stringStatement, jsonStatement));
         }
 
         [TestMethod]
@@ -102,9 +119,13 @@ namespace RefactoringSampleTests
             const int total = 68;
             const int frequency = 4;
 
+            var stringStatement = StringStatement.Create(statement);
+            var jsonStatement = JsonStatement.Create(statement);
             Assert.IsTrue(CheckStatement(statement, movieDict, name, total, frequency));
-            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statement).Result, movieDict, name, total, frequency));
-            Assert.IsTrue(CheckJson(new JsonStatement(statement).Result, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckStandartStringStatement(stringStatement, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckJson(jsonStatement, movieDict, name, total, frequency));
+
+            Assert.IsTrue(CheckComposite(Composite.Create(statement), stringStatement, jsonStatement));
         }
 
         [TestMethod]
@@ -140,9 +161,14 @@ namespace RefactoringSampleTests
             const int total = 5;
             const int frequency = 2;
 
+            var stringStatementNemo = StringStatement.Create(statementNemo);
+            var jsonStatementNemo = JsonStatement.Create(statementNemo);
+
             Assert.IsTrue(CheckStatement(statementNemo, movieDict, name, total, frequency));
-            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statementNemo).Result, movieDict, name, total, frequency));
-            Assert.IsTrue(CheckJson(new JsonStatement(statementNemo).Result, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckStandartStringStatement(stringStatementNemo, movieDict, name, total, frequency));
+            Assert.IsTrue(CheckJson(jsonStatementNemo, movieDict, name, total, frequency));
+
+            Assert.IsTrue(CheckComposite(Composite.Create(statementNemo), stringStatementNemo, jsonStatementNemo));
 
             var statementNeo = new Statement(customerNeo);
 
@@ -152,9 +178,14 @@ namespace RefactoringSampleTests
             const double totalNeo = 4.5;
             const int frequencyNeo = 2;
 
+            var stringStatementNeo = StringStatement.Create(statementNeo);
+            var jsonStatementNeo = JsonStatement.Create(statementNeo);
+
             Assert.IsTrue(CheckStatement(statementNeo, movieDictNeo, name2, totalNeo, frequencyNeo));
-            Assert.IsTrue(CheckStandartStringStatement(new StringStatement(statementNeo).Result, movieDictNeo, name2, totalNeo, frequencyNeo));
-            Assert.IsTrue(CheckJson(new JsonStatement(statementNeo).Result, movieDictNeo, name2, totalNeo, frequencyNeo));
+            Assert.IsTrue(CheckStandartStringStatement(stringStatementNeo, movieDictNeo, name2, totalNeo, frequencyNeo));
+            Assert.IsTrue(CheckJson(jsonStatementNeo, movieDictNeo, name2, totalNeo, frequencyNeo));
+
+            Assert.IsTrue(CheckComposite(Composite.Create(statementNeo), stringStatementNeo, jsonStatementNeo));
         }
     }
 }

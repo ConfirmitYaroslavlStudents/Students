@@ -17,7 +17,7 @@ namespace RefactoringSample
         public readonly Dictionary<string, double> MoviePrices;
 
         public Statement(Customer customer)
-        {          
+        {
             MoviePrices = new Dictionary<string, double>();
 
             TotalAmount = 0;

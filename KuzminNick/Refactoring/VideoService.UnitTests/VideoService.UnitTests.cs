@@ -1,110 +1,114 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Refactoring;
 
 namespace VideoService.UnitTests
 {
     [TestClass]
     public class UnitTests
     {
-        [TestMethod]
-        public void CorretnessOfStatement_ForCase_AbsenceRental()
-        {
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "Сумма задолженности составляет " + 0 + "\n"
-                + "Вы заработали " + 0 + " за активность";
+        private readonly StatementBuilder _statementBuilder = new StatementBuilder();
 
-            var customer = new Customer("TestCustomer");
-            Assert.AreEqual(result, customer.Statement());
+        [TestMethod]
+        public void GetJsonStatement_CustomerIsProperlySerializedAndDeserialized()
+        {
+            const string customerName = "TestCustomer";
+            var customer = new Customer(customerName);
+            var movies = new[] { new Movie("Inception"), new Movie("HarryPotter") };
+            var rentalList = new List<Rental>
+            {
+                new RentalForNewReleaseMovie(daysRented: 1) { Movie = movies[0] },
+                new RentalForChildrenMovie(daysRented: 4) { Movie = movies[1] }
+            };
+            customer.Rentals = rentalList;
+
+            var jsonString = customer.GetStatement(new JsonStatement()).ToString();
+            var serializer = new DataContractJsonSerializer(typeof(Customer));
+            Customer deserializedCustomer;
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString)))
+            {
+                deserializedCustomer = (Customer) serializer.ReadObject(stream);
+            }
+
+            Assert.AreEqual(customerName, deserializedCustomer.Name);
+            var moviesName = deserializedCustomer.RentalsInformation.Keys.ToArray();
+            Assert.AreEqual(movies[0].Title, moviesName[0]);
+            Assert.AreEqual(movies[1].Title, moviesName[1]);
         }
 
         [TestMethod]
-        public void CorretnessOfStatement_ForCase_OneDayOfRentalOfNewReleaseMovie()
+        public void GetStatement_StringStatementIsProperlyGenerated_EmptyListOfMovies()
         {
-            var movie = new Movie("Inception");
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "\t" + "Inception" + "\t" + "3" + "\n"
-                + "Сумма задолженности составляет " + 3 + "\n"
-                + "Вы заработали " + 1 + " за активность";
+            var result = _statementBuilder.GetStringOfCustomerName("TestCustomer");
+            result.Append(_statementBuilder.GetStringOfTotalRental(0));
+            result.Append(_statementBuilder.GetStringOfFrequentRenterPoints(0));
 
+            var customer = new Customer("TestCustomer");
+            Assert.IsTrue(result.Equals(customer.GetStatement(new StringStatement())));
+        }
+
+        [TestMethod]
+        public void GetStatement_StringStatementIsProperlyGenerated_OneDayRentalOfNewReleaseMovie()
+        {
+            var result = _statementBuilder.GetStringOfCustomerName("TestCustomer");
+            result.Append(_statementBuilder.GetStringOfRentalForCurrentMovie("Inception", 3));
+            result.Append(_statementBuilder.GetStringOfTotalRental(3));
+            result.Append(_statementBuilder.GetStringOfFrequentRenterPoints(1));
+
+            var movie = new Movie("Inception");
             var customer = new Customer("TestCustomer");
             var rentalList = new List<Rental> { new RentalForNewReleaseMovie(daysRented: 1) { Movie = movie } };
             customer.Rentals = rentalList;
-            Assert.AreEqual(result, customer.Statement());
+            Assert.IsTrue(result.Equals(customer.GetStatement(new StringStatement())));
         }
 
         [TestMethod]
-        public void CorretnessOfStatementAndFrequentRenterPoints_ForCase_ThreeDaysRentalOfNewReleaseMovie()
+        public void GetStatement_StringStatementIsProperlyGenerated_ThreeDaysRentalOfNewReleaseMovie()
         {
-            var movie = new Movie("The Wolf of Wall Street");
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "\t" + "The Wolf of Wall Street" + "\t" + "9" + "\n"
-                + "Сумма задолженности составляет " + 9 + "\n"
-                + "Вы заработали " + 2 + " за активность";
+            var result = _statementBuilder.GetStringOfCustomerName("TestCustomer");
+            result.Append(_statementBuilder.GetStringOfRentalForCurrentMovie("Inception", 9));
+            result.Append(_statementBuilder.GetStringOfTotalRental(9));
+            result.Append(_statementBuilder.GetStringOfFrequentRenterPoints(2));
 
+            var movie = new Movie("Inception");
             var customer = new Customer("TestCustomer");
             var rentalList = new List<Rental> { new RentalForNewReleaseMovie(daysRented: 3) { Movie = movie } };
             customer.Rentals = rentalList;
-            Assert.AreEqual(result, customer.Statement());
+            Assert.IsTrue(result.Equals(customer.GetStatement(new StringStatement())));
         }
 
         [TestMethod]
-        public void CorretnessOfStatement_ForCase_OneDayOfRentalOfRegularMovie()
+        public void GetStatement_StringStatementIsProperlyGenerated_OneDayRentalOfRegularMovie()
         {
-            var movie = new Movie("Seven Psychopaths");
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "\t" + "Seven Psychopaths" + "\t" + "2" + "\n"
-                + "Сумма задолженности составляет " + 2 + "\n"
-                + "Вы заработали " + 1 + " за активность";
+            var result = _statementBuilder.GetStringOfCustomerName("TestCustomer");
+            result.Append(_statementBuilder.GetStringOfRentalForCurrentMovie("Inception", 2));
+            result.Append(_statementBuilder.GetStringOfTotalRental(2));
+            result.Append(_statementBuilder.GetStringOfFrequentRenterPoints(1));
 
+            var movie = new Movie("Inception");
             var customer = new Customer("TestCustomer");
             var rentalList = new List<Rental> { new RentalForRegularMovie(daysRented: 1) { Movie = movie } };
             customer.Rentals = rentalList;
-            Assert.AreEqual(result, customer.Statement());
+            Assert.IsTrue(result.Equals(customer.GetStatement(new StringStatement())));
         }
 
         [TestMethod]
-        public void CorretnessOfStatement_ForCase_ThreeDaysOfRentalOfRegularMovie()
+        public void GetStatement_StringStatementIsProperlyGenerated_ThreeDaysRentalOfChildrenMovie()
         {
-            var movie = new Movie("Killing Them Softly");
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "\t" + "Killing Them Softly" + "\t" + "3.5" + "\n"
-                + "Сумма задолженности составляет " + "3.5" + "\n"
-                + "Вы заработали " + 1 + " за активность";
+            var result = _statementBuilder.GetStringOfCustomerName("TestCustomer");
+            result.Append(_statementBuilder.GetStringOfRentalForCurrentMovie("Inception", 1.5));
+            result.Append(_statementBuilder.GetStringOfTotalRental(1.5));
+            result.Append(_statementBuilder.GetStringOfFrequentRenterPoints(1));
 
-            var customer = new Customer("TestCustomer");
-            var rentalList = new List<Rental> { new RentalForRegularMovie(daysRented: 3) { Movie = movie } };
-            customer.Rentals = rentalList;
-            Assert.AreEqual(result, customer.Statement());
-        }
-
-        [TestMethod]
-        public void CorretnessOfStatement_ForCase_ThreeDaysOfRentalOfChildrenMovie()
-        {
-            var movie = new Movie("Cloud Atlas");
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "\t" + "Cloud Atlas" + "\t" + "1.5" + "\n"
-                + "Сумма задолженности составляет " + "1.5" + "\n"
-                + "Вы заработали " + 1 + " за активность";
-
+            var movie = new Movie("Inception");
             var customer = new Customer("TestCustomer");
             var rentalList = new List<Rental> { new RentalForChildrenMovie(daysRented: 3) { Movie = movie } };
             customer.Rentals = rentalList;
-            Assert.AreEqual(result, customer.Statement());
-        }
-
-        [TestMethod]
-        public void CorretnessOfStatement_ForCase_FourDaysOfRentalOfChildrenMovie()
-        {
-            var movie = new Movie("The Artist");
-            var result = "Учет аренды для " + "TestCustomer" + "\n"
-                + "\t" + "The Artist" + "\t" + "3" + "\n"
-                + "Сумма задолженности составляет " + "3" + "\n"
-                + "Вы заработали " + 1 + " за активность";
-
-            var customer = new Customer("TestCustomer");
-            var rentalList = new List<Rental> { new RentalForChildrenMovie(daysRented: 4) { Movie = movie } };
-            customer.Rentals = rentalList;
-            Assert.AreEqual(result, customer.Statement());
+            Assert.IsTrue(result.Equals(customer.GetStatement(new StringStatement())));
         }
     }
 }

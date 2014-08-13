@@ -1,45 +1,51 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text;
 
 namespace VideoService
 {
+    [DataContract]
     public class Customer
     {
+        private List<Rental> _rentals;
+
         public Customer(string name)
         {
             Name = name;
             Rentals = new List<Rental>();
+            RentalsInformation = new Dictionary<string, int>();
         }
 
+        [DataMember]
         public string Name
         {
             get;
             set;
         }
 
-        public List<Rental> Rentals
+        [DataMember]
+        public Dictionary<string, int> RentalsInformation
         {
-            get;
-            set;
+            get; set; 
         }
 
-        public string Statement()
+        public List<Rental> Rentals
         {
-            var totalRental = 0.0;
-            var frequentRenterPoints = 0;
-            var result = "Учет аренды для " + Name + "\n";
-            foreach (var rental in Rentals)
+            get { return _rentals; }
+            set
             {
-                var valueOfCurrentRental = rental.GetRental();
-
-                frequentRenterPoints += rental.GetFrequentPoints();
-
-                result += "\t" + rental.Movie.Title + "\t" + valueOfCurrentRental + "\n";
-                totalRental += valueOfCurrentRental;
+                _rentals = value;
+                if (value == null) return;
+                foreach (var rental in value)
+                {
+                    RentalsInformation.Add(rental.Movie.Title, rental.DaysRented);
+                }
             }
+        }
 
-            result += "Сумма задолженности составляет " + totalRental + "\n";
-            result += "Вы заработали " + frequentRenterPoints + " за активность";
-            return result;
+        public StringBuilder GetStatement(IStatement statement)
+        {
+            return statement.GetStatement(this);
         }
     }
 }

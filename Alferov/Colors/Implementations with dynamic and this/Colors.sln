@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colors", "Colors\Colors.csproj", "{96979552-89B9-4AA2-ACE3-CE8B97895FD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colors.Tests", "Colors.Tests\Colors.Tests.csproj", "{B0F4451A-90FF-435A-A772-30BD80E99B5D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96979552-89B9-4AA2-ACE3-CE8B97895FD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96979552-89B9-4AA2-ACE3-CE8B97895FD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96979552-89B9-4AA2-ACE3-CE8B97895FD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96979552-89B9-4AA2-ACE3-CE8B97895FD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0F4451A-90FF-435A-A772-30BD80E99B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0F4451A-90FF-435A-A772-30BD80E99B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0F4451A-90FF-435A-A772-30BD80E99B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0F4451A-90FF-435A-A772-30BD80E99B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

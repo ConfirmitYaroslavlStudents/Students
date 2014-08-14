@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace Refactoring.Utils
 {
-    public class XmlFormatter : ICustomerFormatter
+    public class XmlFormatter : ICustomerFormatter, ICustomerDeserializer
     {
         private readonly Type[] _serializableTypes =
         {
@@ -14,9 +14,9 @@ namespace Refactoring.Utils
             typeof (ChildrensMovie), typeof (NewReleaseMovie)
         };
 
-        public string Serialize(Customer customer)
+        public void Serialize(SerializedData data, Customer customer)
         {
-            var serializer = new DataContractSerializer(typeof (Customer), _serializableTypes);
+            var serializer = new DataContractSerializer(typeof(Customer), _serializableTypes);
 
             using (var sw = new StringWriter())
             using (var writer = new XmlTextWriter(sw))
@@ -24,18 +24,18 @@ namespace Refactoring.Utils
                 writer.Formatting = Formatting.Indented;
                 serializer.WriteObject(writer, customer);
                 writer.Flush();
-                return sw.ToString();
+                data.XmlData = sw.ToString();
             }
         }
 
-        public Customer Deserialize(string serializedData)
+        public Customer Deserialize(SerializedData serializedData)
         {
             using (var stream = new MemoryStream())
             {
-                byte[] data = Encoding.UTF8.GetBytes(serializedData);
+                byte[] data = Encoding.UTF8.GetBytes(serializedData.XmlData);
                 stream.Write(data, 0, data.Length);
                 stream.Position = 0;
-                var dataContractSerializer = new DataContractSerializer(typeof (Customer), _serializableTypes);
+                var dataContractSerializer = new DataContractSerializer(typeof(Customer), _serializableTypes);
 
                 return dataContractSerializer.ReadObject(stream) as Customer;
             }

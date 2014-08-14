@@ -2,7 +2,6 @@
 {
     public interface ICustomerFormatter
     {
-        string Serialize(Customer customer);
-        Customer Deserialize(string serializedData);
+        void Serialize(SerializedData data, Customer customer);
     }
 }

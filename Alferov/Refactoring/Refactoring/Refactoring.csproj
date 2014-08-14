@@ -41,9 +41,12 @@
     <Compile Include="Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rental.cs" />
+    <Compile Include="Utils\CompositeFormatter.cs" />
+    <Compile Include="Utils\ICustomerDeserializer.cs" />
     <Compile Include="Utils\ICustomerFormatter.cs" />
     <Compile Include="Utils\JsonFormatter.cs" />
-    <Compile Include="Utils\StringFormatter.cs" />
+    <Compile Include="Utils\SerializedData.cs" />
+    <Compile Include="Utils\StandardFormatter.cs" />
     <Compile Include="Utils\XmlFormatter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

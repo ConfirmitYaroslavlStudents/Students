@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Refactoring.Utils
 {
-    public class StringFormatter : ICustomerFormatter
+    public class StandardFormatter : ICustomerFormatter, ICustomerDeserializer
     {
-        public string Serialize(Customer customer)
+        public void Serialize(SerializedData data, Customer customer)
         {
             var result = new StringBuilder(string.Format("Учет аренды для {0}\n", customer.Name));
 
@@ -17,16 +17,17 @@ namespace Refactoring.Utils
 
             result.AppendFormat("Сумма задолженности составляет {0}\n", customer.TotalAmount);
             result.AppendFormat("Вы заработали {0} за активность", customer.FrequentRenterPoints);
-            return result.ToString();
+            data.StandardData = result.ToString();
         }
 
-        public Customer Deserialize(string serializedData)
+        public Customer Deserialize(SerializedData serializedData)
         {
-            string name = Regex.Match(serializedData, @"\b\w+\n", RegexOptions.Compiled).ToString().TrimEnd('\n');
+            string standardData = serializedData.StandardData;
+            string name = Regex.Match(standardData, @"\b\w+\n", RegexOptions.Compiled).ToString().TrimEnd('\n');
             var customer = new Customer(name);
 
-            var movieTitles = Regex.Matches(serializedData, @"\t(.*?)\t", RegexOptions.Compiled);
-            var moviePrices = Regex.Matches(serializedData, @"\t\d+[,.]?(\d+)?\n", RegexOptions.Compiled);
+            var movieTitles = Regex.Matches(standardData, @"\t(.*?)\t", RegexOptions.Compiled);
+            var moviePrices = Regex.Matches(standardData, @"\t\d+[,.]?(\d+)?\n", RegexOptions.Compiled);
 
             if (movieTitles.Count != moviePrices.Count)
             {
@@ -38,9 +39,9 @@ namespace Refactoring.Utils
                 customer.Movies.Add(movieTitles[i].ToString().Trim('\t'), Convert.ToDouble(moviePrices[i].ToString().Trim('\t', '\n')));
             }
 
-            string totalAmounAsString = Regex.Match(serializedData, @" \d+[,.]?(\d+)?\n", RegexOptions.Compiled).ToString().TrimEnd('\n');
+            string totalAmounAsString = Regex.Match(standardData, @" \d+[,.]?(\d+)?\n", RegexOptions.Compiled).ToString().TrimEnd('\n');
             customer.TotalAmount = Convert.ToDouble(totalAmounAsString);
-            customer.FrequentRenterPoints = Convert.ToInt32(Regex.Match(serializedData, @" (\d+) ", RegexOptions.Compiled).ToString());
+            customer.FrequentRenterPoints = Convert.ToInt32(Regex.Match(standardData, @" (\d+) ", RegexOptions.Compiled).ToString());
 
             return customer;
         }

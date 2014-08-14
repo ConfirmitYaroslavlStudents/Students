@@ -66,7 +66,7 @@ namespace Refactoring
             return true;
         }
 
-        public string GetStatement(ICustomerFormatter formatter)
+        public SerializedData GetStatement(ICustomerFormatter formatter)
         {
             foreach (Rental rental in Rentals)
             {
@@ -76,7 +76,10 @@ namespace Refactoring
                 TotalAmount += thisAmount;
             }
 
-            return formatter.Serialize(this);
+            var serializedData = new SerializedData();
+            formatter.Serialize(serializedData, this);
+
+            return serializedData;
         }
     }
 }

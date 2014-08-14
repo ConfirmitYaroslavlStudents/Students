@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Refactoring.Utils
 {
-    public class JsonFormatter : ICustomerFormatter
+    public class JsonFormatter : ICustomerFormatter, ICustomerDeserializer
     {
         private readonly Type[] _serializableTypes =
         {
@@ -13,26 +13,26 @@ namespace Refactoring.Utils
             typeof (ChildrensMovie), typeof (NewReleaseMovie)
         };
 
-        public string Serialize(Customer customer)
+        public void Serialize(SerializedData data, Customer customer)
         {
             using (var stream = new MemoryStream())
             {
-                var jsonSerializer = new DataContractJsonSerializer(typeof (Customer), _serializableTypes);
+                var jsonSerializer = new DataContractJsonSerializer(typeof(Customer), _serializableTypes);
                 jsonSerializer.WriteObject(stream, customer);
                 stream.Position = 0;
                 var sr = new StreamReader(stream);
-                return sr.ReadToEnd();
+                data.JsonData = sr.ReadToEnd();
             }
         }
 
-        public Customer Deserialize(string serializedData)
+        public Customer Deserialize(SerializedData serializedData)
         {
             using (var stream = new MemoryStream())
             {
-                byte[] data = Encoding.UTF8.GetBytes(serializedData);
+                byte[] data = Encoding.UTF8.GetBytes(serializedData.JsonData);
                 stream.Write(data, 0, data.Length);
                 stream.Position = 0;
-                var dataContractSerializer = new DataContractJsonSerializer(typeof (Customer), _serializableTypes);
+                var dataContractSerializer = new DataContractJsonSerializer(typeof(Customer), _serializableTypes);
 
                 return dataContractSerializer.ReadObject(stream) as Customer;
             }

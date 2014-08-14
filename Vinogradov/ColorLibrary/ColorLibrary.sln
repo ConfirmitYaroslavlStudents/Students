@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorLibrary", "ColorLibrary\ColorLibrary.csproj", "{EFC0AB20-F85A-483F-82BA-CEB2C95EB2A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{6E122EAB-361D-4BF5-9442-F916AFDD7A30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestsForColorLibrary", "UnitTestsForColorLibrary\UnitTestsForColorLibrary.csproj", "{8CDADF76-2AC2-4CEB-B077-E21AB0CB6839}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFC0AB20-F85A-483F-82BA-CEB2C95EB2A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC0AB20-F85A-483F-82BA-CEB2C95EB2A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC0AB20-F85A-483F-82BA-CEB2C95EB2A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC0AB20-F85A-483F-82BA-CEB2C95EB2A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E122EAB-361D-4BF5-9442-F916AFDD7A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E122EAB-361D-4BF5-9442-F916AFDD7A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E122EAB-361D-4BF5-9442-F916AFDD7A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E122EAB-361D-4BF5-9442-F916AFDD7A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CDADF76-2AC2-4CEB-B077-E21AB0CB6839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDADF76-2AC2-4CEB-B077-E21AB0CB6839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDADF76-2AC2-4CEB-B077-E21AB0CB6839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDADF76-2AC2-4CEB-B077-E21AB0CB6839}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

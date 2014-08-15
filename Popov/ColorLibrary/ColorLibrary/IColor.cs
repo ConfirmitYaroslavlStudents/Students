@@ -3,7 +3,7 @@ namespace ColorLibrary
 {
     public interface IColor
     {
-        string DoWith(IColor color);
+        void DoWith(IColor color);
         Red ToRed();
         Green ToGreen();
     }

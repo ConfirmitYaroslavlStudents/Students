@@ -39,9 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Colors.cs" />
-    <Compile Include="interfaces.cs" />
+    <Compile Include="IProcessor.cs" />
+    <Compile Include="Red.cs" />
+    <Compile Include="IColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Green.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

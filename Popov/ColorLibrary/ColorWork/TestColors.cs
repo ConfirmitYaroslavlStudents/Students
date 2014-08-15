@@ -6,6 +6,7 @@ namespace ColorWork
 {
     class FlagColors : IProcessor
     {
+        //only for tests
         public bool IsRedRed { get; private set; }
         public bool IsRedGreen { get; private set; }
         public bool IsGreenRed { get; private set; }
@@ -36,7 +37,7 @@ namespace ColorWork
     public class TestColors
     {
         [TestMethod]
-        public void TestColor()
+        public void GreenWithRed()
         {
             var flags = new FlagColors();
             IColor greenColor = new Green(flags);
@@ -47,6 +48,22 @@ namespace ColorWork
 
             Assert.IsFalse(flags.IsGreenGreen);
             Assert.IsFalse(flags.IsRedGreen);
+            Assert.IsFalse(flags.IsRedRed);
+        }
+
+        [TestMethod]
+        public void RedWithGreen()
+        {
+            var flags = new FlagColors();
+            IColor redColor = new Red(flags);
+            IColor greenColor = new Green(flags);
+            
+            redColor.DoWith(greenColor);
+
+            Assert.IsTrue(flags.IsRedGreen);
+
+            Assert.IsFalse(flags.IsGreenGreen);
+            Assert.IsFalse(flags.IsGreenRed);
             Assert.IsFalse(flags.IsRedRed);
         }
     }

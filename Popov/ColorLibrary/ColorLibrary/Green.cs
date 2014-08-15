@@ -12,7 +12,7 @@ namespace ColorLibrary
         }
 
 
-        public void DoWith(Red red)
+        public void DoWithColor(Red red)
         {
             if (red != null)
             {
@@ -20,7 +20,7 @@ namespace ColorLibrary
             }
         }
 
-        public void DoWith(Green green)
+        public void DoWithColor(Green green)
         {
             if (green != null)
             {
@@ -30,14 +30,8 @@ namespace ColorLibrary
 
         public void DoWith(IColor color)
         {
-            if (color.ToGreen() != null)
-            {
-                DoWith(color.ToGreen());
-            }
-            if (color.ToRed() != null)
-            {
-                DoWith(color.ToRed());
-            }
+            DoWithColor(color.ToGreen());
+            DoWithColor(color.ToRed());
         }
 
         public Red ToRed()

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0397B574-C7D0-4CE8-8C84-5947E3D9FC27}</ProjectGuid>
+    <ProjectGuid>{417841A0-5A50-4678-9E1F-D5CFBBB4C98A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Refactoring.Tests</RootNamespace>
-    <AssemblyName>Refactoring.Tests</AssemblyName>
+    <RootNamespace>Colors.Tests</RootNamespace>
+    <AssemblyName>Colors.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,8 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.XML" />
     <Reference Include="xunit">
       <HintPath>lib\xunit.dll</HintPath>
     </Reference>
@@ -54,14 +52,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="TestsHelper.cs" />
-    <Compile Include="RefactoringTests.cs" />
+    <Compile Include="ColorsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Refactoring\Refactoring.csproj">
-      <Project>{A38ABCD1-2FEE-45C0-8211-AE2C1D3446D1}</Project>
-      <Name>Refactoring</Name>
+    <ProjectReference Include="..\Colors\Colors.csproj">
+      <Project>{993ebeb3-e715-4895-a987-962183e800ca}</Project>
+      <Name>Colors</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

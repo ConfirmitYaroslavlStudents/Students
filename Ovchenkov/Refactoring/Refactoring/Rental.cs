@@ -1,5 +1,4 @@
-﻿
-namespace Refactoring
+﻿namespace Refactoring
 {
     public class Rental
     {
@@ -13,12 +12,6 @@ namespace Refactoring
         {
             get;
             set;
-        }
-
-        public Rental(Movie movie, int daysRented)
-        {
-            Movie = movie;
-            DaysRented = daysRented;
         }
 
         public double GetPrice()

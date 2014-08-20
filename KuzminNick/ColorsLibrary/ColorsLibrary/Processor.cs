@@ -1,28 +1,35 @@
 ﻿namespace ColorsLibrary
 {
-    public enum TypesOfColorCombination { GreenRed, RedGreen, GreenGreen, RedRed }
     public class Processor
     {
-        public TypesOfColorCombination TypeOfColorCombination;
-
-        public TypesOfColorCombination Process(GreenColor greenColor, RedColor redColor)
+        public string Process(IColorable firstColorable, IColorable secondColorable)
         {
-            return TypesOfColorCombination.GreenRed;
+            // Фактически исходная задача не решена, т.к. мы лишь определяем во времени выполении тип параметров, 
+            // но не выбор одной из полиморфных перегрузок ниже
+            var visitor = new Visitor();
+            firstColorable.IdentifyItself(visitor);
+            secondColorable.IdentifyItself(visitor);
+            return visitor.ColorCombination;
         }
 
-        public TypesOfColorCombination Process(RedColor redColor, GreenColor greenColor)
+        public string Process(GreenColor greenColor, RedColor redColor)
         {
-            return TypesOfColorCombination.RedGreen;
+            return "GreenRed";
         }
 
-        public TypesOfColorCombination Process(GreenColor firstGreenColor, GreenColor secondGreenColor)
+        public string Process(RedColor redColor, GreenColor greenColor)
         {
-            return TypesOfColorCombination.GreenGreen;
+            return "RedGreen";
         }
 
-        public TypesOfColorCombination Process(RedColor firstRedColor, RedColor secondRedColor)
+        public string Process(GreenColor firstGreenColor, GreenColor secondGreenColor)
         {
-            return TypesOfColorCombination.RedRed;
+            return "GreenGreen";
+        }
+
+        public string Process(RedColor firstRedColor, RedColor secondRedColor)
+        {
+            return "RedRed";
         }
     }
 }

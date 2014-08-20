@@ -1,9 +1,16 @@
-﻿namespace VideoService
+﻿using System.Runtime.Serialization;
+
+namespace VideoService
 {
+    [DataContract]
+    [KnownTypeAttribute(typeof(RentalForChildrenMovie))]
+    [KnownTypeAttribute(typeof(RentalForNewReleaseMovie))]
+    [KnownTypeAttribute(typeof(RentalForRegularMovie))]
     public abstract class Rental
     {
         private int _daysRented;
 
+        [DataMember]
         public Movie Movie
         {
             get; set;
@@ -28,6 +35,7 @@
         }
     }
 
+    [DataContract]
     public sealed class RentalForChildrenMovie : Rental
     {
         public RentalForChildrenMovie(int daysRented)
@@ -44,6 +52,7 @@
         }
     }
 
+    [DataContract]
     public sealed class RentalForNewReleaseMovie : Rental
     {
         public RentalForNewReleaseMovie(int daysRented)
@@ -71,6 +80,7 @@
         }
     }
 
+    [DataContract]
     public sealed class RentalForRegularMovie : Rental
     {
         public RentalForRegularMovie(int daysRented)

@@ -14,8 +14,8 @@ namespace Colors
         public void Process(IColor colorOne, IColor colorTwo)
         {
             var helper = new ProcessHelper();
-            colorOne.Accept(this, helper);
-            colorTwo.Accept(this, helper);
+            colorOne.Accept(helper);
+            colorTwo.Accept(helper);
 
             helper.Process(this);
             //через конструтор копирования

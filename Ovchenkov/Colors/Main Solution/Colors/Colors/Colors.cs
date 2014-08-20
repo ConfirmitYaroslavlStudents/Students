@@ -7,7 +7,7 @@ namespace Colors
         public Red(){}
         public Red(IColor color){}
 
-        public void Accept(IProcessor processor, ProcessHelper helper)
+        public void Accept(ProcessHelper helper)
         {
             helper.SetColor(this);
         }
@@ -18,7 +18,7 @@ namespace Colors
         public Green() { }
         public Green(IColor color){}
 
-        public void Accept(IProcessor processor, ProcessHelper helper)
+        public void Accept(ProcessHelper helper)
         {
             helper.SetColor(this);
         }

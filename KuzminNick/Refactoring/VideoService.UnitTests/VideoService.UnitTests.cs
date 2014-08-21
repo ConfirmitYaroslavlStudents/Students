@@ -7,42 +7,11 @@ using Refactoring;
 
 namespace VideoService.UnitTests
 {
-    
-
     [TestClass]
     public class UnitTests
     {
         private readonly StringStatementBuilder _statementBuilder = new StringStatementBuilder();
-
-        [TestMethod]
-        //TODO
-        public void FooBar()
-        {
-            const string customerName = "TestCustomer";
-            var customer = new Customer(customerName);
-            var movies = new[] { new Movie("Inception"), new Movie("HarryPotter") };
-            var rentalList = new List<Rental>
-            {
-                new RentalForNewReleaseMovie(daysRented: 1) { Movie = movies[0] },
-                new RentalForChildrenMovie(daysRented: 4) { Movie = movies[1] }
-            };
-            customer.Rentals = rentalList;
-
-            var jsonString = customer.GetStatement(new JsonStatement());
-            var serializer = new DataContractJsonSerializer(typeof(Customer));
-            Customer deserializedCustomer;
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString)))
-            {
-                deserializedCustomer = (Customer)serializer.ReadObject(stream);
-            }
-
-            Assert.AreEqual(customerName, deserializedCustomer.Name);
-            var firstMovieName = deserializedCustomer.Rentals[0].Movie.Title;
-            var secondMovieName = deserializedCustomer.Rentals[1].Movie.Title;
-            Assert.AreEqual(movies[0].Title, firstMovieName);
-            Assert.AreEqual(movies[1].Title, secondMovieName);
-        }
-
+        
         [TestMethod]
         public void GetJsonStatement_CustomerIsProperlySerializedAndDeserialized()
         {

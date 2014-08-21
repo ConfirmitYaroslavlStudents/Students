@@ -18,20 +18,15 @@ namespace Refactoring
             _listOfStatements.Remove(statement);
         }
 
-        public string GetStatement(IStatement statement, Customer customer)
+        public string GetStatement(Customer customer)
         {
+            var result = String.Empty;
             foreach (var currentStatement in _listOfStatements)
             {
-                if (!statement.GetType().Equals(currentStatement.GetType())) continue;
-
-                Console.WriteLine("TYPES TYPES:");
-                Console.WriteLine(statement.GetType());
-                Console.WriteLine(currentStatement.GetType());
-                return currentStatement.GetStatement(customer);
+                result += currentStatement.GetStatement(customer);
             }
 
-            //TODO!!!
-            throw new Exception();
+            return result;
         }
     }
 }

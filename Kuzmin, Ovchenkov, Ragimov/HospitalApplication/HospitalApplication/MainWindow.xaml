@@ -1,0 +1,30 @@
+﻿<Window x:Name="HospitalMainWindow" x:Class="HospitalApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainHospitalMainWindow" Height="500" Width="650">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="LinearPanelBrush">
+            <GradientStop Color="White" Offset="1.0"/>
+            <GradientStop Color="PaleVioletRed" Offset="0.6"/>
+            <GradientStop Color="DarkRed" Offset="0.3"/>
+            <GradientStop Color="White" Offset="0.0"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <Grid x:Name="MainGrid"   Background="{StaticResource LinearPanelBrush}">
+        <Grid x:Name="MenuGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="100" >
+            <Button Name="LoadTemplateButton" Height="30" Width="120" Margin="10,10,395,60" Click="LoadTemplateButton_Click">Выбрать шаблон</Button>
+            <Button Name="LoadFromBaseButton" Height="30" Width="120" Margin="142,10,263,60" Click="LoadFromBaseButton_Click">Загрузить из базы</Button>
+            <Button Name="ChooseUserButton" Height="30" Margin="316,10,150,60" Click="ChooseUserButton_Click">Выбрать пользователя</Button>
+            <TextBox Name="FirstdNameTextBox" HorizontalAlignment="Left" Height="23" Margin="106,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox Name="SecondNameTextBox" HorizontalAlignment="Left" Height="23" Margin="316,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="134"/>
+            <Label Content="Имя :" HorizontalAlignment="Left" Margin="48,61,0,0" VerticalAlignment="Top" Width="58"/>
+            <Label Content="Фамилия :" HorizontalAlignment="Left" Margin="245,61,0,0" VerticalAlignment="Top" Width="102"/>
+            <Button Name="SaveUserButton" Content="Сохранить пользователя" HorizontalAlignment="Left" Margin="455,61,0,0" VerticalAlignment="Top" Width="145" Height="26" Click="SaveUserButton_Click"/>
+        </Grid>
+        <Grid x:Name="BlankGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="315" Margin="0,100,-8,0" Background="White"/>
+        <Grid x:Name="BottomMenuGrid" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="50" Width="600" >
+            <Button Name="SaveButton" Height="30" Width="120" HorizontalAlignment="Right" Click="SaveButton_Click">Сохранить</Button>
+            <Button Name="PrinButton" Height="30" Width="120" HorizontalAlignment="Right" Margin="0,10,136,10" Click="PrinButton_Click">Печать</Button>
+        </Grid>
+    </Grid>
+</Window>

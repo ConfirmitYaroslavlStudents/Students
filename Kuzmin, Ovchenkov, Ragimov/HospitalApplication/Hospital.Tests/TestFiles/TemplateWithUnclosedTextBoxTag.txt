@@ -1,0 +1,8 @@
+﻿  <Line>
+    <Label>Группа крови</Label>
+    <TextBox Width:200; Height:300;>На рукаве</TextBox>
+  </Line>
+  <Line Height:300;>
+    <Label>Порядковый номер</Label>
+    <TextBox>На рукаве<TextBox>
+  </Line>

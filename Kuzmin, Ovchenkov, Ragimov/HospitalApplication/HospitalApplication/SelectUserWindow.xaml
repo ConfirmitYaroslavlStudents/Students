@@ -1,0 +1,19 @@
+﻿<Window x:Class="HospitalApplication.SelectUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SelectUserWindow" Height="300" Width="300">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="LinearPanelBrush">
+            <GradientStop Color="White" Offset="1.0"/>
+            <GradientStop Color="PaleVioletRed" Offset="0.6"/>
+            <GradientStop Color="DarkRed" Offset="0.3"/>
+            <GradientStop Color="White" Offset="0.0"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <Grid Background="{StaticResource LinearPanelBrush}">
+        <Button Name="ExitButton" Content="Отмена" HorizontalAlignment="Left" Margin="183,227,0,0" VerticalAlignment="Top" Width="75" Click="ExitButton_Click"/>
+        <Button Name="SelectButton" Content="Выбрать" HorizontalAlignment="Left" Margin="29,227,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.228,0.482" Click="SelectButton_Click"/>
+        <ComboBox Name="UserComboBox" HorizontalAlignment="Left" Margin="29,142,0,0" VerticalAlignment="Top" Width="229"/>
+
+    </Grid>
+</Window>

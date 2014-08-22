@@ -7,7 +7,7 @@
     <ProjectGuid>{9D63F230-45C4-4610-AA47-EFC21C450C70}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PrintersLoader</RootNamespace>
+    <RootNamespace>PrintersLoaderLibrary</RootNamespace>
     <AssemblyName>PrintersLoader</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

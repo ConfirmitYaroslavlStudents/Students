@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 using Shared;
+using Shared.Interfaces;
 
 namespace XmlPrinter
 {
@@ -20,7 +21,7 @@ namespace XmlPrinter
                     new XElement("Title", analysis.TemplateTitle),
                     new XElement("Date", analysis.Date),
                     from item in analysis.Data select new XElement(item.Key, item.Value))));
-            xdoc.Save(pathToFile);
+            xdoc.Save(pathToFile + ".xml");
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Shared
+namespace Shared.Interfaces
 {
     public interface IDataStorage
     {

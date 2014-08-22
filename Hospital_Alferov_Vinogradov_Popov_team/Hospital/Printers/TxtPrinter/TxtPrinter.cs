@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using Shared;
+using Shared.Interfaces;
 
 namespace TxtPrinter
 {
@@ -8,7 +9,7 @@ namespace TxtPrinter
     {
         public void Print(Person user, Analysis analysis, string pathToFile)
         {
-            File.WriteAllText(pathToFile, CreateTxtReport(user, analysis));
+            File.WriteAllText(pathToFile + ".txt", CreateTxtReport(user, analysis));
         }
 
         private string CreateTxtReport(Person user, Analysis analysis)

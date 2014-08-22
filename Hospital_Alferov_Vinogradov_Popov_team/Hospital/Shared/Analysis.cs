@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Shared
@@ -20,7 +21,7 @@ namespace Shared
         public override string ToString()
         {
             var result = new StringBuilder();
-            result.AppendLine(Date.ToString());
+            result.AppendLine(Date.ToString(CultureInfo.InvariantCulture));
             foreach (var item in Data)
             {
                 result.AppendLine(string.Format("{0} : {1}", item.Key, item.Value));

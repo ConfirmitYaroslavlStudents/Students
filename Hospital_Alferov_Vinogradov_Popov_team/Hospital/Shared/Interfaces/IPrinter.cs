@@ -1,4 +1,4 @@
-﻿namespace Shared
+﻿namespace Shared.Interfaces
 {
     public interface IPrinter
     {

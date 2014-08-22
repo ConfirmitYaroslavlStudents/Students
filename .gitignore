@@ -83,7 +83,9 @@ ipch/
 *.aps
 *.ncb
 *.opensdf
-*.sdf
+
+#Needed for Hospital db
+#*.sdf
 *.cachefile
 
 # Visual Studio profiler

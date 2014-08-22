@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using DataStorageLibrary;
+using DictionaryFormatter;
 using Microsoft.Win32;
 using PrintersLoader;
 using Shared;
@@ -210,7 +211,6 @@ namespace Hospital
                 return;
             }
 
-            AnalysisTabItem.Visibility = Visibility.Visible;
             AnalysisTabItem.IsSelected = true;
 
             var analyzes = from analysis in _analyzes where analysis.TemplateTitle == _currentTemplateTitle select analysis;
@@ -358,6 +358,23 @@ namespace Hospital
             }
 
             return selectedIndex;
+        }
+
+        private void LoadNewTemplateMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var xmlFormatter = new XmlFormatterSlim();
+            InitCanvas();
+            var newOutputFormatOpenFileDialog = new OpenFileDialog { Filter = "xml files (*.xml)|*.xml", DefaultExt = ".xml" };
+            newOutputFormatOpenFileDialog.Title = "Please select xml file";
+
+            if (newOutputFormatOpenFileDialog.ShowDialog() == true)
+            {
+                var template2 =
+                    new Template(xmlFormatter.Deserialize(File.ReadAllText(newOutputFormatOpenFileDialog.FileName)),
+                        Path.GetFileNameWithoutExtension(newOutputFormatOpenFileDialog.FileName));
+                _dataStorage.AddTemplate(template2);
+                MessageBox.Show("Tempate added successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

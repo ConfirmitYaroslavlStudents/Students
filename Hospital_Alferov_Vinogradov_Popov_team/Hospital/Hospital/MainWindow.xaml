@@ -17,7 +17,7 @@
             <MenuItem x:Name="OtherMainMenuItem" Background="#FFEEEEEE" Height="63" Width="110" Header="other" FontSize="40" FontFamily="Tempus Sans ITC" Foreground="Gold">
                 <MenuItem x:Name="NewTemplateMenuItem" Header="new type of analysis">
                     <MenuItem x:Name="WriteNewTemplateMenuItem" Header="write" Click="WriteNewTemplateMenuItem_Click"/>
-                    <MenuItem x:Name="LoadNewTemplateMenuItem" Header="load"/>
+                    <MenuItem x:Name="LoadNewTemplateMenuItem" Header="load" Click="LoadNewTemplateMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem x:Name="NewOutputFormatMenuItem" Header="load new output format" Click="NewOutputFormatMenuItem_Click"/>
             </MenuItem>

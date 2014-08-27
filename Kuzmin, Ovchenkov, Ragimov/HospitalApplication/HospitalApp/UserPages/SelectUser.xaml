@@ -42,33 +42,7 @@
                 </LinearGradientBrush>
             </ComboBox.Background>
         </ComboBox>
-        <Button x:Name="SelectUserButton" Style="{StaticResource RoundCorner}" Content="Выбрать пользователя" HorizontalAlignment="Left" Margin="353,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="SelectUserButton_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-2"/>
-                </TransformGroup>
-            </Button.RenderTransform>
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="CancelButton" Style="{StaticResource RoundCorner}" Content="Отмена" HorizontalAlignment="Left" Margin="24,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" Click="CancelButton_Click">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Button x:Name="SelectUserButton" Style="{StaticResource RoundCorner}" Content="Выбрать пользователя" HorizontalAlignment="Left" Margin="353,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="SelectUserButton_Click"/>
+        <Button x:Name="CancelButton" Style="{StaticResource RoundCorner}" Content="Отмена" HorizontalAlignment="Left" Margin="24,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" Click="CancelButton_Click"/>
     </Grid>
 </Page>

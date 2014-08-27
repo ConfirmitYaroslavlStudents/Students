@@ -1,100 +1,150 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using HospitalLib.Data;
 using HospitalLib.Providers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using HospitalLib.Utils;
+using Xunit;
+using Xunit.Extensions;
 
 namespace Hospital.Tests
 {
-    [TestClass]
     public class HospitalTests
     {
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisGetData_ConstructorWithNullParameters_ExceptionThrown()
+        static readonly DatabaseProvider DatabaseProvider = new DatabaseProvider();
+        readonly NewIdProvider _idProvider = new NewIdProvider(DatabaseProvider);
+        readonly PersonProvider _personProvider = new PersonProvider(DatabaseProvider);
+        readonly TemplateProvider _templateProvider = new TemplateProvider(DatabaseProvider);
+        readonly AnalysisProvider _analysisProvider = new AnalysisProvider(DatabaseProvider);
+
+        private bool PersonsAreEqual(Person first, Person second)
         {
-            var analysis = new Analysis(null, null, null);
-            analysis.GetData(null);
+            return
+                first.BirthDate.Equals(second.BirthDate) & (first.Id ==
+                    second.Id) & first.FirstName.Equals(second.FirstName) & first.MiddleName.Equals(second.MiddleName);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisGetPersonId_ConstructorWithNullParameters_ExceptionThrown()
+        private bool TemplatesAreEqual(Template first, Template second)
         {
-            var analysis = new Analysis(null, null, null);
-            analysis.GetPersonId();
+            return first.Id == second.Id && first.Name.Equals(second.Name) &&
+                   first.HtmlTemplate.Equals(second.HtmlTemplate);
+
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisGetTemplateId_ConstructorWithNullParameters_ExceptionThrown()
+        private bool AnalyzesAreEqual(Analysis first, Analysis second)
         {
-            var analysis = new Analysis(null, null, null);
-            analysis.GetTemplateId();
+            bool result = true;
+            result &= TemplatesAreEqual(first.Template, second.Template);
+            result &= PersonsAreEqual(first.Person, second.Person);
+            result &= first.Id.Equals(second.Id);
+            result &= (first.CreationTime.CompareTo(second.CreationTime) == 1);
+
+            return result;
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisToJson_ConstructorWithNullParameters_ExceptionThrown()
+        private string GetTemplate(string path)
         {
-            var analysis = new Analysis(null, null, null);
-            analysis.ToJson();
+            var result = String.Empty;
+            path = Environment.CurrentDirectory + @"\Templates\" + path;
+            using (var streamReader = new StreamReader(path))
+            {
+                result = streamReader.ReadToEnd();
+            }
+            return result;
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void PersonBirthDateProperty_ConstructorWithNullParameters_ExceptionThrown()
+        [Theory,
+        InlineData("Ваня", "Сидоров", "Нестеренкович", "1994.4.20"),
+        InlineData("Петя", "Иванов", "Конфермитович", "1994.4.20"),
+        InlineData("Дима", "Сидоров", "Магаз", "1994.4.20"),
+        InlineData("Сашка", "Серый", "ХозяинКругович", "1994.4.20"),
+        InlineData("Катя", "Клеп", "Клопович", "1994.4.20")]
+        public void PersonProvider_SaveAndSearch_ShouldPass(string firstName, string lastName, string middleName, string birthDate)
         {
-            var person = new Person(new NewIdProvider(new DatabaseProvider()), "test", "test", "test", new DateTime());
-            const string uncorrectDate = "01/08/3000";
-            person.BirthDate = Convert.ToDateTime(uncorrectDate);
+            var person = new Person(_idProvider, firstName, lastName, middleName, DateTime.Parse(birthDate));
+            _personProvider.Save(person);
+            var loadedPerson = _personProvider.Search(firstName, lastName);
+            _personProvider.Remove(person);
+
+            Assert.True(PersonsAreEqual(person, loadedPerson[0]));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisProvider_ConstructorWithNullParameter_ExceptionThrown()
+        [Theory,
+         InlineData("Ваня", "Сидоров", "Нестеренкович", "1994.4.20"),
+         InlineData("Петя", "Иванов", "Конфермитович", "1994.4.20"),
+         InlineData("Дима", "Сидоров", "Магаз", "1994.4.20"),
+         InlineData("Сашка", "Серый", "ХозяинКругович", "1994.4.20"),
+         InlineData("Катя", "Клеп", "Клопович", "1994.4.20")]
+        public void Analysis_ToAndFromJson_AnalysisIsProperlyDeserialized(string firstName, string lastName,
+            string middleName, string birthDate)
         {
-            new AnalysisProvider(null);
+            var template = new Template("имя шаблона", "содержимое", _idProvider);
+            var person = new Person(_idProvider, firstName, lastName, middleName, DateTime.Parse(birthDate));
+            var expectedAnalysis = new Analysis(template, person, _idProvider);
+            var actualAnalysis = Analysis.FromJson(expectedAnalysis.ToJson());
+
+            Assert.True(AnalyzesAreEqual(expectedAnalysis, actualAnalysis));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisProviderGetCount_ConstructorWithNullParameter_ExceptionThrown()
+        [Theory,
+         InlineData("Группа крови.html", "Группа крови.txt"),
+         InlineData("Общий анализ крови.html", "Общий анализ крови.txt"),
+         InlineData("Сахар.html", "Сахар.txt")]
+        public void HtmlToTextParser_HtmlTemplateIsProperlyParsed_ShouldPass(string pathToHtmlTemplate, string pathToTxtTemplate)
         {
-            var analysisProvider = new AnalysisProvider(null);
-            analysisProvider.GetCount();
+            var htmlParser = new HtmlToTextParser();
+            var htmlTemplate = GetTemplate(pathToHtmlTemplate);
+            var actualTextTemplate = htmlParser.Parse(htmlTemplate);
+            var expectedTextTemplate = GetTemplate(pathToTxtTemplate);
+
+            Assert.Equal(expectedTextTemplate, actualTextTemplate);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisLoad_ConstructorWithNullParameter_ExceptionThrown()
+        [Theory,
+           InlineData("Ваня", "Сидоров", "Нестеренкович", "1994.4.20"),
+           InlineData("Петя", "Иванов", "Конфермитович", "1994.4.20"),
+           InlineData("Дима", "Сидоров", "Магаз", "1994.4.20"),
+           InlineData("Сашка", "Серый", "ХозяинКругович", "1994.4.20"),
+           InlineData("Катя", "Клеп", "Клопович", "1994.4.20")]
+        public void AnalysisProvider_PersonAnalyzesArePropelyLoaded_ShouldPass(string firstName, string lastName, string middleName, string birthDate)
         {
-            var analysisProvider = new AnalysisProvider(null);
-            analysisProvider.Load(null);
+            var person = new Person(_idProvider, firstName, lastName, middleName, DateTime.Parse(birthDate));
+            var template = new Template("name", "content", _idProvider);
+            var expectedAnalysis = new Analysis(template, person, _idProvider);
+
+            _personProvider.Save(person);
+            _templateProvider.Save(template);
+            _analysisProvider.Save(expectedAnalysis);
+
+            var analyzes = _analysisProvider.Load(person);
+
+            _analysisProvider.Remove(expectedAnalysis);
+            _personProvider.Remove(person);
+            _templateProvider.Remove(template);
+
+            var actualAnalysis = analyzes[0];
+
+            Assert.True(analyzes.Count() == 1);
+            Assert.True(AnalyzesAreEqual(expectedAnalysis, actualAnalysis));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisLoad_ConstructorWithUncorrectParameters_ExceptionThrown()
+        [Theory,
+           InlineData("Ваня", "Сидоров"),
+           InlineData("Петя", "Конфермитович"),
+           InlineData("Дима", "Сидоров"),
+           InlineData("Сашка", "Серый"),
+           InlineData("Катя", "Клеп")]
+        public void TemplateProvider_PersonAnalyzesArePropelyLoaded_ShouldPass(string name, string content)
         {
-            var analysisProvider = new AnalysisProvider(null);
-            var person = new Person(new NewIdProvider(new DatabaseProvider()), "test", "test", "test", new DateTime());
-            analysisProvider.Load(person);
-        }
+            var expectedTemplate = new Template(name, content, _idProvider);
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisSave_ConstructorWithUncorrectParameters_ExceptionThrown()
-        {
-            var analysisProvider = new AnalysisProvider(null);
-            analysisProvider.Save(new Analysis(null, null, null));
-        }
+            _templateProvider.Save(expectedTemplate);
+            var templates = _templateProvider.Load();
+            _templateProvider.Remove(expectedTemplate);
 
-        [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void AnalysisUpdate_ConstructorWithUncorrectParameters_ExceptionThrown()
-        {
-            var analysisProvider = new AnalysisProvider(null);
-            analysisProvider.Update(null);
+            var actualTemplate = templates[0];
+
+            Assert.True(TemplatesAreEqual(expectedTemplate, actualTemplate));
         }
     }
 }

@@ -36,34 +36,8 @@
         <TextBox Name="LastNameTextBox" HorizontalAlignment="Left" Height="35" Margin="280,153,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" FontSize="24" FontWeight="Bold" FontFamily="Verdana" Foreground="Red" TextChanged="LastNameTextBox_TextChanged"/>
         <TextBox Name="FirstNameTextBox" HorizontalAlignment="Left" Height="35" Margin="280,234,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" FontSize="24" FontWeight="Bold" Foreground="Red" FontFamily="Verdana" TextChanged="FirstNameTextBox_TextChanged"/>
         <TextBox Name="MiddleNameTextBox" HorizontalAlignment="Left" Height="35" Margin="280,312,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="286" FontSize="24" FontWeight="Bold" FontFamily="Verdana" Foreground="Red" TextChanged="MiddleNameTextBox_TextChanged"/>
-        <Button x:Name="CreateUserButton" Style="{StaticResource RoundCorner}" Content="Добавить пользователя" HorizontalAlignment="Left" Margin="353,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="CreateUserButton_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-2"/>
-                </TransformGroup>
-            </Button.RenderTransform>
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="CancelButton" Style="{StaticResource RoundCorner}" Content="Отмена" HorizontalAlignment="Left" Margin="24,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" Click="CancelButton_Click">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Button x:Name="CreateUserButton" Style="{StaticResource RoundCorner}" Content="Добавить пользователя" HorizontalAlignment="Left" Margin="353,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="CreateUserButton_Click"/>
+        <Button x:Name="CancelButton" Style="{StaticResource RoundCorner}" Content="Отмена" HorizontalAlignment="Left" Margin="24,474,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="14" Click="CancelButton_Click"/>
         <DatePicker Name="BirthDayDatePicker" HorizontalAlignment="Left" Margin="280,393,0,0" VerticalAlignment="Top" Height="35" Width="286" FontFamily="Verdana" FontSize="24" SelectedDateChanged="BirthDayDatePicker_SelectedDateChanged"/>
     </Grid>
 </Page>

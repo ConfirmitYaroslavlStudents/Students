@@ -18,34 +18,8 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <Button x:Name="AnalysisHistoryButton" Style="{StaticResource RoundCorner}" Content="История анализов" HorizontalAlignment="Left" Margin="182,250,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="16" RenderTransformOrigin="0.5,0.5" Click="AnalysisHistoryButton_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-2"/>
-                </TransformGroup>
-            </Button.RenderTransform>
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="NewAnalysisButton" Style="{StaticResource RoundCorner}" Content="Новый анализ" HorizontalAlignment="Left" Margin="430,250,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="16" Click="NewAnalysisButton_Click">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Button x:Name="AnalysisHistoryButton" Style="{StaticResource RoundCorner}" Content="История анализов" HorizontalAlignment="Left" Margin="182,250,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="16" RenderTransformOrigin="0.5,0.5" Click="AnalysisHistoryButton_Click"/>
+        <Button x:Name="NewAnalysisButton" Style="{StaticResource RoundCorner}" Content="Новый анализ" HorizontalAlignment="Left" Margin="430,250,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="16" Click="NewAnalysisButton_Click"/>
         <Image x:Name="UserIcon" HorizontalAlignment="Left" Height="137" Margin="14,1,0,0" VerticalAlignment="Top" Width="142" Source="/HospitalApp;component/Resources/heart_icon.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
@@ -57,23 +31,6 @@
             </Image.RenderTransform>
         </Image>
         <Label Name="UserLabel" Content="#153 Иванов Иван Иванович 19.01.1983" HorizontalAlignment="Left" Margin="179,24,0,0" VerticalAlignment="Top" FontSize="20" FontFamily="Verdana" Width="546" Height="48" Foreground="Red" FontWeight="Bold"/>
-        <Button x:Name="ChangeUserButton" Style="{StaticResource RoundCorner}" Content="Сменить пользователя" HorizontalAlignment="Left" Margin="182,72,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="42" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="ChangeUserButton_Click">
-            <Button.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-2"/>
-                </TransformGroup>
-            </Button.RenderTransform>
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
-                    <GradientStop Color="#FF950000" Offset="0.502"/>
-                    <GradientStop Color="Red" Offset="1"/>
-                    <GradientStop Color="#FFC52F2F"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Button x:Name="ChangeUserButton" Style="{StaticResource RoundCorner}" Content="Сменить пользователя" HorizontalAlignment="Left" Margin="182,72,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="42" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="ChangeUserButton_Click"/>
     </Grid>
 </Page>

@@ -20,44 +20,31 @@ namespace HospitalLib.Providers
             _databaseProvider = databaseProvider;
         }
 
-        public Template Load(string path)
-        {
-            return null;
-        }
-
         public IList<Template> Load()
         {
             const string query = "select * from Template";
             var reader = _databaseProvider.GetData(query);
 
-            IList<Template> templates = new List<Template>();
-            while (reader.Read())
-            {
-                templates.Add(GetTemplate(reader));
-            }
-
-            return templates;
+            return GetTemplates(reader);
         }
 
         public void Save(Template template)
         {
             const string query = "insert into Template (TemplateId, Template, Name) values(@TemplateId, @Template, @Name)";
             var command = new SqlCommand(query);
-
-            command.Parameters.Add("@Template", SqlDbType.NText);
-            command.Parameters["@Template"].Value = template.HtmlTemplate;
-
-            command.Parameters.AddWithValue("@TemplateId", template.Id);
-            command.Parameters.AddWithValue("@Name", template.Name);
-
-            _databaseProvider.PushData(command);
+            PrepareStatement(command, template);    
         }
 
         public void Update(Template template)
         {
             const string query = "update Template set Template=@Template, Name= @Name where TemplateId = @TemplateId";
              var command = new SqlCommand(query);
+            PrepareStatement(command,template);
 
+        }
+
+        private void PrepareStatement(SqlCommand command, Template template)
+        {
             command.Parameters.Add("@Template", SqlDbType.NText);
             command.Parameters["@Template"].Value = template.HtmlTemplate;
 
@@ -75,19 +62,18 @@ namespace HospitalLib.Providers
             _databaseProvider.PushData(query);
         }
 
-        public IList<Template> Seach(string search)
+        public IList<Template> Search(string tempalteName)
         {
-            var query = "select * from Template" + string.Format(" where Name like '%{0}%'",  search);
+            const string query = "select * from Template where Name like @Name"; 
 
-            var reader = _databaseProvider.GetData(query);
+            var command = new SqlCommand(query);
 
-            IList<Template> templates = new List<Template>();
-            while (reader.Read())
-            {
-                templates.Add(GetTemplate(reader));
-            }
+            command.Parameters.Add("@Name", SqlDbType.NVarChar);
+            command.Parameters["@Name"].Value = "%" + tempalteName + "%";
 
-            return templates;
+            var reader = _databaseProvider.GetData(command);
+
+            return GetTemplates(reader);
         }
 
         public int GetCount()
@@ -97,6 +83,16 @@ namespace HospitalLib.Providers
             var count = int.Parse(result.ToString(CultureInfo.InvariantCulture));
 
             return count;
+        }
+
+        private IList<Template> GetTemplates(SqlDataReader reader)
+        {
+            IList<Template> templates = new List<Template>();
+            while (reader.Read())
+            {
+                templates.Add(GetTemplate(reader));
+            }
+            return templates;
         }
 
         public  Template GetTemplate(SqlDataReader reader)

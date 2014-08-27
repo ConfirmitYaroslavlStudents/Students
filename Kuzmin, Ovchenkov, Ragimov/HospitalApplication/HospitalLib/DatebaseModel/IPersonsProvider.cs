@@ -11,6 +11,5 @@ namespace HospitalLib.DatebaseModel
         void Remove(Person person);
         int GetCount();
         IList<Person> Search(string firstName, string lastName);
-        
     }
 }

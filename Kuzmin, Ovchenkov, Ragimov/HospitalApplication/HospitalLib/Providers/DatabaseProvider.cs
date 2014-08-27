@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
 using HospitalLib.DatebaseModel;
@@ -57,8 +58,7 @@ namespace HospitalLib.Providers
 
         private static SqlConnection CreateConection()
         {
-            var outputFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (outputFolder == null) return null;
+            var outputFolder = Environment.CurrentDirectory;
             var attachDbFilename = Path.Combine(outputFolder, DatabaseFileName);
             var connectionString =
                 string.Format(

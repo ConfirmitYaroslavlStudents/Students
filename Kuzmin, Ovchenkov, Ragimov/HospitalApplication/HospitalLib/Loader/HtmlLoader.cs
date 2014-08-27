@@ -28,25 +28,38 @@ namespace HospitalLib.Loader
 
         public void Load()
         {
-            var pathToDirectory = Environment.CurrentDirectory + PathToFolder;
-
-            const string fileNameTemplate = "*.html";
             var result = new List<Template>();
+            var templatesPath = GetTemplatesPath();
 
-            var templatePath = Directory.GetFiles(pathToDirectory, fileNameTemplate);
-
-            if (templatePath.Length == 0)
+            if (templatesPath.Length == 0)
             {
-                MessageBox.Show("Something wrong with template folder!", "Error!");
                 return;
             }
 
-            foreach (var path in templatePath)
+            foreach (var path in templatesPath)
             {
                 result.Add(LoadTemplate(path, _newIdProvider));
             }
 
             UpdateDatabase(result, _templateProvider);
+        }
+
+        private static string[] GetTemplatesPath()
+        {
+            var pathToDirectory = Environment.CurrentDirectory + PathToFolder;
+            const string fileNameTemplate = "*.html";
+
+            string[] templatesPath = {};
+            try
+            {
+                templatesPath = Directory.GetFiles(pathToDirectory, fileNameTemplate);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Что-то не так с папкой для шаблонов!", "Error!");
+            }
+
+            return templatesPath;
         }
 
         private void UpdateDatabase(IEnumerable<Template> templates, ITemplateProvider templateProvider)
@@ -57,10 +70,7 @@ namespace HospitalLib.Loader
 
             foreach (var loadedTemplate in templates)
             {
-                if (templatesFromDatabase.Count == 0)
-                    templateProvider.Save(loadedTemplate);
-
-                if (names.Keys.Contains(loadedTemplate.Name))
+              if (names.Keys.Contains(loadedTemplate.Name))
                 {
                     var template = names[loadedTemplate.Name];
                     template.HtmlTemplate= loadedTemplate.HtmlTemplate;
@@ -74,7 +84,21 @@ namespace HospitalLib.Loader
         private Template LoadTemplate(string path, INewIdProvider newIdProvider)
         {
             var name = Path.GetFileNameWithoutExtension(path);
-            var html = File.ReadAllText(path);
+            string html;
+            const string utf8Charset = "<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>";
+            try
+            {
+                html = File.ReadAllText(path);
+                if (html.IndexOf("<meta", StringComparison.Ordinal) == -1)
+                {
+                    html = utf8Charset + Environment.NewLine + html;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Something wrong with template " + name, "Error!");
+                return null;
+            }
 
             return new Template(name, html, newIdProvider);
         }

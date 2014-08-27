@@ -25,13 +25,7 @@ namespace HospitalLib.Providers
             const string query = "select * from Persons";
             var reader = _databaseProvider.GetData(query);
 
-            IList<Person> persons = new List<Person>();
-            while (reader.Read())
-            {
-                persons.Add(GetPerson(reader));
-            }
-
-            return persons;
+            return GetPersons(reader);
         }
 
         public void Save(Person person)
@@ -50,8 +44,7 @@ namespace HospitalLib.Providers
             command.Parameters["@MiddleName"].Value = person.MiddleName;
 
             command.Parameters.AddWithValue("@PersonId",  person.Id);
-            command.Parameters.AddWithValue("@BirthDate", person.BirthDate.ToString(CultureInfo.InvariantCulture));
-
+            command.Parameters.AddWithValue("@BirthDate", person.BirthDate.ToShortDateString());
 
             _databaseProvider.PushData(command);
         }
@@ -62,7 +55,12 @@ namespace HospitalLib.Providers
                                  "BirthDate=@BirthDate where PersonId=@PersonId";
 
             var command = new SqlCommand(query);
+            PrepareStatent(command,person);
 
+        }
+
+        private void PrepareStatent(SqlCommand command, Person person)
+        {
             command.Parameters.Add("@FirstName", SqlDbType.NVarChar);
             command.Parameters["@FirstName"].Value = person.FirstName;
             command.Parameters.Add("@LastName", SqlDbType.NVarChar);
@@ -71,8 +69,7 @@ namespace HospitalLib.Providers
             command.Parameters["@MiddleName"].Value = person.MiddleName;
 
             command.Parameters.AddWithValue("@PersonId", person.Id);
-            command.Parameters.AddWithValue("@BirthDate", person.BirthDate.ToString(CultureInfo.InvariantCulture));
-
+            command.Parameters.AddWithValue("@BirthDate", person.BirthDate.ToShortDateString());
 
             _databaseProvider.PushData(command);
         }
@@ -87,16 +84,18 @@ namespace HospitalLib.Providers
 
         public IList<Person> Search(string searchFirstName, string searchLastName)
         {
-            var query = "select * from Persons" + string.Format(" where FirstName like '%{0}%' and LastName like '%{1}%'", searchFirstName, searchLastName);
-            var reader = _databaseProvider.GetData(query);
+            const string query = "select * from Persons where FirstName like @FirstName and LastName like @LastName";
 
-            IList<Person> persons = new List<Person>();
-            while (reader.Read())
-            {
-                persons.Add(GetPerson(reader));
-            }
+            var command = new SqlCommand(query);
 
-            return persons;
+            command.Parameters.Add("@FirstName", SqlDbType.NVarChar);
+            command.Parameters["@FirstName"].Value = "%" + searchFirstName + "%";
+            command.Parameters.Add("@LastName", SqlDbType.NVarChar);
+            command.Parameters["@LastName"].Value = "%" + searchLastName + "%";
+
+            var reader = _databaseProvider.GetData(command);
+            
+            return GetPersons(reader);
         }
 
         public int GetCount()
@@ -106,6 +105,17 @@ namespace HospitalLib.Providers
             var count = int.Parse(result.ToString(CultureInfo.InvariantCulture));
 
             return count;
+        }
+
+        private IList<Person> GetPersons(SqlDataReader reader)
+        {
+            var persons = new List<Person>();
+            while (reader.Read())
+            {
+                persons.Add(GetPerson(reader));
+            }
+
+            return persons;
         }
 
         public Person GetPerson(SqlDataReader reader)

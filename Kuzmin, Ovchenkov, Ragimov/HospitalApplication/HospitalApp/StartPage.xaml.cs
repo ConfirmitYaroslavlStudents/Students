@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using HospitalApp.UserPages;
+using HospitalLib.Providers;
 
 namespace HospitalApp
 {
@@ -15,6 +16,14 @@ namespace HospitalApp
 
         private void SelectUserButton_Click(object sender, RoutedEventArgs e)
         {
+            var personProvider = new PersonProvider(new DatabaseProvider());
+            var persons = personProvider.Load();
+            if (persons.Count == 0)
+            {
+                MessageBox.Show("База данных пациентов пуста!", "Error!");
+                return;
+            }
+
             Switcher.PageSwitcher.Navigate(new SelectUser());
         }
 

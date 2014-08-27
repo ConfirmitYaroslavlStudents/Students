@@ -28,14 +28,8 @@ namespace HospitalLib.Providers
             _databaseProvider.GetData(command);
 
             var reader = _databaseProvider.GetData(command);
-            IList<Analysis> analyzes = new List<Analysis>();
-            while (reader.Read())
-            {
-                var analysis = GetAnalysis(reader);
-                analyzes.Add(analysis);
-            }
 
-            return analyzes;
+            return GetAnalyzes(reader);
         }
 
         public void Save(Analysis analysis)
@@ -94,6 +88,17 @@ namespace HospitalLib.Providers
             var count = int.Parse(result.ToString(CultureInfo.InvariantCulture));
 
             return count;
+        }
+
+        private static IList<Analysis> GetAnalyzes(SqlDataReader reader)
+        {
+            IList<Analysis> analyzes = new List<Analysis>();
+            while (reader.Read())
+            {
+                var analysis = GetAnalysis(reader);
+                analyzes.Add(analysis);
+            }
+            return analyzes;
         }
 
         private static Analysis GetAnalysis(SqlDataReader reader)

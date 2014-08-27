@@ -5,9 +5,8 @@ namespace HospitalLib.DatebaseModel
 {
     public interface ITemplateProvider
     {
-        Template Load(string path);
         IList<Template> Load();
-        IList<Template> Seach(string search);
+        IList<Template> Search(string tempalteName);
         void Save(Template template);
         void Update(Template template);
         void Remove(Template template);

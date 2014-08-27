@@ -76,7 +76,7 @@ namespace HospitalApp.UserPages
             var fistName = FirstNameTextBox.Text;
             var lastName = LastNameTextBox.Text;
             var middleName = MiddleNameTextBox.Text;
-            var birthDate = BirthDayDatePicker.DisplayDate;
+            var birthDate = DateTime.Parse(BirthDayDatePicker.Text);
 
             return Factory.BuidPerson(fistName, lastName, middleName, birthDate);
         }

@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using HospitalApp.UserPages;
 using HospitalLib.Data;
 using HospitalLib.Providers;
@@ -37,7 +40,6 @@ namespace HospitalApp.AnalysisPages
                     }
                 }
             }
-
         }
 
         private void ChangeUserButton_Click(object sender, RoutedEventArgs e)
@@ -52,9 +54,9 @@ namespace HospitalApp.AnalysisPages
 
         private void PrintAnalysisButton_Click(object sender, RoutedEventArgs e)
         {
-            
             var printer = new Printer();
             printer.Print(GetFileName(), GetText());
+            ChangeOpacity(PrintAnalysisButton, 350);
         }
 
         private string GetText()
@@ -88,6 +90,38 @@ namespace HospitalApp.AnalysisPages
             }
             else
                 analysisProvider.Update(analysis);
+
+            ChangeOpacity(SaveAnalysisButton, 350);
+        }
+
+
+
+        private void ChangeOpacity(Button control, int speed, bool fade=true)
+        {
+            var storyboard = new Storyboard();
+            var duration = new TimeSpan(0, 0, 0, 0, speed); 
+            DoubleAnimation animation;
+            if (fade)
+            {
+                control.Style = (Style)FindResource("RoundCornerGreen");
+                animation = new DoubleAnimation { From = 1.0, To = 0.0, Duration = new Duration(duration) };
+                storyboard.Completed += (s, ea) => ChangeOpacity(control, speed, false);
+            }
+
+            else
+            {
+                animation = new DoubleAnimation { From = 0.0, To = 1.0, Duration = new Duration(duration) };
+                storyboard.Completed += (s, ea) =>
+                {
+                    control.Style = (Style)FindResource("RoundCorner");
+                };
+            }
+
+            Storyboard.SetTargetName(animation, control.Name);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity", 0));
+            storyboard.Children.Add(animation);
+
+            storyboard.Begin(control);
         }
 
         private Analysis GetAnalysis()
@@ -111,11 +145,6 @@ namespace HospitalApp.AnalysisPages
             CurrentState.CurrentAnalysis.Person = CurrentState.CurrentPerson;
           
             return CurrentState.CurrentAnalysis;
-        }
-
-        private void WebBrowser_Loaded(object sender, RoutedEventArgs e)
-        {
-           
         }
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)

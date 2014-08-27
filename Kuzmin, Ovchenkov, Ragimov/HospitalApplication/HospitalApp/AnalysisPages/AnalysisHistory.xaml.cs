@@ -11,11 +11,11 @@ namespace HospitalApp.AnalysisPages
     /// <summary>
     /// Interaction logic for AnalysisHisory.xaml
     /// </summary>
-    public partial class AnalysisHisory
+    public partial class AnalysisHistory
     {
         private readonly IDictionary<string, Analysis> _analyzesDictionary;
 
-        public AnalysisHisory()
+        public AnalysisHistory()
         {
             InitializeComponent();
             _analyzesDictionary = new Dictionary<string, Analysis>();
@@ -57,6 +57,11 @@ namespace HospitalApp.AnalysisPages
         {
             var analysis = _analyzesDictionary[AnalyzesComboBox.SelectedValue.ToString()];
             CurrentState.CurrentAnalysis = new Analysis(analysis.Template, analysis.Person, new NewIdProvider(new DatabaseProvider()));
+
+            foreach (var data in analysis.GetDictionary())
+            {
+                 CurrentState.CurrentAnalysis.AddData(data.Key, data.Value);
+            }
             CurrentState.CurrentTemplate = CurrentState.CurrentAnalysis.Template;
             Switcher.PageSwitcher.Navigate(new AnalysisLoaded());
         }

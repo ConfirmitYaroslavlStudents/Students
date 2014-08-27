@@ -20,6 +20,9 @@ namespace HospitalLib.Data
 
         public Analysis(Template template, Person person, NewIdProvider provider)
         {
+            if (provider == null)
+                throw new NullReferenceException("databaseProvider");
+
             _data = new Dictionary<string, string>();
             Template = template;
             Person = person;
@@ -48,6 +51,11 @@ namespace HospitalLib.Data
                 return null;
 
             return _data[key];
+        }
+
+        public IDictionary<string, string> GetDictionary()
+        {
+            return _data;
         }
 
         public void AddData(string key, string value)

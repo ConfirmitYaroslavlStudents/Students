@@ -30,11 +30,19 @@ namespace HospitalApp.UserPages
                 return;
             }
 
-            Switcher.PageSwitcher.Navigate(new AnalysisHisory());
+            Switcher.PageSwitcher.Navigate(new AnalysisHistory());
         }
 
         private void NewAnalysisButton_Click(object sender, RoutedEventArgs e)
         {
+            var templateProvider = new TemplateProvider(new DatabaseProvider());
+            var templates = templateProvider.Load();
+            if (templates.Count == 0)
+            {
+                MessageBox.Show("Добавьте вначале шаблоны для анализов!", "Error!");
+                return;
+            }
+
             Switcher.PageSwitcher.Navigate(new NewAnalysis());
         }
     }

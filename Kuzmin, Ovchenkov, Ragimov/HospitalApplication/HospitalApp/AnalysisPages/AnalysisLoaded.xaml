@@ -24,9 +24,7 @@
         <Button x:Name="ChangeUserButton" Style="{StaticResource RoundCorner}" Content="Сменить пользователя" HorizontalAlignment="Left" Margin="182,72,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="42" FontSize="14" RenderTransformOrigin="0.5,0.5" Click="ChangeUserButton_Click"></Button>
         <Border Height="322" Width="752" BorderThickness="1"
         BorderBrush="Black">
-            <WebBrowser Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="320" Width="750" x:Name="WebBrowser" LoadCompleted="WebBrowser_LoadCompleted">
-
-            </WebBrowser>
+            <WebBrowser Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="320" Width="750" x:Name="WebBrowser" LoadCompleted="WebBrowser_LoadCompleted"/>
         </Border>
         <Button x:Name="CancelButton" Style="{StaticResource RoundCorner}" Content="Отмена" HorizontalAlignment="Left" Margin="20,484,0,0" VerticalAlignment="Top" Width="213" FontWeight="Bold" Foreground="White" Height="58" FontSize="16" RenderTransformOrigin="0.5,0.5" Click="CancelButton_Click"></Button>
     </Grid>

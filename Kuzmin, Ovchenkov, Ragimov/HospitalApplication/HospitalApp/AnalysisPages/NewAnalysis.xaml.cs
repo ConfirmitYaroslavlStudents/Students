@@ -57,7 +57,7 @@ namespace HospitalApp.AnalysisPages
         {
             if (string.IsNullOrEmpty(TemplatesComboBox.SelectedValue.ToString()))
             {
-                MessageBox.Show("Вам следует выбрать анализ");
+                MessageBox.Show("Вам следует выбрать анализ", "Сообщение");
                 return;
             }
 

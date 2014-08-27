@@ -1,9 +1,7 @@
-﻿using HospitalLib.Database;
-
-namespace HospitalLib.Interfaces
+﻿namespace HospitalLib.Interfaces
 {
     public interface IPrint
     {
-        void Print(Template.Template template, Person person);
+        void Print(string name, string text);
     }
 }

@@ -1,41 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using HospitalLib.Database;
 using HospitalLib.Interfaces;
 
 namespace HospitalLib.Utils
 {
     public class Printer : IPrint
     {
-        public string PrinterPath { get; set; }
+        private const string PathToFolder = @"\Printer\";
 
-        public void Print(Template.Template template, Person person)
+        private string GetFilePath(string name)
         {
-            using (var file = new StreamWriter(GetFilePath(person)))
-            {
-               file.Write(template.ToString());
-            }
+            var printerPath = Environment.CurrentDirectory + PathToFolder + name;
+
+            if (string.IsNullOrEmpty(printerPath))
+                throw new InvalidDataException("Printer path is unknown");
+
+            return printerPath  + ".txt";
         }
 
-        private string GetFilePath(Person person)
+        public void Print(string name, string text)
         {
-            if (string.IsNullOrEmpty(PrinterPath))
-                throw new InvalidDataException("Database path is unknown");
-
-            return String.Format("{0}{1}{2}{3}{4}{5}", PrinterPath, "\\", person.SecondName, "_", person.FirstName, ".txt");
-        }
-
-        private IEnumerable<string> GetLines(Template.Template template)
-        {
-            var result = new List<string>();
-
-            foreach (var line in template.Lines)
+            using (var file = new StreamWriter(GetFilePath(name)))
             {
-                result.Add(line.ToString());
+                file.Write(text);
             }
-
-            return result;
         }
     }
 }

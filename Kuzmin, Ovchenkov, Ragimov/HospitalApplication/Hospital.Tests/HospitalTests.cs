@@ -1,9 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Net.Mime;
-using System.Reflection;
-using HospitalLib.Database;
-using HospitalLib.Parser;
+using HospitalLib.Data;
+using HospitalLib.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Hospital.Tests
@@ -12,118 +9,92 @@ namespace Hospital.Tests
     public class HospitalTests
     {
         [TestMethod]
-        public void ParserLoad_TemplateIsProperlyParsed()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisGetData_ConstructorWithNullParameters_ExceptionThrown()
         {
-            var parser = new Parser();
-
-            var baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("Debug","");
-            var testFile = Path.Combine(baseDir.Replace("bin",""), "TestFiles", "Template.txt");
-
-            var template = parser.Load(testFile);
-            var actualContentOfTemplate = String.Empty;
-            foreach (var line in template.Lines)
-            {
-                foreach (var element in line)
-                {
-                    actualContentOfTemplate += element.Text + "|";
-                }
-            }
-
-            const string expectedContentOfTemplate = "Группа крови|На рукаве|Порядковый номер|На рукаве|";
-            Assert.AreEqual(expectedContentOfTemplate, actualContentOfTemplate);
+            var analysis = new Analysis(null, null, null);
+            analysis.GetData(null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ParserLoad_UncorrectPath_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisGetPersonId_ConstructorWithNullParameters_ExceptionThrown()
         {
-            var parser = new Parser();
-            parser.Load(@"FooBar");
+            var analysis = new Analysis(null, null, null);
+            analysis.GetPersonId();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ParserLoad_UnsupportedFormatOfFile_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisGetTemplateId_ConstructorWithNullParameters_ExceptionThrown()
         {
-            var parser = new Parser();
-            parser.Load(@"FooBar.pdf");
+            var analysis = new Analysis(null, null, null);
+            analysis.GetTemplateId();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ParserLoad_UnclosedTextBoxTag_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisToJson_ConstructorWithNullParameters_ExceptionThrown()
         {
-            var parser = new Parser();
-            var baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("Debug", "");
-            var testFile = Path.Combine(baseDir.Replace("bin", ""), "TestFiles", "TemplateWithUnclosedTextBoxTag.txt");
-
-            parser.Load(testFile);
+            var analysis = new Analysis(null, null, null);
+            analysis.ToJson();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ParserLoad_UnclosedLabelTag_ExceptionThrown()
+        [ExpectedException(typeof(ArgumentException))]
+        public void PersonBirthDateProperty_ConstructorWithNullParameters_ExceptionThrown()
         {
-            var parser = new Parser();
-            var baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("Debug", "");
-            var testFile = Path.Combine(baseDir.Replace("bin", ""), "TestFiles", "TemplateWithUnclosedLabelTag.txt");
-            parser.Load(testFile);
+            var person = new Person(new NewIdProvider(new DatabaseProvider()), "test", "test", "test", new DateTime());
+            const string uncorrectDate = "01/08/3000";
+            person.BirthDate = Convert.ToDateTime(uncorrectDate);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ParserLoad_TemplateWithoutSemicolonAfterProperty_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisProvider_ConstructorWithNullParameter_ExceptionThrown()
         {
-            var parser = new Parser();
-            var baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("Debug", "");
-            var testFile = Path.Combine(baseDir.Replace("bin", ""), "TestFiles", "TemplateWithoutSemicolonAfterProperty.txt");
-            parser.Load(testFile);
+            new AnalysisProvider(null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ParserLoad_TemplateWithInvalidElement_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisProviderGetCount_ConstructorWithNullParameter_ExceptionThrown()
         {
-            var parser = new Parser();
-            var baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("Debug", "");
-            var testFile = Path.Combine(baseDir.Replace("bin", ""), "TestFiles", "TemplateWithInvalidElement.txt");
-            parser.Load(testFile);
+            var analysisProvider = new AnalysisProvider(null);
+            analysisProvider.GetCount();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void StorageSave_DatabasePathIsNull_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisLoad_ConstructorWithNullParameter_ExceptionThrown()
         {
-            var storage = new Storage();
-            storage.DatabasePath = null;
-            storage.Save(new HospitalLib.Template.Template(null,""), new Person());
+            var analysisProvider = new AnalysisProvider(null);
+            analysisProvider.Load(null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void StorageSave_DatabasePathIsEmptyString_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisLoad_ConstructorWithUncorrectParameters_ExceptionThrown()
         {
-            var storage = new Storage();
-            storage.DatabasePath = "";
-            storage.Save(new HospitalLib.Template.Template(null,""), new Person());
+            var analysisProvider = new AnalysisProvider(null);
+            var person = new Person(new NewIdProvider(new DatabaseProvider()), "test", "test", "test", new DateTime());
+            analysisProvider.Load(person);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void PersonProviderSave_DatabasePathIsNull_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisSave_ConstructorWithUncorrectParameters_ExceptionThrown()
         {
-            var personProvider = new PersonProvider();
-            personProvider.DatabasePath = null;
-            personProvider.Save(new Person());
+            var analysisProvider = new AnalysisProvider(null);
+            analysisProvider.Save(new Analysis(null, null, null));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void PersonProviderSave_DatabasePathIsEmptyString_ExceptionThrown()
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AnalysisUpdate_ConstructorWithUncorrectParameters_ExceptionThrown()
         {
-            var personProvider = new PersonProvider();
-            personProvider.DatabasePath = "";
-            personProvider.Save(new Person());
+            var analysisProvider = new AnalysisProvider(null);
+            analysisProvider.Update(null);
         }
     }
 }

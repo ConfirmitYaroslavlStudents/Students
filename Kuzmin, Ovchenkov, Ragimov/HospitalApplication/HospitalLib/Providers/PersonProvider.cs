@@ -55,11 +55,11 @@ namespace HospitalLib.Providers
                                  "BirthDate=@BirthDate where PersonId=@PersonId";
 
             var command = new SqlCommand(query);
-            PrepareStatent(command,person);
+            PrepareStatement(command,person);
 
         }
 
-        private void PrepareStatent(SqlCommand command, Person person)
+        private void PrepareStatement(SqlCommand command, Person person)
         {
             command.Parameters.Add("@FirstName", SqlDbType.NVarChar);
             command.Parameters["@FirstName"].Value = person.FirstName;

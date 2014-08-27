@@ -44,7 +44,7 @@ namespace Hospital.Tests
 
         private string GetTemplate(string path)
         {
-            var result = String.Empty;
+            string result;
             path = Environment.CurrentDirectory + @"\Templates\" + path;
             using (var streamReader = new StreamReader(path))
             {
@@ -94,8 +94,8 @@ namespace Hospital.Tests
         {
             var htmlParser = new HtmlToTextParser();
             var htmlTemplate = GetTemplate(pathToHtmlTemplate);
-            var actualTextTemplate = htmlParser.Parse(htmlTemplate);
-            var expectedTextTemplate = GetTemplate(pathToTxtTemplate);
+            var actualTextTemplate = htmlParser.Parse(htmlTemplate).Replace("\r\n", "").Replace("\n", "");
+            var expectedTextTemplate = GetTemplate(pathToTxtTemplate).Replace("\r\n", "").Replace("\n", "");
 
             Assert.Equal(expectedTextTemplate, actualTextTemplate);
         }

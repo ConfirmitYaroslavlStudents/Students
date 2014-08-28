@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using ListFormatter;
 using Shared;
+using Shared.Interfaces;
 
 namespace HospitalConnectedLayer
 {

@@ -1,16 +1,12 @@
 ﻿using System.Xml.Linq;
 using Shared;
+using Shared.Interfaces;
 
 namespace XmlPrinter
 {
     public class XmlPrinter : IPrinter
     {
-        private readonly string _pathToFile;
-
-        public XmlPrinter(string pathToFile)
-        {
-            _pathToFile = pathToFile;
-        }
+        public string PathToFile { get; set; }
 
         public void Print(Person person, Analysis analysis, Template template)
         {
@@ -31,7 +27,7 @@ namespace XmlPrinter
                 xdoc.Add(new XElement(template.Data[i], analysis.Data[i]));
             }
 
-            xdoc.Save(_pathToFile + ".xml");
+            xdoc.Save(PathToFile + ".xml");
         }
     }
 }

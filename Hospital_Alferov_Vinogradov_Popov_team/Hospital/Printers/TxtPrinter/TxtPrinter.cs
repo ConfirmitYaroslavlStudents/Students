@@ -1,21 +1,17 @@
 ﻿using System.IO;
 using System.Text;
 using Shared;
+using Shared.Interfaces;
 
 namespace TxtPrinter
 {
     public class TxtPrinter : IPrinter
     {
-        private readonly string _pathToFile;
-
-        public TxtPrinter(string pathToFile)
-        {
-            _pathToFile = pathToFile;
-        }
+        public string PathToFile { get; set; }
 
         public void Print(Person user, Analysis analysis, Template template)
         {
-            File.WriteAllText(_pathToFile + ".txt", CreateTxtReport(user, analysis, template));
+            File.WriteAllText(PathToFile + ".txt", CreateTxtReport(user, analysis, template));
         }
 
         private string CreateTxtReport(Person user, Analysis analysis, Template template)

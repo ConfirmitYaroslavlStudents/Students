@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Serialization;
 using HospitalConnectedLayer;
 using Microsoft.Win32;
-using PrintersLoader;
+using PrintersLoaderLibrary;
 using Shared;
 
 namespace Hospital
@@ -24,6 +24,7 @@ namespace Hospital
         private Person _currentPerson;
         private List<Template> _templates;
         private List<Analysis> _analyzes;
+        private Analysis _lastAddedAnalysis;
         private string _currentTemplateTitle;
 
         private readonly List<string> _fieldsNamesForAddingPerson = new List<string>
@@ -44,13 +45,11 @@ namespace Hospital
             "Policy number:" 
         };
 
-        private Analysis _lastAddedAnalysis;
-
         public MainWindow()
         {
             InitializeComponent();
 
-            string connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
+            string connectionString =  ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
             string dp = ConfigurationManager.AppSettings["provider"];
 
             try
@@ -102,6 +101,7 @@ namespace Hospital
                     CurrentPersonLabel.Content = string.Format("{0} {1} {2}", _currentPerson.FirstName, _currentPerson.LastName,
                         _currentPerson.PolicyNumber);
                     AnalysisMainMenuItem.IsEnabled = true;
+                    AnalysisExportMenuItem.IsEnabled = false;
                     _lastAddedAnalysis = null;
                 }
                 else
@@ -123,9 +123,27 @@ namespace Hospital
         private void LoadPersonMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LoadPersonTabItem.IsSelected = true;
-            var persons = _dataAccessLayer.GetPersons("", "", "");
+            List<Person> persons;
+
+            try
+            {
+                persons = _dataAccessLayer.GetPersons("", "", "");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             PersonsDataGrid.ItemsSource = persons;
         }
+
+        private void SearchPersonButton_Click(object sender, RoutedEventArgs e)
+        {
+            var persons = _dataAccessLayer.GetPersons(FirstNameTextBox.Text, LastNameTextBox.Text, PolicyNumberTextBox.Text);
+            PersonsDataGrid.ItemsSource = persons;
+        }
+
         private void LoadPersonOKButton_Click(object sender, RoutedEventArgs e)
         {
             //        var foundPersons = new List<Person>();
@@ -163,7 +181,7 @@ namespace Hospital
 
         #region AddAnalysis
 
-        private void AddAnalyzesMainMenuItem_Click(object sender, RoutedEventArgs e)
+        private void AddAnalysisMainMenuItem_Click(object sender, RoutedEventArgs e)
         {
             _templates = _dataAccessLayer.GetTemplates();
 
@@ -187,7 +205,7 @@ namespace Hospital
             _canvasPainter.PaintCanvasWithTextBoxes(_templates[selectedTemplateIndex].Data.Select(item => string.Format("{0}:", item)), AddAnalysisOKButton_Click);
         }
 
-        private void AddAnalyzesOKButton_Click(object sender, RoutedEventArgs e)
+        private void AddAnalysisOKButton_Click(object sender, RoutedEventArgs e)
         {
             var analysisInformation = GetInformationFromTextBoxes().Keys.ToList();
 
@@ -205,7 +223,7 @@ namespace Hospital
                 return;
             }
 
-            _lastAddedAnalysis = new Analysis(analysisInformation, _currentTemplateTitle, DateTime.Now);
+            _lastAddedAnalysis = new Analysis(analysisInformation.Select(item => item.Replace(":", string.Empty)), _currentTemplateTitle, DateTime.Now);
 
             try
             {
@@ -218,6 +236,8 @@ namespace Hospital
             }
 
             MessageBox.Show("Analysis added successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            AnalysisExportMenuItem.IsEnabled = true;
             ClearCanvas();
         }
 
@@ -246,7 +266,6 @@ namespace Hospital
 
         private void LoadAnalyzesOKButton_Click(object sender, RoutedEventArgs e)
         {
-
             _currentTemplateTitle = GetSelectedItem();
 
             if (_currentTemplateTitle == null)
@@ -331,7 +350,6 @@ namespace Hospital
         private void NewOutputFormatMenuItem_Click(object sender, RoutedEventArgs e)
         {
             ClearCanvas();
-
             var newOutputFormatOpenFileDialog = new OpenFileDialog
             {
                 Filter = "dll files (*.dll)|*.dll",
@@ -345,12 +363,13 @@ namespace Hospital
                 File.Copy(newOutputFormatOpenFileDialog.FileName, pathToCopy);
                 MessageBox.Show("Printer added successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
         }
 
         #endregion
 
-        private void LoadTemplatesOKButton_Click(object sender, RoutedEventArgs e)
+        #region ExportAnalysis
+
+        private void AnalysisExportMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var printersTitles = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, @"Printers\"), "*.dll", SearchOption.AllDirectories).Select(Path.GetFileNameWithoutExtension);
 
@@ -360,7 +379,20 @@ namespace Hospital
                 return;
             }
 
-            var printer = PrintersLoaderLib.LoadPrinter(Path.Combine(Environment.CurrentDirectory, @"Printers\", currentOutputName) + ".dll");
+            ClearCanvas();
+            _canvasPainter.PaintCanvasWithListBox(printersTitles, AnalysisExportOKButton_Click);
+        }
+
+        private void AnalysisExportOKButton_Click(object sender, RoutedEventArgs e)
+        {
+            var currentPrinterName = GetSelectedItem();
+
+            if (currentPrinterName == null)
+            {
+                return;
+            }
+
+            var printer = PrintersLoader.LoadPrinter(Path.Combine(Environment.CurrentDirectory, @"Printers\", currentPrinterName) + ".dll");
 
             if (printer == null)
             {
@@ -368,34 +400,85 @@ namespace Hospital
                 return;
             }
 
+            var exportSaveFileDialog = new SaveFileDialog
+            {
+                Filter = "All files (*.*)|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+                Title = "Please enter a name of exported file"
+            };
 
-            //printer.Print(_currentPerson, _lastAddedAnalysis, _lastAddedAnalysis.TemplateTitle.Replace(" ", string.Empty) +_lastAddedAnalysis.Date.Year + _lastAddedAnalysis.Date.Month + _lastAddedAnalysis.Date.Day + _lastAddedAnalysis.Date.Second);
+            if (exportSaveFileDialog.ShowDialog() == true)
+            {
+                printer.PathToFile = exportSaveFileDialog.FileName;
+                Template template;
+
+                try
+                {
+                    template = _dataAccessLayer.GetTemplate(_lastAddedAnalysis.TemplateTitle);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                printer.Print(_currentPerson, _lastAddedAnalysis, template);
+                MessageBox.Show("Analysis exported successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
-        private void AnalysisExport_Click(object sender, RoutedEventArgs e)
-        {
-            var templatesTitles = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, @"Printers\"), "*.dll", SearchOption.AllDirectories).Select(Path.GetFileNameWithoutExtension);
-            ClearCanvas();
-            _canvasPainter.PaintCanvasWithListBox(templatesTitles, LoadTemplatesOKButton_Click);
-            MessageBox.Show("Analysis exported successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        #endregion
 
         private void LoadNewTemplateMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //var xmlFormatter = new XmlFormatterSlim();
-            //ClearCanvas();
-            //var newOutputFormatOpenFileDialog = new OpenFileDialog { Filter = "xml files (*.xml)|*.xml", DefaultExt = ".xml" };
-            //newOutputFormatOpenFileDialog.Title = "Please select xml file";
+            var xmlFmt = new XmlSerializer(typeof(Template));
 
-            //if (newOutputFormatOpenFileDialog.ShowDialog() == true)
-            //{
-            //    var template2 =
-            //        new Template(xmlFormatter.Deserialize(File.ReadAllText(newOutputFormatOpenFileDialog.FileName)),
-            //            Path.GetFileNameWithoutExtension(newOutputFormatOpenFileDialog.FileName));
-            //    _dataAccessLayer.AddTemplate(template2);
-            //    MessageBox.Show("Tempate added successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            //}
+            using (Stream fStream = new FileStream("template.xml", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                xmlFmt.Serialize(fStream, new Template(new List<string> { "hemoglobin", "erythrocytes" }, "Blood Test"));
+            }
+
+
+            ClearCanvas();
+
+            var newOutputFormatOpenFileDialog = new OpenFileDialog
+            {
+                Filter = "xml files (*.xml)|*.xml",
+                DefaultExt = ".xml",
+                Title = "Please select xml file"
+            };
+
+            if (newOutputFormatOpenFileDialog.ShowDialog() == true)
+            {
+                Template template;
+
+                using (Stream fStream = File.OpenRead("circle.xml"))
+                {
+                    template = xmlFmt.Deserialize(fStream) as Template;
+                    if (template == null)
+                    {
+                        MessageBox.Show("Incorrect template format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+                try
+                {
+                    if (!_dataAccessLayer.AddTemplate(template))
+                    {
+                        MessageBox.Show("Template with this name already exists!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                MessageBox.Show("Template added successfully!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
+
+        #region SharedMethods
 
         private string GetSelectedItem()
         {
@@ -415,11 +498,13 @@ namespace Hospital
             }
             return null;
         }
+
         private void ClearCanvas()
         {
-            GeneratedTabItem.IsSelected = true;
+            MainTabItem.IsSelected = true;
             MainCanvas.Children.Clear();
         }
+
         private Dictionary<string, string> GetInformationFromTextBoxes()
         {
             var result = new Dictionary<string, string>();
@@ -438,6 +523,7 @@ namespace Hospital
 
             return result;
         }
+
         private int GetSelectedTemplateIndex()
         {
             int selectedIndex = -1;
@@ -454,15 +540,11 @@ namespace Hospital
             return selectedIndex;
         }
 
+        #endregion
+
         private void MainWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _dataAccessLayer.CloseConnection();
-        }
-
-        private void SearchPersonButton_Click(object sender, RoutedEventArgs e)
-        {
-            var persons = _dataAccessLayer.GetPersons(FirstNameTextBox.Text, LastNameTextBox.Text, PolicyNumberTextBox.Text);
-            PersonsDataGrid.ItemsSource = persons;
         }
     }
 }

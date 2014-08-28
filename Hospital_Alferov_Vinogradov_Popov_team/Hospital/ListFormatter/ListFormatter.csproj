@@ -41,8 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ListBinaryFormatter.cs" />
-    <Compile Include="IListFormatter.cs" />
+    <Compile Include="IListBinaryFormatter.cs" />
+    <Compile Include="ListXmlFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{90cd0998-89b8-4f3c-b3e4-4a378aede315}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

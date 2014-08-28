@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using Shared;
-using Shared.Interfaces;
 
 namespace TxtPrinter
 {

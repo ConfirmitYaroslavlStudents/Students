@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital", "Hospital\Hospit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{90CD0998-89B8-4F3C-B3E4-4A378AEDE315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Tests", "Hospital.Tests\Hospital.Tests.csproj", "{1E9051A2-4546-4281-A73C-AD98E8FE9351}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Printers", "Printers", "{5B6301BC-0965-4648-97F9-0217A4C0376B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxtPrinter", "Printers\TxtPrinter\TxtPrinter.csproj", "{2D4E341E-8DA7-43C3-816E-8F8D8F4D867D}"
@@ -18,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalDAL", "HospitalDAL\HospitalDAL.csproj", "{048A30B7-BBCC-49A3-94C8-C9585C29CA1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListFormatter", "ListFormatter\ListFormatter.csproj", "{91E7EB0C-253F-44D9-B205-282419EDE777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Tests", "Hospital.Tests\Hospital.Tests.csproj", "{E70CC620-809A-4AD1-91F8-E0402AD255A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{90CD0998-89B8-4F3C-B3E4-4A378AEDE315}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90CD0998-89B8-4F3C-B3E4-4A378AEDE315}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90CD0998-89B8-4F3C-B3E4-4A378AEDE315}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E9051A2-4546-4281-A73C-AD98E8FE9351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E9051A2-4546-4281-A73C-AD98E8FE9351}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E9051A2-4546-4281-A73C-AD98E8FE9351}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E9051A2-4546-4281-A73C-AD98E8FE9351}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D4E341E-8DA7-43C3-816E-8F8D8F4D867D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D4E341E-8DA7-43C3-816E-8F8D8F4D867D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4E341E-8DA7-43C3-816E-8F8D8F4D867D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{91E7EB0C-253F-44D9-B205-282419EDE777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91E7EB0C-253F-44D9-B205-282419EDE777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91E7EB0C-253F-44D9-B205-282419EDE777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

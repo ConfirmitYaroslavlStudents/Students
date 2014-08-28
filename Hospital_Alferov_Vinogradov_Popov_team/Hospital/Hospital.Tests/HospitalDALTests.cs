@@ -8,7 +8,7 @@ using Xunit.Extensions;
 
 namespace Hospital.Tests
 {
-    public class DataStorageTests
+    public class HospitalDALTests
     {
         private readonly string _connectionString =
             ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1E9051A2-4546-4281-A73C-AD98E8FE9351}</ProjectGuid>
+    <ProjectGuid>{E70CC620-809A-4AD1-91F8-E0402AD255A2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hospital.Tests</RootNamespace>
@@ -38,10 +38,10 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="xunit">
-      <HintPath>packages\xunit\xunit.dll</HintPath>
+      <HintPath>..\..\..\..\Hospital\Hospital\Hospital.Tests\packages\xunit\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions">
-      <HintPath>packages\xunit\xunit.extensions.dll</HintPath>
+      <HintPath>..\..\..\..\Hospital\Hospital\Hospital.Tests\packages\xunit\xunit.extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -53,42 +53,21 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="DataStorageTests.cs" />
-    <Compile Include="PrintersTests.cs" />
+    <Compile Include="HospitalDALTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Hospital.sdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataStorage\DataStorage.csproj">
-      <Project>{723e5a27-2604-48b9-a81a-bf2b04f25729}</Project>
-      <Name>DataStorage</Name>
     <ProjectReference Include="..\HospitalDAL\HospitalDAL.csproj">
       <Project>{048a30b7-bbcc-49a3-94c8-c9585c29ca1e}</Project>
       <Name>HospitalDAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DictionaryFormatter\DictionaryFormatter.csproj">
-      <Project>{52c91887-a801-4fc9-b9b7-ef115344ce10}</Project>
-      <Name>DictionaryFormatter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PrintersLoader\PrintersLoader.csproj">
-      <Project>{9d63f230-45c4-4610-aa47-efc21c450c70}</Project>
-      <Name>PrintersLoader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Shared\Shared.csproj">
       <Project>{90cd0998-89b8-4f3c-b3e4-4a378aede315}</Project>
       <Name>Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shared\Shared.csproj">
-      <Project>{90cd0998-89b8-4f3c-b3e4-4a378aede315}</Project>
-      <Name>Shared</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -95,14 +95,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataStorage\DataStorage.csproj">
-      <Project>{723e5a27-2604-48b9-a81a-bf2b04f25729}</Project>
-      <Name>DataStorage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DictionaryFormatter\DictionaryFormatter.csproj">
-      <Project>{52c91887-a801-4fc9-b9b7-ef115344ce10}</Project>
-      <Name>DictionaryFormatter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PrintersLoader\PrintersLoader.csproj">
       <Project>{9d63f230-45c4-4610-aa47-efc21c450c70}</Project>
       <Name>PrintersLoader</Name>
@@ -122,7 +114,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy ..\..\..\DataStorage\Hospital.sdf Hospital.sdf
+    <PreBuildEvent>copy ..\..\..\HospitalDAL\Hospital.sdf Hospital.sdf
 rmdir /s /q Printers
 mkdir Printers</PreBuildEvent>
   </PropertyGroup>

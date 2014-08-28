@@ -1,12 +1,18 @@
-﻿using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Shared;
 
 namespace XmlPrinter
 {
     public class XmlPrinter : IPrinter
     {
-        public void Print(Person person, Analysis analysis, string pathToFile)
+        private readonly string _pathToFile;
+
+        public XmlPrinter(string pathToFile)
+        {
+            _pathToFile = pathToFile;
+        }
+
+        public void Print(Person person, Analysis analysis, Template template)
         {
             var xdoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement("person",
@@ -17,10 +23,15 @@ namespace XmlPrinter
                     new XElement("Age", person.Age),
                     new XElement("PolicyNumber", person.FirstName),
                     new XElement("analysis",
-                    new XElement("Title", analysis.TemplateTitle),
-                    new XElement("Date", analysis.Date),
-                    from item in analysis.Data select new XElement(item.Key, item.Value))));
-            xdoc.Save(pathToFile);
+                        new XElement("Title", analysis.TemplateTitle),
+                        new XElement("Date", analysis.Date))));
+
+            for (int i = 0; i < analysis.Data.Count; ++i)
+            {
+                xdoc.Add(new XElement(template.Data[i], analysis.Data[i]));
+            }
+
+            xdoc.Save(_pathToFile + ".xml");
         }
     }
 }

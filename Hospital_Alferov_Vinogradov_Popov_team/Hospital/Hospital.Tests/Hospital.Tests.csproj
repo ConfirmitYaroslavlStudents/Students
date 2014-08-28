@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="xunit">
       <HintPath>packages\xunit\xunit.dll</HintPath>
     </Reference>
@@ -68,6 +69,9 @@
     <ProjectReference Include="..\DataStorage\DataStorage.csproj">
       <Project>{723e5a27-2604-48b9-a81a-bf2b04f25729}</Project>
       <Name>DataStorage</Name>
+    <ProjectReference Include="..\HospitalDAL\HospitalDAL.csproj">
+      <Project>{048a30b7-bbcc-49a3-94c8-c9585c29ca1e}</Project>
+      <Name>HospitalDAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DictionaryFormatter\DictionaryFormatter.csproj">
       <Project>{52c91887-a801-4fc9-b9b7-ef115344ce10}</Project>
@@ -106,6 +110,9 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy ..\..\..\HospitalDAL\Hospital.sdf Hospital.sdf</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

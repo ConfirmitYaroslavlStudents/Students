@@ -2,9 +2,9 @@
 
 namespace Shared
 {
-    public interface IDataStorage
+    public interface IHospitalDAL
     {
-        List<Person> GetPersons(string fieldName, string fieldValue);
+        List<Person> GetPersons(string firstName, string lastName, string policyNumber);
         List<Template> GetTemplates();
         Template GetTemplate(string title);
         bool AddPerson(Person person);

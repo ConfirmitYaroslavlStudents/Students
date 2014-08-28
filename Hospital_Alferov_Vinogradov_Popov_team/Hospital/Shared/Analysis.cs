@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shared
 {
+    [Serializable]
     public class Analysis
     {
-        public string TemplateTitle { get; private set; }
-        public Dictionary<string, string> Data { get; private set; }
-        public DateTime Date { get; private set; }
-
-        public Analysis(Template filledTemplate, DateTime date)
+        public Analysis(IList<string> analysisData, string templateTitle, DateTime date)
         {
+            //if (template.Data.Count != analysisData.Count)
+            //{
+            //    throw new ArgumentException("analysisData");
+            //}
+
             Date = date;
-            TemplateTitle = filledTemplate.Title;
-            Data = filledTemplate.Data;
+            TemplateTitle = templateTitle;
+            Data = analysisData;
         }
 
-        public override string ToString()
-        {
-            var result = new StringBuilder();
-            result.AppendLine(Date.ToString());
-            foreach (var item in Data)
-            {
-                result.AppendLine(string.Format("{0} : {1}", item.Key, item.Value));
-            }
-            result.AppendLine("\n");
-            return result.ToString();
-        }
+        public string TemplateTitle { get; private set; }
+        public IList<string> Data { get; private set; }
+        public DateTime Date { get; private set; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IPrinter
     {
-	    void Print(Person person, Analysis analysis, string pathToFile);
+        void Print(Person person, Analysis analysis, Template template);
     }
 }

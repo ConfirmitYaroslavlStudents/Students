@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DictionaryFormatter")]
+[assembly: AssemblyTitle("ListFormatter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DictionaryFormatter")]
+[assembly: AssemblyProduct("ListFormatter")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("68259314-9770-4790-b551-8cf8975d6029")]
+[assembly: Guid("02882f9c-e7be-4ed5-a22c-9ec65e3772aa")]
 
 // Version information for an assembly consists of the following four values:
 //

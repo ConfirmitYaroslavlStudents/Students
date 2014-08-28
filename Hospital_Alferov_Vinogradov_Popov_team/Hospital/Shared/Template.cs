@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Shared
 {
+    [Serializable]
     public class Template
     {
-        public Dictionary<string, string> Data { get; private set; }
-        public string Title { get; private set; }
-
-        public Template(Dictionary<string, string> data, string title)
+        public Template(IList<string> data, string title)
         {
             Title = title;
             Data = data;
         }
+
+        public IList<string> Data { get; private set; }
+        public string Title { get; private set; }
     }
 }

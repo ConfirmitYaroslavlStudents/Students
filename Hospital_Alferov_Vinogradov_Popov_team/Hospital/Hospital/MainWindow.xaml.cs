@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using DataStorageLibrary;
-using DictionaryFormatter;
 using Microsoft.Win32;
 using PrintersLoader;
 using Shared;

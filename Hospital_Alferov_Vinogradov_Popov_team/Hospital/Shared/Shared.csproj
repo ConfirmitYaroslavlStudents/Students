@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis.cs" />
-    <Compile Include="Interfaces\IDataStorage.cs" />
+    <Compile Include="Interfaces\IHospitalDAL.cs" />
     <Compile Include="Interfaces\IPrinter.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Person.cs" />

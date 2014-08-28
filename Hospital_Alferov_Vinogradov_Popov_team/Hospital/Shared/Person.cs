@@ -6,6 +6,17 @@ namespace Shared
     {
         private int _age;
 
+        public Person(string firstName, string lastName, DateTime dateOfBirth,
+            string address, string policyNumber)
+        {
+            PolicyNumber = policyNumber;
+            Age = DateTime.Now.Year - dateOfBirth.Year;
+            Address = address;
+            DateOfBirth = dateOfBirth;
+            LastName = lastName;
+            FirstName = firstName;
+        }
+
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public DateTime DateOfBirth { get; private set; }
@@ -13,10 +24,7 @@ namespace Shared
 
         public int Age
         {
-            get
-            {
-                return _age;
-            }
+            get { return _age; }
 
             private set
             {
@@ -30,16 +38,5 @@ namespace Shared
         }
 
         public string PolicyNumber { get; private set; }
-        
-        public Person(string firstName, string lastName, DateTime dateOfBirth,
-            string address, string policyNumber)
-        {
-            PolicyNumber = policyNumber;
-            Age = DateTime.Now.Year - dateOfBirth.Year;
-            Address = address;
-            DateOfBirth = dateOfBirth;
-            LastName = lastName;
-            FirstName = firstName;
-        }
     }
 }

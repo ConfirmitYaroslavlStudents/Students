@@ -12,6 +12,8 @@ namespace Shared
             Data = data;
         }
 
+        private Template(){}
+
         public IList<string> Data { get; private set; }
         public string Title { get; private set; }
     }

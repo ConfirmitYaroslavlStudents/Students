@@ -5,7 +5,6 @@ using System.Data.SqlServerCe;
 using DictionaryFormatter;
 using Shared;
 using System.Configuration;
-using Shared.Interfaces;
 
 namespace DataStorageLibrary
 {

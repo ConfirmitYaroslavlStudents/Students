@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using Shared.Interfaces;
+using Shared;
 
-namespace PrintersLoaderLibrary
+namespace PrintersLoader
 {
-    public static class PrintersLoader
+    public static class PrintersLoaderLib
     {
         public static IPrinter LoadPrinter(string pathToAssembly)
         {

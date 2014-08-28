@@ -24,7 +24,7 @@ namespace XmlPrinter
 
             for (int i = 0; i < analysis.Data.Count; ++i)
             {
-                xdoc.Add(new XElement(template.Data[i], analysis.Data[i]));
+                xdoc.Element("person").Element("analysis").Add(new XElement(template.Data[i], analysis.Data[i]));
             }
 
             xdoc.Save(PathToFile + ".xml");

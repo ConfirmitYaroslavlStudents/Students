@@ -12,7 +12,6 @@
             <MenuItem x:Name="AnalysisMainMenuItem" Background="#FFEEEEEE"  Height="63" Width="141" Header="analysis" FontSize="40" FontFamily="Tempus Sans ITC" Foreground="YellowGreen" IsEnabled="False">
                 <MenuItem x:Name="AddAnalysisMenuItem" Header="add" FontSize="40" FontFamily="Tempus Sans ITC"  Click="AddAnalysisMainMenuItem_Click"/>
                 <MenuItem x:Name="LoadAnalyzesMenuItem" Header="load" FontSize="40" FontFamily="Tempus Sans ITC" Click="LoadAnalyzesMainMenuItem_Click"/>
-                <MenuItem IsEnabled="False" x:Name="AnalysisExportMenuItem" Header="export" FontSize="40" FontFamily="Tempus Sans ITC" Click="AnalysisExportMenuItem_Click"/>
             </MenuItem>
             <MenuItem x:Name="OtherMainMenuItem" Background="#FFEEEEEE" Height="63" Width="110" Header="other" FontSize="40" FontFamily="Tempus Sans ITC" Foreground="Gold">
                 <MenuItem x:Name="NewTemplateMenuItem" Header="new type of analysis">
@@ -31,11 +30,12 @@
                     <DataGrid Name="PersonsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" 
                           CanUserResizeColumns="True" CanUserAddRows="False" CanUserSortColumns="True" 
                           ItemsSource="{Binding}" VerticalScrollBarVisibility="Auto" FontSize="20" Height="279" Width="861"
-                              x:FieldModifier="private">
+                              x:FieldModifier="private" MouseDoubleClick="PersonsDataGrid_MouseDoubleClick">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
                             <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
                             <DataGridTextColumn Header="Date Of Birth" Binding="{Binding DateOfBirth}"/>
+                            <DataGridTextColumn Header="Age" Binding="{Binding Age}"/>
                             <DataGridTextColumn Header="Policy Number" Binding="{Binding PolicyNumber}"/>
                             <DataGridTextColumn Header="Address" Binding="{Binding Address}"/>
                         </DataGrid.Columns>
@@ -47,15 +47,17 @@
                              x:FieldModifier="private" />
                     <TextBox Name ="PolicyNumberTextBox" FontSize="30" Canvas.Left="504" Canvas.Top="339" Width="215"
                              x:FieldModifier="private" />
-                    <Button Name ="LoadPersonButton" Content="Load" FontSize="30" Height="50" Width="122" Canvas.Left="729" Canvas.Top="284" Click="LoadPersonOKButton_Click"/>
+                    <Button Name ="LoadPersonButton" Content="Load" FontSize="30" Height="50"
+                            Width="122" Canvas.Left="729" Canvas.Top="284" Click="LoadPersonButton_Click"/>
                     <Button x:Name ="SearchPersonButton" Content="Search" FontSize="30" Height="50" Width="122" Click="SearchPersonButton_Click" Canvas.Left="729" Canvas.Top="339"/>
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Hidden" x:Name="AnalysisTabItem" Header="Analysis">
                 <Canvas x:Name="AnalysisCanvas">
                     <TextBox x:Name ="AnalysisTextBox" Height="375" Canvas.Left="421" TextWrapping="Wrap" Canvas.Top="10" Width="430" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontSize="30" IsReadOnly="True"/>
-                    <ListBox Name="TemplatesListBox" Height="296" Canvas.Left="10" Canvas.Top="10" Width="406"/>
-                    <Button Name ="ExportButton" Content="Export" FontSize="30" Canvas.Left="10" Canvas.Top="311" Width="406" Height="74"/>
+                    <ListBox Name="AnalyzesDatesListBox" FontSize ="30" Height="296" Canvas.Left="10" Canvas.Top="10" Width="406" MouseDoubleClick="AnalyzesDatesListBox_MouseDoubleClick"
+                             x:FieldModifier="private" />
+                    <Button Name ="ExportButton" Content="Export" FontSize="30" Canvas.Left="10" Canvas.Top="311" Width="406" Height="74" Click="AnalysisExportMenuItem_Click"/>
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Hidden" x:Name="WriteNewTemplateTabItem" Header="WriteNewTemplateTabItem">

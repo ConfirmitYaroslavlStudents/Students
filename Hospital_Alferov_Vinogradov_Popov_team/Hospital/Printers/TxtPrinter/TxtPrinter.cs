@@ -23,7 +23,7 @@ namespace TxtPrinter
             result.AppendFormat("Date of birth: {0}\n", user.DateOfBirth);
             result.AppendFormat("The number of full years: {0}\n", user.Age);
             result.AppendFormat("Live at the address: {0}\n\n", user.Address);
-            result.AppendFormat("Results of the analysis from {0}", analysis.Date);
+            result.AppendFormat("Results of the analysis from {0}\n\n", analysis.Date);
 
             for (int i = 0; i < analysis.Data.Count; ++i)
             {

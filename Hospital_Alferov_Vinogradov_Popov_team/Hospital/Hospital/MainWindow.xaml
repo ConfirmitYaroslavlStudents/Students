@@ -1,17 +1,17 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="MainWin" x:Class="Hospital.MainWindow"
-        Title="HospitalApp" Height="604" Width="901" Background="White" ResizeMode="CanMinimize">
+    x:Name="MainWin" x:Class="Hospital.MainWindow"
+        Title="HospitalApp" Height="604" Width="901" Background="White" ResizeMode="CanMinimize" Closing="MainWin_Closing">
     <Canvas Background="#FFCDCDCD" Margin="0,0,0,0" HorizontalAlignment="Left" Width="891">
         <Menu x:Name="MainMenu" Height="63" Canvas.Left="10" Canvas.Top="10" Width="871" RenderTransformOrigin="0.499,0.509" Background="#FFCDCDCD">
             <MenuItem x:Name="PersonMainMenuItem" Background="#FFEEEEEE" Height="63" Width="126" Header="person" FontSize="40" Foreground="OrangeRed" FontFamily="Tempus Sans ITC">
-                <MenuItem x:Name="PersonAddMenuItem" Header="add" FontSize="40" FontFamily="Tempus Sans ITC"  Click="AddPersonMenuItem_Click"/>
-                <MenuItem x:Name="PersonLoadMenuItem" Header="load" FontSize="40" FontFamily="Tempus Sans ITC" Click="LoadPersonMenuItem_Click"/>
+                <MenuItem x:Name="AddPersonMenuItem" Header="add" FontSize="40" FontFamily="Tempus Sans ITC"  Click="AddPersonMenuItem_Click"/>
+                <MenuItem x:Name="LoadPersonMenuItem" Header="load" FontSize="40" FontFamily="Tempus Sans ITC" Click="LoadPersonMenuItem_Click"/>
             </MenuItem>
             <MenuItem x:Name="AnalysisMainMenuItem" Background="#FFEEEEEE"  Height="63" Width="141" Header="analysis" FontSize="40" FontFamily="Tempus Sans ITC" Foreground="YellowGreen" IsEnabled="False">
-                <MenuItem x:Name="AnalysisAddMenuItem" Header="add" FontSize="40" FontFamily="Tempus Sans ITC"  Click="AddAnalysisMainMenuItem_Click"/>
-                <MenuItem x:Name="AnalysisLoadMenuItem" Header="load" FontSize="40" FontFamily="Tempus Sans ITC" Click="LoadAnalysisMainMenuItem_Click"/>
+                <MenuItem x:Name="AddAnalysisMenuItem" Header="add" FontSize="40" FontFamily="Tempus Sans ITC"  Click="AddAnalyzesMainMenuItem_Click"/>
+                <MenuItem x:Name="LoadAnalyzesMenuItem" Header="load" FontSize="40" FontFamily="Tempus Sans ITC" Click="LoadAnalyzesMainMenuItem_Click"/>
             </MenuItem>
             <MenuItem x:Name="OtherMainMenuItem" Background="#FFEEEEEE" Height="63" Width="110" Header="other" FontSize="40" FontFamily="Tempus Sans ITC" Foreground="Gold">
                 <MenuItem x:Name="NewTemplateMenuItem" Header="new type of analysis">
@@ -25,11 +25,12 @@
             <TabItem Visibility='Visible' x:Name="GeneratedTabItem" Header="Main">
                 <Canvas Margin="0,0,0,0" x:Name="MainCanvas"/>
             </TabItem>
-            <TabItem Visibility="Visible" Header="LoadPerson" Name="LoadPersonTabItem">
+            <TabItem Visibility="Visible" Header="LoadPerson" Name="LoadPersonTabItem" x:FieldModifier="private">
                 <Canvas Margin="0,0,0,0">
                     <DataGrid Name="PersonsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" 
                           CanUserResizeColumns="True" CanUserAddRows="False" CanUserSortColumns="True" 
-                          ItemsSource="{Binding}" VerticalScrollBarVisibility="Auto" FontSize="20" Height="279" Width="861">
+                          ItemsSource="{Binding}" VerticalScrollBarVisibility="Auto" FontSize="20" Height="279" Width="861"
+                              x:FieldModifier="private">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
                             <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
@@ -39,10 +40,14 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <Label Content="First Name            Last Name             Policy Number" FontSize="30" Canvas.Left="10" Canvas.Top="284"/>
-                    <TextBox Name ="FirstNameTextBox" FontSize="30" Canvas.Left="10" Canvas.Top="339" Width="242"/>
-                    <TextBox Name ="LastNameTextBox" FontSize="30" Canvas.Left="257" Canvas.Top="339" Width="242"/>
-                    <TextBox Name ="PolicyNumber" FontSize="30" Canvas.Left="504" Canvas.Top="339" Width="215"/>
-                    <Button Name ="LoadPersonOKButton" Content="Load" FontSize="30" Height="90" Width="122" Canvas.Left="724" Canvas.Top="295" Click="LoadPersonOKButton_Click"/>
+                    <TextBox Name ="FirstNameTextBox" FontSize="30" Canvas.Left="10" Canvas.Top="339" Width="242"
+                             x:FieldModifier="private" />
+                    <TextBox Name ="LastNameTextBox" FontSize="30" Canvas.Left="257" Canvas.Top="339" Width="242"
+                             x:FieldModifier="private" />
+                    <TextBox Name ="PolicyNumberTextBox" FontSize="30" Canvas.Left="504" Canvas.Top="339" Width="215"
+                             x:FieldModifier="private" />
+                    <Button Name ="LoadPersonButton" Content="Load" FontSize="30" Height="50" Width="122" Canvas.Left="729" Canvas.Top="284" Click="LoadPersonOKButton_Click"/>
+                    <Button x:Name ="SearchPersonButton" Content="Search" FontSize="30" Height="50" Width="122" Click="SearchPersonButton_Click" Canvas.Left="729" Canvas.Top="339"/>
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Visible" x:Name="AnalysisTabItem" Header="Analysis">
@@ -54,9 +59,12 @@
             </TabItem>
             <TabItem Visibility="Visible" x:Name="WriteNewTemplateTabItem" Header="WriteNewTemplate">
                 <Canvas x:Name="WriteNewTemplateCanvas">
-                    <TextBox Name="TemplateNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap" Tag="Name of template" Canvas.Top="10" Width="841" FontSize="30"/>
-                    <ListBox Name ="FieldsNamesListBox" Height="189" Canvas.Left="10" Canvas.Top="61" Width="841" FontSize="30"/>
-                    <TextBox Name="FieldNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap" Tag="Name of field" Canvas.Top="255" Width="721" FontSize="30"/>
+                    <TextBox Name="TemplateNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap" Tag="Name of template" Canvas.Top="10" Width="841" FontSize="30"
+                             x:FieldModifier="private" />
+                    <ListBox Name ="FieldsNamesListBox" Height="189" Canvas.Left="10" Canvas.Top="61" Width="841" FontSize="30"
+                             x:FieldModifier="private" />
+                    <TextBox Name="FieldNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap" Tag="Name of field" Canvas.Top="255" Width="721" FontSize="30"
+                             x:FieldModifier="private" />
                     <Button Name="AddFieldButton" Content="Add" FontSize="30" Canvas.Left="736" Canvas.Top="255" Height="48" Width="115" Click="AddFieldButton_Click"/>
                     <Button Name="SaveTemplateButton" Content="Save template" FontSize="30" Canvas.Left="10" Canvas.Top="339" Height="46" Width="851" Click="SaveTemplateButton_Click"/>
                 </Canvas>

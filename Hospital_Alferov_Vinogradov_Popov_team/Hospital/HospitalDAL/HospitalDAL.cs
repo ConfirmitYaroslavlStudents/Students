@@ -37,7 +37,7 @@ namespace HospitalConnectedLayer
         {
             _command.CommandText =
                 string.Format(
-                    "SELECT * FROM Persons WHERE FirstName LIKE @FirstName OR LastName LIKE @LastName OR PolicyNumber LIKE @PolicyNumber");
+                    "SELECT * FROM Persons WHERE FirstName LIKE @FirstName AND LastName LIKE @LastName AND PolicyNumber LIKE @PolicyNumber");
 
             _command.Parameters.Add(GetParam("@FirstName", string.Format("%{0}%", firstName)));
             _command.Parameters.Add(GetParam("@LastName", string.Format("%{0}%", lastName)));

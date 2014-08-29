@@ -4,8 +4,6 @@ namespace Shared
 {
     public class Person
     {
-        private int _age;
-
         public Person(string firstName, string lastName, DateTime dateOfBirth,
             string address, string policyNumber)
         {
@@ -20,23 +18,8 @@ namespace Shared
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public DateTime DateOfBirth { get; private set; }
+        public int Age { get; private set; }
         public string Address { get; private set; }
-
-        public int Age
-        {
-            get { return _age; }
-
-            private set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException("age");
-                }
-
-                _age = value;
-            }
-        }
-
         public string PolicyNumber { get; private set; }
     }
 }

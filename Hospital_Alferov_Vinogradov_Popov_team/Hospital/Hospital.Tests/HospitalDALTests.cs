@@ -13,7 +13,7 @@ namespace Hospital.Tests
         private readonly string _connectionString =
             ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
 
-        private readonly string _dp = ConfigurationManager.AppSettings["provider"];
+        private readonly string _dataProvider = ConfigurationManager.AppSettings["provider"];
 
         public static IEnumerable<object[]> TestPersonsData
         {
@@ -48,7 +48,8 @@ namespace Hospital.Tests
                     {"123456789", new Analysis(new List<string> {"20", "50"}, "Blood Test", new DateTime(2014, 08, 3))};
                 yield return
                     new object[]
-                    {"123488889", new Analysis(new List<string> {"20", "40"}, "Alcho Test", new DateTime(2014, 08, 10))};
+                    {"123488889", new Analysis(new List<string> {"20", "40"}, "Alcho Test", new DateTime(2014, 08, 10))}
+                    ;
             }
         }
 
@@ -57,7 +58,7 @@ namespace Hospital.Tests
         public void AddandGetPerson_ThreeDifferentPersons_ShouldPass(Person person)
         {
             var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dp, _connectionString);
+            dataStorage.OpenConnection(_dataProvider, _connectionString);
             dataStorage.AddPerson(person);
             int personsCount = dataStorage.GetPersons(person.FirstName, person.LastName, person.PolicyNumber).Count;
             dataStorage.CloseConnection();
@@ -69,7 +70,7 @@ namespace Hospital.Tests
         public void AddandGetTemplate_TwoTemplates_ShouldPass(Template template)
         {
             var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dp, _connectionString);
+            dataStorage.OpenConnection(_dataProvider, _connectionString);
             dataStorage.AddTemplate(template);
             Template expected = dataStorage.GetTemplate(template.Title);
             dataStorage.CloseConnection();
@@ -80,7 +81,7 @@ namespace Hospital.Tests
         public void GetTemplates_DBWithValues_ShouldPass()
         {
             var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dp, _connectionString);
+            dataStorage.OpenConnection(_dataProvider, _connectionString);
             dataStorage.AddTemplate(new Template(new List<string> {"alcohol", "drugs"}, "Alcho2 Test"));
             int templatesCount = dataStorage.GetTemplates().Count;
             dataStorage.CloseConnection();
@@ -92,7 +93,7 @@ namespace Hospital.Tests
         public void AddandGetAnalyzes_TwoAnalyzes_ShouldPass(string policyNumber, Analysis analysis)
         {
             var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dp, _connectionString);
+            dataStorage.OpenConnection(_dataProvider, _connectionString);
             dataStorage.AddAnalysis(policyNumber, analysis);
             int analyzesCount = dataStorage.GetAnalyzes(policyNumber).Count;
             dataStorage.CloseConnection();

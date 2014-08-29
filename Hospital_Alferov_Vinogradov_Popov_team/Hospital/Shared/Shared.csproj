@@ -35,8 +35,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis.cs" />
-    <Compile Include="Interfaces\IHospitalDAL.cs" />
+    <Compile Include="AnalysisFactory.cs" />
+    <Compile Include="Interfaces\IAnalysisDataAccessLayer.cs" />
+    <Compile Include="Interfaces\IHospitalDataAccessLayer.cs" />
+    <Compile Include="Interfaces\IPersonDataAccessLayer.cs" />
     <Compile Include="Interfaces\IPrinter.cs" />
+    <Compile Include="Interfaces\ITemplateDataAccessLayer.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -55,9 +55,8 @@
             <TabItem Visibility="Hidden" x:Name="AnalysisTabItem" Header="Analysis">
                 <Canvas x:Name="AnalysisCanvas">
                     <TextBox x:Name ="AnalysisTextBox" Height="375" Canvas.Left="421" TextWrapping="Wrap" Canvas.Top="10" Width="430" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontSize="30" IsReadOnly="True"/>
-                    <ListBox Name="AnalyzesDatesListBox" FontSize ="30" Height="296" Canvas.Left="10" Canvas.Top="10" Width="406" MouseDoubleClick="AnalyzesDatesListBox_MouseDoubleClick"
-                             x:FieldModifier="private" />
-                    <Button Name ="ExportButton" Content="Export" FontSize="30" Canvas.Left="10" Canvas.Top="311" Width="406" Height="74" Click="AnalysisExportMenuItem_Click"/>
+                    <ListBox Name="AnalyzesDatesListBox" FontSize ="30" Height="296" Canvas.Left="10" Canvas.Top="10" Width="406" x:FieldModifier="private" SelectionChanged="AnalyzesDatesListBox_SelectionChanged"/>
+                    <Button Name ="ExportButton" Content="Export" FontSize="30" Canvas.Left="10" Canvas.Top="311" Width="406" Height="74" Click="AnalysisExportButton_Click"/>
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Hidden" x:Name="WriteNewTemplateTabItem" Header="WriteNewTemplateTabItem">

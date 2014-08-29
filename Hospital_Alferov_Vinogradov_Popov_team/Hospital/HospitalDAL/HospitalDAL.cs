@@ -7,19 +7,19 @@ using Shared.Interfaces;
 
 namespace HospitalConnectedLayer
 {
-    public class HospitalDAL : IHospitalDAL
+    public class HospitalDAL : IHospitalDataAccessLayer
     {
         private DbCommand _command;
-        private DbProviderFactory _df;
+        private DbProviderFactory _dbProviderFactory;
         private DbConnection _sqlConnection;
 
         #region Open / Close methods
 
         public void OpenConnection(string dataProvider, string connectionString)
         {
-            _df = DbProviderFactories.GetFactory(dataProvider);
-            _sqlConnection = _df.CreateConnection();
-            _command = _df.CreateCommand();
+            _dbProviderFactory = DbProviderFactories.GetFactory(dataProvider);
+            _sqlConnection = _dbProviderFactory.CreateConnection();
+            _command = _dbProviderFactory.CreateCommand();
             _command.Connection = _sqlConnection;
             _sqlConnection.ConnectionString = connectionString;
             _sqlConnection.Open();
@@ -51,11 +51,11 @@ namespace HospitalConnectedLayer
                 while (dataReader.Read())
                 {
                     persons.Add(new Person(
-                        (string)dataReader["FirstName"],
-                        (string)dataReader["LastName"],
-                        (DateTime)dataReader["DateOfBirth"],
-                        (string)dataReader["Address"],
-                        (string)dataReader["PolicyNumber"]));
+                        (string) dataReader["FirstName"],
+                        (string) dataReader["LastName"],
+                        (DateTime) dataReader["DateOfBirth"],
+                        (string) dataReader["Address"],
+                        (string) dataReader["PolicyNumber"]));
                 }
             }
 
@@ -103,11 +103,11 @@ namespace HospitalConnectedLayer
             Template template = null;
             var binFormatter = new ListBinaryFormatter<string>();
 
-            using (var dataReader = _command.ExecuteReader())
+            using (DbDataReader dataReader = _command.ExecuteReader())
             {
                 while (dataReader.Read())
                 {
-                    template = new Template(binFormatter.Deserialize((byte[])dataReader["Data"]), title);
+                    template = new Template(binFormatter.Deserialize((byte[]) dataReader["Data"]), title);
                 }
             }
 
@@ -146,12 +146,12 @@ namespace HospitalConnectedLayer
             var templates = new List<Template>();
             var binFormatter = new ListBinaryFormatter<string>();
 
-            using (var dataReader = _command.ExecuteReader())
+            using (DbDataReader dataReader = _command.ExecuteReader())
             {
                 while (dataReader.Read())
                 {
-                    var title = (string)dataReader["Title"];
-                    IList<string> data = binFormatter.Deserialize((byte[])dataReader["Data"]);
+                    var title = (string) dataReader["Title"];
+                    IList<string> data = binFormatter.Deserialize((byte[]) dataReader["Data"]);
                     templates.Add(new Template(data, title));
                 }
             }
@@ -188,13 +188,13 @@ namespace HospitalConnectedLayer
             var analyzes = new List<Analysis>();
             var binFormatter = new ListBinaryFormatter<string>();
 
-            using (var dataReader = _command.ExecuteReader())
+            using (DbDataReader dataReader = _command.ExecuteReader())
             {
                 while (dataReader.Read())
                 {
-                    var data = (byte[])dataReader["Data"];
-                    var title = (string)dataReader["TemplateTitle"];
-                    var date = (DateTime)dataReader["Date"];
+                    var data = (byte[]) dataReader["Data"];
+                    var title = (string) dataReader["TemplateTitle"];
+                    var date = (DateTime) dataReader["Date"];
                     analyzes.Add(new Analysis(binFormatter.Deserialize(data), title, date));
                 }
             }
@@ -207,7 +207,7 @@ namespace HospitalConnectedLayer
 
         private DbParameter GetParam(string paramName, object paramValue)
         {
-            DbParameter param = _df.CreateParameter();
+            DbParameter param = _dbProviderFactory.CreateParameter();
             param.ParameterName = paramName;
             param.Value = paramValue;
             return param;

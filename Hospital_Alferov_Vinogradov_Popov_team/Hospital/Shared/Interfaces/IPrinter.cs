@@ -2,7 +2,7 @@
 {
     public interface IPrinter
     {
-        void Print(Person person, Analysis analysis, Template template);
         string PathToFile { get; set; }
+        void Print(Person person, Analysis analysis, Template template);
     }
 }

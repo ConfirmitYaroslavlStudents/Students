@@ -23,12 +23,12 @@ namespace Hospital
 
             int maxLength = collection.Max(item => item.Length);
 
-            foreach (var item in collection)
+            foreach (string item in collection)
             {
-                var labelForThisItem = new Label { Content = item, Tag = item,FontSize = fontSize};
+                var labelForThisItem = new Label {Content = item, Tag = item, FontSize = fontSize};
                 _currentCanvas.Children.Add(labelForThisItem);
-                Canvas.SetLeft(labelForThisItem,10);
-                Canvas.SetTop(labelForThisItem,currentCoordinate);
+                Canvas.SetLeft(labelForThisItem, 10);
+                Canvas.SetTop(labelForThisItem, currentCoordinate);
 
                 var textBoxForThisItem = new TextBox
                 {
@@ -39,21 +39,21 @@ namespace Hospital
                 };
 
                 _currentCanvas.Children.Add(textBoxForThisItem);
-                Canvas.SetLeft(textBoxForThisItem, maxLength * widthInterval / 2 + 20);
+                Canvas.SetLeft(textBoxForThisItem, maxLength*widthInterval/2 + 20);
                 Canvas.SetTop(textBoxForThisItem, currentCoordinate);
 
                 currentCoordinate += heightInterval;
             }
 
-            var OKButton = new Button {Content = "OK", FontSize = fontSize};
-            OKButton.Click += clickHandler;
-            OKButton.Width = 100;
-            _currentCanvas.Children.Add(OKButton);
-            Canvas.SetLeft(OKButton,10);
-            Canvas.SetTop(OKButton, currentCoordinate);
+            var okButton = new Button {Content = "OK", FontSize = fontSize};
+            okButton.Click += clickHandler;
+            okButton.Width = 100;
+            _currentCanvas.Children.Add(okButton);
+            Canvas.SetLeft(okButton, 10);
+            Canvas.SetTop(okButton, currentCoordinate);
         }
 
-        public  void PaintCanvasWithListBox(IEnumerable<string> collection, RoutedEventHandler clickHandler)
+        public void PaintCanvasWithListBox(IEnumerable<string> collection, RoutedEventHandler clickHandler)
         {
             const int fontSize = 30;
             const int heightInterval = 40;
@@ -64,17 +64,17 @@ namespace Hospital
             Canvas.SetLeft(itemsTypesListBox, currentCoordinate);
             Canvas.SetTop(itemsTypesListBox, currentCoordinate);
 
-            foreach (var item in collection)
+            foreach (string item in collection)
             {
                 itemsTypesListBox.Items.Add(item);
             }
 
-            var OKButton = new Button { Content = "OK", FontSize = fontSize };
-            OKButton.Click += clickHandler;
-            OKButton.Width = 100;
-            _currentCanvas.Children.Add(OKButton);
-            Canvas.SetLeft(OKButton, 10);
-            Canvas.SetTop(OKButton, currentCoordinate + 200 + heightInterval);
+            var okButton = new Button {Content = "OK", FontSize = fontSize};
+            okButton.Click += clickHandler;
+            okButton.Width = 100;
+            _currentCanvas.Children.Add(okButton);
+            Canvas.SetLeft(okButton, 10);
+            Canvas.SetTop(okButton, currentCoordinate + 200 + heightInterval);
         }
     }
 }

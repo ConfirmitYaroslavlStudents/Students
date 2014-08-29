@@ -51,12 +51,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -121,14 +117,6 @@
       <Project>{9d63f230-45c4-4610-aa47-efc21c450c70}</Project>
       <Name>PrintersLoader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Printers\TxtPrinter\TxtPrinter.csproj">
-      <Project>{2d4e341e-8da7-43c3-816e-8f8d8f4d867d}</Project>
-      <Name>TxtPrinter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Printers\XmlPrinter\XmlPrinter.csproj">
-      <Project>{180711b9-9fff-44fc-95e2-8891c7642b86}</Project>
-      <Name>XmlPrinter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Shared\Shared.csproj">
       <Project>{90cd0998-89b8-4f3c-b3e4-4a378aede315}</Project>
       <Name>Shared</Name>
@@ -153,8 +141,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>rmdir /s /q Printers
-mkdir Printers</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

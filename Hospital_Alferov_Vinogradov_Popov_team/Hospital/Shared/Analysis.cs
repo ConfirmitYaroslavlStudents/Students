@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Shared
 {
     [Serializable]
     public class Analysis
     {
-        public Analysis(IEnumerable<string> analysisData, string templateTitle, DateTime date)
+        public Analysis(IList<string> analysisData, string templateTitle, DateTime date)
         {
-            //if (template.Data.Count != analysisData.Count)
-            //{
-            //    throw new ArgumentException("analysisData");
-            //}
-
             Date = date;
             TemplateTitle = templateTitle;
-            Data = analysisData.ToList();
+            Data = analysisData;
         }
 
         public string TemplateTitle { get; private set; }

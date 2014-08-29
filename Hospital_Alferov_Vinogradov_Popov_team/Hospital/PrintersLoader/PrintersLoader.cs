@@ -13,9 +13,9 @@ namespace PrintersLoaderLibrary
             Assembly printerAssembly = Assembly.LoadFrom(pathToAssembly);
             Type[] printerTypes = printerAssembly.GetTypes();
 
-            foreach (var type in printerTypes)
+            foreach (Type type in printerTypes)
             {
-                var printerInterface = type.GetInterface("IPrinter");
+                Type printerInterface = type.GetInterface("IPrinter");
 
                 if (printerInterface != null)
                 {

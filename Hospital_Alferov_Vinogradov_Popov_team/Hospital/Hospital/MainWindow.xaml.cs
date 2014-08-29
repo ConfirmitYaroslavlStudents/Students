@@ -290,8 +290,8 @@ namespace Hospital
             AnalysisTabItem.IsSelected = true;
 
             IEnumerable<Analysis> analyzes = from analysis in _analyzes
-                where analysis.TemplateTitle == currentTemplateTitle
-                select analysis;
+                                             where analysis.TemplateTitle == currentTemplateTitle
+                                             select analysis;
 
             AnalysisTextBox.Clear();
             AnalyzesDatesListBox.Items.Clear();
@@ -484,35 +484,30 @@ namespace Hospital
 
         private void LoadNewTemplateMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var xmlFmt = new XmlSerializer(typeof (Template));
-
-            using (Stream fStream = new FileStream("template.xml", FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                xmlFmt.Serialize(fStream, new Template(new List<string> {"hemoglobin", "erythrocytes"}, "Blood Test"));
-            }
-
-
             ClearCanvas();
 
             var newOutputFormatOpenFileDialog = new OpenFileDialog
             {
-                Filter = "xml files (*.xml)|*.xml",
-                DefaultExt = ".xml",
-                Title = "Please select xml file"
+                Filter = "txt files (*.txt)|*.txt",
+                DefaultExt = ".txt",
+                Title = "Please select txt file"
             };
 
             if (newOutputFormatOpenFileDialog.ShowDialog() == true)
             {
                 Template template;
 
-                using (Stream fStream = File.OpenRead("circle.xml"))
+                using (var input = new StreamReader(newOutputFormatOpenFileDialog.FileName,Encoding.Default))
                 {
-                    template = xmlFmt.Deserialize(fStream) as Template;
-                    if (template == null)
+                    string s;
+                    var fields = new List<string>();
+
+                    while ((s = input.ReadLine()) != null)
                     {
-                        MessageBox.Show("Incorrect template format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        fields.Add(s);
                     }
+
+                    template = new Template(fields, Path.GetFileNameWithoutExtension(newOutputFormatOpenFileDialog.FileName));
                 }
                 try
                 {
@@ -520,6 +515,7 @@ namespace Hospital
                     {
                         MessageBox.Show("Template with this name already exists!", "Error", MessageBoxButton.OK,
                             MessageBoxImage.Error);
+                        return;
                     }
                 }
                 catch (Exception ex)

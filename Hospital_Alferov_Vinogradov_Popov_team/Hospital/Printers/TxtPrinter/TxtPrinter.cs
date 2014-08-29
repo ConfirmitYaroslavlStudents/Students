@@ -18,18 +18,18 @@ namespace TxtPrinter
         {
             var result = new StringBuilder();
             result.AppendLine(analysis.TemplateTitle);
-            result.AppendFormat("Name: {0} {1}\n", user.FirstName, user.LastName);
-            result.AppendFormat("Insurance policy number: {0}\n", user.PolicyNumber);
-            result.AppendFormat("Date of birth: {0}\n", user.DateOfBirth);
-            result.AppendFormat("The number of full years: {0}\n", user.Age);
-            result.AppendFormat("Live at the address: {0}\n\n", user.Address);
-            result.AppendFormat("Results of the analysis from {0}\n\n", analysis.Date);
+            result.AppendFormat("Name: {0} {1}\r\n", user.FirstName, user.LastName);
+            result.AppendFormat("Insurance policy number: {0}\r\n", user.PolicyNumber);
+            result.AppendFormat("Date of birth: {0}\r\n", user.DateOfBirth);
+            result.AppendFormat("The number of full years: {0}\r\n", user.Age);
+            result.AppendFormat("Live at the address: {0}\r\n\r\n", user.Address);
+            result.AppendFormat("Results of the analysis from {0}\r\n", analysis.Date);
 
             for (int i = 0; i < analysis.Data.Count; ++i)
             {
                 result.AppendLine(string.Format("{0} : {1}", template.Data[i], analysis.Data[i]));
             }
-            result.AppendLine("\n");
+            result.AppendLine("\r\n");
 
             return result.ToString();
         }

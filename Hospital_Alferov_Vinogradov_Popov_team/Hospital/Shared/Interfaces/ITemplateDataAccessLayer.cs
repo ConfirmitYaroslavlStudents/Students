@@ -6,6 +6,6 @@ namespace Shared.Interfaces
     {
         List<Template> GetTemplates();
         Template GetTemplate(string title);
-        bool AddTemplate(Template template);
+        void AddTemplate(Template template);
     }
 }

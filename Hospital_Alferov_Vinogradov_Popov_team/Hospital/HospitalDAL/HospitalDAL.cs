@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.SqlClient;
 using ListFormatter;
 using Shared;
 using Shared.Interfaces;
@@ -9,25 +10,44 @@ namespace HospitalConnectedLayer
 {
     public class HospitalDAL : IHospitalDataAccessLayer
     {
-        private DbCommand _command;
-        private DbProviderFactory _dbProviderFactory;
-        private DbConnection _sqlConnection;
+        private readonly DbCommand _command;
+        private readonly DbProviderFactory _dbProviderFactory;
+        private readonly DbConnection _sqlConnection;
 
         #region Open / Close methods
 
-        public void OpenConnection(string dataProvider, string connectionString)
+        public HospitalDAL(string dataProvider, string connectionString)
         {
-            _dbProviderFactory = DbProviderFactories.GetFactory(dataProvider);
-            _sqlConnection = _dbProviderFactory.CreateConnection();
-            _command = _dbProviderFactory.CreateCommand();
-            _command.Connection = _sqlConnection;
-            _sqlConnection.ConnectionString = connectionString;
-            _sqlConnection.Open();
+            try
+            {
+                _dbProviderFactory = DbProviderFactories.GetFactory(dataProvider);
+                _sqlConnection = _dbProviderFactory.CreateConnection();
+                _command = _dbProviderFactory.CreateCommand();
+                _command.Connection = _sqlConnection;
+                _sqlConnection.ConnectionString = connectionString;
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't load data storage!");
+            }
         }
 
-        public void CloseConnection()
+        private void CloseConnection()
         {
+            _command.Parameters.Clear();
             _sqlConnection.Close();
+        }
+
+        private void OpenConnection()
+        {
+            try
+            {
+                _sqlConnection.Open();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't load data storage!");
+            }
         }
 
         #endregion
@@ -36,6 +56,7 @@ namespace HospitalConnectedLayer
 
         public List<Person> GetPersons(string firstName, string lastName, string policyNumber)
         {
+            OpenConnection();
             _command.CommandText =
                 string.Format(
                     "SELECT * FROM Persons WHERE FirstName LIKE @FirstName AND LastName LIKE @LastName AND PolicyNumber LIKE @PolicyNumber");
@@ -46,25 +67,37 @@ namespace HospitalConnectedLayer
 
             var persons = new List<Person>();
 
-            using (DbDataReader dataReader = _command.ExecuteReader())
+            try
             {
-                while (dataReader.Read())
+                using (DbDataReader dataReader = _command.ExecuteReader())
                 {
-                    persons.Add(new Person(
-                        (string) dataReader["FirstName"],
-                        (string) dataReader["LastName"],
-                        (DateTime) dataReader["DateOfBirth"],
-                        (string) dataReader["Address"],
-                        (string) dataReader["PolicyNumber"]));
+                    while (dataReader.Read())
+                    {
+                        persons.Add(new Person(
+                            (string) dataReader["FirstName"],
+                            (string) dataReader["LastName"],
+                            (DateTime) dataReader["DateOfBirth"],
+                            (string) dataReader["Address"],
+                            (string) dataReader["PolicyNumber"]));
+                    }
                 }
             }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't get persons!");
+            }
+            finally
+            {
+                CloseConnection();
+            }
 
-            _command.Parameters.Clear();
             return persons;
         }
 
-        public bool AddPerson(Person person)
+
+        public void AddPerson(Person person)
         {
+            OpenConnection();
             _command.CommandText =
                 "INSERT INTO Persons(FirstName, LastName, DateOfBirth, Address, PolicyNumber) VALUES(@FirstName, @LastName, @DateOfBirth, @Address, @PolicyNumber)";
 
@@ -78,16 +111,18 @@ namespace HospitalConnectedLayer
             {
                 _command.ExecuteNonQuery();
             }
+            catch (SqlException)
+            {
+                throw new InvalidOperationException("This person already exists!");
+            }
             catch (Exception)
             {
-                return false;
+                throw new InvalidOperationException("Can't add person!");
             }
             finally
             {
-                _command.Parameters.Clear();
+                CloseConnection();
             }
-
-            return true;
         }
 
         #endregion
@@ -96,6 +131,7 @@ namespace HospitalConnectedLayer
 
         public Template GetTemplate(string title)
         {
+            OpenConnection();
             _command.CommandText = "SELECT * FROM Templates WHERE Title = @Title";
 
             _command.Parameters.Add(GetParam("@Title", title));
@@ -103,20 +139,31 @@ namespace HospitalConnectedLayer
             Template template = null;
             var binFormatter = new ListBinaryFormatter<string>();
 
-            using (DbDataReader dataReader = _command.ExecuteReader())
+            try
             {
-                while (dataReader.Read())
+                using (DbDataReader dataReader = _command.ExecuteReader())
                 {
-                    template = new Template(binFormatter.Deserialize((byte[]) dataReader["Data"]), title);
+                    while (dataReader.Read())
+                    {
+                        template = new Template(binFormatter.Deserialize((byte[]) dataReader["Data"]), title);
+                    }
                 }
             }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't get template!");
+            }
+            finally
+            {
+                CloseConnection();
+            }
 
-            _command.Parameters.Clear();
             return template;
         }
 
-        public bool AddTemplate(Template template)
+        public void AddTemplate(Template template)
         {
+            OpenConnection();
             var binFormatter = new ListBinaryFormatter<string>();
 
             _command.CommandText = "INSERT INTO Templates(Title, Data) VALUES(@Title, @Data)";
@@ -128,35 +175,48 @@ namespace HospitalConnectedLayer
             {
                 _command.ExecuteNonQuery();
             }
+            catch (SqlException)
+            {
+                throw new InvalidOperationException("This template already exists!");
+            }
             catch (Exception)
             {
-                return false;
+                throw new InvalidOperationException("Can't add template!");
             }
             finally
             {
-                _command.Parameters.Clear();
+                CloseConnection();
             }
-
-            return true;
         }
 
         public List<Template> GetTemplates()
         {
+            OpenConnection();
             _command.CommandText = "SELECT * FROM Templates";
             var templates = new List<Template>();
             var binFormatter = new ListBinaryFormatter<string>();
 
-            using (DbDataReader dataReader = _command.ExecuteReader())
+            try
             {
-                while (dataReader.Read())
+                using (DbDataReader dataReader = _command.ExecuteReader())
                 {
-                    var title = (string) dataReader["Title"];
-                    IList<string> data = binFormatter.Deserialize((byte[]) dataReader["Data"]);
-                    templates.Add(new Template(data, title));
+                    while (dataReader.Read())
+                    {
+                        var title = (string) dataReader["Title"];
+                        IList<string> data = binFormatter.Deserialize((byte[]) dataReader["Data"]);
+                        templates.Add(new Template(data, title));
+                    }
                 }
             }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't get templates!");
+            }
+            finally
+            {
+                CloseConnection();
+            }
 
-            _command.Parameters.Clear();
             return templates;
         }
 
@@ -166,6 +226,7 @@ namespace HospitalConnectedLayer
 
         public void AddAnalysis(string policyNumber, Analysis analysis)
         {
+            OpenConnection();
             var binFormatter = new ListBinaryFormatter<string>();
             _command.CommandText =
                 "INSERT INTO Analyzes(PolicyNumber, TemplateTitle, Data, Date) VALUES(@PolicyNumber, @TemplateTitle, @Data, @Date)";
@@ -174,13 +235,24 @@ namespace HospitalConnectedLayer
             _command.Parameters.Add(GetParam("@Data", binFormatter.Serialize(analysis.Data)));
             _command.Parameters.Add(GetParam("@Date", analysis.Date));
             _command.Parameters.Add(GetParam("@PolicyNumber", policyNumber));
-            _command.ExecuteNonQuery();
 
-            _command.Parameters.Clear();
+            try
+            {
+                _command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't add analysis!");
+            }
+            finally
+            {
+                CloseConnection();
+            }
         }
 
         public List<Analysis> GetAnalyzes(string policyNumber)
         {
+            OpenConnection();
             _command.CommandText = "SELECT TemplateTitle, Data, Date FROM Analyzes WHERE PolicyNumber = @PolicyNumber";
 
             _command.Parameters.Add(GetParam("@PolicyNumber", policyNumber));
@@ -188,18 +260,28 @@ namespace HospitalConnectedLayer
             var analyzes = new List<Analysis>();
             var binFormatter = new ListBinaryFormatter<string>();
 
-            using (DbDataReader dataReader = _command.ExecuteReader())
+            try
             {
-                while (dataReader.Read())
+                using (DbDataReader dataReader = _command.ExecuteReader())
                 {
-                    var data = (byte[]) dataReader["Data"];
-                    var title = (string) dataReader["TemplateTitle"];
-                    var date = (DateTime) dataReader["Date"];
-                    analyzes.Add(new Analysis(binFormatter.Deserialize(data), title, date));
+                    while (dataReader.Read())
+                    {
+                        var data = (byte[]) dataReader["Data"];
+                        var title = (string) dataReader["TemplateTitle"];
+                        var date = (DateTime) dataReader["Date"];
+                        analyzes.Add(new Analysis(binFormatter.Deserialize(data), title, date));
+                    }
                 }
             }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Can't get analyzes!");
+            }
+            finally
+            {
+                CloseConnection();
+            }
 
-            _command.Parameters.Clear();
             return analyzes;
         }
 

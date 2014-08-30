@@ -25,8 +25,6 @@ namespace Hospital.Tests
                     new object[] {new Person("Vasya", "Pupkin", new DateTime(1990, 4, 21), "Yaroslavl", "723456780")};
                 yield return
                     new object[] {new Person("Sergey", "Bykov", new DateTime(1956, 2, 2), "Moscow", "723499780")};
-                yield return
-                    new object[] {new Person("Sergey", "Bykov", new DateTime(1956, 2, 2), "Moscow", "723499780")};
             }
         }
 
@@ -57,11 +55,9 @@ namespace Hospital.Tests
         [PropertyData("TestPersonsData")]
         public void AddandGetPerson_ThreeDifferentPersons_ShouldPass(Person person)
         {
-            var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dataProvider, _connectionString);
+            var dataStorage = new HospitalDAL(_dataProvider, _connectionString);
             dataStorage.AddPerson(person);
             int personsCount = dataStorage.GetPersons(person.FirstName, person.LastName, person.PolicyNumber).Count;
-            dataStorage.CloseConnection();
             Assert.True(personsCount >= 1);
         }
 
@@ -69,22 +65,18 @@ namespace Hospital.Tests
         [PropertyData("TestTemplatesData")]
         public void AddandGetTemplate_TwoTemplates_ShouldPass(Template template)
         {
-            var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dataProvider, _connectionString);
+            var dataStorage = new HospitalDAL(_dataProvider, _connectionString);
             dataStorage.AddTemplate(template);
             Template expected = dataStorage.GetTemplate(template.Title);
-            dataStorage.CloseConnection();
             Assert.NotEqual(expected, null);
         }
 
         [Fact]
         public void GetTemplates_DBWithValues_ShouldPass()
         {
-            var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dataProvider, _connectionString);
+            var dataStorage = new HospitalDAL(_dataProvider, _connectionString);
             dataStorage.AddTemplate(new Template(new List<string> {"alcohol", "drugs"}, "Alcho2 Test"));
             int templatesCount = dataStorage.GetTemplates().Count;
-            dataStorage.CloseConnection();
             Assert.True(templatesCount >= 1);
         }
 
@@ -92,11 +84,9 @@ namespace Hospital.Tests
         [PropertyData("TestAnalyzesData")]
         public void AddandGetAnalyzes_TwoAnalyzes_ShouldPass(string policyNumber, Analysis analysis)
         {
-            var dataStorage = new HospitalDAL();
-            dataStorage.OpenConnection(_dataProvider, _connectionString);
+            var dataStorage = new HospitalDAL(_dataProvider, _connectionString);
             dataStorage.AddAnalysis(policyNumber, analysis);
             int analyzesCount = dataStorage.GetAnalyzes(policyNumber).Count;
-            dataStorage.CloseConnection();
             Assert.True(analyzesCount >= 1);
         }
     }

@@ -69,6 +69,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Actions\AnalysisActions\AddAnalysis.cs" />
+    <Compile Include="Actions\PrinterActions\AddNewPrinter.cs" />
+    <Compile Include="Actions\TemplateActions\AddNewTemplate.cs" />
+    <Compile Include="Actions\PersonActions\AddPerson.cs" />
+    <Compile Include="Actions\AnalysisActions\ExportAnalysis.cs" />
+    <Compile Include="Actions\AnalysisActions\LoadAnalyzes.cs" />
+    <Compile Include="Actions\PersonActions\LoadPerson.cs" />
+    <Compile Include="Actions\TemplateActions\LoadTemplate.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -139,10 +147,16 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir Printers
+copy ..\..\..\Printers\TxtPrinter\bin\Debug\TxtPrinter.dll  Printers\TxtPrinter.dll
+xcopy ..\..\..\Databases Databases /i</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

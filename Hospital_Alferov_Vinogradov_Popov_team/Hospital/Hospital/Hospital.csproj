@@ -154,7 +154,7 @@
     <Resource Include="ico.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\fon.jpg" />
+    <Resource Include="Images\fon.jpeg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ico.ico" />

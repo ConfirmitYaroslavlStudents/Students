@@ -32,8 +32,10 @@ namespace Hospital
             List<Person> persons;
             try
             {
-                persons = await Task.Run(() => _dataAccessLayer.GetPersons(FirstNameTextBox.Text, LastNameTextBox.Text,
-                    PolicyNumberTextBox.Text));
+                var firstName = FirstNameTextBox.Text;
+                var lastName = LastNameTextBox.Text;
+                var policyNumber = PolicyNumberTextBox.Text;
+                persons = await Task.Run(() => _dataAccessLayer.GetPersons(firstName, lastName, policyNumber));
             }
             catch (InvalidOperationException ex)
             {

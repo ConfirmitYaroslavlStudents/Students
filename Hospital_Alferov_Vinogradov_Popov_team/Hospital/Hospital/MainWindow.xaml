@@ -8,7 +8,7 @@
         <ImageBrush />
     </Window.Background>
     <Canvas Margin="0,0,0,0" HorizontalAlignment="Left" Width="891" Background="#FF8B8787">
-        <Image Source="Images/fon.jpg" Margin="0,0,0,0" Width="891" Height="576" Stretch="Fill" />
+        <Image Source="Images/fon.jpeg" Margin="0,0,0,0" Width="891" Height="576" Stretch="Fill" />
         <Menu x:Name="MainMenu" Height="63" Canvas.Left="10" Canvas.Top="10" Width="871"
               RenderTransformOrigin="0.499,0.509" Background="#00000000" FontFamily="Georgia" FontSize="40">
             <MenuItem x:Name="PersonMainMenuItem" Height="63" Width="218" Header="Person"

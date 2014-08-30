@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Name="MainWin" x:Class="Hospital.MainWindow"
-    Title="Hospital" Height="604" Width="901" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    Title="Hospital" Height="604" Width="901" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+    Icon="ico.png">
     <Window.Background>
         <ImageBrush />
     </Window.Background>
@@ -34,7 +35,7 @@
                 <MenuItem x:Name="NewOutputFormatMenuItem" Header="load new output format"
                           Click="NewOutputFormatMenuItem_Click" />
             </MenuItem>
-            <MenuItem Header="About" Foreground="BlueViolet" Width="217" />
+            <MenuItem x:Name="AboutUs" Header="About" Foreground="BlueViolet" Width="217" Click="AboutUs_Click" />
         </Menu>
         <TabControl x:Name="MainTabControl" Height="427" Canvas.Left="10" Canvas.Top="73" Width="871"
                     Background="#00CDCDCD"  BorderBrush="#00000000">

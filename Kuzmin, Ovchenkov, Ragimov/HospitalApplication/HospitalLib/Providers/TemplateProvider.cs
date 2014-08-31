@@ -10,62 +10,59 @@ namespace HospitalLib.Providers
 {
     public class TemplateProvider : ITemplateProvider
     {
-         private readonly IDatabaseProvider _databaseProvider;
+         private readonly DatabaseProvider _databaseProvider;
 
-         public TemplateProvider(IDatabaseProvider databaseProvider)
+         public TemplateProvider(DatabaseProvider databaseProvider)
         {
             if (databaseProvider == null)
-                throw new NullReferenceException("databaseProvider");
+                throw new ArgumentNullException("databaseProvider");
 
             _databaseProvider = databaseProvider;
         }
 
         public IList<Template> Load()
         {
-            const string query = "select * from Template";
-            var reader = _databaseProvider.GetData(query);
+            const string query = "SELECT * FROM Template";
+            var command = new SqlCommand(query);
+            var reader = _databaseProvider.GetData(command);
 
             return GetTemplates(reader);
         }
 
         public void Save(Template template)
         {
-            const string query = "insert into Template (TemplateId, Template, Name) values(@TemplateId, @Template, @Name)";
+            const string query = "INSERT INTO Template (Template, Name) VALUES(@Template, @Name)";
             var command = new SqlCommand(query);
+
             PrepareStatement(command, template);    
         }
 
         public void Update(Template template)
         {
-            const string query = "update Template set Template=@Template, Name= @Name where TemplateId = @TemplateId";
+            const string query = "UPDATE Template SET Template=@Template WHERE Name=@Name";
              var command = new SqlCommand(query);
+
             PrepareStatement(command,template);
-
         }
 
-        private void PrepareStatement(SqlCommand command, Template template)
-        {
-            command.Parameters.Add("@Template", SqlDbType.NText);
-            command.Parameters["@Template"].Value = template.HtmlTemplate;
-
-            command.Parameters.AddWithValue("@TemplateId", template.Id);
-            command.Parameters.AddWithValue("@Name", template.Name);
-
-            _databaseProvider.PushData(command);
-        }
+     
 
         public void Remove(Template template)
         {
             new AnalysisProvider(_databaseProvider).Remove(template);
 
-            var query = string.Format("delete from Template where TemplateId='{0}'", template.Id);
-            _databaseProvider.PushData(query);
+            const string query = "DELETE FROM Template WHERE Name=@Name";
+            var command = new SqlCommand(query);
+            
+            command.Parameters.Add("@Name", SqlDbType.NVarChar);
+            command.Parameters["@Name"].Value = template.Name;
+         
+            _databaseProvider.PushData(command);
         }
 
         public IList<Template> Search(string tempalteName)
         {
-            const string query = "select * from Template where Name like @Name"; 
-
+            const string query = "SELECT * FROM Template WHERE Name LIKE @Name"; 
             var command = new SqlCommand(query);
 
             command.Parameters.Add("@Name", SqlDbType.NVarChar);
@@ -78,11 +75,22 @@ namespace HospitalLib.Providers
 
         public int GetCount()
         {
-            const string query = "select count(*) from Template";
+            const string query = "SELECT count(*) FROM Template";
             var result = _databaseProvider.GetDataScalar(query);
             var count = int.Parse(result.ToString(CultureInfo.InvariantCulture));
 
             return count;
+        }
+
+        private void PrepareStatement(SqlCommand command, Template template)
+        {
+            command.Parameters.Add("@Template", SqlDbType.NText);
+            command.Parameters["@Template"].Value = template.HtmlTemplate;
+
+            command.Parameters.Add("@Name", SqlDbType.NVarChar);
+            command.Parameters["@Name"].Value = template.Name;
+
+            _databaseProvider.PushData(command);
         }
 
         private IList<Template> GetTemplates(SqlDataReader reader)
@@ -92,17 +100,16 @@ namespace HospitalLib.Providers
             {
                 templates.Add(GetTemplate(reader));
             }
+
             return templates;
         }
 
-        public  Template GetTemplate(SqlDataReader reader)
+        public Template GetTemplate(SqlDataReader reader)
         {
-             var htmlTemplate = reader["Template"].ToString();
-           
+            var htmlTemplate = reader["Template"].ToString();
             var name = reader["Name"].ToString();
-            var id = int.Parse(reader["TemplateId"].ToString());
 
-            return new Template(name, htmlTemplate, id);
+            return new Template(name, htmlTemplate);
         }
     }
 }

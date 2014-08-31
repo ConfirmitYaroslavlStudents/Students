@@ -86,7 +86,7 @@ namespace HospitalApp.AnalysisPages
             if (analysis.New)
             {
                 CurrentState.CurrentAnalysis.New = false;
-                analysisProvider.Save(analysis);
+                analysisProvider.Save(ref analysis);
             }
             else
                 analysisProvider.Update(analysis);

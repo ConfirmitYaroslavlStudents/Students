@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using HospitalLib.Factory;
 
 namespace HospitalApp
@@ -11,6 +12,9 @@ namespace HospitalApp
         public MainWindow()
         {
             InitializeComponent();
+
+            Dispatcher.UnhandledException += OnDispatcherUnhandledException;
+
             var templateLoader = Factory.BuildHtmlLoader();
             templateLoader.Load();
 
@@ -22,5 +26,20 @@ namespace HospitalApp
         {
             Content = nextPage;
         }
+
+        private void OnDispatcherUnhandledException(object sender,
+            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            var errorMessage = string.Format("Извините, приложение завершилось с ошибкой: {0}", e.Exception.InnerException.Message);
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            e.Handled = true;
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            Dispatcher.UnhandledException -= OnDispatcherUnhandledException;
+            Close();
+        }
     }
+
 }

@@ -6,7 +6,7 @@ namespace HospitalLib.DatebaseModel
     interface IAnalysisProvider
     {
         IList<Analysis> Load(Person person);
-        void Save(Analysis analysis);
+        void Save(ref Analysis analysis);
         void Update(Analysis analysis);
         void Remove(Analysis analysis);
         void Remove(Person person);

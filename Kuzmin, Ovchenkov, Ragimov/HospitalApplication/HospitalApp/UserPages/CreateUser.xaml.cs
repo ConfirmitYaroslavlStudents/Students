@@ -68,7 +68,7 @@ namespace HospitalApp.UserPages
         private void SavePerson(Person person)
         {
             var personProvider = new PersonProvider(new DatabaseProvider());
-            personProvider.Save(person);
+            personProvider.Save(ref person);
         }
 
         private Person CreatePerson()

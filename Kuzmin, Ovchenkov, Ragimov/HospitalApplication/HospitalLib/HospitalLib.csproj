@@ -53,7 +53,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -63,8 +62,12 @@
   <ItemGroup>
     <Compile Include="Data\Analysis.cs" />
     <Compile Include="Factory\Factory.cs" />
-    <Compile Include="DatebaseModel\IDatabaseProvider.cs" />
-    <Compile Include="DatebaseModel\INewIdProvider.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\JsonFormatter.cs" />
     <Compile Include="Interfaces\ITemplateLoader.cs" />
     <Compile Include="Loader\HtmlLoader.cs" />
     <Compile Include="Providers\DatabaseProvider.cs" />
@@ -73,7 +76,6 @@
     <Compile Include="Interfaces\IPrint.cs" />
     <Compile Include="DatebaseModel\ITemplateProvider.cs" />
     <Compile Include="Providers\AnalysisProvider.cs" />
-    <Compile Include="Providers\NewIdProvider.cs" />
     <Compile Include="Providers\PersonProvider.cs" />
     <Compile Include="Providers\TemplateProvider.cs" />
     <Compile Include="Data\Template.cs" />
@@ -108,7 +110,12 @@
       <DependentUpon>HospitalDatabase.mdf</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

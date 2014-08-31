@@ -10,66 +10,51 @@ namespace HospitalLib.Providers
 {
     public class PersonProvider : IPersonsProvider
     {
-        private readonly IDatabaseProvider _databaseProvider;
+        private readonly DatabaseProvider _databaseProvider;
 
-        public PersonProvider(IDatabaseProvider databaseProvider)
+        public PersonProvider(DatabaseProvider databaseProvider)
         {
-            if (databaseProvider == null)
-                throw new NullReferenceException("databaseProvider");
+            if(databaseProvider == null)
+                throw new ArgumentNullException("databaseProvider");
 
             _databaseProvider = databaseProvider;
         }
 
         public IList<Person> Load()
         {
-            const string query = "select * from Persons";
-            var reader = _databaseProvider.GetData(query);
-
+            const string query = "SELECT * FROM Persons";
+            var command = new SqlCommand(query);
+           
+            var reader = _databaseProvider.GetData(command);
             return GetPersons(reader);
         }
 
-        public void Save(Person person)
+        public void Save(ref Person person)
         {
-            const string query =
-                "insert into Persons (PersonId, FirstName, LastName, MiddleName, BirthDate)" +
-                " values(@PersonId, @FirstName, @LastName, @MiddleName, @BirthDate)";
+            var command = new SqlCommand
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandText = "SavePersonAndGetId"
+            };
 
-            var command = new SqlCommand(query);
+            AddMainParameters(command, person);
+            command.Parameters["@PersonId"].Direction = ParameterDirection.Output;
 
-            command.Parameters.Add("@FirstName", SqlDbType.NVarChar);
-            command.Parameters["@FirstName"].Value = person.FirstName;
-            command.Parameters.Add("@LastName", SqlDbType.NVarChar);
-            command.Parameters["@LastName"].Value = person.LastName;
-            command.Parameters.Add("@MiddleName", SqlDbType.NVarChar);
-            command.Parameters["@MiddleName"].Value = person.MiddleName;
+            var parameters = _databaseProvider.PushDataWithOutputParameters(command);
+            var id = int.Parse(parameters["@PersonId"].Value.ToString());
 
-            command.Parameters.AddWithValue("@PersonId",  person.Id);
-            command.Parameters.AddWithValue("@BirthDate", person.BirthDate.ToShortDateString());
-
-            _databaseProvider.PushData(command);
+            person = new Person(id, person.FirstName, person.LastName, person.MiddleName, person.BirthDate);
         }
 
         public void Update(Person person)
         {
-            const string query = "update Persons set FirstName = @FirstName, LastName=@LastName, MiddleName=@MiddleName, " +
-                                 "BirthDate=@BirthDate where PersonId=@PersonId";
+            const string query = "UPDATE Persons SET FirstName = @FirstName, LastName=@LastName, MiddleName=@MiddleName, " +
+                                 "BirthDate=@BirthDate WHERE PersonId=@PersonId";
 
             var command = new SqlCommand(query);
-            PrepareStatement(command,person);
 
-        }
-
-        private void PrepareStatement(SqlCommand command, Person person)
-        {
-            command.Parameters.Add("@FirstName", SqlDbType.NVarChar);
-            command.Parameters["@FirstName"].Value = person.FirstName;
-            command.Parameters.Add("@LastName", SqlDbType.NVarChar);
-            command.Parameters["@LastName"].Value = person.LastName;
-            command.Parameters.Add("@MiddleName", SqlDbType.NVarChar);
-            command.Parameters["@MiddleName"].Value = person.MiddleName;
-
-            command.Parameters.AddWithValue("@PersonId", person.Id);
-            command.Parameters.AddWithValue("@BirthDate", person.BirthDate.ToShortDateString());
+            AddMainParameters(command, person);
+            command.Parameters["@PersonId"].Value = person.Id;
 
             _databaseProvider.PushData(command);
         }
@@ -77,14 +62,18 @@ namespace HospitalLib.Providers
         public void Remove(Person person)
         {
             new AnalysisProvider(_databaseProvider).Remove(person);
-            var query = string.Format("delete from Persons where PersonId='{0}'", person.Id);
+            const string query = "DELETE FROM Persons WHERE PersonId=@PersonId";
 
-            _databaseProvider.PushData(query);
+            var command = new SqlCommand(query);
+            command.Parameters.Add("@PersonId", SqlDbType.Int);
+            command.Parameters["@PersonId"].Value = person.Id;
+          
+            _databaseProvider.PushData(command);
         }
 
         public IList<Person> Search(string searchFirstName, string searchLastName)
         {
-            const string query = "select * from Persons where FirstName like @FirstName and LastName like @LastName";
+            const string query = "SELECT * FROM Persons WHERE FirstName LIKE @FirstName AND LastName LIKE @LastName";
 
             var command = new SqlCommand(query);
 
@@ -100,11 +89,28 @@ namespace HospitalLib.Providers
 
         public int GetCount()
         {
-            const string query = "select count(*) from Persons";
+            const string query = "SELECT count(*) FROM Persons";
             var result = _databaseProvider.GetDataScalar(query);
             var count = int.Parse(result.ToString(CultureInfo.InvariantCulture));
 
             return count;
+        }
+
+        private void AddMainParameters(SqlCommand command, Person person)
+        {
+            command.Parameters.Add("@FirstName", SqlDbType.NVarChar);
+            command.Parameters["@FirstName"].Value = person.FirstName;
+
+            command.Parameters.Add("@LastName", SqlDbType.NVarChar);
+            command.Parameters["@LastName"].Value = person.LastName;
+
+            command.Parameters.Add("@MiddleName", SqlDbType.NVarChar);
+            command.Parameters["@MiddleName"].Value = person.MiddleName;
+
+            command.Parameters.Add("@BirthDate", SqlDbType.VarChar);
+            command.Parameters["@BirthDate"].Value = person.BirthDate.ToShortDateString();
+
+            command.Parameters.Add("@PersonId", SqlDbType.Int);
         }
 
         private IList<Person> GetPersons(SqlDataReader reader)

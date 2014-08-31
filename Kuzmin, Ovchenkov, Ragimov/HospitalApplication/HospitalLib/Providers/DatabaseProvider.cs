@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.IO;
-using System.Reflection;
-using HospitalLib.DatebaseModel;
 
 namespace HospitalLib.Providers
 {
-    public class DatabaseProvider : IDatabaseProvider
+    public class DatabaseProvider
     {
         private const string DatabaseFileName = "Database\\HospitalDatabase.mdf";
-
-        public void PushData(string query)
-        {
-            var connection = CreateConection();
-            connection.Open();
-            var command = new SqlCommand(query, connection);
-            command.ExecuteNonQuery();
-        }
 
         public void PushData(SqlCommand command)
         {
@@ -24,16 +14,9 @@ namespace HospitalLib.Providers
             connection.Open();
             command.Connection = connection;
             command.ExecuteNonQuery();
-        }
 
-        public SqlDataReader GetData(string query)
-        {
-            var connection = CreateConection();
-            connection.Open();
-            var command = new SqlCommand(query, connection);
-            var read = command.ExecuteReader();
-
-            return read;
+            connection.Close();
+            connection.Dispose();
         }
 
         public SqlDataReader GetData(SqlCommand command)
@@ -46,12 +29,28 @@ namespace HospitalLib.Providers
             return read;
         }
 
+        public SqlParameterCollection PushDataWithOutputParameters(SqlCommand command)
+        {
+            var connection = CreateConection();
+            connection.Open();
+            command.Connection = connection;
+            command.ExecuteNonQuery();
+
+            connection.Close();
+            connection.Dispose();
+
+            return command.Parameters;
+        }
+
         public int GetDataScalar(string query)
         {
             var connection = CreateConection();
             connection.Open();
             var command = new SqlCommand(query, connection);
             var reader = command.ExecuteScalar();
+
+            connection.Close();
+            connection.Dispose();
 
             return (int) reader;
         }

@@ -9,9 +9,7 @@ namespace HospitalLib.Factory
     {
         public static Person BuidPerson(string fistName, string lastName, string middleName, DateTime birthDate)
         {
-            var databaseProvider = new DatabaseProvider();
-            var idProvider = new NewIdProvider(databaseProvider);
-            var person = new Person(idProvider, fistName, lastName, middleName, birthDate);
+            var person = new Person(fistName, lastName, middleName, birthDate);
 
             return person;
         }
@@ -19,9 +17,8 @@ namespace HospitalLib.Factory
         public static HtmlLoader BuildHtmlLoader()
         {
             var databaseProvider = new DatabaseProvider();
-            var idProvider = new NewIdProvider(databaseProvider);
             var templateProvider = new TemplateProvider(databaseProvider);
-            var htmlLoader = new HtmlLoader(templateProvider, idProvider);
+            var htmlLoader = new HtmlLoader(templateProvider);
 
             return htmlLoader;
         }

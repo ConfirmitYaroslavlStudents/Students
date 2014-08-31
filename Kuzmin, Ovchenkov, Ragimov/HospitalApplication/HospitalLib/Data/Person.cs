@@ -26,15 +26,17 @@ namespace HospitalLib.Data
             }
         }
 
-        public Person(NewIdProvider provider, string firstName, string lastName, string middleName, DateTime birthDate)
-            : this(provider.GetPersonId(), firstName, lastName, middleName, birthDate){}
-
-        public Person(int id, string firstName, string lastName, string middleName, DateTime birthDate)
+        public Person(string firstName, string lastName, string middleName, DateTime birthDate)
         {
             LastName = lastName;
             FirstName = firstName;
             MiddleName = middleName;
             BirthDate = birthDate;
+        }
+
+        internal Person(int id, string firstName, string lastName, string middleName, DateTime birthDate)
+            : this(firstName, lastName, middleName, birthDate)
+        {
             Id = id;
         }
 

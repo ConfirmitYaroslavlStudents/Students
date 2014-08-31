@@ -56,7 +56,7 @@ namespace HospitalApp.AnalysisPages
         private void CreateNewButton_Click(object sender, RoutedEventArgs e)
         {
             var analysis = _analyzesDictionary[AnalyzesComboBox.SelectedValue.ToString()];
-            CurrentState.CurrentAnalysis = new Analysis(analysis.Template, analysis.Person, new NewIdProvider(new DatabaseProvider()));
+            CurrentState.CurrentAnalysis = new Analysis(analysis.Template, analysis.Person);
 
             foreach (var data in analysis.GetDictionary())
             {

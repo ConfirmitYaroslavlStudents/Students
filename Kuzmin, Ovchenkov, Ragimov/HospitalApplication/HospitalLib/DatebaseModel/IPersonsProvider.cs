@@ -6,7 +6,7 @@ namespace HospitalLib.DatebaseModel
     public interface IPersonsProvider
     {
         IList<Person> Load();
-        void Save(Person person);
+        void Save(ref Person person);
         void Update(Person person);
         void Remove(Person person);
         int GetCount();

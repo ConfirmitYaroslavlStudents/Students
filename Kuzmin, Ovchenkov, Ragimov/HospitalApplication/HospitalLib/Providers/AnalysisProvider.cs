@@ -5,59 +5,58 @@ using System.Data.SqlClient;
 using System.Globalization;
 using HospitalLib.Data;
 using HospitalLib.DatebaseModel;
+using HospitalLib.Utils;
 
 namespace HospitalLib.Providers
 {
     public class AnalysisProvider : IAnalysisProvider
     {
-        private readonly IDatabaseProvider _databaseProvider;
+        private readonly DatabaseProvider _databaseProvider;
 
-        public AnalysisProvider(IDatabaseProvider databaseProvider)
+        public AnalysisProvider(DatabaseProvider databaseProvider)
         {
             if (databaseProvider == null)
-                throw new NullReferenceException("databaseProvider");
+                throw new ArgumentNullException("databaseProvider");
 
             _databaseProvider = databaseProvider;
         }
 
         public IList<Analysis> Load(Person person)
         {
-            const string query = "select Analysis, AnalysisId from Analysis  where PersonId=@PersonId";
+            const string query = "SELECT Analysis, AnalysisId FROM Analysis WHERE PersonId = @PersonId";
             var command = new SqlCommand(query);
+
             command.Parameters.AddWithValue("@PersonId", person.Id);
-            _databaseProvider.GetData(command);
 
             var reader = _databaseProvider.GetData(command);
 
             return GetAnalyzes(reader);
         }
 
-        public void Save(Analysis analysis)
+        public void Save(ref Analysis analysis)
         {
-            const string query = "insert into Analysis (AnalysisId, Analysis, TemplateId, PersonId) values(@AnalysisId, @Analysis, @TemplateId, @PersonId)";
+            var command = new SqlCommand
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandText = "SaveAnalysisAnGetId"
+            };
 
-            var command = new SqlCommand(query);
-            command.Parameters.Add("@Analysis", SqlDbType.NText);
-            command.Parameters["@Analysis"].Value = analysis.ToJson(); 
+            AddMainParameters(command, analysis);
+            command.Parameters["@AnalysisId"].Direction = ParameterDirection.Output;
 
-            command.Parameters.AddWithValue("@PersonId", analysis.GetPersonId());
-            command.Parameters.AddWithValue("@TemplateId", analysis.GetTemplateId());
-            command.Parameters.AddWithValue("@AnalysisId", analysis.Id);
+            var parameters = _databaseProvider.PushDataWithOutputParameters(command);
+            var id = int.Parse(parameters["@AnalysisId"].Value.ToString());
 
-            _databaseProvider.PushData(command);
+            analysis = new Analysis(analysis.Template, analysis.Person, id);
         }
 
         public void Update(Analysis analysis)
         {
-            const string query = "update Analysis set Analysis= @Analysis, PersonId=@PersonId, TemplateId=@TemplateId where AnalysisId = @AnalysisId";
-
+            const string query = "UPDATE Analysis SET Analysis= @Analysis WHERE AnalysisId = @AnalysisId";
             var command = new SqlCommand(query);
 
-            command.Parameters.Add("@Analysis", SqlDbType.NText);
-            command.Parameters["@Analysis"].Value = analysis.ToJson();
-
-            command.Parameters.AddWithValue("@PersonId", analysis.GetPersonId());
-            command.Parameters.AddWithValue("@TemplateId", analysis.GetTemplateId());
+            command.Parameters.Add("@@Analysis", SqlDbType.NText);
+            command.Parameters["@@Analysis"].Value = new JsonFormatter().ToJson(analysis);
             command.Parameters.AddWithValue("@AnalysisId", analysis.Id);
 
             _databaseProvider.PushData(command);
@@ -65,29 +64,56 @@ namespace HospitalLib.Providers
 
         public void Remove(Analysis analysis)
         {
-            var query = string.Format("delete from Analysis where AnalysisId='{0}'", analysis.Id);
-            _databaseProvider.PushData(query);
+            const string query = "DELETE FROM Analysis WHERE AnalysisId=AnalysisId";
+            var command = new SqlCommand(query);
+
+            command.Parameters.AddWithValue("@AnalysisId", analysis.Id);
+
+            _databaseProvider.PushData(command);
         }
 
         public void Remove(Person person)
         {
-            var query = string.Format("delete from Analysis where PersonId='{0}'", person.Id);
-            _databaseProvider.PushData(query);
+            const string query = "DELETE FROM Analysis WHERE PersonId=@PersonId";
+            var command = new SqlCommand(query);
+
+            command.Parameters.AddWithValue("@PersonId", person.Id);
+
+            _databaseProvider.PushData(command);
         }
 
         public void Remove(Template template)
         {
-            var query = string.Format("delete from Analysis where TemplateId='{0}'", template.Id);
-            _databaseProvider.PushData(query);
+            const string query = "DELETE FROM Analysis WHERE TemplateName=@TemplateName";
+            var command = new SqlCommand(query);
+
+            command.Parameters.Add("@TemplateName", SqlDbType.NVarChar);
+            command.Parameters["@TemplateName"].Value = template.Name;
+
+            _databaseProvider.PushData(command);
         }
 
         public int GetCount()
         {
-            const string query = "select count(*) from Analysis";
+            const string query = "SELECT count(*) FROM Analysis";
             var result = _databaseProvider.GetDataScalar(query);
             var count = int.Parse(result.ToString(CultureInfo.InvariantCulture));
 
             return count;
+        }
+
+        private void AddMainParameters(SqlCommand command, Analysis analysis)
+        {
+            command.Parameters.Add("@PersonId", SqlDbType.Int);
+            command.Parameters["@PersonId"].Value = analysis.GetPersonId();
+
+            command.Parameters.Add("@TemplateName", SqlDbType.NVarChar);
+            command.Parameters["@TemplateName"].Value = analysis.GetTemplateName();
+
+            command.Parameters.Add("@Analysis", SqlDbType.NText);
+            command.Parameters["@Analysis"].Value = new JsonFormatter().ToJson(analysis);
+
+            command.Parameters.Add("@AnalysisId", SqlDbType.Int);
         }
 
         private static IList<Analysis> GetAnalyzes(SqlDataReader reader)
@@ -98,13 +124,14 @@ namespace HospitalLib.Providers
                 var analysis = GetAnalysis(reader);
                 analyzes.Add(analysis);
             }
+
             return analyzes;
         }
 
         private static Analysis GetAnalysis(SqlDataReader reader)
         {
             var jsonData = reader["Analysis"].ToString();
-            var analysis = Analysis.FromJson(jsonData);
+            var analysis = new JsonFormatter().FromJson<Analysis>(jsonData);
 
             return analysis;
         }

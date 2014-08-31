@@ -12,7 +12,6 @@ namespace Hospital.Tests
     public class HospitalTests
     {
         static readonly DatabaseProvider DatabaseProvider = new DatabaseProvider();
-        readonly NewIdProvider _idProvider = new NewIdProvider(DatabaseProvider);
         readonly PersonProvider _personProvider = new PersonProvider(DatabaseProvider);
         readonly TemplateProvider _templateProvider = new TemplateProvider(DatabaseProvider);
         readonly AnalysisProvider _analysisProvider = new AnalysisProvider(DatabaseProvider);
@@ -20,13 +19,14 @@ namespace Hospital.Tests
         private bool PersonsAreEqual(Person first, Person second)
         {
             return
-                first.BirthDate.Equals(second.BirthDate) & (first.Id ==
-                    second.Id) & first.FirstName.Equals(second.FirstName) & first.MiddleName.Equals(second.MiddleName);
+                first.BirthDate.Equals(second.BirthDate) & 
+                first.FirstName.Equals(second.FirstName) & 
+                first.MiddleName.Equals(second.MiddleName);
         }
 
         private bool TemplatesAreEqual(Template first, Template second)
         {
-            return first.Id == second.Id && first.Name.Equals(second.Name) &&
+            return first.Name.Equals(second.Name) &&
                    first.HtmlTemplate.Equals(second.HtmlTemplate);
 
         }
@@ -36,7 +36,6 @@ namespace Hospital.Tests
             bool result = true;
             result &= TemplatesAreEqual(first.Template, second.Template);
             result &= PersonsAreEqual(first.Person, second.Person);
-            result &= first.Id.Equals(second.Id);
             result &= (first.CreationTime.CompareTo(second.CreationTime) == 1);
 
             return result;
@@ -61,8 +60,8 @@ namespace Hospital.Tests
         InlineData("Катя", "Клеп", "Клопович", "1994.4.20")]
         public void PersonProvider_SaveAndSearch_ShouldPass(string firstName, string lastName, string middleName, string birthDate)
         {
-            var person = new Person(_idProvider, firstName, lastName, middleName, DateTime.Parse(birthDate));
-            _personProvider.Save(person);
+            var person = new Person(firstName, lastName, middleName, DateTime.Parse(birthDate));
+            _personProvider.Save(ref person);
             var loadedPerson = _personProvider.Search(firstName, lastName);
             _personProvider.Remove(person);
 
@@ -78,10 +77,11 @@ namespace Hospital.Tests
         public void Analysis_ToAndFromJson_AnalysisIsProperlyDeserialized(string firstName, string lastName,
             string middleName, string birthDate)
         {
-            var template = new Template("имя шаблона", "содержимое", _idProvider);
-            var person = new Person(_idProvider, firstName, lastName, middleName, DateTime.Parse(birthDate));
-            var expectedAnalysis = new Analysis(template, person, _idProvider);
-            var actualAnalysis = Analysis.FromJson(expectedAnalysis.ToJson());
+            var template = new Template("имя шаблона", "содержимое");
+            var person = new Person(firstName, lastName, middleName, DateTime.Parse(birthDate));
+            var jsonFormatter = new JsonFormatter();
+            var expectedAnalysis = new Analysis(template, person);
+            var actualAnalysis = jsonFormatter.FromJson<Analysis>(jsonFormatter.ToJson(expectedAnalysis));
 
             Assert.True(AnalyzesAreEqual(expectedAnalysis, actualAnalysis));
         }
@@ -108,13 +108,14 @@ namespace Hospital.Tests
            InlineData("Катя", "Клеп", "Клопович", "1994.4.20")]
         public void AnalysisProvider_PersonAnalyzesArePropelyLoaded_ShouldPass(string firstName, string lastName, string middleName, string birthDate)
         {
-            var person = new Person(_idProvider, firstName, lastName, middleName, DateTime.Parse(birthDate));
-            var template = new Template("name", "content", _idProvider);
-            var expectedAnalysis = new Analysis(template, person, _idProvider);
+            var person = new Person(firstName, lastName, middleName, DateTime.Parse(birthDate));
+            _personProvider.Save(ref person);
 
-            _personProvider.Save(person);
+            var template = new Template("name" + firstName, "content");
             _templateProvider.Save(template);
-            _analysisProvider.Save(expectedAnalysis);
+
+            var expectedAnalysis = new Analysis(template, person);
+            _analysisProvider.Save(ref expectedAnalysis);
 
             var analyzes = _analysisProvider.Load(person);
 
@@ -136,8 +137,7 @@ namespace Hospital.Tests
            InlineData("Катя", "Клеп")]
         public void TemplateProvider_PersonAnalyzesArePropelyLoaded_ShouldPass(string name, string content)
         {
-            var expectedTemplate = new Template(name, content, _idProvider);
-
+            var expectedTemplate = new Template(name, content);
             _templateProvider.Save(expectedTemplate);
             var templates = _templateProvider.Load();
             _templateProvider.Remove(expectedTemplate);

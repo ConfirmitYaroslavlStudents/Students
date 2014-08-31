@@ -23,7 +23,6 @@ namespace HospitalApp.UserPages
 
             if (PersonsComboBox.Items.Count == 0)
                 throw new InvalidDataException("Persons Database is empty");
-
             PersonsComboBox.SelectedIndex = 0;
         }
 
@@ -34,7 +33,7 @@ namespace HospitalApp.UserPages
 
         private void SelectUserButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(PersonsComboBox.SelectedValue.ToString()))
+            if (PersonsComboBox.SelectedValue == null)
             {
                 MessageBox.Show("Вам следует выбрать пациента");
                 return;
@@ -81,14 +80,13 @@ namespace HospitalApp.UserPages
 
             if (!string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))
                 Search(lastName, firstName);
-
-            if (_personsDictionary.Count == 0)
+            else
+            {
                 LoadAllPerson();
+            }
 
-            if (PersonsComboBox.Items.Count == 0)
-                throw new InvalidDataException("Persons Database is empty");
-
-            PersonsComboBox.SelectedIndex = 0;
+            if (PersonsComboBox.Items.Count != 0)
+                PersonsComboBox.SelectedIndex = 0;
         }
     }
 }

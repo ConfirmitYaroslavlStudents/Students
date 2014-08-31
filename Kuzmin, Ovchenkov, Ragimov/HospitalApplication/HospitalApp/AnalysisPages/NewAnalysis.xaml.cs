@@ -62,8 +62,7 @@ namespace HospitalApp.AnalysisPages
             }
 
             CurrentState.CurrentTemplate = _templatesDictionary[TemplatesComboBox.SelectedValue.ToString()];
-            CurrentState.CurrentAnalysis = new Analysis(CurrentState.CurrentTemplate, CurrentState.CurrentPerson,
-                new NewIdProvider(new DatabaseProvider()));
+            CurrentState.CurrentAnalysis = new Analysis(CurrentState.CurrentTemplate, CurrentState.CurrentPerson);
 
             Switcher.PageSwitcher.Navigate(new AnalysisLoaded());
         }

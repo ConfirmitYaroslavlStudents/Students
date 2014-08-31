@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using HospitalLib.Data;
 using HospitalLib.DatebaseModel;
 using HospitalLib.Interfaces;
@@ -12,18 +11,14 @@ namespace HospitalLib.Loader
     public class HtmlLoader : ITemplateLoader
     {
         private const string PathToFolder = @"\Templates\";
-        private readonly INewIdProvider _newIdProvider;
         private readonly ITemplateProvider _templateProvider;
 
-        public HtmlLoader(ITemplateProvider templateProvider, INewIdProvider newIdProvider)
+        public HtmlLoader(ITemplateProvider templateProvider)
         {
             if (templateProvider == null)
                 throw new NullReferenceException("templateProvider");
             _templateProvider = templateProvider;
 
-            if (newIdProvider == null)
-                throw new NullReferenceException("NewIdProvider");
-            _newIdProvider = newIdProvider;
         }
 
         public void Load()
@@ -38,7 +33,7 @@ namespace HospitalLib.Loader
 
             foreach (var path in templatesPath)
             {
-                result.Add(LoadTemplate(path, _newIdProvider));
+                result.Add(LoadTemplate(path));
             }
 
             UpdateDatabase(result, _templateProvider);
@@ -49,15 +44,15 @@ namespace HospitalLib.Loader
             var pathToDirectory = Environment.CurrentDirectory + PathToFolder;
             const string fileNameTemplate = "*.html";
 
-            string[] templatesPath = {};
+            string[] templatesPath;
             try
             {
                 templatesPath = Directory.GetFiles(pathToDirectory, fileNameTemplate);
             }
-            catch (Exception)
+            catch (IOException e)
             {
-                MessageBox.Show("Что-то не так с папкой для шаблонов!", "Error!");
-            }
+                throw new IOException("Что-то не так с папкой для шаблонов! " + e.Message);
+            }      
 
             return templatesPath;
         }
@@ -81,26 +76,21 @@ namespace HospitalLib.Loader
             }
         }
 
-        private Template LoadTemplate(string path, INewIdProvider newIdProvider)
+        private Template LoadTemplate(string path)
         {
             var name = Path.GetFileNameWithoutExtension(path);
             string html;
             const string utf8Charset = "<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>";
             try
             {
-                html = File.ReadAllText(path);
-                if (html.IndexOf("<meta", StringComparison.Ordinal) == -1)
-                {
-                    html = utf8Charset + Environment.NewLine + html;
-                }
+                html = utf8Charset + Environment.NewLine + File.ReadAllText(path);
             }
-            catch (Exception)
+            catch (IOException e)
             {
-                MessageBox.Show("Something wrong with template " + name, "Error!");
-                return null;
-            }
+                throw new IOException("Что-то не так с шаблоном! " + e.Message);
+            }   
 
-            return new Template(name, html, newIdProvider);
+            return new Template(name, html);
         }
     }
 }

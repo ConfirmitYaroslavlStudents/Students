@@ -18,10 +18,10 @@ namespace HospitalLib.Utils
                     file.Write(text);
                 }
             }
-            catch (IOException e)
+            catch 
             {
-                throw new IOException("Не удалось распечатать файл! " + e.Message);
-            }   
+                MessageBox.Show("Не удалось распечатать файл!", "Error");
+            }
         }
 
         private string GetFilePath(string name)
@@ -29,7 +29,7 @@ namespace HospitalLib.Utils
             var printerPath = Environment.CurrentDirectory + PathToFolder + name;
 
             if (string.IsNullOrEmpty(printerPath))
-                throw new InvalidDataException("Путь к принтеру не указан!");
+                throw new InvalidDataException("Printer path is unknown");
 
             return printerPath  + ".txt";
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using HospitalLib.Data;
 using HospitalLib.DatebaseModel;
 using HospitalLib.Interfaces;
@@ -44,14 +45,14 @@ namespace HospitalLib.Loader
             var pathToDirectory = Environment.CurrentDirectory + PathToFolder;
             const string fileNameTemplate = "*.html";
 
-            string[] templatesPath;
+            string[] templatesPath = {};
             try
             {
                 templatesPath = Directory.GetFiles(pathToDirectory, fileNameTemplate);
             }
-            catch (IOException e)
+            catch (IOException)
             {
-                throw new IOException("Что-то не так с папкой для шаблонов! " + e.Message);
+                throw new IOException("Что-то не так с папкой для шаблонов!");
             }      
 
             return templatesPath;
@@ -83,12 +84,17 @@ namespace HospitalLib.Loader
             const string utf8Charset = "<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>";
             try
             {
-                html = utf8Charset + Environment.NewLine + File.ReadAllText(path);
+                html = File.ReadAllText(path);
+                if (html.IndexOf("<meta", StringComparison.Ordinal) == -1)
+                {
+                    html = utf8Charset + Environment.NewLine + html;
+                }
             }
-            catch (IOException e)
+            catch (Exception)
             {
-                throw new IOException("Что-то не так с шаблоном! " + e.Message);
-            }   
+                MessageBox.Show("Something wrong with template " + name, "Error!");
+                return null;
+            }
 
             return new Template(name, html);
         }

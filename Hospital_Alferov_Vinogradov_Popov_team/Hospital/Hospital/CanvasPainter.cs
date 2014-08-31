@@ -81,7 +81,9 @@ namespace Hospital
                 Width = 400,
                 FontSize = fontSize,
                 Foreground = Brushes.White,
-                Background = Brushes.Transparent
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.White,
+                BorderThickness = new Thickness(2)
             };
             _currentCanvas.Children.Add(itemsTypesListBox);
             Canvas.SetLeft(itemsTypesListBox, currentCoordinate);

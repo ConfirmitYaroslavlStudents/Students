@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Shared;
@@ -12,11 +11,11 @@ namespace Hospital
 {
     public partial class MainWindow
     {
-        private async void LoadAnalyzesMainMenuItem_Click(object sender, RoutedEventArgs e)
+        private void LoadAnalyzesMainMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                _analyzes = await Task.Run(() => _dataAccessLayer.GetAnalyzes(_currentPerson.PolicyNumber));
+                _analyzes = _dataAccessLayer.GetAnalyzes(_currentPerson.PolicyNumber);
             }
             catch (InvalidOperationException ex)
             {
@@ -31,7 +30,7 @@ namespace Hospital
             _canvasPainter.PaintCanvasWithListBox(currentPersonDifferentTemplatesTitles, LoadAnalyzesOKButton_Click);
         }
 
-        private async void LoadAnalyzesOKButton_Click(object sender, RoutedEventArgs e)
+        private void LoadAnalyzesOKButton_Click(object sender, RoutedEventArgs e)
         {
             string currentTemplateTitle = GetSelectedItem();
 
@@ -42,7 +41,7 @@ namespace Hospital
 
             try
             {
-                _currentTemplate = await Task.Run(() => _dataAccessLayer.GetTemplate(currentTemplateTitle));
+                _currentTemplate = _dataAccessLayer.GetTemplate(currentTemplateTitle);
             }
             catch (InvalidOperationException ex)
             {

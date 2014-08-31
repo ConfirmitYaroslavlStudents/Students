@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Name="MainWin" x:Class="Hospital.MainWindow"
     Title="Hospital" Height="604" Width="901" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-    Icon="ico.png">
+    Icon="Images\ico.png">
     <Window.Background>
         <ImageBrush />
     </Window.Background>
@@ -15,7 +15,7 @@
                       Foreground="OrangeRed">
                 <MenuItem x:Name="AddPersonMenuItem" Header="add"
                           Click="AddPersonMenuItem_Click"
-                          Background="Transparent"/>
+                          Background="Transparent" />
                 <MenuItem x:Name="LoadPersonMenuItem" Header="load"
                           Click="LoadPersonMenuItem_Click" />
             </MenuItem>
@@ -38,7 +38,7 @@
             <MenuItem x:Name="AboutUs" Header="About" Foreground="BlueViolet" Width="217" Click="AboutUs_Click" />
         </Menu>
         <TabControl x:Name="MainTabControl" Height="427" Canvas.Left="10" Canvas.Top="73" Width="871"
-                    Background="#00CDCDCD"  BorderBrush="#00000000">
+                    Background="#00CDCDCD" BorderBrush="#00000000">
             <TabItem Visibility="Hidden" x:Name="MainTabItem" Header="Main">
                 <Canvas Margin="0,0,0,0" x:Name="MainCanvas" Background="#00000000" />
             </TabItem>
@@ -59,7 +59,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <Label Content="First Name            Last Name             Policy Number" FontSize="30"
-                           Canvas.Left="10" Canvas.Top="284" Foreground="White"/>
+                           Canvas.Left="10" Canvas.Top="284" Foreground="White" />
                     <TextBox Name="FirstNameTextBox" FontSize="30" Canvas.Left="10" Canvas.Top="339" Width="242"
                              x:FieldModifier="private" />
                     <TextBox Name="LastNameTextBox" FontSize="30" Canvas.Left="257" Canvas.Top="339" Width="242"
@@ -68,10 +68,10 @@
                              x:FieldModifier="private" />
                     <Button Name="LoadPersonButton" Content="Load" FontSize="30" Height="50"
                             Width="122" Canvas.Left="729" Canvas.Top="284" Click="LoadPersonButton_Click"
-                            Background="Transparent" Foreground="White"/>
+                            Background="Transparent" Foreground="White" />
                     <Button x:Name="SearchPersonButton" Content="Search" FontSize="30" Height="50" Width="122"
                             Click="SearchPersonButton_Click" Canvas.Left="729" Canvas.Top="339"
-                            Background="Transparent" Foreground="White"/>
+                            Background="Transparent" Foreground="White" />
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Hidden" x:Name="AnalysisTabItem" Header="Analysis">
@@ -79,14 +79,14 @@
                     <TextBox x:Name="AnalysisTextBox" Height="375" Canvas.Left="421" TextWrapping="Wrap"
                              Canvas.Top="10" Width="430" HorizontalScrollBarVisibility="Auto"
                              VerticalScrollBarVisibility="Auto" FontSize="30" IsReadOnly="True"
-                             Background="Transparent" Foreground="White"/>
+                             Background="Transparent" Foreground="White" />
                     <ListBox Name="AnalyzesDatesListBox" FontSize="30" Height="296" Canvas.Left="10" Canvas.Top="10"
                              Width="406" x:FieldModifier="private"
                              SelectionChanged="AnalyzesDatesListBox_SelectionChanged"
-                             Background="Transparent" Foreground="White"/>
+                             Background="Transparent" Foreground="White" />
                     <Button Name="ExportButton" Content="Export" FontSize="30" Canvas.Left="10" Canvas.Top="311"
                             Width="406" Height="74" Click="AnalysisExportButton_Click"
-                            Background="Transparent" Foreground="White"/>
+                            Background="Transparent" Foreground="White" />
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Hidden" x:Name="WriteNewTemplateTabItem" Header="WriteNewTemplateTabItem">
@@ -94,26 +94,26 @@
                     <TextBox Name="TemplateNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap"
                              Tag="Name of template" Canvas.Top="10" Width="841" FontSize="30"
                              x:FieldModifier="private"
-                             Background="Transparent" Foreground="White"/>
+                             Background="Transparent" Foreground="White" />
                     <ListBox Name="FieldsNamesListBox" Height="189" Canvas.Left="10" Canvas.Top="61" Width="841"
                              FontSize="30"
                              x:FieldModifier="private"
-                             Background="Transparent" Foreground="White"/>
+                             Background="Transparent" Foreground="White" />
                     <TextBox Name="FieldNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap"
                              Tag="Name of field" Canvas.Top="255" Width="721" FontSize="30"
                              x:FieldModifier="private"
-                             Background="Transparent" Foreground="White"/>
+                             Background="Transparent" Foreground="White" />
                     <Button Name="AddFieldButton" Content="Add" FontSize="30" Canvas.Left="736" Canvas.Top="255"
                             Height="46" Width="115" Click="AddFieldButton_Click"
-                            Background="Transparent" Foreground="White"/>
+                            Background="Transparent" Foreground="White" />
                     <Button Name="SaveTemplateButton" Content="Save template" FontSize="30" Canvas.Left="10"
                             Canvas.Top="339" Height="46" Width="851" Click="SaveTemplateButton_Click"
-                            Background="Transparent" Foreground="White"/>
+                            Background="Transparent" Foreground="White" />
                 </Canvas>
             </TabItem>
         </TabControl>
         <Label Name="CurrentPersonLabel" FontSize="30" Height="61" Width="871" Canvas.Left="10" Canvas.Top="505"
                x:FieldModifier="private"
-               Background="Transparent" Foreground="White"/>
+               Background="Transparent" Foreground="White" />
     </Canvas>
 </Window>

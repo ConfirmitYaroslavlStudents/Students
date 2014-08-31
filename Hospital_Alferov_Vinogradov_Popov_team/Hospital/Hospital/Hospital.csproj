@@ -151,10 +151,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ico.png" />
+    <Resource Include="Images\fon.jpeg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\fon.jpeg" />
+    <Resource Include="Images\ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ico.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ico.ico" />

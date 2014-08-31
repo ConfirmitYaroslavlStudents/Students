@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Shared;
 
@@ -12,11 +11,11 @@ namespace Hospital
     /// </summary>
     public partial class MainWindow
     {
-        private async void AddAnalysisMainMenuItem_Click(object sender, RoutedEventArgs e)
+        private void AddAnalysisMainMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                _templates = await Task.Run(() => _dataAccessLayer.GetTemplates());
+                _templates = _dataAccessLayer.GetTemplates();
             }
             catch (InvalidOperationException ex)
             {
@@ -29,7 +28,7 @@ namespace Hospital
                 ChooseTemplateOKButton_Click);
         }
 
-        private async void ChooseTemplateOKButton_Click(object sender, RoutedEventArgs e)
+        private void ChooseTemplateOKButton_Click(object sender, RoutedEventArgs e)
         {
             int selectedTemplateIndex = GetSelectedTemplateIndex();
 
@@ -42,7 +41,7 @@ namespace Hospital
             try
             {
                 _currentTemplate =
-                    await Task.Run(() => _dataAccessLayer.GetTemplate(_templates[selectedTemplateIndex].Title));
+                    _dataAccessLayer.GetTemplate(_templates[selectedTemplateIndex].Title);
             }
             catch (InvalidOperationException ex)
             {
@@ -80,7 +79,7 @@ namespace Hospital
 
             try
             {
-                Task.Run(() => _dataAccessLayer.AddAnalysis(_currentPerson.PolicyNumber, _currentAnalysis));
+                _dataAccessLayer.AddAnalysis(_currentPerson.PolicyNumber, _currentAnalysis);
             }
             catch (InvalidOperationException ex)
             {

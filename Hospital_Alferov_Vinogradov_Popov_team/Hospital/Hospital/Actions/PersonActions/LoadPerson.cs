@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Shared;
@@ -9,14 +8,14 @@ namespace Hospital
 {
     public partial class MainWindow
     {
-        private async void LoadPersonMenuItem_Click(object sender, RoutedEventArgs e)
+        private void LoadPersonMenuItem_Click(object sender, RoutedEventArgs e)
         {
             LoadPersonTabItem.IsSelected = true;
             List<Person> persons;
 
             try
             {
-                persons = await Task.Run(() => _dataAccessLayer.GetPersons(string.Empty, string.Empty, string.Empty));
+                persons = _dataAccessLayer.GetPersons(string.Empty, string.Empty, string.Empty);
             }
             catch (InvalidOperationException ex)
             {
@@ -27,21 +26,23 @@ namespace Hospital
             PersonsDataGrid.ItemsSource = persons;
         }
 
-        private async void SearchPersonButton_Click(object sender, RoutedEventArgs e)
+        private void SearchPersonButton_Click(object sender, RoutedEventArgs e)
         {
             List<Person> persons;
+
             try
             {
-                var firstName = FirstNameTextBox.Text;
-                var lastName = LastNameTextBox.Text;
-                var policyNumber = PolicyNumberTextBox.Text;
-                persons = await Task.Run(() => _dataAccessLayer.GetPersons(firstName, lastName, policyNumber));
+                string firstName = FirstNameTextBox.Text;
+                string lastName = LastNameTextBox.Text;
+                string policyNumber = PolicyNumberTextBox.Text;
+                persons = _dataAccessLayer.GetPersons(firstName, lastName, policyNumber);
             }
             catch (InvalidOperationException ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
             PersonsDataGrid.ItemsSource = persons;
         }
 

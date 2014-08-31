@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using Shared;
 
@@ -22,7 +21,7 @@ namespace Hospital
             FieldNameTextBox.Text = FieldNameTextBox.Tag.ToString();
         }
 
-        private async void SaveTemplateButton_Click(object sender, RoutedEventArgs e)
+        private void SaveTemplateButton_Click(object sender, RoutedEventArgs e)
         {
             if (TemplateNameTextBox.Text.Equals(TemplateNameTextBox.Tag.ToString()) ||
                 FieldsNamesListBox.Items.Count == 0)
@@ -46,7 +45,7 @@ namespace Hospital
             try
             {
                 string templateName = TemplateNameTextBox.Text;
-                await Task.Run(() => _dataAccessLayer.AddTemplate(new Template(data, templateName)));
+                _dataAccessLayer.AddTemplate(new Template(data, templateName));
             }
             catch (InvalidOperationException ex)
             {

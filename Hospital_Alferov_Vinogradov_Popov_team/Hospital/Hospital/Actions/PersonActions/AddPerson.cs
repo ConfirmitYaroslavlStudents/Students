@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using Shared;
 
@@ -14,7 +13,7 @@ namespace Hospital
             _canvasPainter.PaintCanvasWithTextBoxes(_fieldsNamesForAddingPerson, AddPersonOKButton_Click);
         }
 
-        private async void AddPersonOKButton_Click(object sender, RoutedEventArgs e)
+        private void AddPersonOKButton_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> filledPersonFields = GetInformationFromTextBoxes();
 
@@ -39,7 +38,7 @@ namespace Hospital
 
                 try
                 {
-                    await Task.Run(() => _dataAccessLayer.AddPerson(_currentPerson));
+                    _dataAccessLayer.AddPerson(_currentPerson);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -47,6 +46,7 @@ namespace Hospital
                     _currentPerson = null;
                     return;
                 }
+
                 MessageBox.Show("Person added successfully!", "Information", MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 CurrentPersonLabel.Content = string.Format("{0} {1} {2}", _currentPerson.FirstName,
@@ -65,7 +65,7 @@ namespace Hospital
             }
             catch (ArgumentNullException)
             {
-                MessageBox.Show("Your input is so long!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Your input is so empty value!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

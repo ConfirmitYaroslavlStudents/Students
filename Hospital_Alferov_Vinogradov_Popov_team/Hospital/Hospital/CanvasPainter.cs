@@ -26,7 +26,13 @@ namespace Hospital
 
             foreach (string item in collection)
             {
-                var labelForThisItem = new Label { Content = item, Tag = item, FontSize = fontSize, Foreground = Brushes.White };
+                var labelForThisItem = new Label
+                {
+                    Content = item,
+                    Tag = item,
+                    FontSize = fontSize,
+                    Foreground = Brushes.White
+                };
                 _currentCanvas.Children.Add(labelForThisItem);
                 Canvas.SetLeft(labelForThisItem, 10);
                 Canvas.SetTop(labelForThisItem, currentCoordinate);
@@ -40,13 +46,19 @@ namespace Hospital
                 };
 
                 _currentCanvas.Children.Add(textBoxForThisItem);
-                Canvas.SetLeft(textBoxForThisItem, maxLength * widthInterval / 2 + 20);
+                Canvas.SetLeft(textBoxForThisItem, maxLength*widthInterval/2 + 20);
                 Canvas.SetTop(textBoxForThisItem, currentCoordinate);
 
                 currentCoordinate += heightInterval;
             }
 
-            var okButton = new Button { Content = "OK", FontSize = fontSize, Foreground = Brushes.White, Background = Brushes.Transparent };
+            var okButton = new Button
+            {
+                Content = "OK",
+                FontSize = fontSize,
+                Foreground = Brushes.White,
+                Background = Brushes.Transparent
+            };
             okButton.Click += clickHandler;
             okButton.Width = 100;
 
@@ -63,7 +75,14 @@ namespace Hospital
             const int heightInterval = 40;
             const int currentCoordinate = 10;
 
-            var itemsTypesListBox = new ListBox { Height = 200, Width = 400, FontSize = fontSize, Foreground = Brushes.White, Background = Brushes.Transparent };
+            var itemsTypesListBox = new ListBox
+            {
+                Height = 200,
+                Width = 400,
+                FontSize = fontSize,
+                Foreground = Brushes.White,
+                Background = Brushes.Transparent
+            };
             _currentCanvas.Children.Add(itemsTypesListBox);
             Canvas.SetLeft(itemsTypesListBox, currentCoordinate);
             Canvas.SetTop(itemsTypesListBox, currentCoordinate);
@@ -73,7 +92,13 @@ namespace Hospital
                 itemsTypesListBox.Items.Add(item);
             }
 
-            var okButton = new Button { Content = "OK", FontSize = fontSize, Foreground = Brushes.White, Background = Brushes.Transparent };
+            var okButton = new Button
+            {
+                Content = "OK",
+                FontSize = fontSize,
+                Foreground = Brushes.White,
+                Background = Brushes.Transparent
+            };
             okButton.Click += clickHandler;
             okButton.Width = 100;
 

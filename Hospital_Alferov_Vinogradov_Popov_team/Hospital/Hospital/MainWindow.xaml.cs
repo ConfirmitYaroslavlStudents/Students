@@ -123,8 +123,8 @@ namespace Hospital
 
         private void AboutUs_Click(object sender, RoutedEventArgs e)
         {
-            var message = "Stydents Yaroslavl Demidov State University, Mathematics faculty, " +
-                          "Computer Security 31\nVinogradov Kirill - GUI\nAlferov Roman - DAL\nPopov Sergey - Printers";
+            string message = "Stydents Yaroslavl Demidov State University, Mathematics faculty, " +
+                             "Computer Security 31\nVinogradov Kirill - GUI\nAlferov Roman - DAL\nPopov Sergey - Printers";
             MessageBox.Show(message, "About Us", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }

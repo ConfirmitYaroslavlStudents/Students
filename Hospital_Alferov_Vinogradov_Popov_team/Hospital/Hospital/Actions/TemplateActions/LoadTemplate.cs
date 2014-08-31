@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using Shared;
@@ -11,7 +10,7 @@ namespace Hospital
 {
     public partial class MainWindow
     {
-        private async void LoadNewTemplateMenuItem_Click(object sender, RoutedEventArgs e)
+        private void LoadNewTemplateMenuItem_Click(object sender, RoutedEventArgs e)
         {
             ClearCanvas();
 
@@ -40,13 +39,13 @@ namespace Hospital
                     }
 
                     string fileName = newOutputFormatOpenFileDialog.FileName;
-                    template = await Task.Run(() => new Template(fields,
-                        Path.GetFileNameWithoutExtension(fileName)));
+                    template = new Template(fields,
+                        Path.GetFileNameWithoutExtension(fileName));
                 }
 
                 try
                 {
-                    await Task.Run(() => _dataAccessLayer.AddTemplate(template));
+                    _dataAccessLayer.AddTemplate(template);
                 }
                 catch (InvalidOperationException ex)
                 {

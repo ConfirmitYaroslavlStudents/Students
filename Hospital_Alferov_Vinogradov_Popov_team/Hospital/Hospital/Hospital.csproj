@@ -52,6 +52,10 @@
     <ApplicationIcon>ico.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GemBox.Document, Version=23.3.30.1104, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\GemBox.Document.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
@@ -132,6 +136,10 @@
       <Project>{90cd0998-89b8-4f3c-b3e4-4a378aede315}</Project>
       <Name>Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TemplateFiller\TemplateFiller.csproj">
+      <Project>{49aacadb-94e1-47db-a870-16adaddbba66}</Project>
+      <Name>TemplateFiller</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -169,6 +177,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>mkdir Printers
+mkdir Templates
 copy ..\..\..\Printers\TxtPrinter\bin\Debug\TxtPrinter.dll  Printers\TxtPrinter.dll
 xcopy ..\..\..\Databases Databases /i</PostBuildEvent>
   </PropertyGroup>

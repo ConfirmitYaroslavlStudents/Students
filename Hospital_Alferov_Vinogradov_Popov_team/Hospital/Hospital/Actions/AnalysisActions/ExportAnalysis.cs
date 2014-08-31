@@ -6,6 +6,7 @@ using System.Windows;
 using Microsoft.Win32;
 using PrintersLoaderLibrary;
 using Shared.Interfaces;
+using TemplateFillerLibrary;
 
 namespace Hospital
 {
@@ -66,7 +67,11 @@ namespace Hospital
 
                 try
                 {
-                    printer.Print(_currentPerson, _currentAnalysis, _currentTemplate);
+                    string pathToCurrentHtmlTemplate = Path.Combine(Environment.CurrentDirectory, @"Templates\",
+                        _currentTemplate.Title + ".html");
+                    var templateFiller = new TemplateFiller(pathToCurrentHtmlTemplate);
+
+                    printer.Print(templateFiller.FillTemplate(_currentPerson, _currentAnalysis, _currentTemplate));
                 }
                 catch (Exception ex)
                 {

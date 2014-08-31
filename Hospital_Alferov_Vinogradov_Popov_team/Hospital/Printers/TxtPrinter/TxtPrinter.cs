@@ -1,11 +1,10 @@
 ﻿using System.IO;
 using System.Text;
 using Shared;
-using Shared.Interfaces;
 
 namespace TxtPrinter
 {
-    public class TxtPrinter : IPrinter
+    public class TxtPrinter //: IPrinter
     {
         public string PathToFile { get; set; }
 

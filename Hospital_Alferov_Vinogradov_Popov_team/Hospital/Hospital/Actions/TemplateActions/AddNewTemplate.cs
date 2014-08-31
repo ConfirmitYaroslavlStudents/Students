@@ -10,6 +10,7 @@ namespace Hospital
     public partial class MainWindow
     {
         private bool _isHtmlTemplateLoaded;
+
         private void AddNewTemplateMenuItem_Click(object sender, RoutedEventArgs e)
         {
             WriteNewTemplateTabItem.IsSelected = true;
@@ -28,10 +29,15 @@ namespace Hospital
         private void SaveTemplateButton_Click(object sender, RoutedEventArgs e)
         {
             if (TemplateNameTextBox.Text.Equals(TemplateNameTextBox.Tag.ToString()) ||
-                FieldsNamesListBox.Items.Count == 0 ||
-                !_isHtmlTemplateLoaded)
+                FieldsNamesListBox.Items.Count == 0)
             {
                 MessageBox.Show("Incorrect input!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!_isHtmlTemplateLoaded)
+            {
+                MessageBox.Show("You should load html template!!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -83,6 +89,13 @@ namespace Hospital
                 {
                     File.Copy(newOutputFormatOpenFileDialog.FileName, pathToCopy);
                 }
+                catch (IOException)
+                {
+                    MessageBox.Show("This html template already exists!", "Information", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                    _isHtmlTemplateLoaded = true;
+                    return;
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -90,7 +103,7 @@ namespace Hospital
                 }
 
 
-                MessageBox.Show("Markup added successfully!", "Information", MessageBoxButton.OK,
+                MessageBox.Show("Html template added successfully!", "Information", MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
                 _isHtmlTemplateLoaded = true;

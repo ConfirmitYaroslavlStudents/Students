@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49AACADB-94E1-47DB-A870-16ADADDBBA66}</ProjectGuid>
+    <ProjectGuid>{7FEE662A-D81E-4D88-8B6C-62B405116CCE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TemplateFiller</RootNamespace>
-    <AssemblyName>TemplateFiller</AssemblyName>
+    <RootNamespace>DocxPrinter</RootNamespace>
+    <AssemblyName>DocxPrinter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,15 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GemBox.Document, Version=23.3.30.1104, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\GemBox.Document.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TemplateFiller.cs" />
+    <Compile Include="DocxPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj">
+    <ProjectReference Include="..\..\Shared\Shared.csproj">
       <Project>{90cd0998-89b8-4f3c-b3e4-4a378aede315}</Project>
       <Name>Shared</Name>
     </ProjectReference>

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("TemplateFiller")]
+[assembly: AssemblyTitle("DocxPrinter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TemplateFiller")]
+[assembly: AssemblyProduct("DocxPrinter")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("de2215e1-da53-4f56-81cd-144a41bf860a")]
+[assembly: Guid("024ba24f-caa9-45ce-a6d3-d852493708a3")]
 
 // Version information for an assembly consists of the following four values:
 //

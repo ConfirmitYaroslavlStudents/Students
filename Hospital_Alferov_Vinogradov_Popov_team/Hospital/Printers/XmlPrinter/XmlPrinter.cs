@@ -1,10 +1,9 @@
 ﻿using System.Xml.Linq;
 using Shared;
-using Shared.Interfaces;
 
 namespace XmlPrinter
 {
-    public class XmlPrinter : IPrinter
+    public class XmlPrinter //: IPrinter
     {
         public string PathToFile { get; set; }
 

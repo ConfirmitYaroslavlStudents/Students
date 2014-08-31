@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Tests", "Hospital.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateFiller", "TemplateFiller\TemplateFiller.csproj", "{49AACADB-94E1-47DB-A870-16ADADDBBA66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocxPrinter", "Printers\DocxPrinter\DocxPrinter.csproj", "{7FEE662A-D81E-4D88-8B6C-62B405116CCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{49AACADB-94E1-47DB-A870-16ADADDBBA66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49AACADB-94E1-47DB-A870-16ADADDBBA66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49AACADB-94E1-47DB-A870-16ADADDBBA66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FEE662A-D81E-4D88-8B6C-62B405116CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FEE662A-D81E-4D88-8B6C-62B405116CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FEE662A-D81E-4D88-8B6C-62B405116CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FEE662A-D81E-4D88-8B6C-62B405116CCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,5 +76,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2D4E341E-8DA7-43C3-816E-8F8D8F4D867D} = {5B6301BC-0965-4648-97F9-0217A4C0376B}
 		{180711B9-9FFF-44FC-95E2-8891C7642B86} = {5B6301BC-0965-4648-97F9-0217A4C0376B}
+		{7FEE662A-D81E-4D88-8B6C-62B405116CCE} = {5B6301BC-0965-4648-97F9-0217A4C0376B}
 	EndGlobalSection
 EndGlobal

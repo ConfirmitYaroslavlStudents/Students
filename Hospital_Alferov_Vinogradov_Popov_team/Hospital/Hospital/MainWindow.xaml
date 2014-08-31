@@ -87,23 +87,24 @@
                 </Canvas>
             </TabItem>
             <TabItem Visibility="Hidden" x:Name="WriteNewTemplateTabItem" Header="WriteNewTemplateTabItem">
-                <Canvas x:Name="WriteNewTemplateCanvas" >
+                <Canvas x:Name="WriteNewTemplateCanvas">
                     <TextBox Name="TemplateNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap"
                              Tag="Name of template" Canvas.Top="10" Width="841" FontSize="30"
                              x:FieldModifier="private"
-                             Background="Transparent" Foreground="White" BorderThickness="2"/>
+                             Background="Transparent" Foreground="White" BorderThickness="2" />
                     <ListBox Name="FieldsNamesListBox" Height="189" Canvas.Left="10" Canvas.Top="61" Width="841"
                              FontSize="30"
                              x:FieldModifier="private"
-                             Background="Transparent" Foreground="White" BorderThickness="2" BorderBrush="#FFE3E9EF"/>
+                             Background="Transparent" Foreground="White" BorderThickness="2" BorderBrush="#FFE3E9EF" />
                     <TextBox Name="FieldNameTextBox" Height="46" Canvas.Left="10" TextWrapping="Wrap"
                              Tag="Name of field" Canvas.Top="255" Width="721" FontSize="30"
                              x:FieldModifier="private"
-                             Background="Transparent" Foreground="White" BorderThickness="2"/>
+                             Background="Transparent" Foreground="White" BorderThickness="2" />
                     <Button Name="AddFieldButton" Content="Add" FontSize="30" Canvas.Left="736" Canvas.Top="255"
                             Height="46" Width="115" Click="AddFieldButton_Click"
                             Background="Transparent" Foreground="White" />
-                    <Button Name="LoadHtmlMarkupButton" Content="Load Html Markup" FontSize="30" Canvas.Left="10" Canvas.Top="306"
+                    <Button Name="LoadHtmlMarkupButton" Content="Load Html Markup" FontSize="30" Canvas.Left="10"
+                            Canvas.Top="306"
                             Height="79" Width="421" Click="LoadHtmlMarkupButton_Click"
                             Background="Transparent" Foreground="White" />
                     <Button Name="SaveTemplateButton" Content="Save template" FontSize="30" Canvas.Left="436"

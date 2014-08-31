@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Shared;
 
@@ -12,14 +13,14 @@ namespace TemplateFillerLibrary
         private const string ValueSubstitition = "value";
 
         private readonly string _pathToHtmlTemplate;
-        private readonly Dictionary<string, string> _substitutions; 
+        private readonly Dictionary<string, string> _substitutions;
 
         public TemplateFiller(string pathToHtmlTemplate)
         {
             _pathToHtmlTemplate = pathToHtmlTemplate;
             _substitutions = new Dictionary<string, string>();
         }
-        
+
         public string FillTemplate(Person person, Analysis analysis, Template template)
         {
             InitSubstitutions(person);
@@ -76,9 +77,9 @@ namespace TemplateFillerLibrary
 
         private void InitSubstitutions(Person person)
         {
-            var personProperties = typeof(Person).GetProperties();
+            PropertyInfo[] personProperties = typeof (Person).GetProperties();
 
-            foreach (var personProperty in personProperties)
+            foreach (PropertyInfo personProperty in personProperties)
             {
                 _substitutions[personProperty.Name + "Value"] = personProperty.GetValue(person).ToString();
             }

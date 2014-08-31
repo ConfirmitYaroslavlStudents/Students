@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital", "Hospital\Hospital.csproj", "{BC9E0857-6290-4529-90B4-7170635949CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{90CD0998-89B8-4F3C-B3E4-4A378AEDE315}"
@@ -18,6 +20,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListFormatter", "ListFormatter\ListFormatter.csproj", "{91E7EB0C-253F-44D9-B205-282419EDE777}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.Tests", "Hospital.Tests\Hospital.Tests.csproj", "{E70CC620-809A-4AD1-91F8-E0402AD255A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blank", "Blank\Blank.csproj", "{A7768C15-C150-464F-876F-D00A5CFD6038}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBlankFiller", "TestBlankFiller\TestBlankFiller.csproj", "{BD8D86A9-4E41-40DA-BBD7-71C58F1D56EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +63,14 @@ Global
 		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E70CC620-809A-4AD1-91F8-E0402AD255A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7768C15-C150-464F-876F-D00A5CFD6038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7768C15-C150-464F-876F-D00A5CFD6038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7768C15-C150-464F-876F-D00A5CFD6038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7768C15-C150-464F-876F-D00A5CFD6038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD8D86A9-4E41-40DA-BBD7-71C58F1D56EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD8D86A9-4E41-40DA-BBD7-71C58F1D56EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD8D86A9-4E41-40DA-BBD7-71C58F1D56EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD8D86A9-4E41-40DA-BBD7-71C58F1D56EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

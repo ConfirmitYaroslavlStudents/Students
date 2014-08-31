@@ -176,10 +176,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>mkdir Printers
-mkdir Templates
-copy ..\..\..\Printers\TxtPrinter\bin\Debug\TxtPrinter.dll  Printers\TxtPrinter.dll
-xcopy ..\..\..\Databases Databases /i</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(SolutionDir)HospitalData\Databases" "$(TargetDir)Databases" /i
+xcopy /y "$(SolutionDir)HospitalData\Printers" "$(TargetDir)Printers"  /i
+xcopy /y "$(SolutionDir)HospitalData\Templates" "$(TargetDir)Templates"  /i</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

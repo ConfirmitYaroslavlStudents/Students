@@ -92,7 +92,7 @@ namespace Hospital
                 catch (IOException)
                 {
                     MessageBox.Show("This html template already exists!", "Information", MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                        MessageBoxImage.Information);
                     _isHtmlTemplateLoaded = true;
                     return;
                 }

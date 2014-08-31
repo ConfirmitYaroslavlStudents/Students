@@ -99,9 +99,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>rmdir /s /q Databases
-mkdir Databases
-copy ..\..\..\Databases\Hospital.sdf Databases\Hospital.sdf</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(SolutionDir)HospitalData\Databases" "$(TargetDir)Databases" /i
+copy /y "$(SolutionDir)HospitalData\expected.html" "$(TargetDir)expected.html"
+copy /y "$(SolutionDir)HospitalData\Templates\Blood Test.html" "$(TargetDir)Blood Test.html"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

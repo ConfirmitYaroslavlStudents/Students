@@ -18,9 +18,9 @@
             </MenuItem>
             <MenuItem x:Name="AnalysisMainMenuItem" Height="63" Width="218" Header="Analysis"
                       Foreground="YellowGreen" IsEnabled="False">
-                <MenuItem x:Name="AddAnalysisMenuItem" Header="add" FontSize="40" FontFamily="Tempus Sans ITC"
+                <MenuItem x:Name="AddAnalysisMenuItem" Header="add"
                           Click="AddAnalysisMainMenuItem_Click" />
-                <MenuItem x:Name="LoadAnalyzesMenuItem" Header="load" FontSize="40" FontFamily="Tempus Sans ITC"
+                <MenuItem x:Name="LoadAnalyzesMenuItem" Header="load"
                           Click="LoadAnalyzesMainMenuItem_Click" />
             </MenuItem>
             <MenuItem x:Name="OtherMainMenuItem" Height="63" Width="218" Header="Other"
@@ -103,9 +103,9 @@
                     <Button Name="AddFieldButton" Content="Add" FontSize="30" Canvas.Left="736" Canvas.Top="255"
                             Height="46" Width="115" Click="AddFieldButton_Click"
                             Background="Transparent" Foreground="White" />
-                    <Button Name="LoadHtmlMarkupButton" Content="Load Html Markup" FontSize="30" Canvas.Left="10"
+                    <Button Name="LoadHtmlTemplateButton" Content="Load Html Template" FontSize="30" Canvas.Left="10"
                             Canvas.Top="306"
-                            Height="79" Width="421" Click="LoadHtmlMarkupButton_Click"
+                            Height="79" Width="421" Click="LoadHtmlTemplateButton_Click"
                             Background="Transparent" Foreground="White" />
                     <Button Name="SaveTemplateButton" Content="Save template" FontSize="30" Canvas.Left="436"
                             Canvas.Top="306" Height="79" Width="425" Click="SaveTemplateButton_Click"

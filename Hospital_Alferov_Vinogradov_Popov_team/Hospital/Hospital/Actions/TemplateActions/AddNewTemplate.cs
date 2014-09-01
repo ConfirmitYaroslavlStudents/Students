@@ -71,7 +71,7 @@ namespace Hospital
             _isHtmlTemplateLoaded = false;
         }
 
-        private void LoadHtmlMarkupButton_Click(object sender, RoutedEventArgs e)
+        private void LoadHtmlTemplateButton_Click(object sender, RoutedEventArgs e)
         {
             var newOutputFormatOpenFileDialog = new OpenFileDialog
             {

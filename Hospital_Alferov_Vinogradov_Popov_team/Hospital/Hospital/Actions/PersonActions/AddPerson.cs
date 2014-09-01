@@ -67,6 +67,10 @@ namespace Hospital
             {
                 MessageBox.Show("Your input is so empty value!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

@@ -1,18 +1,12 @@
-﻿using System.IO;
-using System.Text;
-using GemBox.Document;
-using Shared.Interfaces;
+﻿using Shared;
 
 namespace PngPrinter
 {
-    public class PngPrinter : IPrinter
+    public class PngPrinter : Printer
     {
-        public string PathToFile { get; set; }
-
-        public void Print(string filledHtmlTemplate)
+        public override string Extension
         {
-            var ms = new MemoryStream(Encoding.UTF8.GetBytes(filledHtmlTemplate));
-            DocumentModel.Load(ms, LoadOptions.HtmlDefault).Save(PathToFile + ".png");
+            get { return ".png"; }
         }
     }
 }

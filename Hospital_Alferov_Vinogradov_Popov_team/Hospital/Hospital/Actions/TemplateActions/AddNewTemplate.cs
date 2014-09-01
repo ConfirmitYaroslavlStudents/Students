@@ -87,21 +87,13 @@ namespace Hospital
 
                 try
                 {
-                    File.Copy(newOutputFormatOpenFileDialog.FileName, pathToCopy);
-                }
-                catch (IOException)
-                {
-                    MessageBox.Show("This html template already exists!", "Information", MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                    _isHtmlTemplateLoaded = true;
-                    return;
+                    File.Copy(newOutputFormatOpenFileDialog.FileName, pathToCopy, true);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-
 
                 MessageBox.Show("Html template added successfully!", "Information", MessageBoxButton.OK,
                     MessageBoxImage.Information);

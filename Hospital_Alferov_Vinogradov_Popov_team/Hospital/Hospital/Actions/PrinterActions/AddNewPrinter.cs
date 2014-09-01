@@ -25,7 +25,7 @@ namespace Hospital
 
                 try
                 {
-                    File.Copy(newOutputFormatOpenFileDialog.FileName, pathToCopy);
+                    File.Copy(newOutputFormatOpenFileDialog.FileName, pathToCopy, true);
                 }
                 catch (Exception ex)
                 {

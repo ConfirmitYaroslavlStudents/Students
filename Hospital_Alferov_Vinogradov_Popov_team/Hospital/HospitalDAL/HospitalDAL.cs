@@ -46,7 +46,7 @@ namespace HospitalConnectedLayer
             }
             catch (Exception)
             {
-                _sqlConnection.Close();
+                CloseConnection();
                 throw new InvalidOperationException("Can't load data storage!");
             }
         }

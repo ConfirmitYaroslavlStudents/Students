@@ -1,18 +1,12 @@
-﻿using System.IO;
-using System.Text;
-using GemBox.Document;
-using Shared.Interfaces;
+﻿using Shared;
 
 namespace PdfPrinter
 {
-    public class PdfPrinter : IPrinter
+    public class PdfPrinter : Printer
     {
-        public string PathToFile { get; set; }
-
-        public void Print(string filledHtmlTemplate)
+        public override string Extension
         {
-            var ms = new MemoryStream(Encoding.UTF8.GetBytes(filledHtmlTemplate));
-            DocumentModel.Load(ms, LoadOptions.HtmlDefault).Save(PathToFile + ".pdf");
+            get { return ".pdf"; }
         }
     }
 }

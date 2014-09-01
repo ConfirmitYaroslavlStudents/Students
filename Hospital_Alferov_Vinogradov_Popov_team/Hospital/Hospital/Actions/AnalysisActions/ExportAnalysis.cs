@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using Microsoft.Win32;
 using PrintersLoaderLibrary;
-using Shared.Interfaces;
+using Shared;
 using TemplateFillerLibrary;
 
 namespace Hospital
@@ -37,7 +37,7 @@ namespace Hospital
                 return;
             }
 
-            IPrinter printer =
+            Printer printer =
                 PrintersLoader.LoadPrinter(
                     Path.Combine(Environment.CurrentDirectory, @"Printers\", currentPrinterName) + ".dll");
 

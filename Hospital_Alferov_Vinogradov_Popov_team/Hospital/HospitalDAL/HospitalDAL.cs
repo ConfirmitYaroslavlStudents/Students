@@ -10,7 +10,6 @@ namespace HospitalConnectedLayer
 {
     public class HospitalDAL : IHospitalDataAccessLayer
     {
-        private readonly DbCommand _command;
         private readonly DbProviderFactory _dbProviderFactory;
         private readonly DbConnection _sqlConnection;
 
@@ -22,20 +21,12 @@ namespace HospitalConnectedLayer
             {
                 _dbProviderFactory = DbProviderFactories.GetFactory(dataProvider);
                 _sqlConnection = _dbProviderFactory.CreateConnection();
-                _command = _dbProviderFactory.CreateCommand();
-                _command.Connection = _sqlConnection;
                 _sqlConnection.ConnectionString = connectionString;
             }
             catch (Exception)
             {
                 throw new InvalidOperationException("Can't load data storage!");
             }
-        }
-
-        private void CloseConnection()
-        {
-            _command.Parameters.Clear();
-            _sqlConnection.Close();
         }
 
         private void OpenConnection()
@@ -46,7 +37,7 @@ namespace HospitalConnectedLayer
             }
             catch (Exception)
             {
-                CloseConnection();
+                _sqlConnection.Close();
                 throw new InvalidOperationException("Can't load data storage!");
             }
         }
@@ -58,71 +49,81 @@ namespace HospitalConnectedLayer
         public List<Person> GetPersons(string firstName, string lastName, string policyNumber)
         {
             OpenConnection();
-            _command.CommandText =
-                string.Format(
-                    "SELECT * FROM Persons WHERE FirstName LIKE @FirstName AND LastName LIKE @LastName AND PolicyNumber LIKE @PolicyNumber");
 
-            _command.Parameters.Add(GetParam("@FirstName", string.Format("%{0}%", firstName)));
-            _command.Parameters.Add(GetParam("@LastName", string.Format("%{0}%", lastName)));
-            _command.Parameters.Add(GetParam("@PolicyNumber", string.Format("%{0}%", policyNumber)));
-
-            var persons = new List<Person>();
-
-            try
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
             {
-                using (DbDataReader dataReader = _command.ExecuteReader())
+                command.Connection = _sqlConnection;
+                command.CommandText =
+                        string.Format(
+                            "SELECT * FROM Persons WHERE FirstName LIKE @FirstName AND LastName LIKE @LastName AND PolicyNumber LIKE @PolicyNumber");
+
+                command.Parameters.Add(GetParam("@FirstName", string.Format("%{0}%", firstName)));
+                command.Parameters.Add(GetParam("@LastName", string.Format("%{0}%", lastName)));
+                command.Parameters.Add(GetParam("@PolicyNumber", string.Format("%{0}%", policyNumber)));
+
+                var persons = new List<Person>();
+
+                try
                 {
-                    while (dataReader.Read())
+                    using (DbDataReader dataReader = command.ExecuteReader())
                     {
-                        persons.Add(new Person(
-                            (string) dataReader["FirstName"],
-                            (string) dataReader["LastName"],
-                            (DateTime) dataReader["DateOfBirth"],
-                            (string) dataReader["Address"],
-                            (string) dataReader["PolicyNumber"]));
+                        while (dataReader.Read())
+                        {
+                            persons.Add(new Person(
+                                (string)dataReader["FirstName"],
+                                (string)dataReader["LastName"],
+                                (DateTime)dataReader["DateOfBirth"],
+                                (string)dataReader["Address"],
+                                (string)dataReader["PolicyNumber"]));
+                        }
                     }
                 }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't get persons!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
+                
+                return persons; 
             }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't get persons!");
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return persons;
         }
 
 
         public void AddPerson(Person person)
         {
             OpenConnection();
-            _command.CommandText =
-                "INSERT INTO Persons(FirstName, LastName, DateOfBirth, Address, PolicyNumber) VALUES(@FirstName, @LastName, @DateOfBirth, @Address, @PolicyNumber)";
 
-            _command.Parameters.Add(GetParam("@FirstName", person.FirstName));
-            _command.Parameters.Add(GetParam("@LastName", person.LastName));
-            _command.Parameters.Add(GetParam("@Address", person.Address));
-            _command.Parameters.Add(GetParam("@DateOfBirth", person.DateOfBirth));
-            _command.Parameters.Add(GetParam("@PolicyNumber", person.PolicyNumber));
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
+            {
+                command.Connection = _sqlConnection;
+                command.CommandText =
+                    "INSERT INTO Persons(FirstName, LastName, DateOfBirth, Address, PolicyNumber) VALUES(@FirstName, @LastName, @DateOfBirth, @Address, @PolicyNumber)";
 
-            try
-            {
-                _command.ExecuteNonQuery();
-            }
-            catch (SqlException)
-            {
-                throw new InvalidOperationException("This person already exists!");
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't add person!");
-            }
-            finally
-            {
-                CloseConnection();
+                command.Parameters.Add(GetParam("@FirstName", person.FirstName));
+                command.Parameters.Add(GetParam("@LastName", person.LastName));
+                command.Parameters.Add(GetParam("@Address", person.Address));
+                command.Parameters.Add(GetParam("@DateOfBirth", person.DateOfBirth));
+                command.Parameters.Add(GetParam("@PolicyNumber", person.PolicyNumber));
+
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException)
+                {
+                    throw new InvalidOperationException("This person already exists!");
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't add person!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
             }
         }
 
@@ -133,92 +134,107 @@ namespace HospitalConnectedLayer
         public Template GetTemplate(string title)
         {
             OpenConnection();
-            _command.CommandText = "SELECT * FROM Templates WHERE Title = @Title";
 
-            _command.Parameters.Add(GetParam("@Title", title));
-
-            Template template = null;
-            var binFormatter = new ListBinaryFormatter<string>();
-
-            try
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
             {
-                using (DbDataReader dataReader = _command.ExecuteReader())
+                command.Connection = _sqlConnection;
+                command.CommandText = "SELECT * FROM Templates WHERE Title = @Title";
+
+                command.Parameters.Add(GetParam("@Title", title));
+
+                Template template = null;
+                var binFormatter = new ListBinaryFormatter<string>();
+
+                try
                 {
-                    while (dataReader.Read())
+                    using (DbDataReader dataReader = command.ExecuteReader())
                     {
-                        template = new Template(binFormatter.Deserialize((byte[]) dataReader["Data"]), title);
+                        while (dataReader.Read())
+                        {
+                            template = new Template(binFormatter.Deserialize((byte[]) dataReader["Data"]), title);
+                        }
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't get template!");
-            }
-            finally
-            {
-                CloseConnection();
-            }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't get template!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
 
-            return template;
+                return template;
+            }
         }
 
         public void AddTemplate(Template template)
         {
             OpenConnection();
-            var binFormatter = new ListBinaryFormatter<string>();
 
-            _command.CommandText = "INSERT INTO Templates(Title, Data) VALUES(@Title, @Data)";
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
+            {
+                command.Connection = _sqlConnection;
+                var binFormatter = new ListBinaryFormatter<string>();
 
-            _command.Parameters.Add(GetParam("@Title", template.Title));
-            _command.Parameters.Add(GetParam("@Data", binFormatter.Serialize(template.Data)));
+                command.CommandText = "INSERT INTO Templates(Title, Data) VALUES(@Title, @Data)";
 
-            try
-            {
-                _command.ExecuteNonQuery();
-            }
-            catch (SqlException)
-            {
-                throw new InvalidOperationException("This template already exists!");
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't add template!");
-            }
-            finally
-            {
-                CloseConnection();
+                command.Parameters.Add(GetParam("@Title", template.Title));
+                command.Parameters.Add(GetParam("@Data", binFormatter.Serialize(template.Data)));
+
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException)
+                {
+                    throw new InvalidOperationException("This template already exists!");
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't add template!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
             }
         }
 
         public List<Template> GetTemplates()
         {
             OpenConnection();
-            _command.CommandText = "SELECT * FROM Templates";
-            var templates = new List<Template>();
-            var binFormatter = new ListBinaryFormatter<string>();
 
-            try
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
             {
-                using (DbDataReader dataReader = _command.ExecuteReader())
+                command.Connection = _sqlConnection;
+                command.CommandText = "SELECT * FROM Templates";
+                var templates = new List<Template>();
+                var binFormatter = new ListBinaryFormatter<string>();
+
+                try
                 {
-                    while (dataReader.Read())
+                    using (DbDataReader dataReader = command.ExecuteReader())
                     {
-                        var title = (string) dataReader["Title"];
-                        IList<string> data = binFormatter.Deserialize((byte[]) dataReader["Data"]);
-                        templates.Add(new Template(data, title));
+                        while (dataReader.Read())
+                        {
+                            var title = (string) dataReader["Title"];
+                            IList<string> data = binFormatter.Deserialize((byte[]) dataReader["Data"]);
+                            templates.Add(new Template(data, title));
+                        }
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't get templates!");
-            }
-            finally
-            {
-                CloseConnection();
-            }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't get templates!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
 
-            return templates;
+                return templates;
+            }
         }
 
         #endregion
@@ -228,62 +244,73 @@ namespace HospitalConnectedLayer
         public void AddAnalysis(string policyNumber, Analysis analysis)
         {
             OpenConnection();
-            var binFormatter = new ListBinaryFormatter<string>();
-            _command.CommandText =
-                "INSERT INTO Analyzes(PolicyNumber, TemplateTitle, Data, Date) VALUES(@PolicyNumber, @TemplateTitle, @Data, @Date)";
 
-            _command.Parameters.Add(GetParam("@TemplateTitle", analysis.TemplateTitle));
-            _command.Parameters.Add(GetParam("@Data", binFormatter.Serialize(analysis.Data)));
-            _command.Parameters.Add(GetParam("@Date", analysis.Date));
-            _command.Parameters.Add(GetParam("@PolicyNumber", policyNumber));
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
+            {
+                command.Connection = _sqlConnection;
+                var binFormatter = new ListBinaryFormatter<string>();
+                command.CommandText =
+                    "INSERT INTO Analyzes(PolicyNumber, TemplateTitle, Data, Date) VALUES(@PolicyNumber, @TemplateTitle, @Data, @Date)";
 
-            try
-            {
-                _command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't add analysis!");
-            }
-            finally
-            {
-                CloseConnection();
+                command.Parameters.Add(GetParam("@TemplateTitle", analysis.TemplateTitle));
+                command.Parameters.Add(GetParam("@Data", binFormatter.Serialize(analysis.Data)));
+                command.Parameters.Add(GetParam("@Date", analysis.Date));
+                command.Parameters.Add(GetParam("@PolicyNumber", policyNumber));
+
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't add analysis!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
             }
         }
 
         public List<Analysis> GetAnalyzes(string policyNumber)
         {
             OpenConnection();
-            _command.CommandText = "SELECT TemplateTitle, Data, Date FROM Analyzes WHERE PolicyNumber = @PolicyNumber";
 
-            _command.Parameters.Add(GetParam("@PolicyNumber", policyNumber));
-
-            var analyzes = new List<Analysis>();
-            var binFormatter = new ListBinaryFormatter<string>();
-
-            try
+            using (DbCommand command = _dbProviderFactory.CreateCommand())
             {
-                using (DbDataReader dataReader = _command.ExecuteReader())
+                command.Connection = _sqlConnection;
+                command.CommandText =
+                    "SELECT TemplateTitle, Data, Date FROM Analyzes WHERE PolicyNumber = @PolicyNumber";
+
+                command.Parameters.Add(GetParam("@PolicyNumber", policyNumber));
+
+                var analyzes = new List<Analysis>();
+                var binFormatter = new ListBinaryFormatter<string>();
+
+                try
                 {
-                    while (dataReader.Read())
+                    using (DbDataReader dataReader = command.ExecuteReader())
                     {
-                        var data = (byte[]) dataReader["Data"];
-                        var title = (string) dataReader["TemplateTitle"];
-                        var date = (DateTime) dataReader["Date"];
-                        analyzes.Add(new Analysis(binFormatter.Deserialize(data), title, date));
+                        while (dataReader.Read())
+                        {
+                            var data = (byte[]) dataReader["Data"];
+                            var title = (string) dataReader["TemplateTitle"];
+                            var date = (DateTime) dataReader["Date"];
+                            analyzes.Add(new Analysis(binFormatter.Deserialize(data), title, date));
+                        }
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("Can't get analyzes!");
-            }
-            finally
-            {
-                CloseConnection();
-            }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Can't get analyzes!");
+                }
+                finally
+                {
+                    _sqlConnection.Close();
+                }
 
-            return analyzes;
+                return analyzes;
+            }
         }
 
         #endregion

@@ -82,7 +82,7 @@ namespace Hospital
 
             if (newOutputFormatOpenFileDialog.ShowDialog() == true)
             {
-                string pathToCopy = Path.Combine(Environment.CurrentDirectory, @"Templates\",
+                string pathToCopy = Path.Combine(AssemblyPath, @"Templates\",
                     Path.GetFileName(newOutputFormatOpenFileDialog.FileName));
 
                 try

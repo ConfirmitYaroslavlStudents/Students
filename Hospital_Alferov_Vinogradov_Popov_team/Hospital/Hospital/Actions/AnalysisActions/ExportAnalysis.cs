@@ -16,7 +16,7 @@ namespace Hospital
         private void AnalysisExportButton_Click(object sender, RoutedEventArgs e)
         {
             IEnumerable<string> printersTitles =
-                Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, @"Printers\"), "*.dll",
+                Directory.GetFiles(Path.Combine(AssemblyPath, @"Printers\"), "*.dll",
                     SearchOption.AllDirectories).Select(Path.GetFileNameWithoutExtension);
 
             if (!printersTitles.Any())
@@ -38,9 +38,19 @@ namespace Hospital
                 return;
             }
 
-            IPrinter printer =
-                PrintersLoader.LoadPrinter(
-                    Path.Combine(Environment.CurrentDirectory, @"Printers\", currentPrinterName) + ".dll");
+            IPrinter printer;
+
+            try
+            {
+                printer =
+                     PrintersLoader.LoadPrinter(
+                         Path.Combine(AssemblyPath, @"Printers\", currentPrinterName) + ".dll");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             if (printer == null)
             {
@@ -68,7 +78,7 @@ namespace Hospital
 
                 try
                 {
-                    string pathToCurrentHtmlTemplate = Path.Combine(Environment.CurrentDirectory, @"Templates\",
+                    string pathToCurrentHtmlTemplate = Path.Combine(AssemblyPath, @"Templates\",
                         _currentTemplate.Title + ".html");
                     var templateFiller = new TemplateFiller(pathToCurrentHtmlTemplate);
 

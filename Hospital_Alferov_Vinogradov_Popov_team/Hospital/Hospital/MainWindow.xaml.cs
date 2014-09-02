@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using HospitalConnectedLayer;
@@ -13,6 +15,8 @@ namespace Hospital
     /// </summary>
     public partial class MainWindow
     {
+        private static readonly string AssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase.Substring(8));
+
         private readonly CanvasPainter _canvasPainter;
         private readonly HospitalDAL _dataAccessLayer;
 

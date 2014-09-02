@@ -1,10 +1,11 @@
 ﻿using System.IO;
 using System.Text;
 using GemBox.Document;
+using Shared.Interfaces;
 
 namespace Shared
 {
-    public abstract class Printer
+    public abstract class Printer : IPrinter
     {
         public abstract string Extension { get; }
         public string PathToFile { get; set; }

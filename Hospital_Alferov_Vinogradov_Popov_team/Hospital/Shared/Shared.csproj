@@ -43,6 +43,7 @@
     <Compile Include="Interfaces\IAnalysisDataAccessLayer.cs" />
     <Compile Include="Interfaces\IHospitalDataAccessLayer.cs" />
     <Compile Include="Interfaces\IPersonDataAccessLayer.cs" />
+    <Compile Include="Interfaces\IPrinter.cs" />
     <Compile Include="Interfaces\ITemplateDataAccessLayer.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Template.cs" />

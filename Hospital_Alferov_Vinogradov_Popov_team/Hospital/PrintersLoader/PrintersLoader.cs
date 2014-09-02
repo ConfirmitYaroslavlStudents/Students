@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Reflection;
 using Shared;
+using Shared.Interfaces;
+
 
 namespace PrintersLoaderLibrary
 {
     public static class PrintersLoader
     {
-        public static Printer LoadPrinter(string pathToAssembly)
+        public static IPrinter LoadPrinter(string pathToAssembly)
         {
-            Printer printer = null;
+            IPrinter printer = null;
 
             Assembly printerAssembly = Assembly.LoadFrom(pathToAssembly);
             Type[] printerTypes = printerAssembly.GetTypes();
 
-            foreach (Type type in printerTypes)
+            foreach (var type in printerTypes)
             {
-                Type printerAbstractType = type.BaseType;
+                var printerInterface = type.GetInterface("IPrinter");
 
-                if (printerAbstractType != null && printerAbstractType.IsAbstract &&
-                    printerAbstractType.Name == "Printer")
+                if (printerInterface != null)
                 {
-                    printer = printerAssembly.CreateInstance(type.FullName) as Printer;
+                    printer = printerAssembly.CreateInstance(type.FullName) as IPrinter;
                 }
             }
 

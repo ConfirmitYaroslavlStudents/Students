@@ -1,0 +1,5 @@
+﻿<Window x:Class="HospitalApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Медицинский кабинет" Height="600" Width="800" Icon="Resources/favicon.ico" Closed="Window_Closed">
+</Window>

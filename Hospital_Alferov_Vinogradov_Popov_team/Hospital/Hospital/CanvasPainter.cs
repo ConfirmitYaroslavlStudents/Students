@@ -89,10 +89,7 @@ namespace Hospital
             Canvas.SetLeft(itemsTypesListBox, currentCoordinate);
             Canvas.SetTop(itemsTypesListBox, currentCoordinate);
 
-            foreach (string item in collection)
-            {
-                itemsTypesListBox.Items.Add(item);
-            }
+            itemsTypesListBox.ItemsSource = collection;
 
             var okButton = new Button
             {

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using HospitalLib.Providers;
+using HospitalLib.Utils.Validators;
 
 namespace HospitalLib.Data
 {
@@ -9,10 +10,44 @@ namespace HospitalLib.Data
     public class Person
     {
         [DataMember] private DateTime _birthDate;
+        [DataMember] private string _firstName;
+        [DataMember] private string _lastName;
+        [DataMember] private string _middleName;
+
         [DataMember] public int Id { get; private set; }
-        [DataMember] public string FirstName { get; set; }
-        [DataMember] public string LastName { get; set; }
-        [DataMember] public string MiddleName { get; set; }
+
+        [DataMember]
+        public string FirstName
+        {
+            get { return _firstName; }
+            set
+            {
+                Validator.ValidateNameField(value);
+                _firstName = value;
+            }
+        }
+
+        [DataMember]
+        public string LastName
+        {
+            get { return _lastName; }
+            set
+            {
+                Validator.ValidateNameField(value);
+                _lastName = value;
+            }
+        }
+
+        [DataMember]
+        public string MiddleName
+        {
+            get { return _middleName; }
+            set
+            {
+                Validator.ValidateNameField(value);
+                _middleName = value;
+            }
+        }
 
         public DateTime BirthDate
         {

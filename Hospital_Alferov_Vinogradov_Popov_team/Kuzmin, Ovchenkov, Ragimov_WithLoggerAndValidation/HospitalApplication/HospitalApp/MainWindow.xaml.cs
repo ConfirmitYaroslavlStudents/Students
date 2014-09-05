@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using HospitalLib.Factory;
 using HospitalLib.Loader;
+using HospitalLib.Utils;
 using HospitalLib.Utils.Logger;
 using HospitalLib.Utils.LoggingTarget;
 
@@ -19,7 +20,7 @@ namespace HospitalApp
             InitializeComponent();
 
             Dispatcher.UnhandledException += OnDispatcherUnhandledException;
-            HospitalLogger.AddLoggingTarget(new EventLogLoggingTarget());
+            HospitalLogger.AddLoggingTarget(new FileLoggingTarget());
 
             try
             {

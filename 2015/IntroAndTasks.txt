@@ -1,0 +1,12 @@
+Ссылка на презентацию
+https://github.com/Confirmit/Students.git
+
+Вторник
+Stack - Артем Кузнецов
+Queue - Анна Козлова
+List - Владимир Хохренко
+
+Четверг
+LinkedList - Александр Белов
+BinaryTree - Андрей Мокеев
+Set - Михаил Большаков

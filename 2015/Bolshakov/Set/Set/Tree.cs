@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SetLib
 {
-    class Tree<T>
+    class Tree<T>:IEnumerable<T>
     {
         #region Properties
 
@@ -203,7 +203,35 @@ namespace SetLib
 
         private bool _treeModified;
 
-        private T _enumeratorReturn;
+        private Queue<BinNode<T>> _nodesForEnumerator;
 	    #endregion
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            _nodesForEnumerator = new Queue<BinNode<T>>();
+            _treeModified = false;
+            _nodesForEnumerator.Enqueue(_root);
+
+            while (_nodesForEnumerator.Count != 0)
+            {
+                var actualNode = _nodesForEnumerator.Dequeue();
+                if (actualNode != null)
+                {
+                    _nodesForEnumerator.Enqueue(actualNode.LeftChild);
+                    _nodesForEnumerator.Enqueue(actualNode.RightChild);
+                    if (!_treeModified)
+                        yield return actualNode.Data;
+                    else
+                        throw new InvalidOperationException("Collection was modified");
+                }
+                else
+                    continue;
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

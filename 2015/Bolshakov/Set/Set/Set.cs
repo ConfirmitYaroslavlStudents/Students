@@ -114,7 +114,7 @@ namespace SetLib
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _tree.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

@@ -11,7 +11,7 @@ namespace myList
 {
    public class MyList<T> : IEnumerable<T>
    {
-        private T[] _contents = new T[3]; 
+        private T[] _contents = new T[8]; 
         private int _count;
 
        public MyList()
@@ -125,18 +125,6 @@ namespace myList
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-       //for debug purposes
-        public void PrintContents()
-        {
-            Console.WriteLine("List has a capacity of {0} and currently has {1} elements.", _contents.Length, _count);
-            Console.Write("List contents:");
-            for (int i = 0; i < Count; i++)
-            {
-                Console.Write(" {0}", _contents[i]);
-            }
-            Console.WriteLine();
         }
        
     }

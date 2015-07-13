@@ -20,13 +20,10 @@ namespace myList
             testList.Add("six");
             testList.Add("seven");
             testList.Add("eight");
-
-            
-
-           // testList.PrintContents();
+     
 
             //testList.Remove("six");
-            //testList.PrintContents();
+            
             testList.Insert(7, "insert1");
             testList.Insert(9, "insert2");
 

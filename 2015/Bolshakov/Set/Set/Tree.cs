@@ -64,6 +64,12 @@ namespace SetLib
         {
             return Find<T>(_root,ref data);
         }
+
+        public void Clear()
+        {
+            _root = null;
+            Count = 0;
+        }
         #endregion
 
         #region Private Static methods
@@ -196,6 +202,8 @@ namespace SetLib
         private BinNode<T> _root;
 
         private bool _treeModified;
+
+        private T _enumeratorReturn;
 	    #endregion
     }
 }

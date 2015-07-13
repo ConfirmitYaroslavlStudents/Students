@@ -38,6 +38,11 @@ namespace SetLib
             get { return _tree.Count; }
             private set { }
         }
+
+        public void Clear()
+        {
+            _tree.Clear();
+        }
         #endregion
 
         #region ISetMethods
@@ -93,11 +98,6 @@ namespace SetLib
         }
 
         void ICollection<T>.Add(T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Clear()
         {
             throw new NotImplementedException();
         }

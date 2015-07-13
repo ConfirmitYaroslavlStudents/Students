@@ -7,7 +7,7 @@
     <ProjectGuid>{F47A029C-56D4-4CEE-8643-3DB01A42AB2E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bolshakov_1</RootNamespace>
+    <RootNamespace>SetLib</RootNamespace>
     <AssemblyName>Set</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

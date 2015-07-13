@@ -38,22 +38,26 @@ namespace SetLib
             else
             {
                 _root = new BinNode<T>(ref data);
+                _treeModified = result = true;
                 Count++;
-                _treeModified = true;
             }
             return result;
         }
 
         public bool Remove(T data)
         {
+            bool result = false;
             bool modified;
-            _root = Delete<T>(_root,ref data, out modified);
-            if (modified)
+            if (_root != null)
             {
-                Count--;
-                _treeModified = true;
+                _root = Delete<T>(_root, ref data, out modified);
+                if (modified)
+                {
+                    _treeModified = result = true;
+                    Count--;
+                }
             }
-            return modified;
+            return result;
         }
 
         public BinNode<T> Search(T data)
@@ -63,48 +67,6 @@ namespace SetLib
         #endregion
 
         #region Private Static methods
-
-        private static BinNode<Q> Delete<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
-        {
-            treeModified = false;
-            if (node == null)
-                return null;
-            var dataKey = data.GetHashCode();
-            if(dataKey<node.Key)
-                node.LeftChild = Delete<Q>(node.LeftChild,ref data,out treeModified);
-            if(dataKey>node.Key)
-                node.RightChild = Delete<Q>(node.RightChild, ref data,out treeModified);
-            else
-            {
-                if (data.Equals(node.Data))
-                {
-                    treeModified = true;
-                    var l = node.LeftChild;
-                    var r = node.RightChild;
-                    if (r == null)
-                        return l;
-                    var min = FindMin<Q>(r);
-                    min.RightChild = RemoveMin<Q>(r);
-                    min.LeftChild = l;
-                    return Balance<Q>(min);
-                }
-                return node;
-            }
-            return Balance<Q>(node);
-        }
-
-        private static BinNode<Q> FindMin<Q>(BinNode<Q> p)
-        {
-            return p.LeftChild == null ? p : FindMin<Q>(p.LeftChild);
-        }
-
-        private static BinNode<Q> RemoveMin<Q>(BinNode<Q> p)
-        {
-            if (p.LeftChild == null)
-                return p.RightChild;
-            p.LeftChild = RemoveMin<Q>(p.LeftChild);
-            return Balance<Q>(p);
-        }
 
         private static BinNode<Q> Insert<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
         {
@@ -120,7 +82,70 @@ namespace SetLib
                 node.RightChild = Insert<Q>(node.RightChild, ref data, out treeModified);
             else
                 treeModified = false;
-            return Balance<Q>(node);
+            if(treeModified)
+                return Balance<Q>(node);
+            return node;
+        }
+
+        private static BinNode<Q> Delete<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
+        {
+            if (node == null)
+            {
+                treeModified = false;
+                return null;
+            }
+            var dataKey = data.GetHashCode();
+            if(dataKey<node.Key)
+                node.LeftChild = Delete<Q>(node.LeftChild, ref data,out treeModified);
+            else if(dataKey>node.Key)
+                node.RightChild = Delete<Q>(node.RightChild, ref data,out treeModified);
+            else
+            {
+                if (data.Equals(node.Data))
+                {
+                    treeModified = true;
+                    var l = node.LeftChild;
+                    var r = node.RightChild;
+                    if (r == null)
+                        return l;
+                    var min = FindMin<Q>(r);
+                    min.RightChild = RemoveMin<Q>(r);
+                    min.LeftChild = l;
+                    return Balance<Q>(min);
+                }
+                treeModified = false;
+                return node;
+            }
+            if(treeModified)
+                return Balance<Q>(node);
+            return node;
+        }
+
+        private static BinNode<Q> Find<Q>(BinNode<Q> p, ref Q data)
+        {
+            if (p == null)
+                return null;
+            var dataKey = data.GetHashCode();
+            if (dataKey < p.Key)
+                return Find<Q>(p.LeftChild, ref data);
+            else if (dataKey > p.Key)
+                return Find<Q>(p.RightChild, ref data);
+            else if (data.Equals(p.Data))
+                return p;
+            return null;
+        }
+
+        private static BinNode<Q> FindMin<Q>(BinNode<Q> p)
+        {
+            return p.LeftChild == null ? p : FindMin<Q>(p.LeftChild);
+        }
+
+        private static BinNode<Q> RemoveMin<Q>(BinNode<Q> p)
+        {
+            if (p.LeftChild == null)
+                return p.RightChild;
+            p.LeftChild = RemoveMin<Q>(p.LeftChild);
+            return Balance<Q>(p);
         }
 
         private static BinNode<Q> RightTurn<Q>(BinNode<Q> p)
@@ -162,18 +187,6 @@ namespace SetLib
                     p.LeftChild = LeftTurn<Q>(p.LeftChild);
                 p = RightTurn<Q>(p);
             }
-            return p;
-        }
-
-        private static BinNode<Q> Find<Q>(BinNode<Q> p, ref Q data)
-        {
-            if (p == null)
-                return null;
-            var dataKey = data.GetHashCode();
-            if (dataKey < p.Key)
-                return Find<Q>(p.LeftChild, ref data);
-            else if (dataKey > p.Key)
-                return Find<Q>(p.RightChild, ref data);
             return p;
         }
         #endregion

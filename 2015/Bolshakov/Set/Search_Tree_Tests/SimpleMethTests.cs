@@ -8,56 +8,56 @@ namespace Search_Tree_Tests
     [TestClass]
     public class SimpleMethTests
     {
-        [TestMethod]
-        public void CountTest()
-        {
-            var rnd = new Random();
+        //[TestMethod]
+        //public void CountTest()
+        //{
+        //    var rnd = new Random();
 
-            var tree = new Tree<int>();
-            var added = rnd.Next(100);
-            var deleted = rnd.Next(added);
-            var expect = added - deleted;
-            var arr = new int[added];
+        //    var tree = new Tree<int>();
+        //    var added = rnd.Next(100);
+        //    var deleted = rnd.Next(added);
+        //    var expect = added - deleted;
+        //    var arr = new int[added];
 
-            for (int i = 0; i < added; i++)
-            {
-                tree.Add(i);
-                arr[i] = i;
-            }
+        //    for (int i = 0; i < added; i++)
+        //    {
+        //        tree.Add(i);
+        //        arr[i] = i;
+        //    }
 
-            for (int i = 0; i < deleted; i++)
-            {
-                tree.Remove(arr[added - i - 1]);
-            }
+        //    for (int i = 0; i < deleted; i++)
+        //    {
+        //        tree.Remove(arr[added - i - 1]);
+        //    }
 
-            Assert.AreEqual(expect, tree.Count);
-        }
+        //    Assert.AreEqual(expect, tree.Count);
+        //}
 
-        [TestMethod]
-        public void RndCountTest()
-        {
-            var set = new SortedSet<int>();
-            var tree = new Tree<int>();
-            var rnd = new Random();
+        //[TestMethod]
+        //public void RndCountTest()
+        //{
+        //    var set = new SortedSet<int>();
+        //    var tree = new Tree<int>();
+        //    var rnd = new Random();
 
-            for (int i = 0; i < rnd.Next(1000); i++)
-            {
-                var num = rnd.Next(1000);
-                set.Add(num);
-                tree.Add(num);
-            }
+        //    for (int i = 0; i < rnd.Next(1000); i++)
+        //    {
+        //        var num = rnd.Next(1000);
+        //        set.Add(num);
+        //        tree.Add(num);
+        //    }
 
-            var arr = new int[set.Count];
-            set.CopyTo(arr);
+        //    var arr = new int[set.Count];
+        //    set.CopyTo(arr);
 
-            var toDelete = rnd.Next(set.Count);
+        //    var toDelete = rnd.Next(set.Count);
 
-            for (int i = 0; i < toDelete; i++)
-            {
-                tree.Remove(arr[i]);
-            }
+        //    for (int i = 0; i < toDelete; i++)
+        //    {
+        //        tree.Remove(arr[i]);
+        //    }
 
-            Assert.AreEqual(set.Count - toDelete, tree.Count);
-        }
+        //    Assert.AreEqual(set.Count - toDelete, tree.Count);
+        //}
     }
 }

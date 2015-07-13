@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SetLib
 {
-    public class Tree<T>
+    class Tree<T>
     {
         #region Properties
 

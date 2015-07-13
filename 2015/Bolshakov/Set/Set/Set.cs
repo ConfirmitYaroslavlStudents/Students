@@ -8,14 +8,39 @@ namespace SetLib
 {
     public class Set<T>: ISet<T>
     {
+        #region Public Methods
 
+        public Set()
+        {
+            _tree = new Tree<T>();
+        }
+        #endregion
 
-        #region ISetMethods
-
+        #region Implemented Iset Methods
+        
         public bool Add(T item)
         {
-            throw new NotImplementedException();
+           return _tree.Add(item);
         }
+
+        public bool Remove(T item)
+        {
+            return _tree.Remove(item);
+        }
+
+        public bool Contains(T item)
+        {
+            return _tree.Search(item) != null ? true : false;
+        }
+
+        public int Count
+        {
+            get { return _tree.Count; }
+            private set { }
+        }
+        #endregion
+
+        #region ISetMethods
 
         public void ExceptWith(IEnumerable<T> other)
         {
@@ -77,29 +102,14 @@ namespace SetLib
             throw new NotImplementedException();
         }
 
-        public bool Contains(T item)
-        {
-            throw new NotImplementedException();
-        }
-
         public void CopyTo(T[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
-        public int Count
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         public bool IsReadOnly
         {
             get { throw new NotImplementedException(); }
-        }
-
-        public bool Remove(T item)
-        {
-            throw new NotImplementedException();
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -111,6 +121,11 @@ namespace SetLib
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region Private Members
+
+        private Tree<T> _tree;
         #endregion
     }
 }

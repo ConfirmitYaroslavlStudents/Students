@@ -22,6 +22,19 @@ namespace SetLib
                 _tree.Add(item);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Set<T>))
+                return false;
+            var otherSet = obj as Set<T>;
+            foreach (var item in this)
+            {
+                if (!otherSet.Contains<T>(item))
+                    return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Iset Methods

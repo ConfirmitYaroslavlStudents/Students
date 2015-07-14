@@ -11,27 +11,17 @@ namespace ForDebug
     {
         static void Main(string[] args)
         {
-            var a = new SortedSet<int>();
             var set = new Set<int>();
-            set.Add(5);
-            set.Add(6);
-            set.Add(7);
-            set.Add(8);
-            set.Add(9);
-            set.Add(10);
-            set.Add(10);
-            set.Add(9);
-            set.Add(8);
-            foreach (var item in set)
+            var sourceArr = new int[1000];
+
+            for (int i = 0; i < 1000; i++)
             {
-                Console.Write("{0} ",item);
-                break;
+                sourceArr[i] = i;
+                set.Add(i);
             }
-            foreach (var item in set)
-            {
-                Console.Write("{0} ", item);
-                //break;
-            }
+
+            var resultArr = new int[1000];
+            set.CopyTo(resultArr, 0);
 
             Console.ReadLine();
         }

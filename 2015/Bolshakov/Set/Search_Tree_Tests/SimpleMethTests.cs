@@ -181,5 +181,50 @@ namespace Search_Tree_Tests
 
             Assert.AreEqual(except, result);
         }
+
+        [TestMethod]
+        public void CopyToArreyTest()
+        {
+            var set = new Set<int>();
+            var sourceArr = new int[1000];
+
+            for (int i = 0; i < 1000; i++)
+            {
+                sourceArr[i] = i;
+                set.Add(i);
+            }
+
+            var resultArr = new int[1000];
+            set.CopyTo(resultArr, 0);
+
+            Array.Sort(resultArr);
+
+            Assert.AreEqual(999, resultArr[999]);
+        }
+
+        [TestMethod]
+        public void ExceptTest()
+        {
+            var rnd = new Random();
+            var set = new Set<int>();
+            var first = new List<int>();
+            var second = new Set<int>();
+
+            var treshhold = rnd.Next(999);
+            for (int i = 0; i < 1000; i++)
+            {
+                set.Add(i);
+                if (i < treshhold)
+                    first.Add(i);
+                else
+                    second.Add(i);
+            }
+
+            set.ExceptWith(first);
+
+            var result = set.Equals(second);
+
+            Assert.AreEqual(true, result);
+        }
     }
 }

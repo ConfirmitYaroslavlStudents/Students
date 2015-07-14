@@ -43,18 +43,54 @@ namespace SetLib
         {
             _tree.Clear();
         }
-        #endregion
 
-        #region ISetMethods
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _tree.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            var index = arrayIndex;
+            foreach (var item in this)
+            {
+                //TODO: Make real copying elements
+                array[index] = item;
+                index++;
+            }
+        }
 
         public void ExceptWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            foreach (var item in other)
+            {
+                _tree.Remove(item);
+            }
         }
 
-        public void IntersectWith(IEnumerable<T> other)
+        public bool IsSubsetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            foreach (var item in this)
+            {
+                if (!other.Contains<T>(item))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool IsSupersetOf(IEnumerable<T> other)
+        {
+            foreach (var item in other)
+            {
+                if (!this.Contains<T>(item))
+                    return false;
+            }
+            return true;
         }
 
         public bool IsProperSubsetOf(IEnumerable<T> other)
@@ -66,13 +102,11 @@ namespace SetLib
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public bool IsSubsetOf(IEnumerable<T> other)
-        {
-            throw new NotImplementedException();
-        }
+        #region ISetMethods
 
-        public bool IsSupersetOf(IEnumerable<T> other)
+        public void IntersectWith(IEnumerable<T> other)
         {
             throw new NotImplementedException();
         }
@@ -102,24 +136,9 @@ namespace SetLib
             throw new NotImplementedException();
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsReadOnly
         {
             get { throw new NotImplementedException(); }
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _tree.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

@@ -11,6 +11,7 @@ namespace ForDebug
     {
         static void Main(string[] args)
         {
+            var a = new SortedSet<int>();
             var set = new Set<int>();
             set.Add(5);
             set.Add(6);
@@ -23,8 +24,13 @@ namespace ForDebug
             set.Add(8);
             foreach (var item in set)
             {
-                set.Add(2);
-                Console.Write(item);
+                Console.Write("{0} ",item);
+                break;
+            }
+            foreach (var item in set)
+            {
+                Console.Write("{0} ", item);
+                //break;
             }
 
             Console.ReadLine();

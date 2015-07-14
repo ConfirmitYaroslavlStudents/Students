@@ -9,31 +9,39 @@ using System.Threading.Tasks;
 
 namespace myList
 {
-   public class MyList<T> : IEnumerable<T>
-   {
-        private T[] _contents = new T[8]; 
+    public class MyList<T> : IEnumerable<T>
+    {
+        private T[] _contents = new T[8];
         private int _count;
 
-       public MyList()
-       {
-           _count = 0;
-       }
+        public MyList()
+        {
+            _count = 0;
+        }
 
 
-       public void Add(T item)
-       {
-           if (_count >= _contents.Length)
-               Expand();
-           _contents[_count] = item;
-           _count++;
-       }
+        public void Add(T item)
+        {
+            if (_count >= _contents.Length)
+                Expand();
+            _contents[_count] = item;
+            _count++;
+        }
 
-       private void Expand()
-       {
-           T[] temp = _contents;
-           _contents = new T[Count * 2];
-           temp.CopyTo(_contents, 0);
-       }
+        public void AddRange(IEnumerable<T> items)
+        {
+            foreach (var item in items)
+            {
+                Add(item);
+            }
+        }
+
+        private void Expand()
+        {
+            T[] temp = _contents;
+            _contents = new T[Count * 2];
+            temp.CopyTo(_contents, 0);
+        }
 
         public void Clear()
         {
@@ -61,7 +69,7 @@ namespace myList
             return false;
         }
 
-      
+
 
         public void Remove(T item)
         {
@@ -74,11 +82,11 @@ namespace myList
         }
 
 
-       public void Insert(int index, T item)
+        public void Insert(int index, T item)
         {
-            if ( (index < Count) && (index >= 0))
+            if ((index < Count) && (index >= 0))
             {
-                if (_count + 1 >= _contents.Length) 
+                if (_count + 1 >= _contents.Length)
                     Expand();
                 _count++;
 
@@ -119,13 +127,13 @@ namespace myList
             for (int i = 0; i < Count; i++)
             {
                 yield return _contents[i];
-            }         
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-       
+
     }
 }

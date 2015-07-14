@@ -1,5 +1,4 @@
-﻿
-using myList;
+﻿using MyList;
 using NUnit.Framework;
 
 namespace ListTests
@@ -10,7 +9,7 @@ namespace ListTests
         [Test]
         public void AddTest()
         {
-            var sut = new MyList<int>();
+            var sut = new List<int>();
 
             Assert.That(sut, Is.Empty);
 
@@ -23,7 +22,7 @@ namespace ListTests
         [Test]
         public void Clear_countEqualZero()
         {
-            var sut = new MyList<int> {5, 3, 4};
+            var sut = new List<int> {5, 3, 4};
 
             Assert.That(sut.Count, Is.GreaterThan(0));
             sut.Clear();
@@ -35,7 +34,7 @@ namespace ListTests
         [TestCase(6, -1)]
         public void IndexOfTest(int val, int ind)
         {
-            var sut = new MyList<int> {5, 3, 4};
+            var sut = new List<int> {5, 3, 4};
 
             Assert.That(sut.IndexOf(val), Is.EqualTo(ind));
         }
@@ -43,9 +42,9 @@ namespace ListTests
         [Test]
         public void IndexOfObjectTest()
         {
-            var sut = new MyList<MyList<int>>();
-            var l1 = new MyList<int>();
-            var l2 = new MyList<int>();
+            var sut = new List<List<int>>();
+            var l1 = new List<int>();
+            var l2 = new List<int>();
 
             sut.Add(l1);
 
@@ -59,7 +58,7 @@ namespace ListTests
         [TestCase(6, false)]
         public void ContainsTest(int val, bool b)
         {
-            var sut = new MyList<int> {5};
+            var sut = new List<int> {5};
 
             Assert.That(sut.Contains(val), Is.EqualTo(b));
         }
@@ -67,7 +66,7 @@ namespace ListTests
         [Test]
         public void RemoveAtTest()
         {
-            var sut = new MyList<int> { 5, 3, 4 };
+            var sut = new List<int> { 5, 3, 4 };
             sut.RemoveAt(2);
 
             Assert.That(sut.Contains(4), Is.EqualTo(false));
@@ -76,7 +75,7 @@ namespace ListTests
         [Test]
         public void InsertTest()
         {
-            var sut = new MyList<int> {1, 2, 3, 4, 5};
+            var sut = new List<int> {1, 2, 3, 4, 5};
             sut.Insert(2, 11);
             sut.Insert(15, 22);
 

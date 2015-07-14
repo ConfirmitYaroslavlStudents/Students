@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace myList
+namespace MyList
 {
     class Program
     {
         static void Main(string[] args)
         {
-            MyList<string> testList = new MyList<string>();
+            List<string> testList = new List<string>();
 
             testList.Add("one");
             testList.Add("two");

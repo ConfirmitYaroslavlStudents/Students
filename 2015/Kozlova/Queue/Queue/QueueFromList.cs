@@ -81,6 +81,7 @@ namespace Queue
         }
 
         //Print the queue
+        //[TODO] fix
         public void Print()
         {
             foreach (T item in this)
@@ -98,6 +99,7 @@ namespace Queue
             }
             
         }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -169,7 +171,6 @@ namespace Queue
         public T Data { get; private set; }
         public QueueFromListItem<T> NextItem { get; private set; }
 
-        public QueueFromListItem(): this(default(T)) { }
         public QueueFromListItem(T value)
         {
             Data = value;

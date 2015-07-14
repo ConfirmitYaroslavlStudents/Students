@@ -1,24 +1,18 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-
-namespace myList
+namespace MyList
 {
-    public class MyList<T> : IEnumerable<T>
+    //[TODO] implement with linked nodes
+    public class List<T> : IEnumerable<T>
     {
         private T[] _contents = new T[8];
         private int _count;
 
-        public MyList()
+        public List()
         {
             _count = 0;
         }
-
 
         public void Add(T item)
         {
@@ -69,8 +63,6 @@ namespace myList
             return false;
         }
 
-
-
         public void Remove(T item)
         {
             RemoveAt(IndexOf(item));
@@ -80,7 +72,6 @@ namespace myList
         {
             get { return _count; }
         }
-
 
         public void Insert(int index, T item)
         {
@@ -122,6 +113,7 @@ namespace myList
             }
         }
 
+        // [TODO] implement without yield
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < Count; i++)

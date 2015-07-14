@@ -10,7 +10,7 @@ namespace SetLib
     {
         #region Properties
 
-        public int Count { get; private set; }
+        public int Count { get { return _count; } private set { _count = value; _treeModified = true; } }
         #endregion
 
         #region Public Methods
@@ -19,7 +19,6 @@ namespace SetLib
         {
             _root = null;
             Count = 0;
-            _treeModified = true;
         }
 
         public bool Add(T data)
@@ -31,14 +30,14 @@ namespace SetLib
                 _root = Insert<T>(_root, ref data,out modified);
                 if (modified)
                 {
-                    _treeModified = result = true;
+                    result = true;
                     Count++;
                 }
             }
             else
             {
                 _root = new BinNode<T>(ref data);
-                _treeModified = result = true;
+                result = true;
                 Count++;
             }
             return result;
@@ -53,7 +52,7 @@ namespace SetLib
                 _root = Delete<T>(_root, ref data, out modified);
                 if (modified)
                 {
-                    _treeModified = result = true;
+                    result = true;
                     Count--;
                 }
             }
@@ -198,6 +197,8 @@ namespace SetLib
         #endregion
 
         #region Private members
+
+        private int _count;
 
         private BinNode<T> _root;
 

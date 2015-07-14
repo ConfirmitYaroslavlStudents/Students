@@ -14,9 +14,17 @@ namespace SetLib
         {
             _tree = new Tree<T>();
         }
+
+        public Set(IEnumerable<T> other)
+        {
+            foreach (var item in other)
+            {
+                _tree.Add(item);
+            }
+        }
         #endregion
 
-        #region Implemented Iset Methods
+        #region Iset Methods
         
         public bool Add(T item)
         {
@@ -68,9 +76,7 @@ namespace SetLib
         public void ExceptWith(IEnumerable<T> other)
         {
             foreach (var item in other)
-            {
                 _tree.Remove(item);
-            }
         }
 
         public bool IsSubsetOf(IEnumerable<T> other)
@@ -86,63 +92,78 @@ namespace SetLib
         public bool IsSupersetOf(IEnumerable<T> other)
         {
             foreach (var item in other)
-            {
                 if (!this.Contains<T>(item))
                     return false;
-            }
             return true;
         }
 
         public bool IsProperSubsetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (this.IsSubsetOf(other) && !this.IsSupersetOf(other))
+                return true;
+            return false;
         }
 
         public bool IsProperSupersetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region ISetMethods
-
-        public void IntersectWith(IEnumerable<T> other)
-        {
-            throw new NotImplementedException();
+            if (this.IsSupersetOf(other) && !this.IsSubsetOf(other))
+                return true;
+            return false;
         }
 
         public bool Overlaps(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool SetEquals(IEnumerable<T> other)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SymmetricExceptWith(IEnumerable<T> other)
-        {
-            throw new NotImplementedException();
+            foreach (var item in this)
+                if (other.Contains<T>(item))
+                    return true;
+            return false;
         }
 
         public void UnionWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            foreach (var item in other)
+                _tree.Add(item);
+        }
+
+        public void IntersectWith(IEnumerable<T> other)
+        {
+            var exceptableSet = new Set<T>(this).Except<T>(other);
+            this.Except<T>(exceptableSet);
+        }
+
+        public void SymmetricExceptWith(IEnumerable<T> other)
+        {
+            var intersection = new Set<T>(this).Intersect<T>(other);
+            this.Union<T>(other).Except<T>(intersection);
+        }
+
+        public bool SetEquals(IEnumerable<T> other)
+        {
+            if (this.Count != other.Count<T>())
+                return false;
+            if (this.IsSubsetOf(other) && this.IsSupersetOf(other))
+                return true;
+            return false;
         }
 
         void ICollection<T>.Add(T item)
         {
-            throw new NotImplementedException();
+            _tree.Add(item);
         }
 
         public bool IsReadOnly
         {
-            get { throw new NotImplementedException(); }
+            //TODO: Implement real return value
+            get { return false; }
         }
         #endregion
 
         #region Private Members
+
+        private Set(Tree<T> root)
+        {
+            _tree = root;
+        }
 
         private Tree<T> _tree;
         #endregion

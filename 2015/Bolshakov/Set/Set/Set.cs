@@ -25,6 +25,8 @@ namespace SetLib
 
         public override bool Equals(object obj)
         {
+            //TODO: Creat fast equals
+
             if (!(obj is Set<T>))
                 return false;
             var otherSet = obj as Set<T>;

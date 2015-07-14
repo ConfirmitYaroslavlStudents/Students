@@ -203,13 +203,11 @@ namespace SetLib
         private BinNode<T> _root;
 
         private bool _treeModified;
-
-        private Queue<BinNode<T>> _nodesForEnumerator;
 	    #endregion
 
         public IEnumerator<T> GetEnumerator()
         {
-            _nodesForEnumerator = new Queue<BinNode<T>>();
+            var _nodesForEnumerator = new Queue<BinNode<T>>();
             _treeModified = false;
             _nodesForEnumerator.Enqueue(_root);
 

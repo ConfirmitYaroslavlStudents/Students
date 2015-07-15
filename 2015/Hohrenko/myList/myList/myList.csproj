@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4A671D3E-CBAD-4B4F-8613-022B235E9E5F}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>myList</RootNamespace>
     <AssemblyName>myList</AssemblyName>

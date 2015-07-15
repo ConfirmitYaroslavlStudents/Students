@@ -3,6 +3,42 @@ using System.Collections.Generic;
 
 namespace MyList
 {
+    public class TEnum<T> : IEnumerator<T>
+    {
+        private T[] _elements;
+        private int _position = -1;
+
+        public TEnum(T[] items)
+        {
+            _elements = items;
+        }
+
+        public bool MoveNext()
+        {
+            _position++;
+            return (_position < _elements.Length);
+        }
+
+        public void Reset()
+        {
+            _position = -1;
+        }
+
+        public T Current {
+            get { return _elements[_position]; }
+        }
+
+        object IEnumerator.Current
+        {
+            get { return Current; }
+        }
+
+        public void Dispose()
+        {
+            
+        }
+    }
+
     //[TODO] implement with linked nodes
     public class List<T> : IEnumerable<T>
     {
@@ -40,6 +76,7 @@ namespace MyList
         public void Clear()
         {
             _count = 0;
+            _contents = null;
         }
 
         public int IndexOf(T item)
@@ -113,13 +150,9 @@ namespace MyList
             }
         }
 
-        // [TODO] implement without yield
         public IEnumerator<T> GetEnumerator()
-        {
-            for (int i = 0; i < Count; i++)
-            {
-                yield return _contents[i];
-            }
+        {         
+            return new TEnum<T>(_contents);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

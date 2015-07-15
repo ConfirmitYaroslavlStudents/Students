@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Queue
 {
@@ -11,7 +6,7 @@ namespace Queue
     {
         static void Main(string[] args)
         {
-            Queue<string> words = new Queue<string>();
+            var words = new Queue<string>();
             words.Enqueue("one");
             words.Enqueue("two");
             words.Enqueue("three");

@@ -11,18 +11,19 @@ namespace ForDebug
     {
         static void Main(string[] args)
         {
-            var tree = new Tree<List<int>>();
-            var a = new List<int>();
-            var b = new List<int>();
-            var d = new List<int>();
-            var c = new List<int>();
+            var set = new Set<int>();
+            var sourceArr = new int[1000];
 
-            tree.Add(a);
-            tree.Add(b);
-            tree.Add(d);
+            for (int i = 0; i < 1000; i++)
+            {
+                sourceArr[i] = i;
+                set.Add(i);
+            }
 
-            var result = tree.Remove(c);
-            var smt = 3;
+            var resultArr = new int[1000];
+            set.CopyTo(resultArr, 0);
+
+            Console.ReadLine();
         }
     }
 }

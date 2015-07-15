@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SetLib
 {
-    public class Tree<T>
+    class Tree<T>:IEnumerable<T>
     {
         #region Properties
 
-        public int Count { get; private set; }
+        public int Count { get { return _count; } private set { _count = value; _treeModified = true; } }
         #endregion
 
         #region Public Methods
@@ -19,7 +19,6 @@ namespace SetLib
         {
             _root = null;
             Count = 0;
-            _treeModified = true;
         }
 
         public bool Add(T data)
@@ -31,80 +30,48 @@ namespace SetLib
                 _root = Insert<T>(_root, ref data,out modified);
                 if (modified)
                 {
-                    _treeModified = result = true;
+                    result = true;
                     Count++;
                 }
             }
             else
             {
                 _root = new BinNode<T>(ref data);
+                result = true;
                 Count++;
-                _treeModified = true;
             }
             return result;
         }
 
         public bool Remove(T data)
         {
+            bool result = false;
             bool modified;
-            _root = Delete<T>(_root,ref data, out modified);
-            if (modified)
+            if (_root != null)
             {
-                Count--;
-                _treeModified = true;
+                _root = Delete<T>(_root, ref data, out modified);
+                if (modified)
+                {
+                    result = true;
+                    Count--;
+                }
             }
-            return modified;
+            return result;
         }
 
         public BinNode<T> Search(T data)
         {
             return Find<T>(_root,ref data);
         }
+
+        public void Clear()
+        {
+            _root = null;
+            Count = 0;
+        }
         #endregion
 
         #region Private Static methods
-
-        private static BinNode<Q> Delete<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
-        {
-            treeModified = false;
-            if (node == null)
-                return null;
-            var dataKey = data.GetHashCode();
-            if(dataKey<node.Key)
-                node.LeftChild = Delete<Q>(node.LeftChild,ref data,out treeModified);
-            if(dataKey>node.Key)
-                node.RightChild = Delete<Q>(node.RightChild, ref data,out treeModified);
-            else
-            {
-                if (data.Equals(node.Data))
-                {
-                    treeModified = true;
-                    var l = node.LeftChild;
-                    var r = node.RightChild;
-                    if (r == null)
-                        return l;
-                    var min = FindMin<Q>(r);
-                    min.RightChild = RemoveMin<Q>(r);
-                    min.LeftChild = l;
-                    return Balance<Q>(min);
-                }
-                return node;
-            }
-            return Balance<Q>(node);
-        }
-
-        private static BinNode<Q> FindMin<Q>(BinNode<Q> p)
-        {
-            return p.LeftChild == null ? p : FindMin<Q>(p.LeftChild);
-        }
-
-        private static BinNode<Q> RemoveMin<Q>(BinNode<Q> p)
-        {
-            if (p.LeftChild == null)
-                return p.RightChild;
-            p.LeftChild = RemoveMin<Q>(p.LeftChild);
-            return Balance<Q>(p);
-        }
 
         private static BinNode<Q> Insert<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
         {
@@ -120,7 +87,70 @@ namespace SetLib
                 node.RightChild = Insert<Q>(node.RightChild, ref data, out treeModified);
             else
                 treeModified = false;
-            return Balance<Q>(node);
+            if(treeModified)
+                return Balance<Q>(node);
+            return node;
+        }
+
+        private static BinNode<Q> Delete<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
+        {
+            if (node == null)
+            {
+                treeModified = false;
+                return null;
+            }
+            var dataKey = data.GetHashCode();
+            if(dataKey<node.Key)
+                node.LeftChild = Delete<Q>(node.LeftChild, ref data,out treeModified);
+            else if(dataKey>node.Key)
+                node.RightChild = Delete<Q>(node.RightChild, ref data,out treeModified);
+            else
+            {
+                if (data.Equals(node.Data))
+                {
+                    treeModified = true;
+                    var l = node.LeftChild;
+                    var r = node.RightChild;
+                    if (r == null)
+                        return l;
+                    var min = FindMin<Q>(r);
+                    min.RightChild = RemoveMin<Q>(r);
+                    min.LeftChild = l;
+                    return Balance<Q>(min);
+                }
+                treeModified = false;
+                return node;
+            }
+            if(treeModified)
+                return Balance<Q>(node);
+            return node;
+        }
+
+        private static BinNode<Q> Find<Q>(BinNode<Q> p, ref Q data)
+        {
+            if (p == null)
+                return null;
+            var dataKey = data.GetHashCode();
+            if (dataKey < p.Key)
+                return Find<Q>(p.LeftChild, ref data);
+            else if (dataKey > p.Key)
+                return Find<Q>(p.RightChild, ref data);
+            else if (data.Equals(p.Data))
+                return p;
+            return null;
+        }
+
+        private static BinNode<Q> FindMin<Q>(BinNode<Q> p)
+        {
+            return p.LeftChild == null ? p : FindMin<Q>(p.LeftChild);
+        }
+
+        private static BinNode<Q> RemoveMin<Q>(BinNode<Q> p)
+        {
+            if (p.LeftChild == null)
+                return p.RightChild;
+            p.LeftChild = RemoveMin<Q>(p.LeftChild);
+            return Balance<Q>(p);
         }
 
         private static BinNode<Q> RightTurn<Q>(BinNode<Q> p)
@@ -164,25 +194,43 @@ namespace SetLib
             }
             return p;
         }
-
-        private static BinNode<Q> Find<Q>(BinNode<Q> p, ref Q data)
-        {
-            if (p == null)
-                return null;
-            var dataKey = data.GetHashCode();
-            if (dataKey < p.Key)
-                return Find<Q>(p.LeftChild, ref data);
-            else if (dataKey > p.Key)
-                return Find<Q>(p.RightChild, ref data);
-            return p;
-        }
         #endregion
 
         #region Private members
+
+        private int _count;
 
         private BinNode<T> _root;
 
         private bool _treeModified;
 	    #endregion
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var _nodesForEnumerator = new Queue<BinNode<T>>();
+            _treeModified = false;
+            _nodesForEnumerator.Enqueue(_root);
+
+            while (_nodesForEnumerator.Count != 0)
+            {
+                var actualNode = _nodesForEnumerator.Dequeue();
+                if (actualNode != null)
+                {
+                    _nodesForEnumerator.Enqueue(actualNode.LeftChild);
+                    _nodesForEnumerator.Enqueue(actualNode.RightChild);
+                    if (!_treeModified)
+                        yield return actualNode.Data;
+                    else
+                        throw new InvalidOperationException("Collection was modified");
+                }
+                else
+                    continue;
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

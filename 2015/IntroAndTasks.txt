@@ -1,12 +1,15 @@
-Презентация
+﻿Презентация
 https://docs.google.com/presentation/d/1yg4hfWvwISWRjP8B1EloqeCV0Zj8uDVbywXhV4ggYJg/edit?usp=sharing
 
 Вторник
-Stack - Àðòåì Êóçíåöîâ
-Queue - Àííà Êîçëîâà
-List - Âëàäèìèð Õîõðåíêî
+Stack - Артем Кузнецов
+Queue - Анна Козлова
+List - Владимир Хохренко
 
 Четверг
-LinkedList - Àëåêñàíäð Áåëîâ
-BinaryTree - Àíäðåé Ìîêååâ
-Set - Ìèõàèë Áîëüøàêîâ
+LinkedList - Александр Белов
+BinaryTree - Андрей Мокеев
+Set - Михаил Большаков
+
+
+ fixname InControl/change.sh -p <artist><song><album><index>

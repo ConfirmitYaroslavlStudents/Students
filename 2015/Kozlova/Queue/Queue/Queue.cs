@@ -6,7 +6,8 @@ using System.Text;
 
 namespace Queue
 {
-    public class Queue<T> : System.Object, IEnumerable<T>
+    //[TODO] override equals and GetHashCode
+    public class Queue<T> : IEnumerable<T>
     {
         private const int DefaultSize = 5;
         private T[] _items;
@@ -29,6 +30,7 @@ namespace Queue
             get { return _tail + 1; }
         }
 
+        //[TODO] remove
         // Property, returns an array of items, only for tests.
         public T[] Items
         {
@@ -44,6 +46,7 @@ namespace Queue
         }
 
         // Returns an item from a queue with removing it.
+        //[TODO] fix, cyclic array
         public T Dequeue()
         {
             if (_tail == -1)
@@ -79,6 +82,7 @@ namespace Queue
         }
 
         // IEnumerable<T> realization.
+        //[TODO] implement without yield
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < _tail + 1; i++)
@@ -86,6 +90,7 @@ namespace Queue
                 yield return _items[i];
             }
         }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -98,6 +103,7 @@ namespace Queue
                 throw new ArgumentOutOfRangeException();
             return _items[index];
         }
+
         public static bool operator ==(Queue<T> a, Queue<T> b)
         {
             if (System.Object.ReferenceEquals(a, b))
@@ -119,10 +125,12 @@ namespace Queue
             }
             return true;
         }
+
         public static bool operator !=(Queue<T> a, Queue<T> b)
         {
             return !(a == b);
         }
+
         public override bool Equals(object obj)
         {
             if (obj == null)

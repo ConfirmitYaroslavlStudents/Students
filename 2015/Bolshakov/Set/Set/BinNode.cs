@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SetLib
 {
-    public class BinNode<T>
+    class BinNode<T>
     {
         #region Propertie
 

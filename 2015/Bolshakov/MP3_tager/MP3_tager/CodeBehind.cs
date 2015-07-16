@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace MP3_tager
 {
@@ -10,7 +9,20 @@ namespace MP3_tager
     {
         public static void TagFile(string path, string pattern)
         {
+            var tagDictionary = GetTags(path, pattern);
 
+
+        }
+
+        private static Dictionary<TagTypes,string> GetTags(string path, string pattern)
+        {
+            if (!File.Exists(path))
+            {
+                Console.WriteLine(Messeges.FileNotExist);
+                Environment.Exit(1);
+            }
+
+            throw new NotImplementedException();
         }
 
         private static void InsertTo(string path, Dictionary<TagTypes,String> tags)

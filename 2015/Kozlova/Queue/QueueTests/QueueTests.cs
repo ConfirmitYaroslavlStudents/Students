@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QueueLibrary;
 
@@ -86,6 +87,26 @@ namespace QueueTests
             // assert
             Assert.AreEqual(0, actual.Count);
         }
+
+        [TestMethod]
+        public void PeekTest_EmptyQueue_ShouldThrowExeption()
+        {
+            // arrange
+            IQueue<int> testQueue = GetQueueInstance();
+
+            // act
+            try
+            {
+                testQueue.Peek();
+            }
+            catch (Exception e)
+            {
+                // assert
+                StringAssert.Contains(e.Message, "Queue is empty!");
+                return;
+            }
+            Assert.Fail("No exception was thrown.");
+        }
     }
 
     [TestClass]
@@ -125,6 +146,7 @@ namespace QueueTests
             int actualItem = actual.Dequeue();
 
             // assert
+            Assert.AreEqual(4, actual.Count);
             Assert.AreEqual(expectedItem, actualItem);
             Assert.AreEqual(expected, actual);
         }
@@ -174,7 +196,7 @@ namespace QueueTests
         }
 
         [TestMethod]
-        public void PeekTest()
+        public void PeekTest_NotEmptyQueue()
         {
             // arrange
             IQueue<int> testQueue = GetQueueInstance();
@@ -260,10 +282,10 @@ namespace QueueTests
     }
 
     [TestClass]
-    public class QueueFromListTestsDequeueOneItem
+    public class QueueTestsSpecialCases
     {
         [TestMethod]
-        public void Dequeue_QueueHasOneItem()
+        public void QueueFromListDequeue_QueueHasOneItem()
         {
             // arrange
             QueueFromList<string> actual = new QueueFromList<string>("cat");
@@ -277,5 +299,27 @@ namespace QueueTests
             Assert.AreEqual(expected, actual);
             Assert.AreEqual(expectedWord, actualWord);
         }
+
+        [TestMethod]
+        public void QueueEnqueueDequeue_CheckForCyclicArray()
+        {
+            // arrange and act
+            QueueFromList<int> actual = new QueueFromList<int>(1, 2, 3, 4);
+            QueueFromList<int> expected = new QueueFromList<int>(4, 5, 6, 7, 8);
+            actual.Dequeue();
+            actual.Dequeue();
+            actual.Enqueue(5);
+            actual.Enqueue(6);
+            actual.Enqueue(7);
+            actual.Dequeue();
+            actual.Enqueue(8);
+            
+            
+            // assert
+            Assert.AreEqual("4 5 6 7 8 ", actual.ToString());
+            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(5, actual.Count);
+        }
+    
     }
 }

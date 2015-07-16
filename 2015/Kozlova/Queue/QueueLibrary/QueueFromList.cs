@@ -85,6 +85,8 @@ namespace QueueLibrary
         /// <returns>Item from the head of a queue</returns>
         public T Peek()
         {
+            if (_size == 0)
+                throw new Exception("Queue is empty!");
             return _head.Data;
         }
 

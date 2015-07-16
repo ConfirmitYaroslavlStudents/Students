@@ -1,22 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MyList
 {
-    public class TEnum<T> : IEnumerator<T>
+    public class EnumList<T> : IEnumerator<T>
     {
         private T[] _elements;
         private int _position = -1;
+        private int _count;
 
-        public TEnum(T[] items)
+        public EnumList(T[] items, int count)
         {
             _elements = items;
+            _count = count;
         }
 
         public bool MoveNext()
         {
             _position++;
-            return (_position < _elements.Length);
+            return (_position < _count);
         }
 
         public void Reset()
@@ -40,7 +43,7 @@ namespace MyList
     }
 
     //[TODO] implement with linked nodes
-    public class List<T> : IEnumerable<T>
+    public class List<T> : IEnumerable<T>, IList<T>
     {
         private T[] _contents = new T[8];
         private int _count;
@@ -124,6 +127,10 @@ namespace MyList
                 }
                 _contents[index] = item;
             }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
+            }
         }
 
         public void RemoveAt(int index)
@@ -152,7 +159,7 @@ namespace MyList
 
         public IEnumerator<T> GetEnumerator()
         {         
-            return new TEnum<T>(_contents);
+            return new EnumList<T>(_contents, Count);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

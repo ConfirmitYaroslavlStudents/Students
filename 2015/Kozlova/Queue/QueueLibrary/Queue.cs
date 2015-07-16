@@ -10,11 +10,27 @@ namespace QueueLibrary
     /// <typeparam name="T">Type of the items in a queue.</typeparam>
     public class Queue<T> : IQueue<T>
     {
-        private const int DefaultSize = 5;
+        private const int DefaultSize = 4;
         private T[] _items;
         private int _tail;
-        
-        
+        private int _head;
+        private int _size;
+
+        private void SetToZero()
+        {
+            _tail = _head = 0;
+            _size = 0;
+        }
+        private void SetCapacity(int newCapacity)
+        {
+            T[] newItems = new T[newCapacity];
+            Array.Copy(_items, _head, newItems, 0, _items.Length - _head);
+            Array.Copy(_items, 0, newItems, _items.Length - _head, _tail);
+            _items = newItems;
+            _head = 0;
+            _tail = _size;
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -22,19 +38,19 @@ namespace QueueLibrary
         public Queue(params T[] values)
         {
             _items = new T[DefaultSize];
-            Clear();
+            SetToZero();
             foreach (T value in values)
             {
                 Enqueue(value);
             }
         }
-        
+
         /// <summary>
         /// Returns amount of items in the queue.
         /// </summary>
         public int Count
         {
-            get { return _tail + 1; }
+            get { return _size; }
         }
 
         /// <summary>
@@ -43,24 +59,27 @@ namespace QueueLibrary
         /// <param name="item">Item added to queue.</param>
         public void Enqueue(T item)
         {
-            if (_tail + 1 == _items.Length)
-                Array.Resize(ref _items, _items.Length*2);
-            _items[++_tail] = item;
+            if (_size == _items.Length)
+            {
+                SetCapacity(_items.Length*2);
+            }
+            _items[_tail] = item;
+            _tail = (_tail + 1)%_items.Length;
+            _size++;
         }
 
-        //TODO fix, cyclic array
         /// <summary>
         /// Returns an item with removing it.
         /// </summary>
         /// <returns>Item from the head of a queue</returns>
         public T Dequeue()
         {
-            if (_tail == -1)
+            if (_size == 0)
                 throw new Exception("Queue is empty!");
-            T temp = _items[0];
-            for (int i = 0; i < _tail; i++)
-                _items[i] = _items[i + 1];
-            _items[_tail--] = default(T);
+            T temp = _items[_head];
+            _items[_head] = default(T);
+            _head = (_head + 1)%_items.Length;
+            _size--;
             return temp;
         }
 
@@ -70,33 +89,24 @@ namespace QueueLibrary
         /// <returns>Item from the head of a queue</returns>
         public T Peek()
         {
-            return _items[0];
+            if (_size == 0)
+                throw new Exception("Queue is empty!");
+            return _items[_head];
         }
-        
+
         /// <summary>
         /// Delete all the items in a queue.
         /// </summary>
         public void Clear()
         {
-            for (int i = 0; i < _tail + 1; i++)
+            if (_head < _tail)
+                Array.Clear(_items, _head, _size);
+            else
             {
-                _items[i] = default(T);
+                Array.Clear(_items, _head, _items.Length - _head);
+                Array.Clear(_items, 0, _tail);
             }
-            _tail = -1;   
-        }
-
-        //TODO implement without yield
-        public IEnumerator<T> GetEnumerator()
-        {
-            
-            for (int i = 0; i < _tail + 1; i++)
-            {
-                yield return _items[i];
-            }
-        }
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            SetToZero();
         }
 
         public override bool Equals(object obj)
@@ -107,7 +117,7 @@ namespace QueueLibrary
             }
 
             Queue<T> p = obj as Queue<T>;
-            if ((object)p == null)
+            if ((object) p == null)
             {
                 return false;
             }
@@ -127,13 +137,14 @@ namespace QueueLibrary
             }
             return queueToString.ToString();
         }
-        
+
         private T GetElement(int index)
         {
-            if (index > _tail)
+            if (index > _size)
                 throw new ArgumentOutOfRangeException();
-            return _items[index];
+            return _items[(_head + index)%_items.Length];
         }
+
         public static bool operator ==(Queue<T> a, Queue<T> b)
         {
             if (ReferenceEquals(a, b))
@@ -141,7 +152,7 @@ namespace QueueLibrary
                 return true;
             }
 
-            if (((object)a == null) || ((object)b == null))
+            if (((object) a == null) || ((object) b == null))
             {
                 return false;
             }
@@ -159,6 +170,81 @@ namespace QueueLibrary
         {
             return !(a == b);
         }
-        
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+        private class Enumerator : IEnumerator<T>
+        {
+            private Queue<T> _q;
+            private int _index; // -1 = not started, -2 = ended/disposed
+            private T _currentElement;
+
+            internal Enumerator(Queue<T> q)
+            {
+                _q = q;
+                _index = -1;
+                _currentElement = default(T);
+            }
+
+            public void Dispose()
+            {
+                _index = -2;
+                _currentElement = default(T);
+            }
+
+            public bool MoveNext()
+            {
+                if (_index == -2)
+                    return false;
+
+                _index++;
+
+                if (_index == _q._size)
+                {
+                    _index = -2;
+                    _currentElement = default(T);
+                    return false;
+                }
+
+                _currentElement = _q.GetElement(_index);
+                return true;
+            }
+
+            public T Current
+            {
+                get
+                {
+                    if (_index < 0)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    return _currentElement;
+                }
+            }
+
+            object System.Collections.IEnumerator.Current
+            {
+                get
+                {
+                    if (_index < 0)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    return _currentElement;
+                }
+            }
+
+            void System.Collections.IEnumerator.Reset()
+            {
+                _index = -1;
+                _currentElement = default(T);
+            }
+        }
     }
 }

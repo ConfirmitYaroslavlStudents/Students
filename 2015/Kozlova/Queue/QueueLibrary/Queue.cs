@@ -1,43 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Text;
 
-namespace Queue
+namespace QueueLibrary
 {
-    //[TODO] override equals and GetHashCode
-    public class Queue<T> : IEnumerable<T>
+    /// <summary>
+    /// Implementation of a queue with array structure.
+    /// </summary>
+    /// <typeparam name="T">Type of the items in a queue.</typeparam>
+    public class Queue<T> : IQueue<T>
     {
         private const int DefaultSize = 5;
         private T[] _items;
         private int _tail;
-
-        // Constructor, items to be added in a queue can be written in arguments.
+        
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="values">Items to be enqueued.</param>
         public Queue(params T[] values)
         {
             _items = new T[DefaultSize];
-            _tail = -1;
+            Clear();
             foreach (T value in values)
             {
                 Enqueue(value);
             }
         }
         
-        // Property, returns size of a queue
+        /// <summary>
+        /// Returns amount of items in the queue.
+        /// </summary>
         public int Count
         {
             get { return _tail + 1; }
         }
 
-        //[TODO] remove
-        // Property, returns an array of items, only for tests.
-        public T[] Items
-        {
-            get { return _items; }
-        }
-
-        // Add an item into a queue.
+        /// <summary>
+        /// Adds item into a queue
+        /// </summary>
+        /// <param name="item">Item added to queue.</param>
         public void Enqueue(T item)
         {
             if (_tail + 1 == _items.Length)
@@ -45,8 +48,11 @@ namespace Queue
             _items[++_tail] = item;
         }
 
-        // Returns an item from a queue with removing it.
-        //[TODO] fix, cyclic array
+        //TODO fix, cyclic array
+        /// <summary>
+        /// Returns an item with removing it.
+        /// </summary>
+        /// <returns>Item from the head of a queue</returns>
         public T Dequeue()
         {
             if (_tail == -1)
@@ -58,13 +64,18 @@ namespace Queue
             return temp;
         }
 
-        // Returns an item from a queue without removing it.
+        /// <summary>
+        /// Returns an item without removing it.
+        /// </summary>
+        /// <returns>Item from the head of a queue</returns>
         public T Peek()
         {
             return _items[0];
         }
         
-        // Delete all the items in a queue.
+        /// <summary>
+        /// Delete all the items in a queue.
+        /// </summary>
         public void Clear()
         {
             for (int i = 0; i < _tail + 1; i++)
@@ -74,39 +85,58 @@ namespace Queue
             _tail = -1;   
         }
 
-        // Print a queue, each element on a new line.
-        public void Print()
-        {
-            foreach(T item in this)
-                Console.WriteLine(item.ToString());
-        }
-
-        // IEnumerable<T> realization.
-        //[TODO] implement without yield
+        //TODO implement without yield
         public IEnumerator<T> GetEnumerator()
         {
+            
             for (int i = 0; i < _tail + 1; i++)
             {
                 yield return _items[i];
             }
         }
-
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        // Methods for comparing queues while testing.
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Queue<T> p = obj as Queue<T>;
+            if ((object)p == null)
+            {
+                return false;
+            }
+
+            return this == p;
+        }
+        public override int GetHashCode()
+        {
+            return Count;
+        }
+        public override string ToString()
+        {
+            StringBuilder queueToString = new StringBuilder();
+            foreach (T item in this)
+            {
+                queueToString.Append(item + " ");
+            }
+            return queueToString.ToString();
+        }
+        
         private T GetElement(int index)
         {
             if (index > _tail)
                 throw new ArgumentOutOfRangeException();
             return _items[index];
         }
-
         public static bool operator ==(Queue<T> a, Queue<T> b)
         {
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }
@@ -125,37 +155,10 @@ namespace Queue
             }
             return true;
         }
-
         public static bool operator !=(Queue<T> a, Queue<T> b)
         {
             return !(a == b);
         }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            Queue<T> p = obj as Queue<T>;
-            if ((System.Object)p == null)
-            {
-                return false;
-            }
-
-            return this == p;
-        }
         
-        // Conversion to string
-        public override string ToString()
-        {
-            StringBuilder queueToString = new StringBuilder();
-            foreach (T item in this)
-            {
-                queueToString.Append(item + " ");
-            }
-            return queueToString.ToString();
-        }
     }
 }

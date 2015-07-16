@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Queue
+namespace QueueLibrary
 {
-    public class QueueFromList<T>: System.Object, IEnumerable<T>
+    /// <summary>
+    /// Implementation of a queue with list structure.
+    /// </summary>
+    /// <typeparam name="T">Type of the items in a queue.</typeparam>
+    public class QueueFromList<T> : IQueue<T>
     {
         private QueueFromListItem<T> _head;
         private QueueFromListItem<T> _tail;
         private int _size;
 
-        // Property, returns size of a queue
-        public int Count
-        {
-            get { return _size; }
-        }
-
-        // Constructor, items to be added in a queue can be written in arguments.
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="values">Items to be enqueued.</param>
         public QueueFromList(params T[] values)
         {
             _size = 0;
@@ -34,7 +32,18 @@ namespace Queue
             }
         }
 
-        // Add an item into a queue
+        /// <summary>
+        /// Returns amount of items in the queue.
+        /// </summary>
+        public int Count
+        {
+            get { return _size; }
+        }
+
+        /// <summary>
+        /// Adds item into a queue
+        /// </summary>
+        /// <param name="item">Item added to queue.</param>
         public void Enqueue(T item)
         {
             _size++;
@@ -49,7 +58,10 @@ namespace Queue
             }
         }
 
-        // Returns an item from a queue with removing it.
+        /// <summary>
+        /// Returns an item with removing it.
+        /// </summary>
+        /// <returns>Item from the head of a queue</returns>
         public T Dequeue()
         {
             if (_size == 0)
@@ -67,28 +79,24 @@ namespace Queue
             return temp;
         }
 
-        // Returns an item from a queue without removing it.
+        /// <summary>
+        /// Returns an item without removing it.
+        /// </summary>
+        /// <returns>Item from the head of a queue</returns>
         public T Peek()
         {
             return _head.Data;
         }
 
-        // Clears all the queue
+        /// <summary>
+        /// Delete all the items in a queue.
+        /// </summary>
         public void Clear()
         {
             _size = 0;
             _tail = _head = null;
         }
-
-        //Print the queue
-        //[TODO] fix
-        public void Print()
-        {
-            foreach (T item in this)
-                Console.WriteLine(item.ToString());
-        }
         
-        // IEnumerable<T> realization.
         public IEnumerator<T> GetEnumerator()
         {
             QueueFromListItem<T> pointer = _head;
@@ -99,13 +107,20 @@ namespace Queue
             }
             
         }
-
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-
-        // Methods for comparing queues while testing.
+       
+        public override string ToString()
+        {
+            StringBuilder queueToString = new StringBuilder();
+            foreach (T item in this)
+            {
+                queueToString.Append(item + " ");
+            }
+            return queueToString.ToString();
+        }
         public override bool Equals(object obj)
         {
             if (this == null)
@@ -122,6 +137,10 @@ namespace Queue
             }
 
             return this == p;
+        }
+        public override int GetHashCode()
+        {
+            return Count;
         }
         public static bool operator ==(QueueFromList<T> a, QueueFromList<T> b)
         {
@@ -153,38 +172,24 @@ namespace Queue
         {
             return !(a == b);
         }
-
-        // Conversion to string
-        public override string ToString()
-        {
-            StringBuilder queueToString = new StringBuilder();
-            foreach (T item in this)
-            {
-                queueToString.Append(item + " ");
-            }
-            return queueToString.ToString();
-        }
     }
 
-    internal class QueueFromListItem<T>: System.Object
+    internal class QueueFromListItem<T> 
     {
         public T Data { get; private set; }
         public QueueFromListItem<T> NextItem { get; private set; }
-
         public QueueFromListItem(T value)
         {
             Data = value;
             NextItem = null;
         }
 
-        // Creates and returns next item
         public QueueFromListItem<T> SetNext(T value)
         {
             NextItem = new QueueFromListItem<T>(value);
             return NextItem;
         }
 
-        // Methods for comparing queues while testing.
         public override bool Equals(object obj)
         {
             if (this == null)
@@ -195,12 +200,16 @@ namespace Queue
             }
 
             QueueFromListItem<T> p = obj as QueueFromListItem<T>;
-            if ((System.Object)p == null)
+            if ((object)p == null)
             {
                 return false;
             }
 
             return this.Data.Equals(p.Data);
+        }
+        public override int GetHashCode()
+        {
+            return Data.ToString().GetHashCode();
         }
         public static bool operator ==(QueueFromListItem<T> a, QueueFromListItem<T> b)
         {
@@ -221,11 +230,9 @@ namespace Queue
             return !(a == b);
         }
 
-        // Conversion to string
         public override string ToString()
         {
             return Data.ToString();
         }
-
     }
 }

@@ -27,9 +27,9 @@ namespace SetLib
         {
             //TODO: Creat fast equals
 
-            if (!(obj is Set<T>))
+            if (!(obj is ISet<T>))
                 return false;
-            var otherSet = obj as Set<T>;
+            var otherSet = obj as ISet<T>;
             foreach (var item in this)
             {
                 if (!otherSet.Contains<T>(item))

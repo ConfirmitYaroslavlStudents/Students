@@ -8,6 +8,7 @@ namespace Search_Tree_Tests
     [TestClass]
     public class SimpleMethTests
     {
+        //[TODO] remove random
         [TestMethod]
         public void CountTest()
         {

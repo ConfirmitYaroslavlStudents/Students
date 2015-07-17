@@ -1,13 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Homework1
 {
     public class Node<T>
     {
         public T Data { get; set; }
-        public Node<T> NextNode { get; set; }
-        public Node<T> PreviousNode { get; set; }
-
+        public Node<T> NextNode { get; private set; }
+        public Node<T> PreviousNode { get; private set; }
+	//[TODO] remove statics
         public static void AddAfter(Node<T> node, Node<T> newNode)
         {
             if (node == null)

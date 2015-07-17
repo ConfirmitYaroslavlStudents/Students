@@ -202,6 +202,7 @@ namespace Homework1
   
         #endregion
         #region Ifaces
+        //[TODO] reimplement without yield
         public IEnumerator<T> GetEnumerator()
         {
             for (var currentNode=_head;currentNode!=null;currentNode=currentNode.NextNode)

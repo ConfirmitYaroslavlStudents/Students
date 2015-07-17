@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SetLib
 {
-    public class BinNode<T>
+    class BinNode<T>
     {
         #region Propertie
 
@@ -34,7 +34,7 @@ namespace SetLib
         #endregion
 
         #region Public Methods
-
+        //[TODO] investigate hashcodes in .net
         public BinNode(ref T data)
         {
             Data = data;

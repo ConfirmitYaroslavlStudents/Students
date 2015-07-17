@@ -1,4 +1,4 @@
-Презентация
+﻿Презентация
 https://docs.google.com/presentation/d/1yg4hfWvwISWRjP8B1EloqeCV0Zj8uDVbywXhV4ggYJg/edit?usp=sharing
 
 Вторник
@@ -10,3 +10,6 @@ List - Владимир Хохренко
 LinkedList - Александр Белов
 BinaryTree - Андрей Мокеев
 Set - Михаил Большаков
+
+
+ fixname InControl/change.sh -p <artist><song><album><index>

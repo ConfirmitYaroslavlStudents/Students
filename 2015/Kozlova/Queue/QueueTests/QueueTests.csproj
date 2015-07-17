@@ -46,14 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueTestsDequeue.cs" />
-    <Compile Include="QueueTestsEnqueue.cs" />
-    <Compile Include="QueueTestsOthers.cs" />
+    <Compile Include="QueueTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Queue\Queue.csproj">
-      <Project>{D9AF4B77-1071-437F-A73A-18648C665F71}</Project>
-      <Name>Queue</Name>
+    <ProjectReference Include="..\QueueLibrary\QueueLibrary.csproj">
+      <Project>{E29E4D55-F764-4886-BF1D-256973AD0E1F}</Project>
+      <Name>QueueLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

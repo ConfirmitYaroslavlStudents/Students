@@ -25,16 +25,16 @@ namespace Program
 			var tree = new BinaryTree<int> { 90, 50, 150, 20, 75, 95, 175, 5, 25, 66, 80, 92, 111, 166, 200 };
 
 			Console.WriteLine("\n\nPreorder traverse:");
-			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), TraverseType.Preorder);
+			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), "Preorder");
 
 			Console.WriteLine("\n\nInorder Traverse:");
-			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), TraverseType.Inorder);
+			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), "Inorder");
 
 			Console.WriteLine("\n\nPostorder Traverse:");
-			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), TraverseType.Postorder);
+			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), "Postorder");
 
 			Console.WriteLine("\n\nWidth Traverse (foreach use this method):");
-			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), TraverseType.Width);
+			tree.Traverse(node => Console.Write("[{1}]:{0} ", node, node.Level), "Width");
 
 
 			Console.WriteLine();

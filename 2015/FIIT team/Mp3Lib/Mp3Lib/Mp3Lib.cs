@@ -12,7 +12,11 @@ namespace Mp3Lib
         {
             {"help",  new [] {1, 2}},
             {"rename", new [] {3}},
+            {"changeTags", new [] {4}}
         };
+
+        private HashSet<string> _tagSet = new HashSet<string>() 
+        { "artist", "title", "genre", "album", "track" };
 
         private string[] _args;
 
@@ -38,19 +42,24 @@ namespace Mp3Lib
 
         public void ExecuteCommand()
         {
-
             string command = _args[0];
-            CheckArgs(command);
-          
-            switch (command)
+            if (CheckArgs(command))
             {
-                case "help" : ShowHelp();
-                    break;
+                switch (command)
+                {
+                    case "help":
+                        ShowHelp();
+                        break;
 
-                case "rename" : Rename(_args);
-                    break;
+                    case "rename":
+                        Rename(_args);
+                        break;
+
+                    case "changeTags":
+                        ChangeTags(_args);
+                        break;
+                }
             }
-
         }
 
         private void Rename(string[] args)
@@ -65,7 +74,6 @@ namespace Mp3Lib
 
             //file.MoveTo(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
             Console.WriteLine(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
-            
         }
 
         private string GetNewNameByPattern(string pattern, TagLib.File mp3)
@@ -77,6 +85,40 @@ namespace Mp3Lib
             s.Replace("{album}", mp3.Tag.Album);
             s.Replace("{track}", mp3.Tag.Track.ToString());
             return s.ToString();
+        }
+
+        private void ChangeTags(string[] args)
+        {
+            var filePath = args[1];
+            var tagType = args[2];
+            var tagValue = args[3];
+            if (_tagSet.Contains(tagType))
+            {
+                var audioFile = TagLib.File.Create(filePath);
+                switch (args[2])
+                {
+                    case "artist":
+                        audioFile.Tag.Performers = new []{tagValue}; 
+                        break;
+                    case "title":
+                        audioFile.Tag.Title = tagValue;
+                        break;
+                    case "genre":
+                        audioFile.Tag.Genres =  new []{tagValue};
+                        break;
+                    case "album":
+                        audioFile.Tag.Album = tagValue;
+                        break;
+                    case "track":
+                        audioFile.Tag.Track = Convert.ToUInt32(tagValue);
+                        break;
+                }
+                audioFile.Save();
+            }
+            else
+            {
+                Console.WriteLine("There is no such tag!");
+            }
         }
     }
 }

@@ -55,17 +55,15 @@ namespace Mp3Lib
 
         private void Rename(string[] args)
         {
-            var foldPath = args[1];
+            var path = args[1];
             var pattern = args[2];
-            var dir = new DirectoryInfo(foldPath);
-            Console.WriteLine(dir.FullName);
-            foreach (var file in dir.GetFiles("*.mp3"))
-            {
-                var mp3 = TagLib.File.Create(file.FullName);
 
-                //file.MoveTo(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
-                Console.WriteLine(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
-            }
+            var file = new FileInfo(path);
+            var mp3 = TagLib.File.Create(path);
+
+            //file.MoveTo(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
+            Console.WriteLine(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
+            
         }
 
         private string GetNewNameByPattern(string pattern, TagLib.File mp3)
@@ -73,6 +71,9 @@ namespace Mp3Lib
             var s = new StringBuilder(pattern);
             s.Replace("{artist}", mp3.Tag.FirstPerformer);
             s.Replace("{title}", mp3.Tag.Title);
+            s.Replace("{genre}", mp3.Tag.FirstGenre);
+            s.Replace("{album}", mp3.Tag.Album);
+            s.Replace("{track}", mp3.Tag.Track.ToString());
             return s.ToString();
         }
     }

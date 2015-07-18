@@ -11,9 +11,8 @@ namespace LinkedListTest
         public void CountShouldIncAfterAdding()
         {
             var testList = new Homework1.LinkedList<int>();
-            var countExpected = 0;
+            var countExpected = 1;
             testList.Add(0);
-            countExpected++;
             var countActual = testList.Count;
             Assert.AreEqual(countExpected, countActual);
         }

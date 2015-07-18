@@ -230,6 +230,7 @@ namespace SetLib
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
+            //[TODO] create failing test and fix
             throw new NotImplementedException();
         }
     }

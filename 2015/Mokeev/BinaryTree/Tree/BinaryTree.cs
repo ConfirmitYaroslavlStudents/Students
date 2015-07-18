@@ -443,6 +443,7 @@ namespace BinaryTree
 			return !(tree1 == tree2);
 		}
 
+        //[TODO] create new traverse without recompile
 		public void Traverse(Traversing eventHandler, TraverseType type = TraverseType.Preorder)
 		{
 			OnTraverse = null;

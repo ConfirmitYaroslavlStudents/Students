@@ -59,6 +59,8 @@ namespace Mp3Lib
             var pattern = args[2];
 
             var file = new FileInfo(path);
+            if (!file.Exists)
+                return;
             var mp3 = TagLib.File.Create(path);
 
             //file.MoveTo(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");

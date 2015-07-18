@@ -23,6 +23,9 @@ namespace BinaryTree
 		public int Count { get; private set; }
 		public bool IsReadOnly { get { return false; } }
 
+		/// <summary>
+		/// Allows you to add or remove traverse type.
+		/// </summary>
 		public Dictionary<string, Traversing> TraverseTypes { get; set; }
 
 		/// <summary>

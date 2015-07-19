@@ -12,6 +12,8 @@ namespace ConsoleMp3TagEditor
 		public static void Main(string[] args)
 		{
 			var mp3 = new Mp3File(Environment.CurrentDirectory + @"/Changer - The biggest in the world.mp3");
+
+			Console.WriteLine(mp3.Title);
 		}
 	}
 }

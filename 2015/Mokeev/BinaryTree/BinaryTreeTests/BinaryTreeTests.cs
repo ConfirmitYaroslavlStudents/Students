@@ -344,7 +344,7 @@ namespace BinaryTreeTests
 		{
 			var tree = new BinaryTree<int> {90, 50, 150, 20, 75, 95, 175, 5, 25, 66, 80, 92, 111, 166, 200};
 			var data = new StringBuilder();
-			tree.Traverse(node=> data.Append(node+" "), TraverseType.Preorder);
+			tree.Traverse(node=> data.Append(node+" "), "Preorder");
 
 			Assert.AreEqual("90 50 20 5 25 75 66 80 150 95 92 111 175 166 200 ", data.ToString());
 		}
@@ -354,7 +354,7 @@ namespace BinaryTreeTests
 		{
 			var tree = new BinaryTree<int> { 90, 50, 150, 20, 75, 95, 175, 5, 25, 66, 80, 92, 111, 166, 200 };
 			var data = new StringBuilder();
-			tree.Traverse(node => data.Append(node + ", "), TraverseType.Inorder);
+			tree.Traverse(node => data.Append(node + ", "), "Inorder");
 
 			Assert.AreEqual("5, 20, 25, 50, 66, 75, 80, 90, 92, 95, 111, 150, 166, 175, 200, ", data.ToString());
 		}
@@ -364,7 +364,7 @@ namespace BinaryTreeTests
 		{
 			var tree = new BinaryTree<int> { 90, 50, 150, 20, 75, 95, 175, 5, 25, 66, 80, 92, 111, 166, 200 };
 			var data = new StringBuilder();
-			tree.Traverse(node => data.Append(node + ", "), TraverseType.Postorder);
+			tree.Traverse(node => data.Append(node + ", "), "Postorder");
 
 			Assert.AreEqual("5, 25, 20, 66, 80, 75, 50, 92, 111, 95, 166, 200, 175, 150, 90, ", data.ToString());
 		}
@@ -374,7 +374,7 @@ namespace BinaryTreeTests
 		{
 			var tree = new BinaryTree<int> { 90, 50, 150, 20, 75, 95, 175, 5, 25, 66, 80, 92, 111, 166, 200 };
 			var data = new StringBuilder();
-			tree.Traverse(node => data.Append(node + ", "), TraverseType.Width);
+			tree.Traverse(node => data.Append(node + ", "), "Width");
 
 			Assert.AreEqual("90, 50, 150, 20, 75, 95, 175, 5, 25, 66, 80, 92, 111, 166, 200, ", data.ToString());
 		}

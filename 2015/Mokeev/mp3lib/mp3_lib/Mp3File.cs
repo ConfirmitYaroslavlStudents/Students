@@ -51,23 +51,23 @@ namespace mp3_lib
 
 			var tagCode = data.Take(3).ToArray();
 
-			if (Encoding.UTF8.GetString(tagCode) == "TAG")
+			if (Encoding.Default.GetString(tagCode) == "TAG")
 			{
 				_id3v1Data = data;
 				var tmp = fileDataArray.Reverse().Take(355).Reverse().ToArray();
 				var extendedData = tmp.Take(227).ToArray();
 
 				var tmpData = data.Reverse().Take(125).Reverse().ToArray();
-				_title = Encoding.UTF8.GetString(tmpData.Take(30).ToArray());
+				_title = Encoding.Default.GetString(tmpData.Take(30).ToArray());
 
 				tmpData = tmpData.Reverse().Take(95).Reverse().ToArray();
-				_artist = Encoding.UTF8.GetString(tmpData.Take(30).ToArray());
+				_artist = Encoding.Default.GetString(tmpData.Take(30).ToArray());
 
 				tmpData = tmpData.Reverse().Take(65).Reverse().ToArray();
-				_album = Encoding.UTF8.GetString(tmpData.Take(30).ToArray());
+				_album = Encoding.Default.GetString(tmpData.Take(30).ToArray());
 
 				tmpData = tmpData.Reverse().Take(35).Reverse().ToArray();
-				ushort.TryParse(Encoding.UTF8.GetString(tmpData.Take(4).ToArray()), out _year);
+				ushort.TryParse(Encoding.Default.GetString(tmpData.Take(4).ToArray()), out _year);
 
 
 				if (Encoding.UTF8.GetString(extendedData.Take(4).ToArray()) == "TAG+")

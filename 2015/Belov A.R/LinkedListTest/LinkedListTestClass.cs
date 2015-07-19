@@ -31,6 +31,7 @@ namespace LinkedListTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void RangeAddedCorectly()
         {
             var range = new int[] { 0, 1, 2, 3, 4 };
@@ -41,16 +42,7 @@ namespace LinkedListTest
             {
                 Assert.AreEqual(range[i], testList.ElementAt(i));
             }
-            try
-            {
-                testList.AddRange(null);
-            }
-            catch (ArgumentNullException e)
-            {
-
-                expectedException = e;
-            }
-            Assert.IsNotNull(expectedException);
+            testList.AddRange(null);
         }
 
         [TestMethod]
@@ -65,6 +57,7 @@ namespace LinkedListTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ElementInsertedCorectly()
         {
             var range = new int[] { 0, 1, 2, 3, 5,6 };
@@ -77,21 +70,11 @@ namespace LinkedListTest
             {
                 Assert.AreEqual(expectedRange[i], testList.ElementAt(i));
             }
-            ArgumentOutOfRangeException expectedException = null;
-            try
-            {
-                testList.InsertAt(10, 8);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                expectedException = e;
-
-            }
-            Assert.AreNotEqual(null, expectedException);
-
+            testList.InsertAt(10, 8);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void RangeInsertedCorectly()
         {
             var range = new int[] { 0, 1, 2, 6, 7, 8 };
@@ -107,17 +90,8 @@ namespace LinkedListTest
             {
                 Assert.AreEqual(expectedRange[i], testList.ElementAt(i));
             }
-            ArgumentNullException expectedException = null;
-            try
-            {
-                testList.InsertRange(0, null);
-            }
-            catch (ArgumentNullException e)
-            {
-                expectedException = e;
-
-            }
-            Assert.AreNotEqual(null, expectedException);
+            testList.InsertRange(0, null);
+          
 
         }
         [TestMethod]

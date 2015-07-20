@@ -4,40 +4,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+
 namespace Mp3Lib
 {
-    public class Mp3Lib
+    
+    public class Mp3Lib 
     {
-        private Dictionary<string, int[]> _commandList = new Dictionary<string, int[]>()
+        private readonly Dictionary<string, int[]> _commandList = new Dictionary<string, int[]>
         {
             {"help",  new [] {1, 2}},
             {"rename", new [] {3}},
-            {"changeTags", new [] {4}}
+            {"changeTag", new [] {4}}
         };
 
-        private HashSet<string> _tagSet = new HashSet<string>() 
+        private readonly HashSet<string> _tagSet = new HashSet<string>
         { "artist", "title", "genre", "album", "track" };
 
         private string[] _args;
-
-
+        
         public Mp3Lib(string[] args)
         {
             _args = args;
-        }
-
-        private bool CheckArgs(string commandName)
-        {
-            if (_commandList.Keys.Contains(commandName))
-                if (_commandList[commandName].Contains(_args.Length))
-                    return true;
-            return false;
-        }
-
-        public void ShowHelp()
-        {
-            var helper = new Helper();
-            helper.ShowInstructions();
         }
 
         public void ExecuteCommand()
@@ -55,18 +42,28 @@ namespace Mp3Lib
                         Rename(_args);
                         break;
 
-                    case "changeTags":
-                        ChangeTags(_args);
+                    case "changeTag":
+                        ChangeTag(_args);
                         break;
                 }
             }
-            else
-            {
-                throw  new ArgumentException("invalid number of arguments or wrong command name. Use 'help'");
-            }
         }
 
-        private void Rename(string[] args)
+        public virtual bool CheckArgs(string commandName)
+        {
+            if (_commandList.Keys.Contains(commandName))
+                if (_commandList[commandName].Contains(_args.Length))
+                    return true;
+            return false;
+        }
+
+        public virtual void ShowHelp()
+        {
+            var helper = new Helper();
+            helper.ShowInstructions(_args);
+        }
+
+        public virtual void Rename(string[] args)
         {
             var path = args[1];
             var pattern = args[2];
@@ -91,7 +88,7 @@ namespace Mp3Lib
             return s.ToString();
         }
 
-        private void ChangeTags(string[] args)
+        public virtual void ChangeTag(string[] args)
         {
             var filePath = args[1];
             var tagType = args[2];

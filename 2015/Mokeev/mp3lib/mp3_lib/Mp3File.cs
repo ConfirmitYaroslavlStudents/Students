@@ -70,7 +70,7 @@ namespace mp3_lib
 				ushort.TryParse(Encoding.Default.GetString(tmpData.Take(4).ToArray()), out _year);
 
 
-				if (Encoding.UTF8.GetString(extendedData.Take(4).ToArray()) == "TAG+")
+				if (Encoding.Default.GetString(extendedData.Take(4).ToArray()) == "TAG+")
 				{
 					
 				}

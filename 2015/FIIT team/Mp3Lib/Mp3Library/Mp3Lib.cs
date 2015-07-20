@@ -83,10 +83,10 @@ namespace Mp3Library
             file.MoveTo(file.DirectoryName + @"\" + GetNewNameByPattern(pattern, mp3) + ".mp3");
         }
 
-        private string GetNewNameByPattern(string pattern, TagLib.File mp3)
+        public string GetNewNameByPattern(string pattern, TagLib.File mp3)
         {
             var s = new StringBuilder(pattern);
-            s.Replace("{artist}", mp3.Tag.FirstPerformer);
+            s.Replace("{artist}", mp3.Tag.Performers[0]);
             s.Replace("{title}", mp3.Tag.Title);
             s.Replace("{genre}", mp3.Tag.FirstGenre);
             s.Replace("{album}", mp3.Tag.Album);

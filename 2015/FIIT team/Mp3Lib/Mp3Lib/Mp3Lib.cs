@@ -60,6 +60,10 @@ namespace Mp3Lib
                         break;
                 }
             }
+            else
+            {
+                throw  new ArgumentException("invalid number of arguments or wrong command name. Use 'help'");
+            }
         }
 
         private void Rename(string[] args)

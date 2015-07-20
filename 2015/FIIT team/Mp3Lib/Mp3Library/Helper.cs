@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mp3Lib
+namespace Mp3Library
 {
-    //здесь планируется общий хэлп и для каждой команды
-    class Helper
+    public class Helper
     {
-        private readonly Dictionary<string, string> _helpMessages = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {
             {"help", ""},
             {"rename", ""},
             {"changeTag", ""}
         };
 
-        public void ShowInstructions(string[] args)
+        public static void ShowInstructions(string[] args)
         {
             if (args.Length == 1)
             {
-                foreach (var message in _helpMessages)
+                foreach (var message in HelpMessages)
                 {
                     Console.WriteLine(message.Key);
                     Console.WriteLine(message.Value);
@@ -25,8 +24,8 @@ namespace Mp3Lib
             }
             if (args.Length == 2)
             {
-                Console.WriteLine(_helpMessages.ContainsKey(args[0])
-                    ? _helpMessages[args[1]]
+                Console.WriteLine(HelpMessages.ContainsKey(args[0])
+                    ? HelpMessages[args[1]]
                     : "There is no such command!");
             }
         }

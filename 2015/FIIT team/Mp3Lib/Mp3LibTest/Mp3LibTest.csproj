@@ -72,9 +72,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
-      <Project>{61ca57f0-d888-47d4-8e0d-f9d1dd42c5d8}</Project>
-      <Name>Mp3Lib</Name>
+    <ProjectReference Include="..\Mp3Library\Mp3Library.csproj">
+      <Project>{8c7418da-8966-4caa-a869-0752e58b37b9}</Project>
+      <Name>Mp3Library</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

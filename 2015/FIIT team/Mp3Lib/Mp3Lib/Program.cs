@@ -6,10 +6,10 @@ namespace Mp3Lib
     {
         static void Main(string[] args)
         {
-            Mp3Lib app = new Mp3Lib(args);
+            Mp3Library.Mp3Lib app = new Mp3Library.Mp3Lib(args);
             if (args.Length == 0)
             {
-                Console.WriteLine( "maloargov");
+               Console.WriteLine( "maloargov");
                app.ShowHelp();
                Environment.Exit(0);
             }

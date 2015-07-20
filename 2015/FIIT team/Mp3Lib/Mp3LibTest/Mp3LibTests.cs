@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using Mp3Library;
 using NUnit.Framework;
 
 namespace Mp3LibTest
@@ -13,7 +14,7 @@ namespace Mp3LibTest
         [TestCase(3, new[] { "changeTag", @"D:\Music\aaa.mp3", "artist", "Shakira" }, TestName = "Test3")]
         public void CheckCommandExecution(int val, string[] args)
         {
-            Mock<Mp3Lib.Mp3Lib> mp3LibMock = new Mock<Mp3Lib.Mp3Lib>((object)args);
+            Mock<Mp3Lib> mp3LibMock = new Mock<Mp3Lib>((object)args);
             mp3LibMock.Setup(x => x.CheckArgs(args[0])).Returns(true);
             mp3LibMock.Object.ExecuteCommand();
             
@@ -26,7 +27,7 @@ namespace Mp3LibTest
         public void ExecuteCommand_NoCommandExecuted()
         {
             string[] args = {"rename"};
-            Mock<Mp3Lib.Mp3Lib> mp3LibMock = new Mock<Mp3Lib.Mp3Lib>((object)args);
+            Mock<Mp3Lib> mp3LibMock = new Mock<Mp3Lib>((object)args);
             mp3LibMock.Setup(x => x.CheckArgs(args[0])).Returns(false);
             mp3LibMock.Object.ExecuteCommand();
 

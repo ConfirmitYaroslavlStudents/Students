@@ -16,11 +16,10 @@ namespace Mp3Library
             {"changeTag", new [] {4}}
         };
 
-        private readonly HashSet<string> _tagSet = new HashSet<string>
-        { "artist", "title", "genre", "album", "track" };
+        private readonly HashSet<string> _tagSet = new HashSet<string> { "artist", "title", "genre", "album", "track" };
 
         private readonly string[] _args;
-        
+
         public Mp3Lib(string[] args)
         {
             _args = args;
@@ -28,32 +27,29 @@ namespace Mp3Library
 
         public void ExecuteCommand()
         {
-            try
+
+            string command = _args[0];
+            if (CheckArgs(command))
             {
-                string command = _args[0];
-                if (CheckArgs(command))
+                switch (command)
                 {
-                    switch (command)
-                    {
-                        case "help":
-                            ShowHelp();
-                            break;
+                    case "help":
+                        ShowHelp();
+                        break;
 
-                        case "rename":
-                            Rename(_args);
-                            break;
+                    case "rename":
+                        Rename(_args);
+                        break;
 
-                        case "changeTag":
-                            ChangeTag(_args);
-                            break;
-                    }
+                    case "changeTag":
+                        ChangeTag(_args);
+                        break;
                 }
             }
-            catch (ArgumentException e)
+            else
             {
-                Console.WriteLine(e.Message);
+                throw  new ArgumentException("Invalid number of arguments or wrong command name");
             }
-            
         }
 
         public virtual bool CheckArgs(string commandName)
@@ -106,18 +102,18 @@ namespace Mp3Library
 
             if (!_tagSet.Contains(tagType))
                 throw new ArgumentException("There is no such tag");
-            
+
             var audioFile = TagLib.File.Create(filePath);
             switch (tagType)
             {
                 case "artist":
-                    audioFile.Tag.Performers = new []{tagValue}; 
+                    audioFile.Tag.Performers = new[] { tagValue };
                     break;
                 case "title":
                     audioFile.Tag.Title = tagValue;
                     break;
                 case "genre":
-                    audioFile.Tag.Genres =  new []{tagValue};
+                    audioFile.Tag.Genres = new[] { tagValue };
                     break;
                 case "album":
                     audioFile.Tag.Album = tagValue;

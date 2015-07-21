@@ -13,7 +13,14 @@ namespace Mp3Lib
                Environment.Exit(0);
             }
 
-            app.ExecuteCommand();
+            try
+            {
+                app.ExecuteCommand();
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
  
         }
     }

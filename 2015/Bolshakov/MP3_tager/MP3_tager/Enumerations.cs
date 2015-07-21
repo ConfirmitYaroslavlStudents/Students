@@ -9,8 +9,8 @@ namespace MP3_tager
     enum TagTypes
     {
         Artist,
-        Song,
+        Title,
         Album,
-        Index
+        Track
     }
 }

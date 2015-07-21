@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace Mp3Lib
+
+namespace Mp3Library
 {
     class Program
     {
@@ -9,12 +10,13 @@ namespace Mp3Lib
             Mp3Library.Mp3Lib app = new Mp3Library.Mp3Lib(args);
             if (args.Length == 0)
             {
-               app.ShowHelp();
-               Environment.Exit(0);
+                Console.WriteLine("maloargov");
+                app.ShowHelp();
+                Environment.Exit(0);
             }
 
             app.ExecuteCommand();
- 
+
         }
     }
 }

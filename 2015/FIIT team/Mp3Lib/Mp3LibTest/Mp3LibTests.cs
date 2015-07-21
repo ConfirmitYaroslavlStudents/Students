@@ -26,6 +26,7 @@ namespace Mp3LibTest
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentException))]
         public void ExecuteCommand_NoCommandExecuted()
         {
             string[] args = {"rename"};

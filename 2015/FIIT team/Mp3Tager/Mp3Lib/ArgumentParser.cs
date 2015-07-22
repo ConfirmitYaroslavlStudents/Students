@@ -48,11 +48,29 @@ namespace Mp3Lib
         private static bool CheckArgs(string[] args)
         {
             if (args.Length == 0)
-                throw new ArgumentException("Not enough argumens!");
+                throw new ArgumentException("Not enough arguments!");
             if (CommandList.Keys.Contains(args[0]))
                 if (CommandList[args[0]].Contains(args.Length))
                     return true;
+                else
+                {       
+                    throw new ArgumentException(CreateErrorMessage(args));
+                }                       
             return false;
+        }
+
+        private static string CreateErrorMessage(string[] args)
+        {
+            string num = CommandList[args[0]][0].ToString();
+            if (CommandList[args[0]].Length != 1)
+            {
+                for (int i = 1; i < CommandList[args[0]].Length; i++)
+                {
+                    num += " or " + CommandList[args[0]][i];
+                }
+            }        
+            string message = String.Format("Wrong number of arguments passed. {0} passed. {1} expected", args.Length, num);
+            return message;
         }
     }
 }

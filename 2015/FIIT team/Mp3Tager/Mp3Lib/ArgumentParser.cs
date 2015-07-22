@@ -13,44 +13,38 @@ namespace Mp3Lib
             {"changeTag", new [] {4}}
         };
 
-        public static void ParseArguments(string[] args, out string commandName, out string commandForHelp, out string path, out string pattern, out string tag, out string newTagValue)
+        public static Dictionary<string, string> ParseArguments(string[] args)
         {
             if (!CheckArgs(args))
-            {
                 throw new InvalidOperationException("Invalid operation: there is no such command!");
-            }
-            commandName = args[0];
-            switch (commandName)
+
+            var parsedArgs = new Dictionary<string, string>
+            {
+                {"commandName", args[0]}
+            };
+
+            switch (parsedArgs["commandName"])
             {
                 case "help":
-                    if (args.Length == 1)
-                    {
-                        commandForHelp = path = pattern = tag = newTagValue = null;
-                    }
-                    else
-                    {
-                        commandForHelp = args[1];
-                        path = pattern = tag = newTagValue = null;
-                    }
+                    if (args.Length == 2)
+                        parsedArgs.Add("commandForHelp", args[1]);
                     break;
 
                 case "rename":
-                    path = args[1];
-                    pattern = args[2];
-                    commandForHelp = tag = newTagValue = null;
+                    parsedArgs.Add("path", args[1]);
+                    parsedArgs.Add("pattern", args[2]);
                     break;
 
                 case "changeTag":
-                    path = args[1];
-                    tag = args[2];
-                    newTagValue = args[3];
-                    commandForHelp = pattern = null;
-                    break;
-                default:
-                    commandForHelp = commandName = path = pattern = tag = newTagValue = null;
+                    parsedArgs.Add("path", args[1]);
+                    parsedArgs.Add("tag", args[2]);
+                    parsedArgs.Add("newTagValue", args[3]);
                     break;
             }
+
+            return parsedArgs;
         }
+
         private static bool CheckArgs(string[] args)
         {
             if (args.Length == 0)

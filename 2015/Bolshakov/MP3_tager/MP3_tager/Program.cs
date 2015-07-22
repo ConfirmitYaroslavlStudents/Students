@@ -26,6 +26,10 @@ namespace MP3_tager
             {
                 Console.WriteLine(Messeges.FileNotExist);
             }
+            catch(NotValidPatternException excep)
+            {
+                Console.WriteLine(Messeges.NotValidPatter);
+            }
         }
     }
 }

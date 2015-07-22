@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
 using Id3;
 
@@ -12,45 +13,54 @@ namespace MP3_tager
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException();
-            var parsedTags = PrseTags(path, pattern);
+            var parsedTags = ParseTags(path, pattern);
+            if (parsedTags == null)
+                throw new NotValidPatternException();
             InsertTags(path, parsedTags);
         }
 
-        private static void InsertTags(string path, Dictionary<TagTypes, string> parsedTags)
+        private static void InsertTags(string path, Dictionary<FrameType, string> tags)
         {
             var mp3File = new Mp3File(path, Mp3Permissions.ReadWrite);
-            var tag = mp3File.GetTag(Id3TagFamily.FileStartTag);
-            foreach (var item in parsedTags)
+            var idTag = mp3File.GetTag(Id3TagFamily.FileStartTag);
+            foreach (var item in tags)
             {
                 switch (item.Key)
                 {
-                    case TagTypes.Artist:
-                        tag.Artists.Value = item.Value;
+                    #region Boring cases
+                    case FrameType.Artist:
+                        idTag.Artists.Value = item.Value;
                         break;
-                    case TagTypes.Title:
-                        tag.Title.Value = item.Value;
+                    case FrameType.Title:
+                        idTag.Title.Value = item.Value;
                         break;
-                    case TagTypes.Album:
-                        tag.Album.Value = item.Value;
+                    case FrameType.Album:
+                        idTag.Album.Value = item.Value;
                         break;
-                    case TagTypes.Track:
-                        tag.Track.Value = item.Value;
+                    case FrameType.Track:
+                        idTag.Track.Value = item.Value;
+                        break;
+                    case FrameType.Year:
+                        idTag.Year.Value = item.Value;
                         break;
                     default:
-                        break;
+                        break;                    
+                    #endregion
                 }
             }
-            mp3File.WriteTag(tag, new WriteConflictAction());
+            mp3File.WriteTag(idTag, new WriteConflictAction());
             mp3File.Dispose();
         }
 
-        private static Dictionary<TagTypes, string> PrseTags(string path, string pattern)
+        private static Dictionary<FrameType, string> ParseTags(string path, string pattern)
         {
-            var dict = new Dictionary<TagTypes, string>();
-            dict.Add(TagTypes.Album, "New album");
-            dict.Add(TagTypes.Artist, "New artist");
-            dict.Add(TagTypes.Title, "New title");
-            dict.Add(TagTypes.Track, "10");
+            var a = new TagParser(pattern);
+
+            var regex = new Regex(@"[^\\]*?(?=(\.mp3))");
+            var math = regex.Match(path);
+            var clearPath = math.Value;
+
+            var dict = a.GetFrames(clearPath);
             return dict;
         }
     }

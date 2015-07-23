@@ -5,13 +5,9 @@ namespace Homework1
 {
     public class LinkedList<T>:IEnumerable<T>
     {
-        #region Fields
         private Node<T> _head;
-        private Node<T> _lastNode;
+        private Node<T> _tail;
         private int _count;
-        #endregion
-        #region Props
-
         public int Count
         {
             get
@@ -26,8 +22,6 @@ namespace Homework1
                 return _count == 0;
             }
         }
-        #endregion
-        #region Indexer
         public T this[int index]
         {
             get { return ElementAt(index); }
@@ -36,13 +30,11 @@ namespace Homework1
                 NodeAt(index).Data = value;
             }
         }
-        #endregion
-        #region Ctors
         public LinkedList()
         {
             _count = 0;
             _head = null;
-            _lastNode = null;
+            _tail = null;
         }
         public LinkedList(T item)
             : this()
@@ -54,8 +46,6 @@ namespace Homework1
         {
             AddRange(range);
         }
-        #endregion
-        #region Methods
         private Node<T> NodeAt(int index)
         {
             if (index >= Count || index < 0)
@@ -73,7 +63,7 @@ namespace Homework1
             }
             else
             {
-                currentNode = _lastNode;
+                currentNode = _tail;
                 for (int i = Count-1; i > index; i--)
                 {
                     currentNode = currentNode.PreviousNode;
@@ -98,7 +88,7 @@ namespace Homework1
             if (node.PreviousNode == null&&node.NextNode==null)
             {
                 _head = null;
-                _lastNode = null;
+                _tail = null;
             }
             else 
             {
@@ -108,9 +98,9 @@ namespace Homework1
                 }
                 else if (node.NextNode == null)
                 {
-                    _lastNode = node.PreviousNode;
+                    _tail = node.PreviousNode;
                 }
-                Node<T>.Remove(node);
+                node.BreakLinks();
             }
             _count--;
         }
@@ -119,13 +109,13 @@ namespace Homework1
             if (IsEmpty)
             {
                 _head = new Node<T>() { Data = item };
-                _lastNode = _head;
+                _tail = _head;
             }
             else
             {
                 var newNode = new Node<T>() { Data = item };
-                Node<T>.AddAfter(_lastNode, newNode);
-                _lastNode = newNode;
+                _tail.AddAfter(newNode);
+                _tail = newNode;
 
             }
             _count++;
@@ -154,7 +144,7 @@ namespace Homework1
             {
                 var node = NodeAt(index);
                 var newNode = new Node<T>() {Data = value};
-                Node<T>.AddBefore(node,newNode);
+                node.AddBefore(newNode);
                 if (index == 0)
                 {
                     _head = newNode;
@@ -197,25 +187,19 @@ namespace Homework1
         {
             _count = 0;
             _head = null;
-            _lastNode = null;
+            _tail = null;
         }
   
-        #endregion
-        #region Ifaces
         //[TODO] reimplement without yield
         public IEnumerator<T> GetEnumerator()
         {
-            for (var currentNode=_head;currentNode!=null;currentNode=currentNode.NextNode)
-            {
-                yield return currentNode.Data;
-            }
+            return new LinkedListEnumerator<T>(_head);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-        #endregion
     
     }
 }

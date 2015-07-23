@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Tager", "Mp3Tager\Mp3Tager.csproj", "{9008D222-0ECD-4597-9BE4-210499C6F3C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Lib", "Mp3Lib\Mp3Lib.csproj", "{33D3F509-BB12-4033-A44C-9BAF5C4F3BAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3LibTests", "Mp3LibTests\Mp3LibTests.csproj", "{3D582639-8205-4BD0-B792-762E88E74939}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{33D3F509-BB12-4033-A44C-9BAF5C4F3BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33D3F509-BB12-4033-A44C-9BAF5C4F3BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33D3F509-BB12-4033-A44C-9BAF5C4F3BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D582639-8205-4BD0-B792-762E88E74939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D582639-8205-4BD0-B792-762E88E74939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D582639-8205-4BD0-B792-762E88E74939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D582639-8205-4BD0-B792-762E88E74939}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

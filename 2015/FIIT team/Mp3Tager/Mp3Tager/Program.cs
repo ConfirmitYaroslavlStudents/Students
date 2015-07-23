@@ -1,5 +1,5 @@
 ﻿using System;
-using Mp3Lib;
+using System.IO;
 
 namespace Mp3Tager
 {
@@ -16,6 +16,10 @@ namespace Mp3Tager
             {
                 Console.WriteLine(e.Message);
             }
+
+            
+
+
         }
     }
 }

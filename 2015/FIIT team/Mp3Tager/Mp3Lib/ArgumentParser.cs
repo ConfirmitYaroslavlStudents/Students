@@ -48,14 +48,14 @@ namespace Mp3Lib
         private static bool CheckArgs(string[] args)
         {
             if (args.Length == 0)
-                throw new ArgumentException("Not enough arguments!");
+                throw new ArgumentException("No arguments passed!");
             if (CommandList.Keys.Contains(args[0]))
                 if (CommandList[args[0]].Contains(args.Length))
                     return true;
                 else
-                {       
+                {
                     throw new ArgumentException(CreateErrorMessage(args));
-                }                       
+                }
             return false;
         }
 
@@ -68,7 +68,7 @@ namespace Mp3Lib
                 {
                     num += " or " + CommandList[args[0]][i];
                 }
-            }        
+            }
             string message = String.Format("Wrong number of arguments passed. {0} passed. {1} expected", args.Length, num);
             return message;
         }

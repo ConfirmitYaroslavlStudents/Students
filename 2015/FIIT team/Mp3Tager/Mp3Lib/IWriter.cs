@@ -1,6 +1,6 @@
 ﻿namespace Mp3Lib
 {
-    public interface IWriter
+    internal interface IWriter
     {
         void Write(string value);
         void WriteLine(string value);

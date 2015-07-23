@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
+
+[assembly: InternalsVisibleTo("Mp3LibTests")]
 namespace Mp3Lib
 {
-    public static class Actions
+    internal static class Actions
     {
         private static readonly HashSet<string> TagSet = new HashSet<string>
         {
-            "artist", "title", "genre", "album", "track"
+            "{artist}", "{title}", "{genre}", "{album}", "{track}"
         };
 
         public static void Rename(IMp3File audioFile, string pattern)
@@ -20,7 +23,7 @@ namespace Mp3Lib
             newName.Replace("{album}", audioFile.Tag.Album);
             newName.Replace("{track}", audioFile.Tag.Track.ToString());
 
-            audioFile.MoveTo(audioFile.DirectoryName + @"\" + newName + ".mp3");
+            audioFile.MoveTo(audioFile.DirectoryName + @"\" + newName + ".mp3");          
         }
 
         public static void ChangeTag(IMp3File audioFile, string tag, string newTagValue)
@@ -30,23 +33,24 @@ namespace Mp3Lib
 
             switch (tag)
             {
-                case "artist":
+                case "{artist}":
                     audioFile.Tag.Performers = new[] { newTagValue };
                     break;
-                case "title":
+                case "{title}":
                     audioFile.Tag.Title = newTagValue;
                     break;
-                case "genre":
+                case "{genre}":
                     audioFile.Tag.Genres = new[] { newTagValue };
                     break;
-                case "album":
+                case "{album}":
                     audioFile.Tag.Album = newTagValue;
                     break;
-                case "track":
+                case "{track}":
                     audioFile.Tag.Track = Convert.ToUInt32(newTagValue);
                     break;
             }
             audioFile.Save();
         }
+
     }
 }

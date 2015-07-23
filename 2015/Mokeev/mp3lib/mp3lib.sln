@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mp3_lib", "mp3_lib\mp3_lib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleMp3TagEditor", "ConsoleMp3TagEditor\ConsoleMp3TagEditor.csproj", "{EFF8D72A-D06D-4C73-B4D6-527C3A7898AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mp3lib_Tests", "mp3lib_Tests\mp3lib_Tests.csproj", "{11541B6D-CF41-46C7-9039-8A7942D0FBD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EFF8D72A-D06D-4C73-B4D6-527C3A7898AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFF8D72A-D06D-4C73-B4D6-527C3A7898AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFF8D72A-D06D-4C73-B4D6-527C3A7898AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11541B6D-CF41-46C7-9039-8A7942D0FBD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11541B6D-CF41-46C7-9039-8A7942D0FBD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11541B6D-CF41-46C7-9039-8A7942D0FBD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11541B6D-CF41-46C7-9039-8A7942D0FBD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

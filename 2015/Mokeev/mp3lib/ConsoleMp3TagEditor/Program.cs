@@ -23,7 +23,7 @@ namespace ConsoleMp3TagEditor
 			Console.ReadKey();
 		}
 
-		public static bool ArgsValid(string[] args)
+		private static bool ArgsValid(string[] args)
 		{
 			if (args.Length != 4)
 			{
@@ -74,19 +74,19 @@ namespace ConsoleMp3TagEditor
 			return true;
 		}
 
-		public static Dictionary<string, string> ExtactArgs(IEnumerable<string> args)
+		private static Dictionary<string, string> ExtactArgs(IEnumerable<string> args)
 		{
-			var q = new Queue<string>();
+			var queue = new Queue<string>();
 			var retDict = new Dictionary<string, string>();
 			foreach (var arg in args)
 			{
-				if (q.Count == 0)
+				if (queue.Count == 0)
 				{
-					q.Enqueue(arg);
+					queue.Enqueue(arg);
 					continue;
 				}
 
-				retDict.Add(q.Dequeue(), arg);
+				retDict.Add(queue.Dequeue(), arg);
 			}
 
 			return retDict;

@@ -14,10 +14,12 @@ namespace ConsoleMp3TagEditor
 
 			var mp3 = new Mp3File(data["-file"]);
 
-			var renamer = new Mp3RenamerFromFileName(mp3);
+			var renamer = new Mp3TagChanger(mp3);
 
 			renamer.Start(data["-mask"]);
-			
+
+			Console.WriteLine("Done!");
+
 			Console.ReadKey();
 		}
 

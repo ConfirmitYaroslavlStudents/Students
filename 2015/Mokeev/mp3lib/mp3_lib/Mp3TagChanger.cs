@@ -35,8 +35,32 @@ namespace mp3_lib
 		public void Start(string maskInput)
 		{
 			var tagsCollection = Regex.Matches(maskInput, "({[a-z]+})+");
+			var prefixesQueue = FindAllPrefixes(maskInput, tagsCollection);
+
+			var tags = ConvertTagMatchCollectionToQueue(tagsCollection);
+
+			var data = new Dictionary<string, string>();
+			var mp3Name = new StringBuilder(Mp3RealName);
+
+			GetFullDataFromString(prefixesQueue, mp3Name, data, tags);
+
+			ChangeMp3Tags(data);
+		}
+
+		private static Queue<Match> ConvertTagMatchCollectionToQueue(MatchCollection tagsCollection)
+		{
+			var tags = new Queue<Match>();
+			foreach (Match tag in tagsCollection)
+			{
+				tags.Enqueue(tag);
+			}
+			return tags;
+		}
+
+		private Queue<string> FindAllPrefixes(string maskInput, MatchCollection tagsCollection)
+		{
 			var mask = new StringBuilder(maskInput);
-			
+
 			var prefixesQueue = new Queue<string>();
 			foreach (Match tag in tagsCollection)
 			{
@@ -49,17 +73,11 @@ namespace mp3_lib
 				mask.Remove(0,
 					(tag.Value.Length + str.Length > mask.Length) ? mask.Length : tag.Value.Length + str.Length);
 			}
+			return prefixesQueue;
+		}
 
-			var tags = new Queue<Match>();
-			foreach (Match tag in tagsCollection)
-			{
-				tags.Enqueue(tag);
-			}
-
-
-			var data = new Dictionary<string, string>();
-			var mp3Name = new StringBuilder(Mp3RealName);
-
+		private void GetFullDataFromString(Queue<string> prefixesQueue, StringBuilder mp3Name, Dictionary<string, string> data, Queue<Match> tags)
+		{
 			while (prefixesQueue.Count > 0)
 			{
 				var prefix = prefixesQueue.Dequeue();
@@ -95,12 +113,14 @@ namespace mp3_lib
 				else
 				{
 					mp3Name.Remove(0, prefix.Length);
-					if(tags.Count > 0) data.Add(tags.Dequeue().Value, mp3Name.ToString());
+					if (tags.Count > 0) data.Add(tags.Dequeue().Value, mp3Name.ToString());
 					break;
 				}
 			}
+		}
 
-
+		private void ChangeMp3Tags(Dictionary<string, string> data)
+		{
 			foreach (var item in data)
 			{
 				switch (item.Key)

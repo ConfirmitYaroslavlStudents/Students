@@ -48,19 +48,18 @@ namespace MP3_tager
             else
                 return null;
 
-            while (indexesAreValid(patternId,fileNameId))
+            while (fileNameId<_fileName.Length)
             {
                 if(Pattern[patternId]==_fileName[fileNameId])
                 {
-                    var frames = indexesInEnd(patternId,fileNameId)? new Dictionary<FrameType,string>() : recMeth(patternId, fileNameId);
+                    var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : recMeth(patternId, fileNameId);
                     if (frames != null)
                     {
                         frames.Add(_frameTags[tag.ToString()], value.ToString());
                         return frames;
                     }
                 }
-                else
-                    value.Append(_fileName[fileNameId]);
+                value.Append(_fileName[fileNameId]);
                 fileNameId++;
             }
 

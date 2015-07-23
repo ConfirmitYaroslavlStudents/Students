@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using System.Collections.Generic;
 
 namespace MP3_tager
 {
@@ -30,6 +31,11 @@ namespace MP3_tager
             {
                 Console.WriteLine(Messeges.NotValidPatter);
             }
+            catch(KeyNotFoundException excep)
+            {
+                Console.WriteLine(Messeges.KeyNotFound);
+            }
+            
         }
     }
 }

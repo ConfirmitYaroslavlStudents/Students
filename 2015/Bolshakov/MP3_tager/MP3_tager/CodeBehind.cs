@@ -29,6 +29,7 @@ namespace MP3_tager
                 {
                     #region Boring cases
                     case FrameType.Artist:
+                        idTag.Artists.Values.Clear();
                         idTag.Artists.Value = item.Value;
                         break;
                     case FrameType.Title:

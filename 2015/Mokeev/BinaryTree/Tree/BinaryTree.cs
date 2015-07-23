@@ -13,7 +13,7 @@ namespace BinaryTree
 	{
 		public delegate void Traversing(IBinaryNode<T> node);
 
-		public event Traversing OnTraverse;
+		public Traversing OnTraverse { get; set; }
 
 		private BinaryTreeNode<T> RootNode { get; set; }
 
@@ -24,11 +24,23 @@ namespace BinaryTree
 		public bool IsReadOnly { get { return false; } }
 
 		/// <summary>
+		/// Allows you to add or remove traverse type.
+		/// </summary>
+		public Dictionary<string, Traversing> TraverseTypes { get; set; }
+
+		/// <summary>
 		/// Creates Binary tree
 		/// </summary>
 		public BinaryTree()
 		{
 			RootNode = null;
+			TraverseTypes = new Dictionary<string, Traversing>()
+			{
+				{ "Preorder" , PreorderTraversal },
+				{ "Inorder" , InorderTraversal },
+				{ "Postorder" , PostoderTraversal },
+				{ "Width" , WidthTraversal },
+			};
 		}
 
 		/// <summary>
@@ -443,27 +455,12 @@ namespace BinaryTree
 			return !(tree1 == tree2);
 		}
 
-        //[TODO] create new traverse without recompile
-		public void Traverse(Traversing eventHandler, TraverseType type = TraverseType.Preorder)
+		public void Traverse(Traversing eventHandler, string type = "Preorder")
 		{
-			OnTraverse = null;
-			OnTraverse += eventHandler;
-			switch (type)
-			{
-				case TraverseType.Inorder:
-					InorderTraversal(RootNode);
-					break;
-				case TraverseType.Postorder:
-					PostoderTraversal(RootNode);
-					break;
-				case TraverseType.Width:
-					WidthTraversal();
-					break;
-				case TraverseType.Preorder:
-				default:
-					PreorderTraversal(RootNode);
-					break;
-			}
+			if (!TraverseTypes.ContainsKey(type)) throw new ArgumentOutOfRangeException("type");
+
+			OnTraverse = eventHandler;
+			TraverseTypes[type](RootNode);
 		}
 
 		private void PreorderTraversal(IBinaryNode<T> current)
@@ -506,9 +503,9 @@ namespace BinaryTree
 			if (OnTraverse != null) OnTraverse(current);
 		}
 
-		private void WidthTraversal()
+		private void WidthTraversal(IBinaryNode<T> current)
 		{
-			foreach (var node in RootNode)
+			foreach (var node in current)
 			{
 				if (OnTraverse != null) OnTraverse((IBinaryNode<T>) node);
 			}

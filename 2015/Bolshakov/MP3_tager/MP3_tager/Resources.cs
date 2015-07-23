@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MP3_tager
+﻿namespace MP3_tager
 {
     static class Messeges
     {

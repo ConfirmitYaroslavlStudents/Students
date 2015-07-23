@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace RetagerLib
 {
@@ -14,23 +10,22 @@ namespace RetagerLib
         public TagParser(string pattern)
         {
             Pattern = pattern;
-            fillTagDictionary();
+            FillTagDictionary();
         }
 
         public Dictionary<FrameType,string> GetFrames(string fileName)
         {
             _fileName = fileName+'*';
-            var frames = new Dictionary<FrameType, string>();
             
-            return recMeth(0, 0);
+            return RecMeth(0, 0);
         }
 
-        private Dictionary<FrameType,string> recMeth(int patternId,int fileNameId)
+        private Dictionary<FrameType,string> RecMeth(int patternId,int fileNameId)
         {
             var tag = new StringBuilder();
             var value = new StringBuilder();
 
-            while(indexesAreValid(patternId,fileNameId) && Pattern[patternId]==_fileName[fileNameId]) //Go to first different symbol
+            while(IndexesAreValid(patternId,fileNameId) && Pattern[patternId]==_fileName[fileNameId]) //Go to first different symbol
             {
                 patternId++;
                 fileNameId++;
@@ -38,7 +33,7 @@ namespace RetagerLib
 
             if (Pattern[patternId] == '<') 
             {
-                patternId = determinateTag(patternId, tag);
+                patternId = DeterminateTag(patternId, tag);
             }
             else
                 return null; //If this is not tag - error => return null
@@ -47,7 +42,7 @@ namespace RetagerLib
             {
                 if(Pattern[patternId]==_fileName[fileNameId]) //May be it first symbol after tag
                 {
-                    var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : recMeth(patternId, fileNameId);
+                    var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : RecMeth(patternId, fileNameId);
                     if (frames != null) //If recusive method returned non-null dictionary its actualy end of tag
                     {
                         frames.Add(_frameTags[tag.ToString()], value.ToString());
@@ -61,7 +56,7 @@ namespace RetagerLib
             return null;
         }
 
-        private int determinateTag(int patternId, StringBuilder tag)
+        private int DeterminateTag(int patternId, StringBuilder tag)
         {
             do
             {
@@ -74,12 +69,13 @@ namespace RetagerLib
             return patternId;
         }
 
-        private bool indexesAreValid(int patternIndex, int fileNameIndex)
+        private bool IndexesAreValid(int patternIndex, int fileNameIndex)
         {
-            return patternIndex < Pattern.Length && fileNameIndex < _fileName.Length;
+            if (patternIndex < Pattern.Length && fileNameIndex < _fileName.Length) return true;
+            return false;
         }
 
-        private void fillTagDictionary()
+        private void FillTagDictionary()
         {
             _frameTags = new Dictionary<string, FrameType>
             {

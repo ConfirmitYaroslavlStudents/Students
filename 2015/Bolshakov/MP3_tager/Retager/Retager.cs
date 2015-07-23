@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using System.IO;
 using Id3;
 
 namespace RetagerLib
 {
-    //[TODO] non static and rename
     public class Retager
     {
         public void TagFile(string path, string pattern)
@@ -45,9 +41,7 @@ namespace RetagerLib
                     case FrameType.Year:
                         idTag.Year.Value = item.Value;
                         break;
-                    default:
-                        break;                    
-                    #endregion
+                        #endregion
                 }
             }
             mp3File.WriteTag(idTag, new WriteConflictAction());

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MP3_tager
 {
-    enum FrameType
+    public enum FrameType
     {
         Artist,
         Title,

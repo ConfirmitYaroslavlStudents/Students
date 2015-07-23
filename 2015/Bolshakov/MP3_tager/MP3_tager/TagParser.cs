@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 
 namespace MP3_tager
 {
-    class TagParser
+    public class TagParser
     {
-        public string Pattern { get; private set; }
+        public string Pattern { get { return _pattern; } set { _pattern = value + '*'; } }
 
         public TagParser(string pattern)
         {
-            Pattern = pattern+'*';
-            _frameTags = new Dictionary<string,FrameType>();
-            _frameTags.Add("<al>",FrameType.Album);
-            _frameTags.Add("<ar>",FrameType.Artist);
-            _frameTags.Add("<ti>",FrameType.Title);
-            _frameTags.Add("<tr>",FrameType.Track);
-            _frameTags.Add("<ye>",FrameType.Year);
+            Pattern = pattern;
+            fillTagDictionary();
         }
 
         public Dictionary<FrameType,string> GetFrames(string fileName)
@@ -41,25 +36,25 @@ namespace MP3_tager
                 fileNameId++;
             }
 
-            if (Pattern[patternId] == '<')
+            if (Pattern[patternId] == '<') 
             {
                 patternId = determinateTag(patternId, tag);
             }
             else
-                return null;
+                return null; //If this is not tag - error => return null
 
-            while (fileNameId<_fileName.Length)
+            while (fileNameId<_fileName.Length) 
             {
-                if(Pattern[patternId]==_fileName[fileNameId])
+                if(Pattern[patternId]==_fileName[fileNameId]) //May be it first symbol after tag
                 {
                     var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : recMeth(patternId, fileNameId);
-                    if (frames != null)
+                    if (frames != null) //If recusive method returned non-null dictionary its actualy end of tag
                     {
                         frames.Add(_frameTags[tag.ToString()], value.ToString());
                         return frames;
                     }
                 }
-                value.Append(_fileName[fileNameId]);
+                value.Append(_fileName[fileNameId]); 
                 fileNameId++;
             }
 
@@ -84,13 +79,19 @@ namespace MP3_tager
             return patternIndex < Pattern.Length && fileNameIndex < _fileName.Length;
         }
 
-        private bool indexesInEnd(int patternIndex, int fileNameIndex)
+        private void fillTagDictionary()
         {
-            return patternIndex == Pattern.Length-1 && fileNameIndex == _fileName.Length-1;
+            _frameTags = new Dictionary<string, FrameType>();
+            _frameTags.Add("<al>", FrameType.Album);
+            _frameTags.Add("<ar>", FrameType.Artist);
+            _frameTags.Add("<ti>", FrameType.Title);
+            _frameTags.Add("<tr>", FrameType.Track);
+            _frameTags.Add("<ye>", FrameType.Year);
         }
 
         private Dictionary<string,FrameType> _frameTags;
 
         private string _fileName;
+        private string _pattern;
     }
 }

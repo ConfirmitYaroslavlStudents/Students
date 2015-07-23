@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MP3_tager
+namespace RetagerLib
 {
-    class NotValidPatternException : Exception
+    public class NotValidPatternException : Exception
     {
     }
 }

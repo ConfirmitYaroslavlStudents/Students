@@ -1,23 +1,24 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MP3_tager;
 using System.Collections.Generic;
+using RetagerLib;
 
-namespace ParserTests
+namespace Tests
 {
     //[TODO] more tests on "CodeBehind.cs"
     [TestClass]
-    public class UnitTest1
+    public class PareserTests
     {
         [TestMethod]
         public void OneTagPattern()
         {
-            var except = "artist";
+            var expect = "artist";
 
             var parser = new TagParser("<ar>");
-            var frames = parser.GetFrames(except);
+            var frames = parser.GetFrames(expect);
 
-            Assert.AreEqual(except, frames[FrameType.Artist]);
+            Assert.AreEqual(1, frames.Count);
+            Assert.AreEqual(expect, frames[FrameType.Artist]);
         }
 
         [TestMethod]
@@ -25,43 +26,29 @@ namespace ParserTests
         {
             var artist = "artist";
             var title = "title";
-            var except = artist + " - " + title;
+            var expect = artist + " - " + title;
 
             var parser = new TagParser("<ar> - <ti>");
-            var frames = parser.GetFrames(except);
+            var frames = parser.GetFrames(expect);
 
             Assert.AreEqual(artist, frames[FrameType.Artist]);
             Assert.AreEqual(title, frames[FrameType.Title]);
         }
 
         [TestMethod]
-        public void HardCase1Pattern()
+        public void FakeEndOfTagPattern()
         {
             var artist = "arti -st";
             var title = "title";
-            var except = artist + " - " + title;
+            var expect = artist + " - " + title;
 
             var parser = new TagParser("<ar> - <ti>");
-            var frames = parser.GetFrames(except);
+            var frames = parser.GetFrames(expect);
 
             Assert.AreEqual(artist, frames[FrameType.Artist]);
             Assert.AreEqual(title, frames[FrameType.Title]);
         }
 
-        [TestMethod]
-        public void HardCase2Pattern()
-        {
-            var artist = "artist";
-            var title = "tit -le";
-            var except = artist + " - " + title;
-
-            var parser = new TagParser("<ar> - <ti>");
-            var frames = parser.GetFrames(except);
-
-            Assert.AreEqual(artist, frames[FrameType.Artist]);
-            Assert.AreEqual(title, frames[FrameType.Title]);
-        }
-        
         [TestMethod]
         [ExpectedException(typeof(KeyNotFoundException))]
         public void NotExistingTagException()

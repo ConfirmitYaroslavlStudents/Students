@@ -5,12 +5,12 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Id3;
 
-namespace MP3_tager
+namespace RetagerLib
 {
     //[TODO] non static and rename
-    static class CodeBehind
+    public class Retager
     {
-        public static void TagFile(string path, string pattern)
+        public void TagFile(string path, string pattern)
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException();
@@ -20,7 +20,7 @@ namespace MP3_tager
             InsertTags(path, parsedTags);
         }
 
-        private static void InsertTags(string path, Dictionary<FrameType, string> tags)
+        private void InsertTags(string path, Dictionary<FrameType, string> tags)
         {
             var mp3File = new Mp3File(path, Mp3Permissions.ReadWrite);
             var idTag = mp3File.GetTag(Id3TagFamily.FileStartTag);
@@ -54,15 +54,12 @@ namespace MP3_tager
             mp3File.Dispose();
         }
 
-        private static Dictionary<FrameType, string> ParseTags(string path, string pattern)
+        private Dictionary<FrameType, string> ParseTags(string path, string pattern)
         {
-            var a = new TagParser(pattern);
+            var clearPath = Path.GetFileNameWithoutExtension(path);
 
-            var regex = new Regex(@"[^\\]*?(?=(\.mp3))");
-            var math = regex.Match(path);
-            var clearPath = math.Value;
-
-            var dict = a.GetFrames(clearPath);
+            var parser = new TagParser(pattern);
+            var dict = parser.GetFrames(clearPath);
             return dict;
         }
     }

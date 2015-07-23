@@ -2,6 +2,7 @@
 using System.Text;
 using System.IO;
 using System.Collections.Generic;
+using RetagerLib;
 
 namespace MP3_tager
 {
@@ -19,7 +20,10 @@ namespace MP3_tager
                         Console.WriteLine(Messeges.ShortHelp);
                 }
                 else if (args.Length == 2)
-                    CodeBehind.TagFile(args[0], args[1]);
+                {
+                    var tager = new Retager();
+                    tager.TagFile(args[0], args[1]);
+                }
                 else
                     Console.WriteLine(Messeges.ShortHelp);
             }

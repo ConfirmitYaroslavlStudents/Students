@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using RetagerLib;
 
 namespace MP3_tager
@@ -9,20 +10,30 @@ namespace MP3_tager
     {
         static void Main(string[] args)
         {
+            //todo: include try-catch into mode methods
             try
             {
-                switch (args.Length)
+                if (args.Length >= 1)
                 {
-                    case 1:
-                        Console.WriteLine(args[0] == "help" ? Messeges.LongHelp : Messeges.ShortHelp);
-                        break;
-                    case 2:
-                        var tager = new Retager();
-                        tager.TagFile(args[0], args[1]);
-                        break;
-                    default:
-                        Console.WriteLine(Messeges.ShortHelp);
-                        break;
+                    switch (args[0])
+                    {
+                        case "help":
+                            Console.WriteLine(Messeges.LongHelp);
+                            break;
+                        case "retag":
+                            RetagFile(args);
+                            break;
+                        case "rename":
+                            RenameFile(args);
+                            break;
+                        default:
+                            Console.WriteLine(Messeges.InvalidFirsArg);
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(Messeges.ShortHelp);
                 }
             }
             catch(FileNotFoundException)
@@ -38,6 +49,25 @@ namespace MP3_tager
                 Console.WriteLine(Messeges.KeyNotFound);
             }
             
+        }
+
+        private static void RenameFile(string[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void RetagFile(string[] args)
+        {
+            switch (args.Length)
+            {
+                case 3:
+                    var retager = new Retager();
+                    retager.TagFile(args[1],args[2]);
+                    break;
+                default:
+                    Console.WriteLine(Messeges.RetagmodeHelp);
+                    break;
+            }
         }
     }
 }

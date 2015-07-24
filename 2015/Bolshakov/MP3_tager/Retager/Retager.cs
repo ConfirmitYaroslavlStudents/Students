@@ -53,8 +53,8 @@ namespace RetagerLib
             var clearPath = Path.GetFileNameWithoutExtension(path);
 
             var parser = new TagParser(pattern);
-            var dict = parser.GetFrames(clearPath);
-            return dict;
+            var frames = parser.GetFrames(clearPath);
+            return frames;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace RetagerLib
         public TagParser(string pattern)
         {
             Pattern = pattern;
+            //todo: replace tag dictionary
             FillTagDictionary();
         }
 
@@ -17,10 +18,10 @@ namespace RetagerLib
         {
             _fileName = fileName+'*';
             
-            return RecMeth(0, 0);
+            return DeterminateNextTag(0, 0);
         }
 
-        private Dictionary<FrameType,string> RecMeth(int patternId,int fileNameId)
+        private Dictionary<FrameType,string> DeterminateNextTag(int patternId,int fileNameId)
         {
             var tag = new StringBuilder();
             var value = new StringBuilder();
@@ -42,7 +43,7 @@ namespace RetagerLib
             {
                 if(Pattern[patternId]==_fileName[fileNameId]) //May be it first symbol after tag
                 {
-                    var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : RecMeth(patternId, fileNameId);
+                    var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : DeterminateNextTag(patternId, fileNameId);
                     if (frames != null) //If recusive method returned non-null dictionary its actualy end of tag
                     {
                         frames.Add(_frameTags[tag.ToString()], value.ToString());

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace mp3_lib
 {
+    //[TODO] extract classes
 	public class Mp3TagChanger
 	{
 		private string Mp3RealName { get; set; }

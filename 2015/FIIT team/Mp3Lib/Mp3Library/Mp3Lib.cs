@@ -27,7 +27,6 @@ namespace Mp3Library
 
         public void ExecuteCommand()
         {
-
             string command = _args[0];
             if (CheckArgs(command))
             {

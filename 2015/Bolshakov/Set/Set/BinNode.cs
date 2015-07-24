@@ -34,7 +34,6 @@ namespace SetLib
         #endregion
 
         #region Public Methods
-        //[TODO] investigate hashcodes in .net
         public BinNode(ref T data)
         {
             Data = data;

@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
+using System.IO;
+using RetagerLib;
 
 namespace MP3_tager
 {
@@ -7,17 +9,35 @@ namespace MP3_tager
     {
         static void Main(string[] args)
         {
-            if (args.Length == 1)
+            try
             {
-                if (args[0] == "help")
-                    Console.WriteLine(Messeges.LongHelp);
-                else
-                    Console.WriteLine(Messeges.ShortHelp);
+                switch (args.Length)
+                {
+                    case 1:
+                        Console.WriteLine(args[0] == "help" ? Messeges.LongHelp : Messeges.ShortHelp);
+                        break;
+                    case 2:
+                        var tager = new Retager();
+                        tager.TagFile(args[0], args[1]);
+                        break;
+                    default:
+                        Console.WriteLine(Messeges.ShortHelp);
+                        break;
+                }
             }
-            else if (args.Length == 2)
-                CodeBehind.TagFile(args[0], args[1]);
-            else
-                Console.WriteLine(Messeges.ShortHelp);
+            catch(FileNotFoundException)
+            {
+                Console.WriteLine(Messeges.FileNotExist);
+            }
+            catch(NotValidPatternException)
+            {
+                Console.WriteLine(Messeges.NotValidPatter);
+            }
+            catch(KeyNotFoundException)
+            {
+                Console.WriteLine(Messeges.KeyNotFound);
+            }
+            
         }
     }
 }

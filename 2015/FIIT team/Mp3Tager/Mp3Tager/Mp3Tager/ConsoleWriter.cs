@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mp3Lib
+namespace Mp3Tager
 {
     internal class ConsoleWriter : IWriter
     {

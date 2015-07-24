@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 
-
-[assembly: InternalsVisibleTo("Mp3LibTests")]
 namespace Mp3Lib
 {
-    internal static class Actions
+    public static class Actions
     {
         private static readonly HashSet<string> TagSet = new HashSet<string>
         {
@@ -23,7 +20,7 @@ namespace Mp3Lib
             newName.Replace("{album}", audioFile.Tag.Album);
             newName.Replace("{track}", audioFile.Tag.Track.ToString());
 
-            audioFile.MoveTo(audioFile.DirectoryName + @"\" + newName + ".mp3");          
+            audioFile.MoveTo(audioFile.DirectoryName + @"\" + newName + ".mp3");
         }
 
         public static void ChangeTag(IMp3File audioFile, string tag, string newTagValue)
@@ -51,6 +48,5 @@ namespace Mp3Lib
             }
             audioFile.Save();
         }
-
     }
 }

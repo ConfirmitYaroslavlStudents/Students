@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
-namespace Mp3Lib
+
+[assembly: InternalsVisibleTo("Mp3LibTests")]
+namespace Mp3Tager
 {
-    public static class ArgumentParser
+    internal static class ArgumentParser
     {
         static readonly Dictionary<string, int[]> CommandList = new Dictionary<string, int[]>
         {
@@ -15,8 +18,7 @@ namespace Mp3Lib
 
         public static Dictionary<string, string> ParseArguments(string[] args)
         {
-            if (!CheckArgs(args))
-                throw new InvalidOperationException("Invalid operation: there is no such command!");
+            CheckArgs(args);
 
             var parsedArgs = new Dictionary<string, string>
             {
@@ -45,32 +47,14 @@ namespace Mp3Lib
             return parsedArgs;
         }
 
-        private static bool CheckArgs(string[] args)
+        private static void CheckArgs(string[] args)
         {
             if (args.Length == 0)
-                throw new ArgumentException("No arguments passed!");
-            if (CommandList.Keys.Contains(args[0]))
-                if (CommandList[args[0]].Contains(args.Length))
-                    return true;
-                else
-                {
-                    throw new ArgumentException(CreateErrorMessage(args));
-                }
-            return false;
-        }
-
-        private static string CreateErrorMessage(string[] args)
-        {
-            string num = CommandList[args[0]][0].ToString();
-            if (CommandList[args[0]].Length != 1)
-            {
-                for (int i = 1; i < CommandList[args[0]].Length; i++)
-                {
-                    num += " or " + CommandList[args[0]][i];
-                }
-            }
-            string message = String.Format("Wrong number of arguments passed. {0} passed. {1} expected", args.Length, num);
-            return message;
+                throw new ArgumentException("You haven't passed any argument!");
+            if (!CommandList.Keys.Contains(args[0]))
+                throw new InvalidOperationException("Invalid operation: there is no such command!");
+            if (!CommandList[args[0]].Contains(args.Length))
+                throw new ArgumentException("Not enough arguments for this command!");
         }
     }
 }

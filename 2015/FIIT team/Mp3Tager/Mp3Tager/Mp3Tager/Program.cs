@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace Mp3Tager
 {
@@ -9,17 +8,13 @@ namespace Mp3Tager
         {
             try
             {
-                var app = new Mp3Lib.Application();
+                var app = new Application();
                 app.Execute(args);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
-            
-
-
         }
     }
 }

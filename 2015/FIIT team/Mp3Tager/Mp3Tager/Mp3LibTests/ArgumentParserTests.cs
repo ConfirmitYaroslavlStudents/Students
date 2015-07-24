@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3Lib;
+using Mp3Tager;
 
 namespace Mp3LibTests
 {

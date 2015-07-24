@@ -1,6 +1,6 @@
 ﻿namespace Mp3Lib
 {
-    internal interface IMp3File
+    public interface IMp3File
     {
         void MoveTo(string newPath);
         void Save();

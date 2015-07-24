@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Mp3Lib;
 
-namespace Mp3Lib
+namespace Mp3Tager
 {
-    public class Application
+    internal class Application
     {
         private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {

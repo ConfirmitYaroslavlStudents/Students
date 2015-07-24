@@ -1,4 +1,4 @@
-﻿namespace Mp3Lib
+﻿namespace Mp3Tager
 {
     internal interface IWriter
     {

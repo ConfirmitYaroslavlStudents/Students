@@ -55,7 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Homework1\LinkedList.csproj">
+    <ProjectReference Include="..\Homework\LinkedList.csproj">
       <Project>{16265a8b-44a6-4706-bd48-3163a81a8d8b}</Project>
       <Name>LinkedList</Name>
     </ProjectReference>

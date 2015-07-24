@@ -12,6 +12,8 @@ namespace ConsoleMp3TagEditor
 
 			var data = ExtactArgs(args);
 
+            //[TODO] introduce class for args
+            //[TODO] extract arguments parsing
 			var mp3 = new Mp3File(data["-file"]);
 
 			var renamer = new Mp3TagChanger(mp3);

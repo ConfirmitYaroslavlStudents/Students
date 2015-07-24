@@ -11,7 +11,7 @@ namespace Mp3TagTest
         [ExpectedException(typeof(ArgumentException))]
         public void EqualsTest()
         {
-            MaskItem item1=new MaskItem(){Type = MaskItemType.Delimiter,Value = "item"};
+            MaskItem item1 = new MaskItem() { Type = MaskItemType.Delimiter,Value = "item" };
             MaskItem item2 = new MaskItem() { Type = MaskItemType.Delimiter,Value = "item" };
             MaskItem item3 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
             Assert.AreEqual(item1,item2);

@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using Id3;
 using Id3.Frames;
 
-// ReSharper disable InconsistentNaming
-
 namespace mp3_lib
 {
 	public class Mp3File

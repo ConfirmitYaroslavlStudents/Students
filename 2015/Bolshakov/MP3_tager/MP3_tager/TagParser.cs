@@ -81,12 +81,14 @@ namespace MP3_tager
 
         private void fillTagDictionary()
         {
-            _frameTags = new Dictionary<string, FrameType>();
-            _frameTags.Add("<al>", FrameType.Album);
-            _frameTags.Add("<ar>", FrameType.Artist);
-            _frameTags.Add("<ti>", FrameType.Title);
-            _frameTags.Add("<tr>", FrameType.Track);
-            _frameTags.Add("<ye>", FrameType.Year);
+            _frameTags = new Dictionary<string, FrameType>
+            {
+                {"<al>", FrameType.Album},
+                {"<ar>", FrameType.Artist},
+                {"<ti>", FrameType.Title},
+                {"<tr>", FrameType.Track},
+                {"<ye>", FrameType.Year}
+            };
         }
 
         private Dictionary<string,FrameType> _frameTags;

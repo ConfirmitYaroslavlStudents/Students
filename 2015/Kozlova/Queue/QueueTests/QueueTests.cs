@@ -313,8 +313,7 @@ namespace QueueTests
             actual.Enqueue(7);
             actual.Dequeue();
             actual.Enqueue(8);
-            
-            
+           
             // assert
             Assert.AreEqual("4 5 6 7 8 ", actual.ToString());
             Assert.AreEqual(expected, actual);

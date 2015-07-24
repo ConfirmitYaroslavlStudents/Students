@@ -36,7 +36,6 @@ namespace LinkedListTest
         {
             var range = new int[] { 0, 1, 2, 3, 4 };
             var testList = new Homework1.LinkedList<int>();
-            ArgumentNullException expectedException=null;
             testList.AddRange(range);
             for (int i = 0; i < range.Length; i++)
             {

@@ -7,6 +7,7 @@ using Id3;
 
 namespace MP3_tager
 {
+    //[TODO] non static and rename
     static class CodeBehind
     {
         public static void TagFile(string path, string pattern)

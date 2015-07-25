@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Id3;
 using Id3.Frames;
 
-namespace mp3_lib
+namespace mp3lib
 {
 	public class Mp3File
 	{

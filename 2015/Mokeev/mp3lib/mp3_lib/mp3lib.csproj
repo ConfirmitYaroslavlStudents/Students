@@ -7,8 +7,8 @@
     <ProjectGuid>{EFB43607-90B2-4595-9A91-AD156810BF6F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mp3_lib</RootNamespace>
-    <AssemblyName>mp3_lib</AssemblyName>
+    <RootNamespace>mp3lib</RootNamespace>
+    <AssemblyName>mp3lib</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Args.cs" />
+    <Compile Include="ArgsManager.cs" />
+    <Compile Include="DataExtracterFromFileName.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mp3TagChanger.cs" />

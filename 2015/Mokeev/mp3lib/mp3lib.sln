@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mp3_lib", "mp3_lib\mp3_lib.csproj", "{EFB43607-90B2-4595-9A91-AD156810BF6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mp3lib", "mp3_lib\mp3lib.csproj", "{EFB43607-90B2-4595-9A91-AD156810BF6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleMp3TagEditor", "ConsoleMp3TagEditor\ConsoleMp3TagEditor.csproj", "{EFF8D72A-D06D-4C73-B4D6-527C3A7898AF}"
 EndProject

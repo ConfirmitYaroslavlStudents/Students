@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using mp3lib;
 
 namespace ConsoleMp3TagEditor

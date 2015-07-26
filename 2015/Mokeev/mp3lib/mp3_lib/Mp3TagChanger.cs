@@ -13,24 +13,24 @@ namespace mp3lib
 		private string Mp3RealName { get; set; }
 		private Mp3File Mp3 { get; set; }
 
-		private readonly DataExtracterFromFileName _dataExtracterFromFileName;
+		private readonly DataExtracter _dataExtracter;
 
 		public Mp3TagChanger(Mp3File mp3File, string mask)
 		{
 			Mp3 = mp3File;
 
 			Mp3RealName = Path.GetFileNameWithoutExtension(mp3File.FilePath);
-			_dataExtracterFromFileName = new DataExtracterFromFileName(mask);
+			_dataExtracter = new DataExtracter(mask);
 		}
 
 		public void ChangeTags()
 		{
-			var tags = _dataExtracterFromFileName.GetTags();
-			var prefixesQueue = _dataExtracterFromFileName.FindAllPrefixes(tags);
+			var tags = _dataExtracter.GetTags();
+			var prefixesQueue = _dataExtracter.FindAllPrefixes(tags);
 
 			var mp3Name = new StringBuilder(Mp3RealName);
 
-			var data = _dataExtracterFromFileName.GetFullDataFromString(prefixesQueue, mp3Name, tags);
+			var data = _dataExtracter.GetFullDataFromString(prefixesQueue, mp3Name, tags);
 
 			ChangeMp3Tags(data);
 		}

@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace mp3lib
 {
-	public class DataExtracterFromFileName
+	public class DataExtracter
 	{
-		private readonly string[] _allowedStrings = {
+		public readonly string[] AllowedStrings = {
 			"{title}",
 			"{artist}",
 			"{id}",
@@ -18,9 +18,9 @@ namespace mp3lib
 			"{comment}",
 		};
 
-		private string Mask { get; set; }
+		public string Mask { get; private set; }
 
-		public DataExtracterFromFileName(string mask)
+		public DataExtracter(string mask)
 		{
 			Mask = mask;
 		}
@@ -44,7 +44,7 @@ namespace mp3lib
 			var prefixesQueue = new Queue<string>();
 			foreach (var tag in tagsCollection)
 			{
-				if (!_allowedStrings.Contains(tag.Value)) throw new ArgumentException("Wrong type sended: " + tag.Value);
+				if (!AllowedStrings.Contains(tag.Value)) throw new ArgumentException("Wrong type sended: " + tag.Value);
 				if (mask.Length == 0) continue;
 
 				var index = mask.ToString().IndexOf(tag.Value, StringComparison.CurrentCulture);

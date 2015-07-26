@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using mp3_lib;
+using mp3lib;
 
 namespace ConsoleMp3TagEditor
 {
@@ -8,91 +8,36 @@ namespace ConsoleMp3TagEditor
 	{
 		public static void Main(string[] args)
 		{
-			if (!ArgsValid(args)) throw new ArgumentException("Wrong arguments passed", "args");
+			try
+			{
+				var argsManager = new ArgsManager(args);
+				argsManager.CheckArgsValidity();
 
-			var data = ExtactArgs(args);
+				var data = argsManager.ExtactArgs();
 
-            //[TODO] introduce class for args
-            //[TODO] extract arguments parsing
-			var mp3 = new Mp3File(data["-file"]);
+				//[TODO] introduce class for args {READY}
+				//[TODO] extract arguments parsing {READY}
+				var mp3 = new Mp3File(data.FilePath);
 
-			var renamer = new Mp3TagChanger(mp3);
+				var renamer = new Mp3TagChanger(mp3, data.Mask);
 
-			renamer.Start(data["-mask"]);
+				renamer.ChangeTags();
 
-			Console.WriteLine("Done!");
+				Console.WriteLine("Done!");
 
-			Console.ReadKey();
+				Console.ReadKey();
+			}
+			catch (Exception e)
+			{
+			#if DEBUG
+				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}",e.Message, e.StackTrace);
+			#else
+				Console.WriteLine("{0}",e.Message);
+			#endif
+			}
 		}
 
-		private static bool ArgsValid(string[] args)
-		{
-			if (args.Length != 4)
-			{
-				Console.WriteLine("Expected usage: {0} -file \"[path to file]\" -mask \"[mask for changing title]\"");
-				return false;
-			}
-
-			var hasFilePath = false;
-			var hasMask = false;
-			foreach (var str in args)
-			{
-				switch (str)
-				{
-					case "-file":
-						hasFilePath = true;
-						break;
-					case "-mask":
-						hasMask = true;
-						break;
-				}
-			}
-
-			var hasValidArgs = hasMask && hasFilePath;
-			if (!hasValidArgs)
-			{
-				if (!hasMask && !hasFilePath)
-				{
-					Console.WriteLine("You don't append correct file path and mask for mp3.");
-				}
-				else if (!hasFilePath)
-				{
-					Console.WriteLine("You don't append correct file path.");
-				}
-				else
-				{
-					Console.WriteLine("You don't append correct mask for mp3.");
-				}
-
-				return false;
-			}
-
-			if (args[0] == "-file" && args[1] == "-mask" || args[0] == "-mask" && args[1] == "-file")
-			{
-				Console.WriteLine("You don't append correct file path and mask for mp3.");
-				return false;
-			}
-
-			return true;
-		}
-
-		private static Dictionary<string, string> ExtactArgs(IEnumerable<string> args)
-		{
-			var queue = new Queue<string>();
-			var retDict = new Dictionary<string, string>();
-			foreach (var arg in args)
-			{
-				if (queue.Count == 0)
-				{
-					queue.Enqueue(arg);
-					continue;
-				}
-
-				retDict.Add(queue.Dequeue(), arg);
-			}
-
-			return retDict;
-		}
+		
 
 	}
 }

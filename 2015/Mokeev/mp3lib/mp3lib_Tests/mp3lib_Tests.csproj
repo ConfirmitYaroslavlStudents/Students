@@ -50,13 +50,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Mp3FileTests.cs" />
+    <Compile Include="DataExtracterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ArgsClassTests.cs" />
+    <Compile Include="ArgsManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mp3_lib\mp3_lib.csproj">
+    <ProjectReference Include="..\mp3_lib\mp3lib.csproj">
       <Project>{efb43607-90b2-4595-9a91-ad156810bf6f}</Project>
-      <Name>mp3_lib</Name>
+      <Name>mp3lib</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -53,6 +53,7 @@
     <Compile Include="DataExtracterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ArgsClassTests.cs" />
+    <Compile Include="ArgsManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mp3_lib\mp3lib.csproj">

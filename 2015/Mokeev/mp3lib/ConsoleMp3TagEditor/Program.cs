@@ -10,10 +10,10 @@ namespace ConsoleMp3TagEditor
 		{
 			try
 			{
-				var argsManager = new ArgsManager();
-				argsManager.CheckArgsValidity(args);
+				var argsManager = new ArgsManager(args);
+				argsManager.CheckArgsValidity();
 
-				var data = argsManager.ExtactArgs(args);
+				var data = argsManager.ExtactArgs();
 
 				//[TODO] introduce class for args {READY}
 				//[TODO] extract arguments parsing {READY}
@@ -29,11 +29,11 @@ namespace ConsoleMp3TagEditor
 			}
 			catch (Exception e)
 			{
-#if DEBUG
+			#if DEBUG
 				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}",e.Message, e.StackTrace);
-#else
+			#else
 				Console.WriteLine("{0}",e.Message);
-#endif
+			#endif
 			}
 		}
 

@@ -18,7 +18,7 @@ namespace mp3lib
 			"{comment}",
 		};
 
-		public string Mask { get; private set; }
+		private string Mask { get; set; }
 
 		public DataExtracterFromFileName(string mask)
 		{
@@ -58,44 +58,64 @@ namespace mp3lib
 
 		public Dictionary<string, string> GetFullDataFromString(Queue<string> prefixesQueue, StringBuilder mp3Name, Queue<Match> tags)
 		{
-			if (prefixesQueue.Count < tags.Count) throw new Exception("Too low prefixes count. Undefined state found.");
+			var prefixes = prefixesQueue.ToArray();
+			for (var i = 1; i < prefixes.Length; i++)
+			{
+				var prefix = prefixes[i];
+				if (prefix == "") throw new Exception("Too low prefixes count. Undefined state found.");
+			}
 
 			var data = new Dictionary<string, string>();
 			while (prefixesQueue.Count > 0)
 			{
-				var prefix = prefixesQueue.Dequeue();
+				prefixesQueue.Dequeue();
 				if (prefixesQueue.Count > 0)
 				{
 					var postfix = prefixesQueue.Peek();
-					mp3Name.Remove(0, prefix.Length);
 					var resultStr = new StringBuilder();
 
-					var idx = 0;
+					bool needContinue;
 
-					while (postfix[0] != mp3Name[idx])
+					do
 					{
-						resultStr.Append(mp3Name[idx]);
-						idx++;
-					}
+						var idx = 0;
+						var currentStr = new StringBuilder();
+						while (postfix[0] != mp3Name[idx])
+						{
+							resultStr.Append(mp3Name[idx]);
+							currentStr.Append(mp3Name[idx]);
+							idx++;
+						}
 
-					var tmpIdx = idx;
-					var postfixIdx = 0;
-					var tmpStr = new StringBuilder();
+						var tmpIdx = idx;
+						var postfixIdx = 0;
+						var tmpStr = new StringBuilder();
 
-					while (postfix[postfixIdx] != mp3Name[tmpIdx])
-					{
-						tmpStr.Append(postfix[postfixIdx]);
-						postfixIdx++;
-						tmpIdx++;
-					}
+						while (tmpIdx < mp3Name.Length && postfixIdx < postfix.Length && postfix[postfixIdx] == mp3Name[tmpIdx])
+						{
+							tmpStr.Append(postfix[postfixIdx]);
+							postfixIdx++;
+							tmpIdx++;
+						}
 
-
-					mp3Name.Remove(0, resultStr.Length);
-					data.Add(tags.Dequeue().Value, resultStr.ToString());
+						mp3Name.Remove(0, tmpStr.Length);
+						if (tmpStr.ToString() == postfix)
+						{
+							mp3Name.Remove(0, currentStr.Length);
+							data.Add(tags.Dequeue().Value, resultStr.ToString());
+							needContinue = false;
+						}
+						else
+						{
+							mp3Name.Remove(0, resultStr.Length);
+							resultStr.Append(tmpStr);
+							needContinue = true;
+						}
+					} 
+					while (needContinue);
 				}
 				else
 				{
-					mp3Name.Remove(0, prefix.Length);
 					if (tags.Count > 0) data.Add(tags.Dequeue().Value, mp3Name.ToString());
 					break;
 				}

@@ -5,24 +5,30 @@ namespace mp3lib
 {
 	public class ArgsManager
 	{
+		private string[] Args { get; set; }
+
+		public ArgsManager(string[] args)
+		{
+			Args = args;
+		}
+
 		/// <summary>
 		/// Validate args for mp3 file
 		/// </summary>
-		/// <param name="args">Array with args</param>
 		/// <returns>true or throws an Exeptions</returns>
 		/// <exception cref="ArgumentException">Wrong argument</exception>
-		public void CheckArgsValidity(string[] args)
+		public bool CheckArgsValidity()
 		{
-			if (args.Length != 4)
+			if (Args.Length != 4)
 			{
-				throw new ArgumentException("Expected usage: {0} -file \"[path to file]\" -mask \"[mask for changing title]\"", "args");
+				throw new ArgumentException("Expected usage: {0} -file \"[path to file]\" -mask \"[mask for changing title]\"");
 			}
 
 			var hasFilePath = false;
 			var hasMask = false;
-			foreach (var str in args)
+			foreach (var arg in Args)
 			{
-				switch (str)
+				switch (arg)
 				{
 					case "-file":
 						hasFilePath = true;
@@ -38,21 +44,31 @@ namespace mp3lib
 			{
 				if (!hasMask && !hasFilePath)
 				{
-					throw new ArgumentException("You don't append correct file path and mask for mp3.", "args");
+					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}
 				if (!hasFilePath)
 				{
-					throw new ArgumentException("You don't append correct file path.", "args");
+					throw new ArgumentException("You don't append correct file path.");
 				}
-				throw new ArgumentException("You don't append correct mask for mp3.", "args");
+				throw new ArgumentException("You don't append correct mask for mp3.");
 			}
 
-			if (args[0] == "-file" && args[1] == "-mask" || args[0] == "-mask" && args[1] == "-file")
+			for (int i = 0; i < Args.Length; i++)
 			{
-				throw new ArgumentException("You don't append correct file path and mask for mp3.", "args");
+				if (Args[i] == "-file" && i + 1 < Args.Length && Args[i + 1] == "-mask" ||
+				    Args[i] == "-mask" && i + 1 < Args.Length && Args[i + 1] == "-file")
+				{
+					throw new ArgumentException("You don't append correct file path and mask for mp3.");
+				}
+
+				if ( (Args[i] == "-file" || Args[i] == "-mask") && (i + 1 >= Args.Length) )
+				{
+					throw new ArgumentException("You don't append correct file path and mask for mp3.");
+				}
 			}
 
-			return;
+
+			return true;
 		}
 
 		/// <summary>
@@ -60,11 +76,11 @@ namespace mp3lib
 		/// </summary>
 		/// <param name="args">Array with args</param>
 		/// <returns>Dictionary with data extracted from args</returns>
-		public Args ExtactArgs(IEnumerable<string> args)
+		public Args ExtactArgs()
 		{
 			var key = new Queue<string>();
 			var data = new Dictionary<string, string>();
-			foreach (var arg in args)
+			foreach (var arg in Args)
 			{
 				if (key.Count == 0)
 				{

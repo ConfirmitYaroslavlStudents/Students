@@ -34,7 +34,6 @@ namespace SetLib
         #endregion
 
         #region Public Methods
-
         public BinNode(ref T data)
         {
             Data = data;

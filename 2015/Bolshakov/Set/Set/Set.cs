@@ -25,11 +25,9 @@ namespace SetLib
 
         public override bool Equals(object obj)
         {
-            //TODO: Creat fast equals
-
-            if (!(obj is Set<T>))
+            if (!(obj is ISet<T>))
                 return false;
-            var otherSet = obj as Set<T>;
+            var otherSet = obj as ISet<T>;
             foreach (var item in this)
             {
                 if (!otherSet.Contains<T>(item))
@@ -82,7 +80,6 @@ namespace SetLib
             var index = arrayIndex;
             foreach (var item in this)
             {
-                //TODO: Make real copying elements
                 array[index] = item;
                 index++;
             }
@@ -168,7 +165,6 @@ namespace SetLib
 
         public bool IsReadOnly
         {
-            //TODO: Implement real return value
             get { return false; }
         }
         #endregion

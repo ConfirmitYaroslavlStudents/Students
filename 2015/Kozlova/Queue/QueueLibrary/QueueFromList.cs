@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace QueueLibrary
@@ -85,6 +86,8 @@ namespace QueueLibrary
         /// <returns>Item from the head of a queue</returns>
         public T Peek()
         {
+            if (_size == 0)
+                throw new Exception("Queue is empty!");
             return _head.Data;
         }
 
@@ -96,6 +99,11 @@ namespace QueueLibrary
             _size = 0;
             _tail = _head = null;
         }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
         
         public IEnumerator<T> GetEnumerator()
         {
@@ -105,13 +113,8 @@ namespace QueueLibrary
                 yield return pointer.Data;
                 pointer = pointer.NextItem;
             }
-            
         }
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-       
+        
         public override string ToString()
         {
             StringBuilder queueToString = new StringBuilder();
@@ -121,6 +124,7 @@ namespace QueueLibrary
             }
             return queueToString.ToString();
         }
+
         public override bool Equals(object obj)
         {
             if (this == null)
@@ -131,17 +135,25 @@ namespace QueueLibrary
             }
 
             QueueFromList<T> p = obj as QueueFromList<T>;
-            if ((System.Object)p == null)
+            if ((object)p == null)
             {
                 return false;
             }
 
             return this == p;
         }
+
         public override int GetHashCode()
         {
-            return Count;
+            int hashCode = 0;
+            int index = 0;
+            foreach (var element in this)
+            {
+                hashCode += element.ToString().GetHashCode()*(++index);
+            }
+            return hashCode;
         }
+
         public static bool operator ==(QueueFromList<T> a, QueueFromList<T> b)
         {
             if (System.Object.ReferenceEquals(a, b))
@@ -168,6 +180,7 @@ namespace QueueLibrary
             }
             return true;
         }
+
         public static bool operator !=(QueueFromList<T> a, QueueFromList<T> b)
         {
             return !(a == b);

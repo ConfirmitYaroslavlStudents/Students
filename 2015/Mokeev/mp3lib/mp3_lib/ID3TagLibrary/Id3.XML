@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Id3</name>
+    </assembly>
+    <members>
+        <member name="M:Id3.Id3Tag.Cleanup">
+            <summary>
+                Removes all unassigned frames from the tag.
+            </summary>
+        </member>
+        <member name="M:Id3.Id3Tag.CompareTo(Id3.Id3Tag)">
+            <summary>
+            Compares two tags based on their version details.
+            </summary>
+            <param name="other">The tag instance to compare against.</param>
+            <returns>TODO:</returns>
+        </member>
+        <member name="T:Id3.Id3TagFamily">
+            <summary>
+            Specifies families of ID3 tag versions that are mutually-inclusive.
+            </summary>
+        </member>
+        <member name="F:Id3.Id3TagFamily.Version2x">
+            <summary>
+            Indicates ID3 tags in the v2 range (currently v2.2, v2.3 and v2.4). These tags appear at
+            the beginning of the MP3 file.
+            </summary>
+        </member>
+        <member name="F:Id3.Id3TagFamily.Version1x">
+            <summary>
+            Indicates ID3 tags in the v1 range (currently v1.0 and v1.1). These tags appear at the end
+            of the MP3 file.
+            </summary>
+        </member>
+        <member name="T:Id3.Mp3Stream">
+            <summary>
+            Represents a stream of MP3 data. Use this class to load MP3 data, manipulate the tags and save
+            the data back to the stream.
+            </summary>
+        </member>
+        <member name="M:Id3.Mp3Stream.#ctor(System.IO.Stream,Id3.Mp3Permissions)">
+            <summary>
+            Creates an instance of the Mp3Stream class by passing in a Stream object containing the
+            MP3 data.
+            </summary>
+            <param name="stream">The Stream object containing the MP3 data.</param>
+            <param name="permissions">The permissions applicable to the MP3 data. Defaults to read-only access.</param>
+        </member>
+        <member name="M:Id3.Mp3Stream.#ctor(System.Byte[],Id3.Mp3Permissions)">
+            <summary>
+            Creates an instance of the Mp3Stream class by passing in the MP3 data as a byte array.
+            </summary>
+            <param name="byteStream">The byte array representing the MP3 data.</param>
+            <param name="permissions">The permissions applicable to the MP3 data. Defaults to read-only access.</param>
+        </member>
+        <member name="M:Id3.Mp3Stream.DeleteTag(System.Int32,System.Int32)">
+            <summary>
+            Deletes the ID3 tag of the specified version from the MP3 data.
+            </summary>
+            <param name="majorVersion">The major version number.</param>
+            <param name="minorVersion">The minor version number.</param>
+        </member>
+        <member name="M:Id3.Mp3Stream.DeleteTag(Id3.Id3TagFamily)">
+            <summary>
+            Deletes the ID3 tag of the specified tag family type from the MP3 data.
+            </summary>
+            <param name="family">The ID3 tag family type.</param>
+        </member>
+        <member name="M:Id3.Mp3Stream.DeleteAllTags">
+            <summary>
+            Deletes all ID3 tags from the MP3 data.
+            </summary>
+        </member>
+        <member name="M:Id3.Mp3Stream.GetAllTags">
+            <summary>
+            Returns a collection of all ID3 tags present in the MP3 data.
+            </summary>
+            <returns>A collection of all ID3 tags present in the MP3 data.</returns>
+        </member>
+        <member name="M:Id3.Mp3Stream.GetTag(Id3.Id3TagFamily)">
+            <summary>
+            Retrieves an ID3 tag of the specified tag family type - version 2.x or version 1.x.
+            </summary>
+            <param name="family">The ID3 tag family type required.</param>
+            <returns>The ID3 tag of the specified tag family type, or null if it doesn't exist.</returns>
+        </member>
+        <member name="M:Id3.Mp3Stream.GetTag(System.Int32,System.Int32)">
+            <summary>
+            Retrieves an ID3 tag of the specified version number.
+            </summary>
+            <param name="majorVersion">The major version number.</param>
+            <param name="minorVersion">The minor version number</param>
+            <returns>The ID3 tag of the specified version number, or null if it doesn't exist.</returns>
+        </member>
+        <member name="T:Id3.Id3Messages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.AudioStreamMissing">
+            <summary>
+              Looks up a localized string similar to Audio stream not found in this MP3 file.
+            </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.MajorTagVersionMissing">
+            <summary>
+              Looks up a localized string similar to The tag should specify a major version number.
+            </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.NoWritePermissions_CannotDeleteTag">
+             <summary>
+               Looks up a localized string similar to Cannot delete the tag; MP3 stream does not have write permissions.
+            You will need to create the {0} instance with write permissions..
+             </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.NoWritePermissions_CannotWriteTag">
+             <summary>
+               Looks up a localized string similar to Cannot write the tag; MP3 stream does not have write permissions.
+            You will need to create the {0} instance with write permissions..
+             </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.StreamNotReadableOrSeekable">
+            <summary>
+              Looks up a localized string similar to The MP3 stream should be readable and seekable.
+            </summary>
+        </member>
+        <member name="P:Id3.Id3Messages.StreamNotWritable">
+            <summary>
+              Looks up a localized string similar to The MP3 stream should be writable.
+            </summary>
+        </member>
+    </members>
+</doc>

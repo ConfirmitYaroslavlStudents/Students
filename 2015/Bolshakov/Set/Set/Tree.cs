@@ -71,9 +71,7 @@ namespace SetLib
         }
         #endregion
 
-        #region Private Static methods
-
-        private static BinNode<Q> Insert<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
+        private BinNode<Q> Insert<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
         {
             if (node == null)
             {
@@ -92,7 +90,7 @@ namespace SetLib
             return node;
         }
 
-        private static BinNode<Q> Delete<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
+        private BinNode<Q> Delete<Q>(BinNode<Q> node,ref Q data,out bool treeModified)
         {
             if (node == null)
             {
@@ -126,7 +124,7 @@ namespace SetLib
             return node;
         }
 
-        private static BinNode<Q> Find<Q>(BinNode<Q> p, ref Q data)
+        private BinNode<Q> Find<Q>(BinNode<Q> p, ref Q data)
         {
             if (p == null)
                 return null;
@@ -140,12 +138,12 @@ namespace SetLib
             return null;
         }
 
-        private static BinNode<Q> FindMin<Q>(BinNode<Q> p)
+        private BinNode<Q> FindMin<Q>(BinNode<Q> p)
         {
             return p.LeftChild == null ? p : FindMin<Q>(p.LeftChild);
         }
 
-        private static BinNode<Q> RemoveMin<Q>(BinNode<Q> p)
+        private BinNode<Q> RemoveMin<Q>(BinNode<Q> p)
         {
             if (p.LeftChild == null)
                 return p.RightChild;
@@ -153,7 +151,7 @@ namespace SetLib
             return Balance<Q>(p);
         }
 
-        private static BinNode<Q> RightTurn<Q>(BinNode<Q> p)
+        private BinNode<Q> RightTurn<Q>(BinNode<Q> p)
         {
             var q = p.LeftChild;
 
@@ -165,7 +163,7 @@ namespace SetLib
             return q;
         }
 
-        private static BinNode<Q> LeftTurn<Q>(BinNode<Q> p)
+        private BinNode<Q> LeftTurn<Q>(BinNode<Q> p)
         {
             var q = p.RightChild;
 
@@ -177,7 +175,7 @@ namespace SetLib
             return q;
         }
 
-        private static BinNode<Q> Balance<Q>(BinNode<Q> p)
+        private BinNode<Q> Balance<Q>(BinNode<Q> p)
         {
             p.FixHeight();
             if(p.BalanceFactor==2)
@@ -194,7 +192,6 @@ namespace SetLib
             }
             return p;
         }
-        #endregion
 
         #region Private members
 
@@ -230,7 +227,7 @@ namespace SetLib
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
     }
 }

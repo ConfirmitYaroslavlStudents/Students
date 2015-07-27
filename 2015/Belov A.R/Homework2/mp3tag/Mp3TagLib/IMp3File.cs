@@ -4,6 +4,8 @@
     {
         string Name { get; }
         void SetTags(Mp3Tags tags);
+        Mp3Tags GetTags();
+        void ChangeName(string newName);
         void Save();
     }
 }

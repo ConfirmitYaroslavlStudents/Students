@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Mp3TagLib
 {
-    public enum TagList { Title,Artist,Album,Year,Comment,Genre}
+    public enum TagList { Title,Artist,Album,Year,Comment,Genre,Track}
     public class Mp3Tags
     {
         public string Title { get; set; }
@@ -10,6 +10,7 @@ namespace Mp3TagLib
         public string Comment { get; set; }
         public string Genre { get; set; }
         public uint Year { get; set; }
+        public uint Track { get; set; }
 
         public void SetTag(string name,string value)
         {
@@ -31,6 +32,12 @@ namespace Mp3TagLib
                     if(!uint.TryParse(value,out year))
                         throw new ArgumentException("Bad tag name");
                     Year = year;
+                    break;
+                case "track":
+                    uint track;
+                    if (!uint.TryParse(value, out track))
+                        throw new ArgumentException("Bad tag name");
+                    Track = track;
                     break;
                 case "comment":
                     Comment=value;
@@ -55,6 +62,8 @@ namespace Mp3TagLib
                     return Album;
                 case "year":
                     return Year.ToString();
+                case "track":
+                    return "0"+Track.ToString();
                 case "comment":
                     return Comment;
                 case "genre":

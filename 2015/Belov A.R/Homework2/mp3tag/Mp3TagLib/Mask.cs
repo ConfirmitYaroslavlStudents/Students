@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Mp3TagLib
 {
-    public class Mask
+    public class Mask:IEnumerable<string>
     {
         private LinkedList<MaskItem> _body;
+        private string _stringBody;
         private List<Dictionary<string, string>> _posibleTagValues; 
         public Mask(string mask)
         {
@@ -18,6 +20,7 @@ namespace Mp3TagLib
         }
         void Init(string mask)
         {
+            _stringBody = mask;
             _body=new LinkedList<MaskItem>();
             _posibleTagValues = new List<Dictionary<string, string>>();
             var stack=new Stack<char>();
@@ -187,6 +190,7 @@ namespace Mp3TagLib
                 throw new ArgumentException("Can't apply mask");   
             }
             var root=GetTagTree(str);
+            _posibleTagValues.Clear();
             foreach (var child in root.Childs)
             {
                 BuildResults(child, new Dictionary<string, string>());
@@ -205,6 +209,22 @@ namespace Mp3TagLib
             {
                 _posibleTagValues.Add(tagValues);
             }
+        }
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            return (from maskItem in _body where maskItem.Type == MaskItemType.TagName select maskItem.Value).GetEnumerator();
+
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            return _stringBody;
         }
     }
 }

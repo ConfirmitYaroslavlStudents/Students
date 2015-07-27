@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Mp3TagLib;
 
 
@@ -15,26 +17,33 @@ namespace mp3tager
                 Console.Clear();
                 ShowMenu();
                 ShowCurrentFile(tager.CurrentFile);
+                Console.Write("\n\nCommand:");
                 switch (Console.ReadLine().ToLower())
                 {
                     case "load":
                         Console.Clear();
                         if (!tager.Load(GetPath()))
                         {
+                            Console.Clear();
                             ShowError("File does not exist");
                             Console.ReadKey();
                         }
                 break;
                     case "save":
                         Console.Clear();
-                        if(!tager.Save())
-                            ShowError("File is not loaded");
-                        else
+                        try
                         {
+                            tager.Save();
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Successfully");
                             Console.ResetColor();
                             Console.WriteLine("Press any key...");
+                        }
+                        catch (Exception e)
+                        {
+
+                            Console.Clear();
+                            ShowError(e.Message);
                         }
                         Console.ReadKey();
                         break;
@@ -44,7 +53,7 @@ namespace mp3tager
                             Console.Clear();
                             ShowExample();
                             ShowCurrentFile(tager.CurrentFile);
-                            {tager.ChangeTags(GetTagsFromFileName(tager.CurrentFile));}
+                            tager.ChangeTags(GetTagsFromFileName(tager.CurrentFile));
          
                         }
                         catch (Exception e)
@@ -52,6 +61,44 @@ namespace mp3tager
                             Console.Clear();
                             ShowError(e.Message);
                             Console.ReadKey();
+                        }
+                        break;
+                    case "rename":
+                        if (tager.CurrentFile == null)
+                        {
+                            Console.Clear();
+                            ShowError("File is not loaded");
+                            Console.ReadKey();
+                            break;
+                        }
+                        try
+                        {
+                            Console.Clear();
+                            tager.ChangeName(new Mask(GetMask()));
+                            Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Successfully");
+                            Console.ResetColor();
+                            Console.WriteLine("Press any key...");
+                        }
+                        catch (Exception e)
+                        {
+                            Console.Clear();
+                            ShowError(e.Message);
+                        }
+                        Console.ReadKey();
+                        break;
+                    case "analysis":
+                        try
+                        {
+                            Console.Clear();
+                            AnalyzeFolder(@"C:\Users\Alexandr\Desktop\TEST");
+                        }
+                        catch (Exception e)
+                        {
+
+                            Console.Clear();
+                            ShowError(e.Message);
                         }
                         break;
                     case "exit":
@@ -69,6 +116,69 @@ namespace mp3tager
 
         }
 
+        public static void AnalyzeFolder(string path)
+        {
+            var files = Directory.GetFiles(path);
+            var tager=new Tager(new FileLoader());
+            var mask=new Mask(GetMask());
+            var badFiles=new List<string>();
+            foreach (var file in files.Where(file => file.EndsWith(".mp3")))
+            {
+                tager.Load(file);
+                if (!tager.ValidateFileName(mask))
+                {
+                    badFiles.Add(file);
+                }
+            }
+            Console.ForegroundColor=ConsoleColor.Red;
+            Console.WriteLine("Bad files:");
+            foreach (var badFile in badFiles)
+            {
+                Console.WriteLine(badFile);
+            }
+            Console.ResetColor();
+            Console.WriteLine("Enter 'rename' to rename it");
+            Console.WriteLine("Enter 'ignore' to exit");
+            var userChoice = Console.ReadLine().ToLower();
+            while (userChoice!="rename"||userChoice!="ignore")
+            {
+                switch (userChoice)
+                {
+                    case"ignore":
+                        return;
+                        break;
+                    case "rename":
+                        foreach (var badFile in badFiles)
+                        {
+                            tager.Load(badFile);
+                            tager.ChangeName(mask);
+                        }
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Successfully");
+                        Console.ResetColor();
+                        Console.WriteLine("Press any key...");
+                        Console.ReadKey();
+                        break;
+                    default:
+                        Console.Clear();
+                        ShowError("Incorrect command.\n Available commands: ignore , rename");
+                        Console.ReadKey();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Bad files:");
+                        foreach (var badFile in badFiles)
+                        {
+                            Console.WriteLine(badFile);
+                        }
+                        Console.ResetColor();
+                        Console.WriteLine("Enter 'rename' to rename it");
+                        Console.WriteLine("Enter 'ignore' to exit");
+                        userChoice=Console.ReadLine().ToLower();
+                        break;
+                }
+            }
+        }
+
         public static void ShowCurrentFile(IMp3File file)
         {
             if (file == null) return;
@@ -76,14 +186,13 @@ namespace mp3tager
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Current file:");
             Console.ResetColor();
-            var lastSlashIndex = file.Name.LastIndexOf(@"\");
-            Console.WriteLine(file.Name.Substring(lastSlashIndex + 1, file.Name.Length - lastSlashIndex - 1));
+            Console.WriteLine(file.Name+".mp3");
             Console.WriteLine("________________");
         }
         public static string GetPath()
         {
             Console.Write("Path:");
-           // return Environment.CurrentDirectory + @"\[Parental Advisory Explicit Guitar]CROW'SCLAW - 200kmh (Instrumental).mp3";
+            return Environment.CurrentDirectory + @"\Lol.mp3";
             return Console.ReadLine();
         }
         public static string GetMask()
@@ -97,9 +206,6 @@ namespace mp3tager
             if(file==null)
                 throw new ArgumentException("File is not loaded");
             var fileName = file.Name;
-            var lastSlashIndex = fileName.LastIndexOf(@"\");
-            fileName = fileName.Substring(lastSlashIndex + 1,
-                fileName.Length - lastSlashIndex - 1 - ".mp3".Length);
             var mask = new Mask(GetMask());
             var tagValues = Select(mask.GetTagValuesFromString(fileName));
             var result = new Mp3Tags();
@@ -121,7 +227,7 @@ namespace mp3tager
 
         public static void ShowMenu()
         {
-            Console.WriteLine("Available commands:\n1. Load\n2. Save\n3. Changetags\n4. Exit");
+            Console.WriteLine("Available commands:\n1. Load\n2. Save\n3. Changetags\n4. Rename\n5. Analysis\n6. Exit");
         }
 
         public static void ShowExample()

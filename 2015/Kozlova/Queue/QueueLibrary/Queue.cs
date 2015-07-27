@@ -16,21 +16,6 @@ namespace QueueLibrary
         private int _head;
         private int _size;
 
-        private void SetToZero()
-        {
-            _tail = _head = 0;
-            _size = 0;
-        }
-        private void SetCapacity(int newCapacity)
-        {
-            T[] newItems = new T[newCapacity];
-            Array.Copy(_items, _head, newItems, 0, _items.Length - _head);
-            Array.Copy(_items, 0, newItems, _items.Length - _head, _tail);
-            _items = newItems;
-            _head = 0;
-            _tail = _size;
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -66,6 +51,16 @@ namespace QueueLibrary
             _items[_tail] = item;
             _tail = (_tail + 1)%_items.Length;
             _size++;
+        }
+
+        private void SetCapacity(int newCapacity)
+        {
+            T[] newItems = new T[newCapacity];
+            Array.Copy(_items, _head, newItems, 0, _items.Length - _head);
+            Array.Copy(_items, 0, newItems, _items.Length - _head, _tail);
+            _items = newItems;
+            _head = 0;
+            _tail = _size;
         }
 
         /// <summary>
@@ -109,6 +104,12 @@ namespace QueueLibrary
             SetToZero();
         }
 
+        private void SetToZero()
+        {
+            _tail = _head = 0;
+            _size = 0;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -124,10 +125,18 @@ namespace QueueLibrary
 
             return this == p;
         }
+
         public override int GetHashCode()
         {
-            return Count;
+            int hashCode = 0;
+            int index = 0;
+            foreach (var element in this)
+            {
+                hashCode += element.ToString().GetHashCode() * (++index);
+            }
+            return hashCode;
         }
+
         public override string ToString()
         {
             StringBuilder queueToString = new StringBuilder();
@@ -166,6 +175,7 @@ namespace QueueLibrary
             }
             return true;
         }
+
         public static bool operator !=(Queue<T> a, Queue<T> b)
         {
             return !(a == b);
@@ -175,10 +185,12 @@ namespace QueueLibrary
         {
             return new Enumerator(this);
         }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return new Enumerator(this);
         }
+
         private class Enumerator : IEnumerator<T>
         {
             private Queue<T> _q;

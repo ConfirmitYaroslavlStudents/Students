@@ -5,18 +5,25 @@ namespace Mp3Tager
 {
     internal class Application
     {
-        private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
+        private readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {
             {"help", ""},
             {"rename", @"<path> <pattern>"},
             {"changeTag", @"<path> <tag> <newTagValue>"}
         };
 
-        private Dictionary<string, string> _parsedArgs; 
+        private Dictionary<string, string> _parsedArgs;
+        private Actions _actions;
+
+        internal Application ()
+        {
+            _actions = new Actions();
+        }
 
         public void Execute(string[] args)
         {
-            _parsedArgs = ArgumentParser.ParseArguments(args);
+            var parser = new ArgumentParser();
+            _parsedArgs = parser.ParseArguments(args);
             switch (_parsedArgs["commandName"])
             {
                 case "help":
@@ -24,11 +31,11 @@ namespace Mp3Tager
                     break;
 
                 case "rename":
-                    Actions.Rename(new Mp3File(_parsedArgs["path"]), _parsedArgs["pattern"]);
+                    _actions.Rename(new Mp3File(_parsedArgs["path"]), _parsedArgs["pattern"]);
                     break;
 
                 case "changeTag":
-                    Actions.ChangeTag(new Mp3File(_parsedArgs["path"]), _parsedArgs["tag"], _parsedArgs["newTagValue"]);
+                    _actions.ChangeTag(new Mp3File(_parsedArgs["path"]), _parsedArgs["tag"], _parsedArgs["newTagValue"]);
                     break;
             }
         }

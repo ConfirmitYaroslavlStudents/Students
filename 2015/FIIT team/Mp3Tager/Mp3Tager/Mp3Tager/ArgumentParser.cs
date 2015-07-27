@@ -7,16 +7,16 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Mp3LibTests")]
 namespace Mp3Tager
 {
-    internal static class ArgumentParser
+    internal class ArgumentParser
     {
-        static readonly Dictionary<string, int[]> CommandList = new Dictionary<string, int[]>
+        readonly Dictionary<string, int[]> CommandList = new Dictionary<string, int[]>
         {
             {"help",  new [] {1, 2}},
             {"rename", new [] {3}},
             {"changeTag", new [] {4}}
         };
 
-        public static Dictionary<string, string> ParseArguments(string[] args)
+        public Dictionary<string, string> ParseArguments(string[] args)
         {
             CheckArgs(args);
 
@@ -47,7 +47,7 @@ namespace Mp3Tager
             return parsedArgs;
         }
 
-        private static void CheckArgs(string[] args)
+        private void CheckArgs(string[] args)
         {
             if (args.Length == 0)
                 throw new ArgumentException("You haven't passed any argument!");

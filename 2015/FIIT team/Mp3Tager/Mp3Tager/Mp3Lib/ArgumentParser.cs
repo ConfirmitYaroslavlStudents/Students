@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
-
-[assembly: InternalsVisibleTo("Mp3LibTests")]
 namespace Mp3Tager
 {
     internal class ArgumentParser

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Mp3Lib
@@ -26,7 +27,7 @@ namespace Mp3Lib
             newName.Replace(album, audioFile.Tag.Album);
             newName.Replace(track, audioFile.Tag.Track.ToString());
 
-            audioFile.MoveTo(audioFile.DirectoryName + @"\" + newName + ".mp3");
+            MoveTo(audioFile.DirectoryName + @"\" + newName + ".mp3", audioFile);
         }
 
         public  void ChangeTag(IMp3File audioFile, string tag, string newTagValue)
@@ -54,5 +55,12 @@ namespace Mp3Lib
             }
             audioFile.Save();
         }
+
+        private void MoveTo(string newPath, IMp3File audioFile)
+        {
+            var temp = new FileInfo(audioFile.Path);
+            temp.MoveTo(newPath);          
+        }
+
     }
 }

@@ -8,6 +8,7 @@ namespace Mp3LibTests
     [TestClass]
     public class ArgumentParserTests
     {
+        ArgumentParser _parser = new ArgumentParser();
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "You haven't passed any argument!")]
         public void ParserTest_NoArgumentsPassed_ThrowException()
@@ -16,7 +17,7 @@ namespace Mp3LibTests
             string[] args = { };
 
             // act
-            ArgumentParser.ParseArguments(args);
+            _parser.ParseArguments(args);
         }
 
         [TestMethod]
@@ -27,7 +28,7 @@ namespace Mp3LibTests
             string[] args = { "renam", @"D:\file.mp3", "{title}" };
 
             // act
-            ArgumentParser.ParseArguments(args);
+            _parser.ParseArguments(args);
         }
 
         [TestMethod]
@@ -38,7 +39,7 @@ namespace Mp3LibTests
             string[] args = { "rename", @"D:\file.mp3" };
 
             // act
-            ArgumentParser.ParseArguments(args);
+            _parser.ParseArguments(args);
         }
 
         [TestMethod]
@@ -49,7 +50,7 @@ namespace Mp3LibTests
             string expectedCommandName = args[0];
 
             // act
-            var actual = ArgumentParser.ParseArguments(args);
+            var actual = _parser.ParseArguments(args);
 
             // assert
             Assert.AreEqual(expectedCommandName, actual["commandName"]);
@@ -65,7 +66,7 @@ namespace Mp3LibTests
             string expectedCommandForHelp = args[1];
 
             // act
-            var actual = ArgumentParser.ParseArguments(args);
+            var actual = _parser.ParseArguments(args);
 
             // assert
             Assert.AreEqual(expectedCommandName, actual["commandName"]);
@@ -82,7 +83,7 @@ namespace Mp3LibTests
             string expectedPattern = args[2];
 
             // act
-            var actual = ArgumentParser.ParseArguments(args);
+            var actual = _parser.ParseArguments(args);
 
             // assert
             Assert.AreEqual(expectedCommandName, actual["commandName"]);
@@ -101,7 +102,7 @@ namespace Mp3LibTests
             string expectedNewTagValue = args[3];
 
             // act
-            var actual = ArgumentParser.ParseArguments(args);
+            var actual = _parser.ParseArguments(args);
 
             // assert
             Assert.AreEqual(expectedCommandName, actual["commandName"]);

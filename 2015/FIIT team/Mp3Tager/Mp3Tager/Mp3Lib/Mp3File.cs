@@ -1,7 +1,5 @@
 ﻿using System.IO;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Mp3Tager")]
 namespace Mp3Lib
 {
     public class TagBase
@@ -35,12 +33,6 @@ namespace Mp3Lib
             _content = TagLib.File.Create(path);
             Path = path;
             Tag = new TagBase(_content.Tag.Performers, _content.Tag.Genres, _content.Tag.Title, _content.Tag.Album, _content.Tag.Track);
-        }
-
-        public void MoveTo(string newPath)
-        {
-            var temp = new FileInfo(Path);
-            temp.MoveTo(newPath);
         }
 
         public void Save()

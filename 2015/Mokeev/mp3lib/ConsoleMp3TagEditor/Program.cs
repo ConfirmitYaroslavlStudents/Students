@@ -1,6 +1,9 @@
 ﻿using System;
 using mp3lib;
 
+//[TODO] introduce class for args {READY}
+//[TODO] extract arguments parsing {READY}
+
 namespace ConsoleMp3TagEditor
 {
 	public static class Program
@@ -14,13 +17,25 @@ namespace ConsoleMp3TagEditor
 
 				var data = argsManager.ExtactArgs();
 
-				//[TODO] introduce class for args {READY}
-				//[TODO] extract arguments parsing {READY}
-				var mp3 = new Mp3File(data.FilePath);
+				var mp3 = new Mp3File(data.Path);
 
-				var renamer = new Mp3TagChanger(mp3, data.Mask);
+				switch (data.Action)
+				{
+					case ProgramAction.Analyse:
 
-				renamer.ChangeTags();
+
+						break;
+
+					case ProgramAction.Mp3Edit:
+						var tagsChanger = new Mp3TagChanger(mp3, data.Mask);
+						tagsChanger.ChangeTags();
+						break;
+
+					case ProgramAction.FileRename:
+						var renamer = new Mp3TagChanger(mp3, data.Mask);
+						renamer.ChangeTags();
+						break;
+				}
 
 				Console.WriteLine("Done!");
 

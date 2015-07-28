@@ -78,7 +78,7 @@ namespace mp3lib_Tests
 			var validator = new ArgsManager(new []{"-file", "something", "-mask", "{asd}{dsa}"});
 			var args = validator.ExtactArgs();
 
-			Assert.AreEqual(args.FilePath, "something");
+			Assert.AreEqual(args.Path, "something");
 			Assert.AreEqual(args.Mask, "{asd}{dsa}");
 		}
 

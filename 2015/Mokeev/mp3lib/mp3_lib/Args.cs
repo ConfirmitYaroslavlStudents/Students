@@ -2,13 +2,15 @@
 {
 	public class Args
 	{
-		public string FilePath { get; private set; }
+		public ProgramAction Action { get; private set; }
+		public string Path { get; private set; }
 		public string Mask { get; private set; }
 
-		public Args (string path, string mask)
+		public Args (string path, string mask, ProgramAction action)
 		{
-			FilePath = path;
+			Path = path;
 			Mask = mask;
+			Action = action;
 		}
 	}
 }

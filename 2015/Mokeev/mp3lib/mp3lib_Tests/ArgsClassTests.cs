@@ -11,7 +11,7 @@ namespace mp3lib_Tests
 		public void Test_Creating()
 		{
 			var args = new Args("path", "mask");
-			Assert.AreEqual(args.FilePath, "path");
+			Assert.AreEqual(args.Path, "path");
 			Assert.AreEqual(args.Mask, "mask");
 		}
 	}

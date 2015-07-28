@@ -22,6 +22,7 @@ namespace Mp3Tager
                 CommandName = args[0]
             };
 
+            //[TODO] there should be no more than 1 switch on command
             switch (parsedArgs.CommandName)
             {
                 case "help":

@@ -2,6 +2,8 @@
 {
     internal class ParsedArgs
     {
+        //[TODO] make it immutable
+        //[TODO] command name into enum
         public string CommandName { get; set; }
         public string Path { get; set; }
         public string Pattern { get; set; }

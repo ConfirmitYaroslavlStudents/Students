@@ -6,38 +6,38 @@ namespace Mp3Tager
 {
     internal class ArgumentParser
     {
-        readonly Dictionary<string, int[]> CommandList = new Dictionary<string, int[]>
+        static readonly Dictionary<string, int[]> CommandList = new Dictionary<string, int[]>
         {
             {"help",  new [] {1, 2}},
             {"rename", new [] {3}},
             {"changeTag", new [] {4}}
         };
 
-        public Dictionary<string, string> ParseArguments(string[] args)
+        public ParsedArgs ParseArguments(string[] args)
         {
             CheckArgs(args);
 
-            var parsedArgs = new Dictionary<string, string>
+            var parsedArgs = new ParsedArgs
             {
-                {"commandName", args[0]}
+                CommandName = args[0]
             };
 
-            switch (parsedArgs["commandName"])
+            switch (parsedArgs.CommandName)
             {
                 case "help":
                     if (args.Length == 2)
-                        parsedArgs.Add("commandForHelp", args[1]);
+                        parsedArgs.CommandForHelp = args[1];
                     break;
 
                 case "rename":
-                    parsedArgs.Add("path", args[1]);
-                    parsedArgs.Add("pattern", args[2]);
+                    parsedArgs.Path = args[1];
+                    parsedArgs.Pattern = args[2];
                     break;
 
                 case "changeTag":
-                    parsedArgs.Add("path", args[1]);
-                    parsedArgs.Add("tag", args[2]);
-                    parsedArgs.Add("newTagValue", args[3]);
+                    parsedArgs.Path = args[1];
+                    parsedArgs.Tag = args[2];
+                    parsedArgs.NewTagValue = args[3];
                     break;
             }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mp3Lib;
 using Mp3Tager;
 
 namespace Mp3LibTests
@@ -8,7 +7,7 @@ namespace Mp3LibTests
     [TestClass]
     public class ArgumentParserTests
     {
-        ArgumentParser _parser = new ArgumentParser();
+        readonly ArgumentParser _parser = new ArgumentParser();
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "You haven't passed any argument!")]
         public void ParserTest_NoArgumentsPassed_ThrowException()
@@ -53,8 +52,8 @@ namespace Mp3LibTests
             var actual = _parser.ParseArguments(args);
 
             // assert
-            Assert.AreEqual(expectedCommandName, actual["commandName"]);
-            Assert.IsFalse(actual.ContainsKey("commandForHelp"));
+            Assert.AreEqual(expectedCommandName, actual.CommandName);
+            Assert.IsFalse(actual.CommandForHelp != null);
         }
 
         [TestMethod]
@@ -69,8 +68,8 @@ namespace Mp3LibTests
             var actual = _parser.ParseArguments(args);
 
             // assert
-            Assert.AreEqual(expectedCommandName, actual["commandName"]);
-            Assert.AreEqual(expectedCommandForHelp, actual["commandForHelp"]);
+            Assert.AreEqual(expectedCommandName, actual.CommandName);
+            Assert.AreEqual(expectedCommandForHelp, actual.CommandForHelp);
         }
 
         [TestMethod]
@@ -86,9 +85,9 @@ namespace Mp3LibTests
             var actual = _parser.ParseArguments(args);
 
             // assert
-            Assert.AreEqual(expectedCommandName, actual["commandName"]);
-            Assert.AreEqual(expectedPath, actual["path"]);
-            Assert.AreEqual(expectedPattern, actual["pattern"]);
+            Assert.AreEqual(expectedCommandName, actual.CommandName);
+            Assert.AreEqual(expectedPath, actual.Path);
+            Assert.AreEqual(expectedPattern, actual.Pattern);
         }
 
         [TestMethod]
@@ -105,10 +104,10 @@ namespace Mp3LibTests
             var actual = _parser.ParseArguments(args);
 
             // assert
-            Assert.AreEqual(expectedCommandName, actual["commandName"]);
-            Assert.AreEqual(expectedPath, actual["path"]);
-            Assert.AreEqual(expectedTag, actual["tag"]);
-            Assert.AreEqual(expectedNewTagValue, actual["newTagValue"]);
+            Assert.AreEqual(expectedCommandName, actual.CommandName);
+            Assert.AreEqual(expectedPath, actual.Path);
+            Assert.AreEqual(expectedTag, actual.Tag);
+            Assert.AreEqual(expectedNewTagValue, actual.NewTagValue);
         }
     }
 }

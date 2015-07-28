@@ -60,6 +60,10 @@
       <Project>{33d3f509-bb12-4033-a44c-9baf5c4f3bac}</Project>
       <Name>Mp3Lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mp3Tager\Mp3Tager.csproj">
+      <Project>{9008d222-0ecd-4597-9be4-210499c6f3c9}</Project>
+      <Name>Mp3Tager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

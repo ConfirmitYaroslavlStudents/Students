@@ -42,8 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
-    <Compile Include="ConsoleWriter.cs" />
-    <Compile Include="IWriter.cs" />
+    <Compile Include="ParsedArgs.cs" />
+    <Compile Include="ArgumentParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

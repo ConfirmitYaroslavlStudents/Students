@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mp3Lib;
 
 namespace Mp3Tager
 {
     internal class Application
     {
-        private readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {
             {"help", ""},
             {"rename", @"<path> <pattern>"},
             {"changeTag", @"<path> <tag> <newTagValue>"}
         };
 
-        private Dictionary<string, string> _parsedArgs;
-        private Actions _actions;
+        private ParsedArgs _parsedArgs; 
+        private readonly Actions _actions;
 
         internal Application ()
         {
@@ -24,36 +25,37 @@ namespace Mp3Tager
         {
             var parser = new ArgumentParser();
             _parsedArgs = parser.ParseArguments(args);
-            switch (_parsedArgs["commandName"])
+
+            switch (_parsedArgs.CommandName)
             {
                 case "help":
-                    ShowHelp(new ConsoleWriter());
+                    ShowHelp();
                     break;
 
                 case "rename":
-                    _actions.Rename(new Mp3File(_parsedArgs["path"]), _parsedArgs["pattern"]);
+                    _actions.Rename(new Mp3File(_parsedArgs.Path), _parsedArgs.Pattern);
                     break;
 
                 case "changeTag":
-                    _actions.ChangeTag(new Mp3File(_parsedArgs["path"]), _parsedArgs["tag"], _parsedArgs["newTagValue"]);
+                    _actions.ChangeTag(new Mp3File(_parsedArgs.Path), _parsedArgs.Tag, _parsedArgs.NewTagValue);
                     break;
             }
         }
 
-        private void ShowHelp(IWriter writer)
+        private void ShowHelp()
         {
-            if (!_parsedArgs.ContainsKey("commandForHelp"))
+            if (_parsedArgs.CommandForHelp == null)
             {
                 foreach (var message in HelpMessages)
                 {
-                    writer.Write(message.Key + ": ");
-                    writer.WriteLine(message.Value);
+                    Console.Write(message.Key + ": ");
+                    Console.WriteLine(message.Value);
                 }
             }
             else
             {
-                writer.WriteLine(HelpMessages.ContainsKey(_parsedArgs["commandForHelp"])
-                    ? HelpMessages[_parsedArgs["commandForHelp"]]
+                Console.WriteLine(HelpMessages.ContainsKey(_parsedArgs.CommandForHelp)
+                    ? HelpMessages[_parsedArgs.CommandForHelp]
                     : "There is no such command!");
             }
         }

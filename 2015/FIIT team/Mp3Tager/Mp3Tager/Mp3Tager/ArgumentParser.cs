@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
-
-[assembly: InternalsVisibleTo("Mp3LibTests")]
 namespace Mp3Tager
 {
-    internal static class ArgumentParser
+    internal class ArgumentParser
     {
         static readonly Dictionary<string, int[]> CommandList = new Dictionary<string, int[]>
         {
@@ -16,38 +13,39 @@ namespace Mp3Tager
             {"changeTag", new [] {4}}
         };
 
-        public static Dictionary<string, string> ParseArguments(string[] args)
+        public ParsedArgs ParseArguments(string[] args)
         {
             CheckArgs(args);
 
-            var parsedArgs = new Dictionary<string, string>
+            var parsedArgs = new ParsedArgs
             {
-                {"commandName", args[0]}
+                CommandName = args[0]
             };
 
-            switch (parsedArgs["commandName"])
+            //[TODO] there should be no more than 1 switch on command
+            switch (parsedArgs.CommandName)
             {
                 case "help":
                     if (args.Length == 2)
-                        parsedArgs.Add("commandForHelp", args[1]);
+                        parsedArgs.CommandForHelp = args[1];
                     break;
 
                 case "rename":
-                    parsedArgs.Add("path", args[1]);
-                    parsedArgs.Add("pattern", args[2]);
+                    parsedArgs.Path = args[1];
+                    parsedArgs.Pattern = args[2];
                     break;
 
                 case "changeTag":
-                    parsedArgs.Add("path", args[1]);
-                    parsedArgs.Add("tag", args[2]);
-                    parsedArgs.Add("newTagValue", args[3]);
+                    parsedArgs.Path = args[1];
+                    parsedArgs.Tag = args[2];
+                    parsedArgs.NewTagValue = args[3];
                     break;
             }
 
             return parsedArgs;
         }
 
-        private static void CheckArgs(string[] args)
+        private void CheckArgs(string[] args)
         {
             if (args.Length == 0)
                 throw new ArgumentException("You haven't passed any argument!");

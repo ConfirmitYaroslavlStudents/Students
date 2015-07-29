@@ -11,11 +11,6 @@ namespace Mp3LibTests
             Tag = tag;
         }
 
-        public void MoveTo(string newPath)
-        {
-            Path = newPath;
-        }
-
         public void Save()
         {
 
@@ -24,7 +19,6 @@ namespace Mp3LibTests
         public string Path { get; private set; }
         public string DirectoryName { get; private set; }
         public TagBase Tag { get; private set; }
-
 
     }
 }

@@ -19,7 +19,7 @@ namespace Mp3Lib
         public uint Track { get; set; }
     }
 
-    public class Mp3File : IMp3File
+    internal class Mp3File : IMp3File
     {
         public Mp3File(string path)
         {
@@ -35,16 +35,22 @@ namespace Mp3Lib
             Tag = new TagBase(_content.Tag.Performers, _content.Tag.Genres, _content.Tag.Title, _content.Tag.Album, _content.Tag.Track);
         }
 
-        public void MoveTo(string newPath)
-        {
-            var temp = new FileInfo(Path);
-            temp.MoveTo(newPath);
-            Path = newPath;
-        }
-
         public void Save()
         {
+            SaveTags();
             _content.Save();
+        }
+
+        private void SaveTags()
+        {
+
+            _content.Tag.Performers = null;
+            _content.Tag.Genres = null;
+            _content.Tag.Performers = Tag.Performers;
+            _content.Tag.Genres = Tag.Genres;
+            _content.Tag.Title = Tag.Title;
+            _content.Tag.Album = Tag.Album;
+            _content.Tag.Track = Tag.Track;
         }
 
         public string Path { get; private set; }

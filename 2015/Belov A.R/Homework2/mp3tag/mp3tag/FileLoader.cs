@@ -11,7 +11,7 @@ namespace mp3tager
         }
         public IMp3File Load(string path)
         {
-            if (FileExist(path))
+            if (FileExist(path)&&path.Substring(path.Length-4,4)==".mp3")
                 return new Mp3File(TagLib.File.Create(path));
             return null;
         }

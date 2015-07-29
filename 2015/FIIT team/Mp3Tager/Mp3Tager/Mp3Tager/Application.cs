@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mp3Lib;
 
 namespace Mp3Tager
@@ -12,41 +13,49 @@ namespace Mp3Tager
             {"changeTag", @"<path> <tag> <newTagValue>"}
         };
 
-        private Dictionary<string, string> _parsedArgs; 
+        private ParsedArgs _parsedArgs; 
+        private readonly Actions _actions;
+
+        internal Application ()
+        {
+            _actions = new Actions();
+        }
 
         public void Execute(string[] args)
         {
-            _parsedArgs = ArgumentParser.ParseArguments(args);
-            switch (_parsedArgs["commandName"])
+            var parser = new ArgumentParser();
+            _parsedArgs = parser.ParseArguments(args);
+
+            switch (_parsedArgs.CommandName)
             {
                 case "help":
-                    ShowHelp(new ConsoleWriter());
+                    ShowHelp();
                     break;
 
                 case "rename":
-                    Actions.Rename(new Mp3File(_parsedArgs["path"]), _parsedArgs["pattern"]);
+                    _actions.Rename(new Mp3File(_parsedArgs.Path), _parsedArgs.Pattern);
                     break;
 
                 case "changeTag":
-                    Actions.ChangeTag(new Mp3File(_parsedArgs["path"]), _parsedArgs["tag"], _parsedArgs["newTagValue"]);
+                    _actions.ChangeTag(new Mp3File(_parsedArgs.Path), _parsedArgs.Tag, _parsedArgs.NewTagValue);
                     break;
             }
         }
 
-        private void ShowHelp(IWriter writer)
+        private void ShowHelp()
         {
-            if (!_parsedArgs.ContainsKey("commandForHelp"))
+            if (_parsedArgs.CommandForHelp == null)
             {
                 foreach (var message in HelpMessages)
                 {
-                    writer.Write(message.Key + ": ");
-                    writer.WriteLine(message.Value);
+                    Console.Write(message.Key + ": ");
+                    Console.WriteLine(message.Value);
                 }
             }
             else
             {
-                writer.WriteLine(HelpMessages.ContainsKey(_parsedArgs["commandForHelp"])
-                    ? HelpMessages[_parsedArgs["commandForHelp"]]
+                Console.WriteLine(HelpMessages.ContainsKey(_parsedArgs.CommandForHelp)
+                    ? HelpMessages[_parsedArgs.CommandForHelp]
                     : "There is no such command!");
             }
         }

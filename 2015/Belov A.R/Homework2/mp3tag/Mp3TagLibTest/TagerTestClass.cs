@@ -13,14 +13,22 @@ namespace Mp3TagTest
     {
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
-        public void EmptyTagerTest()
+        public void TagerWithoutFileCantSave()
         {
             var fileLoader=new TestFileLoader();
             var testTager=new Tager(fileLoader);
             Assert.IsNull(testTager.CurrentFile);
-            Assert.AreEqual(false, testTager.Save());
+            testTager.Save();
             testTager.ChangeTags(new Mp3Tags());
 
+        }
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void TagerWithoutFileCantChangeTags()
+        {
+            var fileLoader = new TestFileLoader();
+            var testTager = new Tager(fileLoader);
+            testTager.ChangeTags(new Mp3Tags());
         }
         [TestMethod]
         public void LoadTest()
@@ -38,7 +46,7 @@ namespace Mp3TagTest
             testTager.Load("TEST");
             var file = testTager.CurrentFile as TestMp3File;
             Assert.AreEqual(false,file.SaveFlag);
-            Assert.AreEqual(true,testTager.Save());
+            testTager.Save();
             Assert.AreEqual(true,file.SaveFlag);
         }
         [TestMethod]

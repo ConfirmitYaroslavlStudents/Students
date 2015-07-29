@@ -27,5 +27,16 @@ namespace Mp3TagTest
         {
             SaveFlag = true;
         }
+
+
+        public Mp3Tags GetTags()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeName(string newName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

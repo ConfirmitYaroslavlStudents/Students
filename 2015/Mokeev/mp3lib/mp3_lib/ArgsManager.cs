@@ -20,7 +20,7 @@ namespace mp3lib
 		/// <exception cref="ArgumentException">Wrong argument</exception>
 		public bool CheckArgsValidity()
 		{
-			if (Args.Length != 4)
+			if (Args.Length != 6)
 			{
 				throw new ArgumentException("Expected usage: \n\t-action [analyse|file-rename|change-tags] -path \"[path to file]\" -mask \"[mask for changing title]\" \n\tor \n\t-");
 			}
@@ -43,7 +43,8 @@ namespace mp3lib
                         break;
 				}
 
-				if (Args.Select(x => x == arg).ToArray().Count() > 1) throw new ArgumentException("Wrong arg [" + arg + "] count!");
+				var argCount = Args.Where(x=> x == arg).ToArray().Count();
+                if (argCount > 1) throw new ArgumentException("Wrong arg [" + arg + "] count! It's: "+ argCount);
 			}
 
 			var hasValidArgs = hasMask && hasFilePath && setAction;
@@ -112,7 +113,7 @@ namespace mp3lib
 				case "analyse":
 					action = ProgramAction.Analyse;
 					break;
-				case "file-edit":
+				case "file-rename":
 					action = ProgramAction.FileRename;
 					break;
 				case "change-tags":

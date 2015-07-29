@@ -10,9 +10,10 @@ namespace mp3lib_Tests
 		[TestMethod]
 		public void Test_Creating()
 		{
-			var args = new Args("path", "mask");
+			var args = new Args("path", "mask", ProgramAction.FileRename);
 			Assert.AreEqual(args.Path, "path");
 			Assert.AreEqual(args.Mask, "mask");
+			Assert.AreEqual(args.Action, ProgramAction.FileRename);
 		}
 	}
 }

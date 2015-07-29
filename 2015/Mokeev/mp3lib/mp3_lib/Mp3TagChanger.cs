@@ -35,31 +35,31 @@ namespace mp3lib
 			ChangeMp3Tags(data);
 		}
 
-		private void ChangeMp3Tags(Dictionary<string, string> data)
+		private void ChangeMp3Tags(Dictionary<TagType, string> data)
 		{
 			foreach (var item in data)
 			{
 				switch (item.Key)
 				{
-					case "{title}":
-						Mp3.Title = item.Value;
-						break;
-					case "{artist}":
+					case TagType.Artist:
 						Mp3.Artist = item.Value;
 						break;
-					case "{id}":
+					case TagType.Id:
 						Mp3.TrackId = Convert.ToUInt16(item.Value);
 						break;
-					case "{album}":
+					case TagType.Title:
+						Mp3.Title = item.Value;
+						break;
+					case TagType.Album:
 						Mp3.Album = item.Value;
 						break;
-					case "{genre}":
+					case TagType.Genre:
 						Mp3.Genre = Convert.ToUInt16(item.Value);
 						break;
-					case "{year}":
+					case TagType.Year:
 						Mp3.Year = Convert.ToUInt16(item.Value);
 						break;
-					case "{comment}":
+					case TagType.Comment:
 						Mp3.Comment = item.Value;
 						break;
 				}

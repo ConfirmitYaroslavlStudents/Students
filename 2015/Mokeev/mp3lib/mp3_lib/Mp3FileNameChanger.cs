@@ -20,16 +20,10 @@ namespace mp3lib
 		public void ChangeFileName()
 		{
 			var tags = _dataExtracter.GetTags();
-
-			//checks that all tags are valid
-			foreach (var tag in tags.Where(tag => !_dataExtracter.AllowedStrings.Contains(tag.Value)))
-			{
-				throw new Exception("There is no tag like " + tag.Value);
-			}
-
+			
 			var id3Data = Mp3File.GetId3Data();
 
-			foreach (var tag in tags.Where(tag => string.IsNullOrWhiteSpace(id3Data[tag.Value])))
+			foreach (var tag in tags.Where(tag => string.IsNullOrWhiteSpace(id3Data[tag])))
 			{
 				throw new Exception("MP3 File hasn't tag " + tag);
 			}
@@ -38,7 +32,7 @@ namespace mp3lib
 
 			foreach (var tag in tags)
 			{
-				resultFileName.Replace(tag.Value, id3Data[tag.Value]);
+				resultFileName.Replace("{"+tag+"}", id3Data[tag]);
 			}
 
 		}

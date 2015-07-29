@@ -51,17 +51,17 @@ namespace mp3lib
 			mp3File.WriteTag(Tags, WriteConflictAction.Replace);
 		}
 
-		public Dictionary<string, string> GetId3Data()
+		public Dictionary<TagType, string> GetId3Data()
 		{
-			return new Dictionary<string, string>
+			return new Dictionary<TagType, string>
 			{
-				{"{id}", TrackId.ToString()},
-				{"{title}", TrackId.ToString()},
-				{"{artist}", Artist},
-				{"{album}", Album},
-				{"{year}", Year.ToString()},
-				{"{comment}", Comment},
-				{"{genre}", Genre.ToString()}
+				{TagType.Id, TrackId.ToString()},
+				{TagType.Title, Title},
+				{TagType.Artist, Artist},
+				{TagType.Album, Album},
+				{TagType.Year, Year.ToString()},
+				{TagType.Comment, Comment},
+				{TagType.Genre, Genre.ToString()}
 			};
 
 		}

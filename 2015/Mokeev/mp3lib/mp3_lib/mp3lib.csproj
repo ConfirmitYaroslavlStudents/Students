@@ -48,9 +48,11 @@
     <Compile Include="DataExtracter.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="Mp3FileNameChanger.cs" />
+    <Compile Include="Mp3FileAnalyser.cs" />
     <Compile Include="ProgramAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mp3TagChanger.cs" />
+    <Compile Include="TagType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ID3TagLibrary\Id3.dll" />

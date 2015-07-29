@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace mp3lib
 {
-	public class DataExtracterFromFileName
+	public class DataExtracter
 	{
 		private readonly string[] _allowedStrings = {
 			"{title}",
@@ -18,45 +18,72 @@ namespace mp3lib
 			"{comment}",
 		};
 
-		private string Mask { get; set; }
+		public string Mask { get; private set; }
 
-		public DataExtracterFromFileName(string mask)
+		public DataExtracter(string mask)
 		{
 			Mask = mask;
 		}
 
-		public Queue<Match> GetTags()
+		public Queue<TagType> GetTags()
 		{
 			var tagsCollection = Regex.Matches(Mask, "({[a-z]*})");
 
-			var tags = new Queue<Match>();
+			var tags = new Queue<TagType>();
 			foreach (Match tag in tagsCollection)
 			{
-				tags.Enqueue(tag);
+				TagType tagType;
+				switch (tag.Value)
+				{
+					case "{title}":
+						tagType = TagType.Title;
+                        break;
+					case "{id}":
+						tagType = TagType.Id;
+                        break;
+					case "{artist}":
+						tagType = TagType.Artist;
+                        break;
+					case "{album}":
+						tagType = TagType.Album;
+                        break;
+					case "{genre}":
+						tagType = TagType.Genre;
+                        break;
+					case "{comment}":
+						tagType = TagType.Comment;
+                        break;
+					case "{year}":
+						tagType = TagType.Year;
+                        break;
+					default:
+						throw new ArgumentException("There is no tag like " + tag.Value);
+				}
+
+				tags.Enqueue(tagType);
 			}
 			return tags;
 		}
 
-		public Queue<string> FindAllPrefixes(Queue<Match> tagsCollection)
+		public Queue<string> FindAllPrefixes(Queue<TagType> tagsCollection)
 		{
 			var mask = new StringBuilder(Mask);
 
 			var prefixesQueue = new Queue<string>();
 			foreach (var tag in tagsCollection)
 			{
-				if (!_allowedStrings.Contains(tag.Value)) throw new ArgumentException("Wrong type sended: " + tag.Value);
 				if (mask.Length == 0) continue;
 
-				var index = mask.ToString().IndexOf(tag.Value, StringComparison.CurrentCulture);
+				var index = mask.ToString().IndexOf("{"+tag.ToString().ToLower()+"}", StringComparison.CurrentCulture);
 				var str = mask.ToString().Substring(0, index);
 				prefixesQueue.Enqueue(str);
 				mask.Remove(0,
-					(tag.Value.Length + str.Length > mask.Length) ? mask.Length : tag.Value.Length + str.Length);
+					((tag.ToString().Length + 2) + str.Length > mask.Length) ? mask.Length : (tag.ToString().Length + 2) + str.Length);
 			}
 			return prefixesQueue;
 		}
 
-		public Dictionary<string, string> GetFullDataFromString(Queue<string> prefixesQueue, StringBuilder mp3Name, Queue<Match> tags)
+		public Dictionary<TagType, string> GetFullDataFromString(Queue<string> prefixesQueue, StringBuilder mp3Name, Queue<TagType> tags)
 		{
 			var prefixes = prefixesQueue.ToArray();
 			for (var i = 1; i < prefixes.Length; i++)
@@ -65,7 +92,7 @@ namespace mp3lib
 				if (prefix == "") throw new Exception("Too low prefixes count. Undefined state found.");
 			}
 
-			var data = new Dictionary<string, string>();
+			var data = new Dictionary<TagType, string>();
 			while (prefixesQueue.Count > 0)
 			{
 				prefixesQueue.Dequeue();
@@ -102,7 +129,7 @@ namespace mp3lib
 						if (tmpStr.ToString() == postfix)
 						{
 							mp3Name.Remove(0, currentStr.Length);
-							data.Add(tags.Dequeue().Value, resultStr.ToString());
+							data.Add(tags.Dequeue(), resultStr.ToString());
 							needContinue = false;
 						}
 						else
@@ -116,7 +143,7 @@ namespace mp3lib
 				}
 				else
 				{
-					if (tags.Count > 0) data.Add(tags.Dequeue().Value, mp3Name.ToString());
+					if (tags.Count > 0) data.Add(tags.Dequeue(), mp3Name.ToString());
 					break;
 				}
 			}

@@ -11,17 +11,17 @@ namespace mp3lib_Tests
 		[TestMethod]
 		public void Test_CheckArgs_Valid()
 		{
-			var data = new[] {"-file", "filePath", "-mask", "{a}-{b}"};
+			var data = new[] {"-path", "filePath", "-mask", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 
 			Assert.AreEqual(true, argsManager.CheckArgsValidity());
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentException), "Expected usage: {0} -file \"[path to file]\" -mask \"[mask for changing title]\"")]
+		[ExpectedException(typeof(ArgumentException), "Expected usage: \n\t-action [analyse|file-rename|change-tags] -path \"[path to file]\" -mask \"[mask for changing title]\" \n\tor \n\t-")]
 		public void Test_CheckArgs_InvalidArgsCount()
 		{
-			var data = new[] { "-file", "-mask", "{a}-{b}" };
+			var data = new[] { "-path", "-mask", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 			argsManager.CheckArgsValidity();
 		}
@@ -30,7 +30,7 @@ namespace mp3lib_Tests
 		[ExpectedException(typeof(ArgumentException), "You don't append correct file path and mask for mp3.")]
 		public void Test_CheckArgs_InvalidOrder_1()
 		{
-			var data = new[] {"-file", "filePath", "{a}-{b}", "-mask"};
+			var data = new[] { "-path", "filePath", "{a}-{b}", "-mask", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 			argsManager.CheckArgsValidity();
 		}
@@ -39,7 +39,7 @@ namespace mp3lib_Tests
 		[ExpectedException(typeof(ArgumentException), "You don't append correct file path and mask for mp3.")]
 		public void Test_CheckArgs_InvalidOrder_2()
 		{
-			var data = new[] {"-file", "-mask", "filePath", "{a}-{b}"};
+			var data = new[] { "-path", "-mask", "filePath", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 			argsManager.CheckArgsValidity();
 		}
@@ -48,7 +48,7 @@ namespace mp3lib_Tests
 		[ExpectedException(typeof(ArgumentException), "You don't append correct file path.")]
 		public void Test_CheckArgs_InvalidMissFilePath()
 		{
-			var data = new[] { "-data", "data", "-mask", "{a}-{b}" };
+			var data = new[] { "-data", "data", "-mask", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 			argsManager.CheckArgsValidity();
 		}
@@ -57,7 +57,7 @@ namespace mp3lib_Tests
 		[ExpectedException(typeof(ArgumentException), "You don't append correct mask for mp3.")]
 		public void Test_CheckArgs_InvalidMissMask()
 		{
-			var data = new[] { "-file", "filePath", "-data", "{a}-{b}" };
+			var data = new[] { "-path", "filePath", "-data", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 			argsManager.CheckArgsValidity();
 		}
@@ -66,7 +66,7 @@ namespace mp3lib_Tests
 		[ExpectedException(typeof(ArgumentException), "You don't append correct file path and mask for mp3.")]
 		public void Test_CheckArgs_InvalidMissFilePathAndMask()
 		{
-			var data = new[] { "-data1", "filePath", "-data", "{a}-{b}" };
+			var data = new[] { "-data1", "filePath", "-data", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 			argsManager.CheckArgsValidity();
 		}
@@ -75,10 +75,11 @@ namespace mp3lib_Tests
 		[TestMethod]
 		public void Test_ExtractArgs()
 		{
-			var validator = new ArgsManager(new []{"-file", "something", "-mask", "{asd}{dsa}"});
+			var validator = new ArgsManager(new []{ "-path", "something", "-mask", "{asd}{dsa}", "-action", "file-rename" });
+			validator.CheckArgsValidity();
 			var args = validator.ExtactArgs();
 
-			Assert.AreEqual(args.FilePath, "something");
+			Assert.AreEqual(args.Path, "something");
 			Assert.AreEqual(args.Mask, "{asd}{dsa}");
 		}
 

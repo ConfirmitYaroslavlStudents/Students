@@ -13,53 +13,53 @@ namespace mp3lib
 		private string Mp3RealName { get; set; }
 		private Mp3File Mp3 { get; set; }
 
-		private readonly DataExtracterFromFileName _dataExtracterFromFileName;
+		private readonly DataExtracter _dataExtracter;
 
 		public Mp3TagChanger(Mp3File mp3File, string mask)
 		{
 			Mp3 = mp3File;
 
 			Mp3RealName = Path.GetFileNameWithoutExtension(mp3File.FilePath);
-			_dataExtracterFromFileName = new DataExtracterFromFileName(mask);
+			_dataExtracter = new DataExtracter(mask);
 		}
 
 		public void ChangeTags()
 		{
-			var tags = _dataExtracterFromFileName.GetTags();
-			var prefixesQueue = _dataExtracterFromFileName.FindAllPrefixes(tags);
+			var tags = _dataExtracter.GetTags();
+			var prefixesQueue = _dataExtracter.FindAllPrefixes(tags);
 
 			var mp3Name = new StringBuilder(Mp3RealName);
 
-			var data = _dataExtracterFromFileName.GetFullDataFromString(prefixesQueue, mp3Name, tags);
+			var data = _dataExtracter.GetFullDataFromString(prefixesQueue, mp3Name, tags);
 
 			ChangeMp3Tags(data);
 		}
 
-		private void ChangeMp3Tags(Dictionary<string, string> data)
+		private void ChangeMp3Tags(Dictionary<TagType, string> data)
 		{
 			foreach (var item in data)
 			{
 				switch (item.Key)
 				{
-					case "{title}":
-						Mp3.Title = item.Value;
-						break;
-					case "{artist}":
+					case TagType.Artist:
 						Mp3.Artist = item.Value;
 						break;
-					case "{id}":
+					case TagType.Id:
 						Mp3.TrackId = Convert.ToUInt16(item.Value);
 						break;
-					case "{album}":
+					case TagType.Title:
+						Mp3.Title = item.Value;
+						break;
+					case TagType.Album:
 						Mp3.Album = item.Value;
 						break;
-					case "{genre}":
+					case TagType.Genre:
 						Mp3.Genre = Convert.ToUInt16(item.Value);
 						break;
-					case "{year}":
+					case TagType.Year:
 						Mp3.Year = Convert.ToUInt16(item.Value);
 						break;
-					case "{comment}":
+					case TagType.Comment:
 						Mp3.Comment = item.Value;
 						break;
 				}

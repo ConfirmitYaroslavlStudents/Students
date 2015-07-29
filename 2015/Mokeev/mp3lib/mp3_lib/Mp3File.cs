@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Id3;
 using Id3.Frames;
@@ -9,23 +10,23 @@ namespace mp3lib
 	{
 		private Mp3Stream mp3File { get; set; }
 		public string FilePath { get; private set; }
-		private Id3Tag _tags { get; set; }
+		private Id3Tag Tags { get; set; }
 
 		public string Title
 		{
 			get
 			{
-				return _tags.Title;
+				return Tags.Title;
 			}
-			set { _tags.Title.Value = value; Set(); }
+			set { Tags.Title.Value = value; Set(); }
 		}
 
-		public string Artist { get { return _tags.Artists; } set { _tags.Artists.TextValue = value; Set(); } }
-		public string Album { get { return _tags.Album; } set { _tags.Album.Value = value; Set(); } }
-		public int? Year { get { return _tags.Year.Value; } set { _tags.Year.Value = value; Set(); } }
-		public string Comment { get { return _tags.Comments.ToString(); } set { _tags.Comments.Clear(); _tags.Comments.Add(new CommentFrame(){Comment = value}); Set(); } }
-		public ushort TrackId { get { return Convert.ToUInt16(_tags.Track.TrackCount); } set { _tags.Track.Value = value; Set(); } }
-		public ushort Genre { get { return Convert.ToUInt16(_tags.Genre); }  set { _tags.Genre.Value = value.ToString(); Set(); } }
+		public string Artist { get { return Tags.Artists; } set { Tags.Artists.TextValue = value; Set(); } }
+		public string Album { get { return Tags.Album; } set { Tags.Album.Value = value; Set(); } }
+		public int? Year { get { return Tags.Year.Value; } set { Tags.Year.Value = value; Set(); } }
+		public string Comment { get { return Tags.Comments.ToString(); } set { Tags.Comments.Clear(); Tags.Comments.Add(new CommentFrame(){Comment = value}); Set(); } }
+		public ushort TrackId { get { return Convert.ToUInt16(Tags.Track.TrackCount); } set { Tags.Track.Value = value; Set(); } }
+		public ushort Genre { get { return Convert.ToUInt16(Tags.Genre); }  set { Tags.Genre.Value = value.ToString(); Set(); } }
 
 		public Mp3File(string file)
 		{
@@ -40,14 +41,29 @@ namespace mp3lib
 			var id3v1exists = mp3File.HasTagOfFamily(Id3TagFamily.Version1x);
 			var id3v2exists = mp3File.HasTagOfFamily(Id3TagFamily.Version2x);
 
-			if (!id3v2exists && id3v1exists) _tags = mp3File.GetTag(Id3TagFamily.Version1x);
+			if (!id3v2exists && id3v1exists) Tags = mp3File.GetTag(Id3TagFamily.Version1x);
 
-			_tags = mp3File.GetTag(Id3TagFamily.Version2x);
+			Tags = mp3File.GetTag(Id3TagFamily.Version2x);
 		}
 
 		private void Set()
 		{
-			mp3File.WriteTag(_tags, WriteConflictAction.Replace);
+			mp3File.WriteTag(Tags, WriteConflictAction.Replace);
+		}
+
+		public Dictionary<TagType, string> GetId3Data()
+		{
+			return new Dictionary<TagType, string>
+			{
+				{TagType.Id, TrackId.ToString()},
+				{TagType.Title, Title},
+				{TagType.Artist, Artist},
+				{TagType.Album, Album},
+				{TagType.Year, Year.ToString()},
+				{TagType.Comment, Comment},
+				{TagType.Genre, Genre.ToString()}
+			};
+
 		}
 	}
 }

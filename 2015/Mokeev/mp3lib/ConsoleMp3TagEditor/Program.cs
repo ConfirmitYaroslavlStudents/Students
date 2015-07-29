@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using mp3lib;
+
+//[TODO] introduce class for args {READY}
+//[TODO] extract arguments parsing {READY}
 
 namespace ConsoleMp3TagEditor
 {
@@ -14,14 +18,27 @@ namespace ConsoleMp3TagEditor
 				argsManager.CheckArgsValidity();
 
 				var data = argsManager.ExtactArgs();
+				Console.WriteLine(TagType.Album.ToString());
+				Mp3File mp3;
+				switch (data.Action)
+				{
+					case ProgramAction.Analyse:
+						var pathAnalyser = new Mp3FileAnalyser(Directory.GetFiles(data.Path, "*.mp3"), data.Mask);
+						var diff = pathAnalyser.FindDifferences();
+                        break;
 
-				//[TODO] introduce class for args {READY}
-				//[TODO] extract arguments parsing {READY}
-				var mp3 = new Mp3File(data.FilePath);
+					case ProgramAction.Mp3Edit:
+						mp3 = new Mp3File(data.Path);
+						var tagsChanger = new Mp3TagChanger(mp3, data.Mask);
+						tagsChanger.ChangeTags();
+						break;
 
-				var renamer = new Mp3TagChanger(mp3, data.Mask);
-
-				renamer.ChangeTags();
+					case ProgramAction.FileRename:
+						mp3 = new Mp3File(data.Path);
+						var renamer = new Mp3TagChanger(mp3, data.Mask);
+						renamer.ChangeTags();
+						break;
+				}
 
 				Console.WriteLine("Done!");
 

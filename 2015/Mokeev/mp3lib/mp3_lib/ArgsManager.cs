@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace mp3lib
 {
@@ -19,49 +20,64 @@ namespace mp3lib
 		/// <exception cref="ArgumentException">Wrong argument</exception>
 		public bool CheckArgsValidity()
 		{
-			if (Args.Length != 4)
+			if (Args.Length != 6)
 			{
-				throw new ArgumentException("Expected usage: {0} -file \"[path to file]\" -mask \"[mask for changing title]\"");
+				throw new ArgumentException("Expected usage: \n\t-action [analyse|file-rename|change-tags] -path \"[path to file]\" -mask \"[mask for changing title]\" \n\tor \n\t-");
 			}
 
 			var hasFilePath = false;
 			var hasMask = false;
+			var setAction = false;
 			foreach (var arg in Args)
 			{
 				switch (arg)
 				{
-					case "-file":
+					case "-path":
 						hasFilePath = true;
 						break;
 					case "-mask":
 						hasMask = true;
 						break;
+					case "-action":
+						setAction = true;
+                        break;
 				}
+
+				var argCount = Args.Where(x=> x == arg).ToArray().Count();
+                if (argCount > 1) throw new ArgumentException("Wrong arg [" + arg + "] count! It's: "+ argCount);
 			}
 
-			var hasValidArgs = hasMask && hasFilePath;
+			var hasValidArgs = hasMask && hasFilePath && setAction;
 			if (!hasValidArgs)
 			{
+				if(!setAction) throw new ArgumentException("You don't set your action!");
+
 				if (!hasMask && !hasFilePath)
 				{
 					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}
+
 				if (!hasFilePath)
 				{
 					throw new ArgumentException("You don't append correct file path.");
 				}
+
 				throw new ArgumentException("You don't append correct mask for mp3.");
 			}
 
-			for (int i = 0; i < Args.Length; i++)
+			for (var i = 0; i < Args.Length; i++)
 			{
-				if (Args[i] == "-file" && i + 1 < Args.Length && Args[i + 1] == "-mask" ||
-				    Args[i] == "-mask" && i + 1 < Args.Length && Args[i + 1] == "-file")
+				if (Args[i] == "-path"		&& i + 1 < Args.Length && Args[i + 1] == "-mask"	||
+				    Args[i] == "-mask"		&& i + 1 < Args.Length && Args[i + 1] == "-path" ||
+					Args[i] == "-path"		&& i + 1 < Args.Length && Args[i + 1] == "-action"	||
+					Args[i] == "-action"	&& i + 1 < Args.Length && Args[i + 1] == "-path" ||
+					Args[i] == "-action"	&& i + 1 < Args.Length && Args[i + 1] == "-mask"	||
+					Args[i] == "-mask"		&& i + 1 < Args.Length && Args[i + 1] == "-action"	  )
 				{
 					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}
 
-				if ( (Args[i] == "-file" || Args[i] == "-mask") && (i + 1 >= Args.Length) )
+				if ( (Args[i] == "-path" || Args[i] == "-mask" || Args[i] == "-action") && (i + 1 >= Args.Length) )
 				{
 					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}
@@ -74,7 +90,6 @@ namespace mp3lib
 		/// <summary>
 		/// Extracting args
 		/// </summary>
-		/// <param name="args">Array with args</param>
 		/// <returns>Dictionary with data extracted from args</returns>
 		public Args ExtactArgs()
 		{
@@ -91,8 +106,25 @@ namespace mp3lib
 				data.Add(key.Dequeue(), arg);
 			}
 
-			return new Args(data["-file"], data["-mask"]);
-		} 
+			ProgramAction action;
+
+			switch (data["-action"])
+			{
+				case "analyse":
+					action = ProgramAction.Analyse;
+					break;
+				case "file-rename":
+					action = ProgramAction.FileRename;
+					break;
+				case "change-tags":
+					action = ProgramAction.Mp3Edit;
+					break;
+				default:
+					throw new ArgumentException("action can be [analyse|file-rename|change-tags]");
+			}
+
+			return new Args(data["-path"], data["-mask"], action);
+		}
 
 	}
 }

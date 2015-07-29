@@ -7,8 +7,14 @@ namespace Mp3LibTests
     [TestClass]
     public class ArgumentParserTests
     {
-        //[TODO] class init
-        readonly ArgumentParser _parser = new ArgumentParser();
+        private ArgumentParser _parser;
+
+        [TestInitialize]
+        public void InitializeParser()
+        {
+            _parser = new ArgumentParser();
+        }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "You haven't passed any argument!")]
         public void ParserTest_NoArgumentsPassed_ThrowException()

@@ -8,24 +8,41 @@ namespace Mp3TagTest
     public class MaskItemTestClass
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void EqualsTest()
         {
             MaskItem item1 = new MaskItem() { Type = MaskItemType.Delimiter,Value = "item" };
             MaskItem item2 = new MaskItem() { Type = MaskItemType.Delimiter,Value = "item" };
-            MaskItem item3 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
             Assert.AreEqual(item1,item2);
-            Assert.AreNotEqual(item1,item3);
-            item1.Equals(null);
         }
+
         [TestMethod]
-        public void HashTest()
+        public void NotEqualsTest()
+        {
+            MaskItem item1 = new MaskItem() { Type = MaskItemType.Delimiter, Value = "item" };
+            MaskItem item2 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
+            Assert.AreNotEqual(item1, item2);
+        }
+
+        [TestMethod]
+        public void EqualsReturnFalseIfArgIsNull()
+        {
+           Assert.AreEqual(false,new MaskItem().Equals(null));
+        }
+
+        [TestMethod]
+        public void IfEqualsReturnTrueObjectsHaveSameHash()
         {
             MaskItem item1 = new MaskItem() { Type = MaskItemType.Delimiter, Value = "item" };
             MaskItem item2 = new MaskItem() { Type = MaskItemType.Delimiter, Value = "item" };
-            MaskItem item3 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
             Assert.AreEqual(item1.GetHashCode(), item2.GetHashCode());
-            Assert.AreNotEqual(item1.GetHashCode(), item3.GetHashCode());
+        }
+
+        [TestMethod]
+        public void IfEqualsReturnTrueObjectsHaveDifferentHash()
+        {
+            MaskItem item1 = new MaskItem() { Type = MaskItemType.Delimiter, Value = "item" };
+            MaskItem item2 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
+            Assert.AreNotEqual(item1.GetHashCode(), item2.GetHashCode());
         }
     }
 }

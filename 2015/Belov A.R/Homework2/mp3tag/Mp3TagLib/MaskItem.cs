@@ -1,5 +1,4 @@
-﻿using System;
-namespace Mp3TagLib
+﻿namespace Mp3TagLib
 {
     public enum MaskItemType { Delimiter,TagName}
     public class MaskItem
@@ -8,9 +7,9 @@ namespace Mp3TagLib
         public string Value { get; set; }
         public override bool Equals(object obj)
         {
-            MaskItem item=obj as MaskItem;
+            var item=obj as MaskItem;
             if (item == null)
-                throw new ArgumentException("obj");
+                return false;
             return Type == item.Type && Value == item.Value;
         }
 

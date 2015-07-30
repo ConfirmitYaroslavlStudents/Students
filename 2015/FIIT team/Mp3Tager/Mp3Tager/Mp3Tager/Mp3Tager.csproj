@@ -42,8 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
-    <Compile Include="ParsedArgs.cs" />
-    <Compile Include="ArgumentParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
-      <Project>{33d3f509-bb12-4033-a44c-9baf5c4f3bac}</Project>
-      <Name>Mp3Lib</Name>
+    <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">
+      <Project>{1ef53300-5b6a-4290-9cc1-f8194e72c277}</Project>
+      <Name>CommandCreation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

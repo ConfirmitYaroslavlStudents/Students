@@ -16,6 +16,7 @@ namespace mp3tager
         {
             get
             {
+                //[TODO] use Path
                 var lastSlashIndex = _file.Name.LastIndexOf(@"\");
                 return _file.Name.Substring(lastSlashIndex + 1, _file.Name.Length - lastSlashIndex - 1-".mp3".Length);
             } 
@@ -23,6 +24,7 @@ namespace mp3tager
 
         public void SetTags(Mp3Tags tags)
         {
+            //[TODO] extract string constants
             var album = tags.GetTag("Album");
             var yearString = tags.GetTag("Year");
             var comment = tags.GetTag("Comment");
@@ -48,7 +50,7 @@ namespace mp3tager
             }
             if (!string.IsNullOrEmpty(comment))
                 _file.Tag.Comment = comment;
-            if (!string.IsNullOrEmpty(album))
+            if (!string.IsNullOrEmpty(title))
                 _file.Tag.Title =title;
             if (!string.IsNullOrEmpty(artist))
                 _file.Tag.AlbumArtists = new[] { artist};
@@ -64,27 +66,32 @@ namespace mp3tager
 
         public Mp3Tags GetTags()
         {
-            var tags=new Mp3Tags();
-            tags.Album = _file.Tag.Album;
-            tags.Artist = _file.Tag.FirstArtist;
-            tags.Comment = _file.Tag.Comment;
-            tags.Genre = _file.Tag.FirstGenre;
-            tags.Title = _file.Tag.Title;
-            tags.Year = _file.Tag.Year;
-            tags.Track = _file.Tag.Track;
+            var tags = new Mp3Tags
+            {
+                Album = _file.Tag.Album,
+                Artist = _file.Tag.FirstArtist,
+                Comment = _file.Tag.Comment,
+                Genre = _file.Tag.FirstGenre,
+                Title = _file.Tag.Title,
+                Year = _file.Tag.Year,
+                Track = _file.Tag.Track
+            };
             return tags;
 
         }
 
         public void ChangeName(string newName)
         {
+            newName = FixFileName(newName);
+            if(string.IsNullOrEmpty(newName))
+                throw new ArgumentException("Bad name");
             string path = _file.Name.Substring(0, _file.Name.LastIndexOf(@"\"));
-            path = path + @"\" + fixFileName(newName) + ".mp3";
+            path = path + @"\" + newName + ".mp3";
             System.IO.File.Move(_file.Name,path);
             _file = File.Create(path);
         }
 
-        string fixFileName(string name)
+        string FixFileName(string name)
         {
             name = name.Replace("*", "");
             name = name.Replace("|", "");

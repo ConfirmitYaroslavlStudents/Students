@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Lib", "Mp3Lib\Mp3Lib.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3LibTests", "Mp3LibTests\Mp3LibTests.csproj", "{3D582639-8205-4BD0-B792-762E88E74939}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandCreation", "CommandCreation\CommandCreation.csproj", "{1EF53300-5B6A-4290-9CC1-F8194E72C277}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3D582639-8205-4BD0-B792-762E88E74939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D582639-8205-4BD0-B792-762E88E74939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D582639-8205-4BD0-B792-762E88E74939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

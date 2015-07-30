@@ -54,7 +54,6 @@
     <Compile Include="TagerTestClass.cs" />
     <Compile Include="TestFileLoader.cs" />
     <Compile Include="TestMp3File.cs" />
-    <Compile Include="Mp3TagsTestClass.cs" />
     <Compile Include="MaskTestClass.cs" />
     <Compile Include="MaskItemTestClass.cs" />
   </ItemGroup>

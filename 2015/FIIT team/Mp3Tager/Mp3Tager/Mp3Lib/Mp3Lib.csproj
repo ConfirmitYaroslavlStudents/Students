@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Mp3File.cs" />
     <Compile Include="IMp3File.cs" />
-    <Compile Include="Actions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3TagLib;
 
@@ -79,14 +80,11 @@ namespace Mp3TagTest
             foreach (var posibleValue in posibleValues)
             {
                 bool flag = false;
-                foreach (var result in testMask.GetTagValuesFromString(testString))
+                foreach (var result in testMask.GetTagValuesFromString(testString).Where(result => result.ContainsValue(posibleValue.Key)))
                 {
-                    if (result.ContainsValue(posibleValue.Key))
-                    {
-                        flag = result["x"] == posibleValue.Key && result["y"] == posibleValue.Value;
-                        if (flag)
-                            break;
-                    }
+                    flag = result["x"] == posibleValue.Key && result["y"] == posibleValue.Value;
+                    if (flag)
+                        break;
                 }
                 Assert.AreEqual(true,flag);
             }
@@ -109,14 +107,11 @@ namespace Mp3TagTest
             foreach (var posibleValue in posibleValues)
             {
                 bool flag = false;
-                foreach (var result in results)
+                foreach (var result in results.Where(result=>result.ContainsValue(posibleValue.Key)))
                 {
-                    if (result.ContainsValue(posibleValue.Key))
-                    {
-                        flag = result["x"] == posibleValue.Key && result["y"] == posibleValue.Value;
-                        if(flag)
-                            break;
-                    }
+                    flag = result["x"] == posibleValue.Key && result["y"] == posibleValue.Value;
+                    if (flag)
+                        break;
                 }
                 Assert.AreEqual(true, flag);
             }

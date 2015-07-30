@@ -17,6 +17,7 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 		}
 
+        //[TODO] tests
 		public void ChangeFileName()
 		{
 			var tags = _dataExtracter.GetTags();

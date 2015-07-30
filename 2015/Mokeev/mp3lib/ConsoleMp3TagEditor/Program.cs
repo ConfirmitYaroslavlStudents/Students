@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using mp3lib;
 
 //[TODO] introduce class for args {READY}
@@ -24,7 +25,13 @@ namespace ConsoleMp3TagEditor
 				{
 					case ProgramAction.Analyse:
 						var pathAnalyser = new Mp3FileAnalyser(Directory.GetFiles(data.Path, "*.mp3"), data.Mask);
-						var diff = pathAnalyser.FindDifferences();
+
+                        var differences = pathAnalyser.FindDifferences();
+                        foreach (var file in differences)
+				        {
+				            Console.WriteLine(file);
+				        }
+
                         break;
 
 					case ProgramAction.Mp3Edit:
@@ -35,8 +42,8 @@ namespace ConsoleMp3TagEditor
 
 					case ProgramAction.FileRename:
 						mp3 = new Mp3File(data.Path);
-						var renamer = new Mp3TagChanger(mp3, data.Mask);
-						renamer.ChangeTags();
+						var renamer = new Mp3FileNameChanger(mp3, data.Mask);
+						renamer.ChangeFileName();
 						break;
 				}
 

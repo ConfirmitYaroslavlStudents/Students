@@ -19,7 +19,7 @@ namespace Mp3Lib
         public uint Track { get; set; }
     }
 
-    internal class Mp3File : IMp3File
+    public class Mp3File : IMp3File
     {
         public Mp3File(string path)
         {

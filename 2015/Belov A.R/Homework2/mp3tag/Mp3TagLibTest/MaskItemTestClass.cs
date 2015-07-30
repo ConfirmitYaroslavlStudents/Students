@@ -22,10 +22,9 @@ namespace Mp3TagTest
             Assert.AreNotEqual(item1, item2);
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void NullArgumentInEqualsNotAlowed()
+        public void EqualsReturnFalseIfArgIsNull()
         {
-            new MaskItem().Equals(null);
+           Assert.AreEqual(false,new MaskItem().Equals(null));
         }
         [TestMethod]
         public void IfEqualsReturnTrueObjectsHaveSameHash()

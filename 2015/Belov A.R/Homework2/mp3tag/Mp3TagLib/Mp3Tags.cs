@@ -63,7 +63,7 @@ namespace Mp3TagLib
                 case "year":
                     return Year.ToString();
                 case "track":
-                    return "0"+Track.ToString();
+                    return Track.ToString();
                 case "comment":
                     return Comment;
                 case "genre":

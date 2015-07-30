@@ -12,6 +12,7 @@ namespace Mp3TagTest
         public Mp3Tags Tags { get; set; }
         public string Path { get; set; }
         public bool SaveFlag { get; set; }
+        public bool ChangeNameFlag { get; set; }
 
         public string Name
         {
@@ -31,12 +32,13 @@ namespace Mp3TagTest
 
         public Mp3Tags GetTags()
         {
-            throw new NotImplementedException();
+            return Tags;
         }
 
         public void ChangeName(string newName)
         {
-            throw new NotImplementedException();
+            ChangeNameFlag = true;
+            Path = newName;
         }
     }
 }

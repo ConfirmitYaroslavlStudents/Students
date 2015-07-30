@@ -14,115 +14,72 @@ namespace mp3tager
             var tager=new Tager(new FileLoader());
             while (true)
             {
-                Console.Clear();
-                ShowMenu();
-                ShowCurrentFile(tager.CurrentFile);
-                Console.Write("\n\nCommand:");
-                switch (Console.ReadLine().ToLower())
+                Menu.Show();
+                Menu.ShowCurrentFile(tager.CurrentFile);
+                switch (Menu.GetUserChoice("\n\nCommand:").ToLower())
                 {
                     case "load":
-                        Console.Clear();
-                        if (!tager.Load(GetPath()))
+                        if (!tager.Load(Menu.GetUserChoice("path:")))
                         {
-                            Console.Clear();
-                            ShowError("File does not exist");
-                            Console.ReadKey();
+                            Menu.ShowError("File does not exist");
                         }
                 break;
-                    case "save":
-                        Console.Clear();
-                        try
-                        {
-                            tager.Save();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Successfully");
-                            Console.ResetColor();
-                            Console.WriteLine("Press any key...");
-                        }
-                        catch (Exception e)
-                        {
-
-                            Console.Clear();
-                            ShowError(e.Message);
-                        }
-                        Console.ReadKey();
-                        break;
                     case "changetags":
                         try
                         {
-                            Console.Clear();
-                            ShowExample();
-                            ShowCurrentFile(tager.CurrentFile);
+                            Menu.ShowHelp();
+                            Menu.ShowCurrentFile(tager.CurrentFile);
                             tager.ChangeTags(GetTagsFromFileName(tager.CurrentFile));
+                            tager.Save();
+                            Menu.SuccessMessage();
          
                         }
                         catch (Exception e)
                         {
-                            Console.Clear();
-                            ShowError(e.Message);
-                            Console.ReadKey();
+                            Menu.ShowError(e.Message);
                         }
                         break;
                     case "rename":
-                        if (tager.CurrentFile == null)
-                        {
-                            Console.Clear();
-                            ShowError("File is not loaded");
-                            Console.ReadKey();
-                            break;
-                        }
                         try
                         {
-                            Console.Clear();
-                            tager.ChangeName(new Mask(GetMask()));
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Successfully");
-                            Console.ResetColor();
-                            Console.WriteLine("Press any key...");
+                            Menu.ShowHelp();
+                            tager.ChangeName(new Mask(Menu.GetUserChoice("mask:")));
+                            Menu.SuccessMessage();
                         }
                         catch (Exception e)
                         {
-                            Console.Clear();
-                            ShowError(e.Message);
+                            Menu.ShowError(e.Message);
                         }
-                        Console.ReadKey();
                         break;
                     case "analysis":
                         try
                         {
-                            Console.Clear();
-                            AnalyzeFolder(@"C:\Users\Alexandr\Desktop\TEST");
+                            //AnalyzeFolder(@"C:\Users\Alexandr\Desktop\TEST");
+                            AnalyzeFolder(Menu.GetUserChoice("path:"));
                         }
                         catch (Exception e)
                         {
 
-                            Console.Clear();
-                            ShowError(e.Message);
+                            Menu.ShowError(e.Message);
                         }
                         break;
                     case "exit":
                         return;
                     default:
-                        Console.Clear();
-                        ShowError("Error comand");
-                        Console.ReadKey();
+                        Menu.ShowError("Error comand");
                         break;
-
                 }
-
             }
-
-
         }
 
         public static void AnalyzeFolder(string path)
         {
             var files = Directory.GetFiles(path);
             var tager=new Tager(new FileLoader());
-            var mask=new Mask(GetMask());
+            Menu.ShowHelp();
+            var mask=new Mask(Menu.GetUserChoice("mask:"));
             var badFiles=new List<string>();
-            foreach (var file in files.Where(file => file.EndsWith(".mp3")))
+            foreach (var file in files.Where(file => file.ToLower().EndsWith(".mp3")))
             {
                 tager.Load(file);
                 if (!tager.ValidateFileName(mask))
@@ -130,83 +87,62 @@ namespace mp3tager
                     badFiles.Add(file);
                 }
             }
-            Console.ForegroundColor=ConsoleColor.Red;
-            Console.WriteLine("Bad files:");
-            foreach (var badFile in badFiles)
+            if (badFiles.Count == 0)
             {
-                Console.WriteLine(badFile);
+                Menu.ShowMessage("All files is OK");
+                return;
             }
-            Console.ResetColor();
-            Console.WriteLine("Enter 'rename' to rename it");
-            Console.WriteLine("Enter 'ignore' to exit");
-            var userChoice = Console.ReadLine().ToLower();
-            while (userChoice!="rename"||userChoice!="ignore")
+            Menu.PrintCollection("Bad files:",badFiles);
+            var userChoice = "";
+            while (userChoice!="rename"&&userChoice!="ignore")
             {
+                userChoice = Menu.GetUserChoice("Enter 'rename' to rename it\nEnter 'ignore' to exit\n").ToLower();
                 switch (userChoice)
                 {
                     case"ignore":
-                        return;
                         break;
                     case "rename":
+                        var errorFiles=new List<string>();
                         foreach (var badFile in badFiles)
                         {
-                            tager.Load(badFile);
-                            tager.ChangeName(mask);
+                            try
+                            {
+                                tager.Load(badFile);
+                                tager.ChangeName(mask);
+                            }
+                            catch (Exception)
+                            {
+                                
+                                errorFiles.Add(badFile);
+                            }
+                            
                         }
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Successfully");
-                        Console.ResetColor();
-                        Console.WriteLine("Press any key...");
-                        Console.ReadKey();
+                        if (errorFiles.Count == 0)
+                        {
+                           Menu.SuccessMessage();
+                        }
+                        else
+                        {
+                            Menu.PrintCollection(string.Format("{0} files can't be renamed", errorFiles.Count),errorFiles);
+                            Menu.SuccessMessage();
+                        }
                         break;
                     default:
-                        Console.Clear();
-                        ShowError("Incorrect command.\n Available commands: ignore , rename");
-                        Console.ReadKey();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Bad files:");
-                        foreach (var badFile in badFiles)
-                        {
-                            Console.WriteLine(badFile);
-                        }
-                        Console.ResetColor();
-                        Console.WriteLine("Enter 'rename' to rename it");
-                        Console.WriteLine("Enter 'ignore' to exit");
-                        userChoice=Console.ReadLine().ToLower();
+                        Menu.ShowError("Incorrect command.\n Available commands: ignore , rename\n");
+                        Menu.PrintCollection("Bad files:",badFiles);
                         break;
                 }
             }
         }
 
-        public static void ShowCurrentFile(IMp3File file)
-        {
-            if (file == null) return;
-            Console.WriteLine("________________");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Current file:");
-            Console.ResetColor();
-            Console.WriteLine(file.Name+".mp3");
-            Console.WriteLine("________________");
-        }
-        public static string GetPath()
-        {
-            Console.Write("Path:");
-            return Environment.CurrentDirectory + @"\Lol.mp3";
-            return Console.ReadLine();
-        }
-        public static string GetMask()
-        {
-            Console.Write("Mask:");
-            return Console.ReadLine();
-        }
 
         public static Mp3Tags GetTagsFromFileName(IMp3File file)
         {
             if(file==null)
                 throw new ArgumentException("File is not loaded");
             var fileName = file.Name;
-            var mask = new Mask(GetMask());
+            Menu.ShowHelp();
+            var mask = new Mask(Menu.GetUserChoice("mask:"));
             var tagValues = Select(mask.GetTagValuesFromString(fileName));
             var result = new Mp3Tags();
             foreach (var tagValue in tagValues)
@@ -216,71 +152,17 @@ namespace mp3tager
             return result;
         }
 
-        public static void ShowError(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
-            Console.ResetColor();
-            Console.WriteLine("Press any key...");
-            Console.WriteLine("\n\n");
-        }
-
-        public static void ShowMenu()
-        {
-            Console.WriteLine("Available commands:\n1. Load\n2. Save\n3. Changetags\n4. Rename\n5. Analysis\n6. Exit");
-        }
-
-        public static void ShowExample()
-        {
-            Console.Write("Available tags: ");
-            foreach (var tag in Enum.GetValues(typeof(TagList)))
-            {
-                Console.Write(tag+", ");
-            }
-            Console.WriteLine();
-            Console.WriteLine("_______________________");
-            Console.Write("          Example\n_______________________\nMask:\n");
-            //[Touhou] ZUN - Faith is for the Transient People (Sanae's Theme) 2007
-            Console.Write("[Touhou] ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("{Artist}");
-            Console.ResetColor();
-            Console.Write(" - ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("{Title}");
-            Console.ResetColor();
-            Console.Write(" (Sanae's Theme) ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("{Year}");
-            Console.ResetColor();
-            Console.WriteLine();
-            Console.WriteLine("File name:");
-            Console.Write("[Touhou] ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("ZUN");
-            Console.ResetColor();
-            Console.Write(" - ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Faith is for the Transient People");
-            Console.ResetColor();
-            Console.Write(" (Sanae's Theme) ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("2007");
-            Console.ResetColor();
-            Console.WriteLine("\n_______________________\n");
-        }
         public static Dictionary<string,string> Select(List<Dictionary<string, string>> tagValuesList)
         {
-            Console.WriteLine("Select correct tag values:");
+            Menu.ShowInfo("Select correct tag values:");
             Dictionary<string, string> result;
             int index = 0;
             do
             {
                 Console.Clear();
                 result = tagValuesList[index];
-                PrintTagValues(result);
-                Console.WriteLine("{0}/{1}", index+1, tagValuesList.Count);
-                Console.WriteLine("Press enter to select");
+                Menu.PrintTagValues(result);
+                Menu.ShowInfo(string.Format("{0}/{1}", index + 1, tagValuesList.Count) + "\nPress enter to select");
                 if (++index >= tagValuesList.Count)
                     index = 0;
 
@@ -288,13 +170,7 @@ namespace mp3tager
             return result;
         }
 
-        public static void PrintTagValues(Dictionary<string,string> tagValues)
-        {
-            foreach (var tagValue in tagValues)
-            {
-                Console.WriteLine("Tag: "+tagValue.Key+" value: "+tagValue.Value);
-            }
-        }
+       
 
       
      

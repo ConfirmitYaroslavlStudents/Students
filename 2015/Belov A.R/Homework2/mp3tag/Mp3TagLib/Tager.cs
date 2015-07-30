@@ -51,10 +51,11 @@ namespace Mp3TagLib
             var currentTags = _currentFile.GetTags();
             foreach (var item in newNameMask)
             {
-                newName = newName.Replace(item, currentTags.GetTag(item));
+                var tagValue = currentTags.GetTag(item);
+                if(string.IsNullOrEmpty(tagValue))
+                    throw new InvalidOperationException("tag is empty");
+                newName = newName.Replace("{"+item+"}", tagValue);
             }
-            newName=newName.Replace("}","");
-            newName=newName.Replace("{", "");
             _currentFile.ChangeName(newName);
         }
 
@@ -64,23 +65,28 @@ namespace Mp3TagLib
             {
                 var posibleTagValuesFromName = mask.GetTagValuesFromString(_currentFile.Name);
                 var tagsFromFile = _currentFile.GetTags();
-                var fileNameIsOK = false;
+                var fileNameIsOk = false;
                 foreach (var tagValues in posibleTagValuesFromName)
                 {
-                    if (fileNameIsOK)
+                    if (fileNameIsOk)
                         break;
                     foreach (var tagValue in tagValues)
                     {
-
-                        if (tagValue.Value != tagsFromFile.GetTag(tagValue.Key))
+                        var currentTagFromFile = tagsFromFile.GetTag(tagValue.Key);
+                        if (tagValue.Value != currentTagFromFile)
                         {
-                            fileNameIsOK = false;
+                            if (tagValue.Key == "track"&&tagValue.Value.StartsWith("0"))
+                            {
+                                if(tagValue.Value.Substring(1) == currentTagFromFile);
+                                continue;
+                            }
+                            fileNameIsOk = false;
                             break;
                         }
-                        fileNameIsOK = true;
+                        fileNameIsOk = true;
                     }
                 }
-                return fileNameIsOK;
+                return fileNameIsOk;
             }
             catch
             {

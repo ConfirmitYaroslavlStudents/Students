@@ -2,7 +2,7 @@
 
 namespace Mp3Tager
 {
-    class Program
+    internal class Program
     {
         //[TODO] 1. backups of source files + auto restore
         //[TODO] 2. change tags by file name
@@ -10,7 +10,7 @@ namespace Mp3Tager
         // {trackNumber}. {artist} - {song}
         // {trackNumber}{artist} - {song}
         // 1. Pugacheva - Arlekino.mp3
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {

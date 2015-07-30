@@ -14,6 +14,7 @@ namespace Mp3TagTest
             MaskItem item2 = new MaskItem() { Type = MaskItemType.Delimiter,Value = "item" };
             Assert.AreEqual(item1,item2);
         }
+
         [TestMethod]
         public void NotEqualsTest()
         {
@@ -21,11 +22,13 @@ namespace Mp3TagTest
             MaskItem item2 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
             Assert.AreNotEqual(item1, item2);
         }
+
         [TestMethod]
         public void EqualsReturnFalseIfArgIsNull()
         {
            Assert.AreEqual(false,new MaskItem().Equals(null));
         }
+
         [TestMethod]
         public void IfEqualsReturnTrueObjectsHaveSameHash()
         {
@@ -33,6 +36,7 @@ namespace Mp3TagTest
             MaskItem item2 = new MaskItem() { Type = MaskItemType.Delimiter, Value = "item" };
             Assert.AreEqual(item1.GetHashCode(), item2.GetHashCode());
         }
+
         [TestMethod]
         public void IfEqualsReturnTrueObjectsHaveDifferentHash()
         {

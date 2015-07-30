@@ -25,6 +25,7 @@ namespace mp3tager
                         }
                 break;
                     case "changetags":
+                        //[TODO] try catch logic in a single place
                         try
                         {
                             Menu.ShowHelp();
@@ -74,6 +75,8 @@ namespace mp3tager
 
         public static void AnalyzeFolder(string path)
         {
+            //[TODO] SRP vialation
+            //[TODO] need tests
             var files = Directory.GetFiles(path);
             var tager=new Tager(new FileLoader());
             Menu.ShowHelp();

@@ -16,6 +16,7 @@ namespace mp3tager
         {
             get
             {
+                //[TODO] use Path
                 var lastSlashIndex = _file.Name.LastIndexOf(@"\");
                 return _file.Name.Substring(lastSlashIndex + 1, _file.Name.Length - lastSlashIndex - 1-".mp3".Length);
             } 
@@ -23,6 +24,7 @@ namespace mp3tager
 
         public void SetTags(Mp3Tags tags)
         {
+            //[TODO] extract string constants
             var album = tags.GetTag("Album");
             var yearString = tags.GetTag("Year");
             var comment = tags.GetTag("Comment");

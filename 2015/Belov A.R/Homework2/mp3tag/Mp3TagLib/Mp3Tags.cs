@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Mp3TagLib
 {
+    //[TODO] use enum instead of strings in program
     public enum TagList { Title,Artist,Album,Year,Comment,Genre,Track}
     public class Mp3Tags
     {
@@ -16,6 +17,7 @@ namespace Mp3TagLib
         {
             if (name == null)
                 throw new ArgumentException("Bad tag name");
+            //[ToDO] remove switch
             switch (name.ToLower())
             {
                 case "artist":

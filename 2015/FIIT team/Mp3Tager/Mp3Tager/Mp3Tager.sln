@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3LibTests", "Mp3LibTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandCreation", "CommandCreation\CommandCreation.csproj", "{1EF53300-5B6A-4290-9CC1-F8194E72C277}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backuper", "Backuper\Backuper.csproj", "{FB7B6B0B-87AC-410E-8E47-615195855458}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EF53300-5B6A-4290-9CC1-F8194E72C277}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB7B6B0B-87AC-410E-8E47-615195855458}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB7B6B0B-87AC-410E-8E47-615195855458}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB7B6B0B-87AC-410E-8E47-615195855458}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB7B6B0B-87AC-410E-8E47-615195855458}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

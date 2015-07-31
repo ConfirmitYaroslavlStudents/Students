@@ -8,7 +8,8 @@ namespace CommandCreation
         private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {
             {CommandNames.Help, ""},
-            {CommandNames.Rename, @"<path> <pattern>"}
+            {CommandNames.Rename, @"<path> <pattern>"},
+            {CommandNames.ChangeTags, @"<path> <mask>"}
         };
 
         private readonly string _commandForHelp;

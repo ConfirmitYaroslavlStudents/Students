@@ -1,22 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace RetagerLib
+namespace Mp3Handler
 {
     public class TagParser
     {
         public string Pattern { get { return _pattern; } set { _pattern = value + '*'; } }
 
+        public string FileName
+        {
+            get { return _fileName; }
+            set { _fileName = value + '*'; }
+        }
+
         public TagParser(string pattern)
         {
             Pattern = pattern;
-            //todo: replace tag dictionary
-            FillTagDictionary();
         }
 
         public Dictionary<FrameType,string> GetFrames(string fileName)
         {
-            _fileName = fileName+'*';
+            FileName = fileName;
             
             return DeterminateNextTag(0, 0);
         }
@@ -26,7 +30,7 @@ namespace RetagerLib
             var tag = new StringBuilder();
             var value = new StringBuilder();
 
-            while(IndexesAreValid(patternId,fileNameId) && Pattern[patternId]==_fileName[fileNameId]) //Go to first different symbol
+            while(IndexesAreValid(patternId,fileNameId) && Pattern[patternId]==FileName[fileNameId]) //Go to first different symbol
             {
                 patternId++;
                 fileNameId++;
@@ -46,7 +50,7 @@ namespace RetagerLib
                     var frames = fileNameId == _fileName.Length - 1 ? new Dictionary<FrameType, string>() : DeterminateNextTag(patternId, fileNameId);
                     if (frames != null) //If recusive method returned non-null dictionary its actualy end of tag
                     {
-                        frames.Add(_frameTags[tag.ToString()], value.ToString());
+                        frames.Add(Frame.GetEnum(tag.ToString()), value.ToString());
                         return frames;
                     }
                 }
@@ -76,21 +80,9 @@ namespace RetagerLib
             return false;
         }
 
-        private void FillTagDictionary()
-        {
-            _frameTags = new Dictionary<string, FrameType>
-            {
-                {"<al>", FrameType.Album},
-                {"<ar>", FrameType.Artist},
-                {"<ti>", FrameType.Title},
-                {"<tr>", FrameType.Track},
-                {"<ye>", FrameType.Year}
-            };
-        }
-
-        private Dictionary<string,FrameType> _frameTags;
-
         private string _fileName;
+
+        
         private string _pattern;
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using RetagerLib;
+using Mp3Handler;
 
-namespace MP3_tager
+namespace MP3tager
 {
     class Program
     {
@@ -55,7 +55,7 @@ namespace MP3_tager
             switch (args.Length)
             {
                 case 3:
-                    var retager = new TagWorker();
+                    var retager = new Mp3FileProcessor();
                     //var tags = retager.GetTags(args[1]);
                     break;
                 default:
@@ -69,8 +69,8 @@ namespace MP3_tager
             switch (args.Length)
             {
                 case 3:
-                    var retager = new TagWorker();
-                    retager.ReTagFile(args[1],args[2]);
+                    var retager = new Mp3FileProcessor();
+                    retager.RetagFile(args[1],args[2]);
                     break;
                 default:
                     Console.WriteLine(Messeges.RetagmodeHelp);

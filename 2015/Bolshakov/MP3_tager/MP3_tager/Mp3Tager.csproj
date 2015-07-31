@@ -7,7 +7,7 @@
     <ProjectGuid>{446BFE4E-DF2A-443B-B60F-8BB53827FC58}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MP3_tager</RootNamespace>
+    <RootNamespace>MP3tager</RootNamespace>
     <AssemblyName>MP3tager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Retager\Retager.csproj">
+    <ProjectReference Include="..\Retager\Mp3HandlerLib.csproj">
       <Project>{d0db0956-45a9-448b-9ec0-a87b2cd7ae46}</Project>
-      <Name>Retager</Name>
+      <Name>Mp3HandlerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

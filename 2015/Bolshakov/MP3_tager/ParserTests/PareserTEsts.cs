@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RetagerLib;
+using MP3Handler;
 
 namespace Tests
 {

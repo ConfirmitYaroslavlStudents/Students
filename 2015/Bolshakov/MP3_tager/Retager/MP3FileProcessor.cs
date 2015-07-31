@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.IO;
 using Id3;
 
-namespace RetagerLib
+namespace Mp3Handler
 {
-    public class TagWorker
+    public class Mp3FileProcessor
     {
-        public void ReTagFile(string path, string pattern)
+
+        //todo: think about retuning type
+        public bool RetagFile(string path, string pattern)
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException();
             var parsedTags = ParseTags(path, pattern);
             if (parsedTags == null)
-                throw new NotValidPatternException();
+                return false;
             InsertTags(path, parsedTags);
+            return true;
         }
 
-        public void ReNameFile(string path, string pattern)
+        public void RenameFile(string path, string pattern)
         {
-
             if (!File.Exists(path))
                 throw new FileNotFoundException();
-            var tags = GetTags(path);
-            
+            GetTags(path);
         }
 
         private Dictionary<FrameType, string> GetTags(string path)

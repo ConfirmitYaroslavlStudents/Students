@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Retager\Retager.csproj">
+    <ProjectReference Include="..\Retager\Mp3HandlerLib.csproj">
       <Project>{d0db0956-45a9-448b-9ec0-a87b2cd7ae46}</Project>
-      <Name>Retager</Name>
+      <Name>Mp3HandlerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

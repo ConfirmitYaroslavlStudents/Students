@@ -1,4 +1,4 @@
-﻿namespace MP3_tager
+﻿namespace MP3tager
 {
     static class Messeges
     {

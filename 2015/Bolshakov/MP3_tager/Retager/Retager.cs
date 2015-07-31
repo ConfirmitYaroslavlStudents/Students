@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Id3;
 
 namespace RetagerLib
 {
-    public class Retager
+    public class TagWorker
     {
-        public void TagFile(string path, string pattern)
+        public void ReTagFile(string path, string pattern)
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException();
@@ -14,6 +15,48 @@ namespace RetagerLib
             if (parsedTags == null)
                 throw new NotValidPatternException();
             InsertTags(path, parsedTags);
+        }
+
+        public void ReNameFile(string path, string pattern)
+        {
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException();
+            var tags = GetTags(path);
+            
+        }
+
+        private Dictionary<FrameType, string> GetTags(string path)
+        {
+            var mp3File = new Mp3File(path, Mp3Permissions.ReadWrite);
+            var idTag = mp3File.GetTag(Id3TagFamily.FileStartTag);
+
+            var enableTags = GetEmptyTagDictionary();
+            var resultDictionary = new Dictionary<FrameType,string>();
+            foreach (var tag in enableTags)
+            {
+                switch (tag)
+                {
+                    case FrameType.Artist:
+                        resultDictionary.Add(tag,idTag.Artists);
+                        break;
+                    case FrameType.Title:
+                        resultDictionary.Add(tag, idTag.Title);
+                        break;
+                    case FrameType.Album:
+                        resultDictionary.Add(tag, idTag.Album);
+                        break;
+                    case FrameType.Track:
+                        resultDictionary.Add(tag, idTag.Track);
+                        break;
+                    case FrameType.Year:
+                        resultDictionary.Add(tag, idTag.Year);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            return resultDictionary;
         }
 
         private void InsertTags(string path, Dictionary<FrameType, string> tags)
@@ -55,6 +98,18 @@ namespace RetagerLib
             var parser = new TagParser(pattern);
             var frames = parser.GetFrames(clearPath);
             return frames;
+        }
+
+        private List<FrameType> GetEmptyTagDictionary()
+        {
+            return new List<FrameType>
+            {
+                {FrameType.Album},
+                {FrameType.Artist},
+                {FrameType.Title},
+                {FrameType.Track},
+                {FrameType.Year}
+            };
         }
     }
 }

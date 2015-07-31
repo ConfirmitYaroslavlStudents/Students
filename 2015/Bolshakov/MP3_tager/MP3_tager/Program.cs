@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using RetagerLib;
 
 namespace MP3_tager
@@ -21,10 +20,10 @@ namespace MP3_tager
                             Console.WriteLine(Messeges.LongHelp);
                             break;
                         case "retag":
-                            RetagFile(args);
+                            LaunchRetagMode(args);
                             break;
                         case "rename":
-                            RenameFile(args);
+                            LaunchRenameMode(args);
                             break;
                         default:
                             Console.WriteLine(Messeges.InvalidFirsArg);
@@ -51,18 +50,27 @@ namespace MP3_tager
             
         }
 
-        private static void RenameFile(string[] args)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void RetagFile(string[] args)
+        private static void LaunchRenameMode(string[] args)
         {
             switch (args.Length)
             {
                 case 3:
-                    var retager = new Retager();
-                    retager.TagFile(args[1],args[2]);
+                    var retager = new TagWorker();
+                    //var tags = retager.GetTags(args[1]);
+                    break;
+                default:
+                    Console.WriteLine(Messeges.RenamemodeHelp);
+                    break;
+            }
+        }
+
+        private static void LaunchRetagMode(string[] args)
+        {
+            switch (args.Length)
+            {
+                case 3:
+                    var retager = new TagWorker();
+                    retager.ReTagFile(args[1],args[2]);
                     break;
                 default:
                     Console.WriteLine(Messeges.RetagmodeHelp);

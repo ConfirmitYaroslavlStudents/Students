@@ -11,5 +11,6 @@
         //todo: write new messeges
         public static string InvalidFirsArg = "";
         public static string RetagmodeHelp = "";
+        public static string RenamemodeHelp = "";
     }
 }

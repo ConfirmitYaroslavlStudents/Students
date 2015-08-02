@@ -7,7 +7,6 @@ namespace Mp3Handler
 {
     public class Mp3FileProcessor
     {
-
         //todo: think about retuning type
         public bool RetagFile(string path, string pattern)
         {

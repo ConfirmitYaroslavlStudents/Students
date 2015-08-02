@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mp3FileProcessor.cs" />
+    <Compile Include="StrWithCursor.cs" />
     <Compile Include="TagTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagParser.cs" />

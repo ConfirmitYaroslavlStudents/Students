@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="PareserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CursorStringTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retager\Mp3HandlerLib.csproj">

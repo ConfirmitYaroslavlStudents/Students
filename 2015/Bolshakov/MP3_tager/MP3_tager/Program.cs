@@ -39,10 +39,6 @@ namespace MP3tager
             {
                 Console.WriteLine(Messeges.FileNotExist);
             }
-            catch(NotValidPatternException)
-            {
-                Console.WriteLine(Messeges.NotValidPatter);
-            }
             catch(KeyNotFoundException)
             {
                 Console.WriteLine(Messeges.KeyNotFound);

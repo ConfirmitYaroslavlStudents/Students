@@ -6,18 +6,18 @@ namespace mp3lib
 {
 	public class Mp3FileNameChanger
 	{
-		private Mp3File Mp3File { get; set; }
+		private IMp3File Mp3File { get; }
 
 		private readonly DataExtracter _dataExtracter;
 
-		public Mp3FileNameChanger(Mp3File file, string mask)
+		public Mp3FileNameChanger(IMp3File file, string mask)
 		{
 			Mp3File = file;
 
 			_dataExtracter = new DataExtracter(mask);
 		}
 
-        //[TODO] tests
+        //TODO: tests
 		public void ChangeFileName()
 		{
 			var tags = _dataExtracter.GetTags();

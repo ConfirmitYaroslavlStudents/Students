@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using mp3lib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

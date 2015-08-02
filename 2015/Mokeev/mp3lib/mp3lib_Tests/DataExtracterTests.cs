@@ -9,7 +9,6 @@ namespace mp3lib_Tests
 	[TestClass]
 	public class DataExtracterTests
 	{
-        //[TODO] need tests {READY}
 		[TestMethod]
 		public void Test_GetTags()
 		{

@@ -6,24 +6,16 @@ using Id3.Frames;
 
 namespace mp3lib
 {
-	public class Mp3File
-	{
+	public class Mp3File : IMp3File
+    {
 		private Mp3Stream mp3File { get; set; }
 		public string FilePath { get; private set; }
 		private Id3Tag Tags { get; set; }
 
-		public string Title
-		{
-			get
-			{
-				return Tags.Title;
-			}
-			set { Tags.Title.Value = value; Set(); }
-		}
-
+		public string Title { get { return Tags.Title; } set { Tags.Title.Value = value; Set(); } }
 		public string Artist { get { return Tags.Artists; } set { Tags.Artists.TextValue = value; Set(); } }
 		public string Album { get { return Tags.Album; } set { Tags.Album.Value = value; Set(); } }
-		public int? Year { get { return Tags.Year.Value; } set { Tags.Year.Value = value; Set(); } }
+		public string Year { get { return Tags.Year.Value.ToString(); } set { Tags.Year.Value = Convert.ToInt32(value); Set(); } }
 		public string Comment { get { return Tags.Comments.ToString(); } set { Tags.Comments.Clear(); Tags.Comments.Add(new CommentFrame(){Comment = value}); Set(); } }
 		public ushort TrackId { get { return Convert.ToUInt16(Tags.Track.TrackCount); } set { Tags.Track.Value = value; Set(); } }
 		public ushort Genre { get { return Convert.ToUInt16(Tags.Genre); }  set { Tags.Genre.Value = value.ToString(); Set(); } }

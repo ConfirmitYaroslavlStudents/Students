@@ -6,7 +6,7 @@ namespace mp3lib
 {
 	public class ArgsManager
 	{
-		private string[] Args { get; set; }
+		private string[] Args { get; }
 
 		public ArgsManager(string[] args)
 		{

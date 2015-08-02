@@ -4,9 +4,6 @@ using System.IO;
 using System.Linq;
 using mp3lib;
 
-//[TODO] introduce class for args {READY}
-//[TODO] extract arguments parsing {READY}
-
 namespace ConsoleMp3TagEditor
 {
 	public static class Program
@@ -24,12 +21,18 @@ namespace ConsoleMp3TagEditor
 				switch (data.Action)
 				{
 					case ProgramAction.Analyse:
-						var pathAnalyser = new Mp3FileAnalyser(Directory.GetFiles(data.Path, "*.mp3"), data.Mask);
+                        var mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file)).Cast<IMp3File>().ToArray();
+				        var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
                         var differences = pathAnalyser.FindDifferences();
                         foreach (var file in differences)
 				        {
-				            Console.WriteLine(file);
+				            Console.WriteLine("This file has differences: {0}", file.File);
+				            foreach (var diff in file.Diffs)
+				            {
+                                Console.WriteLine("{0} in File Name: {1}", diff.Key, diff.Value.FileNameValue);
+                                Console.WriteLine("{0} in Tags: {1}", diff.Key, diff.Value.TagValue);
+                            }
 				        }
 
                         break;

@@ -7,15 +7,14 @@ using System.Text.RegularExpressions;
 
 namespace mp3lib
 {
-    //[TODO] extract classes
 	public class Mp3TagChanger
 	{
 		private string Mp3RealName { get; set; }
-		private Mp3File Mp3 { get; set; }
+		private IMp3File Mp3 { get; set; }
 
 		private readonly DataExtracter _dataExtracter;
 
-		public Mp3TagChanger(Mp3File mp3File, string mask)
+		public Mp3TagChanger(IMp3File mp3File, string mask)
 		{
 			Mp3 = mp3File;
 
@@ -23,7 +22,7 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 		}
 
-        //[TODO] tests
+        //TODO: tests
 		public void ChangeTags()
 		{
 			var tags = _dataExtracter.GetTags();
@@ -58,7 +57,7 @@ namespace mp3lib
 						Mp3.Genre = Convert.ToUInt16(item.Value);
 						break;
 					case TagType.Year:
-						Mp3.Year = Convert.ToUInt16(item.Value);
+						Mp3.Year = item.Value;
 						break;
 					case TagType.Comment:
 						Mp3.Comment = item.Value;

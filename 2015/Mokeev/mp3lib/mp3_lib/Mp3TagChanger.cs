@@ -28,9 +28,7 @@ namespace mp3lib
 			var tags = _dataExtracter.GetTags();
 			var prefixesQueue = _dataExtracter.FindAllPrefixes(tags);
 
-			var mp3Name = new StringBuilder(Mp3RealName);
-
-			var data = _dataExtracter.GetFullDataFromString(prefixesQueue, mp3Name, tags);
+			var data = _dataExtracter.GetFullDataFromString(prefixesQueue, Mp3RealName, tags);
 
 			ChangeMp3Tags(data);
 		}
@@ -45,7 +43,7 @@ namespace mp3lib
 						Mp3.Artist = item.Value;
 						break;
 					case TagType.Id:
-						Mp3.TrackId = Convert.ToUInt16(item.Value);
+						Mp3.TrackId = item.Value;
 						break;
 					case TagType.Title:
 						Mp3.Title = item.Value;
@@ -54,7 +52,7 @@ namespace mp3lib
 						Mp3.Album = item.Value;
 						break;
 					case TagType.Genre:
-						Mp3.Genre = Convert.ToUInt16(item.Value);
+						Mp3.Genre = item.Value;
 						break;
 					case TagType.Year:
 						Mp3.Year = item.Value;

@@ -83,9 +83,11 @@ namespace mp3lib
 			return prefixesQueue;
 		}
 
-		public Dictionary<TagType, string> GetFullDataFromString(Queue<string> prefixesQueue, StringBuilder mp3Name, Queue<TagType> tags)
+		public Dictionary<TagType, string> GetFullDataFromString(Queue<string> prefixesQueue, string mp3NameString, Queue<TagType> tags)
 		{
-			var prefixes = prefixesQueue.ToArray();
+            var mp3Name = new StringBuilder(mp3NameString);
+
+            var prefixes = prefixesQueue.ToArray();
 			for (var i = 1; i < prefixes.Length; i++)
 			{
 				var prefix = prefixes[i];

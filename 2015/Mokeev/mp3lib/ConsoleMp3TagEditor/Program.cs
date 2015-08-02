@@ -27,10 +27,10 @@ namespace ConsoleMp3TagEditor
                         var differences = pathAnalyser.FindDifferences();
                         foreach (var file in differences)
 				        {
-				            Console.WriteLine("This file has differences: {0}", file.File);
+				            Console.WriteLine("This file has differences: {0}", file.Mp3File);
 				            foreach (var diff in file.Diffs)
 				            {
-                                Console.WriteLine("{0} in File Name: {1}", diff.Key, diff.Value.FileNameValue);
+                                Console.WriteLine("{0} in Mp3File Name: {1}", diff.Key, diff.Value.FileNameValue);
                                 Console.WriteLine("{0} in Tags: {1}", diff.Key, diff.Value.TagValue);
                             }
 				        }

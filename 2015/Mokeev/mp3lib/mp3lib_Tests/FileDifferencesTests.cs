@@ -11,10 +11,13 @@ namespace mp3lib_Tests
         private FileDifferences _fileDiff;
         private Diff _d1;
         private Diff _d2;
+        private TestMp3File mp3File;
+
         [TestInitialize]
         public void TestInit()
         {
-            _fileDiff = new FileDifferences("/test");
+            mp3File = new TestMp3File("/test");
+            _fileDiff = new FileDifferences(mp3File);
             _d1 = new Diff { FileNameValue = "1", TagValue = "2" };
             _d2 = new Diff { FileNameValue = "art1", TagValue = "art2" };
             _fileDiff.Add(TagType.Id, _d1);
@@ -36,7 +39,7 @@ namespace mp3lib_Tests
         [TestMethod]
         public void Test_Path()
         {
-           Assert.AreEqual("/test", _fileDiff.File);
+           Assert.AreEqual(mp3File, _fileDiff.Mp3File);
         }
     }
 }

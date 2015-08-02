@@ -62,7 +62,7 @@ namespace mp3lib_Tests
 			var tags = extracter.GetTags();
 			var prefixes = extracter.FindAllPrefixes(tags);
 
-			var data = extracter.GetFullDataFromString(prefixes, new StringBuilder("10. test artist - test song name"), tags);
+			var data = extracter.GetFullDataFromString(prefixes, "10. test artist - test song name", tags);
 
 			var expected = new Dictionary<TagType, string> {{TagType.Id, "10"}, {TagType.Artist, "test artist"}, {TagType.Title, "test song name"}};
 
@@ -77,7 +77,7 @@ namespace mp3lib_Tests
 			var tags = extracter.GetTags();
 			var prefixes = extracter.FindAllPrefixes(tags);
 
-			var data = extracter.GetFullDataFromString(prefixes, new StringBuilder("10. test artist - test song name"), tags);
+			var data = extracter.GetFullDataFromString(prefixes, "10. test artist - test song name", tags);
 		}
 	}
 }

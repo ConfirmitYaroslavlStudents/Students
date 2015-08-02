@@ -59,6 +59,7 @@
     <Compile Include="DiffTests.cs" />
     <Compile Include="FileDifferencesTests.cs" />
     <Compile Include="Mp3FileAnalyserTests.cs" />
+    <Compile Include="TestMp3File.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mp3_lib\mp3lib.csproj">

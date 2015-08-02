@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -27,14 +28,19 @@ namespace mp3lib
 		        var tags = extracter.GetTags();
 		        var prefixes = extracter.FindAllPrefixes(tags);
 		        var diffs = new FileDifferences(mp3);
-		        var data = extracter.GetFullDataFromString(prefixes, new StringBuilder(mp3.FilePath), tags);
+		        var data = extracter.GetFullDataFromString(prefixes, Path.GetFileNameWithoutExtension(mp3.FilePath), tags);
 
-		        foreach (var item in data.Where(item => mp3Data[item.Key] != item.Value))
+		        var differenceItems = data.Where(item => mp3Data[item.Key] != item.Value).ToArray();
+
+                if (!differenceItems.Any()) continue;
+		        
+                foreach (var item in differenceItems)
 		        {
-		            list.Add(diffs);
 		            diffs.Add(item.Key, new Diff {FileNameValue = item.Value, TagValue = mp3Data[item.Key]});
 		        }
-		    }
+
+                list.Add(diffs);
+            }
 
 		    return list.ToArray();
 		}

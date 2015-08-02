@@ -4,12 +4,12 @@ namespace mp3lib
 {
     public class FileDifferences
     {
-        public IMp3File File { get; private set; }
+        public IMp3File Mp3File { get; private set; }
         public Dictionary<TagType, Diff> Diffs { get; }
 
-        public FileDifferences(IMp3File file)
+        public FileDifferences(IMp3File mp3File)
         {
-            File = file;
+            Mp3File = mp3File;
             Diffs = new Dictionary<TagType, Diff>();
         }
 

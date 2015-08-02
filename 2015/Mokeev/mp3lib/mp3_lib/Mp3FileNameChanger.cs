@@ -26,7 +26,7 @@ namespace mp3lib
 
 			foreach (var tag in tags.Where(tag => string.IsNullOrWhiteSpace(id3Data[tag])))
 			{
-				throw new Exception("MP3 File hasn't tag " + tag);
+				throw new Exception("MP3 Mp3File hasn't tag " + tag);
 			}
 
 			var resultFileName = new StringBuilder(_dataExtracter.Mask);

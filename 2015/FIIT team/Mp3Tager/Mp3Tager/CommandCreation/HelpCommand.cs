@@ -8,16 +8,19 @@ namespace CommandCreation
         private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {
             {CommandNames.Help, ""},
-            {CommandNames.Rename, @"<path> <pattern>"}
+            {CommandNames.Rename, @"<path> <pattern>"},
+            {CommandNames.ChangeTags, @"<path> <mask>"}
         };
-
-        private new static readonly int[] NumberOfArguments = {1, 2};
-        private new static readonly string CommandName = CommandNames.Help;
 
         private readonly string _commandForHelp;
 
+        protected override sealed int[] NumberOfArguments { get; set; }
+        protected override sealed string CommandName { get; set; }
+
         public HelpCommand(string[] args)
         {
+            NumberOfArguments = new[] { 1, 2 };
+            CommandName = CommandNames.Help;
             CheckIfCanBeExecuted(args);
             _commandForHelp = args.Length == 2 ? args[1] : null;
         }
@@ -39,9 +42,5 @@ namespace CommandCreation
                     : "There is no such command!");
             }
         }
-
-
-
-        
     }
 }

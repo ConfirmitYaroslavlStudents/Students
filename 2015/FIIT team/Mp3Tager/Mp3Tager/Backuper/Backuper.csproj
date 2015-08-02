@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1EF53300-5B6A-4290-9CC1-F8194E72C277}</ProjectGuid>
+    <ProjectGuid>{FB7B6B0B-87AC-410E-8E47-615195855458}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommandCreation</RootNamespace>
-    <AssemblyName>CommandCreation</AssemblyName>
+    <RootNamespace>Backuper</RootNamespace>
+    <AssemblyName>Backuper</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,12 +23,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -39,19 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeTagsCommand.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandFactory.cs" />
-    <Compile Include="CommandNames.cs" />
-    <Compile Include="HelpCommand.cs" />
+    <Compile Include="Backuper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RenameCommand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
-      <Project>{33d3f509-bb12-4033-a44c-9baf5c4f3bac}</Project>
-      <Name>Mp3Lib</Name>
-    </ProjectReference>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

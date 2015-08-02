@@ -6,9 +6,9 @@ namespace CommandCreation
     public abstract class Command
     {
         public abstract void Execute();
-        protected readonly int[] NumberOfArguments;
-        protected readonly string CommandName; 
-        
+        protected abstract int[] NumberOfArguments { get; set; }
+        protected abstract string CommandName { get; set; }
+
         protected void CheckIfCanBeExecuted(string[] args)
         {
             if (args == null)

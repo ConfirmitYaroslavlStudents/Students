@@ -1,0 +1,6 @@
+D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.exe.config
+D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.exe
+D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.pdb
+D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
+D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.exe
+D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.pdb

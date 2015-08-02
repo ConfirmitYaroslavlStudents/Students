@@ -15,6 +15,8 @@ namespace CommandCreation
                     return new HelpCommand(args);
                 case CommandNames.Rename:
                     return new RenameCommand(args);
+                case CommandNames.ChangeTags:
+                    return new ChangeTagsCommand(args);
                 default:
                     throw new InvalidDataException("There is no such command");
             }

@@ -21,21 +21,21 @@ namespace ConsoleMp3TagEditor
 				switch (data.Action)
 				{
 					case ProgramAction.Analyse:
-                        var mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file)).Cast<IMp3File>().ToArray();
-				        var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
+						var mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file)).Cast<IMp3File>().ToArray();
+						var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
-                        var differences = pathAnalyser.FindDifferences();
-                        foreach (var file in differences)
-				        {
-				            Console.WriteLine("This file has differences: {0}", file.Mp3File);
-				            foreach (var diff in file.Diffs)
-				            {
-                                Console.WriteLine("{0} in Mp3File Name: {1}", diff.Key, diff.Value.FileNameValue);
-                                Console.WriteLine("{0} in Tags: {1}", diff.Key, diff.Value.TagValue);
-                            }
-				        }
+						var differences = pathAnalyser.FindDifferences();
+						foreach (var file in differences)
+						{
+							Console.WriteLine("This file has differences: {0}", file.Mp3File);
+							foreach (var diff in file.Diffs)
+							{
+								Console.WriteLine("{0} in Mp3File Name: {1}", diff.Key, diff.Value.FileNameValue);
+								Console.WriteLine("{0} in Tags: {1}", diff.Key, diff.Value.TagValue);
+							}
+						}
 
-                        break;
+						break;
 
 					case ProgramAction.Mp3Edit:
 						mp3 = new Mp3File(data.Path);
@@ -56,15 +56,15 @@ namespace ConsoleMp3TagEditor
 			}
 			catch (Exception e)
 			{
-			#if DEBUG
-				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}",e.Message, e.StackTrace);
-			#else
+#if DEBUG
+				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}", e.Message, e.StackTrace);
+#else
 				Console.WriteLine("{0}",e.Message);
-			#endif
+#endif
 			}
 		}
 
-		
+
 
 	}
 }

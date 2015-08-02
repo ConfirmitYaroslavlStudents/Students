@@ -17,11 +17,11 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 		}
 
-        //TODO: tests
+		//TODO: tests
 		public void ChangeFileName()
 		{
 			var tags = _dataExtracter.GetTags();
-			
+
 			var id3Data = Mp3File.GetId3Data();
 
 			foreach (var tag in tags.Where(tag => string.IsNullOrWhiteSpace(id3Data[tag])))
@@ -33,7 +33,7 @@ namespace mp3lib
 
 			foreach (var tag in tags)
 			{
-				resultFileName.Replace("{"+tag+"}", id3Data[tag]);
+				resultFileName.Replace("{" + tag + "}", id3Data[tag]);
 			}
 
 		}

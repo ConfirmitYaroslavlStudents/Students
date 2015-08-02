@@ -4,8 +4,8 @@ namespace mp3lib
 	{
 		Artist,
 		Id,
-		Title, 
-		Album, 
+		Title,
+		Album,
 		Genre,
 		Year,
 		Comment

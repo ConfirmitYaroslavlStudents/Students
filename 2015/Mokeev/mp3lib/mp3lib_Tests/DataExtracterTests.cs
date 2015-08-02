@@ -33,7 +33,7 @@ namespace mp3lib_Tests
 		{
 			var extracter = new DataExtracter("-this-is-{artist}-prefix-{title}");
 			var prefixes = extracter.FindAllPrefixes(extracter.GetTags());
-			
+
 			var expected = new Queue<string>();
 			expected.Enqueue("-this-is-");
 			expected.Enqueue("-prefix-");
@@ -47,7 +47,7 @@ namespace mp3lib_Tests
 		{
 			var extracter = new DataExtracter("-this-is-{aaaa}-prefix-{id}");
 			var prefixes = extracter.FindAllPrefixes(extracter.GetTags());
-			
+
 			var expected = new Queue<string>();
 			expected.Enqueue("-this-is-");
 			expected.Enqueue("-prefix-");
@@ -64,7 +64,7 @@ namespace mp3lib_Tests
 
 			var data = extracter.GetFullDataFromString(prefixes, "10. test artist - test song name", tags);
 
-			var expected = new Dictionary<TagType, string> {{TagType.Id, "10"}, {TagType.Artist, "test artist"}, {TagType.Title, "test song name"}};
+			var expected = new Dictionary<TagType, string> { { TagType.Id, "10" }, { TagType.Artist, "test artist" }, { TagType.Title, "test song name" } };
 
 			CollectionAssert.AreEqual(expected, data);
 		}

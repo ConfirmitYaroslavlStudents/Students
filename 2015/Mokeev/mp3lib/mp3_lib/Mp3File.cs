@@ -7,7 +7,7 @@ using Id3.Frames;
 namespace mp3lib
 {
 	public class Mp3File : IMp3File
-    {
+	{
 		private Mp3Stream Mp3FileStream { get; }
 		public string FilePath { get; }
 		private Id3Tag Tags { get; }
@@ -16,9 +16,9 @@ namespace mp3lib
 		public string Artist { get { return Tags.Artists; } set { Tags.Artists.TextValue = value; Set(); } }
 		public string Album { get { return Tags.Album; } set { Tags.Album.Value = value; Set(); } }
 		public string Year { get { return Tags.Year.Value.ToString(); } set { Tags.Year.Value = Convert.ToInt32(value); Set(); } }
-		public string Comment { get { return Tags.Comments.ToString(); } set { Tags.Comments.Clear(); Tags.Comments.Add(new CommentFrame(){Comment = value}); Set(); } }
+		public string Comment { get { return Tags.Comments.ToString(); } set { Tags.Comments.Clear(); Tags.Comments.Add(new CommentFrame() { Comment = value }); Set(); } }
 		public string TrackId { get { return Tags.Track.TrackCount.ToString(); } set { Tags.Track.Value = Convert.ToInt32(value); Set(); } }
-		public string Genre { get { return Tags.Genre; }  set { Tags.Genre.Value = value; Set(); } }
+		public string Genre { get { return Tags.Genre; } set { Tags.Genre.Value = value; Set(); } }
 
 		public Mp3File(string file)
 		{

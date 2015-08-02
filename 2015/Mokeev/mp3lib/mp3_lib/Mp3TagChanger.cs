@@ -22,7 +22,7 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 		}
 
-        //TODO: tests
+		//TODO: tests
 		public void ChangeTags()
 		{
 			var tags = _dataExtracter.GetTags();

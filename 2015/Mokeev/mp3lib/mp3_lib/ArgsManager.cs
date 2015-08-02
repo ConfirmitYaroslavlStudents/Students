@@ -6,6 +6,18 @@ namespace mp3lib
 {
 	public class ArgsManager
 	{
+		//=========IMPORTANT CONSTANTS===========
+		private const string PATH = "-path";
+		private const string MASK = "-mask";
+		private const string ACTION = "-action";
+		//--------------------------------------
+		private const string ActionAnalyse = "analyse";
+		private const string ActionFileRename = "file-rename";
+		private const string ActionChangeTags = "change-tags";
+		//======================================
+
+
+
 		private string[] Args { get; }
 
 		public ArgsManager(string[] args)
@@ -32,25 +44,25 @@ namespace mp3lib
 			{
 				switch (arg)
 				{
-					case "-path":
+					case PATH:
 						hasFilePath = true;
 						break;
-					case "-mask":
+					case MASK:
 						hasMask = true;
 						break;
-					case "-action":
+					case ACTION:
 						setAction = true;
-                        break;
+						break;
 				}
 
-				var argCount = Args.Where(x=> x == arg).ToArray().Count();
-                if (argCount > 1) throw new ArgumentException("Wrong arg [" + arg + "] count! It's: "+ argCount);
+				var argCount = Args.Where(x => x == arg).ToArray().Count();
+				if (argCount > 1) throw new ArgumentException("Wrong arg [" + arg + "] count! It's: " + argCount);
 			}
 
 			var hasValidArgs = hasMask && hasFilePath && setAction;
 			if (!hasValidArgs)
 			{
-				if(!setAction) throw new ArgumentException("You don't set your action!");
+				if (!setAction) throw new ArgumentException("You don't set your action!");
 
 				if (!hasMask && !hasFilePath)
 				{
@@ -67,17 +79,17 @@ namespace mp3lib
 
 			for (var i = 0; i < Args.Length; i++)
 			{
-				if (Args[i] == "-path"		&& i + 1 < Args.Length && Args[i + 1] == "-mask"	||
-				    Args[i] == "-mask"		&& i + 1 < Args.Length && Args[i + 1] == "-path" ||
-					Args[i] == "-path"		&& i + 1 < Args.Length && Args[i + 1] == "-action"	||
-					Args[i] == "-action"	&& i + 1 < Args.Length && Args[i + 1] == "-path" ||
-					Args[i] == "-action"	&& i + 1 < Args.Length && Args[i + 1] == "-mask"	||
-					Args[i] == "-mask"		&& i + 1 < Args.Length && Args[i + 1] == "-action"	  )
+				if (Args[i] == PATH		&& i + 1 < Args.Length && Args[i + 1] == MASK	||
+					Args[i] == MASK		&& i + 1 < Args.Length && Args[i + 1] == PATH	||
+					Args[i] == PATH		&& i + 1 < Args.Length && Args[i + 1] == ACTION ||
+					Args[i] == ACTION	&& i + 1 < Args.Length && Args[i + 1] == PATH	||
+					Args[i] == ACTION	&& i + 1 < Args.Length && Args[i + 1] == MASK	||
+					Args[i] == MASK		&& i + 1 < Args.Length && Args[i + 1] == ACTION	  )
 				{
 					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}
 
-				if ( (Args[i] == "-path" || Args[i] == "-mask" || Args[i] == "-action") && (i + 1 >= Args.Length) )
+				if ((Args[i] == PATH || Args[i] == MASK || Args[i] == ACTION) && (i + 1 >= Args.Length))
 				{
 					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}
@@ -108,22 +120,22 @@ namespace mp3lib
 
 			ProgramAction action;
 
-			switch (data["-action"])
+			switch (data[ACTION])
 			{
-				case "analyse":
+				case ActionAnalyse:
 					action = ProgramAction.Analyse;
 					break;
-				case "file-rename":
+				case ActionFileRename:
 					action = ProgramAction.FileRename;
 					break;
-				case "change-tags":
+				case ActionChangeTags:
 					action = ProgramAction.Mp3Edit;
 					break;
 				default:
-					throw new ArgumentException("action can be [analyse|file-rename|change-tags]");
+					throw new ArgumentException("-action can be [analyse|file-rename|change-tags]");
 			}
 
-			return new Args(data["-path"], data["-mask"], action);
+			return new Args(data[PATH], data[MASK], action);
 		}
 
 	}

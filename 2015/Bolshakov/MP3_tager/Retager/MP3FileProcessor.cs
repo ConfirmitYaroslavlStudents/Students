@@ -13,10 +13,7 @@ namespace Mp3Handler
 
         public Mp3FileProcessor(string filePath)
         {
-            if(File.Exists(filePath))
-                _fileHandler = new Id3LibFileHandler(filePath);
-            else
-                throw new ArgumentException();
+            _fileHandler = new Id3LibFileHandler(filePath);
         }
 
         public bool RetagFile(string pattern)

@@ -10,6 +10,8 @@ namespace Mp3Handler
     {
         public Id3LibFileHandler(string path)
         {
+            if(!File.Exists(path))
+                throw new FileNotFoundException();
             if(Path.GetExtension(path)!=".mp3")
                 throw new ArgumentException("Not mp3 file");
             FilePath = path;
@@ -76,9 +78,16 @@ namespace Mp3Handler
 
         public void Rename(string newName)
         {
-            throw new NotImplementedException();
+            _mp3File.Dispose();
+            var newFilePath = FilePath.Replace(FileName + ".mp3", newName + ".mp3");
+            if(File.Exists(newFilePath))
+                throw new Exception("File exist");
+            File.Move(FilePath,newFilePath);
+            FilePath = newFilePath;
+            FileName = newName;
+            _mp3File = new Mp3File(FilePath,Mp3Permissions.ReadWrite);
         }
 
-        private readonly Mp3File _mp3File;
+        private Mp3File _mp3File;
     }
 }

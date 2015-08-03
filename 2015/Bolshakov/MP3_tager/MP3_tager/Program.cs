@@ -52,7 +52,7 @@ namespace MP3tager
             {
                 case 3:
                     var retager = new Mp3FileProcessor(args[1]);
-                    //var tags = retager.GetTags(args[1]);
+                    retager.RenameFile(args[2]);
                     break;
                 default:
                     Console.WriteLine(Messeges.RenamemodeHelp);

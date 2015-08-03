@@ -47,19 +47,35 @@ namespace Tests
             Assert.AreEqual(title, frames[FrameType.Title]);
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(KeyNotFoundException))]
-        //public void NotExistingTagException()
-        //{
-        //    var parser = new TagParser("<a>");
-        //    var frames = parser.GetFrames("msg");
-        //}
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void NotExistingTagException()
+        {
+            var parser = new TagParser("<a>");
+            var frames = parser.GetFrames("msg");
+        }
 
         [TestMethod]
         public void NotCorrectPattern()
         {
             var parser = new TagParser("<ar><al>");
             Assert.AreEqual(null, parser.GetFrames("msg"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void NotCompleteTag()
+        {
+            var parser = new TagParser("<ar");
+            parser.GetFrames("msg");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void NotCompleteTag2()
+        {
+            var parser = new TagParser("<ar s <ti>");
+            parser.GetFrames("m s g");
         }
     }
 }

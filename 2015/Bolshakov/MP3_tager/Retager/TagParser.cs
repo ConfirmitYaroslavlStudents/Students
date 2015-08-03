@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace Mp3Handler
@@ -73,7 +72,6 @@ namespace Mp3Handler
             }
 
             frames = null;
-            return;
         }
 
         private void DeterminateTag(StrWithCursor pattern, StringBuilder tag)
@@ -86,12 +84,6 @@ namespace Mp3Handler
             while (pattern != '>' && pattern != '*');
             tag.Append(pattern.Value);
             pattern++;
-        }
-
-        private bool IndexesAreValid(int patternIndex, int fileNameIndex)
-        {
-            if (patternIndex < Pattern.Length && fileNameIndex < _fileName.Length) return true;
-            return false;
         }
 
         private string _fileName;

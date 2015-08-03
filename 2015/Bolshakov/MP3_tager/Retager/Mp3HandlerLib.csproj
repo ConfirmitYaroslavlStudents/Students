@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Id3LibFileHandler.cs" />
+    <Compile Include="IFileHandler.cs" />
     <Compile Include="Mp3FileProcessor.cs" />
     <Compile Include="StrWithCursor.cs" />
     <Compile Include="TagTypes.cs" />

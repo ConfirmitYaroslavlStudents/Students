@@ -51,7 +51,7 @@ namespace MP3tager
             switch (args.Length)
             {
                 case 3:
-                    var retager = new Mp3FileProcessor();
+                    var retager = new Mp3FileProcessor(args[1]);
                     //var tags = retager.GetTags(args[1]);
                     break;
                 default:
@@ -65,8 +65,8 @@ namespace MP3tager
             switch (args.Length)
             {
                 case 3:
-                    var retager = new Mp3FileProcessor();
-                    retager.RetagFile(args[1],args[2]);
+                    var retager = new Mp3FileProcessor(args[1]);
+                    retager.RetagFile(args[2]);
                     break;
                 default:
                     Console.WriteLine(Messeges.RetagmodeHelp);

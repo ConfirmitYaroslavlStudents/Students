@@ -1,115 +1,139 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using Id3;
+using System.Text;
 
 namespace Mp3Handler
 {
     public class Mp3FileProcessor
     {
-        //todo: think about retuning type
-        public bool RetagFile(string path, string pattern)
+        public Mp3FileProcessor(IFileHandler fileHandler)
         {
-            if (!File.Exists(path))
-                throw new FileNotFoundException();
-            var parsedTags = ParseTags(path, pattern);
+            _fileHandler = fileHandler;
+        }
+
+        public Mp3FileProcessor(string filePath)
+        {
+            if(File.Exists(filePath))
+                _fileHandler = new Id3LibFileHandler(filePath);
+            else
+                throw new ArgumentException();
+        }
+
+        public bool RetagFile(string pattern)
+        {
+            var parser = new TagParser(pattern);
+            var parsedTags = parser.GetFrames(_fileHandler.FileName);
             if (parsedTags == null)
                 return false;
-            InsertTags(path, parsedTags);
+            _fileHandler.SetTags(parsedTags);
             return true;
         }
 
-        public void RenameFile(string path, string pattern)
+        public bool RenameFile(string pattern)
         {
-            if (!File.Exists(path))
-                throw new FileNotFoundException();
-            GetTags(path);
-        }
-
-        private Dictionary<FrameType, string> GetTags(string path)
-        {
-            var mp3File = new Mp3File(path, Mp3Permissions.ReadWrite);
-            var idTag = mp3File.GetTag(Id3TagFamily.FileStartTag);
-
-            var enableTags = GetEmptyTagDictionary();
-            var resultDictionary = new Dictionary<FrameType,string>();
-            foreach (var tag in enableTags)
+            var fileTags = _fileHandler.GetTags();
+            var newFileName = new StringBuilder(pattern);
+            foreach (var fileTag in fileTags)
             {
-                switch (tag)
-                {
-                    case FrameType.Artist:
-                        resultDictionary.Add(tag,idTag.Artists);
-                        break;
-                    case FrameType.Title:
-                        resultDictionary.Add(tag, idTag.Title);
-                        break;
-                    case FrameType.Album:
-                        resultDictionary.Add(tag, idTag.Album);
-                        break;
-                    case FrameType.Track:
-                        resultDictionary.Add(tag, idTag.Track);
-                        break;
-                    case FrameType.Year:
-                        resultDictionary.Add(tag, idTag.Year);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                newFileName.Replace(Frame.GetString(fileTag.Key), fileTag.Value);
             }
-            return resultDictionary;
+            if (newFileName.Length != newFileName.Replace("<", "").Length)
+                return false;
+            _fileHandler.Rename(newFileName.ToString());
+            return true;
         }
 
-        private void InsertTags(string path, Dictionary<FrameType, string> tags)
+        public bool Difference(string pattern)
         {
-            var mp3File = new Mp3File(path, Mp3Permissions.ReadWrite);
-            var idTag = mp3File.GetTag(Id3TagFamily.FileStartTag);
-            foreach (var item in tags)
-            {
-                switch (item.Key)
-                {
-                    #region Boring cases
-                    case FrameType.Artist:
-                        idTag.Artists.Values.Clear();
-                        idTag.Artists.Value = item.Value;
-                        break;
-                    case FrameType.Title:
-                        idTag.Title.Value = item.Value;
-                        break;
-                    case FrameType.Album:
-                        idTag.Album.Value = item.Value;
-                        break;
-                    case FrameType.Track:
-                        idTag.Track.Value = item.Value;
-                        break;
-                    case FrameType.Year:
-                        idTag.Year.Value = item.Value;
-                        break;
-                        #endregion
-                }
-            }
-            mp3File.WriteTag(idTag, new WriteConflictAction());
-            mp3File.Dispose();
-        }
-
-        private Dictionary<FrameType, string> ParseTags(string path, string pattern)
-        {
-            var clearPath = Path.GetFileNameWithoutExtension(path);
-
+            return false;
+            throw new NotImplementedException();
             var parser = new TagParser(pattern);
-            var frames = parser.GetFrames(clearPath);
-            return frames;
+            var parsedTags = parser.GetFrames(_fileHandler.FileName);
+
+            if (parsedTags == null)
+                return false;
         }
 
-        private List<FrameType> GetEmptyTagDictionary()
+        public bool Synchronize(string pattern)
         {
-            return new List<FrameType>
-            {
-                {FrameType.Album},
-                {FrameType.Artist},
-                {FrameType.Title},
-                {FrameType.Track},
-                {FrameType.Year}
-            };
+            return false;
         }
+
+#region old
+        //private Dictionary<FrameType, string> GetTags(string path)
+        //{
+        //    var enableTags = GetEmptyTagDictionary();
+        //    var resultDictionary = new Dictionary<FrameType,string>();
+        //    foreach (var tag in enableTags)
+        //    {
+        //        switch (tag)
+        //        {
+        //            case FrameType.Artist:
+        //                resultDictionary.Add(tag,idTag.Artists);
+        //                break;
+        //            case FrameType.Title:
+        //                resultDictionary.Add(tag, idTag.Title);
+        //                break;
+        //            case FrameType.Album:
+        //                resultDictionary.Add(tag, idTag.Album);
+        //                break;
+        //            case FrameType.Track:
+        //                resultDictionary.Add(tag, idTag.Track);
+        //                break;
+        //            case FrameType.Year:
+        //                resultDictionary.Add(tag, idTag.Year);
+        //                break;
+        //            default:
+        //                throw new ArgumentOutOfRangeException();
+        //        }
+        //    }
+        //    return resultDictionary;
+        //}
+
+        //private void InsertTags(string path, Dictionary<FrameType, string> tags)
+        //{
+        //    var mp3File = new Mp3File(path, Mp3Permissions.ReadWrite);
+        //    var idTag = mp3File.GetTag(Id3TagFamily.FileStartTag);
+        //    foreach (var item in tags)
+        //    {
+        //        switch (item.Key)
+        //        {
+        //            #region Boring cases
+        //            case FrameType.Artist:
+        //                idTag.Artists.Values.Clear();
+        //                idTag.Artists.Value = item.Value;
+        //                break;
+        //            case FrameType.Title:
+        //                idTag.Title.Value = item.Value;
+        //                break;
+        //            case FrameType.Album:
+        //                idTag.Album.Value = item.Value;
+        //                break;
+        //            case FrameType.Track:
+        //                idTag.Track.Value = item.Value;
+        //                break;
+        //            case FrameType.Year:
+        //                idTag.Year.Value = item.Value;
+        //                break;
+        //                #endregion
+        //        }
+        //    }
+        //    mp3File.WriteTag(idTag, new WriteConflictAction());
+        //    mp3File.Dispose();
+        //}
+
+        //private List<FrameType> GetEmptyTagDictionary()
+        //{
+        //    return new List<FrameType>
+        //    {
+        //        {FrameType.Album},
+        //        {FrameType.Artist},
+        //        {FrameType.Title},
+        //        {FrameType.Track},
+        //        {FrameType.Year}
+        //    };
+        //}
+#endregion
+        private IFileHandler _fileHandler;
     }
 }

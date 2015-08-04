@@ -9,8 +9,8 @@ namespace mp3lib
 {
 	public class Mp3TagChanger
 	{
-		private string Mp3RealName { get; set; }
-		private IMp3File Mp3 { get; set; }
+		private string Mp3RealName { get; }
+		private IMp3File Mp3 { get; }
 
 		private readonly DataExtracter _dataExtracter;
 
@@ -22,7 +22,7 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 		}
 
-		//TODO: tests
+		//TODO: tests {READY}
 		public void ChangeTags()
 		{
 			var tags = _dataExtracter.GetTags();

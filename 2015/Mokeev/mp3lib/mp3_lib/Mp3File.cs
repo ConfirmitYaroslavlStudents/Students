@@ -57,5 +57,12 @@ namespace mp3lib
 			};
 
 		}
+
+		public void ChangeFileName(string filePath)
+		{
+			if (filePath == FilePath) return;
+
+			//TODO: Implement
+		}
 	}
 }

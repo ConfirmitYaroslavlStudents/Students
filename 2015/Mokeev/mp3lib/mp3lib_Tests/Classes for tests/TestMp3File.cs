@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using mp3lib;
 
-namespace mp3lib_Tests
+namespace mp3lib_Tests.Classes_for_tests
 {
 	public class TestMp3File : IMp3File
 	{
@@ -31,6 +31,11 @@ namespace mp3lib_Tests
 				{ TagType.Id, TrackId },
 				{ TagType.Year, Year },
 			};
+		}
+
+		public void ChangeFileName(string filePath)
+		{
+			
 		}
 	}
 }

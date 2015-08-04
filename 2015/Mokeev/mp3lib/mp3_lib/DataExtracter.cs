@@ -84,6 +84,7 @@ namespace mp3lib
 			}
 
 			var data = new Dictionary<TagType, string>();
+			mp3Name.Remove(0, prefixesQueue.Peek().Length);
 			while (prefixesQueue.Count > 0)
 			{
 				prefixesQueue.Dequeue();

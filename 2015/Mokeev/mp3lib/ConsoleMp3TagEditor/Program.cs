@@ -46,7 +46,7 @@ namespace ConsoleMp3TagEditor
 					case ProgramAction.FileRename:
 						mp3 = new Mp3File(data.Path);
 						var renamer = new Mp3FileNameChanger(mp3, data.Mask);
-						renamer.ChangeFileName();
+						renamer.GetNewFileName();
 						break;
 				}
 

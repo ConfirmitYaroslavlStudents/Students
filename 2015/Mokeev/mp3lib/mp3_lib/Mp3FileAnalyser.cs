@@ -16,7 +16,7 @@ namespace mp3lib
 			Files = files;
 		}
 
-		//TODO: tests
+		//TODO: tests {READY}
 		//TODO: return detailed information {READY}
 		public IEnumerable<FileDifferences> FindDifferences()
 		{

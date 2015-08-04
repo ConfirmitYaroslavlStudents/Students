@@ -14,5 +14,6 @@ namespace mp3lib
 		string Year { get; set; }
 
 		Dictionary<TagType, string> GetId3Data();
+		void ChangeFileName(string filePath);
 	}
 }

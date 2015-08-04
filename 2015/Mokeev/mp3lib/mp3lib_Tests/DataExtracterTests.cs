@@ -12,11 +12,13 @@ namespace mp3lib_Tests
 		[TestMethod]
 		public void Test_GetTags()
 		{
-			var extracter = new DataExtracter("{artist}{id}");
+			var extracter = new DataExtracter("{artist}{id}{title}{year}");
 
 			var expected = new Queue<TagType>();
 			expected.Enqueue(TagType.Artist);
 			expected.Enqueue(TagType.Id);
+			expected.Enqueue(TagType.Title);
+			expected.Enqueue(TagType.Year);
 			var actual = extracter.GetTags();
 
 			Assert.AreEqual(actual.Count, expected.Count);
@@ -78,6 +80,19 @@ namespace mp3lib_Tests
 			var prefixes = extracter.FindAllPrefixes(tags);
 
 			var data = extracter.GetFullDataFromString(prefixes, "10. test artist - test song name", tags);
+		}
+
+		[TestMethod]
+		public void Test_FirstPrefix()
+		{
+			var extracter = new DataExtracter("[{id}] {artist}");
+			var tags = extracter.GetTags();
+			var prefixes = extracter.FindAllPrefixes(tags);
+			var data = extracter.GetFullDataFromString(prefixes, "[10] test artist", tags);
+
+			var expected = new Dictionary<TagType, string> {{TagType.Id, "10"}, {TagType.Artist, "test artist"}};
+
+			CollectionAssert.AreEqual(expected, data);
 		}
 	}
 }

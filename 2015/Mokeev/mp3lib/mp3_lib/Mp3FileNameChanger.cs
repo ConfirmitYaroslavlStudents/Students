@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -18,7 +19,7 @@ namespace mp3lib
 		}
 
 		//TODO: tests
-		public void ChangeFileName()
+		public string GetNewFileName()
 		{
 			var tags = _dataExtracter.GetTags();
 
@@ -36,6 +37,7 @@ namespace mp3lib
 				resultFileName.Replace("{" + tag + "}", id3Data[tag]);
 			}
 
+			return resultFileName.ToString();
 		}
 	}
 }

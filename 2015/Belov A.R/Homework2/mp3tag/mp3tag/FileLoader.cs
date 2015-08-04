@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Mp3TagLib;
 
 namespace mp3tager
@@ -12,9 +13,27 @@ namespace mp3tager
         public IMp3File Load(string path)
         {
             //[TODO] use Path
-            if (FileExist(path)&&path.Substring(path.Length-4,4).ToLower()==".mp3")
-                return new Mp3File(TagLib.File.Create(path));
+            if (ValidateFile(path))
+                return TryCreate(path);
             return null;
+        }
+
+        Mp3File TryCreate(string path)
+        {
+            try
+            {
+                return new Mp3File(TagLib.File.Create(path));
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+            
+        }
+        public bool ValidateFile(string path)
+        {
+            return FileExist(path) && Path.GetExtension(path).ToLower() == ".mp3";
         }
     }
 }

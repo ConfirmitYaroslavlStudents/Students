@@ -16,7 +16,9 @@ namespace Mp3TagTest
 
         public IMp3File Load(string path)
         {
-            return new TestMp3File() {Path = path, Tags = new Mp3Tags()};
+            if (path.Contains(".UnknownExtension"))
+                return null;
+            return new TestMp3File() {Path = path, Tags = new Mp3Tags(){Album = "testAlbum",Artist="testArtist",Comment = "testComment",Genre = "testGenre",Title = "testTitle",Track = 1,Year = 2015}};
         }
     }
 }

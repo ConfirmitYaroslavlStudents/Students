@@ -34,7 +34,7 @@ namespace mp3lib
 
 			foreach (var tag in tags)
 			{
-				resultFileName.Replace("{" + tag + "}", id3Data[tag]);
+				resultFileName.Replace("{" + tag.ToString().ToLower() + "}", id3Data[tag]);
 			}
 
 			return resultFileName.ToString();

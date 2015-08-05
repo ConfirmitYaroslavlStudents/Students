@@ -7,13 +7,14 @@ namespace mp3lib
 	public class ArgsManager
 	{
 		//=========IMPORTANT CONSTANTS===========
-		private const string PATH = "-path";
-		private const string MASK = "-mask";
-		private const string ACTION = "-action";
+		private const string PATH				= "-path";
+		private const string MASK				= "-mask";
+		private const string ACTION				= "-action";
 		//--------------------------------------
-		private const string ActionAnalyse = "analyse";
-		private const string ActionFileRename = "file-rename";
-		private const string ActionChangeTags = "change-tags";
+		private const string ActionAnalyse		= "analyse";
+		private const string ActionFileRename	= "file-rename";
+		private const string ActionChangeTags	= "change-tags";
+		private const string ActionSync			= "sync";
 		//======================================
 
 
@@ -130,6 +131,9 @@ namespace mp3lib
 					break;
 				case ActionChangeTags:
 					action = ProgramAction.Mp3Edit;
+					break;
+				case ActionSync:
+					action = ProgramAction.Sync;
 					break;
 				default:
 					throw new ArgumentException("-action can be [analyse|file-rename|change-tags]");

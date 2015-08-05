@@ -18,22 +18,15 @@ namespace ConsoleMp3TagEditor
 				var data = argsManager.ExtactArgs();
 				Console.WriteLine(TagType.Album.ToString());
 				Mp3File mp3;
+				IEnumerable<IMp3File> mp3Files;
 				switch (data.Action)
 				{
 					case ProgramAction.Analyse:
-						var mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file)).Cast<IMp3File>().ToArray();
+						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
 						var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
-						var differences = pathAnalyser.FindDifferences();
-						foreach (var file in differences)
-						{
-							Console.WriteLine("This file has differences: {0}", file.Mp3File);
-							foreach (var diff in file.Diffs)
-							{
-								Console.WriteLine("{0} in Mp3File Name: {1}", diff.Key, diff.Value.FileNameValue);
-								Console.WriteLine("{0} in Tags: {1}", diff.Key, diff.Value.TagValue);
-							}
-						}
+						var differences = pathAnalyser.GetDifferences();
+						pathAnalyser.ShowDifferences(differences, new ConsoleCommunication());
 
 						break;
 
@@ -46,8 +39,16 @@ namespace ConsoleMp3TagEditor
 					case ProgramAction.FileRename:
 						mp3 = new Mp3File(data.Path);
 						var renamer = new Mp3FileNameChanger(mp3, data.Mask);
-						renamer.GetNewFileName();
+						var newFileName = renamer.GetNewFileName();
+						mp3.ChangeFileName(newFileName);
 						break;
+					case ProgramAction.Sync:
+						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
+						var syncer = new Mp3Syncing(mp3Files, new ConsoleCommunication());
+						syncer.SyncFiles();
+
+						break;
+
 				}
 
 				Console.WriteLine("Done!");
@@ -59,7 +60,7 @@ namespace ConsoleMp3TagEditor
 #if DEBUG
 				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}", e.Message, e.StackTrace);
 #else
-				Console.WriteLine("{0}",e.Message);
+				Console.WriteLine("Error occured: {0}",e.Message);
 #endif
 			}
 		}

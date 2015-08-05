@@ -62,7 +62,12 @@ namespace mp3lib
 		{
 			if (filePath == FilePath) return;
 
-			//TODO: Implement
+			if (File.Exists(Path.GetDirectoryName(FilePath) + filePath))
+			{
+				throw new IOException("File already exists");
+			}
+
+            File.Move(FilePath, Path.GetDirectoryName(FilePath) + "\\" + filePath + ".mp3");
 		}
 	}
 }

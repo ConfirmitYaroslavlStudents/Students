@@ -25,7 +25,7 @@ namespace mp3lib_Tests
 			};
 
 			var analyser = new Mp3FileAnalyser(files, "{id}. {artist} - {title}");
-			var diffs = analyser.FindDifferences().ToList();
+			var diffs = analyser.GetDifferences().ToList();
 
 			var expectedDiff1 = new FileDifferences(secondItem);
 			expectedDiff1.Add(TagType.Id, new Diff { FileNameValue = "2", TagValue = "1" });

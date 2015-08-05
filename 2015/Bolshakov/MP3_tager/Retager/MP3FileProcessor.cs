@@ -18,6 +18,10 @@ namespace Mp3Handler
             _fileHandler = new Id3LibFileHandler(filePath);
         }
 
+        //
+        //   Не нарушает ли класс SRP имея разные методы?
+        //
+
         public bool RetagFile(string pattern)
         {
             var parser = new TagParser(pattern);
@@ -30,7 +34,7 @@ namespace Mp3Handler
 
         public bool RenameFile(string pattern)
         {
-            var fileTags = _fileHandler.GetTags(true);
+            var fileTags = _fileHandler.GetTags();
             var newFileName = new StringBuilder(pattern);
             foreach (var fileTag in fileTags)
             {
@@ -49,7 +53,7 @@ namespace Mp3Handler
             if (pathTags == null)
                 return null;
 
-            var fileTags = _fileHandler.GetTags(false);
+            var fileTags = _fileHandler.GetTags(GetTagsOption.DontRemoveEmtyTags);
 
             var tagDifference = new Dictionary<FrameType,TagDifference>();
 
@@ -65,7 +69,22 @@ namespace Mp3Handler
 
         public bool Synchronize(string pattern)
         {
-            return false;
+            var parser = new TagParser(pattern);
+            var pathTagsValue = parser.GetTagsValue(_fileHandler.FileName);
+
+            var requringTags = new SortedSet<FrameType>(parser.GetTags());
+            var fileTags = new SortedSet<FrameType>(_fileHandler.GetTags().Keys);
+
+            var pathTagsIsBad = pathTagsValue == null;
+            var fileTagsIsBad = !requringTags.SetEquals(fileTags);
+
+            if (pathTagsIsBad && !fileTagsIsBad)
+                RenameFile(pattern);
+            else if (!pathTagsIsBad && fileTagsIsBad)
+                RetagFile(pattern);
+            else
+                return false;
+            return true;
         }
 
         private IFileHandler _fileHandler;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Mp3Handler;
 
 namespace Tests
@@ -16,9 +15,9 @@ namespace Tests
             Tags = new Dictionary<FrameType, string>();
         }
 
-        public Dictionary<FrameType, string> GetTags(bool removeEmptyTags)
+        public Dictionary<FrameType, string> GetTags(GetTagsOption option)
         {
-            if (removeEmptyTags)
+            if (option == GetTagsOption.RemoveEmptyTags)
                 return Tags;
             else
             {
@@ -47,6 +46,11 @@ namespace Tests
         public void Rename(string newName)
         {
             FileName = newName;
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

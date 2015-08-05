@@ -87,7 +87,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void DifferenceTest()
+        public void OneItemDifferenceTest()
         {
             var fileHandler = new TestFileHandler("not my artist - my song")
             {
@@ -107,6 +107,52 @@ namespace Tests
             Assert.AreEqual(1,result.Count);
             Assert.AreEqual(fileExpect,result[FrameType.Artist].FileValue);
             Assert.AreEqual(pathExpect,result[FrameType.Artist].PathValue);
+        }
+
+        [TestMethod]
+        public void ThreeItemDifferenceTest()
+        {
+            var fileHandler = new TestFileHandler("not my artist - not my song")
+            {
+                Tags = new Dictionary<FrameType, string>()
+                {
+                    {FrameType.Artist, "my artist"},
+                    {FrameType.Title, "my song"}
+                }
+            };
+            var fileProcesor = new Mp3FileProcessor(fileHandler);
+
+            var fileArExpect = "my artist";
+            var pathArExpect = "not my artist";
+
+            var fileTiExpect = "my song";
+            var pathTiExpect = "not my song";
+
+            var result = fileProcesor.Difference("<ar> - <ti>");
+
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(fileArExpect, result[FrameType.Artist].FileValue);
+            Assert.AreEqual(pathArExpect, result[FrameType.Artist].PathValue);
+            Assert.AreEqual(fileTiExpect, result[FrameType.Title].FileValue);
+            Assert.AreEqual(pathTiExpect, result[FrameType.Title].PathValue);
+        }
+
+        [TestMethod]
+        public void NoDifferenceTest()
+        {
+            var fileHandler = new TestFileHandler("my artist - my song")
+            {
+                Tags = new Dictionary<FrameType, string>()
+                {
+                    {FrameType.Artist, "my artist"},
+                    {FrameType.Title, "my song"}
+                }
+            };
+            var fileProcesor = new Mp3FileProcessor(fileHandler);
+
+            var result = fileProcesor.Difference("<ar> - <ti>");
+
+            Assert.AreEqual(null, result);
         }
     }
 }

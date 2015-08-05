@@ -6,7 +6,7 @@ using Id3;
 
 namespace Mp3Handler
 {
-    class Id3LibFileHandler:IFileHandler, IDisposable
+    class Id3LibFileHandler:IFileHandler
     {
         public Id3LibFileHandler(string path)
         {
@@ -28,7 +28,7 @@ namespace Mp3Handler
             _mp3File.Dispose();
         }
 
-        public Dictionary<FrameType, string> GetTags(bool removeEmptyTags)
+        public Dictionary<FrameType, string> GetTags(GetTagsOption option)
         {
             var idTag = _mp3File.GetTag(Id3TagFamily.FileStartTag);
 
@@ -41,7 +41,7 @@ namespace Mp3Handler
                 {FrameType.Year, idTag.Year}
             };
 
-            if (removeEmptyTags)
+            if (option == GetTagsOption.RemoveEmptyTags)
                 return (from tag in tagsDictionary where tag.Value != "" select tag).ToDictionary(k => k.Key,
                     v => v.Value);
             else

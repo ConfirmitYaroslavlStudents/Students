@@ -13,9 +13,8 @@ namespace mp3tager.Operations
         public override void Call()
         {
             
-            var path = @"C:\Users\Alexandr\Desktop\TEST";// Menu.GetUserInput("path:");
-            var loader = new FileLoader();
-            var tager = new Tager(loader);
+            var path = Menu.GetUserInput("path:");
+            var tager = new Tager(new FileLoader());
             var analyzer = new Analyzer(tager, s => Path.GetExtension(s).ToLower() == ".mp3");
             Menu.PrintHelp();
             var mask = new Mask(Menu.GetUserInput("mask:"));

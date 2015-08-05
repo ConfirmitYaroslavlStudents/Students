@@ -15,7 +15,7 @@ namespace mp3tager
             //[TODO] SRP vialation
             //[TODO] need tests
             Menu.PrintHelp();
-            var path = @"C:\Users\Alexandr\Desktop\TEST";// Menu.GetUserInput("path:");
+            var path = Menu.GetUserInput("path:");//@"C:\Users\Alexandr\Desktop\TEST";
             var analyzer = new Analyzer(new Tager(new FileLoader()));
             var mask = new Mask(Menu.GetUserInput("mask:"));
             analyzer.Analyze(Directory.GetFiles(path), mask);

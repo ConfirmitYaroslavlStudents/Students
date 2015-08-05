@@ -13,7 +13,7 @@ namespace mp3tager
         public override void Call()
         {
             var tager = new Tager(new FileLoader());
-            //tager.Load(@"C:\Users\Alexandr\Desktop\TEST\1 Holiday.mp3");
+        //    tager.Load(@"C:\Users\Alexandr\Desktop\TEST\песня.mp3");
             if (!tager.Load(Menu.GetUserInput("path:")))
             {
                 throw new FileNotFoundException("File does not exist");

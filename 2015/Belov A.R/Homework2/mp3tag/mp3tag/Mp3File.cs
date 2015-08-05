@@ -43,7 +43,7 @@ namespace mp3tager
             if (!string.IsNullOrEmpty(tags.Title))
                 _file.Tag.Title = tags.Title;
             if (!string.IsNullOrEmpty(tags.Artist))
-                _file.Tag.AlbumArtists = new[] { tags.Artist };
+                _file.Tag.Artists = new[] { tags.Artist };
             if (!string.IsNullOrEmpty(tags.Genre))
                 _file.Tag.Genres = new[] { tags.Genre };
             TagChanged = true;
@@ -80,8 +80,8 @@ namespace mp3tager
 
         public void ChangeName(string newName)
         {
-            newName = FixFileName(newName);
-            if(string.IsNullOrEmpty(newName))
+            NewName = FixFileName(newName);
+            if(string.IsNullOrEmpty(NewName))
                 throw new ArgumentException("Bad name");
             NameChanged = true;
         }

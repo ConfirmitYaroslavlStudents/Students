@@ -61,7 +61,7 @@ namespace Mp3TagLib
             }
             catch (Exception e)
             {
-                ErrorFiles.Add(_tager.CurrentFile.Name,e.Message);
+                ErrorFiles.Add(_tager.CurrentFile.Name, "Can't sync [tags and file name is bad]");
                 return false;
             }
         }

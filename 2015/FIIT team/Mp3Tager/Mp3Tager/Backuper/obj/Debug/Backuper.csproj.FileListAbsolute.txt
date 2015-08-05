@@ -4,3 +4,9 @@ D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.pdb
 D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
 D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.exe
 D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.pdb
+D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\bin\Debug\Backuper.dll.config
+D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\bin\Debug\Backuper.dll
+D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\bin\Debug\Backuper.pdb
+D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
+D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\obj\Debug\Backuper.dll
+D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\obj\Debug\Backuper.pdb

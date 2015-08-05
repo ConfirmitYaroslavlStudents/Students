@@ -50,12 +50,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AnalyzerTestClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagerTestClass.cs" />
     <Compile Include="TestFileLoader.cs" />
     <Compile Include="TestMp3File.cs" />
     <Compile Include="MaskTestClass.cs" />
     <Compile Include="MaskItemTestClass.cs" />
+    <Compile Include="SynchronizerTestClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mp3TagLib\Mp3TagLib.csproj">

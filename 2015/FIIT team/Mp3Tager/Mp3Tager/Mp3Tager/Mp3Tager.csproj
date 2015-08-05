@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,13 +43,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="BackupMp3Tager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Backuper\Backuper.csproj">
+      <Project>{fb7b6b0b-87ac-410e-8e47-615195855458}</Project>
+      <Name>Backuper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">
       <Project>{1ef53300-5b6a-4290-9cc1-f8194e72c277}</Project>
       <Name>CommandCreation</Name>

@@ -17,6 +17,7 @@ namespace Mp3TagLib
         public IMp3File CurrentFile
         {
             get { return _currentFile; }
+            set { _currentFile = value; }
         }
 
         public bool Load(string path)
@@ -77,7 +78,7 @@ namespace Mp3TagLib
                         {
                             if (tagValue.Key == "track"&&tagValue.Value.StartsWith("0"))
                             {
-                                if(tagValue.Value.Substring(1) == currentTagFromFile);
+                                if(tagValue.Value.Substring(1) == currentTagFromFile)
                                 continue;
                             }
                             fileNameIsOk = false;

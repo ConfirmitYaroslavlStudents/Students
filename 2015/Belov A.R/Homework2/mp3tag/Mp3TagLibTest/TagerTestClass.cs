@@ -11,69 +11,65 @@ namespace Mp3TagTest
     [TestClass]
     public class TagerTestClass
     {
+        private TestFileLoader _fileLoader;
+        private Tager _testTager;
+        private Mp3Tags _tesTags;
+        [TestInitialize]
+        public void Init()
+        {
+            _fileLoader = new TestFileLoader();
+            _testTager = new Tager(_fileLoader);
+            _tesTags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
+        }
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
         public void TagerWithoutFileCantSave()
         {
-            var fileLoader=new TestFileLoader();
-            var testTager=new Tager(fileLoader);
-            Assert.IsNull(testTager.CurrentFile);
-            testTager.Save();
-            testTager.ChangeTags(new Mp3Tags());
+            Assert.IsNull(_testTager.CurrentFile);
+            _testTager.Save();
+            _testTager.ChangeTags(new Mp3Tags());
 
         }
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
         public void TagerWithoutFileCantChangeTags()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            testTager.ChangeTags(new Mp3Tags());
+            _testTager.ChangeTags(new Mp3Tags());
         }
         [TestMethod]
         public void LoadTest()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            testTager.Load("TEST");
-            Assert.IsNotNull(testTager.CurrentFile);
+            _testTager.Load("TEST");
+            Assert.IsNotNull(_testTager.CurrentFile);
         }
         [TestMethod]
         public void SaveTest()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            testTager.Load("TEST");
-            var file = testTager.CurrentFile as TestMp3File;
+            _testTager.Load("TEST");
+            var file = _testTager.CurrentFile as TestMp3File;
             Assert.AreEqual(false,file.SaveFlag);
-            testTager.Save();
+            _testTager.Save();
             Assert.AreEqual(true,file.SaveFlag);
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ChangeTagsTest()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            testTager.Load("TEST");
-            var file = testTager.CurrentFile as TestMp3File;
-            var newTags=new Mp3Tags(){Album = "Album",Artist = "Artist",Comment = "Comment",Genre = "Genre",Title = "Title",Year = 2015};
-            testTager.ChangeTags(newTags);
-            Assert.AreEqual(newTags, file.Tags);
-            testTager.ChangeTags(null);
+            _testTager.Load("TEST");
+            var file = _testTager.CurrentFile as TestMp3File;
+            _testTager.ChangeTags(_tesTags);
+            Assert.AreEqual(_tesTags, file.Tags);
+            _testTager.ChangeTags(null);
         }
         [TestMethod]
         public void ChangeNameTest()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
             var expectedName = "[1]. Artist - Title 2015 live in Russia";
-            var tags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015,Track = 1};
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
-            testTager.Load("oldfilename");
-            testTager.ChangeTags(tags);
-            testTager.ChangeName(mask);
-            var currentFile = testTager.CurrentFile as TestMp3File;
+            _testTager.Load("oldfilename");
+            _testTager.ChangeTags(_tesTags);
+            _testTager.ChangeName(mask);
+            var currentFile = _testTager.CurrentFile as TestMp3File;
             Assert.AreEqual(true, currentFile.ChangeNameFlag);
             Assert.AreEqual(expectedName,currentFile.Name);
         }
@@ -81,77 +77,60 @@ namespace Mp3TagTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void NameNotChangeIfTagIsEmpty()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
             var expectedName = "[1]. Artist - Title 2015 live in Russia";
             var tags = new Mp3Tags() { Album = "Album", Artist = "", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
-            testTager.Load("oldfilename");
-            testTager.ChangeTags(tags);
-            testTager.ChangeName(mask);
+            _testTager.Load("oldfilename");
+            _testTager.ChangeTags(tags);
+            _testTager.ChangeName(mask);
         }
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
         public void ExceptionIfFileNotLoaded()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
-            testTager.ChangeName(mask);
+            _testTager.ChangeName(mask);
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ExceptionIfMaskIsNull()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            testTager.Load("path");
-            testTager.ChangeName(null);
+            _testTager.Load("path");
+            _testTager.ChangeName(null);
         }
 
         [TestMethod]
         public void ValidateNameTest()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
             var tags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Artist2 cover", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {comment} {year} live in Russia");
-            testTager.Load("[1]. Artist - Title Artist2 cover 2015 live in Russia");
-            testTager.ChangeTags(tags);
-            Assert.AreEqual(true,testTager.ValidateFileName(mask));
+            _testTager.Load("[1]. Artist - Title Artist2 cover 2015 live in Russia");
+            _testTager.ChangeTags(tags);
+            Assert.AreEqual(true,_testTager.ValidateFileName(mask));
         }
         [TestMethod]
         public void ValidateNameReturnFalseIfNameDoesntContainTag()
-        {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            var tags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
+        {     
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
-            testTager.Load("[1]. Superartist - Title 2015 live in Russia");
-            testTager.ChangeTags(tags);
-            Assert.AreEqual(false, testTager.ValidateFileName(mask));
+            _testTager.Load("[1]. Superartist - Title 2015 live in Russia");
+            _testTager.ChangeTags(_tesTags);
+            Assert.AreEqual(false, _testTager.ValidateFileName(mask));
         }
         [TestMethod]
         public void ValidateNameReturnFalseIfMaskIsBad()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            var tags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia AMAZING VASYA REMIX");
-            testTager.Load("[1]. Superartist - Title 2015 live in Russia");
-            testTager.ChangeTags(tags);
-            Assert.AreEqual(false, testTager.ValidateFileName(mask));
+            _testTager.Load("[1]. Superartist - Title 2015 live in Russia");
+            _testTager.ChangeTags(_tesTags);
+            Assert.AreEqual(false, _testTager.ValidateFileName(mask));
         }
         [TestMethod]
         public void WorksWithLeadingZeroInTrack()
         {
-            var fileLoader = new TestFileLoader();
-            var testTager = new Tager(fileLoader);
-            var tags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
-            testTager.Load("[01]. Artist - Title 2015 live in Russia");
-            testTager.ChangeTags(tags);
-            Assert.AreEqual(true, testTager.ValidateFileName(mask));
+            _testTager.Load("[01]. Artist - Title 2015 live in Russia");
+            _testTager.ChangeTags(_tesTags);
+            Assert.AreEqual(true, _testTager.ValidateFileName(mask));
         }
     }
 }

@@ -19,6 +19,6 @@ namespace Mp3Handler
     public enum GetTagsOption
     {
         RemoveEmptyTags,
-        DontRemoveEmtyTags
+        DontRemoveEmptyTags
     }
 }

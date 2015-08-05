@@ -154,5 +154,43 @@ namespace Tests
 
             Assert.AreEqual(null, result);
         }
+
+        [TestMethod]
+        public void BadFileSynch()
+        {
+            var expect = new Dictionary<FrameType, string>()
+            {
+                {FrameType.Artist, "my artist"},
+                {FrameType.Title, "my song"}
+            };
+
+            var fileHandler = new TestFileHandler("my artist - my song");
+            fileHandler.Tags.Add(FrameType.Artist, "artist");
+            var fileProcesor = new Mp3FileProcessor(fileHandler);
+
+            Assert.AreEqual(true,fileProcesor.Synchronize("<ar> - <ti>"));
+
+            CollectionAssert.AreEquivalent(expect, fileHandler.Tags);
+        }
+
+        [TestMethod]
+        public void BadPathSynch()
+        {
+            var fileHandler = new TestFileHandler("my name")
+            {
+                Tags = new Dictionary<FrameType, string>()
+                {
+                    {FrameType.Artist, "myartist"},
+                    {FrameType.Title, "mysong"}
+                }
+            };
+            var fileProcesor = new Mp3FileProcessor(fileHandler);
+
+            Assert.AreEqual(2,fileHandler.Tags.Count);
+
+            Assert.AreEqual(true, fileProcesor.Synchronize("<ar> - <ti>"));
+
+            Assert.AreEqual("myartist - mysong", fileHandler.FileName);
+        }
     }
 }

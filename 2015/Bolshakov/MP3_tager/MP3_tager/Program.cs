@@ -25,6 +25,9 @@ namespace MP3tager
                         case "rename":
                             LaunchRenameMode(args);
                             break;
+                        case "synch":
+                            LaunchSycnhMode(args);
+                            break;
                         default:
                             Console.WriteLine(Messeges.InvalidFirsArg);
                             break;
@@ -44,6 +47,20 @@ namespace MP3tager
                 Console.WriteLine(Messeges.KeyNotFound);
             }
             
+        }
+
+        private static void LaunchSycnhMode(string[] args)
+        {
+            switch (args.Length)
+            {
+                case 3:
+                    var retager = new Mp3FileProcessor(args[1]);
+                    retager.Synchronize(args[2]);
+                    break;
+                default:
+                    Console.WriteLine(Messeges.RenamemodeHelp);
+                    break;
+            }
         }
 
         private static void LaunchRenameMode(string[] args)

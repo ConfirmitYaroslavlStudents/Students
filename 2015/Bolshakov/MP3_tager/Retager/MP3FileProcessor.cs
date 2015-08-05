@@ -19,7 +19,7 @@ namespace Mp3Handler
         }
 
         //
-        //   Не нарушает ли класс SRP имея разные методы?
+        //   Не нарушает ли класс SRP имея методы с разными функциями?
         //
 
         public bool RetagFile(string pattern)
@@ -53,7 +53,7 @@ namespace Mp3Handler
             if (pathTags == null)
                 return null;
 
-            var fileTags = _fileHandler.GetTags(GetTagsOption.DontRemoveEmtyTags);
+            var fileTags = _fileHandler.GetTags(GetTagsOption.DontRemoveEmptyTags);
 
             var tagDifference = new Dictionary<FrameType,TagDifference>();
 
@@ -79,12 +79,10 @@ namespace Mp3Handler
             var fileTagsIsBad = !requringTags.SetEquals(fileTags);
 
             if (pathTagsIsBad && !fileTagsIsBad)
-                RenameFile(pattern);
-            else if (!pathTagsIsBad && fileTagsIsBad)
-                RetagFile(pattern);
-            else
-                return false;
-            return true;
+                return RenameFile(pattern);
+            if (!pathTagsIsBad && fileTagsIsBad)
+                return RetagFile(pattern);
+            return false;
         }
 
         private IFileHandler _fileHandler;

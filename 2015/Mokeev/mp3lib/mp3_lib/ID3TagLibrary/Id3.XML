@@ -24,13 +24,13 @@
         <member name="F:Id3.Id3TagFamily.Version2x">
             <summary>
             Indicates ID3 tags in the v2 range (currently v2.2, v2.3 and v2.4). These tags appear at
-            the beginning of the MP3 file.
+            the beginning of the MP3 Mp3File.
             </summary>
         </member>
         <member name="F:Id3.Id3TagFamily.Version1x">
             <summary>
             Indicates ID3 tags in the v1 range (currently v1.0 and v1.1). These tags appear at the end
-            of the MP3 file.
+            of the MP3 Mp3File.
             </summary>
         </member>
         <member name="T:Id3.Mp3Stream">
@@ -111,7 +111,7 @@
         </member>
         <member name="P:Id3.Id3Messages.AudioStreamMissing">
             <summary>
-              Looks up a localized string similar to Audio stream not found in this MP3 file.
+              Looks up a localized string similar to Audio stream not found in this MP3 Mp3File.
             </summary>
         </member>
         <member name="P:Id3.Id3Messages.MajorTagVersionMissing">

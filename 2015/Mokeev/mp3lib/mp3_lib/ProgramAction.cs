@@ -4,6 +4,7 @@
 	{
 		Analyse,
 		Mp3Edit,
-		FileRename
+		FileRename,
+		Sync
 	}
 }

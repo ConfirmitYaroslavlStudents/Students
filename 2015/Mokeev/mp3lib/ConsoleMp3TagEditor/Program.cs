@@ -4,9 +4,6 @@ using System.IO;
 using System.Linq;
 using mp3lib;
 
-//[TODO] introduce class for args {READY}
-//[TODO] extract arguments parsing {READY}
-
 namespace ConsoleMp3TagEditor
 {
 	public static class Program
@@ -21,18 +18,17 @@ namespace ConsoleMp3TagEditor
 				var data = argsManager.ExtactArgs();
 				Console.WriteLine(TagType.Album.ToString());
 				Mp3File mp3;
+				IEnumerable<IMp3File> mp3Files;
 				switch (data.Action)
 				{
 					case ProgramAction.Analyse:
-						var pathAnalyser = new Mp3FileAnalyser(Directory.GetFiles(data.Path, "*.mp3"), data.Mask);
+						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
+						var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
-                        var differences = pathAnalyser.FindDifferences();
-                        foreach (var file in differences)
-				        {
-				            Console.WriteLine(file);
-				        }
+						var differences = pathAnalyser.GetDifferences();
+						pathAnalyser.ShowDifferences(differences, new ConsoleCommunication());
 
-                        break;
+						break;
 
 					case ProgramAction.Mp3Edit:
 						mp3 = new Mp3File(data.Path);
@@ -43,8 +39,16 @@ namespace ConsoleMp3TagEditor
 					case ProgramAction.FileRename:
 						mp3 = new Mp3File(data.Path);
 						var renamer = new Mp3FileNameChanger(mp3, data.Mask);
-						renamer.ChangeFileName();
+						var newFileName = renamer.GetNewFileName();
+						mp3.ChangeFileName(newFileName);
 						break;
+					case ProgramAction.Sync:
+						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
+						var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication());
+						syncer.SyncFiles();
+
+						break;
+
 				}
 
 				Console.WriteLine("Done!");
@@ -53,15 +57,15 @@ namespace ConsoleMp3TagEditor
 			}
 			catch (Exception e)
 			{
-			#if DEBUG
-				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}",e.Message, e.StackTrace);
-			#else
-				Console.WriteLine("{0}",e.Message);
-			#endif
+#if DEBUG
+				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}", e.Message, e.StackTrace);
+#else
+				Console.WriteLine("Error occured: {0}",e.Message);
+#endif
 			}
 		}
 
-		
+
 
 	}
 }

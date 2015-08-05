@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -8,17 +7,7 @@ namespace mp3lib
 {
 	public class DataExtracter
 	{
-		private readonly string[] _allowedStrings = {
-			"{title}",
-			"{artist}",
-			"{id}",
-			"{album}",
-			"{genre}",
-			"{year}",
-			"{comment}",
-		};
-
-		public string Mask { get; private set; }
+		public string Mask { get; }
 
 		public DataExtracter(string mask)
 		{
@@ -37,25 +26,25 @@ namespace mp3lib
 				{
 					case "{title}":
 						tagType = TagType.Title;
-                        break;
+						break;
 					case "{id}":
 						tagType = TagType.Id;
-                        break;
+						break;
 					case "{artist}":
 						tagType = TagType.Artist;
-                        break;
+						break;
 					case "{album}":
 						tagType = TagType.Album;
-                        break;
+						break;
 					case "{genre}":
 						tagType = TagType.Genre;
-                        break;
+						break;
 					case "{comment}":
 						tagType = TagType.Comment;
-                        break;
+						break;
 					case "{year}":
 						tagType = TagType.Year;
-                        break;
+						break;
 					default:
 						throw new ArgumentException("There is no tag like " + tag.Value);
 				}
@@ -74,7 +63,7 @@ namespace mp3lib
 			{
 				if (mask.Length == 0) continue;
 
-				var index = mask.ToString().IndexOf("{"+tag.ToString().ToLower()+"}", StringComparison.CurrentCulture);
+				var index = mask.ToString().IndexOf("{" + tag.ToString().ToLower() + "}", StringComparison.CurrentCulture);
 				var str = mask.ToString().Substring(0, index);
 				prefixesQueue.Enqueue(str);
 				mask.Remove(0,
@@ -83,8 +72,10 @@ namespace mp3lib
 			return prefixesQueue;
 		}
 
-		public Dictionary<TagType, string> GetFullDataFromString(Queue<string> prefixesQueue, StringBuilder mp3Name, Queue<TagType> tags)
+		public Dictionary<TagType, string> GetFullDataFromString(Queue<string> prefixesQueue, string mp3NameString, Queue<TagType> tags)
 		{
+			var mp3Name = new StringBuilder(mp3NameString);
+
 			var prefixes = prefixesQueue.ToArray();
 			for (var i = 1; i < prefixes.Length; i++)
 			{
@@ -93,6 +84,7 @@ namespace mp3lib
 			}
 
 			var data = new Dictionary<TagType, string>();
+			mp3Name.Remove(0, prefixesQueue.Peek().Length);
 			while (prefixesQueue.Count > 0)
 			{
 				prefixesQueue.Dequeue();
@@ -138,7 +130,7 @@ namespace mp3lib
 							resultStr.Append(tmpStr);
 							needContinue = true;
 						}
-					} 
+					}
 					while (needContinue);
 				}
 				else

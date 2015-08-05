@@ -7,15 +7,14 @@ using System.Text.RegularExpressions;
 
 namespace mp3lib
 {
-    //[TODO] extract classes
 	public class Mp3TagChanger
 	{
-		private string Mp3RealName { get; set; }
-		private Mp3File Mp3 { get; set; }
+		private string Mp3RealName { get; }
+		private IMp3File Mp3 { get; }
 
 		private readonly DataExtracter _dataExtracter;
 
-		public Mp3TagChanger(Mp3File mp3File, string mask)
+		public Mp3TagChanger(IMp3File mp3File, string mask)
 		{
 			Mp3 = mp3File;
 
@@ -23,15 +22,13 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 		}
 
-        //[TODO] tests
+		//TODO: tests {READY}
 		public void ChangeTags()
 		{
 			var tags = _dataExtracter.GetTags();
 			var prefixesQueue = _dataExtracter.FindAllPrefixes(tags);
 
-			var mp3Name = new StringBuilder(Mp3RealName);
-
-			var data = _dataExtracter.GetFullDataFromString(prefixesQueue, mp3Name, tags);
+			var data = _dataExtracter.GetFullDataFromString(prefixesQueue, Mp3RealName, tags);
 
 			ChangeMp3Tags(data);
 		}
@@ -46,7 +43,7 @@ namespace mp3lib
 						Mp3.Artist = item.Value;
 						break;
 					case TagType.Id:
-						Mp3.TrackId = Convert.ToUInt16(item.Value);
+						Mp3.TrackId = item.Value;
 						break;
 					case TagType.Title:
 						Mp3.Title = item.Value;
@@ -55,10 +52,10 @@ namespace mp3lib
 						Mp3.Album = item.Value;
 						break;
 					case TagType.Genre:
-						Mp3.Genre = Convert.ToUInt16(item.Value);
+						Mp3.Genre = item.Value;
 						break;
 					case TagType.Year:
-						Mp3.Year = Convert.ToUInt16(item.Value);
+						Mp3.Year = item.Value;
 						break;
 					case TagType.Comment:
 						Mp3.Comment = item.Value;

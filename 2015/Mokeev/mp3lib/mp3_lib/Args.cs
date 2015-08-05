@@ -6,7 +6,7 @@
 		public string Path { get; private set; }
 		public string Mask { get; private set; }
 
-		public Args (string path, string mask, ProgramAction action)
+		public Args(string path, string mask, ProgramAction action)
 		{
 			Path = path;
 			Mask = mask;

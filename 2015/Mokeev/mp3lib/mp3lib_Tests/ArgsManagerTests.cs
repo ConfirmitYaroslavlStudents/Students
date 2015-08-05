@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using mp3lib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,7 +10,7 @@ namespace mp3lib_Tests
 		[TestMethod]
 		public void Test_CheckArgs_Valid()
 		{
-			var data = new[] {"-path", "filePath", "-mask", "{a}-{b}", "-action", "file-rename" };
+			var data = new[] { "-path", "filePath", "-mask", "{a}-{b}", "-action", "file-rename" };
 			var argsManager = new ArgsManager(data);
 
 			Assert.AreEqual(true, argsManager.CheckArgsValidity());
@@ -75,7 +74,7 @@ namespace mp3lib_Tests
 		[TestMethod]
 		public void Test_ExtractArgs()
 		{
-			var validator = new ArgsManager(new []{ "-path", "something", "-mask", "{asd}{dsa}", "-action", "file-rename" });
+			var validator = new ArgsManager(new[] { "-path", "something", "-mask", "{asd}{dsa}", "-action", "file-rename" });
 			validator.CheckArgsValidity();
 			var args = validator.ExtactArgs();
 

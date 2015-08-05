@@ -25,6 +25,7 @@ namespace mp3lib
 			foreach (var mp3 in _files)
 			{
 				var mp3Data = mp3.GetId3Data();
+
 				var extracter = new DataExtracter(_mask);
 				var tags = extracter.GetTags();
 				var prefixes = extracter.FindAllPrefixes(tags);

@@ -44,7 +44,7 @@ namespace ConsoleMp3TagEditor
 						break;
 					case ProgramAction.Sync:
 						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
-						var syncer = new Mp3Syncing(mp3Files, new ConsoleCommunication());
+						var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication());
 						syncer.SyncFiles();
 
 						break;

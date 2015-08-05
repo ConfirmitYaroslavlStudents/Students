@@ -5,7 +5,7 @@ namespace Mp3Handler
 {
     public interface IFileHandler:IDisposable
     {
-        string FilePath { get; }
+        string FilePath { get; set; }
 
         string FileName { get; }
 

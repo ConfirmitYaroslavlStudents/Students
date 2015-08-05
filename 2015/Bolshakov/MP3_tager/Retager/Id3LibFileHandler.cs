@@ -6,22 +6,39 @@ using Id3;
 
 namespace Mp3Handler
 {
-    class Id3LibFileHandler:IFileHandler
+    public class Id3LibFileHandler:IFileHandler
     {
         public Id3LibFileHandler(string path)
         {
-            if(!File.Exists(path))
-                throw new FileNotFoundException();
-            if(Path.GetExtension(path)!=".mp3")
-                throw new ArgumentException("Not mp3 file");
             FilePath = path;
-            FileName = Path.GetFileNameWithoutExtension(path);
-            _mp3File = new Mp3File(FilePath, Mp3Permissions.ReadWrite);
         }
 
-        public string FilePath { get; private set; }
+        public Id3LibFileHandler()
+        {
+            
+        }
 
-        public string FileName { get; private set; }
+        public string FilePath
+        {
+            get { return _filePath; }
+            set
+            {
+                if(_mp3File!=null)
+                    _mp3File.Dispose();
+                if (!File.Exists(value))
+                    throw new FileNotFoundException();
+                if (Path.GetExtension(value) != ".mp3")
+                    throw new ArgumentException("Not mp3 file");
+                _mp3File = new Mp3File(FilePath, Mp3Permissions.ReadWrite);
+                _filePath = value;
+                FileName = value;
+            }
+        }
+
+        public string FileName {
+            get { return _fileName; }
+            private set { _fileName = Path.GetFileNameWithoutExtension(value); }
+        }
 
         public void Dispose()
         {
@@ -92,6 +109,8 @@ namespace Mp3Handler
             _mp3File = new Mp3File(FilePath,Mp3Permissions.ReadWrite);
         }
 
+        private string _filePath;
         private Mp3File _mp3File;
+        private string _fileName;
     }
 }

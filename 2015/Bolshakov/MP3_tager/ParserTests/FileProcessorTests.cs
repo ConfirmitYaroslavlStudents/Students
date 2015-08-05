@@ -176,6 +176,12 @@ namespace Tests
         [TestMethod]
         public void BadPathSynch()
         {
+            //Этот тест работает во время отладки. Так же работает на реальном файле.
+            //На моем компе не работает
+            //Я не знаю, что с ним делать
+
+            //todo fix synch test
+
             var fileHandler = new TestFileHandler("my name")
             {
                 Tags = new Dictionary<FrameType, string>()

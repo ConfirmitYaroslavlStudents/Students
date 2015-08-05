@@ -25,9 +25,10 @@ namespace MP3tager
                         case "rename":
                             LaunchRenameMode(args);
                             break;
-                        case "synch":
-                            LaunchSycnhMode(args);
-                            break;
+                        //case "synch":
+                        //    LaunchSycnhMode(args);
+                        //    break;
+                            //todo: imlement difference
                         default:
                             Console.WriteLine(Messeges.InvalidFirsArg);
                             break;

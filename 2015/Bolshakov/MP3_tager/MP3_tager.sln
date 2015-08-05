@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "ParserTests\Tests.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3HandlerLib", "Retager\Mp3HandlerLib.csproj", "{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderLib", "FolderLib\FolderLib.csproj", "{5A972971-3D81-40E0-B72D-9147AD34F888}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A972971-3D81-40E0-B72D-9147AD34F888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A972971-3D81-40E0-B72D-9147AD34F888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A972971-3D81-40E0-B72D-9147AD34F888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A972971-3D81-40E0-B72D-9147AD34F888}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

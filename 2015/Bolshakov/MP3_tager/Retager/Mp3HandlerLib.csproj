@@ -7,8 +7,8 @@
     <ProjectGuid>{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RetagerLib</RootNamespace>
-    <AssemblyName>Retager</AssemblyName>
+    <RootNamespace>Mp3Handler</RootNamespace>
+    <AssemblyName>Mp3HandlerLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -49,11 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Retager.cs" />
-    <Compile Include="Enumerations.cs" />
-    <Compile Include="NotValidPatternException.cs" />
+    <Compile Include="Id3LibFileHandler.cs" />
+    <Compile Include="IFileHandler.cs" />
+    <Compile Include="Mp3FileProcessor.cs" />
+    <Compile Include="TagParser\StrWithCursor.cs" />
+    <Compile Include="TagParser\TagDifference.cs" />
+    <Compile Include="TagTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TagParser.cs" />
+    <Compile Include="TagParser\TagParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

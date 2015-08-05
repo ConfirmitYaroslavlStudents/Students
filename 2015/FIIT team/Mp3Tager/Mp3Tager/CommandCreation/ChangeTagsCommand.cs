@@ -7,19 +7,14 @@ namespace CommandCreation
 {
     internal class ChangeTagsCommand : Command
     {
-        private const string Artist = "{artist}";
-        private const string Title = "{title}";
-        private const string Genre = "{genre}";
-        private const string Album = "{album}";
-        private const string Track = "{track}";
-
+        
         private readonly HashSet<string> TagSet = new HashSet<string>
         {
-            Artist,
-            Album,
-            Genre,
-            Title,
-            Track
+            TagNames.Artist,
+            TagNames.Album,
+            TagNames.Genre,
+            TagNames.Title,
+            TagNames.Track
         };
 
         private string _path;
@@ -51,19 +46,19 @@ namespace CommandCreation
 
             switch (tag)
             {
-                case Artist:
+                case TagNames.Artist:
                     audioFile.Tag.Performers = new[] { newTagValue };
                     break;
-                case Title:
+                case TagNames.Title:
                     audioFile.Tag.Title = newTagValue;
                     break;
-                case Genre:
+                case TagNames.Genre:
                     audioFile.Tag.Genres = new[] { newTagValue };
                     break;
-                case Album:
+                case TagNames.Album:
                     audioFile.Tag.Album = newTagValue;
                     break;
-                case Track:
+                case TagNames.Track:
                     audioFile.Tag.Track = Convert.ToUInt32(newTagValue);
                     break;
             }

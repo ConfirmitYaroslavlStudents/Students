@@ -5,13 +5,7 @@ using Mp3Lib;
 namespace CommandCreation
 {
     internal class RenameCommand : Command
-    {
-        private const string Artist = "{artist}";
-        private const string Title = "{title}";
-        private const string Genre = "{genre}";
-        private const string Album = "{album}";
-        private const string Track = "{track}";
-        
+    {      
         private readonly string _path;
         private readonly string _pattern;
 
@@ -37,11 +31,11 @@ namespace CommandCreation
         private string GetNewName(IMp3File audioFile)
         {
             var newName = new StringBuilder(_pattern);
-            newName.Replace(Artist, audioFile.Tag.Performers[0]);
-            newName.Replace(Title, audioFile.Tag.Title);
-            newName.Replace(Genre, audioFile.Tag.Genres[0]);
-            newName.Replace(Album, audioFile.Tag.Album);
-            newName.Replace(Track, audioFile.Tag.Track.ToString());
+            newName.Replace(TagNames.Artist, audioFile.Tag.Performers[0]);
+            newName.Replace(TagNames.Title, audioFile.Tag.Title);
+            newName.Replace(TagNames.Genre, audioFile.Tag.Genres[0]);
+            newName.Replace(TagNames.Album, audioFile.Tag.Album);
+            newName.Replace(TagNames.Track, audioFile.Tag.Track.ToString());
             return newName.ToString();
         }
 

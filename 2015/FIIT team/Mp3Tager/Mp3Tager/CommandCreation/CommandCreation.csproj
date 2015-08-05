@@ -46,6 +46,7 @@
     <Compile Include="HelpCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenameCommand.cs" />
+    <Compile Include="TagNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">

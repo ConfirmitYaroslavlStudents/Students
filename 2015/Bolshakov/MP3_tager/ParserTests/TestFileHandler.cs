@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mp3Handler;
 
 namespace Tests
@@ -14,10 +15,20 @@ namespace Tests
             FileName = filename;
             Tags = new Dictionary<FrameType, string>();
         }
-        
-        public Dictionary<FrameType, string> GetTags()
+
+        public Dictionary<FrameType, string> GetTags(bool removeEmptyTags)
         {
-            return Tags;
+            if (removeEmptyTags)
+                return Tags;
+            else
+            {
+                var emptyDictionary = Frame.EnumKeyDictionary;
+                foreach (var tag in Tags)
+                {
+                    emptyDictionary[tag.Key] = tag.Value;
+                }
+                return emptyDictionary;
+            }
         }
 
         public void SetTags(Dictionary<FrameType, string> tags)

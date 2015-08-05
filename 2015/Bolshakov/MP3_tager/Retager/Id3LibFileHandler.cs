@@ -28,7 +28,7 @@ namespace Mp3Handler
             _mp3File.Dispose();
         }
 
-        public Dictionary<FrameType, string> GetTags()
+        public Dictionary<FrameType, string> GetTags(bool removeEmptyTags)
         {
             var idTag = _mp3File.GetTag(Id3TagFamily.FileStartTag);
 
@@ -41,7 +41,11 @@ namespace Mp3Handler
                 {FrameType.Year, idTag.Year}
             };
 
-            return (from tag in tagsDictionary where tag.Value != "" select tag).ToDictionary(k => k.Key, v => v.Value);
+            if (removeEmptyTags)
+                return (from tag in tagsDictionary where tag.Value != "" select tag).ToDictionary(k => k.Key,
+                    v => v.Value);
+            else
+                return tagsDictionary;
         }
 
         public void SetTags(Dictionary<FrameType, string> tags)

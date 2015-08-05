@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Mp3Handler
@@ -19,7 +21,7 @@ namespace Mp3Handler
         public bool RetagFile(string pattern)
         {
             var parser = new TagParser(pattern);
-            var parsedTags = parser.GetFrames(_fileHandler.FileName);
+            var parsedTags = parser.GetTagsValue(_fileHandler.FileName);
             if (parsedTags == null)
                 return false;
             _fileHandler.SetTags(parsedTags);
@@ -28,7 +30,7 @@ namespace Mp3Handler
 
         public bool RenameFile(string pattern)
         {
-            var fileTags = _fileHandler.GetTags();
+            var fileTags = _fileHandler.GetTags(true);
             var newFileName = new StringBuilder(pattern);
             foreach (var fileTag in fileTags)
             {
@@ -40,21 +42,33 @@ namespace Mp3Handler
             return true;
         }
 
-        public bool Difference(string pattern)
+        public Dictionary<FrameType, TagDifference> Difference(string pattern)
         {
-            return false;
-            throw new NotImplementedException();
             var parser = new TagParser(pattern);
-            var parsedTags = parser.GetFrames(_fileHandler.FileName);
+            var pathTags = parser.GetTagsValue(_fileHandler.FileName);
+            if (pathTags == null)
+                return null;
 
-            if (parsedTags == null)
-                return false;
+            var fileTags = _fileHandler.GetTags(false);
+
+            var tagDifference = new Dictionary<FrameType,TagDifference>();
+
+            //todo: convert into linq
+            foreach (var pathTag in pathTags)
+            {
+                if (pathTag.Value != fileTags[pathTag.Key])
+                    tagDifference.Add(pathTag.Key, new TagDifference(fileTags[pathTag.Key], pathTag.Value));
+            }
+
+            return tagDifference.Count != 0 ? tagDifference : null;
         }
 
         public bool Synchronize(string pattern)
         {
             return false;
         }
+
+        private IFileHandler _fileHandler;
 
 #region old
         //private Dictionary<FrameType, string> GetTags(string path)
@@ -131,6 +145,5 @@ namespace Mp3Handler
         //    };
         //}
 #endregion
-        private IFileHandler _fileHandler;
     }
 }

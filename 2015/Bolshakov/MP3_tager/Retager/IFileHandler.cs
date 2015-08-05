@@ -8,7 +8,7 @@ namespace Mp3Handler
 
         string FileName { get; }
 
-        Dictionary<FrameType, string> GetTags();
+        Dictionary<FrameType, string> GetTags(bool removeEmptyTags);
 
         void SetTags(Dictionary<FrameType, string> tags);
 

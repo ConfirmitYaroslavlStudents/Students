@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3Handler;
 
@@ -83,6 +84,29 @@ namespace Tests
             var fileProcesor = new Mp3FileProcessor(fileHandler);
 
             Assert.AreEqual(false, fileProcesor.RenameFile("<a> - <ti>"));
+        }
+
+        [TestMethod]
+        public void DifferenceTest()
+        {
+            var fileHandler = new TestFileHandler("not my artist - my song")
+            {
+                Tags = new Dictionary<FrameType, string>()
+                {
+                    {FrameType.Artist, "my artist"},
+                    {FrameType.Title, "my song"}
+                }
+            };
+            var fileProcesor = new Mp3FileProcessor(fileHandler);
+
+            var fileExpect = "my artist";
+            var pathExpect = "not my artist";
+
+            var result = fileProcesor.Difference("<ar> - <ti>");
+
+            Assert.AreEqual(1,result.Count);
+            Assert.AreEqual(fileExpect,result[FrameType.Artist].FileValue);
+            Assert.AreEqual(pathExpect,result[FrameType.Artist].PathValue);
         }
     }
 }

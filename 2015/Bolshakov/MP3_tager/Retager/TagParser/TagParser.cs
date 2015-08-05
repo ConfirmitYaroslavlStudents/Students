@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Mp3Handler
@@ -18,7 +19,7 @@ namespace Mp3Handler
             Pattern = pattern;
         }
 
-        public Dictionary<FrameType,string> GetFrames(string fileName)
+        public Dictionary<FrameType,string> GetTagsValue(string fileName)
         {
             FileName = fileName;
 
@@ -26,6 +27,27 @@ namespace Mp3Handler
             DeterminateNextTag(new StrWithCursor(FileName), new StrWithCursor(Pattern), out frames);
 
             return frames;
+        }
+
+        public List<FrameType> GetTags()
+        {
+            var pattern = new StrWithCursor(Pattern);
+            var parsedTags = new SortedSet<FrameType>();
+            var tag = new StringBuilder();
+
+            while (pattern!='*')
+            {
+                if (pattern == '<')
+                {
+                    DeterminateTag(pattern, tag);
+                    parsedTags.Add(Frame.GetEnum(tag.ToString()));
+                    tag.Clear();
+                }
+                else
+                    pattern++;
+            }
+
+            return parsedTags.Count != 0 ? parsedTags.ToList() : null;
         }
 
         private void DeterminateNextTag(StrWithCursor fileName, StrWithCursor pattern, out Dictionary<FrameType, string> frames)

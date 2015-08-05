@@ -7,7 +7,7 @@ namespace CommandCreation
     {
         public abstract void Execute();
         protected abstract int[] NumberOfArguments { get; set; }
-        protected abstract string CommandName { get; set; }
+        public abstract string CommandName { get; protected set; }
 
         protected void CheckIfCanBeExecuted(string[] args)
         {

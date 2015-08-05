@@ -15,7 +15,7 @@ namespace CommandCreation
         private readonly string _commandForHelp;
 
         protected override sealed int[] NumberOfArguments { get; set; }
-        protected override sealed string CommandName { get; set; }
+        public override sealed string CommandName { get; protected set; }
 
         public HelpCommand(string[] args)
         {

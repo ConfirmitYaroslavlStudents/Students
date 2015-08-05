@@ -28,26 +28,24 @@ namespace Backuper
 
         private void CopyFiles()
         {
-
             foreach (string sourcePath in Directory.GetFiles(_source, "*", SearchOption.AllDirectories))
             {
-
-                try
-                {
                     var destPath = sourcePath.Replace(_source, _destination);
-                    File.Copy(sourcePath, destPath, true);
-                }
-                catch (IOException e)
-                {
-                    throw new Exception("A copy error occured.");
-                }
+                    File.Copy(sourcePath, destPath, true);                            
             }
         }
 
         public void MakeBackup()
         {
-            CreateDirectories();
-            CopyFiles();
+            try
+            {
+                CreateDirectories();
+                CopyFiles();
+            }
+            catch (IOException e)
+            {
+                throw new Exception("A copy error occured.");
+            }
         }
 
         public void RestoreFromBackUp()

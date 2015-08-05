@@ -16,7 +16,7 @@ namespace CommandCreation
         private readonly string _pattern;
 
         protected override sealed int[] NumberOfArguments { get; set; }
-        protected override sealed string CommandName { get; set; }
+        public override sealed string CommandName { get; protected set; }
 
         public RenameCommand(string[] args)
         {

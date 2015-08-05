@@ -26,7 +26,7 @@ namespace CommandCreation
         private string _mask;
 
         protected override sealed int[] NumberOfArguments { get; set; }
-        protected override sealed string CommandName { get; set; }
+        public override sealed string CommandName { get; protected set; }
 
         public ChangeTagsCommand(string[] args)
         {

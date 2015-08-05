@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using mp3lib.Exceptions;
 
 namespace mp3lib
 {
@@ -46,7 +47,7 @@ namespace mp3lib
 						tagType = TagType.Year;
 						break;
 					default:
-						throw new ArgumentException("There is no tag like " + tag.Value);
+						throw new DataExctracterException("There is no tag like " + tag.Value);
 				}
 
 				tags.Enqueue(tagType);
@@ -80,7 +81,7 @@ namespace mp3lib
 			for (var i = 1; i < prefixes.Length; i++)
 			{
 				var prefix = prefixes[i];
-				if (prefix == "") throw new Exception("Too low prefixes count. Undefined state found.");
+				if (prefix == "") throw new DataExctracterException("Too low prefixes count. Undefined state found.");
 			}
 
 			var data = new Dictionary<TagType, string>();

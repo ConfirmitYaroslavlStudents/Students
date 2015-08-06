@@ -51,7 +51,7 @@
     <Compile Include="FileDifferences.cs" />
     <Compile Include="ICommunication.cs" />
     <Compile Include="IMp3File.cs" />
-    <Compile Include="IReqestable.cs" />
+    <Compile Include="IRequestable.cs" />
     <Compile Include="IResponsable.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="Mp3FileNameChanger.cs" />

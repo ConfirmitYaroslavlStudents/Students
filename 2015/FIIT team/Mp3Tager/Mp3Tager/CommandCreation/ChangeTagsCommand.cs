@@ -20,7 +20,7 @@ namespace CommandCreation
         private string _path;
         private string _mask;
 
-        protected override int[] GetNumberOfArguments()
+        public override int[] GetNumberOfArguments()
         {
             return new[] { 3 };
         }

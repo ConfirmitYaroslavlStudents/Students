@@ -14,7 +14,7 @@ namespace CommandCreation
 
         private readonly string _commandForHelp;
 
-        protected override int[] GetNumberOfArguments()
+        public override int[] GetNumberOfArguments()
         {
             return new[] { 1, 2 };
         }

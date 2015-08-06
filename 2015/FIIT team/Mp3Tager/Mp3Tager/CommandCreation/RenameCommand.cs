@@ -9,7 +9,7 @@ namespace CommandCreation
         private readonly string _path;
         private readonly string _pattern;
 
-        protected override int[] GetNumberOfArguments()
+        public override int[] GetNumberOfArguments()
         {
             return new[] { 3 };            
         }
@@ -30,8 +30,6 @@ namespace CommandCreation
             var audioFile = new Mp3File(_path);
             var newName = GetNewName(audioFile);
             RenameFile(audioFile, newName);
-
-
         }
 
         internal string GetNewName(IMp3File audioFile)
@@ -43,7 +41,6 @@ namespace CommandCreation
             newName.Replace(TagNames.Album, audioFile.Tag.Album);
             newName.Replace(TagNames.Track, audioFile.Tag.Track.ToString());
             return newName.ToString();
-
         }
 
         private void RenameFile(IMp3File audioFile, string newName)

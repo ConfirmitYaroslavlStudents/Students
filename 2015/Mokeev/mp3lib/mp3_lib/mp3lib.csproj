@@ -47,9 +47,11 @@
     <Compile Include="ArgsManager.cs" />
     <Compile Include="DataExtracter.cs" />
     <Compile Include="Diff.cs" />
+    <Compile Include="Exceptions\DataExctracterException.cs" />
     <Compile Include="FileDifferences.cs" />
     <Compile Include="ICommunication.cs" />
     <Compile Include="IMp3File.cs" />
+    <Compile Include="IRequestable.cs" />
     <Compile Include="IResponsable.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="Mp3FileNameChanger.cs" />

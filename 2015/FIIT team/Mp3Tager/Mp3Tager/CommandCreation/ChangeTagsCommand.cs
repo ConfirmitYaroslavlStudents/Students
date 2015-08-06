@@ -20,13 +20,17 @@ namespace CommandCreation
         private string _path;
         private string _mask;
 
-        protected override sealed int[] NumberOfArguments { get; set; }
-        public override sealed string CommandName { get; protected set; }
+        protected override int[] GetNumberOfArguments()
+        {
+            return new[] { 3 };
+        }
+        public override string GetCommandName()
+        {
+            return CommandNames.ChangeTags;
+        }
 
         public ChangeTagsCommand(string[] args)
         {
-            NumberOfArguments = new[] {3};
-            CommandName = CommandNames.ChangeTags;
             CheckIfCanBeExecuted(args);
             _path = args[1];
             _mask = args[2];

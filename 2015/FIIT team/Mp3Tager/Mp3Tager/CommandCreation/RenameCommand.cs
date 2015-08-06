@@ -9,13 +9,17 @@ namespace CommandCreation
         private readonly string _path;
         private readonly string _pattern;
 
-        protected override sealed int[] NumberOfArguments { get; set; }
-        public override sealed string CommandName { get; protected set; }
+        protected override int[] GetNumberOfArguments()
+        {
+            return new[] { 3 };            
+        }
+        public override string GetCommandName()
+        {
+            return CommandNames.Rename;
+        }
 
         public RenameCommand(string[] args)
         {
-            NumberOfArguments = new[] { 3 };
-            CommandName = CommandNames.Rename;
             CheckIfCanBeExecuted(args);
             _path = args[1];
             _pattern = args[2];

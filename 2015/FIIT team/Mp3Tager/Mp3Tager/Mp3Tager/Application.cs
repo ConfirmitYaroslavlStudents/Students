@@ -19,7 +19,7 @@ namespace Mp3Tager
                 //restore for all! exceptions
             catch (Exception e)
             {
-                if(command.CommandName != CommandNames.Help)
+                if(command.GetCommandName != CommandNames.Help)
                     backup.RestoreFromMp3Backup();
                 throw e;
             }

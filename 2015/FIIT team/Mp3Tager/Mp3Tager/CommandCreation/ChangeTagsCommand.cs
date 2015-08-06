@@ -39,31 +39,6 @@ namespace CommandCreation
             audioFile.Save();
         }
 
-        private void ChangeTag(IMp3File audioFile, string tag, string newTagValue)
-        {
-            if (!TagSet.Contains(tag))
-                throw new ArgumentException("There is no such tag.");
-
-            switch (tag)
-            {
-                case TagNames.Artist:
-                    audioFile.Tag.Performers = new[] { newTagValue };
-                    break;
-                case TagNames.Title:
-                    audioFile.Tag.Title = newTagValue;
-                    break;
-                case TagNames.Genre:
-                    audioFile.Tag.Genres = new[] { newTagValue };
-                    break;
-                case TagNames.Album:
-                    audioFile.Tag.Album = newTagValue;
-                    break;
-                case TagNames.Track:
-                    audioFile.Tag.Track = Convert.ToUInt32(newTagValue);
-                    break;
-            }
-        }
-
         private void ChangeTags(IMp3File audioFile, string mask)
         {
             var fileName = new FileInfo(audioFile.Path).Name;
@@ -117,5 +92,29 @@ namespace CommandCreation
             return tags;
         }
 
+        internal void ChangeTag(IMp3File audioFile, string tag, string newTagValue)
+        {
+            if (!TagSet.Contains(tag))
+                throw new ArgumentException("There is no such tag.");
+
+            switch (tag)
+            {
+                case TagNames.Artist:
+                    audioFile.Tag.Performers = new[] { newTagValue };
+                    break;
+                case TagNames.Title:
+                    audioFile.Tag.Title = newTagValue;
+                    break;
+                case TagNames.Genre:
+                    audioFile.Tag.Genres = new[] { newTagValue };
+                    break;
+                case TagNames.Album:
+                    audioFile.Tag.Album = newTagValue;
+                    break;
+                case TagNames.Track:
+                    audioFile.Tag.Track = Convert.ToUInt32(newTagValue);
+                    break;
+            }
+        }
     }
 }

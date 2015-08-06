@@ -1,6 +1,6 @@
 ﻿using Mp3Lib;
 
-namespace Mp3LibTests
+namespace CommandCreationTests
 {
     internal class FakeMp3File : IMp3File
     {

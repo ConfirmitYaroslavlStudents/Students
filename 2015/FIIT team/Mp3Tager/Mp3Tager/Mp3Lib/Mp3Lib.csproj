@@ -47,6 +47,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="File.cs" />
+    <Compile Include="IFile.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="IMp3File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -39,9 +39,10 @@ namespace CommandCreation
             audioFile.Save();
         }
 
-        private void ChangeTags(IMp3File audioFile, string mask)
+        internal void ChangeTags(IMp3File audioFile, string mask)
         {
             var fileName = new FileInfo(audioFile.Path).Name;
+            fileName = RemoveExtension(fileName);
             var splits = GetSplits(mask);
             var tags = GetTags(mask);
             for (int i = 0; i < splits.Count; i++)
@@ -71,6 +72,13 @@ namespace CommandCreation
             }
 
             return splits;
+        }
+
+        private string RemoveExtension(string filename)
+        {
+            var index = filename.IndexOf(".mp3", 0);
+            var result = filename.Substring(0, index);
+            return result;
         }
 
         private List<string> GetTags(string mask)

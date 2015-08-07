@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9008D222-0ECD-4597-9BE4-210499C6F3C9}</ProjectGuid>
+    <ProjectGuid>{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mp3Tager</RootNamespace>
@@ -43,22 +43,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
-    <Compile Include="BackupMp3Tager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Backuper\Backuper.csproj">
-      <Project>{fb7b6b0b-87ac-410e-8e47-615195855458}</Project>
+      <Project>{b91332ff-bec9-41d5-9610-75532773266b}</Project>
       <Name>Backuper</Name>
     </ProjectReference>
     <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">
-      <Project>{1ef53300-5b6a-4290-9cc1-f8194e72c277}</Project>
+      <Project>{b9a0ec73-bb56-4118-8f16-85a73a930116}</Project>
       <Name>CommandCreation</Name>
     </ProjectReference>
   </ItemGroup>

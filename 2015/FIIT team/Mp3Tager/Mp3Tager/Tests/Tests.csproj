@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B67CD597-58C9-4644-8620-76C167A2C0D9}</ProjectGuid>
+    <ProjectGuid>{23C5428C-58BD-4223-B0F8-5209511B74C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommandCreationTests</RootNamespace>
-    <AssemblyName>CommandCreationTests</AssemblyName>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,20 +50,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ChangeTagTests.cs" />
-    <Compile Include="CreateUniquePathTests.cs" />
-    <Compile Include="FakeFile.cs" />
-    <Compile Include="FakeMp3File.cs" />
-    <Compile Include="GetNewNameTests.cs" />
+    <Compile Include="BackuperTests.cs" />
+    <Compile Include="Fakes\FakeFile.cs" />
+    <Compile Include="Fakes\FakeMp3File.cs" />
+    <Compile Include="Mp3ManipulationsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">
-      <Project>{1ef53300-5b6a-4290-9cc1-f8194e72c277}</Project>
-      <Name>CommandCreation</Name>
+    <ProjectReference Include="..\Backuper\Backuper.csproj">
+      <Project>{b91332ff-bec9-41d5-9610-75532773266b}</Project>
+      <Name>Backuper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
-      <Project>{33d3f509-bb12-4033-a44c-9baf5c4f3bac}</Project>
+      <Project>{b6ed8bfd-54ff-4b0c-a0ef-61bdd70c96d7}</Project>
       <Name>Mp3Lib</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,18 +1,5 @@
-D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.exe.config
-D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.exe
-D:\soft\CSharpProjects\Backuper\Backuper\bin\Debug\Backuper.pdb
-D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
-D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.exe
-D:\soft\CSharpProjects\Backuper\Backuper\obj\Debug\Backuper.pdb
-D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\bin\Debug\Backuper.dll.config
-D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\bin\Debug\Backuper.dll
-D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\bin\Debug\Backuper.pdb
-D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
-D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\obj\Debug\Backuper.dll
-D:\soft\ConfirmitFolder\Students\2015\FIIT team\Mp3Tager\Mp3Tager\Backuper\obj\Debug\Backuper.pdb
-C:\Users\Acer\Documents\Visual Studio 2013\Projects\Mp3Tager\Backuper\bin\Debug\Backuper.dll.config
-C:\Users\Acer\Documents\Visual Studio 2013\Projects\Mp3Tager\Backuper\bin\Debug\Backuper.dll
-C:\Users\Acer\Documents\Visual Studio 2013\Projects\Mp3Tager\Backuper\bin\Debug\Backuper.pdb
-C:\Users\Acer\Documents\Visual Studio 2013\Projects\Mp3Tager\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
-C:\Users\Acer\Documents\Visual Studio 2013\Projects\Mp3Tager\Backuper\obj\Debug\Backuper.dll
-C:\Users\Acer\Documents\Visual Studio 2013\Projects\Mp3Tager\Backuper\obj\Debug\Backuper.pdb
+C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\bin\Debug\Backuper.dll
+C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\bin\Debug\Backuper.pdb
+C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
+C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\obj\Debug\Backuper.dll
+C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\obj\Debug\Backuper.pdb

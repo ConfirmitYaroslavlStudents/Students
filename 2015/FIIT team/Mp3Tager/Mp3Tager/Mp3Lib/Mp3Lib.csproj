@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33D3F509-BB12-4033-A44C-9BAF5C4F3BAC}</ProjectGuid>
+    <ProjectGuid>{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mp3Lib</RootNamespace>
@@ -47,16 +47,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="File.cs" />
-    <Compile Include="IFile.cs" />
-    <Compile Include="Mp3File.cs" />
-    <Compile Include="IMp3File.cs" />
+    <Compile Include="Mp3File\IMp3File.cs" />
+    <Compile Include="Mp3File\IMp3Tags.cs" />
+    <Compile Include="Mp3File\Mp3File.cs" />
+    <Compile Include="Mp3File\Mp3Tags.cs" />
+    <Compile Include="Mp3Manipulations\ChangeTags.cs" />
+    <Compile Include="Mp3Manipulations\Mp3Manipulations.cs" />
+    <Compile Include="Mp3Manipulations\Rename.cs" />
+    <Compile Include="Mp3Manipulations\TagPatterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

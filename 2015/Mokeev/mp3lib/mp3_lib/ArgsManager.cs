@@ -80,6 +80,7 @@ namespace mp3lib
 
 			for (var i = 0; i < Args.Length; i++)
 			{
+                // TODO is it readable at all?
 				if (Args[i] == PATH		&& i + 1 < Args.Length && Args[i + 1] == MASK	||
 					Args[i] == MASK		&& i + 1 < Args.Length && Args[i + 1] == PATH	||
 					Args[i] == PATH		&& i + 1 < Args.Length && Args[i + 1] == ACTION ||

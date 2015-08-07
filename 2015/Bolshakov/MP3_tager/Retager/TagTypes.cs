@@ -11,6 +11,8 @@ namespace Mp3Handler
         Year
     }
 
+
+    // TODO :: Why static?
     public static class Frame
     {
         static Frame()

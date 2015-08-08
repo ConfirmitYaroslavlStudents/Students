@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BackupLib;
+using RestoreLib;
 using Tests.Fakes;
 
 namespace Tests
@@ -11,7 +11,7 @@ namespace Tests
         [TestMethod]
         public void Backup_Successful()
         {
-            var backup = new Backup();
+            var backup = new Restore();
 
             var tempFile = backup.MakeBackup(new FakeFile(@"D:\music\audio.mp3"));
             Assert.AreEqual(tempFile.FullName, Path.GetTempPath() + @"audio.mp3");

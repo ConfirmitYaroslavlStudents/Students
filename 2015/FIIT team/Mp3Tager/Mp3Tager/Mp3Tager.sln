@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Tager", "Mp3Tager\Mp3Tag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Lib", "Mp3Lib\Mp3Lib.csproj", "{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupLib", "BackupLib\BackupLib.csproj", "{60171C53-459B-448A-BD6B-3BAAB29A95F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestoreLib", "RestoreLib\RestoreLib.csproj", "{420F97FF-A3D8-401D-A00C-0BFC96346412}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,10 @@ Global
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{420F97FF-A3D8-401D-A00C-0BFC96346412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420F97FF-A3D8-401D-A00C-0BFC96346412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420F97FF-A3D8-401D-A00C-0BFC96346412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420F97FF-A3D8-401D-A00C-0BFC96346412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

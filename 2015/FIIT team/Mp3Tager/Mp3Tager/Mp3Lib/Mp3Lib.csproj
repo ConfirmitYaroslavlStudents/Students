@@ -47,6 +47,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mp3File\FileExistenceChecker.cs" />
+    <Compile Include="Mp3File\IFileExistenceChecker.cs" />
     <Compile Include="Mp3File\IMp3File.cs" />
     <Compile Include="Mp3File\IMp3Tags.cs" />
     <Compile Include="Mp3File\Mp3File.cs" />
@@ -59,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileBackuperLib\FileBackuperLib.csproj">
+      <Project>{b12b3bab-087b-47de-b73d-bdac93b02e24}</Project>
+      <Name>FileBackuperLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

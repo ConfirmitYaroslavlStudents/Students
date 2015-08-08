@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Fakes\FakeFileExistenceChecker.cs" />
     <Compile Include="FileBackuperTests.cs" />
     <Compile Include="Fakes\FakeFile.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />

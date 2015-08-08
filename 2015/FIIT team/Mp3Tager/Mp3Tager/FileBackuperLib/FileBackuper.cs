@@ -3,7 +3,7 @@ using System.IO;
 
 namespace FileBackuperLib
 {
-    public class FileBackuper
+    public class FileBackuper: IDisposable
     {
         private IFile _sourceFile;
         private IFile _tempFile;
@@ -33,7 +33,7 @@ namespace FileBackuperLib
             _restored = true;
         }
 
-        public void Free()
+        public void Dispose()
         {
             if (_tempFile != null && _restored == false)
             {

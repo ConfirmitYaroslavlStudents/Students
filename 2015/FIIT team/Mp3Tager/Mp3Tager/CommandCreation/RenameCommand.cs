@@ -28,7 +28,7 @@ namespace CommandCreation
         {
             var mp3File = new Mp3File(File.Create(_path));
             var mp3Manipulations = new Mp3Manipulations(mp3File);
-            mp3Manipulations.Rename(_pattern);
+            mp3Manipulations.Rename(_pattern, new FileExistenceChecker());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3Lib;
+using Tests.Fakes;
 
 namespace Tests
 {
@@ -16,7 +17,7 @@ namespace Tests
             });
 
             var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
-            mp3Manipulations.Rename("{artist}-{title}");
+            mp3Manipulations.Rename("{artist}-{title}", new FakeFileExistenceChecker());
 
             Assert.AreEqual(fakeMp3File.Path, @"D:\music\Alla-Arlekino.mp3");
         }

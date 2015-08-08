@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using TagLib;
+using FileBackuperLib;
+using System;
 
 namespace Mp3Lib
 {
@@ -16,7 +18,7 @@ namespace Mp3Lib
             _file = file;
             Path = _file.Name;
 
-            Mp3Tags = new Mp3Tags
+            Mp3Tags = new Mp3Tags   
             {
                 Album = file.Tag.Album,
                 Title = file.Tag.Title,
@@ -30,11 +32,23 @@ namespace Mp3Lib
         {
             new FileInfo(Path).MoveTo(path);
             Path = path;
-        }
+        }    
+        
 
         public void Save()
         {
-            _file.Save();
+            using (var backup = new FileBackuper())
+            {
+                backup.MakeBackup(new FileBackuperLib.File(Path));
+                try
+                {
+                    _file.Save();
+                }
+                catch(Exception e)
+                {
+                    backup.RestoreFromBackup();
+                }
+            }
         }
     }
 }

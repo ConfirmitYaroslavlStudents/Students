@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{23C5428C-58BD-4223-B0F8-5209511B74C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandCreation", "CommandCreation\CommandCreation.csproj", "{B9A0EC73-BB56-4118-8F16-85A73A930116}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Tager", "Mp3Tager\Mp3Tager.csproj", "{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backuper", "Backuper\Backuper.csproj", "{B91332FF-BEC9-41D5-9610-75532773266B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Lib", "Mp3Lib\Mp3Lib.csproj", "{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupLib", "BackupLib\BackupLib.csproj", "{60171C53-459B-448A-BD6B-3BAAB29A95F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +29,14 @@ Global
 		{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B91332FF-BEC9-41D5-9610-75532773266B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B91332FF-BEC9-41D5-9610-75532773266B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B91332FF-BEC9-41D5-9610-75532773266B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B91332FF-BEC9-41D5-9610-75532773266B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60171C53-459B-448A-BD6B-3BAAB29A95F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

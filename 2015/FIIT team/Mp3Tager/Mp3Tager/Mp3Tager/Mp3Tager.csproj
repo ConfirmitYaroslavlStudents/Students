@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Backuper\Backuper.csproj">
-      <Project>{b91332ff-bec9-41d5-9610-75532773266b}</Project>
-      <Name>Backuper</Name>
+    <ProjectReference Include="..\BackupLib\BackupLib.csproj">
+      <Project>{60171c53-459b-448a-bd6b-3baab29a95f9}</Project>
+      <Name>BackupLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">
       <Project>{b9a0ec73-bb56-4118-8f16-85a73a930116}</Project>

@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Backuper\Backuper.csproj">
-      <Project>{b91332ff-bec9-41d5-9610-75532773266b}</Project>
-      <Name>Backuper</Name>
+    <ProjectReference Include="..\BackupLib\BackupLib.csproj">
+      <Project>{60171c53-459b-448a-bd6b-3baab29a95f9}</Project>
+      <Name>BackupLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
       <Project>{b6ed8bfd-54ff-4b0c-a0ef-61bdd70c96d7}</Project>

@@ -1,5 +1,0 @@
-C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\bin\Debug\Backuper.dll
-C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\bin\Debug\Backuper.pdb
-C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\obj\Debug\Backuper.csprojResolveAssemblyReference.cache
-C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\obj\Debug\Backuper.dll
-C:\Users\Артем\Desktop\MyTager\MyTager\Backuper\obj\Debug\Backuper.pdb

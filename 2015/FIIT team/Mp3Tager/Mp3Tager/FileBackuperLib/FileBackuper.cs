@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace RestoreLib
+namespace FileBackuperLib
 {
-    public class Restore
+    public class FileBackuper
     {
         private IFile _sourceFile;
         private IFile _tempFile;

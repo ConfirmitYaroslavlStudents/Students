@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace RestoreLib
+﻿namespace FileBackuperLib
 {
     public class File : IFile
     {
@@ -8,7 +6,6 @@ namespace RestoreLib
 
         public File(string path)
         {
-            //System.IO.File.Open(path, FileMode.Open);
             FullName = path;
         }
 

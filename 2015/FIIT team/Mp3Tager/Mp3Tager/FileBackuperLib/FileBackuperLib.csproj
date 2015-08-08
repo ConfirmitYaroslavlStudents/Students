@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{420F97FF-A3D8-401D-A00C-0BFC96346412}</ProjectGuid>
+    <ProjectGuid>{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestoreLib</RootNamespace>
-    <AssemblyName>RestoreLib</AssemblyName>
+    <RootNamespace>FileBackuperLib</RootNamespace>
+    <AssemblyName>FileBackuperLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,10 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileBackuper.cs" />
     <Compile Include="File.cs" />
     <Compile Include="IFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Restore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

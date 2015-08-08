@@ -7,7 +7,7 @@ namespace Tests.Fakes
     {
         private readonly HashSet<string> _paths = new HashSet<string>
         {
-            @"D:\TestFile.mp3", @"D:\TestFile (1).mp3"
+            @"D:\music\Alla.mp3", @"D:\music\Alla (1).mp3"
         };
         public bool CheckIfExists(string path)
         {

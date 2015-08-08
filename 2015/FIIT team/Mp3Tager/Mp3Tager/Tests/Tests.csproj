@@ -54,7 +54,8 @@
     <Compile Include="FileBackuperTests.cs" />
     <Compile Include="Fakes\FakeFile.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />
-    <Compile Include="Mp3ManipulationsTests.cs" />
+    <Compile Include="Mp3ManipulationsTests_ChangeTags.cs" />
+    <Compile Include="Mp3ManipulationsTests_Rename.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

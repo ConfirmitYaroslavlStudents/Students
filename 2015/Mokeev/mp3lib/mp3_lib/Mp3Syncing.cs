@@ -5,14 +5,15 @@ namespace mp3lib
 {
 	public class Mp3Syncing
 	{
-		private IMp3File[] _files;
-		private ICommunication _communication;
-		private string _mask;
+		private readonly IMp3File[] _files;
+		private readonly ICommunication _communication;
+		private readonly string _mask;
 
 		public Mp3Syncing(IEnumerable<IMp3File> files, string mask, ICommunication communication)
 		{
 			_files = files.ToArray();
 			_communication = communication;
+			_mask = mask;
 		}
 
 		public void SyncFiles()
@@ -36,8 +37,8 @@ namespace mp3lib
 			{
 				foreach (var diff in fileDifferencese.Diffs)
 				{
-					
-				}
+					if (diff.Value.FileNameValue != "" && diff.Value.TagValue != "") 
+                }
 			}
 
 

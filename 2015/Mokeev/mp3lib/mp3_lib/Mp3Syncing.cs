@@ -37,7 +37,7 @@ namespace mp3lib
 			{
 				foreach (var diff in fileDifferencese.Diffs)
 				{
-					if (diff.Value.FileNameValue != "" && diff.Value.TagValue != "") 
+					//if (diff.Value.FileNameValue != "" && diff.Value.TagValue != "") 
                 }
 			}
 
@@ -45,5 +45,14 @@ namespace mp3lib
 		}
 
 
+
+
 	}
+
+	public enum SyncActions
+	{
+		FromFileName,
+		FromData
+	}
+
 }

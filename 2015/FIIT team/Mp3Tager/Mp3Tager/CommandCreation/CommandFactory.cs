@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace CommandCreation
 {
@@ -7,7 +6,8 @@ namespace CommandCreation
     {
         public Command ChooseCommand(string[] args)
         {
-            CheckForEmtyness(args);
+            var parser = new ArgumentParser(args);
+            parser.CheckForEmptiness();
             var commandName = args[0];
             switch (commandName)
             {
@@ -18,16 +18,8 @@ namespace CommandCreation
                 case CommandNames.ChangeTags:
                     return new ChangeTagsCommand(args);
                 default:
-                    throw new InvalidDataException("There is no such command");
+                    throw new InvalidOperationException("Invalid operation: there is no such command!");
             }
-        }
-
-        private void CheckForEmtyness(string[] args)
-        {
-            if (args == null)
-                throw new ArgumentNullException("args");
-            if (args.Length == 0)
-                throw new ArgumentException("You haven't passed any argument!");
-        }
+        }        
     }
 }

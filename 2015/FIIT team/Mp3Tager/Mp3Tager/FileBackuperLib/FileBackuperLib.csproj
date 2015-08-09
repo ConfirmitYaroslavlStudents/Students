@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}</ProjectGuid>
+    <ProjectGuid>{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mp3Lib</RootNamespace>
-    <AssemblyName>Mp3Lib</AssemblyName>
+    <RootNamespace>FileBackuperLib</RootNamespace>
+    <AssemblyName>FileBackuperLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,32 +37,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mp3File\FileExistenceChecker.cs" />
-    <Compile Include="Mp3File\IFileExistenceChecker.cs" />
-    <Compile Include="Mp3File\IMp3File.cs" />
-    <Compile Include="Mp3File\IMp3Tags.cs" />
-    <Compile Include="Mp3File\Mp3File.cs" />
-    <Compile Include="Mp3File\Mp3Tags.cs" />
-    <Compile Include="Mp3Manipulations\ChangeTags.cs" />
-    <Compile Include="Mp3Manipulations\Mp3Manipulations.cs" />
-    <Compile Include="Mp3Manipulations\Rename.cs" />
-    <Compile Include="Mp3Manipulations\TagPatterns.cs" />
+    <Compile Include="FileBackuper.cs" />
+    <Compile Include="File.cs" />
+    <Compile Include="IFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FileBackuperLib\FileBackuperLib.csproj">
-      <Project>{b12b3bab-087b-47de-b73d-bdac93b02e24}</Project>
-      <Name>FileBackuperLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,8 +13,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: InternalsVisibleTo("Mp3Tager")]
-[assembly: InternalsVisibleTo("Mp3LibTests")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -22,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cd6f1619-8126-4fd1-88c6-3f225500ae67")]
+[assembly: Guid("f8f437f2-e288-4f20-b2e9-7ef0c3bb0eee")]
 
 // Version information for an assembly consists of the following four values:
 //

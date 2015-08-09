@@ -14,13 +14,17 @@ namespace CommandCreation
 
         private readonly string _commandForHelp;
 
-        protected override sealed int[] NumberOfArguments { get; set; }
-        public override sealed string CommandName { get; protected set; }
+        public override int[] GetNumberOfArguments()
+        {
+            return new[] { 1, 2 };
+        }
+        public override string GetCommandName()
+        {
+            return CommandNames.Help;
+        }
 
         public HelpCommand(string[] args)
         {
-            NumberOfArguments = new[] { 1, 2 };
-            CommandName = CommandNames.Help;
             CheckIfCanBeExecuted(args);
             _commandForHelp = args.Length == 2 ? args[1] : null;
         }

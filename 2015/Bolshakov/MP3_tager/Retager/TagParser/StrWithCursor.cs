@@ -2,6 +2,9 @@
 
 namespace Mp3Handler
 {
+    // TODO :: Why don't we use IEnumerable to enumerate string? 
+    // TODO :: Rename, make it readable
+
     public class StrWithCursor
     {
         protected bool Equals(StrWithCursor other)
@@ -35,6 +38,7 @@ namespace Mp3Handler
             StringValue = input;
         }
 
+        
         public StrWithCursor(StrWithCursor input)
         {
             _str = input._str;

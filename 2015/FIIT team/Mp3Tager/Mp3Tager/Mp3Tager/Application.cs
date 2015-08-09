@@ -1,4 +1,5 @@
 ﻿using System;
+using FileBackuperLib;
 using CommandCreation;
 
 namespace Mp3Tager
@@ -7,30 +8,8 @@ namespace Mp3Tager
     {
         public void Execute(string[] args)
         {
-            var backup = new BackupMp3Tager();
-            backup.MakeMp3Backup(args);
-
-            var command = CreateCommand(args);
-
-            try
-            {
-                command.Execute();
-            }
-                //restore for all! exceptions
-            catch (Exception e)
-            {
-                if(command.CommandName != CommandNames.Help)
-                    backup.RestoreFromMp3Backup();
-                throw e;
-            }
+            var command = new CommandFactory().ChooseCommand(args);
+            command.Execute();            
         }
-
-        private Command CreateCommand(string[] args)
-        {
-            var factory = new CommandFactory();
-            var command = factory.ChooseCommand(args);
-            return command;
-        }
- 
     }
 }

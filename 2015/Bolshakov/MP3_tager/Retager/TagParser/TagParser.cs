@@ -52,6 +52,7 @@ namespace Mp3Handler
 
         private void DeterminateNextTag(StrWithCursor fileName, StrWithCursor pattern, out Dictionary<FrameType, string> frames)
         {
+            //TODO ::  Why do we need to use a copy constructor?
             fileName = new StrWithCursor(fileName);
             pattern = new StrWithCursor(pattern);
 

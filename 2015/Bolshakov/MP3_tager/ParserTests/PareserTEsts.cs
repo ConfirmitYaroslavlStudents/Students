@@ -25,6 +25,8 @@ namespace Tests
         {
             var artist = "artist";
             var title = "title";
+
+            // TODO :: this is not 'expect' - 'input'
             var expect = artist + " - " + title;
 
             var parser = new TagParser("<ar> - <ti>");

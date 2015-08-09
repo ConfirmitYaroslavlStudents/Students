@@ -79,7 +79,7 @@ namespace Mp3TagLib
             if (name == null)
                 throw new ArgumentException("Bad tag name");
             name = name.ToLower();
-            //[ToDO] remove switch
+            //[ToDO] remove if
             if (_tags.ContainsKey(name))
             {
                 if (name == "year" || name == "track")

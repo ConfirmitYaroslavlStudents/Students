@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1EF53300-5B6A-4290-9CC1-F8194E72C277}</ProjectGuid>
+    <ProjectGuid>{B9A0EC73-BB56-4118-8F16-85A73A930116}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommandCreation</RootNamespace>
@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -37,8 +41,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentParser.cs" />
     <Compile Include="ChangeTagsCommand.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
@@ -49,8 +58,11 @@
     <Compile Include="TagNames.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
-      <Project>{33d3f509-bb12-4033-a44c-9baf5c4f3bac}</Project>
+      <Project>{b6ed8bfd-54ff-4b0c-a0ef-61bdd70c96d7}</Project>
       <Name>Mp3Lib</Name>
     </ProjectReference>
   </ItemGroup>

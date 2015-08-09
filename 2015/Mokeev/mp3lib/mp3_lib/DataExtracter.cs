@@ -47,7 +47,7 @@ namespace mp3lib
 						tagType = TagType.Year;
 						break;
 					default:
-						throw new DataExctracterException("There is no tag like " + tag.Value);
+						continue;
 				}
 
 				tags.Enqueue(tagType);

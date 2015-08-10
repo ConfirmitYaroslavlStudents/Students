@@ -40,7 +40,8 @@ namespace Mp3Lib
                         throw new InvalidDataException("Mask doesn't match the file name.");
                     }
                 }
-                finish = fileName.IndexOf(splits[i + 1], StringComparison.Ordinal);
+                finish = fileName.IndexOf(splits[i + 1], 1, StringComparison.Ordinal);
+                
 
                 if (finish == -1)
                 {
@@ -63,7 +64,7 @@ namespace Mp3Lib
             }
             if (splits[splits.Count - 1] != String.Empty)
             {
-                finish = fileName.IndexOf(splits[splits.Count - 1], StringComparison.Ordinal);
+                finish = fileName.IndexOf(splits[splits.Count - 1], 1, StringComparison.Ordinal);
                 if (!fileName.EndsWith(splits[splits.Count - 1]))
                 {
                     throw new InvalidDataException("Mask doesn't match the file name.");

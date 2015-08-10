@@ -18,8 +18,8 @@ namespace Tests
             mp3Manipulations.ChangeTags(@"{artist}-{title}");
 
             // Assert
-            Assert.AreEqual(fakeMp3File.Mp3Tags.Artist, "Alla");
-            Assert.AreEqual(fakeMp3File.Mp3Tags.Title, "Arlekino");
+            Assert.AreEqual("Alla", fakeMp3File.Mp3Tags.Artist);
+            Assert.AreEqual("Arlekino", fakeMp3File.Mp3Tags.Title);
         }
 
         [TestMethod]
@@ -33,9 +33,27 @@ namespace Tests
             mp3Manipulations.ChangeTags(@"{ss{artist}}-{title}.");
 
             // Assert
-            Assert.AreEqual(fakeMp3File.Mp3Tags.Artist, "Alla");
-            Assert.AreEqual(fakeMp3File.Mp3Tags.Title, "Arlekino");
+            Assert.AreEqual("Alla", fakeMp3File.Mp3Tags.Artist);
+            Assert.AreEqual( "Arlekino",fakeMp3File.Mp3Tags.Title);
         }
+
+        [TestMethod]
+        public void ChangeTags_SimilarSplits_SuccessfulChange()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\Alla.Arlekino.Pop.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"{artist}.{title}.{genre}");
+
+            // Assert
+            Assert.AreEqual("Alla", fakeMp3File.Mp3Tags.Artist);
+            Assert.AreEqual("Arlekino", fakeMp3File.Mp3Tags.Title);
+            Assert.AreEqual("Pop", fakeMp3File.Mp3Tags.Genre);
+        }
+
+        
 
         [TestMethod]
         public void ChangeTags_EmptyMask_WithoutChanges()
@@ -48,8 +66,21 @@ namespace Tests
             mp3Manipulations.ChangeTags(@"");
 
             // Assert
-            Assert.AreEqual(fakeMp3File.Mp3Tags.Artist, null);
-            Assert.AreEqual(fakeMp3File.Mp3Tags.Title, null);
+            Assert.IsNull(fakeMp3File.Mp3Tags.Artist);
+            Assert.IsNull(fakeMp3File.Mp3Tags.Title);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void ChangeTags_WrongMaskDifferentOrderOfSplits_InvalidDataException()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\.Alla.Arlekino.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"{artist}.{title}.");
+            
         }
 
         [TestMethod]
@@ -62,6 +93,18 @@ namespace Tests
 
             // Act
             mp3Manipulations.ChangeTags(@"..{artist}-{title}");
+        }        
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void ChangeTags_WrongMask_SplitsInDifferentOrder_InvalidDataException()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\_def_Arlekino_abc_.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"_abc_{artist}_def_");
         }
 
         [TestMethod]
@@ -111,5 +154,7 @@ namespace Tests
             // Act
             mp3Manipulations.ChangeTags(@"{artist}{title}");
         }
+
+        
     }
 }

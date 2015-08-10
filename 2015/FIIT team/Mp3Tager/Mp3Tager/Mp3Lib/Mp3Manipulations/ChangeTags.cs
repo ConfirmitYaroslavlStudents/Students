@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Mp3Lib
 {    
@@ -18,6 +19,13 @@ namespace Mp3Lib
 
             if (tags.Count == 0)
                 return;
+
+            //if (!parser.IsEqualNumberOfSplitsInMaskAndFileName(fileName))
+             //   throw new InvalidDataException();
+            if (splits.Any(split => split != String.Empty && !parser.IsEqualNumberOfSplitsInMaskAndFileName(split, splits, fileName)))
+            {
+                throw new InvalidDataException();
+            }
 
             for (int i = 0; i < tags.Count - 1; i++)
             {
@@ -107,5 +115,6 @@ namespace Mp3Lib
             }
         }
 
+        
     }
 }

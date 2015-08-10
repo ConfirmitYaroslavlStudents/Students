@@ -90,9 +90,67 @@ namespace Mp3Lib
             return mask.ToString();
         }
 
-        public bool ValidateFileNameWithMask(string fileName)
+        /*public bool IsEqualNumberOfSplitsInMaskAndFileName(string fileName)
         {
+            if (_splits.Any(split => split != String.Empty && CountSplitsInFileName(split, fileName) != CountSplitsInMask(split)))
+            {
+                return false;
+            }
             return true;
+        }
+
+        private int CountSplitsInMask(string necessarySplit)
+        {
+            return _splits.Count(split => split == necessarySplit);
+        }
+
+        private int CountSplitsInFileName(string necessarySplit, string fileName)
+        {
+            int count = 0;
+            var current = fileName;
+            int finish = current.IndexOf(necessarySplit, StringComparison.Ordinal);
+
+            while (finish != -1)
+            {
+                count++;
+                current = current.Remove(0, finish + 1);
+                finish = current.IndexOf(necessarySplit, StringComparison.Ordinal);
+
+            }
+            return count;
+        }*/
+
+        public bool IsEqualNumberOfSplitsInMaskAndFileName(string split, IEnumerable<string> splitsInMask, string fileName)
+        {
+            return CountSplitsInFileName(split, fileName) == CountSplitsInMask(split, splitsInMask);
+
+        }
+
+        private int CountSplitsInMask(string necessarySplit, IEnumerable<string> splits)
+        {
+            int count = 0;
+            foreach (var split in splits)
+            {
+                if (split == necessarySplit)
+                    count++;
+            }
+            return count;
+        }
+
+        private int CountSplitsInFileName(string necessarySplit, string fileName)
+        {
+            int count = 0;
+            var current = fileName;
+            int finish = current.IndexOf(necessarySplit);
+
+            while (finish != -1)
+            {
+                count++;
+                current = current.Remove(0, finish + 1);
+                finish = current.IndexOf(necessarySplit);
+
+            }
+            return count;
         }
     }
 

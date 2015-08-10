@@ -13,6 +13,8 @@ namespace mp3lib
 		string TrackId { get; set; }
 		string Year { get; set; }
 
+		string this[TagType type] { get; set; }
+
 		Dictionary<TagType, string> GetId3Data();
 		void ChangeFileName(string filePath);
 	}

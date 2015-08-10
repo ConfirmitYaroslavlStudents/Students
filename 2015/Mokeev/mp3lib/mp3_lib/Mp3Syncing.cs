@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace mp3lib
@@ -37,22 +38,56 @@ namespace mp3lib
 			{
 				foreach (var diff in fileDifferencese.Diffs)
 				{
-					//if (diff.Value.FileNameValue != "" && diff.Value.TagValue != "") 
-                }
+					if (diff.Value.FileNameValue == "" ^ diff.Value.TagValue == "")
+					{
+						fileDifferencese.Mp3File[diff.Key] = GetInfoFromUser(diff.Key, diff.Value);
+					}
+					else
+					{
+						fileDifferencese.Mp3File[diff.Key] = (diff.Value.FileNameValue != "")
+							? diff.Value.FileNameValue
+							: diff.Value.TagValue;
+					}
+
+				}
 			}
 
 
 		}
 
 
+		private string GetInfoFromUser(TagType tag, Diff diff)
+		{
+			_communication.SendMessage(string.Format("There is a problem with tag \"{0}\". ", tag));
+			_communication.SendMessage("You can enter tag from: \n\t1) File name, \n\t1) File, \n\t1) Manual");
 
+			while (true)
+			{
+				_communication.SendMessage("Your choise (number): ");
+				SyncActions inputData;
+				var choiseCorrect = SyncActions.TryParse(_communication.GetResponse(), out inputData);
+				if(!choiseCorrect) continue;
+
+				switch (inputData)
+				{
+					case SyncActions.FromFileName:
+						return diff.FileNameValue;
+					case SyncActions.FromData:
+						return diff.TagValue;
+					case SyncActions.Manual:
+						_communication.SendMessage("Enter text for tag \"" + tag + "\"");
+						return _communication.GetResponse();
+				}
+			}
+		}
 
 	}
 
-	public enum SyncActions
+	internal enum SyncActions
 	{
-		FromFileName,
-		FromData
+		FromFileName	= 1,
+		FromData		= 2,
+		Manual			= 3,
 	}
 
 }

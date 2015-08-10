@@ -14,6 +14,12 @@ namespace mp3lib_Tests.Classes_for_tests
 		public string TrackId { get; set; }
 		public string Year { get; set; }
 
+		public string this[TagType type]
+		{
+			get { throw new System.NotImplementedException(); }
+			set { throw new System.NotImplementedException(); }
+		}
+
 		public TestMp3File(string filePath)
 		{
 			FilePath = filePath;

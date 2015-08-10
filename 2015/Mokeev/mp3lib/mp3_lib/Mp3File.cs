@@ -16,6 +16,41 @@ namespace mp3lib
 		public string Artist { get { return Tags.Artists; } set { Tags.Artists.TextValue = value; Set(); } }
 		public string Album { get { return Tags.Album; } set { Tags.Album.Value = value; Set(); } }
 		public string Year { get { return Tags.Year.Value.ToString(); } set { Tags.Year.Value = Convert.ToInt32(value); Set(); } }
+
+		public string this[TagType type]
+		{
+			get { return GetId3Data()[type]; }
+			set
+			{
+				switch (type)
+				{
+					case TagType.Artist:
+						Artist = value;
+						break;
+					case TagType.Id:
+						TrackId = value;
+						break;
+					case TagType.Title:
+						Title = value;
+						break;
+					case TagType.Album:
+						Album = value;
+						break;
+					case TagType.Genre:
+						Genre = value;
+						break;
+					case TagType.Year:
+                         Year = value;
+						break;
+					case TagType.Comment:
+						Comment = value;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(type), type, null);
+				}
+			}
+		}
+
 		public string Comment { get { return Tags.Comments.ToString(); } set { Tags.Comments.Clear(); Tags.Comments.Add(new CommentFrame() { Comment = value }); Set(); } }
 		public string TrackId { get { return Tags.Track.TrackCount.ToString(); } set { Tags.Track.Value = Convert.ToInt32(value); Set(); } }
 		public string Genre { get { return Tags.Genre; } set { Tags.Genre.Value = value; Set(); } }

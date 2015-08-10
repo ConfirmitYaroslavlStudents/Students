@@ -34,6 +34,11 @@ namespace Mp3Lib
                 }
                 finish = fileName.IndexOf(splits[i + 1], StringComparison.Ordinal);
 
+                if (finish == -1)
+                {
+                    throw new InvalidDataException("Mask doesn't match the file name.");
+                }
+
                 tagValue = fileName.Substring(splits[i].Length, finish - splits[i].Length);
                 ChangeTag(tags[i], tagValue);
 

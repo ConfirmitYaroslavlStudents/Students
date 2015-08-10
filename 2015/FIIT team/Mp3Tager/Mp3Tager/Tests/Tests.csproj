@@ -50,10 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Fakes\FakeFileExistenceChecker.cs" />
+    <Compile Include="Fakes\FakeFileSystemSource.cs" />
     <Compile Include="FileBackuperTests.cs" />
     <Compile Include="Fakes\FakeFile.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />
+    <Compile Include="FolderBackuperTests.cs" />
+    <Compile Include="MaskParserTests.cs" />
     <Compile Include="Mp3ManipulationsTests_ChangeTags.cs" />
     <Compile Include="Mp3ManipulationsTests_Rename.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\FileBackuperLib\FileBackuperLib.csproj">
       <Project>{b12b3bab-087b-47de-b73d-bdac93b02e24}</Project>
       <Name>FileBackuperLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FolderBackuperLib\FolderBackuperLib.csproj">
+      <Project>{358e0c23-c364-4c63-a937-f11571062818}</Project>
+      <Name>FolderBackuperLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
       <Project>{b6ed8bfd-54ff-4b0c-a0ef-61bdd70c96d7}</Project>

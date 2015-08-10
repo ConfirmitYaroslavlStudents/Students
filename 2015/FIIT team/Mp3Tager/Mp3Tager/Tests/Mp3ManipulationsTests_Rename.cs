@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3Lib;
 using Tests.Fakes;
 
@@ -7,35 +8,76 @@ namespace Tests
     [TestClass]
     public class Mp3ManipulationsTests_Rename
     {
-        private IMp3File _fakeMp3File;
-        private Mp3Manipulations _mp3Manipulations;
-
-        [TestInitialize]
-        public void SetUp()
+        [TestMethod]
+        public void Rename_CommonPattern_SuccessfulRename()
         {
-            _fakeMp3File = new FakeMp3File(@"D:\music\audio.mp3", new Mp3Tags
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\audio.mp3", new Mp3Tags
             {
                 Artist = "Alla",
                 Title = "Arlekino"
             });
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
 
-            _mp3Manipulations = new Mp3Manipulations(_fakeMp3File);
+
+            // Act
+            mp3Manipulations.Rename("{artist}-{title}");
+
+
+            // Assert
+            Assert.AreEqual(fakeMp3File.Path, @"D:\music\Alla-Arlekino.mp3");
         }
 
         [TestMethod]
-        public void Rename_Successful()
+        public void Rename_ComplexPattern_SuccessfulRename()
         {
-            _mp3Manipulations.Rename("{artist}-{title}", new FakeFileExistenceChecker());
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\audio.mp3", new Mp3Tags
+            {
+                Artist = "Alla",
+                Title = "Arlekino"
+            });
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
 
-            Assert.AreEqual(_fakeMp3File.Path, @"D:\music\Alla-Arlekino.mp3");
+            // Act
+            mp3Manipulations.Rename(@"{asd{artist}}-..{title}");
+
+            // Assert
+            Assert.AreEqual(fakeMp3File.Path, @"D:\music\{asdAlla}-..Arlekino.mp3");
         }
 
         [TestMethod] 
         public void Rename_FileWithSuchNameAlreadyExists_UniquePathCreated()
-        {            
-            _mp3Manipulations.Rename("{artist}", new FakeFileExistenceChecker());
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\audio.mp3", new Mp3Tags
+            {
+                Artist = "Alla",
+                Title = "Arlekino"
+            });
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
 
-            Assert.AreEqual(_fakeMp3File.Path, @"D:\music\Alla (2).mp3");
-        }        
+            // Act
+            mp3Manipulations.Rename("{artist}");
+
+            // Assert
+            Assert.AreEqual(fakeMp3File.Path, @"D:\music\Alla (2).mp3");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Rename_EmptyPattern_ArgumentException()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\audio.mp3", new Mp3Tags
+            {
+                Artist = "Alla",
+                Title = "Arlekino"
+            });
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.Rename(@"");
+        }
     }
 }

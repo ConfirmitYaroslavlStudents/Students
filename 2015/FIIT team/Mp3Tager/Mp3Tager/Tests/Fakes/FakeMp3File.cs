@@ -1,4 +1,5 @@
 ﻿using Mp3Lib;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -7,6 +8,11 @@ namespace Tests
         public string Path { get; private set; }
         public IMp3Tags Mp3Tags { get; private set; }
 
+        private readonly HashSet<string> _paths = new HashSet<string>
+        {
+            @"D:\music\Alla.mp3", @"D:\music\Alla (1).mp3"
+        };
+        
 
         public FakeMp3File(string path, IMp3Tags tags)
         {
@@ -16,7 +22,19 @@ namespace Tests
 
         public void MoveTo(string path)
         {
-            Path = path;
+            var directory = System.IO.Path.GetDirectoryName(path);
+            var fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            var destinationPath = System.IO.Path.Combine(directory, fileName + @".mp3");
+
+            var index = 1;
+
+            while (_paths.Contains(destinationPath))
+            {
+                destinationPath = System.IO.Path.Combine(directory, fileName + @" (" + index + ").mp3");
+                index++;
+            }
+
+            Path = destinationPath;
         }
 
         public void Save()

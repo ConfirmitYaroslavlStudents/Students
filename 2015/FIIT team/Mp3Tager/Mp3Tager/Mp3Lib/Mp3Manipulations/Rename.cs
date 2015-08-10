@@ -1,11 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 namespace Mp3Lib
 {    
     public partial class Mp3Manipulations
     {
-        public void Rename(string pattern, IFileExistenceChecker checker)
+        public void Rename(string pattern)
         {
+            if (pattern == String.Empty)
+                throw new ArgumentException(pattern);
+
             var newName = new StringBuilder(pattern);
 
             newName.Replace(TagPatterns.Artist, _mp3File.Mp3Tags.Artist);
@@ -15,23 +19,11 @@ namespace Mp3Lib
             newName.Replace(TagPatterns.Track, _mp3File.Mp3Tags.Track.ToString());
 
             var directory = Path.GetDirectoryName(_mp3File.Path);
-            var destinationPath = CreateUniquePath(directory, newName.ToString(), checker);
-
-            _mp3File.MoveTo(destinationPath);  
+            _mp3File.MoveTo(Path.Combine(directory, newName + @".mp3"));  
         }
 
-        private string CreateUniquePath(string directory, string newName, IFileExistenceChecker checker)
-        {
-            var index = 1;
-            var destinationPath = Path.Combine(directory, newName + @".mp3");
+        
 
-            while (checker.CheckIfExists(destinationPath))
-            {
-                destinationPath = Path.Combine(directory, newName + @" (" + index + ").mp3");
-                index++;
-            }
-      
-            return destinationPath;
-        }
+        
     }
 }

@@ -3,26 +3,71 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace Mp3Lib
-{
+{    
     public partial class Mp3Manipulations
     {
         public void ChangeTags(string mask)
         {
+            var parser = new MaskParser(mask);
+            var splits = parser.GetSplits();
+            var tags = parser.GetTags();
             var fileName = Path.GetFileNameWithoutExtension(_mp3File.Path);
-            var splits = GetSplits(mask);
-            var tags = GetTags(mask);
-            for (int i = 0; i < splits.Count; i++)
+
+            int finish;
+            string tagValue;
+
+            if (tags.Count == 0)
+                return;
+
+            for (int i = 0; i < tags.Count - 1; i++)
             {
-                var index = fileName.IndexOf(splits[i], StringComparison.Ordinal);
-                var value = fileName.Substring(0, index);
-                fileName = fileName.Remove(0, index + splits[i].Length);
-                ChangeTag(tags[i], value);
+                if (splits[i + 1] == String.Empty)
+                {
+                    throw new InvalidDataException("Ambiguous matching of mask and file name.");
+                }
+                if (i != 0 || (i == 0 && splits[i] != String.Empty))
+                {
+                    if (!fileName.StartsWith(splits[i]))
+                    {
+                        throw new InvalidDataException("Mask doesn't match the file name.");
+                    }
+                }
+                finish = fileName.IndexOf(splits[i + 1], StringComparison.Ordinal);
+
+                tagValue = fileName.Substring(splits[i].Length, finish - splits[i].Length);
+                ChangeTag(tags[i], tagValue);
+
+                fileName = fileName.Remove(0, splits[i].Length + tagValue.Length);
             }
-            ChangeTag(tags[tags.Count - 1], fileName);
+
+            if (splits[splits.Count - 2] == String.Empty)
+            {
+                throw new InvalidDataException("Ambiguous matching of mask and file name.");
+            }
+            if (!fileName.StartsWith(splits[splits.Count - 2]))
+            {
+                throw new InvalidDataException("Mask doesn't match the file name.");
+            }
+            if (splits[splits.Count - 1] != String.Empty)
+            {
+                finish = fileName.IndexOf(splits[splits.Count - 1], StringComparison.Ordinal);
+                if (!fileName.EndsWith(splits[splits.Count - 1]))
+                {
+                    throw new InvalidDataException("Mask doesn't match the file name.");
+                }
+            }
+            else
+            {
+                finish = fileName.Length;
+            }
+
+            tagValue = fileName.Substring(splits[splits.Count - 2].Length, finish - splits[splits.Count - 2].Length);
+            ChangeTag(tags[tags.Count - 1], tagValue);
 
             _mp3File.Save();
         }
-
+        
+              
         private void ChangeTag(string tag, string newTagValue)
         {
             var tagSet = new HashSet<string>
@@ -57,42 +102,5 @@ namespace Mp3Lib
             }
         }
 
-        private List<string> GetSplits(string mask)
-        {
-            var splits = new List<string>();
-            int start = 0;
-            int finish = 0;
-
-            while (true)
-            {
-                start = mask.IndexOf('}', finish) + 1;
-                finish = mask.IndexOf('{', start);
-                if (start != -1 && finish != -1)
-                    splits.Add(mask.Substring(start, finish - start));
-                else
-                    break;
-            }
-
-            return splits;
-        }
-
-        private List<string> GetTags(string mask)
-        {
-            var tags = new List<string>();
-            int start = 0;
-            int finish = 0;
-
-            while (true)
-            {
-                start = mask.IndexOf('{', finish);
-                finish = mask.IndexOf('}', start != -1 ? start : finish) + 1;
-                if (start != -1 && finish != -1)
-                    tags.Add(mask.Substring(start, finish - start));
-                else
-                    break;
-            }
-
-            return tags;
-        } 
     }
 }

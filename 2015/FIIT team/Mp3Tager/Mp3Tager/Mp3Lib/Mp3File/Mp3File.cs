@@ -29,11 +29,22 @@ namespace Mp3Lib
         }
 
         public void MoveTo(string path)
-        {
-            new FileInfo(Path).MoveTo(path);
-            Path = path;
-        }    
-        
+        {            
+            var directory = System.IO.Path.GetDirectoryName(path);
+            var fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            var destinationPath = System.IO.Path.Combine(directory, fileName + @".mp3");
+
+            var index = 1;
+
+            while (System.IO.File.Exists(destinationPath))
+            {
+                destinationPath = System.IO.Path.Combine(directory, fileName + @" (" + index + ").mp3");
+                index++;
+            }
+
+            new FileInfo(Path).MoveTo(destinationPath);
+            Path = destinationPath;
+        }
 
         public void Save()
         {

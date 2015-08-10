@@ -19,7 +19,7 @@ namespace mp3lib
 
 		//TODO: tests {READY}
 		//TODO: return detailed information {READY}
-		public IEnumerable<FileDifferences> GetDifferences()
+		public FileDifferences[] GetDifferences()
 		{
 			var list = new List<FileDifferences>();
 			foreach (var mp3 in _files)

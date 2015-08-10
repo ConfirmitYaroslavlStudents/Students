@@ -42,6 +42,7 @@ namespace ConsoleMp3TagEditor
 						var newFileName = renamer.GetNewFileName();
 						mp3.ChangeFileName(newFileName);
 						break;
+
 					case ProgramAction.Sync:
 						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
 						var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication());

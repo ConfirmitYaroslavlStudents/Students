@@ -80,13 +80,16 @@ namespace mp3lib
 
 			for (var i = 0; i < Args.Length; i++)
 			{
-                // TODO is it readable at all?
-				if (Args[i] == PATH		&& i + 1 < Args.Length && Args[i + 1] == MASK	||
-					Args[i] == MASK		&& i + 1 < Args.Length && Args[i + 1] == PATH	||
-					Args[i] == PATH		&& i + 1 < Args.Length && Args[i + 1] == ACTION ||
-					Args[i] == ACTION	&& i + 1 < Args.Length && Args[i + 1] == PATH	||
-					Args[i] == ACTION	&& i + 1 < Args.Length && Args[i + 1] == MASK	||
-					Args[i] == MASK		&& i + 1 < Args.Length && Args[i + 1] == ACTION	  )
+                // TODO: is it readable at all? {READY}
+				if 
+				(
+					i + 1 < Args.Length		&&
+					(
+						Args[i] == PATH		&& (Args[i + 1] == MASK || Args[i + 1] == ACTION) ||
+						Args[i] == MASK		&& (Args[i + 1] == PATH	|| Args[i + 1] == ACTION) ||
+						Args[i] == ACTION	&& (Args[i + 1] == PATH || Args[i + 1] == MASK)
+					)
+				)
 				{
 					throw new ArgumentException("You don't append correct file path and mask for mp3.");
 				}

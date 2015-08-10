@@ -4,95 +4,87 @@ using System.Collections.Generic;
 namespace Mp3TagLib
 {
     //[TODO] use enum instead of strings in program
-    public enum TagList { Title,Artist,Album,Year,Comment,Genre,Track}
+    public enum Tags { Title,Artist,Album,Year,Comment,Genre,Track}
     public class Mp3Tags
     {
-        private Dictionary<string, string> _tags;
+        private Dictionary<Tags, string> _tags;
 
         public Mp3Tags()
         {
-            _tags = new Dictionary<string, string>
+            _tags = new Dictionary<Tags, string>
             {
-                {"title", ""},
-                {"artist", ""},
-                {"album", ""},
-                {"year", ""},
-                {"comment", ""},
-                {"genre", ""},
-                {"track", ""}
+                {Tags.Title, ""},
+                {Tags.Artist, ""},
+                {Tags.Album, ""},
+                {Tags.Year, ""},
+                {Tags.Comment, ""},
+                {Tags.Genre, ""},
+                {Tags.Track, ""}
             };
         }
         public string Title
         {
-            get { return _tags["title"]; }
-            set { _tags["title"] = value; }
+            get { return _tags[Tags.Title]; }
+            set { _tags[Tags.Title] = value; }
         }
         public string Artist
         {
-            get { return _tags["artist"]; }
-            set { _tags["artist"] = value; }
+            get { return _tags[Tags.Artist]; }
+            set { _tags[Tags.Artist] = value; }
         }
         public string Album
         {
-            get { return _tags["album"]; }
-            set { _tags["album"] = value; }
+            get { return _tags[Tags.Album]; }
+            set { _tags[Tags.Album] = value; }
         }
         public string Comment
         {
-            get { return _tags["comment"]; }
-            set { _tags["comment"] = value; }
+            get { return _tags[Tags.Comment]; }
+            set { _tags[Tags.Comment] = value; }
         }
         public string Genre
         {
-            get { return _tags["genre"]; }
-            set { _tags["genre"] = value; }
+            get { return _tags[Tags.Genre]; }
+            set { _tags[Tags.Genre] = value; }
         }
         public uint Year
         {
             get
             {
                 uint year;
-                if (uint.TryParse(_tags["year"], out year))
+                if (uint.TryParse(_tags[Tags.Year], out year))
                 {
                     return year;
                 }
                 return 0;
             }
-            set { _tags["year"] = value.ToString(); }
+            set { _tags[Tags.Year] = value.ToString(); }
         }
         public uint Track
         {
             get
             {
                 uint year;
-                if (uint.TryParse(_tags["track"], out year))
+                if (uint.TryParse(_tags[Tags.Track], out year))
                 {
                     return year;
                 }
                 return 0;
             }
-            set { _tags["track"] = value.ToString(); }
+            set { _tags[Tags.Track] = value.ToString(); }
         }
 
         public void SetTag(string name,string value)
         {
             if (name == null)
                 throw new ArgumentException("Bad tag name");
-            name = name.ToLower();
+            if (value == null)
+                throw new ArgumentException("Bad value");
             //[ToDO] remove if
-            if (_tags.ContainsKey(name))
+            Tags tag;
+            if (Enum.TryParse(name, true, out tag))
             {
-                if (name == "year" || name == "track")
-                {
-                    uint temp;
-                    if (!uint.TryParse(value, out temp))
-                        throw new ArgumentException("Bad tag name");
-                    _tags[name] = temp.ToString();
-                }
-                else
-                {
-                    _tags[name] = value;
-                }
+                _tags[tag] = value;
             }
             else
             {
@@ -103,9 +95,10 @@ namespace Mp3TagLib
 
         public string GetTag(string name)
         {
-            if (_tags.ContainsKey(name.ToLower()))
+            Tags tag;
+            if (Enum.TryParse(name, true, out tag))
             {
-                return _tags[name];
+                return _tags[tag];
             }
             throw new ArgumentException("bad tag name");
         }

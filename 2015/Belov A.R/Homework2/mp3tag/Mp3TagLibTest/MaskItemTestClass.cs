@@ -10,6 +10,7 @@ namespace Mp3TagTest
         private MaskItem _item1;
         private MaskItem _item2;
         private MaskItem _item3;
+
         [TestInitialize]
         public void Init()
         {
@@ -17,6 +18,7 @@ namespace Mp3TagTest
             _item2 = new MaskItem() { Type = MaskItemType.Delimiter, Value = "item" };
             _item3 = new MaskItem() { Type = MaskItemType.TagName, Value = "item" };
         }
+
         [TestMethod]
         public void EqualsTest()
         {

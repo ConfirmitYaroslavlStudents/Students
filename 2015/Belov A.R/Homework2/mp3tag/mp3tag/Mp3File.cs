@@ -8,10 +8,12 @@ namespace mp3tager
     class Mp3File:IMp3File
     {
         private  File _file;
+
         public Mp3File(File file)
         {
             _file = file;
         }
+
         public string Name
         {
             get
@@ -20,10 +22,15 @@ namespace mp3tager
                 return Path.GetFileNameWithoutExtension(_file.Name);
             } 
         }
+
         public bool NameChanged { get;private set; }
+
         public bool TagChanged { get;private set; }
+
         public string NewName { get; private set; }
+
         public Mp3Tags OldTags { get; private set; }
+
         public void SetTags(Mp3Tags tags)
         {
             OldTags = GetTags();
@@ -60,7 +67,6 @@ namespace mp3tager
                 _file = File.Create(path);
             }
         }
-
 
         public Mp3Tags GetTags()
         {

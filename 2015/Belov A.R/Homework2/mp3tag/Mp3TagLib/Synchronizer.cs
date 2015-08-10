@@ -9,12 +9,14 @@ namespace Mp3TagLib
     public class Synchronizer
     {
         private Tager _tager;
+
         public Synchronizer(Tager tager)
         {
             _tager = tager;
             ModifiedFiles=new List<IMp3File>();
             ErrorFiles=new Dictionary<string, string>();
         }
+
         public List<IMp3File> ModifiedFiles { get; set; }
         public Dictionary<string, string> ErrorFiles { get; set; }
 

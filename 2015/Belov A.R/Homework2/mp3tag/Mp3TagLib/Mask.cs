@@ -10,6 +10,7 @@ namespace Mp3TagLib
         private LinkedList<MaskItem> _body;
         private string _stringBody;
         private List<Dictionary<string, string>> _posibleTagValues; 
+
         public Mask(string mask)
         {
             if (string.IsNullOrEmpty(mask))
@@ -18,6 +19,7 @@ namespace Mp3TagLib
             }
             Init(mask);
         }
+
         void Init(string mask)
         {
             _stringBody = mask;
@@ -51,6 +53,7 @@ namespace Mp3TagLib
             { throw new ArgumentException("Incorrect mask"); }
             
         }
+
         bool ValidateMask(Stack<char> stack)
         {
             if (stack.Count == 0)
@@ -77,6 +80,7 @@ namespace Mp3TagLib
             }
             return flag;
         }
+
         bool ValidateString(string str, LinkedListNode<MaskItem> currentDelimiter)
         {
             for(var node=currentDelimiter;node!=null;node=node.Next)
@@ -116,6 +120,7 @@ namespace Mp3TagLib
                 _body.AddLast(new MaskItem() { Type = MaskItemType.Delimiter, Value = str.Substring(0,indexOfNextOpenParenthesis) });
             }
         }
+
         TagTreeNode GetTagTree(string name)
         {
             var root = new TagTreeNode() { TagValue = "Root", TagName = "Root" };
@@ -124,6 +129,7 @@ namespace Mp3TagLib
             BuildTree(name,_body.First,root);
             return root;
         }
+
         void BuildTree(string str, LinkedListNode<MaskItem> currentMaskItem, TagTreeNode currentTagTreeNode)
         {
             if (currentMaskItem == null)

@@ -15,48 +15,56 @@ namespace Mp3TagTest
         {
             var testMask = new Mask("a{x}bz{sd{y}");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void NoClosingParenthesis()
         {
             var testMask = new Mask("a{x}bzsd{y");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void OpenParenthesisCantBeLast()
         {
             var testMask = new Mask("{a{x}bzsd{y}{");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CloseParenthesisCantBeFirst()
         {
             var testMask = new Mask("{a{x}bzsd{y}");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CloseParenthesisCantBeLast()
         {
             var testMask = new Mask("a{x}bzsd{y}}");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void NullMaskNotAllow()
         {
             var testMask = new Mask(null);
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void MaskWithoutParenthesisNotAllow()
         {
             var testMask = new Mask("badmask");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TagsCantRepeated()
         {
             var testMask = new Mask("asds{a}asdasd{a}dasd");
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void BehaviorWithIncorrectMaskTest()
@@ -65,6 +73,7 @@ namespace Mp3TagTest
             var testString = "aaaabbbb";
             testMask.GetTagValuesFromString(testString);
         }
+
         [TestMethod]
         public void GetTagValuesTest()
         {
@@ -90,6 +99,7 @@ namespace Mp3TagTest
             }
 
         }
+
         [TestMethod]
         public void TwoTagWithoutDelimiterTest()
         {

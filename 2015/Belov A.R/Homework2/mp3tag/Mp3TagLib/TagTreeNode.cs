@@ -11,7 +11,6 @@ namespace Mp3TagLib
         public List<TagTreeNode> Childs { get;private set; }
         public string TagName { get; set; }
         public string TagValue { get; set; }
-
         public void AddChild(TagTreeNode node)
         {
             node.Parent = this;

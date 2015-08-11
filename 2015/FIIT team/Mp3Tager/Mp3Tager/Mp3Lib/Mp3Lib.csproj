@@ -47,6 +47,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSource\FakeSystemSource.cs" />
+    <Compile Include="FileSource\FileSystemSource.cs" />
+    <Compile Include="FileSource\ISource.cs" />
     <Compile Include="Mp3File\IMp3File.cs" />
     <Compile Include="Mp3File\IMp3Tags.cs" />
     <Compile Include="Mp3File\Mp3File.cs" />

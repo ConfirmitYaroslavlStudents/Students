@@ -61,13 +61,12 @@ namespace Mp3Lib
                 fileName = fileName.Remove(0, splits[i].Length + tagValue.Length);
             }
 
-            if (splits[splits.Count - 2] == String.Empty)
+            if (_splits.Count - 2 != 0 || ((_splits.Count - 2) == 0 && _splits[_splits.Count - 2] != String.Empty))
             {
-                throw new InvalidDataException("Ambiguous matching of mask and file name.");
-            }
-            if (!fileName.StartsWith(splits[splits.Count - 2]))
-            {
-                throw new InvalidDataException("Mask doesn't match the file name.");
+                if (!_fileName.StartsWith(_splits[_splits.Count - 2]))
+                {
+                    throw new InvalidDataException("Mask doesn't match the file name.");
+                }
             }
             if (splits[splits.Count - 1] != String.Empty)
             {

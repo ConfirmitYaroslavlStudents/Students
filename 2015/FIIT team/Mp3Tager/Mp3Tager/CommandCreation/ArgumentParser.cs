@@ -21,7 +21,9 @@ namespace CommandCreation
         private void CheckForProperNumberOfArguments(int[] numberOfArguments)
         {
             CheckForEmptiness();
+            // todo: do we need here array?
             if (!numberOfArguments.Contains(_args.Length))
+                // todo: detailed info what was wrong
                 throw new ArgumentException("Not enough arguments for this command!");
         }
 

@@ -1,5 +1,6 @@
 ﻿namespace Mp3Lib
 {
+    // todo: partial?
     public partial class Mp3Manipulations
     {
         private readonly IMp3File _mp3File;

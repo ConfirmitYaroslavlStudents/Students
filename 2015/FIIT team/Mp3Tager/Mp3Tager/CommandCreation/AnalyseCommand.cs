@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Mp3Lib;
 
 namespace CommandCreation
@@ -21,7 +16,7 @@ namespace CommandCreation
             _mask = mask;
         }
 
-
+        //todo: do we need it? why static?
         public static int[] GetNumberOfArguments()
         {
             return new[] { 3 };

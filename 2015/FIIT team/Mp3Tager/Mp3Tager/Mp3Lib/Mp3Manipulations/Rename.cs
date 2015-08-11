@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+
 namespace Mp3Lib
 {    
     public partial class Mp3Manipulations
@@ -21,9 +22,5 @@ namespace Mp3Lib
             var directory = Path.GetDirectoryName(_mp3File.Path);
             _mp3File.MoveTo(Path.Combine(directory, newName + @".mp3"));  
         }
-
-        
-
-        
     }
 }

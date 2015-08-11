@@ -2,6 +2,7 @@
 
 namespace Mp3Lib.FileSource
 {
+    // todo: is it correct place?
     class FakeSystemSource : ISource
     {
         public string SourceFolder { get; private set; }

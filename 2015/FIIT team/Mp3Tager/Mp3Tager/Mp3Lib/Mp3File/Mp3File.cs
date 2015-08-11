@@ -18,7 +18,7 @@ namespace Mp3Lib
             _file = file;
             Path = _file.Name;
 
-            Mp3Tags = new Mp3Tags   
+            Mp3Tags = new Mp3Tags  
             {
                 Album = file.Tag.Album,
                 Title = file.Tag.Title,
@@ -36,6 +36,7 @@ namespace Mp3Lib
 
             var index = 1;
 
+            // TODO: work with true file system?
             while (System.IO.File.Exists(destinationPath))
             {
                 destinationPath = System.IO.Path.Combine(directory, fileName + @" (" + index + ").mp3");
@@ -51,12 +52,14 @@ namespace Mp3Lib
             using (var backup = new FileBackuper())
             {
                 backup.MakeBackup(new FileBackuperLib.File(Path));
+
                 try
                 {
                     _file.Save();
                 }
                 catch(Exception e)
                 {
+                    // todo: user unable to get full info about the process if smth get wrong
                     backup.RestoreFromBackup();
                 }
             }

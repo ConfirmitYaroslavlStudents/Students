@@ -8,6 +8,7 @@ namespace CommandCreation
         private IMp3File mp3File;
         private string _mask;
 
+        // todo: why per instance? static? 
         public static int[] GetNumberOfArguments()
         {
             return new[] { 3 };

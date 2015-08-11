@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Mp3Lib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mp3Lib;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -11,12 +11,11 @@ namespace Tests
         private List<string> _expectedTags;
         private List<string> _expectedSplits;
 
-
         [TestCleanup]
         public void CleanUp()
         {
             var parser = new MaskParser(_expectedMask);
-            
+
             Assert.AreEqual(_expectedMask, parser.GetMaskFromTagsAndSplits());
             CollectionAssert.AreEqual(_expectedTags, parser.GetTags());
             CollectionAssert.AreEqual(_expectedSplits, parser.GetSplits());
@@ -88,6 +87,38 @@ namespace Tests
             _expectedMask = "{ttt{track}{title}}h";
             _expectedTags = new List<string> { "{track}", "{title}" };
             _expectedSplits = new List<string> { "{ttt", "", "}h" };
+        }
+    }
+
+    [TestClass]
+    public class MaskParserTests_IsEqualNumberOfSplitsInMaskAndFileName
+    {
+        [TestMethod]
+        public void MaskParser_IsEqualNumberOfSplitsInMaskAndFileName_ReturnTrue()
+        {
+            // arrange
+            var _expectedMask = "{track}.{artist}.{title}";
+            var parser = new MaskParser(_expectedMask);
+
+            // act
+            var actual = parser.IsEqualNumberOfSplitsInMaskAndFileName(".", "Alla.Pop.Arlekino");
+
+            // assert
+            Assert.IsTrue(actual);
+        }
+
+        [TestMethod]
+        public void MaskParser_IsEqualNumberOfSplitsInMaskAndFileName_ReturnFalse()
+        {
+            // arrange
+            var _expectedMask = "{track}.{artist}{title}";
+            var parser = new MaskParser(_expectedMask);
+
+            // act
+            var actual = parser.IsEqualNumberOfSplitsInMaskAndFileName(".", "Alla.Pop.Arlekino");
+
+            // assert
+            Assert.IsFalse(actual);
         }
     }
 }

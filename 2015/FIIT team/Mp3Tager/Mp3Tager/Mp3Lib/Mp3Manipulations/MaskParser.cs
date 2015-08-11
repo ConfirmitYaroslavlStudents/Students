@@ -71,7 +71,7 @@ namespace Mp3Lib
                     tag.Clear();
                     _splits.Add(split.ToString());
                     split.Clear();
-                }                
+                }
             }
             _splits.Add(split.ToString() + tag.ToString());
         }
@@ -90,64 +90,33 @@ namespace Mp3Lib
             return mask.ToString();
         }
 
-        /*public bool IsEqualNumberOfSplitsInMaskAndFileName(string fileName)
+        public bool IsEqualNumberOfSplitsInMaskAndFileName(string currentSplit, string fileName)
         {
-            if (_splits.Any(split => split != String.Empty && CountSplitsInFileName(split, fileName) != CountSplitsInMask(split)))
-            {
-                return false;
-            }
-            return true;
+            return CountSplitsInMask(currentSplit) == CountSplitsInFileName(currentSplit, fileName);
         }
 
-        private int CountSplitsInMask(string necessarySplit)
-        {
-            return _splits.Count(split => split == necessarySplit);
-        }
-
-        private int CountSplitsInFileName(string necessarySplit, string fileName)
+        private int CountSplitsInMask(string currentSplit)
         {
             int count = 0;
-            var current = fileName;
-            int finish = current.IndexOf(necessarySplit, StringComparison.Ordinal);
-
-            while (finish != -1)
+            foreach (var split in _splits)
             {
-                count++;
-                current = current.Remove(0, finish + 1);
-                finish = current.IndexOf(necessarySplit, StringComparison.Ordinal);
-
-            }
-            return count;
-        }*/
-
-        public bool IsEqualNumberOfSplitsInMaskAndFileName(string split, IEnumerable<string> splitsInMask, string fileName)
-        {
-            return CountSplitsInFileName(split, fileName) == CountSplitsInMask(split, splitsInMask);
-
-        }
-
-        private int CountSplitsInMask(string necessarySplit, IEnumerable<string> splits)
-        {
-            int count = 0;
-            foreach (var split in splits)
-            {
-                if (split == necessarySplit)
+                if (split == currentSplit)
                     count++;
             }
             return count;
         }
 
-        private int CountSplitsInFileName(string necessarySplit, string fileName)
+        private int CountSplitsInFileName(string currentSplit, string fileName)
         {
             int count = 0;
             var current = fileName;
-            int finish = current.IndexOf(necessarySplit);
+            int finish = current.IndexOf(currentSplit);
 
             while (finish != -1)
             {
                 count++;
                 current = current.Remove(0, finish + 1);
-                finish = current.IndexOf(necessarySplit);
+                finish = current.IndexOf(currentSplit);
 
             }
             return count;

@@ -24,9 +24,7 @@ namespace Mp3Lib
             if (tags.Count == 0)
                 return String.Empty;
 
-            //if (!parser.IsEqualNumberOfSplitsInMaskAndFileName(fileName))
-             //   throw new InvalidDataException();
-            if (splits.Any(split => split != String.Empty && !parser.IsEqualNumberOfSplitsInMaskAndFileName(split, splits, fileName)))
+            if (splits.Any(split => split != String.Empty && !parser.IsEqualNumberOfSplitsInMaskAndFileName(split, fileName)))
             {
                 throw new InvalidDataException();
             }

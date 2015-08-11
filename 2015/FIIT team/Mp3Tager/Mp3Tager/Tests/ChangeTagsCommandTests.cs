@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Tests
 {
     [TestFixture]
-    class ChangeTagsCommandTest
+    public class ChangeTagsCommandTest
     {
         private ChangeTagsCommand _command;
         private FakeMp3File _file;

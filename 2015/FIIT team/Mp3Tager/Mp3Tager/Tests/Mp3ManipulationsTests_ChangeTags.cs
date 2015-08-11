@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3Lib;
+using System;
 
 namespace Tests
 {
@@ -23,6 +24,20 @@ namespace Tests
         }
 
         [TestMethod]
+        public void ChangeTags_OneTag_SuccessfulChange()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\Alla.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"{artist}");
+
+            // Assert
+            Assert.AreEqual("Alla", fakeMp3File.Mp3Tags.Artist);            
+        }
+
+        [TestMethod]
         public void ChangeTags_ComplexMask_SuccessfulChange()
         {
             // Init
@@ -34,7 +49,7 @@ namespace Tests
 
             // Assert
             Assert.AreEqual("Alla", fakeMp3File.Mp3Tags.Artist);
-            Assert.AreEqual( "Arlekino",fakeMp3File.Mp3Tags.Title);
+            Assert.AreEqual("Arlekino", fakeMp3File.Mp3Tags.Title);
         }
 
         [TestMethod]
@@ -53,8 +68,6 @@ namespace Tests
             Assert.AreEqual("Pop", fakeMp3File.Mp3Tags.Genre);
         }
 
-        
-
         [TestMethod]
         public void ChangeTags_EmptyMask_WithoutChanges()
         {
@@ -72,7 +85,7 @@ namespace Tests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
-        public void ChangeTags_WrongMaskDifferentOrderOfSplits_InvalidDataException()
+        public void ChangeTags_WrongMask_DifferentOrderOfSplits_InvalidDataException()
         {
             // Init
             var fakeMp3File = new FakeMp3File(@"D:\music\.Alla.Arlekino.mp3", new Mp3Tags());
@@ -80,7 +93,18 @@ namespace Tests
 
             // Act
             mp3Manipulations.ChangeTags(@"{artist}.{title}.");
-            
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void ChangeTags_WrongMask_DifferentOrderOfSplits2_InvalidDataException()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\_def_Arlekino_abc_.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"_abc_{artist}_def_");
         }
 
         [TestMethod]
@@ -93,18 +117,6 @@ namespace Tests
 
             // Act
             mp3Manipulations.ChangeTags(@"..{artist}-{title}");
-        }        
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidDataException))]
-        public void ChangeTags_WrongMask_SplitsInDifferentOrder_InvalidDataException()
-        {
-            // Init
-            var fakeMp3File = new FakeMp3File(@"D:\music\_def_Arlekino_abc_.mp3", new Mp3Tags());
-            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
-
-            // Act
-            mp3Manipulations.ChangeTags(@"_abc_{artist}_def_");
         }
 
         [TestMethod]
@@ -155,6 +167,29 @@ namespace Tests
             mp3Manipulations.ChangeTags(@"{artist}{title}");
         }
 
-        
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ChangeTags_TagDoesNotExist_ArgumentException()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\Alla-Arlekino.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"{sometag}-{title}");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void ChangeTag_TagTrackIsNotInt_FormatException()
+        {
+            // Init
+            var fakeMp3File = new FakeMp3File(@"D:\music\one. Alla-Arlekino.mp3", new Mp3Tags());
+            var mp3Manipulations = new Mp3Manipulations(fakeMp3File);
+
+            // Act
+            mp3Manipulations.ChangeTags(@"{track}. {sometag}-{title}");
+
+        }
     }
 }

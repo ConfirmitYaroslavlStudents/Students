@@ -4,84 +4,85 @@ using System.IO;
 using System.Linq;
 
 namespace Mp3Lib
-{    
+{
     public partial class Mp3Manipulations
     {
+        private List<string> _splits;
+        private List<string> _tags;
+        private string _fileName;       
+        private MaskParser _parser;
+
         public void ChangeTags(string mask)
         {
-            var parser = new MaskParser(mask);
-            var splits = parser.GetSplits();
-            var tags = parser.GetTags();
-            var fileName = Path.GetFileNameWithoutExtension(_mp3File.Path);
+            _parser = new MaskParser(mask);
+            _splits = _parser.GetSplits();
+            _tags = _parser.GetTags();        
+            _fileName = Path.GetFileNameWithoutExtension(_mp3File.Path);
 
             int finish;
             string tagValue;
 
-            if (tags.Count == 0)
+            if (_tags.Count == 0)
                 return;
 
-            //if (!parser.IsEqualNumberOfSplitsInMaskAndFileName(fileName))
-             //   throw new InvalidDataException();
-            if (splits.Any(split => split != String.Empty && !parser.IsEqualNumberOfSplitsInMaskAndFileName(split, splits, fileName)))
+            if (_splits.Any(split => split != String.Empty && !_parser.IsEqualNumberOfSplitsInMaskAndFileName(split, _fileName)))
             {
                 throw new InvalidDataException();
             }
 
-            for (int i = 0; i < tags.Count - 1; i++)
+            for (int i = 0; i < _tags.Count - 1; i++)
             {
-                if (splits[i + 1] == String.Empty)
+                if (_splits[i + 1] == String.Empty)
                 {
                     throw new InvalidDataException("Ambiguous matching of mask and file name.");
                 }
-                if (i != 0 || (i == 0 && splits[i] != String.Empty))
+                if (i != 0 || (i == 0 && _splits[i] != String.Empty))
                 {
-                    if (!fileName.StartsWith(splits[i]))
+                    if (!_fileName.StartsWith(_splits[i]))
                     {
                         throw new InvalidDataException("Mask doesn't match the file name.");
                     }
                 }
-                finish = fileName.IndexOf(splits[i + 1], 1, StringComparison.Ordinal);
-                
+                finish = _fileName.IndexOf(_splits[i + 1], 1, StringComparison.Ordinal);
+
 
                 if (finish == -1)
                 {
                     throw new InvalidDataException("Mask doesn't match the file name.");
                 }
 
-                tagValue = fileName.Substring(splits[i].Length, finish - splits[i].Length);
-                ChangeTag(tags[i], tagValue);
+                tagValue = _fileName.Substring(_splits[i].Length, finish - _splits[i].Length);
+                ChangeTag(_tags[i], tagValue);
 
-                fileName = fileName.Remove(0, splits[i].Length + tagValue.Length);
+                _fileName = _fileName.Remove(0, _splits[i].Length + tagValue.Length);
             }
-
-            if (splits[splits.Count - 2] == String.Empty)
+            
+            if (_splits.Count - 2 != 0 || ((_splits.Count - 2) == 0 && _splits[_splits.Count - 2] != String.Empty))
             {
-                throw new InvalidDataException("Ambiguous matching of mask and file name.");
+                if (!_fileName.StartsWith(_splits[_splits.Count - 2]))
+                {
+                    throw new InvalidDataException("Mask doesn't match the file name.");
+                }
             }
-            if (!fileName.StartsWith(splits[splits.Count - 2]))
+            if (_splits[_splits.Count - 1] != String.Empty)
             {
-                throw new InvalidDataException("Mask doesn't match the file name.");
-            }
-            if (splits[splits.Count - 1] != String.Empty)
-            {
-                finish = fileName.IndexOf(splits[splits.Count - 1], 1, StringComparison.Ordinal);
-                if (!fileName.EndsWith(splits[splits.Count - 1]))
+                finish = _fileName.IndexOf(_splits[_splits.Count - 1], 1, StringComparison.Ordinal);
+                if (!_fileName.EndsWith(_splits[_splits.Count - 1]))
                 {
                     throw new InvalidDataException("Mask doesn't match the file name.");
                 }
             }
             else
             {
-                finish = fileName.Length;
+                finish = _fileName.Length;
             }
 
-            tagValue = fileName.Substring(splits[splits.Count - 2].Length, finish - splits[splits.Count - 2].Length);
-            ChangeTag(tags[tags.Count - 1], tagValue);
+            tagValue = _fileName.Substring(_splits[_splits.Count - 2].Length, finish - _splits[_splits.Count - 2].Length);
+            ChangeTag(_tags[_tags.Count - 1], tagValue);
 
             _mp3File.Save();
         }
         
-              
         private void ChangeTag(string tag, string newTagValue)
         {
             var tagSet = new HashSet<string>
@@ -115,7 +116,5 @@ namespace Mp3Lib
                     break;
             }
         }
-
-        
     }
 }

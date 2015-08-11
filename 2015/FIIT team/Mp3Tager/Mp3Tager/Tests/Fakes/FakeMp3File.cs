@@ -1,11 +1,11 @@
-﻿using Mp3Lib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Mp3Lib;
 
 namespace Tests
 {
     public class FakeMp3File : IMp3File
     {
-        public string Path { get; private set; }
+        public string Path { get; internal set; }
         public IMp3Tags Mp3Tags { get; private set; }
 
         private readonly HashSet<string> _paths = new HashSet<string>

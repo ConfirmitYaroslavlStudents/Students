@@ -11,14 +11,14 @@ namespace CommandCreation
             _args = args;
         }
         
-        public void CheckForTheRightCommandName(string commandName)
+        private void CheckForTheRightCommandName(string commandName)
         {
             CheckForEmptiness();
             if (commandName != _args[0])
                 throw new InvalidOperationException("Invalid operation: there is no such command!");
         }
 
-        public void CheckForProperNumberOfArguments(int[] numberOfArguments)
+        private void CheckForProperNumberOfArguments(int[] numberOfArguments)
         {
             CheckForEmptiness();
             if (!numberOfArguments.Contains(_args.Length))
@@ -31,6 +31,13 @@ namespace CommandCreation
                 throw new ArgumentNullException("args");
             if (_args.Length == 0)
                 throw new ArgumentException("You haven't passed any argument!");
+        }
+
+        public void CheckIfCanBeExecuted(string[] args, int[] numOfCommandArguments)
+        {
+            var parser = new ArgumentParser(args);
+            parser.CheckForProperNumberOfArguments(numOfCommandArguments);
+            parser.CheckForTheRightCommandName(args[0]);
         }
 
     }

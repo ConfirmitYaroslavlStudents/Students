@@ -14,7 +14,7 @@ namespace CommandCreation
 
         private readonly string _commandForHelp;
 
-        public override int[] GetNumberOfArguments()
+        public static int[] GetNumberOfArguments()
         {
             return new[] { 1, 2 };
         }
@@ -25,7 +25,6 @@ namespace CommandCreation
 
         public HelpCommand(string[] args)
         {
-            CheckIfCanBeExecuted(args);
             _commandForHelp = args.Length == 2 ? args[1] : null;
         }
 

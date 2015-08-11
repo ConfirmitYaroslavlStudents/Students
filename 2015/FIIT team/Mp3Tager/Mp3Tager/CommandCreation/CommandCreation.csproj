@@ -61,6 +61,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FileBackuperLib\FileBackuperLib.csproj">
+      <Project>{b12b3bab-087b-47de-b73d-bdac93b02e24}</Project>
+      <Name>FileBackuperLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
       <Project>{b6ed8bfd-54ff-4b0c-a0ef-61bdd70c96d7}</Project>
       <Name>Mp3Lib</Name>

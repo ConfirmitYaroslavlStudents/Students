@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3Lib;
-using Tests.Fakes;
 
 namespace Tests
 {

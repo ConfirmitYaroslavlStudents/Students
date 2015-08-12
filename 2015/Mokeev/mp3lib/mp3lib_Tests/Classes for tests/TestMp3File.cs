@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using mp3lib;
 
 namespace mp3lib_Tests.Classes_for_tests
@@ -8,7 +9,7 @@ namespace mp3lib_Tests.Classes_for_tests
 		public string Album { get; set; }
 		public string Artist { get; set; }
 		public string Comment { get; set; }
-		public string FilePath { get; }
+		public string FilePath { get; set; }
 		public string Genre { get; set; }
 		public string Title { get; set; }
 		public string TrackId { get; set; }
@@ -16,8 +17,36 @@ namespace mp3lib_Tests.Classes_for_tests
 
 		public string this[TagType type]
 		{
-			get { throw new System.NotImplementedException(); }
-			set { throw new System.NotImplementedException(); }
+			get { return GetId3Data()[type]; }
+			set
+			{
+				switch (type)
+				{
+					case TagType.Artist:
+						Artist = value;
+						break;
+					case TagType.Id:
+						TrackId = value;
+						break;
+					case TagType.Title:
+						Title = value;
+						break;
+					case TagType.Album:
+						Album = value;
+						break;
+					case TagType.Genre:
+						Genre = value;
+						break;
+					case TagType.Year:
+						Year = value;
+						break;
+					case TagType.Comment:
+						Comment = value;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(type), type, null);
+				}
+			}
 		}
 
 		public TestMp3File(string filePath)
@@ -39,9 +68,9 @@ namespace mp3lib_Tests.Classes_for_tests
 			};
 		}
 
-		public void ChangeFileName(string filePath)
+		public void ChangeFileName(string fileName)
 		{
-			
+			FilePath = fileName;
 		}
 	}
 }

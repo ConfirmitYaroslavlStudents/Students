@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Classes for tests\TestCommunicator.cs" />
     <Compile Include="Classes for tests\TestMp3FileFileExists.cs" />
     <Compile Include="DataExtracterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Classes for tests\TestMp3File.cs" />
     <Compile Include="Mp3TagChangerTests.cs" />
     <Compile Include="Mp3FileNameChangerTests.cs" />
+    <Compile Include="Mp3SyncingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mp3_lib\mp3lib.csproj">

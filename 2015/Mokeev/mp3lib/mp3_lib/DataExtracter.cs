@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using mp3lib.Exceptions;
@@ -84,6 +85,23 @@ namespace mp3lib
 				if (prefix == "") throw new DataExctracterException("Too low prefixes count. Undefined state found.");
 			}
 
+
+			Dictionary<TagType, string> data;
+			try
+			{
+				data = FindAllTAgs(prefixesQueue, tags, mp3Name);
+			}
+			catch (NotEnoughDataException exception)
+			{
+				data = exception.Data;
+			}
+
+
+			return data;
+		}
+
+		private static Dictionary<TagType, string> FindAllTAgs(Queue<string> prefixesQueue, Queue<TagType> tags, StringBuilder mp3Name)
+		{
 			var data = new Dictionary<TagType, string>();
 			mp3Name.Remove(0, prefixesQueue.Peek().Length);
 			while (prefixesQueue.Count > 0)
@@ -100,11 +118,19 @@ namespace mp3lib
 					{
 						var idx = 0;
 						var currentStr = new StringBuilder();
-						while (postfix[0] != mp3Name[idx])
+
+						try
 						{
-							resultStr.Append(mp3Name[idx]);
-							currentStr.Append(mp3Name[idx]);
-							idx++;
+							while (postfix[0] != mp3Name[idx])
+							{
+								resultStr.Append(mp3Name[idx]);
+								currentStr.Append(mp3Name[idx]);
+								idx++;
+							}
+						}
+						catch (IndexOutOfRangeException)
+						{
+							throw new NotEnoughDataException("Not enough data", tags, data);
 						}
 
 						var tmpIdx = idx;
@@ -131,8 +157,7 @@ namespace mp3lib
 							resultStr.Append(tmpStr);
 							needContinue = true;
 						}
-					}
-					while (needContinue);
+					} while (needContinue);
 				}
 				else
 				{
@@ -140,7 +165,6 @@ namespace mp3lib
 					break;
 				}
 			}
-
 			return data;
 		}
 	}

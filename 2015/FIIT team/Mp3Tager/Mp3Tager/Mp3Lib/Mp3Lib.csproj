@@ -47,13 +47,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mp3File\FileExistenceChecker.cs" />
-    <Compile Include="Mp3File\IFileExistenceChecker.cs" />
+    <Compile Include="FileSource\FakeSystemSource.cs" />
+    <Compile Include="FileSource\FileSystemSource.cs" />
+    <Compile Include="FileSource\ISource.cs" />
     <Compile Include="Mp3File\IMp3File.cs" />
     <Compile Include="Mp3File\IMp3Tags.cs" />
     <Compile Include="Mp3File\Mp3File.cs" />
     <Compile Include="Mp3File\Mp3Tags.cs" />
+    <Compile Include="Mp3Manipulations\Analyse.cs" />
     <Compile Include="Mp3Manipulations\ChangeTags.cs" />
+    <Compile Include="Mp3Manipulations\MaskParser.cs" />
     <Compile Include="Mp3Manipulations\Mp3Manipulations.cs" />
     <Compile Include="Mp3Manipulations\Rename.cs" />
     <Compile Include="Mp3Manipulations\TagPatterns.cs" />

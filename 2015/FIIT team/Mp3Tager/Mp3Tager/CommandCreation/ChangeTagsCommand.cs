@@ -5,10 +5,11 @@ namespace CommandCreation
 {
     internal class ChangeTagsCommand : Command
     {
-        private string _path;
+        private IMp3File mp3File;
         private string _mask;
 
-        public override int[] GetNumberOfArguments()
+        // todo: why per instance? static? 
+        public static int[] GetNumberOfArguments()
         {
             return new[] { 3 };
         }
@@ -17,16 +18,14 @@ namespace CommandCreation
             return CommandNames.ChangeTags;
         }
 
-        public ChangeTagsCommand(string[] args)
+        public ChangeTagsCommand(IMp3File audioFile, string mask)
         {
-            CheckIfCanBeExecuted(args);
-            _path = args[1];
-            _mask = args[2];
+            mp3File = audioFile;
+            _mask = mask;
         }
 
         public override void Execute()
-        {
-            var mp3File = new Mp3File(File.Create(_path));
+        {         
             var mp3Manipulations = new Mp3Manipulations(mp3File);
             mp3Manipulations.ChangeTags(_mask);
         }

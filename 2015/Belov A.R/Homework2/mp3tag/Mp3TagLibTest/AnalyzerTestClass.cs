@@ -19,6 +19,7 @@ namespace Mp3TagTest
         private string _expectedErrorFile;
         private int _expectedSynchronizedFilesCount;
         private int _expectedNotSynchronizedFilesCount;
+
         [TestInitialize]
         public void Init()
         {
@@ -33,18 +34,21 @@ namespace Mp3TagTest
             _analyzerWithFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
             _analyzerWithoutFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
         }
+
         [TestMethod]
         public void SynchronizedFilesContainsOnlyExpectedFile()
         {
             Assert.AreEqual(_expectedSynchronizedFile, _analyzerWithFiltr.SynchronizedFiles.First().Name);
             Assert.AreEqual(_expectedSynchronizedFilesCount, _analyzerWithFiltr.SynchronizedFiles.Count);
         }
+
         [TestMethod]
         public void NotSynchronizedFilesContainsExpectedFile()
         {
             Assert.AreEqual(_expectedNotSynchronizedFilesCount, _analyzerWithFiltr.NotSynchronizedFiles.Count);
             Assert.AreEqual(_expectedNotSynchronizedFile, _analyzerWithFiltr.NotSynchronizedFiles.First().Name);
         }
+
         [TestMethod]
         public void IfAnalyzerWithFiltrErrorFilesIsEmpty()
         {

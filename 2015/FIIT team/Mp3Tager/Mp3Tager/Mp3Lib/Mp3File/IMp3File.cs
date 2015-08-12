@@ -2,6 +2,7 @@
 
 namespace Mp3Lib
 {
+    // TODO: we already have IFile
     public interface IMp3File
     {
         string Path { get; }

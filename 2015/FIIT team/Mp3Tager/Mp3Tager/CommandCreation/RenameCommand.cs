@@ -5,10 +5,10 @@ namespace CommandCreation
 {
     internal class RenameCommand : Command
     {
-        private readonly string _path;
+        private IMp3File mp3File;
         private readonly string _pattern;
 
-        public override int[] GetNumberOfArguments()
+        public  static int[] GetNumberOfArguments()
         {
             return new[] { 3 };            
         }
@@ -17,18 +17,16 @@ namespace CommandCreation
             return CommandNames.Rename;
         }
 
-        public RenameCommand(string[] args)
-        {
-            CheckIfCanBeExecuted(args);
-            _path = args[1];
-            _pattern = args[2];
+        public RenameCommand(IMp3File audioFile, string mask)
+        {      
+            mp3File = audioFile;
+            _pattern = mask;
         }
 
         public override void Execute()
-        {
-            var mp3File = new Mp3File(File.Create(_path));
+        {         
             var mp3Manipulations = new Mp3Manipulations(mp3File);
-            mp3Manipulations.Rename(_pattern, new FileExistenceChecker());
+            mp3Manipulations.Rename(_pattern);
         }
     }
 }

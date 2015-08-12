@@ -18,7 +18,7 @@ namespace Mp3Lib
             _file = file;
             Path = _file.Name;
 
-            Mp3Tags = new Mp3Tags   
+            Mp3Tags = new Mp3Tags  
             {
                 Album = file.Tag.Album,
                 Title = file.Tag.Title,
@@ -29,23 +29,37 @@ namespace Mp3Lib
         }
 
         public void MoveTo(string path)
-        {
-            new FileInfo(Path).MoveTo(path);
-            Path = path;
-        }    
-        
+        {            
+            var directory = System.IO.Path.GetDirectoryName(path);
+            var fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            var destinationPath = System.IO.Path.Combine(directory, fileName + @".mp3");
+
+            var index = 1;
+
+            // TODO: work with true file system?
+            while (System.IO.File.Exists(destinationPath))
+            {
+                destinationPath = System.IO.Path.Combine(directory, fileName + @" (" + index + ").mp3");
+                index++;
+            }
+
+            new FileInfo(Path).MoveTo(destinationPath);
+            Path = destinationPath;
+        }
 
         public void Save()
         {
             using (var backup = new FileBackuper())
             {
                 backup.MakeBackup(new FileBackuperLib.File(Path));
+
                 try
                 {
                     _file.Save();
                 }
                 catch(Exception e)
                 {
+                    // todo: user unable to get full info about the process if smth get wrong
                     backup.RestoreFromBackup();
                 }
             }

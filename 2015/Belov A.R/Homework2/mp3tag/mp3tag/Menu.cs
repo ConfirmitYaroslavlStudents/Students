@@ -11,6 +11,7 @@ namespace mp3tager
             Console.Clear();
             Console.WriteLine("Available commands:\n1. Changetags\n2. Rename\n3. Analysis\n4. Sync\n5. Exit");
         }
+
         public static void PrintCurrentFile(IMp3File file)
         {
             if (file == null) return;
@@ -51,7 +52,7 @@ namespace mp3tager
         {
             Console.Clear();
             Console.Write("Available tags: ");
-            foreach (var tag in Enum.GetValues(typeof(TagList)))
+            foreach (var tag in Enum.GetValues(typeof(Tags)))
             {
                 Console.Write(tag + ", ");
             }
@@ -87,6 +88,7 @@ namespace mp3tager
             Console.ResetColor();
             Console.WriteLine("\n_______________________\n");
         }
+
         public static void PrintMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -104,6 +106,7 @@ namespace mp3tager
             }
             Console.ResetColor();
         }
+
         public static void PrintCollection(string message, Dictionary<string,string> collection,ConsoleColor color)
         {
             Console.ForegroundColor = color;
@@ -119,6 +122,7 @@ namespace mp3tager
                 Console.WriteLine("______________________________");
             }
         }
+
         public static void PrintTagValues(Dictionary<string, string> tagValues)
         {
             Console.Clear();
@@ -127,6 +131,7 @@ namespace mp3tager
                 Console.WriteLine("Tag: " + tagValue.Key + " value: " + tagValue.Value);
             }
         }
+
         public static void PrintChanges(IEnumerable<IMp3File> files)
         {
             foreach (var file in files)
@@ -153,19 +158,19 @@ namespace mp3tager
                     Console.WriteLine("{0}.mp3",mp3File.Name);
                     Console.ResetColor();
                     if (tags.Album!=mp3File.OldTags.Album)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Album, mp3File.OldTags.Album, tags.Album);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Album, mp3File.OldTags.Album, tags.Album);
                     if (tags.Artist != mp3File.OldTags.Artist)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Artist, mp3File.OldTags.Artist, tags.Artist);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Artist, mp3File.OldTags.Artist, tags.Artist);
                     if (tags.Comment!= mp3File.OldTags.Comment)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Comment, mp3File.OldTags.Comment, tags.Comment);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Comment, mp3File.OldTags.Comment, tags.Comment);
                     if (tags.Genre != mp3File.OldTags.Genre)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Genre, mp3File.OldTags.Genre, tags.Genre);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Genre, mp3File.OldTags.Genre, tags.Genre);
                     if (tags.Title != mp3File.OldTags.Title)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Title, mp3File.OldTags.Title, tags.Title);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Title, mp3File.OldTags.Title, tags.Title);
                     if (tags.Track != mp3File.OldTags.Track)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Track, mp3File.OldTags.Track, tags.Track);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Track, mp3File.OldTags.Track, tags.Track);
                     if (tags.Year != mp3File.OldTags.Year)
-                        Console.WriteLine("{0} [{1}]->[{2}]", TagList.Year, mp3File.OldTags.Year, tags.Year);
+                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Year, mp3File.OldTags.Year, tags.Year);
                     Console.WriteLine("_____________________________");
                 }
             }

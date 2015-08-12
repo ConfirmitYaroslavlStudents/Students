@@ -15,6 +15,7 @@ namespace Mp3TagTest
         private TestMp3File _fileWithBadTagsAndBadName;
         private Mask _testMask;
         private Tager _testTager;
+
         [TestInitialize]
         public void Init()
         {
@@ -26,6 +27,7 @@ namespace Mp3TagTest
             _fileWithBadTagsAndBadName = new TestMp3File() { Path = "Artist", Tags = new Mp3Tags() { Artist = "Artist", Title = "" } };
             _synchronizer.Sync(new List<IMp3File>() {_fileWithBadName,_fileWithBadTags,_fileWithBadTagsAndBadName},_testMask);
         }
+
         [TestMethod]
         public void FilesNotChangeBeforeSaving()
         {
@@ -33,17 +35,20 @@ namespace Mp3TagTest
             Assert.AreEqual(false, _fileWithBadTags.SaveFlag);
             Assert.AreEqual(false, _fileWithBadTagsAndBadName.SaveFlag);
         }
+
         [TestMethod]
         public void ErrorFilesContainsFileWithBadTagAndBadName()
         {
             Assert.AreEqual(true,_synchronizer.ErrorFiles.Keys.Contains(_fileWithBadTagsAndBadName.Name));
         }
+
         [TestMethod]
         public void ModifiedFilesContainsNotSyncFiles()
         {
             Assert.AreEqual(true, _synchronizer.ModifiedFiles.Contains(_fileWithBadTags));
             Assert.AreEqual(true, _synchronizer.ModifiedFiles.Contains(_fileWithBadName));
         }
+
         [TestMethod]
         public void SaveTest()
         {

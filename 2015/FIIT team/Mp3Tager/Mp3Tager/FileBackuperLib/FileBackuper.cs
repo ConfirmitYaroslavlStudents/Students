@@ -3,6 +3,7 @@ using System.IO;
 
 namespace FileBackuperLib
 {
+    // TODO: Immutable file model
     public class FileBackuper: IDisposable
     {
         private IFile _sourceFile;

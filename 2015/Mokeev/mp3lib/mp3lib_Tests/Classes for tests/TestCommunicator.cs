@@ -5,28 +5,28 @@ namespace mp3lib_Tests.Classes_for_tests
 {
 	public class TestCommunicator : ICommunication
 	{
-		public Queue<string> Out { get; set; }
-		public Queue<string> In { get; set; }
+		public Queue<string> UserInput { get; private set; }
+		public List<string> ProgramOutput{ get; private set; }
 
-
-		public TestCommunicator() : this (new Queue<string>(), new Queue<string>())
+		public TestCommunicator(IEnumerable<string> userInput)
 		{
-		}
+			UserInput = new Queue<string>();
+			ProgramOutput = new List<string>();
 
-		public TestCommunicator(Queue<string> @out, Queue<string> @in)
-		{
-			Out = @out;
-			In = @in;
+			foreach (var str in userInput)
+			{
+				UserInput.Enqueue(str);
+			}
 		}
 
 		public void SendMessage(string str)
 		{
-			Out.Enqueue(str);
+			ProgramOutput.Add(str);
 		}
 
 		public string GetResponse()
 		{
-			return In.Dequeue();
+			return UserInput.Dequeue();
 		}
 	}
 }

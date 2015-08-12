@@ -16,6 +16,6 @@ namespace mp3lib
 		string this[TagType type] { get; set; }
 
 		Dictionary<TagType, string> GetId3Data();
-		void ChangeFileName(string filePath);
+		void ChangeFileName(string fileName);
 	}
 }

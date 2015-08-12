@@ -9,7 +9,7 @@ namespace mp3lib
 	public class Mp3File : IMp3File
 	{
 		private Mp3Stream Mp3FileStream { get; }
-		public string FilePath { get; }
+		public string FilePath { get; private set; }
 		private Id3Tag Tags { get; }
 
 		public string Title { get { return Tags.Title; } set { Tags.Title.Value = value; Set(); } }
@@ -93,16 +93,17 @@ namespace mp3lib
 
 		}
 
-		public void ChangeFileName(string filePath)
+		public void ChangeFileName(string fileName)
 		{
-			if (filePath == FilePath) return;
+			if (fileName == FilePath) return;
 
-			if (File.Exists(Path.GetDirectoryName(FilePath) + filePath))
+			if (File.Exists(Path.GetDirectoryName(FilePath) + fileName))
 			{
 				throw new IOException("File already exists");
 			}
 
-            File.Move(FilePath, Path.GetDirectoryName(FilePath) + "\\" + filePath + ".mp3");
+            File.Move(FilePath, Path.GetDirectoryName(FilePath) + "\\" + fileName + ".mp3");
+			FilePath = fileName;
 		}
 	}
 }

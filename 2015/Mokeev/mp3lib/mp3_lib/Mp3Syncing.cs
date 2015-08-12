@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace mp3lib
 {
@@ -34,20 +36,38 @@ namespace mp3lib
 				return;
 			}
 
-			foreach (var fileDifferencese in diffs.ToArray())
+			foreach (var fileDifferencese in diffs)
 			{
+				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask);
 				foreach (var diff in fileDifferencese.Diffs)
 				{
 					if (diff.Value.FileNameValue == "" ^ diff.Value.TagValue == "")
 					{
-						fileDifferencese.Mp3File[diff.Key] = GetInfoFromUser(diff.Key, diff.Value);
-					}
-					else
-					{
 						fileDifferencese.Mp3File[diff.Key] = (diff.Value.FileNameValue != "")
 							? diff.Value.FileNameValue
 							: diff.Value.TagValue;
+
 					}
+					else
+					{
+						var data = GetInfoFromUser(diff.Key, diff.Value);
+						switch (data.DataFrom)
+						{
+							case SyncActions.FromFileName:
+								fileDifferencese.Mp3File[diff.Key] = data.Data;
+								break;
+							case SyncActions.FromTags:
+								fileNameChanger.AddTagReplacement(diff.Key, data.Data);
+								break;
+							case SyncActions.Manual:
+								fileDifferencese.Mp3File[diff.Key] = data.Data;
+								fileNameChanger.AddTagReplacement(diff.Key, data.Data);
+								break;
+						}
+					}
+
+					var fn = fileNameChanger.GetNewFileName();
+					fileDifferencese.Mp3File.ChangeFileName(fn);
 
 				}
 			}
@@ -56,38 +76,54 @@ namespace mp3lib
 		}
 
 
-		private string GetInfoFromUser(TagType tag, Diff diff)
+		private class UserData
+		{
+			public UserData(SyncActions dataFrom, string data)
+			{
+				DataFrom = dataFrom;
+				Data = data;
+			}
+
+			public SyncActions DataFrom { get; private set; }
+			public string Data { get; private set; }
+		}
+
+		private UserData GetInfoFromUser(TagType tag, Diff diff)
 		{
 			_communication.SendMessage(string.Format("There is a problem with tag \"{0}\". ", tag));
-			_communication.SendMessage("You can enter tag from: \n\t1) File name, \n\t1) File, \n\t1) Manual");
+			_communication.SendMessage("You can enter tag from: \n\t1) File name, \n\t2) Mp3 Tags, \n\t3) Manual");
 
 			while (true)
 			{
 				_communication.SendMessage("Your choise (number): ");
 				SyncActions inputData;
 				var choiseCorrect = SyncActions.TryParse(_communication.GetResponse(), out inputData);
-				if(!choiseCorrect) continue;
+				if (!choiseCorrect)
+				{
+					_communication.SendMessage("Wrong input!");
+					_communication.SendMessage("You sholud enter number with action!");
+					continue;
+				}
 
 				switch (inputData)
 				{
 					case SyncActions.FromFileName:
-						return diff.FileNameValue;
-					case SyncActions.FromData:
-						return diff.TagValue;
+						return new UserData(inputData, diff.FileNameValue);
+					case SyncActions.FromTags:
+						return new UserData(inputData, diff.TagValue);
 					case SyncActions.Manual:
 						_communication.SendMessage("Enter text for tag \"" + tag + "\"");
-						return _communication.GetResponse();
+						return new UserData(inputData, _communication.GetResponse());
 				}
 			}
 		}
 
-	}
-
-	internal enum SyncActions
-	{
-		FromFileName	= 1,
-		FromData		= 2,
-		Manual			= 3,
+		private enum SyncActions
+		{
+			FromFileName = 1,
+			FromTags = 2,
+			Manual = 3,
+		}
 	}
 
 }

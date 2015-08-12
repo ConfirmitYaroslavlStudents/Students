@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using mp3lib;
+using mp3lib.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace mp3lib_Tests
@@ -43,19 +44,19 @@ namespace mp3lib_Tests
 			CollectionAssert.AreEqual(expected, prefixes);
 		}
 
-		[TestMethod]
-		[ExpectedException(typeof(ArgumentException), "Wrong type sended: {aaaa}")]
-		public void Test_FindAllPrefixes_WrongArgumentPassed()
-		{
-			var extracter = new DataExtracter("-this-is-{aaaa}-prefix-{id}");
-			var prefixes = extracter.FindAllPrefixes(extracter.GetTags());
+		//[TestMethod]
+		//[ExpectedException(typeof(ArgumentException), "Wrong type sended: {aaaa}")]
+		//public void Test_FindAllPrefixes_WrongArgumentPassed()
+		//{
+		//	var extracter = new DataExtracter("-this-is-{aaaa}-prefix-{id}");
+		//	var prefixes = extracter.FindAllPrefixes(extracter.GetTags());
 
-			var expected = new Queue<string>();
-			expected.Enqueue("-this-is-");
-			expected.Enqueue("-prefix-");
+		//	var expected = new Queue<string>();
+		//	expected.Enqueue("-this-is-");
+		//	expected.Enqueue("-prefix-");
 
-			CollectionAssert.AreEqual(expected, prefixes);
-		}
+		//	CollectionAssert.AreEqual(expected, prefixes);
+		//}
 
 		[TestMethod]
 		public void Test_GetFullDataFromString()
@@ -72,7 +73,7 @@ namespace mp3lib_Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(Exception), "Too low prefixes count. Undefined state found.")]
+		[ExpectedException(typeof(DataExctracterException), "Too low prefixes count. Undefined state found.")]
 		public void Test_GetFullDataFromString_DelimiterExpected()
 		{
 			var extracter = new DataExtracter("{id}{artist} - {title}");
@@ -91,6 +92,20 @@ namespace mp3lib_Tests
 			var data = extracter.GetFullDataFromString(prefixes, "[10] test artist", tags);
 
 			var expected = new Dictionary<TagType, string> {{TagType.Id, "10"}, {TagType.Artist, "test artist"}};
+
+			CollectionAssert.AreEqual(expected, data);
+		}
+
+		[TestMethod]
+		public void Test_NotEnoughData()
+		{
+
+			var extracter = new DataExtracter("{id} {artist} - {title}");
+			var tags = extracter.GetTags();
+			var prefixes = extracter.FindAllPrefixes(tags);
+			var data = extracter.GetFullDataFromString(prefixes, "10 art", tags);
+
+			var expected = new Dictionary<TagType, string> { { TagType.Id, "10" }, { TagType.Artist, "" }, {TagType.Title, ""} };
 
 			CollectionAssert.AreEqual(expected, data);
 		}

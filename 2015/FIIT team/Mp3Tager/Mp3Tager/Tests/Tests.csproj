@@ -35,25 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.core">
-      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.core.interfaces">
-      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.interfaces.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.util">
-      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.util.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NUnit.VisualStudio.TestAdapter">
-      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -69,22 +50,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AnalyseCommandTests.cs" />
     <Compile Include="ChangeTagsCommandTests.cs" />
     <Compile Include="Fakes\FakeFileExistenceChecker.cs" />
     <Compile Include="Fakes\FakeFileSystemSource.cs" />
     <Compile Include="Fakes\FakeSystemSource.cs" />
+    <Compile Include="Fakes\FakeWriter.cs" />
     <Compile Include="FileBackuperTests.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />
     <Compile Include="FolderBackuperTests.cs" />
     <Compile Include="MaskParserTests.cs" />
     <Compile Include="Mp3ManipulationsTests_Analyse.cs" />
     <Compile Include="Mp3ManipulationsTests_ChangeTags.cs" />
-    <Compile Include="Mp3ManipulationsTests_Rename.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenameCommandTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CommandCreation
@@ -109,7 +110,7 @@ namespace CommandCreation
         private int CountSplitsInFileName(string currentSplit, string fileName)
         {
             int count = 0;
-            var current = fileName;
+            var current = (string)fileName.Clone();
             int finish = current.IndexOf(currentSplit);
 
             while (finish != -1)
@@ -120,6 +121,93 @@ namespace CommandCreation
 
             }
             return count;
+        }
+
+        public bool ValidateFileName(string fileName)
+        {
+            // Ambiguous matching of mask and file name.
+            for (var i = 1; i < _splits.Count - 1; i++)
+            {
+                if (_splits[i] == String.Empty)
+                    throw new InvalidDataException("Ambiguous matching of mask and file name");
+            }
+            // Ambiguous matching of mask and file name.
+            if (
+                _splits.Any(
+                    split => split != String.Empty && CountSplitsInMask(split) != CountSplitsInFileName(split, fileName)))
+            {
+                throw new InvalidDataException("Ambiguous matching of mask and file name");
+            }
+
+            // Validation with regex
+            var regexPattern = new StringBuilder();
+            foreach (var split in _splits)
+            {
+                regexPattern.Append(ConvertForRegex(split) + ".*");
+            }
+
+            var regex = new Regex(regexPattern.ToString());
+            return regex.IsMatch(@fileName);
+        }
+
+        private string ConvertForRegex(string split)
+        {
+            //'.', '\\', '+', '*', '[', ']', '{', '}', '|', '(', ')', '?', '^', '$'
+            var splitForRegex  = new StringBuilder();
+            foreach (var c in split)
+            {
+                switch (c)
+                {
+                    case '.':
+                        splitForRegex.Append(@"\.");
+                        break;
+                    case '\\':
+                        splitForRegex.Append(@"\\");
+                        break;
+                    case '+':
+                        splitForRegex.Append(@"\+");
+                        break;
+                    case '*':
+                        splitForRegex.Append(@"\*");
+                        break;
+                    case '[':
+                        splitForRegex.Append(@"\[");
+                        break;
+                    case ']':
+                        splitForRegex.Append(@"\]");
+                        break;
+                    case '{':
+                        splitForRegex.Append(@"\{");
+                        break;
+                    case '}':
+                        splitForRegex.Append(@"\}");
+                        break;
+                    case '|':
+                        splitForRegex.Append(@"\|");
+                        break;
+                    case '(':
+                        splitForRegex.Append(@"\)");
+                        break;
+                    case ')':
+                        splitForRegex.Append(@"\)");
+                        break;
+                    case '?':
+                        splitForRegex.Append(@"\?");
+                        break;
+                    case '^':
+                        splitForRegex.Append(@"\^");
+                        break;
+                    case '$':
+                        splitForRegex.Append(@"\$");
+                        break;
+
+                    default:
+                        splitForRegex.Append(c);
+                        break;
+                }
+            }
+
+            return splitForRegex.ToString();
         }
     }
 

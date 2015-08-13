@@ -8,122 +8,73 @@ using FileLib;
 namespace CommandCreation
 {
     class AnalyseCommand : Command
-    {        
+    {
         private ISource _source;
-        private string _mask;
         private IWriter _writer;
-
-        private List<string> _splits;
-        private List<string> _tags;
-        private string _fileName;
-
-        private int _finish;
-        private string _tagValue;
-        private string _tagValueReal;
+        private MaskParser _maskParser;
 
         public AnalyseCommand(ISource source, string mask, IWriter writer)
         {
             _source = source;
-            _mask = mask;
             _writer = writer;
+            _maskParser = new MaskParser(mask);
         }
 
         public override void Execute()
         {
             foreach (var file in _source.GetFiles())
             {
-                _writer.WriteLine(Analyse(file));
+                try
+                {
+                    _writer.WriteLine(Analyse(file));
+                }
+                catch (InvalidDataException e)
+                {
+                    _writer.WriteLine(e.Message + "for file " + file.FullName);
+                }
             }
         }
 
         private string Analyse(IMp3File _mp3File)
         {
+            if (!_maskParser.ValidateFileName(_mp3File.FullName))
+                throw new InvalidDataException("Mask doesn't match the file name.");
+
             var resultMessage = new StringBuilder();
-            _fileName = Path.GetFileNameWithoutExtension(_mp3File.FullName);
+            var fileName = Path.GetFileNameWithoutExtension(_mp3File.FullName);
+            int finish;
+            string tagValue, tagValueReal;
 
-            if (!ParseArgsAndSplits())
-                return String.Empty;
-
-            for (int i = 0; i < _tags.Count - 1; i++)
+            for (int i = 0; i < _maskParser.GetTags().Count - 1; i++)
             {
-                if (_splits[i + 1] == String.Empty)
-                {
-                    throw new InvalidDataException("Ambiguous matching of mask and file name.");
-                }
-                if (i != 0 || (i == 0 && _splits[i] != String.Empty))
-                {
-                    if (!_fileName.StartsWith(_splits[i]))
-                    {
-                        throw new InvalidDataException("Mask doesn't match the file name.");
-                    }
-                }
-                _finish = _fileName.IndexOf(_splits[i + 1], StringComparison.Ordinal);
+                finish = fileName.IndexOf(_maskParser.GetSplits()[i + 1], StringComparison.Ordinal);
 
-                if (_finish == -1)
+                tagValue = fileName.Substring(_maskParser.GetSplits()[i].Length, finish - _maskParser.GetSplits()[i].Length);
+                tagValueReal = GetTagValueByTagPattern(_mp3File, _maskParser.GetTags()[i]);
+
+                if (tagValue != tagValueReal)
                 {
-                    throw new InvalidDataException("Mask doesn't match the file name.");
+                    resultMessage.Append(_maskParser.GetTags()[i] + " in file name: " + tagValue + "; ");
+                    resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueReal);
                 }
 
-                _tagValue = _fileName.Substring(_splits[i].Length, _finish - _splits[i].Length);
-
-                _tagValueReal = GetTagValueByTagPattern(_mp3File, _tags[i]);
-                if (_tagValue != _tagValueReal)
-                {
-                    resultMessage.Append(_tags[i] + " in file name: " + _tagValue + "; ");
-                    resultMessage.Append(_tags[i] + " in tags: " + _tagValueReal);
-                }
-
-                _fileName = _fileName.Remove(0, _splits[i].Length + _tagValue.Length);
+                fileName = fileName.Remove(0, _maskParser.GetSplits()[i].Length + tagValue.Length);
             }
 
-            if (_splits.Count - 2 != 0 || ((_splits.Count - 2) == 0 && _splits[_splits.Count - 2] != String.Empty))
-            {
-                if (!_fileName.StartsWith(_splits[_splits.Count - 2]))
-                {
-                    throw new InvalidDataException("Mask doesn't match the file name.");
-                }
-            }
-            if (_splits[_splits.Count - 1] != String.Empty)
-            {
-                _finish = _fileName.IndexOf(_splits[_splits.Count - 1], StringComparison.Ordinal);
-                if (!_fileName.EndsWith(_splits[_splits.Count - 1]))
-                {
-                    throw new InvalidDataException("Mask doesn't match the file name.");
-                }
-            }
-            else
-            {
-                _finish = _fileName.Length;
-            }
+            finish = _maskParser.GetSplits()[_maskParser.GetSplits().Count - 1] != String.Empty
+                ? fileName.IndexOf(_maskParser.GetSplits()[_maskParser.GetSplits().Count - 1], StringComparison.Ordinal)
+                : fileName.Length;
 
-            _tagValue = _fileName.Substring(_splits[_splits.Count - 2].Length, _finish - _splits[_splits.Count - 2].Length);
-            _tagValueReal = GetTagValueByTagPattern(_mp3File, _tags[_tags.Count - 1]);
+            tagValue = fileName.Substring(_maskParser.GetSplits()[_maskParser.GetSplits().Count - 2].Length, finish - _maskParser.GetSplits()[_maskParser.GetSplits().Count - 2].Length);
+            tagValueReal = GetTagValueByTagPattern(_mp3File, _maskParser.GetTags()[_maskParser.GetTags().Count - 1]);
 
-            if (_tagValue != _tagValueReal)
+            if (tagValue != tagValueReal)
             {
-                resultMessage.Append(_tags[_tags.Count - 1] + " in file name: " + _tagValue + "; ");
-                resultMessage.Append(_tags[_tags.Count - 1] + " in tags: " + _tagValueReal);
+                resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in file name: " + tagValue + "; ");
+                resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in tags: " + tagValueReal);
             }
 
             return resultMessage.ToString();
-        }
-
-        private bool ParseArgsAndSplits()
-        {
-            var parser = new MaskParser(_mask);
-            _splits = parser.GetSplits();
-            _tags = parser.GetTags();
-
-
-            if (_tags.Count == 0)
-                return false;
-
-            if (_splits.Any(split => split != String.Empty && !parser.IsEqualNumberOfSplitsInMaskAndFileName(split, _fileName)))
-            {
-                throw new InvalidDataException();
-            }
-
-            return true;
         }
 
         private string GetTagValueByTagPattern(IMp3File _mp3File, string tagPattern)

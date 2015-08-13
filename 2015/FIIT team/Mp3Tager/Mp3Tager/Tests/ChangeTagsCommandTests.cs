@@ -1,7 +1,8 @@
-﻿using CommandCreation;
+﻿
 using FileLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using CommandCreation;
 
 namespace Tests
 {

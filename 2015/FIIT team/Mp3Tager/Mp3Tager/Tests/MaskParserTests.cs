@@ -1,6 +1,7 @@
 ﻿using CommandCreation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Tests
 {
@@ -88,6 +89,8 @@ namespace Tests
             _expectedTags = new List<string> { "{track}", "{title}" };
             _expectedSplits = new List<string> { "{ttt", "", "}h" };
         }
+
+        
     }
 
     [TestClass]
@@ -119,6 +122,68 @@ namespace Tests
 
             // assert
             Assert.IsFalse(actual);
+        }
+    }
+
+    [TestClass]
+    public class MaskValidates
+    {
+        [TestMethod]
+        public void MaskParser_DifferentSplits_Successful()
+        {
+            var parser = new MaskParser("{artist} - {title} . {track}");
+            Assert.IsTrue(parser.ValidateFileName("TestArtist - TestTitle . 1"));
+        }
+
+        [TestMethod]
+        public void MaskParser_Common_Successful()
+        {
+            var parser = new MaskParser("{artist} - {title}");
+            Assert.IsTrue(parser.ValidateFileName("TestArtist - TestTitle"));
+        }
+
+        [TestMethod]
+        public void MaskParser_SplitInBegin_Successful()
+        {
+            var parser = new MaskParser("a{artist}");
+            Assert.IsTrue(parser.ValidateFileName("aTestArtist"));
+        }
+        
+        [TestMethod]
+        public void MaskParser_SameSplits_Successful()
+        {
+            var parser = new MaskParser("{artist} - {title} - {track}");
+            Assert.IsTrue(parser.ValidateFileName("TestArtist - TestTitle - 1"));
+        }
+
+        [TestMethod]
+        public void MaskParser_LetterInCenter_Successful()
+        {
+            var parser = new MaskParser("{artist}Q{track}");
+            Assert.IsTrue(parser.ValidateFileName("TestArtistQ1"));
+        }
+
+        [TestMethod]
+        public void MaskParser_SplitInBeginAndEnd_Successful()
+        {
+            var parser = new MaskParser("-{artist}.{track}-");
+            Assert.IsTrue(parser.ValidateFileName("-TestArtist.1-"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void MaskParser_ManySplits_Exception()
+        {
+            var parser = new MaskParser("{artist}-{track}");
+            parser.ValidateFileName("Test-Artist-1");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void MaskParser_WithoutSplits_Exception()
+        {
+            var parser = new MaskParser("{artist}{track}");
+            parser.ValidateFileName("TestArtist1");
         }
     }
 }

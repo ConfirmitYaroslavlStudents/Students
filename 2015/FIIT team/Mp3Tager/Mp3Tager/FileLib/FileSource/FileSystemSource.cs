@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Mp3Lib
+namespace FileLib
 {
     public class FileSystemSource : ISource
     {

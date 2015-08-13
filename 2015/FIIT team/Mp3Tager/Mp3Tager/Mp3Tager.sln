@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{23C5428C-58BD-4223-B0F8-5209511B74C0}"
 EndProject
@@ -9,11 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandCreation", "CommandC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Tager", "Mp3Tager\Mp3Tager.csproj", "{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Lib", "Mp3Lib\Mp3Lib.csproj", "{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileBackuperLib", "FileBackuperLib\FileBackuperLib.csproj", "{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderBackuperLib", "FolderBackuperLib\FolderBackuperLib.csproj", "{358E0C23-C364-4C63-A937-F11571062818}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileLib", "FileLib\FileLib.csproj", "{DD0E96FD-32D4-4ED0-B61E-1A4E17F54F4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,18 +31,14 @@ Global
 		{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78074CCB-EA95-4FE0-83D4-D4E4FA59AC54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6ED8BFD-54FF-4B0C-A0EF-61BDD70C96D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B12B3BAB-087B-47DE-B73D-BDAC93B02E24}.Release|Any CPU.Build.0 = Release|Any CPU
 		{358E0C23-C364-4C63-A937-F11571062818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{358E0C23-C364-4C63-A937-F11571062818}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{358E0C23-C364-4C63-A937-F11571062818}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{358E0C23-C364-4C63-A937-F11571062818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD0E96FD-32D4-4ED0-B61E-1A4E17F54F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD0E96FD-32D4-4ED0-B61E-1A4E17F54F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD0E96FD-32D4-4ED0-B61E-1A4E17F54F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD0E96FD-32D4-4ED0-B61E-1A4E17F54F4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

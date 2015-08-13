@@ -54,10 +54,6 @@
       <Project>{b9a0ec73-bb56-4118-8f16-85a73a930116}</Project>
       <Name>CommandCreation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FileBackuperLib\FileBackuperLib.csproj">
-      <Project>{b12b3bab-087b-47de-b73d-bdac93b02e24}</Project>
-      <Name>FileBackuperLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,14 +1,13 @@
 ﻿using System;
-using FileBackuperLib;
 using CommandCreation;
 
 namespace Mp3Tager
 {
     public class Application
     {
-        public void Execute(string[] args)
+        public void Execute(string[] args, IWriter writer)
         {
-            var command = new CommandFactory().ChooseCommand(args);
+            var command = new CommandFactory().ChooseCommand(args, writer);
             command.Execute();            
         }
     }

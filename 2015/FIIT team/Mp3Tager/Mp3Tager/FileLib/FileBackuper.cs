@@ -1,16 +1,16 @@
 ﻿using System;
 using System.IO;
 
-namespace FileBackuperLib
+namespace FileLib
 {
     // TODO: Immutable file model
     public class FileBackuper: IDisposable
     {
-        private IFile _sourceFile;
-        private IFile _tempFile;
+        private IMp3File _sourceFile;
+        private IMp3File _tempFile;
         private bool _restored;
 
-        public IFile MakeBackup(IFile sourceFile)
+        public IMp3File MakeBackup(IMp3File sourceFile)
         {
             if (_sourceFile != null)
                 throw new InvalidOperationException();
@@ -30,7 +30,7 @@ namespace FileBackuperLib
                 throw new InvalidOperationException();
 
             _sourceFile.Delete();
-            _tempFile.MoveTo(_sourceFile.FullName);
+            _tempFile.MoveTo(new FileExistenceChecker(), _sourceFile.FullName);
             _restored = true;
         }
 

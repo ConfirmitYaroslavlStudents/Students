@@ -13,19 +13,13 @@ namespace CommandCreation
         };
 
         private readonly string _commandForHelp;
+        private IWriter _writer;
 
-        public static int[] GetNumberOfArguments()
-        {
-            return new[] { 1, 2 };
-        }
-        public override string GetCommandName()
-        {
-            return CommandNames.Help;
-        }
 
-        public HelpCommand(string[] args)
+        public HelpCommand(string[] args, IWriter writer)
         {
             _commandForHelp = args.Length == 2 ? args[1] : null;
+            _writer = writer;
         }
 
         public override void Execute()
@@ -35,13 +29,12 @@ namespace CommandCreation
                 foreach (var message in HelpMessages)
                 {
                     // todo: no console reference!
-                    Console.Write(message.Key + ": ");
-                    Console.WriteLine(message.Value);
+                    _writer.WriteLine(message.Key + ": " + message.Value);                    
                 }
             }
             else
             {
-                Console.WriteLine(HelpMessages.ContainsKey(_commandForHelp)
+                _writer.WriteLine(HelpMessages.ContainsKey(_commandForHelp)
                     ? HelpMessages[_commandForHelp]
                     : "There is no such command!");
             }

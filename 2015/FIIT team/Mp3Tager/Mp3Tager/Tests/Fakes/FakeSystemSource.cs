@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using FileLib;
 
-namespace Mp3Lib.FileSource
+namespace Tests.Fakes
 {
     // todo: is it correct place?
     class FakeSystemSource : ISource

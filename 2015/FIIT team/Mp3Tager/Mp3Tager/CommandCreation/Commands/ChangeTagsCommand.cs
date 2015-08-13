@@ -1,22 +1,33 @@
-﻿using System;
+﻿using FileLib;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TagLib;
 
-namespace Mp3Lib
+namespace CommandCreation
 {
-    public partial class Mp3Manipulations
+    internal class ChangeTagsCommand : Command
     {
+        private IMp3File _mp3File;
+        private string _mask;
+
         private List<string> _splits;
         private List<string> _tags;
         private string _fileName;
         private int _finish;
         private string _tagValue;
+    
+        public ChangeTagsCommand(IMp3File mp3File, string mask)
+        {
+            _mp3File = mp3File;
+            _mask = mask;
+        }
 
-        public void ChangeTags(string mask)
+        public override void Execute()
         {
             SetFileName();
-            if (!ParseTagsAndSplits(mask))
+            if (!ParseTagsAndSplits(_mask))
                 return;
             ChangeAllTags();
             _mp3File.Save();
@@ -24,7 +35,7 @@ namespace Mp3Lib
 
         private void SetFileName()
         {
-            _fileName = Path.GetFileNameWithoutExtension(_mp3File.Path);
+            _fileName = Path.GetFileNameWithoutExtension(_mp3File.FullName);
         }
 
         private bool ParseTagsAndSplits(string mask)
@@ -119,11 +130,11 @@ namespace Mp3Lib
         {
             var tagSet = new HashSet<string>
             {
-                TagPatterns.Artist,
-                TagPatterns.Album,
-                TagPatterns.Genre,
-                TagPatterns.Title,
-                TagPatterns.Track
+                TagNames.Artist,
+                TagNames.Album,
+                TagNames.Genre,
+                TagNames.Title,
+                TagNames.Track
             };
 
             if (!tagSet.Contains(tag))
@@ -131,20 +142,20 @@ namespace Mp3Lib
 
             switch (tag)
             {
-                case TagPatterns.Artist:
-                    _mp3File.Mp3Tags.Artist = _tagValue;
+                case TagNames.Artist:
+                    _mp3File.Tags.Artist = _tagValue;
                     break;
-                case TagPatterns.Title:
-                    _mp3File.Mp3Tags.Title = _tagValue;
+                case TagNames.Title:
+                    _mp3File.Tags.Title = _tagValue;
                     break;
-                case TagPatterns.Genre:
-                    _mp3File.Mp3Tags.Genre = _tagValue;
+                case TagNames.Genre:
+                    _mp3File.Tags.Genre = _tagValue;
                     break;
-                case TagPatterns.Album:
-                    _mp3File.Mp3Tags.Album = _tagValue;
+                case TagNames.Album:
+                    _mp3File.Tags.Album = _tagValue;
                     break;
-                case TagPatterns.Track:
-                    _mp3File.Mp3Tags.Track = Convert.ToUInt32(_tagValue);
+                case TagNames.Track:
+                    _mp3File.Tags.Track = Convert.ToUInt32(_tagValue);
                     break;
             }
         }
@@ -184,6 +195,6 @@ namespace Mp3Lib
             {
                 CheckIfRigthSplitInTheBeginning(_splits.Count - 2);
             }
-        }
+        }        
     }
 }

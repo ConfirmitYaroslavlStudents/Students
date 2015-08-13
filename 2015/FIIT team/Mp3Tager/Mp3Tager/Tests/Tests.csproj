@@ -70,9 +70,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ChangeTagsCommandTests.cs" />
+    <Compile Include="Fakes\FakeFileExistenceChecker.cs" />
     <Compile Include="Fakes\FakeFileSystemSource.cs" />
+    <Compile Include="Fakes\FakeSystemSource.cs" />
     <Compile Include="FileBackuperTests.cs" />
-    <Compile Include="Fakes\FakeFile.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />
     <Compile Include="FolderBackuperTests.cs" />
     <Compile Include="MaskParserTests.cs" />
@@ -83,25 +84,21 @@
     <Compile Include="RenameCommandTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CommandCreation\CommandCreation.csproj">
       <Project>{b9a0ec73-bb56-4118-8f16-85a73a930116}</Project>
       <Name>CommandCreation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FileBackuperLib\FileBackuperLib.csproj">
-      <Project>{b12b3bab-087b-47de-b73d-bdac93b02e24}</Project>
-      <Name>FileBackuperLib</Name>
+    <ProjectReference Include="..\FileLib\FileLib.csproj">
+      <Project>{dd0e96fd-32d4-4ed0-b61e-1a4e17f54f4a}</Project>
+      <Name>FileLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\FolderBackuperLib\FolderBackuperLib.csproj">
       <Project>{358e0c23-c364-4c63-a937-f11571062818}</Project>
       <Name>FolderBackuperLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mp3Lib\Mp3Lib.csproj">
-      <Project>{b6ed8bfd-54ff-4b0c-a0ef-61bdd70c96d7}</Project>
-      <Name>Mp3Lib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

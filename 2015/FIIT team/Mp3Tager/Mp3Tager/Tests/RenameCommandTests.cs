@@ -1,6 +1,7 @@
 ﻿using CommandCreation;
-using Mp3Lib;
+using FileLib;
 using NUnit.Framework;
+using Tests.Fakes;
 
 namespace Tests
 {
@@ -13,14 +14,15 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            _file = new FakeMp3File(@"D:\TestFile.mp3", new Mp3Tags());
-            _file.Mp3Tags.Album = "TestAlbum";
-            _file.Mp3Tags.Artist = "TestPerformer";
-            _file.Mp3Tags.Genre = "TestGenre";
-            _file.Mp3Tags.Title = "TestTitle";
-            _file.Mp3Tags.Track = 1;         
+            _file = new FakeMp3File(new Mp3Tags(), @"D:\TestFile.mp3");
+            _file.Tags.Album = "TestAlbum";
+            _file.Tags.Artist = "TestPerformer";
+            _file.Tags.Genre = "TestGenre";
+            _file.Tags.Title = "TestTitle";
+            _file.Tags.Track = 1;         
 
-            _command = new RenameCommand(_file, TagNames.Track + ". " + TagNames.Artist + " - " + TagNames.Title);
+            _command = new RenameCommand(_file, new FakeFileExistenceChecker(), 
+                TagNames.Track + ". " + TagNames.Artist + " - " + TagNames.Title);
         }
 
         [Test]
@@ -29,7 +31,7 @@ namespace Tests
             _command.Execute();
 
             var expected = @"D:\1. TestPerformer - TestTitle.mp3";
-            var actual = _file.Path;
+            var actual = _file.FullName;
             Assert.AreEqual(expected, actual);
         }
 

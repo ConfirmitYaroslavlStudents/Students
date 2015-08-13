@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mp3Lib
+namespace FileLib
 {
     public interface ISource
     {

@@ -1,6 +1,6 @@
-namespace Mp3Lib
+namespace FileLib
 {
-    public class Mp3Tags : IMp3Tags
+    public class Mp3Tags
     {
         public string Artist { get; set; }
         public string Title { get; set; }

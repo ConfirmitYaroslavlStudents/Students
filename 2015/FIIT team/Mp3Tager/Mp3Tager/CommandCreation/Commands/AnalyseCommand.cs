@@ -26,7 +26,7 @@ namespace CommandCreation
             {
                 try
                 {
-                    _writer.WriteLine(Analyse(file));
+                    _writer.Write(Analyse(file));
                 }
                 catch (InvalidDataException e)
                 {
@@ -55,7 +55,7 @@ namespace CommandCreation
                 if (tagValue != tagValueReal)
                 {
                     resultMessage.Append(_maskParser.GetTags()[i] + " in file name: " + tagValue + "; ");
-                    resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueReal);
+                    resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueReal + "\n");
                 }
 
                 fileName = fileName.Remove(0, _maskParser.GetSplits()[i].Length + tagValue.Length);
@@ -71,7 +71,7 @@ namespace CommandCreation
             if (tagValue != tagValueReal)
             {
                 resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in file name: " + tagValue + "; ");
-                resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in tags: " + tagValueReal);
+                resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in tags: " + tagValueReal + "\n");
             }
 
             return resultMessage.ToString();

@@ -5,7 +5,7 @@ namespace mp3lib
 	public class FileDifferences
 	{
 		public IMp3File Mp3File { get; private set; }
-		public Dictionary<TagType, Diff> Diffs { get; }
+		public Dictionary<TagType, Diff> Diffs { get; set; }
 
 		public FileDifferences(IMp3File mp3File)
 		{

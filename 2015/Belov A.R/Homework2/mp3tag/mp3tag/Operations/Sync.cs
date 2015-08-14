@@ -12,15 +12,18 @@ namespace mp3tager.Operations
     {
         public override void Call()
         {
-            
             var path = Menu.GetUserInput("path:");
             var tager = new Tager(new FileLoader());
             var analyzer = new Analyzer(tager, s => Path.GetExtension(s).ToLower() == ".mp3");
+            
             Menu.PrintHelp();
+            
             var mask = new Mask(Menu.GetUserInput("mask:"));
             analyzer.Analyze(Directory.GetFiles(path), mask);
+
             var synchronizer = new Synchronizer(tager);
             synchronizer.Sync(analyzer.NotSynchronizedFiles, mask);
+            
             Menu.PrintChanges(synchronizer.ModifiedFiles);
             if (Menu.GetUserInput("Enter 'save' to save changes\nEnter any string to ignore changes\n").ToLower() == "save")
             {

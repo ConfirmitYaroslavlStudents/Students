@@ -47,6 +47,7 @@ namespace mp3lib
 			return list.ToArray();
 		}
 
+        //[TODO] move to separate class
 		public void ShowDifferences(IEnumerable<FileDifferences> differences, IRequestable requestable)
 		{
 			foreach (var file in differences)

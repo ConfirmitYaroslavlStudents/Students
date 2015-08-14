@@ -44,20 +44,6 @@ namespace mp3lib_Tests
 			CollectionAssert.AreEqual(expected, prefixes);
 		}
 
-		//[TestMethod]
-		//[ExpectedException(typeof(ArgumentException), "Wrong type sended: {aaaa}")]
-		//public void Test_FindAllPrefixes_WrongArgumentPassed()
-		//{
-		//	var extracter = new DataExtracter("-this-is-{aaaa}-prefix-{id}");
-		//	var prefixes = extracter.FindAllPrefixes(extracter.GetTags());
-
-		//	var expected = new Queue<string>();
-		//	expected.Enqueue("-this-is-");
-		//	expected.Enqueue("-prefix-");
-
-		//	CollectionAssert.AreEqual(expected, prefixes);
-		//}
-
 		[TestMethod]
 		public void Test_GetFullDataFromString()
 		{

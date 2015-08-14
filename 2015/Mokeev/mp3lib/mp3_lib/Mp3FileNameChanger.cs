@@ -7,7 +7,7 @@ namespace mp3lib
 {
 	public class Mp3FileNameChanger
 	{
-		private IMp3File Mp3File { get; }
+		private IMp3File Mp3File { get; set; }
 
 		private readonly DataExtracter _dataExtracter;
 

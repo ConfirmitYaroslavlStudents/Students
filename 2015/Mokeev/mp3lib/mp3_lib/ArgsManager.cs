@@ -19,7 +19,7 @@ namespace mp3lib
 
 
 
-		private string[] Args { get; }
+		private string[] Args { get; set; }
 
 		public ArgsManager(string[] args)
 		{

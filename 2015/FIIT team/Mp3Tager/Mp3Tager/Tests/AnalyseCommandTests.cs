@@ -39,7 +39,8 @@ namespace Tests
 
             analyser.Execute();
 
-            Assert.AreEqual("{title} in file name: TestTitle2; {title} in tags: TestTitle1\n", fakeWriter.Stream.ToString());
+            Assert.AreEqual("File: " + mp3Files[0].FullName + "\n" + 
+                "{title} in file name: TestTitle2; {title} in tags: TestTitle1\n\n", fakeWriter.Stream.ToString());
         }        
 
         [TestMethod]
@@ -91,10 +92,12 @@ namespace Tests
 
             analyser.Execute();
 
-            Assert.AreEqual("{track} in file name: 2; {track} in tags: 1\n" +
-                            "{title} in file name: Sneg; {title} in tags: Arlekino\n" +
+            Assert.AreEqual("File: " + mp3Files[0].FullName + "\n" +
+                            "{track} in file name: 2; {track} in tags: 1\n" +
+                            "{title} in file name: Sneg; {title} in tags: Arlekino\n\n" +
+                            "File: " + mp3Files[1].FullName + "\n" +
                             "{artist} in file name: Alla; {artist} in tags: Filipp\n" +
-                            "{title} in file name: Arlekino; {title} in tags: Sneg\n",
+                            "{title} in file name: Arlekino; {title} in tags: Sneg\n\n",
                             fakeWriter.Stream.ToString());
         }
     }

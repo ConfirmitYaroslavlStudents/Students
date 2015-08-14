@@ -12,10 +12,12 @@ namespace Mp3Tager
             {
                 var app = new Application();
                 app.Execute(args, writer);
+                writer.WriteLine("Command successfully executed.");
+
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                writer.WriteLine(e.Message);
             }
         }
     }

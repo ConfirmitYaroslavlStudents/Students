@@ -40,7 +40,7 @@ namespace CommandCreation
             if (!_maskParser.ValidateFileName(_mp3File.FullName))
                 throw new InvalidDataException("Mask doesn't match the file name.");
 
-            var resultMessage = new StringBuilder();
+            var resultMessage = new StringBuilder();            
             var fileName = Path.GetFileNameWithoutExtension(_mp3File.FullName);
             int finish;
             string tagValue, tagValueReal;
@@ -74,6 +74,11 @@ namespace CommandCreation
                 resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in tags: " + tagValueReal + "\n");
             }
 
+            if (resultMessage.ToString() != "")
+            {
+                resultMessage.Insert(0, "File: " + _mp3File.FullName + "\n");
+                resultMessage.Append("\n");
+            }
             return resultMessage.ToString();
         }
 

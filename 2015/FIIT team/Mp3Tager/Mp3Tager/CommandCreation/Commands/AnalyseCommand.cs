@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using System.Linq;
 using System;
 using FileLib;
 
@@ -9,9 +7,9 @@ namespace CommandCreation
 {
     class AnalyseCommand : Command
     {
-        private ISource _source;
-        private IWriter _writer;
-        private MaskParser _maskParser;
+        private readonly ISource _source;
+        private readonly IWriter _writer;
+        private readonly MaskParser _maskParser;
 
         public AnalyseCommand(ISource source, string mask, IWriter writer)
         {
@@ -35,67 +33,60 @@ namespace CommandCreation
             }
         }
 
-        private string Analyse(IMp3File _mp3File)
+        private string Analyse(IMp3File mp3File)
         {
-            if (!_maskParser.ValidateFileName(_mp3File.FullName))
+            var fileName = Path.GetFileNameWithoutExtension(mp3File.FullName);
+
+            if (!_maskParser.ValidateFileName(fileName))
                 throw new InvalidDataException("Mask doesn't match the file name.");
 
-            var resultMessage = new StringBuilder();            
-            var fileName = Path.GetFileNameWithoutExtension(_mp3File.FullName);
-            int finish;
-            string tagValue, tagValueReal;
+            var resultMessage = new StringBuilder();
 
-            for (int i = 0; i < _maskParser.GetTags().Count - 1; i++)
+            var tagPatternsInMask = _maskParser.GetTags();
+            var splitsInMask = _maskParser.GetSplits();
+
+            fileName = fileName.Remove(0, splitsInMask[0].Length);
+            for (var i = 0; i < splitsInMask.Count - 1; i++)
             {
-                finish = fileName.IndexOf(_maskParser.GetSplits()[i + 1], StringComparison.Ordinal);
+                var indexOfSplit = splitsInMask[i + 1] != String.Empty
+                    ? fileName.IndexOf(splitsInMask[i + 1], StringComparison.Ordinal)
+                    : fileName.Length;
+                var tagValueInFileName = fileName.Substring(0, indexOfSplit);
+                var tagValueInTags = GetTagValueByTagPattern(mp3File, tagPatternsInMask[i]);
 
-                tagValue = fileName.Substring(_maskParser.GetSplits()[i].Length, finish - _maskParser.GetSplits()[i].Length);
-                tagValueReal = GetTagValueByTagPattern(_mp3File, _maskParser.GetTags()[i]);
-
-                if (tagValue != tagValueReal)
+                if (tagValueInFileName != tagValueInTags)
                 {
-                    resultMessage.Append(_maskParser.GetTags()[i] + " in file name: " + tagValue + "; ");
-                    resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueReal + "\n");
+                    resultMessage.Append(_maskParser.GetTags()[i] + " in file name: " + tagValueInFileName + "; ");
+                    resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueInTags + "\n");
                 }
 
-                fileName = fileName.Remove(0, _maskParser.GetSplits()[i].Length + tagValue.Length);
+                fileName = fileName.Remove(0, indexOfSplit + splitsInMask[i + 1].Length);
             }
 
-            finish = _maskParser.GetSplits()[_maskParser.GetSplits().Count - 1] != String.Empty
-                ? fileName.IndexOf(_maskParser.GetSplits()[_maskParser.GetSplits().Count - 1], StringComparison.Ordinal)
-                : fileName.Length;
-
-            tagValue = fileName.Substring(_maskParser.GetSplits()[_maskParser.GetSplits().Count - 2].Length, finish - _maskParser.GetSplits()[_maskParser.GetSplits().Count - 2].Length);
-            tagValueReal = GetTagValueByTagPattern(_mp3File, _maskParser.GetTags()[_maskParser.GetTags().Count - 1]);
-
-            if (tagValue != tagValueReal)
+            // Add file name to message
+            if (resultMessage.Length > 0)
             {
-                resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in file name: " + tagValue + "; ");
-                resultMessage.Append(_maskParser.GetTags()[_maskParser.GetTags().Count - 1] + " in tags: " + tagValueReal + "\n");
-            }
-
-            if (resultMessage.ToString() != "")
-            {
-                resultMessage.Insert(0, "File: " + _mp3File.FullName + "\n");
+                resultMessage.Insert(0, "File: " + mp3File.FullName + "\n");
                 resultMessage.Append("\n");
             }
+
             return resultMessage.ToString();
         }
 
-        private string GetTagValueByTagPattern(IMp3File _mp3File, string tagPattern)
+        private string GetTagValueByTagPattern(IMp3File mp3File, string tagPattern)
         {
             switch (tagPattern)
             {
                 case TagNames.Artist:
-                    return _mp3File.Tags.Artist;
+                    return mp3File.Tags.Artist;
                 case TagNames.Title:
-                    return _mp3File.Tags.Title;
+                    return mp3File.Tags.Title;
                 case TagNames.Genre:
-                    return _mp3File.Tags.Genre;
+                    return mp3File.Tags.Genre;
                 case TagNames.Album:
-                    return _mp3File.Tags.Album;
+                    return mp3File.Tags.Album;
                 case TagNames.Track:
-                    return _mp3File.Tags.Track.ToString();
+                    return mp3File.Tags.Track.ToString();
                 default:
                     throw new ArgumentException(tagPattern);
             }

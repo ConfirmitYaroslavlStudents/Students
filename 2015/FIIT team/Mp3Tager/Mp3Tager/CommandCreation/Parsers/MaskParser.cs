@@ -141,9 +141,10 @@ namespace CommandCreation
 
             // Validation with regex
             var regexPattern = new StringBuilder();
-            foreach (var split in _splits)
+            for (var i = 0; i < _splits.Count; i++)
             {
-                regexPattern.Append(ConvertForRegex(split) + ".*");
+                regexPattern.Append(ConvertForRegex(_splits[i])
+                    + (i != _splits.Count - 1 ? ".*" : "$"));
             }
 
             var regex = new Regex(regexPattern.ToString());

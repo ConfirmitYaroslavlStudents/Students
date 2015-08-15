@@ -7,40 +7,34 @@ namespace FileLib
     public class FileBackuper: IDisposable
     {
         private IMp3File _sourceFile;
-        private IMp3File _tempFile;
-        private bool _restored;
 
-        public IMp3File MakeBackup(IMp3File sourceFile)
+        public IMp3File TempFile { get; private set; }
+        
+        public FileBackuper(IMp3File sourceFile)
         {
-            if (_sourceFile != null)
+            if (sourceFile == null)
                 throw new InvalidOperationException();
-
             _sourceFile = sourceFile;
-            _restored = false;
+            TempFile = MakeBackup();
+        }
 
+        private IMp3File MakeBackup()
+        {
             var tempDirectory = Path.GetTempPath();
             var fileName = Path.GetFileName(_sourceFile.FullName);
-
-            return _tempFile = _sourceFile.CopyTo(tempDirectory + fileName);
+            return _sourceFile.CopyTo(tempDirectory + fileName);
         }
 
         public void RestoreFromBackup()
-        {
-            if (_sourceFile == null || _tempFile == null)
-                throw new InvalidOperationException();
-
+        {            
             _sourceFile.Delete();
-            _tempFile.MoveTo(new FileExistenceChecker(), _sourceFile.FullName);
-            _restored = true;
+            TempFile.MoveTo(new FileExistenceChecker(), _sourceFile.FullName);
         }
 
         public void Dispose()
         {
-            if (_tempFile != null && _restored == false)
-            {
-                _tempFile.Delete();
-                _tempFile = null;
-            }
+            TempFile.Delete();
+            TempFile = null;            
             _sourceFile = null;
         }
     }

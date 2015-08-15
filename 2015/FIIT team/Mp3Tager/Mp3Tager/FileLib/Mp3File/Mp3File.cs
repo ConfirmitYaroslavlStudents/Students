@@ -30,9 +30,8 @@ namespace FileLib
         public void Save()
         {
             SaveTags();
-            using (var backup = new FileBackuper())
-            {
-                backup.MakeBackup(this);
+            using (var backup = new FileBackuper(this))
+            {                
                 try
                 {
                     _content.Save();
@@ -82,9 +81,8 @@ namespace FileLib
 
         private void MoveFileWithBackUp(string destinationPath)
         {
-            using (var backup = new FileBackuper())
+            using (var backup = new FileBackuper(this))
             {
-                backup.MakeBackup(this);
                 try
                 {
                     System.IO.File.Move(FullName, destinationPath);

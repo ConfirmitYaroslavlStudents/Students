@@ -9,8 +9,8 @@ namespace mp3lib
 {
 	public class Mp3TagChanger
 	{
-		private string Mp3RealName { get; }
-		private IMp3File Mp3 { get; }
+		private string Mp3RealName { get; set; }
+		private IMp3File Mp3 { get; set; }
 
 		private readonly DataExtracter _dataExtracter;
 

@@ -9,7 +9,7 @@ namespace mp3lib_Tests.Classes_for_tests
 		public string Album { get; set; }
 		public string Artist { get; set; }
 		public string Comment { get; set; }
-		public string FilePath { get; }
+		public string FilePath { get; set; }
 		public string Genre { get; set; }
 		public string Title { get; set; }
 		public string TrackId { get; set; }

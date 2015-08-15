@@ -1,37 +1,53 @@
 ﻿using System;
-using Mp3Lib;
+using System.Collections.Generic;
+using FileLib;
 using TagLib;
 
 namespace CommandCreation
 {
     public class CommandFactory
     {
-        public Command ChooseCommand(string[] args)
+        public readonly Dictionary<string, int[]> NumberOfCommandArguments = new Dictionary<string, int[]>()
+        {
+            {CommandNames.Help, new[] {1, 2}},
+            {CommandNames.Rename, new []{3} },
+            {CommandNames.ChangeTags, new []{3}},
+            {CommandNames.Analyse, new []{3}},
+        };
+
+        public Command ChooseCommand(string[] args, IWriter writer)
         {
             IMp3File file;
+            ISource source;
             string mask;
 
             var parser = new ArgumentParser(args);
             parser.CheckForEmptiness();
 
-            var commandName = args[0];
+            var commandName = args[0].ToLower();
             switch (commandName)
             {
                 case CommandNames.Help:
-                    parser.CheckIfCanBeExecuted(args, HelpCommand.GetNumberOfArguments());
-                    return new HelpCommand(args);
+                    parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Help]);
+                    return new HelpCommand(args, writer);
 
                 case CommandNames.Rename:
-                    parser.CheckIfCanBeExecuted(args, RenameCommand.GetNumberOfArguments());
-                    file = new Mp3File(File.Create(args[1]));
+                    parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Rename]);
+                    file = new Mp3File(TagLib.File.Create(args[1]));
                     mask = args[2];
-                    return new RenameCommand(file, mask);
+                    return new RenameCommand(file, new FileExistenceChecker(), mask);
 
                 case CommandNames.ChangeTags:
-                    parser.CheckIfCanBeExecuted(args, ChangeTagsCommand.GetNumberOfArguments());
-                    file = new Mp3File(File.Create(args[1]));
+                    parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.ChangeTags]);
+                    file = new Mp3File(TagLib.File.Create(args[1]));
                     mask = args[2];
                     return new ChangeTagsCommand(file, mask);
+
+                case CommandNames.Analyse:
+                    parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Analyse]);
+                    source = new FileSystemSource(args[1]);                    
+                    mask = args[2];
+                    return new AnalyseCommand(source, mask, writer);
 
                 default:
                     throw new InvalidOperationException("Invalid operation: there is no such command!");

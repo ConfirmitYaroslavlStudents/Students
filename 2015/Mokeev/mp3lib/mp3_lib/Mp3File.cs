@@ -8,9 +8,9 @@ namespace mp3lib
 {
 	public class Mp3File : IMp3File
 	{
-		private Mp3Stream Mp3FileStream { get; }
+		private Mp3Stream Mp3FileStream { get; set; }
 		public string FilePath { get; private set; }
-		private Id3Tag Tags { get; }
+		private Id3Tag Tags { get; set; }
 
 		public string Title { get { return Tags.Title; } set { Tags.Title.Value = value; Set(); } }
 		public string Artist { get { return Tags.Artists; } set { Tags.Artists.TextValue = value; Set(); } }
@@ -46,7 +46,7 @@ namespace mp3lib
 						Comment = value;
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(type), type, null);
+						throw new ArgumentOutOfRangeException(type.ToString(), type, null);
 				}
 			}
 		}

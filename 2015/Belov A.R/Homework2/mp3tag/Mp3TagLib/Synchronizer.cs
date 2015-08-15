@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mp3TagLib
 {
@@ -17,8 +15,9 @@ namespace Mp3TagLib
             ErrorFiles=new Dictionary<string, string>();
         }
 
-        public List<IMp3File> ModifiedFiles { get; set; }
-        public Dictionary<string, string> ErrorFiles { get; set; }
+        public List<IMp3File> ModifiedFiles { get;private set; }
+
+        public Dictionary<string, string> ErrorFiles { get;private set; }
 
         public void Sync(IEnumerable<IMp3File> files,Mask mask)
         {
@@ -32,7 +31,7 @@ namespace Mp3TagLib
             }
         }
 
-        public bool TryChangeName(Mask mask)
+        bool TryChangeName(Mask mask)
         {
             try
             {
@@ -47,7 +46,7 @@ namespace Mp3TagLib
             }
         }
 
-        public bool TryChangeTags(Mask mask)
+        bool TryChangeTags(Mask mask)
         {
             try
             {
@@ -61,7 +60,7 @@ namespace Mp3TagLib
                 ModifiedFiles.Add(_tager.CurrentFile);
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 ErrorFiles.Add(_tager.CurrentFile.Name, "Can't sync [tags and file name is bad]");
                 return false;

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using FileBackuperLib;
+using FileLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests.Fakes;
 
@@ -13,7 +13,7 @@ namespace Tests
         {
             var backup = new FileBackuper();
 
-            var tempFile = backup.MakeBackup(new FakeFile(@"D:\music\audio.mp3"));
+            var tempFile = backup.MakeBackup(new FakeMp3File(new Mp3Tags(), @"D:\music\audio.mp3"));
             Assert.AreEqual(tempFile.FullName, Path.GetTempPath() + @"audio.mp3");
 
             backup.RestoreFromBackup();

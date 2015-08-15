@@ -44,7 +44,7 @@ namespace mp3lib_Tests.Classes_for_tests
 						Comment = value;
 						break;
 					default:
-						throw new ArgumentOutOfRangeException(nameof(type), type, null);
+						throw new ArgumentOutOfRangeException(type.ToString(), type, null);
 				}
 			}
 		}

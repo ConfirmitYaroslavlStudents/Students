@@ -88,6 +88,7 @@ namespace mp3lib
 			public string Data { get; private set; }
 		}
 
+        //[TODO] move to separate class
 		private UserData GetInfoFromUser(TagType tag, Diff diff)
 		{
 			_communication.SendMessage(string.Format("There is a problem with tag \"{0}\". ", tag));

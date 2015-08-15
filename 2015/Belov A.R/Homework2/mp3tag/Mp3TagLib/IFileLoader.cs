@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Mp3TagLib
+﻿namespace Mp3TagLib
 {
     public interface IFileLoader
     {

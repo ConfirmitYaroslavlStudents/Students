@@ -9,7 +9,7 @@ namespace mp3lib
 {
 	public class DataExtracter
 	{
-		public string Mask { get; }
+		public string Mask { get; private set; }
 
 		public DataExtracter(string mask)
 		{

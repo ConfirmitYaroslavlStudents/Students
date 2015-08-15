@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Mp3TagLib;
-using TagLib;
-
 
 namespace mp3tager
 {

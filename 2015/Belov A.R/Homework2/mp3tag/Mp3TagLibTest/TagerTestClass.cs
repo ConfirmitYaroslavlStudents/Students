@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3TagLib;
 
@@ -85,7 +81,6 @@ namespace Mp3TagTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void NameNotChangeIfTagIsEmpty()
         {
-            var expectedName = "[1]. Artist - Title 2015 live in Russia";
             var tags = new Mp3Tags() { Album = "Album", Artist = "", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
             _testTager.Load("oldfilename");

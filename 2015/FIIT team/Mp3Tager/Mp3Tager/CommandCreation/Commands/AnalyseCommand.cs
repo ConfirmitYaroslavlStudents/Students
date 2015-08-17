@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using System;
+using System.Linq;
 using FileLib;
 
 namespace CommandCreation
@@ -20,11 +21,14 @@ namespace CommandCreation
 
         public override void Execute()
         {
-            foreach (var file in _source.GetFiles())
+            var files = _source.GetFiles();
+            var index = 1;
+            var count = files.Count();
+            foreach (var file in files)
             {
                 try
                 {
-                    _writer.Write(Analyse(file));
+                    _writer.Write(Analyse(file, index++, count));
                 }
                 catch (InvalidDataException e)
                 {
@@ -33,7 +37,7 @@ namespace CommandCreation
             }
         }
 
-        private string Analyse(IMp3File mp3File)
+        private string Analyse(IMp3File mp3File, int index, int count)
         {
             var fileName = Path.GetFileNameWithoutExtension(mp3File.FullName);
 
@@ -51,13 +55,23 @@ namespace CommandCreation
                 var indexOfSplit = splitsInMask[i + 1] != String.Empty
                     ? fileName.IndexOf(splitsInMask[i + 1], StringComparison.Ordinal)
                     : fileName.Length;
+                
                 var tagValueInFileName = fileName.Substring(0, indexOfSplit);
-                var tagValueInTags = GetTagValueByTagPattern(mp3File, tagPatternsInMask[i]);
 
-                if (tagValueInFileName != tagValueInTags)
+                if (tagPatternsInMask[i] == "{index}")
                 {
-                    resultMessage.Append(_maskParser.GetTags()[i] + " in file name: " + tagValueInFileName + "; ");
-                    resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueInTags + "\n");
+                    if (tagValueInFileName != ConvertToIndexForm(index, count))
+                        resultMessage.Append("Expected index: " + ConvertToIndexForm(index, count) + "\n");
+                }
+                else
+                {
+                    var tagValueInTags = GetTagValueByTagPattern(mp3File, tagPatternsInMask[i]);
+
+                    if (tagValueInFileName != tagValueInTags)
+                    {
+                        resultMessage.Append(_maskParser.GetTags()[i] + " in file name: " + tagValueInFileName + "; ");
+                        resultMessage.Append(_maskParser.GetTags()[i] + " in tags: " + tagValueInTags + "\n");
+                    }
                 }
 
                 fileName = fileName.Remove(0, indexOfSplit + splitsInMask[i + 1].Length);
@@ -71,6 +85,18 @@ namespace CommandCreation
             }
 
             return resultMessage.ToString();
+        }
+
+        private string ConvertToIndexForm(int index, int count)
+        {
+            var maxDigits = 1 + Math.Floor(Math.Log10(count));
+            var currentDigits = 1 + Math.Floor(Math.Log10(index));
+
+            var convertedIndex = new StringBuilder(index.ToString());
+            for (var i = 0; i < maxDigits - currentDigits; i++)
+                convertedIndex.Insert(0, "0");
+
+            return convertedIndex.ToString();
         }
 
         private string GetTagValueByTagPattern(IMp3File mp3File, string tagPattern)

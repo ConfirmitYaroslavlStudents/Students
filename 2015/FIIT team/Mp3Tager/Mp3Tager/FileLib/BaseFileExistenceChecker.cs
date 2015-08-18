@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileLib
+﻿namespace FileLib
 {
+    // todo: class name
+    // todo: too many file system abstractions
     public abstract class BaseFileExistenceChecker
     {
         protected abstract bool Exists(string path);
@@ -26,7 +22,5 @@ namespace FileLib
 
             return destinationPath;
         }
-
-
     }
 }

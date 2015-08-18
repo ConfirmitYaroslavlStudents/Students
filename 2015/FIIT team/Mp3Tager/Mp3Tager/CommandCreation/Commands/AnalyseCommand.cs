@@ -58,12 +58,11 @@ namespace CommandCreation
             fileName = fileName.Remove(0, splitsInMask[0].Length);
             for (var i = 0; i < splitsInMask.Count - 1; i++)
             {
-
                 var indexOfSplit = splitsInMask[i + 1] != String.Empty
                     ? fileName.IndexOf(splitsInMask[i + 1], StringComparison.Ordinal)
                     : fileName.Length;
-                var tagValueInFileName = fileName.Substring(0, indexOfSplit);
 
+                var tagValueInFileName = fileName.Substring(0, indexOfSplit);
 
                 // analyse index logic starts here
                 if (tagPatternsInMask[i] == "{index}")

@@ -1,6 +1,5 @@
 ﻿namespace FileLib
 {
-    // TODO: we already have IFile
     public interface IMp3File
     {
         Mp3Tags Tags { get; }
@@ -14,7 +13,5 @@
         void MoveTo(string path);
 
         void Delete();
-
-        
     }
 }

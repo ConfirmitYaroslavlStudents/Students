@@ -1,6 +1,5 @@
-﻿using System.IO;
-using TagLib;
-using System;
+﻿using System;
+using System.IO;
 
 namespace FileLib
 {
@@ -32,6 +31,7 @@ namespace FileLib
         public void Save()
         {
             SaveTags();
+
             using (var backup = new FileBackuper(this))
             {                
                 try
@@ -42,6 +42,7 @@ namespace FileLib
                 {
                     // todo: user unable to get full info about the process if smth get wrong
                     backup.RestoreFromBackup();
+
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
             }
@@ -67,18 +68,22 @@ namespace FileLib
         public IMp3File CopyTo(string path)
         {
             var destinationPath = _checker.CreateUniqueName(path);
-            System.IO.File.Copy(FullName, destinationPath, true);
+            File.Copy(FullName, destinationPath, true);
+
             return new Mp3File(TagLib.File.Create(destinationPath), _checker);
         }
 
         public void Delete()
         {
-            System.IO.File.Delete(FullName);
+            File.Delete(FullName);
         }
 
         public void MoveTo(string path)
         {
             var destinationPath = _checker.CreateUniqueName(path);
+
+            // todo: rename --backup-ignore "" {title}
+            // todo: tumbler to switch off backup process
             MoveFileWithBackUp(destinationPath);
         }
 
@@ -88,7 +93,8 @@ namespace FileLib
             {
                 try
                 {
-                    System.IO.File.Move(FullName, destinationPath);
+                    File.Move(FullName, destinationPath);
+
                     FullName = destinationPath;
                 }
                 catch (Exception e)

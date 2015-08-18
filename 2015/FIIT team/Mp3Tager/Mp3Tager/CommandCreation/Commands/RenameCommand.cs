@@ -6,6 +6,7 @@ using TagLib;
 
 namespace CommandCreation
 {
+    // todo: for folder
     internal class RenameCommand : Command
     {
         private IMp3File _mp3File;

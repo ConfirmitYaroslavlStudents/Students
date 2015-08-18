@@ -3,11 +3,12 @@ using System.IO;
 
 namespace FileLib
 {
-    // TODO: Immutable file model
+    // TODO: IDispose pattern
     public class FileBackuper: IDisposable
     {
         private IMp3File _sourceFile;
 
+        // todo: make private?
         public IMp3File TempFile { get; private set; }
         
         public FileBackuper(IMp3File sourceFile)

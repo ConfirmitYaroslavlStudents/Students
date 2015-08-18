@@ -3,15 +3,16 @@ using System.IO;
 
 namespace FileLib
 {
+    // todo: IDirectory ?
     public class FileSystemSource : ISource
     {
-
         public FileSystemSource(string source)
         {
             SourceFolder = source;
         }
 
         public string SourceFolder { get; private set; }
+
         public IEnumerable<string> GetFileNames()
         {
             return Directory.GetFiles(SourceFolder, "*.mp3", SearchOption.TopDirectoryOnly);

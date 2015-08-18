@@ -28,7 +28,6 @@ namespace CommandCreation
             {
                 foreach (var message in HelpMessages)
                 {
-                    // todo: no console reference!
                     _writer.WriteLine(message.Key + ": " + message.Value);                    
                 }
             }

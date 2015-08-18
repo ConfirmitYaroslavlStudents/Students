@@ -5,6 +5,7 @@ using System.IO;
 
 namespace CommandCreation
 {
+    // todo: for folder
     internal class ChangeTagsCommand : Command
     {
         private readonly IMp3File _mp3File;

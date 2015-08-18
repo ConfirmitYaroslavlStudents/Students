@@ -33,13 +33,13 @@ namespace CommandCreation
 
                 case CommandNames.Rename:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Rename]);
-                    file = new Mp3File(TagLib.File.Create(args[1]));
+                    file = new Mp3File(TagLib.File.Create(args[1]), new FileExistenceChecker());
                     mask = args[2];
                     return new RenameCommand(file, new FileExistenceChecker(), mask);
 
                 case CommandNames.ChangeTags:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.ChangeTags]);
-                    file = new Mp3File(TagLib.File.Create(args[1]));
+                    file = new Mp3File(TagLib.File.Create(args[1]), new FileExistenceChecker());
                     mask = args[2];
                     return new ChangeTagsCommand(file, mask);
 

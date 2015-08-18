@@ -28,7 +28,7 @@ namespace FileLib
         public void RestoreFromBackup()
         {            
             _sourceFile.Delete();
-            TempFile.MoveTo(new FileExistenceChecker(), _sourceFile.FullName);
+            TempFile.MoveTo(_sourceFile.FullName);
         }
 
         public void Dispose()

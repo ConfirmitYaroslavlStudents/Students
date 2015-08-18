@@ -27,7 +27,7 @@ namespace CommandCreation
             var newName = GetNewName();
 
             var directory = Path.GetDirectoryName(_mp3File.FullName);
-            _mp3File.MoveTo(_checker, Path.Combine(directory, newName + @".mp3"));
+            _mp3File.MoveTo(Path.Combine(directory, newName + @".mp3"));
         }
 
         private string GetNewName()

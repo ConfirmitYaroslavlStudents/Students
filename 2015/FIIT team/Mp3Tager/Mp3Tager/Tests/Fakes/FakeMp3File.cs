@@ -5,12 +5,15 @@ namespace Tests
 {
     public class FakeMp3File : IMp3File
     {
+        private readonly BaseFileExistenceChecker _checker;
+
         public Mp3Tags Tags { get; private set; }
 
-        public FakeMp3File(Mp3Tags tags, string path)
+        public FakeMp3File(Mp3Tags tags, string path, BaseFileExistenceChecker checker)
         {            
             Tags = tags;
             FullName = path;
+            _checker = checker;
         }
                 
         public void Save()
@@ -21,12 +24,12 @@ namespace Tests
 
         public IMp3File CopyTo(string path)
         {
-            return new FakeMp3File(Tags, path);            
+            return new FakeMp3File(Tags, path, _checker);            
         }
 
-        public void MoveTo(BaseFileExistenceChecker checker, string path)
+        public void MoveTo(string path)
         {
-            FullName = checker.CreateUniqueName(path);
+            FullName = _checker.CreateUniqueName(path);
         }
 
         public void Delete()

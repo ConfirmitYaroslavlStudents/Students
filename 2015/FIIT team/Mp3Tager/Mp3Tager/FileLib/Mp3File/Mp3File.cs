@@ -7,15 +7,17 @@ namespace FileLib
     public class Mp3File : IMp3File
     {
         private readonly TagLib.File _content;
+        private readonly BaseFileExistenceChecker _checker;
 
         public Mp3Tags Tags { get; private set; }
 
         public string FullName { get; private set; }
 
-        public Mp3File(TagLib.File mp3Content)
+        public Mp3File(TagLib.File mp3Content, BaseFileExistenceChecker checker)
         {           
             _content = mp3Content;
-            FullName = mp3Content.Name;         
+            FullName = mp3Content.Name;
+            _checker = checker;
 
             Tags = new Mp3Tags  
             {
@@ -64,8 +66,9 @@ namespace FileLib
 
         public IMp3File CopyTo(string path)
         {
-            System.IO.File.Copy(FullName, path, true);
-            return new Mp3File(TagLib.File.Create(path));
+            var destinationPath = _checker.CreateUniqueName(path);
+            System.IO.File.Copy(FullName, destinationPath, true);
+            return new Mp3File(TagLib.File.Create(destinationPath), _checker);
         }
 
         public void Delete()
@@ -73,9 +76,9 @@ namespace FileLib
             System.IO.File.Delete(FullName);
         }
 
-        public void MoveTo(BaseFileExistenceChecker checker, string path)
+        public void MoveTo(string path)
         {
-            var destinationPath = checker.CreateUniqueName(path);
+            var destinationPath = _checker.CreateUniqueName(path);
             MoveFileWithBackUp(destinationPath);
         }
 

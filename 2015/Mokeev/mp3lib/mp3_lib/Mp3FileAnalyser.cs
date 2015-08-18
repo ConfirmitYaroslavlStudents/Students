@@ -52,11 +52,12 @@ namespace mp3lib
 		{
 			foreach (var file in differences)
 			{
-				requestable.SendMessage(string.Format("This file has differences: {0}", file.Mp3File));
+				requestable.SendMessage(string.Format("This file has differences: {0}", file.Mp3File.FilePath));
 				foreach (var diff in file.Diffs)
 				{
 					requestable.SendMessage(string.Format("{0} in Mp3File Name: {1}", diff.Key, diff.Value.FileNameValue));
 					requestable.SendMessage(string.Format("{0} in Tags: {1}", diff.Key, diff.Value.TagValue));
+					requestable.SendMessage("\n");
 				}
 			}
 		}

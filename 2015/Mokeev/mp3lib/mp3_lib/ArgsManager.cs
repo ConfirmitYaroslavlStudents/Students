@@ -35,7 +35,11 @@ namespace mp3lib
 		{
 			if (Args.Length != 6)
 			{
-				throw new ArgumentException("Expected usage: \n\t-action [analyse|file-rename|change-tags] -path \"[path to file]\" -mask \"[mask for changing title]\" \n\tor \n\t-");
+				throw new ArgumentException("Expected usage: \n\t" +
+												"-action \t[analyse|file-rename|change-tags|sync] \n\t" +
+												"-path  \t\t\"[path to file]\" \n\t" +
+												"-mask  \t\t\"[mask for changing title]\""
+											);
 			}
 
 			var hasFilePath = false;

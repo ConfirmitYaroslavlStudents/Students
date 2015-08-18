@@ -38,19 +38,19 @@ namespace mp3lib
 
 			foreach (var fileDifferencese in diffs)
 			{
-				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask);
+				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask, true);
 				foreach (var diff in fileDifferencese.Diffs)
 				{
-					if (diff.Value.FileNameValue == "" ^ diff.Value.TagValue == "")
+					if (string.IsNullOrWhiteSpace(diff.Value.FileNameValue) ^ string.IsNullOrWhiteSpace(diff.Value.TagValue))
 					{
 						fileDifferencese.Mp3File[diff.Key] = (diff.Value.FileNameValue != "")
 							? diff.Value.FileNameValue
 							: diff.Value.TagValue;
-
+						fileNameChanger.AddTagReplacement(diff.Key, fileDifferencese.Mp3File[diff.Key]);
 					}
 					else
 					{
-						var data = GetInfoFromUser(diff.Key, diff.Value);
+						var data = GetInfoFromUser(diff.Key, diff.Value, fileDifferencese.Mp3File);
 						switch (data.DataFrom)
 						{
 							case SyncActions.FromFileName:
@@ -65,11 +65,9 @@ namespace mp3lib
 								break;
 						}
 					}
-
-					var fn = fileNameChanger.GetNewFileName();
-					fileDifferencese.Mp3File.ChangeFileName(fn);
-
 				}
+				var fn = fileNameChanger.GetNewFileName();
+				fileDifferencese.Mp3File.ChangeFileName(fn);
 			}
 
 
@@ -89,10 +87,11 @@ namespace mp3lib
 		}
 
         //[TODO] move to separate class
-		private UserData GetInfoFromUser(TagType tag, Diff diff)
+		private UserData GetInfoFromUser(TagType tag, Diff diff, IMp3File file)
 		{
+			_communication.SendMessage(string.Format("File: {0}", file.FilePath));
 			_communication.SendMessage(string.Format("There is a problem with tag \"{0}\". ", tag));
-			_communication.SendMessage("You can enter tag from: \n\t1) File name, \n\t2) Mp3 Tags, \n\t3) Manual");
+			_communication.SendMessage(string.Format("You can enter tag from: \n\t1) File name (Data: \"{0}\"), \n\t2) Mp3 Tags (Data: \"{1}\"), \n\t3) Manual", diff.FileNameValue, diff.TagValue));
 
 			while (true)
 			{

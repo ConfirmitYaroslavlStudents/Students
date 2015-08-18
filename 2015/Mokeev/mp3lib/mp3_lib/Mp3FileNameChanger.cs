@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -12,13 +13,16 @@ namespace mp3lib
 		private readonly DataExtracter _dataExtracter;
 
 		private Dictionary<TagType, string> Id3Data { get; set; }
+		private bool _fastChanges;
 
-		public Mp3FileNameChanger(IMp3File file, string mask)
+		public Mp3FileNameChanger(IMp3File file, string mask, bool fastChanges = false)
 		{
 			Mp3File = file;
 			Id3Data = new Dictionary<TagType, string>();
 
 			_dataExtracter = new DataExtracter(mask);
+
+			_fastChanges = fastChanges;
 		}
 
 
@@ -31,6 +35,8 @@ namespace mp3lib
 		public string GetNewFileName()
 		{
 			var tags = _dataExtracter.GetTags();
+
+			if (_fastChanges && Id3Data.Count == 0) return Path.GetFileNameWithoutExtension(Mp3File.FilePath);
 
 			var id3Data = Id3Data.Count > 0 ? Id3Data : Mp3File.GetId3Data();
 

@@ -113,7 +113,7 @@ namespace Tests
                 new FakeMp3File(new Mp3Tags{Title = "title6"}, sourceFolder + "6. title6.mp3", _checker),
                 new FakeMp3File(new Mp3Tags{Title = "title7"}, sourceFolder + "07. title7.mp3", _checker),
                 new FakeMp3File(new Mp3Tags{Title = "title8"}, sourceFolder + "08. title8.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title9"}, sourceFolder + "09. title9.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Title = "title9"}, sourceFolder + "009. title9.mp3", _checker),
                 new FakeMp3File(new Mp3Tags{Title = "title10"}, sourceFolder + "10. title10.mp3", _checker),
             };
             var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
@@ -127,13 +127,15 @@ namespace Tests
             // Assert
             var message = "Index out of range. Maximum is 10:\n" +
                          "\t" + "14. title4" + "\n\n" +
+                         "Wrong  index, expected 09:\n" +
+                          "\t" + "009. title9" + "\n\n" +
                           "Wrong  index, expected 02:\n" + 
                           "\t" + "2. title2" + "\n\n" +
                           "Wrong  index, expected 05:\n" +
                           "\t" + "5. title5" + "\n\n" +
                           "Wrong  index, expected 06:\n" +
                           "\t" + "6. title6" + "\n\n" +
-                          "Some indexes are missing: " + "02, 04 - 06.\n\n";
+                          "Some indexes are missing: " + "02, 04 - 06, 09.\n\n";
 
             Assert.AreEqual(message, fakeWriter.Stream.ToString());
         }

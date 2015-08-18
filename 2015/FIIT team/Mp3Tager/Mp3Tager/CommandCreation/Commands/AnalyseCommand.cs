@@ -108,7 +108,7 @@ namespace CommandCreation
             var count = _indexDict.Keys.SelectMany(key => _indexDict[key]).Count();
 
             int i;
-            foreach (var key in _indexDict.Keys)
+            foreach (string key in _indexDict.Keys)
             {
                 if (!Int32.TryParse(key, out i))
                 {
@@ -118,6 +118,7 @@ namespace CommandCreation
                         resultMessage.Append("\t" + item + "\n");
                     }
                     resultMessage.Append("\n");
+                    continue;
                 }
 
                 if (i > count)
@@ -128,6 +129,7 @@ namespace CommandCreation
                         resultMessage.Append("\t" + item + "\n");
                     }
                     resultMessage.Append("\n");
+                    continue;
                 }
 
                 if (_indexDict[key].Count > 1)
@@ -138,7 +140,21 @@ namespace CommandCreation
                         resultMessage.Append("\t" + item + "\n");
                     }
                     resultMessage.Append("\n");
+                    continue;
                 }
+
+                if (key.StartsWith("0") && key.Length > count.ToString().Length)
+                {
+                    var expectedIndex = ConvertToIndexForm(i, count);
+                    resultMessage.Append("Wrong  index, expected " + expectedIndex + ":\n");
+                    foreach (var item in _indexDict[key])
+                    {
+                        resultMessage.Append("\t" + item + "\n");
+                    }
+                    resultMessage.Append("\n");
+                }
+
+                
             }
             return resultMessage.ToString();
         }

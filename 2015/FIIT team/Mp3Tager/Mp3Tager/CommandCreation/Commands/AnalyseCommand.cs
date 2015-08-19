@@ -9,37 +9,40 @@ namespace CommandCreation
 {
     class AnalyseCommand : Command
     {
-        private readonly ISource _source;
-        private readonly IWriter _writer;
+        private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly MaskParser _maskParser;
 
         private Dictionary<string, List<string>> _indexDict;
 
-        public AnalyseCommand(ISource source, string mask, IWriter writer)
+        public AnalyseCommand(IEnumerable<IMp3File> mp3Files, string mask)
         {
-            _source = source;
-            _writer = writer;
+            _mp3Files = mp3Files;
             _maskParser = new MaskParser(mask);
 
             _indexDict = new Dictionary<string, List<string>>();
         }
 
-        public override void Execute()
+        public override string Execute()
         {
-            var files = _source.GetFiles();
-            foreach (var file in files)
+            var resultMessage = new StringBuilder();
+            foreach (var mp3File in _mp3Files)
             {
                 try
                 {
-                    _writer.Write(Analyse(file));
+                    resultMessage.Append(Analyse(mp3File));
                 }
                 catch (InvalidDataException e)
                 {
-                    _writer.WriteLine(e.Message + " for file " + file.FullName);
+                    resultMessage.Append(e.Message + " for file " + mp3File.FullName);
                 }
             }
             if (_indexDict.Count > 0)
-                _writer.Write(IndexAnalyse());
+                resultMessage.Append(IndexAnalyse());
+            return resultMessage.ToString();
+        }
+
+        public override void Complete()
+        {
         }
 
         private string Analyse(IMp3File mp3File)
@@ -259,7 +262,7 @@ namespace CommandCreation
             return resultMessage.ToString();
         }
 
-        private string GetTagValueByTagPattern(IMp3File mp3File, string tagPattern)
+        private static string GetTagValueByTagPattern(IMp3File mp3File, string tagPattern)
         {
             switch (tagPattern)
             {

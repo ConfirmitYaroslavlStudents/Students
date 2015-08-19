@@ -9,7 +9,7 @@ namespace FileLib
 
         public Mp3Tags Tags { get; private set; }
 
-        public string FullName { get; private set; }
+        public string FullName { get; set; }
 
         public Mp3File(TagLib.File mp3Content)
         {           
@@ -30,11 +30,13 @@ namespace FileLib
         {
             SaveTags();
 
-            using (var backup = new FileBackuper(this))
+            /*using (var backup = new FileBackuper(this))
             {                
                 try
                 {
                     _content.Save();
+                    if (_content.Name != FullName)
+                        MoveTo(FullName);
                 }
                 catch(Exception e)
                 {
@@ -42,7 +44,10 @@ namespace FileLib
 
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
-            }
+            }*/
+            _content.Save();
+            if (_content.Name != FullName)
+                MoveTo(FullName);
         }
 
         private void SaveTags()
@@ -77,7 +82,7 @@ namespace FileLib
         {
             // todo: rename --backup-ignore "" {title}
             // todo: tumbler to switch off backup process
-            using (var backup = new FileBackuper(this))
+            /*using (var backup = new FileBackuper(this))
             {
                 try
                 {
@@ -89,7 +94,10 @@ namespace FileLib
                     backup.RestoreFromBackup();
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
-            }
+            }*/
+            var originalName = Path.Combine(Path.GetDirectoryName(FullName), _content.Name);
+            File.Move(originalName, uniquePath);
+            FullName = uniquePath;
         }
     }
 }

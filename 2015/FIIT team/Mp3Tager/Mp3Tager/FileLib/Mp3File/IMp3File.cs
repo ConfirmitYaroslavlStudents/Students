@@ -4,7 +4,7 @@
     {
         Mp3Tags Tags { get; }
 
-        string FullName { get; }
+        string FullName { get; set; }
 
         void Save();
 

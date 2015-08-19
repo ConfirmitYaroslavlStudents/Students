@@ -72,10 +72,6 @@
       <Project>{dd0e96fd-32d4-4ed0-b61e-1a4e17f54f4a}</Project>
       <Name>FileLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FolderBackuperLib\FolderBackuperLib.csproj">
-      <Project>{358e0c23-c364-4c63-a937-f11571062818}</Project>
-      <Name>FolderBackuperLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

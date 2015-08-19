@@ -84,7 +84,6 @@ namespace mp3lib
 
 			for (var i = 0; i < Args.Length; i++)
 			{
-                // TODO: is it readable at all? {READY}
 				if 
 				(
 					i + 1 < Args.Length		&&
@@ -144,7 +143,7 @@ namespace mp3lib
 					action = ProgramAction.Sync;
 					break;
 				default:
-					throw new ArgumentException("-action can be [analyse|file-rename|change-tags]");
+					throw new ArgumentException("-action can be [analyse|file-rename|change-tags|sync]");
 			}
 
 			return new Args(data[PATH], data[MASK], action);

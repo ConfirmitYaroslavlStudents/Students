@@ -25,7 +25,7 @@ namespace ConsoleMp3TagEditor
 						var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
 						var differences = pathAnalyser.GetDifferences();
-						pathAnalyser.ShowDifferences(differences, new ConsoleCommunication());
+						new CommunicationWithUser().ShowDifferences(differences, new ConsoleCommunication());
 
 						break;
 

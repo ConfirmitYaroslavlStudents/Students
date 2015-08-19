@@ -50,7 +50,7 @@ namespace mp3lib
 					}
 					else
 					{
-						var data = GetInfoFromUser(diff.Key, diff.Value, fileDifferencese.Mp3File);
+						var data = new CommunicationWithUser().GetInfoFromUser(diff.Key, diff.Value, fileDifferencese.Mp3File, _communication);
 						switch (data.DataFrom)
 						{
 							case SyncActions.FromFileName:
@@ -73,57 +73,6 @@ namespace mp3lib
 
 		}
 
-
-		private class UserData
-		{
-			public UserData(SyncActions dataFrom, string data)
-			{
-				DataFrom = dataFrom;
-				Data = data;
-			}
-
-			public SyncActions DataFrom { get; private set; }
-			public string Data { get; private set; }
-		}
-
-        //[TODO] move to separate class
-		private UserData GetInfoFromUser(TagType tag, Diff diff, IMp3File file)
-		{
-			_communication.SendMessage(string.Format("File: {0}", file.FilePath));
-			_communication.SendMessage(string.Format("There is a problem with tag \"{0}\". ", tag));
-			_communication.SendMessage(string.Format("You can enter tag from: \n\t1) File name (Data: \"{0}\"), \n\t2) Mp3 Tags (Data: \"{1}\"), \n\t3) Manual", diff.FileNameValue, diff.TagValue));
-
-			while (true)
-			{
-				_communication.SendMessage("Your choise (number): ");
-				SyncActions inputData;
-				var choiseCorrect = SyncActions.TryParse(_communication.GetResponse(), out inputData);
-				if (!choiseCorrect)
-				{
-					_communication.SendMessage("Wrong input!");
-					_communication.SendMessage("You sholud enter number with action!");
-					continue;
-				}
-
-				switch (inputData)
-				{
-					case SyncActions.FromFileName:
-						return new UserData(inputData, diff.FileNameValue);
-					case SyncActions.FromTags:
-						return new UserData(inputData, diff.TagValue);
-					case SyncActions.Manual:
-						_communication.SendMessage("Enter text for tag \"" + tag + "\"");
-						return new UserData(inputData, _communication.GetResponse());
-				}
-			}
-		}
-
-		private enum SyncActions
-		{
-			FromFileName = 1,
-			FromTags = 2,
-			Manual = 3,
-		}
+        
 	}
-
 }

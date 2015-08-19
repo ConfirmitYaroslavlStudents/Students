@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace mp3lib
 {
@@ -17,8 +15,6 @@ namespace mp3lib
 			_files = files;
 		}
 
-		//TODO: tests {READY}
-		//TODO: return detailed information {READY}
 		public FileDifferences[] GetDifferences()
 		{
 			var list = new List<FileDifferences>();
@@ -45,21 +41,6 @@ namespace mp3lib
 			}
 
 			return list.ToArray();
-		}
-
-        //[TODO] move to separate class
-		public void ShowDifferences(IEnumerable<FileDifferences> differences, IRequestable requestable)
-		{
-			foreach (var file in differences)
-			{
-				requestable.SendMessage(string.Format("This file has differences: {0}", file.Mp3File.FilePath));
-				foreach (var diff in file.Diffs)
-				{
-					requestable.SendMessage(string.Format("{0} in Mp3File Name: {1}", diff.Key, diff.Value.FileNameValue));
-					requestable.SendMessage(string.Format("{0} in Tags: {1}", diff.Key, diff.Value.TagValue));
-					requestable.SendMessage("\n");
-				}
-			}
 		}
 	}
 }

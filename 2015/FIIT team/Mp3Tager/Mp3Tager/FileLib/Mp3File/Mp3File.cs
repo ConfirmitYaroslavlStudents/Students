@@ -6,18 +6,16 @@ namespace FileLib
     public class Mp3File : IMp3File
     {
         private readonly TagLib.File _content;
-        private readonly BaseFileExistenceChecker _checker;
 
         public Mp3Tags Tags { get; private set; }
 
         public string FullName { get; private set; }
 
-        public Mp3File(TagLib.File mp3Content, BaseFileExistenceChecker checker)
+        public Mp3File(TagLib.File mp3Content)
         {           
             _content = mp3Content;
             FullName = mp3Content.Name;
-            _checker = checker;
-
+            
             Tags = new Mp3Tags  
             {
                 Album = mp3Content.Tag.Album,
@@ -40,7 +38,6 @@ namespace FileLib
                 }
                 catch(Exception e)
                 {
-                    // todo: user unable to get full info about the process if smth get wrong
                     backup.RestoreFromBackup();
 
                     throw new Exception("File was restored from backup because of exception:", e);
@@ -65,12 +62,10 @@ namespace FileLib
             _content.Tag.Track = Tags.Track;
         }        
 
-        public IMp3File CopyTo(string path)
+        public IMp3File CopyTo(string uniquePath)
         {
-            var destinationPath = _checker.CreateUniqueName(path);
-            File.Copy(FullName, destinationPath, true);
-
-            return new Mp3File(TagLib.File.Create(destinationPath), _checker);
+            File.Copy(FullName, uniquePath, true);
+            return new Mp3File(TagLib.File.Create(uniquePath));
         }
 
         public void Delete()
@@ -78,24 +73,16 @@ namespace FileLib
             File.Delete(FullName);
         }
 
-        public void MoveTo(string path)
+        public void MoveTo(string uniquePath)
         {
-            var destinationPath = _checker.CreateUniqueName(path);
-
             // todo: rename --backup-ignore "" {title}
             // todo: tumbler to switch off backup process
-            MoveFileWithBackUp(destinationPath);
-        }
-
-        private void MoveFileWithBackUp(string destinationPath)
-        {
             using (var backup = new FileBackuper(this))
             {
                 try
                 {
-                    File.Move(FullName, destinationPath);
-
-                    FullName = destinationPath;
+                    File.Move(FullName, uniquePath);
+                    FullName = uniquePath;
                 }
                 catch (Exception e)
                 {

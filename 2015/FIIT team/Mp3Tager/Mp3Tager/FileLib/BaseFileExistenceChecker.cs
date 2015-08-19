@@ -1,8 +1,8 @@
 ﻿namespace FileLib
 {
-    // todo: class name
+    // todo: *done* class name
     // todo: too many file system abstractions
-    public abstract class BaseFileExistenceChecker
+    public abstract class BaseUniquePathCreator
     {
         protected abstract bool Exists(string path);
 

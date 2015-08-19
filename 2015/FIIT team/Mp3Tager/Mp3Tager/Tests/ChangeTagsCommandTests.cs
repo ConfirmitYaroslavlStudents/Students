@@ -16,7 +16,7 @@ namespace Tests
         [TestInitialize]
         public void SetMp3File()
         {
-            _file = new FakeMp3File(new Mp3Tags(), @"D:\TestFile.mp3", new FakeFileExistenceChecker());
+            _file = new FakeMp3File(new Mp3Tags(), @"D:\TestFile.mp3", new FakeUniquePathCreator());
             _file.Tags.Album = "TestAlbum";
             _file.Tags.Artist = "TestPerformer";
             _file.Tags.Genre = "TestGenre";

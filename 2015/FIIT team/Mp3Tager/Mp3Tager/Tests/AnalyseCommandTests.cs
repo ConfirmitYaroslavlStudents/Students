@@ -9,7 +9,7 @@ namespace Tests
     [TestClass]
     public class AnalyseCommandTests
     {
-        private BaseFileExistenceChecker _checker = new FakeFileExistenceChecker();
+        private BaseUniquePathCreator _checker = new FakeUniquePathCreator();
 
         [TestMethod]
         public void Analyse_Common_Successful()

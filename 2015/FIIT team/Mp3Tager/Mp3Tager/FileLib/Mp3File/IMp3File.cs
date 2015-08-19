@@ -8,9 +8,9 @@
 
         void Save();
 
-        IMp3File CopyTo(string path);
+        IMp3File CopyTo(string uniquePath);
 
-        void MoveTo(string path);
+        void MoveTo(string uniquePath);
 
         void Delete();
     }

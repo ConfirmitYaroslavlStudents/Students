@@ -11,13 +11,13 @@ namespace CommandCreation
     {
         private IMp3File _mp3File;
         private readonly string _mask;
-        BaseFileExistenceChecker _checker;    
+        BaseUniquePathCreator _pathCreator;    
 
-        public RenameCommand(IMp3File audioFile, BaseFileExistenceChecker checker, string mask)
+        public RenameCommand(IMp3File audioFile, BaseUniquePathCreator pathCreator, string mask)
         {      
             _mp3File = audioFile;
             _mask = mask;
-            _checker = checker;
+            _pathCreator = pathCreator;
         }
 
         public override void Execute()
@@ -28,18 +28,23 @@ namespace CommandCreation
             var newName = GetNewName();
 
             var directory = Path.GetDirectoryName(_mp3File.FullName);
-            _mp3File.MoveTo(Path.Combine(directory, newName + @".mp3"));
+            _mp3File.MoveTo(_pathCreator.CreateUniqueName(Path.Combine(directory, newName + @".mp3")));
         }
 
         private string GetNewName()
         {
             var newName = new StringBuilder(_mask);
 
-            newName.Replace(TagNames.Artist, _mp3File.Tags.Artist);
-            newName.Replace(TagNames.Title, _mp3File.Tags.Title);
-            newName.Replace(TagNames.Genre, _mp3File.Tags.Genre);
-            newName.Replace(TagNames.Album, _mp3File.Tags.Album);
-            newName.Replace(TagNames.Track, _mp3File.Tags.Track.ToString());
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(_mp3File.Tags.Artist))                
+                newName.Replace(TagNames.Artist, _mp3File.Tags.Artist);
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(_mp3File.Tags.Title))
+                newName.Replace(TagNames.Title, _mp3File.Tags.Title);
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(_mp3File.Tags.Genre))
+                newName.Replace(TagNames.Genre, _mp3File.Tags.Genre);
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(_mp3File.Tags.Album))
+                newName.Replace(TagNames.Album, _mp3File.Tags.Album);
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(_mp3File.Tags.Track.ToString()))
+                newName.Replace(TagNames.Track, _mp3File.Tags.Track.ToString());
 
             return newName.ToString();
         }

@@ -4,7 +4,6 @@ using FileLib;
 
 namespace Tests.Fakes
 {
-    // todo: is it correct place?
     class FakeSystemSource : ISource
     {
         public string SourceFolder { get; private set; }

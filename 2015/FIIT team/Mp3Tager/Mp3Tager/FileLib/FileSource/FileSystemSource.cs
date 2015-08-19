@@ -23,7 +23,7 @@ namespace FileLib
             List<IMp3File> mp3Files = new List<IMp3File>();
             foreach (var item in GetFileNames())
             {
-                mp3Files.Add(new Mp3File(TagLib.File.Create(item), new FileExistenceChecker()));
+                mp3Files.Add(new Mp3File(TagLib.File.Create(item)));
             }
 
             return mp3Files;

@@ -10,12 +10,13 @@ namespace Tests
     {
         [TestMethod]
         public void Backup_Successful()
-        {
-            var backup = new FileBackuper(new FakeMp3File(new Mp3Tags(), @"D:\music\audioq.mp3", new FakeFileExistenceChecker()));
-            Assert.AreEqual(backup.TempFile.FullName, Path.GetTempPath() + @"audioq.mp3");
-
-            backup.RestoreFromBackup();
-            Assert.AreEqual(backup.TempFile.FullName, @"D:\music\audioq.mp3");
+        {            
+            using (var backup = new FileBackuper(new FakeMp3File(new Mp3Tags(), @"D:\music\audioq.mp3", new FakeUniquePathCreator())))
+            {
+                var actual = backup.RestoreFromBackup();
+                Assert.IsTrue(actual);
+            }
+            
         }
     }
 }

@@ -3,20 +3,22 @@ using System.IO;
 
 namespace FileLib
 {
-    // TODO: IDispose pattern
+    // TODO: *done* IDispose pattern
     public class FileBackuper: IDisposable
     {
         private IMp3File _sourceFile;
+        private bool _disposed;
 
-        // todo: make private?
-        public IMp3File TempFile { get; private set; }
+        // todo: *done* make private?
+        private IMp3File _tempFile;
         
         public FileBackuper(IMp3File sourceFile)
         {
+            _disposed = false;
             if (sourceFile == null)
                 throw new InvalidOperationException();
             _sourceFile = sourceFile;
-            TempFile = MakeBackup();
+            _tempFile = MakeBackup();
         }
 
         private IMp3File MakeBackup()
@@ -26,17 +28,33 @@ namespace FileLib
             return _sourceFile.CopyTo(tempDirectory + fileName);
         }
 
-        public void RestoreFromBackup()
-        {            
+        public bool RestoreFromBackup()
+        {
+            if (_tempFile == null)
+                return false;
             _sourceFile.Delete();
-            TempFile.MoveTo(_sourceFile.FullName);
+            _tempFile.MoveTo(_sourceFile.FullName);
+            return true;
         }
 
         public void Dispose()
         {
-            TempFile.Delete();
-            TempFile = null;            
-            _sourceFile = null;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            
+            if (disposing)
+            {
+                _tempFile.Delete();
+                _tempFile = null;
+                _sourceFile = null;
+            }
+
+            _disposed = true;
         }
     }
 }

@@ -8,8 +8,10 @@
         public override bool Equals(object obj)
         {
             var item=obj as MaskItem;
+           
             if (item == null)
                 return false;
+           
             return Type == item.Type && Value == item.Value;
         }
 

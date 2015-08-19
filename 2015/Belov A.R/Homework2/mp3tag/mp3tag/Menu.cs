@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mp3TagLib;
+using Mp3TagLib.Sync;
 
 namespace mp3tager
 {
@@ -9,7 +10,7 @@ namespace mp3tager
         public static void Show()
         {
             Console.Clear();
-            Console.WriteLine("Available commands:\n1. Changetags\n2. Rename\n3. Analysis\n4. Sync\n5. Exit");
+            Console.WriteLine("Available commands:\n1. Undo \n2. Redo\n3. Changetags\n4. Rename\n5. Analysis\n6. Sync\n7. Handsync\n8. Exit");
         }
 
         public static void PrintCurrentFile(IMp3File file)
@@ -27,6 +28,23 @@ namespace mp3tager
         {
             Console.Write(message);
             return Console.ReadLine();
+        }
+        public static bool GetYesNoAnswer(string message)
+        {
+            Console.Write(message);
+            while (true)
+            {
+                var input=Console.ReadLine().ToLower();
+                if (input == "y")
+                {
+                    return true;
+                }
+                if (input == "n")
+                {
+                    return false;
+                }
+                Console.WriteLine("Invalid input!\n" + message);
+            }
         }
 
         public static void PrintError(string message)
@@ -136,43 +154,66 @@ namespace mp3tager
         {
             foreach (var file in files)
             {
-                var mp3File = file as Mp3File;
-                if (mp3File.NameChanged)
+               PrintChanges(file);
+            }
+        }
+
+        public static void PrintChanges(IMp3File file)
+        {
+            var mp3File = file as Mp3File;
+            if (mp3File.NameChanged)
+            {
+                Console.WriteLine("_____________________________");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("{0}.mp3", mp3File.Name);
+                Console.ResetColor();
+                Console.Write(" renamed to ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("{0}.mp3 ", mp3File.NewName);
+                Console.ResetColor();
+                Console.WriteLine("_____________________________");
+            }
+            if (mp3File.TagChanged)
+            {
+                var tags = mp3File.GetTags();
+                Console.WriteLine("_____________________________");
+                Console.Write("Tags changed in ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("{0}.mp3", mp3File.Name);
+                Console.ResetColor();
+                if (tags.Album != mp3File.OldTags.Album)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Album, mp3File.OldTags.Album, tags.Album);
+                if (tags.Artist != mp3File.OldTags.Artist)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Artist, mp3File.OldTags.Artist, tags.Artist);
+                if (tags.Comment != mp3File.OldTags.Comment)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Comment, mp3File.OldTags.Comment, tags.Comment);
+                if (tags.Genre != mp3File.OldTags.Genre)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Genre, mp3File.OldTags.Genre, tags.Genre);
+                if (tags.Title != mp3File.OldTags.Title)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Title, mp3File.OldTags.Title, tags.Title);
+                if (tags.Track != mp3File.OldTags.Track)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Track, mp3File.OldTags.Track, tags.Track);
+                if (tags.Year != mp3File.OldTags.Year)
+                    Console.WriteLine("{0} [{1}]->[{2}]", Tags.Year, mp3File.OldTags.Year, tags.Year);
+                Console.WriteLine("_____________________________");
+            }
+        }
+
+        public static ISyncRule SelectSyncRule()
+        {
+            Console.WriteLine("Select priority\n1. Rename first\n2. Retag first\n");
+            while (true)
+            {
+                var input = Console.ReadLine().ToLower();
+                if (input == "1")
                 {
-                    Console.WriteLine("_____________________________");
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("{0}.mp3", mp3File.Name);
-                    Console.ResetColor();
-                    Console.Write(" renamed to ");
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("{0}.mp3 ", mp3File.NewName);
-                    Console.ResetColor();
-                    Console.WriteLine("_____________________________");
+                    return new DefaultSyncRule();
                 }
-                if (mp3File.TagChanged)
+                if (input == "2")
                 {
-                    var tags = mp3File.GetTags();
-                    Console.WriteLine("_____________________________");
-                    Console.Write("Tags changed in ");
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("{0}.mp3",mp3File.Name);
-                    Console.ResetColor();
-                    if (tags.Album!=mp3File.OldTags.Album)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Album, mp3File.OldTags.Album, tags.Album);
-                    if (tags.Artist != mp3File.OldTags.Artist)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Artist, mp3File.OldTags.Artist, tags.Artist);
-                    if (tags.Comment!= mp3File.OldTags.Comment)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Comment, mp3File.OldTags.Comment, tags.Comment);
-                    if (tags.Genre != mp3File.OldTags.Genre)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Genre, mp3File.OldTags.Genre, tags.Genre);
-                    if (tags.Title != mp3File.OldTags.Title)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Title, mp3File.OldTags.Title, tags.Title);
-                    if (tags.Track != mp3File.OldTags.Track)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Track, mp3File.OldTags.Track, tags.Track);
-                    if (tags.Year != mp3File.OldTags.Year)
-                        Console.WriteLine("{0} [{1}]->[{2}]", Tags.Year, mp3File.OldTags.Year, tags.Year);
-                    Console.WriteLine("_____________________________");
+                    return new RetagFirsRule();
                 }
+                Console.WriteLine("Invalid input!\n");
             }
         }
     }

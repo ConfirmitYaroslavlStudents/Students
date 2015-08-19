@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mp3TagLib;
+using Mp3TagLib.Operations;
 
-namespace mp3tager
+namespace mp3tager.Operations
 {
     class Analysis:Operation
     {
+        public const int ID = 5;
+
+        public Analysis()
+        {
+            OperationId = ID;
+        }
         public override void Call()
         {
-            //[TODO] SRP vialation
-            //[TODO] need tests
             Menu.PrintHelp();
-            var path = Menu.GetUserInput("path:");//@"C:\Users\Alexandr\Desktop\TEST";
+            var path = @"C:\Users\Alexandr\Desktop\TEST";//Menu.GetUserInput("path:");//@"C:\Users\Alexandr\Desktop\TEST";
             var analyzer = new Analyzer(new Tager(new FileLoader()));
             var mask = new Mask(Menu.GetUserInput("mask:"));
             analyzer.Analyze(Directory.GetFiles(path), mask);
@@ -29,9 +31,14 @@ namespace mp3tager
             Menu.PrintCollection(
                        string.Format("{0} files can't be loaded", analyzer.ErrorFiles.Count()),
                        analyzer.ErrorFiles,ConsoleColor.Red);
-            Menu.PrintCollection("Not synchronized files:", (from file in analyzer.NotSynchronizedFiles select file.Name + ".mp3"), ConsoleColor.Red);
+            Menu.PrintCollection("Not synchronized files:", (from file in analyzer.NotSynchronizedFiles select file.Key.Name + ".mp3 with "+file.Value), ConsoleColor.Red);
             Menu.PrintCollection("Synchronized files:", (from file in analyzer.SynchronizedFiles select file.Name+".mp3"), ConsoleColor.Green);
             Menu.GetUserInput("Press enter...");
+        }
+
+        public override void Cancel()
+        {
+            //nothing to cancel
         }
     }
 }

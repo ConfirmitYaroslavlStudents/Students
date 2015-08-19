@@ -27,13 +27,13 @@ namespace Mp3TagTest
             _expectedSynchronizedFilesCount = 1;
             _expectedNotSynchronizedFilesCount = 1;
             _testPaths = new string[] { _expectedErrorFile, _expectedSynchronizedFile, _expectedNotSynchronizedFile };
-            _analyzerWithFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
-            _analyzerWithoutFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
         }
 
         [TestMethod]
         public void SynchronizedFilesContainsOnlyExpectedFile()
         {
+            _analyzerWithFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
+           
             Assert.AreEqual(_expectedSynchronizedFile, _analyzerWithFiltr.SynchronizedFiles.First().Name);
             Assert.AreEqual(_expectedSynchronizedFilesCount, _analyzerWithFiltr.SynchronizedFiles.Count);
         }
@@ -41,19 +41,25 @@ namespace Mp3TagTest
         [TestMethod]
         public void NotSynchronizedFilesContainsExpectedFile()
         {
+            _analyzerWithFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
+           
             Assert.AreEqual(_expectedNotSynchronizedFilesCount, _analyzerWithFiltr.NotSynchronizedFiles.Count);
-            Assert.AreEqual(_expectedNotSynchronizedFile, _analyzerWithFiltr.NotSynchronizedFiles.First().Name);
+            Assert.AreEqual(_expectedNotSynchronizedFile, _analyzerWithFiltr.NotSynchronizedFiles.Keys.First().Name);
         }
 
         [TestMethod]
         public void IfAnalyzerWithFiltrErrorFilesIsEmpty()
         {
+            _analyzerWithFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
+            
             Assert.AreEqual(0,_analyzerWithFiltr.ErrorFiles.Count);
         }
 
         [TestMethod]
         public void IfAnalyzerWithoutFiltrErrorFilesContainsErrorFile()
         {
+            _analyzerWithoutFiltr.Analyze(_testPaths, new Mask("{artist} {album}"));
+           
             Assert.AreEqual(1, _analyzerWithoutFiltr.ErrorFiles.Count);
         }
     }

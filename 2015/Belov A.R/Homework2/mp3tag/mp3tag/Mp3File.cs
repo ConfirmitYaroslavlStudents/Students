@@ -105,5 +105,17 @@ namespace mp3tager
             name = name.Replace("/", "");
             return name;
         }
+
+        public Mp3Memento GetMemento()
+        {
+            return new Mp3Memento(){Name = Name,Tags = GetTags()};
+        }
+
+        public void SetMemento(Mp3Memento memento)
+        {
+            SetTags(memento.Tags);
+            ChangeName(memento.Name);
+
+        }
     }
 }

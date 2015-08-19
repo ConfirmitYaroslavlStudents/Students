@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3TagLib;
+using Mp3TagLib.Sync;
 
 namespace Mp3TagTest
 {
@@ -24,37 +25,44 @@ namespace Mp3TagTest
             _fileWithBadName=new TestMp3File(){Path = "Artist",Tags = new Mp3Tags(){Artist = "Artist",Title = "Title"}};
             _fileWithBadTags = new TestMp3File() { Path = "Artist Title", Tags = new Mp3Tags() { Artist = "Artist", Title = "" } };
             _fileWithBadTagsAndBadName = new TestMp3File() { Path = "Artist", Tags = new Mp3Tags() { Artist = "Artist", Title = "" } };
-            _synchronizer.Sync(new List<IMp3File>() {_fileWithBadName,_fileWithBadTags,_fileWithBadTagsAndBadName},_testMask);
         }
 
         [TestMethod]
         public void FilesNotChangeBeforeSaving()
         {
-            Assert.AreEqual(false,_fileWithBadName.SaveFlag);
-            Assert.AreEqual(false, _fileWithBadTags.SaveFlag);
-            Assert.AreEqual(false, _fileWithBadTagsAndBadName.SaveFlag);
+            _synchronizer.Sync(new List<IMp3File>() { _fileWithBadName, _fileWithBadTags, _fileWithBadTagsAndBadName }, _testMask);
+          
+            Assert.IsFalse(_fileWithBadName.SaveFlag);
+            Assert.IsFalse( _fileWithBadTags.SaveFlag);
+            Assert.IsFalse( _fileWithBadTagsAndBadName.SaveFlag);
         }
 
         [TestMethod]
         public void ErrorFilesContainsFileWithBadTagAndBadName()
         {
-            Assert.AreEqual(true,_synchronizer.ErrorFiles.Keys.Contains(_fileWithBadTagsAndBadName.Name));
+            _synchronizer.Sync(new List<IMp3File>() { _fileWithBadName, _fileWithBadTags, _fileWithBadTagsAndBadName }, _testMask);
+           
+            Assert.IsTrue(_synchronizer.ErrorFiles.Keys.Contains(_fileWithBadTagsAndBadName.Name));
         }
 
         [TestMethod]
         public void ModifiedFilesContainsNotSyncFiles()
         {
-            Assert.AreEqual(true, _synchronizer.ModifiedFiles.Contains(_fileWithBadTags));
-            Assert.AreEqual(true, _synchronizer.ModifiedFiles.Contains(_fileWithBadName));
+            _synchronizer.Sync(new List<IMp3File>() { _fileWithBadName, _fileWithBadTags, _fileWithBadTagsAndBadName }, _testMask);
+           
+            Assert.IsTrue(_synchronizer.ModifiedFiles.Contains(_fileWithBadTags));
+            Assert.IsTrue( _synchronizer.ModifiedFiles.Contains(_fileWithBadName));
         }
 
         [TestMethod]
         public void SaveTest()
         {
+            _synchronizer.Sync(new List<IMp3File>() { _fileWithBadName, _fileWithBadTags, _fileWithBadTagsAndBadName }, _testMask);
             _synchronizer.Save();
-            Assert.AreEqual(true, _fileWithBadName.SaveFlag);
-            Assert.AreEqual(true, _fileWithBadTags.SaveFlag);
-            Assert.AreEqual(false, _fileWithBadTagsAndBadName.SaveFlag);
+           
+            Assert.IsTrue( _fileWithBadName.SaveFlag);
+            Assert.IsTrue( _fileWithBadTags.SaveFlag);
+            Assert.IsFalse( _fileWithBadTagsAndBadName.SaveFlag);
         }
     }
 }

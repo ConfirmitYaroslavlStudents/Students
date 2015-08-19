@@ -8,6 +8,7 @@ namespace Mp3TagLib
     public class Mp3Tags
     {
         private Dictionary<Tags, string> _tags;
+        public Dictionary<Tags, string> TagsDictionary { get { return _tags; } } 
 
         public Mp3Tags()
         {
@@ -78,9 +79,11 @@ namespace Mp3TagLib
         {
             if (name == null)
                 throw new ArgumentException("Bad tag name");
+           
             if (value == null)
                 throw new ArgumentException("Bad value");
             //[ToDO] remove if
+           
             Tags tag;
             if (Enum.TryParse(name, true, out tag))
             {
@@ -96,6 +99,7 @@ namespace Mp3TagLib
         public string GetTag(string name)
         {
             Tags tag;
+           
             if (Enum.TryParse(name, true, out tag))
             {
                 return _tags[tag];

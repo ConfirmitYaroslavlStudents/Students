@@ -47,8 +47,10 @@ namespace Mp3TagTest
         public void SaveTest()
         {
             _testTager.Load("TEST");
+           
             var file = _testTager.CurrentFile as TestMp3File;
             Assert.AreEqual(false,file.SaveFlag);
+           
             _testTager.Save();
             Assert.AreEqual(true,file.SaveFlag);
         }
@@ -59,6 +61,7 @@ namespace Mp3TagTest
         {
             _testTager.Load("TEST");
             var file = _testTager.CurrentFile as TestMp3File;
+           
             _testTager.ChangeTags(_tesTags);
             Assert.AreEqual(_tesTags, file.Tags);
             _testTager.ChangeTags(null);
@@ -69,10 +72,13 @@ namespace Mp3TagTest
         {
             var expectedName = "[1]. Artist - Title 2015 live in Russia";
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
+           
             _testTager.Load("oldfilename");
             _testTager.ChangeTags(_tesTags);
             _testTager.ChangeName(mask);
+            
             var currentFile = _testTager.CurrentFile as TestMp3File;
+          
             Assert.AreEqual(true, currentFile.ChangeNameFlag);
             Assert.AreEqual(expectedName,currentFile.Name);
         }
@@ -83,6 +89,7 @@ namespace Mp3TagTest
         {
             var tags = new Mp3Tags() { Album = "Album", Artist = "", Comment = "Comment", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
+           
             _testTager.Load("oldfilename");
             _testTager.ChangeTags(tags);
             _testTager.ChangeName(mask);
@@ -109,6 +116,7 @@ namespace Mp3TagTest
         {
             var tags = new Mp3Tags() { Album = "Album", Artist = "Artist", Comment = "Artist2 cover", Genre = "Genre", Title = "Title", Year = 2015, Track = 1 };
             var mask = new Mask("[{track}]. {artist} - {title} {comment} {year} live in Russia");
+            
             _testTager.Load("[1]. Artist - Title Artist2 cover 2015 live in Russia");
             _testTager.ChangeTags(tags);
             Assert.AreEqual(true,_testTager.ValidateFileName(mask));
@@ -118,6 +126,7 @@ namespace Mp3TagTest
         public void ValidateNameReturnFalseIfNameDoesntContainTag()
         {     
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
+          
             _testTager.Load("[1]. Superartist - Title 2015 live in Russia");
             _testTager.ChangeTags(_tesTags);
             Assert.AreEqual(false, _testTager.ValidateFileName(mask));
@@ -127,6 +136,7 @@ namespace Mp3TagTest
         public void ValidateNameReturnFalseIfMaskIsBad()
         {
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia AMAZING VASYA REMIX");
+           
             _testTager.Load("[1]. Superartist - Title 2015 live in Russia");
             _testTager.ChangeTags(_tesTags);
             Assert.AreEqual(false, _testTager.ValidateFileName(mask));
@@ -136,6 +146,7 @@ namespace Mp3TagTest
         public void WorksWithLeadingZeroInTrack()
         {
             var mask = new Mask("[{track}]. {artist} - {title} {year} live in Russia");
+          
             _testTager.Load("[01]. Artist - Title 2015 live in Russia");
             _testTager.ChangeTags(_tesTags);
             Assert.AreEqual(true, _testTager.ValidateFileName(mask));

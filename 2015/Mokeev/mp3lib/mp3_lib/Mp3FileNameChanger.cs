@@ -60,5 +60,15 @@ namespace mp3lib
 
 			return resultFileName.ToString();
 		}
-	}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Rollback(RollbackInfo info)
+		{
+			throw new NotImplementedException();
+		}
+    }
 }

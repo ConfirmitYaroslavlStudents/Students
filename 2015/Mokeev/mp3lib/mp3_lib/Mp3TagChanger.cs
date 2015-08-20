@@ -13,7 +13,7 @@ namespace mp3lib
 
 		private string Mp3RealName { get; set; }
 		private IMp3File Mp3 { get; set; }
-		private string _mask;
+		private readonly string _mask;
 
 		private readonly DataExtracter _dataExtracter;
 
@@ -83,11 +83,6 @@ namespace mp3lib
 
 			var oldData = data.ToDictionary(item => item.Key, item => item.Value);
 			ChangeMp3Tags(oldData);
-		}
-
-		~Mp3TagChanger()
-		{
-			Dispose();
 		}
 	}
 }

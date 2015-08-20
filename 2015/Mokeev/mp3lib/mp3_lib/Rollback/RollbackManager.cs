@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -35,16 +36,16 @@ namespace mp3lib.Rollback
 			{
 				case ProgramAction.Mp3Edit:
 					new Mp3TagChanger(new Mp3File(info.FilesChanged[0]), info.Mask, _communicator).Rollback(info);
-					break;
+					return new RollbackStatus(RollbackState.Success, ProgramAction.Mp3Edit);
 				case ProgramAction.FileRename:
-					break;
+					new Mp3FileNameChanger(new Mp3File(info.FilesChanged[0]), info.Mask).Rollback(info);
+					return new RollbackStatus(RollbackState.Success, ProgramAction.FileRename);
 				case ProgramAction.Sync:
+					new Mp3Syncing(info.FilesChanged.Select(file => new Mp3File(file)), info.Mask, _communicator).Rollback(info);
 					break;
-				default:
-					throw new ArgumentOutOfRangeException();
 			}
 
-			return new RollbackStatus(RollbackState.Fail, ProgramAction.Sync, "Not implemented");
+			return new RollbackStatus(RollbackState.Fail, null, $"For action {info.Action} it's not implemented");
 		}
 
 		private void Load()
@@ -83,5 +84,6 @@ namespace mp3lib.Rollback
 		{
 			Save();
 		}
+
 	}
 }

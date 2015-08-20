@@ -9,6 +9,8 @@ namespace ConsoleMp3TagEditor
 {
 	public static class Program
 	{
+		private static readonly string RollbackData = Environment.CurrentDirectory+"/restoreData.xml";
+
 		public static void Main(string[] args)
 		{
 			try
@@ -32,41 +34,50 @@ namespace ConsoleMp3TagEditor
 
 					case ProgramAction.Mp3Edit:
 						mp3 = new Mp3File(data.Path);
-						var tagsChanger = new Mp3TagChanger(mp3, data.Mask);
-						tagsChanger.ChangeTags();
+						using (var tagsChanger = new Mp3TagChanger(mp3, data.Mask, new FileSaver(RollbackData)))
+						{
+							tagsChanger.ChangeTags();
+						}
 						break;
 
 					case ProgramAction.FileRename:
 						mp3 = new Mp3File(data.Path);
-						var renamer = new Mp3FileNameChanger(mp3, data.Mask);
-						var newFileName = renamer.GetNewFileName();
-						mp3.ChangeFileName(newFileName);
+						using (var renamer = new Mp3FileNameChanger(mp3, data.Mask))
+						{
+							var newFileName = renamer.GetNewFileName();
+							mp3.ChangeFileName(newFileName);
+						}
 						break;
 
 					case ProgramAction.Sync:
 						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
-						var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication());
-						syncer.SyncFiles();
+						using (var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication()))
+						{
+							syncer.SyncFiles();
+						}
 
 						break;
 
 					case ProgramAction.Rollback:
 						//throw new NotImplementedException();
 
-						var rollbackSystem = new RollbackManager(new FileSaver(Environment.CurrentDirectory+"/restoreData.xml"));
-						var state = rollbackSystem.Rollback();
+						using (var rollbackSystem = new RollbackManager(new FileSaver(RollbackData)))
+						{
+							var state = rollbackSystem.Rollback();
 
-						Console.WriteLine(
-							state.State == RollbackState.Fail
-								? $"Error occured while trying doing rollback. Details : \n\tAction: {state.RollbackedAction} \n\tError:{state.FailReason}"
-								: $"Rollback success. {state.RollbackedAction} cancelled.");
+							Console.WriteLine(
+								state.State == RollbackState.Fail
+									? $"Error occured while trying doing rollback. Details : \n\tAction: {state.RollbackedAction} \n\tError:{state.FailReason}"
+									: $"Rollback success. {state.RollbackedAction} cancelled.");
+						}
 
 						break;
 
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 
 				Console.WriteLine("Done!");
-
 			}
 			catch (Exception e)
 			{
@@ -81,8 +92,5 @@ namespace ConsoleMp3TagEditor
 				Console.ReadKey();
 			}
 		}
-
-
-
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using mp3lib.Rollback;
 
@@ -55,13 +56,12 @@ namespace mp3lib
 								fileDifferencese.Mp3File[diff.Key] = data.Data;
 								break;
 							case SyncActions.FromTags:
-								fileNameChanger.AddTagReplacement(diff.Key, data.Data);
 								break;
 							case SyncActions.Manual:
 								fileDifferencese.Mp3File[diff.Key] = data.Data;
-								fileNameChanger.AddTagReplacement(diff.Key, data.Data);
 								break;
 						}
+						fileNameChanger.AddTagReplacement(diff.Key, data.Data);
 					}
 				}
 				var fn = fileNameChanger.GetNewFileName();
@@ -69,6 +69,16 @@ namespace mp3lib
 			}
 
 
+		}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Rollback(RollbackInfo info)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

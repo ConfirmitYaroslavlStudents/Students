@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using CommandCreation;
 using System;
+using System.Collections.Generic;
 using Tests.Fakes;
 
 namespace Tests
@@ -10,207 +11,322 @@ namespace Tests
     [TestClass]
     public class ChangeTagsCommandTest
     {
-        private ChangeTagsCommand _command;
-        private FakeMp3File _file;
-
-        [TestInitialize]
-        public void SetMp3File()
-        {
-            _file = new FakeMp3File(new Mp3Tags(), @"D:\TestFile.mp3", new FakeUniquePathCreator());
-            _file.Tags.Album = "TestAlbum";
-            _file.Tags.Artist = "TestPerformer";
-            _file.Tags.Genre = "TestGenre";
-            _file.Tags.Title = "TestTitle";
-            _file.Tags.Track = 1;
-        }
+        private const string SourceFolder = @"D:\music\";
+        private readonly FakeUniquePathCreator _checker = new FakeUniquePathCreator();
 
         [TestMethod]
         public void Change1Tags_Successful()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}");
-            _file.FullName = @"D:\music\Alla.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Title = "title1"}, SourceFolder + "1. newtitle1.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Title = "title2"}, SourceFolder + "2. newtitle2.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Title = "title3"}, SourceFolder + "3. newtitle3.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{track}. {title}");
+            var message = changetags.Execute();
+            changetags.Complete();
 
-            Assert.AreEqual("Alla", _file.Tags.Artist);
+            // Assert
+            Assert.AreEqual("newtitle1", mp3Files[0].Tags.Title);
+            Assert.AreEqual("newtitle2", mp3Files[1].Tags.Title);
+            Assert.AreEqual("newtitle3", mp3Files[2].Tags.Title);
+
+            Assert.AreEqual((uint)1, mp3Files[0].Tags.Track);
+            Assert.AreEqual((uint)2, mp3Files[1].Tags.Track);
+            Assert.AreEqual((uint)3, mp3Files[2].Tags.Track);
         }
 
         [TestMethod]
         public void Change2Tags_Successful()
         {
-            _command = new ChangeTagsCommand(_file, "{artist} - {title}");
-            _file.FullName = @"D:\Art - ist.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist1"}, SourceFolder + "newartist1.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Artist = "artist2"}, SourceFolder + "newartist2.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Artist = "artist3"}, SourceFolder + "newartist3.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}");
+            var message = changetags.Execute();
+            changetags.Complete();
 
-            Assert.AreEqual("Art", _file.Tags.Artist);
-            Assert.AreEqual("ist", _file.Tags.Title);
+            // Assert
+            Assert.AreEqual("newartist1", mp3Files[0].Tags.Artist);
+            Assert.AreEqual("newartist2", mp3Files[1].Tags.Artist);
+            Assert.AreEqual("newartist3", mp3Files[2].Tags.Artist);
         }
 
         [TestMethod]
         public void Change3Tags_Successful()
         {
-            _command = new ChangeTagsCommand(_file, "{track}.{artist} - {title}");
-            _file.FullName = @"D:\1.Art - ist.mp3";
-            uint expectedTrack = 1;
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "1.newartist1 - newtitle1.mp3", _checker),
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "2.newartist2 - newtitle2.mp3", _checker),
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "3.newartist3 - newtitle3.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{track}.{artist} - {title}");
+            var message = changetags.Execute();
+            changetags.Complete();
 
-            Assert.AreEqual("Art", _file.Tags.Artist);
-            Assert.AreEqual("ist", _file.Tags.Title);
-            Assert.AreEqual(expectedTrack, _file.Tags.Track);
+            // Assert
+            Assert.AreEqual("newartist1", mp3Files[0].Tags.Artist);
+            Assert.AreEqual("newartist2", mp3Files[1].Tags.Artist);
+            Assert.AreEqual("newartist3", mp3Files[2].Tags.Artist);
+
+            Assert.AreEqual("newtitle1", mp3Files[0].Tags.Title);
+            Assert.AreEqual("newtitle2", mp3Files[1].Tags.Title);
+            Assert.AreEqual("newtitle3", mp3Files[2].Tags.Title);
+
+            Assert.AreEqual((uint)1, mp3Files[0].Tags.Track);
+            Assert.AreEqual((uint)2, mp3Files[1].Tags.Track);
+            Assert.AreEqual((uint)3, mp3Files[2].Tags.Track);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_WithStrangeSeparator_Successful()
         {
-            _command = new ChangeTagsCommand(_file, "{track}.{artist} - {title}");
-            _file.FullName = @"D:\1.Artabcist.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "1.newartist.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{track}.{artist} - {title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         public void ChangeTags_SeparatorInName_Successful()
         {
-            _command = new ChangeTagsCommand(_file, "{artist} - {title}");
-            _file.FullName = @"D:\Hi-fi - song one.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "new-artist - newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist} - {title}");
+            var message = changetags.Execute();
+            changetags.Complete();
 
-            Assert.AreEqual("Hi-fi", _file.Tags.Artist);
-            Assert.AreEqual("song one", _file.Tags.Title);
+            // Assert
+            Assert.AreEqual("new-artist", mp3Files[0].Tags.Artist);
+            Assert.AreEqual("newtitle", mp3Files[0].Tags.Title);
         }
 
         [TestMethod]
         public void ChangeTags_ComplexMask_SuccessfulChange()
         {
-            _command = new ChangeTagsCommand(_file, @"{ss{artist}}-{title}.");
-            _file.FullName = @"D:\music\{ssAlla}-Arlekino..mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "{ssnewartist}-newtitle..mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{ss{artist}}-{title}.");
+            var message = changetags.Execute();
+            changetags.Complete();
 
             // Assert
-            Assert.AreEqual("Alla", _file.Tags.Artist);
-            Assert.AreEqual("Arlekino", _file.Tags.Title);
+            Assert.AreEqual("newartist", mp3Files[0].Tags.Artist);
+            Assert.AreEqual("newtitle", mp3Files[0].Tags.Title);
         }
 
         [TestMethod]
         public void ChangeTags_SimilarSplits_SuccessfulChange()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}.{title}.{genre}");
-            _file.FullName = @"D:\music\Alla.Arlekino.Pop.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags(), SourceFolder + "newartist.newtitle.newgenre.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}.{title}.{genre}");
+            var message = changetags.Execute();
+            changetags.Complete();
 
             // Assert
-            Assert.AreEqual("Alla", _file.Tags.Artist);
-            Assert.AreEqual("Arlekino", _file.Tags.Title);
-            Assert.AreEqual("Pop", _file.Tags.Genre);
+            Assert.AreEqual("newartist", mp3Files[0].Tags.Artist);
+            Assert.AreEqual("newtitle", mp3Files[0].Tags.Title);
+            Assert.AreEqual("newgenre", mp3Files[0].Tags.Genre);
         }
 
         [TestMethod]
         public void ChangeTags_EmptyMask_WithoutChanges()
         {
-            _command = new ChangeTagsCommand(_file, @"");
-            _file.FullName = @"D:\music\Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "");
+            var message = changetags.Execute();
+            changetags.Complete();
 
             // Assert
-            Assert.AreEqual("TestPerformer", _file.Tags.Artist);
-            Assert.AreEqual("TestTitle", _file.Tags.Title);
+            Assert.AreEqual("artist", mp3Files[0].Tags.Artist);
+            Assert.AreEqual("title", mp3Files[0].Tags.Title);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_WrongMask_DifferentOrderOfSplits_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}.{title}.");
-            _file.FullName = @"D:\music\.Alla.Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + ".newartist.newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}.{title}.");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_WrongMask_DifferentOrderOfSplits2_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"_abc_{artist}_def_");
-            _file.FullName = @"D:\music\_def_Arlekino_abc_.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Title = "title"}, SourceFolder + "_def_newtitle_abc_.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "_abc_{artist}_def_");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_WrongMask_InBegin_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"..{artist}-{title}");
-            _file.FullName = @"D:\music\Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "..{artist}-{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_WrongMask_NearlySplit_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}-..{title}");
-            _file.FullName = @"D:\music\Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}-..{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_WrongMask_DifferentSplits_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}.{title}");
-            _file.FullName = @"D:\music\Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}.{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_SplitsInFilenameMoreThanInMask_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}-{title}");
-            _file.FullName = @"D:\music\-Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "-newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}-{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         public void ChangeTags_AmbiguousMatchingOfMaskAndFilename_InvalidDataException()
         {
-            _command = new ChangeTagsCommand(_file, @"{artist}{title}");
-            _file.FullName = @"D:\music\Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{artist}{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ChangeTags_TagDoesNotExist_ArgumentException()
         {
-            _command = new ChangeTagsCommand(_file, @"{sometag}-{title}");
-            _file.FullName = @"D:\music\Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{sometag}-{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
         public void ChangeTag_TagTrackIsNotInt_FormatException()
         {
-            _command = new ChangeTagsCommand(_file, @"{track}. {sometag}-{title}");
-            _file.FullName = @"D:\music\one. Alla-Arlekino.mp3";
+            // Init
+            var mp3Files = new List<IMp3File>
+            {
+                new FakeMp3File(new Mp3Tags{Artist = "artist", Title = "title"}, SourceFolder + "one. newartist-newtitle.mp3", _checker),
+            };
 
-            _command.Execute();
+            // Act
+            var changetags = new ChangeTagsCommand(mp3Files, "{track}. {artist}-{title}");
+            var message = changetags.Execute();
+            changetags.Complete();
         }
     }
 }

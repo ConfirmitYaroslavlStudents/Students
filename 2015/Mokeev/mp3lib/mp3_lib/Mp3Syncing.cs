@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using mp3lib.Rollback;
 
 namespace mp3lib
 {
-	public class Mp3Syncing
+	public class Mp3Syncing : IRecoverable
 	{
 		private readonly IMp3File[] _files;
 		private readonly ICommunication _communication;
@@ -72,7 +70,5 @@ namespace mp3lib
 
 
 		}
-
-        
 	}
 }

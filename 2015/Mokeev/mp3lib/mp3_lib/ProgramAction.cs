@@ -5,6 +5,7 @@
 		Analyse,
 		Mp3Edit,
 		FileRename,
-		Sync
+		Sync,
+		Rollback
 	}
 }

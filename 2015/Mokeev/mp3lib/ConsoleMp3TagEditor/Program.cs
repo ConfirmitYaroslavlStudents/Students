@@ -16,7 +16,6 @@ namespace ConsoleMp3TagEditor
 				argsManager.CheckArgsValidity();
 
 				var data = argsManager.ExtactArgs();
-				Console.WriteLine(TagType.Album.ToString());
 				Mp3File mp3;
 				IEnumerable<IMp3File> mp3Files;
 				switch (data.Action)
@@ -26,7 +25,7 @@ namespace ConsoleMp3TagEditor
 						var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
 						var differences = pathAnalyser.GetDifferences();
-						pathAnalyser.ShowDifferences(differences, new ConsoleCommunication());
+						new CommunicationWithUser().ShowDifferences(differences, new ConsoleCommunication());
 
 						break;
 
@@ -54,15 +53,19 @@ namespace ConsoleMp3TagEditor
 
 				Console.WriteLine("Done!");
 
-				Console.ReadKey();
 			}
 			catch (Exception e)
 			{
-#if DEBUG
+/*#if DEBUG
 				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}", e.Message, e.StackTrace);
 #else
-				Console.WriteLine("Error occured: {0}",e.Message);
-#endif
+				*/
+				Console.WriteLine("Error occured: {0}", e.Message);
+//#endif
+			}
+			finally
+			{
+				Console.ReadKey();
 			}
 		}
 

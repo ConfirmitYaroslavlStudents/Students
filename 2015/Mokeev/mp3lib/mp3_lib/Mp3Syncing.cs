@@ -38,19 +38,19 @@ namespace mp3lib
 
 			foreach (var fileDifferencese in diffs)
 			{
-				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask);
+				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask, true);
 				foreach (var diff in fileDifferencese.Diffs)
 				{
-					if (diff.Value.FileNameValue == "" ^ diff.Value.TagValue == "")
+					if (string.IsNullOrWhiteSpace(diff.Value.FileNameValue) ^ string.IsNullOrWhiteSpace(diff.Value.TagValue))
 					{
 						fileDifferencese.Mp3File[diff.Key] = (diff.Value.FileNameValue != "")
 							? diff.Value.FileNameValue
 							: diff.Value.TagValue;
-
+						fileNameChanger.AddTagReplacement(diff.Key, fileDifferencese.Mp3File[diff.Key]);
 					}
 					else
 					{
-						var data = GetInfoFromUser(diff.Key, diff.Value);
+						var data = new CommunicationWithUser().GetInfoFromUser(diff.Key, diff.Value, fileDifferencese.Mp3File, _communication);
 						switch (data.DataFrom)
 						{
 							case SyncActions.FromFileName:
@@ -65,66 +65,14 @@ namespace mp3lib
 								break;
 						}
 					}
-
-					var fn = fileNameChanger.GetNewFileName();
-					fileDifferencese.Mp3File.ChangeFileName(fn);
-
 				}
+				var fn = fileNameChanger.GetNewFileName();
+				fileDifferencese.Mp3File.ChangeFileName(fn);
 			}
 
 
 		}
 
-
-		private class UserData
-		{
-			public UserData(SyncActions dataFrom, string data)
-			{
-				DataFrom = dataFrom;
-				Data = data;
-			}
-
-			public SyncActions DataFrom { get; private set; }
-			public string Data { get; private set; }
-		}
-
-        //[TODO] move to separate class
-		private UserData GetInfoFromUser(TagType tag, Diff diff)
-		{
-			_communication.SendMessage(string.Format("There is a problem with tag \"{0}\". ", tag));
-			_communication.SendMessage("You can enter tag from: \n\t1) File name, \n\t2) Mp3 Tags, \n\t3) Manual");
-
-			while (true)
-			{
-				_communication.SendMessage("Your choise (number): ");
-				SyncActions inputData;
-				var choiseCorrect = SyncActions.TryParse(_communication.GetResponse(), out inputData);
-				if (!choiseCorrect)
-				{
-					_communication.SendMessage("Wrong input!");
-					_communication.SendMessage("You sholud enter number with action!");
-					continue;
-				}
-
-				switch (inputData)
-				{
-					case SyncActions.FromFileName:
-						return new UserData(inputData, diff.FileNameValue);
-					case SyncActions.FromTags:
-						return new UserData(inputData, diff.TagValue);
-					case SyncActions.Manual:
-						_communication.SendMessage("Enter text for tag \"" + tag + "\"");
-						return new UserData(inputData, _communication.GetResponse());
-				}
-			}
-		}
-
-		private enum SyncActions
-		{
-			FromFileName = 1,
-			FromTags = 2,
-			Manual = 3,
-		}
+        
 	}
-
 }

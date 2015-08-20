@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Id3;
-using Id3.Frames;
 
 namespace mp3lib
 {
 	public class Mp3File : IMp3File
 	{
-		private Mp3Stream Mp3FileStream { get; set; }
+		private TagLib.File File { get; set; }
 		public string FilePath { get; private set; }
-		private Id3Tag Tags { get; set; }
 
-		public string Title { get { return Tags.Title; } set { Tags.Title.Value = value; Set(); } }
-		public string Artist { get { return Tags.Artists; } set { Tags.Artists.TextValue = value; Set(); } }
-		public string Album { get { return Tags.Album; } set { Tags.Album.Value = value; Set(); } }
-		public string Year { get { return Tags.Year.Value.ToString(); } set { Tags.Year.Value = Convert.ToInt32(value); Set(); } }
+		public string Title { get { return File.Tag.Title; } set { File.Tag.Title = value; Set(); } }
+		public string Artist { get { return File.Tag.FirstPerformer; } set { File.Tag.Performers = new [] {value}; Set(); } }
+		public string Album { get { return File.Tag.Album; } set { File.Tag.Album = value; Set(); } }
+		public string Year { get { return File.Tag.Year.ToString(); } set { File.Tag.Year = Convert.ToUInt32(value); Set(); } }
 
 		public string this[TagType type]
 		{
@@ -51,31 +48,21 @@ namespace mp3lib
 			}
 		}
 
-		public string Comment { get { return Tags.Comments.ToString(); } set { Tags.Comments.Clear(); Tags.Comments.Add(new CommentFrame() { Comment = value }); Set(); } }
-		public string TrackId { get { return Tags.Track.TrackCount.ToString(); } set { Tags.Track.Value = Convert.ToInt32(value); Set(); } }
-		public string Genre { get { return Tags.Genre; } set { Tags.Genre.Value = value; Set(); } }
+		public string Comment { get { return File.Tag.Comment; } set { File.Tag.Comment = value; Set(); } }
+		public string TrackId { get { return File.Tag.Track.ToString(); } set { File.Tag.Track = Convert.ToUInt32(value); Set(); } }
+		public string Genre { get { return File.Tag.FirstGenre; } set { File.Tag.Genres = new[] { value }; Set(); } }
 
 		public Mp3File(string file)
 		{
-			if (!File.Exists(file)) throw new FileNotFoundException("Mp3File not found", file);
+			if (!System.IO.File.Exists(file)) throw new FileNotFoundException("Mp3File not found", file);
 			FilePath = file;
 
-			var fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite);
-
-			Mp3FileStream = new Mp3Stream(fs, Mp3Permissions.ReadWrite);
-
-			if (!Mp3FileStream.HasTags) return;
-			var id3v1exists = Mp3FileStream.HasTagOfFamily(Id3TagFamily.Version1x);
-			var id3v2exists = Mp3FileStream.HasTagOfFamily(Id3TagFamily.Version2x);
-
-			if (!id3v2exists && id3v1exists) Tags = Mp3FileStream.GetTag(Id3TagFamily.Version1x);
-
-			Tags = Mp3FileStream.GetTag(Id3TagFamily.Version2x);
+			File = TagLib.File.Create(file);
 		}
 
 		private void Set()
 		{
-			Mp3FileStream.WriteTag(Tags, WriteConflictAction.Replace);
+			File.Save();
 		}
 
 		public Dictionary<TagType, string> GetId3Data()
@@ -97,13 +84,19 @@ namespace mp3lib
 		{
 			if (fileName == FilePath) return;
 
-			if (File.Exists(Path.GetDirectoryName(FilePath) + fileName))
+			if (System.IO.File.Exists(Path.GetDirectoryName(FilePath) + fileName))
 			{
 				throw new IOException("File already exists");
 			}
 
-            File.Move(FilePath, Path.GetDirectoryName(FilePath) + "\\" + fileName + ".mp3");
+			File.Dispose();
+			File = null;
+
+			var path = Path.GetDirectoryName(FilePath) + "\\" + fileName + ".mp3";
+            System.IO.File.Move(FilePath, path);
 			FilePath = fileName;
+
+			File = TagLib.File.Create(path);
 		}
 	}
 }

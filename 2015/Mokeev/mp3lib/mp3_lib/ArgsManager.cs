@@ -35,7 +35,11 @@ namespace mp3lib
 		{
 			if (Args.Length != 6)
 			{
-				throw new ArgumentException("Expected usage: \n\t-action [analyse|file-rename|change-tags] -path \"[path to file]\" -mask \"[mask for changing title]\" \n\tor \n\t-");
+				throw new ArgumentException("Expected usage: \n\t" +
+												"-action \t[analyse|file-rename|change-tags|sync] \n\t" +
+												"-path  \t\t\"[path to file]\" \n\t" +
+												"-mask  \t\t\"[mask for changing title]\""
+											);
 			}
 
 			var hasFilePath = false;
@@ -80,7 +84,6 @@ namespace mp3lib
 
 			for (var i = 0; i < Args.Length; i++)
 			{
-                // TODO: is it readable at all? {READY}
 				if 
 				(
 					i + 1 < Args.Length		&&
@@ -140,7 +143,7 @@ namespace mp3lib
 					action = ProgramAction.Sync;
 					break;
 				default:
-					throw new ArgumentException("-action can be [analyse|file-rename|change-tags]");
+					throw new ArgumentException("-action can be [analyse|file-rename|change-tags|sync]");
 			}
 
 			return new Args(data[PATH], data[MASK], action);

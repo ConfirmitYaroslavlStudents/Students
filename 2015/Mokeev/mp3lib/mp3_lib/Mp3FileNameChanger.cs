@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using mp3lib.Rollback;
 
 namespace mp3lib
 {
-	public class Mp3FileNameChanger
+	public class Mp3FileNameChanger : IRecoverable
 	{
 		private readonly IMp3File _mp3File;
 		private readonly DataExtracter _dataExtracter;

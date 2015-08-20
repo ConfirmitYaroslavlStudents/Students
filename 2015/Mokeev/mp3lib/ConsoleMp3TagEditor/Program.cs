@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using mp3lib;
+using mp3lib.Rollback;
 
 namespace ConsoleMp3TagEditor
 {
@@ -49,6 +50,19 @@ namespace ConsoleMp3TagEditor
 
 						break;
 
+					case ProgramAction.Rollback:
+						//throw new NotImplementedException();
+
+						var rollbackSystem = new RollbackManager(new FileSaver(Environment.CurrentDirectory+"/restoreData.xml"));
+						var state = rollbackSystem.Rollback();
+
+						Console.WriteLine(
+							state.State == RollbackState.Fail
+								? $"Error occured while trying doing rollback. Details : \n\tAction: {state.RollbackedAction} \n\tError:{state.FailReason}"
+								: $"Rollback success. {state.RollbackedAction} cancelled.");
+
+						break;
+
 				}
 
 				Console.WriteLine("Done!");
@@ -56,12 +70,11 @@ namespace ConsoleMp3TagEditor
 			}
 			catch (Exception e)
 			{
-/*#if DEBUG
+#if DEBUG
 				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}", e.Message, e.StackTrace);
 #else
-				*/
 				Console.WriteLine("Error occured: {0}", e.Message);
-//#endif
+#endif
 			}
 			finally
 			{

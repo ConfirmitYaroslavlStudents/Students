@@ -15,6 +15,7 @@ namespace mp3lib
 		private const string ActionFileRename	= "file-rename";
 		private const string ActionChangeTags	= "change-tags";
 		private const string ActionSync			= "sync";
+		private const string ActionRollback		= "rollback";
 		//======================================
 
 
@@ -33,12 +34,12 @@ namespace mp3lib
 		/// <exception cref="ArgumentException">Wrong argument</exception>
 		public bool CheckArgsValidity()
 		{
-			if (Args.Length != 6)
+			if (Args.Length != 6 && Args.Length != 2)
 			{
 				throw new ArgumentException("Expected usage: \n\t" +
-												"-action \t[analyse|file-rename|change-tags|sync] \n\t" +
-												"-path  \t\t\"[path to file]\" \n\t" +
-												"-mask  \t\t\"[mask for changing title]\""
+												"-action  \t[analyse|file-rename|change-tags|sync|rollback] \n\t" +
+												"-path\t\t\"[path to file]\" \n\t" +
+												"-mask\t\t\"[mask for changing title]\""
 											);
 			}
 
@@ -69,17 +70,20 @@ namespace mp3lib
 			{
 				if (!setAction) throw new ArgumentException("You don't set your action!");
 
-				if (!hasMask && !hasFilePath)
+				if (Args.Length > 2)
 				{
-					throw new ArgumentException("You don't append correct file path and mask for mp3.");
-				}
+					if (!hasMask && !hasFilePath)
+					{
+						throw new ArgumentException("You don't append correct file path and mask for mp3.");
+					}
 
-				if (!hasFilePath)
-				{
-					throw new ArgumentException("You don't append correct file path.");
-				}
+					if (!hasFilePath)
+					{
+						throw new ArgumentException("You don't append correct file path.");
+					}
 
-				throw new ArgumentException("You don't append correct mask for mp3.");
+					throw new ArgumentException("You don't append correct mask for mp3.");
+				}
 			}
 
 			for (var i = 0; i < Args.Length; i++)
@@ -142,11 +146,14 @@ namespace mp3lib
 				case ActionSync:
 					action = ProgramAction.Sync;
 					break;
-				default:
-					throw new ArgumentException("-action can be [analyse|file-rename|change-tags|sync]");
+				case ActionRollback:
+					action = ProgramAction.Rollback;
+					break;
+                default:
+					throw new ArgumentException("-action can be [analyse|file-rename|change-tags|sync|rollback]");
 			}
 
-			return new Args(data[PATH], data[MASK], action);
+			return new Args(action);
 		}
 
 	}

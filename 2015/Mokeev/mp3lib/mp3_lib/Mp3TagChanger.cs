@@ -2,24 +2,30 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using mp3lib.Rollback;
 
 namespace mp3lib
 {
-	public class Mp3TagChanger
+	public class Mp3TagChanger : IRecoverable
 	{
+		private List<KeyValuePair<TagType, string>> _changes = new List<KeyValuePair<TagType, string>>();
+		private readonly ISaver _backuper;
+
 		private string Mp3RealName { get; set; }
 		private IMp3File Mp3 { get; set; }
+		private string _mask;
 
 		private readonly DataExtracter _dataExtracter;
 
-		public Mp3TagChanger(IMp3File mp3File, string mask)
+		public Mp3TagChanger(IMp3File mp3File, string mask, ISaver backuper)
 		{
 			Mp3 = mp3File;
 
+			_backuper = backuper;
+			_mask = mask;
+
 			Mp3RealName = Path.GetFileNameWithoutExtension(mp3File.FilePath);
-			_dataExtracter = new DataExtracter(mask);
+			_dataExtracter = new DataExtracter(_mask);
 		}
 
 		public void ChangeTags()
@@ -36,6 +42,7 @@ namespace mp3lib
 		{
 			foreach (var item in data)
 			{
+				_changes.Add(new KeyValuePair<TagType, string>(item.Key, Mp3[item.Key]));
 				switch (item.Key)
 				{
 					case TagType.Artist:
@@ -61,6 +68,26 @@ namespace mp3lib
 						break;
 				}
 			}
+		}
+
+
+		public void Dispose()
+		{
+			new RollbackManager(_backuper).AddAction(new RollbackInfo(ProgramAction.Mp3Edit, new [] {Mp3.FilePath}, _mask, _changes));
+		}
+
+		public void Rollback(RollbackInfo info)
+		{
+			var data = info.Data as List<KeyValuePair<TagType, string>>;
+			if (data == null) throw new Exception("Wrong data came from source.");
+
+			var oldData = data.ToDictionary(item => item.Key, item => item.Value);
+			ChangeMp3Tags(oldData);
+		}
+
+		~Mp3TagChanger()
+		{
+			Dispose();
 		}
 	}
 }

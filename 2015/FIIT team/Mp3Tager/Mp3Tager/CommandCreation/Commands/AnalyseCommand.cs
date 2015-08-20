@@ -115,33 +115,21 @@ namespace CommandCreation
                 if (!Int32.TryParse(key, out i))
                 {
                     resultMessage.Append("Index must be number\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                     continue;
                 }
 
                 if (i > count)
                 {
                     resultMessage.Append("Index out of range. Maximum is " + count + ":\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                     continue;
                 }
 
                 if (_indexDict[key].Count > 1)
                 {
                     resultMessage.Append("More than one item with index " + key + ":\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                     continue;
                 }
 
@@ -149,16 +137,21 @@ namespace CommandCreation
                 {
                     var expectedIndex = ConvertToIndexForm(i, count);
                     resultMessage.Append("Wrong  index, expected " + expectedIndex + ":\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                 }
 
                 
             }
             return resultMessage.ToString();
+        }
+
+        private void AddInfoInMessage(string key, StringBuilder resultString)
+        {
+            foreach (var item in _indexDict[key])
+            {
+                resultString.Append("\t" + item + "\n");
+            }
+            resultString.Append("\n");
         }
 
         private string OnlyIndexAnalyse()
@@ -180,11 +173,7 @@ namespace CommandCreation
                     if (_indexDict.ContainsKey(form) && form != expectedIndex)
                     {
                         resultMessage.Append("Wrong  index, expected " + expectedIndex + ":\n");
-                        foreach (var item in _indexDict[form])
-                        {
-                            resultMessage.Append("\t" + item + "\n");
-                        }
-                        resultMessage.Append("\n");
+                        AddInfoInMessage(form, resultMessage);
                     }                                              
                 }
                 

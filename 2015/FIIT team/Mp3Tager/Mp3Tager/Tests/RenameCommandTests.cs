@@ -15,7 +15,7 @@ namespace Tests
         [TestInitialize]
         public void SetUp()
         {
-            _file = new FakeMp3File(new Mp3Tags(), @"D:\TestFile.mp3");
+            _file = new FakeMp3File(new Mp3Tags(), @"D:\TestFile.mp3", new FakeUniquePathCreator());
             _file.Tags.Album = "TestAlbum";
             _file.Tags.Artist = "TestPerformer";
             _file.Tags.Genre = "TestGenre";
@@ -26,7 +26,7 @@ namespace Tests
         [TestMethod]
         public void RenameTestExecute_Successful()
         {
-            _command = new RenameCommand(_file, new FakeFileExistenceChecker(),
+            _command = new RenameCommand(_file, new FakeUniquePathCreator(),
                 TagNames.Track + ". " + TagNames.Artist + " - " + TagNames.Title);
             _command.Execute();
 
@@ -37,7 +37,7 @@ namespace Tests
         [TestMethod]
         public void Rename_ComplexPattern_SuccessfulRename()
         {
-            _command = new RenameCommand(_file, new FakeFileExistenceChecker(),
+            _command = new RenameCommand(_file, new FakeUniquePathCreator(),
                 @"{asd" + TagNames.Artist + "}-.." + TagNames.Title);
             _command.Execute();
 
@@ -47,7 +47,7 @@ namespace Tests
         [TestMethod]
         public void Rename_FileWithSuchNameAlreadyExists_UniquePathCreated()
         {
-            _command = new RenameCommand(_file, new FakeFileExistenceChecker(),
+            _command = new RenameCommand(_file, new FakeUniquePathCreator(),
                 TagNames.Artist);
             _command.Execute();
 
@@ -58,7 +58,7 @@ namespace Tests
         [ExpectedException(typeof(ArgumentException))]
         public void Rename_EmptyPattern_ArgumentException()
         {
-            _command = new RenameCommand(_file, new FakeFileExistenceChecker(), @"");
+            _command = new RenameCommand(_file, new FakeUniquePathCreator(), @"");
             _command.Execute();
         }
     }

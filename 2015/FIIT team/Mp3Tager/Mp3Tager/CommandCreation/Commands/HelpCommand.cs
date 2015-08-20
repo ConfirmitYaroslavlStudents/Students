@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CommandCreation
 {
-    internal class HelpCommand : Command
+   /* internal class HelpCommand : Command
     {
         private static readonly Dictionary<string, string> HelpMessages = new Dictionary<string, string>
         {
@@ -28,7 +28,6 @@ namespace CommandCreation
             {
                 foreach (var message in HelpMessages)
                 {
-                    // todo: no console reference!
                     _writer.WriteLine(message.Key + ": " + message.Value);                    
                 }
             }
@@ -39,5 +38,5 @@ namespace CommandCreation
                     : "There is no such command!");
             }
         }
-    }
+    }*/
 }

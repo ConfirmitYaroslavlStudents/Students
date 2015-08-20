@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mp3TagLib
 {
     public class Tager
     {
-        private IFileLoader _fileLoader;
+        private readonly IFileLoader _fileLoader;
         private IMp3File _currentFile;
         public Tager(IFileLoader fileLoader)
         {
@@ -35,6 +37,7 @@ namespace Mp3TagLib
         {
             if (_currentFile == null)
                 throw new NullReferenceException("File is not loaded");
+           
             if(tags==null)
                 throw new ArgumentException("Incorrect tags");
             _currentFile.SetTags(tags);
@@ -44,10 +47,14 @@ namespace Mp3TagLib
         {
             if (_currentFile == null)
                 throw new NullReferenceException("File is not loaded");
+           
             if (newNameMask == null)
                 throw new ArgumentException("Incorrect mask");
+            
             var newName = newNameMask.ToString();
             var currentTags = _currentFile.GetTags();
+           
+            
             foreach (var item in newNameMask)
             {
                 var tagValue = currentTags.GetTag(item);
@@ -65,13 +72,16 @@ namespace Mp3TagLib
                 var posibleTagValuesFromName = mask.GetTagValuesFromString(_currentFile.Name);
                 var tagsFromFile = _currentFile.GetTags();
                 var fileNameIsOk = false;
+               
                 foreach (var tagValues in posibleTagValuesFromName)
                 {
                     if (fileNameIsOk)
                         break;
+                  
                     foreach (var tagValue in tagValues)
                     {
                         var currentTagFromFile = tagsFromFile.GetTag(tagValue.Key);
+                        
                         if (tagValue.Value != currentTagFromFile)
                         {
                             if (tagValue.Key == "track"&&tagValue.Value.StartsWith("0"))
@@ -92,5 +102,13 @@ namespace Mp3TagLib
                 return false;
             }
         }
+
+        public IEnumerable<Tags> GetIncorectTags()
+        {
+            var tags = _currentFile.GetTags();
+            return (from tag in tags.TagsDictionary where string.IsNullOrEmpty(tag.Value) select tag.Key).ToList();
+        }
+
+
     }
 }

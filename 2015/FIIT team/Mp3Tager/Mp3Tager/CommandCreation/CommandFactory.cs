@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FileLib;
 using TagLib;
+using System.IO;
 
 namespace CommandCreation
 {
@@ -17,8 +18,7 @@ namespace CommandCreation
 
         public Command ChooseCommand(string[] args, IWriter writer)
         {
-            IMp3File file;
-            ISource source;
+            List<IMp3File> files;
             string mask;
 
             var parser = new ArgumentParser(args);
@@ -27,31 +27,47 @@ namespace CommandCreation
             var commandName = args[0].ToLower();
             switch (commandName)
             {
-                case CommandNames.Help:
+                /*case CommandNames.Help:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Help]);
-                    return new HelpCommand(args, writer);
+                    return new HelpCommand(args, writer);*/
 
                 case CommandNames.Rename:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Rename]);
-                    file = new Mp3File(TagLib.File.Create(args[1]));
+                    files = GetFilesFromPath(args[1]);
                     mask = args[2];
-                    return new RenameCommand(file, new FileExistenceChecker(), mask);
+                    return new RenameCommand(files, new UniquePathCreator(), mask);
 
                 case CommandNames.ChangeTags:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.ChangeTags]);
-                    file = new Mp3File(TagLib.File.Create(args[1]));
+                    files = GetFilesFromPath(args[1]);
                     mask = args[2];
-                    return new ChangeTagsCommand(file, mask);
+                    return new ChangeTagsCommand(files, mask);
 
                 case CommandNames.Analyse:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Analyse]);
-                    source = new FileSystemSource(args[1]);                    
+                    files = GetFilesFromPath(args[1]);
                     mask = args[2];
-                    return new AnalyseCommand(source, mask, writer);
+                    return new AnalyseCommand(files, mask);
 
                 default:
                     throw new InvalidOperationException("Invalid operation: there is no such command!");
             }
         }
+
+        private List<IMp3File> GetFilesFromPath(string path)
+        {
+            var files = new List<IMp3File>();
+            if (Path.GetFileName(path) != string.Empty)
+            {
+                files.Add(new Mp3File(TagLib.File.Create(path)));
+            }
+            else
+            {
+                var directory = new FileSystemSource(path);
+                files.AddRange(directory.GetFiles());
+            }
+            return files;
+        }
+
     }
 }

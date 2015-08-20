@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Tests.Fakes
 {
-    class FakeFileExistenceChecker : BaseFileExistenceChecker
+    class FakeUniquePathCreator : BaseUniquePathCreator
     {
         private readonly HashSet<string> _paths = new HashSet<string>
         {

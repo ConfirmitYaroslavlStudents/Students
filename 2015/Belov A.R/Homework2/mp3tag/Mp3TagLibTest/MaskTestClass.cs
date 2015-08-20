@@ -86,6 +86,7 @@ namespace Mp3TagTest
                 {"aaabb", "b"},
                 {"aaabbb", ""}
             };
+           
             foreach (var posibleValue in posibleValues)
             {
                 bool flag = false;
@@ -114,6 +115,7 @@ namespace Mp3TagTest
                 {"aabb", ""}
             };
             var results = testMask.GetTagValuesFromString(testString);
+         
             foreach (var posibleValue in posibleValues)
             {
                 bool flag = false;

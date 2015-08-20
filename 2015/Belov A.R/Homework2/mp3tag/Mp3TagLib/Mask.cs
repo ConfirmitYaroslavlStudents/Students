@@ -26,6 +26,7 @@ namespace Mp3TagLib
             _body=new LinkedList<MaskItem>();
             _posibleTagValues = new List<Dictionary<string, string>>();
             var stack=new Stack<char>();
+            
             for (var i = 0; i < mask.Length; i++)
             {
                 switch (mask[i])
@@ -160,16 +161,20 @@ namespace Mp3TagLib
                 currentTagTreeNode.AddChild(newNode);
                 return;
             }
+           
             var nextDelimiter = currentMaskItem.Next.Value.Value;
             var currentTagName = currentMaskItem.Value.Value;
             var nextDelimiterIndex = str.IndexOf(nextDelimiter);
+           
             if(nextDelimiterIndex==-1)
                 return;
             while (true)
             {
                 var newNode = new TagTreeNode() { TagName = currentTagName, TagValue = str.Substring(0, nextDelimiterIndex) };
+               
                 currentTagTreeNode.AddChild(newNode);
                 BuildTree(str.Substring(nextDelimiterIndex, str.Length - newNode.TagValue.Length), currentMaskItem.Next, newNode);
+               
                 var strAfterNextDelimiter = str.Substring(nextDelimiterIndex + nextDelimiter.Length,
                     str.Length - nextDelimiter.Length-nextDelimiterIndex);
                 if (nextDelimiter == "")
@@ -195,8 +200,10 @@ namespace Mp3TagLib
             {
                 throw new ArgumentException("Can't apply mask");   
             }
+          
             var root=GetTagTree(str);
             _posibleTagValues.Clear();
+           
             foreach (var child in root.Childs)
             {
                 BuildResults(child, new Dictionary<string, string>());
@@ -207,10 +214,12 @@ namespace Mp3TagLib
         void BuildResults(TagTreeNode node,Dictionary<string,string> tagValues)
         {
             tagValues.Add(node.TagName, node.TagValue);
+            
             foreach (var child in node.Childs)
             {
                 BuildResults(child,new Dictionary<string, string>(tagValues));
             }
+           
             if (node.Childs.Count == 0)
             {
                 _posibleTagValues.Add(tagValues);

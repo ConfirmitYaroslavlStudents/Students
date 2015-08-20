@@ -50,10 +50,11 @@
     <Compile Include="Operations\Analysis.cs" />
     <Compile Include="Operations\Changetags.cs" />
     <Compile Include="Operations\Exit.cs" />
-    <Compile Include="Operations\Operation.cs" />
+    <Compile Include="Operations\HandSync.cs" />
     <Compile Include="FileLoader.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Mp3File.cs" />
+    <Compile Include="Operations\OperationFactory.cs" />
     <Compile Include="Operations\Sync.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -134,7 +134,7 @@ namespace CommandCreation
             // Ambiguous matching of mask and file name.
             if (
                 _splits.Any(
-                    split => split != String.Empty && CountSplitsInMask(split) != CountSplitsInFileName(split, fileName)))
+                    split => split != String.Empty && CountSplitsInMask(split) < CountSplitsInFileName(split, fileName)))
             {
                 throw new InvalidDataException("Ambiguous matching of mask and file name");
             }

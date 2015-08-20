@@ -7,5 +7,8 @@
         Mp3Tags GetTags();
         void ChangeName(string newName);
         void Save();
+        Mp3Memento GetMemento();
+
+        void SetMemento(Mp3Memento memento);
     }
 }

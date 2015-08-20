@@ -35,5 +35,16 @@ namespace Mp3TagTest
             ChangeNameFlag = true;
             Path = newName;
         }
+
+
+        public Mp3Memento GetMemento()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetMemento(Mp3Memento memento)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

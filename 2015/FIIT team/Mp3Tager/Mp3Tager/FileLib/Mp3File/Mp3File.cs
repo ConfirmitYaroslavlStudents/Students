@@ -1,6 +1,5 @@
-﻿using System.IO;
-using TagLib;
-using System;
+﻿using System;
+using System.IO;
 
 namespace FileLib
 {
@@ -10,13 +9,13 @@ namespace FileLib
 
         public Mp3Tags Tags { get; private set; }
 
-        public string FullName { get; private set; }
+        public string FullName { get; set; }
 
         public Mp3File(TagLib.File mp3Content)
         {           
             _content = mp3Content;
-            FullName = mp3Content.Name;         
-
+            FullName = mp3Content.Name;
+            
             Tags = new Mp3Tags  
             {
                 Album = mp3Content.Tag.Album,
@@ -30,20 +29,25 @@ namespace FileLib
         public void Save()
         {
             SaveTags();
-            using (var backup = new FileBackuper())
-            {
-                backup.MakeBackup(this);
+
+            /*using (var backup = new FileBackuper(this))
+            {                
                 try
                 {
                     _content.Save();
+                    if (_content.Name != FullName)
+                        MoveTo(FullName);
                 }
                 catch(Exception e)
                 {
-                    // todo: user unable to get full info about the process if smth get wrong
                     backup.RestoreFromBackup();
+
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
-            }
+            }*/
+            _content.Save();
+            if (_content.Name != FullName)
+                MoveTo(FullName);
         }
 
         private void SaveTags()
@@ -63,39 +67,37 @@ namespace FileLib
             _content.Tag.Track = Tags.Track;
         }        
 
-        public IMp3File CopyTo(string path)
+        public IMp3File CopyTo(string uniquePath)
         {
-            System.IO.File.Copy(FullName, path, true);
-            return new Mp3File(TagLib.File.Create(path));
+            File.Copy(FullName, uniquePath, true);
+            return new Mp3File(TagLib.File.Create(uniquePath));
         }
 
         public void Delete()
         {
-            System.IO.File.Delete(FullName);
+            File.Delete(FullName);
         }
 
-        public void MoveTo(BaseFileExistenceChecker checker, string path)
+        public void MoveTo(string uniquePath)
         {
-            var destinationPath = checker.CreateUniqueName(path);
-            MoveFileWithBackUp(destinationPath);
-        }
-
-        private void MoveFileWithBackUp(string destinationPath)
-        {
-            using (var backup = new FileBackuper())
+            // todo: rename --backup-ignore "" {title}
+            // todo: tumbler to switch off backup process
+            /*using (var backup = new FileBackuper(this))
             {
-                backup.MakeBackup(this);
                 try
                 {
-                    System.IO.File.Move(FullName, destinationPath);
-                    FullName = destinationPath;
+                    File.Move(FullName, uniquePath);
+                    FullName = uniquePath;
                 }
                 catch (Exception e)
                 {
                     backup.RestoreFromBackup();
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
-            }
+            }*/
+            var originalName = Path.Combine(Path.GetDirectoryName(FullName), _content.Name);
+            File.Move(originalName, uniquePath);
+            FullName = uniquePath;
         }
     }
 }

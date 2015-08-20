@@ -3,45 +3,58 @@ using System.IO;
 
 namespace FileLib
 {
-    // TODO: Immutable file model
+    // TODO: *done* IDispose pattern
     public class FileBackuper: IDisposable
     {
         private IMp3File _sourceFile;
+        private bool _disposed;
+
+        // todo: *done* make private?
         private IMp3File _tempFile;
-        private bool _restored;
-
-        public IMp3File MakeBackup(IMp3File sourceFile)
+        
+        public FileBackuper(IMp3File sourceFile)
         {
-            if (_sourceFile != null)
+            _disposed = false;
+            if (sourceFile == null)
                 throw new InvalidOperationException();
-
             _sourceFile = sourceFile;
-            _restored = false;
-
-            var tempDirectory = Path.GetTempPath();
-            var fileName = Path.GetFileName(_sourceFile.FullName);
-
-            return _tempFile = _sourceFile.CopyTo(tempDirectory + fileName);
+            _tempFile = MakeBackup();
         }
 
-        public void RestoreFromBackup()
+        private IMp3File MakeBackup()
         {
-            if (_sourceFile == null || _tempFile == null)
-                throw new InvalidOperationException();
+            var tempDirectory = Path.GetTempPath();
+            var fileName = Path.GetFileName(_sourceFile.FullName);
+            return _sourceFile.CopyTo(tempDirectory + fileName);
+        }
 
+        public bool RestoreFromBackup()
+        {
+            if (_tempFile == null)
+                return false;
             _sourceFile.Delete();
-            _tempFile.MoveTo(new FileExistenceChecker(), _sourceFile.FullName);
-            _restored = true;
+            _tempFile.MoveTo(_sourceFile.FullName);
+            return true;
         }
 
         public void Dispose()
         {
-            if (_tempFile != null && _restored == false)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            
+            if (disposing)
             {
                 _tempFile.Delete();
                 _tempFile = null;
+                _sourceFile = null;
             }
-            _sourceFile = null;
+
+            _disposed = true;
         }
     }
 }

@@ -1,4 +1,8 @@
 ﻿using System;
+using mp3tager.Operations;
+using Mp3TagLib;
+using Mp3TagLib.Operations;
+
 
 namespace mp3tager
 {
@@ -6,18 +10,17 @@ namespace mp3tager
     {
         static void Main()
         {
+            Processor processor=new Processor(new OperationFactory());
             while (true)
             {
                 //[TODO] try catch logic in a single place
                 try
                 {
                     Menu.Show();
-                    var currentOperation = Operation.Create(Menu.GetUserInput("\n\nCommand:").ToLower());
-                    currentOperation.Call();
+                    processor.CallOperation(processor.CreateOperation(Menu.GetUserInput("\n\nCommand:").ToLower()));
                 }
                 catch (Exception e)
                 {
-
                     Menu.PrintError(e.Message);
                 }
             }

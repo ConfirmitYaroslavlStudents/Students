@@ -53,7 +53,7 @@ namespace CommandCreation
             var newName = GetNewName(mp3File);
             var directory = Path.GetDirectoryName(mp3File.FullName);
             var newFullName = Path.Combine(directory, newName + @".mp3");
-            if (newFullName != mp3File.FullName)
+            if (newFullName == mp3File.FullName)
             {
                 newFullName = _pathCreator.CreateUniqueName(newFullName);
             }

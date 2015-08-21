@@ -14,8 +14,17 @@ namespace Mp3Tager
             if (command.ShouldBeCompleted)
             {
                 worker.WriteLine("\n\nSave changes? Input y/n");
-                if (worker.ReadLine() == "y")
+                var answer = worker.ReadLine();
+                // how it should react in case of other letters??
+                if (answer == "y")
+                {
                     command.Complete();
+                    worker.WriteLine("Command successfully executed.");
+                }
+                else if (answer == "n")
+                {
+                    worker.WriteLine("Command canceled");
+                }
             }
         }
     }

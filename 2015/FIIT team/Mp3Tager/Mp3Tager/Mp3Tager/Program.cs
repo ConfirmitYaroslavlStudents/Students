@@ -15,8 +15,7 @@ namespace Mp3Tager
             try
             {
                 var app = new Application();
-                app.Execute(args, worker);
-                worker.WriteLine("Command successfully executed.");
+                app.Execute(args, worker);               
             }
             catch (Exception e)
             {

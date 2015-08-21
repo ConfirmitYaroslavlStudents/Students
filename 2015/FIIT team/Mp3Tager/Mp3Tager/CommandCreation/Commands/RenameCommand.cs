@@ -8,7 +8,7 @@ using TagLib;
 
 namespace CommandCreation
 {
-    // todo: for folder
+    // todo: *done* for folder
     internal class RenameCommand : Command
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
@@ -31,6 +31,11 @@ namespace CommandCreation
             }
             return resultMessage.ToString();
         }
+        
+        protected override void SetIfShouldBeCompleted()
+        {
+            ShouldBeCompleted = true;
+        }
 
         public override void Complete()
         {
@@ -47,10 +52,13 @@ namespace CommandCreation
 
             var newName = GetNewName(mp3File);
             var directory = Path.GetDirectoryName(mp3File.FullName);
-            var uniqueName = _pathCreator.CreateUniqueName(Path.Combine(directory, newName + @".mp3"));
-
-            var resultMessage = mp3File.FullName + " ---> " + uniqueName + "\n";
-            mp3File.FullName = uniqueName;
+            var newFullName = Path.Combine(directory, newName + @".mp3");
+            if (newFullName != mp3File.FullName)
+            {
+                newFullName = _pathCreator.CreateUniqueName(newFullName);
+            }
+            var resultMessage = mp3File.FullName + " ---> " + newFullName + "\n";
+            mp3File.FullName = newFullName;
 
             return resultMessage;
         }
@@ -72,7 +80,5 @@ namespace CommandCreation
 
             return newName.ToString();
         }
-
-        
     }
 }

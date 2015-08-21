@@ -2,7 +2,7 @@
 
 namespace CommandCreation
 {
-    public class ConsoleWriter: IWriter
+    public class ConsoleWorker: IWorker
     {
         public void Write(string value)
         {
@@ -17,6 +17,11 @@ namespace CommandCreation
         public void WriteLine(string value)
         {
             Console.WriteLine(value);
+        }
+
+        public string ReadLine()
+        {
+            return Console.ReadLine();
         }
     }
 }

@@ -3,20 +3,15 @@ using System.IO;
 
 namespace FileLib
 {
-    // todo: IDirectory ?
-    public class FileSystemSource : ISource
+    // todo: *done* IDirectory ?
+    public class Mp3Directory : IDirectory
     {
-        public FileSystemSource(string source)
+        public Mp3Directory(string source)
         {
             SourceFolder = source;
         }
 
         public string SourceFolder { get; private set; }
-
-        public IEnumerable<string> GetFileNames()
-        {
-            return Directory.GetFiles(SourceFolder, "*.mp3", SearchOption.TopDirectoryOnly);
-        }
 
         public IEnumerable<IMp3File> GetFiles()
         {
@@ -27,6 +22,11 @@ namespace FileLib
             }
 
             return mp3Files;
+        }
+                
+        private IEnumerable<string> GetFileNames()
+        {
+            return Directory.GetFiles(SourceFolder, "*.mp3", SearchOption.TopDirectoryOnly);
         }
     }
 }

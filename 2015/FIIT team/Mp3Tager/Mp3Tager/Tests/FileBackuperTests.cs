@@ -15,8 +15,7 @@ namespace Tests
             {
                 var actual = backup.RestoreFromBackup();
                 Assert.IsTrue(actual);
-            }
-            
+            }            
         }
     }
 }

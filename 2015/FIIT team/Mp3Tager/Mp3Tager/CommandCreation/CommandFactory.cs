@@ -16,7 +16,7 @@ namespace CommandCreation
             {CommandNames.Analyse, new []{3}},
         };
 
-        public Command ChooseCommand(string[] args, IWriter writer)
+        public Command ChooseCommand(string[] args)
         {
             List<IMp3File> files;
             string mask;
@@ -27,9 +27,9 @@ namespace CommandCreation
             var commandName = args[0].ToLower();
             switch (commandName)
             {
-                /*case CommandNames.Help:
+                case CommandNames.Help:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Help]);
-                    return new HelpCommand(args, writer);*/
+                    return new HelpCommand(args);
 
                 case CommandNames.Rename:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Rename]);
@@ -57,13 +57,13 @@ namespace CommandCreation
         private List<IMp3File> GetFilesFromPath(string path)
         {
             var files = new List<IMp3File>();
-            if (Path.GetFileName(path) != string.Empty)
+            if (Path.GetExtension(path) != string.Empty)
             {
                 files.Add(new Mp3File(TagLib.File.Create(path)));
             }
             else
             {
-                var directory = new FileSystemSource(path);
+                var directory = new Mp3Directory(path);
                 files.AddRange(directory.GetFiles());
             }
             return files;

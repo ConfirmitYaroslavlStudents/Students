@@ -10,17 +10,17 @@ namespace Mp3Tager
     {
         static void Main(string[] args)
         {
-            IWriter writer = new ConsoleWriter();
+            IWorker worker = new ConsoleWorker();
 
             try
             {
                 var app = new Application();
-                app.Execute(args, writer);
-                writer.WriteLine("Command successfully executed.");
+                app.Execute(args, worker);
+                worker.WriteLine("Command successfully executed.");
             }
             catch (Exception e)
             {
-                writer.WriteLine(e.Message);
+                worker.WriteLine(e.Message);
             }
         }
     }

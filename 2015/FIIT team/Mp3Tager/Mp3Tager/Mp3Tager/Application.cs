@@ -6,13 +6,17 @@ namespace Mp3Tager
 {
     public class Application
     {
-        public void Execute(string[] args, IWriter writer)
+        public void Execute(string[] args, IWorker worker)
         {
-            var command = new CommandFactory().ChooseCommand(args, writer);
-            Console.WriteLine(command.Execute());
-            Console.WriteLine("\n\nSave changes? y/n");
-            if (Console.ReadLine() == "y")
-                command.Complete();
+            var command = new CommandFactory().ChooseCommand(args);
+            worker.WriteLine(command.Execute());
+
+            if (command.ShouldBeCompleted)
+            {
+                worker.WriteLine("\n\nSave changes? Input y/n");
+                if (worker.ReadLine() == "y")
+                    command.Complete();
+            }
         }
     }
 }

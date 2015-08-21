@@ -48,8 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AnalyseCommand.cs" />
-    <Compile Include="ConsoleWriter.cs" />
-    <Compile Include="IWriter.cs" />
+    <Compile Include="ConsoleWorker.cs" />
+    <Compile Include="IWorker.cs" />
     <Compile Include="Parsers\ArgumentParser.cs" />
     <Compile Include="Commands\ChangeTagsCommand.cs" />
     <Compile Include="Commands\Command.cs" />

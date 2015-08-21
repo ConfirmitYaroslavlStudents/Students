@@ -2,12 +2,10 @@
 
 namespace FileLib
 {
-    public interface ISource
+    public interface IDirectory
     {
         string SourceFolder { get; }
 
-        IEnumerable<string> GetFileNames();
         IEnumerable<IMp3File> GetFiles();
-
     }
 }

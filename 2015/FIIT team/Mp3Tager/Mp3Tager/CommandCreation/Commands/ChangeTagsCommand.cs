@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CommandCreation
 {
-    // todo: for folder
+    // todo: *done* for folder
     internal class ChangeTagsCommand : Command
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
@@ -28,6 +28,11 @@ namespace CommandCreation
             return resultMessage.ToString();
         }
 
+        protected override void SetIfShouldBeCompleted()
+        {
+            ShouldBeCompleted = true;
+        }
+
         public override void Complete()
         {
             foreach (var mp3File in _mp3Files)
@@ -39,6 +44,7 @@ namespace CommandCreation
         private string ChangeTags(IMp3File mp3File)
         {
             var resultMessage = new StringBuilder();
+            resultMessage.Append(mp3File.FullName + ":\n");
 
             var fileName = Path.GetFileNameWithoutExtension(mp3File.FullName);
 
@@ -63,6 +69,7 @@ namespace CommandCreation
                 fileName = fileName.Remove(0, indexOfSplit + splitsInMask[i + 1].Length);
             }
 
+            resultMessage.Append("\n");
             return resultMessage.ToString();
         }
 
@@ -117,6 +124,6 @@ namespace CommandCreation
                 default:
                     throw new ArgumentException(tagPattern);
             }
-        }
+        }        
     }
 }

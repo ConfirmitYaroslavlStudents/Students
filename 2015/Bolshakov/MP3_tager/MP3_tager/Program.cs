@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Mp3Handler;
+using FolderLib;
 
 namespace MP3tager
 {
@@ -12,23 +13,28 @@ namespace MP3tager
             //todo: include try-catch into mode methods
             try
             {
-                if (args.Length >= 1)
+                if( args.Length == 1 && 
+                    args[0] == "help")
+                    Console.WriteLine(Messeges.LongHelp);
+                else if (args.Length == 3)
                 {
-                    switch (args[0])
+                    var mode = args[0];
+                    var path = args[1];
+                    var pattern = args[2];
+                    switch (mode)
                     {
-                        case "help":
-                            Console.WriteLine(Messeges.LongHelp);
+                        case "diff":
+                            LaunchDiffMode(path,pattern);
                             break;
                         case "retag":
-                            LaunchRetagMode(args);
+                            LaunchRetagMode(path,pattern);
                             break;
                         case "rename":
-                            LaunchRenameMode(args);
+                            LaunchRenameMode(path, pattern);
                             break;
-                        //case "synch":
-                        //    LaunchSycnhMode(args);
-                        //    break;
-                            //todo: imlement difference
+                        case "synch":
+                            LaunchSynchMode(path,pattern);
+                            break;
                         default:
                             Console.WriteLine(Messeges.InvalidFirsArg);
                             break;
@@ -50,46 +56,56 @@ namespace MP3tager
             
         }
 
-        private static void LaunchSycnhMode(string[] args)
+        private static void LaunchSynchMode(string path, string pattern)
         {
-            switch (args.Length)
+            var folderProcessor = new FolderProcessor();
+            folderProcessor.PrepareSynch(path, pattern);
+            Console.WriteLine(Messeges.FilesToRename);
+            foreach (var renameAction in folderProcessor.LateFileHandler.ToRename)
             {
-                case 3:
-                    var retager = new Mp3FileProcessor(args[1]);
-                    retager.Synchronize(args[2]);
-                    break;
-                default:
-                    Console.WriteLine(Messeges.RenamemodeHelp);
-                    break;
+                Console.WriteLine("\t\"{0}\" to \t\"{1}\"",renameAction.FilePath,renameAction.NewName);
+            }
+            Console.WriteLine(Messeges.FilesToTag);
+            foreach (var retagAction in folderProcessor.LateFileHandler.ToRetag)
+            {
+                Console.WriteLine("\t{0} new tags:",retagAction.FilePath);
+                foreach (var tag in retagAction.NewTags)
+                {
+                    Console.WriteLine("{0}: \"{1}\"",Frame.GetString(tag.Key),tag.Value);
+                }
+            }
+            Console.WriteLine("OK? y/n");
+            if (Console.ReadLine() == "y")
+                folderProcessor.CompleteSych(new int[0]);
+        }
+
+        private static void LaunchDiffMode(string path, string pattern)
+        {
+            var folderProcessor = new FolderProcessor();
+            var differences = folderProcessor.GetDifferences(path,pattern);
+            foreach (var difference in differences)
+            {
+                if (difference.Value.Count != 0)
+                {
+                    Console.WriteLine("{0} differences:",difference.Key);
+                    foreach (var value in difference.Value)
+                    {
+                        Console.WriteLine("\t{0} in file: \"{1}\", in name: \"{2}\"", Frame.GetString(value.Key), value.Value.FileValue, value.Value.PathValue);
+                    }
+                }
             }
         }
 
-        private static void LaunchRenameMode(string[] args)
+        private static void LaunchRenameMode(string path, string pattern)
         {
-            switch (args.Length)
-            {
-                case 3:
-                    var retager = new Mp3FileProcessor(args[1]);
-                    retager.RenameFile(args[2]);
-                    break;
-                default:
-                    Console.WriteLine(Messeges.RenamemodeHelp);
-                    break;
-            }
+            var retager = new Mp3FileProcessor(path);
+            retager.RenameFile(pattern);
         }
 
-        private static void LaunchRetagMode(string[] args)
+        private static void LaunchRetagMode(string path, string pattern)
         {
-            switch (args.Length)
-            {
-                case 3:
-                    var retager = new Mp3FileProcessor(args[1]);
-                    retager.RetagFile(args[2]);
-                    break;
-                default:
-                    Console.WriteLine(Messeges.RetagmodeHelp);
-                    break;
-            }
+            var retager = new Mp3FileProcessor(path);
+            retager.RetagFile(pattern);
         }
     }
 }

@@ -12,5 +12,7 @@
         public static string InvalidFirsArg = "";
         public static string RetagmodeHelp = "";
         public static string RenamemodeHelp = "";
+        public static bool FilesToRename { get; set; }
+        public static bool FilesToTag { get; set; }
     }
 }

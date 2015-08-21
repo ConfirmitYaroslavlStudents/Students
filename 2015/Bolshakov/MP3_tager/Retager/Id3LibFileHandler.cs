@@ -29,7 +29,7 @@ namespace Mp3Handler
                     throw new FileNotFoundException();
                 if (Path.GetExtension(value) != ".mp3")
                     throw new ArgumentException("Not mp3 file");
-                _mp3File = new Mp3File(FilePath, Mp3Permissions.ReadWrite);
+                _mp3File = new Mp3File(value, Mp3Permissions.ReadWrite);
                 _filePath = value;
                 FileName = value;
             }

@@ -38,7 +38,7 @@ namespace Mp3Handler
             StringValue = input;
         }
 
-        
+       
         public StrWithCursor(StrWithCursor input)
         {
             _str = input._str;

@@ -49,6 +49,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FolderLib\FolderLib.csproj">
+      <Project>{5a972971-3d81-40e0-b72d-9147ad34f888}</Project>
+      <Name>FolderLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retager\Mp3HandlerLib.csproj">
       <Project>{d0db0956-45a9-448b-9ec0-a87b2cd7ae46}</Project>
       <Name>Mp3HandlerLib</Name>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using CommandCreation;
+﻿using CommandCreation;
 
 namespace Mp3Tager
 {
@@ -11,20 +9,20 @@ namespace Mp3Tager
             var command = new CommandFactory().ChooseCommand(args);
             worker.WriteLine(command.Execute());
 
-            if (command.ShouldBeCompleted)
+            if (!command.ShouldBeCompleted) return;
+
+            worker.WriteLine("\n\nSave changes? Input y/n");
+            var answer = worker.ReadLine();
+            // TODO: how it should react in case of other letters??
+            switch (answer)
             {
-                worker.WriteLine("\n\nSave changes? Input y/n");
-                var answer = worker.ReadLine();
-                // how it should react in case of other letters??
-                if (answer == "y")
-                {
+                case "y":
                     command.Complete();
                     worker.WriteLine("Command successfully executed.");
-                }
-                else if (answer == "n")
-                {
+                    break;
+                case "n":
                     worker.WriteLine("Command canceled");
-                }
+                    break;
             }
         }
     }

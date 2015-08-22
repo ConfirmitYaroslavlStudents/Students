@@ -1,10 +1,8 @@
-﻿using FileLib;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using TagLib;
+using FileLib;
 
 namespace CommandCreation
 {
@@ -58,7 +56,7 @@ namespace CommandCreation
                 newFullName = _pathCreator.CreateUniqueName(newFullName);
             }
             var resultMessage = mp3File.FullName + " ---> " + newFullName + "\n";
-            mp3File.FullName = newFullName;
+            mp3File.MoveTo(newFullName, true);
 
             return resultMessage;
         }

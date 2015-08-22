@@ -11,7 +11,7 @@ namespace CommandCreation
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly MaskParser _maskParser;
-        private Dictionary<string, List<string>> _indexDict;
+        private readonly Dictionary<string, List<string>> _indexDict;
 
         public AnalyseCommand(IEnumerable<IMp3File> mp3Files, string mask)
         {

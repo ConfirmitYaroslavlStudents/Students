@@ -32,6 +32,11 @@ namespace Tests
             FullName = _checker.CreateUniqueName(uniquePath);
         }
 
+        public void MoveTo(string uniquePath, bool safe)
+        {
+            MoveTo(uniquePath);
+        }
+
         public void Delete()
         {
         }

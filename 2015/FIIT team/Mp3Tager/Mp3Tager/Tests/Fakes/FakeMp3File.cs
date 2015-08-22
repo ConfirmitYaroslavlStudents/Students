@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FileLib;
+﻿using FileLib;
 
 namespace Tests
 {
@@ -17,6 +16,10 @@ namespace Tests
         }
                 
         public void Save()
+        {
+        }
+
+        public void Save(bool enableBackup)
         {
         }
 

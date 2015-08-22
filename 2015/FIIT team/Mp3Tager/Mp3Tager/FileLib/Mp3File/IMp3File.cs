@@ -8,6 +8,8 @@
 
         void Save();
 
+        void SaveWithBackup();
+
         IMp3File CopyTo(string uniquePath);
 
         void MoveTo(string uniquePath);

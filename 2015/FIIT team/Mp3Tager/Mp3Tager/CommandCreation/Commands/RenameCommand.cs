@@ -39,7 +39,10 @@ namespace CommandCreation
         {
             foreach (var mp3File in _mp3Files)
             {
-                mp3File.Save();
+                if (EnableBackup)
+                    mp3File.SaveWithBackup();
+                else
+                    mp3File.Save();
             }
         }
 

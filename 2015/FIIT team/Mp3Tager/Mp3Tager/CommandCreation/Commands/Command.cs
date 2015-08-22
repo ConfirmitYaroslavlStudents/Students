@@ -9,6 +9,8 @@
 
         public bool ShouldBeCompleted { get; protected set; }
 
+        public bool EnableBackup { get; set; }
+
         protected abstract void SetIfShouldBeCompleted();
 
         public abstract string Execute();

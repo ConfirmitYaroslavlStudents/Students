@@ -26,23 +26,27 @@ namespace FileLib
                 Genre = mp3Content.Tag.FirstGenre,
                 Track = mp3Content.Tag.Track
             };
-        }        
+        }
 
         public void Save()
         {
             SaveTags();
+            _content.Save();
+            if (_newFullName != null)
+            {
+                MoveTo(_newFullName);
+            }
+        }
 
+        public void SaveWithBackup()
+        {
             // todo: rename --backup-ignore "" {title}
             // todo: tumbler to switch off backup process
             using (var backup = new FileBackuper(this))
             {
                 try
                 {
-                    _content.Save();
-                    if (_newFullName != null)
-                    {
-                        MoveTo(_newFullName);
-                    }
+                    Save();
                 }
                 catch (Exception e)
                 {
@@ -50,7 +54,6 @@ namespace FileLib
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
             }
-
         }
 
         private void SaveTags()

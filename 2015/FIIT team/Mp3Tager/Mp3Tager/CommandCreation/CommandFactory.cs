@@ -11,9 +11,9 @@ namespace CommandCreation
         public readonly Dictionary<string, int[]> NumberOfCommandArguments = new Dictionary<string, int[]>()
         {
             {CommandNames.Help, new[] {1, 2}},
-            {CommandNames.Rename, new []{3} },
-            {CommandNames.ChangeTags, new []{3}},
-            {CommandNames.Analyse, new []{3}},
+            {CommandNames.Rename, new[] {3, 4}},
+            {CommandNames.ChangeTags, new[] {3, 4}},
+            {CommandNames.Analyse, new[] {3}},
         };
 
         public Command ChooseCommand(string[] args)
@@ -35,13 +35,19 @@ namespace CommandCreation
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Rename]);
                     files = GetFilesFromPath(args[1]);
                     mask = args[2];
-                    return new RenameCommand(files, new UniquePathCreator(), mask);
+                    return new RenameCommand(files, new UniquePathCreator(), mask)
+                    {
+                        EnableBackup = !(args.Length == 4 && args[3] == "--backup-ignore")
+                    };
 
                 case CommandNames.ChangeTags:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.ChangeTags]);
                     files = GetFilesFromPath(args[1]);
                     mask = args[2];
-                    return new ChangeTagsCommand(files, mask);
+                    return new ChangeTagsCommand(files, mask)
+                    {
+                        EnableBackup = !(args.Length == 4 && args[3] == "--backup-ignore")
+                    };
 
                 case CommandNames.Analyse:
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Analyse]);

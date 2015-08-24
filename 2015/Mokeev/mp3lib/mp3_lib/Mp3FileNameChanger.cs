@@ -44,7 +44,21 @@ namespace mp3lib
 
 			if (_fastChanges && Id3Data.Count == 0) return Path.GetFileNameWithoutExtension(_mp3File.FilePath);
 
-			var id3Data = Id3Data.Count > 0 ? Id3Data : _mp3File.GetId3Data();
+			Dictionary<TagType, string> id3Data;
+			if (Id3Data.Count > 0)
+			{
+				id3Data = Id3Data;
+				var keys = _mp3File.GetId3Data().Where(tag => !Id3Data.ContainsKey(tag.Key) && tags.Contains(tag.Key)).ToDictionary(tag => tag.Key, tag => tag.Value);
+
+				foreach (var item in  keys)
+				{
+					id3Data.Add(item.Key, item.Value);
+				}
+			}
+			else
+			{
+				id3Data = _mp3File.GetId3Data();
+			}
 
 			var emptyTags = id3Data.Where(tag => string.IsNullOrWhiteSpace(tag.Value)).Select(x=> x.Key).ToArray();
 
@@ -81,7 +95,7 @@ namespace mp3lib
 			var data = info.Data as string;
 			if(data == null) return;
 
-            _mp3File.ChangeFileName(Path.GetFileNameWithoutExtension(data));
+            _mp3File.ChangeFileName(data);
 		}
     }
 }

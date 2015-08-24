@@ -10,7 +10,7 @@ namespace mp3lib.Rollback
 		public ProgramAction Action { get; set; }
 		public List<string> FilesChanged { get; set; }
 		public string Mask { get; set; }
-		public object Data { get; set; }
+		public dynamic Data { get; set; }
 
 		public RollbackInfo(ProgramAction action, IEnumerable<string> files, string mask, dynamic data = null)
 		{

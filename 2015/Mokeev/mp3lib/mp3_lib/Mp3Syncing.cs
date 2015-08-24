@@ -10,12 +10,18 @@ namespace mp3lib
 		private readonly IMp3File[] _files;
 		private readonly ICommunication _communication;
 		private readonly string _mask;
+		private readonly List<KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>> _data;
+		private IEnumerable<string> _filesChanged;
+		private readonly ISaver _saver;
 
-		public Mp3Syncing(IEnumerable<IMp3File> files, string mask, ICommunication communication)
+		public Mp3Syncing(IEnumerable<IMp3File> files, string mask, ICommunication communication, ISaver saver)
 		{
 			_files = files.ToArray();
 			_communication = communication;
 			_mask = mask;
+
+			_data = new List<KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>>();
+			_saver = saver;
 		}
 
 		public void SyncFiles()
@@ -35,9 +41,13 @@ namespace mp3lib
 				return;
 			}
 
+			var filesChanged = new List<string>();
+
 			foreach (var fileDifferencese in diffs)
 			{
-				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask, true);
+				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask, _saver, true);
+				filesChanged.Add(fileDifferencese.Mp3File.FilePath);
+				var fData = new KeyValuePair<string, Dictionary<TagType, string>>(fileDifferencese.Mp3File.FilePath, fileDifferencese.Mp3File.GetId3Data());
 				foreach (var diff in fileDifferencese.Diffs)
 				{
 					if (string.IsNullOrWhiteSpace(diff.Value.FileNameValue) ^ string.IsNullOrWhiteSpace(diff.Value.TagValue))
@@ -64,21 +74,41 @@ namespace mp3lib
 						fileNameChanger.AddTagReplacement(diff.Key, data.Data);
 					}
 				}
+
 				var fn = fileNameChanger.GetNewFileName();
+				_data.Add(new KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>(fn, fData));
 				fileDifferencese.Mp3File.ChangeFileName(fn);
 			}
-
-
+			_filesChanged = filesChanged;
 		}
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.FileRename, _filesChanged, _mask,
+				_data)).Dispose();
 		}
 
 		public void Rollback(RollbackInfo info)
 		{
-			throw new NotImplementedException();
+			var data = info.Data as List<KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>>;
+
+			if(data == null) return;
+
+			foreach (var item in data)
+			{
+				var mp3 = new Mp3File(item.Key);
+				foreach (var tag in item.Value.Value)
+				{
+					mp3[tag.Key] = tag.Value;
+				}
+
+				mp3.ChangeFileName(item.Value.Key);
+			}
 		}
+	}
+
+	internal enum ChangeType
+	{
+		File, Tags
 	}
 }

@@ -153,7 +153,7 @@ namespace mp3lib
 					throw new ArgumentException("-action can be [analyse|file-rename|change-tags|sync|rollback]");
 			}
 
-			return new Args(action);
+			return (data.ContainsKey(MASK) && data.ContainsKey(PATH)) ? new Args(data[PATH], data[MASK], action) : new Args(action);
 		}
 
 	}

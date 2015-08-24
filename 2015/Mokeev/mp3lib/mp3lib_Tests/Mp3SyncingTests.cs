@@ -19,7 +19,7 @@ namespace mp3lib_Tests
 
 			var files = new[] {item};
 
-			var syncer = new Mp3Syncing(files, "{id}. {artist} - {title}", communicator);
+			var syncer = new Mp3Syncing(files, "{id}. {artist} - {title}", communicator, new TestRollbackSaver(new[] { "" }));
 			syncer.SyncFiles();
 
 			Assert.AreEqual(item.TrackId, "2");
@@ -40,7 +40,7 @@ namespace mp3lib_Tests
 
 			var files = new[] {item};
 
-			var syncer = new Mp3Syncing(files, "{id}. {artist} - {title}", communicator);
+			var syncer = new Mp3Syncing(files, "{id}. {artist} - {title}", communicator, new TestRollbackSaver(new[] { "" }));
 			syncer.SyncFiles();
 
 			Assert.AreEqual(item.TrackId, "3");
@@ -60,7 +60,7 @@ namespace mp3lib_Tests
 
 			var files = new[] {item};
 
-			var syncer = new Mp3Syncing(files, "{id}. {artist} - {title}", communicator);
+			var syncer = new Mp3Syncing(files, "{id}. {artist} - {title}", communicator, new TestRollbackSaver(new[] { "" }));
 			syncer.SyncFiles();
 
 			Assert.AreEqual(item.TrackId, "3");

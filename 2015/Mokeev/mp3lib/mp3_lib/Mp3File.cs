@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using TagLib;
 
 namespace mp3lib
 {
 	public class Mp3File : IMp3File
 	{
 		private TagLib.File File { get; set; }
+		private Tag Tag { get; }
+
 		public string FilePath { get; private set; }
 
-		public string Title { get { return File.Tag.Title; } set { File.Tag.Title = value; Set(); } }
-		public string Artist { get { return File.Tag.FirstPerformer; } set { File.Tag.Performers = new [] {value}; Set(); } }
-		public string Album { get { return File.Tag.Album; } set { File.Tag.Album = value; Set(); } }
-		public string Year { get { return File.Tag.Year.ToString(); } set { File.Tag.Year = Convert.ToUInt32(value); Set(); } }
+		public string Title { get { return Tag.Title; } set { File.Tag.Title = value; Set(); } }
+		public string Artist { get { return Tag.FirstPerformer; } set { File.Tag.Performers = new [] {value}; Set(); } }
+		public string Album { get { return Tag.Album; } set { File.Tag.Album = value; Set(); } }
+		public string Year { get { return Tag.Year.ToString(); } set { File.Tag.Year = Convert.ToUInt32(value); Set(); } }
 
 		public string this[TagType type]
 		{
@@ -48,9 +51,9 @@ namespace mp3lib
 			}
 		}
 
-		public string Comment { get { return File.Tag.Comment; } set { File.Tag.Comment = value; Set(); } }
-		public string TrackId { get { return File.Tag.Track.ToString(); } set { File.Tag.Track = Convert.ToUInt32(value); Set(); } }
-		public string Genre { get { return File.Tag.FirstGenre; } set { File.Tag.Genres = new[] { value }; Set(); } }
+		public string Comment { get { return Tag.Comment; } set { File.Tag.Comment = value; Set(); } }
+		public string TrackId { get { return Tag.Track.ToString(); } set { File.Tag.Track = Convert.ToUInt32(value); Set(); } }
+		public string Genre { get { return Tag.FirstGenre; } set { File.Tag.Genres = new[] { value }; Set(); } }
 
 		public Mp3File(string file)
 		{
@@ -58,6 +61,7 @@ namespace mp3lib
 			FilePath = file;
 
 			File = TagLib.File.Create(file);
+			Tag = File.GetTag(TagTypes.Id3v2);
 		}
 
 		private void Set()

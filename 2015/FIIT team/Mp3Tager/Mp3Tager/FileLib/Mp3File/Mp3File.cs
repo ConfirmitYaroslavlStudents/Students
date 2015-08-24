@@ -71,7 +71,23 @@ namespace FileLib
             _content.Tag.Title = Tags.Title;
             _content.Tag.Album = Tags.Album;
             _content.Tag.Track = Tags.Track;
-        }        
+        }
+
+        public void MakeBackup(Action functionToExecute)
+        {
+            using (var backup = new FileBackuper(this))
+            {
+                try
+                {
+                    functionToExecute.Invoke();
+                }
+                catch (Exception e)
+                {
+                    backup.RestoreFromBackup();
+                    throw new Exception("File was restored from backup because of exception:", e);
+                }
+            }
+        }
 
         public IMp3File CopyTo(string uniquePath)
         {

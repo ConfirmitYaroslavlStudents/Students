@@ -29,7 +29,7 @@ namespace CommandCreation
             }
             return resultMessage.ToString();
         }
-        
+
         protected override void SetIfShouldBeCompleted()
         {
             ShouldBeCompleted = true;
@@ -40,7 +40,7 @@ namespace CommandCreation
             foreach (var mp3File in _mp3Files)
             {
                 if (EnableBackup)
-                    mp3File.SaveWithBackup();
+                    ((Mp3File)mp3File).MakeBackup(mp3File.Save);
                 else
                     mp3File.Save();
             }
@@ -54,7 +54,7 @@ namespace CommandCreation
             var newName = GetNewName(mp3File);
             var directory = Path.GetDirectoryName(mp3File.FullName);
             var newFullName = Path.Combine(directory, newName + @".mp3");
-            if (newFullName == mp3File.FullName)
+            if (newFullName != mp3File.FullName)
             {
                 newFullName = _pathCreator.CreateUniqueName(newFullName);
             }
@@ -68,7 +68,7 @@ namespace CommandCreation
         {
             var newName = new StringBuilder(_mask);
 
-            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(mp3File.Tags.Artist))                
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(mp3File.Tags.Artist))
                 newName.Replace(TagNames.Artist, mp3File.Tags.Artist);
             if (_mask.Contains(TagNames.Title) && !string.IsNullOrEmpty(mp3File.Tags.Title))
                 newName.Replace(TagNames.Title, mp3File.Tags.Title);

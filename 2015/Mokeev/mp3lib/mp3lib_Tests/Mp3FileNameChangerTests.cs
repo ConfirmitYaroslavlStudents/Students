@@ -13,7 +13,7 @@ namespace mp3lib_Tests
 		public void Test_NewFileName()
 		{
 			var mp3 = new TestMp3File("C:/test/mp3s/1. asd - qwe.mp3") {Artist = "art", TrackId = "1", Title = "ttl"};
-			var renamer = new Mp3FileNameChanger(mp3, "{id}. {artist} - {title}");
+			var renamer = new Mp3FileNameChanger(mp3, "{id}. {artist} - {title}", new TestRollbackSaver(new [] {""}));
 
 			Assert.AreEqual("1. art - ttl", renamer.GetNewFileName());
 		}
@@ -22,7 +22,7 @@ namespace mp3lib_Tests
 		public void Test_ManualFileNameReplacements()
 		{
 			var mp3 = new TestMp3File("C:/test/mp3s/1. asd - qwe.mp3") { Artist = "art", TrackId = "1", Title = "ttl" };
-			var renamer = new Mp3FileNameChanger(mp3, "{id}. {artist} - {title}");
+			var renamer = new Mp3FileNameChanger(mp3, "{id}. {artist} - {title}", new TestRollbackSaver(new[] { "" }));
 			renamer.AddTagReplacement(TagType.Id, mp3.TrackId);
 			renamer.AddTagReplacement(TagType.Artist, mp3.Artist);
 			renamer.AddTagReplacement(TagType.Title, mp3.Title);

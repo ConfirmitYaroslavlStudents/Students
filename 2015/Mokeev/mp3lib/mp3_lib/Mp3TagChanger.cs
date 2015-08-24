@@ -8,11 +8,11 @@ namespace mp3lib
 {
 	public class Mp3TagChanger : IRecoverable
 	{
-		private List<KeyValuePair<TagType, string>> _changes = new List<KeyValuePair<TagType, string>>();
-		private readonly ISaver _backuper;
+		private readonly List<KeyValuePair<TagType, string>> _changes = new List<KeyValuePair<TagType, string>>();
+		private ISaver Backuper { get; }
 
-		private string Mp3RealName { get; set; }
-		private IMp3File Mp3 { get; set; }
+		private string Mp3RealName { get; }
+		private IMp3File Mp3 { get; }
 		private readonly string _mask;
 
 		private readonly DataExtracter _dataExtracter;
@@ -21,7 +21,7 @@ namespace mp3lib
 		{
 			Mp3 = mp3File;
 
-			_backuper = backuper;
+			Backuper = backuper;
 			_mask = mask;
 
 			Mp3RealName = Path.GetFileNameWithoutExtension(mp3File.FilePath);
@@ -73,7 +73,7 @@ namespace mp3lib
 
 		public void Dispose()
 		{
-			new RollbackManager(_backuper).AddAction(new RollbackInfo(ProgramAction.Mp3Edit, new [] {Mp3.FilePath}, _mask, _changes));
+			new RollbackManager(Backuper).AddAction(new RollbackInfo(ProgramAction.Mp3Edit, new [] {Mp3.FilePath}, _mask, _changes)).Dispose();
 		}
 
 		public void Rollback(RollbackInfo info)

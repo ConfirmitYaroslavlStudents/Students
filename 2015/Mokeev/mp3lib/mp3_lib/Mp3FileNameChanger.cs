@@ -12,10 +12,14 @@ namespace mp3lib
 		private readonly IMp3File _mp3File;
 		private readonly DataExtracter _dataExtracter;
 
+		private readonly ISaver _saver;
+		private readonly string _mask;
+		private StringBuilder _data;
+
 		private Dictionary<TagType, string> Id3Data { get; }
 		private readonly bool _fastChanges;
 
-		public Mp3FileNameChanger(IMp3File file, string mask, bool fastChanges = false)
+		public Mp3FileNameChanger(IMp3File file, string mask, ISaver saver, bool fastChanges = false)
 		{
 			_mp3File = file;
 			Id3Data = new Dictionary<TagType, string>();
@@ -23,6 +27,9 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 
 			_fastChanges = fastChanges;
+
+			_saver = saver;
+			_mask = mask;
 		}
 
 
@@ -58,17 +65,23 @@ namespace mp3lib
 				resultFileName.Replace("{" + tagInfo.Key.ToString().ToLower() + "}", tagInfo.Value);
 			}
 
+			_data = resultFileName;
+
 			return resultFileName.ToString();
 		}
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.FileRename, new[] {_mp3File.FilePath}, _mask,
+				_data.ToString())).Dispose();
 		}
 
 		public void Rollback(RollbackInfo info)
 		{
-			throw new NotImplementedException();
+			var data = info.Data as string;
+			if(data == null) return;
+
+            _mp3File.ChangeFileName(Path.GetFileNameWithoutExtension(data));
 		}
     }
 }

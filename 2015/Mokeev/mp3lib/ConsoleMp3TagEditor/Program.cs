@@ -9,12 +9,12 @@ namespace ConsoleMp3TagEditor
 {
 	public static class Program
 	{
-		private static readonly string RollbackData = Environment.CurrentDirectory+"/restoreData.xml";
+		private static readonly string RollbackData = Environment.CurrentDirectory+"/restoreData.json";
 
 		public static void Main(string[] args)
 		{
-			try
-			{
+			/*try
+			{*/
 				var argsManager = new ArgsManager(args);
 				argsManager.CheckArgsValidity();
 
@@ -42,7 +42,7 @@ namespace ConsoleMp3TagEditor
 
 					case ProgramAction.FileRename:
 						mp3 = new Mp3File(data.Path);
-						using (var renamer = new Mp3FileNameChanger(mp3, data.Mask))
+						using (var renamer = new Mp3FileNameChanger(mp3, data.Mask, new FileSaver(RollbackData)))
 						{
 							var newFileName = renamer.GetNewFileName();
 							mp3.ChangeFileName(newFileName);
@@ -51,7 +51,7 @@ namespace ConsoleMp3TagEditor
 
 					case ProgramAction.Sync:
 						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
-						using (var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication()))
+						using (var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication(), new FileSaver(RollbackData)))
 						{
 							syncer.SyncFiles();
 						}
@@ -59,7 +59,6 @@ namespace ConsoleMp3TagEditor
 						break;
 
 					case ProgramAction.Rollback:
-						//throw new NotImplementedException();
 
 						using (var rollbackSystem = new RollbackManager(new FileSaver(RollbackData)))
 						{
@@ -78,11 +77,11 @@ namespace ConsoleMp3TagEditor
 				}
 
 				Console.WriteLine("Done!");
-			}
+			/*}
 			catch (Exception e)
 			{
 #if DEBUG
-				Console.WriteLine("Exeption: \n{0} \n\nAt:\n{1}", e.Message, e.StackTrace);
+				Console.WriteLine("Exeption: \r\n{0} \r\n\nAt:\n{1}", e.Message, e.StackTrace);
 #else
 				Console.WriteLine("Error occured: {0}", e.Message);
 #endif
@@ -90,7 +89,7 @@ namespace ConsoleMp3TagEditor
 			finally
 			{
 				Console.ReadKey();
-			}
+			}*/
 		}
 	}
 }

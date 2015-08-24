@@ -40,8 +40,8 @@ namespace FileLib
 
         public void SaveWithBackup()
         {
-            // todo: rename --backup-ignore "" {title}
-            // todo: tumbler to switch off backup process
+            // todo: *done* rename --backup-ignore "" {title}
+            // todo: *done* tumbler to switch off backup process
             using (var backup = new FileBackuper(this))
             {
                 try

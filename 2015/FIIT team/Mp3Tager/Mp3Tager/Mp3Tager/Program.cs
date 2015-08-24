@@ -3,7 +3,7 @@ using CommandCreation;
 
 namespace Mp3Tager
 {
-    // TODO: Task: plan of operations
+    // TODO: *done* Task: plan of operations
 
     // TODO: switch count? visitor
     class Program

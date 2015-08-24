@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Tests.Fakes
 {
-    class FakeUniquePathCreator : BaseUniquePathCreator
+    class FakeMp3Directory : BaseDirectory
     {
         private readonly HashSet<string> _paths = new HashSet<string>
         {
@@ -13,6 +13,11 @@ namespace Tests.Fakes
         protected override bool Exists(string path)
         {
             return _paths.Contains(path);
+        }
+
+        public override IEnumerable<IMp3File> GetFiles(string directory)
+        {
+            return new List<IMp3File>();
         }
     }
 }

@@ -12,17 +12,28 @@ namespace Mp3Tager
             if (!command.ShouldBeCompleted) return;
 
             worker.WriteLine("\n\nSave changes? Input y/n");
+
+            while (!GetAnswerOnSavingChanges(worker, command))
+            {
+                worker.WriteLine("\nWrong input, please write y for Yes and n for No:\n");
+
+            }           
+        }
+
+        private bool GetAnswerOnSavingChanges(IWorker worker, Command command)
+        {
             var answer = worker.ReadLine();
-            // TODO: how it should react in case of other letters??
             switch (answer)
             {
                 case "y":
                     command.Complete();
-                    worker.WriteLine("Command successfully executed.");
-                    break;
+                    worker.WriteLine("\nCommand successfully executed.");
+                    return true;
                 case "n":
-                    worker.WriteLine("Command canceled");
-                    break;
+                    worker.WriteLine("\nCommand canceled");
+                    return true;
+                default:
+                    return false;
             }
         }
     }

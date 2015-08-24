@@ -35,7 +35,7 @@ namespace CommandCreation
                     parser.CheckIfCanBeExecuted(args, NumberOfCommandArguments[CommandNames.Rename]);
                     files = GetFilesFromPath(args[1]);
                     mask = args[2];
-                    return new RenameCommand(files, new UniquePathCreator(), mask)
+                    return new RenameCommand(files, new Mp3Directory(), mask)
                     {
                         EnableBackup = !(args.Length == 4 && args[3] == "--backup-ignore")
                     };
@@ -69,8 +69,8 @@ namespace CommandCreation
             }
             else
             {
-                var directory = new Mp3Directory(path);
-                files.AddRange(directory.GetFiles());
+                var directory = new Mp3Directory();
+                files.AddRange(directory.GetFiles(path));
             }
             return files;
         }

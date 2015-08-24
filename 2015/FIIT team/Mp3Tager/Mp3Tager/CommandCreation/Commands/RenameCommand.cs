@@ -11,9 +11,9 @@ namespace CommandCreation
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly string _mask;
-        private readonly BaseUniquePathCreator _pathCreator;
+        private readonly BaseDirectory _pathCreator;
 
-        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseUniquePathCreator pathCreator, string mask)
+        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseDirectory pathCreator, string mask)
         {
             _mp3Files = mp3Files;
             _mask = mask;

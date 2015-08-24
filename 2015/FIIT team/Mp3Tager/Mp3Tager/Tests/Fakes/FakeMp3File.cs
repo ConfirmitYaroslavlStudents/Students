@@ -4,11 +4,11 @@ namespace Tests
 {
     public class FakeMp3File : IMp3File
     {
-        private readonly BaseUniquePathCreator _checker;
+        private readonly BaseDirectory _checker;
 
         public Mp3Tags Tags { get; private set; }
 
-        public FakeMp3File(Mp3Tags tags, string path, BaseUniquePathCreator checker)
+        public FakeMp3File(Mp3Tags tags, string path, BaseDirectory checker)
         {            
             Tags = tags;
             FullName = path;
@@ -41,6 +41,11 @@ namespace Tests
         }
 
         public void Delete()
+        {
+        }
+
+
+        public void SaveWithBackup()
         {
         }
     }

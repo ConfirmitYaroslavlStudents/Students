@@ -12,7 +12,7 @@ namespace Tests
     public class ChangeTagsCommandTest
     {
         private const string SourceFolder = @"D:\music\";
-        private readonly FakeUniquePathCreator _checker = new FakeUniquePathCreator();
+        private readonly FakeMp3Directory _checker = new FakeMp3Directory();
 
         [TestMethod]
         public void Change1Tags_Successful()

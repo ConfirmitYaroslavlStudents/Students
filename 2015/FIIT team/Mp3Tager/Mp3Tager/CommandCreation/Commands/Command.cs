@@ -4,7 +4,7 @@
     {
         protected Command()
         {
-            SetIfShouldBeCompleted();        
+            SetIfShouldBeCompleted();
         }
 
         public bool ShouldBeCompleted { get; protected set; }

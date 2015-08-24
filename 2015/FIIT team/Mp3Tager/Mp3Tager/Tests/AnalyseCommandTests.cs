@@ -9,7 +9,7 @@ namespace Tests
     [TestClass]
     public class AnalyseCommandTests
     {
-        private readonly BaseUniquePathCreator _checker = new FakeUniquePathCreator();
+        private readonly BaseDirectory _checker = new FakeMp3Directory();
         private const string SourceFolder = @"D:\music\";
         private List<IMp3File> _mp3Files;
         private string _mask;

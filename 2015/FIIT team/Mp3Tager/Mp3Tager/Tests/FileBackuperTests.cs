@@ -11,7 +11,7 @@ namespace Tests
         [TestMethod]
         public void Backup_Successful()
         {            
-            using (var backup = new FileBackuper(new FakeMp3File(new Mp3Tags(), @"D:\music\audioq.mp3", new FakeUniquePathCreator())))
+            using (var backup = new FileBackuper(new FakeMp3File(new Mp3Tags(), @"D:\music\audioq.mp3", new FakeMp3Directory())))
             {
                 var actual = backup.RestoreFromBackup();
                 Assert.IsTrue(actual);

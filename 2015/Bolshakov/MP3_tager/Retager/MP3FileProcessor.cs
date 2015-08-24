@@ -73,7 +73,7 @@ namespace Mp3Handler
             var fileTags = new SortedSet<FrameType>(_fileHandler.GetTags().Keys);
 
             var pathTagsIsBad = pathTagsValue == null;
-            var fileTagsIsBad = !requringTags.SetEquals(fileTags);
+            var fileTagsIsBad = !requringTags.IsSubsetOf(fileTags);
 
             if (pathTagsIsBad && !fileTagsIsBad)
                 return RenameFile(pattern);

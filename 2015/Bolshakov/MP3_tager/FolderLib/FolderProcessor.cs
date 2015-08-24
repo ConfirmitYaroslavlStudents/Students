@@ -18,9 +18,24 @@ namespace FolderLib
             FileHandlerFactory();
         }
 
-        public List<Dictionary<FrameType,TagDifference>> GetDifference(string path)
+        public LateWriteFileHandler LateFileHandler
         {
-            throw new NotImplementedException();
+            get { return _lateFileHandler; }
+        }
+
+        public Dictionary<string,Dictionary<FrameType,TagDifference>> GetDifferences(string path, string pattern)
+        {
+            var files = _folderHandler.GetAllMp3s(path);
+            if (files.Count == 0)
+                return null;
+            var mp3Processor = new Mp3FileProcessor(_lateFileHandler);
+            var differences = new Dictionary<string, Dictionary<FrameType, TagDifference>>();
+            foreach (var file in files)
+            {
+                _lateFileHandler.FilePath = file;
+                differences.Add(file,mp3Processor.Difference(pattern));
+            }
+            return differences;
         }
 
         public bool PrepareSynch(string path, string pattern)
@@ -44,7 +59,7 @@ namespace FolderLib
             return false;
         }
 
-        public bool ComleteSych(int[] notToWrite)
+        public bool CompleteSych(int[] notToWrite)
         {
             if (_synchInProgres)
             {

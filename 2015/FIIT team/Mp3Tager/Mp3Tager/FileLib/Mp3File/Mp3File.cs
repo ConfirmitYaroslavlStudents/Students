@@ -9,7 +9,9 @@ namespace FileLib
 
         public Mp3Tags Tags { get; private set; }
 
-        public string FullName { get; set; }
+        public string FullName { get; private set; }
+
+        private string _newFullName;
 
         public Mp3File(TagLib.File mp3Content)
         {           
@@ -24,30 +26,34 @@ namespace FileLib
                 Genre = mp3Content.Tag.FirstGenre,
                 Track = mp3Content.Tag.Track
             };
-        }        
+        }
 
         public void Save()
         {
             SaveTags();
+            _content.Save();
+            if (_newFullName != null)
+            {
+                MoveTo(_newFullName);
+            }
+        }
 
-            /*using (var backup = new FileBackuper(this))
-            {                
+        public void SaveWithBackup()
+        {
+            // todo: *done* rename --backup-ignore "" {title}
+            // todo: *done* tumbler to switch off backup process
+            using (var backup = new FileBackuper(this))
+            {
                 try
                 {
-                    _content.Save();
-                    if (_content.Name != FullName)
-                        MoveTo(FullName);
+                    Save();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     backup.RestoreFromBackup();
-
                     throw new Exception("File was restored from backup because of exception:", e);
                 }
-            }*/
-            _content.Save();
-            if (_content.Name != FullName)
-                MoveTo(FullName);
+            }
         }
 
         private void SaveTags()
@@ -80,24 +86,14 @@ namespace FileLib
 
         public void MoveTo(string uniquePath)
         {
-            // todo: rename --backup-ignore "" {title}
-            // todo: tumbler to switch off backup process
-            /*using (var backup = new FileBackuper(this))
-            {
-                try
-                {
-                    File.Move(FullName, uniquePath);
-                    FullName = uniquePath;
-                }
-                catch (Exception e)
-                {
-                    backup.RestoreFromBackup();
-                    throw new Exception("File was restored from backup because of exception:", e);
-                }
-            }*/
-            var originalName = Path.Combine(Path.GetDirectoryName(FullName), _content.Name);
-            File.Move(originalName, uniquePath);
+            File.Move(FullName, uniquePath);
             FullName = uniquePath;
+            // TODO: what happen with _content?
+        }
+
+        public void MoveTo(string uniquePath, bool safe)
+        {
+            _newFullName = uniquePath;
         }
     }
 }

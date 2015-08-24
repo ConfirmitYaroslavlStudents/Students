@@ -4,7 +4,7 @@ using Mp3Handler;
 
 namespace FolderLib
 {
-    class LateWriteFileHandler:IFileHandler
+    public class LateWriteFileHandler:IFileHandler
     {
         public List<RenameAction> ToRename { get; private set; }
         public List<RetagAction> ToRetag { get; private set; }
@@ -32,17 +32,9 @@ namespace FolderLib
 
         public void SetTags(Dictionary<FrameType, string> tags)
         {
-            if (!_namesList.Contains(_fileHandler.FilePath))
-            {
-                _namesList.Add(_fileHandler.FilePath);
                 var act = new RetagAction(_fileHandler.SetTags, tags, _fileHandler.FilePath);
                 ToRetag.Add(act);
                 _actions.Enqueue(act);
-            }
-            else
-            {
-                NameCollisions.Add(_fileHandler.FilePath);
-            }
         }
 
         public void Rename(string newName)

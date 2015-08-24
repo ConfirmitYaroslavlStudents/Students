@@ -3,24 +3,23 @@ using CommandCreation;
 
 namespace Mp3Tager
 {
-    // TODO: Task: plan of operations
+    // TODO: *done* Task: plan of operations
 
     // TODO: switch count? visitor
     class Program
     {
         static void Main(string[] args)
         {
-            IWriter writer = new ConsoleWriter();
+            IWorker worker = new ConsoleWorker();
 
             try
             {
                 var app = new Application();
-                app.Execute(args, writer);
-                writer.WriteLine("Command successfully executed.");
+                app.Execute(args, worker);               
             }
             catch (Exception e)
             {
-                writer.WriteLine(e.Message);
+                worker.WriteLine(e.Message);
             }
         }
     }

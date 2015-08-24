@@ -11,8 +11,7 @@ namespace CommandCreation
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly MaskParser _maskParser;
-
-        private Dictionary<string, List<string>> _indexDict;
+        private readonly Dictionary<string, List<string>> _indexDict;
 
         public AnalyseCommand(IEnumerable<IMp3File> mp3Files, string mask)
         {
@@ -40,6 +39,11 @@ namespace CommandCreation
                 resultMessage.Append(IndexAnalyse());
             return resultMessage.ToString();
         }
+        
+        protected override void SetIfShouldBeCompleted()
+        {
+            ShouldBeCompleted = false;
+        }
 
         public override void Complete()
         {
@@ -47,7 +51,6 @@ namespace CommandCreation
 
         private string Analyse(IMp3File mp3File)
         {
-
             var fileName = Path.GetFileNameWithoutExtension(mp3File.FullName);
 
             if (!_maskParser.ValidateFileName(fileName))
@@ -115,33 +118,21 @@ namespace CommandCreation
                 if (!Int32.TryParse(key, out i))
                 {
                     resultMessage.Append("Index must be number\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                     continue;
                 }
 
                 if (i > count)
                 {
                     resultMessage.Append("Index out of range. Maximum is " + count + ":\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                     continue;
                 }
 
                 if (_indexDict[key].Count > 1)
                 {
                     resultMessage.Append("More than one item with index " + key + ":\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
+                    AddInfoInMessage(key, resultMessage);
                     continue;
                 }
 
@@ -149,16 +140,19 @@ namespace CommandCreation
                 {
                     var expectedIndex = ConvertToIndexForm(i, count);
                     resultMessage.Append("Wrong  index, expected " + expectedIndex + ":\n");
-                    foreach (var item in _indexDict[key])
-                    {
-                        resultMessage.Append("\t" + item + "\n");
-                    }
-                    resultMessage.Append("\n");
-                }
-
-                
+                    AddInfoInMessage(key, resultMessage);
+                }                
             }
             return resultMessage.ToString();
+        }
+
+        private void AddInfoInMessage(string key, StringBuilder resultString)
+        {
+            foreach (var item in _indexDict[key])
+            {
+                resultString.Append("\t" + item + "\n");
+            }
+            resultString.Append("\n");
         }
 
         private string OnlyIndexAnalyse()
@@ -180,11 +174,7 @@ namespace CommandCreation
                     if (_indexDict.ContainsKey(form) && form != expectedIndex)
                     {
                         resultMessage.Append("Wrong  index, expected " + expectedIndex + ":\n");
-                        foreach (var item in _indexDict[form])
-                        {
-                            resultMessage.Append("\t" + item + "\n");
-                        }
-                        resultMessage.Append("\n");
+                        AddInfoInMessage(form, resultMessage);
                     }                                              
                 }
                 
@@ -249,6 +239,7 @@ namespace CommandCreation
                 if (!forms.Contains(currentForm))
                     forms.Add(currentForm);
             }
+
             return forms;
         }
 

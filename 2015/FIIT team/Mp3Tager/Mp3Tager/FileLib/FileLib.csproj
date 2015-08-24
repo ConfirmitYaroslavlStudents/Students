@@ -46,10 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileBackuper.cs" />
-    <Compile Include="FileExistenceChecker.cs" />
-    <Compile Include="FileSource\FileSystemSource.cs" />
-    <Compile Include="FileSource\ISource.cs" />
-    <Compile Include="BaseFileExistenceChecker.cs" />
+    <Compile Include="Mp3Directory\Mp3Directory.cs" />
+    <Compile Include="Mp3Directory\BaseDirectory.cs" />
     <Compile Include="Mp3File\IMp3File.cs" />
     <Compile Include="Mp3File\Mp3Tags.cs" />
     <Compile Include="Mp3File\Mp3File.cs" />

@@ -1,21 +1,19 @@
-﻿using FileLib;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using TagLib;
+using FileLib;
 
 namespace CommandCreation
 {
-    // todo: for folder
+    // todo: *done* for folder
     internal class RenameCommand : Command
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly string _mask;
-        private readonly BaseUniquePathCreator _pathCreator;
+        private readonly BaseDirectory _pathCreator;
 
-        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseUniquePathCreator pathCreator, string mask)
+        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseDirectory pathCreator, string mask)
         {
             _mp3Files = mp3Files;
             _mask = mask;
@@ -31,12 +29,20 @@ namespace CommandCreation
             }
             return resultMessage.ToString();
         }
+        
+        protected override void SetIfShouldBeCompleted()
+        {
+            ShouldBeCompleted = true;
+        }
 
         public override void Complete()
         {
             foreach (var mp3File in _mp3Files)
             {
-                mp3File.Save();
+                if (EnableBackup)
+                    mp3File.SaveWithBackup();
+                else
+                    mp3File.Save();
             }
         }
 
@@ -47,10 +53,13 @@ namespace CommandCreation
 
             var newName = GetNewName(mp3File);
             var directory = Path.GetDirectoryName(mp3File.FullName);
-            var uniqueName = _pathCreator.CreateUniqueName(Path.Combine(directory, newName + @".mp3"));
-
-            var resultMessage = mp3File.FullName + " ---> " + uniqueName + "\n";
-            mp3File.FullName = uniqueName;
+            var newFullName = Path.Combine(directory, newName + @".mp3");
+            if (newFullName == mp3File.FullName)
+            {
+                newFullName = _pathCreator.CreateUniqueName(newFullName);
+            }
+            var resultMessage = mp3File.FullName + " ---> " + newFullName + "\n";
+            mp3File.MoveTo(newFullName, true);
 
             return resultMessage;
         }
@@ -72,7 +81,5 @@ namespace CommandCreation
 
             return newName.ToString();
         }
-
-        
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using mp3lib.Rollback;
 
@@ -46,8 +47,6 @@ namespace mp3lib
 			foreach (var fileDifferencese in diffs)
 			{
 				var fileNameChanger = new Mp3FileNameChanger(fileDifferencese.Mp3File, _mask, _saver, true);
-				filesChanged.Add(fileDifferencese.Mp3File.FilePath);
-				var fData = new KeyValuePair<string, Dictionary<TagType, string>>(fileDifferencese.Mp3File.FilePath, fileDifferencese.Mp3File.GetId3Data());
 				foreach (var diff in fileDifferencese.Diffs)
 				{
 					if (string.IsNullOrWhiteSpace(diff.Value.FileNameValue) ^ string.IsNullOrWhiteSpace(diff.Value.TagValue))
@@ -76,7 +75,12 @@ namespace mp3lib
 				}
 
 				var fn = fileNameChanger.GetNewFileName();
-				_data.Add(new KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>(fn, fData));
+				//filesChanged.Add(fileDifferencese.Mp3File.FilePath);
+				var file = Path.GetDirectoryName(fileDifferencese.Mp3File.FilePath) + "\\" + fn + ".mp3";
+				filesChanged.Add(file);
+                var fData = new KeyValuePair<string, Dictionary<TagType, string>>(fileDifferencese.Mp3File.FilePath, fileDifferencese.Mp3File.GetId3Data());
+				_data.Add(
+					new KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>(file, fData));
 				fileDifferencese.Mp3File.ChangeFileName(fn);
 			}
 			_filesChanged = filesChanged;
@@ -84,31 +88,28 @@ namespace mp3lib
 
 		public void Dispose()
 		{
-			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.FileRename, _filesChanged, _mask,
+			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.Sync, _filesChanged, _mask,
 				_data)).Dispose();
 		}
 
 		public void Rollback(RollbackInfo info)
 		{
-			var data = info.Data as List<KeyValuePair<string, KeyValuePair<string, Dictionary<TagType, string>>>>;
+			var data = info.Data;
 
 			if(data == null) return;
 
 			foreach (var item in data)
 			{
-				var mp3 = new Mp3File(item.Key);
-				foreach (var tag in item.Value.Value)
+				var mp3 = new Mp3File(item.Key.ToString());
+				foreach (Newtonsoft.Json.Linq.JProperty tag in item.Value.Value)
 				{
-					mp3[tag.Key] = tag.Value;
+					TagType tt;
+					var valid = TagType.TryParse(tag.First.ToString(), out tt);
+					if(valid) mp3[tt] = tag.Value.ToString();
 				}
 
 				mp3.ChangeFileName(item.Value.Key);
 			}
 		}
-	}
-
-	internal enum ChangeType
-	{
-		File, Tags
 	}
 }

@@ -6,6 +6,7 @@ using System.IO;
 
 namespace CommandCreation
 {
+    // todo : add tests
     public class CommandFactory
     {
         public readonly Dictionary<string, int[]> NumberOfCommandArguments = new Dictionary<string, int[]>()
@@ -65,15 +66,16 @@ namespace CommandCreation
             var files = new List<IMp3File>();
             if (Path.GetExtension(path) != string.Empty)
             {
+                // todo : mp3File - wrapper pattern
                 files.Add(new Mp3File(TagLib.File.Create(path)));
             }
             else
             {
                 var directory = new Mp3Directory();
+
                 files.AddRange(directory.GetFiles(path));
             }
             return files;
         }
-
     }
 }

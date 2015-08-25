@@ -6,7 +6,6 @@ using FileLib;
 
 namespace CommandCreation
 {
-    // todo: *done* for folder
     internal class RenameCommand : Command
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
@@ -22,6 +21,7 @@ namespace CommandCreation
 
         public override string Execute()
         {
+            // todo : logging
             var resultMessage = new StringBuilder();
             foreach (var mp3File in _mp3Files)
             {
@@ -32,6 +32,7 @@ namespace CommandCreation
 
         protected override void SetIfShouldBeCompleted()
         {
+            // todo : try to avoid
             ShouldBeCompleted = true;
         }
 
@@ -54,10 +55,10 @@ namespace CommandCreation
             var newName = GetNewName(mp3File);
             var directory = Path.GetDirectoryName(mp3File.FullName);
             var newFullName = Path.Combine(directory, newName + @".mp3");
+
             if (newFullName != mp3File.FullName)
-            {
                 newFullName = _pathCreator.CreateUniqueName(newFullName);
-            }
+
             var resultMessage = mp3File.FullName + " ---> " + newFullName + "\n";
             mp3File.MoveTo(newFullName, true);
 

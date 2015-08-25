@@ -13,6 +13,7 @@ namespace FileLib
 
         private string _newFullName;
 
+        // todo : TagLib.File  should not be public available
         public Mp3File(TagLib.File mp3Content)
         {           
             _content = mp3Content;
@@ -107,6 +108,7 @@ namespace FileLib
             // TODO: what happen with _content?
         }
 
+        // todo : safe parameter?
         public void MoveTo(string uniquePath, bool safe)
         {
             _newFullName = uniquePath;

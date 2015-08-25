@@ -3,7 +3,6 @@ using System.IO;
 
 namespace FileLib
 {
-    // todo: *done* IDirectory ?
     public class Mp3Directory : BaseDirectory
     {
         protected override bool Exists(string path)

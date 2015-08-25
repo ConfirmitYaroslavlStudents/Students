@@ -2,7 +2,6 @@
 
 namespace FileLib
 {
-    // todo: *done* too many file system abstractions
     public abstract class BaseDirectory
     {
         public abstract IEnumerable<IMp3File> GetFiles(string directory);

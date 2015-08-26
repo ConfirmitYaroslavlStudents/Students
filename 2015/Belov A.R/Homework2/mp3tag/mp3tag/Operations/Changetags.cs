@@ -25,10 +25,12 @@ namespace mp3tager.Operations
             }
           
             _tager = new Tager(new FileLoader());
+          
             if (!_tager.Load(Menu.GetUserInput("path:")))
             {
                 throw new FileNotFoundException("File does not exist");
             }
+        
             Menu.PrintHelp();
             Menu.PrintCurrentFile(_tager.CurrentFile);
            
@@ -73,6 +75,7 @@ namespace mp3tager.Operations
                     index = 0;
 
             } while (Console.ReadKey().Key != ConsoleKey.Enter);
+           
             return result;
         }
 

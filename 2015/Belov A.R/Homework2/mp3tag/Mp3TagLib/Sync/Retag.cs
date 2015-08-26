@@ -1,25 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Mp3TagLib.Sync
 {
-    public class SyncMethods
+    class Retag:SyncOperation
     {
-        public bool TryChangeName(Mask mask,Tager tager)
-        {
-            try
-            {
-                tager.ChangeName(mask);
-                return true;
-            }
-            catch (Exception)
-            {
-
-                return false;
-            }
-        }
-
-        public bool TryChangeTags(Mask mask, Tager tager)
+        public override bool Call(Mask mask, Tager tager)
         {
             try
             {

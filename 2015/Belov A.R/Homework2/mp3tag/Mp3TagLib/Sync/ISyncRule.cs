@@ -5,6 +5,6 @@ namespace Mp3TagLib.Sync
 {
     public interface ISyncRule
     {
-        List<Func<Mask, Tager, bool>> OperationsList { get;}
+        List<SyncOperation> OperationsList { get; }
     }
 }

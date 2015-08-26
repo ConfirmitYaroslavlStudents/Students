@@ -33,9 +33,9 @@ namespace Mp3TagLib.Sync
         {
             var errorFlag = true;
             _tager.CurrentFile = file;
-            foreach (var func in rule.OperationsList)
+            foreach (var operation in rule.OperationsList)
             {
-                if (func(mask, _tager))
+                if (operation.Call(mask, _tager))
                 {
                     ModifiedFiles.Add(_tager.CurrentFile);
                     errorFlag = false;

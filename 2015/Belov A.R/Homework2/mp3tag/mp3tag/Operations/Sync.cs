@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using Mp3TagLib;
 using Mp3TagLib.Operations;
 using Mp3TagLib.Sync;
@@ -11,10 +12,12 @@ namespace mp3tager.Operations
     class Sync:Operation
     {
         public const int ID = 6;
-        private Dictionary<IMp3File, Mp3Memento> _files;  
+        private Dictionary<IMp3File, Mp3Memento> _files;
+
         public Sync()
         {
-            _files=new Dictionary<IMp3File, Mp3Memento>();
+            _files = new Dictionary<IMp3File, Mp3Memento>();
+
             OperationId = ID;
         }
       
@@ -23,6 +26,7 @@ namespace mp3tager.Operations
             if (IsCanceled)
             {
                 RestoreFiles();
+
                 return;
             }
 
@@ -39,10 +43,12 @@ namespace mp3tager.Operations
             synchronizer.Sync(analyzer.NotSynchronizedFiles.Keys, mask);
             
             Menu.PrintChanges(synchronizer.ModifiedFiles);
+
             if (Menu.GetYesNoAnswer("Save changes?\nY/N:"))
             {
                 SaveFilesState(synchronizer.ModifiedFiles);
                 synchronizer.Save();
+
                 Menu.PrintMessage("Successfully");
                 Menu.PrintCollection(string.Format("with {0} errors", synchronizer.ErrorFiles.Count), synchronizer.ErrorFiles, ConsoleColor.Red);
                 Menu.GetUserInput("Press enter...");
@@ -69,6 +75,7 @@ namespace mp3tager.Operations
             {
                 var file = _files.Keys.ElementAt(i);
                 var newMemento = file.GetMemento();
+
                 file.SetMemento(_files[file]);
                 _files[file] = newMemento;
                 file.Save();

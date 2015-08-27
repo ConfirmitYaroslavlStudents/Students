@@ -7,13 +7,13 @@ using Mp3TagLib.Sync;
 
 namespace Mp3TagLib.Plan
 {
-     [Serializable]
+    [Serializable]
     public class PlanItem
     {
         public string FilePath { get; private set; }
         public ISyncRule Rule { get; private set; }
         public Mask Mask { get; private set; }
-        public string Message { get;private set; }
+        public string Message { get; private set; }
 
         public PlanItem(Mask mask, string path, ISyncRule rule, string message)
         {

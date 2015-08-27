@@ -5,13 +5,13 @@ using System.Text;
 namespace Mp3TagLib.Plan
 {
     [Serializable]
-    public class SyncPlan:IEnumerable<PlanItem>
+    public class SyncPlan : IEnumerable<PlanItem>
     {
         private List<PlanItem> _body;
 
         public SyncPlan()
         {
-            _body=new List<PlanItem>();
+            _body = new List<PlanItem>();
 
         }
 
@@ -22,7 +22,7 @@ namespace Mp3TagLib.Plan
 
         public override string ToString()
         {
-            StringBuilder builder=new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             foreach (var planItem in _body)
             {
                 builder.AppendLine(planItem.Message);

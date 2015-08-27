@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using mp3lib;
 using mp3lib.Rollback;
 
@@ -59,7 +60,6 @@ namespace ConsoleMp3TagEditor
 						break;
 
 					case ProgramAction.Rollback:
-
 						using (var rollbackSystem = new RollbackManager(new FileSaver(RollbackData)))
 						{
 							var state = rollbackSystem.Rollback();

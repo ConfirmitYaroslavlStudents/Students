@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using Mp3TagLib;
 using Mp3TagLib.Operations;
 using Mp3TagLib.Sync;
@@ -21,10 +22,10 @@ namespace mp3tager.Operations
     
         public override void Call()
         {
-
             if (IsCanceled)
             {
                 RestoreFiles();
+
                 return;
             }
 
@@ -69,10 +70,8 @@ namespace mp3tager.Operations
                 {
                     notSynchronizedFile.Key.SetMemento(memento);
                 }
-
             }
         }
-
     
         public override void Cancel()
         {

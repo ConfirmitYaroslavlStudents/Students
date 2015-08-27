@@ -6,7 +6,7 @@ using Mp3TagLib.Operations;
 
 namespace mp3tager.Operations
 {
-    class Changetags:Operation
+    class Changetags : Operation
     {
         public const int ID = 3;
         private Tager _tager;
@@ -22,15 +22,14 @@ namespace mp3tager.Operations
             if (IsCanceled)
             {
                 RestoreFile();
+
                 return;
             }
           
             _tager = new Tager(new FileLoader());
           
             if (!_tager.Load(Menu.GetUserInput("path:")))
-            {
                 throw new FileNotFoundException("File does not exist");
-            }
         
             Menu.PrintHelp();
             Menu.PrintCurrentFile(_tager.CurrentFile);

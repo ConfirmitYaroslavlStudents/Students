@@ -36,7 +36,7 @@ namespace MP3tager
                             LaunchSynchMode(path,pattern);
                             break;
                         default:
-                            Console.WriteLine(Messeges.InvalidFirsArg);
+                            Console.WriteLine(Messeges.ShortHelp);
                             break;
                     }
                 }
@@ -48,10 +48,6 @@ namespace MP3tager
             catch(FileNotFoundException)
             {
                 Console.WriteLine(Messeges.FileNotExist);
-            }
-            catch(KeyNotFoundException)
-            {
-                Console.WriteLine(Messeges.KeyNotFound);
             }
             
         }

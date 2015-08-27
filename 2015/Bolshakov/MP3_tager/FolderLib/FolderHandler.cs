@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FolderLib
 {
-    public class FolderHandler
+    public class FolderHandler : IFolderHandler
     {
         public List<string> GetAllMp3s(string path)
         {

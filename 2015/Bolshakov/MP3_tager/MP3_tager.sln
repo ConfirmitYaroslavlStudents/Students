@@ -7,9 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3Tager", "MP3_tager\Mp3Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "ParserTests\Tests.csproj", "{158F2A62-73A5-462E-A59A-973DC902C71F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3HandlerLib", "Retager\Mp3HandlerLib.csproj", "{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileProcessorLib", "Retager\FileProcessorLib.csproj", "{D0DB0956-45A9-448B-9EC0-A87B2CD7AE46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderLib", "FolderLib\FolderLib.csproj", "{5A972971-3D81-40E0-B72D-9147AD34F888}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderProcessorLib", "FolderLib\FolderProcessorLib.csproj", "{5A972971-3D81-40E0-B72D-9147AD34F888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiverLibrary", "ArchiverLibrary\ArchiverLibrary.csproj", "{08183709-4475-4FA8-89DD-FE4B73EF1077}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagParserLib", "TagParserLib\TagParserLib.csproj", "{74CAF903-17F2-4E3B-9F33-4467D8FD173B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{5A972971-3D81-40E0-B72D-9147AD34F888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A972971-3D81-40E0-B72D-9147AD34F888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A972971-3D81-40E0-B72D-9147AD34F888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08183709-4475-4FA8-89DD-FE4B73EF1077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08183709-4475-4FA8-89DD-FE4B73EF1077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08183709-4475-4FA8-89DD-FE4B73EF1077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08183709-4475-4FA8-89DD-FE4B73EF1077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74CAF903-17F2-4E3B-9F33-4467D8FD173B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74CAF903-17F2-4E3B-9F33-4467D8FD173B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74CAF903-17F2-4E3B-9F33-4467D8FD173B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74CAF903-17F2-4E3B-9F33-4467D8FD173B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

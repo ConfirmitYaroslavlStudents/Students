@@ -51,15 +51,24 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FileProcessorTests.cs" />
+    <Compile Include="FolderProcessorTests.cs" />
     <Compile Include="PareserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CursorStringTest.cs" />
-    <Compile Include="TestFileHandler.cs" />
+    <Compile Include="TestFileSystem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Retager\Mp3HandlerLib.csproj">
+    <ProjectReference Include="..\FolderLib\FolderProcessorLib.csproj">
+      <Project>{5a972971-3d81-40e0-b72d-9147ad34f888}</Project>
+      <Name>FolderProcessorLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retager\FileProcessorLib.csproj">
       <Project>{d0db0956-45a9-448b-9ec0-a87b2cd7ae46}</Project>
-      <Name>Mp3HandlerLib</Name>
+      <Name>FileProcessorLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TagParserLib\TagParserLib.csproj">
+      <Project>{74caf903-17f2-4e3b-9f33-4467d8fd173b}</Project>
+      <Name>TagParserLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

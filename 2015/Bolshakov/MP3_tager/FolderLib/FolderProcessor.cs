@@ -6,7 +6,7 @@ namespace FolderLib
 {
     public class FolderProcessor
     {
-        public FolderProcessor(FolderHandler folderHandler, IFileHandler fileHandler)
+        public FolderProcessor(IFolderHandler folderHandler, IFileHandler fileHandler)
         {
             _folderHandler = folderHandler;
             _lateFileHandler = new LateWriteFileHandler(fileHandler);
@@ -15,7 +15,7 @@ namespace FolderLib
         public FolderProcessor()
         {
             _folderHandler = new FolderHandler();
-            FileHandlerFactory();
+            FileHandlerBuilder();
         }
 
         public LateWriteFileHandler LateFileHandler
@@ -33,7 +33,9 @@ namespace FolderLib
             foreach (var file in files)
             {
                 _lateFileHandler.FilePath = file;
-                differences.Add(file,mp3Processor.Difference(pattern));
+                var diff = mp3Processor.Difference(pattern);
+                if(diff != null)
+                    differences.Add(file,diff);
             }
             return differences;
         }
@@ -71,14 +73,15 @@ namespace FolderLib
             return false;
         }
 
-        private void FileHandlerFactory()
+
+        private void FileHandlerBuilder()
         {
             var fileHandler = new Id3LibFileHandler();
             _lateFileHandler = new LateWriteFileHandler(fileHandler);
         }
 
         private LateWriteFileHandler _lateFileHandler;
-        private FolderHandler _folderHandler;
+        private IFolderHandler _folderHandler;
         private bool _synchInProgres;
     }
 }

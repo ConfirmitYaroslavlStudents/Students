@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A972971-3D81-40E0-B72D-9147AD34F888}</ProjectGuid>
+    <ProjectGuid>{B198A2CA-CB3E-4F83-A369-A17FF66C5DF0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FolderLib</RootNamespace>
-    <AssemblyName>FolderLib</AssemblyName>
+    <RootNamespace>Archiver</RootNamespace>
+    <AssemblyName>Archiver</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,16 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FolderProcessor.cs" />
-    <Compile Include="FolderHandler.cs" />
-    <Compile Include="LateWriteFileHandler.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Retager\Mp3HandlerLib.csproj">
-      <Project>{d0db0956-45a9-448b-9ec0-a87b2cd7ae46}</Project>
-      <Name>Mp3HandlerLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

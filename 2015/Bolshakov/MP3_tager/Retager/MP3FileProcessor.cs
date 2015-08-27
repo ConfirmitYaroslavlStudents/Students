@@ -15,10 +15,6 @@ namespace Mp3Handler
             _fileHandler = new Id3LibFileHandler(filePath);
         }
 
-        //
-        //   Не нарушает ли класс SRP имея методы с разными функциями?
-        //
-
         public bool RetagFile(string pattern)
         {
             var parser = new TagParser(pattern);
@@ -43,27 +39,6 @@ namespace Mp3Handler
             return true;
         }
 
-        public Dictionary<FrameType, TagDifference> Difference(string pattern)
-        {
-            var parser = new TagParser(pattern);
-            var pathTags = parser.GetTagsValue(_fileHandler.FileName);
-            if (pathTags == null)
-                return null;
-
-            var fileTags = _fileHandler.GetTags(GetTagsOption.DontRemoveEmptyTags);
-
-            var tagDifference = new Dictionary<FrameType,TagDifference>();
-
-            //todo: convert into linq
-            foreach (var pathTag in pathTags)
-            {
-                if (pathTag.Value != fileTags[pathTag.Key])
-                    tagDifference.Add(pathTag.Key, new TagDifference(fileTags[pathTag.Key], pathTag.Value));
-            }
-
-            return tagDifference.Count != 0 ? tagDifference : null;
-        }
-
         public bool Synchronize(string pattern)
         {
             var parser = new TagParser(pattern);
@@ -80,6 +55,26 @@ namespace Mp3Handler
             if (!pathTagsIsBad && fileTagsIsBad)
                 return RetagFile(pattern);
             return false;
+        }
+
+        public Dictionary<FrameType, TagDifference> Difference(string pattern)
+        {
+            var parser = new TagParser(pattern);
+            var pathTags = parser.GetTagsValue(_fileHandler.FileName);
+            if (pathTags == null)
+                return null;
+
+            var fileTags = _fileHandler.GetTags(GetTagsOption.DontRemoveEmptyTags);
+
+            var tagDifference = new Dictionary<FrameType,TagDifference>();
+
+            foreach (var pathTag in pathTags)
+            {
+                if (pathTag.Value != fileTags[pathTag.Key])
+                    tagDifference.Add(pathTag.Key, new TagDifference(fileTags[pathTag.Key], pathTag.Value));
+            }
+
+            return tagDifference.Count != 0 ? tagDifference : null;
         }
 
         private IFileHandler _fileHandler;

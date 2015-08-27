@@ -40,6 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzer.cs" />
+    <Compile Include="FileProblem.cs" />
+    <Compile Include="Plan\IPlanProvider.cs" />
+    <Compile Include="Plan\SyncPlan.cs" />
+    <Compile Include="Plan\PlanBuilder.cs" />
+    <Compile Include="Plan\PlanItem.cs" />
     <Compile Include="Sync\DefaultSyncRule.cs" />
     <Compile Include="IFileLoader.cs" />
     <Compile Include="IMp3File.cs" />

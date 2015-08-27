@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mp3TagLib.Sync
 {
+    [Serializable]
     public abstract class SyncOperation
     {
         public abstract bool Call(Mask mask, Tager tager);

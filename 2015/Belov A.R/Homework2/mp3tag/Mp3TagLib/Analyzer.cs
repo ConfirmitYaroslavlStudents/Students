@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mp3TagLib.Plan;
 
 namespace Mp3TagLib
 {
@@ -61,24 +62,30 @@ namespace Mp3TagLib
 
         string GetFileInfo(Mask mask)
         {
-            var badTags = _tager.GetIncorectTags();
+            var badTags = _tager.GetIncorectTags(mask);
             StringBuilder builder = new StringBuilder();
-            bool maskContainsBadTag = false;
            
             foreach (var badTag in badTags)
             {
-                if (mask.Contains(badTag.ToString().ToLower()))
-                {
-                    
-                    maskContainsBadTag = true;
                     builder.Append(badTag + " is empty;");
-                }
             }
            
-            if(maskContainsBadTag)
-            return "Bad tags:" + builder;
+            if(badTags.Any())
+             return "Bad tags:" + builder;
             
             return "Bad name";
+        }
+
+        public SyncPlan BuildPlan(IEnumerable<string> paths,Mask mask)
+        {
+            Analyze(paths,mask);
+            PlanBuilder builder=new PlanBuilder(_tager,mask);
+            var plan=builder.Build(NotSynchronizedFiles.Keys);
+            foreach (var errorFile in builder.ErrorFiles)
+            {
+                ErrorFiles.Add(errorFile.Key,errorFile.Value);
+            }
+            return plan;
         }
  
     }

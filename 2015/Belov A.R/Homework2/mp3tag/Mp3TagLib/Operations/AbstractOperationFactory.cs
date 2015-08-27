@@ -4,6 +4,7 @@
     {
         public abstract Operation CreateOperation(int id);
         public abstract Operation CreateOperation(string name);
+       
         public Operation Create(string name, OperationNode lastOperationNode)
         {
             switch (name.ToLower())
@@ -22,6 +23,7 @@
                     return CreateOperation(name);
             }
         }
+      
         public Operation Create(int id, OperationNode lastOperationNode)
         {
             switch (id)

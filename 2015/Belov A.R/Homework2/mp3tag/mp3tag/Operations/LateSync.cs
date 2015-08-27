@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Mp3TagLib;
 using Mp3TagLib.Operations;
+using Mp3TagLib.Plan;
 using Mp3TagLib.Sync;
 
 namespace mp3tager.Operations
 {
-    class Sync:Operation
+    class LateSync:Operation
     {
-        public const int ID = 6;
-        private Dictionary<IMp3File, Mp3Memento> _files;  
-        public Sync()
+        public const int ID = 8;
+        private Dictionary<IMp3File, Mp3Memento> _files;
+        public LateSync()
         {
             _files=new Dictionary<IMp3File, Mp3Memento>();
             OperationId = ID;
         }
-      
+    
         public override void Call()
         {
             if (IsCanceled)
@@ -26,17 +29,14 @@ namespace mp3tager.Operations
                 return;
             }
 
-            var path = Menu.GetUserInput("path:"); //@"C:\Users\Alexandr\Desktop\TEST";
+            var path = Menu.GetUserInput("Load your plan\npath:");
+            var planLoader = new PlanProvider(); 
             var tager = new Tager(new FileLoader());
-            var analyzer = new Analyzer(tager, s => Path.GetExtension(s).ToLower() == ".mp3");
-            
-            Menu.PrintHelp();
-            
-            var mask = new Mask(Menu.GetUserInput("mask:"));
-            analyzer.Analyze(Directory.GetFiles(path), mask);
+            var synchronizer = new Synchronizer(tager);
 
-            var synchronizer = new Synchronizer(tager,Menu.SelectSyncRule());
-            synchronizer.Sync(analyzer.NotSynchronizedFiles.Keys, mask);
+           
+            synchronizer.Sync(planLoader.Load(path));
+           
             
             Menu.PrintChanges(synchronizer.ModifiedFiles);
             if (Menu.GetYesNoAnswer("Save changes?\nY/N:"))

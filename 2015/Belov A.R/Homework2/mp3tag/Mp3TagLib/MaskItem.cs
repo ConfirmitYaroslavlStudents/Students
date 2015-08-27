@@ -1,11 +1,16 @@
-﻿namespace Mp3TagLib
+﻿using System;
+
+namespace Mp3TagLib
 {
+     [Serializable]
     public enum MaskItemType { Delimiter,TagName}
+   [Serializable]
     public class MaskItem
     {
         public MaskItemType Type { get; set; }
         public string Value { get; set; }
-        public override bool Equals(object obj)
+      
+       public override bool Equals(object obj)
         {
             var item=obj as MaskItem;
            

@@ -6,12 +6,13 @@ namespace mp3tager.Operations
 {
     class Exit:Operation
     {
-        public const int ID = 8;
+        public const int ID =9;
 
         public Exit()
         {
             OperationId = ID;
         }
+        
         public override void Call()
         {
             Environment.Exit(0);

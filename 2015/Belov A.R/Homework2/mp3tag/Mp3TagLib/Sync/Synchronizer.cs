@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mp3TagLib.Plan;
 
 namespace Mp3TagLib.Sync
 {
@@ -7,9 +8,11 @@ namespace Mp3TagLib.Sync
     {
         private readonly Tager _tager;
         private readonly ISyncRule _syncRule;
+     
         public Synchronizer(Tager tager):this(tager,new DefaultSyncRule())
         {
         }
+     
         public Synchronizer(Tager tager,ISyncRule rule)
         {
             _tager = tager;
@@ -17,6 +20,7 @@ namespace Mp3TagLib.Sync
             ErrorFiles = new Dictionary<string, string>();
             _syncRule = rule;
         }
+      
         public List<IMp3File> ModifiedFiles { get;private set; }
 
         public Dictionary<string, string> ErrorFiles { get;private set; }
@@ -47,6 +51,20 @@ namespace Mp3TagLib.Sync
                 ErrorFiles.Add(_tager.CurrentFile.Name, "Can't sync this file");
             }
         }
+
+        public void Sync(SyncPlan plan)
+        {
+            foreach (var item in plan)
+            {
+                if (_tager.Load(item.FilePath))
+                Sync(_tager.CurrentFile,item.Mask,item.Rule);
+                else
+                {
+                    ErrorFiles.Add(item.FilePath, "load error");
+                }
+            }
+        }
+       
         public void Save()
         {
             foreach (var modifiedFile in ModifiedFiles)

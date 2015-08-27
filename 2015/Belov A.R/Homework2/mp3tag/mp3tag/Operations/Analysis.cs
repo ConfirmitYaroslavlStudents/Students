@@ -14,15 +14,16 @@ namespace mp3tager.Operations
         {
             OperationId = ID;
         }
+      
         public override void Call()
         {
             Menu.PrintHelp();
-           
-            var path = Menu.GetUserInput("path:"); //@"C:\Users\Alexandr\Desktop\TEST";
+
+            var path = Menu.GetUserInput("path:");          //@"C:\Users\Alexandr\Desktop\TEST";
             var analyzer = new Analyzer(new Tager(new FileLoader()));
             var mask = new Mask(Menu.GetUserInput("mask:"));
           
-            analyzer.Analyze(Directory.GetFiles(path), mask);
+            var plan=analyzer.BuildPlan(Directory.GetFiles(path), mask);
            
             if (!analyzer.NotSynchronizedFiles.Any()&&!analyzer.ErrorFiles.Keys.Any())
             {
@@ -33,13 +34,18 @@ namespace mp3tager.Operations
          
             if (analyzer.ErrorFiles.Keys.Any())
             Menu.PrintCollection(
-                       string.Format("{0} files can't be loaded", analyzer.ErrorFiles.Count()),
+                       string.Format("{0} files can't be synchronized", analyzer.ErrorFiles.Count()),
                        analyzer.ErrorFiles,ConsoleColor.Red);
           
             Menu.PrintCollection("Not synchronized files:", (from file in analyzer.NotSynchronizedFiles select file.Key.Name + ".mp3 with "+file.Value), ConsoleColor.Red);
             Menu.PrintCollection("Synchronized files:", (from file in analyzer.SynchronizedFiles select file.Name+".mp3"), ConsoleColor.Green);
            
-            Menu.GetUserInput("Press enter...");
+            Menu.PrintPlan(plan);
+            if (Menu.GetYesNoAnswer("Save this plan?\nY/N:"))
+            {
+                PlanProvider provider=new PlanProvider();
+                provider.Save(plan,Menu.GetUserInput("path:"));
+            }
         }
 
         public override void Cancel()

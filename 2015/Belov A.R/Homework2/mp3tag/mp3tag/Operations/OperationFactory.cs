@@ -22,6 +22,8 @@ namespace mp3tager.Operations
                     return new HandSync();
                 case Exit.ID:
                     return new Exit();
+                case LateSync.ID:
+                    return new LateSync();
                 default:
                     throw new ArgumentException("Invalid command");
             }
@@ -43,6 +45,8 @@ namespace mp3tager.Operations
                     return CreateOperation(HandSync.ID);
                 case "exit":
                     return CreateOperation(Exit.ID);
+                case "latesync":
+                    return CreateOperation(LateSync.ID);
                 default:
                     throw new ArgumentException("Invalid command");
             }

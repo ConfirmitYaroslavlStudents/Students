@@ -11,6 +11,7 @@
             if (lastOperation != null)
             _lastOperation=lastOperation.Value;
         }
+     
         public override void Call()
         {
             if(_lastOperation==null)

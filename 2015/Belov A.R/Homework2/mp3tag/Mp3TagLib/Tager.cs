@@ -8,6 +8,7 @@ namespace Mp3TagLib
     {
         private readonly IFileLoader _fileLoader;
         private IMp3File _currentFile;
+     
         public Tager(IFileLoader fileLoader)
         {
             _fileLoader = fileLoader;
@@ -45,24 +46,7 @@ namespace Mp3TagLib
 
         public void ChangeName(Mask newNameMask)
         {
-            if (_currentFile == null)
-                throw new NullReferenceException("File is not loaded");
-           
-            if (newNameMask == null)
-                throw new ArgumentException("Incorrect mask");
-            
-            var newName = newNameMask.ToString();
-            var currentTags = _currentFile.GetTags();
-           
-            
-            foreach (var item in newNameMask)
-            {
-                var tagValue = currentTags.GetTag(item);
-                if(string.IsNullOrEmpty(tagValue))
-                    throw new InvalidOperationException("tag is empty");
-                newName = newName.Replace("{"+item+"}", tagValue);
-            }
-            _currentFile.ChangeName(newName);
+            _currentFile.ChangeName(GenerateName(newNameMask));
         }
 
         public bool ValidateFileName(Mask mask)
@@ -103,12 +87,65 @@ namespace Mp3TagLib
             }
         }
 
-        public IEnumerable<Tags> GetIncorectTags()
+        public IEnumerable<Tags> GetIncorectTags(Mask mask)
         {
             var tags = _currentFile.GetTags();
-            return (from tag in tags.TagsDictionary where string.IsNullOrEmpty(tag.Value) select tag.Key).ToList();
+            return (from tag in tags.TagsDictionary where string.IsNullOrEmpty(tag.Value) && mask.Contains(tag.Key.ToString().ToLower()) select tag.Key).ToList();
         }
 
 
+
+        internal List<FileProblem> GetFileProblems(Mask mask)
+        {
+            var fileProblem=new List<FileProblem>();
+            if (GetIncorectTags(mask).Any())
+            {
+                fileProblem.Add(FileProblem.BadTags);
+            }
+            try
+            {
+                mask.GetTagValuesFromString(CurrentFile.Name);
+            }
+            catch
+            {
+                fileProblem.Add(FileProblem.BadName);
+            }
+            return fileProblem;
+
+
+        }
+
+        internal string GenerateName(Mask mask)
+        {
+            if (_currentFile == null)
+                throw new NullReferenceException("File is not loaded");
+
+            if (mask == null)
+                throw new ArgumentException("Incorrect mask");
+
+            var newName = mask.ToString();
+            var currentTags = _currentFile.GetTags();
+
+
+            foreach (var item in mask)
+            {
+                var tagValue = currentTags.GetTag(item);
+                if (string.IsNullOrEmpty(tagValue))
+                    throw new InvalidOperationException("tag is empty");
+                newName = newName.Replace("{" + item + "}", tagValue);
+            }
+            return newName;
+        }
+
+        internal Mp3Tags GetTagsFromName(Mask mask)
+        {
+            var tags = new Mp3Tags();
+            var tagsFromName = mask.GetTagValuesFromString(CurrentFile.Name);
+            foreach (var tag in tagsFromName.First())
+            {
+                tags.SetTag(tag.Key, tag.Value);
+            }
+            return tags;
+        }
     }
 }

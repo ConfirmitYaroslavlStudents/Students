@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mp3TagLib;
+using Mp3TagLib.Plan;
 using Mp3TagLib.Sync;
 
 namespace mp3tager
@@ -10,7 +11,7 @@ namespace mp3tager
         public static void Show()
         {
             Console.Clear();
-            Console.WriteLine("Available commands:\n1. Undo \n2. Redo\n3. Changetags\n4. Rename\n5. Analysis\n6. Sync\n7. Handsync\n8. Exit");
+            Console.WriteLine("Available commands:\n1. Undo \n2. Redo\n3. Changetags\n4. Rename\n5. Analysis\n6. Sync\n7. Handsync\n8. Latesync\n9. Exit");
         }
 
         public static void PrintCurrentFile(IMp3File file)
@@ -29,6 +30,7 @@ namespace mp3tager
             Console.Write(message);
             return Console.ReadLine();
         }
+      
         public static bool GetYesNoAnswer(string message)
         {
             Console.Write(message);
@@ -215,6 +217,14 @@ namespace mp3tager
                 }
                 Console.WriteLine("Invalid input!\n");
             }
+        }
+
+        public static void PrintPlan(SyncPlan plan)
+        {
+            Console.WriteLine("Builded plan:");
+            Console.ForegroundColor=ConsoleColor.Red;
+            Console.WriteLine(plan);
+            Console.ResetColor();
         }
     }
 }

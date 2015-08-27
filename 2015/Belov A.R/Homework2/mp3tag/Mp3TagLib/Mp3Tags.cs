@@ -23,26 +23,31 @@ namespace Mp3TagLib
                 {Tags.Track, ""}
             };
         }
+     
         public string Title
         {
             get { return _tags[Tags.Title]; }
             set { _tags[Tags.Title] = value; }
         }
+      
         public string Artist
         {
             get { return _tags[Tags.Artist]; }
             set { _tags[Tags.Artist] = value; }
         }
+       
         public string Album
         {
             get { return _tags[Tags.Album]; }
             set { _tags[Tags.Album] = value; }
         }
+       
         public string Comment
         {
             get { return _tags[Tags.Comment]; }
             set { _tags[Tags.Comment] = value; }
         }
+       
         public string Genre
         {
             get { return _tags[Tags.Genre]; }

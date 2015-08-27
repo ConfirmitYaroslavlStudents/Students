@@ -16,6 +16,7 @@ namespace mp3tager.Operations
         {
             OperationId = ID;
         }
+     
         public override void Call()
         {
             if (IsCanceled)
@@ -42,6 +43,7 @@ namespace mp3tager.Operations
             
             Menu.PrintSuccessMessage();
         }
+      
         Mp3Tags GetTagsFromFileName(IMp3File file)
         {
             if (file == null)
@@ -59,6 +61,7 @@ namespace mp3tager.Operations
             }
             return result;
         }
+      
         Dictionary<string, string> Select(List<Dictionary<string, string>> tagValuesList)
         {
             Menu.PrintMessage("Select correct tag values:");

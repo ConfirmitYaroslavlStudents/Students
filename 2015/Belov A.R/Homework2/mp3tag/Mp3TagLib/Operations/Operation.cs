@@ -4,6 +4,7 @@
     {
         public int OperationId { get;protected set; }
         protected bool IsCanceled;
+       
         public abstract void Call();
         public abstract void Cancel();
     }

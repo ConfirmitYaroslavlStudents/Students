@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Mp3TagLib
 {
+     [Serializable]
     public class Mask:IEnumerable<string>
     {
         private LinkedList<MaskItem> _body;

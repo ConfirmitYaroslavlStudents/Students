@@ -12,11 +12,13 @@ namespace mp3tager.Operations
     {
         public const int ID = 7;
         private Dictionary<IMp3File, Mp3Memento> _files;  
+       
         public HandSync()
         {
             _files=new Dictionary<IMp3File, Mp3Memento>();
             OperationId = ID;
         }
+    
         public override void Call()
         {
 
@@ -71,19 +73,19 @@ namespace mp3tager.Operations
             }
         }
 
+    
         public override void Cancel()
         {
             IsCanceled = true;
             RestoreFiles();
         }
-       
+
         void RestoreFiles()
         {
             for (int i = 0; i < _files.Count; i++)
             {
                 var file = _files.Keys.ElementAt(i);
                 var newMemento = file.GetMemento();
-              
                 file.SetMemento(_files[file]);
                 _files[file] = newMemento;
                 file.Save();

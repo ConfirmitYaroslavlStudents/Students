@@ -10,6 +10,7 @@ namespace mp3tager
         {
             return File.Exists(path);
         }
+       
         public IMp3File Load(string path)
         {
             //[TODO] use Path
@@ -31,6 +32,7 @@ namespace mp3tager
             }
             
         }
+      
         public bool ValidateFile(string path)
         {
             return FileExist(path) && Path.GetExtension(path).ToLower() == ".mp3";

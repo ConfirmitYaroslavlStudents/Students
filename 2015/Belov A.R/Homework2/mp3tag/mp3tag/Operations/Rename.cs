@@ -14,6 +14,7 @@ namespace mp3tager.Operations
         {
             OperationId = ID;
         }
+     
         public override void Call()
         {
             if (IsCanceled)
@@ -41,6 +42,7 @@ namespace mp3tager.Operations
             RestoreFile();
             IsCanceled = true;
         }
+       
         void RestoreFile()
         {
             var newMemento = _tager.CurrentFile.GetMemento();

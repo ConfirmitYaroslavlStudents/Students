@@ -3,6 +3,7 @@
     public interface IMp3File
     {
         string Name { get; }
+        string Path { get; }
         void SetTags(Mp3Tags tags);
         Mp3Tags GetTags();
         void ChangeName(string newName);

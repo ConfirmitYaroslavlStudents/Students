@@ -54,8 +54,10 @@
     <Compile Include="FileLoader.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Mp3File.cs" />
+    <Compile Include="Operations\LateSync.cs" />
     <Compile Include="Operations\OperationFactory.cs" />
     <Compile Include="Operations\Sync.cs" />
+    <Compile Include="PlanProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Operations\Rename.cs" />

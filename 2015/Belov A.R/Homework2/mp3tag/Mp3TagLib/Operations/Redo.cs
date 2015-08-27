@@ -12,6 +12,7 @@
             _lastCanceledOperation = lastOperation.Next.Value;
 
         }
+      
         public override void Call()
         {
             if(_lastCanceledOperation==null)

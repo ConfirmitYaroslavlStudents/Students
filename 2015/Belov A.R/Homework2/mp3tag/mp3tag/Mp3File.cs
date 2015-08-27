@@ -19,7 +19,7 @@ namespace mp3tager
             get
             {
                 //[TODO] use Path
-                return Path.GetFileNameWithoutExtension(_file.Name);
+                return System.IO.Path.GetFileNameWithoutExtension(_file.Name);
             } 
         }
 
@@ -116,6 +116,12 @@ namespace mp3tager
             SetTags(memento.Tags);
             ChangeName(memento.Name);
 
+        }
+
+
+        public string Path
+        {
+            get { return _file.Name; }
         }
     }
 }

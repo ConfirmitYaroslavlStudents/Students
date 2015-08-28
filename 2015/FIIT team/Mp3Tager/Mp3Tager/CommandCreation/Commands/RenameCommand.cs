@@ -1,21 +1,18 @@
-﻿using FileLib;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using TagLib;
+using FileLib;
 
 namespace CommandCreation
 {
-    // todo: for folder
     internal class RenameCommand : Command
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly string _mask;
-        private readonly BaseUniquePathCreator _pathCreator;
+        private readonly BaseDirectory _pathCreator;
 
-        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseUniquePathCreator pathCreator, string mask)
+        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseDirectory pathCreator, string mask)
         {
             _mp3Files = mp3Files;
             _mask = mask;
@@ -24,6 +21,7 @@ namespace CommandCreation
 
         public override string Execute()
         {
+            // todo : logging
             var resultMessage = new StringBuilder();
             foreach (var mp3File in _mp3Files)
             {
@@ -32,11 +30,20 @@ namespace CommandCreation
             return resultMessage.ToString();
         }
 
+        protected override void SetIfShouldBeCompleted()
+        {
+            // todo : try to avoid
+            ShouldBeCompleted = true;
+        }
+
         public override void Complete()
         {
             foreach (var mp3File in _mp3Files)
             {
-                mp3File.Save();
+                if (EnableBackup)
+                    ((Mp3File)mp3File).MakeBackup(mp3File.Save);
+                else
+                    mp3File.Save();
             }
         }
 
@@ -47,10 +54,13 @@ namespace CommandCreation
 
             var newName = GetNewName(mp3File);
             var directory = Path.GetDirectoryName(mp3File.FullName);
-            var uniqueName = _pathCreator.CreateUniqueName(Path.Combine(directory, newName + @".mp3"));
+            var newFullName = Path.Combine(directory, newName + @".mp3");
 
-            var resultMessage = mp3File.FullName + " ---> " + uniqueName + "\n";
-            mp3File.FullName = uniqueName;
+            if (newFullName != mp3File.FullName)
+                newFullName = _pathCreator.CreateUniqueName(newFullName);
+
+            var resultMessage = mp3File.FullName + " ---> " + newFullName + "\n";
+            mp3File.MoveTo(newFullName, true);
 
             return resultMessage;
         }
@@ -59,7 +69,7 @@ namespace CommandCreation
         {
             var newName = new StringBuilder(_mask);
 
-            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(mp3File.Tags.Artist))                
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(mp3File.Tags.Artist))
                 newName.Replace(TagNames.Artist, mp3File.Tags.Artist);
             if (_mask.Contains(TagNames.Title) && !string.IsNullOrEmpty(mp3File.Tags.Title))
                 newName.Replace(TagNames.Title, mp3File.Tags.Title);
@@ -72,7 +82,5 @@ namespace CommandCreation
 
             return newName.ToString();
         }
-
-        
     }
 }

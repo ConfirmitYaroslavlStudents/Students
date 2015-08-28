@@ -56,8 +56,10 @@
     <Compile Include="Operations\Redo.cs" />
     <Compile Include="Operations\Undo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sync\SyncMethods.cs" />
+    <Compile Include="Sync\Rename.cs" />
+    <Compile Include="Sync\Retag.cs" />
     <Compile Include="Sync\RetagFirsRule.cs" />
+    <Compile Include="Sync\SyncOperation.cs" />
     <Compile Include="Tager.cs" />
     <Compile Include="TagTreeNode.cs" />
     <Compile Include="Sync\Synchronizer.cs" />

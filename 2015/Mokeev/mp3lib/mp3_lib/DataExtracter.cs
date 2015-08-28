@@ -153,7 +153,7 @@ namespace mp3lib
 						}
 						else
 						{
-							mp3Name.Remove(0, resultStr.Length);
+							mp3Name.Remove(0, currentStr.Length);
 							resultStr.Append(tmpStr);
 							needContinue = true;
 						}

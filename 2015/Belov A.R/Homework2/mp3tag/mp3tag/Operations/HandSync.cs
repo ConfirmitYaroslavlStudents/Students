@@ -76,6 +76,7 @@ namespace mp3tager.Operations
             IsCanceled = true;
             RestoreFiles();
         }
+       
         void RestoreFiles()
         {
             for (int i = 0; i < _files.Count; i++)

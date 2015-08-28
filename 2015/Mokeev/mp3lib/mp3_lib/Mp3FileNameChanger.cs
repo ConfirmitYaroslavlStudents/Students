@@ -12,10 +12,14 @@ namespace mp3lib
 		private readonly IMp3File _mp3File;
 		private readonly DataExtracter _dataExtracter;
 
+		private readonly ISaver _saver;
+		private readonly string _mask;
+		private StringBuilder _data;
+
 		private Dictionary<TagType, string> Id3Data { get; }
 		private readonly bool _fastChanges;
 
-		public Mp3FileNameChanger(IMp3File file, string mask, bool fastChanges = false)
+		public Mp3FileNameChanger(IMp3File file, string mask, ISaver saver, bool fastChanges = false)
 		{
 			_mp3File = file;
 			Id3Data = new Dictionary<TagType, string>();
@@ -23,6 +27,9 @@ namespace mp3lib
 			_dataExtracter = new DataExtracter(mask);
 
 			_fastChanges = fastChanges;
+
+			_saver = saver;
+			_mask = mask;
 		}
 
 
@@ -37,7 +44,21 @@ namespace mp3lib
 
 			if (_fastChanges && Id3Data.Count == 0) return Path.GetFileNameWithoutExtension(_mp3File.FilePath);
 
-			var id3Data = Id3Data.Count > 0 ? Id3Data : _mp3File.GetId3Data();
+			Dictionary<TagType, string> id3Data;
+			if (Id3Data.Count > 0)
+			{
+				id3Data = Id3Data;
+				var keys = _mp3File.GetId3Data().Where(tag => !Id3Data.ContainsKey(tag.Key) && tags.Contains(tag.Key)).ToDictionary(tag => tag.Key, tag => tag.Value);
+
+				foreach (var item in  keys)
+				{
+					id3Data.Add(item.Key, item.Value);
+				}
+			}
+			else
+			{
+				id3Data = _mp3File.GetId3Data();
+			}
 
 			var emptyTags = id3Data.Where(tag => string.IsNullOrWhiteSpace(tag.Value)).Select(x=> x.Key).ToArray();
 
@@ -58,17 +79,23 @@ namespace mp3lib
 				resultFileName.Replace("{" + tagInfo.Key.ToString().ToLower() + "}", tagInfo.Value);
 			}
 
+			_data = resultFileName;
+
 			return resultFileName.ToString();
 		}
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.FileRename, new[] {_mp3File.FilePath}, _mask,
+				_data.ToString())).Dispose();
 		}
 
 		public void Rollback(RollbackInfo info)
 		{
-			throw new NotImplementedException();
+			var data = info.Data as string;
+			if(data == null) return;
+
+            _mp3File.ChangeFileName(data);
 		}
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace FileLib
+﻿using System.Collections.Generic;
+
+namespace FileLib
 {
-    // todo: *done* class name
-    // todo: too many file system abstractions
-    public abstract class BaseUniquePathCreator
+    public abstract class BaseDirectory
     {
+        public abstract IEnumerable<IMp3File> GetFiles(string directory);
+
         protected abstract bool Exists(string path);
 
         public string CreateUniqueName(string path)
@@ -13,7 +15,7 @@
             var destinationPath = System.IO.Path.Combine(directory, fileName + @".mp3");
 
             var index = 1;
-                        
+
             while (Exists(destinationPath))
             {
                 destinationPath = System.IO.Path.Combine(directory, fileName + @" (" + index + ").mp3");

@@ -11,8 +11,7 @@ namespace CommandCreation
     {
         private readonly IEnumerable<IMp3File> _mp3Files;
         private readonly MaskParser _maskParser;
-
-        private Dictionary<string, List<string>> _indexDict;
+        private readonly Dictionary<string, List<string>> _indexDict;
 
         public AnalyseCommand(IEnumerable<IMp3File> mp3Files, string mask)
         {
@@ -40,6 +39,11 @@ namespace CommandCreation
                 resultMessage.Append(IndexAnalyse());
             return resultMessage.ToString();
         }
+        
+        protected override void SetIfShouldBeCompleted()
+        {
+            ShouldBeCompleted = false;
+        }
 
         public override void Complete()
         {
@@ -47,7 +51,6 @@ namespace CommandCreation
 
         private string Analyse(IMp3File mp3File)
         {
-
             var fileName = Path.GetFileNameWithoutExtension(mp3File.FullName);
 
             if (!_maskParser.ValidateFileName(fileName))
@@ -138,9 +141,7 @@ namespace CommandCreation
                     var expectedIndex = ConvertToIndexForm(i, count);
                     resultMessage.Append("Wrong  index, expected " + expectedIndex + ":\n");
                     AddInfoInMessage(key, resultMessage);
-                }
-
-                
+                }                
             }
             return resultMessage.ToString();
         }
@@ -238,6 +239,7 @@ namespace CommandCreation
                 if (!forms.Contains(currentForm))
                     forms.Add(currentForm);
             }
+
             return forms;
         }
 

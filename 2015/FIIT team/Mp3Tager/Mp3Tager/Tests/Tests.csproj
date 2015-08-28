@@ -52,13 +52,9 @@
   <ItemGroup>
     <Compile Include="AnalyseCommandTests.cs" />
     <Compile Include="ChangeTagsCommandTests.cs" />
-    <Compile Include="Fakes\FakeFileExistenceChecker.cs" />
-    <Compile Include="Fakes\FakeFileSystemSource.cs" />
-    <Compile Include="Fakes\FakeSystemSource.cs" />
-    <Compile Include="Fakes\FakeWriter.cs" />
+    <Compile Include="Fakes\FakeMp3Directory.cs" />
     <Compile Include="FileBackuperTests.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />
-    <Compile Include="FolderBackuperTests.cs" />
     <Compile Include="MaskParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenameCommandTests.cs" />

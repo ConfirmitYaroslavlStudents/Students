@@ -4,15 +4,13 @@
     {
         Mp3Tags Tags { get; }
 
-        string FullName { get; }
+        string FullName { get; set; }
 
         void Save();
 
-        IMp3File CopyTo(string uniquePath);
+        IMp3File CopyTo(string path);
 
-        void MoveTo(string uniquePath);
-
-        void MoveTo(string uniquePath, bool safe);
+        void MoveTo(string path);
 
         void Delete();
     }

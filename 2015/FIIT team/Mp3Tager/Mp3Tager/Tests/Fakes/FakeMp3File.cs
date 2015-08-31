@@ -4,48 +4,34 @@ namespace Tests
 {
     public class FakeMp3File : IMp3File
     {
-        private readonly BaseDirectory _checker;
+
 
         public Mp3Tags Tags { get; private set; }
 
-        public FakeMp3File(Mp3Tags tags, string path, BaseDirectory checker)
+        public FakeMp3File(Mp3Tags tags, string path)
         {            
             Tags = tags;
             FullName = path;
-            _checker = checker;
+          //  _checker = checker;
         }
                 
         public void Save()
         {
         }
 
-        public void Save(bool enableBackup)
-        {
-        }
-
         public string FullName { get; set; }
 
-        public IMp3File CopyTo(string uniquePath)
+        public IMp3File CopyTo(string path)
         {
-            return new FakeMp3File(Tags, uniquePath, _checker);            
+            return new FakeMp3File(Tags, path);            
         }
 
-        public void MoveTo(string uniquePath)
+        public void MoveTo(string path)
         {
-            FullName = _checker.CreateUniqueName(uniquePath);
-        }
-
-        public void MoveTo(string uniquePath, bool safe)
-        {
-            MoveTo(uniquePath);
+           // FullName = _checker.CreateUniqueName(path);
         }
 
         public void Delete()
-        {
-        }
-
-
-        public void SaveWithBackup()
         {
         }
     }

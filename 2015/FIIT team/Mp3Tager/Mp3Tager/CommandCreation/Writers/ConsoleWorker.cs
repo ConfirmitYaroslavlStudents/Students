@@ -19,6 +19,7 @@ namespace CommandCreation
             Console.WriteLine(value);
         }
 
+
         public string ReadLine()
         {
             return Console.ReadLine();

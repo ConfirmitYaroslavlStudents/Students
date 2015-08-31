@@ -46,8 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileBackuper.cs" />
-    <Compile Include="Mp3Directory\Mp3Directory.cs" />
-    <Compile Include="Mp3Directory\BaseDirectory.cs" />
+    <Compile Include="FileSource\FileSource.cs" />
+    <Compile Include="FileSource\IFileSource.cs" />
     <Compile Include="Mp3File\IMp3File.cs" />
     <Compile Include="Mp3File\Mp3Tags.cs" />
     <Compile Include="Mp3File\Mp3File.cs" />

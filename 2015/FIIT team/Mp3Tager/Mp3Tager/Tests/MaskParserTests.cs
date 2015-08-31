@@ -1,7 +1,7 @@
-﻿using CommandCreation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using CommandCreation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
 {

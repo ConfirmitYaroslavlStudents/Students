@@ -48,18 +48,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AnalyseCommand.cs" />
-    <Compile Include="ConsoleWorker.cs" />
-    <Compile Include="IWorker.cs" />
+    <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Parsers\ArgumentParser.cs" />
     <Compile Include="Commands\ChangeTagsCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="CommandFactory.cs" />
-    <Compile Include="CommandNames.cs" />
-    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Constants\CommandNames.cs" />
     <Compile Include="Parsers\MaskParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\RenameCommand.cs" />
-    <Compile Include="TagNames.cs" />
+    <Compile Include="Constants\TagNames.cs" />
+    <Compile Include="Visitors\DifferenceVisitor.cs" />
+    <Compile Include="Visitors\GetCommandNameVisitor.cs" />
+    <Compile Include="Visitors\GetFilePathVisitor.cs" />
+    <Compile Include="Visitors\ICommandVisitor.cs" />
+    <Compile Include="Writers\ConsoleWorker.cs" />
+    <Compile Include="Writers\IWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

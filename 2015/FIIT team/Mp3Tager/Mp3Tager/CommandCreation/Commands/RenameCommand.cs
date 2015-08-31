@@ -1,86 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using FileLib;
 
 namespace CommandCreation
 {
-    internal class RenameCommand : Command
+    public class RenameCommand : Command
     {
-        private readonly IEnumerable<IMp3File> _mp3Files;
+        internal IMp3File File;
+        internal string OldFullName;
         private readonly string _mask;
-        private readonly BaseDirectory _pathCreator;
 
-        public RenameCommand(IEnumerable<IMp3File> mp3Files, BaseDirectory pathCreator, string mask)
+        public RenameCommand(IMp3File mp3File, string mask)
         {
-            _mp3Files = mp3Files;
+            File = mp3File;
             _mask = mask;
-            _pathCreator = pathCreator;
+            OldFullName = mp3File.FullName;
         }
 
-        public override string Execute()
-        {
-            // todo : logging
-            var resultMessage = new StringBuilder();
-            foreach (var mp3File in _mp3Files)
-            {
-                resultMessage.Append(Rename(mp3File));
-            }
-            return resultMessage.ToString();
-        }
-
-        protected override void SetIfShouldBeCompleted()
-        {
-            // todo : try to avoid
-            ShouldBeCompleted = true;
-        }
-
-        public override void Complete()
-        {
-            foreach (var mp3File in _mp3Files)
-            {
-                if (EnableBackup)
-                    ((Mp3File)mp3File).MakeBackup(mp3File.Save);
-                else
-                    mp3File.Save();
-            }
-        }
-
-        private string Rename(IMp3File mp3File)
+        public override void Execute()
         {
             if (_mask == String.Empty)
                 throw new ArgumentException(_mask);
 
-            var newName = GetNewName(mp3File);
-            var directory = Path.GetDirectoryName(mp3File.FullName);
+            var newName = GetNewName();
+            var directory = Path.GetDirectoryName(File.FullName);        
             var newFullName = Path.Combine(directory, newName + @".mp3");
-
-            if (newFullName != mp3File.FullName)
-                newFullName = _pathCreator.CreateUniqueName(newFullName);
-
-            var resultMessage = mp3File.FullName + " ---> " + newFullName + "\n";
-            mp3File.MoveTo(newFullName, true);
-
-            return resultMessage;
+            File.FullName = newFullName;
         }
 
-        private string GetNewName(IMp3File mp3File)
+        public override void Undo()
+        {
+            File.FullName = OldFullName;
+        }
+
+        private string GetNewName()
         {
             var newName = new StringBuilder(_mask);
-
-            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(mp3File.Tags.Artist))
-                newName.Replace(TagNames.Artist, mp3File.Tags.Artist);
-            if (_mask.Contains(TagNames.Title) && !string.IsNullOrEmpty(mp3File.Tags.Title))
-                newName.Replace(TagNames.Title, mp3File.Tags.Title);
-            if (_mask.Contains(TagNames.Genre) && !string.IsNullOrEmpty(mp3File.Tags.Genre))
-                newName.Replace(TagNames.Genre, mp3File.Tags.Genre);
-            if (_mask.Contains(TagNames.Album) && !string.IsNullOrEmpty(mp3File.Tags.Album))
-                newName.Replace(TagNames.Album, mp3File.Tags.Album);
-            if (_mask.Contains(TagNames.Track) && !string.IsNullOrEmpty(mp3File.Tags.Track.ToString()))
-                newName.Replace(TagNames.Track, mp3File.Tags.Track.ToString());
+            // todo: generate exceptions for empty tags
+            if (_mask.Contains(TagNames.Artist) && !string.IsNullOrEmpty(File.Tags.Artist))
+                newName.Replace(TagNames.Artist, File.Tags.Artist);
+            if (_mask.Contains(TagNames.Title) && !string.IsNullOrEmpty(File.Tags.Title))
+                newName.Replace(TagNames.Title, File.Tags.Title);
+            if (_mask.Contains(TagNames.Genre) && !string.IsNullOrEmpty(File.Tags.Genre))
+                newName.Replace(TagNames.Genre, File.Tags.Genre);
+            if (_mask.Contains(TagNames.Album) && !string.IsNullOrEmpty(File.Tags.Album))
+                newName.Replace(TagNames.Album, File.Tags.Album);
+            if (_mask.Contains(TagNames.Track) && !string.IsNullOrEmpty(File.Tags.Track.ToString()))
+                newName.Replace(TagNames.Track, File.Tags.Track.ToString());
 
             return newName.ToString();
+        }
+
+        public override T Accept<T>(ICommandVisitor<T> visitor)
+        {
+            return visitor.Visit(this);
+        }
+
+        public override bool IsPlanningCommand()
+        {
+            return true;
         }
     }
 }

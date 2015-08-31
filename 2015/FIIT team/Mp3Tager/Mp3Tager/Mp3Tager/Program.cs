@@ -3,7 +3,7 @@ using CommandCreation;
 
 namespace Mp3Tager
 {
-    // TODO: *done* Task: plan of operations
+    // TODO: Task: plan of operations
 
     // TODO: switch count? visitor
     class Program
@@ -15,7 +15,8 @@ namespace Mp3Tager
             try
             {
                 var app = new Application();
-                app.Execute(args, worker);               
+                app.Execute(args, worker);
+                worker.WriteLine("Command successfully executed.");
             }
             catch (Exception e)
             {

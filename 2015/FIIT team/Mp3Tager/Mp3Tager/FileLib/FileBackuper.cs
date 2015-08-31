@@ -3,20 +3,17 @@ using System.IO;
 
 namespace FileLib
 {
-    // TODO: *done* IDispose pattern
-    public class FileBackuper: IDisposable
+    public class FileBackuper : IDisposable
     {
         private IMp3File _sourceFile;
+        private IMp3File _tempFile;
         private bool _disposed;
 
-        // todo: *done* make private?
-        private IMp3File _tempFile;
-        
         public FileBackuper(IMp3File sourceFile)
         {
-            _disposed = false;
             if (sourceFile == null)
                 throw new InvalidOperationException();
+            _disposed = false;
             _sourceFile = sourceFile;
             _tempFile = MakeBackup();
         }
@@ -46,7 +43,7 @@ namespace FileLib
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed) return;
-            
+
             if (disposing)
             {
                 _tempFile.Delete();

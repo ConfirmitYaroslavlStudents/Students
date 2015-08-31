@@ -1,31 +1,29 @@
 ﻿using System;
 using System.IO;
+using File = TagLib.File;
 
 namespace FileLib
 {
     public class Mp3File : IMp3File
     {
-        private readonly TagLib.File _content;
+        private File _content;
 
         public Mp3Tags Tags { get; private set; }
 
-        public string FullName { get; private set; }
+        public string FullName { get; set; }
 
-        private string _newFullName;
+        public Mp3File(string path)
+        {
+            _content = File.Create(path);
+            FullName = path;
 
-        // todo : TagLib.File  should not be public available
-        public Mp3File(TagLib.File mp3Content)
-        {           
-            _content = mp3Content;
-            FullName = mp3Content.Name;
-            
-            Tags = new Mp3Tags  
+            Tags = new Mp3Tags
             {
-                Album = mp3Content.Tag.Album,
-                Title = mp3Content.Tag.Title,                  
-                Artist = mp3Content.Tag.FirstPerformer,
-                Genre = mp3Content.Tag.FirstGenre,
-                Track = mp3Content.Tag.Track
+                Album = _content.Tag.Album,
+                Title = _content.Tag.Title,
+                Artist = _content.Tag.FirstPerformer,
+                Genre = _content.Tag.FirstGenre,
+                Track = _content.Tag.Track
             };
         }
 
@@ -33,32 +31,27 @@ namespace FileLib
         {
             SaveTags();
             _content.Save();
-            if (_newFullName != null)
-            {
-                MoveTo(_newFullName);
-            }
+
+            if (_content.Name == FullName)
+                return;
+            CheckForFileExists();
+            MoveTo(FullName);
         }
 
-        public void SaveWithBackup()
+        private void CheckForFileExists()
         {
-            // todo: *done* rename --backup-ignore "" {title}
-            // todo: *done* tumbler to switch off backup process
-            using (var backup = new FileBackuper(this))
+            var index = 1;
+            var indexStr = string.Empty;
+            while (System.IO.File.Exists(FullName + indexStr))
             {
-                try
-                {
-                    Save();
-                }
-                catch (Exception e)
-                {
-                    backup.RestoreFromBackup();
-                    throw new Exception("File was restored from backup because of exception:", e);
-                }
+                indexStr = string.Format("({0})", index++);
             }
+            FullName = Path.Combine(Path.GetDirectoryName(FullName),
+                Path.GetFileNameWithoutExtension(FullName) + indexStr + ".mp3");
         }
 
         private void SaveTags()
-        {            
+        {
             if (Tags.Artist != null)
             {
                 _content.Tag.Performers = null;
@@ -74,44 +67,22 @@ namespace FileLib
             _content.Tag.Track = Tags.Track;
         }
 
-        public void MakeBackup(Action functionToExecute)
+        public IMp3File CopyTo(string path)
         {
-            using (var backup = new FileBackuper(this))
-            {
-                try
-                {
-                    functionToExecute.Invoke();
-                }
-                catch (Exception e)
-                {
-                    backup.RestoreFromBackup();
-                    throw new Exception("File was restored from backup because of exception:", e);
-                }
-            }
-        }
+            System.IO.File.Copy(_content.Name, path, true);
 
-        public IMp3File CopyTo(string uniquePath)
-        {
-            File.Copy(FullName, uniquePath, true);
-            return new Mp3File(TagLib.File.Create(uniquePath));
+            return new Mp3File(path);
         }
 
         public void Delete()
         {
-            File.Delete(FullName);
+            System.IO.File.Delete(_content.Name);
         }
 
-        public void MoveTo(string uniquePath)
+        public void MoveTo(string path)
         {
-            File.Move(FullName, uniquePath);
-            FullName = uniquePath;
-            // TODO: what happen with _content?
-        }
-
-        // todo : safe parameter?
-        public void MoveTo(string uniquePath, bool safe)
-        {
-            _newFullName = uniquePath;
-        }
+            System.IO.File.Move(_content.Name, path);
+            _content = File.Create(path);
+        }       
     }
 }

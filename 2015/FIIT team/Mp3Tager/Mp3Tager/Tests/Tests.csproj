@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="AnalyseCommandTests.cs" />
     <Compile Include="ChangeTagsCommandTests.cs" />
-    <Compile Include="Fakes\FakeMp3Directory.cs" />
+    <Compile Include="Fakes\FakeWriter.cs" />
     <Compile Include="FileBackuperTests.cs" />
     <Compile Include="Fakes\FakeMp3File.cs" />
     <Compile Include="MaskParserTests.cs" />

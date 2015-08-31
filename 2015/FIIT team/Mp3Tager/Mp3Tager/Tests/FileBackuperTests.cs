@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿/*
+using System.IO;
 using FileLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests.Fakes;
@@ -10,12 +11,13 @@ namespace Tests
     {
         [TestMethod]
         public void Backup_Successful()
-        {            
-            using (var backup = new FileBackuper(new FakeMp3File(new Mp3Tags(), @"D:\music\audioq.mp3", new FakeMp3Directory())))
-            {
-                var actual = backup.RestoreFromBackup();
-                Assert.IsTrue(actual);
-            }            
+        {
+            var backup = new FileBackuper(new FakeMp3File(new Mp3Tags(), @"D:\music\audioq.mp3", new FakeFileExistenceChecker()));
+            Assert.AreEqual(backup.TempFile.FullName, Path.GetTempPath() + @"audioq.mp3");
+
+            backup.RestoreFromBackup();
+            Assert.AreEqual(backup.TempFile.FullName, @"D:\music\audioq.mp3");
         }
     }
 }
+*/

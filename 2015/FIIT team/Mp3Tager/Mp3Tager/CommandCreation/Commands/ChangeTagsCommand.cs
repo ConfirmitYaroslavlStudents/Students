@@ -1,55 +1,41 @@
-﻿  using FileLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using FileLib;
 
 namespace CommandCreation
 {
-    // todo: *done* for folder
-    internal class ChangeTagsCommand : Command
+    public class ChangeTagsCommand : Command
     {
-        private readonly IEnumerable<IMp3File> _mp3Files;
+        internal IMp3File File;
         private readonly MaskParser _maskParser;
-    
-        public ChangeTagsCommand(IEnumerable<IMp3File> mp3Files, string mask)
+        internal Mp3Tags OldTags;
+
+        public ChangeTagsCommand(IMp3File mp3File, string mask)
         {
-            _mp3Files = mp3Files;
+            File = mp3File;
             _maskParser = new MaskParser(mask);
+            OldTags = new Mp3Tags();
+            File.Tags.CopyTo(OldTags);
         }
 
-        public override string Execute()
+        public override void Execute()
         {
-            var resultMessage = new StringBuilder();
-            foreach (var mp3File in _mp3Files)
-            {
-                resultMessage.Append(ChangeTags(mp3File));
-            }
-            return resultMessage.ToString();
+            ChangeTags();
         }
 
-        protected override void SetIfShouldBeCompleted()
+        public override void Undo()
         {
-            ShouldBeCompleted = true;
+            File.Tags.Album = OldTags.Album;
+            File.Tags.Artist = OldTags.Artist;
+            File.Tags.Genre = OldTags.Genre;
+            File.Tags.Title = OldTags.Title;
+            File.Tags.Track = OldTags.Track;
         }
 
-        public override void Complete()
+        private void ChangeTags()
         {
-            foreach (var mp3File in _mp3Files)
-            {
-                if (EnableBackup)
-                    ((Mp3File)mp3File).MakeBackup(mp3File.Save);
-                else
-                    mp3File.Save();
-            }
-        }
-
-        private string ChangeTags(IMp3File mp3File)
-        {
-            var resultMessage = new StringBuilder();
-            resultMessage.Append(mp3File.FullName + ":\n");
-
-            var fileName = Path.GetFileNameWithoutExtension(mp3File.FullName);
+            var fileName = Path.GetFileNameWithoutExtension(File.FullName);
 
             if (!_maskParser.ValidateFileName(fileName))
                 throw new InvalidDataException("Mask doesn't match the file name.");
@@ -65,18 +51,13 @@ namespace CommandCreation
                     : fileName.Length;
                 var tagValueInFileName = fileName.Substring(0, indexOfSplit);
 
-                resultMessage.Append(tagPatternsInMask[i] + " " + GetTagValueByTagPattern(mp3File, tagPatternsInMask[i])
-                    + " ----> " + tagValueInFileName + "\n");
-                ChangeTag(mp3File, tagPatternsInMask[i], tagValueInFileName);
+                ChangeTag(tagPatternsInMask[i], tagValueInFileName);
 
                 fileName = fileName.Remove(0, indexOfSplit + splitsInMask[i + 1].Length);
             }
-
-            resultMessage.Append("\n");
-            return resultMessage.ToString();
         }
 
-        private static void ChangeTag(IMp3File mp3File, string tagPattern, string newTagValue)
+        private void ChangeTag(string tagPattern, string newTagValue)
         {
             var tagSet = new HashSet<string>
             {
@@ -93,40 +74,31 @@ namespace CommandCreation
             switch (tagPattern)
             {
                 case TagNames.Artist:
-                    mp3File.Tags.Artist = newTagValue;
+                    File.Tags.Artist = newTagValue;
                     break;
                 case TagNames.Title:
-                    mp3File.Tags.Title = newTagValue;
+                    File.Tags.Title = newTagValue;
                     break;
                 case TagNames.Genre:
-                    mp3File.Tags.Genre = newTagValue;
+                    File.Tags.Genre = newTagValue;
                     break;
                 case TagNames.Album:
-                    mp3File.Tags.Album = newTagValue;
+                    File.Tags.Album = newTagValue;
                     break;
                 case TagNames.Track:
-                    mp3File.Tags.Track = Convert.ToUInt32(newTagValue);
+                    File.Tags.Track = Convert.ToUInt32(newTagValue);
                     break;
             }
         }
-
-        private static string GetTagValueByTagPattern(IMp3File mp3File, string tagPattern)
+        
+        public override T Accept<T>(ICommandVisitor<T> visitor)
         {
-            switch (tagPattern)
-            {
-                case TagNames.Artist:
-                    return mp3File.Tags.Artist;
-                case TagNames.Title:
-                    return mp3File.Tags.Title;
-                case TagNames.Genre:
-                    return mp3File.Tags.Genre;
-                case TagNames.Album:
-                    return mp3File.Tags.Album;
-                case TagNames.Track:
-                    return mp3File.Tags.Track.ToString();
-                default:
-                    throw new ArgumentException(tagPattern);
-            }
-        }        
+            return visitor.Visit(this);
+        }
+
+        public override bool IsPlanningCommand()
+        {
+            return true;
+        }
     }
 }

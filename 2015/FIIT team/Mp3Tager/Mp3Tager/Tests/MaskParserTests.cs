@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using CommandCreation;
+﻿using CommandCreation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Tests
 {
@@ -90,7 +90,7 @@ namespace Tests
             _expectedSplits = new List<string> { "{ttt", "", "}h" };
         }
 
-        
+
     }
 
     [TestClass]
@@ -148,7 +148,7 @@ namespace Tests
             var parser = new MaskParser("a{artist}");
             Assert.IsTrue(parser.ValidateFileName("aTestArtist"));
         }
-        
+
         [TestMethod]
         public void MaskParser_SameSplits_Successful()
         {

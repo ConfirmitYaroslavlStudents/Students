@@ -1,4 +1,5 @@
-﻿using FileLib;
+﻿using System.IO;
+using FileLib;
 
 namespace Tests
 {
@@ -12,7 +13,6 @@ namespace Tests
         {            
             Tags = tags;
             FullName = path;
-          //  _checker = checker;
         }
                 
         public void Save()

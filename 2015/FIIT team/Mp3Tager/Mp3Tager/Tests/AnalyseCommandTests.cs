@@ -1,5 +1,5 @@
-﻿/*
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CommandCreation;
 using FileLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,13 +10,11 @@ namespace Tests
     [TestClass]
     public class AnalyseCommandTests
     {
-        //private BaseFileExistenceChecker _checker = new FakeFileExistenceChecker();
-
         [TestMethod]
         public void Analyse_Common_Successful()
         {
-            var sourceFolder = @"D:\music\";            
-
+            // Init
+            const string sourceFolder = @"D:\music\";
             var mp3Files = new List<IMp3File>
             {
                 new FakeMp3File(new Mp3Tags
@@ -30,22 +28,22 @@ namespace Tests
                 }, sourceFolder + "TestArtist2 - TestTitle2.mp3"),
             };
 
-            var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
+            var fakeWriter = new FakeWorker();
+            var commandPool = mp3Files.Select(mp3File => new AnalyseCommand(mp3File, "{artist} - {title}", fakeWriter)).Cast<Command>().ToList();
 
-            var fakeWriter = new FakeWriter();
-            var analyser = new AnalyseCommand(fakeSystemSource, @"{artist} - {title}", fakeWriter);
+            // Act
+            commandPool.ForEach(command => command.Execute());
 
-            analyser.Execute();
-
-            Assert.AreEqual("File: " + mp3Files[0].FullName + "\n" + 
+            // Assert
+            Assert.AreEqual("File: " + mp3Files[0].FullName + "\n" +
                 "{title} in file name: TestTitle2; {title} in tags: TestTitle1\n\n", fakeWriter.Stream.ToString());
-        }        
+        }
 
         [TestMethod]
         public void Analyse_WithoutDifferences_SuccessfulAnalyse()
         {
-            var sourceFolder = @"D:\music\";
-
+            // Init
+            const string sourceFolder = @"D:\music\";
             var mp3Files = new List<IMp3File>
             {
                 new FakeMp3File(new Mp3Tags
@@ -53,43 +51,40 @@ namespace Tests
                     Artist = "Alla", Title = "Arlekino"
                 }, sourceFolder + "Alla - Arlekino.mp3")
             };
+            var fakeWriter = new FakeWorker();
+            var commandPool = mp3Files.Select(mp3File => new AnalyseCommand(mp3File, "{artist} - {title}", fakeWriter)).Cast<Command>().ToList();
 
-            var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
+            // Act
+            commandPool.ForEach(command => command.Execute());
 
-            var fakeWriter = new FakeWriter();
-            var analyser = new AnalyseCommand(fakeSystemSource, @"{artist} - {title}", fakeWriter);
-
-            analyser.Execute();
-
+            // Assert
             Assert.AreEqual("", fakeWriter.Stream.ToString());
         }
 
         [TestMethod]
         public void Analyse_ManyDifferences_SuccessfulAnalyse()
         {
-
-            var sourceFolder = @"D:\music\";
-
+            // Init
+            const string sourceFolder = @"D:\music\";
             var mp3Files = new List<IMp3File>
             {
                 new FakeMp3File(new Mp3Tags
                 {
                     Artist = "Alla", Title = "Arlekino", Track = 1
-                }, sourceFolder + "2. Alla - Sneg.mp3", _checker),
+                }, sourceFolder + "2. Alla - Sneg.mp3"),
 
                 new FakeMp3File(new Mp3Tags
                 {
                     Artist = "Filipp", Title = "Sneg", Track = 2
-                }, sourceFolder + "2. Alla - Arlekino.mp3", _checker)
+                }, sourceFolder + "2. Alla - Arlekino.mp3")
             };
+            var fakeWriter = new FakeWorker();
+            var commandPool = mp3Files.Select(mp3File => new AnalyseCommand(mp3File, "{track}. {artist} - {title}", fakeWriter)).Cast<Command>().ToList();
+            
+            // Act
+            commandPool.ForEach(command => command.Execute());
 
-            var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
-
-            var fakeWriter = new FakeWriter();
-            var analyser = new AnalyseCommand(fakeSystemSource, @"{track}. {artist} - {title}", fakeWriter);
-
-            analyser.Execute();
-
+            // Asert
             Assert.AreEqual("File: " + mp3Files[0].FullName + "\n" +
                             "{track} in file name: 2; {track} in tags: 1\n" +
                             "{title} in file name: Sneg; {title} in tags: Arlekino\n\n" +
@@ -106,31 +101,29 @@ namespace Tests
             const string sourceFolder = @"D:\music\";
             var mp3Files = new List<IMp3File>
             {
-                new FakeMp3File(new Mp3Tags{Title = "title1"}, sourceFolder + "01. title1.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title2"}, sourceFolder + "2. title2.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title3"}, sourceFolder + "03. title3.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title4"}, sourceFolder + "14. title4.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title5"}, sourceFolder + "5. title5.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title6"}, sourceFolder + "6. title6.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title7"}, sourceFolder + "07. title7.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title8"}, sourceFolder + "08. title8.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title9"}, sourceFolder + "009. title9.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title10"}, sourceFolder + "10. title10.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Title = "title1"}, sourceFolder + "01. title1.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title2"}, sourceFolder + "2. title2.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title3"}, sourceFolder + "03. title3.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title4"}, sourceFolder + "14. title4.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title5"}, sourceFolder + "5. title5.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title6"}, sourceFolder + "6. title6.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title7"}, sourceFolder + "07. title7.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title8"}, sourceFolder + "08. title8.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title9"}, sourceFolder + "009. title9.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title10"}, sourceFolder + "10. title10.mp3"),
             };
-            var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
-            var fakeWriter = new FakeWriter();
-
-            var analyser = new AnalyseCommand(fakeSystemSource, @"{index}. {title}", fakeWriter);
+            var fakeWriter = new FakeWorker();
+            var commandPool = mp3Files.Select(mp3File => new AnalyseCommand(mp3File, "{index}. {title}", fakeWriter)).Cast<Command>().ToList();
 
             // Act
-            analyser.Execute();
+            commandPool.ForEach(command => command.Execute());
 
             // Assert
             var message = "Index out of range. Maximum is 10:\n" +
                          "\t" + "14. title4" + "\n\n" +
                          "Wrong  index, expected 09:\n" +
                           "\t" + "009. title9" + "\n\n" +
-                          "Wrong  index, expected 02:\n" + 
+                          "Wrong  index, expected 02:\n" +
                           "\t" + "2. title2" + "\n\n" +
                           "Wrong  index, expected 05:\n" +
                           "\t" + "5. title5" + "\n\n" +
@@ -148,24 +141,22 @@ namespace Tests
             const string sourceFolder = @"D:\music\";
             var mp3Files = new List<IMp3File>
             {
-                new FakeMp3File(new Mp3Tags{Title = "title1"}, sourceFolder + "01. title1.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title2"}, sourceFolder + "02. title2.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title3"}, sourceFolder + "03. title3.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title4"}, sourceFolder + "04. title4.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title5"}, sourceFolder + "05. title5.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title6"}, sourceFolder + "06. title6.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title7"}, sourceFolder + "07. title7.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title8"}, sourceFolder + "08. title8.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title9"}, sourceFolder + "09. title9.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title10"}, sourceFolder + "10. title10.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Title = "title1"}, sourceFolder + "01. title1.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title2"}, sourceFolder + "02. title2.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title3"}, sourceFolder + "03. title3.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title4"}, sourceFolder + "04. title4.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title5"}, sourceFolder + "05. title5.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title6"}, sourceFolder + "06. title6.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title7"}, sourceFolder + "07. title7.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title8"}, sourceFolder + "08. title8.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title9"}, sourceFolder + "09. title9.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title10"}, sourceFolder + "10. title10.mp3"),
             };
-            var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
-            var fakeWriter = new FakeWriter();
-
-            var analyser = new AnalyseCommand(fakeSystemSource, @"{index}. {title}", fakeWriter);
+            var fakeWriter = new FakeWorker();
+            var commandPool = mp3Files.Select(mp3File => new AnalyseCommand(mp3File, "{index}. {title}", fakeWriter)).Cast<Command>().ToList();
 
             // Act
-            analyser.Execute();
+            commandPool.ForEach(command => command.Execute());
 
             // Assert
             var message = "";
@@ -180,29 +171,26 @@ namespace Tests
             const string sourceFolder = @"D:\music\";
             var mp3Files = new List<IMp3File>
             {
-                new FakeMp3File(new Mp3Tags{Title = "title1"}, sourceFolder + "4. anothertitle.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title2"}, sourceFolder + "2. title2.mp3", _checker),
-                new FakeMp3File(new Mp3Tags{Title = "title3"}, sourceFolder + "qw. title3.mp3", _checker),
+                new FakeMp3File(new Mp3Tags{Title = "title1"}, sourceFolder + "4. anothertitle.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title2"}, sourceFolder + "2. title2.mp3"),
+                new FakeMp3File(new Mp3Tags{Title = "title3"}, sourceFolder + "qw. title3.mp3"),
             };
-            var fakeSystemSource = new FakeSystemSource(sourceFolder, mp3Files);
-            var fakeWriter = new FakeWriter();
-
-            var analyser = new AnalyseCommand(fakeSystemSource, @"{index}. {title}", fakeWriter);
+            var fakeWriter = new FakeWorker();
+            var commandPool = mp3Files.Select(mp3File => new AnalyseCommand(mp3File, "{index}. {title}", fakeWriter)).Cast<Command>().ToList();
 
             // Act
-            analyser.Execute();
+            commandPool.ForEach(command => command.Execute());
 
             // Assert
-            var message = "File: " + mp3Files[0].FullName + "\n" +                         
+            var message = "File: " + mp3Files[0].FullName + "\n" +
                          "{title} in file name: anothertitle; {title} in tags: title1\n\n" +
                          "Index out of range. Maximum is 3:\n" +
                          "\t" + "4. anothertitle" + "\n\n" +
                          "Index must be number\n" +
-                         "\t" + "qw. title3" + "\n\n" +                         
+                         "\t" + "qw. title3" + "\n\n" +
                          "Some indexes are missing: " + "1, 3.\n\n";
 
             Assert.AreEqual(message, fakeWriter.Stream.ToString());
         }
     }
 }
-*/

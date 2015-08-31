@@ -44,7 +44,7 @@ namespace Mp3Tager
                 }
             }
 
-            SaveChanges(files, worker);
+            SaveChanges(files, worker, args.Contains("--backup-ignore"));
         }
 
         private void ShowHelp(string[] args, IWorker worker)
@@ -74,7 +74,7 @@ namespace Mp3Tager
             worker.WriteLine(command.Accept(new DifferenceVisitor()));
         }
 
-        private void SaveChanges(IEnumerable<IMp3File> files, IWorker worker)
+        private void SaveChanges(IEnumerable<IMp3File> files, IWorker worker, bool enableBackup)
         {
             worker.WriteLine("Save changes? y/n");
 
@@ -86,22 +86,33 @@ namespace Mp3Tager
 
             foreach (var mp3File in files)
             {
-                var backup = new FileBackuper(mp3File);
-                using (backup)
-                {
-                    try
-                    {
-                        mp3File.Save();
-                    }
-                    catch (Exception e)
-                    {
-                        backup.RestoreFromBackup();
-                        throw new Exception("File " + mp3File.FullName
-                            + " was restored from backup because of exception:", e);
-                    }
-                }
+                SaveMp3File(mp3File, enableBackup);
             }
             worker.WriteLine("Command succesfully executed.");
+        }
+
+        private void SaveMp3File(IMp3File mp3File, bool enableBackup)
+        {
+            if (!enableBackup)
+            {
+                mp3File.Save();
+                return;
+            }
+
+            var backup = new FileBackuper(mp3File);
+            using (backup)
+            {
+                try
+                {
+                    mp3File.Save();
+                }
+                catch (Exception e)
+                {
+                    backup.RestoreFromBackup();
+                    throw new Exception("File " + mp3File.FullName
+                        + " was restored from backup because of exception:", e);
+                }
+            }
         }
     }
 }

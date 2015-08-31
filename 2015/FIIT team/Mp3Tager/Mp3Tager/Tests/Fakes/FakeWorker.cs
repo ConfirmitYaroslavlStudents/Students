@@ -3,11 +3,11 @@ using CommandCreation;
 
 namespace Tests.Fakes
 {
-    public class FakeWriter : IWorker
+    public class FakeWorker : IWorker
     {
         public StringBuilder Stream { get; private set; }
 
-        public FakeWriter()
+        public FakeWorker()
         {
             Stream = new StringBuilder();
         }

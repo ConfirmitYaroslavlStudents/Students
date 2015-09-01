@@ -17,7 +17,7 @@ namespace Mp3TagLib
 
         public IMp3File CurrentFile
         {
-            get { return _currentFile; }
+            get { return  _currentFile; }
             set { _currentFile = value; }
         }
 

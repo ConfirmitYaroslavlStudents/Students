@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using Mp3TagLib;
 using Mp3TagLib.Operations;
+using Mp3TagLib.Sync;
 
 namespace mp3tager.Operations
 {
+
     class Changetags : Operation
+
     {
         public const int ID = 3;
-        private Tager _tager;
-        private Mp3Memento _memento;
+        private Retag retag;
 
         public Changetags()
         {
@@ -21,24 +23,33 @@ namespace mp3tager.Operations
         {
             if (IsCanceled)
             {
-                RestoreFile();
-
+                retag.Redo();
                 return;
             }
           
-            _tager = new Tager(new FileLoader());
-          
-            if (!_tager.Load(Menu.GetUserInput("path:")))
+            var tager = new Tager(new FileLoader());
+
+
+            if (!tager.Load(Menu.GetUserInput("path:")))
+            {
                 throw new FileNotFoundException("File does not exist");
-        
+            }
+
+
+
             Menu.PrintHelp();
-            Menu.PrintCurrentFile(_tager.CurrentFile);
+            Menu.PrintCurrentFile(tager.CurrentFile);
            
-            var tags = GetTagsFromFileName(_tager.CurrentFile);
-            
-            _memento = _tager.CurrentFile.GetMemento();
-            _tager.ChangeTags(tags);
-            _tager.Save();
+
+
+            var tags = GetTagsFromFileName(tager.CurrentFile);
+
+
+
+            retag = new Retag();
+            retag.Call(tags, tager);
+            retag.Save();
+
             
             Menu.PrintSuccessMessage();
         }
@@ -60,7 +71,8 @@ namespace mp3tager.Operations
             }
             return result;
         }
-      
+
+
         Dictionary<string, string> Select(List<Dictionary<string, string>> tagValuesList)
         {
             Menu.PrintMessage("Select correct tag values:");
@@ -81,18 +93,14 @@ namespace mp3tager.Operations
             return result;
         }
 
+
+
+
         public override void Cancel()
         {
-            RestoreFile();
+            retag.Cancel();
+            retag.Save();
             IsCanceled = true;
-        }
-
-        void RestoreFile()
-        {
-            var newMemento = _tager.CurrentFile.GetMemento();
-            _tager.CurrentFile.SetMemento(_memento);
-            _memento = newMemento;
-            _tager.Save();
         }
     }
 }

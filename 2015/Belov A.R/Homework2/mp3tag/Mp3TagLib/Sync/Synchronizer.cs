@@ -18,10 +18,12 @@ namespace Mp3TagLib.Sync
             _tager = tager;
             ModifiedFiles = new List<IMp3File>();
             ErrorFiles = new Dictionary<string, string>();
+            OperationList = new List<SyncOperation>();
             _syncRule = rule;
         }
       
         public List<IMp3File> ModifiedFiles { get;private set; }
+        public List<SyncOperation> OperationList { get; private set; }
 
         public Dictionary<string, string> ErrorFiles { get;private set; }
 
@@ -29,7 +31,7 @@ namespace Mp3TagLib.Sync
         {
             foreach (var mp3File in files)
             {
-                Sync(mp3File,mask,_syncRule);
+                Sync(mp3File,mask,_syncRule.Clone());
             }
         }
 
@@ -39,8 +41,9 @@ namespace Mp3TagLib.Sync
             _tager.CurrentFile = file;
             foreach (var operation in rule.OperationsList)
             {
-                if (operation.Call(mask, _tager))
+                if (operation.Call(mask, _tager,file))
                 {
+                    OperationList.Add(operation);
                     ModifiedFiles.Add(_tager.CurrentFile);
                     errorFlag = false;
                     break;
@@ -64,22 +67,48 @@ namespace Mp3TagLib.Sync
                 }
             }
         }
-       
+        public void SaveLast()
+        {
+            if(OperationList.Count!=0)
+            OperationList[OperationList.Count-1].Save();
+        }
+
+        public void RestoreLast()
+        {
+            if (OperationList.Count != 0)
+                OperationList[OperationList.Count - 1].Cancel();
+        }
+
         public void Save()
         {
-            foreach (var modifiedFile in ModifiedFiles)
+            foreach (var operation in OperationList)
             {
                 try
                 {
-                    modifiedFile.Save();
+                    operation.Save();
                 }
                 catch (Exception e)
                 {
                       
-                    ErrorFiles.Add(modifiedFile.Name,e.Message);
+                    ErrorFiles.Add(operation.File.Name,e.Message);
                 }
             }
-            ModifiedFiles.Clear();
+        }
+        public void Restore()
+        {
+            foreach (var operation in OperationList)
+            {
+               
+                    operation.Cancel();  
+            }
+        }
+        public void Redo()
+        {
+            foreach (var operation in OperationList)
+            {
+
+                operation.Redo();
+            }
         }
     }
 }

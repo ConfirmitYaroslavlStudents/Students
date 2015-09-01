@@ -12,8 +12,8 @@ namespace mp3tager.Operations
             {
                 case Changetags.ID:
                     return new Changetags();
-                case Rename.ID:
-                    return new Rename();
+                case ChangeName.ID:
+                    return new ChangeName();
                 case Analysis.ID:
                     return new Analysis();
                 case Sync.ID:
@@ -36,7 +36,7 @@ namespace mp3tager.Operations
                 case "changetags":
                     return CreateOperation(Changetags.ID);
                 case "rename":
-                    return CreateOperation(Rename.ID);
+                    return CreateOperation(ChangeName.ID);
                 case "analysis":
                     return CreateOperation(Analysis.ID);
                 case "sync":

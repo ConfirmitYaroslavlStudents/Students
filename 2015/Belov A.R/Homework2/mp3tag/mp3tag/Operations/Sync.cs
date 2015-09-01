@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Mp3TagLib;
 using Mp3TagLib.Operations;
 using Mp3TagLib.Sync;
@@ -12,11 +11,13 @@ namespace mp3tager.Operations
     class Sync:Operation
     {
         public const int ID = 6;
-        private Dictionary<IMp3File, Mp3Memento> _files;
+
+        private Synchronizer _synchronizer;
+
+
 
         public Sync()
         {
-            _files = new Dictionary<IMp3File, Mp3Memento>();
 
             OperationId = ID;
         }
@@ -25,32 +26,40 @@ namespace mp3tager.Operations
         {
             if (IsCanceled)
             {
-                RestoreFiles();
-
+                _synchronizer.Redo();
                 return;
             }
+
+
 
             var path = Menu.GetUserInput("path:"); //@"C:\Users\Alexandr\Desktop\TEST";
             var tager = new Tager(new FileLoader());
             var analyzer = new Analyzer(tager, s => Path.GetExtension(s).ToLower() == ".mp3");
-            
+
+
+
             Menu.PrintHelp();
-            
+
+
+
             var mask = new Mask(Menu.GetUserInput("mask:"));
+
+
+
             analyzer.Analyze(Directory.GetFiles(path), mask);
 
-            var synchronizer = new Synchronizer(tager,Menu.SelectSyncRule());
-            synchronizer.Sync(analyzer.NotSynchronizedFiles.Keys, mask);
-            
-            Menu.PrintChanges(synchronizer.ModifiedFiles);
 
+            _synchronizer = new Synchronizer(tager,Menu.SelectSyncRule());
+            _synchronizer.Sync(analyzer.NotSynchronizedFiles.Keys, mask);
+
+
+
+            Menu.PrintChanges(_synchronizer.ModifiedFiles);
             if (Menu.GetYesNoAnswer("Save changes?\nY/N:"))
             {
-                SaveFilesState(synchronizer.ModifiedFiles);
-                synchronizer.Save();
-
+                _synchronizer.Save();
                 Menu.PrintMessage("Successfully");
-                Menu.PrintCollection(string.Format("with {0} errors", synchronizer.ErrorFiles.Count), synchronizer.ErrorFiles, ConsoleColor.Red);
+                Menu.PrintCollection(string.Format("with {0} errors", _synchronizer.ErrorFiles.Count), _synchronizer.ErrorFiles, ConsoleColor.Red);
                 Menu.GetUserInput("Press enter...");
             }
         }
@@ -58,28 +67,7 @@ namespace mp3tager.Operations
         public override void Cancel()
         {
             IsCanceled = true;
-            RestoreFiles();
-        }
-
-        void SaveFilesState(IEnumerable<IMp3File> files)
-        {
-            foreach (var mp3File in files)
-            {
-                _files.Add(mp3File, mp3File.GetMemento());
-            }
-        }
-
-        void RestoreFiles()
-        {
-            for (int i = 0; i < _files.Count; i++)
-            {
-                var file = _files.Keys.ElementAt(i);
-                var newMemento = file.GetMemento();
-
-                file.SetMemento(_files[file]);
-                _files[file] = newMemento;
-                file.Save();
-            }
+            _synchronizer.Restore();
         }
     }
 }

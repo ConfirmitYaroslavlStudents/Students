@@ -1,16 +1,17 @@
 ﻿using System.IO;
 using Mp3TagLib;
 using Mp3TagLib.Operations;
+using Mp3TagLib.Sync;
 
 namespace mp3tager.Operations
 {
-    class Rename:Operation
+    class ChangeName:Operation
     {
         public const int ID = 4;
-        private Tager _tager;
-        private Mp3Memento _memento;
+        private Mp3TagLib.Sync.Rename rename;
 
-        public Rename()
+
+        public ChangeName()
         {
             OperationId = ID;
         }
@@ -19,36 +20,42 @@ namespace mp3tager.Operations
         {
             if (IsCanceled)
             {
-                RestoreFile();
+                rename.Redo();
                 return;
             }
         
-            _tager = new Tager(new FileLoader());
+            var tager = new Tager(new FileLoader());
                                                            // _tager.Load(@"C:\Users\Alexandr\Desktop\TEST\песня.mp3");
-            if (!_tager.Load(Menu.GetUserInput("path:")))
+            if (!tager.Load(Menu.GetUserInput("path:")))
             {
                 throw new FileNotFoundException("File does not exist");
             }
-          
+
+
+
+
             Menu.PrintHelp();
-            _memento=_tager.CurrentFile.GetMemento();
-            _tager.ChangeName(new Mask(Menu.GetUserInput("mask:")));
-            _tager.Save();
+
+
+
+
+
+
+            rename = new Rename();
+            rename.Call(new Mask(Menu.GetUserInput("mask:")), tager,tager.CurrentFile);
+            rename.Save();
+
+
+
             Menu.PrintSuccessMessage();
         }
 
         public override void Cancel()
         {
-            RestoreFile();
+            rename.Cancel();
+            rename.Save();
             IsCanceled = true;
         }
        
-        void RestoreFile()
-        {
-            var newMemento = _tager.CurrentFile.GetMemento();
-            _tager.CurrentFile.SetMemento(_memento);
-            _memento = newMemento;
-            _tager.Save();
-        }
     }
 }

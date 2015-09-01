@@ -12,5 +12,10 @@ namespace Mp3TagLib.Sync
         {
             OperationsList = new List<SyncOperation> { new Retag(), new Rename() };
         }
+
+        public ISyncRule Clone()
+        {
+            return new RetagFirsRule();
+        }
     }
 }

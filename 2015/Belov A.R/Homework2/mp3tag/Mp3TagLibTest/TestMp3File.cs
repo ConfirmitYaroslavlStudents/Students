@@ -39,12 +39,12 @@ namespace Mp3TagTest
 
         public Mp3Memento GetMemento()
         {
-            throw new System.NotImplementedException();
+            return new Mp3Memento();
         }
 
         public void SetMemento(Mp3Memento memento)
         {
-            throw new System.NotImplementedException();
+           
         }
     }
 }

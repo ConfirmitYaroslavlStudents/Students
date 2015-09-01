@@ -12,11 +12,10 @@ namespace mp3tager.Operations
     class HandSync:Operation
     {
         public const int ID = 7;
-        private Dictionary<IMp3File, Mp3Memento> _files;  
-       
+        private Synchronizer synchronizer;
+
         public HandSync()
         {
-            _files=new Dictionary<IMp3File, Mp3Memento>();
             OperationId = ID;
         }
     
@@ -24,39 +23,47 @@ namespace mp3tager.Operations
         {
             if (IsCanceled)
             {
-                RestoreFiles();
 
+                synchronizer.Redo();
                 return;
             }
 
             var path = Menu.GetUserInput("path:");      //@"C:\Users\Alexandr\Desktop\TEST\New folder";
             var tager = new Tager(new FileLoader());
             var analyzer = new Analyzer(tager, s => Path.GetExtension(s).ToLower() == ".mp3");
-            
+
+
             Menu.PrintHelp();
-            
+
+
+
             var mask = new Mask(Menu.GetUserInput("mask:"));
-           
+
+
+
             analyzer.Analyze(Directory.GetFiles(path), mask);
-           
-            var synchronizer = new Synchronizer(tager);
+
+
+
+            synchronizer = new Synchronizer(tager);
             
             foreach (var notSynchronizedFile in analyzer.NotSynchronizedFiles)
             {
                 Console.Clear();
                 Menu.PrintMessage(notSynchronizedFile.Key.Name+" with "+notSynchronizedFile.Value);
                
-                var memento = notSynchronizedFile.Key.GetMemento();
+
                
                 synchronizer.Sync(notSynchronizedFile.Key,mask,Menu.SelectSyncRule());
                 Menu.PrintChanges(notSynchronizedFile.Key);
-                
+
+
+
                 if (Menu.GetYesNoAnswer("Save changes?\nY/N:"))
                 {
-                    _files.Add(notSynchronizedFile.Key, memento);
                     try
                     {
-                        notSynchronizedFile.Key.Save();
+                        synchronizer.SaveLast();
                         Menu.PrintMessage("Successfully");
                         Menu.GetUserInput("Press enter...");
                     }
@@ -68,7 +75,7 @@ namespace mp3tager.Operations
                 }
                 else
                 {
-                    notSynchronizedFile.Key.SetMemento(memento);
+                    synchronizer.RestoreLast();
                 }
             }
         }
@@ -76,19 +83,8 @@ namespace mp3tager.Operations
         public override void Cancel()
         {
             IsCanceled = true;
-            RestoreFiles();
+            synchronizer.Restore();
         }
 
-        void RestoreFiles()
-        {
-            for (int i = 0; i < _files.Count; i++)
-            {
-                var file = _files.Keys.ElementAt(i);
-                var newMemento = file.GetMemento();
-                file.SetMemento(_files[file]);
-                _files[file] = newMemento;
-                file.Save();
-            }
-        }
     }
 }

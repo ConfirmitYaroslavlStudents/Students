@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace mp3lib
+namespace mp3lib.Args_Managing
 {
 	public class ArgsManager
 	{

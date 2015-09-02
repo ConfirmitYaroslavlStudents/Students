@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using mp3lib.Args_Managing;
 
 namespace mp3lib.Rollback
 {
 	[Serializable]
 	public sealed class RollbackInfo
 	{
-		public ProgramAction Action { get; set; }
-		public List<string> FilesChanged { get; set; }
-		public string Mask { get; set; }
-		public dynamic Data { get; set; }
+		public IEnumerable<Info> Data { get; set; }
 
-		public RollbackInfo(ProgramAction action, IEnumerable<string> files, string mask, dynamic data = null)
+		public RollbackInfo(IEnumerable<Info> data = null)
 		{
-			Action = action;
-			FilesChanged = files?.ToList() ?? new List<string>();
-			Mask = mask;
-			Data = data ?? new List<dynamic>();
+			Data = data ?? new List<Info>();
 		}
 	}
 }

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using mp3lib.Args_Managing;
 using mp3lib.Rollback;
 
-namespace mp3lib
+namespace mp3lib.Core.Actions
 {
-	public class Mp3FileNameChanger : IRecoverable
+	public class Mp3FileNameChanger
 	{
 		private readonly IMp3File _mp3File;
 		private readonly DataExtracter _dataExtracter;
@@ -82,20 +83,6 @@ namespace mp3lib
 			_data = resultFileName;
 
 			return resultFileName.ToString();
-		}
-
-		public void Dispose()
-		{
-			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.FileRename, new[] {_mp3File.FilePath}, _mask,
-				_data.ToString())).Dispose();
-		}
-
-		public void Rollback(RollbackInfo info)
-		{
-			var data = info.Data as string;
-			if(data == null) return;
-
-            _mp3File.ChangeFileName(data);
 		}
     }
 }

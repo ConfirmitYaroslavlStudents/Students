@@ -1,5 +1,6 @@
 ﻿using System;
 using mp3lib;
+using mp3lib.Communication_With_User;
 
 namespace ConsoleMp3TagEditor
 {

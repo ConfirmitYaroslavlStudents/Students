@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using TagLib;
 
-namespace mp3lib
+namespace mp3lib.Core
 {
 	public class Mp3File : IMp3File
 	{
@@ -101,6 +101,11 @@ namespace mp3lib
 			FilePath = fileName;
 
 			File = TagLib.File.Create(path);
+		}
+
+		public void Dispose()
+		{
+			
 		}
 	}
 }

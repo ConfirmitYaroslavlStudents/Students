@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using mp3lib.Args_Managing;
+using mp3lib.Core;
 
-namespace mp3lib
+namespace mp3lib.Communication_With_User
 {
 	public class CommunicationWithUser
 	{

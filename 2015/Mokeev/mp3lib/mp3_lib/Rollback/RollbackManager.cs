@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+using mp3lib.Core;
 using Newtonsoft.Json;
 
 namespace mp3lib.Rollback
@@ -12,17 +10,17 @@ namespace mp3lib.Rollback
 	{
 		private readonly ISaver _saver;
 
-		private Stack<RollbackInfo> _data;
+		private Stack<Info> _data;
 
 		public RollbackManager(ISaver saveTo)
 		{
 			_saver = saveTo;
-			_data = new Stack<RollbackInfo>();
+			_data = new Stack<Info>();
 
 			Load();
 		}
 
-		public IDisposable AddAction(RollbackInfo info)
+		public IDisposable AddAction(Info info)
 		{
 			_data.Push(info);
 			return this;
@@ -34,27 +32,30 @@ namespace mp3lib.Rollback
 
 			var info = _data.Pop();
 
-			switch (info.Action)
+			//TODO: ROLLBACK
+			try
 			{
-				case ProgramAction.Mp3Edit:
-					new Mp3TagChanger(new Mp3File(info.FilesChanged[0]), info.Mask, _saver).Rollback(info);
-					return new RollbackStatus(RollbackState.Success, ProgramAction.Mp3Edit);
-				case ProgramAction.FileRename:
-					new Mp3FileNameChanger(new Mp3File(info.FilesChanged[0]), info.Mask, _saver).Rollback(info);
-					return new RollbackStatus(RollbackState.Success, ProgramAction.FileRename);
-				case ProgramAction.Sync:
-					new Mp3Syncing(info.FilesChanged.Select(file => new Mp3File(file)), info.Mask, null, _saver).Rollback(info);
-					return new RollbackStatus(RollbackState.Success, ProgramAction.Sync);
+				var mp3 = new Mp3File(info.NewFileName);
+				mp3.ChangeFileName(info.OldFileName);
+				foreach (var tag in info.Tags)
+				{
+					mp3[tag.Key] = tag.Value;
+				}
+				return new RollbackStatus(RollbackState.Success);
+			}
+			catch (Exception e)
+			{
+				return new RollbackStatus(RollbackState.Fail, e.Message);
 			}
 
-			return new RollbackStatus(RollbackState.Fail, null, $"For action {info.Action} it's not implemented");
+
 		}
 
 		private void Load()
 		{
 			try
 			{
-				_data = JsonConvert.DeserializeObject<Stack<RollbackInfo>>(_saver.GetResponse()) ?? new Stack<RollbackInfo>();
+				_data = JsonConvert.DeserializeObject<Stack<Info>>(_saver.GetResponse()) ?? new Stack<Info>();
 			}
 			catch
 			{
@@ -73,4 +74,5 @@ namespace mp3lib.Rollback
 		}
 
 	}
+
 }

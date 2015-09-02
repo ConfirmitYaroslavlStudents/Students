@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using mp3lib;
+using mp3lib.Core;
+using mp3lib.Core.Actions;
 using mp3lib_Tests.Classes_for_tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

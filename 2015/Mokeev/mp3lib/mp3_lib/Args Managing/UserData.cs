@@ -1,4 +1,6 @@
-namespace mp3lib
+using mp3lib.Core;
+
+namespace mp3lib.Args_Managing
 {
 	public class UserData
 	{

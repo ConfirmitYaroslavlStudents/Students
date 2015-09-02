@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace mp3lib
+namespace mp3lib.Core
 {
-	public interface IMp3File
+	public interface IMp3File : IDisposable
 	{
 		string Album { get; set; }
 		string Artist { get; set; }

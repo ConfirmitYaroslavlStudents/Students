@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using mp3lib.Args_Managing;
+using mp3lib.Communication_With_User;
 using mp3lib.Rollback;
 
-namespace mp3lib
+namespace mp3lib.Core.Actions
 {
-	public class Mp3Syncing : IRecoverable
+	public class Mp3Syncing
 	{
 		private readonly IMp3File[] _files;
 		private readonly ICommunication _communication;
@@ -84,32 +85,6 @@ namespace mp3lib
 				fileDifferencese.Mp3File.ChangeFileName(fn);
 			}
 			_filesChanged = filesChanged;
-		}
-
-		public void Dispose()
-		{
-			new RollbackManager(_saver).AddAction(new RollbackInfo(ProgramAction.Sync, _filesChanged, _mask,
-				_data)).Dispose();
-		}
-
-		public void Rollback(RollbackInfo info)
-		{
-			var data = info.Data;
-
-			if(data == null) return;
-
-			foreach (var item in data)
-			{
-				var mp3 = new Mp3File(item.Key.ToString());
-				foreach (Newtonsoft.Json.Linq.JProperty tag in item.Value.Value)
-				{
-					TagType tt;
-					var valid = TagType.TryParse(tag.First.ToString(), out tt);
-					if(valid) mp3[tt] = tag.Value.ToString();
-				}
-
-				mp3.ChangeFileName(item.Value.Key);
-			}
 		}
 	}
 }

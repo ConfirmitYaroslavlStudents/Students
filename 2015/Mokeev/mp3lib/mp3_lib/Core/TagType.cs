@@ -1,4 +1,4 @@
-namespace mp3lib
+namespace mp3lib.Core
 {
 	public enum TagType
 	{

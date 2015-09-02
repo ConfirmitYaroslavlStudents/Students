@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using mp3lib;
+using mp3lib.Communication_With_User;
 
 namespace mp3lib_Tests.Classes_for_tests
 {

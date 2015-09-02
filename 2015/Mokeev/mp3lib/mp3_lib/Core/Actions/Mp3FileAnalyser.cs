@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace mp3lib
+namespace mp3lib.Core.Actions
 {
 	public class Mp3FileAnalyser
 	{

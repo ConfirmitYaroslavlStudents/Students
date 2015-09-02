@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using mp3lib.Args_Managing;
 using mp3lib.Rollback;
 
-namespace mp3lib
+namespace mp3lib.Core.Actions
 {
-	public class Mp3TagChanger : IRecoverable
+	public class Mp3TagChanger
 	{
 		private readonly List<KeyValuePair<TagType, string>> _changes = new List<KeyValuePair<TagType, string>>();
 		private ISaver Backuper { get; }
@@ -68,21 +69,6 @@ namespace mp3lib
 						break;
 				}
 			}
-		}
-
-
-		public void Dispose()
-		{
-			new RollbackManager(Backuper).AddAction(new RollbackInfo(ProgramAction.Mp3Edit, new [] {Mp3.FilePath}, _mask, _changes)).Dispose();
-		}
-
-		public void Rollback(RollbackInfo info)
-		{
-			var data = info.Data as List<KeyValuePair<TagType, string>>;
-			if (data == null) throw new Exception("Wrong data came from source.");
-
-			var oldData = data.ToDictionary(item => item.Key, item => item.Value);
-			ChangeMp3Tags(oldData);
 		}
 	}
 }

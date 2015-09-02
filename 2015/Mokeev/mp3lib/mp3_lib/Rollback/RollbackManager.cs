@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+using mp3lib.Core;
 using Newtonsoft.Json;
 
 namespace mp3lib.Rollback
@@ -22,9 +19,9 @@ namespace mp3lib.Rollback
 			Load();
 		}
 
-		public IDisposable AddAction(RollbackInfo info)
+		public IDisposable AddAction(RollbackInfo rollbackInfo)
 		{
-			_data.Push(info);
+			_data.Push(rollbackInfo);
 			return this;
 		}
 
@@ -34,20 +31,23 @@ namespace mp3lib.Rollback
 
 			var info = _data.Pop();
 
-			switch (info.Action)
+			//TODO: ROLLBACK
+			try
 			{
-				case ProgramAction.Mp3Edit:
-					new Mp3TagChanger(new Mp3File(info.FilesChanged[0]), info.Mask, _saver).Rollback(info);
-					return new RollbackStatus(RollbackState.Success, ProgramAction.Mp3Edit);
-				case ProgramAction.FileRename:
-					new Mp3FileNameChanger(new Mp3File(info.FilesChanged[0]), info.Mask, _saver).Rollback(info);
-					return new RollbackStatus(RollbackState.Success, ProgramAction.FileRename);
-				case ProgramAction.Sync:
-					new Mp3Syncing(info.FilesChanged.Select(file => new Mp3File(file)), info.Mask, null, _saver).Rollback(info);
-					return new RollbackStatus(RollbackState.Success, ProgramAction.Sync);
+				var mp3 = new Mp3File(info.NewFileName, _saver);
+				mp3.ChangeFileName(info.OldFileName);
+				foreach (var tag in info.Tags)
+				{
+					mp3[tag.Key] = tag.Value;
+				}
+				return new RollbackStatus(RollbackState.Success);
+			}
+			catch (Exception e)
+			{
+				return new RollbackStatus(RollbackState.Fail, e.Message);
 			}
 
-			return new RollbackStatus(RollbackState.Fail, null, $"For action {info.Action} it's not implemented");
+
 		}
 
 		private void Load()
@@ -73,4 +73,5 @@ namespace mp3lib.Rollback
 		}
 
 	}
+
 }

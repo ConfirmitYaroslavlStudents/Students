@@ -1,4 +1,4 @@
-﻿namespace mp3lib
+﻿namespace mp3lib.Args_Managing
 {
 	public enum ProgramAction
 	{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using mp3lib;
+using mp3lib.Core;
 using mp3lib.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

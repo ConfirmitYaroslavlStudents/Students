@@ -55,34 +55,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Args.cs" />
-    <Compile Include="ArgsManager.cs" />
-    <Compile Include="CommunicationWithUser.cs" />
-    <Compile Include="DataExtracter.cs" />
-    <Compile Include="Diff.cs" />
+    <Compile Include="Args Managing\Args.cs" />
+    <Compile Include="Args Managing\ArgsManager.cs" />
+    <Compile Include="Communication With User\CommunicationWithUser.cs" />
+    <Compile Include="Core\DataExtracter.cs" />
+    <Compile Include="Core\Diff.cs" />
     <Compile Include="Exceptions\DataExctracterException.cs" />
-    <Compile Include="FileDifferences.cs" />
-    <Compile Include="ICommunication.cs" />
-    <Compile Include="IMp3File.cs" />
-    <Compile Include="IRequestable.cs" />
-    <Compile Include="IResponsable.cs" />
-    <Compile Include="Rollback\IRecoverable.cs" />
-    <Compile Include="Mp3File.cs" />
-    <Compile Include="Mp3FileNameChanger.cs" />
-    <Compile Include="Mp3FileAnalyser.cs" />
-    <Compile Include="Mp3Syncing.cs" />
-    <Compile Include="Exceptions\NotEnoughDataException.cs" />
-    <Compile Include="ProgramAction.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mp3TagChanger.cs" />
-    <Compile Include="Rollback\ISaver.cs" />
+    <Compile Include="Core\FileDifferences.cs" />
+    <Compile Include="Communication With User\ICommunication.cs" />
+    <Compile Include="Core\IMp3File.cs" />
+    <Compile Include="Communication With User\IRequestable.cs" />
+    <Compile Include="Communication With User\IResponsable.cs" />
     <Compile Include="Rollback\RollbackInfo.cs" />
+    <Compile Include="Core\Mp3File.cs" />
+    <Compile Include="Core\Actions\Mp3FileNameChanger.cs" />
+    <Compile Include="Core\Actions\Mp3FileAnalyser.cs" />
+    <Compile Include="Core\Actions\Mp3Syncing.cs" />
+    <Compile Include="Exceptions\NotEnoughDataException.cs" />
+    <Compile Include="Args Managing\ProgramAction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Actions\Mp3TagChanger.cs" />
+    <Compile Include="Rollback\ISaver.cs" />
     <Compile Include="Rollback\RollbackManager.cs" />
     <Compile Include="Rollback\RollbackState.cs" />
     <Compile Include="Rollback\RollbackStatus.cs" />
-    <Compile Include="SyncActions.cs" />
-    <Compile Include="TagType.cs" />
-    <Compile Include="UserData.cs" />
+    <Compile Include="Core\SyncActions.cs" />
+    <Compile Include="Core\TagType.cs" />
+    <Compile Include="Args Managing\UserData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

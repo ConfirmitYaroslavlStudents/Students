@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleMp3TagEditor", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mp3lib_Tests", "mp3lib_Tests\mp3lib_Tests.csproj", "{11541B6D-CF41-46C7-9039-8A7942D0FBD0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4EFA9225-61C2-435F-B782-9DDE256C8932}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{96DD0CE4-722D-47E0-BD45-CCD4474A5483}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{11541B6D-CF41-46C7-9039-8A7942D0FBD0} = {4EFA9225-61C2-435F-B782-9DDE256C8932}
+		{11541B6D-CF41-46C7-9039-8A7942D0FBD0} = {96DD0CE4-722D-47E0-BD45-CCD4474A5483}
 	EndGlobalSection
 EndGlobal

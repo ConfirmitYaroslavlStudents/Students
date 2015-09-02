@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using mp3lib.Exceptions;
 
-namespace mp3lib
+namespace mp3lib.Core
 {
 	public class DataExtracter
 	{

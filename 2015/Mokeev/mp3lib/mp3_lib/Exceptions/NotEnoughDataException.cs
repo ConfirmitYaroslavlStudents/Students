@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using mp3lib.Core;
 
 namespace mp3lib.Exceptions
 {

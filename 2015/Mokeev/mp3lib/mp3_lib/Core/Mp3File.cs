@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using mp3lib.Rollback;
 using TagLib;
 
-namespace mp3lib
+namespace mp3lib.Core
 {
 	public class Mp3File : IMp3File
 	{
 		private TagLib.File File { get; set; }
 		private Tag Tag { get; }
+
+		private bool _fileChanged = false;
+		private string _oldFilePath;
+		private ISaver _saver;
 
 		public string FilePath { get; private set; }
 
@@ -55,10 +61,13 @@ namespace mp3lib
 		public string TrackId { get { return Tag.Track.ToString(); } set { File.Tag.Track = Convert.ToUInt32(value); Set(); } }
 		public string Genre { get { return Tag.FirstGenre; } set { File.Tag.Genres = new[] { value }; Set(); } }
 
-		public Mp3File(string file)
+		public Mp3File(string file, ISaver saver)
 		{
 			if (!System.IO.File.Exists(file)) throw new FileNotFoundException("Mp3File not found", file);
 			FilePath = file;
+
+			_oldFilePath = file.Clone() as string;
+			_saver = saver;
 
 			File = TagLib.File.Create(file);
 			Tag = File.GetTag(TagTypes.Id3v2);
@@ -67,6 +76,7 @@ namespace mp3lib
 		private void Set()
 		{
 			File.Save();
+			_fileChanged = true;
 		}
 
 		public Dictionary<TagType, string> GetId3Data()
@@ -101,6 +111,24 @@ namespace mp3lib
 			FilePath = fileName;
 
 			File = TagLib.File.Create(path);
+		}
+
+		public void Rollback(RollbackInfo rollbackInfo)
+		{
+			foreach (var tag in rollbackInfo.Tags)
+			{
+				this[tag.Key] = tag.Value;
+			}
+
+			ChangeFileName(rollbackInfo.OldFileName);
+		}
+
+		public void Dispose()
+		{
+			if(!_fileChanged) return;
+
+			var data = new RollbackInfo(GetId3Data().ToList(), FilePath, _oldFilePath);
+			new RollbackManager(_saver).AddAction(data).Dispose();
 		}
 	}
 }

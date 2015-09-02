@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using mp3lib.Rollback;
 
-namespace mp3lib
+namespace mp3lib.Core
 {
-	public interface IMp3File
+	public interface IMp3File : IDisposable
 	{
 		string Album { get; set; }
 		string Artist { get; set; }
@@ -17,5 +19,7 @@ namespace mp3lib
 
 		Dictionary<TagType, string> GetId3Data();
 		void ChangeFileName(string fileName);
+
+		void Rollback(RollbackInfo rollbackInfo);
 	}
 }

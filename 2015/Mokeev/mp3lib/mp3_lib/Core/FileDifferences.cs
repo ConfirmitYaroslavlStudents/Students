@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace mp3lib
+namespace mp3lib.Core
 {
 	public class FileDifferences
 	{

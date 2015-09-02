@@ -2,81 +2,93 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using mp3lib;
+using mp3lib.Args_Managing;
+using mp3lib.Communication_With_User;
+using mp3lib.Core;
+using mp3lib.Core.Actions;
 using mp3lib.Rollback;
 
 namespace ConsoleMp3TagEditor
 {
 	public static class Program
 	{
-		private static readonly string RollbackData = Environment.CurrentDirectory+"/restoreData.json";
+		private static readonly string RollbackData = Environment.CurrentDirectory + "/restoreData.json";
 
 		public static void Main(string[] args)
 		{
 			/*try
 			{*/
-				var argsManager = new ArgsManager(args);
-				argsManager.CheckArgsValidity();
+			var argsManager = new ArgsManager(args);
+			argsManager.CheckArgsValidity();
 
-				var data = argsManager.ExtactArgs();
-				Mp3File mp3;
-				IEnumerable<IMp3File> mp3Files;
-				switch (data.Action)
-				{
-					case ProgramAction.Analyse:
-						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
-						var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
+			var data = argsManager.ExtactArgs();
+			Mp3File mp3;
+			IEnumerable<IMp3File> mp3Files;
+			switch (data.Action)
+			{
+				case ProgramAction.Analyse:
+					mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file, new FileSaver(file))).ToArray();
+					var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
-						var differences = pathAnalyser.GetDifferences();
-						new CommunicationWithUser().ShowDifferences(differences, new ConsoleCommunication());
+					var differences = pathAnalyser.GetDifferences();
+					new CommunicationWithUser().ShowDifferences(differences, new ConsoleCommunication());
 
-						break;
+					foreach (var mp3File in mp3Files)
+					{
+						mp3File?.Dispose();
+					}
 
-					case ProgramAction.Mp3Edit:
-						mp3 = new Mp3File(data.Path);
-						using (var tagsChanger = new Mp3TagChanger(mp3, data.Mask, new FileSaver(RollbackData)))
-						{
-							tagsChanger.ChangeTags();
-						}
-						break;
+					break;
 
-					case ProgramAction.FileRename:
-						mp3 = new Mp3File(data.Path);
-						using (var renamer = new Mp3FileNameChanger(mp3, data.Mask, new FileSaver(RollbackData)))
-						{
-							var newFileName = renamer.GetNewFileName();
-							mp3.ChangeFileName(newFileName);
-						}
-						break;
+				case ProgramAction.Mp3Edit:
+					using (mp3 = new Mp3File(data.Path, new FileSaver(data.Path)))
+					{
+						var tagsChanger = new Mp3TagChanger(mp3, data.Mask, new FileSaver(RollbackData));
+						tagsChanger.ChangeTags();
+					}
+					break;
 
-					case ProgramAction.Sync:
-						mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file));
-						using (var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication(), new FileSaver(RollbackData)))
-						{
-							syncer.SyncFiles();
-						}
+				case ProgramAction.FileRename:
+					using (mp3 = new Mp3File(data.Path, new FileSaver(data.Path)))
+					{
+						var renamer = new Mp3FileNameChanger(mp3, data.Mask, new FileSaver(RollbackData));
+						var newFileName = renamer.GetNewFileName();
+						mp3.ChangeFileName(newFileName);
+					}
+					break;
 
-						break;
+				case ProgramAction.Sync:
+					mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file, new FileSaver(file))).ToArray();
+					var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication(), new FileSaver(RollbackData));
+					syncer.SyncFiles();
 
-					case ProgramAction.Rollback:
-						using (var rollbackSystem = new RollbackManager(new FileSaver(RollbackData)))
-						{
-							var state = rollbackSystem.Rollback();
+					foreach (var mp3File in mp3Files)
+					{
+						mp3File?.Dispose();
+					}
 
-							Console.WriteLine(
-								state.State == RollbackState.Fail
-									? $"Error occured while trying doing rollback. Details : \n\tAction: {state.RollbackedAction} \n\tError:{state.FailReason}"
-									: $"Rollback success. {state.RollbackedAction} cancelled.");
-						}
+					break;
 
-						break;
+				case ProgramAction.Rollback:
 
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+					using (var rollbackSystem = new RollbackManager(new FileSaver(RollbackData)))
+					{
+						var state = rollbackSystem.Rollback();
 
-				Console.WriteLine("Done!");
+						Console.WriteLine(
+							state.State == RollbackState.Fail
+								? $"Error occured while trying doing rollback. Details : \n\tError:{state.FailReason}"
+								: $"Rollback success.");
+					}
+
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			Console.WriteLine("Done!");
 			/*}
 			catch (Exception e)
 			{

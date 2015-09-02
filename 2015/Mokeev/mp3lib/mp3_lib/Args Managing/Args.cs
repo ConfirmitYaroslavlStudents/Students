@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mp3lib
+namespace mp3lib.Args_Managing
 {
 	public class Args
 	{

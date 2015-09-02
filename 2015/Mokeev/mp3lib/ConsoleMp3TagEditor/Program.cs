@@ -28,7 +28,7 @@ namespace ConsoleMp3TagEditor
 			switch (data.Action)
 			{
 				case ProgramAction.Analyse:
-					mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file)).ToArray();
+					mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file, new FileSaver(file))).ToArray();
 					var pathAnalyser = new Mp3FileAnalyser(mp3Files, data.Mask);
 
 					var differences = pathAnalyser.GetDifferences();
@@ -42,7 +42,7 @@ namespace ConsoleMp3TagEditor
 					break;
 
 				case ProgramAction.Mp3Edit:
-					using (mp3 = new Mp3File(data.Path))
+					using (mp3 = new Mp3File(data.Path, new FileSaver(data.Path)))
 					{
 						var tagsChanger = new Mp3TagChanger(mp3, data.Mask, new FileSaver(RollbackData));
 						tagsChanger.ChangeTags();
@@ -50,7 +50,7 @@ namespace ConsoleMp3TagEditor
 					break;
 
 				case ProgramAction.FileRename:
-					using (mp3 = new Mp3File(data.Path))
+					using (mp3 = new Mp3File(data.Path, new FileSaver(data.Path)))
 					{
 						var renamer = new Mp3FileNameChanger(mp3, data.Mask, new FileSaver(RollbackData));
 						var newFileName = renamer.GetNewFileName();
@@ -59,7 +59,7 @@ namespace ConsoleMp3TagEditor
 					break;
 
 				case ProgramAction.Sync:
-					mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file)).ToArray();
+					mp3Files = Directory.GetFiles(data.Path, "*.mp3").Select(file => new Mp3File(file, new FileSaver(file))).ToArray();
 					var syncer = new Mp3Syncing(mp3Files, data.Mask, new ConsoleCommunication(), new FileSaver(RollbackData));
 					syncer.SyncFiles();
 

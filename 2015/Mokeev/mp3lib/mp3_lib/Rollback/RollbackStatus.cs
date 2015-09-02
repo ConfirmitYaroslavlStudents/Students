@@ -1,6 +1,3 @@
-using System;
-using mp3lib.Args_Managing;
-
 namespace mp3lib.Rollback
 {
 	public class RollbackStatus

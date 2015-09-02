@@ -1,18 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using mp3lib.Args_Managing;
+using mp3lib.Core;
+using TagLib;
 
 namespace mp3lib.Rollback
 {
 	[Serializable]
 	public sealed class RollbackInfo
 	{
-		public IEnumerable<Info> Data { get; set; }
+		public IEnumerable<KeyValuePair<TagType, string>> Tags { get; } 
+		public string NewFileName { get; }
+		public string OldFileName { get; }
 
-		public RollbackInfo(IEnumerable<Info> data = null)
+		public RollbackInfo(IEnumerable<KeyValuePair<TagType, string>> tags, string newFileName, string oldFileName)
 		{
-			Data = data ?? new List<Info>();
+			Tags = tags;
+			NewFileName = newFileName;
+			OldFileName = oldFileName;
 		}
 	}
 }

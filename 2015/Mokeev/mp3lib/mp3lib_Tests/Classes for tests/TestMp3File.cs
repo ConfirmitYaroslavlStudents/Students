@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using mp3lib;
 using mp3lib.Core;
+using mp3lib.Rollback;
 
 namespace mp3lib_Tests.Classes_for_tests
 {
@@ -72,6 +73,16 @@ namespace mp3lib_Tests.Classes_for_tests
 		public void ChangeFileName(string fileName)
 		{
 			FilePath = fileName;
+		}
+
+		public void Rollback(RollbackInfo rollbackInfo)
+		{
+			
+		}
+
+		public void Dispose()
+		{
+			
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using mp3lib.Rollback;
 
 namespace mp3lib.Core
 {
@@ -18,5 +19,7 @@ namespace mp3lib.Core
 
 		Dictionary<TagType, string> GetId3Data();
 		void ChangeFileName(string fileName);
+
+		void Rollback(RollbackInfo rollbackInfo);
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using mp3lib.Core;
 using Newtonsoft.Json;
 
@@ -10,19 +9,19 @@ namespace mp3lib.Rollback
 	{
 		private readonly ISaver _saver;
 
-		private Stack<Info> _data;
+		private Stack<RollbackInfo> _data;
 
 		public RollbackManager(ISaver saveTo)
 		{
 			_saver = saveTo;
-			_data = new Stack<Info>();
+			_data = new Stack<RollbackInfo>();
 
 			Load();
 		}
 
-		public IDisposable AddAction(Info info)
+		public IDisposable AddAction(RollbackInfo rollbackInfo)
 		{
-			_data.Push(info);
+			_data.Push(rollbackInfo);
 			return this;
 		}
 
@@ -35,7 +34,7 @@ namespace mp3lib.Rollback
 			//TODO: ROLLBACK
 			try
 			{
-				var mp3 = new Mp3File(info.NewFileName);
+				var mp3 = new Mp3File(info.NewFileName, _saver);
 				mp3.ChangeFileName(info.OldFileName);
 				foreach (var tag in info.Tags)
 				{
@@ -55,7 +54,7 @@ namespace mp3lib.Rollback
 		{
 			try
 			{
-				_data = JsonConvert.DeserializeObject<Stack<Info>>(_saver.GetResponse()) ?? new Stack<Info>();
+				_data = JsonConvert.DeserializeObject<Stack<RollbackInfo>>(_saver.GetResponse()) ?? new Stack<RollbackInfo>();
 			}
 			catch
 			{

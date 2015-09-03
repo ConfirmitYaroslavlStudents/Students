@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Mp3TagLib.Sync
 {
     [Serializable]
-    public class RetagFirsRule:ISyncRule
+    public class RetagFirsRule : ISyncRule
     {
         public List<SyncOperation> OperationsList { get; private set; }
 

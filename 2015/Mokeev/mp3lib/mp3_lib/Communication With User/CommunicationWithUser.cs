@@ -7,8 +7,6 @@ namespace mp3lib.Communication_With_User
 {
 	public class CommunicationWithUser
 	{
-
-
 		//TODO: move to separate class {READY}
 		public void ShowDifferences(IEnumerable<FileDifferences> differences, IRequestable requestable)
 		{

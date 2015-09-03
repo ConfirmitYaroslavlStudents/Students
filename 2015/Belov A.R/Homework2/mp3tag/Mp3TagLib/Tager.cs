@@ -8,7 +8,7 @@ namespace Mp3TagLib
     {
         private readonly IFileLoader _fileLoader;
         private IMp3File _currentFile;
-     
+
         public Tager(IFileLoader fileLoader)
         {
             _fileLoader = fileLoader;
@@ -17,13 +17,13 @@ namespace Mp3TagLib
 
         public IMp3File CurrentFile
         {
-            get { return  _currentFile; }
+            get { return _currentFile; }
             set { _currentFile = value; }
         }
 
         public bool Load(string path)
         {
-            _currentFile=_fileLoader.Load(path);
+            _currentFile = _fileLoader.Load(path);
             return _currentFile != null;
         }
 
@@ -38,8 +38,8 @@ namespace Mp3TagLib
         {
             if (_currentFile == null)
                 throw new NullReferenceException("File is not loaded");
-           
-            if(tags==null)
+
+            if (tags == null)
                 throw new ArgumentException("Incorrect tags");
             _currentFile.SetTags(tags);
         }
@@ -56,22 +56,22 @@ namespace Mp3TagLib
                 var posibleTagValuesFromName = mask.GetTagValuesFromString(_currentFile.Name);
                 var tagsFromFile = _currentFile.GetTags();
                 var fileNameIsOk = false;
-               
+
                 foreach (var tagValues in posibleTagValuesFromName)
                 {
                     if (fileNameIsOk)
                         break;
-                  
+
                     foreach (var tagValue in tagValues)
                     {
                         var currentTagFromFile = tagsFromFile.GetTag(tagValue.Key);
-                        
+
                         if (tagValue.Value != currentTagFromFile)
                         {
-                            if (tagValue.Key == "track"&&tagValue.Value.StartsWith("0"))
+                            if (tagValue.Key == "track" && tagValue.Value.StartsWith("0"))
                             {
-                                if(tagValue.Value.Substring(1) == currentTagFromFile)
-                                continue;
+                                if (tagValue.Value.Substring(1) == currentTagFromFile)
+                                    continue;
                             }
                             fileNameIsOk = false;
                             break;
@@ -97,7 +97,7 @@ namespace Mp3TagLib
 
         internal List<FileProblem> GetFileProblems(Mask mask)
         {
-            var fileProblem=new List<FileProblem>();
+            var fileProblem = new List<FileProblem>();
             if (GetIncorectTags(mask).Any())
             {
                 fileProblem.Add(FileProblem.BadTags);

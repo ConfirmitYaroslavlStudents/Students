@@ -2,7 +2,7 @@
 {
     public class OperationsList
     {
-        public  OperationNode First { get; set; }
+        public OperationNode First { get; set; }
         public OperationNode Last { get; set; }
         public OperationNode Current { get; set; }
 
@@ -16,7 +16,7 @@
 
         public void Add(Operation operation)
         {
-            Current.Next = new OperationNode() {Value = operation, Previous = Current};
+            Current.Next = new OperationNode() { Value = operation, Previous = Current };
             Last = Current.Next;
             Current = Last;
         }
@@ -24,13 +24,13 @@
         public void MoveNext()
         {
             if (Current.Next != null)
-            Current = Current.Next;
+                Current = Current.Next;
         }
 
         public void MovePrevious()
         {
-            if(Current.Previous!=null)
-            Current = Current.Previous;
+            if (Current.Previous != null)
+                Current = Current.Previous;
         }
 
     }

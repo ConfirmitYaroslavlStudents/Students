@@ -59,10 +59,12 @@ namespace mp3tager
         public void Save()
         {
             _file.Save();
+
             if (!string.IsNullOrEmpty(NewName))
             {
                 var path = _file.Name.Substring(0, _file.Name.LastIndexOf(@"\"));
                 path = path + @"\" + NewName + ".mp3";
+
                 System.IO.File.Move(_file.Name, path);
                 _file = File.Create(path);
             }

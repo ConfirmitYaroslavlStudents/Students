@@ -10,8 +10,8 @@ namespace mp3tager.Operations
         {
             switch (id)
             {
-                case Changetags.ID:
-                    return new Changetags();
+                case ChangeTags.ID:
+                    return new ChangeTags();
                 case ChangeName.ID:
                     return new ChangeName();
                 case Analysis.ID:
@@ -34,7 +34,7 @@ namespace mp3tager.Operations
             switch (name)
             {
                 case "changetags":
-                    return CreateOperation(Changetags.ID);
+                    return CreateOperation(ChangeTags.ID);
                 case "rename":
                     return CreateOperation(ChangeName.ID);
                 case "analysis":

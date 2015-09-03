@@ -8,13 +8,13 @@ using Mp3TagLib.Sync;
 namespace mp3tager.Operations
 {
 
-    class Changetags : Operation
+    class ChangeTags : Operation
 
     {
         public const int ID = 3;
         private Retag retag;
 
-        public Changetags()
+        public ChangeTags()
         {
             OperationId = ID;
         }

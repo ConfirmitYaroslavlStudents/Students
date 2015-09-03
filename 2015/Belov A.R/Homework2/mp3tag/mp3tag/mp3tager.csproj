@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Operations\Analysis.cs" />
-    <Compile Include="Operations\Changetags.cs" />
+    <Compile Include="Operations\ChangeTags.cs" />
     <Compile Include="Operations\Exit.cs" />
     <Compile Include="Operations\HandSync.cs" />
     <Compile Include="FileLoader.cs" />

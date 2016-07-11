@@ -6,7 +6,7 @@ namespace Stack_1
 {
     public class StackArray<T> : IStack<T>
     {
-        private const int DefaultCapacity = 8;
+        private const int DefaultCapacity = 5;
 
         private T[] _items;
 

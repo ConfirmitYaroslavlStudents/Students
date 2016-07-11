@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{90BC2BC8-5CEF-431B-BAEB-E3B12885832D}</ProjectGuid>
+    <ProjectGuid>{16A7642E-D8A2-44AD-BBB2-8E8200F6CFB5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QueueArrayTests1</RootNamespace>
-    <AssemblyName>QueueArrayTests1</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>QueueTests</RootNamespace>
+    <AssemblyName>QueueTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,13 +51,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MyQueueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QueueArray\QueueArray.csproj">
-      <Project>{09455B6F-8463-40AB-B7E3-312D62EBF7B7}</Project>
-      <Name>QueueArray</Name>
+    <ProjectReference Include="..\Queue\Queue.csproj">
+      <Project>{811B71F7-4DE4-4C0E-A05E-CB4B61E0EAB4}</Project>
+      <Name>Queue</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

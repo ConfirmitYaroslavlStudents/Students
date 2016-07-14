@@ -2,7 +2,7 @@ using Creatures.Language.Commands.Interfaces;
 
 namespace Creatures.Language.Commands
 {
-    public class CloneValue : ICommand
+    public class CloneValue : ICommandSetter
     {
         private readonly string _targetName;
         private readonly string _sourceName;
@@ -26,6 +26,11 @@ namespace Creatures.Language.Commands
         public void AcceptVisitor(ICommandVisitor visitor)
         {
             visitor.Accept(this);
+        }
+
+        public bool ContainsAsArgument(string variable)
+        {
+            return _sourceName == variable;
         }
     }
 }

@@ -2,7 +2,7 @@ using Creatures.Language.Commands.Interfaces;
 
 namespace Creatures.Language.Commands
 {
-    public class SetValue : ICommand
+    public class SetValue : ICommandSetter
     {
         private readonly string _name;
         private readonly int _value;
@@ -13,7 +13,7 @@ namespace Creatures.Language.Commands
             _value = value;
         }
 
-        public string Name
+        public string TargetName
         {
             get { return _name; }
         }
@@ -26,6 +26,11 @@ namespace Creatures.Language.Commands
         public void AcceptVisitor(ICommandVisitor visitor)
         {
             visitor.Accept(this);
+        }
+
+        public bool ContainsAsArgument(string variable)
+        {
+            return false;
         }
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Creatures.Language.Commands
 {
-    public class CloseCondition : ICommand
+    public class CloseCondition : ICommandWithConstruction
     {
         public void AcceptVisitor(ICommandVisitor visitor)
         {
             visitor.Accept(this);
         }
+
     }
 }

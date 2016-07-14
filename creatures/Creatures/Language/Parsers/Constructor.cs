@@ -111,7 +111,7 @@ namespace Creatures.Language.Parsers
             if (parts[0] != "if")
                 throw exception;
             if (!IsIdentifier(parts[1]))
-                throw new ArgumentException("Identifier expected, but have : " + parts[1]);
+                new ArgumentException("Identifier expected, but have : " + parts[1]);
             if (parts[2] != "then")
                 throw exception;
 
@@ -181,7 +181,7 @@ namespace Creatures.Language.Parsers
             if (parts[0] != type)
                 throw exception;
             if (IsIdentifier(parts[1]))
-                throw new ArgumentException("Identifier expected, but have : " + parts[1]);
+                new ArgumentException("Identifier expected, but have : " + parts[1]);
 
             return parts[1];
         }

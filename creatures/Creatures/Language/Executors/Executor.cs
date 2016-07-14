@@ -78,7 +78,7 @@ namespace Creatures.Language.Executors
         {
             if (!_conditions.Peek()) return;
              
-            _variables[command.Name] = command.Value;
+            _variables[command.TargetName] = command.Value;
         }
 
         public void Accept(Plus command)
@@ -87,7 +87,7 @@ namespace Creatures.Language.Executors
 
             var firstValue = _variables[command.FirstSource];
             var secondValue = _variables[command.SecondSource];
-            _variables[command.NameTarget] = firstValue + secondValue;
+            _variables[command.TargetName] = firstValue + secondValue;
         }
 
         public void Accept(Minus command)
@@ -96,7 +96,7 @@ namespace Creatures.Language.Executors
 
             var firstValue = _variables[command.FirstSource];
             var secondValue = _variables[command.SecondSource];
-            _variables[command.NameTarget] = firstValue - secondValue;
+            _variables[command.TargetName] = firstValue - secondValue;
         }
 
         public void Accept(CloneValue command)
@@ -136,14 +136,14 @@ namespace Creatures.Language.Executors
         {
             if (!_conditions.Peek()) return;
 
-            _variables[command.NameTarget] = _executorToolset.GetState(command.Direction);
+            _variables[command.TargetName] = _executorToolset.GetState(command.Direction);
         }
 
         public void Accept(GetRandom command)
         {
             if (!_conditions.Peek()) return;
 
-            _variables[command.NameTarget] = _executorToolset.GetRandom(_variables[command.MaxValueName].Value);
+            _variables[command.TargetName] = _executorToolset.GetRandom(_variables[command.MaxValueName].Value);
         }
 
         public void Accept(Stop command)

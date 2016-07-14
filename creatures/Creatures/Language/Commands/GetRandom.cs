@@ -2,7 +2,7 @@
 
 namespace Creatures.Language.Commands
 {
-    public class GetRandom : ICommand
+    public class GetRandom : ICommandSetter
     {
         private readonly string _nameTarget;
         private readonly string _maxValueName;
@@ -13,7 +13,7 @@ namespace Creatures.Language.Commands
             _maxValueName = maxValueName;
         }
 
-        public string NameTarget
+        public string TargetName
         {
             get { return _nameTarget; }
         }
@@ -27,5 +27,11 @@ namespace Creatures.Language.Commands
         {
             visitor.Accept(this);
         }
+
+        public bool ContainsAsArgument(string variable)
+        {
+            return _maxValueName == variable;
+        }
+
     }
 }

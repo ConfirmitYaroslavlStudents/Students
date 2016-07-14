@@ -2,7 +2,7 @@ using Creatures.Language.Commands.Interfaces;
 
 namespace Creatures.Language.Commands
 {
-    public class Condition : ICommand
+    public class Condition : ICommandWithConstruction,ICommandWithArgument
     {
         private readonly string _conditionName;
 
@@ -19,6 +19,11 @@ namespace Creatures.Language.Commands
         public void AcceptVisitor(ICommandVisitor visitor)
         {
             visitor.Accept(this);
+        }
+
+        public bool ContainsAsArgument(string variable)
+        {
+            return variable == _conditionName;
         }
     }
 }

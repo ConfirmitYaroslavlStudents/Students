@@ -2,7 +2,7 @@
 
 namespace Creatures.Language.Commands
 {
-    public class GetState : ICommand
+    public class GetState : ICommandSetter
     {
         private readonly string _nameTarget;
         private readonly int _direction;
@@ -13,7 +13,7 @@ namespace Creatures.Language.Commands
             _direction = direction;
         }
 
-        public string NameTarget
+        public string TargetName
         {
             get { return _nameTarget; }
         }
@@ -26,6 +26,11 @@ namespace Creatures.Language.Commands
         public void AcceptVisitor(ICommandVisitor visitor)
         {
             visitor.Accept(this);
+        }
+
+        public bool ContainsAsArgument(string variable)
+        {
+            return false;
         }
     }
 }

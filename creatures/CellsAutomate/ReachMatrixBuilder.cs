@@ -5,20 +5,9 @@ namespace CellsAutomate
 {
     public class ReachMatrixBuilder
     {
-        public bool[,] Build(
+        public int[,] Build(
             bool[,] placeHoldersMatrix,
-            int pointX,
-            int pointY)
-        {
-            int n = placeHoldersMatrix.GetLength(0);
-            int m = placeHoldersMatrix.GetLength(1);
-
-            return Build(placeHoldersMatrix, new bool[n, m], pointX, pointY);
-        }
-
-        public bool[,] Build(
-            bool[,] placeHoldersMatrix,
-            bool[,] reachingMatrix,
+            int[,] eatMatrix,
             int pointX,
             int pointY)
         {
@@ -38,9 +27,9 @@ namespace CellsAutomate
                     && current.Y >= 0
                     && current.Y < n
                     && !placeHoldersMatrix[current.X, current.Y]
-                    && !reachingMatrix[current.X, current.Y])
+                    && eatMatrix[current.X, current.Y] == 0)
                 {
-                    reachingMatrix[current.X, current.Y] = true;
+                    eatMatrix[current.X, current.Y] += Creature.N;
 
                     foreach (var point in ActionEx.GetPoints(current.X, current.Y))
                     {
@@ -49,7 +38,7 @@ namespace CellsAutomate
                 }
             }
 
-            return reachingMatrix;
+            return eatMatrix;
         }
     }
 }

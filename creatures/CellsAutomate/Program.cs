@@ -13,10 +13,10 @@ namespace CellsAutomate
         {
             var length = 100;
 
-            var matrix = new Matrix();
+            var matrix = new Matrix(100, 100);
             matrix.Cells = new Creature[length, length];
-            matrix.N = length;
-            matrix.M = length;
+            matrix.Length = length;
+            matrix.Width = length;
 
             matrix.FillStartMatrixRandomly();
             Print(0, length, matrix);
@@ -59,7 +59,7 @@ namespace CellsAutomate
             {
                 for (int j = 0; j < length; j++)
                 {
-                    bitmap.SetPixel(i, j, matrix.Eat[i, j] ? Color.Green : Color.White);
+                    bitmap.SetPixel(i, j, matrix.Eat[i, j] != 0 ? Color.Green : Color.White);
                 }
             }
 

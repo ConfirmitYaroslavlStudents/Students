@@ -146,12 +146,15 @@ namespace CellsAutomate
 
     static class ActionEx
     {
-        public static Point PointByAction(ActionEnum actionEnum, Point start)
+        public static Point PointByAction(ActionEnum actionEnum, Point start, Creature[,] cellsMatrix)
         {
             switch (actionEnum)
             {
                 case ActionEnum.Die:
-                    throw new ArgumentException();
+                {
+                    cellsMatrix[start.X, start.Y] = null;
+                    throw new TheCreatureIsDeadException(start);
+                }
                 case ActionEnum.Left:
                     return new Point(start.X - 1, start.Y);
                 case ActionEnum.Right:
@@ -199,18 +202,28 @@ namespace CellsAutomate
 
     public class Matrix
     {
-        public int N;
-        public int M;
+        public int Length;
+        public int Width;
 
         public Creature[,] Cells { get; set; }
+
+        public Matrix(int n, int m)
+        {
+            Length = n;
+            Width = m;
+            Eat = new int[n, m];
+            for(int i=0; i<Length; i++)
+                for (int j = 0; j < Width; j++)
+                    Eat[i, j] = 0;
+        }
 
         public IEnumerable<Creature> CellsAsEnumerable
         {
             get
             {
-                for (int i = 0; i < N; i++)
+                for (int i = 0; i < Length; i++)
                 {
-                    for (int j = 0; j < M; j++)
+                    for (int j = 0; j < Width; j++)
                     {
                         if (Cells[i,j] != null)
                             yield return Cells[i, j];
@@ -219,16 +232,16 @@ namespace CellsAutomate
             }
         }
 
-        public bool[,] Eat { get; private set; }
+        public int[,] Eat { get; private set; }
 
         public int AliveCount
         {
             get
             {
                 int count = 0;
-                for (int i = 0; i < N; i++)
+                for (int i = 0; i < Length; i++)
                 {
-                    for (int j = 0; j < M; j++)
+                    for (int j = 0; j < Width; j++)
                     {
                         if (Cells[i, j] !=null) count++;
                     }
@@ -238,28 +251,24 @@ namespace CellsAutomate
             }
         }
 
-        public bool[,] CanBeReached()
+        public void CanBeReached()
         {
-            var reachingMatrix = new bool[N, M];
-            var placeHoldersMatrix = new bool[N, M];
+            var placeHoldersMatrix = new bool[Length, Width];
 
-            for (int  i = 0;  i < N;  i++)
+            for (int  i = 0;  i < Length;  i++)
             {
-                for (int j = 0; j < M; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     placeHoldersMatrix[i, j] = Cells[i, j] != null;
                 }
             }
-
-
+            
             var reachMatrixBuilder = new ReachMatrixBuilder();
 
-            reachMatrixBuilder.Build(placeHoldersMatrix, reachingMatrix, 0, 0);
-            reachMatrixBuilder.Build(placeHoldersMatrix, reachingMatrix, 0, M - 1);
-            reachMatrixBuilder.Build(placeHoldersMatrix, reachingMatrix, N - 1, 0);
-            reachMatrixBuilder.Build(placeHoldersMatrix, reachingMatrix, N - 1, M - 1);
-
-            return reachingMatrix;
+            Eat = reachMatrixBuilder.Build(placeHoldersMatrix, Eat, 0, 0);
+            Eat = reachMatrixBuilder.Build(placeHoldersMatrix, Eat, 0, Width - 1);
+            Eat = reachMatrixBuilder.Build(placeHoldersMatrix, Eat, Length - 1, 0);
+            Eat = reachMatrixBuilder.Build(placeHoldersMatrix, Eat, Length - 1, Width - 1);
         }
 
         public void FillStartMatrixRandomly()
@@ -274,24 +283,24 @@ namespace CellsAutomate
 
             //Cells[20, 20] = new Creature(new Point(20, 20), executor, commands, random);
 
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < M; j++)
+                for (int j = 0; j < Width; j++)
                 {
-                    Cells[i, j] = random.Next(100) % 4 == 0 ? new Creature(new Point(i, j), executor, commands, random) : null;
+                    Cells[i, j] = random.Next(100) % 4 == 0 ? new Creature(new Point(i, j), executor, commands, random, 1) : null;
                 }
             }
 
-            Eat = CanBeReached();
+            CanBeReached();
         }
 
         public string PrintStartMatrix()
         {
-            var result = new bool[N, M];
+            var result = new bool[Length, Width];
 
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < M; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     result[i, j] = Cells[i, j] != null;
                 }
@@ -304,9 +313,9 @@ namespace CellsAutomate
         {
             var result = new StringBuilder();
 
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < M; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     result.Append(matrix[i, j] ? "*" : " ");
                 }
@@ -318,30 +327,30 @@ namespace CellsAutomate
 
         public void MakeTurn()
         {
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < M; j++)
+                for (int j = 0; j < Width; j++)
                 {
                     MakeTurn(Cells[i, j], Eat, i, j);
                 }
             }
 
-            Eat = CanBeReached();
+            CanBeReached();
         }
 
-        private void MakeTurn(Creature simpleCreature, bool[,] eat, int i, int j)
+        private void MakeTurn(Creature simpleCreature, int[,] eat, int i, int j)
         {
             if (simpleCreature == null) return;
             
-            var resultTuple = simpleCreature.MyTurn(eat);
+            var resultTuple = simpleCreature.MyTurn(eat, Cells);
 
             var result = resultTuple.Item2;
 
             if (resultTuple.Item1)
             {
-                var newPosition = ActionEx.PointByAction(result, new Point(i, j));
+                var newPosition = ActionEx.PointByAction(result, new Point(i, j), Cells);
 
-                Cells[newPosition.X, newPosition.Y] = simpleCreature.MakeChild(newPosition);
+                Cells[newPosition.X, newPosition.Y] = simpleCreature.MakeChild(newPosition, simpleCreature.Generation);
 
                 return;
             }
@@ -350,7 +359,7 @@ namespace CellsAutomate
             if (result == ActionEnum.Die) Cells[i, j] = null;
             else
             {
-                var newPosition = ActionEx.PointByAction(result, new Point(i, j));
+                var newPosition = ActionEx.PointByAction(result, new Point(i, j), Cells);
                 simpleCreature.SetPosition(newPosition);
                 Cells[i, j] = null;
                 Cells[newPosition.X, newPosition.Y] = simpleCreature;

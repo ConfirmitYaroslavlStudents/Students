@@ -7,6 +7,17 @@ namespace CellsAutomate
     {
         public int[,] Build(
             bool[,] placeHoldersMatrix,
+            int pointX,
+            int pointY)
+        {
+            int n = placeHoldersMatrix.GetLength(0);
+            int m = placeHoldersMatrix.GetLength(1);
+
+            return Build(placeHoldersMatrix, new int[n, m], pointX, pointY);
+        }
+
+        public int[,] Build(
+            bool[,] placeHoldersMatrix,
             int[,] eatMatrix,
             int pointX,
             int pointY)

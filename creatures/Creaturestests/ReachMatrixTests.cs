@@ -27,7 +27,7 @@ namespace Creaturestests
                     .AppendLine("          ")
                     .AppendLine("          ");
 
-            var result = new ReachMatrixBuilder().Build(ToBools(matrix), 0, 0);
+            var result = new ReachMatrixBuilder().Build(ToInts(matrix), 0, 0);
 
             var expectedResult =
                 new StringBuilder()
@@ -52,7 +52,7 @@ namespace Creaturestests
               new StringBuilder()
                   .AppendLine("*");
 
-            var result = new ReachMatrixBuilder().Build(ToBools(matrix), 0, 0);
+            var result = new ReachMatrixBuilder().Build(ToInts(matrix), 0, 0);
 
             var expectedResult =
                 new StringBuilder()
@@ -77,7 +77,7 @@ namespace Creaturestests
                     .AppendLine("          ")
                     .AppendLine("          ");
 
-            var result = new ReachMatrixBuilder().Build(ToBools(matrix), 0, 0);
+            var result = new ReachMatrixBuilder().Build(ToInts(matrix), 0, 0);
 
             var expectedResult =
                 new StringBuilder()
@@ -111,7 +111,7 @@ namespace Creaturestests
                     .AppendLine("          ")
                     .AppendLine("          ");
 
-            var result = new ReachMatrixBuilder().Build(ToBools(matrix), 0, 0);
+            var result = new ReachMatrixBuilder().Build(ToInts(matrix), 0, 0);
 
             var expectedResult =
                 new StringBuilder()
@@ -129,7 +129,7 @@ namespace Creaturestests
             GetSure(expectedResult.ToString(), result);
         }
 
-        private bool[,] ToBools(string matrix)
+        private bool[,] ToInts(string matrix)
         {
             var expectedBools =
                 matrix.Split(Environment.NewLine.ToArray())
@@ -152,14 +152,14 @@ namespace Creaturestests
             return result;
         }
 
-        private bool[,] ToBools(StringBuilder matrix)
+        private bool[,] ToInts(StringBuilder matrix)
         {
-            return ToBools(matrix.ToString());
+            return ToInts(matrix.ToString());
         }
 
-        private void GetSure(string expected, bool[,] actual)
+        private void GetSure(string expected, int[,] actual)
         {
-            var expectedBools = ToBools(expected);
+            var expectedBools = ToInts(expected);
 
 
             var n = expectedBools.GetLength(0);

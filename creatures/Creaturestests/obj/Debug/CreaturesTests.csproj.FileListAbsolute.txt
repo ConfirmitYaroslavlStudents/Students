@@ -1,0 +1,11 @@
+C:\Confirmit\creatures\Creaturestests\obj\Debug\CreaturesTests.csprojResolveAssemblyReference.cache
+C:\Confirmit\creatures\Creaturestests\bin\Debug\Creaturestests.dll
+C:\Confirmit\creatures\Creaturestests\bin\Debug\Creaturestests.pdb
+C:\Confirmit\creatures\Creaturestests\bin\Debug\CellsAutomate.exe
+C:\Confirmit\creatures\Creaturestests\bin\Debug\Creatures.exe
+C:\Confirmit\creatures\Creaturestests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Confirmit\creatures\Creaturestests\bin\Debug\CellsAutomate.pdb
+C:\Confirmit\creatures\Creaturestests\bin\Debug\Creatures.pdb
+C:\Confirmit\creatures\Creaturestests\bin\Debug\ru\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+C:\Confirmit\creatures\Creaturestests\obj\Debug\Creaturestests.dll
+C:\Confirmit\creatures\Creaturestests\obj\Debug\Creaturestests.pdb

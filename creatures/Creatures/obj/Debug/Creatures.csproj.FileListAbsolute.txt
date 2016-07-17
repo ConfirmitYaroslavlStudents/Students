@@ -4,3 +4,6 @@ C:\Confirmit\creatures\Creatures\bin\Debug\Creatures.exe
 C:\Confirmit\creatures\Creatures\bin\Debug\Creatures.pdb
 C:\Confirmit\creatures\Creatures\obj\Debug\Creatures.exe
 C:\Confirmit\creatures\Creatures\obj\Debug\Creatures.pdb
+C:\Users\Галина\Desktop\creatures\Creatures\obj\Debug\Creatures.exe
+C:\Users\Галина\Desktop\creatures\Creatures\obj\Debug\Creatures.pdb
+C:\Confirmit\creatures\Creatures\obj\Debug\Creatures.csprojResolveAssemblyReference.cache

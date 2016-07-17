@@ -5,3 +5,5 @@ C:\Confirmit\creatures\CellsAutomate\bin\Debug\Creatures.exe
 C:\Confirmit\creatures\CellsAutomate\bin\Debug\Creatures.pdb
 C:\Confirmit\creatures\CellsAutomate\obj\Debug\CellsAutomate.exe
 C:\Confirmit\creatures\CellsAutomate\obj\Debug\CellsAutomate.pdb
+C:\Users\Анна\Desktop\Новая папка (2)\creatures\CellsAutomate\obj\Debug\CellsAutomate.exe
+C:\Users\Анна\Desktop\Новая папка (2)\creatures\CellsAutomate\obj\Debug\CellsAutomate.pdb

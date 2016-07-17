@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace CellsAutomate
 {
@@ -12,23 +13,22 @@ namespace CellsAutomate
         private static void Main(string[] args)
         {
             var length = 100;
-
-            var matrix = new Matrix(100, 100);
-            matrix.Cells = new Creature[length, length];
-            matrix.Length = length;
-            matrix.Width = length;
+            var matrix = new Matrix(length, length);
+            int scale = 500 / length;
 
             matrix.FillStartMatrixRandomly();
-            Print(0, length, matrix);
+            matrix.CanBeReached();
+            Print(0, length, matrix, scale);
 
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 20; i++)
             {
                 matrix.MakeTurn();
-                Print(i + 1, length, matrix);
-                Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
+                Print(i + 1, length, matrix, scale);
+                if(matrix.AliveCount != 0)
+                    Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
                 var generationStat =
                     string.Join(" ",
                     matrix
@@ -42,41 +42,48 @@ namespace CellsAutomate
                 log.AppendLine(generationStat);
             }
 
-            File.WriteAllText(@"C:\Temp\Creatures\Log.txt", log.ToString());
+            File.WriteAllText(@"C:\Confirmit\Log.txt", log.ToString());
             Console.WriteLine(Stats.Up);
             Console.WriteLine(Stats.Right);
             Console.WriteLine(Stats.Down);
             Console.WriteLine(Stats.Left);
+            Console.ReadKey();
         }
 
-        private static void Print(int id, int length, Matrix matrix)
+        private static void Print(int id, int length, Matrix matrix, int scale)
         {
-            if (id % 10 != 0) return;
+            //if (id % 10 != 0) return;
 
-            var bitmap = new Bitmap(length*2, length);
+            int newLength = length * scale;
 
-            for (int i = 0; i < length; i++)
+            var bitmap = new Bitmap(newLength*2, newLength);
+
+            for (int i = 0; i < newLength; i+=scale)
             {
-                for (int j = 0; j < length; j++)
-                {
-                    bitmap.SetPixel(i, j, matrix.Eat[i, j] != 0 ? Color.Green : Color.White);
-                }
+                for(int k = 0; k < scale; k++)
+                    for (int j = 0; j < newLength; j+=scale)
+                    {
+                        for(int l = 0; l < scale; l++)
+                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.HasFood(new Point(i / scale , j / scale)) ? Color.Green : Color.White);
+                    }
             }
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < newLength; i+=scale)
             {
-                for (int j = 0; j < length; j++)
-                {
-                    var x = i + length;
-                    var y = j;
+                for (int k = 0; k < scale; k++)
+                    for (int j = 0; j < newLength; j+=scale)
+                    {
+                        for (int l = 0; l < scale; l++)
+                        {
+                            var x = i + newLength;
+                            var y = j;
 
-                    bitmap.SetPixel(x, y, matrix.Cells[i, j] == null ? Color.White : Color.Red);
-
-                    // bitmap.SetPixel(x, y, matrix.Cells[i, j] == null ? (eat[i, j] ? Color.White : Color.Green) : Color.Red);
-                }
+                            bitmap.SetPixel(x + k, y + l, matrix.Cells[i / scale, j / scale] == null ? Color.White : Color.Red);
+                        }
+                    }
             }
 
-            bitmap.Save($@"C:\temp\creatures\bitmaps\{id}.bmp", ImageFormat.Bmp);
+            bitmap.Save($@"C:\Confirmit\{id}.bmp", ImageFormat.Bmp);
         }
     }
 }

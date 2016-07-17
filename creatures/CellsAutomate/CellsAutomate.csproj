@@ -44,12 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="TheCreatureIsDead.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Creature.cs" />
+    <Compile Include="CreatureIsDead.cs" />
+    <Compile Include="FoodMatrix.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="MyExecutorToolset.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReachMatrixBuilder.cs" />
+    <Compile Include="SeedGenerator.cs" />
     <Compile Include="SimpleCreature.cs" />
+    <Compile Include="Stats.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Creatures\Creatures.csproj">

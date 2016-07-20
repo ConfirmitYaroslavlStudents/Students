@@ -6,7 +6,7 @@ namespace CellsAutomate.Mutator
 {
 	public class Mutator
 	{
-		private Random _random;
+		private Random _random;        
 
 		public Mutator(Random random)
 		{

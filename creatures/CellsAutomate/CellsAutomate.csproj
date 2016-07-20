@@ -49,6 +49,15 @@
     <Compile Include="CreatureIsDead.cs" />
     <Compile Include="FoodMatrix.cs" />
     <Compile Include="Matrix.cs" />
+    <Compile Include="Mutator\Mutations\AddCommandMutation.cs" />
+    <Compile Include="Mutator\Mutations\DeleteCommandMutation.cs" />
+    <Compile Include="Mutator\Mutations\Deletter.cs" />
+    <Compile Include="Mutator\Mutations\DeletterViaVisitor.cs" />
+    <Compile Include="Mutator\Mutations\IMutation.cs" />
+    <Compile Include="Mutator\Mutations\ReplaceCommandMutation.cs" />
+    <Compile Include="Mutator\Mutations\Replacer.cs" />
+    <Compile Include="Mutator\Mutations\SwapCommandMutation.cs" />
+    <Compile Include="Mutator\Mutator.cs" />
     <Compile Include="MyExecutorToolset.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

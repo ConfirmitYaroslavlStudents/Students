@@ -1,39 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
 namespace Creatures.Language.Executors
 {
-    
-    public interface IExecutorToolset
-    {
-        int GetState(int direction);
-        int GetRandom(int maxValue);
-    }
-
-    public class ExecutorToolset : IExecutorToolset
-    {
-        Random _random;
-
-        public ExecutorToolset(Random random)
-        {
-            _random = random;
-        }
-
-        public int GetState(int direction)
-        {
-            return 4;    
-        }
-
-        public int GetRandom(int maxValue)
-        {
-            return 1;
-        }
-    }
-
-    public class Executor : ICommandVisitor
+    public class ValidationExecutor:ICommandVisitor
     {
         private Dictionary<string, int?> _variables;
         private StringBuilder _console;
@@ -41,25 +16,26 @@ namespace Creatures.Language.Executors
 
         private IExecutorToolset _executorToolset;
         private bool _stop;
+        private bool _isExecutable;
 
-        public string Execute(IEnumerable<ICommand> parsedCommands, IExecutorToolset executorToolset)
+        public bool Execute(IEnumerable<ICommand> parsedCommands, IExecutorToolset executorToolset)
         {
             _variables = new Dictionary<string, int?>();
             _console = new StringBuilder();
             _conditions = new Stack<bool>();
             _conditions.Push(true);
             _stop = false;
-
+            _isExecutable = true;
             _executorToolset = executorToolset;
 
             foreach (var parsedCommand in parsedCommands)
             {
-                if (_stop) break;
-
                 Execute(parsedCommand);
+                if (!_isExecutable) break;
             }
-            
-            return _console.ToString();
+            if (_conditions.Count > 1) _isExecutable = false;
+
+            return _isExecutable;
         }
 
         private void Execute(ICommand command)
@@ -69,22 +45,30 @@ namespace Creatures.Language.Executors
 
         public void Accept(NewInt command)
         {
-            if (!_conditions.Peek()) return;
-             
             _variables[command.Name] = null;
         }
 
         public void Accept(SetValue command)
         {
-            if (!_conditions.Peek()) return;
-             
+            if (!_variables.ContainsKey(command.TargetName))
+            {
+                _isExecutable = false;
+                return;
+            }
             _variables[command.TargetName] = command.Value;
         }
 
         public void Accept(Plus command)
         {
-            if (!_conditions.Peek()) return;
-
+            if (!_variables.ContainsKey(command.FirstSource)  || 
+                !_variables.ContainsKey(command.SecondSource) ||
+                !_variables.ContainsKey(command.TargetName)   ||
+                _variables[command.FirstSource]==null         ||
+                _variables[command.SecondSource]==null)
+            {
+                _isExecutable = false;
+                return;
+            }      
             var firstValue = _variables[command.FirstSource];
             var secondValue = _variables[command.SecondSource];
             _variables[command.TargetName] = firstValue + secondValue;
@@ -92,7 +76,15 @@ namespace Creatures.Language.Executors
 
         public void Accept(Minus command)
         {
-            if (!_conditions.Peek()) return;
+            if (!_variables.ContainsKey(command.FirstSource)  ||
+                !_variables.ContainsKey(command.SecondSource) ||
+                !_variables.ContainsKey(command.TargetName)   ||
+                _variables[command.FirstSource]==null         ||
+                _variables[command.SecondSource]==null)
+            {
+                _isExecutable = false;
+                return;
+            }
 
             var firstValue = _variables[command.FirstSource];
             var secondValue = _variables[command.SecondSource];
@@ -101,27 +93,38 @@ namespace Creatures.Language.Executors
 
         public void Accept(CloneValue command)
         {
-            if (!_conditions.Peek()) return;
-
+            if (!_variables.ContainsKey(command.SourceName) ||
+                !_variables.ContainsKey(command.TargetName) ||
+                _variables[command.SourceName]==null)
+            {
+                _isExecutable = false;
+                return;
+            }
             var value = _variables[command.SourceName];
             _variables[command.TargetName] = value;
         }
 
         public void Accept(Condition command)
         {
-            if (!_conditions.Peek())
+            if (!_variables.ContainsKey(command.ConditionName) ||
+                _variables[command.ConditionName] == null)
             {
-                _conditions.Push(false);
+                _isExecutable = false;
                 return;
             }
-
+      
             var value = _variables[command.ConditionName];
             _conditions.Push(value >= 0);
         }
 
         public void Accept(Print command)
         {
-            if (!_conditions.Peek()) return;
+            if (!_variables.ContainsKey(command.Variable) ||
+                _variables[command.Variable]==null)
+            {
+                _isExecutable = false;
+                return;
+            }
 
             var value = _variables[command.Variable];
             _console.AppendLine(value.ToString());
@@ -129,28 +132,42 @@ namespace Creatures.Language.Executors
 
         public void Accept(CloseCondition command)
         {
+            if (_conditions.Count == 0)
+            {
+                _isExecutable = false;
+                return;
+            }
+
             _conditions.Pop();
         }
 
         public void Accept(GetState command)
         {
-            if (!_conditions.Peek()) return;
-
+            if (!_variables.ContainsKey(command.TargetName))
+            {
+                _isExecutable = false;
+                return;
+            }
+            //TODO
             _variables[command.TargetName] = _executorToolset.GetState(command.Direction);
         }
 
         public void Accept(GetRandom command)
         {
-            if (!_conditions.Peek()) return;
-
+            if (!_variables.ContainsKey(command.TargetName) ||
+                !_variables.ContainsKey(command.MaxValueName))
+            {
+                _isExecutable = false;
+                return;
+            }
+            
             _variables[command.TargetName] = _executorToolset.GetRandom(_variables[command.MaxValueName].Value);
         }
 
         public void Accept(Stop command)
-        {
-            if (!_conditions.Peek()) return;
-
+        {       
             _stop = true;
         }
+
     }
 }

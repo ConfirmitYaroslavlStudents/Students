@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 namespace CellsAutomate
 {
@@ -13,17 +12,14 @@ namespace CellsAutomate
         private static void Main(string[] args)
         {
             var length = 100;
-            var matrix = new Matrix(length, length);
             int scale = 500 / length;
-
+            var matrix = new Matrix(length, length);
             matrix.FillStartMatrixRandomly();
-            matrix.CanBeReached();
             Print(0, length, matrix, scale);
-
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 100; i++)
             {
                 matrix.MakeTurn();
                 Print(i + 1, length, matrix, scale);
@@ -42,7 +38,7 @@ namespace CellsAutomate
                 log.AppendLine(generationStat);
             }
 
-            File.WriteAllText(@"C:\Confirmit\Log.txt", log.ToString());
+            File.WriteAllText(@"C:\Confirmit\Log\Log.txt", log.ToString());
             Console.WriteLine(Stats.Up);
             Console.WriteLine(Stats.Right);
             Console.WriteLine(Stats.Down);
@@ -83,7 +79,7 @@ namespace CellsAutomate
                     }
             }
 
-            bitmap.Save($@"C:\Confirmit\{id}.bmp", ImageFormat.Bmp);
+            bitmap.Save($@"C:\Confirmit\Log\{id}.bmp", ImageFormat.Bmp);
         }
     }
 }

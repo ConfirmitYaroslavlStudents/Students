@@ -7,9 +7,7 @@ namespace CellsAutomate
     {
         Die,
         MakeChild,
-        Go,
-        Stay,
-        Eat
+        Go
     }
 
     public enum DirectionEnum

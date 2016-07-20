@@ -1,17 +1,15 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace CellsAutomate
 {
     public class SimpleCreature
     {
-        private Point _position;
-        private Random _random = new Random();
+        public Point Position { get; private set; }
 
-        public static int FoodLevel = 10;
+        public static int FoodLevel = 16;
         private int _minToSurvive = 3;
         private int _childPrice = 6;
-        private int _oneBite = 3;
+        private int _oneBite = 8;
         private int _maxTurns = 20;
 
         private int _turns;
@@ -22,12 +20,12 @@ namespace CellsAutomate
 
         public SimpleCreature(Point position, int generation)
         {
-            _position = position;
+            Position = position;
             Generation = generation;
             HadMoved = false;
         }
 
-        public ActionEnum MyTurn(FoodMatrix eatMatrix, SimpleCreature[,] cellsMatrix)
+        public ActionEnum MyTurn()
         {
             HadMoved = true;
             if (_foodSupply < _minToSurvive || _turns >= _maxTurns)
@@ -36,7 +34,7 @@ namespace CellsAutomate
             _foodSupply -= _minToSurvive;
             _turns++;
 
-            if (_foodSupply >= _childPrice)
+            if (_foodSupply >= _childPrice + _minToSurvive)
             {
                 return ActionEnum.MakeChild;
             }
@@ -46,7 +44,7 @@ namespace CellsAutomate
 
         public void EatFood(FoodMatrix eatMatrix)
         {
-            if (eatMatrix.TakeFood(_position, _oneBite))
+            if (eatMatrix.TakeFood(Position, _oneBite))
             {
                 _foodSupply += _oneBite;
             }
@@ -60,36 +58,7 @@ namespace CellsAutomate
 
         internal void SetPosition(Point newPosition)
         {
-            _position = newPosition;
-        }
-
-        public DirectionEnum GetDirectionOrEat(FoodMatrix eatMatrix)
-        {
-            var r = _random.Next(3) + 1;
-
-            if (eatMatrix.HasFood(_position))
-            {
-                EatFood(eatMatrix);
-                return DirectionEnum.Stay;
-            }
-
-            switch (r)
-            {
-                case 1:
-                    Stats.Up++;
-                    return DirectionEnum.Up;
-                case 2:
-                    Stats.Right++;
-                    return DirectionEnum.Right;
-                case 3:
-                    Stats.Down++;
-                    return DirectionEnum.Down;
-                case 4:
-                    Stats.Left++;
-                    return DirectionEnum.Left;
-                default:
-                    throw new Exception();
-            }
+            Position = newPosition;
         }
     }
 }

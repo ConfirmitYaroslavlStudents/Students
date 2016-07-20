@@ -1,13 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace CellsAutomate
 {
-    public class FoodMatrix
+    public class FoodMatrix : ICollection
     {
         private int[,] _matrix;
         public int Length { get; set; }
         public int Width { get; set; }
+
+        public int Count
+        {
+            get
+            {
+                return ((ICollection)_matrix).Count;
+            }
+        }
+
+        public object SyncRoot
+        {
+            get
+            {
+                return _matrix.SyncRoot;
+            }
+        }
+
+        public bool IsSynchronized
+        {
+            get
+            {
+                return _matrix.IsSynchronized;
+            }
+        }
 
         public FoodMatrix(int length, int width)
         {
@@ -21,7 +47,7 @@ namespace CellsAutomate
             return false;
         }
 
-        private void AddFood(Point currentPoint, int embaddedFood)
+        public void AddFood(Point currentPoint, int embaddedFood)
         {
             _matrix[currentPoint.X, currentPoint.Y] += embaddedFood;
         }
@@ -57,7 +83,7 @@ namespace CellsAutomate
                     && !creaturesMatrix[current.X, current.Y]
                     && !HasFood(current))
                 {
-                    AddFood(current, Creature.FoodLevel);
+                    AddFood(current, SimpleCreature.FoodLevel);
 
                     foreach (var point in DirectionEx.GetPoints(current.X, current.Y))
                     {
@@ -65,6 +91,16 @@ namespace CellsAutomate
                     }
                 }
             }
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            _matrix.CopyTo(array, index);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _matrix.GetEnumerator();
         }
     }
 }

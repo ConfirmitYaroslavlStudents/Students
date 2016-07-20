@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 
 namespace CellsAutomate
 {
@@ -54,7 +53,7 @@ namespace CellsAutomate
             }
         }
 
-        public void CanBeReached()
+        public void FillMatrixWithFood()
         {
             var placeHoldersMatrix = new bool[Length, Width];
 
@@ -88,39 +87,39 @@ namespace CellsAutomate
                 }
             }
 
-            CanBeReached();
+            FillMatrixWithFood();
         }
 
-        public string PrintStartMatrix()
-        {
-            var result = new bool[Length, Width];
+        //public string PrintStartMatrix()
+        //{
+        //    var result = new bool[Length, Width];
 
-            for (int i = 0; i < Length; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    result[i, j] = Cells[i, j] != null;
-                }
-            }
+        //    for (int i = 0; i < Length; i++)
+        //    {
+        //        for (int j = 0; j < Width; j++)
+        //        {
+        //            result[i, j] = Cells[i, j] != null;
+        //        }
+        //    }
 
-            return PrintMatrix(result);
-        }
+        //    return PrintMatrix(result);
+        //}
 
-        private string PrintMatrix(bool[,] matrix)
-        {
-            var result = new StringBuilder();
+        //private string PrintMatrix(bool[,] matrix)
+        //{
+        //    var result = new StringBuilder();
 
-            for (int i = 0; i < Length; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    result.Append(matrix[i, j] ? "*" : " ");
-                }
-                result.AppendLine("|");
-            }
+        //    for (int i = 0; i < Length; i++)
+        //    {
+        //        for (int j = 0; j < Width; j++)
+        //        {
+        //            result.Append(matrix[i, j] ? "*" : " ");
+        //        }
+        //        result.AppendLine("|");
+        //    }
 
-            return result.ToString();
-        }
+        //    return result.ToString();
+        //}
 
         public void MakeTurn()
         {
@@ -133,6 +132,13 @@ namespace CellsAutomate
                 }
             }
 
+            PrepareForNextTurn();
+
+            FillMatrixWithFood();
+        }
+
+        private void PrepareForNextTurn()
+        {
             for (int i = 0; i < Length; i++)
             {
                 for (int j = 0; j < Width; j++)
@@ -141,47 +147,55 @@ namespace CellsAutomate
                         Cells[i, j].HadMoved = false;
                 }
             }
-
-            CanBeReached();
         }
 
         private void MakeTurn(SimpleCreature currentSimpleCreature, FoodMatrix eat, int i, int j)
         {
             var currentPoint = new Point(i, j);
 
-            if (currentSimpleCreature == null) return;
+            var turnResult = currentSimpleCreature.MyTurn();
 
-            var turnResult = currentSimpleCreature.MyTurn(eat, Cells);
-
-            if (turnResult == ActionEnum.Die)
+            switch (turnResult)
             {
-                Cells[i, j] = null;
-                return;
+                case ActionEnum.Die:
+                    MakeTurnDie(i, j);
+                    break;
+                case ActionEnum.MakeChild:
+                    MakeTurnMakeChild(currentSimpleCreature, currentPoint);
+                    break;
+                case ActionEnum.Go:
+                    MakeTurnGo(currentSimpleCreature, i, j, currentPoint);
+                    break;
+                default: throw new Exception();
             }
+        }
 
-            if (turnResult == ActionEnum.MakeChild)
-            {
-                var resultDirection = ChooseDirectionForChild(currentPoint);
-                if (resultDirection != DirectionEnum.Stay)
-                {
-                    var newPosition = DirectionEx.PointByDirection(resultDirection, currentPoint);
+        private void MakeTurnDie(int i, int j)
+        {
+            Cells[i, j] = null;
+        }
 
-                    Cells[newPosition.X, newPosition.Y] = currentSimpleCreature.MakeChild(newPosition);
-                }
-                return;
-            }
+        private void MakeTurnGo(SimpleCreature currentSimpleCreature, int i, int j, Point currentPoint)
+        {
+            var diretionResult = GetDirectionOrEat(currentSimpleCreature);
 
-            var diretionResult = currentSimpleCreature.GetDirectionOrEat(EatMatrix);
-
-            if(diretionResult != DirectionEnum.Stay)
+            if (diretionResult != DirectionEnum.Stay)
             {
                 var newPosition = DirectionEx.PointByDirection(diretionResult, currentPoint);
-                if (DirectionEx.IsValid(newPosition, Length, Width) && Cells[newPosition.X, newPosition.Y] == null)
-                {
-                    currentSimpleCreature.SetPosition(newPosition);
-                    Cells[i, j] = null;
-                    Cells[newPosition.X, newPosition.Y] = currentSimpleCreature;
-                }
+                currentSimpleCreature.SetPosition(newPosition);
+                Cells[i, j] = null;
+                Cells[newPosition.X, newPosition.Y] = currentSimpleCreature;
+            }
+        }
+
+        private void MakeTurnMakeChild(SimpleCreature currentSimpleCreature, Point currentPoint)
+        {
+            var resultDirection = ChooseDirectionForChild(currentPoint);
+            if (resultDirection != DirectionEnum.Stay)
+            {
+                var newPosition = DirectionEx.PointByDirection(resultDirection, currentPoint);
+
+                Cells[newPosition.X, newPosition.Y] = currentSimpleCreature.MakeChild(newPosition);
             }
         }
 
@@ -192,9 +206,70 @@ namespace CellsAutomate
 
             foreach (var item in points)
             {
-                if (DirectionEx.IsValid(item, Length, Width) && Cells[item.X, item.Y] == null)
+                if (DirectionEx.IsValid(item, Length, Width) && IsFree(item))
                 {
                     directions.Add(DirectionEx.DirectionByPoint(parentPoint, item));
+                }
+            }
+
+            if (directions.Count != 0)
+            {
+                return directions.ElementAt(0);
+            }
+
+            return DirectionEnum.Stay;
+        }
+
+        public bool IsFree(Point currentPoint)
+        {
+            if (Cells[currentPoint.X, currentPoint.Y] == null)
+                return true;
+            return false;
+        }
+
+        private DirectionEnum GetDirectionOrEat(SimpleCreature currentSimpleCreature)
+        {
+
+            if (EatMatrix.HasFood(currentSimpleCreature.Position))
+            {
+                currentSimpleCreature.EatFood(EatMatrix);
+                return DirectionEnum.Stay;
+            }
+
+            var result = ChooseDirectionForMove(currentSimpleCreature.Position);
+
+            switch (result)
+            {
+                case DirectionEnum.Up:
+                    Stats.Up++;
+                    break;
+                case DirectionEnum.Right:
+                    Stats.Right++;
+                    break;
+                case DirectionEnum.Down:
+                    Stats.Down++;
+                    break;
+                case DirectionEnum.Left:
+                    Stats.Left++;
+                    break;
+                case DirectionEnum.Stay:
+                    break;
+                default:
+                    throw new Exception();
+            }
+            return result;
+        }
+
+        private DirectionEnum ChooseDirectionForMove(Point currentPoint)
+        {
+            var directions = new List<DirectionEnum>();
+            var points = DirectionEx.GetPoints(currentPoint.X, currentPoint.Y);
+
+            foreach (var item in points)
+            {
+                if (DirectionEx.IsValid(item, Length, Width) && IsFree(item) && EatMatrix.HasFood(item))
+                {
+                    directions.Add(DirectionEx.DirectionByPoint(currentPoint, item));
                 }
             }
 

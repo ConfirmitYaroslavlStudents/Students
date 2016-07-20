@@ -16,8 +16,8 @@ namespace CellsAutomate
 
         public static int FoodLevel = 10;  
         private int _minToSurvive = 3;  
-        private int _childPrice = 6;  
-        private int _oneBite = 3; 
+        private int _childPrice = 4;  
+        private int _oneBite = 5; 
         private int _maxTurns = 20;
 
         private int _turns;
@@ -42,7 +42,7 @@ namespace CellsAutomate
             _foodSupply -= _minToSurvive;
             _turns++;
 
-            if (_foodSupply >= _childPrice)
+            if (_foodSupply >= _childPrice + _minToSurvive)
             {
                 return ActionEnum.MakeChild;
             }

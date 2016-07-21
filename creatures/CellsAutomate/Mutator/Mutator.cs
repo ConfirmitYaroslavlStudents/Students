@@ -1,34 +1,41 @@
 ﻿using System;
 using CellsAutomate.Mutator.Mutations;
 using Creatures.Language.Commands.Interfaces;
+using Creatures.Language.Executors;
 
 namespace CellsAutomate.Mutator
 {
 	public class Mutator
-	{
-		private Random _random;        
+	{      
+        private Random _random;
 
-		public Mutator(Random random)
+        public Mutator(Random random)
 		{
 			_random = random;
 		}
 
-		public ICommand[] Mutate(ICommand[] commands)
+		public ICommand[] Mutate(ICommand[] commands,out bool isAlive)
 		{
 			IMutation mutation = GetRandomMutation();
-            return mutation.Transform(commands);
+		    var newCommands = mutation.Transform(commands);
+		    isAlive = AssertValid(newCommands);
+		    return newCommands;
 		}
+
+	    private bool AssertValid(ICommand[] commads)
+	    {
+	        return new ValidationExecutor().Execute(commads, new ExecutorToolset(_random));
+	    }
 
 		private IMutation GetRandomMutation()
 		{
-			int randomNumber = _random.Next(3);
+		    var mutations = new IMutation[]
+		    {
+		        new AddCommandMutation(_random), new DeleteCommandMutation(_random),
+		        new ReplaceCommandMutation(_random), new DublicateCommandMutatiton(_random)
+		    };
 
-			if (randomNumber == 0)
-				return new AddCommandMutation();
-			else if (randomNumber == 1)
-				return new DeleteCommandMutation(_random);
-			else
-				return new SwapCommandMutation();
+		    return mutations[_random.Next(mutations.Length)];
 		}
 	}
 }

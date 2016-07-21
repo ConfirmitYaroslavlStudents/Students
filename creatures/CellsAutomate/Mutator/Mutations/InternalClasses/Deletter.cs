@@ -3,7 +3,7 @@ using System.Linq;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
-namespace CellsAutomate.Mutator.Mutations
+namespace CellsAutomate.Mutator.Mutations.InternalClasses
 {
     internal class Deletter
     {

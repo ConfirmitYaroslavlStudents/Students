@@ -1,25 +1,26 @@
 ﻿using System;
+using CellsAutomate.Mutator.Mutations.InternalClasses;
 using Creatures.Language.Commands.Interfaces;
 
 namespace CellsAutomate.Mutator.Mutations
 {
-	public class DeleteCommandMutation : IMutation
-	{
-	    private Random _rnd;
+    public class DeleteCommandMutation : IMutation
+    {
+        private Random _rnd;
 
-	    public DeleteCommandMutation()
-	    {
-	        _rnd=new Random();
-	    }
+        public DeleteCommandMutation()
+        {
+            _rnd = new Random();
+        }
 
-	    public DeleteCommandMutation(Random rnd)
-	    {
-	        _rnd = rnd;
-	    }
-		public ICommand[] Transform(ICommand[] commands)
-		{
-		    var delIndex = _rnd.Next(commands.Length);
-		    return new DeletterViaVisitor(commands).DeleteCommand(delIndex);
-		}
-	}
+        public DeleteCommandMutation(Random random)
+        {
+            _rnd = random;
+        }
+        public ICommand[] Transform(ICommand[] commands)
+        {
+            var delIndex = _rnd.Next(commands.Length);
+            return new DeletterViaVisitor(commands).DeleteCommand(delIndex);
+        }
+    }
 }

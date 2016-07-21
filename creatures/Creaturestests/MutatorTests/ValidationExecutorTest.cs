@@ -10,6 +10,19 @@ namespace Creaturestests.MutatorTests
     public class ValidationExecutorTest
     {
         [TestMethod]
+        public void DeclareFewInt()
+        {
+            var executor = new ValidationExecutor();
+            var commands =
+               new StringBuilder()
+                   .AppendLine("int a")
+                   .AppendLine("int a");
+
+            var parsedcommands = new Parser().ProcessCommands(commands.ToString());
+            Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));
+        }
+
+        [TestMethod]
         public void PrintNotInitInt()
         {
             var executor = new ValidationExecutor();

@@ -3,7 +3,7 @@ using System.Linq;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
-namespace CellsAutomate.Mutator.Mutations
+namespace CellsAutomate.Mutator.Mutations.InternalClasses
 {
     internal class DeletterViaVisitor : ICommandVisitor
     {
@@ -43,6 +43,7 @@ namespace CellsAutomate.Mutator.Mutations
         {
             DeleteAllUnderWhereUsed(command.Name, _index);
         }
+
         private void DeleteAllUnderWhereUsed(string variable, int index)
         {
             var indexOfthiscommand = _index;
@@ -60,6 +61,7 @@ namespace CellsAutomate.Mutator.Mutations
                 _index = indexOfthiscommand;
             }
         }
+
         public void Accept(SetValue command)
         {
             if (IsInitializeSetter(command, _index))

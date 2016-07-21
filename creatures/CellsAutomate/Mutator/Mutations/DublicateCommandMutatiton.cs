@@ -4,18 +4,18 @@ using Creatures.Language.Commands.Interfaces;
 
 namespace CellsAutomate.Mutator.Mutations
 {
-    public class ReplaceCommandMutation : IMutation
+    public class DublicateCommandMutatiton : IMutation
     {
         private Random _rnd;
 
-        public ReplaceCommandMutation(Random rnd)
+        public DublicateCommandMutatiton(Random rnd)
         {
             _rnd = rnd;
         }
 
         public ICommand[] Transform(ICommand[] commands)
         {
-            return new Replacer(commands, _rnd).Replace(_rnd.Next(commands.Length));
+            return new Dublicator(commands, _rnd).Dublicate(_rnd.Next(commands.Length));
         }
     }
 }

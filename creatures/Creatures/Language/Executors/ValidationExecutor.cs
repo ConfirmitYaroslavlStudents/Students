@@ -45,6 +45,11 @@ namespace Creatures.Language.Executors
 
         public void Accept(NewInt command)
         {
+            if (_variables.ContainsKey(command.Name))
+            {
+                _isExecutable = false;
+                return;
+            }
             _variables[command.Name] = null;
         }
 

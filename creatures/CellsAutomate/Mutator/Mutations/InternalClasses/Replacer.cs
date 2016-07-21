@@ -34,7 +34,7 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
 
         public void Accept(NewInt command)
         {
-            var newCommand=new NewInt(GetRandomName());
+            var newCommand = new NewInt(GetRandomName());
             _commands[_index] = newCommand;
         }
 
@@ -52,16 +52,10 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         public void Accept(Plus command)
         {
             var declarations = FindDeclarationsBefore(_index);
-            string targetName, firstSourceName, secondSourceName;
-            do
-            {
-                targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
-                firstSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.FirstSource;
-                secondSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.SecondSource;
 
-            } while (targetName == command.TargetName           && 
-                     firstSourceName == command.FirstSource     &&
-                     secondSourceName == command.SecondSource);
+            var targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
+            var firstSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.FirstSource;
+            var secondSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.SecondSource;
 
             var newCommand = new Plus(targetName, firstSourceName, secondSourceName);
             _commands[_index] = newCommand;
@@ -77,16 +71,9 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         public void Accept(Minus command)
         {
             var declarations = FindDeclarationsBefore(_index);
-            string targetName, firstSourceName, secondSourceName;
-            do
-            {
-                targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
-                firstSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.FirstSource;
-                secondSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.SecondSource;
-
-            } while (targetName == command.TargetName           &&
-                     firstSourceName == command.FirstSource     &&
-                     secondSourceName == command.SecondSource);
+            var targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
+            var firstSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.FirstSource;
+            var secondSourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.SecondSource;
 
             var newCommand = new Minus(targetName, firstSourceName, secondSourceName);
             _commands[_index] = newCommand;
@@ -95,25 +82,17 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         public void Accept(CloneValue command)
         {
             var declarations = FindDeclarationsBefore(_index);
-            string targetName, sourceName;
-            do
-            {
-                targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
-                sourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.SourceName;
-            } while (targetName == command.TargetName && sourceName == command.SourceName);
+            var targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
+            var sourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.SourceName;
 
             var newCommand = new CloneValue(targetName, sourceName);
             _commands[_index] = newCommand;
         }
-   
+
         public void Accept(Condition command)
         {
             var declarations = FindDeclarationsBefore(_index);
-            string conditionName;
-            do
-            {
-                conditionName = ChooseRandom(declarations).Name;
-            } while (conditionName==command.ConditionName);
+            var conditionName = ChooseRandom(declarations).Name;
 
             var newCommand = new Condition(conditionName);
             _commands[_index] = newCommand;
@@ -132,13 +111,9 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         public void Accept(GetState command)
         {
             var declarations = FindDeclarationsBefore(_index);
-            string targetName;
-            int direction;
-            do
-            {
-                direction = (GetRandomAccess()) ? GetRandomIntValue() : command.Direction;
-                targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
-            } while (command.TargetName==targetName && command.Direction==direction);
+
+            var direction = (GetRandomAccess()) ? GetRandomIntValue() : command.Direction;
+            var targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
 
             var newCommand = new GetState(targetName, direction);
             _commands[_index] = newCommand;
@@ -147,12 +122,9 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         public void Accept(GetRandom command)
         {
             var declarations = FindDeclarationsBefore(_index);
-            string targetName, sourceName;
-            do
-            {
-                targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
-                sourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.MaxValueName;
-            } while (targetName == command.TargetName && sourceName == command.MaxValueName);
+
+            var targetName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.TargetName;
+            var sourceName = (GetRandomAccess()) ? ChooseRandom(declarations).Name : command.MaxValueName;
 
             var newCommand = new GetRandom(targetName, sourceName);
             _commands[_index] = newCommand;
@@ -172,7 +144,7 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
             var alphabet = GetASCIILetters();
             string result = string.Empty;
             for (int i = 0; i < length; i++)
-                result += alphabet[_rnd.Next(alphabet.Length)];
+                result += ChooseRandom(alphabet);
 
             return result;
         }

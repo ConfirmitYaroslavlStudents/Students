@@ -15,36 +15,11 @@ namespace Creaturestests.MutatorTests
     [TestClass]
     public class DeleteCommandMutationUnitTest
     {
-        internal class SpecialRandom : Random
-        {
-            private int _return;
-
-            public SpecialRandom()
-            {
-                
-            }
-
-            public SpecialRandom(int ret)
-            {
-                _return = ret;
-            }
-            public override int Next()
-            {
-                return _return;
-            }
-
-            public override int Next(int first)
-            {
-                return _return;
-            }
-        }
-
         [TestMethod]
         public void DeleteIfCommand()
         {
             var precommands =
                 new StringBuilder()
-                    // зададим константы
                     .AppendLine("int zero")
                     .AppendLine("zero = 0")
                     .AppendLine("if zero then")
@@ -120,7 +95,6 @@ namespace Creaturestests.MutatorTests
         {
             var precommands =
                new StringBuilder()
-                   // зададим константы
                    .AppendLine("int zero")
                    .AppendLine("int one")
                    .AppendLine("one = 1")

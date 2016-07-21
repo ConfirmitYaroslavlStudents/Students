@@ -51,8 +51,9 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
 
         public void Accept(NewInt command)
         {
+            var insertIndex = _rnd.Next(_commands.Length + 1);
             var newCommand = new NewInt(GetRandomName());
-            Insert(newCommand, _rnd.Next(0, _commands.Length + 1));
+            Insert(newCommand, insertIndex);
         }
 
         public void Accept(SetValue command)
@@ -117,8 +118,8 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         {
             var insertIndex = _rnd.Next(_commands.Length + 1);
             var declarations = FindDeclarationsBefore(insertIndex);
-
             var randomTarget = declarations[_rnd.Next(declarations.Length)];
+
             var newCommand = new Condition(randomTarget.Name);
             Insert(newCommand, insertIndex);
             Accept(new CloseCondition());
@@ -161,7 +162,7 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
 
         private string GetRandomName()
         {
-            var length = _rnd.Next(MaxLengthOfName);
+            var length = _rnd.Next(1,MaxLengthOfName+1);
             return GetRandomName(length);
         }
 
@@ -201,6 +202,7 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
             for (int i = index - 1; i >= 0; i--)
                 if (_commands[i] is NewInt) declarations.Add(_commands[i] as NewInt);
 
+            if (declarations.Count == 0) declarations.Add(new NewInt(GetRandomName()));
             return declarations.ToArray();
         }
     }

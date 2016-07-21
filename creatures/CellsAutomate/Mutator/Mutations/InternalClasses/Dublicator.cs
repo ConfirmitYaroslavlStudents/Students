@@ -5,6 +5,7 @@ using Creatures.Language.Commands.Interfaces;
 
 namespace CellsAutomate.Mutator.Mutations.InternalClasses
 {
+
     internal class Dublicator
     {
         private ICommand[] _commands;
@@ -18,7 +19,7 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
 
         public ICommand[] Dublicate(int index)
         {
-            Insert(_commands[index], _rnd.Next(0,_commands.Length+1));
+            Insert(_commands[index], _rnd.Next(_commands.Length+1));
             return _commands;
         }
 

@@ -61,6 +61,7 @@
     <Compile Include="MutatorTests\DublicateCommandMutationTest.cs" />
     <Compile Include="MutatorTests\ReplaceCommandMutationTest.cs" />
     <Compile Include="MutatorTests\SpecialRandom.cs" />
+    <Compile Include="MutatorTests\SwapCommandMutationTest.cs" />
     <Compile Include="MutatorTests\ValidationExecutorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleCreatureTests.cs" />

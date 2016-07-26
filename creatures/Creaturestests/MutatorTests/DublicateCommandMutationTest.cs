@@ -13,7 +13,7 @@ namespace Creaturestests.MutatorTests
     [TestClass]
     public class DublicateCommandMutationTest
     {      
-        private CommandsEqualityComparer _comparer=new CommandsEqualityComparer();
+        private CommandsEqualityComparer _comparer = new CommandsEqualityComparer();
 
         [TestMethod]
         public void DublicateCommandOnTheSpot()

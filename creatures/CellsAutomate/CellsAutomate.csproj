@@ -57,6 +57,7 @@
     <Compile Include="Mutator\Mutations\DublicateCommandMutatiton.cs" />
     <Compile Include="Mutator\Mutations\InternalClasses\Dublicator.cs" />
     <Compile Include="Mutator\Mutations\IMutation.cs" />
+    <Compile Include="Mutator\Mutations\InternalClasses\Swapper.cs" />
     <Compile Include="Mutator\Mutations\ReplaceCommandMutation.cs" />
     <Compile Include="Mutator\Mutations\InternalClasses\Replacer.cs" />
     <Compile Include="Mutator\Mutations\SwapCommandMutation.cs" />

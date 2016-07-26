@@ -137,7 +137,7 @@ namespace Creatures.Language.Executors
 
         public void Accept(CloseCondition command)
         {
-            if (_conditions.Count == 0)
+            if (_conditions.Count == 1)
             {
                 _isExecutable = false;
                 return;

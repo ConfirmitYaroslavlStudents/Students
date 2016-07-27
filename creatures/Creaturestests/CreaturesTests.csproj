@@ -56,6 +56,7 @@
     <Compile Include="LanguageTests.cs" />
     <Compile Include="MatrixTests.cs" />
     <Compile Include="MutatorTests\AddCommandMutationTest.cs" />
+    <Compile Include="MutatorTests\CommandParserTest.cs" />
     <Compile Include="MutatorTests\CommandsEqualityComparer.cs" />
     <Compile Include="MutatorTests\DeleteCommandMutationUnitTest.cs" />
     <Compile Include="MutatorTests\DublicateCommandMutationTest.cs" />

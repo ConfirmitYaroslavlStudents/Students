@@ -209,5 +209,21 @@ namespace Creaturestests.MutatorTests
             var parsedcommands = new Parser().ProcessCommands(commands.ToString());
             Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));
         }
+
+        [TestMethod]
+        public void LonelyEndIf()
+        {
+            var executor = new ValidationExecutor();
+            var commands=
+                new StringBuilder(@"
+                    int a
+                    endif
+                    a = 1
+                        ");
+
+            var parsedcommands = new Parser().ProcessCommands(commands.ToString());
+
+            Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));
+        }
     }
 }

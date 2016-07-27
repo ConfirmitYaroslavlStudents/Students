@@ -92,7 +92,7 @@ namespace Creaturestests.MutatorTests
                 }
             }
             var command = resultCommands[indexToAdd] as Plus;
-            var validNames = new[] { "zero", "one", "two" };
+            var validNames = new[] { "zero", "one", "two","four" };
             var validFlag = validNames.Contains(command.FirstSource) &&
                             validNames.Contains(command.SecondSource) &&
                             validNames.Contains(command.TargetName);

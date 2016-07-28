@@ -1,7 +1,0 @@
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\bin\Debug\CellsAutomate.exe
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\bin\Debug\CellsAutomate.pdb
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\bin\Debug\Creatures.exe
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\bin\Debug\Creatures.pdb
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\obj\Debug\CellsAutomate.csprojResolveAssemblyReference.cache
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\obj\Debug\CellsAutomate.exe
-C:\GitHub\Confirmit\Students\creatures\CellsAutomate\obj\Debug\CellsAutomate.pdb

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
+using CellsAutomate.Constants;
 
 namespace CellsAutomate
 {
@@ -29,11 +28,11 @@ namespace CellsAutomate
             _matrix[currentPoint.X, currentPoint.Y] += embeddedFood;
         }
 
-        public bool TakeFood(Point currentPoint, int takingFood)
+        public bool TakeFood(Point currentPoint)
         {
-            if (takingFood > _matrix[currentPoint.X, currentPoint.Y])
+            if (CreatureConstants.OneBite > _matrix[currentPoint.X, currentPoint.Y])
                 return false;
-            _matrix[currentPoint.X, currentPoint.Y] -= takingFood;
+            _matrix[currentPoint.X, currentPoint.Y] -= CreatureConstants.OneBite;
             return true;
         }
 
@@ -58,9 +57,9 @@ namespace CellsAutomate
                     && current.Y >= 0
                     && current.Y < length
                     && !creaturesMatrix[current.X, current.Y]
-                    && _matrix[current.X, current.Y] <= Constants.MaxFoodLevel)
+                    && _matrix[current.X, current.Y] <= FoodMatrixConstants.MaxFoodLevel)
                 {
-                    AddFood(current, Constants.FoodLevel);
+                    AddFood(current, FoodMatrixConstants.FoodLevel);
 
                     foreach (var point in DirectionEx.GetPoints(current.X, current.Y))
                     {

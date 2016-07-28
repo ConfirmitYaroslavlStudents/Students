@@ -93,9 +93,9 @@ namespace CellsAutomate
             }
         }
 
-        public static bool IsFree(Point currentPoint, AbstractCreature[,] Cells)
+        public static bool IsFree(Point currentPoint, BaseCreature[,] creatures)
         {
-            if (Cells[currentPoint.X, currentPoint.Y] == null)
+            if (creatures[currentPoint.X, currentPoint.Y] == null)
                 return true;
             return false;
         }

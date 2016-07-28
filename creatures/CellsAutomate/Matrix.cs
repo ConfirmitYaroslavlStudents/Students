@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
+using CellsAutomate.Factory;
 
 namespace CellsAutomate
 {
@@ -11,17 +11,17 @@ namespace CellsAutomate
         public int Height;
         public FoodMatrix EatMatrix { get; set; }
 
-        public AbstractCreature[,] Cells { get; set; }
+        public BaseCreature[,] Creatures { get; set; }
 
         public Matrix(int length, int height)
         {
             Length = length;
             Height = height;
             EatMatrix = new FoodMatrix(length, height);
-            Cells = new AbstractCreature[length, height];
+            Creatures = new BaseCreature[length, height];
         }
 
-        public IEnumerable<AbstractCreature> CellsAsEnumerable
+        public IEnumerable<BaseCreature> creaturesAsEnumerable
         {
             get
             {
@@ -29,8 +29,8 @@ namespace CellsAutomate
                 {
                     for (int j = 0; j < Height; j++)
                     {
-                        if (Cells[i, j] != null)
-                            yield return Cells[i, j];
+                        if (Creatures[i, j] != null)
+                            yield return Creatures[i, j];
                     }
                 }
             }
@@ -45,7 +45,7 @@ namespace CellsAutomate
                 {
                     for (int j = 0; j < Height; j++)
                     {
-                        if (Cells[i, j] != null) count++;
+                        if (Creatures[i, j] != null) count++;
                     }
                 }
 
@@ -61,7 +61,7 @@ namespace CellsAutomate
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    placeHoldersMatrix[i, j] = Cells[i, j] != null;
+                    placeHoldersMatrix[i, j] = Creatures[i, j] != null;
                 }
             }
 
@@ -75,13 +75,13 @@ namespace CellsAutomate
         {
             var random = new Random();
 
-            var creator = new CreatorSimpleCreature();
+            var creator = new CreatorOfSimpleCreature();
 
             for (int i = 0; i < Length; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    Cells[i, j] = random.Next(100) % 4 == 0 ? creator.CreateAbstractCreature(new Point(i, j), random, 1) : null;
+                    Creatures[i, j] = random.Next(100) % 4 == 0 ? creator.CreateAbstractCreature(new Point(i, j), random, 1) : null;
                 }
             }
 
@@ -90,20 +90,20 @@ namespace CellsAutomate
 
         public void MakeTurn()
         {
-            var cells = new List<AbstractCreature>();
+            var creatures = new List<BaseCreature>();
 
             for (int i = 0; i < Length; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    if (Cells[i, j] != null)
+                    if (Creatures[i, j] != null)
                     {
-                        cells.Add(Cells[i, j]);
+                        creatures.Add(Creatures[i, j]);
                     }
                 }
             }
 
-            foreach (var item in cells)
+            foreach (var item in creatures)
             {
                 MakeTurn(item);
             }
@@ -111,16 +111,16 @@ namespace CellsAutomate
             FillMatrixWithFood();
         }
 
-        private void MakeTurn(AbstractCreature currentCreature)
+        private void MakeTurn(BaseCreature currentCreature)
         {
-            var turnResult = currentCreature.MyTurn(EatMatrix, Cells);
+            var turnResult = currentCreature.MyTurn(EatMatrix, Creatures);
             var action = turnResult.Item1;
             var direction = turnResult.Item2;
 
             switch (action)
             {
                 case ActionEnum.Die:
-                    MakeTurnDie(currentCreature.Position); break;
+                    MakeTurnDie(currentCreature.GetPosition()); break;
                 case ActionEnum.MakeChild:
                     MakeTurnMakeChild(direction, currentCreature); break;
                 case ActionEnum.Go:
@@ -133,31 +133,33 @@ namespace CellsAutomate
 
         private void MakeTurnDie(Point position)
         {
-            Cells[position.X, position.Y] = null;
+            Creatures[position.X, position.Y] = null;
         }
 
-        private void MakeTurnMakeChild(DirectionEnum direction, AbstractCreature simpleCreature)
+        private void MakeTurnMakeChild(DirectionEnum direction, BaseCreature simpleCreature)
         {
             if (!simpleCreature.CanMakeChild || direction == DirectionEnum.Stay)
                 return;
-            var childPoint = DirectionEx.PointByDirection(direction, simpleCreature.Position);
-            if (DirectionEx.IsValid(childPoint, Length, Height) && DirectionEx.IsFree(childPoint, Cells))
+            var childPoint = DirectionEx.PointByDirection(direction, simpleCreature.GetPosition());
+            if (DirectionEx.IsValid(childPoint, Length, Height) && DirectionEx.IsFree(childPoint, Creatures))
             {
-                Cells[childPoint.X, childPoint.Y] = simpleCreature.MakeChild(childPoint);
+                Creatures[childPoint.X, childPoint.Y] = simpleCreature.MakeChild(childPoint);
             }
         }
 
-        private void MakeTurnGo(DirectionEnum direction, AbstractCreature simpleCreature)
+        private void MakeTurnGo(DirectionEnum direction, BaseCreature simpleCreature)
         {
             if (direction == DirectionEnum.Stay)
                 return;
-            var newPosition = DirectionEx.PointByDirection(direction, simpleCreature.Position);
+            var newPosition = DirectionEx.PointByDirection(direction, simpleCreature.GetPosition());
 
-            if (DirectionEx.IsValid(newPosition, Length, Height) && DirectionEx.IsFree(newPosition, Cells))
+            if (DirectionEx.IsValid(newPosition, Length, Height) && DirectionEx.IsFree(newPosition, Creatures))
             {
-                Cells[simpleCreature.Position.X, simpleCreature.Position.Y] = null;
+                var currentPoint = simpleCreature.GetPosition();
+                Creatures[currentPoint.X, currentPoint.Y] = null;
                 simpleCreature.SetPosition(newPosition);
-                Cells[simpleCreature.Position.X, simpleCreature.Position.Y] = simpleCreature;
+                currentPoint = simpleCreature.GetPosition();
+                Creatures[currentPoint.X, currentPoint.Y] = simpleCreature;
                 AddStats(direction);
             }
         }
@@ -182,9 +184,9 @@ namespace CellsAutomate
             }
         }
 
-        private void MakeTurnEat(AbstractCreature simpleCreature)
+        private void MakeTurnEat(BaseCreature simpleCreature)
         {
-            if (EatMatrix.TakeFood(simpleCreature.Position, Constants.OneBite))
+            if (EatMatrix.TakeFood(simpleCreature.GetPosition()))
             {
                 simpleCreature.EatFood();
             }

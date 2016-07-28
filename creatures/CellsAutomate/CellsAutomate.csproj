@@ -44,11 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Constants\CreatureConstants.cs" />
+    <Compile Include="Constants\FoodMatrixConstants.cs" />
+    <Compile Include="Constants\LoggerConstants.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Creature.cs" />
+    <Compile Include="Creatures\Creature.cs" />
     <Compile Include="CreatureDead.cs" />
-    <Compile Include="FactoryMethod.cs" />
+    <Compile Include="Creatures\BaseCreature.cs" />
+    <Compile Include="Factory\Creator.cs" />
     <Compile Include="FoodMatrix.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Mutator\Mutations\AddCommandMutation.cs" />
@@ -71,7 +74,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeedGenerator.cs" />
-    <Compile Include="SimpleCreature.cs" />
+    <Compile Include="Creatures\SimpleCreature.cs" />
     <Compile Include="Stats.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +83,7 @@
       <Name>Creatures</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

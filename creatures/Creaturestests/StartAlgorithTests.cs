@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Creaturestests
 {
@@ -39,7 +37,7 @@ namespace Creaturestests
     public class StartAlgorithTests : TestsBase
     {
         [TestMethod]
-        public void AllCellsAreOpen()
+        public void AllcreaturesAreOpen()
         {
             var state = new Dictionary<int, int>() {
                 { 0, 4 },
@@ -56,7 +54,7 @@ namespace Creaturestests
         }
 
         [TestMethod]
-        public void AllCellsAreClosed()
+        public void AllcreaturesAreClosed()
         {
             var state = new Dictionary<int, int>() {
                 { 0, 3 },

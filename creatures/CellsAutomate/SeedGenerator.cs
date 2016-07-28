@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Parsers;
-using Creatures.Language.Executors;
 
 namespace CellsAutomate
 {
     public class SeedGenerator
     {
-        public ICommand[] StartAlgorithm
-        {
-            get
-            {
-                return new Parser().ProcessCommands(GetAlgorithm()).ToArray();
-            }
-        }
+        public ICommand[] StartAlgorithm => new Parser().ProcessCommands(GetAlgorithm()).ToArray();
 
         public string GetAlgorithm()
         {

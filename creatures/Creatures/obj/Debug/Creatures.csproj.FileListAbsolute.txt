@@ -1,0 +1,6 @@
+C:\GitHub\Confirmit\Students\creatures\Creatures\bin\Debug\Creatures.exe.config
+C:\GitHub\Confirmit\Students\creatures\Creatures\bin\Debug\Creatures.exe
+C:\GitHub\Confirmit\Students\creatures\Creatures\bin\Debug\Creatures.pdb
+C:\GitHub\Confirmit\Students\creatures\Creatures\obj\Debug\Creatures.csprojResolveAssemblyReference.cache
+C:\GitHub\Confirmit\Students\creatures\Creatures\obj\Debug\Creatures.exe
+C:\GitHub\Confirmit\Students\creatures\Creatures\obj\Debug\Creatures.pdb

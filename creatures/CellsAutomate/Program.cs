@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CellsAutomate.Constants;
 using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Parsers;
 
@@ -16,11 +17,11 @@ namespace CellsAutomate
             //var commands = new SeedGenerator().StartAlgorithm;
             //var newCommands = commands.ToArray();
             //var mutator = new Mutator.Mutator(new Random());
-            //var logger=new Logger();
+            //var logger = new Logger();
 
-            //for (int i =0; i<10;i++)
-            //{           
-            //     newCommands = mutator.Mutate(newCommands, logger);             
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    newCommands = mutator.Mutate(newCommands, logger);
             //}
             //var str = logger.Builder.ToString();
             //Console.WriteLine(str);
@@ -30,7 +31,7 @@ namespace CellsAutomate
             //Console.WriteLine(nowCommands);
             //Console.ReadKey();
 
-            var length = Constants.Length;
+            var length = LoggerConstants.Length;
             int scale = 500 / length;
             var matrix = new Matrix(length, length);
             matrix.FillStartMatrixRandomly();
@@ -47,8 +48,8 @@ namespace CellsAutomate
                 var generationStat =
                     string.Join(" ",
                     matrix
-                        .CellsAsEnumerable
-                        .Select(x => x.Generation)
+                        .creaturesAsEnumerable
+                        .Select(x => x.GetGeneration())
                         .GroupBy(x => x)
                         .OrderBy(x => x.Key)
                         .Select(x => string.Format("{0}:{1}", x.Key, x.Count()))
@@ -59,7 +60,7 @@ namespace CellsAutomate
                 PrintGeneration(matrix, i);
             }
 
-            File.WriteAllText(Constants.Log + "\\Log.txt", log.ToString());
+            File.WriteAllText(LoggerConstants.Log + "\\Log.txt", log.ToString());
             Console.WriteLine(Stats.Up);
             Console.WriteLine(Stats.Right);
             Console.WriteLine(Stats.Down);
@@ -67,11 +68,11 @@ namespace CellsAutomate
             Console.ReadKey();
         }
 
-        private static void PrintGeneration(Matrix cells, int turn)
+        private static void PrintGeneration(Matrix creatures, int turn)
         {
             for (int i = 1; i <= turn + 1; i++)
             {
-                var g = (from x in cells.CellsAsEnumerable where x.Generation == i select x).Count();
+                var g = (from x in creatures.creaturesAsEnumerable where x.GetGeneration() == i select x).Count();
                 if (g != 0)
                     Console.WriteLine(i + "=> " + g);
             }
@@ -105,12 +106,12 @@ namespace CellsAutomate
                             var x = i + newLength;
                             var y = j;
 
-                            bitmap.SetPixel(x + k, y + l, matrix.Cells[i / scale, j / scale] == null ? Color.White : Color.Red);
+                            bitmap.SetPixel(x + k, y + l, matrix.Creatures[i / scale, j / scale] == null ? Color.White : Color.Red);
                         }
                     }
             }
 
-            bitmap.Save(Constants.Log + String.Format($"\\{id}.bmp"), ImageFormat.Bmp);
+            bitmap.Save(LoggerConstants.Log + String.Format($"\\{id}.bmp"), ImageFormat.Bmp);
         }
     }
 }

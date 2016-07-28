@@ -1,5 +1,4 @@
-﻿using CellsAutomate;
-using System.Drawing;
+﻿using System.Drawing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CellsAutomate.Tests
@@ -36,7 +35,7 @@ namespace CellsAutomate.Tests
         {
             var eatMatrix = new FoodMatrix(2, 2);
             //eatMatrix.AddFood(new Point(0, 0), 1);
-            eatMatrix.TakeFood(new Point(0, 0), 1);
+            eatMatrix.TakeFood(new Point(0, 0));
             Assert.IsFalse(eatMatrix.HasFood(new Point(0, 0)));
         }
 
@@ -44,7 +43,7 @@ namespace CellsAutomate.Tests
         public void TakeFoodIsFalseTest()
         {
             var eatMatrix = new FoodMatrix(2, 2);
-            Assert.IsFalse(eatMatrix.TakeFood(new Point(0, 0), 1));
+            Assert.IsFalse(eatMatrix.TakeFood(new Point(0, 0)));
         }
 
         [TestMethod()]

@@ -11,7 +11,7 @@ namespace CellsAutomate.Tests
         {
             var matrix = new Matrix(5, 5);
             //for (int i = 0; i < 5; i++)
-                //matrix.Cells[i, i] = new SimpleCreature(new Point(i, i), 1);
+                //matrix.creatures[i, i] = new SimpleCreature(new Point(i, i), 1);
             Assert.AreEqual(5, matrix.AliveCount);
         }
 
@@ -26,9 +26,9 @@ namespace CellsAutomate.Tests
         public void FillMatrixWithFoodTest()
         {
             var matrix = new Matrix(5, 5);
-            //matrix.Cells[0, 0] = new SimpleCreature(new Point(0, 0), 1);
-            //matrix.Cells[0, 4] = new SimpleCreature(new Point(0, 4), 1);
-            //matrix.Cells[4, 0] = new SimpleCreature(new Point(4, 0), 1);
+            //matrix.creatures[0, 0] = new SimpleCreature(new Point(0, 0), 1);
+            //matrix.creatures[0, 4] = new SimpleCreature(new Point(0, 4), 1);
+            //matrix.creatures[4, 0] = new SimpleCreature(new Point(4, 0), 1);
             matrix.FillMatrixWithFood();
 
             var expectedFoodMatrix = new FoodMatrix(5, 5);
@@ -48,7 +48,7 @@ namespace CellsAutomate.Tests
         {
             var matrix = new Matrix(2, 2);
             //var actualSimpleCreature = new SimpleCreature(new Point(0, 0), 1);
-            //matrix.Cells[0, 0] = actualSimpleCreature;
+            //matrix.creatures[0, 0] = actualSimpleCreature;
             //matrix.EatMatrix.AddFood(new Point(0, 1), SimpleCreature.FoodLevel);
             matrix.MakeTurn();
             //Assert.AreEqual(new Point(0, 1), actualSimpleCreature.Position);
@@ -58,7 +58,7 @@ namespace CellsAutomate.Tests
         public void IsFreeIsTrueTest()
         {
             var matrix = new Matrix(2, 2);
-            //matrix.Cells[0, 0] = new SimpleCreature(new Point(0, 0), 1);
+            //matrix.creatures[0, 0] = new SimpleCreature(new Point(0, 0), 1);
             //Assert.IsTrue(matrix.IsFree(new Point(1, 1)));
         }
 
@@ -66,7 +66,7 @@ namespace CellsAutomate.Tests
         public void IsFreeIsFalseTest()
         {
             var matrix = new Matrix(2, 2);
-            //matrix.Cells[0, 0] = new SimpleCreature(new Point(0, 0), 1);
+            //matrix.creatures[0, 0] = new SimpleCreature(new Point(0, 0), 1);
             //Assert.IsFalse(matrix.IsFree(new Point(0, 0)));
         }
 
@@ -74,7 +74,7 @@ namespace CellsAutomate.Tests
         public void MakeTurnMakeChildTest()
         {
             var matrix = new Matrix(2, 2);
-            //matrix.Cells[0, 0] = new SimpleCreature(new Point(0, 0), 1);
+            //matrix.creatures[0, 0] = new SimpleCreature(new Point(0, 0), 1);
             //matrix.EatMatrix.AddFood(new Point(0, 0), SimpleCreature.FoodLevel);
             matrix.MakeTurn();
             matrix.MakeTurn();
@@ -85,7 +85,7 @@ namespace CellsAutomate.Tests
         public void MakeTurnEatTest()
         {
             var matrix = new Matrix(2, 2);
-            //matrix.Cells[0, 0] = new SimpleCreature(new Point(0, 0), 1);
+            //matrix.creatures[0, 0] = new SimpleCreature(new Point(0, 0), 1);
             //matrix.EatMatrix.AddFood(new Point(0, 0), SimpleCreature.FoodLevel);
             matrix.MakeTurn();
             //Assert.IsFalse(matrix.IsFree(new Point(0, 0)));
@@ -95,7 +95,7 @@ namespace CellsAutomate.Tests
         public void MakeTurnDieTest()
         {
             var matrix = new Matrix(1, 1);
-            //matrix.Cells[0, 0] = new SimpleCreature(new Point(0, 0), 1);
+            //matrix.creatures[0, 0] = new SimpleCreature(new Point(0, 0), 1);
             matrix.MakeTurn();
             matrix.MakeTurn();
             matrix.MakeTurn();

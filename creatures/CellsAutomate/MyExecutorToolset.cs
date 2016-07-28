@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 
 namespace CellsAutomate

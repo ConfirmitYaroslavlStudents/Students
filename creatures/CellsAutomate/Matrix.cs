@@ -8,26 +8,26 @@ namespace CellsAutomate
     public class Matrix
     {
         public int Length;
-        public int Width;
+        public int Height;
         public FoodMatrix EatMatrix { get; set; }
 
-        public SimpleCreature[,] Cells { get; set; }
+        public AbstractCreature[,] Cells { get; set; }
 
-        public Matrix(int n, int m)
+        public Matrix(int length, int height)
         {
-            Length = n;
-            Width = m;
-            EatMatrix = new FoodMatrix(n, m);
-            Cells = new SimpleCreature[n, m];
+            Length = length;
+            Height = height;
+            EatMatrix = new FoodMatrix(length, height);
+            Cells = new AbstractCreature[length, height];
         }
 
-        public IEnumerable<SimpleCreature> CellsAsEnumerable
+        public IEnumerable<AbstractCreature> CellsAsEnumerable
         {
             get
             {
                 for (int i = 0; i < Length; i++)
                 {
-                    for (int j = 0; j < Width; j++)
+                    for (int j = 0; j < Height; j++)
                     {
                         if (Cells[i, j] != null)
                             yield return Cells[i, j];
@@ -43,7 +43,7 @@ namespace CellsAutomate
                 int count = 0;
                 for (int i = 0; i < Length; i++)
                 {
-                    for (int j = 0; j < Width; j++)
+                    for (int j = 0; j < Height; j++)
                     {
                         if (Cells[i, j] != null) count++;
                     }
@@ -55,190 +55,116 @@ namespace CellsAutomate
 
         public void FillMatrixWithFood()
         {
-            var placeHoldersMatrix = new bool[Length, Width];
+            var placeHoldersMatrix = new bool[Length, Height];
 
             for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < Height; j++)
                 {
                     placeHoldersMatrix[i, j] = Cells[i, j] != null;
                 }
             }
 
             EatMatrix.Build(placeHoldersMatrix, 0, 0);
-            EatMatrix.Build(placeHoldersMatrix, 0, Width - 1);
+            EatMatrix.Build(placeHoldersMatrix, 0, Height - 1);
             EatMatrix.Build(placeHoldersMatrix, Length - 1, 0);
-            EatMatrix.Build(placeHoldersMatrix, Length - 1, Width - 1);
+            EatMatrix.Build(placeHoldersMatrix, Length - 1, Height - 1);
         }
 
         public void FillStartMatrixRandomly()
         {
             var random = new Random();
-            //var i = random.Next(N);
-            //var j = random.Next(M);
 
-            //Cells[20, 20] = new Creature(new Point(20, 20), executor, commands, random);
+            var creator = new CreatorSimpleCreature();
 
             for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < Height; j++)
                 {
-                    Cells[i, j] = random.Next(100) % 4 == 0 ? new SimpleCreature(new Point(i, j), 1) : null;
+                    Cells[i, j] = random.Next(100) % 4 == 0 ? creator.CreateAbstractCreature(new Point(i, j), random, 1) : null;
                 }
             }
 
             FillMatrixWithFood();
         }
-
-        //public string PrintStartMatrix()
-        //{
-        //    var result = new bool[Length, Width];
-
-        //    for (int i = 0; i < Length; i++)
-        //    {
-        //        for (int j = 0; j < Width; j++)
-        //        {
-        //            result[i, j] = Cells[i, j] != null;
-        //        }
-        //    }
-
-        //    return PrintMatrix(result);
-        //}
-
-        //private string PrintMatrix(bool[,] matrix)
-        //{
-        //    var result = new StringBuilder();
-
-        //    for (int i = 0; i < Length; i++)
-        //    {
-        //        for (int j = 0; j < Width; j++)
-        //        {
-        //            result.Append(matrix[i, j] ? "*" : " ");
-        //        }
-        //        result.AppendLine("|");
-        //    }
-
-        //    return result.ToString();
-        //}
 
         public void MakeTurn()
         {
+            var cells = new List<AbstractCreature>();
+
             for (int i = 0; i < Length; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < Height; j++)
                 {
-                    if(Cells[i, j] != null && !Cells[i, j].HadMoved)
-                        MakeTurn(Cells[i, j], EatMatrix, i, j);
+                    if (Cells[i, j] != null)
+                    {
+                        cells.Add(Cells[i, j]);
+                    }
                 }
             }
 
-            PrepareForNextTurn();
+            foreach (var item in cells)
+            {
+                MakeTurn(item);
+            }
 
             FillMatrixWithFood();
         }
 
-        private void PrepareForNextTurn()
+        private void MakeTurn(AbstractCreature currentCreature)
         {
-            for (int i = 0; i < Length; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    if (Cells[i, j] != null)
-                        Cells[i, j].HadMoved = false;
-                }
-            }
-        }
+            var turnResult = currentCreature.MyTurn(EatMatrix, Cells);
+            var action = turnResult.Item1;
+            var direction = turnResult.Item2;
 
-        private void MakeTurn(SimpleCreature currentSimpleCreature, FoodMatrix eat, int i, int j)
-        {
-            var currentPoint = new Point(i, j);
-
-            var turnResult = currentSimpleCreature.MyTurn();
-
-            switch (turnResult)
+            switch (action)
             {
                 case ActionEnum.Die:
-                    MakeTurnDie(i, j);
-                    break;
+                    MakeTurnDie(currentCreature.Position); break;
                 case ActionEnum.MakeChild:
-                    MakeTurnMakeChild(currentSimpleCreature, currentPoint);
-                    break;
+                    MakeTurnMakeChild(direction, currentCreature); break;
                 case ActionEnum.Go:
-                    MakeTurnGo(currentSimpleCreature, i, j, currentPoint);
-                    break;
+                    MakeTurnGo(direction, currentCreature); break;
+                case ActionEnum.Eat:
+                    MakeTurnEat(currentCreature); break;
                 default: throw new Exception();
             }
         }
 
-        private void MakeTurnDie(int i, int j)
+        private void MakeTurnDie(Point position)
         {
-            Cells[i, j] = null;
+            Cells[position.X, position.Y] = null;
         }
 
-        private void MakeTurnGo(SimpleCreature currentSimpleCreature, int i, int j, Point currentPoint)
+        private void MakeTurnMakeChild(DirectionEnum direction, AbstractCreature simpleCreature)
         {
-            var diretionResult = GetDirectionOrEat(currentSimpleCreature);
-
-            if (diretionResult != DirectionEnum.Stay)
+            if (!simpleCreature.CanMakeChild || direction == DirectionEnum.Stay)
+                return;
+            var childPoint = DirectionEx.PointByDirection(direction, simpleCreature.Position);
+            if (DirectionEx.IsValid(childPoint, Length, Height) && DirectionEx.IsFree(childPoint, Cells))
             {
-                var newPosition = DirectionEx.PointByDirection(diretionResult, currentPoint);
-                currentSimpleCreature.SetPosition(newPosition);
-                Cells[i, j] = null;
-                Cells[newPosition.X, newPosition.Y] = currentSimpleCreature;
+                Cells[childPoint.X, childPoint.Y] = simpleCreature.MakeChild(childPoint);
             }
         }
 
-        private void MakeTurnMakeChild(SimpleCreature currentSimpleCreature, Point currentPoint)
+        private void MakeTurnGo(DirectionEnum direction, AbstractCreature simpleCreature)
         {
-            var resultDirection = ChooseDirectionForChild(currentPoint);
-            if (resultDirection != DirectionEnum.Stay)
-            {
-                var newPosition = DirectionEx.PointByDirection(resultDirection, currentPoint);
+            if (direction == DirectionEnum.Stay)
+                return;
+            var newPosition = DirectionEx.PointByDirection(direction, simpleCreature.Position);
 
-                Cells[newPosition.X, newPosition.Y] = currentSimpleCreature.MakeChild(newPosition);
+            if (DirectionEx.IsValid(newPosition, Length, Height) && DirectionEx.IsFree(newPosition, Cells))
+            {
+                Cells[simpleCreature.Position.X, simpleCreature.Position.Y] = null;
+                simpleCreature.SetPosition(newPosition);
+                Cells[simpleCreature.Position.X, simpleCreature.Position.Y] = simpleCreature;
+                AddStats(direction);
             }
         }
 
-        private DirectionEnum ChooseDirectionForChild(Point parentPoint)
+        private void AddStats(DirectionEnum direction)
         {
-            var directions = new List<DirectionEnum>();
-            var points = DirectionEx.GetPoints(parentPoint.X, parentPoint.Y);
-
-            foreach (var item in points)
-            {
-                if (DirectionEx.IsValid(item, Length, Width) && IsFree(item))
-                {
-                    directions.Add(DirectionEx.DirectionByPoint(parentPoint, item));
-                }
-            }
-
-            if (directions.Count != 0)
-            {
-                return directions.ElementAt(0);
-            }
-
-            return DirectionEnum.Stay;
-        }
-
-        public bool IsFree(Point currentPoint)
-        {
-            if (Cells[currentPoint.X, currentPoint.Y] == null)
-                return true;
-            return false;
-        }
-
-        private DirectionEnum GetDirectionOrEat(SimpleCreature currentSimpleCreature)
-        {
-
-            if (EatMatrix.HasFood(currentSimpleCreature.Position))
-            {
-                currentSimpleCreature.EatFood(EatMatrix);
-                return DirectionEnum.Stay;
-            }
-
-            var result = ChooseDirectionForMove(currentSimpleCreature.Position);
-
-            switch (result)
+            switch (direction)
             {
                 case DirectionEnum.Up:
                     Stats.Up++;
@@ -252,33 +178,16 @@ namespace CellsAutomate
                 case DirectionEnum.Left:
                     Stats.Left++;
                     break;
-                case DirectionEnum.Stay:
-                    break;
-                default:
-                    throw new Exception();
+                default: throw new Exception();
             }
-            return result;
         }
 
-        private DirectionEnum ChooseDirectionForMove(Point currentPoint)
+        private void MakeTurnEat(AbstractCreature simpleCreature)
         {
-            var directions = new List<DirectionEnum>();
-            var points = DirectionEx.GetPoints(currentPoint.X, currentPoint.Y);
-
-            foreach (var item in points)
+            if (EatMatrix.TakeFood(simpleCreature.Position, Constants.OneBite))
             {
-                if (DirectionEx.IsValid(item, Length, Width) && IsFree(item) && EatMatrix.HasFood(item))
-                {
-                    directions.Add(DirectionEx.DirectionByPoint(currentPoint, item));
-                }
+                simpleCreature.EatFood();
             }
-
-            if (directions.Count != 0)
-            {
-                return directions.ElementAt(0);
-            }
-
-            return DirectionEnum.Stay;
         }
     }
 }

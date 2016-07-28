@@ -61,7 +61,7 @@ namespace Creatures.Language.Parsers
                 throw exception;
 
             var partsLeft = parts[1].Split('+').Select(item => item.Trim()).ToList();
-            if (parts.Count != 2)
+            if (partsLeft.Count != 2)
                 throw exception;
 
             if (IsIdentifier(parts[0]) && IsIdentifier(partsLeft[0]) && IsIdentifier(partsLeft[1]))
@@ -78,7 +78,7 @@ namespace Creatures.Language.Parsers
                 throw exception;
 
             var partsLeft = parts[1].Split('-').Select(item => item.Trim()).ToList();
-            if (parts.Count != 2)
+            if (partsLeft.Count != 2)
                 throw exception;
 
             if (IsIdentifier(parts[0]) && IsIdentifier(partsLeft[0]) && IsIdentifier(partsLeft[1]))
@@ -135,10 +135,10 @@ namespace Creatures.Language.Parsers
                 throw exception;
 
             var partsLeft = parts[1].Split(' ').Select(item => item.Trim()).ToList();
-            if (parts.Count != 2)
+            if (partsLeft.Count != 2)
                 throw exception;
 
-            if (IsIdentifier(parts[0]) && partsLeft[0] == "getState")
+            if (IsIdentifier(parts[0]) && partsLeft[0] == "getState" && int.Parse(partsLeft[1]) >= 0 && int.Parse(partsLeft[1]) <= 3)
                 return new GetState(parts[0], int.Parse(partsLeft[1]));
 
             throw exception;
@@ -152,7 +152,7 @@ namespace Creatures.Language.Parsers
                 throw exception;
 
             var partsLeft = parts[1].Split(' ').Select(item => item.Trim()).ToList();
-            if (parts.Count != 2)
+            if (partsLeft.Count != 2)
                 throw exception;
 
             if (IsIdentifier(parts[0]) && partsLeft[0] == "random" && IsIdentifier(partsLeft[1]))
@@ -180,7 +180,7 @@ namespace Creatures.Language.Parsers
                 throw exception;
             if (parts[0] != type)
                 throw exception;
-            if (IsIdentifier(parts[1]))
+            if (!IsIdentifier(parts[1]))
                 new ArgumentException("Identifier expected, but have : " + parts[1]);
 
             return parts[1];

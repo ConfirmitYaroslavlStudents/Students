@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Creature.cs" />
-    <Compile Include="CreatureIsDead.cs" />
+    <Compile Include="CreatureDead.cs" />
+    <Compile Include="FactoryMethod.cs" />
     <Compile Include="FoodMatrix.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Mutator\Mutations\AddCommandMutation.cs" />

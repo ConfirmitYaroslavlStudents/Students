@@ -30,7 +30,7 @@ namespace CellsAutomate
             //Console.WriteLine(nowCommands);
             //Console.ReadKey();
 
-            var length = 100;
+            var length = Constants.Length;
             int scale = 500 / length;
             var matrix = new Matrix(length, length);
             matrix.FillStartMatrixRandomly();
@@ -42,7 +42,7 @@ namespace CellsAutomate
             {
                 matrix.MakeTurn();
                 Print(i + 1, length, matrix, scale);
-                if(matrix.AliveCount != 0)
+                if (matrix.AliveCount != 0)
                     Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
                 var generationStat =
                     string.Join(" ",
@@ -55,14 +55,26 @@ namespace CellsAutomate
                         .ToArray());
 
                 log.AppendLine(generationStat);
+
+                PrintGeneration(matrix, i);
             }
 
-            File.WriteAllText(@"C:\Confirmit\Log\Log.txt", log.ToString());
+            File.WriteAllText(Constants.Log + "\\Log.txt", log.ToString());
             Console.WriteLine(Stats.Up);
             Console.WriteLine(Stats.Right);
             Console.WriteLine(Stats.Down);
             Console.WriteLine(Stats.Left);
             Console.ReadKey();
+        }
+
+        private static void PrintGeneration(Matrix cells, int turn)
+        {
+            for (int i = 1; i <= turn + 1; i++)
+            {
+                var g = (from x in cells.CellsAsEnumerable where x.Generation == i select x).Count();
+                if (g != 0)
+                    Console.WriteLine(i + "=> " + g);
+            }
         }
 
         private static void Print(int id, int length, Matrix matrix, int scale)
@@ -71,22 +83,22 @@ namespace CellsAutomate
 
             int newLength = length * scale;
 
-            var bitmap = new Bitmap(newLength*2, newLength);
+            var bitmap = new Bitmap(newLength * 2, newLength);
 
-            for (int i = 0; i < newLength; i+=scale)
+            for (int i = 0; i < newLength; i += scale)
             {
-                for(int k = 0; k < scale; k++)
-                    for (int j = 0; j < newLength; j+=scale)
+                for (int k = 0; k < scale; k++)
+                    for (int j = 0; j < newLength; j += scale)
                     {
-                        for(int l = 0; l < scale; l++)
-                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.HasFood(new Point(i / scale , j / scale)) ? Color.Green : Color.White);
+                        for (int l = 0; l < scale; l++)
+                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.HasFood(new Point(i / scale, j / scale)) ? Color.Green : Color.White);
                     }
             }
 
-            for (int i = 0; i < newLength; i+=scale)
+            for (int i = 0; i < newLength; i += scale)
             {
                 for (int k = 0; k < scale; k++)
-                    for (int j = 0; j < newLength; j+=scale)
+                    for (int j = 0; j < newLength; j += scale)
                     {
                         for (int l = 0; l < scale; l++)
                         {
@@ -98,7 +110,7 @@ namespace CellsAutomate
                     }
             }
 
-            bitmap.Save($@"C:\Confirmit\Log\{id}.bmp", ImageFormat.Bmp);
+            bitmap.Save(Constants.Log + String.Format($"\\{id}.bmp"), ImageFormat.Bmp);
         }
     }
 }

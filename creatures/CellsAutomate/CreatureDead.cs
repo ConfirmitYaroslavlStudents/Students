@@ -4,11 +4,11 @@ using System.Runtime.Serialization;
 
 namespace CellsAutomate
 {
-    public class CreatureIsDeadException : ApplicationException
+    public class CreatureDeadException : ApplicationException
     {
         public Point Coordinates { get; private set; }
 
-        public CreatureIsDeadException(Point deadPoint) : base("Point is dead!")
+        public CreatureDeadException(Point deadPoint) : base("Point is dead!")
         {
             Coordinates = deadPoint;
         }

@@ -7,77 +7,62 @@ using Creatures.Language.Executors;
 
 namespace CellsAutomate
 {
-    public class Creature
+    public class Creature : AbstractCreature
     {
         private readonly Random _random;
-        private Point _position;
         private readonly Executor _executor;
         private readonly ICommand[] _commands;
 
-        public static int FoodLevel = 10;  
-        private int _minToSurvive = 3;  
-        private int _childPrice = 4;  
-        private int _oneBite = 5; 
-        private int _maxTurns = 20;
-
-        private int _turns;
-        private int _foodSupply = 5; //Choose
-
-        public int Generation { get; }
-
         public Creature(Point position, Executor executor, ICommand[] commands, Random random, int generation)
         {
-            _position = position;
+            Position = position;
             _executor = executor;
             _commands = commands;
             _random = random;
             Generation = generation;
         }
 
-        public ActionEnum MyTurn(FoodMatrix eatMatrix, Creature[,] cellsMatrix)
+        public override Tuple<ActionEnum, DirectionEnum> MyTurn(FoodMatrix eatMatrix, AbstractCreature[,] cells)
         {
-            if (_foodSupply < _minToSurvive || _turns >= _maxTurns)
-                return ActionEnum.Die;
+            if (FoodSupply < Constants.MinFoodToSurvive)
+                return Tuple.Create(ActionEnum.Die, DirectionEnum.Stay);
 
-            _foodSupply -= _minToSurvive;
-            _turns++;
+            FoodSupply -= Constants.MinFoodToSurvive;
 
-            if (_foodSupply >= _childPrice + _minToSurvive)
-            {
-                return ActionEnum.MakeChild;
-            }
-
-            return ActionEnum.Go;
+            return Tuple.Create(GetAction(eatMatrix), DirectionEx.DirectionByNumber(GetDirection(eatMatrix, cells)));
         }
 
-        public void EatFood(FoodMatrix eatMatrix)
+        public override AbstractCreature MakeChild(Point position)
         {
-            if (eatMatrix.TakeFood(_position, _oneBite))
-            {
-                _foodSupply += _oneBite;
-            }
+            FoodSupply -= Constants.ChildPrice;
+            return new SimpleCreature(position, new Random(), Generation + 1);
         }
 
-        public Creature MakeChild(Point position)
-        {
-            _foodSupply -= _childPrice;
-            return new Creature(position, _executor, _commands, _random, Generation + 1);
-        }
-
-        internal void SetPosition(Point newPosition)
-        {
-            _position = newPosition;
-        }
-
-        public int GetDirectionForLanguage(Point currentPoint, FoodMatrix eatMatrix)
+        private int GetDirection(FoodMatrix eatMatrix, AbstractCreature[,] cells)
         {
             var state =
                     DirectionEx
-                        .GetPoints(currentPoint.X, currentPoint.Y)
-                        .ToDictionary(x => DirectionEx.DirectionByPointForLanguage(currentPoint, x), x => (DirectionEx.IsValid(x, eatMatrix.Length, eatMatrix.Width) && eatMatrix.HasFood(x)) ? 4 : 0);
+                        .GetPoints(Position.X, Position.Y)
+                        .ToDictionary(x => DirectionEx.DirectionByPointsWithNumber(Position, x),
+                        x => (DirectionEx.IsValid(x, eatMatrix.Length, eatMatrix.Height)
+                        && eatMatrix.HasFood(x) && DirectionEx.IsFree(Position, cells)) ? 4 : 0);
 
             var result = _executor.Execute(_commands, new MyExecutorToolset(_random, state));
             return int.Parse(result);
+        }
+
+        private ActionEnum GetAction(FoodMatrix eatMatrix)
+        {
+            if (FoodSupply < Constants.CriticalLevelOfFood && eatMatrix.HasFood(Position))
+                return ActionEnum.Eat;
+            var result = _random.Next(3) + 1;
+            switch (result)
+            {
+                case 1: return ActionEnum.MakeChild;
+                case 2: return ActionEnum.Go;
+                case 3: return ActionEnum.Eat;
+                default: throw new Exception();
+            }
         }
     }
 }

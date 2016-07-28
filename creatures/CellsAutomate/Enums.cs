@@ -7,16 +7,17 @@ namespace CellsAutomate
     {
         Die,
         MakeChild,
-        Go
+        Go,
+        Eat
     }
 
     public enum DirectionEnum
     {
+        Stay,
         Up,
         Right,
         Down,
-        Left,
-        Stay
+        Left
     }
 
     static class DirectionEx
@@ -38,7 +39,7 @@ namespace CellsAutomate
             }
         }
 
-        public static DirectionEnum DirectionByPoint(Point start, Point finish)
+        public static DirectionEnum DirectionByPoints(Point start, Point finish)
         {
             var xOffset = finish.X - start.X;
             var yOffset = finish.Y - start.Y;
@@ -66,7 +67,7 @@ namespace CellsAutomate
             return true;
         }
 
-        public static int DirectionByPointForLanguage(Point start, Point finish)
+        public static int DirectionByPointsWithNumber(Point start, Point finish)
         {
             var xOffset = finish.X - start.X;
             var yOffset = finish.Y - start.Y;
@@ -77,6 +78,26 @@ namespace CellsAutomate
             if (xOffset == -1 && yOffset == 0) return 3;
 
             throw new ArgumentException();
+        }
+
+        public static DirectionEnum DirectionByNumber(int number)
+        {
+            switch (number)
+            {
+                case 0: return DirectionEnum.Stay;
+                case 1: return DirectionEnum.Up;
+                case 2: return DirectionEnum.Right;
+                case 3: return DirectionEnum.Down;
+                case 4: return DirectionEnum.Left;
+                default: throw new Exception();
+            }
+        }
+
+        public static bool IsFree(Point currentPoint, AbstractCreature[,] Cells)
+        {
+            if (Cells[currentPoint.X, currentPoint.Y] == null)
+                return true;
+            return false;
         }
     }
 }

@@ -5,39 +5,16 @@ using System.Drawing;
 
 namespace CellsAutomate
 {
-    public class FoodMatrix : ICollection
+    public class FoodMatrix
     {
-        private int[,] _matrix;
-        public int Length { get; set; }
-        public int Width { get; set; }
+        private readonly int[,] _matrix;
 
-        public int Count
-        {
-            get
-            {
-                return ((ICollection)_matrix).Count;
-            }
-        }
+        public int Length => _matrix.GetLength(0);
+        public int Height => _matrix.GetLength(1);
 
-        public object SyncRoot
+        public FoodMatrix(int length, int height)
         {
-            get
-            {
-                return _matrix.SyncRoot;
-            }
-        }
-
-        public bool IsSynchronized
-        {
-            get
-            {
-                return _matrix.IsSynchronized;
-            }
-        }
-
-        public FoodMatrix(int length, int width)
-        {
-            _matrix = new int[length,width];
+            _matrix = new int[length, height];
         }
 
         public bool HasFood(Point currentPoint)
@@ -47,9 +24,9 @@ namespace CellsAutomate
             return false;
         }
 
-        public void AddFood(Point currentPoint, int embaddedFood)
+        private void AddFood(Point currentPoint, int embeddedFood)
         {
-            _matrix[currentPoint.X, currentPoint.Y] += embaddedFood;
+            _matrix[currentPoint.X, currentPoint.Y] += embeddedFood;
         }
 
         public bool TakeFood(Point currentPoint, int takingFood)
@@ -59,7 +36,7 @@ namespace CellsAutomate
             _matrix[currentPoint.X, currentPoint.Y] -= takingFood;
             return true;
         }
-        
+
         public void Build(
             bool[,] creaturesMatrix,
             int pointX,
@@ -81,9 +58,9 @@ namespace CellsAutomate
                     && current.Y >= 0
                     && current.Y < length
                     && !creaturesMatrix[current.X, current.Y]
-                    && !HasFood(current))
+                    && _matrix[current.X, current.Y] <= Constants.MaxFoodLevel)
                 {
-                    AddFood(current, SimpleCreature.FoodLevel);
+                    AddFood(current, Constants.FoodLevel);
 
                     foreach (var point in DirectionEx.GetPoints(current.X, current.Y))
                     {
@@ -91,16 +68,6 @@ namespace CellsAutomate
                     }
                 }
             }
-        }
-
-        public void CopyTo(Array array, int index)
-        {
-            _matrix.CopyTo(array, index);
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return _matrix.GetEnumerator();
         }
     }
 }

@@ -1,64 +1,69 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace CellsAutomate
 {
-    public class SimpleCreature
+    public class SimpleCreature : AbstractCreature
     {
-        public Point Position { get; private set; }
+        private Random _random;
 
-        public static int FoodLevel = 16;
-        private int _minToSurvive = 3;
-        private int _childPrice = 6;
-        private int _oneBite = 8;
-        private int _maxTurns = 20;
-
-        private int _turns;
-        private int _foodSupply = 7; //Choose
-        public bool HadMoved { get; set; }
-
-        public int Generation { get; }
-
-        public SimpleCreature(Point position, int generation)
+        public SimpleCreature(Point position, Random random, int generation)
         {
             Position = position;
+            _random = random;
             Generation = generation;
-            HadMoved = false;
         }
 
-        public ActionEnum MyTurn()
+        public override Tuple<ActionEnum, DirectionEnum> MyTurn(FoodMatrix eatMatrix, AbstractCreature[,] cells)
         {
-            HadMoved = true;
-            if (_foodSupply < _minToSurvive || _turns >= _maxTurns)
-                return ActionEnum.Die;
+            if (FoodSupply < Constants.MinFoodToSurvive)
+                return Tuple.Create(ActionEnum.Die, DirectionEnum.Stay);
 
-            _foodSupply -= _minToSurvive;
-            _turns++;
+            FoodSupply -= Constants.MinFoodToSurvive;
 
-            if (_foodSupply >= _childPrice + _minToSurvive)
+            return Tuple.Create(GetAction(eatMatrix), GetDirection(eatMatrix, cells));
+        }
+
+        private DirectionEnum GetDirection(FoodMatrix eatMatrix, AbstractCreature[,] cells)
+        {
+            var points = DirectionEx.GetPoints(Position.X, Position.Y);
+            var directions = new List<DirectionEnum>();
+            foreach (var item in points)
             {
-                return ActionEnum.MakeChild;
+                if (DirectionEx.IsValid(item, eatMatrix.Length, eatMatrix.Height) && eatMatrix.HasFood(item) &&
+                    DirectionEx.IsFree(item, cells))
+                {
+                    directions.Add(DirectionEx.DirectionByPoints(Position, item));
+                }
             }
 
-            return ActionEnum.Go;
+            if (directions.Count != 0)
+            {
+                var result = _random.Next(directions.Count) + 1;
+                return DirectionEx.DirectionByNumber(result);
+            }
+            return DirectionEnum.Stay;
         }
 
-        public void EatFood(FoodMatrix eatMatrix)
+        private ActionEnum GetAction(FoodMatrix eatMatrix)
         {
-            if (eatMatrix.TakeFood(Position, _oneBite))
+            if (FoodSupply < Constants.CriticalLevelOfFood && eatMatrix.HasFood(Position))
+                return ActionEnum.Eat;
+            var result = _random.Next(3) + 1;
+            switch (result)
             {
-                _foodSupply += _oneBite;
+                case 1: return ActionEnum.MakeChild;
+                case 2: return ActionEnum.Go;
+                case 3: return ActionEnum.Eat;
+                default: throw new Exception();
             }
         }
 
-        public SimpleCreature MakeChild(Point position)
+        public override AbstractCreature MakeChild(Point position)
         {
-            _foodSupply -= _childPrice;
-            return new SimpleCreature(position, Generation + 1);
-        }
-
-        internal void SetPosition(Point newPosition)
-        {
-            Position = newPosition;
+            FoodSupply -= Constants.ChildPrice;
+            return new SimpleCreature(position, new Random(), Generation + 1);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using CellsAutomate.Mutator.Mutations.InternalClasses;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands.Interfaces;
 
 namespace CellsAutomate.Mutator.Mutations
@@ -17,5 +18,10 @@ namespace CellsAutomate.Mutator.Mutations
 		{
 			return new Adder(commands,_rnd).AddCommand();
 		}
+
+	    public ICommand[] Transform(ICommand[] commands, ILogger logger)
+	    {
+	        return new Adder(commands, _rnd, logger).AddCommand();
+	    }
 	}
 }

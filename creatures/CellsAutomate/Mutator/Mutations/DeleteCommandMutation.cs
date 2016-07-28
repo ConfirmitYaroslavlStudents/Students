@@ -1,5 +1,6 @@
 ﻿using System;
 using CellsAutomate.Mutator.Mutations.InternalClasses;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands.Interfaces;
 
 namespace CellsAutomate.Mutator.Mutations
@@ -21,6 +22,12 @@ namespace CellsAutomate.Mutator.Mutations
         {
             var delIndex = _rnd.Next(commands.Length);
             return new DeletterViaVisitor(commands).DeleteCommand(delIndex);
+        }
+
+        public ICommand[] Transform(ICommand[] commands, ILogger logger)
+        {
+            var delIndex = _rnd.Next(commands.Length);
+            return new DeletterViaVisitor(commands,logger).DeleteCommand(delIndex);
         }
     }
 }

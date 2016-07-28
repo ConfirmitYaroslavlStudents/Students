@@ -6,11 +6,11 @@ using Creatures.Language.Commands.Interfaces;
 
 namespace Creatures.Language.Parsers
 {
-    public class CommandParser : ICommandVisitor
+    public class CommandToStringParser : ICommandVisitor
     {
         private StringBuilder _builder;
 
-        public CommandParser()
+        public CommandToStringParser()
         {
             _builder = new StringBuilder();
         }
@@ -32,7 +32,7 @@ namespace Creatures.Language.Parsers
 
         private string GetResult()
         {
-            var res = _builder.ToString();
+            var res = _builder.ToString().Trim('\r', '\n', ' ');
             _builder.Clear();
             return res;
         }

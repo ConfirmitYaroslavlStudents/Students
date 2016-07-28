@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
@@ -18,11 +19,19 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
 
         private ICommand[] _commands;
         private Random _rnd;
+        private readonly bool _logging = false;
+        public ILogger Logger { get;} 
 
         public Adder(ICommand[] commands, Random rnd)
         {
             _commands = commands;
             _rnd = rnd;
+        }
+
+        public Adder(ICommand[] commands, Random rnd, ILogger logger):this(commands,rnd)
+        {
+            Logger = logger;
+            _logging = true;
         }
 
         public ICommand[] AddCommand()
@@ -47,6 +56,10 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
                 Array.Copy(_commands, index, newCommands, index + 1, _commands.Length - index);
 
             _commands = newCommands;
+            if (_logging)
+            {
+                Logger.Write(LogHelper.CreateAddMutationLog(commandToInsert, index));
+            }
         }
 
         public void Accept(NewInt command)

@@ -51,7 +51,7 @@
     <Compile Include="Language\Commands\Condition.cs" />
     <Compile Include="Language\Commands\Interfaces\ICommandVisitor.cs" />
     <Compile Include="Language\Executors\ValidationExecutor.cs" />
-    <Compile Include="Language\Parsers\CommandParser.cs" />
+    <Compile Include="Language\Parsers\CommandToStringParser.cs" />
     <Compile Include="Language\Parsers\Constructor.cs" />
     <Compile Include="Language\Commands\Interfaces\ICommand.cs" />
     <Compile Include="Language\Commands\Minus.cs" />

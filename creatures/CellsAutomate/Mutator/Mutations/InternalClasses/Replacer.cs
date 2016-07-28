@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
@@ -14,16 +15,27 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
         private Random _rnd;
         private int _index;
 
+        private readonly bool _logging = false;
+        public ILogger Logger { get; }
+
         public Replacer(IEnumerable<ICommand> commands, Random random)
         {
             _commands = commands.ToArray();
             _rnd = random;
         }
 
+        public Replacer(IEnumerable<ICommand> commands, Random random, ILogger logger) : this(commands, random)
+        {
+            _logging = true;
+            Logger = logger;
+        }
+
         public ICommand[] Replace(int index)
         {
             _index = index;
+            var prev = _commands[index];
             Execute(_commands[index]);
+            if (_logging) Logger.Write(LogHelper.CreateReplaceMutationLog(prev, _commands[index], index));
             return _commands;
         }
 

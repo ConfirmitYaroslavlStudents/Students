@@ -4,6 +4,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CellsAutomate.Mutator.Mutations.Logging;
+using Creatures.Language.Parsers;
 
 namespace CellsAutomate
 {
@@ -11,6 +13,23 @@ namespace CellsAutomate
     {
         private static void Main(string[] args)
         {
+            //var commands = new SeedGenerator().StartAlgorithm;
+            //var newCommands = commands.ToArray();
+            //var mutator = new Mutator.Mutator(new Random());
+            //var logger=new Logger();
+
+            //for (int i =0; i<10;i++)
+            //{           
+            //     newCommands = mutator.Mutate(newCommands, logger);             
+            //}
+            //var str = logger.Builder.ToString();
+            //Console.WriteLine(str);
+            //var elderCommands = new CommandToStringParser().ParseCommands(commands);
+            //var nowCommands = new CommandToStringParser().ParseCommands(newCommands);
+            //Console.WriteLine(elderCommands + "\n");
+            //Console.WriteLine(nowCommands);
+            //Console.ReadKey();
+
             var length = 100;
             int scale = 500 / length;
             var matrix = new Matrix(length, length);

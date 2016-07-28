@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Creaturestests.MutatorTests
 {
     [TestClass]
-    public class CommandParserTest
+    public class CommandToStringParserTest
     {
 
         [TestMethod]
@@ -16,7 +16,7 @@ namespace Creaturestests.MutatorTests
         {
             const string name = "commandName";
             var command = new NewInt(name);
-            var commandParser=new CommandParser();
+            var commandParser=new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim('\n', ' ','\r');
             var desiredResult = $"int {name}";
@@ -31,7 +31,7 @@ namespace Creaturestests.MutatorTests
             const string firstSourceName = "firstSourseName";
             const string secondSourceName = "secondSourceName";
             var command = new Plus(targetName, firstSourceName, secondSourceName);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = $"{targetName} = {firstSourceName} + {secondSourceName}";
@@ -46,7 +46,7 @@ namespace Creaturestests.MutatorTests
             const string firstSourceName = "firstSourseName";
             const string secondSourceName = "secondSourceName";
             var command = new Minus(targetName, firstSourceName, secondSourceName);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = $"{targetName} = {firstSourceName} - {secondSourceName}";
@@ -60,7 +60,7 @@ namespace Creaturestests.MutatorTests
             const string targetName = "target";
             const string sourceName = "source";
             var command = new CloneValue(targetName, sourceName);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand=commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = $"{targetName} = {sourceName}";
@@ -72,7 +72,7 @@ namespace Creaturestests.MutatorTests
         public void CloseConditionParse()
         {
             var command=new CloseCondition();
-            var commandParser=new CommandParser();
+            var commandParser=new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = "endif";
@@ -85,7 +85,7 @@ namespace Creaturestests.MutatorTests
         {
             const string conditionName = "condition";
             var command = new Condition(conditionName);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = $"if {conditionName} then";
@@ -99,7 +99,7 @@ namespace Creaturestests.MutatorTests
             const string targetName = "target";
             const string maxValueName = "cat";
             var command = new GetRandom(targetName, maxValueName);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim('\n', ' ', '\r');
             var result = $"{targetName} = random {maxValueName}";
@@ -113,7 +113,7 @@ namespace Creaturestests.MutatorTests
             const string targetName = "target";
             const int direction = 2;
             var command = new GetState(targetName, direction);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = $"{targetName} = getState {direction}";
@@ -126,7 +126,7 @@ namespace Creaturestests.MutatorTests
         {
             const string variableName = "somekindofvariable";
             var command = new Print(variableName);
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = $"print {variableName}";
@@ -138,7 +138,7 @@ namespace Creaturestests.MutatorTests
         public void StopParse()
         {
             var command = new Stop();
-            var commandParser = new CommandParser();
+            var commandParser = new CommandToStringParser();
 
             var parsedCommand = commandParser.ParseCommand(command).Trim(' ', '\n', '\r');
             var result = "stop";
@@ -171,7 +171,7 @@ namespace Creaturestests.MutatorTests
                         ");
             var parsedCommands = new Parser().ProcessCommands(somecode.ToString()).ToArray();
 
-            var parsedCommandInString = new CommandParser().ParseCommands(parsedCommands);
+            var parsedCommandInString = new CommandToStringParser().ParseCommands(parsedCommands);
             var reverse = new Parser().ProcessCommands(parsedCommandInString).ToArray();
 
             Assert.AreEqual(reverse.Length, parsedCommands.Length);

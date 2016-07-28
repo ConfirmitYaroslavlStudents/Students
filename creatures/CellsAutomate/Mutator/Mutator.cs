@@ -1,5 +1,6 @@
 ﻿using System;
 using CellsAutomate.Mutator.Mutations;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 
@@ -14,13 +15,30 @@ namespace CellsAutomate.Mutator
 			_random = random;
 		}
 
-		public ICommand[] Mutate(ICommand[] commands,out bool isAlive)
+		public ICommand[] Mutate(ICommand[] commands)
 		{
 			IMutation mutation = GetRandomMutation();
 		    var newCommands = mutation.Transform(commands);
-		    isAlive = AssertValid(newCommands);
+		    while (!AssertValid(newCommands))
+		    {
+                newCommands = mutation.Transform(commands);
+            }
 		    return newCommands;
 		}
+
+	    public ICommand[] Mutate(ICommand[] commands, ILogger logger)
+	    {
+            IMutation mutation = GetRandomMutation();
+            var newCommands = mutation.Transform(commands,logger);
+            while (!AssertValid(newCommands))
+            {
+                logger.Write("Mutation failed\n");
+                _random.Next();
+                newCommands = mutation.Transform(commands,logger);
+            }
+            logger.Write("Mutated\n");
+            return newCommands;
+        }
 
 	    private bool AssertValid(ICommand[] commads)
 	    {
@@ -32,7 +50,8 @@ namespace CellsAutomate.Mutator
 		    var mutations = new IMutation[]
 		    {
 		        new AddCommandMutation(_random), new DeleteCommandMutation(_random),
-		        new ReplaceCommandMutation(_random), new DublicateCommandMutatiton(_random)
+		        new ReplaceCommandMutation(_random), new DublicateCommandMutatiton(_random),
+                new SwapCommandMutation(_random) 
 		    };
 
 		    return mutations[_random.Next(mutations.Length)];

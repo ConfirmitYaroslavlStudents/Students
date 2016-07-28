@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
@@ -9,10 +10,19 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
     {
         private ICommand[] _commands;
         private bool[] _marks;
+        private readonly bool _logging = false;
+        public ILogger Logger { get; }
+
         public Deletter(IEnumerable<ICommand> commands)
         {
             _commands = commands.ToArray();
             _marks = new bool[_commands.Length];
+        }
+
+        public Deletter(IEnumerable<ICommand> commands,ILogger logger):this(commands)
+        {
+            Logger = logger;
+            _logging = true;
         }
 
         public ICommand[] DeleteCommand(int index)
@@ -21,7 +31,11 @@ namespace CellsAutomate.Mutator.Mutations.InternalClasses
             var newCommands = new List<ICommand>();
             for (int i = 0; i < _commands.Length; i++)
             {
-                if (_marks[i]) continue;
+                if (_marks[i])
+                {
+                    if (_logging) Logger.Write(LogHelper.CreateDeleteMutationLog(_commands[i], i));
+                    continue;
+                }
 
                 newCommands.Add(_commands[i]);
             }

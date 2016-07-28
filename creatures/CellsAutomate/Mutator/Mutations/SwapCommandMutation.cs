@@ -1,5 +1,6 @@
 ﻿using System;
 using CellsAutomate.Mutator.Mutations.InternalClasses;
+using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands.Interfaces;
 
 namespace CellsAutomate.Mutator.Mutations
@@ -23,6 +24,19 @@ namespace CellsAutomate.Mutator.Mutations
                 secondSwapIndex = tempSwapIndex;
             }
             return new Swapper(commands).SwapCommand(firstSwapIndex, secondSwapIndex);
+        }
+
+        public ICommand[] Transform(ICommand[] commands, ILogger logger)
+        {
+            var firstSwapIndex = _rnd.Next(commands.Length);
+            var secondSwapIndex = _rnd.Next(commands.Length - 1);
+            if (firstSwapIndex > secondSwapIndex)
+            {
+                var tempSwapIndex = firstSwapIndex;
+                firstSwapIndex = secondSwapIndex;
+                secondSwapIndex = tempSwapIndex;
+            }
+            return new Swapper(commands, logger).SwapCommand(firstSwapIndex, secondSwapIndex);
         }
     }
 }

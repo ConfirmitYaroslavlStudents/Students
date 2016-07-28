@@ -31,10 +31,11 @@ namespace CellsAutomate
             //Console.WriteLine(nowCommands);
             //Console.ReadKey();
 
-            var length = LoggerConstants.Length;
+            var length = LogConstants.Length;
             int scale = 500 / length;
             var matrix = new Matrix(length, length);
             matrix.FillStartMatrixRandomly();
+            CreateDirectory();
             Print(0, length, matrix, scale);
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
@@ -48,7 +49,7 @@ namespace CellsAutomate
                 var generationStat =
                     string.Join(" ",
                     matrix
-                        .creaturesAsEnumerable
+                        .CreaturesAsEnumerable
                         .Select(x => x.GetGeneration())
                         .GroupBy(x => x)
                         .OrderBy(x => x.Key)
@@ -60,7 +61,7 @@ namespace CellsAutomate
                 PrintGeneration(matrix, i);
             }
 
-            File.WriteAllText(LoggerConstants.Log + "\\Log.txt", log.ToString());
+            File.WriteAllText(LogConstants.Log + "\\Log.txt", log.ToString());
             Console.WriteLine(Stats.Up);
             Console.WriteLine(Stats.Right);
             Console.WriteLine(Stats.Down);
@@ -72,7 +73,7 @@ namespace CellsAutomate
         {
             for (int i = 1; i <= turn + 1; i++)
             {
-                var g = (from x in creatures.creaturesAsEnumerable where x.GetGeneration() == i select x).Count();
+                var g = (from x in creatures.CreaturesAsEnumerable where x.GetGeneration() == i select x).Count();
                 if (g != 0)
                     Console.WriteLine(i + "=> " + g);
             }
@@ -110,8 +111,14 @@ namespace CellsAutomate
                         }
                     }
             }
+            bitmap.Save(LogConstants.Log + String.Format($"\\{id}.bmp"), ImageFormat.Bmp);
+        }
 
-            bitmap.Save(LoggerConstants.Log + String.Format($"\\{id}.bmp"), ImageFormat.Bmp);
+        public static void CreateDirectory()
+        {
+            if(Directory.Exists(LogConstants.Log))
+                Directory.Delete(LogConstants.Log, true);
+            Directory.CreateDirectory(LogConstants.Log);
         }
     }
 }

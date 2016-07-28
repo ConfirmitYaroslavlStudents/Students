@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using CellsAutomate.Creatures;
 using CellsAutomate.Factory;
 
 namespace CellsAutomate
@@ -21,7 +22,7 @@ namespace CellsAutomate
             Creatures = new BaseCreature[length, height];
         }
 
-        public IEnumerable<BaseCreature> creaturesAsEnumerable
+        public IEnumerable<BaseCreature> CreaturesAsEnumerable
         {
             get
             {

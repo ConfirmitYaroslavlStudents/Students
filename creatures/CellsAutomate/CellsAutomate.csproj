@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Constants\CreatureConstants.cs" />
     <Compile Include="Constants\FoodMatrixConstants.cs" />
-    <Compile Include="Constants\LoggerConstants.cs" />
+    <Compile Include="Constants\LogConstants.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Creatures\Creature.cs" />
     <Compile Include="CreatureDead.cs" />

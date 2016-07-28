@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using CellsAutomate.Constants;
 
-namespace CellsAutomate
+namespace CellsAutomate.Creatures
 {
     public class SimpleCreature : BaseCreature
     {

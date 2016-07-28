@@ -5,7 +5,7 @@ using CellsAutomate.Constants;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 
-namespace CellsAutomate
+namespace CellsAutomate.Creatures
 {
     public class Creature : BaseCreature
     {

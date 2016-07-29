@@ -40,12 +40,13 @@ namespace CellsAutomate
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < LogConstants.CountOfTurns; i++)
             {
+                if (matrix.AliveCount == 0)
+                    break;
                 matrix.MakeTurn();
                 Print(i + 1, length, matrix, scale);
-                if (matrix.AliveCount != 0)
-                    Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
+                Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
                 var generationStat =
                     string.Join(" ",
                     matrix

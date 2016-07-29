@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using CellsAutomate.Constants;
+using CellsAutomate.Food;
 
 namespace CellsAutomate.Creatures
 {

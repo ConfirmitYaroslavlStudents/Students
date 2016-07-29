@@ -52,7 +52,11 @@
     <Compile Include="CreatureDead.cs" />
     <Compile Include="Creatures\BaseCreature.cs" />
     <Compile Include="Factory\Creator.cs" />
-    <Compile Include="FoodMatrix.cs" />
+    <Compile Include="Food\FillingFromCornersByWavesStrategy.cs" />
+    <Compile Include="Food\FillingOfEntireFieldStrategy.cs" />
+    <Compile Include="Food\FoodMatrix.cs" />
+    <Compile Include="Food\IStrategyForBuild.cs" />
+    <Compile Include="Food\RandomRainOfFood.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Mutator\Mutations\AddCommandMutation.cs" />
     <Compile Include="Mutator\Mutations\InternalClasses\Adder.cs" />

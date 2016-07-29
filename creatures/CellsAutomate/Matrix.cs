@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using CellsAutomate.Creatures;
 using CellsAutomate.Factory;
+using CellsAutomate.Food;
 
 namespace CellsAutomate
 {
@@ -18,7 +19,7 @@ namespace CellsAutomate
         {
             Length = length;
             Height = height;
-            EatMatrix = new FoodMatrix(length, height);
+            EatMatrix = new FoodMatrix(length, height, new FillingFromCornersByWavesStrategy());
             Creatures = new BaseCreature[length, height];
         }
 
@@ -66,10 +67,7 @@ namespace CellsAutomate
                 }
             }
 
-            EatMatrix.Build(placeHoldersMatrix, 0, 0);
-            EatMatrix.Build(placeHoldersMatrix, 0, Height - 1);
-            EatMatrix.Build(placeHoldersMatrix, Length - 1, 0);
-            EatMatrix.Build(placeHoldersMatrix, Length - 1, Height - 1);
+            EatMatrix.Build(placeHoldersMatrix);
         }
 
         public void FillStartMatrixRandomly()

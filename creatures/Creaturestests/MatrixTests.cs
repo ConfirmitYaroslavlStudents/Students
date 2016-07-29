@@ -1,6 +1,6 @@
-﻿using CellsAutomate;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Drawing;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CellsAutomate.Food;
+
 namespace CellsAutomate.Tests
 {
     [TestClass()]

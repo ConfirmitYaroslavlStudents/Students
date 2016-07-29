@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using CellsAutomate.Constants;
+using CellsAutomate.Food;
 
 namespace CellsAutomate.Creatures
 {
     public class SimpleCreature : BaseCreature
     {
-        private readonly Random _random;
+        private static Random _random;
 
         public SimpleCreature(Point position, Random random, int generation)
         {
@@ -39,12 +41,9 @@ namespace CellsAutomate.Creatures
                 }
             }
 
-            if (directions.Count != 0)
-            {
-                var result = _random.Next(directions.Count) + 1;
-                return DirectionEx.DirectionByNumber(result);
-            }
-            return DirectionEnum.Stay;
+            if (directions.Count == 0) return DirectionEnum.Stay;
+            var result = _random.Next(directions.Count);
+            return directions.ElementAt(result);
         }
 
         private ActionEnum GetAction(FoodMatrix eatMatrix)

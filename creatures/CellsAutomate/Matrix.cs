@@ -112,7 +112,7 @@ namespace CellsAutomate
 
         private void MakeTurn(BaseCreature currentCreature)
         {
-            var turnResult = currentCreature.MyTurn(EatMatrix, Creatures);
+            var turnResult = Membrane.Turn(EatMatrix, Creatures, currentCreature.GetPosition());
             var action = turnResult.Item1;
             var direction = turnResult.Item2;
 
@@ -125,7 +125,7 @@ namespace CellsAutomate
                 case ActionEnum.Go:
                     MakeTurnGo(direction, currentCreature); break;
                 case ActionEnum.Eat:
-                    MakeTurnEat(currentCreature); break;
+                    Membrane.Eat(EatMatrix, currentCreature); ; break;
                 default: throw new Exception();
             }
         }
@@ -135,30 +135,30 @@ namespace CellsAutomate
             Creatures[position.X, position.Y] = null;
         }
 
-        private void MakeTurnMakeChild(DirectionEnum direction, BaseCreature simpleCreature)
+        private void MakeTurnMakeChild(DirectionEnum direction, BaseCreature creature)
         {
-            if (!simpleCreature.CanMakeChild || direction == DirectionEnum.Stay)
+            if (!creature.CanMakeChild || direction == DirectionEnum.Stay)
                 return;
-            var childPoint = DirectionEx.PointByDirection(direction, simpleCreature.GetPosition());
-            if (DirectionEx.IsValid(childPoint, Length, Height) && DirectionEx.IsFree(childPoint, Creatures))
+            var childPoint = DirectionEx.PointByDirection(direction, creature.GetPosition());
+            if (DirectionEx.IsValidAndFree(childPoint, Creatures))
             {
-                Creatures[childPoint.X, childPoint.Y] = simpleCreature.MakeChild(childPoint);
+                Creatures[childPoint.X, childPoint.Y] = creature.MakeChild(childPoint);
             }
         }
 
-        private void MakeTurnGo(DirectionEnum direction, BaseCreature simpleCreature)
+        private void MakeTurnGo(DirectionEnum direction, BaseCreature creature)
         {
             if (direction == DirectionEnum.Stay)
                 return;
-            var newPosition = DirectionEx.PointByDirection(direction, simpleCreature.GetPosition());
+            var newPosition = DirectionEx.PointByDirection(direction, creature.GetPosition());
 
-            if (DirectionEx.IsValid(newPosition, Length, Height) && DirectionEx.IsFree(newPosition, Creatures))
+            if (DirectionEx.IsValidAndFree(newPosition, Creatures))
             {
-                var currentPoint = simpleCreature.GetPosition();
+                var currentPoint = creature.GetPosition();
                 Creatures[currentPoint.X, currentPoint.Y] = null;
-                simpleCreature.SetPosition(newPosition);
-                currentPoint = simpleCreature.GetPosition();
-                Creatures[currentPoint.X, currentPoint.Y] = simpleCreature;
+                creature.SetPosition(newPosition);
+                currentPoint = creature.GetPosition();
+                Creatures[currentPoint.X, currentPoint.Y] = creature;
                 AddStats(direction);
             }
         }
@@ -180,14 +180,6 @@ namespace CellsAutomate
                     Stats.Left++;
                     break;
                 default: throw new Exception();
-            }
-        }
-
-        private void MakeTurnEat(BaseCreature simpleCreature)
-        {
-            if (EatMatrix.TakeFood(simpleCreature.GetPosition()))
-            {
-                simpleCreature.EatFood();
             }
         }
     }

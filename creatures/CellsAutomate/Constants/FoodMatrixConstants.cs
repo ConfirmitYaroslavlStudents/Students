@@ -2,7 +2,7 @@
 {
     class FoodMatrixConstants
     {
-        public static int FoodLevel = 16;
-        public static int MaxFoodLevel = 32;
+        public static int FoodLevel = 15;
+        public static int MaxFoodLevel = 30;
     }
 }

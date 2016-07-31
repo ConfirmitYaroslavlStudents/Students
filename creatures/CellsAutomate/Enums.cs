@@ -53,21 +53,6 @@ namespace CellsAutomate
             throw new ArgumentException();
         }
 
-        public static Point[] GetPoints(int i, int j)
-        {
-            return new[] { new Point(i + 1, j), new Point(i, j + 1), new Point(i - 1, j), new Point(i, j - 1) };
-        }
-
-        public static bool IsValid(Point x, int length, int height)
-        {
-            if (x.X < 0) return false;
-            if (x.Y < 0) return false;
-            if (x.X >= length) return false;
-            if (x.Y >= height) return false;
-
-            return true;
-        }
-
         public static int DirectionByPointsWithNumber(Point start, Point finish)
         {
             var xOffset = finish.X - start.X;
@@ -99,6 +84,29 @@ namespace CellsAutomate
             if (creatures[currentPoint.X, currentPoint.Y] == null)
                 return true;
             return false;
+        }
+        
+        public static bool IsValid(Point x, int length, int height)
+        {
+            if (x.X < 0) return false;
+            if (x.Y < 0) return false;
+            if (x.X >= length) return false;
+            if (x.Y >= height) return false;
+
+            return true;
+        }
+
+        public static bool IsValidAndFree(Point position, BaseCreature[,] creatures)
+        {
+            if (DirectionEx.IsValid(position, creatures.GetLength(0), creatures.GetLength(1))
+                && DirectionEx.IsFree(position, creatures))
+                return true;
+            return false;
+        }
+        
+        public static Point[] GetPoints(int i, int j)
+        {
+            return new[] { new Point(i + 1, j), new Point(i, j + 1), new Point(i - 1, j), new Point(i, j - 1) };
         }
     }
 }

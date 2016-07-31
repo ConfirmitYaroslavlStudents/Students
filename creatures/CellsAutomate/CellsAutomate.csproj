@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Membrane.cs" />
     <Compile Include="Constants\CreatureConstants.cs" />
     <Compile Include="Constants\FoodMatrixConstants.cs" />
     <Compile Include="Constants\LogConstants.cs" />

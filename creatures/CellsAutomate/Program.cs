@@ -40,7 +40,8 @@ namespace CellsAutomate
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
 
-            for (int i = 0; i < LogConstants.CountOfTurns; i++)
+            long i;
+            for (i = 0; i < LogConstants.CountOfTurns; i++)
             {
                 if (matrix.AliveCount == 0)
                     break;
@@ -54,23 +55,24 @@ namespace CellsAutomate
                         .Select(x => x.GetGeneration())
                         .GroupBy(x => x)
                         .OrderBy(x => x.Key)
-                        .Select(x => string.Format("{0}:{1}", x.Key, x.Count()))
+                        .Select(x => $"{x.Key}:{x.Count()}")
                         .ToArray());
 
                 log.AppendLine(generationStat);
 
-                PrintGeneration(matrix, i);
+                //PrintGeneration(matrix, i);
             }
+            PrintGeneration(matrix, i);
 
             File.WriteAllText(LogConstants.Log + "\\Log.txt", log.ToString());
-            Console.WriteLine(Stats.Up);
-            Console.WriteLine(Stats.Right);
-            Console.WriteLine(Stats.Down);
-            Console.WriteLine(Stats.Left);
+            Console.WriteLine("Up: " + Stats.Up);
+            Console.WriteLine("Right: " + Stats.Right);
+            Console.WriteLine("Down: " + Stats.Down);
+            Console.WriteLine("Left: " + Stats.Left);
             Console.ReadKey();
         }
 
-        private static void PrintGeneration(Matrix creatures, int turn)
+        private static void PrintGeneration(Matrix creatures, long turn)
         {
             for (int i = 1; i <= turn + 1; i++)
             {
@@ -80,9 +82,9 @@ namespace CellsAutomate
             }
         }
 
-        private static void Print(int id, int length, Matrix matrix, int scale)
+        private static void Print(long id, int length, Matrix matrix, int scale)
         {
-            //if (id % 10 != 0) return;
+            if (id % 50 != 0) return;
 
             int newLength = length * scale;
 

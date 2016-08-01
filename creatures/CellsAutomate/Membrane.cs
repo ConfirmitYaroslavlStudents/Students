@@ -1,33 +1,35 @@
 ﻿using System;
-using System.Drawing;
 using CellsAutomate.Creatures;
 using CellsAutomate.Food;
 
 namespace CellsAutomate
 {
-    public static class Membrane
+    public class Membrane
     {
-        public static Tuple<ActionEnum, DirectionEnum> Turn(FoodMatrix eatMatrix, 
-            BaseCreature[,] creatures, Point position)
+        private readonly BaseCreature _creature;
+
+        public Membrane(BaseCreature creature)
         {
-            var currentCreature = creatures[position.X, position.Y];
-            if (HasToDie(currentCreature))
-                return Tuple.Create(ActionEnum.Die, DirectionEnum.Stay);
-            return currentCreature.MyTurn(eatMatrix, creatures);
+            _creature = creature;
         }
 
-        private static bool HasToDie(BaseCreature creature)
+        public Tuple<ActionEnum, DirectionEnum> Turn(FoodMatrix eatMatrix, 
+            BaseCreature[,] creatures)
         {
-            if (creature.HasMinToSurvive)
-                return false;
-            return true;
+            var currentCreature = creatures[_creature.GetPosition().X, _creature.GetPosition().Y];
+            return HasToDie() ? Tuple.Create(ActionEnum.Die, DirectionEnum.Stay) : currentCreature.MyTurn(eatMatrix, creatures);
         }
 
-        public static void Eat(FoodMatrix eatMatrix, BaseCreature creature)
+        private bool HasToDie()
         {
-            if (eatMatrix.TakeFood(creature.GetPosition()))
+            return !_creature.HasMinToSurvive;
+        }
+
+        public void Eat(FoodMatrix eatMatrix)
+        {
+            if (eatMatrix.TakeFood(_creature.GetPosition()))
             {
-                creature.EatFood();
+                _creature.EatFood();
             }
         }
     }

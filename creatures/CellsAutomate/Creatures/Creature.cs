@@ -38,7 +38,7 @@ namespace CellsAutomate.Creatures
         public override BaseCreature MakeChild(Point position)
         {
             EnergyPoints -= CreatureConstants.ChildPrice;
-            return new SimpleCreature(position, new Random(), Generation + 1);
+            return new SimpleCreature(position, Random, Generation + 1);
         }
     }
 }

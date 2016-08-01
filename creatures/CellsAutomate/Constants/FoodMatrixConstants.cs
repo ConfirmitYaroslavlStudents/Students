@@ -2,7 +2,7 @@
 {
     class FoodMatrixConstants
     {
-        public static int FoodLevel = 15;
-        public static int MaxFoodLevel = 30;
+        public const int FoodLevel = 15;
+        public const int MaxFoodLevel = 30;
     }
 }

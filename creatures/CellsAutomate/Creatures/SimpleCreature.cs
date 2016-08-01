@@ -31,14 +31,13 @@ namespace CellsAutomate.Creatures
                 }
             }
             if (directions.Count == 0) return DirectionEnum.Stay;
-            var result = Random.Next(directionsWithFood.Count == 0 ? directions.Count : directionsWithFood.Count);
-            return directions.ElementAt(result);
+            return directionsWithFood.Count == 0 ? directions.ElementAt(Random.Next(directions.Count)) : directionsWithFood.ElementAt(Random.Next(directionsWithFood.Count));
         }
 
         public override BaseCreature MakeChild(Point position)
         {
             EnergyPoints -= CreatureConstants.ChildPrice;
-            return new SimpleCreature(position, new Random(), Generation + 1);
+            return new SimpleCreature(position, Random, Generation + 1);
         }
     }
 }

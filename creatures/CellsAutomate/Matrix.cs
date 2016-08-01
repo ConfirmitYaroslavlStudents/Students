@@ -55,7 +55,7 @@ namespace CellsAutomate
             }
         }
 
-        public void FillMatrixWithFood()
+        private void FillMatrixWithFood()
         {
             var placeHoldersMatrix = new bool[Length, Height];
 
@@ -112,7 +112,8 @@ namespace CellsAutomate
 
         private void MakeTurn(BaseCreature currentCreature)
         {
-            var turnResult = Membrane.Turn(EatMatrix, Creatures, currentCreature.GetPosition());
+            var membrane = new Membrane(currentCreature);
+            var turnResult = membrane.Turn(EatMatrix, Creatures);
             var action = turnResult.Item1;
             var direction = turnResult.Item2;
 
@@ -125,7 +126,7 @@ namespace CellsAutomate
                 case ActionEnum.Go:
                     MakeTurnGo(direction, currentCreature); break;
                 case ActionEnum.Eat:
-                    Membrane.Eat(EatMatrix, currentCreature); ; break;
+                    membrane.Eat(EatMatrix); ; break;
                 default: throw new Exception();
             }
         }

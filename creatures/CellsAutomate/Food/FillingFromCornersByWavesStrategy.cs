@@ -4,7 +4,7 @@ using CellsAutomate.Constants;
 
 namespace CellsAutomate.Food
 {
-    class FillingFromCornersByWavesStrategy : IStrategyForBuild
+    public class FillingFromCornersByWavesStrategy : IStrategyForBuild
     {
         public void Build(bool[,] creatures, FoodMatrix eatMatrix)
         {

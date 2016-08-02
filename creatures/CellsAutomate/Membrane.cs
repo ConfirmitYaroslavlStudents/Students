@@ -16,7 +16,7 @@ namespace CellsAutomate
         public Tuple<ActionEnum, DirectionEnum> Turn(FoodMatrix eatMatrix, 
             BaseCreature[,] creatures)
         {
-            var currentCreature = creatures[_creature.GetPosition().X, _creature.GetPosition().Y];
+            var currentCreature = creatures[_creature.GetPosition.X, _creature.GetPosition.Y];
             return HasToDie() ? Tuple.Create(ActionEnum.Die, DirectionEnum.Stay) : currentCreature.MyTurn(eatMatrix, creatures);
         }
 
@@ -27,7 +27,7 @@ namespace CellsAutomate
 
         public void Eat(FoodMatrix eatMatrix)
         {
-            if (eatMatrix.TakeFood(_creature.GetPosition()))
+            if (eatMatrix.TakeFood(_creature.GetPosition))
             {
                 _creature.EatFood();
             }

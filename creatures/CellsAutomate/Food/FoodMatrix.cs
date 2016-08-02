@@ -20,9 +20,7 @@ namespace CellsAutomate.Food
 
         public bool HasFood(Point currentPoint)
         {
-            if (_matrix[currentPoint.X, currentPoint.Y] != 0)
-                return true;
-            return false;
+            return _matrix[currentPoint.X, currentPoint.Y] != 0;
         }
 
         public void AddFood(Point currentPoint)

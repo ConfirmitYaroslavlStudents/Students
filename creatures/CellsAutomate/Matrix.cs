@@ -12,13 +12,15 @@ namespace CellsAutomate
         public int Length;
         public int Height;
         public FoodMatrix EatMatrix { get; set; }
+        private Creator _creator;
 
         public BaseCreature[,] Creatures { get; set; }
 
-        public Matrix(int length, int height)
+        public Matrix(int length, int height, Creator creator)
         {
             Length = length;
             Height = height;
+            _creator = creator;
             EatMatrix = new FoodMatrix(length, height, new FillingFromCornersByWavesStrategy());
             Creatures = new BaseCreature[length, height];
         }
@@ -74,13 +76,11 @@ namespace CellsAutomate
         {
             var random = new Random();
 
-            var creator = new CreatorOfSimpleCreature();
-
             for (int i = 0; i < Length; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    Creatures[i, j] = random.Next(100) % 4 == 0 ? creator.CreateAbstractCreature(new Point(i, j), random, 1) : null;
+                    Creatures[i, j] = random.Next(100) % 4 == 0 ? _creator.CreateAbstractCreature(new Point(i, j), random, 1) : null;
                 }
             }
 
@@ -120,7 +120,7 @@ namespace CellsAutomate
             switch (action)
             {
                 case ActionEnum.Die:
-                    MakeTurnDie(currentCreature.GetPosition()); break;
+                    MakeTurnDie(currentCreature.GetPosition); break;
                 case ActionEnum.MakeChild:
                     MakeTurnMakeChild(direction, currentCreature); break;
                 case ActionEnum.Go:
@@ -140,7 +140,7 @@ namespace CellsAutomate
         {
             if (!creature.CanMakeChild || direction == DirectionEnum.Stay)
                 return;
-            var childPoint = DirectionEx.PointByDirection(direction, creature.GetPosition());
+            var childPoint = DirectionEx.PointByDirection(direction, creature.GetPosition);
             if (DirectionEx.IsValidAndFree(childPoint, Creatures))
             {
                 Creatures[childPoint.X, childPoint.Y] = creature.MakeChild(childPoint);
@@ -151,14 +151,14 @@ namespace CellsAutomate
         {
             if (direction == DirectionEnum.Stay)
                 return;
-            var newPosition = DirectionEx.PointByDirection(direction, creature.GetPosition());
+            var newPosition = DirectionEx.PointByDirection(direction, creature.GetPosition);
 
             if (DirectionEx.IsValidAndFree(newPosition, Creatures))
             {
-                var currentPoint = creature.GetPosition();
+                var currentPoint = creature.GetPosition;
                 Creatures[currentPoint.X, currentPoint.Y] = null;
                 creature.SetPosition(newPosition);
-                currentPoint = creature.GetPosition();
+                currentPoint = creature.GetPosition;
                 Creatures[currentPoint.X, currentPoint.Y] = creature;
                 AddStats(direction);
             }

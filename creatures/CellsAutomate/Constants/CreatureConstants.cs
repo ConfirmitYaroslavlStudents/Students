@@ -1,6 +1,6 @@
 ﻿namespace CellsAutomate.Constants
 {
-    class CreatureConstants
+    public class CreatureConstants
     {
         public const int StartEnergyPoints = 15;
         public const int MinFoodToSurvive = 5;

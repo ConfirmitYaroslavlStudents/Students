@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CellsAutomate.Constants;
+using CellsAutomate.Creatures;
+using CellsAutomate.Factory;
 using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Parsers;
 
@@ -33,7 +35,8 @@ namespace CellsAutomate
 
             var length = LogConstants.Length;
             int scale = 500 / length;
-            var matrix = new Matrix(length, length);
+            var creator = new CreatorOfSimpleCreature();
+            var matrix = new Matrix(length, length, creator);
             matrix.FillStartMatrixRandomly();
             CreateDirectory();
             Print(0, length, matrix, scale);
@@ -52,7 +55,7 @@ namespace CellsAutomate
                     string.Join(" ",
                     matrix
                         .CreaturesAsEnumerable
-                        .Select(x => x.GetGeneration())
+                        .Select(x => x.GetGeneration)
                         .GroupBy(x => x)
                         .OrderBy(x => x.Key)
                         .Select(x => $"{x.Key}:{x.Count()}")
@@ -76,7 +79,7 @@ namespace CellsAutomate
         {
             for (int i = 1; i <= turn + 1; i++)
             {
-                var g = (from x in creatures.CreaturesAsEnumerable where x.GetGeneration() == i select x).Count();
+                var g = (from x in creatures.CreaturesAsEnumerable where x.GetGeneration == i select x).Count();
                 if (g != 0)
                     Console.WriteLine(i + "=> " + g);
             }

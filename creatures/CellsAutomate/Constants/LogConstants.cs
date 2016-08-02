@@ -1,9 +1,9 @@
 ﻿namespace CellsAutomate.Constants
 {
-    class LogConstants
+    public class LogConstants
     {
-        public const long CountOfTurns = 10000;
-        public const int Length = 500;
+        public const long CountOfTurns = 1000;
+        public const int Length = 100;
         public const string Log = @"C:\creatures\Log";
     }
 }

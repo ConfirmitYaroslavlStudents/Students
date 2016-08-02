@@ -15,22 +15,15 @@ namespace CellsAutomate.Creatures
         public bool CanMakeChild => EnergyPoints >= CreatureConstants.ChildPrice + CreatureConstants.MinFoodToSurvive;
         public bool HasMinToSurvive => EnergyPoints >= CreatureConstants.MinFoodToSurvive;
 
+        public int GetGeneration => Generation;
+        public Point GetPosition => Position;
+
         public abstract BaseCreature MakeChild(Point position);
         protected abstract DirectionEnum GetDirection(FoodMatrix eatMatrix, BaseCreature[,] creatures);
 
         public void SetPosition(Point newPosition)
         {
             Position = newPosition;
-        }
-
-        public Point GetPosition()
-        {
-            return Position;
-        }
-
-        public int GetGeneration()
-        {
-            return Generation;
         }
 
         public void EatFood()
@@ -48,18 +41,12 @@ namespace CellsAutomate.Creatures
         private ActionEnum GetAction(FoodMatrix eatMatrix)
         {
             if (EnergyPoints < CreatureConstants.CriticalLevelOfFood)
-                if (eatMatrix.GetLevelOfFood(Position) >= CreatureConstants.OneBite)
-                        return ActionEnum.Eat;
-                else
-                    return ActionEnum.Go;
+                return eatMatrix.GetLevelOfFood(Position) >= CreatureConstants.OneBite ? ActionEnum.Eat : ActionEnum.Go;
             
             if (CanMakeChild)
                 return ActionEnum.MakeChild;
 
-            if (Random.Next(100) % 2 == 1)
-                return ActionEnum.Eat;
-
-            return ActionEnum.Go;
+            return Random.Next(100) % 2 == 1 ? ActionEnum.Eat : ActionEnum.Go;
         }
     }
 }

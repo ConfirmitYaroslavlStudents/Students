@@ -3,3 +3,6 @@
 ################################################################################
 
 /creatures/CellsAutomate/bin/Debug
+/creatures/CellsAutomate/obj/Debug
+/creatures/Creatures/obj/Debug
+/creatures/Creaturestests/obj/Debug

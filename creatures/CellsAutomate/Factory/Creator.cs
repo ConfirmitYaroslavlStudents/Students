@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using CellsAutomate.Creatures;
+using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 
 namespace CellsAutomate.Factory
@@ -12,11 +13,16 @@ namespace CellsAutomate.Factory
 
     public class CreatorOfCreature : Creator
     {
+        private ICommand[] _commands;
+        public CreatorOfCreature()
+        {
+            _commands = new SeedGenerator().StartAlgorithm;
+        }
+
         public override BaseCreature CreateAbstractCreature(Point position, Random random, int generation)
         {
             var executor = new Executor();
-            var commands = new SeedGenerator().StartAlgorithm;
-            return new Creature(position, executor, commands, random, generation);
+            return new Creature(position, executor, _commands, random, generation);
         }
     }
 

@@ -157,12 +157,13 @@ namespace Creatures.Language.Executors
         public void Accept(GetRandom command)
         {
             if (!_variables.ContainsKey(command.TargetName) ||
-                !_variables.ContainsKey(command.MaxValueName))
+                !_variables.ContainsKey(command.MaxValueName) ||
+                _variables[command.MaxValueName] == null)
             {
                 _isExecutable = false;
                 return;
             }
-            
+
             _variables[command.TargetName] = _executorToolset.GetRandom(_variables[command.MaxValueName].Value);
         }
 

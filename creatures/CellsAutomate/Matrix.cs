@@ -12,7 +12,7 @@ namespace CellsAutomate
         public int Length;
         public int Height;
         public FoodMatrix EatMatrix { get; set; }
-        private Creator _creator;
+        private readonly Creator _creator;
 
         public BaseCreature[,] Creatures { get; set; }
 

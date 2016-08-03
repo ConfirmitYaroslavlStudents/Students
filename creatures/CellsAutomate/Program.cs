@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CellsAutomate.Constants;
-using CellsAutomate.Creatures;
 using CellsAutomate.Factory;
 using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Parsers;
@@ -42,9 +41,8 @@ namespace CellsAutomate
             Print(0, length, matrix, scale);
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
-
-            long i;
-            for (i = 0; i < LogConstants.CountOfTurns; i++)
+            
+            for (int i = 0; i < LogConstants.CountOfTurns; i++)
             {
                 if (matrix.AliveCount == 0)
                     break;
@@ -65,7 +63,6 @@ namespace CellsAutomate
 
                 //PrintGeneration(matrix, i);
             }
-            PrintGeneration(matrix, i);
 
             File.WriteAllText(LogConstants.Log + "\\Log.txt", log.ToString());
             Console.WriteLine("Up: " + Stats.Up);
@@ -75,7 +72,7 @@ namespace CellsAutomate
             Console.ReadKey();
         }
 
-        private static void PrintGeneration(Matrix creatures, long turn)
+        private static void PrintGeneration(Matrix creatures, int turn)
         {
             for (int i = 1; i <= turn + 1; i++)
             {
@@ -85,9 +82,9 @@ namespace CellsAutomate
             }
         }
 
-        private static void Print(long id, int length, Matrix matrix, int scale)
+        private static void Print(int id, int length, Matrix matrix, int scale)
         {
-            if (id % 50 != 0) return;
+            //if (id % 50 != 0) return;
 
             int newLength = length * scale;
 

@@ -55,6 +55,8 @@
     <Compile Include="Creatures\BaseCreatureTests.cs" />
     <Compile Include="Creatures\CreatureTests.cs" />
     <Compile Include="FoodMatrixTests.cs" />
+    <Compile Include="Food\FillingFromCornersByWavesStrategyTests.cs" />
+    <Compile Include="Food\FillingOfEntireFieldStrategyTests.cs" />
     <Compile Include="LanguageTests.cs" />
     <Compile Include="MatrixTests.cs" />
     <Compile Include="MembraneTests.cs" />

@@ -29,7 +29,7 @@ namespace CellsAutomate.Creatures
                         .GetPoints(Position.X, Position.Y)
                         .ToDictionary(x => DirectionEx.DirectionByPointsWithNumber(Position, x),
                         x => (DirectionEx.IsValidAndFree(x, creatures)
-                        && eatMatrix.HasFood(x)) ? 4 : 0);
+                        && eatMatrix.GetLevelOfFood(x) >= CreatureConstants.OneBite) ? 4 : 0);
 
             var result = _executor.Execute(_commands, new MyExecutorToolset(Random, state));
             return DirectionEx.DirectionByNumber(int.Parse(result));

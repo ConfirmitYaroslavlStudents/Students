@@ -1,6 +1,6 @@
 ﻿namespace CellsAutomate.Food
 {
-    public interface IStrategyForBuild
+    public interface IFoodDistributionStrategy
     {
         void Build(bool[,] creatures, FoodMatrix eatMatrix);
     }

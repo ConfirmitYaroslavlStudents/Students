@@ -14,18 +14,18 @@ namespace CellsAutomate
         public FoodMatrix EatMatrix { get; set; }
         private readonly Creator _creator;
 
-        public BaseCreature[,] Creatures { get; set; }
+        public Membrane[,] Creatures { get; set; }
 
         public Matrix(int length, int height, Creator creator)
         {
             Length = length;
             Height = height;
             _creator = creator;
-            EatMatrix = new FoodMatrix(length, height, new FillingFromCornersByWavesStrategy());
-            Creatures = new BaseCreature[length, height];
+            EatMatrix = new FoodMatrix(length, height);
+            Creatures = new Membrane[length, height];
         }
 
-        public IEnumerable<BaseCreature> CreaturesAsEnumerable
+        public IEnumerable<Membrane> CreaturesAsEnumerable
         {
             get
             {
@@ -80,7 +80,7 @@ namespace CellsAutomate
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    Creatures[i, j] = random.Next(100) % 4 == 0 ? _creator.CreateAbstractCreature(new Point(i, j), random, 1) : null;
+                    Creatures[i, j] = random.Next(100) % 4 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, _creator) : null;
                 }
             }
 
@@ -89,7 +89,7 @@ namespace CellsAutomate
 
         public void MakeTurn()
         {
-            var creatures = new List<BaseCreature>();
+            var creatures = new List<Membrane>();
 
             for (int i = 0; i < Length; i++)
             {
@@ -110,23 +110,22 @@ namespace CellsAutomate
             FillMatrixWithFood();
         }
 
-        private void MakeTurn(BaseCreature currentCreature)
+        private void MakeTurn(Membrane currentCreature)
         {
-            var membrane = new Membrane(currentCreature);
-            var turnResult = membrane.Turn(EatMatrix, Creatures);
+            var turnResult = currentCreature.Turn(EatMatrix, Creatures);
             var action = turnResult.Item1;
             var direction = turnResult.Item2;
 
             switch (action)
             {
                 case ActionEnum.Die:
-                    MakeTurnDie(currentCreature.GetPosition); break;
+                    MakeTurnDie(currentCreature.Position); break;
                 case ActionEnum.MakeChild:
                     MakeTurnMakeChild(direction, currentCreature); break;
                 case ActionEnum.Go:
                     MakeTurnGo(direction, currentCreature); break;
                 case ActionEnum.Eat:
-                    membrane.Eat(EatMatrix); ; break;
+                    currentCreature.Eat(EatMatrix); break;
                 default: throw new Exception();
             }
         }
@@ -136,32 +135,35 @@ namespace CellsAutomate
             Creatures[position.X, position.Y] = null;
         }
 
-        private void MakeTurnMakeChild(DirectionEnum direction, BaseCreature creature)
+        private void MakeTurnMakeChild(DirectionEnum direction, Membrane creature)
         {
-            if (!creature.CanMakeChild || direction == DirectionEnum.Stay)
+            if (direction == DirectionEnum.Stay)
                 return;
-            var childPoint = DirectionEx.PointByDirection(direction, creature.GetPosition);
+            var childPoint = DirectionEx.PointByDirection(direction, creature.Position);
             if (DirectionEx.IsValidAndFree(childPoint, Creatures))
             {
                 Creatures[childPoint.X, childPoint.Y] = creature.MakeChild(childPoint);
             }
         }
 
-        private void MakeTurnGo(DirectionEnum direction, BaseCreature creature)
+        private void MakeTurnGo(DirectionEnum direction, Membrane creature)
         {
             if (direction == DirectionEnum.Stay)
                 return;
-            var newPosition = DirectionEx.PointByDirection(direction, creature.GetPosition);
+            var newPosition = DirectionEx.PointByDirection(direction, creature.Position);
 
-            if (DirectionEx.IsValidAndFree(newPosition, Creatures))
-            {
-                var currentPoint = creature.GetPosition;
-                Creatures[currentPoint.X, currentPoint.Y] = null;
-                creature.SetPosition(newPosition);
-                currentPoint = creature.GetPosition;
-                Creatures[currentPoint.X, currentPoint.Y] = creature;
-                AddStats(direction);
-            }
+            if (!DirectionEx.IsValidAndFree(newPosition, Creatures)) return;
+            Move(creature, newPosition);
+            AddStats(direction);
+        }
+
+        private void Move(Membrane creature, Point newPosition)
+        {
+            var currentPoint = creature.Position;
+            Creatures[currentPoint.X, currentPoint.Y] = null;
+            creature.Position = newPosition;
+            currentPoint = creature.Position;
+            Creatures[currentPoint.X, currentPoint.Y] = creature;
         }
 
         private void AddStats(DirectionEnum direction)
@@ -179,6 +181,8 @@ namespace CellsAutomate
                     break;
                 case DirectionEnum.Left:
                     Stats.Left++;
+                    break;
+                case DirectionEnum.Stay:
                     break;
                 default: throw new Exception();
             }

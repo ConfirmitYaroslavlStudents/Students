@@ -8,7 +8,7 @@ namespace CellsAutomate.Factory
 {
     public abstract class Creator
     {
-        public abstract BaseCreature CreateAbstractCreature(Point position, Random random, int generation);
+        public abstract BaseCreature CreateAbstractCreature();
     }
 
     public class CreatorOfCreature : Creator
@@ -19,18 +19,18 @@ namespace CellsAutomate.Factory
             _commands = new SeedGenerator().StartAlgorithm;
         }
 
-        public override BaseCreature CreateAbstractCreature(Point position, Random random, int generation)
+        public override BaseCreature CreateAbstractCreature()
         {
             var executor = new Executor();
-            return new Creature(position, executor, _commands, random, generation);
+            return new Creature(executor, _commands);
         }
     }
 
     public class CreatorOfSimpleCreature : Creator
     {
-        public override BaseCreature CreateAbstractCreature(Point position, Random random, int generation)
+        public override BaseCreature CreateAbstractCreature()
         {
-            return new SimpleCreature(position, random, generation);
+            return new SimpleCreature();
         }
     }
 }

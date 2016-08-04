@@ -3,7 +3,7 @@ using CellsAutomate.Constants;
 
 namespace CellsAutomate.Food
 {
-    public class FillingOfEntireFieldStrategy : IStrategyForBuild
+    public class FillingOfEntireFieldStrategy : IFoodDistributionStrategy
     {
         private int _counterOfTurns;
         private readonly int _frequency;

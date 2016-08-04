@@ -13,32 +13,34 @@ namespace CellsAutomate.Creatures
         private readonly Executor _executor;
         private readonly ICommand[] _commands;
 
-        public Creature(Point position, Executor executor, ICommand[] commands, Random random, int generation)
+        public Creature(Executor executor, ICommand[] commands)
         {
-            Position = position;
             _executor = executor;
             _commands = commands;
-            Random = random;
-            Generation = generation;
         }
 
-        protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, BaseCreature[,] creatures)
+        protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, Membrane[,] creatures, Point position, Random random)
         {
             var state =
                     DirectionEx
-                        .GetPoints(Position.X, Position.Y)
-                        .ToDictionary(x => DirectionEx.DirectionByPointsWithNumber(Position, x),
+                        .GetPoints(position.X, position.Y)
+                        .ToDictionary(x => DirectionEx.DirectionByPointsWithNumber(position, x),
                         x => (DirectionEx.IsValidAndFree(x, creatures)
                         && eatMatrix.GetLevelOfFood(x) >= CreatureConstants.OneBite) ? 4 : 0);
 
-            var result = _executor.Execute(_commands, new MyExecutorToolset(Random, state));
+            var result = _executor.Execute(_commands, new MyExecutorToolset(random, state));
             return DirectionEx.DirectionByNumber(int.Parse(result));
         }
 
-        public override BaseCreature MakeChild(Point position)
+        protected override ActionEnum GetAction(FoodMatrix eatMatrix, int energyPoints, Point position, Random random, bool canMakeChild)
         {
-            EnergyPoints -= CreatureConstants.ChildPrice;
-            return new SimpleCreature(position, Random, Generation + 1);
+            if (energyPoints < CreatureConstants.CriticalLevelOfFood)
+                return eatMatrix.GetLevelOfFood(position) >= CreatureConstants.OneBite ? ActionEnum.Eat : ActionEnum.Go;
+
+            if (canMakeChild)
+                return ActionEnum.MakeChild;
+
+            return random.Next(100) % 2 == 1 ? ActionEnum.Eat : ActionEnum.Go;
         }
     }
 }

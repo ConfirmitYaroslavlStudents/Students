@@ -9,35 +9,31 @@ namespace CellsAutomate.Creatures
 {
     public class SimpleCreature : BaseCreature
     {
-        public SimpleCreature(Point position, Random random, int generation)
+        protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, Membrane[,] creatures, Point position, Random random)
         {
-            Position = position;
-            Random = random;
-            Generation = generation;
-        }
-
-        protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, BaseCreature[,] creatures)
-        {
-            var points = DirectionEx.GetPoints(Position.X, Position.Y);
+            var points = DirectionEx.GetPoints(position.X, position.Y);
             var directions = new List<DirectionEnum>();
             var directionsWithFood = new List<DirectionEnum>();
             foreach (var item in points)
             {
-                if (DirectionEx.IsValidAndFree(item, creatures))
-                {
-                    directions.Add(DirectionEx.DirectionByPoints(Position, item));
-                    if(eatMatrix.GetLevelOfFood(item) >= CreatureConstants.OneBite)
-                        directionsWithFood.Add(DirectionEx.DirectionByPoints(Position, item));
-                }
+                if (!DirectionEx.IsValidAndFree(item, creatures)) continue;
+                directions.Add(DirectionEx.DirectionByPoints(position, item));
+                if(eatMatrix.GetLevelOfFood(item) >= CreatureConstants.OneBite)
+                    directionsWithFood.Add(DirectionEx.DirectionByPoints(position, item));
             }
             if (directions.Count == 0) return DirectionEnum.Stay;
-            return directionsWithFood.Count == 0 ? directions.ElementAt(Random.Next(directions.Count)) : directionsWithFood.ElementAt(Random.Next(directionsWithFood.Count));
+            return directionsWithFood.Count == 0 ? directions.ElementAt(random.Next(directions.Count)) : directionsWithFood.ElementAt(random.Next(directionsWithFood.Count));
         }
 
-        public override BaseCreature MakeChild(Point position)
+        protected override ActionEnum GetAction(FoodMatrix eatMatrix, int energyPoints, Point position, Random random, bool canMakeChild)
         {
-            EnergyPoints -= CreatureConstants.ChildPrice;
-            return new SimpleCreature(position, Random, Generation + 1);
+            if (energyPoints < CreatureConstants.CriticalLevelOfFood)
+                return eatMatrix.GetLevelOfFood(position) >= CreatureConstants.OneBite ? ActionEnum.Eat : ActionEnum.Go;
+
+            if (canMakeChild)
+                return ActionEnum.MakeChild;
+
+            return random.Next(100) % 2 == 1 ? ActionEnum.Eat : ActionEnum.Go;
         }
     }
 }

@@ -4,7 +4,7 @@ using CellsAutomate.Constants;
 
 namespace CellsAutomate.Food
 {
-    public class RandomRainOfFoodStrategy : IStrategyForBuild
+    public class RandomRainOfFoodStrategy : IFoodDistributionStrategy
     {
         private readonly int _frequency;
 

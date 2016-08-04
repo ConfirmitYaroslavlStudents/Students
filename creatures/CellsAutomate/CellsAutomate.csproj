@@ -56,8 +56,8 @@
     <Compile Include="Food\FillingFromCornersByWavesStrategy.cs" />
     <Compile Include="Food\FillingOfEntireFieldStrategy.cs" />
     <Compile Include="Food\FoodMatrix.cs" />
-    <Compile Include="Food\IStrategyForBuild.cs" />
-    <Compile Include="Food\RandomRainOfFood.cs" />
+    <Compile Include="Food\IFoodDistributionStrategy.cs" />
+    <Compile Include="Food\RandomRainOfFoodStrategy.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Mutator\Mutations\AddCommandMutation.cs" />
     <Compile Include="Mutator\Mutations\InternalClasses\Adder.cs" />

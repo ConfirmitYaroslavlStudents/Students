@@ -79,13 +79,11 @@ namespace CellsAutomate
             }
         }
 
-        public static bool IsFree(Point currentPoint, BaseCreature[,] creatures)
+        public static bool IsFree(Point currentPoint, Membrane[,] creatures)
         {
-            if (creatures[currentPoint.X, currentPoint.Y] == null)
-                return true;
-            return false;
+            return creatures[currentPoint.X, currentPoint.Y] == null;
         }
-        
+
         public static bool IsValid(Point x, int length, int height)
         {
             if (x.X < 0) return false;
@@ -96,14 +94,12 @@ namespace CellsAutomate
             return true;
         }
 
-        public static bool IsValidAndFree(Point position, BaseCreature[,] creatures)
+        public static bool IsValidAndFree(Point position, Membrane[,] creatures)
         {
-            if (DirectionEx.IsValid(position, creatures.GetLength(0), creatures.GetLength(1))
-                && DirectionEx.IsFree(position, creatures))
-                return true;
-            return false;
+            return IsValid(position, creatures.GetLength(0), creatures.GetLength(1))
+                   && IsFree(position, creatures);
         }
-        
+
         public static Point[] GetPoints(int i, int j)
         {
             return new[] { new Point(i + 1, j), new Point(i, j + 1), new Point(i - 1, j), new Point(i, j - 1) };

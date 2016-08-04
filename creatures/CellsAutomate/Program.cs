@@ -53,7 +53,7 @@ namespace CellsAutomate
                     string.Join(" ",
                     matrix
                         .CreaturesAsEnumerable
-                        .Select(x => x.GetGeneration)
+                        .Select(x => x.Generation)
                         .GroupBy(x => x)
                         .OrderBy(x => x.Key)
                         .Select(x => $"{x.Key}:{x.Count()}")
@@ -76,7 +76,7 @@ namespace CellsAutomate
         {
             for (int i = 1; i <= turn + 1; i++)
             {
-                var g = (from x in creatures.CreaturesAsEnumerable where x.GetGeneration == i select x).Count();
+                var g = (from x in creatures.CreaturesAsEnumerable where x.Generation == i select x).Count();
                 if (g != 0)
                     Console.WriteLine(i + "=> " + g);
             }
@@ -96,7 +96,7 @@ namespace CellsAutomate
                     for (int j = 0; j < newLength; j += scale)
                     {
                         for (int l = 0; l < scale; l++)
-                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.HasFood(new Point(i / scale, j / scale)) ? Color.Green : Color.White);
+                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.GetLevelOfFood(new Point(i / scale, j / scale)) >= CreatureConstants.OneBite ? Color.Green : Color.White);
                     }
             }
 
@@ -114,13 +114,19 @@ namespace CellsAutomate
                         }
                     }
             }
-            bitmap.Save(LogConstants.Log + String.Format($"\\{id}.bmp"), ImageFormat.Bmp);
+            bitmap.Save(LogConstants.Log + $"\\{id}.bmp", ImageFormat.Bmp);
         }
 
         public static void CreateDirectory()
         {
-            if(Directory.Exists(LogConstants.Log))
-                Directory.Delete(LogConstants.Log, true);
+            if (Directory.Exists(LogConstants.Log))
+            {
+                var files = new DirectoryInfo(LogConstants.Log).GetFiles();
+
+                foreach (var file in files)
+                    file.Delete();
+                return;
+            }
             Directory.CreateDirectory(LogConstants.Log);
         }
     }

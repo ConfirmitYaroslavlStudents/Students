@@ -7,15 +7,15 @@ namespace CellsAutomate.Food
     {
         private readonly int[,] _matrix;
 
-        private readonly IStrategyForBuild _strategy;
+        private readonly IFoodDistributionStrategy _strategy;
 
         public int Length => _matrix.GetLength(0);
         public int Height => _matrix.GetLength(1);
 
-        public FoodMatrix(int length, int height, IStrategyForBuild strategy)
+        public FoodMatrix(int length, int height)
         {
             _matrix = new int[length, height];
-            _strategy = strategy;
+            _strategy = new FillingFromCornersByWavesStrategy();
         }
 
         public bool HasFood(Point currentPoint)

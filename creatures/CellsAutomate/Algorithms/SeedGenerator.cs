@@ -3,7 +3,7 @@ using System.Text;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Parsers;
 
-namespace CellsAutomate
+namespace CellsAutomate.Algorithms
 {
     public class SeedGenerator
     {

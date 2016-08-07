@@ -1,9 +1,9 @@
-﻿using CellsAutomate;
-using Creatures.Language.Executors;
+﻿using Creatures.Language.Executors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CellsAutomate.Algorithms;
 
 namespace Creaturestests
 {

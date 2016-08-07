@@ -34,14 +34,26 @@ namespace CellsAutomate
 
             _energyPoints -= CreatureConstants.MinFoodToSurvive;
 
-            var result = _creature.MyTurn(eatMatrix, creatures, _energyPoints, Position,  _random, CanMakeChild());
+            var result = _creature.MyTurn(eatMatrix, creatures, Position, _random, CanMakeChild(), HasToEat(), HasOneBite(eatMatrix));
 
             return result.Item1 == ActionEnum.MakeChild ? Tuple.Create(ActionEnum.MakeChild, GetDirectionForChild(creatures)) : result;
         }
 
         private bool CanMakeChild()
         {
+            //return _energyPoints >= CreatureConstants.ChildPrice + CreatureConstants.CriticalLevelOfFood;
             return _energyPoints >= CreatureConstants.ChildPrice + CreatureConstants.MinFoodToSurvive;
+            //return _energyPoints >= CreatureConstants.ChildPrice;
+        }
+
+        private bool HasToEat()
+        {
+            return _energyPoints <= CreatureConstants.CriticalLevelOfFood;
+        }
+
+        private bool HasOneBite(FoodMatrix eatMatrix)
+        {
+            return eatMatrix.HasOneBite(Position);
         }
 
         private bool HasToDie()
@@ -69,6 +81,13 @@ namespace CellsAutomate
         {
             _energyPoints -= CreatureConstants.ChildPrice;
             return new Membrane(_creator.CreateAbstractCreature(), _random, childPosition, Generation + 1, _creator);
+        }
+        
+        public void Move(Membrane[,] creatures, Point newPosition)
+        {
+            creatures[Position.X, Position.Y] = null;
+            Position = newPosition;
+            creatures[Position.X, Position.Y] = this;
         }
     }
 }

@@ -32,13 +32,13 @@ namespace CellsAutomate
             //Console.WriteLine(nowCommands);
             //Console.ReadKey();
 
-            var length = LogConstants.Length;
-            int scale = 500 / length;
-            var creator = new CreatorOfSimpleCreature();
-            var matrix = new Matrix(length, length, creator);
+            var matrixSize = LogConstants.MatrixSize;
+            int scale = 500 / matrixSize;
+            var creator = new CreatorOfCreature();
+            var matrix = new Matrix(matrixSize, matrixSize, creator);
             matrix.FillStartMatrixRandomly();
             CreateDirectory();
-            Print(0, length, matrix, scale);
+            Print(0, matrixSize, matrix, scale);
             Console.WriteLine("0:{0}", matrix.AliveCount);
             var log = new StringBuilder();
             
@@ -47,7 +47,7 @@ namespace CellsAutomate
                 if (matrix.AliveCount == 0)
                     break;
                 matrix.MakeTurn();
-                Print(i + 1, length, matrix, scale);
+                Print(i + 1, matrixSize, matrix, scale);
                 Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
                 var generationStat =
                     string.Join(" ",
@@ -64,7 +64,7 @@ namespace CellsAutomate
                 //PrintGeneration(matrix, i);
             }
 
-            File.WriteAllText(LogConstants.Log + "\\Log.txt", log.ToString());
+            File.WriteAllText(LogConstants.PathToLogDirectory + "\\Log.txt", log.ToString());
             Console.WriteLine("Up: " + Stats.Up);
             Console.WriteLine("Right: " + Stats.Right);
             Console.WriteLine("Down: " + Stats.Down);
@@ -96,7 +96,7 @@ namespace CellsAutomate
                     for (int j = 0; j < newLength; j += scale)
                     {
                         for (int l = 0; l < scale; l++)
-                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.GetLevelOfFood(new Point(i / scale, j / scale)) >= CreatureConstants.OneBite ? Color.Green : Color.White);
+                            bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.HasOneBite(new Point(i / scale, j / scale)) ? Color.Green : Color.White);
                     }
             }
 
@@ -114,20 +114,20 @@ namespace CellsAutomate
                         }
                     }
             }
-            bitmap.Save(LogConstants.Log + $"\\{id}.bmp", ImageFormat.Bmp);
+            bitmap.Save(LogConstants.PathToLogDirectory + $"\\{id}.bmp", ImageFormat.Bmp);
         }
 
         public static void CreateDirectory()
         {
-            if (Directory.Exists(LogConstants.Log))
+            if (Directory.Exists(LogConstants.PathToLogDirectory))
             {
-                var files = new DirectoryInfo(LogConstants.Log).GetFiles();
+                var files = new DirectoryInfo(LogConstants.PathToLogDirectory).GetFiles();
 
                 foreach (var file in files)
                     file.Delete();
                 return;
             }
-            Directory.CreateDirectory(LogConstants.Log);
+            Directory.CreateDirectory(LogConstants.PathToLogDirectory);
         }
     }
 }

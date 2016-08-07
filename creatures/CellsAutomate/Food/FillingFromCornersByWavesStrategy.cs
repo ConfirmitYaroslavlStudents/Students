@@ -36,7 +36,7 @@ namespace CellsAutomate.Food
                 if (DirectionEx.IsValid(current, length, height)
                     && !creaturesMatrix[current.X, current.Y])
                 {
-                    if (eatMatrix.GetLevelOfFood(current) < FoodMatrixConstants.MaxFoodLevel)
+                    if (!eatMatrix.HasMaxFoodLevel(current))
                         eatMatrix.AddFood(current);
 
                     foreach (var point in DirectionEx.GetPoints(current.X, current.Y))

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using CellsAutomate.Algorithms;
 using CellsAutomate.Creatures;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
@@ -13,16 +12,21 @@ namespace CellsAutomate.Factory
 
     public class CreatorOfCreature : Creator
     {
-        private ICommand[] _commands;
+        private readonly ICommand[] _commandsForGetDirection;
+        private readonly ICommand[] _commandsForGetAction;
+
         public CreatorOfCreature()
         {
-            _commands = new SeedGenerator().StartAlgorithm;
+            //_commands = new SeedGenerator().StartAlgorithm;
+            _commandsForGetDirection = new GetDirectionAlgorithm().Algorithm;
+            _commandsForGetAction = new GetActionAlgorithm().Algorithm;
+
         }
 
         public override BaseCreature CreateAbstractCreature()
         {
             var executor = new Executor();
-            return new Creature(executor, _commands);
+            return new Creature(executor, _commandsForGetDirection, _commandsForGetAction);
         }
     }
 

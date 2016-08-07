@@ -18,9 +18,14 @@ namespace CellsAutomate.Food
             _strategy = new FillingFromCornersByWavesStrategy();
         }
 
-        public bool HasFood(Point currentPoint)
+        public bool HasOneBite(Point currentPoint)
         {
-            return _matrix[currentPoint.X, currentPoint.Y] != 0;
+            return GetLevelOfFood(currentPoint) >= CreatureConstants.OneBite;
+        }
+
+        public bool HasMaxFoodLevel(Point currentPoint)
+        {
+            return GetLevelOfFood(currentPoint) >= FoodMatrixConstants.MaxFoodLevel;
         }
 
         public void AddFood(Point currentPoint)
@@ -36,7 +41,7 @@ namespace CellsAutomate.Food
             return true;
         }
 
-        public int GetLevelOfFood(Point currentPoint)
+        private int GetLevelOfFood(Point currentPoint)
         {
             return _matrix[currentPoint.X, currentPoint.Y];
         }

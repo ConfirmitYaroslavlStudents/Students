@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using Creatures.Language.Executors;
 
-namespace CellsAutomate
+namespace CellsAutomate.Algorithms
 {
-    public class MyExecutorToolset : IExecutorToolset
+    public class ExecutorToolsetForGetAction : IExecutorToolset
     {
         private readonly Random _random;
         private readonly IDictionary<int, int> _state;
 
-        public MyExecutorToolset(Random random, IDictionary<int, int> state)
+        public ExecutorToolsetForGetAction(Random random, IDictionary<int, int> state)
         {
             _random = random;
             _state = state;
         }
 
-        public int GetState(int direction)
+        public int GetState(int condition)
         {
-            return _state[direction];
+            return _state[condition];
         }
 
         public int GetRandom(int maxValue)

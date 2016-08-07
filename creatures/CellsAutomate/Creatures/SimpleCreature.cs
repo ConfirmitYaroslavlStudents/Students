@@ -18,17 +18,17 @@ namespace CellsAutomate.Creatures
             {
                 if (!DirectionEx.IsValidAndFree(item, creatures)) continue;
                 directions.Add(DirectionEx.DirectionByPoints(position, item));
-                if(eatMatrix.GetLevelOfFood(item) >= CreatureConstants.OneBite)
+                if(eatMatrix.HasOneBite(item))
                     directionsWithFood.Add(DirectionEx.DirectionByPoints(position, item));
             }
             if (directions.Count == 0) return DirectionEnum.Stay;
             return directionsWithFood.Count == 0 ? directions.ElementAt(random.Next(directions.Count)) : directionsWithFood.ElementAt(random.Next(directionsWithFood.Count));
         }
 
-        protected override ActionEnum GetAction(FoodMatrix eatMatrix, int energyPoints, Point position, Random random, bool canMakeChild)
+        protected override ActionEnum GetAction(Random random, bool canMakeChild, bool hasToEat, bool hasOneBite)
         {
-            if (energyPoints < CreatureConstants.CriticalLevelOfFood)
-                return eatMatrix.GetLevelOfFood(position) >= CreatureConstants.OneBite ? ActionEnum.Eat : ActionEnum.Go;
+            if (hasToEat)
+                return hasOneBite ? ActionEnum.Eat : ActionEnum.Go;
 
             if (canMakeChild)
                 return ActionEnum.MakeChild;

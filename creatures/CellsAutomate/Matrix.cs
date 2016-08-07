@@ -153,17 +153,8 @@ namespace CellsAutomate
             var newPosition = DirectionEx.PointByDirection(direction, creature.Position);
 
             if (!DirectionEx.IsValidAndFree(newPosition, Creatures)) return;
-            Move(creature, newPosition);
+            creature.Move(Creatures, newPosition);
             AddStats(direction);
-        }
-
-        private void Move(Membrane creature, Point newPosition)
-        {
-            var currentPoint = creature.Position;
-            Creatures[currentPoint.X, currentPoint.Y] = null;
-            creature.Position = newPosition;
-            currentPoint = creature.Position;
-            Creatures[currentPoint.X, currentPoint.Y] = creature;
         }
 
         private void AddStats(DirectionEnum direction)

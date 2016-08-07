@@ -26,7 +26,7 @@ namespace CellsAutomate.Food
                 for (int j = 0; j < eatMatrix.Height; j++)
                 {
                     if (!creatures[i, j]
-                        && eatMatrix.GetLevelOfFood(new Point(i, j)) < FoodMatrixConstants.MaxFoodLevel)
+                        && !eatMatrix.HasMaxFoodLevel(new Point(i, j)))
                     {
                         eatMatrix.AddFood(new Point(i, j));
                     }

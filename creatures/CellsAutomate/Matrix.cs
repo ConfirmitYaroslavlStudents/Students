@@ -16,12 +16,12 @@ namespace CellsAutomate
 
         public Membrane[,] Creatures { get; set; }
 
-        public Matrix(int length, int height, Creator creator)
+        public Matrix(int length, int height, Creator creator, IFoodDistributionStrategy strategy)
         {
             Length = length;
             Height = height;
             _creator = creator;
-            EatMatrix = new FoodMatrix(length, height);
+            EatMatrix = new FoodMatrix(length, height, strategy);
             Creatures = new Membrane[length, height];
         }
 

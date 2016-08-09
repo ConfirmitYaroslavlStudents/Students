@@ -12,10 +12,10 @@ namespace CellsAutomate.Food
         public int Length => _matrix.GetLength(0);
         public int Height => _matrix.GetLength(1);
 
-        public FoodMatrix(int length, int height)
+        public FoodMatrix(int length, int height, IFoodDistributionStrategy strategy)
         {
             _matrix = new int[length, height];
-            _strategy = new FillingFromCornersByWavesStrategy();
+            _strategy = strategy;
         }
 
         public bool HasOneBite(Point currentPoint)
@@ -30,7 +30,7 @@ namespace CellsAutomate.Food
 
         public void AddFood(Point currentPoint)
         {
-            _matrix[currentPoint.X, currentPoint.Y] += FoodMatrixConstants.FoodLevel;
+            _matrix[currentPoint.X, currentPoint.Y] += FoodMatrixConstants.AddedFoodLevel;
         }
 
         public bool TakeFood(Point currentPoint)

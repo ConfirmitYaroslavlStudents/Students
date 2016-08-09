@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using CellsAutomate.Constants;
 using CellsAutomate.Factory;
+using CellsAutomate.Food;
 using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Parsers;
 
@@ -35,7 +36,7 @@ namespace CellsAutomate
             var matrixSize = LogConstants.MatrixSize;
             int scale = 500 / matrixSize;
             var creator = new CreatorOfCreature();
-            var matrix = new Matrix(matrixSize, matrixSize, creator);
+            var matrix = new Matrix(matrixSize, matrixSize, creator, new FillingFromCornersByWavesStrategy());
             matrix.FillStartMatrixRandomly();
             CreateDirectory();
             Print(0, matrixSize, matrix, scale);

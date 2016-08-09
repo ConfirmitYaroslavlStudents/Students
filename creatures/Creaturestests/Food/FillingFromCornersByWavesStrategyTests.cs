@@ -13,9 +13,9 @@ namespace Creaturestests.Food
         //    var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
         //    var creatures = new bool[2, 2];
         //    eatMatrix.Build(creatures);
-        //    for(int i = 0; i < eatMatrix.Length; i++)
-        //        for(int j = 0; j < eatMatrix.Height; j++)
-        //            Assert.IsTrue(eatMatrix.HasFood(new Point(i, j)));
+        //    for (int i = 0; i < eatMatrix.Length; i++)
+        //        for (int j = 0; j < eatMatrix.Height; j++)
+        //            Assert.IsTrue(eatMatrix.HasOneBite(new Point(i, j)));
         //}
 
         //[TestMethod()]
@@ -31,7 +31,7 @@ namespace Creaturestests.Food
         //    eatMatrix.Build(creatures);
         //    for (int i = 0; i < eatMatrix.Length; i++)
         //        for (int j = 0; j < eatMatrix.Height; j++)
-        //            Assert.IsFalse(eatMatrix.HasFood(new Point(i, j)));
+        //            Assert.IsFalse(eatMatrix.HasOneBite(new Point(i, j)));
         //}
     }
 }

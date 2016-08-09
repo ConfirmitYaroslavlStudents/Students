@@ -1,40 +1,42 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using CellsAutomate.Factory;
 using System.Drawing;
-using CellsAutomate;
-using CellsAutomate.Creatures;
-using CellsAutomate.Food;
-using Creatures.Language.Executors;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Creaturestests
+namespace CellsAutomate.Tests
 {
     [TestClass()]
     public class MembraneTests
     {
-        //[TestMethod()]
-        //public void TurnDieTest()
-        //{
-        //    var point = new Point(0, 0);
-        //    var creature = new Creature(point, new Executor(), new SeedGenerator().StartAlgorithm, new Random(), 1);
-        //    var membrane = new Membrane(creature);
-        //    var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
-        //    var creatures = new Creature[2, 2];
-        //    creatures[point.X, point.Y] = creature;
-        //    while (creature.HasMinToSurvive)
-        //        membrane.Turn(eatMatrix, creatures);
-        //    Assert.AreEqual(Tuple.Create(ActionEnum.Die, DirectionEnum.Stay), membrane.Turn(eatMatrix, creatures));
-        //}
 
-        //[TestMethod()]
-        //public void TurnNotDieTest()
-        //{
-        //    var point = new Point(0, 0);
-        //    var creature = new Creature(point, new Executor(), new SeedGenerator().StartAlgorithm, new Random(), 1);
-        //    var membrane = new Membrane(creature);
-        //    var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
-        //    var creatures = new Creature[2, 2];
-        //    creatures[point.X, point.Y] = creature;
-        //    Assert.AreNotEqual(Tuple.Create(ActionEnum.Die, DirectionEnum.Stay), membrane.Turn(eatMatrix, creatures));
-        //}
+        [TestMethod()]
+        public void MakeChildTest()
+        {
+            var random = new Random();
+            var creator = new CreatorOfCreature();
+            var pointOfBirth = new Point(1, 0);
+            var parentMembrane = new Membrane(creator.CreateAbstractCreature(), random, new Point(0, 0), 1, creator);
+            var childMembrane = parentMembrane.MakeChild(pointOfBirth);
+
+            Assert.AreEqual(parentMembrane.GetType(), childMembrane.GetType());
+            Assert.AreEqual(pointOfBirth, childMembrane.Position);
+            Assert.AreEqual(2, childMembrane.Generation);
+        }
+
+        [TestMethod()]
+        public void MoveTest()
+        {
+            var random = new Random();
+            var creator = new CreatorOfCreature();
+            var creatures = new Membrane[2, 2];
+            var creature = new Membrane(creator.CreateAbstractCreature(), random, new Point(0, 0), 1, creator);
+            var destinationPoint = new Point(1, 0);
+            creatures[0, 0] = creature;
+            creature.Move(creatures, destinationPoint);
+
+            Assert.AreEqual(destinationPoint, creature.Position);
+            Assert.AreEqual(null, creatures[0, 0]);
+            Assert.AreEqual(creature, creatures[destinationPoint.X, destinationPoint.Y]);
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace CellsAutomate.Food
 
         public bool TakeFood(Point currentPoint)
         {
-            if (CreatureConstants.OneBite > _matrix[currentPoint.X, currentPoint.Y])
+            if (!HasOneBite(currentPoint))
                 return false;
             _matrix[currentPoint.X, currentPoint.Y] -= CreatureConstants.OneBite;
             return true;

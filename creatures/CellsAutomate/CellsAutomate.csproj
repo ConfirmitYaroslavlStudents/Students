@@ -55,7 +55,7 @@
     <Compile Include="Creatures\Creature.cs" />
     <Compile Include="CreatureDead.cs" />
     <Compile Include="Creatures\BaseCreature.cs" />
-    <Compile Include="Factory\Creator.cs" />
+    <Compile Include="Creator.cs" />
     <Compile Include="Food\FillingFromCornersByWavesStrategy.cs" />
     <Compile Include="Food\FillingOfEntireFieldStrategy.cs" />
     <Compile Include="Food\FoodMatrix.cs" />
@@ -96,6 +96,9 @@
     <Compile Include="Algorithms\GetDirectionAlgorithm.cs" />
     <Compile Include="Creatures\SimpleCreature.cs" />
     <Compile Include="Stats.cs" />
+    <Compile Include="Tools\ActionEx.cs" />
+    <Compile Include="Tools\CommonMethods.cs" />
+    <Compile Include="Tools\DirectionEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Creatures\Creatures.csproj">

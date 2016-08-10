@@ -15,7 +15,7 @@ namespace CellsAutomate.Food.Tests
             var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
             var point = new Point(0, 0);
 
-            FrequentlyUsedMethods.RaiseFoodLevelToConstant(eatMatrix, point, CreatureConstants.OneBite);
+            FrequentlyUsedMethods.RaiseFoodLevelToConstantWithAddFood(eatMatrix, point, CreatureConstants.OneBite);
 
             Assert.IsTrue(eatMatrix.HasOneBite(point));
         }
@@ -40,7 +40,7 @@ namespace CellsAutomate.Food.Tests
             var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
             var point = new Point(0, 0);
 
-            FrequentlyUsedMethods.RaiseFoodLevelToConstant(eatMatrix, point, FoodMatrixConstants.MaxFoodLevel);
+            FrequentlyUsedMethods.RaiseFoodLevelToConstantWithAddFood(eatMatrix, point, FoodMatrixConstants.MaxFoodLevel);
 
             Assert.IsTrue(eatMatrix.HasMaxFoodLevel(point));
         }
@@ -67,7 +67,7 @@ namespace CellsAutomate.Food.Tests
             var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
             var point = new Point(0, 0);
 
-            FrequentlyUsedMethods.RaiseFoodLevelToConstant(eatMatrix, point, CreatureConstants.OneBite);
+            FrequentlyUsedMethods.RaiseFoodLevelToConstantWithAddFood(eatMatrix, point, CreatureConstants.OneBite);
 
             Assert.IsTrue(eatMatrix.HasOneBite(point));
         }
@@ -78,7 +78,7 @@ namespace CellsAutomate.Food.Tests
             var eatMatrix = new FoodMatrix(2, 2, new FillingFromCornersByWavesStrategy());
             var point = new Point(0, 0);
 
-            FrequentlyUsedMethods.RaiseFoodLevelToConstant(eatMatrix, point, CreatureConstants.OneBite);
+            FrequentlyUsedMethods.RaiseFoodLevelToConstantWithAddFood(eatMatrix, point, CreatureConstants.OneBite);
 
             Assert.IsTrue(eatMatrix.HasOneBite(point));
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using CellsAutomate.Creatures;
-using CellsAutomate.Factory;
 using CellsAutomate.Food;
+using CellsAutomate.Tools;
 
 namespace CellsAutomate
 {
@@ -140,7 +140,7 @@ namespace CellsAutomate
             if (direction == DirectionEnum.Stay)
                 return;
             var childPoint = DirectionEx.PointByDirection(direction, creature.Position);
-            if (DirectionEx.IsValidAndFree(childPoint, Creatures))
+            if (CommonMethods.IsValidAndFree(childPoint, Creatures))
             {
                 Creatures[childPoint.X, childPoint.Y] = creature.MakeChild(childPoint);
             }
@@ -152,31 +152,9 @@ namespace CellsAutomate
                 return;
             var newPosition = DirectionEx.PointByDirection(direction, creature.Position);
 
-            if (!DirectionEx.IsValidAndFree(newPosition, Creatures)) return;
+            if (!CommonMethods.IsValidAndFree(newPosition, Creatures)) return;
             creature.Move(Creatures, newPosition);
-            AddStats(direction);
-        }
-
-        private void AddStats(DirectionEnum direction)
-        {
-            switch (direction)
-            {
-                case DirectionEnum.Up:
-                    Stats.Up++;
-                    break;
-                case DirectionEnum.Right:
-                    Stats.Right++;
-                    break;
-                case DirectionEnum.Down:
-                    Stats.Down++;
-                    break;
-                case DirectionEnum.Left:
-                    Stats.Left++;
-                    break;
-                case DirectionEnum.Stay:
-                    break;
-                default: throw new Exception();
-            }
+            Stats.AddStats(direction);
         }
     }
 }

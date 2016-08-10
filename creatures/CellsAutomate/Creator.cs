@@ -3,7 +3,7 @@ using CellsAutomate.Creatures;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 
-namespace CellsAutomate.Factory
+namespace CellsAutomate
 {
     public abstract class Creator
     {
@@ -17,7 +17,6 @@ namespace CellsAutomate.Factory
 
         public CreatorOfCreature()
         {
-            //_commands = new SeedGenerator().StartAlgorithm;
             _commandsForGetDirection = new GetDirectionAlgorithm().Algorithm;
             _commandsForGetAction = new GetActionAlgorithm().Algorithm;
 

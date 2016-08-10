@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using CellsAutomate.Constants;
 using CellsAutomate.Food;
+using CellsAutomate.Tools;
 
 namespace CellsAutomate.Creatures
 {
@@ -11,12 +11,12 @@ namespace CellsAutomate.Creatures
     {
         protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, Membrane[,] creatures, Point position, Random random)
         {
-            var points = DirectionEx.GetPoints(position.X, position.Y);
+            var points = CommonMethods.GetPoints(position);
             var directions = new List<DirectionEnum>();
             var directionsWithFood = new List<DirectionEnum>();
             foreach (var item in points)
             {
-                if (!DirectionEx.IsValidAndFree(item, creatures)) continue;
+                if (!CommonMethods.IsValidAndFree(item, creatures)) continue;
                 directions.Add(DirectionEx.DirectionByPoints(position, item));
                 if(eatMatrix.HasOneBite(item))
                     directionsWithFood.Add(DirectionEx.DirectionByPoints(position, item));
@@ -33,7 +33,7 @@ namespace CellsAutomate.Creatures
             if (canMakeChild)
                 return ActionEnum.MakeChild;
 
-            return random.Next(100) % 2 == 1 ? ActionEnum.Eat : ActionEnum.Go;
+            return random.Next(2) == 1 ? ActionEnum.Eat : ActionEnum.Go;
         }
     }
 }

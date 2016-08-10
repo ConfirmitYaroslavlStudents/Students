@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CellsAutomate.Constants;
-using CellsAutomate.Factory;
 using CellsAutomate.Food;
 using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Parsers;

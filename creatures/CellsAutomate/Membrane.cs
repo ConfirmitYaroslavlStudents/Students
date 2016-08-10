@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using CellsAutomate.Constants;
 using CellsAutomate.Creatures;
-using CellsAutomate.Factory;
 using CellsAutomate.Food;
+using CellsAutomate.Tools;
 
 namespace CellsAutomate
 {
@@ -63,8 +62,8 @@ namespace CellsAutomate
 
         private DirectionEnum GetDirectionForChild(Membrane[,] creatures)
         {
-            var points = DirectionEx.GetPoints(Position.X, Position.Y);
-            var directions = (from item in points where DirectionEx.IsValidAndFree(item, creatures)
+            var points = CommonMethods.GetPoints(Position);
+            var directions = (from item in points where CommonMethods.IsValidAndFree(item, creatures)
                               select DirectionEx.DirectionByPoints(Position, item)).ToList();
             return directions.Count == 0 ? DirectionEnum.Stay : directions.ElementAt(_random.Next(directions.Count));
         }

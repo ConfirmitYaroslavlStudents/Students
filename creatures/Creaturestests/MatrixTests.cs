@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using CellsAutomate;
-using CellsAutomate.Factory;
 using CellsAutomate.Food;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

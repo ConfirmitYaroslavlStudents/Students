@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using CellsAutomate.Constants;
+using CellsAutomate.Tools;
 
 namespace CellsAutomate.Food
 {
@@ -33,15 +34,15 @@ namespace CellsAutomate.Food
                 var current = stack.Pop();
                 visitedCells[current.X, current.Y] = true;
 
-                if (DirectionEx.IsValid(current, length, height)
+                if (CommonMethods.IsValid(current, length, height)
                     && !creaturesMatrix[current.X, current.Y])
                 {
                     if (!eatMatrix.HasMaxFoodLevel(current))
                         eatMatrix.AddFood(current);
 
-                    foreach (var point in DirectionEx.GetPoints(current.X, current.Y))
+                    foreach (var point in CommonMethods.GetPoints(current))
                     {
-                        if(DirectionEx.IsValid(point, length, height) && !visitedCells[point.X, point.Y])
+                        if(CommonMethods.IsValid(point, length, height) && !visitedCells[point.X, point.Y])
                             stack.Push(point);
                     }
                 }

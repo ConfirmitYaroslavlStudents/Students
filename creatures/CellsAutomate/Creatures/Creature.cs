@@ -5,6 +5,7 @@ using CellsAutomate.Algorithms;
 using CellsAutomate.Food;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
+using CellsAutomate.Tools;
 
 namespace CellsAutomate.Creatures
 {
@@ -25,20 +26,20 @@ namespace CellsAutomate.Creatures
         protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, 
             Membrane[,] creatures, Point position, Random random)
         {
-            var points = DirectionEx.GetPoints(position.X, position.Y);
+            var points = CommonMethods.GetPoints(position);
             var state = new Dictionary<int, int>();
 
             foreach (var point in points)
             {
                 var direction = DirectionEx.DirectionByPointsWithNumber(position, point);
 
-                if (DirectionEx.IsValidAndFree(point, creatures))
+                if (CommonMethods.IsValidAndFree(point, creatures))
                     state.Add(direction, eatMatrix.HasOneBite(point) ? 4 : 3);
 
-                if (!DirectionEx.IsValid(point, eatMatrix.Length, eatMatrix.Height))
+                if (!CommonMethods.IsValid(point, eatMatrix.Length, eatMatrix.Height))
                     state.Add(direction, 1);
                 else
-                    if (!DirectionEx.IsFree(point, creatures))
+                    if (!CommonMethods.IsFree(point, creatures))
                         state.Add(direction, 2);
             }
 
@@ -56,7 +57,7 @@ namespace CellsAutomate.Creatures
             };
 
             var result = _executor.Execute(_commandsForGetAction, new ExecutorToolsetForGetAction(random, state));
-            return DirectionEx.ActionByNumber(int.Parse(result));
+            return ActionEx.ActionByNumber(int.Parse(result));
         }
     }
 }

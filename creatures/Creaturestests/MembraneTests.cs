@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using CellsAutomate.Factory;
 using System.Drawing;
 
 namespace CellsAutomate.Tests

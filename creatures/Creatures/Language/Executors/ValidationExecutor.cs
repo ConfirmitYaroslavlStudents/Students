@@ -28,7 +28,8 @@ namespace Creatures.Language.Executors
             foreach (var parsedCommand in parsedCommands)
             {
                 Execute(parsedCommand);
-                if (!_isExecutable) break;
+                if (!_isExecutable)
+                    break;
             }
             if (_conditions.Count > 1) _isExecutable = false;
 

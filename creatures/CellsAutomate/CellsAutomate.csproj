@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Algorithms\GetActionAlgorithm.cs" />
     <Compile Include="Algorithms\SeedGenerator.cs" />
-    <Compile Include="Algorithms\ExecutorToolsetForGetAction.cs" />
     <Compile Include="Membrane.cs" />
     <Compile Include="Constants\CreatureConstants.cs" />
     <Compile Include="Constants\FoodMatrixConstants.cs" />
@@ -90,7 +89,6 @@
     <Compile Include="Mutator\NewMutations\MutatorNew.cs" />
     <Compile Include="Mutator\NewMutations\ReplaceCommandMutationNew.cs" />
     <Compile Include="Mutator\NewMutations\SwapCommandMutationNew.cs" />
-    <Compile Include="Algorithms\ExecutorToolsetForGetDirection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Algorithms\GetDirectionAlgorithm.cs" />

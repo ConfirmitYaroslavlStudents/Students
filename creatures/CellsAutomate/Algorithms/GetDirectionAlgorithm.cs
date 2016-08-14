@@ -3,7 +3,7 @@ using System.Text;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Parsers;
 
-namespace CellsAutomate
+namespace CellsAutomate.Algorithms
 {
     public class GetDirectionAlgorithm
     {
@@ -166,9 +166,7 @@ namespace CellsAutomate
                     .AppendLine("endif")
 
                 //Шагнём
-                .AppendLine("int counter")
                 .AppendLine("counter = zero")
-                .AppendLine("int isThisCell")
 
                 .AppendLine("if upState_isEmptyAndHasFood then")
                 .AppendLine("counter = counter + one")

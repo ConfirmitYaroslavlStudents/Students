@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CellsAutomate.Algorithms;
 using CellsAutomate.Constants;
 using CellsAutomate.Food;
 using CellsAutomate.Mutator.Mutations.Logging;
@@ -15,7 +16,7 @@ namespace CellsAutomate
     {
         private static void Main(string[] args)
         {
-            //var commands = new SeedGenerator().StartAlgorithm;
+            //var commands = new GetDirectionAlgorithm().Algorithm;
             //var newCommands = commands.ToArray();
             //var mutator = new Mutator.Mutator(new Random());
             //var logger = new Logger();
@@ -24,6 +25,7 @@ namespace CellsAutomate
             //{
             //    newCommands = mutator.Mutate(newCommands, logger);
             //}
+
             //var str = logger.Builder.ToString();
             //Console.WriteLine(str);
             //var elderCommands = new CommandToStringParser().ParseCommands(commands);
@@ -34,14 +36,19 @@ namespace CellsAutomate
 
             var matrixSize = LogConstants.MatrixSize;
             int scale = 500 / matrixSize;
-            var creator = new CreatorOfCreature();
+
+            var commandsForGetDirection = new GetDirectionAlgorithm().Algorithm;
+            var commandsForGetAction = new GetActionAlgorithm().Algorithm;
+            var creator = new CreatorOfCreature(commandsForGetAction, commandsForGetDirection);
+
             var matrix = new Matrix(matrixSize, matrixSize, creator, new FillingFromCornersByWavesStrategy());
             matrix.FillStartMatrixRandomly();
             CreateDirectory();
             Print(0, matrixSize, matrix, scale);
             Console.WriteLine("0:{0}", matrix.AliveCount);
+
             var log = new StringBuilder();
-            
+
             for (int i = 0; i < LogConstants.CountOfTurns; i++)
             {
                 if (matrix.AliveCount == 0)

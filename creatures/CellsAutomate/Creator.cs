@@ -15,11 +15,10 @@ namespace CellsAutomate
         private readonly ICommand[] _commandsForGetDirection;
         private readonly ICommand[] _commandsForGetAction;
 
-        public CreatorOfCreature()
+        public CreatorOfCreature(ICommand[] commandsForGetAction, ICommand[] commandsForGetDirection)
         {
-            _commandsForGetDirection = new GetDirectionAlgorithm().Algorithm;
-            _commandsForGetAction = new GetActionAlgorithm().Algorithm;
-
+            _commandsForGetAction = commandsForGetAction;
+            _commandsForGetDirection = commandsForGetDirection;
         }
 
         public override BaseCreature CreateAbstractCreature()

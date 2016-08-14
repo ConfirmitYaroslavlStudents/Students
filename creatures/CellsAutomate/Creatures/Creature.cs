@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using CellsAutomate.Algorithms;
 using CellsAutomate.Food;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
@@ -43,7 +42,8 @@ namespace CellsAutomate.Creatures
                         state.Add(direction, 2);
             }
 
-            var result = _executor.Execute(_commandsForGetDirection, new ExecutorToolsetForGetDirection(random, state));
+            var result = _executor.Execute(_commandsForGetDirection, new MyExecutorToolset(random, state));
+
             return DirectionEx.DirectionByNumber(int.Parse(result));
         }
 
@@ -56,7 +56,8 @@ namespace CellsAutomate.Creatures
                 {2, canMakeChild ? 0 : -1}
             };
 
-            var result = _executor.Execute(_commandsForGetAction, new ExecutorToolsetForGetAction(random, state));
+            var result = _executor.Execute(_commandsForGetAction, new MyExecutorToolset(random, state));
+            
             return ActionEx.ActionByNumber(int.Parse(result));
         }
     }

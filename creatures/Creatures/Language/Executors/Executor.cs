@@ -33,6 +33,29 @@ namespace Creatures.Language.Executors
         }
     }
 
+    public class MyExecutorToolset : IExecutorToolset
+    {
+        private readonly Random _random;
+        private readonly IDictionary<int, int> _state;
+
+        public MyExecutorToolset(Random random, IDictionary<int, int> state)
+        {
+            _random = random;
+            _state = state;
+        }
+
+        public int GetState(int condition)
+        {
+            return _state[condition];
+        }
+
+        public int GetRandom(int maxValue)
+        {
+            var result = _random.Next(maxValue);
+            return result + 1;
+        }
+    }
+
     public class Executor : ICommandVisitor
     {
         private Dictionary<string, int?> _variables;

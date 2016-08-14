@@ -8,6 +8,7 @@ namespace CellsAutomate.Tools
         {
             switch (number)
             {
+                case 0: return ActionEnum.Die;
                 case 1: return ActionEnum.MakeChild;
                 case 2: return ActionEnum.Go;
                 case 3: return ActionEnum.Eat;

@@ -335,14 +335,9 @@ namespace Creaturestests.MutatorTests
 
         private bool AreCollectionsEquals(ICommandsList x, ICommandsList y)
         {
-            var flag = x.Count == y.Count;
+            if (x.Count != y.Count) return false;
             var comparer = new CommandsEqualityComparer();
-            for (int i = 0; i < x.Count; i++)
-            {
-                flag = comparer.IsEqual(x[i], y[i]);
-                if (!flag) break;
-            }
-            return flag;
+            return !x.Where((t, i) => !comparer.IsEqual(t, y[i])).Any();
         }
 
         private ReplaceCommandMutation GetMutationForCloseCondition(ICommandsList commands, int replaceIndex)
@@ -426,7 +421,7 @@ namespace Creaturestests.MutatorTests
         {
             var random = new ReplaceRandom();
             var declarationIndex = GetDeclarationIndexOfVariable(command.TargetName, commands);
-            random.TuneSetValue(replaceIndex, declarationIndex, declarationIndex);
+            random.TuneSetValue(replaceIndex, declarationIndex,command.Value);
             return new ReplaceCommandMutation(random, commands);
         }
 

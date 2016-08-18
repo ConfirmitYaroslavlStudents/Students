@@ -7,8 +7,6 @@ using System.Text;
 using CellsAutomate.Algorithms;
 using CellsAutomate.Constants;
 using CellsAutomate.Food;
-using CellsAutomate.Mutator.Mutations.Logging;
-using Creatures.Language.Parsers;
 
 namespace CellsAutomate
 {
@@ -16,24 +14,6 @@ namespace CellsAutomate
     {
         private static void Main(string[] args)
         {
-            //var commands = new GetDirectionAlgorithm().Algorithm;
-            //var newCommands = commands.ToArray();
-            //var mutator = new Mutator.Mutator(new Random());
-            //var logger = new Logger();
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    newCommands = mutator.Mutate(newCommands, logger);
-            //}
-
-            //var str = logger.Builder.ToString();
-            //Console.WriteLine(str);
-            //var elderCommands = new CommandToStringParser().ParseCommands(commands);
-            //var nowCommands = new CommandToStringParser().ParseCommands(newCommands);
-            //Console.WriteLine(elderCommands + "\n");
-            //Console.WriteLine(nowCommands);
-            //Console.ReadKey();
-
             var matrixSize = LogConstants.MatrixSize;
             int scale = 500 / matrixSize;
 

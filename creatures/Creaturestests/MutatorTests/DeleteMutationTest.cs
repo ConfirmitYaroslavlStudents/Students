@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CellsAutomate.Mutator.CommandsList;
 using CellsAutomate.Mutator.Mutations;
 using Creatures.Language.Parsers;
@@ -361,14 +362,9 @@ namespace Creaturestests.MutatorTests
 
         private bool AreCollectionsEquals(ICommandsList x, ICommandsList y)
         {
-            var flag = x.Count == y.Count;
+            if (x.Count != y.Count) return false;
             var comparer = new CommandsEqualityComparer();
-            for (int i = 0; i < x.Count; i++)
-            {
-                flag = comparer.IsEqual(x[i], y[i]);
-                if (!flag) break;
-            }
-            return flag;
+            return !x.Where((t, i) => !comparer.IsEqual(t, y[i])).Any();
         }
 
         private DeleteCommandMutation GetDeleteMutation(int indexToDelete, ICommandsList commands)

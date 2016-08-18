@@ -35,4 +35,5 @@ namespace CellsAutomate
             return new SimpleCreature();
         }
     }
+
 }

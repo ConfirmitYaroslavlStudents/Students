@@ -80,10 +80,9 @@ namespace CellsAutomate
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    Creatures[i, j] = random.Next(100) % 4 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, _creator) : null;
+                    Creatures[i, j] = random.Next(1000) % 1000 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, _creator) : null;
                 }
             }
-
             FillMatrixWithFood();
         }
 
@@ -112,24 +111,33 @@ namespace CellsAutomate
 
         private void MakeTurn(Membrane currentCreature)
         {
-            var turnResult = currentCreature.Turn(EatMatrix, Creatures);
-            var action = turnResult.Item1;
-            var direction = turnResult.Item2;
-
-            switch (action)
+            try
             {
-                case ActionEnum.Die:
-                    MakeTurnDie(currentCreature.Position); break;
-                case ActionEnum.MakeChild:
-                    MakeTurnMakeChild(direction, currentCreature); break;
-                case ActionEnum.Go:
-                    MakeTurnGo(direction, currentCreature); break;
-                case ActionEnum.Eat:
-                    currentCreature.Eat(EatMatrix); break;
-                default: throw new Exception();
+                var turnResult = currentCreature.Turn(EatMatrix, Creatures);
+                var action = turnResult.Item1;
+                var direction = turnResult.Item2;
+
+                switch (action)
+                {
+                    case ActionEnum.Die:
+                        MakeTurnDie(currentCreature.Position); break;
+                    case ActionEnum.MakeChild:
+                        MakeTurnMakeChild(direction, currentCreature); break;
+                    case ActionEnum.Go:
+                        MakeTurnGo(direction, currentCreature); break;
+                    case ActionEnum.Eat:
+                        currentCreature.Eat(EatMatrix); break;
+                    default: throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                MakeTurnDie(currentCreature.Position);
+                EXEPTIONS++;
             }
         }
 
+        public static int EXEPTIONS = 0;
         private void MakeTurnDie(Point position)
         {
             Creatures[position.X, position.Y] = null;

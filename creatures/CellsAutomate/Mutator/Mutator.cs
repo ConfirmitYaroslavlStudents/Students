@@ -10,6 +10,7 @@ namespace CellsAutomate.Mutator
         private Random _random;
         private ICommandsList _commands;
         private const int NumOfAttempts = 5;
+        private const double MutatePropability = 0.01;
 
         private readonly List<IMutation> _mutations;
 
@@ -29,13 +30,42 @@ namespace CellsAutomate.Mutator
 
         public void Mutate()
         {
+            var mutationCount = GetNumberOfMutations();
+            for (int i = 0; i < mutationCount; i++)
+            {
+                MutateSingle();
+            }
+        }
+
+        public static int MUTATIONS = 0;
+        public static int MUTATIONSREAL = 0;
+        private void MutateSingle()
+        {
+            MUTATIONS++;
             var mutation = GetRandomMutation();
             for (int i = 0; i < NumOfAttempts; i++)
             {
+                MUTATIONSREAL++;
                 mutation.Transform();
                 if (_commands.AssertValid()) break;
                 mutation.Undo();
+                MUTATIONSREAL--;
             }
+        }
+
+        private int GetNumberOfMutations()
+        {
+            var mutationCount = 0;
+            for (int i = 0; i < _commands.Count; i++)
+            {
+                if (ShouldMutate()) mutationCount++;
+            }
+            return mutationCount;
+        }
+
+        private bool ShouldMutate()
+        {
+            return _random.NextDouble() < MutatePropability;
         }
 
         private IMutation GetRandomMutation()

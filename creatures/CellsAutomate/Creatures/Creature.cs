@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using CellsAutomate.Food;
+using CellsAutomate.Mutator.CommandsList;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 using CellsAutomate.Tools;
@@ -59,6 +61,23 @@ namespace CellsAutomate.Creatures
             var result = _executor.Execute(_commandsForGetAction, new MyExecutorToolset(random, state));
             
             return ActionEx.ActionByNumber(int.Parse(result));
+        }
+
+        public Creature MakeChild()
+        {
+            var childsDirections = Mutate(_commandsForGetDirection);
+            var childsActions = Mutate(_commandsForGetAction);
+
+            var child = new Creature(_executor, childsDirections, childsActions);
+            return child;
+        }
+
+        private ICommand[] Mutate(ICommand[] commands)
+        {
+            var commandsList = new CommandsList(commands);
+            var mutator = new Mutator.Mutator(new Random(), commandsList);
+            mutator.Mutate();
+            return commandsList.ToArray();
         }
     }
 }

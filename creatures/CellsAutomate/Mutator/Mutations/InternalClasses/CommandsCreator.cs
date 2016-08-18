@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CellsAutomate.Mutator.CommandsList;
 using Creatures.Language.Commands;
 
-namespace CellsAutomate.Mutator.NewMutations
+namespace CellsAutomate.Mutator.Mutations.InternalClasses
 {
     internal class CommandsCreator
     {

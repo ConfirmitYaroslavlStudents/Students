@@ -1,45 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using CellsAutomate.Mutator.CommandsList;
 using Creatures.Language.Commands.Interfaces;
 
-namespace CellsAutomate.Mutator.NewMutations
+namespace CellsAutomate.Mutator.Mutations
 {
-    public class DublicateCommandMutationNew : IMutationNew
+    public class DublicateCommandMutation : IMutation
     {
         private ICommandsList _commands;
         private Random _random;
 
-        private readonly Stack<DublicateCommand> _dublicated;
+        private DublicateCommand _dublicated;
 
-        public DublicateCommandMutationNew(Random random, ICommandsList commands)
+        public DublicateCommandMutation(Random random, ICommandsList commands)
         {
             _commands = commands;
             _random = random;
-            _dublicated = new Stack<DublicateCommand>();
         }
 
         public void Transform()
         {
             InitNextTransform();
             var dublicateFromIndex = _random.Next(_commands.Count);
-            var dublicateToIndex = _random.Next(dublicateFromIndex, _commands.Count + 2);
+            var dublicateToIndex = _random.Next(dublicateFromIndex, _commands.Count + 1);
             var dublicateCommand = new DublicateCommand(_commands, dublicateFromIndex, dublicateToIndex);
-            dublicateCommand.Release();
-            _dublicated.Push(dublicateCommand);
+            dublicateCommand.Execute();
+            _dublicated = dublicateCommand;
         }
 
         public void Undo()
         {
-            while (_dublicated.Count > 0)
-            {
-                var dublicateCommand = _dublicated.Pop();
-                dublicateCommand.Undo();
-            }
+            _dublicated?.Undo();
+            _dublicated = null;
         }
 
         private void InitNextTransform()
         {
-            _dublicated.Clear();
+            _dublicated = null;
         }
 
         private class DublicateCommand
@@ -57,7 +54,7 @@ namespace CellsAutomate.Mutator.NewMutations
                 To = to;
             }
 
-            public void Release()
+            public void Execute()
             {
                 Commands.Insert(To, Command);
             }

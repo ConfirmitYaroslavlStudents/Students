@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Creatures.Language.Commands;
 using Creatures.Language.Commands.Interfaces;
 
-namespace CellsAutomate.Mutator.NewMutations
+namespace CellsAutomate.Mutator.Mutations.InternalClasses
 {
     public class CommandsEqualityComparer : IEqualityComparer<ICommand>
     {

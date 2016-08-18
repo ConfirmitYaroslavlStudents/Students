@@ -1,60 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
+using CellsAutomate.Mutator.CommandsList;
 using CellsAutomate.Mutator.Mutations;
-using CellsAutomate.Mutator.Mutations.Logging;
-using Creatures.Language.Commands.Interfaces;
-using Creatures.Language.Executors;
 
 namespace CellsAutomate.Mutator
 {
-	public class Mutator
-	{      
+    public class Mutator
+    {
         private Random _random;
+        private ICommandsList _commands;
+        private const int NumOfAttempts = 5;
 
-        public Mutator(Random random)
-		{
-			_random = random;
-		}
+        private readonly List<IMutation> _mutations;
 
-		public ICommand[] Mutate(ICommand[] commands)
-		{
-			IMutation mutation = GetRandomMutation();
-		    var newCommands = mutation.Transform(commands);
-		    while (!AssertValid(newCommands))
-		    {
-                newCommands = mutation.Transform(commands);
-            }
-		    return newCommands;
-		}
-
-	    public ICommand[] Mutate(ICommand[] commands, ILogger logger)
-	    {
-            IMutation mutation = GetRandomMutation();
-            var newCommands = mutation.Transform(commands,logger);
-            while (!AssertValid(newCommands))
+        public Mutator(Random random, ICommandsList commands)
+        {
+            _random = random;
+            _commands = commands;
+            _mutations = new List<IMutation>
             {
-                logger.Write("Mutation failed\n");
-                _random.Next();
-                newCommands = mutation.Transform(commands,logger);
-            }
-            logger.Write("Mutated\n");
-            return newCommands;
+                 new AddCommandMutation(_random,_commands),
+                 new DeleteCommandMutation(_random, _commands),
+                 new DublicateCommandMutation(_random,_commands),
+                 new ReplaceCommandMutation(_random,_commands),
+                 new SwapCommandMutation(_random,_commands)
+            };
         }
 
-	    private bool AssertValid(ICommand[] commads)
-	    {
-	        return new ValidationExecutor().Execute(commads, new ExecutorToolset(_random));
-	    }
+        public void Mutate()
+        {
+            var mutation = GetRandomMutation();
+            for (int i = 0; i < NumOfAttempts; i++)
+            {
+                mutation.Transform();
+                if (_commands.AssertValid()) break;
+                mutation.Undo();
+            }
+        }
 
-		private IMutation GetRandomMutation()
-		{
-		    var mutations = new IMutation[]
-		    {
-		        new AddCommandMutation(_random), new DeleteCommandMutation(_random),
-		        new ReplaceCommandMutation(_random), new DublicateCommandMutatiton(_random),
-                new SwapCommandMutation(_random) 
-		    };
+        private IMutation GetRandomMutation()
+        {
+            return ChooseRandom(_mutations);
+        }
 
-		    return mutations[_random.Next(mutations.Length)];
-		}
-	}
+        private T ChooseRandom<T>(IReadOnlyList<T> array)
+        {
+            return array[_random.Next(array.Count)];
+        }
+    }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using CellsAutomate.Mutator.Mutations.Logging;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Parsers;
 
-namespace CellsAutomate.Mutator.NewMutations
+namespace CellsAutomate.Mutator.CommandsList
 {
     public class CommandsListWithLogger : ICommandsList
     {

@@ -1,42 +1,71 @@
 ﻿using System;
-using CellsAutomate.Mutator.Mutations.InternalClasses;
-using CellsAutomate.Mutator.Mutations.Logging;
-using Creatures.Language.Commands.Interfaces;
+using System.Collections.Generic;
+using CellsAutomate.Mutator.CommandsList;
 
 namespace CellsAutomate.Mutator.Mutations
 {
     public class SwapCommandMutation : IMutation
     {
-        private Random _rnd;
+        private ICommandsList _commands;
+        private Random _random;
 
-        public SwapCommandMutation(Random random)
+        private SwapCommand _swapped;
+        public SwapCommandMutation(Random random, ICommandsList commands)
         {
-            _rnd = random;
-        }
-        public ICommand[] Transform(ICommand[] commands)
-        {
-            var firstSwapIndex = _rnd.Next(commands.Length);
-            var secondSwapIndex = _rnd.Next(commands.Length - 1);
-            if (firstSwapIndex > secondSwapIndex)
-            {
-                var tempSwapIndex = firstSwapIndex;
-                firstSwapIndex = secondSwapIndex;
-                secondSwapIndex = tempSwapIndex;
-            }
-            return new Swapper(commands).SwapCommand(firstSwapIndex, secondSwapIndex);
+            _commands = commands;
+            _random = random;
         }
 
-        public ICommand[] Transform(ICommand[] commands, ILogger logger)
+        public void Transform()
         {
-            var firstSwapIndex = _rnd.Next(commands.Length);
-            var secondSwapIndex = _rnd.Next(commands.Length - 1);
-            if (firstSwapIndex > secondSwapIndex)
+            InitNextTransform();
+            var firstIndex = _random.Next(_commands.Count);
+            var secondIndex = _random.Next(_commands.Count);
+            var command = new SwapCommand(_commands, firstIndex, secondIndex);
+            command.Execute();
+            _swapped=command;
+        }
+
+        private void InitNextTransform()
+        {
+            _swapped = null;
+        }
+
+        public void Undo()
+        {
+            _swapped?.Undo();
+            _swapped = null;
+        }
+
+        private class SwapCommand
+        {
+            public ICommandsList Commands { get; }
+            public int First { get; }
+            public int Second { get; }
+
+            public SwapCommand(ICommandsList commands, int first, int second)
             {
-                var tempSwapIndex = firstSwapIndex;
-                firstSwapIndex = secondSwapIndex;
-                secondSwapIndex = tempSwapIndex;
+                Commands = commands;
+                First = first;
+                Second = second;
             }
-            return new Swapper(commands, logger).SwapCommand(firstSwapIndex, secondSwapIndex);
+
+            public void Execute()
+            {
+                Swap(First, Second);
+            }
+
+            public void Undo()
+            {
+                Swap(First, Second);
+            }
+
+            private void Swap(int first, int second)
+            {
+                var temp = Commands[second];
+                Commands[second] = Commands[first];
+                Commands[first] = temp;
+            }
         }
     }
 }

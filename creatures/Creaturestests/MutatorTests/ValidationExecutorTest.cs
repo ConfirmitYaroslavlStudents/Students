@@ -140,7 +140,7 @@ namespace Creaturestests.MutatorTests
                     .AppendLine("b = 1")
                     .AppendLine("int a")
                     .AppendLine("int c")
-                    .AppendLine("c=a-b");
+                    .AppendLine("c = a - b");
 
             var parsedcommands = new Parser().ProcessCommands(commands.ToString());
             Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));
@@ -156,7 +156,7 @@ namespace Creaturestests.MutatorTests
                     .AppendLine("b = 1")
                     .AppendLine("int a")
                     .AppendLine("a = 1")
-                    .AppendLine("c=a-b");
+                    .AppendLine("c = a - b");
 
             var parsedcommands = new Parser().ProcessCommands(commands.ToString());
             Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));
@@ -172,7 +172,7 @@ namespace Creaturestests.MutatorTests
                     .AppendLine("b = 1")
                     .AppendLine("int a")
                     .AppendLine("int c")
-                    .AppendLine("c=a+b");
+                    .AppendLine("c = a + b");
 
             var parsedcommands = new Parser().ProcessCommands(commands.ToString());
             Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));
@@ -188,7 +188,7 @@ namespace Creaturestests.MutatorTests
                     .AppendLine("b = 1")
                     .AppendLine("int a")
                     .AppendLine("a = 1")
-                    .AppendLine("c=a+b");
+                    .AppendLine("c = a + b");
 
             var parsedcommands = new Parser().ProcessCommands(commands.ToString());
             Assert.IsFalse(executor.Execute(parsedcommands, new ExecutorToolset(new Random())));

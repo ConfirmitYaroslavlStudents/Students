@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Creatures.Language.Commands.Interfaces;
 
-namespace CellsAutomate.Mutator.NewMutations
+namespace CellsAutomate.Mutator.CommandsList
 {
     public interface ICommandsList : IEnumerable<ICommand>
     {

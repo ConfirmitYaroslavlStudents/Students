@@ -5,7 +5,7 @@ using System.Linq;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 
-namespace CellsAutomate.Mutator.NewMutations
+namespace CellsAutomate.Mutator.CommandsList
 {
     public class CommandsList : ICommandsList
     {

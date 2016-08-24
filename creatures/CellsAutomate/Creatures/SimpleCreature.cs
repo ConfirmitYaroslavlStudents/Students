@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using CellsAutomate.Constants;
 using CellsAutomate.Food;
 using CellsAutomate.Tools;
 
@@ -25,12 +26,12 @@ namespace CellsAutomate.Creatures
             return directionsWithFood.Count == 0 ? directions.ElementAt(random.Next(directions.Count)) : directionsWithFood.ElementAt(random.Next(directionsWithFood.Count));
         }
 
-        protected override ActionEnum GetAction(Random random, bool canMakeChild, bool hasToEat, bool hasOneBite)
+        protected override ActionEnum GetAction(Random random, bool hasOneBite, int energyPoints)
         {
-            if (hasToEat)
+            if (energyPoints < CreatureConstants.CriticalLevelOfFood)
                 return hasOneBite ? ActionEnum.Eat : ActionEnum.Go;
 
-            if (canMakeChild)
+            if (energyPoints >= CreatureConstants.ChildPrice)
                 return ActionEnum.MakeChild;
 
             return random.Next(2) == 1 ? ActionEnum.Eat : ActionEnum.Go;

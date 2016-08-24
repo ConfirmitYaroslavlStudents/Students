@@ -8,13 +8,12 @@ namespace CellsAutomate.Creatures
     {
         protected abstract DirectionEnum GetDirection(FoodMatrix eatMatrix, Membrane[,] creatures, Point position, Random random);
 
-        protected abstract ActionEnum GetAction(Random random, bool canMakeChild, bool hasCriticalLevelOfFood,
-            bool hasOneBite);
+        protected abstract ActionEnum GetAction(Random random, bool hasOneBite, int energyPoints);
 
         public Tuple<ActionEnum, DirectionEnum> MyTurn(FoodMatrix eatMatrix, Membrane[,] creatures, Point position, 
-            Random random, bool canMakeChild, bool hasToEat, bool hasOneBite)
+            Random random, bool hasOneBite, int energyPoints)
         {
-            var action = GetAction(random, canMakeChild, hasToEat, hasOneBite);
+            var action = GetAction(random, hasOneBite, energyPoints);
             var direction = (action == ActionEnum.Eat || action == ActionEnum.MakeChild) 
                 ? DirectionEnum.Stay : GetDirection(eatMatrix, creatures, position, random);
             return Tuple.Create(action, direction);

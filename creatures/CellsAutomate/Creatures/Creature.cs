@@ -7,6 +7,7 @@ using CellsAutomate.Mutator.CommandsList;
 using Creatures.Language.Commands.Interfaces;
 using Creatures.Language.Executors;
 using CellsAutomate.Tools;
+using CellsAutomate.Constants;
 
 namespace CellsAutomate.Creatures
 {
@@ -49,13 +50,13 @@ namespace CellsAutomate.Creatures
             return DirectionEx.DirectionByNumber(int.Parse(result));
         }
 
-        protected override ActionEnum GetAction(Random random, bool canMakeChild, bool hasToEat, bool hasOneBite)
+        protected override ActionEnum GetAction(Random random, bool hasOneBite, int energyPoints)
         {
             var state = new Dictionary<int, int>
             {
-                {0, hasToEat ? 0 : -1},
+                {0, energyPoints < CreatureConstants.CriticalLevelOfFood ? 0 : -1},
                 {1, hasOneBite ? 0 : -1},
-                {2, canMakeChild ? 0 : -1}
+                {2, energyPoints >= CreatureConstants.ChildPrice ? 0 : -1}
             };
 
             var result = _executor.Execute(_commandsForGetAction, new MyExecutorToolset(random, state));

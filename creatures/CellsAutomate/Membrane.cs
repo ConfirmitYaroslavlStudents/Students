@@ -33,21 +33,9 @@ namespace CellsAutomate
 
             _energyPoints -= CreatureConstants.MinFoodToSurvive;
 
-            var result = _creature.MyTurn(eatMatrix, creatures, Position, _random, CanMakeChild(), HasToEat(), HasOneBite(eatMatrix));
+            var result = _creature.MyTurn(eatMatrix, creatures, Position, _random, HasOneBite(eatMatrix), _energyPoints);
 
             return result.Item1 == ActionEnum.MakeChild ? Tuple.Create(ActionEnum.MakeChild, GetDirectionForChild(creatures)) : result;
-        }
-
-        private bool CanMakeChild()
-        {
-            //return _energyPoints >= CreatureConstants.ChildPrice + CreatureConstants.CriticalLevelOfFood;
-            return _energyPoints >= CreatureConstants.ChildPrice + CreatureConstants.MinFoodToSurvive;
-            //return _energyPoints >= CreatureConstants.ChildPrice;
-        }
-
-        private bool HasToEat()
-        {
-            return _energyPoints <= CreatureConstants.CriticalLevelOfFood;
         }
 
         private bool HasOneBite(FoodMatrix eatMatrix)

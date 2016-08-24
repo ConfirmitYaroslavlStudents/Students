@@ -10,7 +10,7 @@ namespace CellsAutomate.Mutator
         private Random _random;
         private ICommandsList _commands;
         private const int NumOfAttempts = 5;
-        private const double MutatePropability = 0.01;
+        private const double MutateProbability = 0.01;
 
         private readonly List<IMutation> _mutations;
 
@@ -65,7 +65,7 @@ namespace CellsAutomate.Mutator
 
         private bool ShouldMutate()
         {
-            return _random.NextDouble() < MutatePropability;
+            return _random.NextDouble() < MutateProbability;
         }
 
         private IMutation GetRandomMutation()

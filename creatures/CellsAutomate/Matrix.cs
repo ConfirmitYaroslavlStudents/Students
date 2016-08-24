@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using CellsAutomate.Creatures;
 using CellsAutomate.Food;
 using CellsAutomate.Tools;
 
@@ -80,7 +79,7 @@ namespace CellsAutomate
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    Creatures[i, j] = random.Next(1000) % 1000 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, _creator) : null;
+                    Creatures[i, j] = random.Next(1000) % 100 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, _creator) : null;
                 }
             }
             FillMatrixWithFood();
@@ -133,11 +132,11 @@ namespace CellsAutomate
             catch (Exception)
             {
                 MakeTurnDie(currentCreature.Position);
-                EXEPTIONS++;
+                EXCEPTIONS++;
             }
         }
 
-        public static int EXEPTIONS = 0;
+        public static int EXCEPTIONS = 0;
         private void MakeTurnDie(Point position)
         {
             Creatures[position.X, position.Y] = null;

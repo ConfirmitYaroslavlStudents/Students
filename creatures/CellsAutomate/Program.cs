@@ -56,9 +56,9 @@ namespace CellsAutomate
             Console.WriteLine("Right: " + Stats.Right);
             Console.WriteLine("Down: " + Stats.Down);
             Console.WriteLine("Left: " + Stats.Left);
-            Console.WriteLine(Mutator.Mutator.MUTATIONS);
-            Console.WriteLine(Mutator.Mutator.MUTATIONSREAL);
-            Console.WriteLine(Matrix.EXEPTIONS);
+            Console.WriteLine("Mutations: " + Mutator.Mutator.MUTATIONS);
+            Console.WriteLine("Successful mutations: " + Mutator.Mutator.MUTATIONSREAL);
+            Console.WriteLine("Exceptions: " + Matrix.EXCEPTIONS);
             Console.ReadKey();
         }
 

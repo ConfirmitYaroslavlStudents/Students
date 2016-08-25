@@ -17,12 +17,6 @@ namespace CellsAutomate.Mutator.CommandsList
             _commands = commands.ToList();
         }
 
-        public bool AssertValid()
-        {
-            var executor = new ValidationExecutor();
-            return executor.Execute(_commands, new ExecutorToolset(new Random()));
-        }
-
         public void Insert(int index, ICommand item)
         {
             _commands.Insert(index, item);

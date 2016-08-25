@@ -8,7 +8,6 @@ namespace CellsAutomate.Mutator.CommandsList
         int Count { get; }
         void Insert(int index, ICommand item);
         void RemoveAt(int index);
-        bool AssertValid();
         ICommand this[int index] { get; set; }
     }
 }

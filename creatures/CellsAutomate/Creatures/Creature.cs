@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using CellsAutomate.Food;
 using CellsAutomate.Mutator.CommandsList;
 using Creatures.Language.Commands.Interfaces;
@@ -14,15 +15,15 @@ namespace CellsAutomate.Creatures
     public class Creature : BaseCreature
     {
         private readonly Executor _executor;
-        private readonly ICommand[] _commandsForGetDirection;
-        private readonly ICommand[] _commandsForGetAction;
+        public ICommand[] CommandsForGetDirection { get; }
+        public ICommand[] CommandsForGetAction { get; }
 
         public Creature(Executor executor, ICommand[] commandsForGetDirection, 
             ICommand[] commandsForGetAction)
         {
             _executor = executor;
-            _commandsForGetDirection = commandsForGetDirection;
-            _commandsForGetAction = commandsForGetAction;
+            CommandsForGetDirection = commandsForGetDirection;
+            CommandsForGetAction = commandsForGetAction;
         }
 
         protected override DirectionEnum GetDirection(FoodMatrix eatMatrix, 
@@ -45,7 +46,7 @@ namespace CellsAutomate.Creatures
                         state.Add(direction, 2);
             }
 
-            var result = _executor.Execute(_commandsForGetDirection, new MyExecutorToolset(random, state));
+            var result = _executor.Execute(CommandsForGetDirection, new MyExecutorToolset(random, state));
 
             return DirectionEx.DirectionByNumber(int.Parse(result));
         }
@@ -59,26 +60,11 @@ namespace CellsAutomate.Creatures
                 {2, energyPoints >= CreatureConstants.ChildPrice ? 0 : -1}
             };
 
-            var result = _executor.Execute(_commandsForGetAction, new MyExecutorToolset(random, state));
+            var result = _executor.Execute(CommandsForGetAction, new MyExecutorToolset(random, state));
             
             return ActionEx.ActionByNumber(int.Parse(result));
         }
-
-        public Creature MakeChild()
-        {
-            var childsDirections = Mutate(_commandsForGetDirection);
-            var childsActions = Mutate(_commandsForGetAction);
-
-            var child = new Creature(_executor, childsDirections, childsActions);
-            return child;
-        }
-
-        private ICommand[] Mutate(ICommand[] commands)
-        {
-            var commandsList = new CommandsList(commands);
-            var mutator = new Mutator.Mutator(new Random(), commandsList);
-            mutator.Mutate();
-            return commandsList.ToArray();
-        }
     }
+
+
 }

@@ -14,12 +14,12 @@ namespace CellsAutomate
         public Point Position { get; set; }
         public int Generation { get; }
         private int _energyPoints = CreatureConstants.StartEnergyPoints;
-        private readonly BaseCreature _creature;
+        public BaseCreature Creature { get; }
         private readonly Creator _creator;
 
         public Membrane(BaseCreature creature, Random random, Point position, int generation, Creator creator)
         {
-            _creature = creature;
+            Creature = creature;
             _random = random;
             Position = position;
             Generation = generation;
@@ -33,7 +33,7 @@ namespace CellsAutomate
 
             _energyPoints -= CreatureConstants.MinFoodToSurvive;
 
-            var result = _creature.MyTurn(eatMatrix, creatures, Position, _random, HasOneBite(eatMatrix), _energyPoints);
+            var result = Creature.MyTurn(eatMatrix, creatures, Position, _random, HasOneBite(eatMatrix), _energyPoints);
 
             return result.Item1 == ActionEnum.MakeChild ? Tuple.Create(ActionEnum.MakeChild, GetDirectionForChild(creatures)) : result;
         }
@@ -67,8 +67,7 @@ namespace CellsAutomate
         public Membrane MakeChild(Point childPosition)
         {
             _energyPoints -= CreatureConstants.ChildPrice;
-            var child = _creator.CreateAbstractCreature();
-            if (_creature is Creature) child = (_creature as Creature).MakeChild();
+            var child = _creator.MakeChild(Creature);
             return new Membrane(child, _random, childPosition, Generation + 1, _creator);
         }
         

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -6,12 +7,17 @@ using System.Linq;
 using System.Text;
 using CellsAutomate.Algorithms;
 using CellsAutomate.Constants;
+using CellsAutomate.Creatures;
 using CellsAutomate.Food;
+using Creatures.Language.Commands.Interfaces;
+using Creatures.Language.Parsers;
 
 namespace CellsAutomate
 {
     class Program
     {
+        private static Random _random = new Random();
+
         private static void Main(string[] args)
         {
             var matrixSize = LogConstants.MatrixSize;
@@ -51,6 +57,27 @@ namespace CellsAutomate
                 //PrintGeneration(matrix, i);
             }
 
+            var maxGeneration = matrix.CreaturesAsEnumerable.Max(n => n.Generation);
+            var averageGeneration = (int)matrix.CreaturesAsEnumerable.Average(n => n.Generation);
+            var limit = (int)(0.75 * maxGeneration);
+            var step = averageGeneration / 5;
+
+            var youngCreatures =
+                matrix.CreaturesAsEnumerable.Where(n => n.Generation > limit && n.Generation != maxGeneration).ToArray();
+            var mediumAgeCreatures =
+                matrix.CreaturesAsEnumerable.Where(
+                    n => n.Generation >= averageGeneration - step && n.Generation <= averageGeneration + step).ToArray();
+
+            var randomYoung = ChooseRandom(youngCreatures);
+            var randomMedium = ChooseRandom(mediumAgeCreatures);
+
+            var youngCreatureLog = CreateLogOfCreature(randomYoung.Creature as Creature, randomYoung.Generation);
+            var mediumCreatureLog = CreateLogOfCreature(randomMedium.Creature as Creature, randomMedium.Generation);
+            var originalCreatureLog = CreateLogOfCreature(creator.CreateAbstractCreature() as Creature, 1);
+            File.WriteAllText(LogConstants.PathToLogDirectory + "\\randomYoungCommands.txt", youngCreatureLog);
+            File.WriteAllText(LogConstants.PathToLogDirectory + "\\randomMediumCommands.txt", mediumCreatureLog);
+            File.WriteAllText(LogConstants.PathToLogDirectory + "\\originalCommands.txt", originalCreatureLog);
+
             File.WriteAllText(LogConstants.PathToLogDirectory + "\\Log.txt", log.ToString());
             Console.WriteLine("Up: " + Stats.Up);
             Console.WriteLine("Right: " + Stats.Right);
@@ -60,6 +87,33 @@ namespace CellsAutomate
             Console.WriteLine("Successful mutations: " + Mutator.Mutator.MUTATIONSREAL);
             Console.WriteLine("Exceptions: " + Matrix.EXCEPTIONS);
             Console.ReadKey();
+        }
+
+        private static string CreateLogOfCreature(Creature creature, int generation)
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine($"Generation: {generation}");
+            builder.AppendLine("- - - - - ActionCommands - - - - -");
+            builder.AppendLine(CommandsToString(creature.CommandsForGetAction));
+            builder.AppendLine("- - - - - DirectionCommands - - - - -");
+            builder.AppendLine(CommandsToString(creature.CommandsForGetDirection));
+            return builder.ToString();
+        }
+
+        private static string CommandsToString(ICommand[] commands)
+        {
+            var builder=new StringBuilder();
+            var commandsToString = new CommandToStringParser();
+            for (int num = 0; num < commands.Length; num++)
+            {
+                builder.AppendLine($"{num}) "+commandsToString.ParseCommand(commands[num]));
+            }
+            return builder.ToString();
+        }
+
+        private static T ChooseRandom<T>(IList<T> collection)
+        {
+            return collection[_random.Next(collection.Count)];
         }
 
         private static void PrintGeneration(Matrix creatures, int turn)

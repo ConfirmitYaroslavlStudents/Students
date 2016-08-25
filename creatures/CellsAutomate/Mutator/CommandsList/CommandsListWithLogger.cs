@@ -44,11 +44,6 @@ namespace CellsAutomate.Mutator.CommandsList
             }
         }
 
-        public bool AssertValid()
-        {
-            return _commands.AssertValid();
-        }
-
         public IEnumerator<ICommand> GetEnumerator()
         {
             return _commands.GetEnumerator();

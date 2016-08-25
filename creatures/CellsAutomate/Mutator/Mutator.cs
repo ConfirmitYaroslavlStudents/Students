@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CellsAutomate.Mutator.CommandsList;
 using CellsAutomate.Mutator.Mutations;
+using Creatures.Language.Executors;
 
 namespace CellsAutomate.Mutator
 {
@@ -47,10 +48,16 @@ namespace CellsAutomate.Mutator
             {
                 MUTATIONSREAL++;
                 mutation.Transform();
-                if (_commands.AssertValid()) break;
+                if (AssertValid()) break;
                 mutation.Undo();
                 MUTATIONSREAL--;
             }
+        }
+
+        private bool AssertValid()
+        {
+            var executor = new ValidationExecutor();
+            return executor.Execute(_commands, new ExecutorToolset(new Random()));
         }
 
         private int GetNumberOfMutations()

@@ -17,6 +17,7 @@ namespace CellsAutomate
     class Program
     {
         private static Random _random = new Random();
+        private static Dictionary<int, Color> _colors = new Dictionary<int, Color>();
 
         private static void Main(string[] args)
         {
@@ -143,6 +144,8 @@ namespace CellsAutomate
 
             if (list.Select(x => x.ParentMark).Distinct().Count() == 1)
             {
+                _colors = new Dictionary<int, Color>();
+
                 for (var i = 0; i < matrixSize; i++)
                 {
                     for (var j = 0; j < matrixSize; j++)
@@ -191,18 +194,6 @@ namespace CellsAutomate
             }
 
 
-            var colors = new Dictionary<int, Color>()
-            {
-                {0, Color.Red},
-                { 1, Color.Blue },
-                { 2, Color.Yellow },
-                { 3, Color.Brown },
-                { 4, Color.CadetBlue }
-            };
-
-            var random = new Random();
-            
-
             for (int i = 0; i < newLength; i += scale)
             {
                 for (int k = 0; k < scale; k++)
@@ -218,14 +209,14 @@ namespace CellsAutomate
                             var color = Color.White;
                             if (creature != null)
                             {
-                                if (!colors.ContainsKey(creature.ParentMark))
+                                if (!_colors.ContainsKey(creature.ParentMark))
                                 {
-                                    colors[creature.ParentMark] = Color.FromArgb(
-                                        random.Next(255),
-                                        random.Next(255),
-                                        random.Next(255));
+                                    _colors[creature.ParentMark] = Color.FromArgb(
+                                        _random.Next(255),
+                                        _random.Next(255),
+                                        _random.Next(255));
                                 }
-                                color = colors[creature.ParentMark];
+                                color = _colors[creature.ParentMark];
                             }
 
                             bitmap.SetPixel(x + k, y + l, color);

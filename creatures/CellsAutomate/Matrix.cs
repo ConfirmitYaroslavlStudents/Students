@@ -79,7 +79,7 @@ namespace CellsAutomate
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    Creatures[i, j] = random.Next(1000) % 100 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, _creator) : null;
+                    Creatures[i, j] = random.Next(1000) % 100 == 0 ? new Membrane(_creator.CreateAbstractCreature(), random, new Point(i, j), 1, 0, _creator) : null;
                 }
             }
             FillMatrixWithFood();

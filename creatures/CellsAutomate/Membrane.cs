@@ -11,16 +11,18 @@ namespace CellsAutomate
     public class Membrane
     {
         private readonly Random _random;
+        private int _parentMark;
         public Point Position { get; set; }
         public int Generation { get; }
         private int _energyPoints = CreatureConstants.StartEnergyPoints;
         public BaseCreature Creature { get; }
         private readonly Creator _creator;
 
-        public Membrane(BaseCreature creature, Random random, Point position, int generation, Creator creator)
+        public Membrane(BaseCreature creature, Random random, Point position, int generation, int parentMark, Creator creator)
         {
             Creature = creature;
             _random = random;
+            _parentMark = parentMark;
             Position = position;
             Generation = generation;
             _creator = creator;
@@ -68,7 +70,7 @@ namespace CellsAutomate
         {
             _energyPoints -= CreatureConstants.ChildPrice;
             var child = _creator.MakeChild(Creature);
-            return new Membrane(child, _random, childPosition, Generation + 1, _creator);
+            return new Membrane(child, _random, childPosition, Generation + 1, _parentMark, _creator);
         }
         
         public void Move(Membrane[,] creatures, Point newPosition)
@@ -76,6 +78,12 @@ namespace CellsAutomate
             creatures[Position.X, Position.Y] = null;
             Position = newPosition;
             creatures[Position.X, Position.Y] = this;
+        }
+
+        public int ParentMark
+        {
+            get { return _parentMark; }
+            set { _parentMark = value; }
         }
     }
 }

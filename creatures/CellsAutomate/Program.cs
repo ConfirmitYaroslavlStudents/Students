@@ -40,6 +40,13 @@ namespace CellsAutomate
                 if (matrix.AliveCount == 0)
                     break;
                 matrix.MakeTurn();
+
+                if (i % 100 == 0)
+                {
+                    MarkParts(matrixSize, matrix);
+                }
+                
+
                 Print(i + 1, matrixSize, matrix, scale);
                 Console.WriteLine("{0}:{1}", i + 1, matrix.AliveCount);
                 var generationStat =
@@ -116,6 +123,45 @@ namespace CellsAutomate
             return collection[_random.Next(collection.Count)];
         }
 
+        private static void MarkParts(int matrixSize, Matrix matrix)
+        {
+            var list = new List<Membrane>();
+            for (var i = 0; i < matrixSize; i++)
+            {
+                for (var j = 0; j < matrixSize; j++)
+                {
+                    var creature = matrix.Creatures[i, j];
+
+                    if (creature != null)
+                    {
+                        list.Add(creature);
+                    }
+                }
+            }
+
+            int n = 0;
+
+            if (list.Select(x => x.ParentMark).Distinct().Count() == 1)
+            {
+                for (var i = 0; i < matrixSize; i++)
+                {
+                    for (var j = 0; j < matrixSize; j++)
+                    {
+                        var creature = matrix.Creatures[i, j];
+
+                        if (creature != null)
+                        {
+                            creature.ParentMark = n;
+                            n++;
+                            //creature.ParentMark = matrixSize / 2 > i
+                            //    ? (matrixSize / 2 > j ? 4 : 3)
+                            //    : (matrixSize / 2 > j ? 2 : 1);
+                        }
+                    }
+                }
+            }
+        }
+
         private static void PrintGeneration(Matrix creatures, int turn)
         {
             for (int i = 1; i <= turn + 1; i++)
@@ -144,6 +190,17 @@ namespace CellsAutomate
                     }
             }
 
+
+            var colors = new Dictionary<int, Color>()
+            {
+                {0, Color.Red},
+                { 1, Color.Blue },
+                { 2, Color.Yellow },
+                { 3, Color.Brown },
+                { 4, Color.CadetBlue }
+            };
+
+
             for (int i = 0; i < newLength; i += scale)
             {
                 for (int k = 0; k < scale; k++)
@@ -154,7 +211,9 @@ namespace CellsAutomate
                             var x = i + newLength;
                             var y = j;
 
-                            bitmap.SetPixel(x + k, y + l, matrix.Creatures[i / scale, j / scale] == null ? Color.White : Color.Red);
+                            var creature = matrix.Creatures[i/scale, j/scale];
+
+                            bitmap.SetPixel(x + k, y + l, creature == null ? Color.White : Color.FromArgb((int)Math.Pow(creature.ParentMark, 5)));
                         }
                     }
             }

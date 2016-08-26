@@ -200,6 +200,8 @@ namespace CellsAutomate
                 { 4, Color.CadetBlue }
             };
 
+            var random = new Random();
+            
 
             for (int i = 0; i < newLength; i += scale)
             {
@@ -213,7 +215,20 @@ namespace CellsAutomate
 
                             var creature = matrix.Creatures[i/scale, j/scale];
 
-                            bitmap.SetPixel(x + k, y + l, creature == null ? Color.White : Color.FromArgb((int)Math.Pow(creature.ParentMark, 5)));
+                            var color = Color.White;
+                            if (creature != null)
+                            {
+                                if (!colors.ContainsKey(creature.ParentMark))
+                                {
+                                    colors[creature.ParentMark] = Color.FromArgb(
+                                        random.Next(255),
+                                        random.Next(255),
+                                        random.Next(255));
+                                }
+                                color = colors[creature.ParentMark];
+                            }
+
+                            bitmap.SetPixel(x + k, y + l, color);
                         }
                     }
             }

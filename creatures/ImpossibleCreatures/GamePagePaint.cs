@@ -8,17 +8,20 @@ namespace ImpossibleCreatures
     {
         private SolidColorBrush emptyColor = new SolidColorBrush(Colors.Black);
 
-        private void PaintSquare(int x, int y, Color color, Rectangle[,] squares)
+        private void PaintSquareFill(int x, int y, Color color, Rectangle[,] squares)
         {
             squares[x, y].Fill = new SolidColorBrush(color);
-            squares[x, y].Stroke = new SolidColorBrush(Colors.Black);
-            squares[x, y].StrokeThickness = 3;
+        }
+
+        private void PaintSquareStroke(int x, int y, Color color, Rectangle[,] squares)
+        {
+            squares[x, y].Stroke = new SolidColorBrush(color);
         }
 
         private void CleanSquare(int column, int row, Rectangle[,] doubleElements)
         {
             doubleElements[column, row].Fill = emptyColor;
-            doubleElements[column, row].StrokeThickness = 0;
+            doubleElements[column, row].StrokeThickness = 3;
         }
 
         private void CleanGrid(Rectangle[,] doubleElements)

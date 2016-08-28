@@ -5,9 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImpossibleCreatures"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Loaded="Start" >
-    
-    <Grid Name="MainGrid" >
+        Name="Window"
+        Title="MainWindow" Height="1000" Width="1000" Loaded="Start" >
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Column="0" Row="0">
+            <Button Width="auto" Height="auto" Name="start" Click="start_Click" Foreground="Black">Start/Pause</Button>
+        </Grid>
+        <Grid Column="1" Row="0">
+            <Button Name="onestep" Click="onestep_Click">One step forward</Button>
+        </Grid>
+        <Grid Column="0" ColumnSpan="2" Row="1" Name="MainGrid" Width="auto" Height="auto" Background="White"/>
     </Grid>
+
 </Window>

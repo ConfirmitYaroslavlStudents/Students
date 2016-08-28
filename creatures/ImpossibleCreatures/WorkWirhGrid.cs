@@ -1,12 +1,13 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using CellsAutomate.Constants;
 
 namespace ImpossibleCreatures
 {
     public static class WorkWirhGrid
     {
-        private static readonly SolidColorBrush StrokeColor = new SolidColorBrush(Colors.Black);
+        private static readonly SolidColorBrush StrokeColor = new SolidColorBrush(Colors.Transparent);
 
         public static void MarkTable(Grid grid, int column, int row)
         {
@@ -27,9 +28,7 @@ namespace ImpossibleCreatures
             {
                 for (int j = 0; j < row; j++)
                 {
-                    var rectengle = new Rectangle { Width = 50, Height = 50, Stroke = StrokeColor, StrokeThickness = 0 };
-
-                    //rectengle.Fill = (i + j) % 2 == 0 ? new SolidColorBrush(Colors.Gray) : new SolidColorBrush(Colors.DarkGray);
+                    var rectengle = new Rectangle { Stroke = StrokeColor, StrokeThickness = LogConstants.StrokeThickness };
 
                     Grid.SetColumn(rectengle, i);
                     Grid.SetRow(rectengle, j);

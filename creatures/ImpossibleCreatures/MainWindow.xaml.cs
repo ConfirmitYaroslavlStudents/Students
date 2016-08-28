@@ -18,31 +18,29 @@ using Matrix = CellsAutomate.Matrix;
 
 namespace ImpossibleCreatures
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private DispatcherTimer _timer;
         private Matrix _matrix;
         private Random _random = new Random();
-        private int step = 0;
+        private int _step = 0;
 
         private readonly Rectangle[,] _squares;
 
         public MainWindow()
         {
             InitializeComponent();
+
             var width = LogConstants.MatrixSize;
             var height = LogConstants.MatrixSize;
 
             _squares = new Rectangle[width, height];
-            WorkWirhGrid.InitalizeGrid(MainGrid, _squares, width, height);
             WorkWirhGrid.MarkTable(MainGrid, width, height);
+            WorkWirhGrid.InitalizeGrid(MainGrid, _squares, width, height);
 
             _timer = new DispatcherTimer
             {
-                Interval = new TimeSpan(0, 0, 0, 1)
+                Interval = new TimeSpan(0, 0, 0, LogConstants.TimeSpanSeconds, LogConstants.TimeSpanMSeconds)
             };
             _timer.Tick += MakeTurn;
         }
@@ -50,22 +48,20 @@ namespace ImpossibleCreatures
         private void Start(object sender, RoutedEventArgs e)
         {
             var matrixSize = LogConstants.MatrixSize;
-            int scale = 500 / matrixSize;
 
             var commandsForGetDirection = new GetDirectionAlgorithm().Algorithm;
             var commandsForGetAction = new GetActionAlgorithm().Algorithm;
             var creator = new CreatorOfCreature(commandsForGetAction, commandsForGetDirection);
 
-            var matrix = new Matrix(matrixSize, matrixSize, creator, new FillingFromCornersByWavesStrategy());
-            matrix.FillStartMatrixRandomly();
-            Print(step, matrixSize, matrix);
-
-            _timer.Start();
+            _matrix = new Matrix(matrixSize, matrixSize, creator, new FillingFromCornersByWavesStrategy());
+            _matrix.FillStartMatrixRandomly();
+            Print(_step, matrixSize, _matrix);
         }
 
         private void MakeTurn(object sender, object o)
         {
-            step++;
+            _step++;
+            Window.Title = _step.ToString();
             if (_matrix.AliveCount == 0)
             {
                 _timer.Stop();
@@ -73,8 +69,7 @@ namespace ImpossibleCreatures
 
             _matrix.MakeTurn();
 
-            Print(step, LogConstants.MatrixSize, _matrix);
-            _timer.Stop();
+            Print(_step, LogConstants.MatrixSize, _matrix);
         }
 
         private string CreateLogOfCreature(Creature creature, int generation)
@@ -117,24 +112,37 @@ namespace ImpossibleCreatures
         private void Print(int id, int length, Matrix matrix)
         {
             for (int i = 0; i < length; i++)
-                    for (int j = 0; j < length; j++)
-                            PaintSquare(i, j, matrix.EatMatrix.HasOneBite(new System.Drawing.Point(i, j)) ? Colors.Green : Colors.Blue, _squares);
-                        //bitmap.SetPixel(i + k, j + l, matrix.EatMatrix.HasOneBite(new Point(i / scale, j / scale)) ? Color.Green : Color.White);
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    var isThereAreFood = matrix.EatMatrix.HasOneBite(new System.Drawing.Point(i, j));
+                    var isThereAreCreature = matrix.Creatures[i, j] != null;
+                    var strokeColor = new Color();
+                    var fillColor = new Color();
 
-            //for (int i = 0; i < newLength; i += scale)
-            //{
-            //    for (int k = 0; k < scale; k++)
-            //        for (int j = 0; j < newLength; j += scale)
-            //        {
-            //            for (int l = 0; l < scale; l++)
-            //            {
-            //                var x = i + newLength;
-            //                var y = j;
+                    if (isThereAreCreature)
+                    {
+                        fillColor = Colors.Black;
+                        strokeColor = isThereAreFood ? Colors.YellowGreen : Colors.OrangeRed;
+                    }
+                    else
+                    {
+                        if (isThereAreFood)
+                        {
+                            fillColor = Color.FromArgb(50,154,205,50);
+                            strokeColor = fillColor;
+                        }
+                        else
+                        {
+                            fillColor = Colors.White;
+                            strokeColor = fillColor;
+                        }
+                    }
 
-            //                //bitmap.SetPixel(x + k, y + l, matrix.Creatures[i / scale, j / scale] == null ? Color.White : Color.Red);
-            //            }
-            //        }
-            //}
+                    PaintSquareStroke(i, j, strokeColor, _squares);
+                    PaintSquareFill(i, j, fillColor, _squares);
+                }
+            }
         }
 
         public void CreateDirectory()
@@ -148,6 +156,23 @@ namespace ImpossibleCreatures
                 return;
             }
             Directory.CreateDirectory(LogConstants.PathToLogDirectory);
+        }
+
+        private void start_Click(object sender, RoutedEventArgs e)
+        {
+            if (_timer.IsEnabled)
+            {
+                _timer.Stop();
+            }
+            else
+            {
+                _timer.Start();
+            }
+        }
+
+        private void onestep_Click(object sender, RoutedEventArgs e)
+        {
+            MakeTurn(null, null);
         }
     }
 }

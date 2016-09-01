@@ -5,7 +5,7 @@ using Creatures.Language.Parsers;
 
 namespace CellsAutomate.Algorithms
 {
-    class GetActionAlgorithm
+    public class GetActionAlgorithm
     {
         public ICommand[] Algorithm => new Parser().ProcessCommands(GetAlgorithm()).ToArray();
 

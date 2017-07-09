@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queue", "Queue\Queue.csproj", "{C03AB55D-C06C-416E-9839-BA0775A6137A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestsForCustomQueue", "UnitTestsForCustomQueue\UnitTestsForCustomQueue.csproj", "{18C8A9F5-C220-49C0-8817-95403A022DC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C03AB55D-C06C-416E-9839-BA0775A6137A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C03AB55D-C06C-416E-9839-BA0775A6137A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C03AB55D-C06C-416E-9839-BA0775A6137A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C03AB55D-C06C-416E-9839-BA0775A6137A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18C8A9F5-C220-49C0-8817-95403A022DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18C8A9F5-C220-49C0-8817-95403A022DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18C8A9F5-C220-49C0-8817-95403A022DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18C8A9F5-C220-49C0-8817-95403A022DC8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

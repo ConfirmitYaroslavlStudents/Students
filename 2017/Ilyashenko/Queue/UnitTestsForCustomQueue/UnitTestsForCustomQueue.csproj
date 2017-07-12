@@ -50,13 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest.cs" />
+    <Compile Include="CustomQueueTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Queue\Queue.csproj">
-      <Project>{c03ab55d-c06c-416e-9839-ba0775a6137a}</Project>
-      <Name>Queue</Name>
+    <ProjectReference Include="..\QueueLib\QueueLib.csproj">
+      <Project>{5ca7f0d8-6eed-4771-8499-da3431c1e32d}</Project>
+      <Name>QueueLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

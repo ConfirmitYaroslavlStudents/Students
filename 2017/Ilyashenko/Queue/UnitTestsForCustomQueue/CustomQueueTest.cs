@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Queue;
+using QueueLib;
 
 namespace UnitTestsForCustomQueue
 {
     [TestClass]
-    public class UnitTest
+    public class CustomQueueTest
     {
         [TestMethod]
         public void TestCountAfterCreation()

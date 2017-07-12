@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Queue
+namespace QueueLib
 {
     public class CustomQueue<T>
     {
-        private int _defaultCapacity = 10;
+        private int _defaultCapacity = 8;
         private int _size;
         private int _capacity;
         private int _head;
@@ -15,43 +15,41 @@ namespace Queue
 
         public CustomQueue()
         {
-            _queueElements = new T[_defaultCapacity];
-            _head = 0;
-            _tail = 0;
-            _size = 0;
-            _capacity = _defaultCapacity;
+            Init(_defaultCapacity);
         }
 
         public CustomQueue(int concreteCapacity)
         {
             if (concreteCapacity <= 0)
                 throw new ArgumentOutOfRangeException();
-            _queueElements = new T[concreteCapacity];
-            _head = 0;
-            _tail = 0;
-            _size = 0;
-            _capacity = concreteCapacity;
+            Init(concreteCapacity);
         }
 
         public CustomQueue(IEnumerable<T> itemCollection)
         {
-            if (itemCollection.Count() == 0)
+            var collectionCount = itemCollection.Count();
+            if (collectionCount == 0)
             {
-                _queueElements = new T[_defaultCapacity];
-                _head = 0;
-                _tail = 0;
-                _size = 0;
-                _capacity = _defaultCapacity;
+                Init(_defaultCapacity);
             }
             else
             {
-                _queueElements = new T[itemCollection.Count() * 2];
-                Array.Copy(itemCollection.ToArray(), _queueElements, itemCollection.Count());
+                _queueElements = new T[collectionCount * 2];
+                Array.Copy(itemCollection.ToArray(), _queueElements, collectionCount);
                 _head = 0;
-                _tail = itemCollection.Count();
-                _size = itemCollection.Count();
-                _capacity = itemCollection.Count()*2;
+                _tail = collectionCount;
+                _size = collectionCount;
+                _capacity = collectionCount * 2;
             }
+        }
+
+        private void Init(int capacity)
+        {
+            _queueElements = new T[capacity];
+            _head = 0;
+            _tail = 0;
+            _size = 0;
+            _capacity = capacity;
         }
 
         public int Count()
@@ -61,10 +59,10 @@ namespace Queue
 
         public void Enqueue(T item)
         {
-            if (_size > _capacity/2)
+            if (_size == _capacity)
                 IncreaseCapacity();
             _queueElements[_tail] = item;
-            _tail++;
+            _tail = (_tail + 1) % _capacity;
             _size++;
         }
 
@@ -73,7 +71,7 @@ namespace Queue
             if (_size == 0)
                 throw new InvalidOperationException();
             var result = _queueElements[_head];
-            _head++;
+            _head = (_head + 1) % _capacity;
             _size--;
             return result;
         }
@@ -87,9 +85,9 @@ namespace Queue
 
         private void IncreaseCapacity()
         {
-            var newQueue = new T[_capacity*2];
-            Array.Copy(_queueElements, _head, newQueue, 0, _size);
-            _capacity = _capacity*2;
+            var newQueue = new T[_capacity * 2];
+            CopyTo(newQueue, 0);
+            _capacity = _capacity * 2;
             _queueElements = newQueue;
             _head = 0;
             _tail = _size;
@@ -97,17 +95,19 @@ namespace Queue
 
         public void Clear()
         {
-            Array.Clear(_queueElements, _head, _size);
-            _head = 0;
-            _tail = 0;
-            _size = 0;
+            Init(_defaultCapacity);
         }
 
         public void CopyTo(T[] array, int startIndex)
         {
-            for (int i = _head; i < _size; i++)
+            if (_head < _tail)
             {
-                array[startIndex + i] = _queueElements[i];
+                Array.Copy(_queueElements, _head, array, startIndex, _size);
+            }
+            else
+            {
+                Array.Copy(_queueElements, _head, array, startIndex, _queueElements.Length - _head);
+                Array.Copy(_queueElements, 0, array, startIndex + _queueElements.Length - _head, _tail);
             }
         }
 
@@ -119,7 +119,7 @@ namespace Queue
         public T[] ToArray()
         {
             var newArray = new T[_size];
-            Array.Copy(_queueElements, _head, newArray, 0, _size);
+            CopyTo(newArray, 0);
             return newArray;
         }
     }

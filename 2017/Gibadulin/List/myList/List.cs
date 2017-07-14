@@ -7,94 +7,117 @@ namespace myList
 {
     public class List<T>
     {
-        class Node
+        private class Node
         {
-            public T info;
-            public Node next;
-            public Node(T Info)
+            public T Info;
+            public Node Next;
+
+            public Node(T info)
             {
-                info = Info;
-                next = null;
+                Info = info;
+                Next = null;
             }
         }
 
-        private Node head,
-           tail;
-        private int count;
+        private Node Head,
+            Tail;
+
+        public int Count { get; private set; }
 
         public List()
         {
-            head = null;
-            tail = null;
-            count = 0;
+            Head = null;
+            Tail = null;
+            Count = 0;
         }
 
-        public int Count
+        public void Clear()
         {
-            get
+            Head = null;
+            Tail = null;
+            Count = 0;
+        }
+
+        private Node NodeOfIndex(int index)
+        {
+            if (index >= Count)
             {
-                return count;
+                throw new IndexOutOfRangeException();
             }
+            var current = Head;
+            for (var i = 0; i < index; i++)
+                current = current.Next;
+            return current;
         }
 
         public T this[int index]
         {
-            get
-            {
-                if (index >= count)
-                {
-                    throw new Exception("Index out of range");
-                }
-                Node current = head;
-                for (int i = 0; i < index; i++)
-                    current = current.next;
-                return current.info;
-            }
-            set
-            {
-                if (index >= count)
-                {
-                    throw new Exception("Index out of range");
-                }
-                Node current = head;
-                for (int i = 0; i < index; i++)
-                    current = current.next;
-                current.info = value;
-            }
+            get { return NodeOfIndex(index).Info; }
+            set { NodeOfIndex(index).Info = value; }
         }
 
-        public void PushBack(T item)
+        private void PushBack(T item)
         {
-            if (head == null)
+            if (Head == null)
             {
-                head = new Node(item);
-                tail = head;
+                Head = new Node(item);
+                Tail = Head;
             }
             else
             {
-                tail.next = new Node(item);
-                tail = tail.next;
+                Tail.Next = new Node(item);
+                Tail = Tail.Next;
             }
-            count++;
+            Count++;
+        }
+
+        public void Insert(T item, int index)
+        {
+            if (index > Count)
+                throw new IndexOutOfRangeException();
+
+            if (index == Count)
+            {
+                PushBack(item);
+                return;
+            }
+
+            if (index == 0)
+            {
+                var current = new Node(item);
+                current.Next = Head;
+                Head = current;
+                Count++;
+            }
+            else
+            {
+                var previous = Head;
+                for (var i = 0; i < index - 1; i++)
+                    previous = previous.Next;
+                var current = new Node(item);
+                current.Next = previous.Next;
+                previous.Next = current.Next;
+                Count++;
+            }
         }
 
         public bool Contains(T item)
         {
-            Node current = head;
-            while (current != null && !current.info.Equals(item))
-                current = current.next;
+            var current = Head;
+            while (current != null && !current.Info.Equals(item))
+                current = current.Next;
             if (current == null)
                 return false;
             return true;
         }
 
-        public int IndexOfFirstEquals(T item)
+        public int IndexOf(T item)
         {
-            Node current = head;
-            int index = 0;
-            while (current != null && !current.info.Equals(item))
+            var current = Head;
+            var index = 0;
+            while (current != null && !current.Info.Equals(item))
             {
-                current = current.next;
+                current = current.Next;
                 index++;
             }
             if (current == null)
@@ -102,63 +125,27 @@ namespace myList
             return index;
         }
 
-        public void Insert(T item, int index)
+        public void Remove(T item)
         {
-            if (index > count)
+            if (Head.Info.Equals(item))
             {
-                throw new Exception("Index out of range");
-            }
-            if (index == count)
-            {
-                PushBack(item);
-                return;
-            }
-            if (index == 0)
-            {
-                Node current = new Node(item);
-                current.next = head;
-                head = current;
-                count++;
+                Head = Head.Next;
+                Count--;
             }
             else
             {
-                Node previous = head;
-                for (int i = 0; i < index - 1; i++)
-                    previous = previous.next;
-                Node current = new Node(item);
-                current.next = previous.next;
-                previous.next = current.next;
-                count++;
-            }
-        }
+                var current = Head;
+                while (current.Next != null && !current.Next.Info.Equals(item))
+                    current = current.Next;
 
-        public void RemoveFirstEquals(T item)
-        {
-            if (head.info.Equals(item))
-            {
-                head = head.next;
-                count--;
-            }
-            else
-            {
-                Node current = head;
-                while (current.next != null && !current.next.info.Equals(item))
-                    current = current.next;
-                if (current.next != null)
-                {
-                    current.next = current.next.next;
-                    count--;
-                    if (current.next == null)
-                        tail = current;
-                }
-            }
-        }
+                if (current.Next == null)
+                    return;
 
-        public void Clear()
-        {
-            head = null;
-            tail = null;
-            count = 0;
+                current.Next = current.Next.Next;
+                Count--;
+                if (current.Next == null)
+                    Tail = current;
+            }
         }
     }
 }

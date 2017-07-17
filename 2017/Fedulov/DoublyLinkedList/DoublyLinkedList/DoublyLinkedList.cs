@@ -12,18 +12,16 @@ namespace DoublyLinkedList
         private class DoublyLinkedListNode
         {
             public T Value { set; get; }
-            public DoublyLinkedListNode Prev { set; get; }
+            public DoublyLinkedListNode Previous { set; get; }
             public DoublyLinkedListNode Next { set; get; }
 
             public DoublyLinkedListNode(T value)
             {
                 Value = value;
-                Prev = null;
+                Previous = null;
                 Next = null;
             }
         }
-
-        
 
         private DoublyLinkedListNode First { set; get; }
         private DoublyLinkedListNode Last { set; get; }
@@ -32,35 +30,34 @@ namespace DoublyLinkedList
 
         public DoublyLinkedList(params T[] arr)
         {
-            DoublyLinkedListNode curr = new DoublyLinkedListNode(default(T));
+            var current = new DoublyLinkedListNode(default(T));
             foreach (var elem in arr)
             {
                 DoublyLinkedListNode node = new DoublyLinkedListNode(elem);
                 if (Count == 0)
                 {
-
-                    curr = node;
-                    First = curr;
+                    current = node;
+                    First = current;
                 }
                 else
                 {
-                    curr.Next = node;
-                    node.Prev = curr;
-                    curr = node;
+                    current.Next = node;
+                    node.Previous = current;
+                    current = node;
                 }
 
-                Last = curr;
+                Last = current;
                 Count++;
             }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            DoublyLinkedListNode curr = First;
-            while (curr != null)
+            var current = First;
+            while (current != null)
             {
-                yield return curr.Value;
-                curr = curr.Next;
+                yield return current.Value;
+                current = current.Next;
             }
         }
 
@@ -71,7 +68,7 @@ namespace DoublyLinkedList
 
         public void Add(T item)
         {
-            DoublyLinkedListNode node = new DoublyLinkedListNode(item);
+            var node = new DoublyLinkedListNode(item);
 
             if (First == null)
             {
@@ -80,12 +77,11 @@ namespace DoublyLinkedList
             }
             else
             {
-                node.Prev = Last;
+                node.Previous = Last;
                 Last.Next = node;
                 Last = node;
             }
-
-
+            
             Count++;
         }
 
@@ -96,7 +92,7 @@ namespace DoublyLinkedList
 
         public void AddFirst(T item)
         {
-            DoublyLinkedListNode node = new DoublyLinkedListNode(item) { Next = First };
+            var node = new DoublyLinkedListNode(item) { Next = First };
             if (Count == 0)
                 Last = node;
             First = node;
@@ -106,25 +102,17 @@ namespace DoublyLinkedList
         public void Clear()
         {
             Count = 0;
-            DoublyLinkedListNode curr = First;
-
-            while (curr.Next != null)
-            {
-                curr = curr.Next;
-                curr.Prev = null;
-            }
-            curr = null;
             First = Last = null;
         }
 
         public bool Contains(T item)
         {
-            DoublyLinkedListNode curr = First;
-            while (curr != null)
+            var current = First;
+            while (current != null)
             {
-                if (curr.Value.Equals(item))
+                if (current.Value.Equals(item))
                     return true;
-                curr = curr.Next;
+                current = current.Next;
             }
             return false;
         }
@@ -135,33 +123,29 @@ namespace DoublyLinkedList
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex),
                     "arrayIndex should not exceed length of array, list should fit the array");
 
-            DoublyLinkedListNode curr = First;
-            while (curr != null)
+            var current = First;
+            while (current != null)
             {
-                array[arrayIndex++] = curr.Value;
-                curr = curr.Next;
+                array[arrayIndex++] = current.Value;
+                current = current.Next;
             }
         }
 
         public bool Remove(T item)
         {
-            DoublyLinkedListNode prev = null, curr = First, next = First.Next;
+            DoublyLinkedListNode Previous = null, current = First, next = First.Next;
 
-            while (curr != null)
+            while (current != null)
             {
-                if (curr.Value.Equals(item))
+                if (current.Value.Equals(item))
                 {
-                    if (prev != null)
+                    if (Previous != null)
                     {
-                        prev.Next = next;
+                        Previous.Next = next;
                         if (next == null)
-                        {
-                            Last = prev;
-                        }
+                            Last = Previous;
                         else
-                        {
-                            next.Prev = prev;
-                        }
+                            next.Previous = Previous;
                     }
                     else
                     {
@@ -169,13 +153,13 @@ namespace DoublyLinkedList
                         if (First == null)
                             Last = null;
                         else
-                            First.Prev = null;
+                            First.Previous = null;
                     }
                     Count--;
                     return true;
                 }
-                prev = curr;
-                curr = next;
+                Previous = current;
+                current = next;
                 next = next?.Next;
             }
 
@@ -189,7 +173,7 @@ namespace DoublyLinkedList
             if (First == null)
                 Last = First;
             else
-                First.Prev = null;
+                First.Previous = null;
             Count--;
         }
 
@@ -203,8 +187,8 @@ namespace DoublyLinkedList
                     First = Last = null;
                     break;
                 default:
-                    Last = Last.Prev;
-                    Last.Prev.Next = null;
+                    Last = Last.Previous;
+                    Last.Previous.Next = null;
                     break;
             }
             Count--;

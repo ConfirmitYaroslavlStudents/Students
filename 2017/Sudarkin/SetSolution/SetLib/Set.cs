@@ -126,23 +126,23 @@ namespace SetLib
 
             if (removeNode.IsLeaf)
             {
-                RebuildTreeAfterDelete_Case1_NodeIsLeaf(removeNode);
+                RebuildTreeAfterDeleteWhenNodeIsLeaf(removeNode);
                 Count--;
             }
             else if (removeNode.ChildCount == 1)
             {
-                RebuildTreeAfterDelete_Case2_NodeHasOneChild(removeNode);
+                RebuildTreeAfterDeleteWhenNodeHasOneChild(removeNode);
                 Count--;
             }
             else
             {
-                RebuildTreeAfterDelete_Case3_NodeHasTwoChildren(removeNode);
+                RebuildTreeAfterDeleteWhenNodeHasTwoChildren(removeNode);
             }
 
             return true;
         }
 
-        private void RebuildTreeAfterDelete_Case1_NodeIsLeaf(BinaryNode<T> removeNode)
+        private void RebuildTreeAfterDeleteWhenNodeIsLeaf(BinaryNode<T> removeNode)
         {
             if (removeNode.IsLeft)
             {
@@ -156,7 +156,7 @@ namespace SetLib
             removeNode.Parent = null;
         }
 
-        private void RebuildTreeAfterDelete_Case2_NodeHasOneChild(BinaryNode<T> removeNode)
+        private void RebuildTreeAfterDeleteWhenNodeHasOneChild(BinaryNode<T> removeNode)
         {
             bool wasHead = removeNode == _root;
 
@@ -206,7 +206,7 @@ namespace SetLib
             removeNode.Right = null;
         }
 
-        private void RebuildTreeAfterDelete_Case3_NodeHasTwoChildren(BinaryNode<T> removeNode)
+        private void RebuildTreeAfterDeleteWhenNodeHasTwoChildren(BinaryNode<T> removeNode)
         {
             BinaryNode<T> successorNode = removeNode.Left;
             while (successorNode.HasRight)

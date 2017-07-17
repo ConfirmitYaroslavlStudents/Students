@@ -230,3 +230,5 @@ pip-log.txt
 ## Bolshakov
 #############
 !/2015/Bolshakov/MP3_tager/MP3_tager/bin/Debug/*.dll
+# Sudarkin
+!/2017/Sudarkin/Mp3Util/Mp3UtilTests/Dummy.mp3

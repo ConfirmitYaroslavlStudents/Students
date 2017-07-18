@@ -5,6 +5,7 @@ using TagLib;
 
 namespace RenamerTests
 {
+    // SRP violation
     [TestClass]
     public class RenamerTests
     {

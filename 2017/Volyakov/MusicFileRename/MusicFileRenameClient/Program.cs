@@ -8,6 +8,7 @@ namespace MusicFileRename
 {
     class Program
     {
+        //remove self made shell
         static void Main(string[] args)
         {
             string input;

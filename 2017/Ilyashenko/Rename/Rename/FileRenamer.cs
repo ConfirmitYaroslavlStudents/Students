@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Rename
 {
+    // SRP violation
     public class FileRenamer
     {
         private string _baseDirectory;
@@ -17,12 +18,14 @@ namespace Rename
         {
             if (args.Length < 2 || args.Length > 3)
             {
+                // exception message
                 throw new ArgumentException();
             }
             try
             {
                 var dir = new DirectoryInfo(_baseDirectory);
             }
+            // YAGNI
             catch (Exception exception)
             {
                 throw exception;
@@ -68,6 +71,7 @@ namespace Rename
             }
         }
 
+        //refactor
         public void MakeFileTags(string[] filePaths)
         {
             foreach (var fPath in filePaths)
@@ -83,6 +87,7 @@ namespace Rename
                     i++;
                 }
                 artist = artist.Substring(0, artist.Length);
+               
                 title = fileName.Substring(i + 3, fileName.Length - (i + 3) - Path.GetExtension(fPath).Length);
                 var currFile = TagLib.File.Create(fPath);
                 currFile.Tag.Performers = new string[] { artist };

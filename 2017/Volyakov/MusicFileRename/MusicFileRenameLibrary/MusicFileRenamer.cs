@@ -3,6 +3,7 @@ using System.IO;
 
 namespace MusicFileRename
 {
+    //SRP violation
     public static class MusicFileRenamer
     {
 

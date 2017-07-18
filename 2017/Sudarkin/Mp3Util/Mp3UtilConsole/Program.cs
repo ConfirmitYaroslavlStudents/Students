@@ -23,6 +23,7 @@ namespace Mp3UtilConsole
                 return;
             }
 
+            //move main logic to separate class
             IActionStrategy action = GetActionStrategy(arguments.Action);
 
             foreach (string file in fileManager.GetFiles(arguments.Mask, arguments.Recursive))

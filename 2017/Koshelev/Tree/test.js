@@ -1,21 +1,25 @@
 var assert = require('chai').assert;
-var Tree = require('./tree');
+var Tree = require('./treeES5').Tree;
+var Node = require('./treeES5').Node;
 
 describe("Tree", function(){
 	var tree;
-	describe('addNode', function(){
-		it('should add new node if it does not exist', function(){
+	describe('findNode + addNode', function(){
+		it('should return null if node not found', function(){
+			var tree = new Tree();
+			assert.equal(null, tree.findNode(2));
+		});
+		it('should add and find node', function(){
 			var tree = new Tree();
 			tree.addNode(5);
-			tree.addNode(5);
-			tree.addNode(2);
-			tree.addNode(6);
-			assert.equal(tree.getValue(), 5);
-			assert.equal(tree.getRight().getValue(), 6);
-			assert.equal(tree.getLeft().getValue(), 2);
-			tree.showTree();
+			tree.addNode(4);
+			tree.addNode(7);
+			assert.equal(tree.findNode(5).getValue(), 5);
+			assert.equal(tree.findNode(4).getValue(), 4);
+			assert.equal(tree.findNode(7).getValue(), 7);
 		});
 	});
+
 	describe('deleteNode - should delete node if it exists', function(){
 		var tree;
 
@@ -28,48 +32,46 @@ describe("Tree", function(){
 			tree.addNode(28);
 			tree.addNode(13);
 			tree.addNode(18);
-			tree.showTree();
 		});
 
 		afterEach('output tree', function(){
-			tree.showTree();
-			console.log("--------------------");
 			tree = null;
 		});
 
 		it('delete root(20)', function(){
-			tree = tree.deleteNode(20);
-			assert.equal(tree.getValue(), 16);
-			assert.equal(tree.getRight().getRight().getValue(), 25);
+			tree.deleteNode(20);
+			assert.equal(null, tree.findNode(20));
 		});
 
 		it('delete left son which have sons(16)', function(){
-			tree = tree.deleteNode(16);
-			assert.equal(tree.getLeft().getValue(), 18);
-			assert.equal(tree.getLeft().getLeft().getValue(), 13);
+			tree.deleteNode(16);
+			tree.showTree();
+			assert.equal(tree.findNode(16), null);
 		});
 
 		it('delete right son which have sons(25)', function(){
-			tree = tree.deleteNode(25);
-			assert.equal(tree.getRight().getValue(), 23);
-			assert.equal(tree.getRight().getRight().getValue(), 28);
+			tree.deleteNode(25);
+			assert.equal(tree.findNode(25), null);
 		});
 
 		it('delete left leaf(13)', function(){
-			tree = tree.deleteNode(13);
-			assert.equal(tree.getLeft().getLeft(), null);
+			tree.deleteNode(13);
+			assert.equal(tree.findNode(13), null);
 		});
 
 		it('delete right leaf(28)', function(){
-			tree = tree.deleteNode(28);
-			assert.equal(tree.getRight().getRight(), null);
+			tree.deleteNode(28);
+			assert.equal(tree.findNode(28), null);
 		});
 
 		it("don't delete anything if node doesn't exist", function(){
-			tree = tree.deleteNode(15);
-			assert.equal(tree.getLeft().getValue(), 16);
-			assert.equal(tree.getLeft().getLeft().getValue(), 13);
-			assert.equal(tree.getLeft().getRight().getValue(), 18);
+			tree.showTree();
+			assert.equal(tree.findNode(15), null);
+			tree.deleteNode(15);
+			tree.showTree();
+			let nodes = [20, 16, 25, 23, 28, 13, 18];
+			for (let i = 0; i < nodes.length; i++)
+				assert.equal(tree.findNode(nodes[i]).getValue(), nodes[i]);
 		})
 	})
 })

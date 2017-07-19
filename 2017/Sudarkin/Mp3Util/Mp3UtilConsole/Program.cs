@@ -1,21 +1,20 @@
 ﻿using System;
-using Mp3UtilConsole.Actions;
-using Mp3UtilConsole.Arguments;
-using Mp3UtilConsole.Logger;
+using Mp3UtilLib;
+using Mp3UtilLib.Arguments;
+using Mp3UtilLib.Logger;
 
 namespace Mp3UtilConsole
 {
     internal class Program
     {
-        private static readonly ILogger Logger = new ConsoleLogger();
+        private static readonly ConsoleLogger Logger = new ConsoleLogger();
 
         private static void Main(string[] args)
         {
-            FileManager fileManager = new FileManager();
             Args arguments = null;
             try
             {
-                arguments = ArgumentsManager.Parse(args);
+                arguments = ArgumentsParser.Parse(args);
             }
             catch (ArgumentException ex)
             {
@@ -23,36 +22,8 @@ namespace Mp3UtilConsole
                 return;
             }
 
-            //move main logic to separate class
-            IActionStrategy action = GetActionStrategy(arguments.Action);
-
-            foreach (string file in fileManager.GetFiles(arguments.Mask, arguments.Recursive))
-            {
-                try
-                {
-                    action.Process(new Mp3File(file));
-                    Logger.Write($"{file} - The transformation is complete", LogStatus.Success);
-                }
-                catch(Exception ex)
-                {
-                    Logger.Write(ex.Message, LogStatus.Error);
-                }
-            }
-
-            Logger.Write("Done!", LogStatus.Success);
-        }
-
-        private static IActionStrategy GetActionStrategy(ProgramAction action)
-        {
-            switch (action)
-            {
-                case ProgramAction.ToFileName:
-                    return new FileNameAction();
-                case ProgramAction.ToTag:
-                    return new TagAction();
-                default:
-                    return null;
-            }
+            Processor processor = new Processor(arguments, Logger);
+            processor.Execute();
         }
     }
 }

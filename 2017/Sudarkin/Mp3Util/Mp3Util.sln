@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3UtilConsole", "Mp3UtilCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3UtilTests", "Mp3UtilTests\Mp3UtilTests.csproj", "{4C5B594C-3ED9-4F21-A4DD-14B93F07A038}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mp3UtilLib", "Mp3UtilLib\Mp3UtilLib.csproj", "{EA76037C-DA17-401B-98D9-0C14B66C39F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4C5B594C-3ED9-4F21-A4DD-14B93F07A038}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C5B594C-3ED9-4F21-A4DD-14B93F07A038}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C5B594C-3ED9-4F21-A4DD-14B93F07A038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA76037C-DA17-401B-98D9-0C14B66C39F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA76037C-DA17-401B-98D9-0C14B66C39F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA76037C-DA17-401B-98D9-0C14B66C39F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA76037C-DA17-401B-98D9-0C14B66C39F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

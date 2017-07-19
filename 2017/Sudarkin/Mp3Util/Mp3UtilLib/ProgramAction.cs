@@ -1,4 +1,4 @@
-﻿namespace Mp3UtilConsole
+﻿namespace Mp3UtilLib
 {
     public enum ProgramAction
     {

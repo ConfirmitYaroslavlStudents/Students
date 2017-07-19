@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Mp3UtilConsole.Actions
+namespace Mp3UtilLib.Actions
 {
     public class TagAction : IActionStrategy
     {

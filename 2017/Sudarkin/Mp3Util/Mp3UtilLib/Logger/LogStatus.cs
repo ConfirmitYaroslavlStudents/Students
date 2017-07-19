@@ -1,4 +1,4 @@
-﻿namespace Mp3UtilConsole.Logger
+﻿namespace Mp3UtilLib.Logger
 {
     public enum LogStatus
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Mp3UtilConsole.Logger
+namespace Mp3UtilLib.Logger
 {
-    public class ConsoleLogger : ILogger
+    public class ConsoleLogger
     {
         public void Write(string message, LogStatus status)
         {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.IO.Abstractions;
 
-namespace Mp3UtilConsole
+namespace Mp3UtilLib
 {
     public class FileManager
     {
@@ -22,17 +22,14 @@ namespace Mp3UtilConsole
 
         public void Move(string source, string dest) => _fileSystem.File.Move(source, dest);
 
-        public IEnumerable<string> GetFiles(string searchPattern, bool recursive)
+        public IEnumerable<string> GetFiles(string directory, string searchPattern, SearchOption searchOption)
+            => _fileSystem.Directory.GetFiles(directory, searchPattern, searchOption);
+
+        public IEnumerable<string> GetFilesFromCurrentDirectory(string searchPattern, bool recursive)
         {
             return GetFiles(
-                _fileSystem.Directory.GetCurrentDirectory(), searchPattern, recursive);
-        }
-
-        public IEnumerable<string> GetFiles(string directory, string searchPattern, bool recursive)
-        {
-            return _fileSystem.Directory.GetFiles(
-                directory, 
-                searchPattern,
+                _fileSystem.Directory.GetCurrentDirectory(), 
+                searchPattern, 
                 recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using File = TagLib.File;
 
-namespace Mp3UtilTests.Helpers
+namespace Mp3UtilLib
 {
     public class FileAbstraction : File.IFileAbstraction
     {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mp3UtilConsole;
-using Mp3UtilConsole.Actions;
+using Mp3UtilLib;
+using Mp3UtilLib.Actions;
 using Mp3UtilTests.Helpers;
 
 namespace Mp3UtilTests

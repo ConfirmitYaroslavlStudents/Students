@@ -1,4 +1,4 @@
-﻿namespace Mp3UtilConsole.Arguments
+﻿namespace Mp3UtilLib.Arguments
 {
     public class Args
     {

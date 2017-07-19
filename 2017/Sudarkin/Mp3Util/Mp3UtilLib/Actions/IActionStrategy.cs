@@ -1,4 +1,4 @@
-﻿namespace Mp3UtilConsole.Actions
+﻿namespace Mp3UtilLib.Actions
 {
     public interface IActionStrategy
     {

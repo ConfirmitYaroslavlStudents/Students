@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Mp3UtilConsole.Arguments
+namespace Mp3UtilLib.Arguments
 {
-    public class ArgumentsManager
+    public class ArgumentsParser
     {
         private static readonly Dictionary<string, ProgramAction> AllowedActions = new Dictionary<string, ProgramAction>
         {

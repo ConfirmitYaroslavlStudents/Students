@@ -4,8 +4,8 @@ using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mp3UtilConsole;
-using Mp3UtilConsole.Actions;
+using Mp3UtilLib;
+using Mp3UtilLib.Actions;
 using Mp3UtilTests.Helpers;
 
 namespace Mp3UtilTests
@@ -31,7 +31,7 @@ namespace Mp3UtilTests
                 {@"C:\Music\Bullet For My Valentine - Just Another Star.mp3", new MockFileData(_dummyMp3)}
             });
 
-            IActionStrategy fileNameAction = new FileNameAction(fileSystem);
+            IActionStrategy fileNameAction = new FileNameAction();
 
             foreach (string file in fileSystem.AllFiles)
             {
@@ -61,7 +61,7 @@ namespace Mp3UtilTests
             mp3File.Artist = "Artist";
             mp3File.Title = "Title";
 
-            new FileNameAction(fileSystem).Process(mp3File);
+            new FileNameAction().Process(mp3File);
         }
 
         private string GetRandomString()

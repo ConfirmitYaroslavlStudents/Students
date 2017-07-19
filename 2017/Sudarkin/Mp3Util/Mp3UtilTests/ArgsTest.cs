@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mp3UtilConsole;
-using Mp3UtilConsole.Arguments;
+using Mp3UtilLib;
+using Mp3UtilLib.Arguments;
 
 namespace Mp3UtilTests
 {
@@ -12,7 +12,7 @@ namespace Mp3UtilTests
         public void ParsingArguments()
         {
             string[] args = { "*.*", "-recursive", "-toTag" };
-            Args parsedArgs = ArgumentsManager.Parse(args);
+            Args parsedArgs = ArgumentsParser.Parse(args);
 
             Assert.AreEqual("*.*", parsedArgs.Mask);
             Assert.AreEqual(true, parsedArgs.Recursive);
@@ -23,7 +23,7 @@ namespace Mp3UtilTests
         public void ParsingArgumentsWithDefaultValues()
         {
             string[] args = { "*.*" };
-            Args parsedArgs = ArgumentsManager.Parse(args);
+            Args parsedArgs = ArgumentsParser.Parse(args);
 
             Assert.AreEqual("*.*", parsedArgs.Mask);
             Assert.AreEqual(false, parsedArgs.Recursive);
@@ -35,14 +35,14 @@ namespace Mp3UtilTests
         public void ParsingEmptyArguments()
         {
             string[] args = new string[0];
-            ArgumentsManager.Parse(args);
+            ArgumentsParser.Parse(args);
         }
 
         [TestMethod]
         public void ParsingArgumentsWithMultiplyActionParam()
         {
             string[] args = { "*.*", "-toTag", "-toTag", "-toFileName", "-toTag", "-toFileName" };
-            Args parsedArgs = ArgumentsManager.Parse(args);
+            Args parsedArgs = ArgumentsParser.Parse(args);
 
             Assert.AreEqual("*.*", parsedArgs.Mask);
             Assert.AreEqual(false, parsedArgs.Recursive);
@@ -54,7 +54,7 @@ namespace Mp3UtilTests
         public void ParsingWithWrongArgument()
         {
             string[] args = { "*.*", "-recursive", "-wrongArgument" };
-            ArgumentsManager.Parse(args);
+            ArgumentsParser.Parse(args);
         }
     }
 }

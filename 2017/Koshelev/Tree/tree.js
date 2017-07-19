@@ -1,161 +1,219 @@
-function Tree() {
-	this._value = this._left = this._right = this._par = null;
-}
+'use strict'
 
-Tree.prototype.getValue = function() {
-	return this._value;
-}
+class Tree {
 
-Tree.prototype.setValue = function(val) {
-	this._value = val;
-}
+	constructor() {
+		this.root = null;
+	}
 
-Tree.prototype.getLeft = function() {
-	return this._left;
-}
+	findNode(val) {
+		if (this.root && this.root.findNode(val).getValue() == val)
+			return this.root.findNode(val);
+		return null;
+	}
 
-Tree.prototype.setLeft = function(node) {
-	this._left = node;
-}
-
-Tree.prototype.getRight = function() {
-	return this._right;
-}
-
-Tree.prototype.setRight = function(node) {
-	this._right = node;
-}
-
-Tree.prototype.getParent = function() {
-	return this._parent;
-}
-
-Tree.prototype.setParent = function(node) {
-	this._parent = node;
-}
-
-Tree.prototype.showTree = function() {
-	function spaces(self) {
-		var i = 0;
-		while (self.getParent()) {
-			i++;
-			self = self.getParent();
+	addNode(val) {
+		let node = null;
+		
+		if (this.root)
+			node = this.root.findNode(val);
+		else{
+			this.root = new Node(val);
+			return true;
 		}
-		var spaces = "";
-		for (var j = 0; j < i; j++)
-			spaces += "  ";
+
+		if (node.getValue() == val)
+			return false;
+		
+		node.addNode(val);
+	}
+
+	deleteNode(val) {
+		let node = null;
+		if (this.root)
+			node = this.root.findNode(val);
+		if (!node)
+			return false;
+		if (node.getValue() != val)
+			return false;
+		if (node == this.root)
+			this.root = node.deleteNode();
+		else
+			node.deleteNode();
+		return true;
+	}
+
+	showTree(){
+		if (this.root)
+			this.root.showTree();
+	}
+}
+
+class Node {
+
+	constructor(val) {
+		this.value = val;
+		this.parent = this.left = this.right = null;
+	}
+
+	getValue() {
+		return this.value;
+	}
+
+	setValue(val) {
+		this.value = val;
+	}
+
+	getLeft() {
+		return this.left;
+	}
+
+	setLeft(node) {
+		this.left = node;
+	}
+
+	getRight() {
+		return this.right;
+	}
+
+	setRight(node) {
+		this.right = node;
+	}
+
+	getParent() {
+		return this.parent;
+	}
+
+	setParent(node) {
+		this.parent = node;
+	}
+
+	addNode(val) {
+		if (val > this.value) {
+			this.right = new Node(val);
+			this.right.setParent(this);
+		} else {
+			this.left = new Node(val);
+			this.left.setParent(this);
+		}
+	}
+
+	findNode(val) {
+		if (val == this.value)
+			return this;
+		if (val < this.value)
+			if (this.left)
+				return this.left.findNode(val);
+			else 
+				return this;
+		if (val > this.value)
+			if (this.right)
+				return this.right.findNode(val);
+			else 
+				return this;
+	}
+
+	deleteNode() {
+		if (!this.parent)
+			return this.removeRoot();
+
+		if (this.parent.getValue() > this.value) {
+			if (this.right) {
+				this.replaceByRightSon();
+			} else {
+				if (this.left)
+					this.left.setParent(this.parent);
+				this.parent.setLeft(this.left);
+			}
+		} else {
+			if (this.left) {
+				this.replaceByLeftSon();
+			} else {
+				if (this.right)
+					this.right.setParent(this.parent);
+				this.parent.setRight(this.right);
+			}
+		}
+	}
+
+	replaceByRightSon() {
+		let low = this.findLowestFromRight();
+
+		low.setLeft(this.left);
+		if (this.left)
+			this.left.setParent(low);
+
+		this.right.setParent(this.parent);
+		if (this.parent)
+			this.parent.setLeft(this.right);
+	}
+
+	replaceByLeftSon() {
+		let low = this.findLowestFromLeft();
+
+		low.setRight(this.right);
+		if (this.right)
+			this.right.setParent(low);
+
+		this.left.setParent(this.parent);
+		if (this.parent)
+			this.parent.setRight(this.left);
+	}
+
+	findLowestFromLeft() {
+		let self = this.left;
+
+		while (self.getRight()) {
+			self = self.getRight();
+		}
+
+		return self;
+	}
+
+	findLowestFromRight() {
+		let self = this.right;
+
+		while (self.getLeft()) {
+			self = self.getLeft();
+		}
+
+		return self;
+	}
+
+	removeRoot() {
+		if (this.left) {
+			this.replaceByLeftSon();
+			return this.left;
+		}
+		if (this.right) {
+			this.replaceByRightSon();
+			return this.right;
+		}
+		return null;
+	}
+
+	spaces(){
+		let self = this;
+		let i = 0
+		while(self.getParent())
+		{
+			self = self.getParent();
+			i++;
+		}
+		let spaces = "";
+		for (let j = 0; j < i; j++)
+			spaces += " ";
 		return spaces;
 	}
 
-	if (this.getRight())
-		this.getRight().showTree();
-
-	console.log(spaces(this) + this.getValue());
-
-	if (this.getLeft())
-		this.getLeft().showTree();
+	showTree(){
+		if (this.right)
+			this.right.showTree();
+		console.log(this.spaces() + this.value);
+		if (this.left)
+			this.left.showTree();
+	}
 }
 
-Tree.prototype.findNode = function(val) { //return node closest to val
-	var self = this;
-
-	while (self != null) {
-		var value = self.getValue();
-		var left = self.getLeft();
-		var right = self.getRight();
-		if (value == val)
-			return self;
-		if (value < val)
-			if (right)
-				self = right;
-			else
-				return self;
-		if (value > val)
-			if (left)
-				self = left;
-			else
-				return self;
-	}
-	return self;
-}
-
-Tree.prototype.addNode = function(val) { // add new node to tree
-	var self = this.findNode(val);
-	var value = self.getValue();
-
-	if (value == val)
-		return;
-
-	if (value && value > val) {
-		self.setLeft(new Tree());
-		self.getLeft().setValue(val);
-		self.getLeft().setParent(self);
-		return;
-	}
-	if (value && value < val) {
-		self.setRight(new Tree());
-		self.getRight().setValue(val);
-		self.getRight().setParent(self);
-		return;
-	}
-	self.setValue(val); // for root
-}
-
-Tree.prototype.deleteNode = function(val) {
-	var self = this.findNode(val);
-
-	if (self.getValue() != val)
-		return this;
-
-	if (self.getParent() && self.getParent().getValue() > self.getValue()) { // not root and left son
-		if (self.getRight()) {
-			var replace = self.getRight();
-			while (replace.getLeft())
-				replace = replace.getLeft();
-
-			replace.setLeft(self.getLeft()); // replace left son deleting node to the lowest son from right
-			self.getLeft().setParent(replace);
-			self.getParent().setLeft(self.getRight()); // replace deleted node by right son
-			self.getRight().setParent(self.getParent()); // link right son to deleted node parent
-		} else {
-			if (self.getLeft()) {
-				self.getParent().setLeft(self.getLeft());
-				self.getLeft().setParent(self.getParent());
-			} else {
-				self.getParent().setLeft(null); // a leaf
-			}
-		}
-	} else {
-		if (self.getLeft()) { // root or right son
-			var replace = self.getLeft();
-			while (replace.getRight())
-				replace = replace.getRight(); // find max on branch
-
-			replace.setRight(self.getRight()); // link deleted node right son to max
-			self.getRight().setParent(replace);
-			if (self.getParent()) {
-				self.getParent().setRight(self.getLeft()); // link with parent if it is
-				self.getLeft().setParent(self.getParent());
-			} else {
-				self.getLeft().setParent(null);
-			}
-		} else {
-			if (self.getRight()) { // root without left son
-				if (self.getParent())
-					self.getParent().setRight(self.getRight());
-				self.getRight().setParent(self.getParent());
-			} else {
-				if (self.getParent()) // a leaf
-					self.getParent().setRight(null);
-			}
-		}
-	}
-
-	var root = self.getParent() || self.getRight() || self.getLeft(); // return root
-	while (root.getParent())
-		root = root.getParent();
-	self = null;
-	return root;
-}
-
-module.exports = Tree;
+exports.Tree = Tree;
+exports.Node = Node;

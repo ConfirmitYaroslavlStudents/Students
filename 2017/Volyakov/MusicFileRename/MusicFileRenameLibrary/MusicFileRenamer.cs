@@ -1,69 +1,59 @@
 ﻿using System;
 using System.IO;
 
-namespace MusicFileRename
+namespace MusicFileRenameLibrary
 {
-    //SRP violation
-    public static class MusicFileRenamer
+    public class MusicFileRenamer
     {
-
-        public static void RenameFileNameByTag(string pattern, bool recursive = false, string directory = null)
+        private string[] _extensions = new string[] { ".mp3", ".mp4" };
+        private Parser _parser = new Parser();
+        private FileWorker _fileWorker = new FileWorker();
+        private IRenamer _renamer;
+        
+        public enum RenameType
         {
-            var files = GetFiles(pattern,recursive,directory);
-            foreach (var filePath in files)
+            ToFileName,
+            ToTag
+        }
+
+        public void RenameMusicFiles(string directory,string searchPattern, bool recursive, RenameType renameType)
+        {
+            if (!IsCorrectExtension(searchPattern))
+                throw new ArgumentException("Маска файла содержит неподдерживаемый формат файла");
+
+            var filesForRename = _fileWorker.GetFiles(directory, searchPattern, recursive);
+
+            _renamer = AppointRenamer(renameType);
+
+            foreach(var file in filesForRename)
             {
-                var slashIndex = filePath.LastIndexOf(@"\");
-                var pathWithoutName = filePath.Substring(0, slashIndex + 1);
-                var fileTag = TagLib.File.Create(filePath);
-
-                var newName = fileTag.Tag.Performers[0] + "-" + fileTag.Tag.Title + ".mp3";
-                var newPath = pathWithoutName + newName;
-
-                if(!File.Exists(newPath))
-                    File.Move(filePath,newPath);
+                var parsedFile = _parser.ParseFile(file);
+                _fileWorker.GetFileTags(parsedFile);
+                _renamer.Rename(parsedFile);
+                _parser.CollectFilePath(parsedFile);
+                _fileWorker.SaveFile(file, parsedFile);
             }
         }
 
-        public static void RenameTagByFileName(string pattern, bool recursive = false, string directory = null)
+        private bool IsCorrectExtension(string searchPattern)
         {
-            var files = GetFiles(pattern, recursive,directory);
-            foreach (var filePath in files)
+            var currentExtension = _parser.GetFileExtension(searchPattern);
+            for (int i = 0; i < _extensions.Length; i++)
             {
-                var nameStartIndex = filePath.LastIndexOf(@"\") + 1;
-                var fileName = filePath.Substring(nameStartIndex, filePath.Length - nameStartIndex);
+                if (_extensions[i] == currentExtension)
+                    return true;
+            }
+            return false;
+        }
 
-                var dashIndex = fileName.IndexOf('-');
-                var performerLength = dashIndex;
-                var titleLength = fileName.Length - dashIndex - 5;
-                var performer = fileName.Substring(0, performerLength);
-                var title = fileName.Substring(dashIndex + 1, titleLength);
-
-                var fileTag = TagLib.File.Create(filePath);
-                fileTag.Tag.Performers = new string[] { performer };
-                fileTag.Tag.Title = title;
-                fileTag.Save();
+        private IRenamer AppointRenamer(RenameType renameType)
+        {
+            switch(renameType)
+            {
+                case RenameType.ToFileName : return new FileNameRenamer();
+                case RenameType.ToTag : return new TagRenamer();
+                default: throw new ArgumentException("Неверно задан тип переименования");
             }
         }
-
-        private static string[] GetFiles(string pattern, bool recursive, string directory)
-        {
-            var IsMp3 = pattern.IndexOf(".mp3") == pattern.Length - 4;
-            if (pattern.Length < 5 || ! IsMp3)
-                throw new ArgumentException("Wrong Pattern");
-            
-            SearchOption option;
-            if (recursive)
-                option = SearchOption.AllDirectories;
-            else
-                option = SearchOption.TopDirectoryOnly;
-
-            if (directory == null)
-                directory = Directory.GetCurrentDirectory();
-            else if (!Directory.Exists(directory))
-                throw new ArgumentException("Wrong Directory");
-
-            return Directory.GetFiles(directory,pattern,option);
-        }
-
     }
 }

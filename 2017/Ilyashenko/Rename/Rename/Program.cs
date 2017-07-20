@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using RenamerLibrary;
 
-namespace Rename
+namespace RenamerConsole
 {
     class Program
     {
@@ -10,13 +11,8 @@ namespace Rename
             var directory = Directory.GetCurrentDirectory();
             try
             {
-                var renamer = new FileRenamer(directory);
+                var renamer = new Renamer(directory);
                 renamer.Rename(args);
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine("Один или несколько аргументов программы были введены неверно. Проверьте правильность введённых значений.");
-                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {

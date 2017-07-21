@@ -1,8 +1,6 @@
 ﻿using System;
-using DirLib;
-using ParseInputLib;
+using TaggerLib;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +11,8 @@ namespace Tagger
     {
         static void Main(string[] args)
         {
-            var input = Console.ReadLine(); //(path) (mask) (-n|-t) [-r]
-            var inputData = ParseInput.Parse(input);
-            Dir.ChangeFiles(inputData);        
+            var inputData = ParseInput.Parse(args);
+            Dir.ChangeFiles(inputData);
         }
     }
 }

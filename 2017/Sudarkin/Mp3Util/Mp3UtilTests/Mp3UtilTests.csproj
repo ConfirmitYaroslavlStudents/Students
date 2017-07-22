@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ArgsTest.cs" />
+    <Compile Include="FileManagerTest.cs" />
     <Compile Include="FileNameActionTest.cs" />
     <Compile Include="TagActionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

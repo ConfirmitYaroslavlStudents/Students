@@ -29,7 +29,7 @@ namespace Mp3UtilLib
 
         public Mp3File(string path, Stream stream, IFileSystem fileSystem)
         {
-            _file = CreateTagFile(path, stream);
+            _file = CreateTagFileFromStream(path, stream);
 
             if (_file.MimeType != "taglib/mp3")
             {
@@ -44,7 +44,7 @@ namespace Mp3UtilLib
             Title = _file.Tag.Title;
         }
 
-        private TagFile CreateTagFile(string path, Stream stream = null)
+        private TagFile CreateTagFileFromStream(string path, Stream stream = null)
         {
             try
             {

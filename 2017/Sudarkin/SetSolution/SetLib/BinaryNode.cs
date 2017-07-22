@@ -20,11 +20,11 @@ namespace SetLib
             {
                 int count = 0;
 
-                if (Left != null)
+                if (HasLeft)
                 {
                     count++;
                 }
-                if (Right != null)
+                if (HasRight)
                 {
                     count++;
                 }

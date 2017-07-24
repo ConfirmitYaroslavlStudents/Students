@@ -30,7 +30,7 @@ namespace RenamerLibrary
         {
             return recursive ? Directory.GetFiles(currentDirectory, pattern, SearchOption.AllDirectories) : Directory.GetFiles(currentDirectory, pattern);
         }
-
+        
         public void MakeFileNames(string[] filePaths)
         {
             foreach (var fPath in filePaths)

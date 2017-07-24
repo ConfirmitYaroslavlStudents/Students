@@ -5,21 +5,20 @@ using System.Text.RegularExpressions;
 
 namespace RenamerLibrary
 {
-    public class Mp3File : SoundFile
+    public class TestableMp3File : SoundFile
     {
-        private TagLib.File file;
+        private string _artist;
+        private string _title;
 
         public new string Artist
         {
             get
             {
-                var artists = new string[] { file.Tag.Artists[0], file.Tag.FirstArtist, file.Tag.AlbumArtists[0], file.Tag.FirstAlbumArtist, file.Tag.Performers[0], file.Tag.FirstPerformer, file.Tag.JoinedArtists, file.Tag.JoinedPerformers, file.Tag.JoinedAlbumArtists };
-                return artists.Where(x => !String.IsNullOrEmpty(x)).First();
+                return _artist;
             }
             set
             {
-                file.Tag.Performers = new string[] { value };
-                file.Save();
+                _artist = value;
             }
         }
 
@@ -27,30 +26,23 @@ namespace RenamerLibrary
         {
             get
             {
-                return file.Tag.Title;
+                return _title;
             }
             set
             {
-                file.Tag.Title = value;
-                file.Save();
+                _title = value;
             }
         }
 
-        public Mp3File(string _path)
+        public TestableMp3File(string _path)
         {
             path = _path;
-            file = TagLib.File.Create(path);
         }
 
         public override void MakeFilename()
         {
             var newPath = Path.GetDirectoryName(path) + "\\" + Artist + " - " + Title + Path.GetExtension(path);
-            if (!File.Exists(newPath))
-            {
-                File.Move(path, newPath);
-                path = newPath;
-                file = TagLib.File.Create(path);
-            }
+            path = newPath;
         }
 
         public override void MakeTags()

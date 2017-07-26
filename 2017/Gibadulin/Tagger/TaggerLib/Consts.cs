@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaggerLib
+﻿namespace TaggerLib
 {
-    class Consts
+    internal class Consts
     {
-        public const string Subfolder = "-r";
-        public const string ToName = "-n";
-        public const string ToTag = "-t";
+        public const string ToTag = "toTag";
+        public const string ToName = "toName";
+        public const string Subfolder = "recursive";
     }
 }

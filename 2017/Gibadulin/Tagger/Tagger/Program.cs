@@ -1,5 +1,4 @@
 ﻿using System;
-using TaggerLib;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +10,7 @@ namespace Tagger
     {
         static void Main(string[] args)
         {
-            var inputData = ParseInput.Parse(args);
-            Dir.ChangeFiles(inputData);
+            TaggerLib.Tagger.ChangeFiles(args);
         }
     }
 }

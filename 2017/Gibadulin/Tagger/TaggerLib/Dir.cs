@@ -1,38 +1,32 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TaggerLib
 {
-    public class Dir
+    internal class Dir 
     {
-        public static void ChangeFiles(ParseInput.InputData inputData)
+        private static string[] GetPathsFiles(InputData inputData)
         {
-                string[] filesToChange;
-                if (inputData.Subfolders)
-                    filesToChange = Directory.GetFiles(inputData.Path, inputData.Mask, SearchOption.AllDirectories);
-                else
-                    filesToChange = Directory.GetFiles(inputData.Path, inputData.Mask);
+            string[] pathsfiles;
+            if (inputData.Subfolders)
+                pathsfiles = System.IO.Directory.GetFiles(inputData.Path, inputData.Mask, System.IO.SearchOption.AllDirectories);
+            else
+                pathsfiles = System.IO.Directory.GetFiles(inputData.Path, inputData.Mask);
 
-                if (inputData.Modifier == Consts.ToTag)
-                    FilesToTag(filesToChange);
-                if (inputData.Modifier == Consts.ToName)
-                    FilesToName(filesToChange);
+            return pathsfiles;
         }
 
-        private static void FilesToTag(string[] filesToChange)
+        public static List<File> GetFiles(InputData inputData)
         {
-            foreach (var item in filesToChange)
-                Tag.ToTag(item);
-        }
+            var files = new List<File>();
+            var pathsfiles = GetPathsFiles(inputData);
+            foreach (var path in pathsfiles)
+            {
+                var file = new File(path);
+                file.GetTags();
+                files.Add(file);
+            }
 
-        private static void FilesToName(string[] filesToChange)
-        {
-            foreach (var item in filesToChange)
-                Tag.ToName(item);
-        }
+            return files;
+        }       
     }
 }

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EAC49B21-4EC0-4B17-B4E9-1469C9696FCE}</ProjectGuid>
+    <ProjectGuid>{440026BF-574A-4BCA-85E9-129A0DDD1BFD}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tagger</RootNamespace>
@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TaggerLib\TaggerLib.csproj">
-      <Project>{005de3c8-6936-4146-aec6-f33df38e1970}</Project>
+      <Project>{171629b2-b240-4e90-84e1-fa1e2edb9620}</Project>
       <Name>TaggerLib</Name>
     </ProjectReference>
   </ItemGroup>

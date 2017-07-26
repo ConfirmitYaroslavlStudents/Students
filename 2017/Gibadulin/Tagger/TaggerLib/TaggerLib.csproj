@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{005DE3C8-6936-4146-AEC6-F33DF38E1970}</ProjectGuid>
+    <ProjectGuid>{171629B2-B240-4E90-84E1-FA1E2EDB9620}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TaggerLib</RootNamespace>
@@ -48,11 +48,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acting.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Dir.cs" />
+    <Compile Include="File.cs" />
     <Compile Include="ParseInput.cs" />
-    <Compile Include="Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tagger.cs" />
+    <Compile Include="ToName.cs" />
+    <Compile Include="ToTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

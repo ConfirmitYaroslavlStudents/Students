@@ -2,29 +2,25 @@
 
 namespace TaggerLib
 {
-    public class ParseInput
+    internal class InputData
     {
-        public class InputData
-        {
-            public string Path { get; internal set; }
-            public string Mask { get; internal set; }
-            public string Modifier { get; internal set; }
-            public bool Subfolders { get; internal set; }
-        }
+        public string Path { get;  set; }
+        public string Mask { get;  set; }
+        public string Modifier { get;  set; }
+        public bool Subfolders { get;  set; }
+    }
 
+    internal class ParseInput
+    {
         public static InputData Parse(string[] args)
         {
             if (args.Length > 4 || args.Length < 3)
             {
-                throw new ArgumentException("Wrong Input");
-            }
-            if (args[2] != Consts.ToName && args[2] != Consts.ToTag)
-            {
-                throw new ArgumentException("Wrong Input");
+                throw new ArgumentException("Wrong count of argument");
             }
             if (args.Length == 4 && args[3] != Consts.Subfolder)
             {
-                throw new ArgumentException("Wrong Input");
+                throw new ArgumentException("Wrong Subfolders string");
             }
 
             var inputData = new InputData();

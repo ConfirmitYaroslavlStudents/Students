@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3RenamerTimeMeasure", "MP3RenamerTimeMeasure\MP3RenamerTimeMeasure.csproj", "{B26B1AD8-1011-4938-BD3B-CA0E573E15E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3RenamerLib", "MP3RenamerLib\MP3RenamerLib.csproj", "{5868FA96-8415-4ADC-A876-8C42CE73CB4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3RenamerTimeMeasure.Test", "MP3RenamerTimeMeasure.Test\MP3RenamerTimeMeasure.Test.csproj", "{FAEB055A-C56E-4826-961B-D3CE9B43FC14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B26B1AD8-1011-4938-BD3B-CA0E573E15E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B26B1AD8-1011-4938-BD3B-CA0E573E15E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B26B1AD8-1011-4938-BD3B-CA0E573E15E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B26B1AD8-1011-4938-BD3B-CA0E573E15E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5868FA96-8415-4ADC-A876-8C42CE73CB4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5868FA96-8415-4ADC-A876-8C42CE73CB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5868FA96-8415-4ADC-A876-8C42CE73CB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5868FA96-8415-4ADC-A876-8C42CE73CB4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAEB055A-C56E-4826-961B-D3CE9B43FC14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAEB055A-C56E-4826-961B-D3CE9B43FC14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAEB055A-C56E-4826-961B-D3CE9B43FC14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAEB055A-C56E-4826-961B-D3CE9B43FC14}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

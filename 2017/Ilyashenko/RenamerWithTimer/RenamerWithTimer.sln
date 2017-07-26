@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenamerWithTimer", "RenamerWithTimer\RenamerWithTimer.csproj", "{C6DA1074-7A3B-47BB-831E-01F2294FE9AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessorsLib", "ProcessorsLib\ProcessorsLib.csproj", "{DF8D4718-003F-4612-B596-785943CFDBF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenamersLib", "ProcessorsLib\RenamersLib.csproj", "{DF8D4718-003F-4612-B596-785943CFDBF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenamersTests", "RenamersTests\RenamersTests.csproj", "{13C78BE8-0ECE-41A9-8422-5C578A7BDE81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DF8D4718-003F-4612-B596-785943CFDBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF8D4718-003F-4612-B596-785943CFDBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF8D4718-003F-4612-B596-785943CFDBF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13C78BE8-0ECE-41A9-8422-5C578A7BDE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13C78BE8-0ECE-41A9-8422-5C578A7BDE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13C78BE8-0ECE-41A9-8422-5C578A7BDE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13C78BE8-0ECE-41A9-8422-5C578A7BDE81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,16 @@ namespace Mp3UtilLib.Logger
 {
     public class ConsoleLogger
     {
+        public void WriteError(string message)
+        {
+            Write(message, LogStatus.Error);
+        }
+
+        public void WriteSuccess(string message)
+        {
+            Write(message, LogStatus.Success);
+        }
+
         public void Write(string message, LogStatus status)
         {
             WriteStatus(status);
@@ -14,17 +24,9 @@ namespace Mp3UtilLib.Logger
         {
             switch (status)
             {
-                case LogStatus.Info:
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    Console.Write("[Info] ");
-                    break;
                 case LogStatus.Success:
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.Write("[Success] ");
-                    break;
-                case LogStatus.Warning:
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.Write("[Warning] ");
                     break;
                 case LogStatus.Error:
                     Console.ForegroundColor = ConsoleColor.Red;

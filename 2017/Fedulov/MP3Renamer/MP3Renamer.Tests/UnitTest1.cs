@@ -6,7 +6,7 @@ using TagLib;
 
 namespace MP3Renamer.Tests
 {
-    [TestClass]
+    /*[TestClass]
     public class MP3RenamerTests
     {
         private string directory = "tests";
@@ -112,5 +112,5 @@ namespace MP3Renamer.Tests
             Assert.AreEqual(testFileToTagRecursiveArtistExpected, resultArtist);
             Assert.AreEqual(testFileToTagRecursiveNameExpected, resultTitle);
         }
-    }
+    }*/
 }

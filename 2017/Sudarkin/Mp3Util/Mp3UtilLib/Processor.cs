@@ -8,14 +8,14 @@ namespace Mp3UtilLib
     public class Processor
     {
         private readonly Args _arguments;
-        private readonly FileManager _fileManager;
+        private readonly FileSystem.FileSystem _fileSystem;
         private readonly ConsoleLogger _logger;
 
         public Processor(Args arguments, ConsoleLogger logger)
         {
             _arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _fileManager = new FileManager();
+            _fileSystem = new FileSystem.FileSystem();
         }
 
         public void Execute()
@@ -23,20 +23,20 @@ namespace Mp3UtilLib
             IActionStrategy action = GetActionStrategy(_arguments.Action);
 
             foreach (string file in 
-                _fileManager.GetFilesFromCurrentDirectory(_arguments.Mask, _arguments.Recursive))
+                _fileSystem.GetFilesFromCurrentDirectory(_arguments.Mask, _arguments.Recursive))
             {
                 try
                 {
                     action.Process(new Mp3File(file));
-                    _logger.Write($"{file} - The transformation is complete", LogStatus.Success);
+                    _logger.WriteError($"{file} - The transformation is complete");
                 }
                 catch (Exception ex)
                 {
-                    _logger.Write(ex.Message, LogStatus.Error);
+                    _logger.WriteError(ex.Message);
                 }
             }
 
-            _logger.Write("Done!", LogStatus.Success);
+            _logger.WriteSuccess("Done!");
         }
 
         private IActionStrategy GetActionStrategy(ProgramAction action)

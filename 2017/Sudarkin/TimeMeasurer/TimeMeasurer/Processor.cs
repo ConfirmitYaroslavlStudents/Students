@@ -1,22 +1,20 @@
 ﻿using System;
 
-namespace TimeMeasurer.Variant2
+namespace TimeMeasurer
 {
     public class Processor
     {
         public void Process()
         {
-            Mp3File file = new Mp3File();
             TimeMeasurer timeMeasurer = new TimeMeasurer(true);
             Mp3Renamer renamer = new Mp3Renamer(timeMeasurer);
             PermissionsChecker checker = new PermissionsChecker(timeMeasurer);
-            
+            var renamerDecorator 
+                = new WithPermissionDecorator(renamer, checker, UserRole.Journalist);
+
             for (int i = 0; i < 100; i++)
             {
-                if (checker.CheckPermission(file, UserRole.Journalist))
-                {
-                    renamer.Rename(file);
-                }
+                renamerDecorator.Rename(new Mp3File());
             }
 
             Console.WriteLine(timeMeasurer.GetResults());

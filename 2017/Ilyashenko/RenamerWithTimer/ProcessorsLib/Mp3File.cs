@@ -1,17 +1,17 @@
-﻿namespace ProcessorsLib
+﻿namespace RenamersLib
 {
     public class Mp3File
     {
-        public string path { get; set; }
+        public string Path { get; private set; }
 
         public Mp3File(string _path)
         {
-            path = _path;
+            Path = _path;
         }
 
         public void Move(string newPath)
         {
-            path = newPath;
+            Path = newPath;
         }
     }
 }

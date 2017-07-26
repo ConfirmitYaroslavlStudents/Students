@@ -4,9 +4,9 @@ namespace Mp3UtilLib.Actions
 {
     public class TagAction : IActionStrategy
     {
-        public void Process(Mp3File mp3File)
+        public void Process(AudioFile audioFile)
         {
-            string nameWithoutExtension = Path.GetFileNameWithoutExtension(mp3File.FullName);
+            string nameWithoutExtension = Path.GetFileNameWithoutExtension(audioFile.FullName);
             if (nameWithoutExtension == null)
             {
                 return;
@@ -27,9 +27,9 @@ namespace Mp3UtilLib.Actions
                 artist = nameWithoutExtension.Trim();
             }
 
-            mp3File.Artist = artist;
-            mp3File.Title = title;
-            mp3File.Save();
+            audioFile.Artist = artist;
+            audioFile.Title = title;
+            audioFile.Save();
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace TimeMeasurer.Variant2
+﻿namespace TimeMeasurer
 {
-    public class Mp3Renamer
+    public class Mp3Renamer : IMp3Renamer
     {
         private readonly TimeMeasurer _timeMeasurer;
 

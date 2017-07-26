@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-namespace TimeMeasurer.Variant2
+namespace TimeMeasurer
 {
-    public class PermissionsChecker
+    public class PermissionsChecker : IPermissionsChecker
     {
         private readonly TimeMeasurer _timeMeasurer;
 

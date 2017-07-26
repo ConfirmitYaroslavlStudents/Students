@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Renamer", "MP3Renamer\MP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Renamer.Tests", "MP3Renamer.Tests\MP3Renamer.Tests.csproj", "{06E6ADA6-25E0-48D8-A4E0-EEB5C09209D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3RenamerLib", "RenamerLib\MP3RenamerLib.csproj", "{1132776F-A81F-49B0-B898-D3A3F0084B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{8DEF44EB-869F-42C9-8827-F7C0E3338312}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{06E6ADA6-25E0-48D8-A4E0-EEB5C09209D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06E6ADA6-25E0-48D8-A4E0-EEB5C09209D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06E6ADA6-25E0-48D8-A4E0-EEB5C09209D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1132776F-A81F-49B0-B898-D3A3F0084B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1132776F-A81F-49B0-B898-D3A3F0084B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1132776F-A81F-49B0-B898-D3A3F0084B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1132776F-A81F-49B0-B898-D3A3F0084B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DEF44EB-869F-42C9-8827-F7C0E3338312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DEF44EB-869F-42C9-8827-F7C0E3338312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DEF44EB-869F-42C9-8827-F7C0E3338312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DEF44EB-869F-42C9-8827-F7C0E3338312}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

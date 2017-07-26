@@ -1,4 +1,4 @@
-﻿namespace ProcessorsLib
+﻿namespace RenamersLib
 {
     public enum UserRole
     {

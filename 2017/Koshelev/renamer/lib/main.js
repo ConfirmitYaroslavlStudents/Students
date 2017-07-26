@@ -1,9 +1,9 @@
-(function() {
+function main() {
   var cli, colors, err, pkg, program;
   program = require("commander");
   colors = require("colors");
   pkg = require("../package.json");
-  cli = require("./cli");
+  cli = require("./filesHandling");
   
   program.version(pkg.version)
     .option("--toName [mask]", "find files by mask and replace name by tag")
@@ -17,9 +17,11 @@
   }
 
   if (program.toName)
-    cli.renameByTag(program.toName, program.recursive);
+    cli.renameByTag(program.toName, { recursive: program.recursive});
   
   if (program.toTag)
-    cli.retagByName(program.toTag, program.recursive);
+    cli.retagByName(program.toTag, { recursive: program.recursive});
 
-}).call(this);
+}
+
+module.exports = main;

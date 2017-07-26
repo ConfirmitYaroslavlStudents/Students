@@ -36,9 +36,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Abstractions, Version=2.0.0.144, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Abstractions.2.0.0.144\lib\net40\System.IO.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,8 +52,9 @@
     <Compile Include="Actions\TagAction.cs" />
     <Compile Include="Arguments\Args.cs" />
     <Compile Include="Arguments\ArgumentsParser.cs" />
-    <Compile Include="FileAbstraction.cs" />
-    <Compile Include="FileManager.cs" />
+    <Compile Include="FileSystem\FileSystem.cs" />
+    <Compile Include="FileSystem\IFileSystem.cs" />
+    <Compile Include="AudioFile.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Logger\LogStatus.cs" />
     <Compile Include="Mp3File.cs" />

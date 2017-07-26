@@ -18,7 +18,7 @@ namespace Mp3UtilConsole
             }
             catch (ArgumentException ex)
             {
-                Logger.Write(ex.Message, LogStatus.Error);
+                Logger.WriteError(ex.Message);
                 return;
             }
 

@@ -2,9 +2,7 @@
 {
     public enum LogStatus
     {
-        Info,
         Success,
-        Warning,
         Error
     }
 }

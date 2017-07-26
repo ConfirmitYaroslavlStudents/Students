@@ -7,7 +7,8 @@ namespace TimeMeasurer
     {
         public void MoveTo(string path)
         {
-            Thread.Sleep(new Random().Next(50));
+            Random rnd = new Random();
+            Thread.Sleep(rnd.Next(50));
         }
     }
 }

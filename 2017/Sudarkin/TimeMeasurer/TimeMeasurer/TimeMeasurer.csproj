@@ -42,17 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mp3Renamer\IMp3Renamer.cs" />
+    <Compile Include="PermissionsChecker\IPermissionsChecker.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeMeasurer.cs" />
     <Compile Include="UserRole.cs" />
-    <Compile Include="Variant1\Mp3Renamer.cs" />
-    <Compile Include="Variant1\PermissionsChecker.cs" />
-    <Compile Include="Variant1\Processor.cs" />
-    <Compile Include="Variant2\Mp3Renamer.cs" />
-    <Compile Include="Variant2\PermissionsChecker.cs" />
-    <Compile Include="Variant2\Processor.cs" />
+    <Compile Include="Mp3Renamer\Mp3Renamer.cs" />
+    <Compile Include="PermissionsChecker\PermissionsChecker.cs" />
+    <Compile Include="Processor.cs" />
+    <Compile Include="Mp3Renamer\WithPermissionDecorator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

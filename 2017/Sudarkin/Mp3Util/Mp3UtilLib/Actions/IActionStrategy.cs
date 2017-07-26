@@ -2,6 +2,6 @@
 {
     public interface IActionStrategy
     {
-        void Process(Mp3File mp3File);
+        void Process(AudioFile audioFile);
     }
 }

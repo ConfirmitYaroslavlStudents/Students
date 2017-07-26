@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Abstractions.TestingHelpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3UtilLib;
 using Mp3UtilLib.Actions;
@@ -12,29 +10,22 @@ namespace Mp3UtilTests
     [TestClass]
     public class TagActionTest
     {
-        private readonly byte[] _dummyMp3;
-
-        public TagActionTest()
-        {
-            _dummyMp3 = TestHelper.GetDummyMp3();
-        }
-
         [TestMethod]
         public void ExtractTagsFromName()
         {
-            MockFileSystem fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            string[] files =
             {
-                { @"C:\Music\Bullet For My Valentine - Cries in Vain.mp3", new MockFileData(_dummyMp3) },
-                { @"C:\Music\Bullet For My Valentine - Curses.mp3", new MockFileData(_dummyMp3) },
-                { @"C:\Music\Bullet For My Valentine - No Control.mp3", new MockFileData(_dummyMp3) },
-                { @"C:\Music\Bullet For My Valentine - Just Another Star.mp3", new MockFileData(_dummyMp3) }
-            });
+                @"C:\Music\Bullet For My Valentine - Cries in Vain.mp3",
+                @"C:\Music\Bullet For My Valentine - Curses.mp3",
+                @"C:\Music\Bullet For My Valentine - No Control.mp3",
+                @"C:\Music\Bullet For My Valentine - Just Another Star.mp3"
+            };
 
             IActionStrategy tagAction = new TagAction();
 
-            foreach (string file in fileSystem.AllFiles)
+            foreach (string file in files)
             {
-                Mp3File mp3File = TestHelper.GetMp3File(file, fileSystem);
+                AudioFile mp3File = new TestableMp3File(file);
                 string[] chunks = Path.GetFileNameWithoutExtension(file)
                     .Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                 string artist = chunks[0].Trim();

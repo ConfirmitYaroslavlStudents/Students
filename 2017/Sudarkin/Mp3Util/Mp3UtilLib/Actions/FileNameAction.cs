@@ -4,11 +4,11 @@ namespace Mp3UtilLib.Actions
 {
     public class FileNameAction : IActionStrategy
     {
-        public void Process(Mp3File mp3File)
+        public void Process(AudioFile audioFile)
         {
-            mp3File.MoveTo(
-                Path.Combine(Path.GetDirectoryName(mp3File.FullName),
-                    $"{mp3File.Artist} - {mp3File.Title}.mp3"));
+            audioFile.MoveTo(
+                Path.Combine(Path.GetDirectoryName(audioFile.FullName),
+                    $"{audioFile.Artist} - {audioFile.Title}.mp3"));
         }
     }
 }

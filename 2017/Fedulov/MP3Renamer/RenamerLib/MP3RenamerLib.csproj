@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B9006F6-6392-4F00-9EA0-DC9D6831962D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{1132776F-A81F-49B0-B898-D3A3F0084B8C}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MP3Renamer</RootNamespace>
-    <AssemblyName>MP3Renamer</AssemblyName>
+    <RootNamespace>RenamerLib</RootNamespace>
+    <AssemblyName>RenamerLib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -55,21 +52,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Arguments.cs" />
+    <Compile Include="Actions.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="MP3File.cs" />
+    <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProcessExecutor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{8def44eb-869f-42c9-8827-f7c0e3338312}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RenamerLib\MP3RenamerLib.csproj">
-      <Project>{1132776f-a81f-49b0-b898-d3a3f0084b8c}</Project>
-      <Name>MP3RenamerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

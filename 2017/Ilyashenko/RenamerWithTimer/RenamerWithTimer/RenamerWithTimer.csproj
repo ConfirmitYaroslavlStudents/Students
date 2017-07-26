@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProcessorsLib\ProcessorsLib.csproj">
+    <ProjectReference Include="..\ProcessorsLib\RenamersLib.csproj">
       <Project>{df8d4718-003f-4612-b596-785943cfdbf6}</Project>
-      <Name>ProcessorsLib</Name>
+      <Name>RenamersLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

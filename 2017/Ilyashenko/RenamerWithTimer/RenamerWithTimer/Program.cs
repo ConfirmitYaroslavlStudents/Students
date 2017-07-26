@@ -1,5 +1,6 @@
 ﻿using System;
-using ProcessorsLib;
+using RenamersLib;
+using System.Collections.Generic;
 
 namespace RenamerWithTimer
 {
@@ -7,8 +8,15 @@ namespace RenamerWithTimer
     {
         static void Main(string[] args)
         {
-            var processor = new FileProcessor();
-            processor.Process(true);
+            var files = new List<Mp3File>() { new Mp3File("FirstSample.mp3"), new Mp3File("SecondSample.mp3"), new Mp3File("ThirdSample.mp3")};
+
+            foreach (var file in files)
+            {
+                var oldName = file.Path;
+                var renamer = new RenamerWithTimeCounter(new RenamerWithPermissionCheck(new FileRenamer(), new PermissionChecker(), UserRole.Administrator));
+                renamer.Rename(file);
+                Console.WriteLine($"Файл {oldName} переименован в {file.Path} за {renamer.Elapsed}");
+            }
 
             Console.ReadKey();
         }

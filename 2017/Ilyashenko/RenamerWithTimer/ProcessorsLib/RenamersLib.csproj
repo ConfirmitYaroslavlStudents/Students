@@ -7,8 +7,8 @@
     <ProjectGuid>{DF8D4718-003F-4612-B596-785943CFDBF6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProcessorsLib</RootNamespace>
-    <AssemblyName>ProcessorsLib</AssemblyName>
+    <RootNamespace>RenamersLib</RootNamespace>
+    <AssemblyName>RenamersLib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,12 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileProcessor.cs" />
-    <Compile Include="FileRenamer.cs" />
+    <Compile Include="Renamers\FileRenamer.cs" />
+    <Compile Include="Interfaces\IFileRenamer.cs" />
+    <Compile Include="Interfaces\IPermissionChecker.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="PermissionChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeCounter.cs" />
+    <Compile Include="Renamers\RenamerWithPermissionCheck.cs" />
+    <Compile Include="Renamers\RenamerWithTimeCounter.cs" />
     <Compile Include="UserRole.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

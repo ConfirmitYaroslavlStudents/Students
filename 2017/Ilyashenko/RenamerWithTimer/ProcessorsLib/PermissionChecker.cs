@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace ProcessorsLib
+namespace RenamersLib
 {
-    public class PermissionChecker
+    public class PermissionChecker : IPermissionChecker
     {
         public bool CheckPermissions(Mp3File file, UserRole role)
         {
-            return (int)role >= (new Random()).Next((int)UserRole.Administrator + 1);
+            return role > (int)UserRole.Guest;
         }
     }
 }

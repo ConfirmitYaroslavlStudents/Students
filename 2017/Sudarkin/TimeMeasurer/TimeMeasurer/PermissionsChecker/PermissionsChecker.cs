@@ -22,7 +22,7 @@ namespace TimeMeasurer
             }, "PermissionsChecker::CheckPermission.Sleep");
 
             return _timeMeasurer.Measure(
-                () => rnd.Next((int)UserRole.Administrator + 1) <= (int)role, 
+                () => role >= UserRole.Journalist, 
                 "PermissionsChecker::CheckPermission.Return");
         }
     }

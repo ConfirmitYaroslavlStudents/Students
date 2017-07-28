@@ -42,16 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MP3Renamer\IMP3Renamer.cs" />
-    <Compile Include="PermissionChecker\IPermissionChecker.cs" />
+    <Compile Include="IRenamer.cs" />
     <Compile Include="MP3File.cs" />
-    <Compile Include="MP3Renamer\MP3Renamer.cs" />
-    <Compile Include="MP3Renamer\MP3RenamerWithTimer.cs" />
-    <Compile Include="PermissionChecker\PermissionChecker.cs" />
-    <Compile Include="PermissionChecker\PermissionCheckerWithTimer.cs" />
+    <Compile Include="MP3Renamer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timer.cs" />
+    <Compile Include="RenamerWithPermissionCheck.cs" />
+    <Compile Include="RenamerWithTimer.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

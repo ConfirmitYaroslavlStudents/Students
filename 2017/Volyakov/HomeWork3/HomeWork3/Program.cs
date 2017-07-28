@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeWork3
 {
@@ -12,22 +8,10 @@ namespace HomeWork3
         {
             MP3File file = new MP3File();
             User currentUser = new User();
-            IPermissionChecker checker = new PermissionChecker();
-            IMP3Renamer renamer = new MP3RenamerWithTimer();
-
-            for (int i = 0; i < 100; i++)
-            {
-                if(checker.CheckPermission(file,currentUser))
-                {
-                    renamer.Rename(file);
-                }
-            }
-            Timer renamerTimer = renamer as Timer;
-            if (renamerTimer!= null)
-                Console.WriteLine("Rename Time: "+ renamerTimer.GetTime());
-            Timer checkerTimer = checker as Timer;
-            if (checkerTimer != null)
-                Console.WriteLine("Permission check Time: " + checkerTimer.GetTime());
+            var Renamer = new RenamerWithTimer(new RenamerWithPermissionCheck(
+                new MP3Renamer(), currentUser));
+            Renamer.Rename(file);
+            Console.WriteLine("{0} {1}", file.FileName, Renamer.Elapsed);
             Console.ReadLine();
         }
     }

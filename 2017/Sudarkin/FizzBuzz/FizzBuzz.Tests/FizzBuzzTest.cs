@@ -93,7 +93,7 @@ namespace FizzBuzz.Tests
 
             var numberAsString = fizzBuzz.GetStringRepresentationFor(18);
 
-            Assert.AreEqual("Banana", numberAsString);
+            Assert.AreEqual("FizzBanana", numberAsString);
         }
 
         [TestMethod]
@@ -117,7 +117,8 @@ namespace FizzBuzz.Tests
         public void ChangingRule()
         {
             FizzBuzz fizzBuzz = new FizzBuzz();
-            fizzBuzz.ChangeRule(15, "BuzzFizz");
+            fizzBuzz.ChangeRule(3, "Buzz");
+            fizzBuzz.ChangeRule(5, "Fizz");
 
             string numberAsString = fizzBuzz.GetStringRepresentationFor(15);
 

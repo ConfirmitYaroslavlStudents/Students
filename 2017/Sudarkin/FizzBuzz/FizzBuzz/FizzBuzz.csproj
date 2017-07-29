@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DescendingComparer.cs" />
     <Compile Include="FizzBuzz.cs" />
     <Compile Include="Int32Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

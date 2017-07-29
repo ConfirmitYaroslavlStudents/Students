@@ -9,25 +9,25 @@ namespace FizzBuzz
 
         public FizzBuzz()
         {
-            _rules = new SortedDictionary<int, string>(new DescendingComparer<int>())
+            _rules = new SortedDictionary<int, string>
             {
                 {3, "Fizz"},
                 {5, "Buzz" },
-                {15, "FizzBuzz" }
             };
         }
 
         public string GetStringRepresentationFor(int number)
         {
+            string resultString = string.Empty;
             foreach (var rule in _rules)
             {
                 if (number.IsDividableBy(rule.Key))
                 {
-                    return rule.Value;
+                    resultString += rule.Value;
                 }
             }
 
-            return number.ToString();
+            return !string.IsNullOrEmpty(resultString) ? resultString : number.ToString();
         }
 
         public bool IsRuleExistsFor(int number)

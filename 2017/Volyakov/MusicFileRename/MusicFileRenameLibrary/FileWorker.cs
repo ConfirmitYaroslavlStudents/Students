@@ -5,24 +5,40 @@ namespace MusicFileRenameLibrary
 {
     public class FileWorker
     {
+        private ArgsShell _args;
 
-        public string[] GetFiles(string directoryPath, string searchPattern, bool recursive)
+        public FileWorker(ArgsShell args)
         {
-            if (!Directory.Exists(directoryPath))
-                throw new ArgumentException("Папка не найдена");
-
-            SearchOption searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-
-            return Directory.GetFiles(directoryPath, searchPattern, searchOption);
+            _args = args;
         }
 
-        public void GetFileTags(FileShell file)
+        public string[] GetFiles()
         {
-            if (!File.Exists(file.FullFilePath))
-                throw new ArgumentException("Файл " + file + " не существует");
-            var fileTags = TagLib.File.Create(file.FullFilePath);
-            file.TagArtist = fileTags.Tag.Performers[0];
-            file.TagTitle = fileTags.Tag.Title;
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            SearchOption searchOption = _args.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+
+            return Directory.GetFiles(currentDirectory, _args.Pattern, searchOption);
+        }
+
+        public string GetFileTitleTag(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new ArgumentException("Файл " + filePath + " не существует");
+
+            var fileTags = TagLib.File.Create(filePath);
+
+            return fileTags.Tag.Title;
+        }
+
+        public string GetFileArtistTag(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new ArgumentException("Файл " + filePath + " не существует");
+
+            var fileTags = TagLib.File.Create(filePath);
+
+            return fileTags.Tag.Performers[0];
         }
 
         public void SaveFile(string oldFilePath, FileShell newFile)

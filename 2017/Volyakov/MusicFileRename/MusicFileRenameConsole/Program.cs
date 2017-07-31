@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MusicFileRenameLibrary;
 
 namespace MusicFileRename
@@ -11,10 +7,10 @@ namespace MusicFileRename
     {
         static void Main(string[] args)
         {
-            MusicRenamerCaller caller = new MusicRenamerCaller();
             try
             {
-                caller.CallRenamer(args);
+                var renamer = new MusicFileRenamerShell(args);
+                renamer.RenameMusicFiles();
             }
             catch (Exception ex)
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using TagLib;
 using MusicFileRenameLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,50 +10,78 @@ namespace FileRenamerTest
         private Parser parser = new Parser();
 
         [TestMethod]
-        public void ParseFileName()
+        public void ParseNormalFileName()
         {
             string fileName = @"test\artist-title.mp3";
-            var expected = new FileShell();
-            expected.FullFilePath = @"test\artist-title.mp3";
-            expected.Path = @"test\";
-            expected.Artist = "artist";
-            expected.Title = "title";
-            expected.Extension = ".mp3";
+            var expectedFullFilePath = @"test\artist-title.mp3";
+            var expectedPath = @"test\";
+            var expectedExtension = ".mp3";
+            var expectedArtist = "artist";
+            var expectedTitle = "title";
             var actual = parser.ParseFile(fileName);
-            Assert.AreEqual(expected.FullFilePath, actual.FullFilePath);
-            Assert.AreEqual(expected.Path, actual.Path);
-            Assert.AreEqual(expected.Artist, actual.Artist);
-            Assert.AreEqual(expected.Title, actual.Title);
-            Assert.AreEqual(expected.Extension, actual.Extension);
+
+            Assert.AreEqual(expectedFullFilePath, actual[0]);
+            Assert.AreEqual(expectedPath, actual[1]);
+            Assert.AreEqual(expectedExtension, actual[2]);
+            Assert.AreEqual(expectedArtist, actual[3]);
+            Assert.AreEqual(expectedTitle, actual[4]);
         }
 
         [TestMethod]
-        public void GetExtension()
+        public void ParseFileNameWithoutDash()
         {
-            var actual = parser.GetFileExtension("*ar.mp3");
-            var expected = ".mp3";
-            Assert.AreEqual(expected, actual);
+            string fileName = @"test\artisttitle.mp3";
+            var expectedFullFilePath = @"test\artisttitle.mp3";
+            var expectedPath = @"test\";
+            var expectedExtension = ".mp3";
+            var expectedArtist = "artisttitle";
+            var expectedTitle = "artisttitle";
+            var actual = parser.ParseFile(fileName);
+
+            Assert.AreEqual(expectedFullFilePath, actual[0]);
+            Assert.AreEqual(expectedPath, actual[1]);
+            Assert.AreEqual(expectedExtension, actual[2]);
+            Assert.AreEqual(expectedArtist, actual[3]);
+            Assert.AreEqual(expectedTitle, actual[4]);
         }
 
+        [TestMethod]
+        public void ParseFileWithoutPath()
+        {
+            string fileName = @"artist-title.mp3";
+            var expectedFullFilePath = @"artist-title.mp3";
+            var expectedPath = "";
+            var expectedExtension = ".mp3";
+            var expectedArtist = "artist";
+            var expectedTitle = "title";
+            var actual = parser.ParseFile(fileName);
+
+            Assert.AreEqual(expectedFullFilePath, actual[0]);
+            Assert.AreEqual(expectedPath, actual[1]);
+            Assert.AreEqual(expectedExtension, actual[2]);
+            Assert.AreEqual(expectedArtist, actual[3]);
+            Assert.AreEqual(expectedTitle, actual[4]);
+        }
+        
         [TestMethod]
         public void CollectFilePath()
         {
-            FileShell fileShell = new FileShell();
-            fileShell.FullFilePath = "asasasas";
-            fileShell.Path = @"\test\dir\";
-            fileShell.Artist = "Cat";
-            fileShell.Title = "Dog";
-            fileShell.Extension = ".mp3";
+            FileShell fileShell = new FileShell("asasasas", @"\test\dir\", ".mp3", "Cat", "Dog");
+
             parser.CollectFilePath(fileShell);
+
             var expected = @"\test\dir\Cat-Dog.mp3";
             Assert.AreEqual(expected, fileShell.FullFilePath);
         }
 
         [TestMethod]
-        [ExpectedException (typeof(ArgumentException))]
-        public void WrongGetExtension()
+        [ExpectedException(typeof(ArgumentException))]
+        public void TryParseWrongFilePath()
         {
-            parser.GetFileExtension(".mp");
+            string fileName = @".mp3";
+
+            var actual = parser.ParseFile(fileName);
         }
+
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicFileRenameClient", "MusicFileRenameClient\MusicFileRenameClient.csproj", "{8F30E3A2-A0B2-41A4-AAE8-A96EF206BBC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicFileRenameConsole", "MusicFileRenameConsole\MusicFileRenameConsole.csproj", "{8F30E3A2-A0B2-41A4-AAE8-A96EF206BBC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicFileRenameLibrary", "MusicFileRenameLibrary\MusicFileRenameLibrary.csproj", "{76E79619-EE43-443C-8F26-FD56DAE33108}"
 EndProject

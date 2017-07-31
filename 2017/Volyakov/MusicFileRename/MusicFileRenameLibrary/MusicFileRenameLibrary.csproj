@@ -46,14 +46,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Shells\MusicFileRenamerShell.cs" />
+    <Compile Include="Shells\ArgsShell.cs" />
     <Compile Include="Renamers\FileNameRenamer.cs" />
-    <Compile Include="FileShell.cs" />
+    <Compile Include="Shells\FileShell.cs" />
     <Compile Include="FileWorker.cs" />
     <Compile Include="Renamers\IRenamer.cs" />
     <Compile Include="MusicFileRenamer.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renamers\TagRenamer.cs" />
+    <Compile Include="ShellMaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

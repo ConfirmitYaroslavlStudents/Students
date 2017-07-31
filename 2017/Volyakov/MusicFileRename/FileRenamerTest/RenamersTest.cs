@@ -1,6 +1,4 @@
-﻿using System;
-using TagLib;
-using MusicFileRenameLibrary;
+﻿using MusicFileRenameLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FileRenamerTest

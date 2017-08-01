@@ -48,13 +48,13 @@
   <ItemGroup>
     <Compile Include="Arguments\ArgumentParser.cs" />
     <Compile Include="Arguments\Arguments.cs" />
-    <Compile Include="FilenameMaker\FilenameMaker.cs" />
-    <Compile Include="FilenameMaker\IFilenameMaker.cs" />
-    <Compile Include="TagMaker\ITagMaker.cs" />
+    <Compile Include="FileProcessor.cs" />
+    <Compile Include="FileSystem.cs" />
+    <Compile Include="IFileProcessor.cs" />
+    <Compile Include="IFileSystem.cs" />
     <Compile Include="Mp3File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renamer.cs" />
-    <Compile Include="TagMaker\TagMaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

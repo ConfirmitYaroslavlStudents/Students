@@ -7,7 +7,12 @@ namespace FizzBuzzApp
     {
         static void Main(string[] args)
         {
-            var fizzBuzz = new FizzBuzz(new string[] { "11 Banana", "17 Orange"});
+            var fizzBuzz = new FizzBuzz(new Rule[] 
+            {
+                new Rule(11, "Banana"),
+                new Rule(17, "Apple")
+            });
+
             fizzBuzz.AddRule(2, "Hello");
             fizzBuzz.AddRule(7, "World");
 

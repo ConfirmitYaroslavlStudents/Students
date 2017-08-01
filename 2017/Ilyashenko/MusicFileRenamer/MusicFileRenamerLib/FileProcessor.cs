@@ -5,8 +5,14 @@ using System.Text.RegularExpressions;
 
 namespace MusicFileRenamerLib
 {
-    public class TagMaker : ITagMaker
+    public class FileProcessor : IFileProcessor
     {
+        private IFileSystem _fileSystem;
+
+        public FileProcessor(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+        }
         public void MakeTags(Mp3File file)
         {
             var fileName = Path.GetFileNameWithoutExtension(file.path);
@@ -16,18 +22,21 @@ namespace MusicFileRenamerLib
             {
                 throw new ArgumentException("Недопустимое имя файла. Имя файла должно иметь вид \"Исполнитель - Название песни.mp3\".");
             }
-            SetTags(file, nameParts[0], nameParts[1]);
+
+            file.Artist = nameParts[0];
+            file.Title = nameParts[1];
+
+            _fileSystem.SetTags(file);
         }
 
-        private void SetTags(Mp3File file, string artist, string title)
+        public void MakeFilename(Mp3File file)
         {
-            file.Artist = artist;
-            file.Title = title;
-
-            var taggedFile = TagLib.File.Create(file.path);
-            taggedFile.Tag.Performers = new string[] { artist };
-            taggedFile.Tag.Title = title;
-            taggedFile.Save();
+            var newPath = Path.GetDirectoryName(file.path) + "\\" + file.Artist + " - " + file.Title + Path.GetExtension(file.path);
+            if (!_fileSystem.Exists(newPath))
+            {
+                _fileSystem.Move(file.path, newPath);
+                file.path = newPath;
+            }
         }
     }
 }

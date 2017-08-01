@@ -49,8 +49,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FizzBuzzLib\FizzBuzzLib.csproj">
-      <Project>{4262dded-fa06-4302-b39d-c01c2f3c7dcc}</Project>
+    <ProjectReference Include="..\FizzBuzz.Lib\FizzBuzzLib.csproj">
+      <Project>{94b926aa-e553-4158-bb0b-353533066c9b}</Project>
       <Name>FizzBuzzLib</Name>
     </ProjectReference>
   </ItemGroup>

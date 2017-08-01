@@ -66,18 +66,11 @@ namespace FizzBuzzTests
         [TestMethod]
         public void GetCorrectStringForNewRuleAddedViaConstructor()
         {
-            _fizzBuzz = new FizzBuzz(new string[] { "2 Banana" });
+            _fizzBuzz = new FizzBuzz(new Rule[] { new Rule(2, "Banana") });
 
             var numberAsString = _fizzBuzz.Process(2);
 
             Assert.AreEqual("Banana", numberAsString);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
-        public void AddRuleInWrongFormatViaConstructior()
-        {
-            _fizzBuzz = new FizzBuzz(new string[] { "2-Banana" });
         }
 
         [TestMethod]
@@ -134,6 +127,18 @@ namespace FizzBuzzTests
         public void ChangeUnexistingRule()
         {
             _fizzBuzz.ChangeRule(2, "Zzap");
+        }
+
+        [TestMethod]
+        public void ProcessSeveralNumbers()
+        {
+            _fizzBuzz.AddRule(2, "Hello");
+            _fizzBuzz.AddRule(7, "World");
+
+            var expected = new string[] { "1", "Hello", "Fizz", "Hello", "Buzz", "HelloFizz", "World", "Hello", "Fizz", "HelloBuzz" };
+
+            for (int i = 1; i <= 10; i++)
+                Assert.AreEqual(expected[i - 1], _fizzBuzz.Process(i));
         }
     }
 }

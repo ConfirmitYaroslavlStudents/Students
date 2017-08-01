@@ -14,7 +14,9 @@ namespace MusicFileRenamerTests
             file.Artist = "Peter Gabriel";
             file.Title = "Red Rain";
 
-            var renamer = new Renamer(new string[] { "*.mp3", "-recursive", "-toFileName" }, "", new TestableFilenameMaker(), new TestableTagMaker());
+            var args = (new ArgumentParser()).Parse(new string[] { "*.mp3", "-recursive", "-toFileName" });
+
+            var renamer = new Renamer(args, "", new FileProcessor(new TestableFileSystem()));
             renamer.Rename(file);
 
             Assert.AreEqual(@"\Peter Gabriel - Red Rain.mp3", file.path);
@@ -25,7 +27,9 @@ namespace MusicFileRenamerTests
         {
             var file = new Mp3File(@"Styx - Boat On The River.mp3");
 
-            var renamer = new Renamer(new string[] { "*.mp3", "-recursive", "-toTag" }, "", new TestableFilenameMaker(), new TestableTagMaker());
+            var args = (new ArgumentParser()).Parse(new string[] { "*.mp3", "-recursive", "-toTag" });
+
+            var renamer = new Renamer(args, "", new FileProcessor(new TestableFileSystem()));
             renamer.Rename(file);
 
             Assert.AreEqual("Styx", file.Artist);
@@ -37,7 +41,9 @@ namespace MusicFileRenamerTests
         public void TryMakeTagsWithWrongFilename()
         {
             var file = new Mp3File("sample.mp3");
-            var renamer = new Renamer(new string[] { "*.mp3", "-recursive", "-toTag" }, "", new TestableFilenameMaker(), new TestableTagMaker());
+            var args = (new ArgumentParser()).Parse(new string[] { "*.mp3", "-recursive", "-toTag" });
+
+            var renamer = new Renamer(args, "", new FileProcessor(new TestableFileSystem()));
             renamer.Rename(file);
         }
     }

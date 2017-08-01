@@ -11,7 +11,8 @@ namespace MusicFileRenamerApp
             var directory = Directory.GetCurrentDirectory();
             try
             {
-                var renamer = new Renamer(args, directory, new FilenameMaker(), new TagMaker());
+                var arguments = (new ArgumentParser()).Parse(args);
+                var renamer = new Renamer(arguments, directory, new FileProcessor(new FileSystem()));
 
                 foreach (var fPath in renamer.GetFilePaths())
                     renamer.Rename(new Mp3File(fPath));

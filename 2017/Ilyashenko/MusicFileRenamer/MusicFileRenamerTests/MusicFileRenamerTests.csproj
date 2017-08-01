@@ -49,11 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentParserTests.cs" />
+    <Compile Include="FileProcessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenamerTests.cs" />
-    <Compile Include="TestableClassesTests.cs" />
-    <Compile Include="TestableClasses\TestableFilenameMaker.cs" />
-    <Compile Include="TestableClasses\TestableTagMaker.cs" />
+    <Compile Include="TestableClasses\TestableFileSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

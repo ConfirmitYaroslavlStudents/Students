@@ -23,7 +23,7 @@ namespace Mp3UtilLib
             FullName = path;
         }
 
-        public virtual void MoveTo(string path)
+        public void MoveTo(string path)
         {
             FileSystem.Move(FullName, path);
 

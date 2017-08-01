@@ -5,6 +5,8 @@ namespace Mp3UtilTests.Helpers
 {
     public class TestableMp3File : AudioFile
     {
+        public bool Saved { get; private set; }
+
         public TestableMp3File(string filename) 
             :base(filename, new MockFileSystem())
         {
@@ -19,7 +21,7 @@ namespace Mp3UtilTests.Helpers
 
         public override void Save()
         {
-            //Save
+            Saved = true;
         }
     }
 }

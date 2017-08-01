@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FizzBuzz.Tests
@@ -123,6 +124,45 @@ namespace FizzBuzz.Tests
             string numberAsString = fizzBuzz.GetStringRepresentationFor(15);
 
             Assert.AreEqual("BuzzFizz", numberAsString);
+        }
+
+        [TestMethod]
+        public void AddingRuleRange()
+        {
+            FizzBuzz fizzBuzz = new FizzBuzz();
+            fizzBuzz.AddRuleRange(new Dictionary<int, string>
+            {
+                {2, "Banana"},
+                {17, "Orange"},
+            });
+
+            Assert.AreEqual(true, fizzBuzz.IsRuleExistsFor(2));
+            Assert.AreEqual(true, fizzBuzz.IsRuleExistsFor(17));
+        }
+
+        [TestMethod]
+        public void Processor()
+        {
+            string[] expectedValues =
+            {
+                "1", "Banana", "Fizz", "Banana", "Buzz",
+                "BananaFizz", "7", "Banana", "FizzOrange", "BananaBuzz"
+            };
+
+            FizzBuzz fizzBuzz = new FizzBuzz(new Dictionary<int, string>
+            {
+                {2, "Banana"},
+                {9, "Orange"},
+            });
+
+            FizzBuzzProcessor processor = new FizzBuzzProcessor(fizzBuzz);
+
+            int i = 0;
+            foreach (string item in processor.Process(1, 10))
+            {
+                Assert.AreEqual(expectedValues[i], item);
+                i++;
+            }
         }
     }
 }

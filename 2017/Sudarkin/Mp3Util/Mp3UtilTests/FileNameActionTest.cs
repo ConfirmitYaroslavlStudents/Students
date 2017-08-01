@@ -14,10 +14,8 @@ namespace Mp3UtilTests
         {
             MockFileSystem fileSystem = new MockFileSystem(new[]
             {
-                @"C:\Music\Bullet For My Valentine - Cries in Vain.mp3",
-                @"C:\Music\Bullet For My Valentine - Curses.mp3",
-                @"C:\Music\Bullet For My Valentine - No Control.mp3",
-                @"C:\Music\Bullet For My Valentine - Just Another Star.mp3"
+                @"Bullet For My Valentine - Cries in Vain.mp3",
+                @"Anne-Marie - Ciao Adios.mp3"
             });
 
             IActionStrategy fileNameAction = new FileNameAction();
@@ -32,7 +30,7 @@ namespace Mp3UtilTests
 
                 fileNameAction.Process(mp3File);
 
-                Assert.AreEqual(true, fileSystem.Exists($@"C:\Music\{artist} - {title}.mp3"));
+                Assert.AreEqual(true, fileSystem.Exists($@"{artist} - {title}.mp3"));
             }
         }
 

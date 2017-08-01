@@ -1,42 +1,60 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Mp3UtilLib;
 using Mp3UtilLib.FileSystem;
+using System.Linq;
 
 namespace Mp3UtilTests.Helpers
 {
     public class MockFileSystem : IFileSystem
     {
-        private readonly List<string> _files;
+        private readonly Dictionary<string, AudioFile> _files;
 
         public string CurrentDirectory { get; set; }
-        public string[] AllFiles => _files.ToArray();
+        public string[] AllFiles => _files.Keys.ToArray();
 
-        public MockFileSystem() : this(new List<string>())
+        public MockFileSystem()
         {
-            
+            _files = new Dictionary<string, AudioFile>();
         }
 
-        public MockFileSystem(IEnumerable<string> files)
+        public MockFileSystem(IDictionary<string, AudioFile> files) : this()
         {
-            _files = new List<string>();
-
             AddRange(files);
+        }
+
+        public MockFileSystem(IEnumerable<string> files) : this()
+        {
+            AddRange(files);
+        }
+
+        public void AddRange(IDictionary<string, AudioFile> collection)
+        {
+            foreach (var item in collection)
+            {
+                _files.Add(item.Key, item.Value);
+            }
+        }
+
+        public void Add(string path, AudioFile file)
+        {
+            if (!Exists(path))
+            {
+                _files.Add(path, file);
+            }
         }
 
         public void AddRange(IEnumerable<string> collection)
         {
             foreach (string item in collection)
             {
-                if (!Exists(item))
-                {
-                    _files.Add(item);
-                }
+                Add(item, null);
             }
         }
 
         public bool Exists(string path)
         {
-            return _files.IndexOf(path) != -1;
+            return _files.ContainsKey(path);
         }
 
         public void Move(string source, string dest)
@@ -46,21 +64,13 @@ namespace Mp3UtilTests.Helpers
                 throw new IOException("File is already exists!");
             }
 
+            Add(dest, _files[source]);
             _files.Remove(source);
-            _files.Add(dest);
         }
 
-        public IEnumerable<string> GetFiles(string directory, string searchPattern, SearchOption searchOption)
+        public IEnumerable<AudioFile> GetAudioFilesFromCurrentDirectory(string searchPattern, bool recursive)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<string> GetFilesFromCurrentDirectory(string searchPattern, bool recursive)
-        {
-            return GetFiles(
-                CurrentDirectory, 
-                searchPattern,
-                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            return _files.Select(file => file.Value).ToArray();
         }
     }
 }

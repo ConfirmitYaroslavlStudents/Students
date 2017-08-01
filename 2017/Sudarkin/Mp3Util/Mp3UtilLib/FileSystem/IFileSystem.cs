@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 
 namespace Mp3UtilLib.FileSystem
 {
@@ -7,7 +6,6 @@ namespace Mp3UtilLib.FileSystem
     {
         bool Exists(string path);
         void Move(string source, string dest);
-        IEnumerable<string> GetFiles(string directory, string searchPattern, SearchOption searchOption);
-        IEnumerable<string> GetFilesFromCurrentDirectory(string searchPattern, bool recursive);
+        IEnumerable<AudioFile> GetAudioFilesFromCurrentDirectory(string searchPattern, bool recursive);
     }
 }

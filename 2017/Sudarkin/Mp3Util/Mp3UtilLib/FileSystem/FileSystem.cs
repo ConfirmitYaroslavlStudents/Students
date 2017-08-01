@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Mp3UtilLib.FileSystem
 {
@@ -17,15 +18,14 @@ namespace Mp3UtilLib.FileSystem
             File.Move(source, dest);
         }
 
-        public IEnumerable<string> GetFiles(string directory, string searchPattern, SearchOption searchOption)
-            => Directory.GetFiles(directory, searchPattern, searchOption);
-
-        public IEnumerable<string> GetFilesFromCurrentDirectory(string searchPattern, bool recursive)
+        public IEnumerable<AudioFile> GetAudioFilesFromCurrentDirectory(string searchPattern, bool recursive)
         {
-            return GetFiles(
+            IEnumerable<string> files = Directory.GetFiles(
                 Directory.GetCurrentDirectory(),
                 searchPattern,
                 recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+
+            return files.Select(file => new Mp3File(file)).ToArray();
         }
     }
 }

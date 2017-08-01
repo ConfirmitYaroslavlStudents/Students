@@ -1,6 +1,7 @@
 ﻿using System;
 using Mp3UtilLib.Actions;
 using Mp3UtilLib.Arguments;
+using Mp3UtilLib.FileSystem;
 using Mp3UtilLib.Logger;
 
 namespace Mp3UtilLib
@@ -8,27 +9,39 @@ namespace Mp3UtilLib
     public class Processor
     {
         private readonly Args _arguments;
-        private readonly FileSystem.FileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
         private readonly ConsoleLogger _logger;
 
+        public Processor(Args arguments, IFileSystem fileSystem)
+            : this(arguments, new ConsoleLogger(), fileSystem)
+        {
+            
+        }
+
         public Processor(Args arguments, ConsoleLogger logger)
+            : this(arguments, logger, new FileSystem.FileSystem())
+        {
+            
+        }
+
+        public Processor(Args arguments, ConsoleLogger logger, IFileSystem fileSystem)
         {
             _arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _fileSystem = new FileSystem.FileSystem();
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
 
         public void Execute()
         {
-            IActionStrategy action = GetActionStrategy(_arguments.Action);
+            IActionStrategy action = new ActionCreator().GetAction(_arguments.Action);
 
-            foreach (string file in 
-                _fileSystem.GetFilesFromCurrentDirectory(_arguments.Mask, _arguments.Recursive))
+            foreach (AudioFile audioFile in 
+                _fileSystem.GetAudioFilesFromCurrentDirectory(_arguments.Mask, _arguments.Recursive))
             {
                 try
                 {
-                    action.Process(new Mp3File(file));
-                    _logger.WriteError($"{file} - The transformation is complete");
+                    action.Process(audioFile);
+                    _logger.WriteSuccess($"{audioFile.FullName} - The transformation is complete");
                 }
                 catch (Exception ex)
                 {
@@ -37,19 +50,6 @@ namespace Mp3UtilLib
             }
 
             _logger.WriteSuccess("Done!");
-        }
-
-        private IActionStrategy GetActionStrategy(ProgramAction action)
-        {
-            switch (action)
-            {
-                case ProgramAction.ToFileName:
-                    return new FileNameAction();
-                case ProgramAction.ToTag:
-                    return new TagAction();
-                default:
-                    return null;
-            }
         }
     }
 }

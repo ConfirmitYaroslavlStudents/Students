@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mp3UtilLib;
 using Mp3UtilLib.Actions;
@@ -15,26 +14,29 @@ namespace Mp3UtilTests
         {
             string[] files =
             {
-                @"C:\Music\Bullet For My Valentine - Cries in Vain.mp3",
-                @"C:\Music\Bullet For My Valentine - Curses.mp3",
-                @"C:\Music\Bullet For My Valentine - No Control.mp3",
-                @"C:\Music\Bullet For My Valentine - Just Another Star.mp3"
+                @"Bullet For My Valentine - Cries in Vain.mp3",
+                @"Ciao Adios - Anne-Mari.mp3"
+            };
+
+            List<string[]> expectedValues = new List<string[]>
+            {
+                new[] {"Bullet For My Valentine", "Cries in Vain"},
+                new[] {"Ciao Adios", "Anne-Mari"}
             };
 
             IActionStrategy tagAction = new TagAction();
 
+            int i = 0;
             foreach (string file in files)
             {
-                AudioFile mp3File = new TestableMp3File(file);
-                string[] chunks = Path.GetFileNameWithoutExtension(file)
-                    .Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-                string artist = chunks[0].Trim();
-                string title = chunks[1].Trim();
+                TestableMp3File mp3File = new TestableMp3File(file);
 
                 tagAction.Process(mp3File);
                 
-                Assert.AreEqual(artist, mp3File.Artist);
-                Assert.AreEqual(title, mp3File.Title);
+                Assert.AreEqual(expectedValues[i][0], mp3File.Artist);
+                Assert.AreEqual(expectedValues[i][1], mp3File.Title);
+                Assert.AreEqual(true, mp3File.Saved);
+                i++;
             }
         }
     }

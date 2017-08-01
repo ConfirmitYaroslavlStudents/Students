@@ -16,6 +16,11 @@ namespace FizzBuzz
             };
         }
 
+        public FizzBuzz(IDictionary<int, string> rules) : this()
+        {
+            AddRuleRange(rules);
+        }
+
         public string GetStringRepresentationFor(int number)
         {
             string resultString = string.Empty;
@@ -33,6 +38,14 @@ namespace FizzBuzz
         public bool IsRuleExistsFor(int number)
         {
             return _rules.ContainsKey(number);
+        }
+
+        public void AddRuleRange(IDictionary<int, string> rules)
+        {
+            foreach (var rule in rules)
+            {
+                AddRule(rule.Key, rule.Value);
+            }
         }
 
         public void AddRule(int number, string output)

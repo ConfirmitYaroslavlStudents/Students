@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FizzBuzz.App
 {
@@ -6,16 +7,19 @@ namespace FizzBuzz.App
     {
         private static void Main()
         {
-            FizzBuzz fizzBuzz = new FizzBuzz();
-
-            fizzBuzz.AddRule(2, "Banana");
-            fizzBuzz.AddRule(17, "Orange");
-            fizzBuzz.AddRule(4, "Grape");
-
-            for (int i = 1; i <= 100; i++)
+            FizzBuzz fizzBuzz = new FizzBuzz(new Dictionary<int, string>
             {
-                Console.WriteLine(
-                    fizzBuzz.GetStringRepresentationFor(i));
+                { 2, "Banana" },
+                { 17, "Orange" },
+                { 4, "Grape" }
+            });
+
+
+            FizzBuzzProcessor processor = new FizzBuzzProcessor(fizzBuzz);
+
+            foreach (string item in processor.Process(1, 100))
+            {
+                Console.WriteLine(item);
             }
 
             Console.ReadKey();

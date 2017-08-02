@@ -28,26 +28,5 @@ function getTags(path, options) {
 	}
 }
 
-function maskToRegExp(mask) {
-
-	for (var i = 0; i < mask.length; i++) {
-		if (mask[i] == "*") {
-			mask = mask.slice(0, i) + "." + mask.slice(i);
-			i++;
-		}
-		if (mask[i] == "?") {
-			mask = mask.slice(0, i) + ".+" + mask.slice(i + 1);
-			i++;
-		}
-		if (mask[i] == '.') {
-			mask = mask.slice(0, i) + "\\" + mask.slice(i);
-			i++;
-		}
-	}
-	mask = "^" + mask + "$";
-	return mask;
-}
-
-exports.maskHandler = maskToRegExp;
 exports.getTags = getTags;
 exports.getNewPath = getNewPath;

@@ -1,5 +1,6 @@
 let assert = require('chai').assert;
-let stringHandlers = require('../lib/stringHandling.js');
+let stringHandlers = require('../lib/pathsHandling.js');
+require('./filesHandlingTest.js');
 
 describe('stringHandlers', function() {
 
@@ -48,20 +49,6 @@ describe('stringHandlers', function() {
 			assert.equal(tags.title, 'All I Know');
 		});
 
-	})
-
-	describe('maskHandler', function(){
-		it('*', function(){
-			let mask = '*.mp3';
-			let regExp = stringHandlers.maskHandler(mask);
-			assert.equal(regExp, '^.*\\.mp3$');
-		});
-
-		it('?', function(){
-			let mask = "?.mp3";
-			let regExp = stringHandlers.maskHandler(mask);
-			assert.equal(regExp, '^.+\\.mp3$');
-		})	
-	})
+	});
 	
 });

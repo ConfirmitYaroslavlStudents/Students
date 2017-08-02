@@ -2,14 +2,21 @@
 {
     public class Tagger
     {
-        public static void ChangeFiles(string[] args)
+        public static void ChangeFiles(InputData input)
         {
-            var input = ParseInput.Parse(args);
             var files = Dir.GetFiles(input);
-            var action = Acting.Act(input.Modifier);
+            var changer = ChangingFile.GetChange(input.Modifier);
+
+            Action act = new FileChanger(changer);
+            act = new TimeMeasurer(act);
+            act = new CheckPermission(act);
+
             foreach (var file in files)
-            {               
-                action.Act(file);
+            {
+                changer.FileForChange = file;
+             
+                act.Act();
+
                 file.Save();
             }
         }

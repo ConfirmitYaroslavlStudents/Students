@@ -2,14 +2,15 @@
 
 namespace TaggerLib
 {
-    internal interface IActing
+    internal interface IChangingFile
     {
-        void Act(File file);
+        void Change();
+        File FileForChange { get; set; }
     }
 
-    internal class Acting
+    internal class ChangingFile
     {
-        public static IActing Act(string modifier)
+        public static IChangingFile GetChange(string modifier)
         {
             switch (modifier)
             {

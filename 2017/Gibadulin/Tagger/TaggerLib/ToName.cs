@@ -1,16 +1,24 @@
-﻿namespace TaggerLib
+﻿using System;
+
+namespace TaggerLib
 {
-    internal class ToName: IActing
+    public class ToName : IChangingFile
     {
-        private string NewName(File file)
+        public File FileForChange { get; set; }
+
+        public void Change()
         {
-            var newFileName = string.Join(", ", file.Performers) + " - " + file.Title + System.IO.Path.GetExtension(file.Path);
-            return newFileName;
+            if (FileForChange == null)
+                throw new ArgumentNullException();
+
+            FileForChange.Name = NewName();
         }
 
-        public void Act(File file)
+        private string NewName()
         {
-            file.Name = NewName(file);
+            var newFileName = string.Join(", ", FileForChange.Performers) + " - " + FileForChange.Title +
+                              System.IO.Path.GetExtension(FileForChange.Path);
+            return newFileName;
         }
     }
 }

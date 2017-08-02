@@ -2,15 +2,7 @@
 
 namespace TaggerLib
 {
-    internal class InputData
-    {
-        public string Path { get;  set; }
-        public string Mask { get;  set; }
-        public string Modifier { get;  set; }
-        public bool Subfolders { get;  set; }
-    }
-
-    internal class ParseInput
+    public class ParseInput
     {
         public static InputData Parse(string[] args)
         {

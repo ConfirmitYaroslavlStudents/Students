@@ -10,7 +10,7 @@ namespace TaggerLib.Test
         [ExpectedException(typeof(ArgumentException))]
         public void Parse_WrongRecursiveConst_Exception()
         {
-            string[] args = {"path", "mask", "toName", "WRONG_recursive"};
+            string[] args = {"path", "mask", "mod", "WRONG_recursive"};
 
             var actual = ParseInput.Parse(args);
         }

@@ -2,19 +2,8 @@
 
 namespace TaggerLib
 {
-    internal class Dir 
+    public class Dir
     {
-        private static string[] GetPathsFiles(InputData inputData)
-        {
-            string[] pathsfiles;
-            if (inputData.Subfolders)
-                pathsfiles = System.IO.Directory.GetFiles(inputData.Path, inputData.Mask, System.IO.SearchOption.AllDirectories);
-            else
-                pathsfiles = System.IO.Directory.GetFiles(inputData.Path, inputData.Mask);
-
-            return pathsfiles;
-        }
-
         public static List<File> GetFiles(InputData inputData)
         {
             var files = new List<File>();
@@ -27,6 +16,18 @@ namespace TaggerLib
             }
 
             return files;
-        }       
+        }
+
+        internal static string[] GetPathsFiles(InputData inputData)
+        {
+            string[] pathsfiles;
+            if (inputData.Subfolders)
+                pathsfiles = System.IO.Directory.GetFiles(inputData.Path, inputData.Mask,
+                    System.IO.SearchOption.AllDirectories);
+            else
+                pathsfiles = System.IO.Directory.GetFiles(inputData.Path, inputData.Mask);
+
+            return pathsfiles;
+        }
     }
 }

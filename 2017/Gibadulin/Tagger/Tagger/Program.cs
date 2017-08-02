@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tagger
+﻿namespace Tagger
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(/*string[] args*/)
         {
-            TaggerLib.Tagger.ChangeFiles(args);
+            var args = new[] {@"D:\testTagger", "*", "toName", "recursive"};
+
+            var input = TaggerLib.ParseInput.Parse(args);
+            TaggerLib.Tagger.ChangeFiles(input);
         }
     }
 }

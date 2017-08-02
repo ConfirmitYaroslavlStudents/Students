@@ -2,7 +2,7 @@
 
 namespace TaggerLib
 {
-    internal class File
+    public class File
     {
         public string Name { get; set; }
         public string Path { get; }
@@ -25,7 +25,13 @@ namespace TaggerLib
             Title = file.Tag.Title;
         }
 
-        private void SaveTags()
+        public void Save()
+        {
+            SaveTags();
+            SaveName();
+        }
+
+        internal void SaveTags()
         {
             if (Performers == null || Title == null)
                 throw new ArgumentNullException();
@@ -36,25 +42,23 @@ namespace TaggerLib
             file.Save();
         }
 
-        private string NewPath()
-        {
-            if (Name == null)
-                throw new ArgumentNullException();
-            var dirPath = System.IO.Path.GetDirectoryName(Path);
-            var newPath = System.IO.Path.Combine(dirPath, Name);
-
-            return newPath;
-        }
-
-        private void SaveName()
+        internal void SaveName()
         {
             System.IO.File.Move(Path, NewPath());
         }
 
-        public void Save()
+        internal string NewPath()
         {
-            SaveTags();
-            SaveName();
+            if (Name == null)
+                throw new ArgumentNullException();
+
+            var dirPath = System.IO.Path.GetDirectoryName(Path);
+            if (dirPath==null)
+                throw new ArgumentNullException();
+
+            var newPath = System.IO.Path.Combine(dirPath, Name);
+
+            return newPath;
         }
     }
 }

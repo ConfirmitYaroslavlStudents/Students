@@ -1,6 +1,6 @@
 ﻿namespace Tasker.Core.Options
 {
-    public class ConsoleOptions : IOptions
+    public class ConsoleOptions
     {
         public string Command { get; set; }
     }

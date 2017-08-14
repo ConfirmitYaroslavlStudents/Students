@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using Tasker.Core.Applets;
-using Tasker.Core.Options;
 
 namespace Tasker.Core
 {
     public class Processor
     {
-        private readonly List<IApplet<IOptions>> _applets;
+        private readonly List<IApplet> _applets;
+        private readonly List<State> _states;
 
         public Processor()
         {
-            _applets = new List<IApplet<IOptions>>();
+            _applets = new List<IApplet>();
+            _states = new List<State>();
         }
 
-        public Processor(IEnumerable<IApplet<IOptions>> applets) : this()
+        public Processor(IEnumerable<IApplet> applets) : this()
         {
             foreach (var applet in applets)
             {
@@ -21,29 +22,26 @@ namespace Tasker.Core
             }
         }
 
-        public void AddApplet(IApplet<IOptions> applet)
+        public void AddApplet(IApplet applet)
         {
             _applets.Add(applet);
         }
 
         public void Start()
         {
-            State previousState = State.NotRunning;
+            _states.Clear();
+
             foreach (var applet in _applets)
             {
-                if (IsDisabledToRun(previousState, applet.Condition))
+                if (ExecutionCondition.CanExecute(applet.Condition, _states))
                 {
-                    continue;
+                    _states.Add(applet.Execute());
                 }
-
-                previousState = applet.Execute();
+                else
+                {
+                    _states.Add(State.NotRunning);
+                }
             }
-        }
-
-        private bool IsDisabledToRun(State previousState, ExecutionCondition currentCondition)
-        {
-            return previousState == State.Failed
-                   && currentCondition == ExecutionCondition.IfPreviousIsSuccessful;
         }
     }
 }

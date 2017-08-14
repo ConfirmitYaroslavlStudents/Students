@@ -4,9 +4,9 @@ using Tasker.Core.Options;
 
 namespace Tasker.Core.Applets
 {
-    public class ConsoleCommandApplet : IApplet<ConsoleOptions>
+    public class ConsoleCommandApplet : IApplet
     {
-        public ExecutionCondition Condition { get; }
+        public int Condition { get; }
         public ConsoleOptions Options { get; }
 
         public ConsoleCommandApplet(ConsoleOptions options)
@@ -15,7 +15,7 @@ namespace Tasker.Core.Applets
 
         }
 
-        public ConsoleCommandApplet(ExecutionCondition condition, ConsoleOptions options)
+        public ConsoleCommandApplet(int condition, ConsoleOptions options)
         {
             Condition = condition;
             Options = options ?? throw new ArgumentException(nameof(condition));

@@ -4,9 +4,9 @@ using Tasker.Core.Options;
 
 namespace Tasker.Core.Applets
 {
-    public class BatExecutorApplet : IApplet<BatOptions>
+    public class BatExecutorApplet : IApplet
     {
-        public ExecutionCondition Condition { get; }
+        public int Condition { get; }
         public BatOptions Options { get; }
 
         public BatExecutorApplet(BatOptions options)
@@ -15,7 +15,7 @@ namespace Tasker.Core.Applets
 
         }
 
-        public BatExecutorApplet(ExecutionCondition condition, BatOptions options)
+        public BatExecutorApplet(int condition, BatOptions options)
         {
             Condition = condition;
             Options = options ?? throw new ArgumentException(nameof(condition));

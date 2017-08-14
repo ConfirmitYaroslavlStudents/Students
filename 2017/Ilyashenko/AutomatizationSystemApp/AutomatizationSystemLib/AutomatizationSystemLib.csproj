@@ -40,12 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleCommandStep.cs" />
-    <Compile Include="ExecuteFileStep.cs" />
-    <Compile Include="IProcessable.cs" />
+    <Compile Include="Options\ConsoleWriteOptions.cs" />
+    <Compile Include="Steps\RandomConditionStep.cs" />
+    <Compile Include="Steps\ConsoleWriteStep.cs" />
+    <Compile Include="Steps\NextStep.cs" />
+    <Compile Include="Options\NextStepOptions.cs" />
+    <Compile Include="Options\BatFileOptions.cs" />
+    <Compile Include="Options\ConsoleCommandOptions.cs" />
+    <Compile Include="Steps\ConsoleCommandStep.cs" />
+    <Compile Include="Steps\BatFileStep.cs" />
     <Compile Include="IStep.cs" />
-    <Compile Include="Process.cs" />
+    <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Status.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

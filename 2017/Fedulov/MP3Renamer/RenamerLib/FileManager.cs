@@ -8,25 +8,24 @@ using System.IO.Abstractions;
 
 namespace RenamerLib
 {
-    public class FileManager
+    public interface IFileManager
     {
-        private readonly IFileSystem fileSystem;
+        bool Exist(string path);
+        void Move(string source, string dest);
+        IEnumerable<IMP3File> GetFiles(string searchPattern, SearchOption searchOption);
+    }
 
-        public FileManager() : this(new FileSystem())
+    public class FileManager : IFileManager
+    {
+        public bool Exist(string path) => File.Exists(path);
+
+        public void Move(string source, string dest) => File.Move(source, dest);
+
+        public IEnumerable<IMP3File> GetFiles(string searchPattern, SearchOption searchOption)
         {
-        }
-
-        public FileManager(IFileSystem fileSystem)
-        {
-            this.fileSystem = fileSystem;
-        }
-
-        public bool Exist(string path) => fileSystem.File.Exists(path);
-
-        public void Move(string source, string dest) => fileSystem.File.Move(source, dest);
-
-        public string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
-            => fileSystem.Directory.GetFiles(path ?? fileSystem.Directory.GetCurrentDirectory(),
+            IEnumerable<string> fileNames = Directory.GetFiles(Directory.GetCurrentDirectory(),
                 searchPattern, searchOption);
+            return fileNames.Select(file => new MP3File(file)).ToArray();
+        }
     }
 }

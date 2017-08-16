@@ -38,12 +38,13 @@ namespace Logger
                 case Status.Info:
                     file?.Write("[Info]: ");
                     break;
-            }   
+            }
+            StoreLogging();   
         }
 
-        public void StopLogging()
+        public void StoreLogging()
         {
-            file.Close();
+            file.Flush();
         }
     }
 }

@@ -9,32 +9,36 @@ using TagLib;
 
 namespace RenamerLib
 {
-    public class MP3File
+    public interface IMP3File
+    {
+        string Artist { set; get; }
+        string Title { set; get; }
+        string FilePath { set; get; }
+        void Move(string path);
+        void Save();
+    }
+
+    public class MP3File : IMP3File
     {
         public readonly TagLib.File taggedFile;
-        public readonly FileManager fileManager;
+        public readonly IFileManager fileManager;
 
         public string Artist { set; get; }
         public string Title { set; get; }
         public string FilePath { set; get; }
 
-        public MP3File(string path) : this(path, null, new FileSystem())
+        public MP3File(string path) : this(path, new FileManager())
         {
         }
 
-        public MP3File(string path, IFileSystem fileSystem) : this(path, null, fileSystem)
+        public MP3File(string path, IFileManager fileManager)
         {
-        }
-
-        public MP3File(string path, Stream stream, IFileSystem fileSystem)
-        {
-            taggedFile = TagLib.File.Create(path); //(stream == null) ? TagLib.File.Create(path) : TagLib.File.Create(path, stream);
-
-            fileManager = new FileManager(fileSystem);
-
+            taggedFile = TagLib.File.Create(path);
             Artist = taggedFile.Tag.FirstPerformer;
             Title = taggedFile.Tag.Title;
             FilePath = taggedFile.Name;
+
+            this.fileManager = fileManager;
         }
 
         public void Move(string path)

@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AutoProcessor
 {
     public class Process
     {
-        private List<StepDependensyDecorator> _steps;
-        
+        private List<Step> _steps;
+
         public Process()
         {
-            _steps = new List<StepDependensyDecorator>();
+            _steps = new List<Step>();
         }
 
-        public Process(IEnumerable<StepDependensyDecorator> steps)
+        public Process(IEnumerable<Step> steps)
         {
-            _steps = new List<StepDependensyDecorator>(steps);
+            _steps = new List<Step>(steps);
         }
 
-        public void AddStep(StepDependensyDecorator newStep)
+        public void AddStep(Step newStep)
         {
             _steps.Add(newStep);
         }
 
-        public List<StepDependensyDecorator> Steps
+        public List<Step> Steps
         {
             get
             {

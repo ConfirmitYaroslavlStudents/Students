@@ -3,19 +3,23 @@ using Tasker.Core.Applets;
 
 namespace Tasker.Tests.Helpers
 {
-    public class TestApplet : IApplet<TestOptions>
+    public class TestApplet : IApplet
     {
         private readonly State _returnedState;
 
         public bool Started { get; private set; }
 
-        public ExecutionCondition Condition { get; }
-        public TestOptions Options { get; }
+        public int Condition { get; }
 
-        public TestApplet(ExecutionCondition condition, TestOptions options, State returnedState)
+        public TestApplet() 
+            : this(ExecutionCondition.Always, State.Successful)
+        {
+            
+        }
+
+        public TestApplet(int condition, State returnedState)
         {
             Condition = condition;
-            Options = options;
             _returnedState = returnedState;
         }
 

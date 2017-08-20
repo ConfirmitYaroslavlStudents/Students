@@ -27,9 +27,9 @@ namespace RenamerLib
                 throw new ArgumentException("Wrong number of parameters provided!");
 
             Arguments arguments = new Arguments();
-
             arguments.Mask = args[0];
             arguments.IsRecursive = false;
+
             for (int i = 1; i < args.Length; ++i)
             {
                 if (Equals(args[i], "-recursive"))

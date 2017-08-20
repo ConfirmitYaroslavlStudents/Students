@@ -48,5 +48,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutomatizationSystemLib\AutomatizationSystemLib.csproj">
+      <Project>{6684326d-db7d-4750-afcf-f4b3f73d8ba1}</Project>
+      <Name>AutomatizationSystemLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

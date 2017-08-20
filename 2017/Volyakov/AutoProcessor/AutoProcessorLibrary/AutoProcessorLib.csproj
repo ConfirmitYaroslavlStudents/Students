@@ -40,15 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Steps\ConsoleWriteStep.cs" />
-    <Compile Include="Steps\Decorators\Dependensy\DependentStep.cs" />
-    <Compile Include="Steps\Decorators\Dependensy\IndependentStep.cs" />
+    <Compile Include="Steps\Classes\BranchingStep.cs" />
+    <Compile Include="Steps\Classes\DependentStep.cs" />
+    <Compile Include="Steps\Classes\CMDCommandStep.cs" />
+    <Compile Include="Status.cs" />
+    <Compile Include="Steps\Classes\ConsoleWriteStep.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Steps\StartSMDStep.cs" />
-    <Compile Include="Steps\Decorators\Dependensy\StepDependensyDecorator.cs" />
-    <Compile Include="StepStarter.cs" />
+    <Compile Include="Steps\Classes\StartBatFileStep.cs" />
     <Compile Include="Steps\Step.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

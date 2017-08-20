@@ -2,6 +2,6 @@
 {
     public interface IStep
     {
-        void Execute(bool previousStepsExecutedCorrectly);
+        void Execute(Processor sender, int stepId);
     }
 }

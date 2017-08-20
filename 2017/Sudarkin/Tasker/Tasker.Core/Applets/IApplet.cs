@@ -1,11 +1,8 @@
-﻿using Tasker.Core.Options;
-
-namespace Tasker.Core.Applets
+﻿namespace Tasker.Core.Applets
 {
-    public interface IApplet<out T> where T : IOptions
+    public interface IApplet
     {
-        ExecutionCondition Condition { get; }
-        T Options { get; }
+        int Condition { get; }
 
         State Execute();
     }

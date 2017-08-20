@@ -9,12 +9,12 @@ namespace RenamerLib
 {
     public interface IAction
     {
-        void Process(MP3File mp3File);
+        void Process(IMP3File mp3File);
     }
 
-    class TagToFileNameAction : IAction
+    public class TagToFileNameAction : IAction
     {
-        public void Process(MP3File mp3File)
+        public void Process(IMP3File mp3File)
         {
             string directory = Path.GetDirectoryName(mp3File.FilePath);
             string newPath = directory + "\\" + mp3File.Artist + " - " + mp3File.Title + ".mp3";
@@ -22,15 +22,15 @@ namespace RenamerLib
         }
     }
 
-    class FileNameToTagAction : IAction
+    public class FileNameToTagAction : IAction
     {
-        public void Process(MP3File mp3File)
+        public void Process(IMP3File mp3File)
         {
             string fileName = Path.GetFileNameWithoutExtension(mp3File.FilePath);
             if(fileName == null)
                 throw new IOException("MP3 file should have a name");
 
-            string[] fileParts = fileName.Split(new string[] {"-"}, StringSplitOptions.RemoveEmptyEntries);
+            string[] fileParts = fileName.Split(new string[] {" - ", "."}, StringSplitOptions.RemoveEmptyEntries);
             if (fileParts.Length < 2)
                 throw new IOException("File name does not contain enough information");
             if (fileParts.Length > 2)

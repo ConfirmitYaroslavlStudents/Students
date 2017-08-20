@@ -48,8 +48,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionConditionTest.cs" />
     <Compile Include="Helpers\TestApplet.cs" />
-    <Compile Include="Helpers\TestOptions.cs" />
     <Compile Include="ProcessorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -40,15 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Options\ConsoleWriteOptions.cs" />
-    <Compile Include="Steps\RandomConditionStep.cs" />
-    <Compile Include="Steps\ConsoleWriteStep.cs" />
-    <Compile Include="Steps\NextStep.cs" />
-    <Compile Include="Options\NextStepOptions.cs" />
-    <Compile Include="Options\BatFileOptions.cs" />
-    <Compile Include="Options\ConsoleCommandOptions.cs" />
-    <Compile Include="Steps\ConsoleCommandStep.cs" />
-    <Compile Include="Steps\BatFileStep.cs" />
+    <Compile Include="StepConfigs\ConditionalStepConfig.cs" />
+    <Compile Include="ExecutionCondition.cs" />
+    <Compile Include="ExecutionConditionChecker.cs" />
+    <Compile Include="Steps\ConsoleWriteStep\ConsoleWriteOptions.cs" />
+    <Compile Include="ProcessorInfo.cs" />
+    <Compile Include="StepConfigs\StepConfig.cs" />
+    <Compile Include="Steps\ConsoleWriteStep\ConsoleWriteStep.cs" />
+    <Compile Include="Steps\BatFileStep\BatFileOptions.cs" />
+    <Compile Include="Steps\ConsoleCommandStep\ConsoleCommandOptions.cs" />
+    <Compile Include="Steps\ConsoleCommandStep\ConsoleCommandStep.cs" />
+    <Compile Include="Steps\BatFileStep\BatFileStep.cs" />
     <Compile Include="IStep.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

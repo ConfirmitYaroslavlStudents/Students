@@ -5,35 +5,37 @@ namespace AutomatizationSystemLib
 {
     public class Processor
     {
-        private List<IStep> _steps;
-        public Status[] StepStatus;
         public int NextStepId = 0;
+        public ProcessorInfo Info;
 
-        public Processor(IEnumerable<IStep> steps)
+        public Processor(IEnumerable<StepConfig> steps)
         {
-            _steps = steps.ToList();
+            Info = new ProcessorInfo();
+            Info.Steps = steps.ToList();
         }
 
         public void Execute()
         {
             InitializeStatus();
 
-            while (NextStepId < _steps.Count)
+            while (NextStepId < Info.Steps.Count)
             {
-                _steps[NextStepId].Execute(this, NextStepId);
+                if (ExecutionConditionChecker.CheckCondition(Info.Steps[NextStepId].Condition, Info, NextStepId))
+                    Info.Steps[NextStepId].Execute(Info, NextStepId);
+                NextStepId++;
             }
         }
 
-        public void AddStep(IStep step)
+        public void AddStep(StepConfig step)
         {
-            _steps.Add(step);
+            Info.Steps.Add(step);
         }
 
         private void InitializeStatus()
         {
-            StepStatus = new Status[_steps.Count];
-            for (int i = 0; i < StepStatus.Length; i++)
-                StepStatus[i] = Status.Waiting;
+            Info.StepStatus = new List<Status>();
+            for (int i = 0; i < Info.Steps.Count; i++)
+                Info.StepStatus.Add(Status.Waiting);
         }
     }
 }

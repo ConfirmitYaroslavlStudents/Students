@@ -1,4 +1,4 @@
-﻿namespace Tasker.Core.Options
+﻿namespace Tasker.Core.Actions.WriteLine
 {
     public class WriteLineOptions
     {

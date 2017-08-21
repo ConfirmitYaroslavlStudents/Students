@@ -2,14 +2,12 @@
 
 namespace AutoProcessor
 {
-    public class CMDCommandStep : Step
+    public class CMDCommandStep : IStep
     {
         private ProcessStartInfo _startInfo;
 
         public CMDCommandStep(string command)
         {
-            StepStatus = Status.NotStarted;
-
             _startInfo = 
                     new ProcessStartInfo("cmd.exe")
                     {
@@ -20,26 +18,15 @@ namespace AutoProcessor
                     };
         }
 
-        public override void Start()
+        public void Start()
         {
-            StepStatus = Status.Launched;
-
-            try
-            {
-                var process =
+            var process =
                     new System.Diagnostics.Process
                     {
                         StartInfo = _startInfo
                     };
 
-                process.Start();
-
-                StepStatus = Status.Finished;
-            }
-            catch
-            {
-                StepStatus = Status.Error;
-            }
+            process.Start();
         }
     }
 }

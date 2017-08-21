@@ -40,16 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Steps\Classes\BranchingStep.cs" />
-    <Compile Include="Steps\Classes\DependentStep.cs" />
-    <Compile Include="Steps\Classes\CMDCommandStep.cs" />
+    <Compile Include="Processes\BranchingProcess.cs" />
+    <Compile Include="Processes\DependentProcess.cs" />
+    <Compile Include="Processors\Processor.cs" />
+    <Compile Include="Steps\StepCollection\StepCollection.cs" />
+    <Compile Include="Steps\StepCollection\StepStatusPair.cs" />
+    <Compile Include="Steps\NotUsed\BranchingStep.cs" />
+    <Compile Include="Steps\NotUsed\DependentStep.cs" />
+    <Compile Include="Steps\SimpleSteps\CMDCommandStep.cs" />
     <Compile Include="Status.cs" />
-    <Compile Include="Steps\Classes\ConsoleWriteStep.cs" />
-    <Compile Include="Process.cs" />
-    <Compile Include="Processor.cs" />
+    <Compile Include="Steps\SimpleSteps\ConsoleWriteStep.cs" />
+    <Compile Include="Processes\Process.cs" />
+    <Compile Include="Processors\StepProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Steps\Classes\StartBatFileStep.cs" />
-    <Compile Include="Steps\Step.cs" />
+    <Compile Include="Steps\SimpleSteps\StartBatFileStep.cs" />
+    <Compile Include="Steps\IStep.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

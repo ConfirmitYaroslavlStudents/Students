@@ -2,35 +2,23 @@
 
 namespace AutoProcessor
 {
-    public class StartBatFileStep: Step
+    public class StartBatFileStep: IStep
     {
         private string _filePath;
 
         public StartBatFileStep(string BatFilePath)
         {
             _filePath = BatFilePath;
-
-            StepStatus = Status.NotStarted;
         }
 
-        public override void Start()
+        public void Start()
         {
-            StepStatus = Status.Launched;
-
-            try
+            if (IsBatFile(_filePath))
             {
-                if (IsBatFile(_filePath))
-                {
-                    //Запустить .bat файл
-                    StepStatus = Status.Finished;
-                }
-                else
-                    StepStatus = Status.Error;
+                //Запустить .bat файл   
             }
-            catch
-            {
-                StepStatus = Status.Error;
-            }
+            else
+                throw new ArgumentException("File doesn't have .bat extension");
         }
 
         private bool IsBatFile(string filePath)

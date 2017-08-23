@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using RenamerLib;
-using System.IO.Abstractions;
-using System.Linq;
+﻿using RenamerLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RenamerLib.Arguments;
 
 namespace MP3Renamer.Tests
 {
@@ -16,22 +12,24 @@ namespace MP3Renamer.Tests
         {
             MockFileManager fileSystem = new MockFileManager();
             fileSystem.AddFile("file1.mp3", 
-                new MockMP3File("file1.mp3", fileSystem) { Artist = "Bon Jovi", Title = "It's my life" });
+                new MockMp3File("file1.mp3", fileSystem) { Artist = "Bon Jovi", Title = "It's my life" });
             fileSystem.AddFile("file2.mp3", 
-                new MockMP3File("file2.mp3", fileSystem) { Artist = "Imagine Dragons", Title = "Believer" });
+                new MockMp3File("file2.mp3", fileSystem) { Artist = "Imagine Dragons", Title = "Believer" });
 
-            Arguments arguments = new Arguments();
-            arguments.IsRecursive = false;
-            arguments.Action = AllowedActions.toFileName;
-            arguments.Mask = "*.mp3";
+            RenamerArguments renamerArguments = new RenamerArguments
+            {
+                IsRecursive = false,
+                Action = AllowedActions.ToFileName,
+                Mask = "*.mp3"
+            };
 
-            Processor processor = new Processor(arguments, fileSystem);
+            Processor processor = new Processor(renamerArguments, fileSystem);
             processor.Process();
 
             Assert.IsTrue(fileSystem.Exist("\\Bon Jovi - It's my life.mp3"));
             Assert.IsTrue(fileSystem.Exist("\\Imagine Dragons - Believer.mp3"));
 
-            Assert.AreEqual(2, fileSystem.files.Count);
+            Assert.AreEqual(2, fileSystem.Files.Count);
         }
 
         [TestMethod]
@@ -39,25 +37,27 @@ namespace MP3Renamer.Tests
         {
             MockFileManager fileSystem = new MockFileManager();
             fileSystem.AddFile("Bon Jovi - It's my life.mp3",
-                new MockMP3File("Bon Jovi - It's my life.mp3", fileSystem));
+                new MockMp3File("Bon Jovi - It's my life.mp3", fileSystem));
             fileSystem.AddFile("Imagine Dragons - Believer.mp3",
-                new MockMP3File("Imagine Dragons - Believer.mp3", fileSystem));
+                new MockMp3File("Imagine Dragons - Believer.mp3", fileSystem));
 
-            Arguments arguments = new Arguments();
-            arguments.IsRecursive = false;
-            arguments.Action = AllowedActions.toTag;
-            arguments.Mask = "*.mp3";
+            RenamerArguments renamerArguments = new RenamerArguments
+            {
+                IsRecursive = false,
+                Action = AllowedActions.ToTag,
+                Mask = "*.mp3"
+            };
 
-            Processor processor = new Processor(arguments, fileSystem);
+            Processor processor = new Processor(renamerArguments, fileSystem);
             processor.Process();
 
-            Assert.AreEqual("Bon Jovi", fileSystem.files["Bon Jovi - It's my life.mp3"].Artist);
-            Assert.AreEqual("It's my life", fileSystem.files["Bon Jovi - It's my life.mp3"].Title);
+            Assert.AreEqual("Bon Jovi", fileSystem.Files["Bon Jovi - It's my life.mp3"].Artist);
+            Assert.AreEqual("It's my life", fileSystem.Files["Bon Jovi - It's my life.mp3"].Title);
 
-            Assert.AreEqual("Imagine Dragons", fileSystem.files["Imagine Dragons - Believer.mp3"].Artist);
-            Assert.AreEqual("Believer", fileSystem.files["Imagine Dragons - Believer.mp3"].Title);
+            Assert.AreEqual("Imagine Dragons", fileSystem.Files["Imagine Dragons - Believer.mp3"].Artist);
+            Assert.AreEqual("Believer", fileSystem.Files["Imagine Dragons - Believer.mp3"].Title);
 
-            Assert.AreEqual(2, fileSystem.files.Count);
+            Assert.AreEqual(2, fileSystem.Files.Count);
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MP3Renamer;
-using TagLib;
 using RenamerLib;
+using RenamerLib.Arguments;
 
 namespace MP3Renamer.Tests
 {
@@ -15,7 +13,7 @@ namespace MP3Renamer.Tests
         public void ParseWithNoArguments()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] { });
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] { });
         }
 
         [TestMethod]
@@ -23,51 +21,51 @@ namespace MP3Renamer.Tests
         public void ParseWithLessArguments()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] {"*.mp3"});
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] {"*.mp3"});
         }
 
         [TestMethod]
         public void ParseArgumentsRecusiveToTag()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] { "*.mp3", "-recursive", "-toTag" });
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] { "*.mp3", "-recursive", "-toTag" });
 
-            Assert.AreEqual("*.mp3", arguments.Mask);
-            Assert.IsTrue(arguments.IsRecursive);
-            Assert.AreEqual(AllowedActions.toTag, arguments.Action);
+            Assert.AreEqual("*.mp3", renamerArguments.Mask);
+            Assert.IsTrue(renamerArguments.IsRecursive);
+            Assert.AreEqual(AllowedActions.ToTag, renamerArguments.Action);
         }
 
         [TestMethod]
         public void ParseArgumentsRecusiveToFileName()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] { "*.mp3", "-recursive", "-toFileName" });
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] { "*.mp3", "-recursive", "-toFileName" });
 
-            Assert.AreEqual("*.mp3", arguments.Mask);
-            Assert.IsTrue(arguments.IsRecursive);
-            Assert.AreEqual(AllowedActions.toFileName, arguments.Action);
+            Assert.AreEqual("*.mp3", renamerArguments.Mask);
+            Assert.IsTrue(renamerArguments.IsRecursive);
+            Assert.AreEqual(AllowedActions.ToFileName, renamerArguments.Action);
         }
 
         [TestMethod]
         public void ParseArgumentsToTag()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] { "*.mp3", "-toTag" });
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] { "*.mp3", "-toTag" });
 
-            Assert.AreEqual("*.mp3", arguments.Mask);
-            Assert.IsFalse(arguments.IsRecursive);
-            Assert.AreEqual(AllowedActions.toTag, arguments.Action);
+            Assert.AreEqual("*.mp3", renamerArguments.Mask);
+            Assert.IsFalse(renamerArguments.IsRecursive);
+            Assert.AreEqual(AllowedActions.ToTag, renamerArguments.Action);
         }
 
         [TestMethod]
         public void ParseArgumentsToFileName()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] { "*.mp3", "-toFileName" });
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] { "*.mp3", "-toFileName" });
 
-            Assert.AreEqual("*.mp3", arguments.Mask);
-            Assert.IsFalse(arguments.IsRecursive);
-            Assert.AreEqual(AllowedActions.toFileName, arguments.Action);
+            Assert.AreEqual("*.mp3", renamerArguments.Mask);
+            Assert.IsFalse(renamerArguments.IsRecursive);
+            Assert.AreEqual(AllowedActions.ToFileName, renamerArguments.Action);
         }
 
         [TestMethod]
@@ -75,7 +73,7 @@ namespace MP3Renamer.Tests
         public void ParseWithMoreArguments()
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = parser.ParseArguments(new string[] { "*.mp3", "-recursive", "-toFileName",  "-toTag" });
+            RenamerArguments renamerArguments = parser.ParseArguments(new string[] { "*.mp3", "-recursive", "-toFileName",  "-toTag" });
         }
     }
 }

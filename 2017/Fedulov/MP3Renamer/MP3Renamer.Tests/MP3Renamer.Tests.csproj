@@ -65,7 +65,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ArgumentsTests.cs" />
-    <Compile Include="MockFileSystem.cs" />
+    <Compile Include="MockFileManager.cs" />
+    <Compile Include="MockMP3File.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProcessorTest.cs" />
     <Compile Include="ActionsTest.cs" />

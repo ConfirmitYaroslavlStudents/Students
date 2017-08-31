@@ -5,7 +5,12 @@ function main() {
   pkg = require("../package.json");
   let rename = require("./Rename").renameByTag;
   let retag = require('./Retag').retagByName;
-
+  if (module.parent){
+    module.exports={
+      retag, rename
+    };
+    return;
+  }
   program.version(pkg.version)
     .option("--toName [mask]", "find files by mask and replace name by tag")
     .option("--toTag [mask]", "find files by mask and replace tag by name")

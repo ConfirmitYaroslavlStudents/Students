@@ -2,6 +2,6 @@
 {
     public interface IStep
     {
-        void Execute(Processor sender, int stepId);
+        void Execute();
     }
 }

@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Logger;
 using RenamerLib;
+using RenamerLib.Arguments;
 
 namespace MP3Renamer
 {
     public class ProcessExecutor
     {
-        public void Execute(Arguments arguments, ILogger logger)
+        public void Execute(RenamerArguments renamerArguments, ILogger logger)
         {
             try
             {
-                Processor processor = new Processor(arguments, logger);
+                Processor processor = new Processor(renamerArguments, logger);
                 processor.Process();
             }
             catch (Exception e)

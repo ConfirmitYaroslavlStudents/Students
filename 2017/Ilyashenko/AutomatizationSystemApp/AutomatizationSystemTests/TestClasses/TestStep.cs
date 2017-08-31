@@ -11,11 +11,9 @@ namespace AutomatizationSystemTests
             _obj = obj;
         }
 
-        public void Execute(Processor sender, int stepId)
+        public void Execute()
         {
             _obj.Changed = true;
-            sender.StepStatus[stepId] = Status.Successful;
-            sender.NextStepId++;
         }
     }
 }

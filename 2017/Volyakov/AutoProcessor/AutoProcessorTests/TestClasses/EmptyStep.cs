@@ -2,16 +2,14 @@
 
 namespace AutoProcessorTests
 {
-    public class EmptyStep : Step
+    public class EmptyStep : IStep
     {
         public EmptyStep()
         {
-            StepStatus = Status.NotStarted;
         }
 
-        public override void Start()
+        public void Start()
         {
-            StepStatus = Status.Finished;
         }
     }
 }

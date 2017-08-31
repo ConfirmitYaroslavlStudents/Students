@@ -52,9 +52,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arguments.cs" />
-    <Compile Include="Actions.cs" />
-    <Compile Include="FileManager.cs" />
+    <Compile Include="Actions\ActionWithLogger.cs" />
+    <Compile Include="Actions\FileNameToTagAction.cs" />
+    <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Actions\TagToFileNameAction.cs" />
+    <Compile Include="Arguments\ArgumentsClass.cs" />
+    <Compile Include="Actions\AllowedActions.cs" />
+    <Compile Include="Arguments\ArgumentsParser.cs" />
+    <Compile Include="FileSystemManager.cs" />
+    <Compile Include="IFileManager.cs" />
+    <Compile Include="IMP3File.cs" />
     <Compile Include="MP3File.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

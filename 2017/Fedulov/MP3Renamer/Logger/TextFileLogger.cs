@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logger
 {
     public class TextFileLogger : ILogger
     {
-        private System.IO.StreamWriter file;
+        private StreamWriter _file;
 
         public TextFileLogger(string logFileName)
         {
-            file = new StreamWriter(logFileName);   
+            _file = new StreamWriter(logFileName);   
         }
 
         public void WriteMessage(String message, Status status)
         {
             WriteStatus(status);
-            file?.WriteLine(message);
+            _file?.WriteLine(message);
         }
 
         public void WriteStatus(Status status)
@@ -27,16 +23,16 @@ namespace Logger
             switch (status)
             {
                 case Status.Success:
-                    file?.Write("[Success]: ");
+                    _file?.Write("[Success]: ");
                     break;
                 case Status.Warning:
-                    file?.Write("[Warning]: ");
+                    _file?.Write("[Warning]: ");
                     break;
                 case Status.Error:
-                    file?.Write("[Error]: ");
+                    _file?.Write("[Error]: ");
                     break;
                 case Status.Info:
-                    file?.Write("[Info]: ");
+                    _file?.Write("[Info]: ");
                     break;
             }
             StoreLogging();   
@@ -44,7 +40,7 @@ namespace Logger
 
         public void StoreLogging()
         {
-            file.Flush();
+            _file.Flush();
         }
     }
 }

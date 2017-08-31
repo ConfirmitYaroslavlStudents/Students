@@ -1,59 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Logger;
+using RenamerLib.Actions;
+using RenamerLib.Arguments;
 
 namespace RenamerLib
 {
     public class Processor
     {
-        private readonly Arguments arguments;
-        private IFileManager fileManager;
-        private ILogger logger;
+        private readonly RenamerArguments _arguments;
+        private readonly IFileManager _fileManager;
+        private readonly ILogger _logger;
 
-        public Processor(Arguments arguments)
+        public Processor(RenamerArguments renamerArguments)
         {
-            if (arguments == null)
-                throw new ArgumentException("Arguments shouldn't be null!");
+            if (renamerArguments == null)
+                throw new ArgumentException("RenamerArguments shouldn't be null!");
 
-            this.arguments = arguments;
-            this.logger = null;
-            fileManager = new FileManager();
+            _arguments = renamerArguments;
+            _logger = null;
+            _fileManager = new FileSystemManager();
         }
 
-        public Processor(Arguments arguments, IFileManager fileManager)
+        public Processor(RenamerArguments renamerArguments, IFileManager fileManager)
         {
-            if (arguments == null)
-                throw new ArgumentException("Arguments shouldn't be null!");
+            if (renamerArguments == null)
+                throw new ArgumentException("RenamerArguments shouldn't be null!");
 
-            this.arguments = arguments;
-            this.logger = null;
-            this.fileManager = fileManager;
+            _arguments = renamerArguments;
+            _logger = null;
+            _fileManager = fileManager;
         }
 
-        public Processor(Arguments arguments, ILogger logger) : this(arguments)
+        public Processor(RenamerArguments renamerArguments, ILogger logger) : this(renamerArguments)
         {
             if (logger == null)
-                throw new ArgumentException("Arguments shouldn't be null!");
+                throw new ArgumentException("RenamerArguments shouldn't be null!");
 
-            this.logger = logger;
+            _logger = logger;
         }
 
-        public Processor(Arguments arguments, ILogger logger, IFileManager fileManager) : this(arguments, logger)
+        public Processor(RenamerArguments renamerArguments, ILogger logger, IFileManager fileManager) : this(renamerArguments, logger)
         {
-            this.fileManager = fileManager;
+            _fileManager = fileManager;
         }
 
         private IAction GetAction(AllowedActions action)
         {
             switch (action)
             {
-                case AllowedActions.toFileName:
+                case AllowedActions.ToFileName:
                     return new TagToFileNameAction();
-                case AllowedActions.toTag:
+                case AllowedActions.ToTag:
                     return new FileNameToTagAction();
                 default:
                     return null;
@@ -62,26 +60,16 @@ namespace RenamerLib
 
         public void Process()
         {
-            IAction action = GetAction(arguments.Action);
+            IAction action = new ActionWithLogger(GetAction(_arguments.Action), _logger);
 
-            var files = fileManager.GetFiles(arguments.Mask, 
-                arguments.IsRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            var files = _fileManager.GetFiles(_arguments.Mask, 
+                _arguments.IsRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
             foreach (var file in files)
             {
-                try
-                {
-                    logger?.WriteMessage(file.FilePath + " transformation processed", Status.Info);
-                    action.Process(file);
-                    logger?.WriteMessage(file.FilePath + " transformation complete", Status.Info);
-                }
-                catch (Exception e)
-                {
-                    logger?.WriteMessage(e.Message, Status.Error);
-                    throw;
-                }
+                action.Process(file);
             }
 
-            logger?.WriteMessage("Process succesfully completed!", Status.Success);
+            _logger?.WriteMessage("Process succesfully completed!", Status.Success);
         }
     }
 }

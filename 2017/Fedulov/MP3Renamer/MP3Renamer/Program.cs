@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using Logger;
-using RenamerLib;
+using RenamerLib.Arguments;
 
 namespace MP3Renamer
 {
     public class Program
     {
-        public static Arguments GetArguments(string[] args, ILogger logger)
+        public static RenamerArguments GetArguments(string[] args, ILogger logger)
         {
             ArgumentsParser parser = new ArgumentsParser();
-            Arguments arguments = null;
+            RenamerArguments renamerArguments = null;
 
             try
             {
-                arguments = parser.ParseArguments(args);
+                renamerArguments = parser.ParseArguments(args);
             }
             catch (ArgumentException e)
             {
@@ -27,16 +21,16 @@ namespace MP3Renamer
                 Console.WriteLine("Process failed! See log.txt for full information");
             }
 
-            return arguments;
+            return renamerArguments;
         }
 
         public static void Main(string[] args)
         {
             var logger = new TextFileLogger("log.txt");
-            var arguments = GetArguments(args, logger);
+            var renamerArguments = GetArguments(args, logger);
 
             ProcessExecutor processExecutor = new ProcessExecutor();
-            processExecutor.Execute(arguments, logger);
+            processExecutor.Execute(renamerArguments, logger);
         }
     }
 }

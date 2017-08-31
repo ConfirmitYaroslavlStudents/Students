@@ -40,18 +40,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Applets\BatExecutorApplet.cs" />
-    <Compile Include="Applets\ConsoleCommandApplet.cs" />
-    <Compile Include="Applets\IApplet.cs" />
-    <Compile Include="Applets\TriggerApplet.cs" />
-    <Compile Include="Applets\WriteLineApplet.cs" />
-    <Compile Include="ExecutionCondition.cs" />
-    <Compile Include="Options\BatOptions.cs" />
-    <Compile Include="Options\ConsoleOptions.cs" />
-    <Compile Include="Options\WriteLineOptions.cs" />
-    <Compile Include="Processor.cs" />
+    <Compile Include="Actions\BatExecutor\BatExecutorAction.cs" />
+    <Compile Include="Actions\BatExecutor\BatOptions.cs" />
+    <Compile Include="Actions\ConsoleCommand\ConsoleCommandAction.cs" />
+    <Compile Include="Actions\ConsoleCommand\ConsoleOptions.cs" />
+    <Compile Include="Actions\IAction.cs" />
+    <Compile Include="Actions\WriteLine\WriteLineAction.cs" />
+    <Compile Include="Actions\WriteLine\WriteLineOptions.cs" />
+    <Compile Include="BehaviourTree\BehaviourTree.cs" />
+    <Compile Include="BehaviourTree\ExecutionBehaviours\IExecutionBehaviour.cs" />
+    <Compile Include="BehaviourTree\ExecutionBehaviours\OrdinaryBehaviour.cs" />
+    <Compile Include="BehaviourTree\ExecutionBehaviours\SequenceBehaviour.cs" />
+    <Compile Include="BehaviourTree\Nodes\ActionNode.cs" />
+    <Compile Include="BehaviourTree\Nodes\ConditionNode.cs" />
+    <Compile Include="BehaviourTree\Nodes\INode.cs" />
+    <Compile Include="BehaviourTree\Nodes\SequenceNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="State.cs" />
+    <Compile Include="Status.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,11 +8,11 @@ namespace FizzBuzz
 {
     public class FizzBuzz
     {
-        private readonly SortedDictionary<int, string> rules;
+        private readonly SortedDictionary<int, string> _rules;
 
         public FizzBuzz()
         {
-            rules = new SortedDictionary<int, string>
+            _rules = new SortedDictionary<int, string>
             {
                 { 3, "Fizz" },
                 { 5, "Buzz" }
@@ -22,7 +22,7 @@ namespace FizzBuzz
         public string Process(int number)
         {
             string result = "";
-            foreach (var rule in rules)
+            foreach (var rule in _rules)
             {
                 if (number.IsDividableBy(rule.Key))
                     result += rule.Value;
@@ -31,9 +31,9 @@ namespace FizzBuzz
             return string.IsNullOrEmpty(result) ? number.ToString() : result;
         }
 
-        public bool isRuleExist(int number)
+        public bool ШsRuleExist(int number)
         {
-            return rules.ContainsKey(number);
+            return _rules.ContainsKey(number);
         }
 
         public void AddRule(int number, string value)
@@ -41,7 +41,7 @@ namespace FizzBuzz
             if (isRuleExist(number))
                 throw new ArgumentException("Rule for number " + number + " already exist!" );
 
-            rules.Add(number, value);
+            _rules.Add(number, value);
         }
 
         public void AddRuleRange(IDictionary<int, string> newRules)
@@ -57,7 +57,7 @@ namespace FizzBuzz
             if (!isRuleExist(number))
                 throw new ArgumentException("Rule for number " + number + " does not exist!");
 
-            rules[number] = value;
+            _rules[number] = value;
         }
 
         public void RemoveRule(int number)
@@ -65,7 +65,7 @@ namespace FizzBuzz
             if (!isRuleExist(number))
                 throw new ArgumentException("Rule for number " + number + " does not exist!");
 
-            rules.Remove(number);
+            _rules.Remove(number);
         }
     }
 

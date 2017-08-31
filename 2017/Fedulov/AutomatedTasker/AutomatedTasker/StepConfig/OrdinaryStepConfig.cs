@@ -15,7 +15,7 @@ namespace AutomatedTasker.StepConfig
             ExecutionStatus = Status.NotStarted;
         } 
 
-        public bool Execute()
+        public void Execute(ExecutingInfo info, int stepId)
         {
             ExecutionStatus = Status.Started;
 
@@ -23,12 +23,11 @@ namespace AutomatedTasker.StepConfig
             {
                 Step.Execute();
                 ExecutionStatus = Status.Success;
-                return true;
             }
             catch
             {
                 ExecutionStatus = Status.Error;
-                return false;
+                info.HasFailed = true;
             }
         }
     }

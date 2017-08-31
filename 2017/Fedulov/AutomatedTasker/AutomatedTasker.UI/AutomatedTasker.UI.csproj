@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DD426988-449F-40C6-86FF-EE461188EFCE}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{248C708C-CA53-4A8F-B35D-D286838A382F}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutomatedTasker.App</RootNamespace>
-    <AssemblyName>AutomatedTasker.App</AssemblyName>
+    <RootNamespace>AutomatedTasker.UI</RootNamespace>
+    <AssemblyName>AutomatedTasker.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,17 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="UserInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AutomatedTasker.UI\AutomatedTasker.UI.csproj">
-      <Project>{248c708c-ca53-4a8f-b35d-d286838a382f}</Project>
-      <Name>AutomatedTasker.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AutomatedTasker\AutomatedTasker.Lib.csproj">
       <Project>{e86c9bc8-427a-49ef-9b4a-08ae67dd7c1d}</Project>
       <Name>AutomatedTasker.Lib</Name>

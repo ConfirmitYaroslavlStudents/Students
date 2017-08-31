@@ -8,6 +8,6 @@ namespace AutomatedTasker.StepConfig
         ExecutionCondition Condition { set; get; }
         Status ExecutionStatus { set; get; }
 
-        bool Execute();
+        void Execute(ExecutingInfo info, int stepId);
     }
 }

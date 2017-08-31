@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedTasker.Test", "Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedTasker.App", "AutomatedTasker.App\AutomatedTasker.App.csproj", "{DD426988-449F-40C6-86FF-EE461188EFCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedTasker.UI", "AutomatedTasker.UI\AutomatedTasker.UI.csproj", "{248C708C-CA53-4A8F-B35D-D286838A382F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DD426988-449F-40C6-86FF-EE461188EFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD426988-449F-40C6-86FF-EE461188EFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD426988-449F-40C6-86FF-EE461188EFCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{248C708C-CA53-4A8F-B35D-D286838A382F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{248C708C-CA53-4A8F-B35D-D286838A382F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{248C708C-CA53-4A8F-B35D-D286838A382F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{248C708C-CA53-4A8F-B35D-D286838A382F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

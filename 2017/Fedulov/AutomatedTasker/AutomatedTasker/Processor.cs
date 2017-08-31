@@ -21,10 +21,11 @@ namespace AutomatedTasker
 
         public void Process()
         {
-            foreach (var step in Info.Steps)
+            for(int i = 0; i < Info.Steps.Count; ++i)
             {
+                var step = Info.Steps[i];
                 if (CheckCondition(step))
-                    Info.HasFailed &= step.Execute();
+                    step.Execute(Info, i);
             }
         }
     }

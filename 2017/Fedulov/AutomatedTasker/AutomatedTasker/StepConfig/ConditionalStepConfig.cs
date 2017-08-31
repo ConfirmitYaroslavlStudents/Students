@@ -31,37 +31,14 @@ namespace AutomatedTasker.StepConfig
             }
         }
 
-        public bool Execute()
+        public void Execute(ExecutingInfo info, int stepId)
         {
             ExecutionStatus = Status.Started;
 
-            try
-            {
-                bool successStatus = true;
-                if (ConditionItem.ExecutionStatus == Status.Success)
-                {
-                    foreach (var item in StepsIfTrue)
-                    {
-                        successStatus &= item.Execute();
-                    }
-                }
-                else
-                {
-                    foreach (var item in StepsIfFalse)
-                    {
-                        successStatus &= item.Execute();
-                    }
-                }
+            info.Steps.InsertRange(stepId + 1,
+                ConditionItem.ExecutionStatus == Status.Success ? StepsIfTrue : StepsIfFalse);
 
-                ExecutionStatus = Status.Success;
-                return successStatus;
-            }
-            catch
-            {
-                ExecutionStatus = Status.Error;
-                return false;
-            }
-
+            ExecutionStatus = Status.Success;
         }
     }
 }

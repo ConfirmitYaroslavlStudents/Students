@@ -12,5 +12,8 @@
     "mocha": "^3.5.0"
   },
   "main": "index.js",
+  "bin": {
+    "minilinux": "./bin/cli"
+  },
   "preferGlobal": true
 }

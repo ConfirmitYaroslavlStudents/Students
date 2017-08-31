@@ -4,12 +4,11 @@ function core(branches) {
 	} = require('./commands');
 	let error = false;
 	let results = [];
-	let main = branches[0].operations;
 
-	for (let i = 0; i < main.length; i++) {
-		let command = main[i].command;
-		let args = main[i].args;
-		let isAlways = main[i].isAlways;
+	for (let cur = branches; cur && cur.command; cur = cur.next) {
+		let command = cur.command;
+		let args = cur.args;
+		let isAlways = cur.isAlways;
 
 		// true - executed successful
 		// false - executed unsuccessful
@@ -17,15 +16,15 @@ function core(branches) {
 		try {
 			if (isAlways || !error) {
 				call(command, args);
-				results.push(true);
+				cur.result = true;
 			} else {
-				results.push(null);
+				cur.result = null;
 			}
 		} catch (e) {
-			results.push(false);
+			cur.result = false;
 			error = true;
+			console.log(e);
 		}
-		branching(command);
 	}
 
 	return results;
@@ -34,22 +33,6 @@ function core(branches) {
 		commands[command].apply(null, args);
 	}
 
-	function branching(command) {
-		for (let i = 1; i < branches.length; i++) {
-			if (branches[i].condition == command) {
-				const result = results.slice(-1)[0];
-				if (result !== null || branches[i].isAlways) {
-					if (result) {
-						main = main.concat(branches[i].operationsTrue);
-						error = false;
-					} else {
-						main = main.concat(branches[i].operationsFalse);
-						error = false;
-					}
-				}
-			}
-		}
-	}
 }
 
 module.exports = {

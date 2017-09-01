@@ -1,0 +1,42 @@
+.add-btn {
+    margin: 10px;
+
+}
+
+.candidate-edit-form {
+    padding: 0 15px 15px 15px;
+}
+
+.float-right {
+    float: right;
+}
+
+.footer {
+    margin-top: -10px;
+    padding-top: 40px;
+    text-align: center;
+}
+
+.footer-label {
+    color: dimgray;
+}
+
+.custom-raised-main {
+    width: 96%;
+    margin: 0 auto 0;
+    z-index: 0;
+    box-shadow: 0 0 5px 5px rgba(0,0,0,0.15);
+}
+
+.navbar-style {
+    position: relative;
+    z-index: 100;
+}
+
+.selected-to-edit {
+    box-shadow: 0 1px 10px 2px rgba(0,0,0,0.15);
+}
+
+.tab-content {
+    padding: 0 20px 0 20px;
+}

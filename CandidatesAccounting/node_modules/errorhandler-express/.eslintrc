@@ -1,0 +1,15 @@
+{
+  "env": {
+    "browser": false,
+    "node": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node" : {
+        "paths": ["src"]
+      }
+    }
+  },
+  "extends": ["airbnb"]
+}
+

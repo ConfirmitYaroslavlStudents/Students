@@ -47,6 +47,9 @@ export default class DialogWindow extends React.Component {
       case 'fab':
         openButton = <FabButton onClick={this.handleOpen} color="primary" icon={this.props.openButtonContent}/>;
         break;
+      case 'icon':
+        openButton = <IconButton onClick={this.handleOpen}>{this.props.openButtonContent}</IconButton>;
+        break;
       default:
         openButton = <FlatButton onClick={this.handleOpen} color="primary" text={this.props.openButtonContent}/>;
     }
@@ -56,6 +59,7 @@ export default class DialogWindow extends React.Component {
         {openButton}
 
         <Dialog
+          fullScreen={this.props.fullScreen}
           open={this.state.open}
           onRequestClose={this.handleClose}
           transition={<Slide direction="up" />}

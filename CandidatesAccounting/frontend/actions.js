@@ -35,4 +35,13 @@ function changeCandidateEditInfo(key, value) {
   }
 }
 
-module.exports = {addCandidate, deleteCandidate, editCandidate, setCandidateEditInfo, changeCandidateEditInfo};
+function setCandidateEditComment(index, comment) {
+  return {
+    type: 'SET_CANDIDATE_EDIT_COMMENT',
+    index,
+    comment
+  }
+}
+
+module.exports = {addCandidate, deleteCandidate, editCandidate, setCandidateEditInfo, changeCandidateEditInfo,
+  setCandidateEditComment};

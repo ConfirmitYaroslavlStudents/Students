@@ -2,6 +2,7 @@ import Candidate from './candidate';
 import Interviewee from './interviewee';
 import Student from './student';
 import Trainee from './trainee';
+import Comment from './comment';
 
 function CreateCandidate(status, args) {
   switch (status) {
@@ -11,7 +12,7 @@ function CreateCandidate(status, args) {
         args.name,
         args.birthDate,
         args.email,
-        args.comment,
+        args.comments,
         args.interviewDate,
         args.interviewRoom
       );
@@ -21,7 +22,7 @@ function CreateCandidate(status, args) {
         args.name,
         args.birthDate,
         args.email,
-        args.comment,
+        args.comments,
         args.groupName
       );
     case 'Trainee':
@@ -30,7 +31,7 @@ function CreateCandidate(status, args) {
         args.name,
         args.birthDate,
         args.email,
-        args.comment,
+        args.comments,
         args.mentor
       );
     default:
@@ -39,10 +40,10 @@ function CreateCandidate(status, args) {
         args.name,
         args.birthDate,
         args.email,
-        args.comment,
+        args.comments,
       );
   }
 }
 
-module.exports = {Candidate, Interviewee, Student, Trainee, CreateCandidate};
+module.exports = {Candidate, Interviewee, Student, Trainee, Comment, CreateCandidate};
 

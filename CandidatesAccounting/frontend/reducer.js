@@ -27,6 +27,11 @@ export default function reducer(state = Map(), action) {
       let newCandidateEditInfo = state.get('candidateEditInfo');
       newCandidateEditInfo[action.key] = action.value;
       return state.update('candidateEditInfo', () => newCandidateEditInfo);
+
+    case 'SET_CANDIDATE_EDIT_COMMENT':
+      let candidateEditInfo = state.get('candidateEditInfo');
+      candidateEditInfo.comments[action.index] = action.comment;
+      return state.update('candidateEditInfo', () => candidateEditInfo);
   }
   return state;
 }

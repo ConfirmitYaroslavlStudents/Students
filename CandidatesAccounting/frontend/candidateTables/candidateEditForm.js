@@ -1,6 +1,8 @@
 import React from 'react';
 import TextInput from '../materialUIDecorators/textInput';
 import SelectMenu from '../materialUIDecorators/selectMenu';
+import {Comment} from '../candidates';
+import CommentsEditDialog from './commentsEditDialog';
 
 export default class CandidateEditForm extends React.Component {
   constructor(props) {
@@ -8,11 +10,13 @@ export default class CandidateEditForm extends React.Component {
     this.state = ({candidateType: props.candidateEditInfo.status});
     this.changeEditInfo = this.changeEditInfo.bind(this);
     this.changeCandidateType = this.changeCandidateType.bind(this);
+    this.setCandidateComment = this.setCandidateComment.bind(this);
   }
 
   render() {
     const changeEditInfo = this.changeEditInfo;
     const changeCandidateType = this.changeCandidateType;
+    const setCandidateComment = this.setCandidateComment;
     let specialFields;
     switch (this.state.candidateType) {
       case 'Interviewee':
@@ -79,12 +83,10 @@ export default class CandidateEditForm extends React.Component {
 
         {specialFields}
 
-        <TextInput
-          name="comment"
-          label="Comment"
-          value={this.props.candidateEditInfo.comment}
-          placeholder="additional info"
-          onChange={function(value) {changeEditInfo('comment', value)}}/>
+        <div className="float-right">
+          {this.props.candidateEditInfo.comments ? this.props.candidateEditInfo.comments.length + ' comment(s)' : 'no comments'}
+          <CommentsEditDialog/>
+        </div>
       </div>
     );
   }
@@ -96,5 +98,9 @@ export default class CandidateEditForm extends React.Component {
   changeCandidateType(type) {
     this.setState({candidateType: type});
     this.props.changeEditInfo('status', type);
+  }
+
+  setCandidateComment(index, comment) {
+    this.props.setCandidateComment(index, new Comment(' a', 'd', comment));
   }
 }

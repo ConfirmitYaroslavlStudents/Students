@@ -11,13 +11,14 @@ export default function CandidateRowControls(props) {
         content={
           <CandidateEditForm
             changeEditInfo={props.changeCandidateEditInfo}
+            setCandidateComment={props.setCandidateEditComment}
             candidateEditInfo={props.candidateEditInfo}
           />}
         label="Candidate edit"
         openButtonContent="Edit"
         open={function() {
           props.setCandidateEditInfo(CreateCandidate(props.candidate.constructor.name, props.candidate));
-          props.changeCandidateEditInfo('status', props.candidate.constructor.name)
+          props.changeCandidateEditInfo('status', props.candidate.constructor.name);
         }}
         save={function() {
           props.editCandidate(props.candidate.id, CreateCandidate(props.candidateEditInfo.status, props.candidateEditInfo))

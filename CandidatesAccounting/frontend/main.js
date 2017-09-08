@@ -6,7 +6,7 @@ import createMuiTheme from 'material-ui/styles/theme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/palette';
 import purple from 'material-ui/colors/purple';
-import { BrowserRouter, Router, HashRouter, Route} from 'react-router-dom';
+import { BrowserRouter, Switch, Route} from 'react-router-dom';
 import reducer from './reducer'
 import {CreateCandidate, Interviewee, Student, Trainee} from './candidates';
 import AppView from './appview';
@@ -21,7 +21,23 @@ store.dispatch({
       new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com', 'ПМИ', 'frontend'),
       new Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com', 'КБ', 'backend'),
       new Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', '5 этаж', 'Евгений Иванов'),
-      new Trainee(5, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова')
+      new Trainee(5, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(6, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(7, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(8, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(9, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(10, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(11, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(12, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(13, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(14, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(15, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(16, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(17, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(18, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(19, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(20, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова'),
+      new Trainee(21, 'Игорь', '22.07.1994', 'Igor@confirmit.com', '8 этаж', 'Евгения Иванова')
     ],
     candidateEditInfo: CreateCandidate('Candidate', {})
   }
@@ -37,7 +53,12 @@ ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
       <BrowserRouter>
-        <Route path="/" component={AppView} />
+        <Switch>
+          <Route exact path="/" render={() => {return <AppView selectedTab={0}/>}}/>
+          <Route path="/interviewees" render={() => {return <AppView selectedTab={1}/>}}/>
+          <Route path="/students" render={() => {return <AppView selectedTab={2}/>}}/>
+          <Route path="/trainees" render={() => {return <AppView selectedTab={3}/>}}/>
+        </Switch>
       </BrowserRouter>
     </Provider>
   </MuiThemeProvider>,

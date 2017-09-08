@@ -6,14 +6,12 @@ import Icon from 'material-ui-icons/AccountCircle';
 
 export default function Navbar(props) {
   return (
-    <div className="navbar-style">
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography type="title" color="inherit">
-            <Icon /> {props.title}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <AppBar className="custom-navbar"  color="primary">
+      <Toolbar>
+        <Typography type="title" color="inherit">
+          <Icon /> {props.title}
+        </Typography>
+      </Toolbar>
+    </AppBar>
   );
 }

@@ -235,3 +235,5 @@ pip-log.txt
 ## Dmitry Banokin CandidatesAccounting
 #############
 node_modules/
+CandidatesAccounting/node_modules/
+.idea/

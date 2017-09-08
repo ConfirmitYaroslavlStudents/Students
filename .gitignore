@@ -230,3 +230,8 @@ pip-log.txt
 ## Bolshakov
 #############
 !/2015/Bolshakov/MP3_tager/MP3_tager/bin/Debug/*.dll
+
+#############
+## Dmitry Banokin CandidatesAccounting
+#############
+node_modules/

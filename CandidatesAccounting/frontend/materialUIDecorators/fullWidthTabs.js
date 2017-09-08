@@ -27,8 +27,8 @@ export default class FullWidthTabs extends React.Component {
 
   render() {
     return (
-      <div>
-        <AppBar position="static" color="default" className="tab-bar">
+      <div className="custom-main">
+        <AppBar className="tabs-bar" color="default">
           <Tabs
             value={this.state.value}
             onChange={this.handleChange.bind(this)}
@@ -47,7 +47,7 @@ export default class FullWidthTabs extends React.Component {
           onChangeIndex={this.handleChangeIndex.bind(this)}
         >
           {this.props.tabs.map((oneTab, index) =>
-            <TabContainer key={'tab' + index}> {oneTab} </TabContainer>
+            <TabContainer key={'tab' + index}> {index === this.state.value ? oneTab : <div> </div>} </TabContainer>
           )}
         </SwipeableViews>
       </div>

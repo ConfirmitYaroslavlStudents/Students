@@ -3,6 +3,14 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
 import SwipeableViews from 'react-swipeable-views';
 
+function TabContainer(props) {
+  return (
+    <div style={{}}>
+      {props.children}
+    </div>
+  );
+}
+
 export default class FullWidthTabs extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +27,8 @@ export default class FullWidthTabs extends React.Component {
 
   render() {
     return (
-      <div  className="custom-main">
-        <AppBar className="tab-bar" color="default">
+      <div>
+        <AppBar position="static" color="default" className="tab-bar">
           <Tabs
             value={this.state.value}
             onChange={this.handleChange.bind(this)}
@@ -39,9 +47,7 @@ export default class FullWidthTabs extends React.Component {
           onChangeIndex={this.handleChangeIndex.bind(this)}
         >
           {this.props.tabs.map((oneTab, index) =>
-            <div key={'tab' + index}>
-              {oneTab}
-            </div>
+            <TabContainer key={'tab' + index}> {oneTab} </TabContainer>
           )}
         </SwipeableViews>
       </div>

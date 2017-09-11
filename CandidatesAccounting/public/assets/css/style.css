@@ -6,6 +6,22 @@
     padding: 0 15px 15px 15px;
 }
 
+.comment {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.user-comment {
+    float: right;
+    text-align: right;
+}
+
+.comment-date {
+    font-size: smaller;
+    color: dimgray;
+}
+
 .custom-main {
     margin-top: 118px;
 }

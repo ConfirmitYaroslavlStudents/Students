@@ -11,7 +11,6 @@ export default function CommentsEditDialog(props) {
             setCandidateComment={props.setCandidateEditComment}
             candidateEditInfo={props.candidateEditInfo}
           />}
-        fullScreen={true}
         label="Comments"
         openButtonType="icon"
         openButtonContent={<EditIcon />}

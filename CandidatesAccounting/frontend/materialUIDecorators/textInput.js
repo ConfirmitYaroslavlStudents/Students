@@ -19,6 +19,7 @@ export default class TextInput extends React.Component {
         onChange={this.handleChange}
         fullWidth
         margin="normal"
+        autoFocus={this.props.autoFocus}
       />
     );
   }

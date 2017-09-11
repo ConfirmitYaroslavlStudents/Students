@@ -1,34 +1,41 @@
 import React from 'react';
-import BasicTable from '../materialUIDecorators/basicTable';
-import {Comment} from '../candidates';
-import FlatButton from '../materialUIDecorators/flatButton';
+import Avatar from 'material-ui-icons/AccountCircle';
+import TextInput from '../materialUIDecorators/textInput';
+import IconButton from 'material-ui/IconButton';
+import AddIcon from 'material-ui-icons/Add';
 
 export default class CommentEditForm extends React.Component {
   constructor(props) {
     super(props);
-    this.setCandidateComment = this.setCandidateComment.bind(this);
   }
 
   render() {
     return (
-      <div>
-        <BasicTable
-          heads={['Date', 'Author', 'Text', <span className="float-right">Actions</span>]}
-          contentRows = {[
-            ['04.08.2017', 'Андрей', 'Текст комментария', <div className="float-right"><FlatButton text="edit" color="primary"/>,
-              <FlatButton text="remove" color="accent"/></div>],
-            ['15.02.2017', 'Ольга', 'Текст другого комментария', <div className="float-right"><FlatButton text="edit" color="primary"/>,
-              <FlatButton text="remove" color="accent"/></div>]
-          ]}
-        />
-        <div className="float-right add-btn">
-          <FlatButton text="add" color="primary"/>
+      <div style={{display: 'inline-block', width: 400, padding: 20}}>
+        <div className="comment">
+          <Avatar />
+          <p>Павел <span className="comment-date">13:23 07.08.17</span></p>
+          <p>Какой-то комментарий от Павла</p>
         </div>
+        <div className="comment user-comment">
+          <Avatar />
+          <p>Вы <span className="comment-date">15:43 07.08.17</span></p>
+          <p>Ваше замечание насчёт кандидата</p>
+        </div>
+        <div className="comment">
+          <Avatar />
+          <p>Ольга <span className="comment-date">15:48 07.08.17</span></p>
+          <p>Комментарий Ольги</p>
+        </div>
+        <div style={{display:'inline-block', width: '86%'}}>
+          <TextInput
+            name="comment"
+            placeholder="New comment"
+            autoFocus={true}
+          />
+        </div>
+        <IconButton><AddIcon /></IconButton>
       </div>
     );
-  }
-
-  setCandidateComment(index, comment) {
-    this.props.setCandidateComment(index, new Comment(' a', 'd', comment));
   }
 }

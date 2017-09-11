@@ -1,9 +1,7 @@
 import React from 'react';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateRowControls';
-import CommentsEditDialog from './commentsEditDialog';
-import AddIcon from 'material-ui-icons/Add';
-import IconButton from 'material-ui/IconButton';
+import AddCommentForm from './commentControls';
 
 export default class StudentTable extends React.Component {
   constructor(props) {
@@ -30,11 +28,7 @@ export default class StudentTable extends React.Component {
       student.birthDate,
       student.email,
       student.groupName,
-      <div>
-        {student.comments ? student.comments.length + ' comment(s)' : 'no comments'}
-        <IconButton onClick={function() {prompt('Type new comment here:')}}><AddIcon /></IconButton>
-        <CommentsEditDialog/>
-      </div>,
+      <AddCommentForm candidate={student} />,
       <CandidateRowControls candidate={student} {...this.props}/>
     ];
   }

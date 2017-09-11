@@ -36452,15 +36452,15 @@
 
 	var _tableTabAll2 = _interopRequireDefault(_tableTabAll);
 
-	var _tableTabInterviewees = __webpack_require__(639);
+	var _tableTabInterviewees = __webpack_require__(641);
 
 	var _tableTabInterviewees2 = _interopRequireDefault(_tableTabInterviewees);
 
-	var _tableTabStudents = __webpack_require__(641);
+	var _tableTabStudents = __webpack_require__(643);
 
 	var _tableTabStudents2 = _interopRequireDefault(_tableTabStudents);
 
-	var _tableTabTrainees = __webpack_require__(643);
+	var _tableTabTrainees = __webpack_require__(645);
 
 	var _tableTabTrainees2 = _interopRequireDefault(_tableTabTrainees);
 
@@ -50080,7 +50080,7 @@
 
 	var _candidateTable2 = _interopRequireDefault(_candidateTable);
 
-	var _addNewCandidate = __webpack_require__(638);
+	var _addNewCandidate = __webpack_require__(640);
 
 	var _addNewCandidate2 = _interopRequireDefault(_addNewCandidate);
 
@@ -50127,17 +50127,9 @@
 
 	var _candidateRowControls2 = _interopRequireDefault(_candidateRowControls);
 
-	var _commentsEditDialog = __webpack_require__(634);
+	var _commentControls = __webpack_require__(638);
 
-	var _commentsEditDialog2 = _interopRequireDefault(_commentsEditDialog);
-
-	var _Add = __webpack_require__(637);
-
-	var _Add2 = _interopRequireDefault(_Add);
-
-	var _IconButton = __webpack_require__(600);
-
-	var _IconButton2 = _interopRequireDefault(_IconButton);
+	var _commentControls2 = _interopRequireDefault(_commentControls);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50180,19 +50172,7 @@
 	  }, {
 	    key: 'getRow',
 	    value: function getRow(candidate, index) {
-	      return [index + 1, candidate.name, candidate.constructor.name, candidate.birthDate, candidate.email, _react2.default.createElement(
-	        'div',
-	        null,
-	        candidate.comments ? candidate.comments.length + ' comment(s)' : 'no comments',
-	        _react2.default.createElement(
-	          _IconButton2.default,
-	          { onClick: function onClick() {
-	              prompt('Type new comment here:');
-	            } },
-	          _react2.default.createElement(_Add2.default, null)
-	        ),
-	        _react2.default.createElement(_commentsEditDialog2.default, null)
-	      ), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: candidate }, this.props))];
+	      return [index + 1, candidate.name, candidate.constructor.name, candidate.birthDate, candidate.email, _react2.default.createElement(_commentControls2.default, { candidate: candidate }), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: candidate }, this.props))];
 	    }
 	  }]);
 
@@ -55151,7 +55131,8 @@
 	        value: this.state.value,
 	        onChange: this.handleChange,
 	        fullWidth: true,
-	        margin: 'normal'
+	        margin: 'normal',
+	        autoFocus: this.props.autoFocus
 	      });
 	    }
 	  }, {
@@ -59590,7 +59571,7 @@
 
 	var _commentsEditForm2 = _interopRequireDefault(_commentsEditForm);
 
-	var _ViewList = __webpack_require__(636);
+	var _ViewList = __webpack_require__(637);
 
 	var _ViewList2 = _interopRequireDefault(_ViewList);
 
@@ -59602,7 +59583,6 @@
 	      setCandidateComment: props.setCandidateEditComment,
 	      candidateEditInfo: props.candidateEditInfo
 	    }),
-	    fullScreen: true,
 	    label: 'Comments',
 	    openButtonType: 'icon',
 	    openButtonContent: _react2.default.createElement(_ViewList2.default, null),
@@ -59628,15 +59608,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _basicTable = __webpack_require__(565);
+	var _AccountCircle = __webpack_require__(482);
 
-	var _basicTable2 = _interopRequireDefault(_basicTable);
+	var _AccountCircle2 = _interopRequireDefault(_AccountCircle);
 
-	var _candidates = __webpack_require__(377);
+	var _textInput = __webpack_require__(606);
 
-	var _flatButton = __webpack_require__(575);
+	var _textInput2 = _interopRequireDefault(_textInput);
 
-	var _flatButton2 = _interopRequireDefault(_flatButton);
+	var _IconButton = __webpack_require__(600);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
+	var _Add = __webpack_require__(636);
+
+	var _Add2 = _interopRequireDefault(_Add);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59652,10 +59638,7 @@
 	  function CommentEditForm(props) {
 	    _classCallCheck(this, CommentEditForm);
 
-	    var _this = _possibleConstructorReturn(this, (CommentEditForm.__proto__ || Object.getPrototypeOf(CommentEditForm)).call(this, props));
-
-	    _this.setCandidateComment = _this.setCandidateComment.bind(_this);
-	    return _this;
+	    return _possibleConstructorReturn(this, (CommentEditForm.__proto__ || Object.getPrototypeOf(CommentEditForm)).call(this, props));
 	  }
 
 	  _createClass(CommentEditForm, [{
@@ -59663,38 +59646,82 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement(_basicTable2.default, {
-	          heads: ['Date', 'Author', 'Text', _react2.default.createElement(
-	            'span',
-	            { className: 'float-right' },
-	            'Actions'
-	          )],
-	          contentRows: [['04.08.2017', 'Андрей', 'Текст комментария', _react2.default.createElement(
-	            'div',
-	            { className: 'float-right' },
-	            _react2.default.createElement(_flatButton2.default, { text: 'edit', color: 'primary' }),
-	            ',',
-	            _react2.default.createElement(_flatButton2.default, { text: 'remove', color: 'accent' })
-	          )], ['15.02.2017', 'Ольга', 'Текст другого комментария', _react2.default.createElement(
-	            'div',
-	            { className: 'float-right' },
-	            _react2.default.createElement(_flatButton2.default, { text: 'edit', color: 'primary' }),
-	            ',',
-	            _react2.default.createElement(_flatButton2.default, { text: 'remove', color: 'accent' })
-	          )]]
-	        }),
+	        { style: { display: 'inline-block', width: 400, padding: 20 } },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'float-right add-btn' },
-	          _react2.default.createElement(_flatButton2.default, { text: 'add', color: 'primary' })
+	          { className: 'comment' },
+	          _react2.default.createElement(_AccountCircle2.default, null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '\u041F\u0430\u0432\u0435\u043B ',
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'comment-date' },
+	              '13:23 07.08.17'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '\u041A\u0430\u043A\u043E\u0439-\u0442\u043E \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043E\u0442 \u041F\u0430\u0432\u043B\u0430'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'comment user-comment' },
+	          _react2.default.createElement(_AccountCircle2.default, null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '\u0412\u044B ',
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'comment-date' },
+	              '15:43 07.08.17'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '\u0412\u0430\u0448\u0435 \u0437\u0430\u043C\u0435\u0447\u0430\u043D\u0438\u0435 \u043D\u0430\u0441\u0447\u0451\u0442 \u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442\u0430'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'comment' },
+	          _react2.default.createElement(_AccountCircle2.default, null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '\u041E\u043B\u044C\u0433\u0430 ',
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'comment-date' },
+	              '15:48 07.08.17'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            '\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u041E\u043B\u044C\u0433\u0438'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { display: 'inline-block', width: '86%' } },
+	          _react2.default.createElement(_textInput2.default, {
+	            name: 'comment',
+	            placeholder: 'New comment',
+	            autoFocus: true
+	          })
+	        ),
+	        _react2.default.createElement(
+	          _IconButton2.default,
+	          null,
+	          _react2.default.createElement(_Add2.default, null)
 	        )
 	      );
-	    }
-	  }, {
-	    key: 'setCandidateComment',
-	    value: function setCandidateComment(index, comment) {
-	      this.props.setCandidateComment(index, new _candidates.Comment(' a', 'd', comment));
 	    }
 	  }]);
 
@@ -59705,45 +59732,6 @@
 
 /***/ }),
 /* 636 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _pure = __webpack_require__(483);
-
-	var _pure2 = _interopRequireDefault(_pure);
-
-	var _SvgIcon = __webpack_require__(488);
-
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _ref = _react2.default.createElement('path', { d: 'M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z' });
-
-	var ViewList = function ViewList(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _ref
-	  );
-	};
-
-	ViewList = (0, _pure2.default)(ViewList);
-	ViewList.muiName = 'SvgIcon';
-
-	exports.default = ViewList;
-
-/***/ }),
-/* 637 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59782,7 +59770,143 @@
 	exports.default = Add;
 
 /***/ }),
+/* 637 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(483);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(488);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _ref = _react2.default.createElement('path', { d: 'M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z' });
+
+	var ViewList = function ViewList(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _ref
+	  );
+	};
+
+	ViewList = (0, _pure2.default)(ViewList);
+	ViewList.muiName = 'SvgIcon';
+
+	exports.default = ViewList;
+
+/***/ }),
 /* 638 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = AddCommentForm;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _commentsEditDialog = __webpack_require__(634);
+
+	var _commentsEditDialog2 = _interopRequireDefault(_commentsEditDialog);
+
+	var _addCommentDialog = __webpack_require__(639);
+
+	var _addCommentDialog2 = _interopRequireDefault(_addCommentDialog);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function AddCommentForm(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(_addCommentDialog2.default, { candidate: props.candidate }),
+	    _react2.default.createElement(_commentsEditDialog2.default, null),
+	    props.candidate.comments ? props.candidate.comments.length : ''
+	  );
+	}
+
+/***/ }),
+/* 639 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = AddCommentDialog;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _dialogWindow = __webpack_require__(578);
+
+	var _dialogWindow2 = _interopRequireDefault(_dialogWindow);
+
+	var _Add = __webpack_require__(636);
+
+	var _Add2 = _interopRequireDefault(_Add);
+
+	var _textInput = __webpack_require__(606);
+
+	var _textInput2 = _interopRequireDefault(_textInput);
+
+	var _IconButton = __webpack_require__(600);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function AddCommentDialog(props) {
+	  return _react2.default.createElement(_dialogWindow2.default, {
+	    content: _react2.default.createElement(
+	      'div',
+	      { style: { margin: '0px 10px 10px 10px' } },
+	      _react2.default.createElement(
+	        'div',
+	        { style: { display: 'inline-block', width: '86%' } },
+	        _react2.default.createElement(_textInput2.default, {
+	          name: 'comment',
+	          autoFocus: true,
+	          placeholder: 'a quick note'
+	        })
+	      ),
+	      _react2.default.createElement(
+	        _IconButton2.default,
+	        null,
+	        _react2.default.createElement(_Add2.default, null)
+	      )
+	    ),
+	    label: 'Add new comment',
+	    openButtonType: 'icon',
+	    openButtonContent: _react2.default.createElement(_Add2.default, null),
+	    open: function open() {},
+	    save: function save() {},
+	    close: function close() {}
+	  });
+	}
+
+/***/ }),
+/* 640 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59802,7 +59926,7 @@
 
 	var _dialogWindow2 = _interopRequireDefault(_dialogWindow);
 
-	var _Add = __webpack_require__(637);
+	var _Add = __webpack_require__(636);
 
 	var _Add2 = _interopRequireDefault(_Add);
 
@@ -59838,7 +59962,7 @@
 	}
 
 /***/ }),
-/* 639 */
+/* 641 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59852,11 +59976,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _intervieweeTable = __webpack_require__(640);
+	var _intervieweeTable = __webpack_require__(642);
 
 	var _intervieweeTable2 = _interopRequireDefault(_intervieweeTable);
 
-	var _addNewCandidate = __webpack_require__(638);
+	var _addNewCandidate = __webpack_require__(640);
 
 	var _addNewCandidate2 = _interopRequireDefault(_addNewCandidate);
 
@@ -59878,7 +60002,7 @@
 	}
 
 /***/ }),
-/* 640 */
+/* 642 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59903,17 +60027,9 @@
 
 	var _candidateRowControls2 = _interopRequireDefault(_candidateRowControls);
 
-	var _commentsEditDialog = __webpack_require__(634);
+	var _commentControls = __webpack_require__(638);
 
-	var _commentsEditDialog2 = _interopRequireDefault(_commentsEditDialog);
-
-	var _Add = __webpack_require__(637);
-
-	var _Add2 = _interopRequireDefault(_Add);
-
-	var _IconButton = __webpack_require__(600);
-
-	var _IconButton2 = _interopRequireDefault(_IconButton);
+	var _commentControls2 = _interopRequireDefault(_commentControls);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59956,19 +60072,7 @@
 	  }, {
 	    key: 'getRow',
 	    value: function getRow(interviewee, index) {
-	      return [index + 1, interviewee.name, interviewee.birthDate, interviewee.email, interviewee.interviewDate, interviewee.interviewRoom, _react2.default.createElement(
-	        'div',
-	        null,
-	        interviewee.comments ? interviewee.comments.length + ' comment(s)' : 'no comments',
-	        _react2.default.createElement(
-	          _IconButton2.default,
-	          { onClick: function onClick() {
-	              prompt('Type new comment here:');
-	            } },
-	          _react2.default.createElement(_Add2.default, null)
-	        ),
-	        _react2.default.createElement(_commentsEditDialog2.default, null)
-	      ), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: interviewee }, this.props))];
+	      return [index + 1, interviewee.name, interviewee.birthDate, interviewee.email, interviewee.interviewDate, interviewee.interviewRoom, _react2.default.createElement(_commentControls2.default, { candidate: interviewee }), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: interviewee }, this.props))];
 	    }
 	  }]);
 
@@ -59978,7 +60082,7 @@
 	exports.default = IntervieweeTable;
 
 /***/ }),
-/* 641 */
+/* 643 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59992,11 +60096,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _studentTable = __webpack_require__(642);
+	var _studentTable = __webpack_require__(644);
 
 	var _studentTable2 = _interopRequireDefault(_studentTable);
 
-	var _addNewCandidate = __webpack_require__(638);
+	var _addNewCandidate = __webpack_require__(640);
 
 	var _addNewCandidate2 = _interopRequireDefault(_addNewCandidate);
 
@@ -60018,7 +60122,7 @@
 	}
 
 /***/ }),
-/* 642 */
+/* 644 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60043,17 +60147,9 @@
 
 	var _candidateRowControls2 = _interopRequireDefault(_candidateRowControls);
 
-	var _commentsEditDialog = __webpack_require__(634);
+	var _commentControls = __webpack_require__(638);
 
-	var _commentsEditDialog2 = _interopRequireDefault(_commentsEditDialog);
-
-	var _Add = __webpack_require__(637);
-
-	var _Add2 = _interopRequireDefault(_Add);
-
-	var _IconButton = __webpack_require__(600);
-
-	var _IconButton2 = _interopRequireDefault(_IconButton);
+	var _commentControls2 = _interopRequireDefault(_commentControls);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60096,19 +60192,7 @@
 	  }, {
 	    key: 'getRow',
 	    value: function getRow(student, index) {
-	      return [index + 1, student.name, student.birthDate, student.email, student.groupName, _react2.default.createElement(
-	        'div',
-	        null,
-	        student.comments ? student.comments.length + ' comment(s)' : 'no comments',
-	        _react2.default.createElement(
-	          _IconButton2.default,
-	          { onClick: function onClick() {
-	              prompt('Type new comment here:');
-	            } },
-	          _react2.default.createElement(_Add2.default, null)
-	        ),
-	        _react2.default.createElement(_commentsEditDialog2.default, null)
-	      ), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: student }, this.props))];
+	      return [index + 1, student.name, student.birthDate, student.email, student.groupName, _react2.default.createElement(_commentControls2.default, { candidate: student }), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: student }, this.props))];
 	    }
 	  }]);
 
@@ -60118,7 +60202,7 @@
 	exports.default = StudentTable;
 
 /***/ }),
-/* 643 */
+/* 645 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60132,11 +60216,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _traineeTable = __webpack_require__(644);
+	var _traineeTable = __webpack_require__(646);
 
 	var _traineeTable2 = _interopRequireDefault(_traineeTable);
 
-	var _addNewCandidate = __webpack_require__(638);
+	var _addNewCandidate = __webpack_require__(640);
 
 	var _addNewCandidate2 = _interopRequireDefault(_addNewCandidate);
 
@@ -60158,7 +60242,7 @@
 	}
 
 /***/ }),
-/* 644 */
+/* 646 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60183,17 +60267,9 @@
 
 	var _candidateRowControls2 = _interopRequireDefault(_candidateRowControls);
 
-	var _commentsEditDialog = __webpack_require__(634);
+	var _commentControls = __webpack_require__(638);
 
-	var _commentsEditDialog2 = _interopRequireDefault(_commentsEditDialog);
-
-	var _Add = __webpack_require__(637);
-
-	var _Add2 = _interopRequireDefault(_Add);
-
-	var _IconButton = __webpack_require__(600);
-
-	var _IconButton2 = _interopRequireDefault(_IconButton);
+	var _commentControls2 = _interopRequireDefault(_commentControls);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60236,19 +60312,7 @@
 	  }, {
 	    key: 'getRow',
 	    value: function getRow(trainee, index) {
-	      return [index + 1, trainee.name, trainee.birthDate, trainee.email, trainee.mentor, _react2.default.createElement(
-	        'div',
-	        null,
-	        trainee.comments ? trainee.comments.length + ' comment(s)' : 'no comments',
-	        _react2.default.createElement(
-	          _IconButton2.default,
-	          { onClick: function onClick() {
-	              prompt('Type new comment here:');
-	            } },
-	          _react2.default.createElement(_Add2.default, null)
-	        ),
-	        _react2.default.createElement(_commentsEditDialog2.default, null)
-	      ), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: trainee }, this.props))];
+	      return [index + 1, trainee.name, trainee.birthDate, trainee.email, trainee.mentor, _react2.default.createElement(_commentControls2.default, { candidate: trainee }), _react2.default.createElement(_candidateRowControls2.default, _extends({ candidate: trainee }, this.props))];
 	    }
 	  }]);
 

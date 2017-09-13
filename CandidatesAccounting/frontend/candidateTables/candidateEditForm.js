@@ -2,7 +2,7 @@ import React from 'react';
 import TextInput from '../materialUIDecorators/textInput';
 import SelectMenu from '../materialUIDecorators/selectMenu';
 import {Comment} from '../candidates';
-import CommentsEditDialog from './commentsEditDialog';
+import CommentsEditDialog from './editCommentDialog';
 
 export default class CandidateEditForm extends React.Component {
   constructor(props) {

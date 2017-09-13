@@ -32,6 +32,7 @@ export default class CommentEditForm extends React.Component {
             name="comment"
             placeholder="New comment"
             autoFocus={true}
+            multiline={true}
           />
         </div>
         <IconButton><AddIcon /></IconButton>

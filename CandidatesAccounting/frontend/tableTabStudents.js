@@ -1,6 +1,6 @@
 import React from 'react';
 import StudentTable from './candidateTables/studentTable';
-import AddNewCandidate from './candidateTables/addNewCandidate';
+import AddNewCandidate from './candidateTables/addCandidateDialog';
 
 export default function TableTabStudents(props) {
   return (

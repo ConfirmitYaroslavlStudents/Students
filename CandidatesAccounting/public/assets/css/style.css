@@ -53,6 +53,14 @@
     padding: 5% 0;
 }
 
+.send-button {
+    display: inline-block;
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    width: 14%;
+}
+
 .tabs-bar {
     position: fixed;
     margin-top: 70px;

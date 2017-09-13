@@ -1,6 +1,6 @@
 import React from 'react';
 import BasicTable from '../materialUIDecorators/basicTable';
-import CandidateRowControls from './candidateRowControls';
+import CandidateRowControls from './candidateControls';
 import AddCommentForm from './commentControls';
 
 export default class TraineeTable extends React.Component {

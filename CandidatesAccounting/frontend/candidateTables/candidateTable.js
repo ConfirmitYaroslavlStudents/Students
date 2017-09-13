@@ -1,7 +1,7 @@
 import React from 'react';
 import BasicTable from '../materialUIDecorators/basicTable';
-import CandidateRowControls from './candidateRowControls';
-import AddCommentForm from './commentControls';
+import CandidateRowControls from './candidateControls';
+import CommentControls from './commentControls';
 
 export default class CandidateTable extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class CandidateTable extends React.Component {
       candidate.constructor.name,
       candidate.birthDate,
       candidate.email,
-      <AddCommentForm candidate={candidate} />,
+      <CommentControls candidate={candidate} setCandidateEditComment={this.props.setCandidateEditComment}/>,
       <CandidateRowControls candidate={candidate} {...this.props}/>
     ];
   }

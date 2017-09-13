@@ -1,6 +1,6 @@
 import React from 'react';
 import IntervieweeTable from './candidateTables/intervieweeTable';
-import AddNewCandidate from './candidateTables/addNewCandidate';
+import AddNewCandidate from './candidateTables/addCandidateDialog';
 
 export default function TableTabInterviewees(props) {
   return (

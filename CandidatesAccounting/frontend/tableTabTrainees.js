@@ -1,6 +1,6 @@
 import React from 'react';
 import TraineeTable from './candidateTables/traineeTable';
-import AddNewCandidate from './candidateTables/addNewCandidate';
+import AddNewCandidate from './candidateTables/addCandidateDialog';
 
 export default function TableTabTrainees(props) {
   return (

@@ -21,17 +21,7 @@ store.dispatch({
       new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com', [new Comment(' ', ' ', 'ПМИ')], 'frontend'),
       new Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com',  [new Comment(' ', ' ', 'КБ')],'backend'),
       new Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(5, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(6, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(7, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(8, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(9, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(10, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(11, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(12, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(13, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(14, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(15, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com', [new Comment(' ', ' ', '8 этаж')], 'Евгения Иванова')
+      new Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com', [new Comment(' ', ' ', '8 этаж')], 'Евгения Иванова')
     ],
     candidateEditInfo: CreateCandidate('Candidate', {})
   }

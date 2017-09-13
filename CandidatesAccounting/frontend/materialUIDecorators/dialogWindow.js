@@ -53,6 +53,14 @@ export default class DialogWindow extends React.Component {
       default:
         openButton = <FlatButton onClick={this.handleOpen} color="primary" text={this.props.openButtonContent}/>;
     }
+    let saveButton;
+    if (this.props.withSaveButton) {
+      saveButton =
+        <Button color="contrast" onClick={this.handleSave} style={{marginLeft: 30}}>
+          <SaveIcon/>
+          save
+        </Button>;
+    }
     return (
       <div style={{"display": "inline"}}>
 
@@ -69,10 +77,9 @@ export default class DialogWindow extends React.Component {
               <Typography type="title" color="inherit" style={{flex: 1}}>
                 {this.props.label}
               </Typography>
-              <Button color="contrast" onClick={this.handleSave} style={{marginLeft: 30}}>
-                <SaveIcon/>
-                save
-              </Button>
+
+              {saveButton}
+
               <IconButton color="contrast" onClick={this.handleClose} style={{marginRight: -15}} aria-label="Close">
                 <CloseIcon/>
               </IconButton>

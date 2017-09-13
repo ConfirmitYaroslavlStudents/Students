@@ -3,7 +3,7 @@ import DialogWindow from '../materialUIDecorators/dialogWindow';
 import CommentsEditForm from './commentsEditForm';
 import EditIcon from 'material-ui-icons/ViewList';
 
-export default function CommentsEditDialog(props) {
+export default function EditCommentDialog(props) {
   return (
       <DialogWindow
         content={

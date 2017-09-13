@@ -30,7 +30,11 @@ export default function reducer(state = Map(), action) {
 
     case 'SET_CANDIDATE_EDIT_COMMENT':
       let candidateEditInfo = state.get('candidateEditInfo');
-      candidateEditInfo.comments[action.index] = action.comment;
+      if (action.index >= candidateEditInfo.comments.length - 1) {
+        candidateEditInfo.comments.push(action.comment);
+      } else {
+        candidateEditInfo.comments[action.index] = action.comment;
+      }
       return state.update('candidateEditInfo', () => candidateEditInfo);
   }
   return state;

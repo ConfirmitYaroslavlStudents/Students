@@ -1,10 +1,10 @@
 import React from 'react';
 import Avatar from 'material-ui-icons/AccountCircle';
 import TextInput from '../materialUIDecorators/textInput';
-import IconButton from 'material-ui/IconButton';
+import IconButton from '../materialUIDecorators/customIconButton';
 import AddIcon from 'material-ui-icons/Add';
 
-export default class CommentEditForm extends React.Component {
+export default class EditCommentForm extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -33,9 +33,10 @@ export default class CommentEditForm extends React.Component {
             placeholder="New comment"
             autoFocus={true}
             multiline={true}
+            onChange={function() {}}
           />
         </div>
-        <IconButton><AddIcon /></IconButton>
+        <IconButton icon={<AddIcon />} />
       </div>
     );
   }

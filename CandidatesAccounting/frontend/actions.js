@@ -20,28 +20,28 @@ function editCandidate(id, candidateNewState) {
   }
 }
 
-function setCandidateEditInfo(candidate) {
+function setTempCandidate(candidate) {
   return {
-    type: 'SET_CANDIDATE_EDIT_INFO',
+    type: 'SET_TEMP_CANDIDATE',
     candidate
   }
 }
 
-function changeCandidateEditInfo(key, value) {
+function changeTempCandidateInfo(key, value) {
   return {
-    type: 'CHANGE_CANDIDATE_EDIT_INFO',
+    type: 'CHANGE_TEMP_CANDIDATE_INFO',
     key,
     value
   }
 }
 
-function setCandidateEditComment(index, comment) {
+function setTempCandidateComment(index, comment) {
   return {
-    type: 'SET_CANDIDATE_EDIT_COMMENT',
+    type: 'SET_TEMP_CANDIDATE_COMMENT',
     index,
     comment
   }
 }
 
-module.exports = {addCandidate, deleteCandidate, editCandidate, setCandidateEditInfo, changeCandidateEditInfo,
-  setCandidateEditComment};
+module.exports = {addCandidate, deleteCandidate, editCandidate, setTempCandidate, changeTempCandidateInfo,
+  setTempCandidateComment};

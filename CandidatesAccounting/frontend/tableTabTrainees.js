@@ -1,6 +1,6 @@
 import React from 'react';
 import TraineeTable from './candidateTables/traineeTable';
-import AddNewCandidate from './candidateTables/addCandidateDialog';
+import AddCandidateDialog from './candidateTables/addCandidateDialog';
 
 export default function TableTabTrainees(props) {
   return (
@@ -8,12 +8,12 @@ export default function TableTabTrainees(props) {
       <TraineeTable
         {...props}
       />
-      <AddNewCandidate
+      <AddCandidateDialog
         candidateType='Trainee'
         addCandidate={props.addCandidate}
-        candidateEditInfo={props.candidateEditInfo}
-        setCandidateEditInfo={props.setCandidateEditInfo}
-        changeCandidateEditInfo={props.changeCandidateEditInfo}
+        tempCandidate={props.tempCandidate}
+        setTempCandidate={props.setTempCandidate}
+        changeTempCandidateInfo={props.changeTempCandidateInfo}
       />
     </div>
   );

@@ -11,7 +11,7 @@ export default class AddCommentForm extends React.Component{
   render() {
 
     return (
-      <div style={{width: 400, margin: '0px 0px 10px 10px'}}>
+      <div style={{width: 400, margin: '0px 10px 10px 10px'}}>
         <div style={{display: 'inline-block', width: '100%'}}>
           <TextInput
             name="comment"

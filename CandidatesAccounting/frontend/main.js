@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
+import reducer from './reducer'
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import purple from 'material-ui/colors/purple';
 import { BrowserRouter, Switch, Route} from 'react-router-dom';
-import reducer from './reducer'
 import {CreateCandidate, Interviewee, Student, Trainee, Comment} from './candidates';
 import AppView from './appview';
 
@@ -23,7 +23,7 @@ store.dispatch({
       new Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
       new Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com', [new Comment(' ', ' ', '8 этаж')], 'Евгения Иванова')
     ],
-    candidateEditInfo: CreateCandidate('Candidate', {})
+    tempCandidate: CreateCandidate('Candidate', {})
   }
 });
 

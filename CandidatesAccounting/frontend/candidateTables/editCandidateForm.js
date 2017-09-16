@@ -1,22 +1,20 @@
 import React from 'react';
 import TextInput from '../materialUIDecorators/textInput';
 import SelectMenu from '../materialUIDecorators/selectMenu';
-import { Comment } from '../candidates';
-import CommentsEditForm from './editCommentForm';
+import EditCommentForm from './editCommentForm';
 import EditIcon from 'material-ui-icons/ViewList';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 
-export default class CandidateEditForm extends React.Component {
+export default class EditCandidateForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({candidateType: props.candidateEditInfo.status});
-    this.changeEditInfo = this.changeEditInfo.bind(this);
+    this.state = ({candidateType: props.tempCandidate.status});
+    this.changeInfo = this.changeInfo.bind(this);
     this.changeCandidateType = this.changeCandidateType.bind(this);
-    this.setCandidateComment = this.setCandidateComment.bind(this);
   }
 
   render() {
-    const changeEditInfo = this.changeEditInfo;
+    const changeInfo = this.changeInfo;
     const changeCandidateType = this.changeCandidateType;
     let specialFields;
     switch (this.state.candidateType) {
@@ -25,33 +23,35 @@ export default class CandidateEditForm extends React.Component {
           <TextInput
             name="interviewDate"
             label="Interview date"
-            value={this.props.candidateEditInfo.interviewDate}
+            value={this.props.tempCandidate.interviewDate}
             placeholder="dd.mm.yyyy hh:mm"
-            onChange={function(value) {changeEditInfo('interviewDate', value)}}/>
+            onChange={function(value) {changeInfo('interviewDate', value)}}/>
           <TextInput
             name="interviewRoom"
             label="Interview room"
-            value={this.props.candidateEditInfo.interviewRoom}
+            value={this.props.tempCandidate.interviewRoom}
             placeholder="interview placement"
-            onChange={function(value) {changeEditInfo('interviewRoom', value)}}/>
+            onChange={function(value) {changeInfo('interviewRoom', value)}}/>
         </div>;
         break;
+
       case 'Student':
         specialFields = <div>
           <TextInput
             name="groupName"
             label="Group name"
-            value={this.props.candidateEditInfo.groupName}
-            onChange={function(value) {changeEditInfo('groupName', value)}}/>
+            value={this.props.tempCandidate.groupName}
+            onChange={function(value) {changeInfo('groupName', value)}}/>
         </div>;
         break;
+
       case 'Trainee':
         specialFields = <div>
           <TextInput
             name="mentor"
             label="Mentor's name"
-            value={this.props.candidateEditInfo.mentor}
-            onChange={function(value) {changeEditInfo('mentor', value)}}/>
+            value={this.props.tempCandidate.mentor}
+            onChange={function(value) {changeInfo('mentor', value)}}/>
         </div>;
         break;
     }
@@ -67,30 +67,30 @@ export default class CandidateEditForm extends React.Component {
         <TextInput
           name="name"
           label="Name"
-          value={this.props.candidateEditInfo.name}
-          onChange={function(value) {changeEditInfo('name', value)}}/>
+          value={this.props.tempCandidate.name}
+          onChange={function(value) {changeInfo('name', value)}}/>
         <TextInput
           name="birthDate"
           label="Birth date"
-          value={this.props.candidateEditInfo.birthDate}
+          value={this.props.tempCandidate.birthDate}
           placeholder="dd.mm.yyyy"
-          onChange={function(value) {changeEditInfo('birthDate', value)}}/>
+          onChange={function(value) {changeInfo('birthDate', value)}}/>
         <TextInput
           name="email"
           label="E-mail"
-          value={this.props.candidateEditInfo.email}
+          value={this.props.tempCandidate.email}
           placeholder="example@mail.com"
-          onChange={function(value) {changeEditInfo('email', value)}}/>
+          onChange={function(value) {changeInfo('email', value)}}/>
 
         {specialFields}
 
         <div className="float-right">
-          {this.props.candidateEditInfo.comments ? this.props.candidateEditInfo.comments.length + ' comment(s)' : 'no comments'}
+          {this.props.tempCandidate.comments ? this.props.tempCandidate.comments.length : 0}
           <DialogWindow
             content={
-              <CommentsEditForm
+              <EditCommentForm
                 setCandidateComment={this.props.setCandidateEditComment}
-                candidateEditInfo={this.props.candidateEditInfo}
+                candidateEditInfo={this.props.tempCandidate}
               />}
             label="Comments"
             openButtonType="icon"
@@ -101,16 +101,12 @@ export default class CandidateEditForm extends React.Component {
     );
   }
 
-  changeEditInfo(key, value) {
-    this.props.changeEditInfo(key, value);
+  changeInfo(key, value) {
+    this.props.changeTempCandidateInfo(key, value);
   }
 
   changeCandidateType(type) {
-    this.setState({candidateType: type});
-    this.props.changeEditInfo('status', type);
-  }
-
-  setCandidateComment(index, comment) {
-    this.props.setCandidateComment(index, new Comment(' a', 'd', comment));
+    this.setState({ candidateType: type });
+    this.props.changeTempCandidateInfo('status', type);
   }
 }

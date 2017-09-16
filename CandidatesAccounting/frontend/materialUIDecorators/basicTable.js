@@ -5,7 +5,12 @@ import Paper from 'material-ui/Paper';
 export default class BasicTable extends React.Component {
   render() {
     const contentRows = this.props.contentRows.map((row, index) =>
-      this.createContentRow(row, index)
+      <TableRow key={'tr' + index}>
+        {
+          row.map((cell, cellIndex) =>
+            <TableCell key={'td' + cellIndex}>{cell}</TableCell>
+          )}
+      </TableRow>
     );
     return (
       <Paper style={
@@ -28,18 +33,6 @@ export default class BasicTable extends React.Component {
           </TableBody>
         </Table>
       </Paper>
-    );
-  }
-
-  createContentRow(row, rowIndex)
-  {
-    return (
-      <TableRow key={'tr' + rowIndex}>
-        {
-          row.map((cell, index) =>
-            <TableCell key={'td' + index}>{cell}</TableCell>
-        )}
-      </TableRow>
     );
   }
 }

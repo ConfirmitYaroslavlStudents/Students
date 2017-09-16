@@ -1,11 +1,9 @@
 import React from 'react';
-import Button from 'material-ui/Button';
 import Dialog from 'material-ui/Dialog';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import CloseIcon from 'material-ui-icons/Close';
-import SaveIcon from 'material-ui-icons/Save';
 import IconButton from 'material-ui/IconButton';
 import Slide from 'material-ui/transitions/Slide';
 import FabButton from './fabButton';
@@ -16,7 +14,7 @@ export default class DialogWindow extends React.Component {
     super(props);
     this.state = ({ open: false });
     this.handleOpen = this.handleOpen.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+    this.handleAccept = this.handleAccept.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
@@ -27,9 +25,9 @@ export default class DialogWindow extends React.Component {
     this.setState({ open: true });
   };
 
-  handleSave() {
-    if (this.props.save) {
-      this.props.save();
+  handleAccept() {
+    if (this.props.accept) {
+      this.props.accept();
     }
     this.setState({ open: false });
   }
@@ -53,13 +51,10 @@ export default class DialogWindow extends React.Component {
       default:
         openButton = <FlatButton onClick={this.handleOpen} color="primary" text={this.props.openButtonContent}/>;
     }
-    let saveButton;
-    if (this.props.withSaveButton) {
-      saveButton =
-        <Button color="contrast" onClick={this.handleSave} style={{marginLeft: 30}}>
-          <SaveIcon/>
-          save
-        </Button>;
+    let acceptButton;
+    if (!this.props.withoutAcceptButton) {
+      acceptButton =
+        <FlatButton color="contrast" onClick={this.handleAccept} text={this.props.acceptButtonContent}/>
     }
     return (
       <div style={{"display": "inline"}}>
@@ -78,7 +73,7 @@ export default class DialogWindow extends React.Component {
                 {this.props.label}
               </Typography>
 
-              {saveButton}
+              {acceptButton}
 
               <IconButton color="contrast" onClick={this.handleClose} style={{marginRight: -15}} aria-label="Close">
                 <CloseIcon/>

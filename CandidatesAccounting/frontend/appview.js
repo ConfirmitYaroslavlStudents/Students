@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import actions from './actions';
 import Navbar from './materialUIDecorators/navbar';
 import FullWidthTabs from './materialUIDecorators/fullWidthTabs';
@@ -7,7 +8,6 @@ import TableTabAll from './tableTabAll';
 import TableTabInterviewees from './tableTabInterviewees';
 import TableTabStudents from './tableTabStudents';
 import TableTabTrainees from './tableTabTrainees';
-import { NavLink } from 'react-router-dom';
 
 export default class AppView extends React.Component {
   render() {
@@ -37,7 +37,7 @@ export default class AppView extends React.Component {
           tabs={tabs}
         />
 
-        <div className="footer footer-transparent">
+        <div className="footer">
           <span>2017 Test</span>
         </div>
       </div>
@@ -48,7 +48,7 @@ export default class AppView extends React.Component {
 function mapStateToProps(state) {
   return {
     candidates: state.get('candidates'),
-    candidateEditInfo: state.get('candidateEditInfo')
+    tempCandidate: state.get('tempCandidate')
   };
 }
 

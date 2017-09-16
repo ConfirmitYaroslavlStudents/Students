@@ -2,8 +2,8 @@ import React from 'react';
 import AddIcon from 'material-ui-icons/Add';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddCommentForm from './addCommentForm';
-import CommentsEditForm from './editCommentForm';
-import EditIcon from 'material-ui-icons/ViewList';
+import EditCommentForm from './editCommentForm';
+import ViewListIcon from 'material-ui-icons/ViewList';
 import {CreateCandidate} from '../candidates';
 
 export default function CommentControls(props) {
@@ -11,32 +11,33 @@ export default function CommentControls(props) {
     <div>
       <DialogWindow
         content={
-          <AddCommentForm commentIndex={props.candidate.comments.length} setCandidateEditComment={props.setCandidateEditComment}/>
+          <AddCommentForm commentIndex={props.candidate.comments ? props.candidate.comments.length : 0} setCandidateEditComment={props.setTempCandidateComment}/>
         }
         label="Add new comment"
         openButtonType="icon"
         openButtonContent={<AddIcon />}
-        withSaveButton={true}
+        acceptButtonContent={<div><AddIcon /> add</div>}
         open={function () {
-          props.setCandidateEditInfo(CreateCandidate(props.candidate.constructor.name, props.candidate));
+          props.setTempCandidate(CreateCandidate(props.candidate.constructor.name, props.candidate));
         }}
-        save={function() {
-          props.editCandidate(props.candidate.id, CreateCandidate(props.candidateEditInfo.status, props.candidateEditInfo))
+        accept={function() {
+          props.editCandidate(props.candidate.id, CreateCandidate(props.tempCandidate.status, props.tempCandidate))
         }}
       />
 
       <DialogWindow
         content={
-          <CommentsEditForm
-            setCandidateComment={props.setCandidateEditComment}
-            candidateEditInfo={props.candidateEditInfo}
+          <EditCommentForm
+            setCandidateComment={props.setTempCandidateComment}
+            candidateEditInfo={props.tempCandidate}
           />}
         label="Comments"
         openButtonType="icon"
-        openButtonContent={<EditIcon />}
+        openButtonContent={<ViewListIcon />}
+        withoutAcceptButton={true}
       />
 
-      {props.candidate.comments ? props.candidate.comments.length : ''}
+      {props.candidate.comments ? props.candidate.comments.length : 0}
     </div>
   );
 }

@@ -20,24 +20,24 @@ switch (action.type) {
       1,
       action.candidateNewState));
 
-  case 'SET_CANDIDATE_EDIT_INFO':
-    let candidateInfo = action.candidate;
-    candidateInfo.status = action.candidate.constructor.name;
-    return state.update('candidateEditInfo', (candidateEditInfo) => candidateInfo);
+  case 'SET_TEMP_CANDIDATE':
+    let candidate = action.candidate;
+    candidate.status = action.candidate.constructor.name;
+    return state.update('tempCandidate', (candidateEditInfo) => candidate);
 
-  case 'CHANGE_CANDIDATE_EDIT_INFO':
-    let newCandidateEditInfo = state.get('candidateEditInfo');
+  case 'CHANGE_TEMP_CANDIDATE_INFO':
+    let newCandidateEditInfo = state.get('tempCandidate');
     newCandidateEditInfo[action.key] = action.value;
-    return state.update('candidateEditInfo', () => newCandidateEditInfo);
+    return state.update('tempCandidate', () => newCandidateEditInfo);
 
-  case 'SET_CANDIDATE_EDIT_COMMENT':
-    let candidateEditInfo = state.get('candidateEditInfo');
-    if (action.index >= candidateEditInfo.comments.length) {
-      candidateEditInfo.comments.push(action.comment);
+  case 'SET_TEMP_CANDIDATE_COMMENT':
+    let tempCandidate = state.get('tempCandidate');
+    if (action.index >= tempCandidate.comments.length) {
+      tempCandidate.comments.push(action.comment);
     } else {
-      candidateEditInfo.comments[action.index] = action.comment;
+      tempCandidate.comments[action.index] = action.comment;
     }
-    return state.update('candidateEditInfo', () => candidateEditInfo);
+    return state.update('tempCandidate', () => tempCandidate);
 }
 return state;
 }

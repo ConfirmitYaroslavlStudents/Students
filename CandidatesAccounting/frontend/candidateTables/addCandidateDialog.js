@@ -2,29 +2,29 @@ import React from 'react';
 import {CreateCandidate} from '../candidates/index';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddIcon from 'material-ui-icons/Add';
-import CandidateEditForm from './editCandidateForm';
+import editCandidateForm from './editCandidateForm';
 
 export default function AddCandidateDialog(props) {
   return (
     <div className="add-btn float-right">
       <DialogWindow
         content={
-          <CandidateEditForm
-            changeEditInfo={props.changeCandidateEditInfo}
-            candidateEditInfo={props.candidateEditInfo}/>
+          <editCandidateForm
+            changeTempCandidateInfo={props.changeTempCandidateInfo}
+            tempCandidate={props.tempCandidate}/>
         }
         label="Add new candidate"
         openButtonType="fab"
         openButtonContent={<AddIcon/>}
+        acceptButtonContent={<div><AddIcon/> add</div>}
         open={function() {
-          props.setCandidateEditInfo(CreateCandidate(props.candidateType, {}));
-          props.changeCandidateEditInfo('status', props.candidateType)
+          props.setTempCandidate(CreateCandidate(props.candidateType, {}));
         }}
-        save={function() {
-          props.addCandidate(CreateCandidate(props.candidateEditInfo.status, props.candidateEditInfo))
+        accept={function() {
+          props.addCandidate(CreateCandidate(props.tempCandidate.status, props.tempCandidate))
         }}
         close={function() {
-          props.setCandidateEditInfo(CreateCandidate(props.candidateType, {}));
+          props.changeTempCandidateInfo(CreateCandidate(props.candidateType, {}));
         }}
       />
     </div>);

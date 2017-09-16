@@ -237,3 +237,4 @@ pip-log.txt
 node_modules/
 CandidatesAccounting/node_modules/
 .idea/
+CandidatesAccounting/.vs/

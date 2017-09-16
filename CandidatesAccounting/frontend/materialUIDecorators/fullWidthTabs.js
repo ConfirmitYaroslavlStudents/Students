@@ -5,7 +5,7 @@ import SwipeableViews from 'react-swipeable-views';
 
 function TabContainer(props) {
   return (
-    <div style={{}}>
+    <div>
       {props.children}
     </div>
   );

@@ -34,7 +34,7 @@ export default class AppView extends React.Component {
         <FullWidthTabs
           selected={this.props.selectedTab}
           labels={ labels }
-          tabs={ tabs }
+          tabs={tabs}
         />
 
         <div className="footer footer-transparent">

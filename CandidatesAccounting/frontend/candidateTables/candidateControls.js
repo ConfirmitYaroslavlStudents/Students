@@ -1,7 +1,7 @@
 import React from 'react';
 import FlatButton from '../materialUIDecorators/flatButton';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
-import CandidateEditForm from './candidateEditForm';
+import CandidateEditForm from './editCandidateForm';
 import {CreateCandidate} from '../candidates/index';
 
 export default function CandidateControls(props) {

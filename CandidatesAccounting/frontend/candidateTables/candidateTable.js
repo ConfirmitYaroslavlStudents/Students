@@ -28,7 +28,7 @@ export default class CandidateTable extends React.Component {
       candidate.constructor.name,
       candidate.birthDate,
       candidate.email,
-      <CommentControls candidate={candidate} setCandidateEditComment={this.props.setCandidateEditComment}/>,
+      <CommentControls candidate={candidate} {...this.props} />,
       <CandidateRowControls candidate={candidate} {...this.props}/>
     ];
   }

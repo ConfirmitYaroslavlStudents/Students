@@ -2,7 +2,7 @@ import React from 'react';
 import {CreateCandidate} from '../candidates/index';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddIcon from 'material-ui-icons/Add';
-import CandidateEditForm from './candidateEditForm';
+import CandidateEditForm from './editCandidateForm';
 
 export default function AddCandidateDialog(props) {
   return (

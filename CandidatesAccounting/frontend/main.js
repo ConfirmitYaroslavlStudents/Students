@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
-import createMuiTheme from 'material-ui/styles/theme';
+import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import createPalette from 'material-ui/styles/palette';
+import createPalette from 'material-ui/styles/createPalette';
 import purple from 'material-ui/colors/purple';
 import { BrowserRouter, Switch, Route} from 'react-router-dom';
 import reducer from './reducer'

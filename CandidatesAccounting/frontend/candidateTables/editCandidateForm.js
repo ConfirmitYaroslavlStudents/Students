@@ -4,6 +4,7 @@ import SelectMenu from '../materialUIDecorators/selectMenu';
 import EditCommentForm from './editCommentForm';
 import EditIcon from 'material-ui-icons/ViewList';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
+import Badge from '../materialUIDecorators/badge';
 
 export default class EditCandidateForm extends React.Component {
   constructor(props) {
@@ -62,13 +63,14 @@ export default class EditCandidateForm extends React.Component {
           label="Candidate's status"
           options={['Interviewee', 'Student', 'Trainee']}
           selectedOption={this.state.candidateType}
-          onChange={function(status) { changeCandidateType(status)}}
+          onChange={changeCandidateType}
         />
         <TextInput
           name="name"
           label="Name"
           value={this.props.tempCandidate.name}
-          onChange={function(value) {changeInfo('name', value)}}/>
+          onChange={function(value) {changeInfo('name', value)}}
+          autoFocus={true}/>
         <TextInput
           name="birthDate"
           label="Birth date"
@@ -84,19 +86,25 @@ export default class EditCandidateForm extends React.Component {
 
         {specialFields}
 
-        <div className="float-right">
-          {this.props.tempCandidate.comments ? this.props.tempCandidate.comments.length : 0}
-          <DialogWindow
-            content={
-              <EditCommentForm
-                setCandidateComment={this.props.setCandidateEditComment}
-                candidateEditInfo={this.props.tempCandidate}
-              />}
-            label="Comments"
-            openButtonType="icon"
-            openButtonContent={<EditIcon />}
-          />
-        </div>
+        {this.props.additionMode ?
+          ''
+          :
+          <div className="float-right">
+            <Badge badgeContent={this.props.tempCandidate.comments.length} badgeStyle="comment-badge">
+              <DialogWindow
+                content={
+                  <EditCommentForm
+                    candidate={this.props.tempCandidate}
+                    setTempCandidateComment={this.props.setTempCandidateComment}
+                    editCandidate={this.props.editCandidate}
+                  />}
+                label="Comments"
+                openButtonType="icon"
+                openButtonContent={<EditIcon/>}
+                />
+            </Badge>
+          </div>
+        }
       </div>
     );
   }

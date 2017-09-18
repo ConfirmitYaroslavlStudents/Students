@@ -17,7 +17,7 @@ export default class AddCommentForm extends React.Component{
             name="comment"
             autoFocus={true}
             multiline={true}
-            placeholder="a quick note"
+            placeholder="New comment"
             onChange={this.changeCommentText}
           />
         </div>
@@ -26,6 +26,10 @@ export default class AddCommentForm extends React.Component{
   }
 
   changeCommentText(text) {
-    this.props.setCandidateEditComment(this.props.commentIndex, new Comment('Вы', '01.01.1900', text));
+    let date = new Date();
+    this.props.setTempCandidateComment(this.props.commentIndex, new Comment(
+      'Вы',
+      date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear(),
+      text));
   }
 }

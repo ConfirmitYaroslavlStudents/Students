@@ -2,24 +2,50 @@
     margin: 10px;
 }
 
+.add-comment-btn {
+    display: inline-block;
+    width: 18%;
+    position: absolute;
+    bottom: 11px;
+}
+
+.button-content {
+    display: flex;
+    align-items: center;
+}
+
 .candidate-edit-form {
     padding: 0 15px 15px 15px;
 }
 
 .comment {
     display: inline-block;
-    width: 100%;
-    margin-bottom: 5px;
+    width: 90%;
+    margin: 5px 20px;
 }
 
-.user-comment {
-    float: right;
-    text-align: right;
+.comment-badge {
+    margin-top: 17px;
+    margin-right: 10px;
+    width: 19px !important;
+    height: 19px !important;
+    font-size: smaller !important;
 }
 
 .comment-date {
     font-size: smaller;
     color: dimgray;
+}
+
+.comment-text-input {
+    display: inline-block;
+    width: 82%;
+    margin-left: 20px;
+}
+
+.user-comment {
+    float: right;
+    text-align: right;
 }
 
 .custom-main {
@@ -45,20 +71,13 @@
 
 .nav-link {
     text-decoration: none !important;
+    color: dimgray;
     display: inline-block;
     position: absolute;
     width: 100%;
     margin-top: -24px;
     padding: 5% 0;
     left: 0;
-}
-
-.send-button {
-    display: inline-block;
-    position: absolute;
-    bottom: 10px;
-    right: 0;
-    width: 14%;
 }
 
 .tabs-bar {

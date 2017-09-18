@@ -15,7 +15,7 @@ export default class TextInput extends React.Component {
         id={this.props.name}
         label={this.props.label}
         placeholder={this.props.placeholder}
-        value={this.state.value}
+        value={this.props.value === '' ? '' : this.state.value}
         onChange={this.handleChange}
         multiline={this.props.multiline}
         fullWidth

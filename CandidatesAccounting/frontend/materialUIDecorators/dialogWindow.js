@@ -54,7 +54,7 @@ export default class DialogWindow extends React.Component {
     let acceptButton;
     if (!this.props.withoutAcceptButton) {
       acceptButton =
-        <FlatButton color="contrast" onClick={this.handleAccept} text={this.props.acceptButtonContent}/>
+        <FlatButton color="contrast" onClick={this.handleAccept} text={this.props.acceptButtonContent} />
     }
     return (
       <div style={{"display": "inline"}}>

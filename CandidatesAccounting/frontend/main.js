@@ -17,11 +17,16 @@ store.dispatch({
   type: "SET_STATE",
   state: {
     candidates: [
-      new Interviewee(1, 'Олег', '07.01.1995', 'Oleg@mail.ru', [new Comment(' ', ' ', 'C#')], '04.09.2017', '8'),
-      new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com', [new Comment(' ', ' ', 'ПМИ')], 'frontend'),
-      new Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com',  [new Comment(' ', ' ', 'КБ')],'backend'),
-      new Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'),
-      new Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com', [new Comment(' ', ' ', '8 этаж')], 'Евгения Иванова')
+      new Interviewee(1, 'Олег', '07.01.1995', 'Oleg@mail.ru',
+        [new Comment('Анна', '10:15 17.5.2017', 'Текст комментария №1')], '04.09.2017', '8'),
+      new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com',
+        [new Comment('Анна', '10:15 17.05.2017', 'Текст комментария №2')], 'frontend'),
+      new Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com',
+        [new Comment('Анна', '10:15 17.5.2017', 'Текст комментария №3')], 'backend'),
+      new Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com',
+        [new Comment('Анна', '10:15 17.5.2017', 'Текст комментария №4')], 'Евгений Иванов'),
+      new Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com',
+        [new Comment('Анна', '10:15 17.5.2017', 'Текст комментария №5')], 'Евгения Иванова')
     ],
     tempCandidate: CreateCandidate('Candidate', {})
   }

@@ -13,11 +13,12 @@ export default function CandidateControls(props) {
           <EditCandidateForm
             changeTempCandidateInfo={props.changeTempCandidateInfo}
             setTempCandidateComment={props.setTempCandidateComment}
+            editCandidate={props.editCandidate}
             tempCandidate={props.tempCandidate}
           />}
         label="Candidate edit"
         openButtonContent="Edit"
-        acceptButtonContent={<div><SaveIcon/> save</div>}
+        acceptButtonContent={<div className="button-content"><SaveIcon/> <span style={{marginTop: 3}}> save</span></div>}
         open={function() {
           props.setTempCandidate(CreateCandidate(props.candidate.constructor.name, props.candidate));
         }}

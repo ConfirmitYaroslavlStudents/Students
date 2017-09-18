@@ -70,3 +70,8 @@ export default class EditCommentForm extends React.Component {
     }
   }
 }
+
+EditCommentForm.propTypes = {
+  candidate: React.PropTypes.object.isRequired,
+  editCandidate: React.PropTypes.func.isRequired,
+};

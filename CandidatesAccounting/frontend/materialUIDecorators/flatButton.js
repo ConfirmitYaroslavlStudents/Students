@@ -16,3 +16,12 @@ export default function FlatButton(props) {
     </div>
   );
 }
+
+FlatButton.propTypes = {
+  onClick: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool,
+  class: React.PropTypes.string,
+  icon: React.PropTypes.object,
+  text: React.PropTypes.object,
+  color: React.PropTypes.string,
+};

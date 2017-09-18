@@ -6,12 +6,20 @@ export default function CustomIconButton(props) {
     <div style={{"display": "inline"}}>
       <IconButton
         color={props.color}
-        className={props.class}
         onClick={props.onClick}
         disabled={props.disabled}
+        className={props.class}
       >
         {props.icon}
       </IconButton>
     </div>
   );
 }
+
+CustomIconButton.propTypes = {
+  onClick: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.bool,
+  class: React.PropTypes.string,
+  icon: React.PropTypes.object,
+  color: React.PropTypes.string,
+};

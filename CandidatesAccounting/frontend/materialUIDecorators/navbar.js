@@ -15,3 +15,7 @@ export default function Navbar(props) {
     </AppBar>
   );
 }
+
+Navbar.propTypes = {
+  title: React.PropTypes.object,
+};

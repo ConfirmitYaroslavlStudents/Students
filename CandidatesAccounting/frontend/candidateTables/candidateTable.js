@@ -33,3 +33,7 @@ export default class CandidateTable extends React.Component {
     ];
   }
 }
+
+CandidateTable.propTypes = {
+  candidates: React.PropTypes.array.isRequired,
+};

@@ -88,3 +88,16 @@ export default class DialogWindow extends React.Component {
     );
   }
 }
+
+DialogWindow.propTypes = {
+  open: React.PropTypes.func,
+  accept: React.PropTypes.func,
+  close: React.PropTypes.func,
+  openButtonType: React.PropTypes.string,
+  openButtonContent: React.PropTypes.object,
+  withoutAcceptButton: React.PropTypes.bool,
+  acceptButtonContent: React.PropTypes.object,
+  fullScreen: React.PropTypes.bool,
+  label: React.PropTypes.string,
+  content: React.PropTypes.object.isRequired,
+};

@@ -33,3 +33,7 @@ export default class TraineeTable extends React.Component {
     ];
   }
 }
+
+TraineeTable.propTypes = {
+  trainees: React.PropTypes.array.isRequired,
+};

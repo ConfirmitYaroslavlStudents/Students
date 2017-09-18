@@ -118,3 +118,11 @@ export default class EditCandidateForm extends React.Component {
     this.props.changeTempCandidateInfo('status', type);
   }
 }
+
+EditCandidateForm.propTypes = {
+  tempCandidate: React.PropTypes.object.isRequired,
+  setTempCandidateComment: React.PropTypes.func.isRequired,
+  changeTempCandidateInfo: React.PropTypes.func.isRequired,
+  editCandidate: React.PropTypes.func.isRequired,
+  additionMode: React.PropTypes.bool,
+};

@@ -13,7 +13,7 @@ export default function CommentControls(props) {
       <DialogWindow
         content={
           <AddCommentForm
-            commentIndex={props.candidate.comments ? props.candidate.comments.length : 0}
+            commentIndex={props.candidate.comments.length}
             setTempCandidateComment={props.setTempCandidateComment}
           />}
         label="Add new comment"
@@ -45,3 +45,11 @@ export default function CommentControls(props) {
     </div>
   );
 }
+
+CommentControls.propTypes = {
+  candidate: React.PropTypes.object.isRequired,
+  tempCandidate: React.PropTypes.object.isRequired,
+  setTempCandidate: React.PropTypes.func.isRequired,
+  setTempCandidateComment: React.PropTypes.func.isRequired,
+  editCandidate: React.PropTypes.func.isRequired,
+};

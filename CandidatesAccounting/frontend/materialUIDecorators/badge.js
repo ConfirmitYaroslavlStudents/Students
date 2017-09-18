@@ -8,3 +8,8 @@ export default function SimpleBadge(props) {
       </Badge>
   );
 }
+
+SimpleBadge.propTypes = {
+  badgeContent: React.PropTypes.object,
+  badgeStyle: React.PropTypes.string,
+};

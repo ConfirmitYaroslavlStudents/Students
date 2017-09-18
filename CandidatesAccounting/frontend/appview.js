@@ -52,4 +52,8 @@ function mapStateToProps(state) {
   };
 }
 
+AppView.propTypes = {
+  selectedTab: React.PropTypes.number.isRequired,
+};
+
 module.exports = connect(mapStateToProps, actions)(AppView);

@@ -35,3 +35,7 @@ export default class IntervieweeTable extends React.Component {
     ];
   }
 }
+
+IntervieweeTable.propTypes = {
+  interviewees: React.PropTypes.array.isRequired,
+};

@@ -36,3 +36,8 @@ export default class BasicTable extends React.Component {
     );
   }
 }
+
+BasicTable.propTypes = {
+  heads: React.PropTypes.array,
+  contentRows: React.PropTypes.array,
+};

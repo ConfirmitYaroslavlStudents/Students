@@ -37,3 +37,12 @@ export default function CandidateControls(props) {
     </div>
   );
 }
+
+CandidateControls.propTypes = {
+  candidate: React.PropTypes.object.isRequired,
+  tempCandidate: React.PropTypes.object.isRequired,
+  setTempCandidate: React.PropTypes.func.isRequired,
+  changeTempCandidateInfo: React.PropTypes.func.isRequired,
+  editCandidate: React.PropTypes.func.isRequired,
+  deleteCandidate: React.PropTypes.func.isRequired,
+};

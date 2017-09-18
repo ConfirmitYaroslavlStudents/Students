@@ -30,3 +30,13 @@ export default class TextInput extends React.Component {
     this.props.onChange(e.target.value);
   }
 }
+
+TextInput.propTypes = {
+  name: React.PropTypes.object,
+  value: React.PropTypes.string,
+  onChange: React.PropTypes.func.isRequired,
+  label: React.PropTypes.string,
+  placeholder: React.PropTypes.string,
+  multiline: React.PropTypes.bool,
+  autoFocus: React.PropTypes.bool,
+};

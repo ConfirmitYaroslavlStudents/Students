@@ -33,3 +33,7 @@ export default class StudentTable extends React.Component {
     ];
   }
 }
+
+StudentTable.propTypes = {
+  students: React.PropTypes.array.isRequired,
+};

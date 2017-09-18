@@ -9,7 +9,6 @@ export default class AddCommentForm extends React.Component{
   }
 
   render() {
-
     return (
       <div style={{width: 400, margin: '0px 10px 10px 10px'}}>
         <div style={{display: 'inline-block', width: '100%'}}>
@@ -33,3 +32,8 @@ export default class AddCommentForm extends React.Component{
       text));
   }
 }
+
+AddCommentForm.propTypes = {
+  commentIndex: React.PropTypes.number.isRequired,
+  setTempCandidateComment: React.PropTypes.func.isRequired,
+};

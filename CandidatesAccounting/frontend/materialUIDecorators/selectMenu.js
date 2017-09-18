@@ -2,7 +2,7 @@ import React from 'react';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
-export default class selectMenu extends React.Component {
+export default class SelectMenu extends React.Component {
   constructor(props) {
     super(props);
     const selected = props.options.indexOf(props.selectedOption);
@@ -66,3 +66,10 @@ export default class selectMenu extends React.Component {
     );
   }
 }
+
+SelectMenu.propTypes = {
+  options: React.PropTypes.object.isRequired,
+  selectedOption: React.PropTypes.object.isRequired,
+  onChange: React.PropTypes.func,
+  label: React.PropTypes.string,
+};

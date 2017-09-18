@@ -13,6 +13,8 @@ export default function AddCandidateDialog(props) {
             additionMode={true}
             changeTempCandidateInfo={props.changeTempCandidateInfo}
             tempCandidate={props.tempCandidate}
+            setTempCandidateComment={props.setTempCandidateComment}
+            editCandidate={props.editCandidate}
           />
         }
         label="Add new candidate"
@@ -31,3 +33,11 @@ export default function AddCandidateDialog(props) {
       />
     </div>);
 }
+
+AddCandidateDialog.propTypes = {
+  addCandidate: React.PropTypes.func.isRequired,
+  candidateType: React.PropTypes.string.isRequired,
+  tempCandidate: React.PropTypes.object.isRequired,
+  setTempCandidate: React.PropTypes.func.isRequired,
+  changeTempCandidateInfo: React.PropTypes.func.isRequired,
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
 import CommentControls from './commentControls';
@@ -35,5 +36,5 @@ export default class StudentTable extends React.Component {
 }
 
 StudentTable.propTypes = {
-  students: React.PropTypes.array.isRequired,
+  students: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };

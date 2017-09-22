@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FlatButton from '../materialUIDecorators/flatButton';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import EditCandidateForm from './editCandidateForm';
@@ -39,10 +40,10 @@ export default function CandidateControls(props) {
 }
 
 CandidateControls.propTypes = {
-  candidate: React.PropTypes.object.isRequired,
-  tempCandidate: React.PropTypes.object.isRequired,
-  setTempCandidate: React.PropTypes.func.isRequired,
-  changeTempCandidateInfo: React.PropTypes.func.isRequired,
-  editCandidate: React.PropTypes.func.isRequired,
-  deleteCandidate: React.PropTypes.func.isRequired,
+  candidate: PropTypes.object.isRequired,
+  tempCandidate: PropTypes.object.isRequired,
+  setTempCandidate: PropTypes.func.isRequired,
+  changeTempCandidateInfo: PropTypes.func.isRequired,
+  editCandidate: PropTypes.func.isRequired,
+  deleteCandidate: PropTypes.func.isRequired,
 };

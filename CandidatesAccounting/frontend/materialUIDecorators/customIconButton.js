@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 
 export default function CustomIconButton(props) {
@@ -17,9 +18,9 @@ export default function CustomIconButton(props) {
 }
 
 CustomIconButton.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool,
-  class: React.PropTypes.string,
-  icon: React.PropTypes.object,
-  color: React.PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  class: PropTypes.string,
+  icon: PropTypes.object,
+  color: PropTypes.string,
 };

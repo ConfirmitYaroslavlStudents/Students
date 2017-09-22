@@ -14,6 +14,8 @@ export default function TableTabStudents(props) {
         tempCandidate={props.tempCandidate}
         setTempCandidate={props.setTempCandidate}
         changeTempCandidateInfo={props.changeTempCandidateInfo}
+        setTempCandidateComment={props.setTempCandidateComment}
+        editCandidate={props.editCandidate}
       />
     </div>
   );

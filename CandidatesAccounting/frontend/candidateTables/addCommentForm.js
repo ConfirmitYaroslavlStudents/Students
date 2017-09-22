@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
 import { Comment } from '../candidates/index';
 
@@ -34,6 +35,6 @@ export default class AddCommentForm extends React.Component{
 }
 
 AddCommentForm.propTypes = {
-  commentIndex: React.PropTypes.number.isRequired,
-  setTempCandidateComment: React.PropTypes.func.isRequired,
+  commentIndex: PropTypes.number.isRequired,
+  setTempCandidateComment: PropTypes.func.isRequired,
 };

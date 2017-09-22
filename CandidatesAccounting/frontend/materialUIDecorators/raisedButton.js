@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 
 export default class RaisedButton extends React.Component {
@@ -8,7 +9,6 @@ export default class RaisedButton extends React.Component {
         <Button
           raised
           color={this.props.color}
-          className={this.props.class}
           onClick={this.props.onClick}
           disabled={this.props.disabled}
         >
@@ -21,10 +21,9 @@ export default class RaisedButton extends React.Component {
 }
 
 RaisedButton.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool,
-  class: React.PropTypes.string,
-  icon: React.PropTypes.object,
-  text: React.PropTypes.object,
-  color: React.PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  icon: PropTypes.object,
+  text: PropTypes.object,
+  color: PropTypes.string,
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 
@@ -38,6 +39,6 @@ export default class BasicTable extends React.Component {
 }
 
 BasicTable.propTypes = {
-  heads: React.PropTypes.array,
-  contentRows: React.PropTypes.array,
+  heads: PropTypes.array,
+  contentRows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };

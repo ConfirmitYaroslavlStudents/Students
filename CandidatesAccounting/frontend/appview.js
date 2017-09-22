@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import actions from './actions';
@@ -53,7 +54,7 @@ function mapStateToProps(state) {
 }
 
 AppView.propTypes = {
-  selectedTab: React.PropTypes.number.isRequired,
+  selectedTab: PropTypes.number.isRequired,
 };
 
 module.exports = connect(mapStateToProps, actions)(AppView);

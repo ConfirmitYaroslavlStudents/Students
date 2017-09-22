@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -90,14 +91,14 @@ export default class DialogWindow extends React.Component {
 }
 
 DialogWindow.propTypes = {
-  open: React.PropTypes.func,
-  accept: React.PropTypes.func,
-  close: React.PropTypes.func,
-  openButtonType: React.PropTypes.string,
-  openButtonContent: React.PropTypes.object,
-  withoutAcceptButton: React.PropTypes.bool,
-  acceptButtonContent: React.PropTypes.object,
-  fullScreen: React.PropTypes.bool,
-  label: React.PropTypes.string,
-  content: React.PropTypes.object.isRequired,
+  open: PropTypes.func,
+  accept: PropTypes.func,
+  close: PropTypes.func,
+  openButtonType: PropTypes.string,
+  openButtonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  withoutAcceptButton: PropTypes.bool,
+  acceptButtonContent: PropTypes.object,
+  fullScreen: PropTypes.bool,
+  label: PropTypes.string,
+  content: PropTypes.object.isRequired,
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 
 export default class TextInput extends React.Component {
@@ -32,11 +33,11 @@ export default class TextInput extends React.Component {
 }
 
 TextInput.propTypes = {
-  name: React.PropTypes.object,
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.func.isRequired,
-  label: React.PropTypes.string,
-  placeholder: React.PropTypes.string,
-  multiline: React.PropTypes.bool,
-  autoFocus: React.PropTypes.bool,
+  name: PropTypes.object,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  multiline: PropTypes.bool,
+  autoFocus: PropTypes.bool,
 };

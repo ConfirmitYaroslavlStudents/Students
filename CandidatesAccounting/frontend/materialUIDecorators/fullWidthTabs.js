@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
 import SwipeableViews from 'react-swipeable-views';
@@ -50,7 +51,7 @@ export default class FullWidthTabs extends React.Component {
 }
 
 FullWidthTabs.propTypes = {
-  selected: React.PropTypes.number.isRequired,
-  labels: React.PropTypes.object.isRequired,
-  tabs: React.PropTypes.object.isRequired,
+  selected: PropTypes.number.isRequired,
+  labels: PropTypes.array.isRequired,
+  tabs: PropTypes.array.isRequired,
 };

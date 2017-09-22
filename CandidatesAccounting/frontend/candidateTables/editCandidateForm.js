@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
 import SelectMenu from '../materialUIDecorators/selectMenu';
 import EditCommentForm from './editCommentForm';
@@ -120,9 +121,9 @@ export default class EditCandidateForm extends React.Component {
 }
 
 EditCandidateForm.propTypes = {
-  tempCandidate: React.PropTypes.object.isRequired,
-  setTempCandidateComment: React.PropTypes.func.isRequired,
-  changeTempCandidateInfo: React.PropTypes.func.isRequired,
-  editCandidate: React.PropTypes.func.isRequired,
-  additionMode: React.PropTypes.bool,
+  tempCandidate: PropTypes.object.isRequired,
+  setTempCandidateComment: PropTypes.func.isRequired,
+  changeTempCandidateInfo: PropTypes.func.isRequired,
+  editCandidate: PropTypes.func.isRequired,
+  additionMode: PropTypes.bool,
 };

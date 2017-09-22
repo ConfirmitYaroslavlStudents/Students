@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Badge from 'material-ui/Badge';
 
 export default function SimpleBadge(props) {
@@ -10,6 +11,6 @@ export default function SimpleBadge(props) {
 }
 
 SimpleBadge.propTypes = {
-  badgeContent: React.PropTypes.object,
-  badgeStyle: React.PropTypes.string,
+  badgeContent: PropTypes.number,
+  badgeStyle: PropTypes.string,
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
 import CommentControls from './commentControls';
@@ -35,5 +36,5 @@ export default class TraineeTable extends React.Component {
 }
 
 TraineeTable.propTypes = {
-  trainees: React.PropTypes.array.isRequired,
+  trainees: PropTypes.array.isRequired,
 };

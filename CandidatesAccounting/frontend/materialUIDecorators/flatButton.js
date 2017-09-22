@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 
 export default function FlatButton(props) {
@@ -18,10 +19,10 @@ export default function FlatButton(props) {
 }
 
 FlatButton.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool,
-  class: React.PropTypes.string,
-  icon: React.PropTypes.object,
-  text: React.PropTypes.object,
-  color: React.PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  class: PropTypes.string,
+  icon: PropTypes.object,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  color: PropTypes.string,
 };

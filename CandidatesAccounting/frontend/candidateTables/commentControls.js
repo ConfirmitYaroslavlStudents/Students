@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AddIcon from 'material-ui-icons/Add';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddCommentForm from './addCommentForm';
@@ -47,9 +48,9 @@ export default function CommentControls(props) {
 }
 
 CommentControls.propTypes = {
-  candidate: React.PropTypes.object.isRequired,
-  tempCandidate: React.PropTypes.object.isRequired,
-  setTempCandidate: React.PropTypes.func.isRequired,
-  setTempCandidateComment: React.PropTypes.func.isRequired,
-  editCandidate: React.PropTypes.func.isRequired,
+  candidate: PropTypes.object.isRequired,
+  tempCandidate: PropTypes.object.isRequired,
+  setTempCandidate: PropTypes.func.isRequired,
+  setTempCandidateComment: PropTypes.func.isRequired,
+  editCandidate: PropTypes.func.isRequired,
 };

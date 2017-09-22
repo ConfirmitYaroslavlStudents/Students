@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
@@ -68,8 +69,8 @@ export default class SelectMenu extends React.Component {
 }
 
 SelectMenu.propTypes = {
-  options: React.PropTypes.object.isRequired,
-  selectedOption: React.PropTypes.object.isRequired,
-  onChange: React.PropTypes.func,
-  label: React.PropTypes.string,
+  options: PropTypes.object.isRequired,
+  selectedOption: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
+  label: PropTypes.string,
 };

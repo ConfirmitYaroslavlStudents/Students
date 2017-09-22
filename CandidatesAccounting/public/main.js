@@ -93,7 +93,7 @@
 	store.dispatch({
 	  type: "SET_STATE",
 	  state: {
-	    candidates: [new _candidates.Interviewee(1, 'Олег', '07.01.1995', 'Oleg@mail.ru', [new _candidates.Comment(' ', ' ', 'C#')], '04.09.2017', '8'), new _candidates.Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com', [new _candidates.Comment(' ', ' ', 'ПМИ')], 'frontend'), new _candidates.Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com', [new _candidates.Comment(' ', ' ', 'КБ')], 'backend'), new _candidates.Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new _candidates.Comment(' ', ' ', '5 этаж')], 'Евгений Иванов'), new _candidates.Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com', [new _candidates.Comment(' ', ' ', '8 этаж')], 'Евгения Иванова')],
+	    candidates: [new _candidates.Interviewee(1, 'Олег', '07.01.1995', 'Oleg@mail.ru', [new _candidates.Comment('Анна', '10:15 17.5.2017', 'Текст комментария №1')], '04.09.2017', '8'), new _candidates.Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com', [new _candidates.Comment('Анна', '10:15 17.05.2017', 'Текст комментария №2')], 'frontend'), new _candidates.Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com', [new _candidates.Comment('Анна', '10:15 17.5.2017', 'Текст комментария №3')], 'backend'), new _candidates.Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com', [new _candidates.Comment('Анна', '10:15 17.5.2017', 'Текст комментария №4')], 'Евгений Иванов'), new _candidates.Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com', [new _candidates.Comment('Анна', '10:15 17.5.2017', 'Текст комментария №5')], 'Евгения Иванова')],
 	    tempCandidate: (0, _candidates.CreateCandidate)('Candidate', {})
 	  }
 	});
@@ -36644,6 +36644,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _reactRedux = __webpack_require__(205);
 
 	var _reactRouterDom = __webpack_require__(342);
@@ -36664,15 +36668,15 @@
 
 	var _tableTabAll2 = _interopRequireDefault(_tableTabAll);
 
-	var _tableTabInterviewees = __webpack_require__(698);
+	var _tableTabInterviewees = __webpack_require__(701);
 
 	var _tableTabInterviewees2 = _interopRequireDefault(_tableTabInterviewees);
 
-	var _tableTabStudents = __webpack_require__(700);
+	var _tableTabStudents = __webpack_require__(703);
 
 	var _tableTabStudents2 = _interopRequireDefault(_tableTabStudents);
 
-	var _tableTabTrainees = __webpack_require__(702);
+	var _tableTabTrainees = __webpack_require__(705);
 
 	var _tableTabTrainees2 = _interopRequireDefault(_tableTabTrainees);
 
@@ -36759,6 +36763,10 @@
 	  };
 	}
 
+	AppView.propTypes = {
+	  selectedTab: _propTypes2.default.number.isRequired
+	};
+
 	module.exports = (0, _reactRedux.connect)(mapStateToProps, _actions2.default)(AppView);
 
 /***/ }),
@@ -36830,6 +36838,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _AppBar = __webpack_require__(387);
 
 	var _AppBar2 = _interopRequireDefault(_AppBar);
@@ -36865,6 +36877,10 @@
 	    )
 	  );
 	}
+
+	Navbar.propTypes = {
+	  title: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.string])
+	};
 
 /***/ }),
 /* 387 */
@@ -43377,6 +43393,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _Tabs = __webpack_require__(491);
 
 	var _Tabs2 = _interopRequireDefault(_Tabs);
@@ -43396,14 +43416,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function TabContainer(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    props.children
-	  );
-	}
 
 	var FullWidthTabs = function (_React$Component) {
 	  _inherits(FullWidthTabs, _React$Component);
@@ -43461,15 +43473,13 @@
 	          },
 	          this.props.tabs.map(function (oneTab, index) {
 	            return _react2.default.createElement(
-	              TabContainer,
+	              'div',
 	              { key: 'tab' + index },
-	              ' ',
 	              index === _this2.state.value ? oneTab : _react2.default.createElement(
 	                'div',
 	                null,
 	                ' '
-	              ),
-	              ' '
+	              )
 	            );
 	          })
 	        )
@@ -43481,6 +43491,13 @@
 	}(_react2.default.Component);
 
 	exports.default = FullWidthTabs;
+
+
+	FullWidthTabs.propTypes = {
+	  selected: _propTypes2.default.number.isRequired,
+	  labels: _propTypes2.default.array.isRequired,
+	  tabs: _propTypes2.default.array.isRequired
+	};
 
 /***/ }),
 /* 491 */
@@ -52300,7 +52317,7 @@
 
 	var _candidateTable2 = _interopRequireDefault(_candidateTable);
 
-	var _addCandidateDialog = __webpack_require__(697);
+	var _addCandidateDialog = __webpack_require__(700);
 
 	var _addCandidateDialog2 = _interopRequireDefault(_addCandidateDialog);
 
@@ -52316,7 +52333,9 @@
 	      addCandidate: props.addCandidate,
 	      tempCandidate: props.tempCandidate,
 	      setTempCandidate: props.setTempCandidate,
-	      changeTempCandidateInfo: props.changeTempCandidateInfo
+	      changeTempCandidateInfo: props.changeTempCandidateInfo,
+	      setTempCandidateComment: props.setTempCandidateComment,
+	      editCandidate: props.editCandidate
 	    })
 	  );
 	}
@@ -52339,6 +52358,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _basicTable = __webpack_require__(621);
 
 	var _basicTable2 = _interopRequireDefault(_basicTable);
@@ -52347,7 +52370,7 @@
 
 	var _candidateControls2 = _interopRequireDefault(_candidateControls);
 
-	var _commentControls = __webpack_require__(695);
+	var _commentControls = __webpack_require__(698);
 
 	var _commentControls2 = _interopRequireDefault(_commentControls);
 
@@ -52401,6 +52424,11 @@
 
 	exports.default = CandidateTable;
 
+
+	CandidateTable.propTypes = {
+	  candidates: _propTypes2.default.array.isRequired
+	};
+
 /***/ }),
 /* 621 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -52416,6 +52444,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	var _Table = __webpack_require__(622);
 
@@ -52496,6 +52528,12 @@
 	}(_react2.default.Component);
 
 	exports.default = BasicTable;
+
+
+	BasicTable.propTypes = {
+	  heads: _propTypes2.default.array,
+	  contentRows: _propTypes2.default.oneOfType([_propTypes2.default.array, _propTypes2.default.object])
+	};
 
 /***/ }),
 /* 622 */
@@ -53497,6 +53535,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _flatButton = __webpack_require__(631);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
@@ -53511,7 +53553,7 @@
 
 	var _index = __webpack_require__(378);
 
-	var _Save = __webpack_require__(694);
+	var _Save = __webpack_require__(697);
 
 	var _Save2 = _interopRequireDefault(_Save);
 
@@ -53525,15 +53567,21 @@
 	      content: _react2.default.createElement(_editCandidateForm2.default, {
 	        changeTempCandidateInfo: props.changeTempCandidateInfo,
 	        setTempCandidateComment: props.setTempCandidateComment,
+	        editCandidate: props.editCandidate,
 	        tempCandidate: props.tempCandidate
 	      }),
 	      label: 'Candidate edit',
 	      openButtonContent: 'Edit',
 	      acceptButtonContent: _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'button-content' },
 	        _react2.default.createElement(_Save2.default, null),
-	        ' save'
+	        ' ',
+	        _react2.default.createElement(
+	          'span',
+	          { style: { marginTop: 3 } },
+	          ' save'
+	        )
 	      ),
 	      open: function open() {
 	        props.setTempCandidate((0, _index.CreateCandidate)(props.candidate.constructor.name, props.candidate));
@@ -53555,6 +53603,15 @@
 	  );
 	}
 
+	CandidateControls.propTypes = {
+	  candidate: _propTypes2.default.object.isRequired,
+	  tempCandidate: _propTypes2.default.object.isRequired,
+	  setTempCandidate: _propTypes2.default.func.isRequired,
+	  changeTempCandidateInfo: _propTypes2.default.func.isRequired,
+	  editCandidate: _propTypes2.default.func.isRequired,
+	  deleteCandidate: _propTypes2.default.func.isRequired
+	};
+
 /***/ }),
 /* 631 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -53569,6 +53626,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	var _Button = __webpack_require__(632);
 
@@ -53593,6 +53654,15 @@
 	    )
 	  );
 	}
+
+	FlatButton.propTypes = {
+	  onClick: _propTypes2.default.func.isRequired,
+	  disabled: _propTypes2.default.bool,
+	  class: _propTypes2.default.string,
+	  icon: _propTypes2.default.object,
+	  text: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]),
+	  color: _propTypes2.default.string
+	};
 
 /***/ }),
 /* 632 */
@@ -53901,6 +53971,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _Dialog = __webpack_require__(635);
 
 	var _Dialog2 = _interopRequireDefault(_Dialog);
@@ -54047,6 +54121,20 @@
 	}(_react2.default.Component);
 
 	exports.default = DialogWindow;
+
+
+	DialogWindow.propTypes = {
+	  open: _propTypes2.default.func,
+	  accept: _propTypes2.default.func,
+	  close: _propTypes2.default.func,
+	  openButtonType: _propTypes2.default.string,
+	  openButtonContent: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]),
+	  withoutAcceptButton: _propTypes2.default.bool,
+	  acceptButtonContent: _propTypes2.default.object,
+	  fullScreen: _propTypes2.default.bool,
+	  label: _propTypes2.default.string,
+	  content: _propTypes2.default.object.isRequired
+	};
 
 /***/ }),
 /* 635 */
@@ -57044,6 +57132,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _Button = __webpack_require__(632);
 
 	var _Button2 = _interopRequireDefault(_Button);
@@ -57068,6 +57160,14 @@
 	  );
 	}
 
+	FabButton.propTypes = {
+	  onClick: _propTypes2.default.func.isRequired,
+	  disabled: _propTypes2.default.bool,
+	  class: _propTypes2.default.string,
+	  icon: _propTypes2.default.object,
+	  color: _propTypes2.default.string
+	};
+
 /***/ }),
 /* 660 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -57083,6 +57183,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	var _textInput = __webpack_require__(661);
 
@@ -57103,6 +57207,10 @@
 	var _dialogWindow = __webpack_require__(634);
 
 	var _dialogWindow2 = _interopRequireDefault(_dialogWindow);
+
+	var _badge = __webpack_require__(694);
+
+	var _badge2 = _interopRequireDefault(_badge);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57192,9 +57300,7 @@
 	          label: 'Candidate\'s status',
 	          options: ['Interviewee', 'Student', 'Trainee'],
 	          selectedOption: this.state.candidateType,
-	          onChange: function onChange(status) {
-	            changeCandidateType(status);
-	          }
+	          onChange: changeCandidateType
 	        }),
 	        _react2.default.createElement(_textInput2.default, {
 	          name: 'name',
@@ -57202,7 +57308,8 @@
 	          value: this.props.tempCandidate.name,
 	          onChange: function onChange(value) {
 	            changeInfo('name', value);
-	          } }),
+	          },
+	          autoFocus: true }),
 	        _react2.default.createElement(_textInput2.default, {
 	          name: 'birthDate',
 	          label: 'Birth date',
@@ -57220,19 +57327,23 @@
 	            changeInfo('email', value);
 	          } }),
 	        specialFields,
-	        _react2.default.createElement(
+	        this.props.additionMode ? '' : _react2.default.createElement(
 	          'div',
 	          { className: 'float-right' },
-	          this.props.tempCandidate.comments ? this.props.tempCandidate.comments.length : 0,
-	          _react2.default.createElement(_dialogWindow2.default, {
-	            content: _react2.default.createElement(_editCommentForm2.default, {
-	              setCandidateComment: this.props.setCandidateEditComment,
-	              candidateEditInfo: this.props.tempCandidate
-	            }),
-	            label: 'Comments',
-	            openButtonType: 'icon',
-	            openButtonContent: _react2.default.createElement(_ViewList2.default, null)
-	          })
+	          _react2.default.createElement(
+	            _badge2.default,
+	            { badgeContent: this.props.tempCandidate.comments.length, badgeStyle: 'comment-badge' },
+	            _react2.default.createElement(_dialogWindow2.default, {
+	              content: _react2.default.createElement(_editCommentForm2.default, {
+	                candidate: this.props.tempCandidate,
+	                setTempCandidateComment: this.props.setTempCandidateComment,
+	                editCandidate: this.props.editCandidate
+	              }),
+	              label: 'Comments',
+	              openButtonType: 'icon',
+	              openButtonContent: _react2.default.createElement(_ViewList2.default, null)
+	            })
+	          )
 	        )
 	      );
 	    }
@@ -57254,6 +57365,15 @@
 
 	exports.default = EditCandidateForm;
 
+
+	EditCandidateForm.propTypes = {
+	  tempCandidate: _propTypes2.default.object.isRequired,
+	  setTempCandidateComment: _propTypes2.default.func.isRequired,
+	  changeTempCandidateInfo: _propTypes2.default.func.isRequired,
+	  editCandidate: _propTypes2.default.func.isRequired,
+	  additionMode: _propTypes2.default.bool
+	};
+
 /***/ }),
 /* 661 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -57269,6 +57389,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	var _TextField = __webpack_require__(662);
 
@@ -57303,7 +57427,7 @@
 	        id: this.props.name,
 	        label: this.props.label,
 	        placeholder: this.props.placeholder,
-	        value: this.state.value,
+	        value: this.props.value === '' ? '' : this.state.value,
 	        onChange: this.handleChange,
 	        multiline: this.props.multiline,
 	        fullWidth: true,
@@ -57323,6 +57447,17 @@
 	}(_react2.default.Component);
 
 	exports.default = TextInput;
+
+
+	TextInput.propTypes = {
+	  name: _propTypes2.default.object,
+	  value: _propTypes2.default.string,
+	  onChange: _propTypes2.default.func.isRequired,
+	  label: _propTypes2.default.string,
+	  placeholder: _propTypes2.default.string,
+	  multiline: _propTypes2.default.bool,
+	  autoFocus: _propTypes2.default.bool
+	};
 
 /***/ }),
 /* 662 */
@@ -59337,6 +59472,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _List = __webpack_require__(675);
 
 	var _List2 = _interopRequireDefault(_List);
@@ -59353,13 +59492,13 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var selectMenu = function (_React$Component) {
-	  _inherits(selectMenu, _React$Component);
+	var SelectMenu = function (_React$Component) {
+	  _inherits(SelectMenu, _React$Component);
 
-	  function selectMenu(props) {
-	    _classCallCheck(this, selectMenu);
+	  function SelectMenu(props) {
+	    _classCallCheck(this, SelectMenu);
 
-	    var _this = _possibleConstructorReturn(this, (selectMenu.__proto__ || Object.getPrototypeOf(selectMenu)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (SelectMenu.__proto__ || Object.getPrototypeOf(SelectMenu)).call(this, props));
 
 	    var selected = props.options.indexOf(props.selectedOption);
 	    _this.state = {
@@ -59373,7 +59512,7 @@
 	    return _this;
 	  }
 
-	  _createClass(selectMenu, [{
+	  _createClass(SelectMenu, [{
 	    key: 'handleClickListItem',
 	    value: function handleClickListItem(event) {
 	      this.setState({ open: true, anchorEl: event.currentTarget });
@@ -59441,10 +59580,18 @@
 	    }
 	  }]);
 
-	  return selectMenu;
+	  return SelectMenu;
 	}(_react2.default.Component);
 
-	exports.default = selectMenu;
+	exports.default = SelectMenu;
+
+
+	SelectMenu.propTypes = {
+	  options: _propTypes2.default.object.isRequired,
+	  selectedOption: _propTypes2.default.object.isRequired,
+	  onChange: _propTypes2.default.func,
+	  label: _propTypes2.default.string
+	};
 
 /***/ }),
 /* 675 */
@@ -61776,6 +61923,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _AccountCircle = __webpack_require__(482);
 
 	var _AccountCircle2 = _interopRequireDefault(_AccountCircle);
@@ -61792,6 +61943,8 @@
 
 	var _Add2 = _interopRequireDefault(_Add);
 
+	var _candidates = __webpack_require__(378);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61806,88 +61959,106 @@
 	  function EditCommentForm(props) {
 	    _classCallCheck(this, EditCommentForm);
 
-	    return _possibleConstructorReturn(this, (EditCommentForm.__proto__ || Object.getPrototypeOf(EditCommentForm)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (EditCommentForm.__proto__ || Object.getPrototypeOf(EditCommentForm)).call(this, props));
+
+	    _this.state = { newCommentText: '' };
+	    _this.changeNewCommentText = _this.changeNewCommentText.bind(_this);
+	    _this.addNewComment = _this.addNewComment.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(EditCommentForm, [{
 	    key: 'render',
 	    value: function render() {
+	      var comments = this.props.candidate.comments.map(function (comment, index) {
+	        return comment.author.toLowerCase() === 'вы' ? _react2.default.createElement(
+	          'div',
+	          { key: 'comment' + index, className: 'comment user-comment' },
+	          _react2.default.createElement(_AccountCircle2.default, null),
+	          _react2.default.createElement(
+	            'p',
+	            { style: { marginBottom: 0 } },
+	            comment.author,
+	            ' ',
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'comment-date' },
+	              comment.date
+	            ),
+	            _react2.default.createElement(
+	              'span',
+	              null,
+	              ' [Edit | Delete]'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { wordWrap: 'break-word' } },
+	            comment.text
+	          )
+	        ) : _react2.default.createElement(
+	          'div',
+	          { key: 'comment' + index, className: 'comment' },
+	          _react2.default.createElement(_AccountCircle2.default, null),
+	          _react2.default.createElement(
+	            'p',
+	            { style: { marginBottom: 0 } },
+	            comment.author,
+	            ' ',
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'comment-date' },
+	              comment.date
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { wordWrap: 'break-word' } },
+	            comment.text
+	          )
+	        );
+	      });
 	      return _react2.default.createElement(
 	        'div',
-	        { style: { display: 'inline-block', width: 400, padding: 20 } },
+	        { style: { display: 'inline-block', width: 400, padding: '20px 0' } },
+	        comments,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'comment' },
-	          _react2.default.createElement(_AccountCircle2.default, null),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '\u041F\u0430\u0432\u0435\u043B ',
-	            _react2.default.createElement(
-	              'span',
-	              { className: 'comment-date' },
-	              '13:23 07.08.17'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '\u041A\u0430\u043A\u043E\u0439-\u0442\u043E \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u043E\u0442 \u041F\u0430\u0432\u043B\u0430'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'comment user-comment' },
-	          _react2.default.createElement(_AccountCircle2.default, null),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '\u0412\u044B ',
-	            _react2.default.createElement(
-	              'span',
-	              { className: 'comment-date' },
-	              '15:43 07.08.17'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '\u0412\u0430\u0448\u0435 \u0437\u0430\u043C\u0435\u0447\u0430\u043D\u0438\u0435 \u043D\u0430\u0441\u0447\u0451\u0442 \u043A\u0430\u043D\u0434\u0438\u0434\u0430\u0442\u0430'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'comment' },
-	          _react2.default.createElement(_AccountCircle2.default, null),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '\u041E\u043B\u044C\u0433\u0430 ',
-	            _react2.default.createElement(
-	              'span',
-	              { className: 'comment-date' },
-	              '15:48 07.08.17'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            '\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0439 \u041E\u043B\u044C\u0433\u0438'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { style: { display: 'inline-block', width: '86%' } },
+	          { className: 'comment-text-input' },
 	          _react2.default.createElement(_textInput2.default, {
 	            name: 'comment',
 	            placeholder: 'New comment',
+	            value: this.state.newCommentText,
 	            autoFocus: true,
 	            multiline: true,
-	            onChange: function onChange() {}
+	            onChange: this.changeNewCommentText
 	          })
 	        ),
-	        _react2.default.createElement(_customIconButton2.default, { icon: _react2.default.createElement(_Add2.default, null) })
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'add-comment-btn' },
+	          _react2.default.createElement(_customIconButton2.default, {
+	            icon: _react2.default.createElement(_Add2.default, null),
+	            onClick: this.addNewComment
+	          })
+	        )
 	      );
+	    }
+	  }, {
+	    key: 'changeNewCommentText',
+	    value: function changeNewCommentText(text) {
+	      this.setState({ newCommentText: text });
+	    }
+	  }, {
+	    key: 'addNewComment',
+	    value: function addNewComment() {
+	      if (this.state.newCommentText.trim() !== '') {
+	        var date = new Date();
+	        var candidate = this.props.candidate;
+	        candidate.comments.push(new _candidates.Comment('Вы', date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear(), this.state.newCommentText));
+	        this.props.editCandidate(this.props.candidate.id, candidate);
+	        this.setState({ newCommentText: '' });
+	      }
 	    }
 	  }]);
 
@@ -61895,6 +62066,12 @@
 	}(_react2.default.Component);
 
 	exports.default = EditCommentForm;
+
+
+	EditCommentForm.propTypes = {
+	  candidate: _propTypes2.default.object.isRequired,
+	  editCandidate: _propTypes2.default.func.isRequired
+	};
 
 /***/ }),
 /* 691 */
@@ -61911,6 +62088,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _IconButton = __webpack_require__(655);
 
 	var _IconButton2 = _interopRequireDefault(_IconButton);
@@ -61925,14 +62106,22 @@
 	      _IconButton2.default,
 	      {
 	        color: props.color,
-	        className: props.class,
 	        onClick: props.onClick,
-	        disabled: props.disabled
+	        disabled: props.disabled,
+	        className: props.class
 	      },
 	      props.icon
 	    )
 	  );
 	}
+
+	CustomIconButton.propTypes = {
+	  onClick: _propTypes2.default.func.isRequired,
+	  disabled: _propTypes2.default.bool,
+	  class: _propTypes2.default.string,
+	  icon: _propTypes2.default.object,
+	  color: _propTypes2.default.string
+	};
 
 /***/ }),
 /* 692 */
@@ -62021,6 +62210,199 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.default = SimpleBadge;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _Badge = __webpack_require__(695);
+
+	var _Badge2 = _interopRequireDefault(_Badge);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function SimpleBadge(props) {
+	  return _react2.default.createElement(
+	    _Badge2.default,
+	    { badgeContent: props.badgeContent, classes: { badge: props.badgeStyle }, color: 'primary' },
+	    props.children
+	  );
+	}
+
+	SimpleBadge.propTypes = {
+	  badgeContent: _propTypes2.default.number,
+	  badgeStyle: _propTypes2.default.string
+	};
+
+/***/ }),
+/* 695 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _Badge = __webpack_require__(696);
+
+	Object.defineProperty(exports, 'default', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_Badge).default;
+	  }
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 696 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.styles = undefined;
+
+	var _extends2 = __webpack_require__(227);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
+	var _defineProperty2 = __webpack_require__(282);
+
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+	var _objectWithoutProperties2 = __webpack_require__(265);
+
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _classnames = __webpack_require__(389);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _withStyles = __webpack_require__(390);
+
+	var _withStyles2 = _interopRequireDefault(_withStyles);
+
+	var _helpers = __webpack_require__(475);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var RADIUS = 12; //  weak
+
+	var styles = exports.styles = function styles(theme) {
+	  return {
+	    root: {
+	      position: 'relative',
+	      display: 'inline-block'
+	    },
+	    badge: {
+	      display: 'flex',
+	      flexDirection: 'row',
+	      flexWrap: 'wrap',
+	      justifyContent: 'center',
+	      alignContent: 'center',
+	      alignItems: 'center',
+	      position: 'absolute',
+	      top: -RADIUS,
+	      right: -RADIUS,
+	      fontFamily: theme.typography.fontFamily,
+	      fontWeight: theme.typography.fontWeight,
+	      fontSize: RADIUS,
+	      width: RADIUS * 2,
+	      height: RADIUS * 2,
+	      borderRadius: '50%',
+	      backgroundColor: theme.palette.color,
+	      color: theme.palette.textColor
+	    },
+	    colorPrimary: {
+	      backgroundColor: theme.palette.primary[500],
+	      color: theme.palette.getContrastText(theme.palette.primary[500])
+	    },
+	    colorAccent: {
+	      backgroundColor: theme.palette.secondary.A200,
+	      color: theme.palette.getContrastText(theme.palette.secondary.A200)
+	    }
+	  };
+	};
+
+	function Badge(props) {
+	  var badgeContent = props.badgeContent,
+	      classes = props.classes,
+	      classNameProp = props.className,
+	      color = props.color,
+	      children = props.children,
+	      other = (0, _objectWithoutProperties3.default)(props, ['badgeContent', 'classes', 'className', 'color', 'children']);
+
+	  var className = (0, _classnames2.default)(classes.root, classNameProp);
+	  var badgeClassName = (0, _classnames2.default)(classes.badge, (0, _defineProperty3.default)({}, classes['color' + (0, _helpers.capitalizeFirstLetter)(color)], color !== 'default'));
+
+	  return _react2.default.createElement(
+	    'div',
+	    (0, _extends3.default)({ className: className }, other),
+	    children,
+	    _react2.default.createElement(
+	      'span',
+	      { className: badgeClassName },
+	      badgeContent
+	    )
+	  );
+	}
+
+	Badge.propTypes = process.env.NODE_ENV !== "production" ? {
+	  /**
+	   * The content rendered within the badge.
+	   */
+	  badgeContent: _propTypes2.default.node.isRequired,
+	  /**
+	   * The badge will be added relative to this node.
+	   */
+	  children: _propTypes2.default.node.isRequired,
+	  /**
+	   * Useful to extend the style applied to components.
+	   */
+	  classes: _propTypes2.default.object.isRequired,
+	  /**
+	   * @ignore
+	   */
+	  className: _propTypes2.default.string,
+	  /**
+	   * The color of the component. It's using the theme palette when that makes sense.
+	   */
+	  color: _propTypes2.default.oneOf(['default', 'primary', 'accent'])
+	} : {};
+
+	Badge.defaultProps = {
+	  color: 'default'
+	};
+
+	exports.default = (0, _withStyles2.default)(styles, { name: 'MuiBadge' })(Badge);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
+/* 697 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _react = __webpack_require__(1);
 
@@ -62052,7 +62434,7 @@
 	exports.default = Save;
 
 /***/ }),
-/* 695 */
+/* 698 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62066,6 +62448,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _Add = __webpack_require__(692);
 
 	var _Add2 = _interopRequireDefault(_Add);
@@ -62074,7 +62460,7 @@
 
 	var _dialogWindow2 = _interopRequireDefault(_dialogWindow);
 
-	var _addCommentForm = __webpack_require__(696);
+	var _addCommentForm = __webpack_require__(699);
 
 	var _addCommentForm2 = _interopRequireDefault(_addCommentForm);
 
@@ -62088,6 +62474,10 @@
 
 	var _candidates = __webpack_require__(378);
 
+	var _badge = __webpack_require__(694);
+
+	var _badge2 = _interopRequireDefault(_badge);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function CommentControls(props) {
@@ -62095,15 +62485,23 @@
 	    'div',
 	    null,
 	    _react2.default.createElement(_dialogWindow2.default, {
-	      content: _react2.default.createElement(_addCommentForm2.default, { commentIndex: props.candidate.comments ? props.candidate.comments.length : 0, setCandidateEditComment: props.setTempCandidateComment }),
+	      content: _react2.default.createElement(_addCommentForm2.default, {
+	        commentIndex: props.candidate.comments.length,
+	        setTempCandidateComment: props.setTempCandidateComment
+	      }),
 	      label: 'Add new comment',
 	      openButtonType: 'icon',
 	      openButtonContent: _react2.default.createElement(_Add2.default, null),
 	      acceptButtonContent: _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'button-content' },
 	        _react2.default.createElement(_Add2.default, null),
-	        ' add'
+	        ' ',
+	        _react2.default.createElement(
+	          'span',
+	          { style: { marginTop: 3 } },
+	          'add'
+	        )
 	      ),
 	      open: function open() {
 	        props.setTempCandidate((0, _candidates.CreateCandidate)(props.candidate.constructor.name, props.candidate));
@@ -62112,22 +62510,34 @@
 	        props.editCandidate(props.candidate.id, (0, _candidates.CreateCandidate)(props.tempCandidate.status, props.tempCandidate));
 	      }
 	    }),
-	    _react2.default.createElement(_dialogWindow2.default, {
-	      content: _react2.default.createElement(_editCommentForm2.default, {
-	        setCandidateComment: props.setTempCandidateComment,
-	        candidateEditInfo: props.tempCandidate
-	      }),
-	      label: 'Comments',
-	      openButtonType: 'icon',
-	      openButtonContent: _react2.default.createElement(_ViewList2.default, null),
-	      withoutAcceptButton: true
-	    }),
-	    props.candidate.comments ? props.candidate.comments.length : 0
+	    _react2.default.createElement(
+	      _badge2.default,
+	      { badgeContent: props.candidate.comments.length, badgeStyle: 'comment-badge' },
+	      _react2.default.createElement(_dialogWindow2.default, {
+	        content: _react2.default.createElement(_editCommentForm2.default, {
+	          candidate: props.candidate,
+	          setTempCandidateComment: props.setTempCandidateComment,
+	          editCandidate: props.editCandidate
+	        }),
+	        label: 'Comments',
+	        openButtonType: 'icon',
+	        openButtonContent: _react2.default.createElement(_ViewList2.default, null),
+	        withoutAcceptButton: true
+	      })
+	    )
 	  );
 	}
 
+	CommentControls.propTypes = {
+	  candidate: _propTypes2.default.object.isRequired,
+	  tempCandidate: _propTypes2.default.object.isRequired,
+	  setTempCandidate: _propTypes2.default.func.isRequired,
+	  setTempCandidateComment: _propTypes2.default.func.isRequired,
+	  editCandidate: _propTypes2.default.func.isRequired
+	};
+
 /***/ }),
-/* 696 */
+/* 699 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62141,6 +62551,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	var _textInput = __webpack_require__(661);
 
@@ -62171,7 +62585,6 @@
 	  _createClass(AddCommentForm, [{
 	    key: 'render',
 	    value: function render() {
-
 	      return _react2.default.createElement(
 	        'div',
 	        { style: { width: 400, margin: '0px 10px 10px 10px' } },
@@ -62182,7 +62595,7 @@
 	            name: 'comment',
 	            autoFocus: true,
 	            multiline: true,
-	            placeholder: 'a quick note',
+	            placeholder: 'New comment',
 	            onChange: this.changeCommentText
 	          })
 	        )
@@ -62191,7 +62604,8 @@
 	  }, {
 	    key: 'changeCommentText',
 	    value: function changeCommentText(text) {
-	      this.props.setCandidateEditComment(this.props.commentIndex, new _index.Comment('Вы', '01.01.1900', text));
+	      var date = new Date();
+	      this.props.setTempCandidateComment(this.props.commentIndex, new _index.Comment('Вы', date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear(), text));
 	    }
 	  }]);
 
@@ -62200,8 +62614,14 @@
 
 	exports.default = AddCommentForm;
 
+
+	AddCommentForm.propTypes = {
+	  commentIndex: _propTypes2.default.number.isRequired,
+	  setTempCandidateComment: _propTypes2.default.func.isRequired
+	};
+
 /***/ }),
-/* 697 */
+/* 700 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62214,6 +62634,10 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	var _index = __webpack_require__(378);
 
@@ -62236,17 +62660,26 @@
 	    'div',
 	    { className: 'add-btn float-right' },
 	    _react2.default.createElement(_dialogWindow2.default, {
-	      content: _react2.default.createElement('editCandidateForm', {
+	      content: _react2.default.createElement(_editCandidateForm2.default, {
+	        additionMode: true,
 	        changeTempCandidateInfo: props.changeTempCandidateInfo,
-	        tempCandidate: props.tempCandidate }),
+	        tempCandidate: props.tempCandidate,
+	        setTempCandidateComment: props.setTempCandidateComment,
+	        editCandidate: props.editCandidate
+	      }),
 	      label: 'Add new candidate',
 	      openButtonType: 'fab',
 	      openButtonContent: _react2.default.createElement(_Add2.default, null),
 	      acceptButtonContent: _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'button-content' },
 	        _react2.default.createElement(_Add2.default, null),
-	        ' add'
+	        ' ',
+	        _react2.default.createElement(
+	          'span',
+	          { style: { marginTop: 3 } },
+	          'add'
+	        )
 	      ),
 	      open: function open() {
 	        props.setTempCandidate((0, _index.CreateCandidate)(props.candidateType, {}));
@@ -62255,14 +62688,24 @@
 	        props.addCandidate((0, _index.CreateCandidate)(props.tempCandidate.status, props.tempCandidate));
 	      },
 	      close: function close() {
-	        props.changeTempCandidateInfo((0, _index.CreateCandidate)(props.candidateType, {}));
+	        props.setTempCandidate((0, _index.CreateCandidate)(props.candidateType, {}));
 	      }
 	    })
 	  );
 	}
 
+	AddCandidateDialog.propTypes = {
+	  addCandidate: _propTypes2.default.func.isRequired,
+	  candidateType: _propTypes2.default.string.isRequired,
+	  tempCandidate: _propTypes2.default.object.isRequired,
+	  setTempCandidate: _propTypes2.default.func.isRequired,
+	  changeTempCandidateInfo: _propTypes2.default.func.isRequired,
+	  setTempCandidateComment: _propTypes2.default.func.isRequired,
+	  editCandidate: _propTypes2.default.func.isRequired
+	};
+
 /***/ }),
-/* 698 */
+/* 701 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62276,11 +62719,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _intervieweeTable = __webpack_require__(699);
+	var _intervieweeTable = __webpack_require__(702);
 
 	var _intervieweeTable2 = _interopRequireDefault(_intervieweeTable);
 
-	var _addCandidateDialog = __webpack_require__(697);
+	var _addCandidateDialog = __webpack_require__(700);
 
 	var _addCandidateDialog2 = _interopRequireDefault(_addCandidateDialog);
 
@@ -62296,13 +62739,15 @@
 	      addCandidate: props.addCandidate,
 	      tempCandidate: props.tempCandidate,
 	      setTempCandidate: props.setTempCandidate,
-	      changeTempCandidateInfo: props.changeTempCandidateInfo
+	      changeTempCandidateInfo: props.changeTempCandidateInfo,
+	      setTempCandidateComment: props.setTempCandidateComment,
+	      editCandidate: props.editCandidate
 	    })
 	  );
 	}
 
 /***/ }),
-/* 699 */
+/* 702 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62319,6 +62764,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _basicTable = __webpack_require__(621);
 
 	var _basicTable2 = _interopRequireDefault(_basicTable);
@@ -62327,7 +62776,7 @@
 
 	var _candidateControls2 = _interopRequireDefault(_candidateControls);
 
-	var _commentControls = __webpack_require__(695);
+	var _commentControls = __webpack_require__(698);
 
 	var _commentControls2 = _interopRequireDefault(_commentControls);
 
@@ -62381,8 +62830,13 @@
 
 	exports.default = IntervieweeTable;
 
+
+	IntervieweeTable.propTypes = {
+	  interviewees: _propTypes2.default.array.isRequired
+	};
+
 /***/ }),
-/* 700 */
+/* 703 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62396,11 +62850,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _studentTable = __webpack_require__(701);
+	var _studentTable = __webpack_require__(704);
 
 	var _studentTable2 = _interopRequireDefault(_studentTable);
 
-	var _addCandidateDialog = __webpack_require__(697);
+	var _addCandidateDialog = __webpack_require__(700);
 
 	var _addCandidateDialog2 = _interopRequireDefault(_addCandidateDialog);
 
@@ -62416,13 +62870,15 @@
 	      addCandidate: props.addCandidate,
 	      tempCandidate: props.tempCandidate,
 	      setTempCandidate: props.setTempCandidate,
-	      changeTempCandidateInfo: props.changeTempCandidateInfo
+	      changeTempCandidateInfo: props.changeTempCandidateInfo,
+	      setTempCandidateComment: props.setTempCandidateComment,
+	      editCandidate: props.editCandidate
 	    })
 	  );
 	}
 
 /***/ }),
-/* 701 */
+/* 704 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62439,6 +62895,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _basicTable = __webpack_require__(621);
 
 	var _basicTable2 = _interopRequireDefault(_basicTable);
@@ -62447,7 +62907,7 @@
 
 	var _candidateControls2 = _interopRequireDefault(_candidateControls);
 
-	var _commentControls = __webpack_require__(695);
+	var _commentControls = __webpack_require__(698);
 
 	var _commentControls2 = _interopRequireDefault(_commentControls);
 
@@ -62501,8 +62961,13 @@
 
 	exports.default = StudentTable;
 
+
+	StudentTable.propTypes = {
+	  students: _propTypes2.default.oneOfType([_propTypes2.default.array, _propTypes2.default.object]).isRequired
+	};
+
 /***/ }),
-/* 702 */
+/* 705 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62516,11 +62981,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _traineeTable = __webpack_require__(703);
+	var _traineeTable = __webpack_require__(706);
 
 	var _traineeTable2 = _interopRequireDefault(_traineeTable);
 
-	var _addCandidateDialog = __webpack_require__(697);
+	var _addCandidateDialog = __webpack_require__(700);
 
 	var _addCandidateDialog2 = _interopRequireDefault(_addCandidateDialog);
 
@@ -62536,13 +63001,15 @@
 	      addCandidate: props.addCandidate,
 	      tempCandidate: props.tempCandidate,
 	      setTempCandidate: props.setTempCandidate,
-	      changeTempCandidateInfo: props.changeTempCandidateInfo
+	      changeTempCandidateInfo: props.changeTempCandidateInfo,
+	      setTempCandidateComment: props.setTempCandidateComment,
+	      editCandidate: props.editCandidate
 	    })
 	  );
 	}
 
 /***/ }),
-/* 703 */
+/* 706 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62559,6 +63026,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(207);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _basicTable = __webpack_require__(621);
 
 	var _basicTable2 = _interopRequireDefault(_basicTable);
@@ -62567,7 +63038,7 @@
 
 	var _candidateControls2 = _interopRequireDefault(_candidateControls);
 
-	var _commentControls = __webpack_require__(695);
+	var _commentControls = __webpack_require__(698);
 
 	var _commentControls2 = _interopRequireDefault(_commentControls);
 
@@ -62620,6 +63091,11 @@
 	}(_react2.default.Component);
 
 	exports.default = TraineeTable;
+
+
+	TraineeTable.propTypes = {
+	  trainees: _propTypes2.default.array.isRequired
+	};
 
 /***/ })
 /******/ ]);

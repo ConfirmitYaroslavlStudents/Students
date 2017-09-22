@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 
 export default function FabButton(props) {
@@ -18,9 +19,9 @@ export default function FabButton(props) {
 }
 
 FabButton.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool,
-  class: React.PropTypes.string,
-  icon: React.PropTypes.object,
-  color: React.PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  class: PropTypes.string,
+  icon: PropTypes.object,
+  color: PropTypes.string,
 };

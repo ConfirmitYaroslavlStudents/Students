@@ -38,9 +38,10 @@ export default class FullWidthTabs extends React.Component {
         <SwipeableViews
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex.bind(this)}
+          animateHeight={true}
         >
           {this.props.tabs.map((oneTab, index) =>
-            <div key={'tab' + index}>
+            <div key={'tab' + index} className="tab-container">
               {index === this.state.value ? oneTab : <div> </div>}
             </div>
           )}

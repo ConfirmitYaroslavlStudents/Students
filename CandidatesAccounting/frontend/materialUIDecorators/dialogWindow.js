@@ -5,7 +5,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import CloseIcon from 'material-ui-icons/Close';
-import IconButton from 'material-ui/IconButton';
+import IconButton from './iconButton';
 import Slide from 'material-ui/transitions/Slide';
 import FabButton from './fabButton';
 import FlatButton from './flatButton';
@@ -47,7 +47,7 @@ export default class DialogWindow extends React.Component {
         openButton = <FabButton onClick={this.handleOpen} color="primary" icon={this.props.openButtonContent}/>;
         break;
       case 'icon':
-        openButton = <IconButton onClick={this.handleOpen}>{this.props.openButtonContent}</IconButton>;
+        openButton = <IconButton onClick={this.handleOpen} icon={this.props.openButtonContent} />;
         break;
       default:
         openButton = <FlatButton onClick={this.handleOpen} color="primary" text={this.props.openButtonContent}/>;
@@ -76,9 +76,11 @@ export default class DialogWindow extends React.Component {
 
               {acceptButton}
 
-              <IconButton color="contrast" onClick={this.handleClose} style={{marginRight: -15}} aria-label="Close">
-                <CloseIcon/>
-              </IconButton>
+              <IconButton
+                color="contrast"
+                onClick={this.handleClose}
+                style={{marginRight: -15}}
+                icon={<CloseIcon/>}/>
             </Toolbar>
           </AppBar>
 

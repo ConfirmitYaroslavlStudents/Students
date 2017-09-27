@@ -13,10 +13,10 @@ import TableTabTrainees from './tableTabTrainees';
 export default class AppView extends React.Component {
   render() {
     const labels=[
-      <NavLink to="/" className="nav-link">All</NavLink>,
-      <NavLink to="/interviewees" className="nav-link">Interviewees</NavLink>,
-      <NavLink to="/students" className="nav-link">Students</NavLink>,
-      <NavLink to="/trainees" className="nav-link">Trainees</NavLink>
+      <NavLink to="/" className="nav-link" >All</NavLink>,
+      <NavLink to="/interviewees" className="nav-link" activeStyle={{color: 'purple'}}>Interviewees</NavLink>,
+      <NavLink to="/students" className="nav-link" activeStyle={{color: 'purple'}}>Students</NavLink>,
+      <NavLink to="/trainees" className="nav-link" activeStyle={{color: 'purple'}}>Trainees</NavLink>
     ];
     const tabs=[
       <TableTabAll candidates={this.props.candidates}
@@ -39,7 +39,7 @@ export default class AppView extends React.Component {
         />
 
         <div className="footer">
-          <span>2017 Test</span>
+          <span>2017 Work in progress</span>
         </div>
       </div>
     );

@@ -27,6 +27,9 @@ export default function CommentControls(props) {
         accept={function() {
           props.editCandidate(props.candidate.id, CreateCandidate(props.tempCandidate.status, props.tempCandidate))
         }}
+        close={function() {
+          props.setTempCandidate(CreateCandidate(props.candidate.constructor.name, {}))
+        }}
       />
       <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
         <DialogWindow

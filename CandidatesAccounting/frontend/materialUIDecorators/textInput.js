@@ -33,7 +33,7 @@ export default class TextInput extends React.Component {
 }
 
 TextInput.propTypes = {
-  name: PropTypes.object,
+  name: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,

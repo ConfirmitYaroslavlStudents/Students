@@ -36,5 +36,5 @@ export default class CandidateTable extends React.Component {
 }
 
 CandidateTable.propTypes = {
-  candidates: PropTypes.array.isRequired,
+  candidates: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };

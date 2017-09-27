@@ -4,7 +4,7 @@ import AddCandidateDialog from './candidateTables/addCandidateDialog';
 
 export default function TableTabInterviewees(props) {
   return (
-    <div>
+    <div >
       <IntervieweeTable
         {...props}
       />

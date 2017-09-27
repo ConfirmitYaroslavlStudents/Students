@@ -4,7 +4,7 @@ import AddCandidateDialog from './candidateTables/addCandidateDialog';
 
 export default function TableTabStudents(props) {
   return (
-    <div>
+    <div >
       <StudentTable
         {...props}
       />

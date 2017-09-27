@@ -38,5 +38,5 @@ export default class IntervieweeTable extends React.Component {
 }
 
 IntervieweeTable.propTypes = {
-  interviewees: PropTypes.array.isRequired,
+  interviewees: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };

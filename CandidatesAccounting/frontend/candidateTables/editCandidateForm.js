@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
-import SelectMenu from '../materialUIDecorators/selectMenu';
+import SimpleSelect from '../materialUIDecorators/simpleSelect';
 import EditCommentForm from './editCommentForm';
 import EditIcon from 'material-ui-icons/ViewList';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import Badge from '../materialUIDecorators/badge';
+import styled from 'styled-components';
 
 export default class EditCandidateForm extends React.Component {
   constructor(props) {
@@ -59,11 +60,12 @@ export default class EditCandidateForm extends React.Component {
     }
 
     return (
-      <div className="candidate-edit-form">
-        <SelectMenu
+      <FormWrapper>
+
+        <SimpleSelect
           label="Candidate's status"
           options={['Interviewee', 'Student', 'Trainee']}
-          selectedOption={this.state.candidateType}
+          selected={this.state.candidateType}
           onChange={changeCandidateType}
         />
         <TextInput
@@ -106,7 +108,7 @@ export default class EditCandidateForm extends React.Component {
             </Badge>
           </div>
         }
-      </div>
+      </FormWrapper>
     );
   }
 
@@ -127,3 +129,7 @@ EditCandidateForm.propTypes = {
   editCandidate: PropTypes.func.isRequired,
   additionMode: PropTypes.bool,
 };
+
+const FormWrapper = styled.div`
+  padding: 15px;
+`;

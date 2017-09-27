@@ -38,6 +38,7 @@ switch (action.type) {
       tempCandidate.comments[action.index] = action.comment;
     }
     return state.update('tempCandidate', () => tempCandidate);
-}
+  }
+
 return state;
 }

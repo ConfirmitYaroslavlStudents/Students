@@ -36,5 +36,5 @@ export default class TraineeTable extends React.Component {
 }
 
 TraineeTable.propTypes = {
-  trainees: PropTypes.array.isRequired,
+  trainees: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };

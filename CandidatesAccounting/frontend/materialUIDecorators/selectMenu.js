@@ -69,8 +69,8 @@ export default class SelectMenu extends React.Component {
 }
 
 SelectMenu.propTypes = {
-  options: PropTypes.object.isRequired,
-  selectedOption: PropTypes.object.isRequired,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  selectedOption: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   onChange: PropTypes.func,
   label: PropTypes.string,
 };

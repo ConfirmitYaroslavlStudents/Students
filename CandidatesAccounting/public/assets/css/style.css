@@ -2,26 +2,18 @@
     margin: 10px;
 }
 
-.add-comment-btn {
-    display: inline-block;
-    width: 18%;
-    position: absolute;
-    bottom: 11px;
+body {
+    margin: 0;
+    font-family: "Roboto", "Helvetica Neue", "Arial", sans-serif;
+    font-weight: 300;
+    line-height: 1.5em;
+    color: #333;
+    background-color: #CCCCCC;
 }
 
 .button-content {
     display: flex;
     align-items: center;
-}
-
-.candidate-edit-form {
-    padding: 0 15px 15px 15px;
-}
-
-.comment {
-    display: inline-block;
-    width: 90%;
-    margin: 5px 20px;
 }
 
 .comment-badge {
@@ -30,22 +22,6 @@
     width: 19px !important;
     height: 19px !important;
     font-size: smaller !important;
-}
-
-.comment-date {
-    font-size: smaller;
-    color: dimgray;
-}
-
-.comment-text-input {
-    display: inline-block;
-    width: 82%;
-    margin-left: 20px;
-}
-
-.user-comment {
-    float: right;
-    text-align: right;
 }
 
 .custom-main {
@@ -75,7 +51,7 @@
     display: inline-block;
     position: absolute;
     width: 100%;
-    margin-top: -24px;
+    margin-top: -20px;
     padding: 5% 0;
     left: 0;
 }
@@ -86,6 +62,18 @@
     height: 48px;
 }
 
+.text-right {
+    float: right;
+}
+
+.td:last-child {
+    padding-right: 0;
+}
+
 .tab-content {
     padding: 0 20px 0 20px;
+}
+
+.tab-container {
+    padding-bottom: 80px;
 }

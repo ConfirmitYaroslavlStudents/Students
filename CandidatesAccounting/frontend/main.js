@@ -6,7 +6,7 @@ import reducer from './reducer'
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
-import purple from 'material-ui/colors/purple';
+import {deepPurple} from 'material-ui/colors';
 import { BrowserRouter, Switch, Route} from 'react-router-dom';
 import {CreateCandidate, Interviewee, Student, Trainee, Comment} from './candidates';
 import AppView from './appview';
@@ -34,7 +34,7 @@ store.dispatch({
 
 const theme = createMuiTheme({
   palette: createPalette({
-    primary: purple
+    primary: deepPurple,
   })
 });
 

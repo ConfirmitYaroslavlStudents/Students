@@ -3,20 +3,23 @@ import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import Icon from 'material-ui-icons/AccountCircle';
 
 export default function Navbar(props) {
   return (
     <AppBar className="custom-navbar" color="primary">
       <Toolbar>
-        <Typography type="title" color="inherit">
-          <Icon /> {props.title}
+        {props.icon}
+        <Typography type="title" color="inherit" style={{flex: 1}}>
+          {props.title}
         </Typography>
+        {props.controls}
       </Toolbar>
     </AppBar>
   );
 }
 
 Navbar.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  icon: PropTypes.object,
+  title: PropTypes.string,
+  controls: PropTypes.object,
 };

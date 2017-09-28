@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
 import { Comment } from '../candidates/index';
+import styled from 'styled-components';
 
 export default class AddCommentForm extends React.Component{
   constructor(props) {
@@ -11,17 +12,15 @@ export default class AddCommentForm extends React.Component{
 
   render() {
     return (
-      <div style={{width: 400, margin: '0px 10px 10px 10px'}}>
-        <div style={{display: 'inline-block', width: '100%'}}>
-          <TextInput
-            name="comment"
-            autoFocus={true}
-            multiline={true}
-            placeholder="New comment"
-            onChange={this.changeCommentText}
-          />
-        </div>
-      </div>
+      <FormWrapper>
+        <TextInput
+          name="comment"
+          autoFocus={true}
+          multiline={true}
+          placeholder="New comment"
+          onChange={this.changeCommentText}
+        />
+      </FormWrapper>
     );
   }
 
@@ -38,3 +37,8 @@ AddCommentForm.propTypes = {
   commentIndex: PropTypes.number.isRequired,
   setTempCandidateComment: PropTypes.func.isRequired,
 };
+
+const FormWrapper = styled.div`
+  width: 500px;
+  margin: 0px 10px 10px;
+`;

@@ -9,14 +9,16 @@ import TableTabAll from './tableTabAll';
 import TableTabInterviewees from './tableTabInterviewees';
 import TableTabStudents from './tableTabStudents';
 import TableTabTrainees from './tableTabTrainees';
+import Logo from 'material-ui-icons/AccountCircle';
+import FlatButton from './materialUIDecorators/flatButton';
 
 export default class AppView extends React.Component {
   render() {
     const labels=[
-      <NavLink to="/" className="nav-link" >All</NavLink>,
-      <NavLink to="/interviewees" className="nav-link" activeStyle={{color: 'purple'}}>Interviewees</NavLink>,
-      <NavLink to="/students" className="nav-link" activeStyle={{color: 'purple'}}>Students</NavLink>,
-      <NavLink to="/trainees" className="nav-link" activeStyle={{color: 'purple'}}>Trainees</NavLink>
+      <NavLink exact to="/" className="nav-link" activeStyle={{color: '#673AB7'}}>All</NavLink>,
+      <NavLink to="/interviewees" className="nav-link" activeStyle={{color: '#673AB7'}}>Interviewees</NavLink>,
+      <NavLink to="/students" className="nav-link" activeStyle={{color: '#673AB7'}}>Students</NavLink>,
+      <NavLink to="/trainees" className="nav-link" activeStyle={{color: '#673AB7'}}>Trainees</NavLink>
     ];
     const tabs=[
       <TableTabAll candidates={this.props.candidates}
@@ -30,7 +32,7 @@ export default class AppView extends React.Component {
     ];
     return (
       <div>
-        <Navbar title="Candidate Accounting"/>
+        <Navbar icon={<Logo />} title="Candidate Accounting" controls={<FlatButton color="contrast" onClick={()=>alert('TODO')} text="Sign out"/>}/>
 
         <FullWidthTabs
           selected={this.props.selectedTab}

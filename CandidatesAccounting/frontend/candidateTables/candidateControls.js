@@ -16,6 +16,7 @@ export default function CandidateControls(props) {
             setTempCandidateComment={props.setTempCandidateComment}
             editCandidate={props.editCandidate}
             tempCandidate={props.tempCandidate}
+            setTempCandidate={props.setTempCandidate}
           />}
         label="Candidate edit"
         openButtonContent="Edit"

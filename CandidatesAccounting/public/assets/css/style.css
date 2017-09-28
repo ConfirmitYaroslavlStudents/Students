@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    font-family: "Roboto", "Helvetica Neue", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 300;
     line-height: 1.5em;
     color: #333;
@@ -25,13 +25,13 @@ body {
 }
 
 .custom-main {
-    margin-top: 118px;
+    margin-top: 112px;
 }
 
 .custom-navbar {
     position: fixed;
     z-index: 100;
-    height: 70px;
+    height: 64px;
 }
 
 .float-right {
@@ -56,9 +56,17 @@ body {
     left: 0;
 }
 
+.nav-link:hover {
+    color: #673AB7;
+}
+
+.sign-btn {
+    color: white;
+}
+
 .tabs-bar {
     position: fixed;
-    margin-top: 70px;
+    margin-top: 64px;
     height: 48px;
 }
 

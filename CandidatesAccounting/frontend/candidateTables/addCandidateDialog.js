@@ -13,9 +13,10 @@ export default function AddCandidateDialog(props) {
           <EditCandidateForm
             additionMode={true}
             changeTempCandidateInfo={props.changeTempCandidateInfo}
-            tempCandidate={props.tempCandidate}
             setTempCandidateComment={props.setTempCandidateComment}
             editCandidate={props.editCandidate}
+            tempCandidate={props.tempCandidate}
+            setTempCandidate={props.setTempCandidate}
           />
         }
         label="Add new candidate"

@@ -6,6 +6,7 @@ import EditCommentForm from './editCommentForm';
 import EditIcon from 'material-ui-icons/ViewList';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import Badge from '../materialUIDecorators/badge';
+import {CreateCandidate} from '../candidates';
 import styled from 'styled-components';
 
 export default class EditCandidateForm extends React.Component {
@@ -58,7 +59,6 @@ export default class EditCandidateForm extends React.Component {
         </div>;
         break;
     }
-
     return (
       <FormWrapper>
 
@@ -118,12 +118,13 @@ export default class EditCandidateForm extends React.Component {
 
   changeCandidateType(type) {
     this.setState({ candidateType: type });
-    this.props.changeTempCandidateInfo('status', type);
+    this.props.setTempCandidate(CreateCandidate(type, this.props.tempCandidate));
   }
 }
 
 EditCandidateForm.propTypes = {
   tempCandidate: PropTypes.object.isRequired,
+  setTempCandidate: PropTypes.func.isRequired,
   setTempCandidateComment: PropTypes.func.isRequired,
   changeTempCandidateInfo: PropTypes.func.isRequired,
   editCandidate: PropTypes.func.isRequired,
@@ -131,5 +132,5 @@ EditCandidateForm.propTypes = {
 };
 
 const FormWrapper = styled.div`
-  padding: 15px;
+  padding: 15px 15px 5px;
 `;

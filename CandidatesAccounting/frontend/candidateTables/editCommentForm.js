@@ -34,7 +34,7 @@ export default class EditCommentForm extends React.Component {
             </DeleteComment>
           </CommentIcons>
           <CommentMount userComment>
-            <div style={{wordWrap: 'break-word'}}>{comment.text}</div>
+            <CommentText>{comment.text}</CommentText>
             <CommentFooter>{comment.date} <AuthorName right>{comment.author}</AuthorName></CommentFooter>
           </CommentMount>
         </CommentWrapper>
@@ -44,14 +44,14 @@ export default class EditCommentForm extends React.Component {
             <AvatarIcon />
           </CommentIcons>
           <CommentMount>
-            <div style={{wordWrap: 'break-word'}}>{comment.text}</div>
+            <CommentText>{comment.text}</CommentText>
             <CommentFooter right><AuthorName>{comment.author}</AuthorName> {comment.date}</CommentFooter>
           </CommentMount>
         </CommentWrapper>
     );
 
     if (this.props.candidate.comments.length === 0) {
-      comments = <NoComment><p>There is no any comment</p></NoComment>
+      comments = <NoComment><p>No comments</p></NoComment>
     }
 
     return (
@@ -137,7 +137,7 @@ const CommentIcons = styled.div`
 
 const CommentMount = styled.div`
   display: inline-block;
-  padding: 7px;
+  padding: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   max-width: 70%;
   float: left;
@@ -148,6 +148,10 @@ const CommentMount = styled.div`
 		float: right;
 		border-radius: 7px 2px 7px 7px;
 	`}
+`;
+
+const CommentText = styled.div`
+  word-wrap: break-word;
 `;
 
 const CommentFooter = styled.div`  

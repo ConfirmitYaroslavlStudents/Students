@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
-import CandidateRowControls from './candidateControls';
+import CandidateControls from './candidateControls';
 import CommentControls from './commentControls';
 
 export default class CandidateTable extends React.Component {
@@ -30,7 +30,7 @@ export default class CandidateTable extends React.Component {
       candidate.birthDate,
       candidate.email,
       <CommentControls candidate={candidate} {...this.props} />,
-      <CandidateRowControls candidate={candidate} {...this.props}/>
+      <CandidateControls candidate={candidate} {...this.props}/>
     ];
   }
 }

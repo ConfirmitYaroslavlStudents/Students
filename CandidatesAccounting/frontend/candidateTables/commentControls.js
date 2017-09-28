@@ -16,6 +16,7 @@ export default function CommentControls(props) {
           <AddCommentForm
             commentIndex={props.candidate.comments.length}
             setTempCandidateComment={props.setTempCandidateComment}
+            candidate={props.candidate}
           />}
         label="Add new comment"
         openButtonType="icon"
@@ -28,7 +29,7 @@ export default function CommentControls(props) {
           props.editCandidate(props.candidate.id, CreateCandidate(props.tempCandidate.status, props.tempCandidate))
         }}
         close={function() {
-          props.setTempCandidate(CreateCandidate(props.candidate.constructor.name, {}))
+          props.setTempCandidate(CreateCandidate(props.candidate.constructor.name, {}));
         }}
       />
       <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">

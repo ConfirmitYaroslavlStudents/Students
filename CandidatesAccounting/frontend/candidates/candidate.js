@@ -6,7 +6,9 @@ export default class Candidate {
     this.email = email;
     this.comments = [];
     if (comments) {
-      this.comments = comments;
+      for (let i = 0; i < comments.length; i++) {
+        this.comments.push(comments[i]);
+      }
     }
   }
 }

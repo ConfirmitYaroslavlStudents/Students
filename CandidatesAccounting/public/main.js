@@ -36427,7 +36427,9 @@
 	  this.email = email;
 	  this.comments = [];
 	  if (comments) {
-	    this.comments = comments;
+	    for (var i = 0; i < comments.length; i++) {
+	      this.comments.push(comments[i]);
+	    }
 	  }
 	};
 
@@ -67592,7 +67594,8 @@
 	    _react2.default.createElement(_dialogWindow2.default, {
 	      content: _react2.default.createElement(_addCommentForm2.default, {
 	        commentIndex: props.candidate.comments.length,
-	        setTempCandidateComment: props.setTempCandidateComment
+	        setTempCandidateComment: props.setTempCandidateComment,
+	        candidate: props.candidate
 	      }),
 	      label: 'Add new comment',
 	      openButtonType: 'icon',

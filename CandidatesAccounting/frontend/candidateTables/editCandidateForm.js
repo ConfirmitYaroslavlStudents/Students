@@ -18,6 +18,7 @@ export default class EditCandidateForm extends React.Component {
   }
 
   render() {
+    console.log('ECndF render');
     const changeInfo = this.changeInfo;
     const changeCandidateType = this.changeCandidateType;
     let specialFields;

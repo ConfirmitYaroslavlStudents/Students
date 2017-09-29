@@ -19,6 +19,7 @@ export default class AddCommentForm extends React.Component{
           multiline={true}
           placeholder="New comment"
           onChange={this.changeCommentText}
+          value=""
         />
       </FormWrapper>
     );

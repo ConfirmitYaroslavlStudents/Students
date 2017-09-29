@@ -37048,7 +37048,7 @@
 /* 394 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -37059,10 +37059,10 @@
 	var Candidate = function Candidate(id, name, birthDate, email, comments) {
 	  _classCallCheck(this, Candidate);
 
-	  this.id = id;
-	  this.name = name;
-	  this.birthDate = birthDate;
-	  this.email = email;
+	  this.id = id ? id : '';
+	  this.name = name ? name : '';
+	  this.birthDate = birthDate ? birthDate : '';
+	  this.email = email ? email : '';
 	  this.comments = [];
 	  if (comments) {
 	    for (var i = 0; i < comments.length; i++) {
@@ -37103,8 +37103,8 @@
 
 	    var _this = _possibleConstructorReturn(this, (Interviewee.__proto__ || Object.getPrototypeOf(Interviewee)).call(this, id, name, birthDate, email, comments));
 
-	    _this.interviewDate = interviewDate;
-	    _this.interviewRoom = interviewRoom;
+	    _this.interviewDate = interviewDate ? interviewDate : '';
+	    _this.interviewRoom = interviewRoom ? interviewRoom : '';
 	    return _this;
 	  }
 
@@ -37143,7 +37143,7 @@
 
 	    var _this = _possibleConstructorReturn(this, (Student.__proto__ || Object.getPrototypeOf(Student)).call(this, id, name, birthDate, email, comments));
 
-	    _this.groupName = groupName;
+	    _this.groupName = groupName ? groupName : '';
 	    return _this;
 	  }
 
@@ -37182,7 +37182,7 @@
 
 	    var _this = _possibleConstructorReturn(this, (Trainee.__proto__ || Object.getPrototypeOf(Trainee)).call(this, id, name, birthDate, email, comments));
 
-	    _this.mentor = mentor;
+	    _this.mentor = mentor ? mentor : '';
 	    return _this;
 	  }
 
@@ -37195,7 +37195,7 @@
 /* 398 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -37206,9 +37206,9 @@
 	var Comment = function Comment(author, date, text) {
 	  _classCallCheck(this, Comment);
 
-	  this.author = author;
-	  this.date = date;
-	  this.text = text;
+	  this.author = author ? author : '';
+	  this.date = date ? date : '';
+	  this.text = text ? text : '';
 	};
 
 	exports.default = Comment;
@@ -58079,6 +58079,7 @@
 	  _createClass(EditCandidateForm, [{
 	    key: 'render',
 	    value: function render() {
+	      console.log('ECndF render');
 	      var changeInfo = this.changeInfo;
 	      var changeCandidateType = this.changeCandidateType;
 	      var specialFields = void 0;
@@ -58259,7 +58260,7 @@
 	    var _this = _possibleConstructorReturn(this, (TextInput.__proto__ || Object.getPrototypeOf(TextInput)).call(this, props));
 
 	    var value = props.value ? props.value : '';
-	    _this.state = { value: value };
+	    _this.state = { value: value, defaultValue: value };
 	    _this.handleChange = _this.handleChange.bind(_this);
 	    return _this;
 	  }
@@ -58267,11 +58268,17 @@
 	  _createClass(TextInput, [{
 	    key: 'render',
 	    value: function render() {
+	      if (this.props.value !== this.state.defaultValue) {
+	        var value = this.props.value ? this.props.value : '';
+	        this.state = { value: value, defaultValue: value };
+	      }
+	      console.log(this.state.value);
+	      console.log('______________');
 	      return _react2.default.createElement(_TextField2.default, {
 	        id: this.props.name,
 	        label: this.props.label,
 	        placeholder: this.props.placeholder,
-	        value: !this.props.value || this.props.value === '' ? '' : this.state.value,
+	        value: this.state.value,
 	        onChange: this.handleChange,
 	        multiline: this.props.multiline,
 	        fullWidth: true,
@@ -58282,7 +58289,7 @@
 	  }, {
 	    key: 'handleChange',
 	    value: function handleChange(e) {
-	      this.setState({ value: e.target.value });
+	      this.setState({ value: e.target.value, defaultValue: this.state.defaultValue });
 	      this.props.onChange(e.target.value);
 	    }
 	  }]);
@@ -58295,7 +58302,7 @@
 
 	TextInput.propTypes = {
 	  name: _propTypes2.default.string,
-	  value: _propTypes2.default.string,
+	  value: _propTypes2.default.string.isRequired,
 	  onChange: _propTypes2.default.func.isRequired,
 	  label: _propTypes2.default.string,
 	  placeholder: _propTypes2.default.string,
@@ -68364,7 +68371,8 @@
 	          autoFocus: true,
 	          multiline: true,
 	          placeholder: 'New comment',
-	          onChange: this.changeCommentText
+	          onChange: this.changeCommentText,
+	          value: ''
 	        })
 	      );
 	    }

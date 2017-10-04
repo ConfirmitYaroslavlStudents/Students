@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateControls from './candidateControls';
-import CommentControls from './commentControls';
 
 export default class CandidateTable extends React.Component {
   constructor(props) {
@@ -16,7 +15,7 @@ export default class CandidateTable extends React.Component {
     ));
 
     return <BasicTable
-      heads={['#', 'Name', 'Status', 'Birth Date', 'E-mail', 'Comments', <span className="float-right">Actions</span>]}
+      heads={['#', 'Name', 'Status', 'Birth Date', 'E-mail', <span className="float-right">Actions</span>]}
       contentRows={rows}
     />
   }
@@ -29,7 +28,6 @@ export default class CandidateTable extends React.Component {
       candidate.constructor.name,
       candidate.birthDate,
       candidate.email,
-      <CommentControls candidate={candidate} {...this.props} />,
       <CandidateControls candidate={candidate} {...this.props}/>
     ];
   }

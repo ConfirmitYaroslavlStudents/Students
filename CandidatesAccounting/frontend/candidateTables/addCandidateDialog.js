@@ -7,7 +7,7 @@ import EditCandidateForm from './editCandidateForm';
 
 export default function AddCandidateDialog(props) {
   return (
-    <div className="add-btn float-right">
+    <div className="add-btn">
       <DialogWindow
         content={
           <EditCandidateForm
@@ -20,8 +20,8 @@ export default function AddCandidateDialog(props) {
           />
         }
         label="Add new candidate"
-        openButtonType="fab"
-        openButtonContent={<AddIcon/>}
+        openButtonType="flat"
+        openButtonContent={<div className="button-content"><AddIcon/> new candidate</div>}
         acceptButtonContent={<div className="button-content"><AddIcon/> <span style={{marginTop: 3}}>add</span></div>}
         open={function() {
           props.setTempCandidate(CreateCandidate(props.candidateType, {}));

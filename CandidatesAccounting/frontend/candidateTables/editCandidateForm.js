@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
 import SimpleSelect from '../materialUIDecorators/simpleSelect';
-import EditCommentForm from './editCommentForm';
+import EditCommentForm from '../commentsForm';
 import EditIcon from 'material-ui-icons/ViewList';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import Badge from '../materialUIDecorators/badge';
@@ -18,7 +18,6 @@ export default class EditCandidateForm extends React.Component {
   }
 
   render() {
-    console.log('ECndF render');
     const changeInfo = this.changeInfo;
     const changeCandidateType = this.changeCandidateType;
     let specialFields;
@@ -30,13 +29,15 @@ export default class EditCandidateForm extends React.Component {
             label="Interview date"
             value={this.props.tempCandidate.interviewDate}
             placeholder="dd.mm.yyyy hh:mm"
-            onChange={function(value) {changeInfo('interviewDate', value)}}/>
+            onChange={function(value) {changeInfo('interviewDate', value)}}
+            multiline={true}/>
           <TextInput
             name="interviewRoom"
             label="Interview room"
             value={this.props.tempCandidate.interviewRoom}
             placeholder="interview placement"
-            onChange={function(value) {changeInfo('interviewRoom', value)}}/>
+            onChange={function(value) {changeInfo('interviewRoom', value)}}
+            multiline={true}/>
         </div>;
         break;
 
@@ -46,7 +47,8 @@ export default class EditCandidateForm extends React.Component {
             name="groupName"
             label="Group name"
             value={this.props.tempCandidate.groupName}
-            onChange={function(value) {changeInfo('groupName', value)}}/>
+            onChange={function(value) {changeInfo('groupName', value)}}
+            multiline={true}/>
         </div>;
         break;
 
@@ -56,7 +58,8 @@ export default class EditCandidateForm extends React.Component {
             name="mentor"
             label="Mentor's name"
             value={this.props.tempCandidate.mentor}
-            onChange={function(value) {changeInfo('mentor', value)}}/>
+            onChange={function(value) {changeInfo('mentor', value)}}
+            multiline={true}/>
         </div>;
         break;
     }
@@ -74,19 +77,22 @@ export default class EditCandidateForm extends React.Component {
           label="Name"
           value={this.props.tempCandidate.name}
           onChange={function(value) {changeInfo('name', value)}}
-          autoFocus={true}/>
+          autoFocus={true}
+          multiline={true}/>
         <TextInput
           name="birthDate"
           label="Birth date"
           value={this.props.tempCandidate.birthDate}
           placeholder="dd.mm.yyyy"
-          onChange={function(value) {changeInfo('birthDate', value)}}/>
+          onChange={function(value) {changeInfo('birthDate', value)}}
+          multiline={true}/>
         <TextInput
           name="email"
           label="E-mail"
           value={this.props.tempCandidate.email}
           placeholder="example@mail.com"
-          onChange={function(value) {changeInfo('email', value)}}/>
+          onChange={function(value) {changeInfo('email', value)}}
+          multiline={true}/>
 
         {specialFields}
 

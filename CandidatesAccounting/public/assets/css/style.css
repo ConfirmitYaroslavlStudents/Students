@@ -1,5 +1,7 @@
 .add-btn {
-    margin: 10px;
+    position: absolute;
+    right: 1px;
+    top: 1px;
 }
 
 body {
@@ -51,8 +53,9 @@ body {
     display: inline-block;
     position: absolute;
     width: 100%;
-    margin-top: -20px;
-    padding: 5% 0;
+    height: 100%;
+    padding: 16px 0;
+    top: 0;
     left: 0;
 }
 
@@ -60,18 +63,12 @@ body {
     color: #673AB7;
 }
 
-.sign-btn {
-    color: white;
-}
-
 .tabs-bar {
     position: fixed;
+    width: 100%;
     margin-top: 64px;
     height: 48px;
-}
-
-.text-right {
-    float: right;
+    flex-direction: row !important;
 }
 
 .td:last-child {

@@ -1,47 +1,68 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import actions from './actions';
 import Navbar from './materialUIDecorators/navbar';
-import FullWidthTabs from './materialUIDecorators/fullWidthTabs';
 import TableTabAll from './tableTabAll';
 import TableTabInterviewees from './tableTabInterviewees';
 import TableTabStudents from './tableTabStudents';
 import TableTabTrainees from './tableTabTrainees';
 import Logo from 'material-ui-icons/AccountCircle';
 import FlatButton from './materialUIDecorators/flatButton';
+import TablesBar from './tablesBar';
+import EditCommentForm from './commentsForm';
 
 export default class AppView extends React.Component {
   render() {
-    const labels=[
-      <NavLink exact to="/" className="nav-link" activeStyle={{color: '#673AB7'}}>All</NavLink>,
-      <NavLink to="/interviewees" className="nav-link" activeStyle={{color: '#673AB7'}}>Interviewees</NavLink>,
-      <NavLink to="/students" className="nav-link" activeStyle={{color: '#673AB7'}}>Students</NavLink>,
-      <NavLink to="/trainees" className="nav-link" activeStyle={{color: '#673AB7'}}>Trainees</NavLink>
-    ];
-    const tabs=[
-      <TableTabAll candidates={this.props.candidates}
-                   {...this.props}/>,
-      <TableTabInterviewees interviewees={this.props.candidates.filter((c) => c.constructor.name === 'Interviewee')}
-                          {...this.props}/>,
-      <TableTabStudents students={this.props.candidates.filter((c) => c.constructor.name === 'Student')}
-                        {...this.props}/>,
-      <TableTabTrainees trainees={this.props.candidates.filter((c) => c.constructor.name === 'Trainee')}
-                        {...this.props}/>
-    ];
+    let props = this.props;
+    let candidateId = 0;
+    const currentLocation = props.location.pathname.split('/');
+    let selectedTableNumber = 0;
+    let newCandidateDefaultType = 'Interviewee';
+    switch (currentLocation[1]) {
+      case 'interviewees':
+        selectedTableNumber = 1;
+        newCandidateDefaultType = 'Interviewee';
+        break;
+      case 'students':
+        selectedTableNumber = 2;
+        newCandidateDefaultType = 'Student';
+        break;
+      case 'trainees':
+        selectedTableNumber = 3;
+        newCandidateDefaultType = 'Trainee';
+        break;
+    }
+    if (currentLocation[2]) {
+      candidateId = parseInt(currentLocation[2]);
+    }
     return (
       <div>
-        <Navbar icon={<Logo />} title="Candidate Accounting" controls={<FlatButton color="contrast" onClick={()=>alert('TODO')} text="Sign out"/>}/>
-
-        <FullWidthTabs
-          selected={this.props.selectedTab}
-          labels={ labels }
-          tabs={tabs}
+        <Navbar
+          icon={<Logo />}
+          title="Candidate Accounting"
+          controls={<FlatButton color="contrast" onClick={()=>alert('TODO')} text="Sign out"/>}
         />
-
-        <div className="footer">
-          <span>2017 Work in progress</span>
+        <TablesBar
+          selected={selectedTableNumber}
+          newCandidateDefaultType = {newCandidateDefaultType}
+          {...this.props}
+        />
+        <div className="custom-main">
+          <Switch>
+            <Route exact path="/" render={() =>
+              <TableTabAll {...this.props}/>}/>
+            <Route exact path="/interviewees" render={() =>
+              <TableTabInterviewees {...this.props}/>}/>
+            <Route exact path="/students" render={() =>
+              <TableTabStudents {...this.props}/>}/>
+            <Route exact path="/trainees" render={() =>
+              <TableTabTrainees {...this.props}/>}/>
+            <Route path="/*/comments" render={() =>
+              <EditCommentForm
+                candidate={props.candidates.toArray()[candidateId - 1]}
+                editCandidate={props.editCandidate} />} />
+          </Switch>
         </div>
       </div>
     );
@@ -54,9 +75,5 @@ function mapStateToProps(state) {
     tempCandidate: state.get('tempCandidate')
   };
 }
-
-AppView.propTypes = {
-  selectedTab: PropTypes.number.isRequired,
-};
 
 module.exports = connect(mapStateToProps, actions)(AppView);

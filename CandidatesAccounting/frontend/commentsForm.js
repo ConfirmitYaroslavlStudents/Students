@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AvatarIcon from 'material-ui-icons/AccountCircle';
-import TextInput from '../materialUIDecorators/textInput';
-import IconButton from '../materialUIDecorators/iconButton';
+import TextInput from './materialUIDecorators/textInput';
+import IconButton from './materialUIDecorators/iconButton';
 import AddIcon from 'material-ui-icons/Add';
-import {Comment} from '../candidates';
+import {Comment} from './candidates/index';
 import RemoveIcon from 'material-ui-icons/Delete';
 import styled, { css } from 'styled-components';
+import moment from 'moment';
 
-export default class EditCommentForm extends React.Component {
+export default class CommentsForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({newCommentText: ''});
@@ -34,7 +35,9 @@ export default class EditCommentForm extends React.Component {
             </DeleteComment>
           </CommentIcons>
           <CommentMount userComment>
-            <CommentText>{comment.text}</CommentText>
+            <CommentText>{comment.text.split(/[\n\r]/).map((line, index) =>
+              (<span key={index}>{line}<br/></span>))}
+            </CommentText>
             <CommentFooter>{comment.date} <AuthorName right>{comment.author}</AuthorName></CommentFooter>
           </CommentMount>
         </CommentWrapper>
@@ -44,7 +47,9 @@ export default class EditCommentForm extends React.Component {
             <AvatarIcon />
           </CommentIcons>
           <CommentMount>
-            <CommentText>{comment.text}</CommentText>
+            <CommentText>{comment.text.split(['\n']).map((line, index) =>
+              (<span key={index}>{line}<br/></span>))}
+            </CommentText>
             <CommentFooter right><AuthorName>{comment.author}</AuthorName> {comment.date}</CommentFooter>
           </CommentMount>
         </CommentWrapper>
@@ -91,7 +96,7 @@ export default class EditCommentForm extends React.Component {
       let candidate = this.props.candidate;
       candidate.comments.push(new Comment(
         'Вы',
-        date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear(),
+        moment().format('H:MM:SS DD MMMM YYYY'),
         this.state.newCommentText));
       this.props.editCandidate(this.props.candidate.id, candidate);
       this.setState({newCommentText: ''})
@@ -105,15 +110,15 @@ export default class EditCommentForm extends React.Component {
   }
 }
 
-EditCommentForm.propTypes = {
+CommentsForm.propTypes = {
   candidate: PropTypes.object.isRequired,
   editCandidate: PropTypes.func.isRequired,
 };
 
 const FormWrapper = styled.div`
   display: 'inline-block';
-  width: 500px;
-  padding: 20px 0;
+  width: 100%;
+  padding-top: 20px;
   background: #EEE;
 `;
 
@@ -125,13 +130,12 @@ const CommentWrapper = styled.div`
 
 const CommentIcons = styled.div`
   display: inline-block;
-  width: 10%;
   float: left;
-  margin: 0 -10px 0 8px;
-  
+  margin: 0 10px 0 10px;
+    
   ${props => props.right && css`
 		float: right;
-		margin: 0 8x 0 -10px;
+		margin: 0 0 0 10px;
 	`}
 `;
 
@@ -188,23 +192,21 @@ const NoComment = styled.div`
 
 const AddCommentWrapper = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  position: relative;
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: -20px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   clear: both;
   background: #FFF;
 `;
 
-const CommentTextInput = styled.div`  
-  display: inline-block;
-  width: 86%;
-  margin-left: 20px;
+const CommentTextInput = styled.div`
+  padding-left: 20px;
+  padding-right: 56px;
 `;
 
 const AddCommentButton = styled.div`
   display: inline-block;
-  width: 14%;
   position: absolute;
-  bottom: 11px;
+  right: 10px;
+  bottom: 10px;
  `;

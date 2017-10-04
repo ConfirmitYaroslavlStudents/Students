@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
 import { Comment } from '../candidates/index';
 import styled from 'styled-components';
+import moment from 'moment';
 
 export default class AddCommentForm extends React.Component{
   constructor(props) {
@@ -26,10 +27,9 @@ export default class AddCommentForm extends React.Component{
   }
 
   changeCommentText(text) {
-    let date = new Date();
     this.props.setTempCandidateComment(this.props.commentIndex, new Comment(
       'Вы',
-      date.getHours() + ':' + date.getMinutes() + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear(),
+      moment().format('H:MM:SS DD MMMM YYYY'),
       text));
   }
 }

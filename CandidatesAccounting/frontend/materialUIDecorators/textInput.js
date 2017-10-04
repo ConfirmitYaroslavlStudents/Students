@@ -15,8 +15,6 @@ export default class TextInput extends React.Component {
       const value = this.props.value ? this.props.value : '';
       this.state = ({ value: value, defaultValue: value });
     }
-    console.log(this.state.value);
-    console.log('______________');
     return (
       <TextField
         id={this.props.name}

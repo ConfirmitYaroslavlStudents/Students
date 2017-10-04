@@ -8,7 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import {deepPurple} from 'material-ui/colors';
 import { BrowserRouter, Route} from 'react-router-dom';
-import {CreateCandidate, Interviewee, Student, Trainee, Comment} from './candidates';
+import {Interviewee, Student, Trainee, Comment} from './candidates';
 import AppView from './appview';
 
 const store = createStore(
@@ -30,8 +30,7 @@ store.dispatch({
         [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №4')], 'Евгений Иванов'),
       new Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com',
         [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №5')], 'Евгения Иванова'),
-    ],
-    tempCandidate: CreateCandidate('Candidate', {})
+    ]
   }
 });
 

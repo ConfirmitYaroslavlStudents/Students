@@ -15,7 +15,6 @@ import EditCommentForm from './commentsForm';
 export default class AppView extends React.Component {
   render() {
     let props = this.props;
-    let candidateId = 0;
     const currentLocation = props.location.pathname.split('/');
     let selectedTableNumber = 0;
     let newCandidateDefaultType = 'Interviewee';
@@ -33,9 +32,12 @@ export default class AppView extends React.Component {
         newCandidateDefaultType = 'Trainee';
         break;
     }
-    if (currentLocation[2]) {
+
+    let candidateId = 0;
+    if (currentLocation[2] !== '') {
       candidateId = parseInt(currentLocation[2]);
     }
+
     return (
       <div>
         <Navbar
@@ -46,7 +48,7 @@ export default class AppView extends React.Component {
         <TablesBar
           selected={selectedTableNumber}
           newCandidateDefaultType = {newCandidateDefaultType}
-          {...this.props}
+          addCandidate={this.props.addCandidate}
         />
         <div className="custom-main">
           <Switch>
@@ -61,7 +63,8 @@ export default class AppView extends React.Component {
             <Route path="/*/comments" render={() =>
               <EditCommentForm
                 candidate={props.candidates.toArray()[candidateId - 1]}
-                editCandidate={props.editCandidate} />} />
+                addComment={props.addComment}
+                deleteComment={props.deleteComment}/>} />
           </Switch>
         </div>
       </div>
@@ -71,8 +74,7 @@ export default class AppView extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    candidates: state.get('candidates'),
-    tempCandidate: state.get('tempCandidate')
+    candidates: state.get('candidates')
   };
 }
 

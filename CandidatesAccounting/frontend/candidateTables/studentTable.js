@@ -15,7 +15,7 @@ export default class StudentTable extends React.Component {
     ));
 
     return <BasicTable
-      heads={ ['#', 'Name', 'Birth Date', 'E-mail', 'Group Name', <span className="float-right">Actions</span>] }
+      heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group Name', <span className="float-right">Actions</span>] }
       contentRows={rows}
     />
   }
@@ -25,8 +25,8 @@ export default class StudentTable extends React.Component {
     return [
       index + 1,
       student.name,
-      student.birthDate,
       student.email,
+      student.birthDate,
       student.groupName,
       <CandidateRowControls candidate={student} {...this.props}/>
     ];

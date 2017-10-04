@@ -15,7 +15,7 @@ export default class IntervieweeTable extends React.Component {
     ));
 
     return <BasicTable
-      heads={ ['#', 'Name', 'Birth Date', 'E-mail', 'Interview date', 'Interview room',
+      heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Interview date', 'Interview room',
         <span className="float-right">Actions</span>] }
       contentRows={rows}
     />
@@ -26,8 +26,8 @@ export default class IntervieweeTable extends React.Component {
     return [
       index + 1,
       interviewee.name,
-      interviewee.birthDate,
       interviewee.email,
+      interviewee.birthDate,
       interviewee.interviewDate,
       interviewee.interviewRoom,
       <CandidateRowControls candidate={interviewee} {...this.props}/>

@@ -27,10 +27,13 @@ export default class DialogWindow extends React.Component {
   };
 
   handleAccept() {
+    let accepted = true;
     if (this.props.accept) {
-      this.props.accept();
+      accepted = this.props.accept();
     }
-    this.setState({ open: false });
+    if (accepted !== false) {
+      this.setState({open: false});
+    }
   }
 
   handleClose() {

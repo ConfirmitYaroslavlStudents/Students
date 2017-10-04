@@ -15,7 +15,7 @@ export default class CandidateTable extends React.Component {
     ));
 
     return <BasicTable
-      heads={['#', 'Name', 'Status', 'Birth Date', 'E-mail', <span className="float-right">Actions</span>]}
+      heads={['#', 'Name', 'Status', 'E-mail', 'Birth Date', <span className="float-right">Actions</span>]}
       contentRows={rows}
     />
   }
@@ -26,8 +26,8 @@ export default class CandidateTable extends React.Component {
       index + 1,
       candidate.name,
       candidate.constructor.name,
-      candidate.birthDate,
       candidate.email,
+      candidate.birthDate,
       <CandidateControls candidate={candidate} {...this.props}/>
     ];
   }

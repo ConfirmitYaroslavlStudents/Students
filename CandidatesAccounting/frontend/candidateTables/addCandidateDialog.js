@@ -1,47 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import {CreateCandidate} from '../candidates/index';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddIcon from 'material-ui-icons/Add';
-import EditCandidateForm from './editCandidateForm';
+import EditCandidateInfoForm from './editCandidateInfoForm';
 
-export default function AddCandidateDialog(props) {
-  return (
-    <div className="add-btn">
-      <DialogWindow
-        content={
-          <EditCandidateForm
-            additionMode={true}
-            changeTempCandidateInfo={props.changeTempCandidateInfo}
-            setTempCandidateComment={props.setTempCandidateComment}
-            editCandidate={props.editCandidate}
-            tempCandidate={props.tempCandidate}
-            setTempCandidate={props.setTempCandidate}
-          />
-        }
-        label="Add new candidate"
-        openButtonType="flat"
-        openButtonContent={<div className="button-content"><AddIcon/> new candidate</div>}
-        acceptButtonContent={<div className="button-content"><AddIcon/> <span style={{marginTop: 3}}>add</span></div>}
-        open={function() {
-          props.setTempCandidate(CreateCandidate(props.candidateType, {}));
-        }}
-        accept={function() {
-          props.addCandidate(CreateCandidate(props.tempCandidate.status, props.tempCandidate))
-        }}
-        close={function() {
-          props.setTempCandidate(CreateCandidate(props.candidateType, {}));
-        }}
-      />
-    </div>);
+export default class AddCandidateDialog extends React.Component{
+  constructor(props) {
+    super(props);
+    let newCandidate = CreateCandidate(props.candidateStatus, {});
+    newCandidate.status = props.candidateStatus;
+    this.candidate = newCandidate;
+  }
+
+  render() {
+    let candidate = this.candidate;
+    const props = this.props;
+    let newCandidate = CreateCandidate(props.candidateStatus, {});
+    newCandidate.status = props.candidateStatus;
+    candidate = newCandidate;
+    return (
+      <AddButtonWrapper>
+        <DialogWindow
+          content={
+            <EditCandidateInfoForm
+              additionMode={true}
+              candidate={candidate}
+            />
+          }
+          label="Add new candidate"
+          openButtonType="flat"
+          openButtonContent={<div className="button-content"><AddIcon/> new candidate</div>}
+          acceptButtonContent={<div className="button-content"><AddIcon/> <span style={{marginTop: 3}}>add</span></div>}
+          accept={function () {
+            props.addCandidate(CreateCandidate(candidate.status, candidate));
+            return true;
+          }}
+        />
+      </AddButtonWrapper>);
+  }
 }
 
 AddCandidateDialog.propTypes = {
   addCandidate: PropTypes.func.isRequired,
-  candidateType: PropTypes.string.isRequired,
-  tempCandidate: PropTypes.object.isRequired,
-  setTempCandidate: PropTypes.func.isRequired,
-  changeTempCandidateInfo: PropTypes.func.isRequired,
-  setTempCandidateComment: PropTypes.func.isRequired,
-  editCandidate: PropTypes.func.isRequired,
+  candidateStatus: PropTypes.string.isRequired,
 };
+
+const AddButtonWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+`;
+

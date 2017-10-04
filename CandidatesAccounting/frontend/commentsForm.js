@@ -92,27 +92,23 @@ export default class CommentsForm extends React.Component {
 
   addNewComment() {
     if (this.state.newCommentText.trim() !== '') {
-      let date = new Date();
-      let candidate = this.props.candidate;
-      candidate.comments.push(new Comment(
+      this.props.addComment(this.props.candidate.id, new Comment(
         'Вы',
         moment().format('H:MM:SS DD MMMM YYYY'),
         this.state.newCommentText));
-      this.props.editCandidate(this.props.candidate.id, candidate);
       this.setState({newCommentText: ''})
     }
   }
 
   deleteComment(index) {
-    let candidate = this.props.candidate;
-    candidate.comments.splice(index, 1);
-    this.props.editCandidate(this.props.candidate.id, candidate);
+    this.props.deleteComment(this.props.candidate.id, index);
   }
 }
 
 CommentsForm.propTypes = {
   candidate: PropTypes.object.isRequired,
-  editCandidate: PropTypes.func.isRequired,
+  addComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
 };
 
 const FormWrapper = styled.div`

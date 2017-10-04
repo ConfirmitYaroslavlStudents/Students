@@ -28,15 +28,10 @@ export default class TablesBar extends React.Component{
             <Tab label={<NavLink to="/students" className="nav-link" activeStyle={{color: '#673AB7'}}>Students</NavLink>}/>
             <Tab label={<NavLink to="/trainees" className="nav-link" activeStyle={{color: '#673AB7'}}>Trainees</NavLink>}/>
           </Tabs>
-        </div>\
+        </div>
           <AddCandidateDialog
             addCandidate={this.props.addCandidate}
-            candidateType={this.props.newCandidateDefaultType}
-            tempCandidate={this.props.tempCandidate}
-            setTempCandidate={this.props.setTempCandidate}
-            changeTempCandidateInfo={this.props.changeTempCandidateInfo}
-            setTempCandidateComment={this.props.setTempCandidateComment}
-            editCandidate={this.props.editCandidate}
+            candidateStatus={this.props.newCandidateDefaultType}
           />
       </AppBar>
     );

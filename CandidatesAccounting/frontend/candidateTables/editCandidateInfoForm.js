@@ -2,39 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
 import SimpleSelect from '../materialUIDecorators/simpleSelect';
-import EditCommentForm from '../commentsForm';
-import EditIcon from 'material-ui-icons/ViewList';
-import DialogWindow from '../materialUIDecorators/dialogWindow';
-import Badge from '../materialUIDecorators/badge';
-import {CreateCandidate} from '../candidates';
 import styled from 'styled-components';
 
-export default class EditCandidateForm extends React.Component {
+export default class EditCandidateInfoForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({candidateType: props.tempCandidate.status});
-    this.changeInfo = this.changeInfo.bind(this);
-    this.changeCandidateType = this.changeCandidateType.bind(this);
+    this.state = ({candidateStatus: props.candidate.status});
   }
 
   render() {
-    const changeInfo = this.changeInfo;
-    const changeCandidateType = this.changeCandidateType;
+    const props = this.props;
+    const changeInfo = this.changeInfo.bind(this);
+    const changeCandidateType = this.changeCandidateStatus.bind(this);
     let specialFields;
-    switch (this.state.candidateType) {
+    console.log(props.candidate);
+    switch (this.state.candidateStatus) {
       case 'Interviewee':
         specialFields = <div>
           <TextInput
             name="interviewDate"
             label="Interview date"
-            value={this.props.tempCandidate.interviewDate}
+            value={props.candidate.interviewDate}
             placeholder="dd.mm.yyyy hh:mm"
             onChange={function(value) {changeInfo('interviewDate', value)}}
             multiline={true}/>
           <TextInput
             name="interviewRoom"
             label="Interview room"
-            value={this.props.tempCandidate.interviewRoom}
+            value={props.candidate.interviewRoom}
             placeholder="interview placement"
             onChange={function(value) {changeInfo('interviewRoom', value)}}
             multiline={true}/>
@@ -46,7 +41,7 @@ export default class EditCandidateForm extends React.Component {
           <TextInput
             name="groupName"
             label="Group name"
-            value={this.props.tempCandidate.groupName}
+            value={props.candidate.groupName}
             onChange={function(value) {changeInfo('groupName', value)}}
             multiline={true}/>
         </div>;
@@ -57,7 +52,7 @@ export default class EditCandidateForm extends React.Component {
           <TextInput
             name="mentor"
             label="Mentor's name"
-            value={this.props.tempCandidate.mentor}
+            value={props.candidate.mentor}
             onChange={function(value) {changeInfo('mentor', value)}}
             multiline={true}/>
         </div>;
@@ -65,79 +60,58 @@ export default class EditCandidateForm extends React.Component {
     }
     return (
       <FormWrapper>
-
         <SimpleSelect
           label="Candidate's status"
           options={['Interviewee', 'Student', 'Trainee']}
-          selected={this.state.candidateType}
+          selected={this.state.candidateStatus}
           onChange={changeCandidateType}
         />
         <TextInput
           name="name"
           label="Name"
-          value={this.props.tempCandidate.name}
+          value={props.candidate.name}
           onChange={function(value) {changeInfo('name', value)}}
           autoFocus={true}
           multiline={true}/>
         <TextInput
           name="birthDate"
           label="Birth date"
-          value={this.props.tempCandidate.birthDate}
+          value={props.candidate.birthDate}
           placeholder="dd.mm.yyyy"
           onChange={function(value) {changeInfo('birthDate', value)}}
           multiline={true}/>
         <TextInput
           name="email"
           label="E-mail"
-          value={this.props.tempCandidate.email}
+          value={props.candidate.email}
           placeholder="example@mail.com"
           onChange={function(value) {changeInfo('email', value)}}
           multiline={true}/>
 
         {specialFields}
-
-        {this.props.additionMode ?
-          ''
-          :
-          <div className="float-right">
-            <Badge badgeContent={this.props.tempCandidate.comments.length} badgeStyle="comment-badge">
-              <DialogWindow
-                content={
-                  <EditCommentForm
-                    candidate={this.props.tempCandidate}
-                    setTempCandidateComment={this.props.setTempCandidateComment}
-                    editCandidate={this.props.editCandidate}
-                  />}
-                label="Comments"
-                openButtonType="icon"
-                openButtonContent={<EditIcon/>}
-                />
-            </Badge>
-          </div>
-        }
       </FormWrapper>
     );
   }
 
   changeInfo(key, value) {
-    this.props.changeTempCandidateInfo(key, value);
+    console.log('tb', this.props.candidate);
+    this.props.candidate[key] = value;
   }
 
-  changeCandidateType(type) {
-    this.setState({ candidateType: type });
-    this.props.setTempCandidate(CreateCandidate(type, this.props.tempCandidate));
+  changeCandidateStatus(status) {
+    this.setState({ candidateStatus: status });
+    this.props.candidate.status = status;
+    this.props.candidate['interviewDate'] = '';
+    this.props.candidate['interviewRoom'] = '';
+    this.props.candidate['groupName'] = '';
+    this.props.candidate['mentor'] = '';
   }
 }
 
-EditCandidateForm.propTypes = {
-  tempCandidate: PropTypes.object.isRequired,
-  setTempCandidate: PropTypes.func.isRequired,
-  setTempCandidateComment: PropTypes.func.isRequired,
-  changeTempCandidateInfo: PropTypes.func.isRequired,
-  editCandidate: PropTypes.func.isRequired,
-  additionMode: PropTypes.bool,
+EditCandidateInfoForm.propTypes = {
+  candidate: PropTypes.object.isRequired,
 };
 
 const FormWrapper = styled.div`
-  padding: 15px 15px 5px;
+  padding: 15px 15px 10px;
 `;

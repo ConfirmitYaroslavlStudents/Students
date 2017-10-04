@@ -14,10 +14,12 @@ export default class CandidateTable extends React.Component {
       this.getRow(candidate, index)
     ));
 
-    return <BasicTable
-      heads={['#', 'Name', 'Status', 'E-mail', 'Birth Date', <span className="float-right">Actions</span>]}
-      contentRows={rows}
-    />
+    return (
+      <BasicTable
+        heads={['#', 'Name', 'Status', 'E-mail', 'Birth Date', <span className="float-right">Actions</span>]}
+        contentRows={rows}
+      />
+    );
   }
 
   getRow(candidate, index)

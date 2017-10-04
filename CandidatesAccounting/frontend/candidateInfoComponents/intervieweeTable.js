@@ -14,11 +14,13 @@ export default class IntervieweeTable extends React.Component {
       this.getRow(interviewee, index)
     ));
 
-    return <BasicTable
-      heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Interview date', 'Interview room',
-        <span className="float-right">Actions</span>] }
-      contentRows={rows}
-    />
+    return (
+      <BasicTable
+        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Interview date', 'Interview room',
+          <span className="float-right">Actions</span>] }
+        contentRows={rows}
+      />
+    );
   }
 
   getRow(interviewee, index)

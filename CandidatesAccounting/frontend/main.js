@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import reducer from './reducer'
+import { BrowserRouter, Route} from 'react-router-dom';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import {deepPurple} from 'material-ui/colors';
-import { BrowserRouter, Route} from 'react-router-dom';
-import {Interviewee, Student, Trainee, Comment} from './candidates';
 import AppView from './appview';
+import {Interviewee, Student, Trainee, Comment} from './candidatesClasses';
 
 const store = createStore(
   reducer,

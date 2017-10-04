@@ -4,7 +4,7 @@ import TextInput from '../materialUIDecorators/textInput';
 import SimpleSelect from '../materialUIDecorators/simpleSelect';
 import styled from 'styled-components';
 
-export default class EditCandidateInfoForm extends React.Component {
+export default class СandidateInfoForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({candidateStatus: props.candidate.status});
@@ -15,7 +15,6 @@ export default class EditCandidateInfoForm extends React.Component {
     const changeInfo = this.changeInfo.bind(this);
     const changeCandidateType = this.changeCandidateStatus.bind(this);
     let specialFields;
-    console.log(props.candidate);
     switch (this.state.candidateStatus) {
       case 'Interviewee':
         specialFields = <div>
@@ -108,7 +107,7 @@ export default class EditCandidateInfoForm extends React.Component {
   }
 }
 
-EditCandidateInfoForm.propTypes = {
+СandidateInfoForm.propTypes = {
   candidate: PropTypes.object.isRequired,
 };
 

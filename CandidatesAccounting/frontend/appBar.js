@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
 import { NavLink } from 'react-router-dom';
-import AddCandidateDialog from './candidateTables/addCandidateDialog';
+import AddCandidateDialog from './candidateInfoComponents/addCandidateDialog';
 
-export default class TablesBar extends React.Component{
+export default class CustomAppBar extends React.Component{
   constructor(props) {
     super(props);
     this.state = { selected: props.selected };
@@ -42,6 +42,6 @@ export default class TablesBar extends React.Component{
   };
 }
 
-TablesBar.PropTypes = {
+CustomAppBar.PropTypes = {
   selected: PropTypes.number,
 };

@@ -3,14 +3,14 @@ import {connect} from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import actions from './actions';
 import Navbar from './materialUIDecorators/navbar';
-import TableTabAll from './tableTabAll';
-import TableTabInterviewees from './tableTabInterviewees';
-import TableTabStudents from './tableTabStudents';
-import TableTabTrainees from './tableTabTrainees';
 import Logo from 'material-ui-icons/AccountCircle';
 import FlatButton from './materialUIDecorators/flatButton';
-import TablesBar from './tablesBar';
-import EditCommentForm from './commentsForm';
+import AppBar from './appBar';
+import CommentsForm from './commentInfoComponents/commentsForm';
+import CandidateTable from './candidateInfoComponents/candidateTable';
+import IntervieweeTable from './candidateInfoComponents/intervieweeTable';
+import StudentTable from './candidateInfoComponents/studentTable';
+import TraineeTable from './candidateInfoComponents/traineeTable';
 
 export default class AppView extends React.Component {
   render() {
@@ -45,24 +45,28 @@ export default class AppView extends React.Component {
           title="Candidate Accounting"
           controls={<FlatButton color="contrast" onClick={()=>alert('TODO')} text="Sign out"/>}
         />
-        <TablesBar
+        <AppBar
           selected={selectedTableNumber}
           newCandidateDefaultType = {newCandidateDefaultType}
-          addCandidate={this.props.addCandidate}
+          addCandidate={props.addCandidate}
         />
         <div className="custom-main">
           <Switch>
             <Route exact path="/" render={() =>
-              <TableTabAll {...this.props}/>}/>
+              <CandidateTable candidates={props.candidates}
+                              {...this.props}/>}/>
             <Route exact path="/interviewees" render={() =>
-              <TableTabInterviewees {...this.props}/>}/>
+              <IntervieweeTable interviewees={props.candidates.filter((c) => c.constructor.name === 'Interviewee')}
+                                {...this.props}/>}/>
             <Route exact path="/students" render={() =>
-              <TableTabStudents {...this.props}/>}/>
+              <StudentTable students={props.candidates.filter((c) => c.constructor.name === 'Student')}
+                            {...this.props}/>}/>
             <Route exact path="/trainees" render={() =>
-              <TableTabTrainees {...this.props}/>}/>
+              <TraineeTable trainees={props.candidates.filter((c) => c.constructor.name === 'Trainee')}
+                            {...this.props}/>}/>
             <Route path="/*/comments" render={() =>
-              <EditCommentForm
-                candidate={props.candidates.toArray()[candidateId - 1]}
+              <CommentsForm
+                candidate={props.candidates.find(c => c.id === candidateId)}
                 addComment={props.addComment}
                 deleteComment={props.deleteComment}/>} />
           </Switch>

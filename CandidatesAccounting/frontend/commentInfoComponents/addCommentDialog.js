@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddIcon from 'material-ui-icons/Add';
-import { Comment } from '../candidates/index';
+import { Comment } from '../candidatesClasses/index';
 import moment from 'moment';
 import TextInput from '../materialUIDecorators/textInput';
 import styled from 'styled-components';

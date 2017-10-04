@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {CreateCandidate} from '../candidates/index';
+import {CreateCandidate} from '../candidatesClasses/index';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddIcon from 'material-ui-icons/Add';
-import EditCandidateInfoForm from './editCandidateInfoForm';
+import CandidateInfoForm from './candidateInfoForm';
 
 export default class AddCandidateDialog extends React.Component{
   constructor(props) {
@@ -23,12 +23,7 @@ export default class AddCandidateDialog extends React.Component{
     return (
       <AddButtonWrapper>
         <DialogWindow
-          content={
-            <EditCandidateInfoForm
-              additionMode={true}
-              candidate={candidate}
-            />
-          }
+          content={<CandidateInfoForm candidate={candidate} />}
           label="Add new candidate"
           openButtonType="flat"
           openButtonContent={<div className="button-content"><AddIcon/> new candidate</div>}

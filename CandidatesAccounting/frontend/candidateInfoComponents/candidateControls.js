@@ -6,7 +6,7 @@ import EditCandidateDialog from './editCandidateDialog';
 import ViewListIcon from 'material-ui-icons/ViewList';
 import Badge from '../materialUIDecorators/badge';
 import {NavLink} from 'react-router-dom';
-import AddCommentDialog from './addCommentDialog';
+import AddCommentDialog from '../commentInfoComponents/addCommentDialog';
 
 export default function CandidateControls(props) {
   return (
@@ -15,6 +15,7 @@ export default function CandidateControls(props) {
         candidate={props.candidate}
         addComment={props.addComment}
       />
+
       <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
@@ -24,7 +25,10 @@ export default function CandidateControls(props) {
         </Badge>
       </NavLink>
 
-      <EditCandidateDialog candidate={props.candidate} editCandidate={props.editCandidate}/>
+      <EditCandidateDialog
+        candidate={props.candidate}
+        editCandidate={props.editCandidate}
+      />
 
       <IconButton
         icon={<RemoveIcon />}

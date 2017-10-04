@@ -34,13 +34,6 @@ body {
     float: right;
 }
 
-.footer {
-    margin-top: -10px;
-    padding-top: 40px;
-    text-align: center;
-    color: dimgray;
-}
-
 .nav-link {
     text-decoration: none !important;
     color: dimgray;
@@ -67,12 +60,4 @@ body {
 
 .td:last-child {
     padding-right: 0;
-}
-
-.tab-content {
-    padding: 0 20px 0 20px;
-}
-
-.tab-container {
-    padding-bottom: 80px;
 }

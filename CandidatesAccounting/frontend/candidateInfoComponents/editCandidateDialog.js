@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
-import EditCandidateInfoForm from './editCandidateInfoForm';
-import {CreateCandidate} from '../candidates/index';
+import CandidateInfoForm from './candidateInfoForm';
+import {CreateCandidate} from '../candidatesClasses/index';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
 
@@ -22,10 +22,7 @@ export default class EditCandidateDialog extends React.Component {
     candidate = currentCandidate;
     return (
       <DialogWindow
-        content={
-          <EditCandidateInfoForm
-            candidate={candidate}
-          />}
+        content={<CandidateInfoForm candidate={candidate} />}
         label="Candidate edit"
         openButtonType="icon"
         openButtonContent={<EditIcon/>}

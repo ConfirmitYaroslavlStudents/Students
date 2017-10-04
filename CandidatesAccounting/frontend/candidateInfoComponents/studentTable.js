@@ -14,10 +14,12 @@ export default class StudentTable extends React.Component {
       this.getRow(student, index)
     ));
 
-    return <BasicTable
-      heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group Name', <span className="float-right">Actions</span>] }
-      contentRows={rows}
-    />
+    return (
+      <BasicTable
+        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group Name', <span className="float-right">Actions</span>] }
+        contentRows={rows}
+      />
+    );
   }
 
   getRow(student, index)

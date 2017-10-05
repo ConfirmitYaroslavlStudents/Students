@@ -25,7 +25,7 @@ export default class AddCommentDialog extends React.Component {
         content={
           <FormWrapper>
             <AddCommentPanel
-              value=""
+              value={this.state.commentText}
               onChange={this.changeCommentText.bind(this)}
               onClick={this.addNewComment}
             />
@@ -49,14 +49,19 @@ export default class AddCommentDialog extends React.Component {
 
   handleOpenClose(isOpen) {
     this.setState({isOpen: isOpen});
+    this.changeCommentText('');
   }
 
   addNewComment() {
-    if (this.state.commentText.trim() !== '') {
+    let commentText = this.state.commentText;
+    if (commentText.replace(/<[^>]+>/g,'').trim() !== '') {
+      if (commentText.slice(-11) === '<p><br></p>') {
+        commentText = commentText.substr(0, commentText.length-11);
+      }
       this.props.addComment(this.props.candidate.id, new Comment(
         'Вы',
         moment().format('H:MM:SS DD MMMM YYYY'),
-        this.state.commentText));
+        commentText));
       this.handleOpenClose(false);
     }
   }

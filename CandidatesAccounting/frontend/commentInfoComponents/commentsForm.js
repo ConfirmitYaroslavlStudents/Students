@@ -42,11 +42,15 @@ export default class CommentsForm extends React.Component {
   }
 
   addNewComment() {
-    if (this.state.newCommentText.trim() !== '') {
+    let newCommentText = this.state.newCommentText;
+    if (newCommentText.replace(/<[^>]+>/g,'').trim() !== '') {
+      if (newCommentText.slice(-11) === '<p><br></p>') {
+        newCommentText = newCommentText.substr(0, newCommentText.length - 11);
+      }
       this.props.addComment(this.props.candidate.id, new Comment(
         'Вы',
         moment().format('H:MM:SS DD MMMM YYYY'),
-        this.state.newCommentText));
+        newCommentText));
       this.setState({newCommentText: ''})
     }
   }

@@ -24,8 +24,7 @@ export default function CommentCloud(props) {
         }
       </CommentIcons>
       <CommentMount userComment={props.comment.author === props.userName}>
-        <CommentText>{props.comment.text.split(/[\n\r]/).map((line, index) =>
-          (<span key={index}>{line}<br/></span>))}
+        <CommentText dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
         <CommentFooter>
           {props.comment.date}

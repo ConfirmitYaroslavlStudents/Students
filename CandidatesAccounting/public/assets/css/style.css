@@ -7,6 +7,10 @@ body {
     background-color: #CCCCCC;
 }
 
+p {
+    margin: 0;
+}
+
 .button-content {
     display: flex;
     align-items: center;

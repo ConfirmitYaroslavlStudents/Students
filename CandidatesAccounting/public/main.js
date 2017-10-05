@@ -65269,8 +65269,12 @@
 	  }, {
 	    key: 'addNewComment',
 	    value: function addNewComment() {
-	      if (this.state.newCommentText.trim() !== '') {
-	        this.props.addComment(this.props.candidate.id, new _index.Comment('Вы', (0, _moment2.default)().format('H:MM:SS DD MMMM YYYY'), this.state.newCommentText));
+	      var newCommentText = this.state.newCommentText;
+	      if (newCommentText.replace(/<[^>]+>/g, '').trim() !== '') {
+	        if (newCommentText.slice(-11) === '<p><br></p>') {
+	          newCommentText = newCommentText.substr(0, newCommentText.length - 11);
+	        }
+	        this.props.addComment(this.props.candidate.id, new _index.Comment('Вы', (0, _moment2.default)().format('H:MM:SS DD MMMM YYYY'), newCommentText));
 	        this.setState({ newCommentText: '' });
 	      }
 	    }
@@ -81171,18 +81175,7 @@
 	    _react2.default.createElement(
 	      CommentMount,
 	      { userComment: props.comment.author === props.userName },
-	      _react2.default.createElement(
-	        CommentText,
-	        null,
-	        props.comment.text.split(/[\n\r]/).map(function (line, index) {
-	          return _react2.default.createElement(
-	            'span',
-	            { key: index },
-	            line,
-	            _react2.default.createElement('br', null)
-	          );
-	        })
-	      ),
+	      _react2.default.createElement(CommentText, { dangerouslySetInnerHTML: { __html: props.comment.text } }),
 	      _react2.default.createElement(
 	        CommentFooter,
 	        null,
@@ -81275,9 +81268,9 @@
 	  value: true
 	});
 
-	var _templateObject = _taggedTemplateLiteral(['\n  display: inline-block;\n  position: absolute;\n  right: 10px;\n  bottom: 10px;\n '], ['\n  display: inline-block;\n  position: absolute;\n  right: 10px;\n  bottom: 10px;\n ']),
-	    _templateObject2 = _taggedTemplateLiteral(['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  padding-bottom: 10px;\n  clear: both;\n  background: #FFF;\n'], ['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  padding-bottom: 10px;\n  clear: both;\n  background: #FFF;\n']),
-	    _templateObject3 = _taggedTemplateLiteral(['\n  padding-left: 20px;\n  padding-right: 56px;\n'], ['\n  padding-left: 20px;\n  padding-right: 56px;\n']);
+	var _templateObject = _taggedTemplateLiteral(['\n  display: inline-block;\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n '], ['\n  display: inline-block;\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n ']),
+	    _templateObject2 = _taggedTemplateLiteral(['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  clear: both;\n  background: #FFF;\n'], ['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  clear: both;\n  background: #FFF;\n']),
+	    _templateObject3 = _taggedTemplateLiteral(['\n  padding-right: 58px;\n'], ['\n  padding-right: 58px;\n']);
 
 	exports.default = AddCommentPanel;
 
@@ -81289,17 +81282,13 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _textInput = __webpack_require__(709);
-
-	var _textInput2 = _interopRequireDefault(_textInput);
-
 	var _iconButton = __webpack_require__(508);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _Add = __webpack_require__(863);
+	var _AddCircleOutline = __webpack_require__(863);
 
-	var _Add2 = _interopRequireDefault(_Add);
+	var _AddCircleOutline2 = _interopRequireDefault(_AddCircleOutline);
 
 	var _styledComponents = __webpack_require__(648);
 
@@ -81320,28 +81309,34 @@
 	    _react2.default.createElement(
 	      CommentTextInput,
 	      null,
-	      _react2.default.createElement(_textInput2.default, {
-	        name: 'comment',
-	        placeholder: 'New comment',
-	        value: props.value,
-	        autoFocus: true,
-	        multiline: true,
-	        onChange: props.onChange,
-	        onKeyDown: function onKeyDown(event) {
-	          if (event.keyCode === 13) {
-	            if (!event.shiftKey) {
-	              event.preventDefault();
-	              props.onClick(event);
+	      _react2.default.createElement(
+	        _reactQuill2.default,
+	        {
+	          value: props.value,
+	          onChange: props.onChange,
+	          placeholder: 'New comment',
+	          tabIndex: 1,
+	          onKeyDown: function onKeyDown(event) {
+	            if (event.keyCode === 13) {
+	              if (!event.shiftKey) {
+	                event.preventDefault();
+	                props.onClick(event);
+	              }
 	            }
 	          }
-	        }
-	      })
+	        },
+	        _react2.default.createElement(
+	          'div',
+	          { autoFocus: true, tabIndex: 1 },
+	          ' '
+	        )
+	      )
 	    ),
 	    _react2.default.createElement(
 	      ButtonWrapper,
 	      null,
 	      _react2.default.createElement(_iconButton2.default, {
-	        icon: _react2.default.createElement(_Add2.default, null),
+	        icon: _react2.default.createElement(_AddCircleOutline2.default, null),
 	        onClick: props.onClick
 	      })
 	    )
@@ -81384,9 +81379,9 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _ref = _react2.default.createElement('path', { d: 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z' });
+	var _ref = _react2.default.createElement('path', { d: 'M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' });
 
-	var Add = function Add(props) {
+	var AddCircleOutline = function AddCircleOutline(props) {
 	  return _react2.default.createElement(
 	    _SvgIcon2.default,
 	    props,
@@ -81394,10 +81389,10 @@
 	  );
 	};
 
-	Add = (0, _pure2.default)(Add);
-	Add.muiName = 'SvgIcon';
+	AddCircleOutline = (0, _pure2.default)(AddCircleOutline);
+	AddCircleOutline.muiName = 'SvgIcon';
 
-	exports.default = Add;
+	exports.default = AddCircleOutline;
 
 /***/ }),
 /* 864 */
@@ -100049,7 +100044,7 @@
 	          FormWrapper,
 	          null,
 	          _react2.default.createElement(_addCommentPanel2.default, {
-	            value: '',
+	            value: this.state.commentText,
 	            onChange: this.changeCommentText.bind(this),
 	            onClick: this.addNewComment
 	          })
@@ -100076,12 +100071,17 @@
 	    key: 'handleOpenClose',
 	    value: function handleOpenClose(isOpen) {
 	      this.setState({ isOpen: isOpen });
+	      this.changeCommentText('');
 	    }
 	  }, {
 	    key: 'addNewComment',
 	    value: function addNewComment() {
-	      if (this.state.commentText.trim() !== '') {
-	        this.props.addComment(this.props.candidate.id, new _index.Comment('Вы', (0, _moment2.default)().format('H:MM:SS DD MMMM YYYY'), this.state.commentText));
+	      var commentText = this.state.commentText;
+	      if (commentText.replace(/<[^>]+>/g, '').trim() !== '') {
+	        if (commentText.slice(-11) === '<p><br></p>') {
+	          commentText = commentText.substr(0, commentText.length - 11);
+	        }
+	        this.props.addComment(this.props.candidate.id, new _index.Comment('Вы', (0, _moment2.default)().format('H:MM:SS DD MMMM YYYY'), commentText));
 	        this.handleOpenClose(false);
 	      }
 	    }

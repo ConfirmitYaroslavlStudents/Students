@@ -37447,15 +37447,15 @@
 
 	var _candidateTable2 = _interopRequireDefault(_candidateTable);
 
-	var _intervieweeTable = __webpack_require__(967);
+	var _intervieweeTable = __webpack_require__(968);
 
 	var _intervieweeTable2 = _interopRequireDefault(_intervieweeTable);
 
-	var _studentTable = __webpack_require__(968);
+	var _studentTable = __webpack_require__(969);
 
 	var _studentTable2 = _interopRequireDefault(_studentTable);
 
-	var _traineeTable = __webpack_require__(969);
+	var _traineeTable = __webpack_require__(970);
 
 	var _traineeTable2 = _interopRequireDefault(_traineeTable);
 
@@ -81116,7 +81116,7 @@
 	    _templateObject3 = _taggedTemplateLiteral(['\n\t\tfloat: right;\n\t\tmargin: 0 0 0 10px;\n\t'], ['\n\t\tfloat: right;\n\t\tmargin: 0 0 0 10px;\n\t']),
 	    _templateObject4 = _taggedTemplateLiteral(['\n  display: inline-block;\n  padding: 10px;\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  max-width: 70%;\n  float: left;\n  background: #FFF;\n  border-radius: 2px 7px 7px 7px;\n  \n  ', '\n'], ['\n  display: inline-block;\n  padding: 10px;\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  max-width: 70%;\n  float: left;\n  background: #FFF;\n  border-radius: 2px 7px 7px 7px;\n  \n  ', '\n']),
 	    _templateObject5 = _taggedTemplateLiteral(['\n\t\tfloat: right;\n\t\tborder-radius: 7px 2px 7px 7px;\n\t'], ['\n\t\tfloat: right;\n\t\tborder-radius: 7px 2px 7px 7px;\n\t']),
-	    _templateObject6 = _taggedTemplateLiteral(['\n  word-wrap: break-word;\n'], ['\n  word-wrap: break-word;\n']),
+	    _templateObject6 = _taggedTemplateLiteral(['\n  word-wrap: break-word;\n  font-size: 96%;\n'], ['\n  word-wrap: break-word;\n  font-size: 96%;\n']),
 	    _templateObject7 = _taggedTemplateLiteral(['  \n  text-align: left;\n  font-size: smaller;\n  color: dimgray;\n  text-align = left;\n  \n  ', '\n'], ['  \n  text-align: left;\n  font-size: smaller;\n  color: dimgray;\n  text-align = left;\n  \n  ', '\n']),
 	    _templateObject8 = _taggedTemplateLiteral(['\n\t\ttext-align: right;\n\t'], ['\n\t\ttext-align: right;\n\t']),
 	    _templateObject9 = _taggedTemplateLiteral(['  \n  margin-left: -12px;\n'], ['  \n  margin-left: -12px;\n']),
@@ -81141,9 +81141,9 @@
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _Delete = __webpack_require__(861);
+	var _RemoveCircleOutline = __webpack_require__(861);
 
-	var _Delete2 = _interopRequireDefault(_Delete);
+	var _RemoveCircleOutline2 = _interopRequireDefault(_RemoveCircleOutline);
 
 	var _styledComponents = __webpack_require__(648);
 
@@ -81165,7 +81165,7 @@
 	        DeleteComment,
 	        null,
 	        _react2.default.createElement(_iconButton2.default, {
-	          icon: _react2.default.createElement(_Delete2.default, null),
+	          icon: _react2.default.createElement(_RemoveCircleOutline2.default, null),
 	          onClick: function onClick() {
 	            props.deleteComment(props.commentIndex);
 	          }
@@ -81175,7 +81175,8 @@
 	    _react2.default.createElement(
 	      CommentMount,
 	      { userComment: props.comment.author === props.userName },
-	      _react2.default.createElement(CommentText, { dangerouslySetInnerHTML: { __html: props.comment.text } }),
+	      _react2.default.createElement(CommentText, {
+	        dangerouslySetInnerHTML: { __html: props.comment.text } }),
 	      _react2.default.createElement(
 	        CommentFooter,
 	        null,
@@ -81243,9 +81244,9 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _ref = _react2.default.createElement('path', { d: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' });
+	var _ref = _react2.default.createElement('path', { d: 'M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' });
 
-	var Delete = function Delete(props) {
+	var RemoveCircleOutline = function RemoveCircleOutline(props) {
 	  return _react2.default.createElement(
 	    _SvgIcon2.default,
 	    props,
@@ -81253,10 +81254,10 @@
 	  );
 	};
 
-	Delete = (0, _pure2.default)(Delete);
-	Delete.muiName = 'SvgIcon';
+	RemoveCircleOutline = (0, _pure2.default)(RemoveCircleOutline);
+	RemoveCircleOutline.muiName = 'SvgIcon';
 
-	exports.default = Delete;
+	exports.default = RemoveCircleOutline;
 
 /***/ }),
 /* 862 */
@@ -81270,7 +81271,8 @@
 
 	var _templateObject = _taggedTemplateLiteral(['\n  display: inline-block;\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n '], ['\n  display: inline-block;\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n ']),
 	    _templateObject2 = _taggedTemplateLiteral(['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  clear: both;\n  background: #FFF;\n'], ['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  clear: both;\n  background: #FFF;\n']),
-	    _templateObject3 = _taggedTemplateLiteral(['\n  padding-right: 58px;\n'], ['\n  padding-right: 58px;\n']);
+	    _templateObject3 = _taggedTemplateLiteral(['\n  padding-right: 58px;\n'], ['\n  padding-right: 58px;\n']),
+	    _templateObject4 = _taggedTemplateLiteral(['\n  auto-focus: true;\n  tab-index: 1;\n  min-height: 80px;\n  font-size: 96%;\n'], ['\n  auto-focus: true;\n  tab-index: 1;\n  min-height: 80px;\n  font-size: 96%;\n']);
 
 	exports.default = AddCommentPanel;
 
@@ -81325,11 +81327,7 @@
 	            }
 	          }
 	        },
-	        _react2.default.createElement(
-	          'div',
-	          { autoFocus: true, tabIndex: 1 },
-	          ' '
-	        )
+	        _react2.default.createElement(CommentTextEdit, null)
 	      )
 	    ),
 	    _react2.default.createElement(
@@ -81354,6 +81352,8 @@
 	var AddCommentWrapper = _styledComponents2.default.div(_templateObject2);
 
 	var CommentTextInput = _styledComponents2.default.div(_templateObject3);
+
+	var CommentTextEdit = _styledComponents2.default.div(_templateObject4);
 
 /***/ }),
 /* 863 */
@@ -99467,25 +99467,25 @@
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _Delete = __webpack_require__(861);
+	var _Delete = __webpack_require__(958);
 
 	var _Delete2 = _interopRequireDefault(_Delete);
 
-	var _editCandidateDialog = __webpack_require__(958);
+	var _editCandidateDialog = __webpack_require__(959);
 
 	var _editCandidateDialog2 = _interopRequireDefault(_editCandidateDialog);
 
-	var _ViewList = __webpack_require__(961);
+	var _ViewList = __webpack_require__(962);
 
 	var _ViewList2 = _interopRequireDefault(_ViewList);
 
-	var _badge = __webpack_require__(962);
+	var _badge = __webpack_require__(963);
 
 	var _badge2 = _interopRequireDefault(_badge);
 
 	var _reactRouterDom = __webpack_require__(235);
 
-	var _addCommentDialog = __webpack_require__(965);
+	var _addCommentDialog = __webpack_require__(966);
 
 	var _addCommentDialog2 = _interopRequireDefault(_addCommentDialog);
 
@@ -99541,6 +99541,45 @@
 	  value: true
 	});
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(501);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(506);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _ref = _react2.default.createElement('path', { d: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' });
+
+	var Delete = function Delete(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _ref
+	  );
+	};
+
+	Delete = (0, _pure2.default)(Delete);
+	Delete.muiName = 'SvgIcon';
+
+	exports.default = Delete;
+
+/***/ }),
+/* 959 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -99561,11 +99600,11 @@
 
 	var _index = __webpack_require__(229);
 
-	var _Save = __webpack_require__(959);
+	var _Save = __webpack_require__(960);
 
 	var _Save2 = _interopRequireDefault(_Save);
 
-	var _Edit = __webpack_require__(960);
+	var _Edit = __webpack_require__(961);
 
 	var _Edit2 = _interopRequireDefault(_Edit);
 
@@ -99649,7 +99688,7 @@
 	};
 
 /***/ }),
-/* 959 */
+/* 960 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99688,7 +99727,7 @@
 	exports.default = Save;
 
 /***/ }),
-/* 960 */
+/* 961 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99727,7 +99766,7 @@
 	exports.default = Edit;
 
 /***/ }),
-/* 961 */
+/* 962 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99766,7 +99805,7 @@
 	exports.default = ViewList;
 
 /***/ }),
-/* 962 */
+/* 963 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99784,7 +99823,7 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _Badge = __webpack_require__(963);
+	var _Badge = __webpack_require__(964);
 
 	var _Badge2 = _interopRequireDefault(_Badge);
 
@@ -99804,7 +99843,7 @@
 	};
 
 /***/ }),
-/* 963 */
+/* 964 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99813,7 +99852,7 @@
 	  value: true
 	});
 
-	var _Badge = __webpack_require__(964);
+	var _Badge = __webpack_require__(965);
 
 	Object.defineProperty(exports, 'default', {
 	  enumerable: true,
@@ -99825,7 +99864,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 964 */
+/* 965 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -99959,7 +99998,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 965 */
+/* 966 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99984,7 +100023,7 @@
 
 	var _dialogWindow2 = _interopRequireDefault(_dialogWindow);
 
-	var _InsertComment = __webpack_require__(966);
+	var _InsertComment = __webpack_require__(967);
 
 	var _InsertComment2 = _interopRequireDefault(_InsertComment);
 
@@ -100101,7 +100140,7 @@
 	var FormWrapper = _styledComponents2.default.div(_templateObject);
 
 /***/ }),
-/* 966 */
+/* 967 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -100140,7 +100179,7 @@
 	exports.default = InsertComment;
 
 /***/ }),
-/* 967 */
+/* 968 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -100225,7 +100264,7 @@
 	};
 
 /***/ }),
-/* 968 */
+/* 969 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -100310,7 +100349,7 @@
 	};
 
 /***/ }),
-/* 969 */
+/* 970 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

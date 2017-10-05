@@ -25,7 +25,7 @@ export default function AddCommentPanel(props) {
             }
           }
         >
-          <div autoFocus={true}  tabIndex={1}> </div>
+          <CommentTextEdit />
         </ReactQuill>
 
       </CommentTextInput>
@@ -62,4 +62,11 @@ const AddCommentWrapper = styled.div`
 
 const CommentTextInput = styled.div`
   padding-right: 58px;
+`;
+
+const CommentTextEdit = styled.div`
+  auto-focus: true;
+  tab-index: 1;
+  min-height: 80px;
+  font-size: 96%;
 `;

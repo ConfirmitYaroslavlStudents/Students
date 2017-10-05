@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AvatarIcon from 'material-ui-icons/AccountCircle';
 import IconButton from '../materialUIDecorators/iconButton';
-import RemoveIcon from 'material-ui-icons/Delete';
+import RemoveIcon from 'material-ui-icons/RemoveCircleOutline';
 import styled, { css } from 'styled-components';
 
 export default function CommentCloud(props) {
@@ -24,7 +24,8 @@ export default function CommentCloud(props) {
         }
       </CommentIcons>
       <CommentMount userComment={props.comment.author === props.userName}>
-        <CommentText dangerouslySetInnerHTML={{__html: props.comment.text}}>
+        <CommentText
+          dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
         <CommentFooter>
           {props.comment.date}
@@ -78,6 +79,7 @@ const CommentMount = styled.div`
 
 const CommentText = styled.div`
   word-wrap: break-word;
+  font-size: 96%;
 `;
 
 const CommentFooter = styled.div`  

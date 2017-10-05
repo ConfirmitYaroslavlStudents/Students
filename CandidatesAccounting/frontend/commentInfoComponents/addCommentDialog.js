@@ -1,55 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
-import AddIcon from 'material-ui-icons/Add';
+import CommentIcon from 'material-ui-icons/InsertComment';
+import CloseIcon from 'material-ui-icons/Close';
 import { Comment } from '../candidatesClasses/index';
 import moment from 'moment';
-import TextInput from '../materialUIDecorators/textInput';
+import IconButton from '../materialUIDecorators/iconButton';
+import AddCommentPanel from './addCommentPanel';
 import styled from 'styled-components';
 
 export default class AddCommentDialog extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({commentText: ''});
+    this.state = ({isOpen: false, commentText: ''});
+    this.handleOpenClose = this.handleOpenClose.bind(this);
+    this.addNewComment = this.addNewComment.bind(this);
   }
 
   render() {
-    const props = this.props;
-    let commentText = this.state.commentText;
+    const handleOpenClose = this.handleOpenClose;
     return (
       <DialogWindow
+        open={this.state.isOpen}
         content={
           <FormWrapper>
-            <TextInput
-              name="comment"
-              autoFocus={true}
-              multiline={true}
-              placeholder="New comment"
-              onChange={this.changeCommentText.bind(this)}
+            <AddCommentPanel
               value=""
+              onChange={this.changeCommentText.bind(this)}
+              onClick={this.addNewComment}
             />
           </FormWrapper>}
         label="Add new comment"
-        openButtonType="icon"
-        openButtonContent={<AddIcon/>}
-        acceptButtonContent={<div className="button-content"><AddIcon/> <span style={{marginTop: 3}}>add</span></div>}
-        accept={function () {
-          if (commentText.trim() !== '') {
-            props.addComment(props.candidate.id, new Comment(
-              'Вы',
-              moment().format('H:MM:SS DD MMMM YYYY'),
-              commentText));
-            return true;
-          } else {
-            return false;
-          }
-        }}
+        openButton={
+          <IconButton icon={<CommentIcon />} onClick={() => {handleOpenClose(true)}}/>
+        }
+        controls={
+          <div style={{display: 'inline-block'}}>
+            <IconButton color="inherit" icon={<CloseIcon />} onClick={() => {handleOpenClose(false)}}/>
+          </div>
+        }
       />
     );
   }
 
   changeCommentText(text) {
     this.setState({commentText: text});
+  }
+
+  handleOpenClose(isOpen) {
+    this.setState({isOpen: isOpen});
+  }
+
+  addNewComment() {
+    if (this.state.commentText.trim() !== '') {
+      this.props.addComment(this.props.candidate.id, new Comment(
+        'Вы',
+        moment().format('H:MM:SS DD MMMM YYYY'),
+        this.state.commentText));
+      this.handleOpenClose(false);
+    }
   }
 }
 
@@ -60,5 +69,4 @@ AddCommentDialog.propTypes = {
 
 const FormWrapper = styled.div`
   width: 500px;
-  margin: 0px 10px 10px;
 `;

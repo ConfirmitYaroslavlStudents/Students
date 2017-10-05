@@ -28,7 +28,11 @@ export default class CommentsForm extends React.Component {
     return (
       <FormWrapper>
         {comments}
-        <AddCommentPanel value={this.state.newCommentText} onChange={this.changeNewCommentText} onClick={this.addNewComment}/>
+        <AddCommentPanel
+          value={this.state.newCommentText}
+          onChange={this.changeNewCommentText}
+          onClick={this.addNewComment}
+        />
       </FormWrapper>
     );
   }
@@ -66,7 +70,8 @@ const FormWrapper = styled.div`
 `;
 
 const NoComment = styled.div`
-  padding: 10px;
+  padding: 5px;
   color: dimgray;
   text-align: center;
+  margin-bottom: 20px;
 `;

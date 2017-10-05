@@ -5,6 +5,8 @@ import CandidateInfoForm from './candidateInfoForm';
 import {CreateCandidate} from '../candidatesClasses/index';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
+import CloseIcon from 'material-ui-icons/Close';
+import IconButton from '../materialUIDecorators/iconButton';
 
 export default class EditCandidateDialog extends React.Component {
   constructor(props) {
@@ -12,28 +14,40 @@ export default class EditCandidateDialog extends React.Component {
     let currentCandidate = CreateCandidate(props.candidate.constructor.name, props.candidate);
     currentCandidate.status = props.candidate.constructor.name;
     this.candidate = currentCandidate;
+    this.state = ({isOpen: false, commentText: ''});
+    this.handleOpenClose = this.handleOpenClose.bind(this);
   }
 
   render() {
     let candidate = this.candidate;
     const props = this.props;
+    const handleOpenClose = this.handleOpenClose;
     let currentCandidate = CreateCandidate(props.candidate.constructor.name, props.candidate);
     currentCandidate.status = props.candidate.constructor.name;
     candidate = currentCandidate;
     return (
       <DialogWindow
-        content={<CandidateInfoForm candidate={candidate} />}
+        open={this.state.isOpen}
+        content={
+          <CandidateInfoForm candidate={candidate} />
+        }
         label="Candidate edit"
-        openButtonType="icon"
-        openButtonContent={<EditIcon/>}
-        acceptButtonContent={<div className="button-content"><SaveIcon/> <span style={{marginTop: 3}}> save</span>
-        </div>}
-        accept={function () {
-          props.editCandidate(candidate.id, CreateCandidate(candidate.status, candidate));
-          return true;
-        }}
+        openButton={ <IconButton icon={<EditIcon />} onClick={() => {handleOpenClose(true)}}/> }
+        controls={
+          <div style={{display: 'inline-block'}}>
+            <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
+              props.editCandidate(candidate.id, candidate);
+              handleOpenClose(false);
+            }}/>
+            <IconButton color="inherit" icon={<CloseIcon />} onClick={() => {handleOpenClose(false)}}/>
+          </div>
+        }
       />
     );
+  }
+
+  handleOpenClose(isOpen) {
+    this.setState({isOpen: isOpen});
   }
 }
 

@@ -12,6 +12,7 @@ export default class CustomAppBar extends React.Component{
   };
 
   render() {
+    this.state = { selected: this.props.selected };
     return (
       <AppBar className="tabs-bar" color="default">
         <div style={{display: 'inline-block', position: 'absolute', left: '15%', right: '15%'}}>

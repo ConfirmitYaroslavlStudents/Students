@@ -22,6 +22,7 @@ export default class TextInput extends React.Component {
         placeholder={this.props.placeholder}
         value={this.state.value}
         onChange={this.handleChange}
+        onKeyDown={this.props.onKeyDown}
         multiline={this.props.multiline}
         fullWidth
         margin="normal"

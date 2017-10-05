@@ -7,7 +7,7 @@ import Typography from 'material-ui/Typography';
 export default function Navbar(props) {
   return (
     <AppBar className="custom-navbar" color="primary">
-      <Toolbar>
+      <Toolbar style={{paddingRight: 8}}>
         {props.icon}
         <Typography type="title" color="inherit" style={{flex: 1}}>
           {props.title}

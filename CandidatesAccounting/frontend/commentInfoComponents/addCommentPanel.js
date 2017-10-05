@@ -4,6 +4,7 @@ import TextInput from '../materialUIDecorators/textInput';
 import IconButton from '../materialUIDecorators/iconButton';
 import AddIcon from 'material-ui-icons/Add';
 import styled from 'styled-components';
+import ReactQuill from 'react-quill';
 
 export default function AddCommentPanel(props) {
   return (
@@ -16,6 +17,16 @@ export default function AddCommentPanel(props) {
           autoFocus={true}
           multiline={true}
           onChange={props.onChange}
+          onKeyDown={
+            function(event) {
+              if(event.keyCode === 13) {
+                if(!event.shiftKey) {
+                  event.preventDefault();
+                  props.onClick(event);
+                }
+              }
+            }
+          }
         />
       </CommentTextInput>
       <ButtonWrapper>

@@ -4,106 +4,38 @@ import Dialog from 'material-ui/Dialog';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import CloseIcon from 'material-ui-icons/Close';
-import IconButton from './iconButton';
 import Slide from 'material-ui/transitions/Slide';
-import FabButton from './fabButton';
-import FlatButton from './flatButton';
 
-export default class DialogWindow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = ({ open: false });
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleAccept = this.handleAccept.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-  }
+export default function DialogWindow(props) {
+  return (
+    <div style={{"display": "inline"}}>
+      {props.openButton}
+      <Dialog
+        fullScreen={props.fullScreen}
+        open={props.open}
+        transition={<Slide direction="up" />}
+      >
+        <AppBar style={{position: 'relative'}}>
+          <Toolbar style={{paddingRight: 8}}>
+            <Typography type="title" color="inherit" style={{flex: 1}}>
+              {props.label}
+            </Typography>
+            {props.controls}
+          </Toolbar>
+        </AppBar>
 
-  handleOpen() {
-    if (this.props.open) {
-      this.props.open();
-    }
-    this.setState({ open: true });
-  };
+        {props.content}
 
-  handleAccept() {
-    let accepted = true;
-    if (this.props.accept) {
-      accepted = this.props.accept();
-    }
-    if (accepted !== false) {
-      this.setState({open: false});
-    }
-  }
-
-  handleClose() {
-    if (this.props.close) {
-      this.props.close();
-    }
-    this.setState({ open: false });
-  };
-
-  render() {
-    let openButton;
-    switch(this.props.openButtonType) {
-      case 'fab':
-        openButton = <FabButton onClick={this.handleOpen} color="primary" icon={this.props.openButtonContent}/>;
-        break;
-      case 'icon':
-        openButton = <IconButton onClick={this.handleOpen} icon={this.props.openButtonContent} />;
-        break;
-      default:
-        openButton = <FlatButton onClick={this.handleOpen} color="primary" text={this.props.openButtonContent}/>;
-    }
-    let acceptButton;
-    if (!this.props.withoutAcceptButton) {
-      acceptButton =
-        <FlatButton color="contrast" onClick={this.handleAccept} text={this.props.acceptButtonContent} />
-    }
-    return (
-      <div style={{"display": "inline"}}>
-
-        {openButton}
-
-        <Dialog
-          fullScreen={this.props.fullScreen}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-          transition={<Slide direction="up" />}
-        >
-          <AppBar style={{position: 'relative'}}>
-            <Toolbar>
-              <Typography type="title" color="inherit" style={{flex: 1}}>
-                {this.props.label}
-              </Typography>
-
-              {acceptButton}
-
-              <IconButton
-                color="contrast"
-                onClick={this.handleClose}
-                style={{marginRight: -15}}
-                icon={<CloseIcon/>}/>
-            </Toolbar>
-          </AppBar>
-
-          {this.props.content}
-
-        </Dialog>
-      </div>
-    );
-  }
+      </Dialog>
+    </div>
+  );
 }
 
 DialogWindow.propTypes = {
-  open: PropTypes.func,
-  accept: PropTypes.func,
-  close: PropTypes.func,
-  openButtonType: PropTypes.string,
-  openButtonContent: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  withoutAcceptButton: PropTypes.bool,
-  acceptButtonContent: PropTypes.object,
+  open: PropTypes.bool.isRequired,
+  openButton: PropTypes.object.isRequired,
   fullScreen: PropTypes.bool,
   label: PropTypes.string,
+  controls: PropTypes.object,
   content: PropTypes.object.isRequired,
 };

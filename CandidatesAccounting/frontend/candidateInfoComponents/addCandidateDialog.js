@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {CreateCandidate} from '../candidatesClasses/index';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
-import AddIcon from 'material-ui-icons/Add';
+import AddPersonIcon from 'material-ui-icons/PersonAdd';
+import CloseIcon from 'material-ui-icons/Close';
 import CandidateInfoForm from './candidateInfoForm';
+import IconButton from '../materialUIDecorators/iconButton';
 
 export default class AddCandidateDialog extends React.Component{
   constructor(props) {
@@ -12,9 +14,12 @@ export default class AddCandidateDialog extends React.Component{
     let newCandidate = CreateCandidate(props.candidateStatus, {});
     newCandidate.status = props.candidateStatus;
     this.candidate = newCandidate;
+    this.state=({isOpen: false});
+    this.handleOpenClose = this.handleOpenClose.bind(this);
   }
 
   render() {
+    const handleOpenClose = this.handleOpenClose;
     let candidate = this.candidate;
     const props = this.props;
     let newCandidate = CreateCandidate(props.candidateStatus, {});
@@ -23,17 +28,27 @@ export default class AddCandidateDialog extends React.Component{
     return (
       <AddButtonWrapper>
         <DialogWindow
-          content={<CandidateInfoForm candidate={candidate} />}
+          open={this.state.isOpen}
+          content={
+            <CandidateInfoForm candidate={candidate} />
+          }
           label="Add new candidate"
-          openButtonType="flat"
-          openButtonContent={<div className="button-content"><AddIcon/> new candidate</div>}
-          acceptButtonContent={<div className="button-content"><AddIcon/> <span style={{marginTop: 3}}>add</span></div>}
-          accept={function () {
-            props.addCandidate(CreateCandidate(candidate.status, candidate));
-            return true;
-          }}
+          openButton={ <IconButton icon={<AddPersonIcon />} onClick={() => {handleOpenClose(true)}}/> }
+          controls={
+            <div style={{display: 'inline-block'}}>
+              <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
+                props.addCandidate(candidate);
+                handleOpenClose(false);
+              }}/>
+              <IconButton color="inherit" icon={<CloseIcon />} onClick={() => {handleOpenClose(false)}}/>
+            </div>
+          }
         />
       </AddButtonWrapper>);
+  }
+
+  handleOpenClose(isOpen) {
+    this.setState({isOpen: isOpen});
   }
 }
 
@@ -45,7 +60,7 @@ AddCandidateDialog.propTypes = {
 const AddButtonWrapper = styled.div`
   display: inline-block;
   position: absolute;
-  right: 1px;
+  right: 5px;
   top: 1px;
 `;
 

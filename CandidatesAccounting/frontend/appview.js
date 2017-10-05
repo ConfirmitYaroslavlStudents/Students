@@ -4,7 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 import actions from './actions';
 import Navbar from './materialUIDecorators/navbar';
 import Logo from 'material-ui-icons/AccountCircle';
-import FlatButton from './materialUIDecorators/flatButton';
+import IconButton from './materialUIDecorators/iconButton';
+import SignOutIcon from 'material-ui-icons/ExitToApp';
 import AppBar from './appBar';
 import CommentsForm from './commentInfoComponents/commentsForm';
 import CandidateTable from './candidateInfoComponents/candidateTable';
@@ -43,7 +44,7 @@ export default class AppView extends React.Component {
         <Navbar
           icon={<Logo />}
           title="Candidate Accounting"
-          controls={<FlatButton color="contrast" onClick={()=>alert('TODO')} text="Sign out"/>}
+          controls={<IconButton color="contrast" onClick={()=>alert('TODO')} icon={<SignOutIcon/>} />}
         />
         <AppBar
           selected={selectedTableNumber}

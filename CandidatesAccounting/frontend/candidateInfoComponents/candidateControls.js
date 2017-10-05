@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import IconButton from '../materialUIDecorators/iconButton';
 import RemoveIcon from 'material-ui-icons/Delete';
 import EditCandidateDialog from './editCandidateDialog';
-import ViewListIcon from 'material-ui-icons/ViewList';
+import CommentIcon from 'material-ui-icons/ViewList';
 import Badge from '../materialUIDecorators/badge';
 import {NavLink} from 'react-router-dom';
 import AddCommentDialog from '../commentInfoComponents/addCommentDialog';
@@ -19,7 +19,7 @@ export default function CandidateControls(props) {
       <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
-            icon={<ViewListIcon />}
+            icon={<CommentIcon />}
             onClick={function () { }}
           />
         </Badge>
@@ -33,7 +33,7 @@ export default function CandidateControls(props) {
       <IconButton
         icon={<RemoveIcon />}
         color="accent"
-        onClick={function () { props.deleteCandidate(props.candidate.id) }}
+        onClick={() => { props.deleteCandidate(props.candidate.id) }}
       />
     </div>
   );

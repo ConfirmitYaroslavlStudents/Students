@@ -9,7 +9,13 @@ export default function reducer(state = Map(), action) {
       return state.merge(action.state);
 
     case 'ADD_CANDIDATE':
-      let lastId = state.get('candidates').last().id;
+      let lastCandidate = state.get('candidates').last();
+      let lastId;
+      if (lastCandidate) {
+        lastId = lastCandidate.id;
+      } else {
+        lastId = 0;
+      }
       let newCandidate = CreateCandidate(action.candidate.status ? action.candidate.status
                                                                  : action.candidate.constructor.name, action.candidate);
       newCandidate.id = lastId + 1;

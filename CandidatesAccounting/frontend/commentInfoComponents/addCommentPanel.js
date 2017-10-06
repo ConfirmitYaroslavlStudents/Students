@@ -67,6 +67,6 @@ const CommentTextInput = styled.div`
 const CommentTextEdit = styled.div`
   auto-focus: true;
   tab-index: 1;
-  min-height: 80px;
+  min-height: 120px;
   font-size: 96%;
 `;

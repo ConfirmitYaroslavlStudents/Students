@@ -75,7 +75,7 @@ const FormWrapper = styled.div`
 
 const NoComment = styled.div`
   padding: 5px;
-  color: dimgray;
+  color: #aaa;
   text-align: center;
   margin-bottom: 20px;
 `;

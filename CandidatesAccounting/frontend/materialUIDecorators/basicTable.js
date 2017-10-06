@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 
 export default class BasicTable extends React.Component {
   render() {
-    const contentRows = this.props.contentRows.map((row, index) =>
+    let contentRows = this.props.contentRows.map((row, index) =>
       <TableRow key={'tr' + index}>
         {
           row.map((cell, cellIndex) =>
@@ -13,6 +14,10 @@ export default class BasicTable extends React.Component {
           )}
       </TableRow>
     );
+    console.log(contentRows);
+    if (contentRows.size === 0) {
+      contentRows = (<TableRow><TableCell><EmptyTable>The table is empty</EmptyTable></TableCell></TableRow>);
+    }
     return (
       <Paper style={
         {
@@ -42,3 +47,11 @@ BasicTable.propTypes = {
   heads: PropTypes.array,
   contentRows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
+
+const EmptyTable = styled.div`
+  color: #aaa;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  margin-top: -12px;
+`;

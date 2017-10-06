@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AvatarIcon from 'material-ui-icons/AccountCircle';
 import IconButton from '../materialUIDecorators/iconButton';
-import RemoveIcon from 'material-ui-icons/RemoveCircleOutline';
+import RemoveIcon from 'material-ui-icons/Delete';
 import styled, { css } from 'styled-components';
 
 export default function CommentCloud(props) {
@@ -64,12 +64,12 @@ const CommentIcons = styled.div`
 
 const CommentMount = styled.div`
   display: inline-block;
-  padding: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  padding: 10px 10px 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
   max-width: 70%;
   float: left;
   background: #FFF;
-  border-radius: 2px 7px 7px 7px;
+  border-radius: 3px 7px 7px 7px;
   
   ${props => props.userComment && css`
 		float: right;

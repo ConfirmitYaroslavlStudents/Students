@@ -1,11 +1,12 @@
 import {Map} from 'immutable';
 import {CreateCandidate} from './candidatesClasses';
-
+// Redux Saga
+// Thunk
 export default function reducer(state = Map(), action) {
   let candidate;
 
   switch (action.type) {
-    case 'SET_STATE':
+    case 'SET_INITIAL_STATE':
       return state.merge(action.state);
 
     case 'ADD_CANDIDATE':

@@ -11,8 +11,8 @@ export default class TextInput extends React.Component {
   }
 
   render() {
-    if (this.props.value !== this.state.defaultValue) {
-      const value = this.props.value ? this.props.value : '';
+    const value = this.props.value ? this.props.value : '';
+    if (value !== this.state.defaultValue) {
       this.state = ({ value: value, defaultValue: value });
     }
     return (
@@ -39,7 +39,7 @@ export default class TextInput extends React.Component {
 
 TextInput.propTypes = {
   name: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,

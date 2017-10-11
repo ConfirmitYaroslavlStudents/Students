@@ -1,3 +1,9 @@
+function setInitialState() {
+  return {
+    type: 'SET_INITIAL_STATE'
+  }
+}
+
 function addCandidate(candidate) {
   return {
     type: 'ADD_CANDIDATE',
@@ -36,4 +42,4 @@ function deleteComment(candidateId, commentId) {
   }
 }
 
-module.exports = {addCandidate, deleteCandidate, editCandidate, addComment, deleteComment};
+module.exports = {setInitialState, addCandidate, deleteCandidate, editCandidate, addComment, deleteComment};

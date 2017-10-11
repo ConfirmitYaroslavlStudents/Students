@@ -1,5 +1,6 @@
 export default class Candidate {
   constructor(id, name, birthDate, email, comments) {
+    this.status = 'Candidate';
     this.id = id ? id : '';
     this.name = name ? name : '';
     this.birthDate = birthDate ? birthDate : '';

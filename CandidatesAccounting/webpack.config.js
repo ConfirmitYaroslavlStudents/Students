@@ -6,7 +6,7 @@ module.exports = {
   watch: true,
 
   entry: {
-    main: './main'
+    main: ['babel-polyfill', './main.js'],
   },
   output: {
     path:       path.join(__dirname, 'public'),

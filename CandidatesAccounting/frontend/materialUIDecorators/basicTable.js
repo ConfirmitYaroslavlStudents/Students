@@ -14,7 +14,6 @@ export default class BasicTable extends React.Component {
           )}
       </TableRow>
     );
-    console.log(contentRows);
     if (contentRows.size === 0) {
       contentRows = (<TableRow><TableCell><EmptyTable>The table is empty</EmptyTable></TableCell></TableRow>);
     }

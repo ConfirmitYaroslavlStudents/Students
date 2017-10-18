@@ -32,15 +32,68 @@ http.createServer(app).listen(app.get('port'), function() {
 });
 
 app.get('/candidates', (req, res) => {
-  console.log('SET_INITIAL_STATE');
-  console.log(candidates);
+  console.log('Send all candidates');
   res.send(candidates);
 });
 
 app.post('/candidates', (req, res) => {
-  candidates.push(req.body.candidate);
-  console.log('ADD_NEW_CANDIDATE', req.body.candidate);
-  console.log(candidates);
+  let lastId = 0;
+  for (let i = 0; i < candidates.length; i++) {
+    if (candidates[i].id > lastId) {
+      lastId = candidates[i].id;
+    }
+  }
+  let candidate = req.body.candidate;
+  candidate.id = lastId + 1;
+  candidates.push(candidate);
+  console.log('Add new candidate:', candidate);
+  res.end();
+});
+
+app.put('/candidates/:id', (req, res) => {
+  for (let i = 0; i < candidates.length; i++) {
+    if (candidates[i].id === parseInt(req.params.id)) {
+      console.log('Edit candidate');
+      console.log('Previous state:', candidates[i]);
+      candidates[i] = req.body.candidate;
+      console.log('New state:', candidates[i]);
+      break;
+    }
+  }
+  res.end();
+});
+
+app.delete('/candidates/:id', (req, res) => {
+  for (let i = 0; i < candidates.length; i++) {
+    if (candidates[i].id === parseInt(req.params.id)) {
+      console.log('Delete candidate:', candidates[i]);
+      candidates.splice(i, 1);
+      break;
+    }
+  }
+  res.end();
+});
+
+app.post('/candidates/:candidateId/comments', (req, res) => {
+  for (let i = 0; i < candidates.length; i++) {
+    if (candidates[i].id === parseInt(req.params.candidateId)) {
+      candidates[i].comments.push(req.body.comment);
+      console.log('Add comment:', candidates[i].id, req.body.comment);
+      break;
+    }
+  }
+  res.end();
+});
+
+app.delete('/candidates/:candidateId/comments/:commentId', (req, res) => {
+  for (let i = 0; i < candidates.length; i++) {
+    if (candidates[i].id === parseInt(req.params.candidateId)) {
+      console.log('Delete comment:', candidates[i].id, candidates[i].comments[req.params.commentId]);
+      candidates[i].comments.splice(req.params.commentId, 1);
+      break;
+    }
+  }
+  res.end();
 });
 
 app.get('/*', (req, res) => {

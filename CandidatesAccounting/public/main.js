@@ -8992,7 +8992,6 @@
 	sagaMiddleware.run(_sagas2.default);
 
 	(0, _fetcher.getAllCandidates)().then(function (candidatesArray) {
-
 	  var candidates = [];
 	  for (var i = 0; i < candidatesArray.length; i++) {
 	    candidates.push((0, _candidatesClasses.CreateCandidate)(candidatesArray[i].status, candidatesArray[i]));
@@ -36276,8 +36275,6 @@
 
 	var _candidatesClasses = __webpack_require__(574);
 
-	// Redux Saga
-	// Thunk
 	function reducer() {
 	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (0, _immutable.Map)();
 	  var action = arguments[1];
@@ -36289,12 +36286,12 @@
 	      return state.merge(action.state);
 
 	    case 'ADD_CANDIDATE':
-	      var lastCandidate = state.get('candidates').last();
-	      var lastId = void 0;
-	      if (lastCandidate) {
-	        lastId = lastCandidate.id;
-	      } else {
-	        lastId = 0;
+	      var candidates = state.get('candidates').toArray();
+	      var lastId = 0;
+	      for (var i = 0; i < candidates.length; i++) {
+	        if (candidates[i].id > lastId) {
+	          lastId = candidates[i].id;
+	        }
 	      }
 	      var newCandidate = (0, _candidatesClasses.CreateCandidate)(action.candidate.status ? action.candidate.status : action.candidate.constructor.name, action.candidate);
 	      newCandidate.id = lastId + 1;
@@ -41552,31 +41549,40 @@
 	  value: true
 	});
 	exports.default = rootSaga;
-	exports.addNewCandidate = addNewCandidate;
-	exports.watchCandidateAddition = watchCandidateAddition;
-
-	var _reduxSaga = __webpack_require__(537);
+	exports.watchCandidateAdd = watchCandidateAdd;
+	exports.watchCandidateDelete = watchCandidateDelete;
+	exports.watchCandidateEdit = watchCandidateEdit;
+	exports.watchCommentAdd = watchCommentAdd;
+	exports.watchCommentDelete = watchCommentDelete;
+	exports.addCandidateSaga = addCandidateSaga;
+	exports.deleteCandidateSaga = deleteCandidateSaga;
+	exports.editCandidateSaga = editCandidateSaga;
+	exports.addCommentSaga = addCommentSaga;
+	exports.deleteCommentSaga = deleteCommentSaga;
 
 	var _effects = __webpack_require__(551);
 
 	var _fetcher = __webpack_require__(581);
 
-	var _fetcher2 = _interopRequireDefault(_fetcher);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 	var _marked = /*#__PURE__*/regeneratorRuntime.mark(rootSaga),
-	    _marked2 = /*#__PURE__*/regeneratorRuntime.mark(addNewCandidate),
-	    _marked3 = /*#__PURE__*/regeneratorRuntime.mark(watchCandidateAddition);
+	    _marked2 = /*#__PURE__*/regeneratorRuntime.mark(watchCandidateAdd),
+	    _marked3 = /*#__PURE__*/regeneratorRuntime.mark(watchCandidateDelete),
+	    _marked4 = /*#__PURE__*/regeneratorRuntime.mark(watchCandidateEdit),
+	    _marked5 = /*#__PURE__*/regeneratorRuntime.mark(watchCommentAdd),
+	    _marked6 = /*#__PURE__*/regeneratorRuntime.mark(watchCommentDelete),
+	    _marked7 = /*#__PURE__*/regeneratorRuntime.mark(addCandidateSaga),
+	    _marked8 = /*#__PURE__*/regeneratorRuntime.mark(deleteCandidateSaga),
+	    _marked9 = /*#__PURE__*/regeneratorRuntime.mark(editCandidateSaga),
+	    _marked10 = /*#__PURE__*/regeneratorRuntime.mark(addCommentSaga),
+	    _marked11 = /*#__PURE__*/regeneratorRuntime.mark(deleteCommentSaga);
 
-	// single entry point to start all Sagas at once
 	function rootSaga() {
 	  return regeneratorRuntime.wrap(function rootSaga$(_context) {
 	    while (1) {
 	      switch (_context.prev = _context.next) {
 	        case 0:
 	          _context.next = 2;
-	          return (0, _effects.all)([watchCandidateAddition()]);
+	          return (0, _effects.all)([watchCandidateAdd(), watchCandidateDelete(), watchCandidateEdit(), watchCommentAdd(), watchCommentDelete()]);
 
 	        case 2:
 	        case 'end':
@@ -41586,22 +41592,15 @@
 	  }, _marked, this);
 	}
 
-	function addNewCandidate(action) {
-	  return regeneratorRuntime.wrap(function addNewCandidate$(_context2) {
+	function watchCandidateAdd() {
+	  return regeneratorRuntime.wrap(function watchCandidateAdd$(_context2) {
 	    while (1) {
 	      switch (_context2.prev = _context2.next) {
 	        case 0:
-	          fetch("/candidates", {
-	            method: "POST",
-	            headers: {
-	              "Content-Type": "application/json"
-	            },
-	            body: JSON.stringify({ candidate: action.candidate })
-	          }).then(function (response) {
-	            return response.json();
-	          }).then(function (data) {});
+	          _context2.next = 2;
+	          return (0, _effects.takeEvery)('ADD_CANDIDATE', addCandidateSaga);
 
-	        case 1:
+	        case 2:
 	        case 'end':
 	          return _context2.stop();
 	      }
@@ -41609,13 +41608,13 @@
 	  }, _marked2, this);
 	}
 
-	function watchCandidateAddition() {
-	  return regeneratorRuntime.wrap(function watchCandidateAddition$(_context3) {
+	function watchCandidateDelete() {
+	  return regeneratorRuntime.wrap(function watchCandidateDelete$(_context3) {
 	    while (1) {
 	      switch (_context3.prev = _context3.next) {
 	        case 0:
 	          _context3.next = 2;
-	          return (0, _effects.takeEvery)('ADD_CANDIDATE', addNewCandidate);
+	          return (0, _effects.takeEvery)('DELETE_CANDIDATE', deleteCandidateSaga);
 
 	        case 2:
 	        case 'end':
@@ -41623,6 +41622,129 @@
 	      }
 	    }
 	  }, _marked3, this);
+	}
+
+	function watchCandidateEdit() {
+	  return regeneratorRuntime.wrap(function watchCandidateEdit$(_context4) {
+	    while (1) {
+	      switch (_context4.prev = _context4.next) {
+	        case 0:
+	          _context4.next = 2;
+	          return (0, _effects.takeEvery)('EDIT_CANDIDATE', editCandidateSaga);
+
+	        case 2:
+	        case 'end':
+	          return _context4.stop();
+	      }
+	    }
+	  }, _marked4, this);
+	}
+
+	function watchCommentAdd() {
+	  return regeneratorRuntime.wrap(function watchCommentAdd$(_context5) {
+	    while (1) {
+	      switch (_context5.prev = _context5.next) {
+	        case 0:
+	          _context5.next = 2;
+	          return (0, _effects.takeEvery)('ADD_COMMENT', addCommentSaga);
+
+	        case 2:
+	        case 'end':
+	          return _context5.stop();
+	      }
+	    }
+	  }, _marked5, this);
+	}
+
+	function watchCommentDelete() {
+	  return regeneratorRuntime.wrap(function watchCommentDelete$(_context6) {
+	    while (1) {
+	      switch (_context6.prev = _context6.next) {
+	        case 0:
+	          _context6.next = 2;
+	          return (0, _effects.takeEvery)('DELETE_COMMENT', deleteCommentSaga);
+
+	        case 2:
+	        case 'end':
+	          return _context6.stop();
+	      }
+	    }
+	  }, _marked6, this);
+	}
+
+	function addCandidateSaga(action) {
+	  return regeneratorRuntime.wrap(function addCandidateSaga$(_context7) {
+	    while (1) {
+	      switch (_context7.prev = _context7.next) {
+	        case 0:
+	          (0, _fetcher.addCandidate)(action.candidate);
+
+	        case 1:
+	        case 'end':
+	          return _context7.stop();
+	      }
+	    }
+	  }, _marked7, this);
+	}
+
+	function deleteCandidateSaga(action) {
+	  return regeneratorRuntime.wrap(function deleteCandidateSaga$(_context8) {
+	    while (1) {
+	      switch (_context8.prev = _context8.next) {
+	        case 0:
+	          (0, _fetcher.deleteCandidate)(action.id);
+
+	        case 1:
+	        case 'end':
+	          return _context8.stop();
+	      }
+	    }
+	  }, _marked8, this);
+	}
+
+	function editCandidateSaga(action) {
+	  return regeneratorRuntime.wrap(function editCandidateSaga$(_context9) {
+	    while (1) {
+	      switch (_context9.prev = _context9.next) {
+	        case 0:
+	          (0, _fetcher.editCandidate)(action.id, action.candidateNewState);
+
+	        case 1:
+	        case 'end':
+	          return _context9.stop();
+	      }
+	    }
+	  }, _marked9, this);
+	}
+
+	function addCommentSaga(action) {
+	  return regeneratorRuntime.wrap(function addCommentSaga$(_context10) {
+	    while (1) {
+	      switch (_context10.prev = _context10.next) {
+	        case 0:
+	          (0, _fetcher.addComment)(action.candidateId, action.comment);
+
+	        case 1:
+	        case 'end':
+	          return _context10.stop();
+	      }
+	    }
+	  }, _marked10, this);
+	}
+
+	function deleteCommentSaga(action) {
+	  return regeneratorRuntime.wrap(function deleteCommentSaga$(_context11) {
+	    while (1) {
+	      switch (_context11.prev = _context11.next) {
+	        case 0:
+	          (0, _fetcher.deleteComment)(action.candidateId, action.commentId);
+
+	        case 1:
+	        case 'end':
+	          return _context11.stop();
+	      }
+	    }
+	  }, _marked11, this);
 	}
 
 /***/ }),
@@ -41635,13 +41757,94 @@
 	  value: true
 	});
 	exports.getAllCandidates = getAllCandidates;
+	exports.addCandidate = addCandidate;
+	exports.deleteCandidate = deleteCandidate;
+	exports.editCandidate = editCandidate;
+	exports.addComment = addComment;
+	exports.deleteComment = deleteComment;
 	function getAllCandidates() {
 	  return fetch('/candidates').then(function (response) {
-	    return response.json();
+	    if (response.status !== 200) {
+	      alert('Error: ' + response.status);
+	    } else {
+	      return response.json();
+	    }
 	  });
 	}
 
-	module.exports = { getAllCandidates: getAllCandidates };
+	function addCandidate(candidate) {
+	  fetch("/candidates", {
+	    method: "POST",
+	    headers: {
+	      "Content-Type": "application/json"
+	    },
+	    body: JSON.stringify({ candidate: candidate })
+	  }).then(function (response) {
+	    return response;
+	  }).then(function (response) {
+	    if (response.status !== 200) {
+	      alert('Error: ' + response.status);
+	    }
+	  }).catch(alert);
+	}
+
+	function deleteCandidate(id) {
+	  fetch("/candidates/" + id, {
+	    method: "DELETE"
+	  }).then(function (response) {
+	    return response;
+	  }).then(function (response) {
+	    if (response.status !== 200) {
+	      alert('Error: ' + response.status);
+	    }
+	  }).catch(alert);
+	}
+
+	function editCandidate(id, candidateNewState) {
+	  fetch("/candidates/" + id, {
+	    method: "PUT",
+	    headers: {
+	      "Content-Type": "application/json"
+	    },
+	    body: JSON.stringify({ candidate: candidateNewState })
+	  }).then(function (response) {
+	    return response;
+	  }).then(function (response) {
+	    if (response.status !== 200) {
+	      alert('Error: ' + response.status);
+	    }
+	  }).catch(alert);
+	}
+
+	function addComment(candidateId, comment) {
+	  fetch("/candidates/" + candidateId + '/comments', {
+	    method: "POST",
+	    headers: {
+	      "Content-Type": "application/json"
+	    },
+	    body: JSON.stringify({ comment: comment })
+	  }).then(function (response) {
+	    return response;
+	  }).then(function (response) {
+	    if (response.status !== 200) {
+	      alert('Error: ' + response.status);
+	    }
+	  }).catch(alert);
+	}
+
+	function deleteComment(candidateId, commentId) {
+	  fetch("/candidates/" + candidateId + '/comments/' + commentId, {
+	    method: "DELETE"
+	  }).then(function (response) {
+	    return response;
+	  }).then(function (response) {
+	    if (response.status !== 200) {
+	      alert('Error: ' + response.status);
+	    }
+	  }).catch(alert);
+	}
+
+	module.exports = { getAllCandidates: getAllCandidates, addCandidate: addCandidate, deleteCandidate: deleteCandidate, editCandidate: editCandidate, addComment: addComment, deleteComment: deleteComment };
 
 /***/ }),
 /* 582 */
@@ -92813,7 +93016,7 @@
 	var _templateObject = _taggedTemplateLiteral(['\n  display: inline-block;\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n '], ['\n  display: inline-block;\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n ']),
 	    _templateObject2 = _taggedTemplateLiteral(['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  clear: both;\n  background: #FFF;\n'], ['\n  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);\n  position: relative;\n  width: 100%;\n  clear: both;\n  background: #FFF;\n']),
 	    _templateObject3 = _taggedTemplateLiteral(['\n  padding-right: 58px;\n'], ['\n  padding-right: 58px;\n']),
-	    _templateObject4 = _taggedTemplateLiteral(['\n  auto-focus: true;\n  tab-index: 1;\n  min-height: 120px;\n  font-size: 96%;\n'], ['\n  auto-focus: true;\n  tab-index: 1;\n  min-height: 120px;\n  font-size: 96%;\n']);
+	    _templateObject4 = _taggedTemplateLiteral(['\n  tabindex: 1;\n  min-height: 120px;\n  font-size: 96%;\n'], ['\n  tabindex: 1;\n  min-height: 120px;\n  font-size: 96%;\n']);
 
 	exports.default = AddCommentPanel;
 

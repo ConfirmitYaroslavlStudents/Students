@@ -1,27 +1,57 @@
-import { delay } from 'redux-saga'
-import { put, takeEvery, all, call } from 'redux-saga/effects'
-import fetcher from './fetcher.js';
+import { takeEvery, all} from 'redux-saga/effects';
+import { addCandidate, deleteCandidate, editCandidate, addComment, deleteComment } from './fetcher.js';
 
-// single entry point to start all Sagas at once
 export default function* rootSaga() {
   yield all([
-    watchCandidateAddition()
+    watchCandidateAdd(),
+    watchCandidateDelete(),
+    watchCandidateEdit(),
+    watchCommentAdd(),
+    watchCommentDelete()
   ])
 }
 
-export function* addNewCandidate(action) {
-  fetch("/candidates",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({candidate: action.candidate})
-    })
-    .then(function(response){ return response.json(); })
-    .then(function(data){  })
+export function* watchCandidateAdd() {
+  yield takeEvery('ADD_CANDIDATE', addCandidateSaga);
 }
 
-export function* watchCandidateAddition() {
-  yield takeEvery('ADD_CANDIDATE', addNewCandidate);
+export function* watchCandidateDelete() {
+  yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga);
 }
+
+export function* watchCandidateEdit() {
+  yield takeEvery('EDIT_CANDIDATE', editCandidateSaga);
+}
+
+export function* watchCommentAdd() {
+  yield takeEvery('ADD_COMMENT', addCommentSaga);
+}
+
+export function* watchCommentDelete() {
+  yield takeEvery('DELETE_COMMENT', deleteCommentSaga);
+}
+
+export function* addCandidateSaga(action) {
+  addCandidate(action.candidate);
+}
+
+export function* deleteCandidateSaga(action) {
+  deleteCandidate(action.id);
+}
+
+export function* editCandidateSaga(action) {
+  editCandidate(action.id, action.candidateNewState);
+}
+
+export function* addCommentSaga(action) {
+  addComment(action.candidateId, action.comment);
+}
+
+export function* deleteCommentSaga(action) {
+  deleteComment(action.candidateId, action.commentId);
+}
+
+
+
+
+

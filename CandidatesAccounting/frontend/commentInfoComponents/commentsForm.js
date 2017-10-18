@@ -28,11 +28,11 @@ export default class CommentsForm extends React.Component {
     return (
       <FormWrapper>
         {comments}
-        <AddCommentPanel
-          value={this.state.newCommentText}
-          onChange={this.changeNewCommentText}
-          onClick={this.addNewComment}
-        />
+      <AddCommentPanel
+        value={this.state.newCommentText}
+        onChange={this.changeNewCommentText}
+        onClick={this.addNewComment}
+      />
       </FormWrapper>
     );
   }

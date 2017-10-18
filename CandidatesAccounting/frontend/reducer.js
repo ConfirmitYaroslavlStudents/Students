@@ -1,7 +1,6 @@
 import {Map} from 'immutable';
 import {CreateCandidate} from './candidatesClasses';
-// Redux Saga
-// Thunk
+
 export default function reducer(state = Map(), action) {
   let candidate;
 
@@ -10,12 +9,12 @@ export default function reducer(state = Map(), action) {
       return state.merge(action.state);
 
     case 'ADD_CANDIDATE':
-      let lastCandidate = state.get('candidates').last();
-      let lastId;
-      if (lastCandidate) {
-        lastId = lastCandidate.id;
-      } else {
-        lastId = 0;
+      let candidates = state.get('candidates').toArray();
+      let lastId = 0;
+      for (let i = 0; i < candidates.length; i++) {
+        if (candidates[i].id > lastId) {
+          lastId = candidates[i].id;
+        }
       }
       let newCandidate = CreateCandidate(action.candidate.status ? action.candidate.status
                                                                  : action.candidate.constructor.name, action.candidate);

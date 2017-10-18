@@ -24,7 +24,6 @@ sagaMiddleware.run(rootSaga);
 
 getAllCandidates()
   .then(function(candidatesArray) {
-
     let candidates = [];
     for (let i = 0; i < candidatesArray.length; i++) {
       candidates.push(CreateCandidate(candidatesArray[i].status, candidatesArray[i]));

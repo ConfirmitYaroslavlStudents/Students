@@ -9,7 +9,7 @@ import AddCommentPanel from './addCommentPanel';
 export default class CommentsForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({newCommentText: ''});
+    this.newCommentText = '';
     this.changeNewCommentText = this.changeNewCommentText.bind(this);
     this.addNewComment = this.addNewComment.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
@@ -28,21 +28,31 @@ export default class CommentsForm extends React.Component {
     return (
       <FormWrapper>
         {comments}
-      <AddCommentPanel
-        value={this.state.newCommentText}
-        onChange={this.changeNewCommentText}
-        onClick={this.addNewComment}
-      />
+        <AddCommentPanelWrapper>
+          <AddCommentPanel
+            value={this.newCommentText}
+            onChange={this.changeNewCommentText}
+            onClick={this.addNewComment}
+          />
+        </AddCommentPanelWrapper>
       </FormWrapper>
     );
   }
 
   changeNewCommentText(text) {
-    this.setState({newCommentText: text})
+    this.newCommentText = text;
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  }
+
+  componentDidUpdate() {
+    window.scrollTo(0, document.documentElement.scrollHeight);
   }
 
   addNewComment() {
-    let newCommentText = this.state.newCommentText;
+    let newCommentText = this.newCommentText;
     if (newCommentText.replace(/<[^>]+>/g,'').trim() !== '') {
       if (newCommentText.slice(-11) === '<p><br></p>') {
         newCommentText = newCommentText.substr(0, newCommentText.length - 11);
@@ -51,7 +61,7 @@ export default class CommentsForm extends React.Component {
         'Вы',
         moment().format('H:MM:SS DD MMMM YYYY'),
         newCommentText));
-      this.setState({newCommentText: ''})
+      this.newCommentText = '';
     }
   }
 
@@ -67,10 +77,14 @@ CommentsForm.propTypes = {
 };
 
 const FormWrapper = styled.div`
-  display: 'inline-block';
   width: 100%;
-  padding-top: 20px;
+  min-height: 100vmin;
   background: #EEE;
+  position: absolute;
+  top: 0;
+  padding-top: 134px;
+  padding-bottom: 161px;
+  box-sizing: border-box;
 `;
 
 const NoComment = styled.div`
@@ -78,4 +92,10 @@ const NoComment = styled.div`
   color: #aaa;
   text-align: center;
   margin-bottom: 20px;
+`;
+
+const AddCommentPanelWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 `;

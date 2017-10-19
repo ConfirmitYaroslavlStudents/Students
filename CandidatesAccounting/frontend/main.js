@@ -12,7 +12,7 @@ import createPalette from 'material-ui/styles/createPalette';
 import {deepPurple} from 'material-ui/colors';
 import AppView from './appview';
 import {CreateCandidate} from './candidatesClasses';
-import {getAllCandidates} from './fetcher';
+import {getAllCandidates} from './candidateService';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -23,13 +23,9 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 
 getAllCandidates()
-  .then(function(candidatesArray) {
-    let candidates = [];
-    for (let i = 0; i < candidatesArray.length; i++) {
-      candidates.push(CreateCandidate(candidatesArray[i].status, candidatesArray[i]));
-    }
+  .then(function(candidates) {
     store.dispatch({
-      type: "SET_INITIAL_STATE",
+      type: "SET_INITIAL_STATE_SUCCESS",
       state: {
         candidates: candidates
       }

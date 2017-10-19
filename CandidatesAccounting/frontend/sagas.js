@@ -1,5 +1,6 @@
-import { takeEvery, all} from 'redux-saga/effects';
-import { addCandidate, deleteCandidate, editCandidate, addComment, deleteComment } from './fetcher.js';
+import { takeEvery, all, put, call} from 'redux-saga/effects';
+import { addCandidate, deleteCandidate, editCandidate} from './candidateService.js';
+import { addComment, deleteComment } from './commentService';
 
 export default function* rootSaga() {
   yield all([
@@ -32,26 +33,60 @@ export function* watchCommentDelete() {
 }
 
 export function* addCandidateSaga(action) {
-  addCandidate(action.candidate);
+  try {
+    yield call(addCandidate, action.candidate);
+    yield put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
+  }
+  catch (error) {
+    yield put({type: 'SERVICE_FAILURE', message: error + ' Add candidate server error'});
+  }
+  /*
+    addCandidate(action.candidate)
+    .then(() => {
+      put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
+    })
+    .catch((error) => {
+      put({type: 'SERVICE_FAILURE', message: error + ' Add candidate server error'});
+    })
+  */
 }
 
 export function* deleteCandidateSaga(action) {
-  deleteCandidate(action.id);
+  try {
+    yield call(deleteCandidate, action.id);
+    yield put({type: 'DELETE_CANDIDATE_SUCCESS', id: action.id});
+  }
+  catch(error) {
+    yield put({type: 'SERVICE_FAILURE', message: error + ' Delete candidate server error'});
+  }
 }
 
 export function* editCandidateSaga(action) {
-  editCandidate(action.id, action.candidateNewState);
+  try {
+    yield call(editCandidate, action.id, action.candidateNewState);
+    yield put({type: 'EDIT_CANDIDATE_SUCCESS', id: action.id, candidateNewState: action.candidateNewState});
+  }
+  catch(error) {
+    put({type: 'SERVICE_FAILURE', message: error + ' Edit candidate server error'});
+  }
 }
 
 export function* addCommentSaga(action) {
-  addComment(action.candidateId, action.comment);
+  try {
+    yield call(addComment, action.candidateId, action.comment);
+    yield put({type: 'ADD_COMMENT_SUCCESS', candidateId: action.candidateId, comment: action.comment});
+  }
+  catch(error) {
+    yield put({type: 'SERVICE_FAILURE', message: error + ' Add comment server error'});
+  }
 }
 
 export function* deleteCommentSaga(action) {
-  deleteComment(action.candidateId, action.commentId);
+  try {
+    yield call(deleteComment, action.candidateId, action.commentId);
+    yield put({type: 'DELETE_COMMENT_SUCCESS', candidateId: action.candidateId, commentId: action.commentId});
+  }
+  catch(error) {
+    yield put({type: 'SERVICE_FAILURE', message: error + ' Delete comment server error'});
+  }
 }
-
-
-
-
-

@@ -43,7 +43,7 @@ app.post('/candidates', (req, res) => {
       lastId = candidates[i].id;
     }
   }
-  let candidate = req.body.candidate;
+  let candidate = req.body.data;
   candidate.id = lastId + 1;
   candidates.push(candidate);
   console.log('Add new candidate:', candidate);
@@ -55,7 +55,7 @@ app.put('/candidates/:id', (req, res) => {
     if (candidates[i].id === parseInt(req.params.id)) {
       console.log('Edit candidate');
       console.log('Previous state:', candidates[i]);
-      candidates[i] = req.body.candidate;
+      candidates[i] = req.body.data;
       console.log('New state:', candidates[i]);
       break;
     }
@@ -77,8 +77,8 @@ app.delete('/candidates/:id', (req, res) => {
 app.post('/candidates/:candidateId/comments', (req, res) => {
   for (let i = 0; i < candidates.length; i++) {
     if (candidates[i].id === parseInt(req.params.candidateId)) {
-      candidates[i].comments.push(req.body.comment);
-      console.log('Add comment:', candidates[i].id, req.body.comment);
+      candidates[i].comments.push(req.body.data);
+      console.log('Add comment:', candidates[i].id, req.body.data);
       break;
     }
   }

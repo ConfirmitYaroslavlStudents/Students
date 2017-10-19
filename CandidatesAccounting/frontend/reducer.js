@@ -5,7 +5,7 @@ export default function reducer(state = Map(), action) {
   let candidate;
 
   switch (action.type) {
-    case 'SET_INITIAL_STATE_SUCCESS':
+    case 'SET_INITIAL_STATE':
       return state.merge(action.state);
 
     case 'ADD_CANDIDATE_SUCCESS':
@@ -47,9 +47,10 @@ export default function reducer(state = Map(), action) {
         1,
         candidate));
 
-    case 'SERVICE_FAILURE':
-      alert(action.message);
-  }
+    case 'SET_ERROR_MESSAGE':
+      return state = state.set('errorMessage', action.message);
 
-  return state;
+    default:
+      return state;
+  }
 }

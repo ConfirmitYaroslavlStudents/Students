@@ -10,12 +10,16 @@ export default class CommentsForm extends React.Component {
   constructor(props) {
     super(props);
     this.newCommentText = '';
+    this.currentCommentsNumber = props.candidate.comments.length;
+    this.previousCommentsNumber = this.currentCommentsNumber;
     this.changeNewCommentText = this.changeNewCommentText.bind(this);
     this.addNewComment = this.addNewComment.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
   }
 
   render() {
+    this.previousCommentsNumber = this.currentCommentsNumber;
+    this.currentCommentsNumber = this.props.candidate.comments.length;
     let deleteComment = this.deleteComment;
 
     let comments = this.props.candidate.comments.map((comment, index) =>
@@ -48,7 +52,9 @@ export default class CommentsForm extends React.Component {
   }
 
   componentDidUpdate() {
-    window.scrollTo(0, document.documentElement.scrollHeight);
+    if (this.currentCommentsNumber > this.previousCommentsNumber) {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+    }
   }
 
   addNewComment() {

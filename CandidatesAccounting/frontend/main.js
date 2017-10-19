@@ -11,7 +11,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import {deepPurple} from 'material-ui/colors';
 import AppView from './appview';
-import {CreateCandidate} from './candidatesClasses';
 import {getAllCandidates} from './candidateService';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -23,11 +22,12 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 
 getAllCandidates()
-  .then(function(candidates) {
+  .then((candidates) => {
     store.dispatch({
-      type: "SET_INITIAL_STATE_SUCCESS",
+      type: "SET_INITIAL_STATE",
       state: {
-        candidates: candidates
+        candidates: candidates,
+        errorMessage: ''
       }
     });
 

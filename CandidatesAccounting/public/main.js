@@ -8981,8 +8981,6 @@
 
 	var _appview2 = _interopRequireDefault(_appview);
 
-	var _candidatesClasses = __webpack_require__(574);
-
 	var _candidateService = __webpack_require__(581);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -8993,9 +8991,10 @@
 
 	(0, _candidateService.getAllCandidates)().then(function (candidates) {
 	  store.dispatch({
-	    type: "SET_INITIAL_STATE_SUCCESS",
+	    type: "SET_INITIAL_STATE",
 	    state: {
-	      candidates: candidates
+	      candidates: candidates,
+	      errorMessage: ''
 	    }
 	  });
 
@@ -36278,7 +36277,7 @@
 	  var candidate = void 0;
 
 	  switch (action.type) {
-	    case 'SET_INITIAL_STATE_SUCCESS':
+	    case 'SET_INITIAL_STATE':
 	      return state.merge(action.state);
 
 	    case 'ADD_CANDIDATE_SUCCESS':
@@ -36331,11 +36330,12 @@
 	        })), 1, candidate);
 	      });
 
-	    case 'SERVICE_FAILURE':
-	      alert(action.message);
-	  }
+	    case 'SET_ERROR_MESSAGE':
+	      return state = state.set('errorMessage', action.message);
 
-	  return state;
+	    default:
+	      return state;
+	  }
 	}
 
 /***/ }),
@@ -41694,7 +41694,7 @@
 	          _context7.prev = 7;
 	          _context7.t0 = _context7['catch'](0);
 	          _context7.next = 11;
-	          return (0, _effects.put)({ type: 'SERVICE_FAILURE', message: _context7.t0 + ' Add candidate server error' });
+	          return (0, _effects.put)({ type: 'SET_ERROR_MESSAGE', message: _context7.t0 + '. Add candidate error. Please, refresh the page.' });
 
 	        case 11:
 	        case 'end':
@@ -41725,7 +41725,7 @@
 	          _context8.prev = 7;
 	          _context8.t0 = _context8['catch'](0);
 	          _context8.next = 11;
-	          return (0, _effects.put)({ type: 'SERVICE_FAILURE', message: _context8.t0 + ' Delete candidate server error' });
+	          return (0, _effects.put)({ type: 'SET_ERROR_MESSAGE', message: _context8.t0 + '. Delete candidate error. Please, refresh the page.' });
 
 	        case 11:
 	        case 'end':
@@ -41756,7 +41756,7 @@
 	          _context9.prev = 7;
 	          _context9.t0 = _context9['catch'](0);
 
-	          (0, _effects.put)({ type: 'SERVICE_FAILURE', message: _context9.t0 + ' Edit candidate server error' });
+	          (0, _effects.put)({ type: 'SET_ERROR_MESSAGE', message: _context9.t0 + '. Edit candidate error. Please, refresh the page.' });
 
 	        case 10:
 	        case 'end':
@@ -41787,7 +41787,7 @@
 	          _context10.prev = 7;
 	          _context10.t0 = _context10['catch'](0);
 	          _context10.next = 11;
-	          return (0, _effects.put)({ type: 'SERVICE_FAILURE', message: _context10.t0 + ' Add comment server error' });
+	          return (0, _effects.put)({ type: 'SET_ERROR_MESSAGE', message: _context10.t0 + '. Add comment error. Please, refresh the page.' });
 
 	        case 11:
 	        case 'end':
@@ -41818,7 +41818,7 @@
 	          _context11.prev = 7;
 	          _context11.t0 = _context11['catch'](0);
 	          _context11.next = 11;
-	          return (0, _effects.put)({ type: 'SERVICE_FAILURE', message: _context11.t0 + ' Delete comment server error' });
+	          return (0, _effects.put)({ type: 'SET_ERROR_MESSAGE', message: _context11.t0 + '. Delete comment error. Please, refresh the page.' });
 
 	        case 11:
 	        case 'end':
@@ -49314,6 +49314,10 @@
 
 	var _traineeTable2 = _interopRequireDefault(_traineeTable);
 
+	var _snackbar = __webpack_require__(1319);
+
+	var _snackbar2 = _interopRequireDefault(_snackbar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49412,7 +49416,8 @@
 	                  deleteComment: props.deleteComment });
 	              } })
 	          )
-	        )
+	        ),
+	        _react2.default.createElement(_snackbar2.default, { message: props.errorMessage, setErrorMessage: props.setErrorMessage })
 	      );
 	    }
 	  }]);
@@ -49425,7 +49430,8 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    candidates: state.get('candidates')
+	    candidates: state.get('candidates'),
+	    errorMessage: state.get('errorMessage')
 	  };
 	}
 
@@ -49440,12 +49446,6 @@
 	function setInitialState() {
 	  return {
 	    type: 'SET_INITIAL_STATE'
-	  };
-	}
-
-	function setInitialStateSuccess() {
-	  return {
-	    type: 'SET_INITIAL_STATE_SUCCESS'
 	  };
 	}
 
@@ -49525,16 +49525,15 @@
 	  };
 	}
 
-	function serviceFailure(message) {
+	function setErrorMessage(message) {
 	  return {
-	    type: 'SERVICE_FAILURE',
+	    type: 'SET_ERROR_MESSAGE',
 	    message: message
 	  };
 	}
 
-	module.exports = { setInitialState: setInitialState, addCandidate: addCandidate, deleteCandidate: deleteCandidate, editCandidate: editCandidate, addComment: addComment, deleteComment: deleteComment, serviceFailure: serviceFailure,
-	  setInitialStateSuccess: setInitialStateSuccess, addCandidateSuccess: addCandidateSuccess, deleteCandidateSuccess: deleteCandidateSuccess, editCandidateSuccess: editCandidateSuccess,
-	  addCommentSuccess: addCommentSuccess, deleteCommentSuccess: deleteCommentSuccess };
+	module.exports = { setInitialState: setInitialState, addCandidate: addCandidate, deleteCandidate: deleteCandidate, editCandidate: editCandidate, addComment: addComment, deleteComment: deleteComment, setErrorMessage: setErrorMessage,
+	  addCandidateSuccess: addCandidateSuccess, deleteCandidateSuccess: deleteCandidateSuccess, editCandidateSuccess: editCandidateSuccess, addCommentSuccess: addCommentSuccess, deleteCommentSuccess: deleteCommentSuccess };
 
 /***/ }),
 /* 753 */
@@ -77138,6 +77137,8 @@
 	    var _this = _possibleConstructorReturn(this, (CommentsForm.__proto__ || Object.getPrototypeOf(CommentsForm)).call(this, props));
 
 	    _this.newCommentText = '';
+	    _this.currentCommentsNumber = props.candidate.comments.length;
+	    _this.previousCommentsNumber = _this.currentCommentsNumber;
 	    _this.changeNewCommentText = _this.changeNewCommentText.bind(_this);
 	    _this.addNewComment = _this.addNewComment.bind(_this);
 	    _this.deleteComment = _this.deleteComment.bind(_this);
@@ -77147,6 +77148,8 @@
 	  _createClass(CommentsForm, [{
 	    key: 'render',
 	    value: function render() {
+	      this.previousCommentsNumber = this.currentCommentsNumber;
+	      this.currentCommentsNumber = this.props.candidate.comments.length;
 	      var deleteComment = this.deleteComment;
 
 	      var comments = this.props.candidate.comments.map(function (comment, index) {
@@ -77193,7 +77196,9 @@
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      window.scrollTo(0, document.documentElement.scrollHeight);
+	      if (this.currentCommentsNumber > this.previousCommentsNumber) {
+	        window.scrollTo(0, document.documentElement.scrollHeight);
+	      }
 	    }
 	  }, {
 	    key: 'addNewComment',
@@ -112349,6 +112354,764 @@
 	TraineeTable.propTypes = {
 	  trainees: _propTypes2.default.oneOfType([_propTypes2.default.array, _propTypes2.default.object]).isRequired
 	};
+
+/***/ }),
+/* 1319 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(555);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _Snackbar = __webpack_require__(1320);
+
+	var _Snackbar2 = _interopRequireDefault(_Snackbar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ErrorSnackbar = function (_React$Component) {
+	  _inherits(ErrorSnackbar, _React$Component);
+
+	  function ErrorSnackbar(props) {
+	    _classCallCheck(this, ErrorSnackbar);
+
+	    var _this = _possibleConstructorReturn(this, (ErrorSnackbar.__proto__ || Object.getPrototypeOf(ErrorSnackbar)).call(this, props));
+
+	    _this.state = {
+	      open: false
+	    };
+	    _this.handleRequestClose = _this.handleRequestClose.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(ErrorSnackbar, [{
+	    key: 'handleRequestClose',
+	    value: function handleRequestClose() {
+	      this.setState({
+	        open: false
+	      });
+	      this.props.setErrorMessage('');
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var open = this.state.open;
+	      if (this.props.message !== '') {
+	        open = true;
+	      }
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_Snackbar2.default, {
+	          action: 'Error',
+	          open: open,
+	          message: this.props.message,
+	          autoHideDuration: this.props.autoHideDuration ? this.props.autoHideDuration : 10000,
+	          onRequestClose: this.handleRequestClose,
+	          anchorOrigin: { vertical: 'bottom', horizontal: 'left' }
+	        })
+	      );
+	    }
+	  }]);
+
+	  return ErrorSnackbar;
+	}(_react2.default.Component);
+
+	exports.default = ErrorSnackbar;
+
+
+	ErrorSnackbar.propTypes = {
+	  message: _propTypes2.default.string,
+	  autoHideDuration: _propTypes2.default.number,
+	  setErrorMessage: _propTypes2.default.func
+	};
+
+/***/ }),
+/* 1320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _Snackbar = __webpack_require__(1321);
+
+	Object.defineProperty(exports, 'default', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_Snackbar).default;
+	  }
+	});
+
+	var _SnackbarContent = __webpack_require__(1323);
+
+	Object.defineProperty(exports, 'SnackbarContent', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_SnackbarContent).default;
+	  }
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 1321 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.styles = undefined;
+
+	var _extends2 = __webpack_require__(621);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
+	var _objectWithoutProperties2 = __webpack_require__(659);
+
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+	var _getPrototypeOf = __webpack_require__(684);
+
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+	var _classCallCheck2 = __webpack_require__(688);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(689);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(690);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(725);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _defineProperty2 = __webpack_require__(675);
+
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+	var _ref2, _ref3;
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(756);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _reactEventListener = __webpack_require__(890);
+
+	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
+
+	var _withStyles = __webpack_require__(757);
+
+	var _withStyles2 = _interopRequireDefault(_withStyles);
+
+	var _transitions = __webpack_require__(680);
+
+	var _ClickAwayListener = __webpack_require__(1322);
+
+	var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
+
+	var _helpers = __webpack_require__(842);
+
+	var _Slide = __webpack_require__(1054);
+
+	var _Slide2 = _interopRequireDefault(_Slide);
+
+	var _SnackbarContent = __webpack_require__(1323);
+
+	var _SnackbarContent2 = _interopRequireDefault(_SnackbarContent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var babelPluginFlowReactPropTypes_proptype_Element = __webpack_require__(330).babelPluginFlowReactPropTypes_proptype_Element || __webpack_require__(555).any;
+
+	var babelPluginFlowReactPropTypes_proptype_Node = __webpack_require__(330).babelPluginFlowReactPropTypes_proptype_Node || __webpack_require__(555).any;
+
+	var babelPluginFlowReactPropTypes_proptype_TransitionCallback = __webpack_require__(1038).babelPluginFlowReactPropTypes_proptype_TransitionCallback || __webpack_require__(555).any;
+
+	var styles = exports.styles = function styles(theme) {
+	  var gutter = theme.spacing.unit * 3;
+	  var top = { top: 0 };
+	  var bottom = { bottom: 0 };
+	  var right = { justifyContent: 'flex-end' };
+	  var left = { justifyContent: 'flex-start' };
+	  var topSpace = { top: gutter };
+	  var bottomSpace = { bottom: gutter };
+	  var rightSpace = { right: gutter };
+	  var leftSpace = { left: gutter };
+
+	  return {
+	    root: {
+	      zIndex: theme.zIndex.snackbar,
+	      position: 'fixed',
+	      display: 'flex',
+	      left: 0,
+	      right: 0,
+	      justifyContent: 'center',
+	      alignItems: 'center'
+	    },
+	    anchorTopCenter: {
+	      extend: [top]
+	    },
+	    anchorBottomCenter: {
+	      extend: [bottom]
+	    },
+	    anchorTopRight: (0, _defineProperty3.default)({
+	      extend: [top, right]
+	    }, theme.breakpoints.up('md'), {
+	      extend: [topSpace, rightSpace]
+	    }),
+	    anchorBottomRight: (0, _defineProperty3.default)({
+	      extend: [bottom, right]
+	    }, theme.breakpoints.up('md'), {
+	      extend: [bottomSpace, rightSpace]
+	    }),
+	    anchorTopLeft: (0, _defineProperty3.default)({
+	      extend: [top, left]
+	    }, theme.breakpoints.up('md'), {
+	      extend: [topSpace, leftSpace]
+	    }),
+	    anchorBottomLeft: (0, _defineProperty3.default)({
+	      extend: [bottom, left]
+	    }, theme.breakpoints.up('md'), {
+	      extend: [bottomSpace, leftSpace]
+	    })
+	  };
+	};
+
+	var babelPluginFlowReactPropTypes_proptype_Props = {
+	  action: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node),
+	  anchorOrigin: __webpack_require__(555).shape({
+	    horizontal: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['left']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['right']), __webpack_require__(555).number]),
+	    vertical: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['top']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['bottom']), __webpack_require__(555).number])
+	  }),
+	  autoHideDuration: __webpack_require__(555).number,
+	  children: typeof babelPluginFlowReactPropTypes_proptype_Element === 'function' ? babelPluginFlowReactPropTypes_proptype_Element : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Element),
+	  classes: __webpack_require__(555).object,
+	  className: __webpack_require__(555).string,
+	  enterTransitionDuration: __webpack_require__(555).number,
+	  key: __webpack_require__(555).any,
+	  leaveTransitionDuration: __webpack_require__(555).number,
+	  message: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node),
+	  onEnter: typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback),
+	  onEntering: typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback),
+	  onEntered: typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback),
+	  onExit: typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback),
+	  onExiting: typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback),
+	  onExited: typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback),
+	  onMouseEnter: __webpack_require__(555).func,
+	  onMouseLeave: __webpack_require__(555).func,
+	  onRequestClose: __webpack_require__(555).func,
+	  open: __webpack_require__(555).bool.isRequired,
+	  SnackbarContentProps: __webpack_require__(555).object,
+	  transition: typeof babelPluginFlowReactPropTypes_proptype_Element === 'function' ? babelPluginFlowReactPropTypes_proptype_Element : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Element)
+	};
+
+	var Snackbar = function (_React$Component) {
+	  (0, _inherits3.default)(Snackbar, _React$Component);
+
+	  function Snackbar() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    (0, _classCallCheck3.default)(this, Snackbar);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Snackbar.__proto__ || (0, _getPrototypeOf2.default)(Snackbar)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+	      // Used to only render active snackbars.
+	      exited: false
+	    }, _this.timerAutoHide = null, _this.handleMouseEnter = function (event) {
+	      if (_this.props.onMouseEnter) {
+	        _this.props.onMouseEnter(event);
+	      }
+	      _this.handlePause();
+	    }, _this.handleMouseLeave = function (event) {
+	      if (_this.props.onMouseLeave) {
+	        _this.props.onMouseLeave(event);
+	      }
+	      _this.handleResume();
+	    }, _this.handleClickAway = function (event) {
+	      if (_this.props.onRequestClose) {
+	        _this.props.onRequestClose(event, 'clickaway');
+	      }
+	    }, _this.handlePause = function () {
+	      clearTimeout(_this.timerAutoHide);
+	    }, _this.handleResume = function () {
+	      if (_this.props.autoHideDuration !== null) {
+	        _this.setAutoHideTimer(_this.props.autoHideDuration * 0.5);
+	      }
+	    }, _this.handleTransitionExited = function () {
+	      _this.setState({ exited: true });
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+
+	  (0, _createClass3.default)(Snackbar, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (!this.props.open) {
+	        this.setState({ exited: true });
+	      }
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      if (this.props.open) {
+	        this.setAutoHideTimer();
+	      }
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.open && this.state.exited) {
+	        this.setState({ exited: false });
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps) {
+	      if (prevProps.open !== this.props.open) {
+	        if (this.props.open) {
+	          this.setAutoHideTimer();
+	        } else {
+	          clearTimeout(this.timerAutoHide);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      clearTimeout(this.timerAutoHide);
+	    }
+	  }, {
+	    key: 'setAutoHideTimer',
+
+
+	    // Timer that controls delay before snackbar auto hides
+	    value: function setAutoHideTimer() {
+	      var _this2 = this;
+
+	      var autoHideDuration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+	      if (!this.props.onRequestClose || this.props.autoHideDuration === null) {
+	        return;
+	      }
+
+	      clearTimeout(this.timerAutoHide);
+	      this.timerAutoHide = setTimeout(function () {
+	        if (!_this2.props.onRequestClose || _this2.props.autoHideDuration === null) {
+	          return;
+	        }
+
+	        _this2.props.onRequestClose(null, 'timeout');
+	      }, autoHideDuration || this.props.autoHideDuration);
+	    }
+
+	    // Pause the timer when the user is interacting with the Snackbar
+	    // or when the user hide the window.
+
+
+	    // Restart the timer when the user is no longer interacting with the Snackbar
+	    // or when the window is shown back.
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          action = _props.action,
+	          _props$anchorOrigin = _props.anchorOrigin,
+	          vertical = _props$anchorOrigin.vertical,
+	          horizontal = _props$anchorOrigin.horizontal,
+	          autoHideDuration = _props.autoHideDuration,
+	          children = _props.children,
+	          classes = _props.classes,
+	          className = _props.className,
+	          enterTransitionDuration = _props.enterTransitionDuration,
+	          leaveTransitionDuration = _props.leaveTransitionDuration,
+	          message = _props.message,
+	          onEnter = _props.onEnter,
+	          onEntering = _props.onEntering,
+	          onEntered = _props.onEntered,
+	          onExit = _props.onExit,
+	          onExiting = _props.onExiting,
+	          onExited = _props.onExited,
+	          onMouseEnter = _props.onMouseEnter,
+	          onMouseLeave = _props.onMouseLeave,
+	          onRequestClose = _props.onRequestClose,
+	          open = _props.open,
+	          SnackbarContentProps = _props.SnackbarContentProps,
+	          transitionProp = _props.transition,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['action', 'anchorOrigin', 'autoHideDuration', 'children', 'classes', 'className', 'enterTransitionDuration', 'leaveTransitionDuration', 'message', 'onEnter', 'onEntering', 'onEntered', 'onExit', 'onExiting', 'onExited', 'onMouseEnter', 'onMouseLeave', 'onRequestClose', 'open', 'SnackbarContentProps', 'transition']);
+
+
+	      if (!open && this.state.exited) {
+	        return null;
+	      }
+
+	      var transitionProps = {
+	        in: open,
+	        transitionAppear: true,
+	        enterTransitionDuration: enterTransitionDuration,
+	        leaveTransitionDuration: leaveTransitionDuration,
+	        onEnter: onEnter,
+	        onEntering: onEntering,
+	        onEntered: onEntered,
+	        onExit: onExit,
+	        onExiting: onExiting,
+	        onExited: (0, _helpers.createChainedFunction)(this.handleTransitionExited, onExited)
+	      };
+	      var transitionContent = children || _react2.default.createElement(_SnackbarContent2.default, (0, _extends3.default)({ message: message, action: action }, SnackbarContentProps));
+
+	      var transition = void 0;
+	      if (typeof transitionProp === 'function') {
+	        transition = _react2.default.createElement(transitionProp, transitionProps, transitionContent);
+	      } else {
+	        transition = _react2.default.cloneElement(transitionProp || _react2.default.createElement(_Slide2.default, { direction: vertical === 'top' ? 'down' : 'up' }), transitionProps, transitionContent);
+	      }
+
+	      return _react2.default.createElement(
+	        _reactEventListener2.default,
+	        { target: 'window', onFocus: this.handleResume, onBlur: this.handlePause },
+	        _react2.default.createElement(
+	          _ClickAwayListener2.default,
+	          { onClickAway: this.handleClickAway },
+	          _react2.default.createElement(
+	            'div',
+	            (0, _extends3.default)({
+	              className: (0, _classnames2.default)(classes.root, classes['anchor' + (0, _helpers.capitalizeFirstLetter)(vertical) + (0, _helpers.capitalizeFirstLetter)(horizontal)], className),
+	              onMouseEnter: this.handleMouseEnter,
+	              onMouseLeave: this.handleMouseLeave
+	            }, other),
+	            transition
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	  return Snackbar;
+	}(_react2.default.Component);
+
+	Snackbar.defaultProps = {
+	  anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+	  autoHideDuration: null,
+	  enterTransitionDuration: _transitions.duration.enteringScreen,
+	  leaveTransitionDuration: _transitions.duration.leavingScreen
+	};
+	Snackbar.propTypes = process.env.NODE_ENV !== "production" ? (_ref2 = {
+	  anchorOrigin: __webpack_require__(555).shape({
+	    horizontal: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['left']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['right']), __webpack_require__(555).number]),
+	    vertical: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['top']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['bottom']), __webpack_require__(555).number])
+	  }).isRequired,
+	  autoHideDuration: __webpack_require__(555).number,
+	  classes: __webpack_require__(555).object.isRequired,
+	  action: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node)
+	}, (0, _defineProperty3.default)(_ref2, 'anchorOrigin', __webpack_require__(555).shape({
+	  horizontal: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['left']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['right']), __webpack_require__(555).number]),
+	  vertical: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['top']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['bottom']), __webpack_require__(555).number])
+	})), (0, _defineProperty3.default)(_ref2, 'autoHideDuration', __webpack_require__(555).number), (0, _defineProperty3.default)(_ref2, 'children', typeof babelPluginFlowReactPropTypes_proptype_Element === 'function' ? babelPluginFlowReactPropTypes_proptype_Element : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Element)), (0, _defineProperty3.default)(_ref2, 'classes', __webpack_require__(555).object), (0, _defineProperty3.default)(_ref2, 'className', __webpack_require__(555).string), (0, _defineProperty3.default)(_ref2, 'enterTransitionDuration', __webpack_require__(555).number), (0, _defineProperty3.default)(_ref2, 'key', __webpack_require__(555).any), (0, _defineProperty3.default)(_ref2, 'leaveTransitionDuration', __webpack_require__(555).number), (0, _defineProperty3.default)(_ref2, 'message', typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node)), (0, _defineProperty3.default)(_ref2, 'onEnter', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref2, 'onEntering', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref2, 'onEntered', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref2, 'onExit', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref2, 'onExiting', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref2, 'onExited', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref2, 'onMouseEnter', __webpack_require__(555).func), (0, _defineProperty3.default)(_ref2, 'onMouseLeave', __webpack_require__(555).func), (0, _defineProperty3.default)(_ref2, 'onRequestClose', __webpack_require__(555).func), (0, _defineProperty3.default)(_ref2, 'open', __webpack_require__(555).bool.isRequired), (0, _defineProperty3.default)(_ref2, 'SnackbarContentProps', __webpack_require__(555).object), (0, _defineProperty3.default)(_ref2, 'transition', typeof babelPluginFlowReactPropTypes_proptype_Element === 'function' ? babelPluginFlowReactPropTypes_proptype_Element : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Element)), _ref2) : {};
+	Snackbar.propTypes = process.env.NODE_ENV !== "production" ? (_ref3 = {
+	  anchorOrigin: __webpack_require__(555).shape({
+	    horizontal: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['left']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['right']), __webpack_require__(555).number]),
+	    vertical: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['top']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['bottom']), __webpack_require__(555).number])
+	  }).isRequired,
+	  autoHideDuration: __webpack_require__(555).number,
+	  classes: __webpack_require__(555).object.isRequired,
+	  action: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node)
+	}, (0, _defineProperty3.default)(_ref3, 'anchorOrigin', __webpack_require__(555).shape({
+	  horizontal: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['left']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['right']), __webpack_require__(555).number]),
+	  vertical: __webpack_require__(555).oneOfType([__webpack_require__(555).oneOf(['top']), __webpack_require__(555).oneOf(['center']), __webpack_require__(555).oneOf(['bottom']), __webpack_require__(555).number])
+	})), (0, _defineProperty3.default)(_ref3, 'autoHideDuration', __webpack_require__(555).number), (0, _defineProperty3.default)(_ref3, 'children', typeof babelPluginFlowReactPropTypes_proptype_Element === 'function' ? babelPluginFlowReactPropTypes_proptype_Element : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Element)), (0, _defineProperty3.default)(_ref3, 'classes', __webpack_require__(555).object), (0, _defineProperty3.default)(_ref3, 'className', __webpack_require__(555).string), (0, _defineProperty3.default)(_ref3, 'enterTransitionDuration', __webpack_require__(555).number), (0, _defineProperty3.default)(_ref3, 'key', __webpack_require__(555).any), (0, _defineProperty3.default)(_ref3, 'leaveTransitionDuration', __webpack_require__(555).number), (0, _defineProperty3.default)(_ref3, 'message', typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node)), (0, _defineProperty3.default)(_ref3, 'onEnter', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref3, 'onEntering', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref3, 'onEntered', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref3, 'onExit', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref3, 'onExiting', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref3, 'onExited', typeof babelPluginFlowReactPropTypes_proptype_TransitionCallback === 'function' ? babelPluginFlowReactPropTypes_proptype_TransitionCallback : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_TransitionCallback)), (0, _defineProperty3.default)(_ref3, 'onMouseEnter', __webpack_require__(555).func), (0, _defineProperty3.default)(_ref3, 'onMouseLeave', __webpack_require__(555).func), (0, _defineProperty3.default)(_ref3, 'onRequestClose', __webpack_require__(555).func), (0, _defineProperty3.default)(_ref3, 'open', __webpack_require__(555).bool.isRequired), (0, _defineProperty3.default)(_ref3, 'SnackbarContentProps', __webpack_require__(555).object), (0, _defineProperty3.default)(_ref3, 'transition', typeof babelPluginFlowReactPropTypes_proptype_Element === 'function' ? babelPluginFlowReactPropTypes_proptype_Element : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Element)), _ref3) : {};
+	exports.default = (0, _withStyles2.default)(styles, { name: 'MuiSnackbar' })(Snackbar);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(332)))
+
+/***/ }),
+/* 1322 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _getPrototypeOf = __webpack_require__(684);
+
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+	var _classCallCheck2 = __webpack_require__(688);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(689);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(690);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(725);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(369);
+
+	var _reactEventListener = __webpack_require__(890);
+
+	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var babelPluginFlowReactPropTypes_proptype_Node = __webpack_require__(330).babelPluginFlowReactPropTypes_proptype_Node || __webpack_require__(555).any;
+
+	var isDescendant = function isDescendant(el, target) {
+	  if (target !== null && target.parentNode) {
+	    return el === target || isDescendant(el, target.parentNode);
+	  }
+	  return false;
+	};
+
+	var babelPluginFlowReactPropTypes_proptype_Props = {
+	  children: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node.isRequired ? babelPluginFlowReactPropTypes_proptype_Node.isRequired : babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node).isRequired,
+	  onClickAway: __webpack_require__(555).func.isRequired
+	};
+
+	/**
+	 * @ignore - internal component.
+	 */
+	var ClickAwayListener = function (_React$Component) {
+	  (0, _inherits3.default)(ClickAwayListener, _React$Component);
+
+	  function ClickAwayListener() {
+	    var _ref;
+
+	    var _temp, _this, _ret;
+
+	    (0, _classCallCheck3.default)(this, ClickAwayListener);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = ClickAwayListener.__proto__ || (0, _getPrototypeOf2.default)(ClickAwayListener)).call.apply(_ref, [this].concat(args))), _this), _this.mounted = false, _this.handleClickAway = function (event) {
+	      // Ignore events that have been `event.preventDefault()` marked.
+	      if (event.defaultPrevented) {
+	        return;
+	      }
+
+	      // IE11 support, which trigger the handleClickAway even after the unbind
+	      if (_this.mounted) {
+	        var el = (0, _reactDom.findDOMNode)(_this);
+
+	        if (event.target instanceof HTMLElement && document.documentElement && document.documentElement.contains(event.target) && !isDescendant(el, event.target)) {
+	          _this.props.onClickAway(event);
+	        }
+	      }
+	    }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+
+	  (0, _createClass3.default)(ClickAwayListener, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.mounted = true;
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.mounted = false;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _reactEventListener2.default,
+	        {
+	          target: 'document',
+	          onMouseup: this.handleClickAway,
+	          onTouchend: this.handleClickAway
+	        },
+	        this.props.children
+	      );
+	    }
+	  }]);
+	  return ClickAwayListener;
+	}(_react2.default.Component);
+
+	ClickAwayListener.propTypes = process.env.NODE_ENV !== "production" ? {
+	  children: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node.isRequired ? babelPluginFlowReactPropTypes_proptype_Node.isRequired : babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node).isRequired,
+	  onClickAway: __webpack_require__(555).func.isRequired
+	} : {};
+	exports.default = ClickAwayListener;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(332)))
+
+/***/ }),
+/* 1323 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.styles = undefined;
+
+	var _extends2 = __webpack_require__(621);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
+	var _objectWithoutProperties2 = __webpack_require__(659);
+
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+	var _defineProperty2 = __webpack_require__(675);
+
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+	var _ref;
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(756);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _withStyles = __webpack_require__(757);
+
+	var _withStyles2 = _interopRequireDefault(_withStyles);
+
+	var _Paper = __webpack_require__(843);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
+	var _Typography = __webpack_require__(847);
+
+	var _Typography2 = _interopRequireDefault(_Typography);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var babelPluginFlowReactPropTypes_proptype_Node = __webpack_require__(330).babelPluginFlowReactPropTypes_proptype_Node || __webpack_require__(555).any;
+
+	var styles = exports.styles = function styles(theme) {
+	  var _root;
+
+	  var type = theme.palette.type === 'light' ? 'dark' : 'light';
+	  var backgroundColor = theme.palette.shades[type].background.default;
+
+	  return {
+	    root: (_root = {
+	      pointerEvents: 'initial',
+	      color: theme.palette.getContrastText(backgroundColor),
+	      backgroundColor: backgroundColor,
+	      display: 'flex',
+	      alignItems: 'center',
+	      flexWrap: 'wrap',
+	      padding: '6px ' + theme.spacing.unit * 3 + 'px'
+	    }, (0, _defineProperty3.default)(_root, theme.breakpoints.up('md'), {
+	      minWidth: 288,
+	      maxWidth: 568,
+	      borderRadius: 2
+	    }), (0, _defineProperty3.default)(_root, theme.breakpoints.down('md'), {
+	      flexGrow: 1
+	    }), _root),
+	    message: {
+	      padding: theme.spacing.unit + 'px 0'
+	    },
+	    action: {
+	      display: 'flex',
+	      alignItems: 'center',
+	      marginLeft: 'auto',
+	      paddingLeft: theme.spacing.unit * 3,
+	      marginRight: -theme.spacing.unit
+	    }
+	  };
+	};
+
+	var babelPluginFlowReactPropTypes_proptype_Props = {
+	  action: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node),
+	  classes: __webpack_require__(555).object,
+	  className: __webpack_require__(555).string,
+	  message: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node.isRequired ? babelPluginFlowReactPropTypes_proptype_Node.isRequired : babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node).isRequired
+	};
+
+
+	function SnackbarContent(props) {
+	  var action = props.action,
+	      classes = props.classes,
+	      className = props.className,
+	      message = props.message,
+	      other = (0, _objectWithoutProperties3.default)(props, ['action', 'classes', 'className', 'message']);
+
+
+	  return _react2.default.createElement(
+	    _Paper2.default,
+	    (0, _extends3.default)({
+	      component: _Typography2.default,
+	      headlineMapping: {
+	        body1: 'div'
+	      },
+	      role: 'alertdialog',
+	      square: true,
+	      elevation: 6,
+	      className: (0, _classnames2.default)(classes.root, className)
+	    }, other),
+	    _react2.default.createElement(
+	      'div',
+	      { className: classes.message },
+	      message
+	    ),
+	    action ? _react2.default.createElement(
+	      'div',
+	      { className: classes.action },
+	      action
+	    ) : null
+	  );
+	}
+
+	SnackbarContent.propTypes = process.env.NODE_ENV !== "production" ? (_ref = {
+	  classes: __webpack_require__(555).object.isRequired,
+	  action: typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node)
+	}, (0, _defineProperty3.default)(_ref, 'classes', __webpack_require__(555).object), (0, _defineProperty3.default)(_ref, 'className', __webpack_require__(555).string), (0, _defineProperty3.default)(_ref, 'message', typeof babelPluginFlowReactPropTypes_proptype_Node === 'function' ? babelPluginFlowReactPropTypes_proptype_Node.isRequired ? babelPluginFlowReactPropTypes_proptype_Node.isRequired : babelPluginFlowReactPropTypes_proptype_Node : __webpack_require__(555).shape(babelPluginFlowReactPropTypes_proptype_Node).isRequired), _ref) : {};
+	exports.default = (0, _withStyles2.default)(styles, { name: 'MuiSnackbarContent' })(SnackbarContent);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(332)))
 
 /***/ })
 /******/ ]);

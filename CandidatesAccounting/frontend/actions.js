@@ -4,12 +4,6 @@ function setInitialState() {
   }
 }
 
-function setInitialStateSuccess() {
-  return {
-    type: 'SET_INITIAL_STATE_SUCCESS'
-  }
-}
-
 function addCandidate(candidate) {
   return {
     type: 'ADD_CANDIDATE',
@@ -86,13 +80,12 @@ function deleteCommentSuccess(candidateId, commentId) {
   }
 }
 
-function serviceFailure(message) {
+function setErrorMessage(message) {
   return {
-    type: 'SERVICE_FAILURE',
+    type: 'SET_ERROR_MESSAGE',
     message
   }
 }
 
-module.exports = {setInitialState, addCandidate, deleteCandidate, editCandidate, addComment, deleteComment, serviceFailure,
-                  setInitialStateSuccess, addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess,
-                  addCommentSuccess, deleteCommentSuccess};
+module.exports = {setInitialState, addCandidate, deleteCandidate, editCandidate, addComment, deleteComment, setErrorMessage,
+                  addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess};

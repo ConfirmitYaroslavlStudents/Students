@@ -12,6 +12,7 @@ import CandidateTable from './candidateInfoComponents/candidateTable';
 import IntervieweeTable from './candidateInfoComponents/intervieweeTable';
 import StudentTable from './candidateInfoComponents/studentTable';
 import TraineeTable from './candidateInfoComponents/traineeTable';
+import SnackBar from './materialUIDecorators/snackbar';
 
 export default class AppView extends React.Component {
   render() {
@@ -72,6 +73,7 @@ export default class AppView extends React.Component {
                 deleteComment={props.deleteComment}/>} />
           </Switch>
         </div>
+        <SnackBar message={props.errorMessage} setErrorMessage={props.setErrorMessage}/>
       </div>
     );
   }
@@ -79,7 +81,8 @@ export default class AppView extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    candidates: state.get('candidates')
+    candidates: state.get('candidates'),
+    errorMessage: state.get('errorMessage')
   };
 }
 

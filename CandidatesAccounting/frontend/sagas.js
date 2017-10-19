@@ -38,17 +38,17 @@ export function* addCandidateSaga(action) {
     yield put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
   }
   catch (error) {
-    yield put({type: 'SERVICE_FAILURE', message: error + ' Add candidate server error'});
+    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Add candidate error. Please, refresh the page.'});
   }
-  /*
-    addCandidate(action.candidate)
+
+   /* addCandidate(action.candidate) // TODO: addCandidate should cast a promise
     .then(() => {
       put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
     })
     .catch((error) => {
       put({type: 'SERVICE_FAILURE', message: error + ' Add candidate server error'});
     })
-  */
+    */
 }
 
 export function* deleteCandidateSaga(action) {
@@ -57,7 +57,7 @@ export function* deleteCandidateSaga(action) {
     yield put({type: 'DELETE_CANDIDATE_SUCCESS', id: action.id});
   }
   catch(error) {
-    yield put({type: 'SERVICE_FAILURE', message: error + ' Delete candidate server error'});
+    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Delete candidate error. Please, refresh the page.'});
   }
 }
 
@@ -67,7 +67,7 @@ export function* editCandidateSaga(action) {
     yield put({type: 'EDIT_CANDIDATE_SUCCESS', id: action.id, candidateNewState: action.candidateNewState});
   }
   catch(error) {
-    put({type: 'SERVICE_FAILURE', message: error + ' Edit candidate server error'});
+    put({type: 'SET_ERROR_MESSAGE', message: error + '. Edit candidate error. Please, refresh the page.'});
   }
 }
 
@@ -77,7 +77,7 @@ export function* addCommentSaga(action) {
     yield put({type: 'ADD_COMMENT_SUCCESS', candidateId: action.candidateId, comment: action.comment});
   }
   catch(error) {
-    yield put({type: 'SERVICE_FAILURE', message: error + ' Add comment server error'});
+    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Add comment error. Please, refresh the page.'});
   }
 }
 
@@ -87,6 +87,6 @@ export function* deleteCommentSaga(action) {
     yield put({type: 'DELETE_COMMENT_SUCCESS', candidateId: action.candidateId, commentId: action.commentId});
   }
   catch(error) {
-    yield put({type: 'SERVICE_FAILURE', message: error + ' Delete comment server error'});
+    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Delete comment error. Please, refresh the page.'});
   }
 }

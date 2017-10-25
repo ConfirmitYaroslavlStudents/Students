@@ -1,6 +1,6 @@
 import { takeEvery, all, put, call} from 'redux-saga/effects';
 import { addCandidate, deleteCandidate, editCandidate} from './candidateService.js';
-import { addComment, deleteComment } from './commentService';
+import { addComment, deleteComment} from './commentService.js';
 
 export default function* rootSaga() {
   yield all([
@@ -33,6 +33,7 @@ export function* watchCommentDelete() {
 }
 
 export function* addCandidateSaga(action) {
+
   try {
     yield call(addCandidate, action.candidate);
     yield put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
@@ -40,15 +41,6 @@ export function* addCandidateSaga(action) {
   catch (error) {
     yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Add candidate error. Please, refresh the page.'});
   }
-
-   /* addCandidate(action.candidate) // TODO: addCandidate should cast a promise
-    .then(() => {
-      put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
-    })
-    .catch((error) => {
-      put({type: 'SERVICE_FAILURE', message: error + ' Add candidate server error'});
-    })
-    */
 }
 
 export function* deleteCandidateSaga(action) {

@@ -19,6 +19,7 @@ export default function reducer(state = Map(), action) {
       let newCandidate = CreateCandidate(action.candidate.status ? action.candidate.status
                                                                  : action.candidate.constructor.name, action.candidate);
       newCandidate.id = lastId + 1;
+      console.log('add_cand');
       return state.update('candidates', (candidates) => candidates.push(newCandidate));
 
     case 'DELETE_CANDIDATE_SUCCESS':

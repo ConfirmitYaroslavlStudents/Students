@@ -14,7 +14,6 @@ export default class AddCommentDialog extends React.Component {
     super(props);
     this.state = ({isOpen: false, commentText: ''});
     this.handleOpenClose = this.handleOpenClose.bind(this);
-    this.addNewComment = this.addNewComment.bind(this);
   }
 
   render() {
@@ -27,7 +26,7 @@ export default class AddCommentDialog extends React.Component {
             <AddCommentPanel
               value={this.state.commentText}
               onChange={this.changeCommentText.bind(this)}
-              onClick={this.addNewComment}
+              onClick={this.addNewComment.bind(this)}
             />
           </FormWrapper>}
         label="Add new comment"

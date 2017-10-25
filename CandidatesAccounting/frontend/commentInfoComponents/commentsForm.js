@@ -10,16 +10,13 @@ export default class CommentsForm extends React.Component {
   constructor(props) {
     super(props);
     this.newCommentText = '';
-    this.currentCommentsNumber = props.candidate.comments.length;
-    this.previousCommentsNumber = this.currentCommentsNumber;
+    this.shouldScrollDown = false;
     this.changeNewCommentText = this.changeNewCommentText.bind(this);
     this.addNewComment = this.addNewComment.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
   }
 
   render() {
-    this.previousCommentsNumber = this.currentCommentsNumber;
-    this.currentCommentsNumber = this.props.candidate.comments.length;
     let deleteComment = this.deleteComment;
 
     let comments = this.props.candidate.comments.map((comment, index) =>
@@ -52,8 +49,9 @@ export default class CommentsForm extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.currentCommentsNumber > this.previousCommentsNumber) {
+    if (this.shouldScrollDown) {
       window.scrollTo(0, document.documentElement.scrollHeight);
+      this.shouldScrollDown = false;
     }
   }
 
@@ -68,6 +66,7 @@ export default class CommentsForm extends React.Component {
         moment().format('H:MM:SS DD MMMM YYYY'),
         newCommentText));
       this.newCommentText = '';
+      this.shouldScrollDown = true;
     }
   }
 

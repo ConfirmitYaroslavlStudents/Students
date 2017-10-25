@@ -13,6 +13,14 @@ export function getAllCandidates() {
 }
 
 export function addCandidate(candidate) {
+  /*return new Promise(function(resolve)
+  {
+    fetchPost('/candidates', candidate).then((response) => {
+      console.log(response);
+      resolve();
+    });
+  });
+  */
   return fetchPost('/candidates', candidate);
 }
 

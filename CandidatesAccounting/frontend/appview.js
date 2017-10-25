@@ -45,7 +45,7 @@ export default class AppView extends React.Component {
         <Navbar
           icon={<Logo />}
           title="Candidate Accounting"
-          controls={<IconButton color="contrast" onClick={()=>alert('TODO')} icon={<SignOutIcon/>} />}
+          controls={<div><span> </span><IconButton color="contrast" onClick={()=>alert('TODO')} icon={<SignOutIcon/>} /></div>}
         />
         <AppBar
           selected={selectedTableNumber}

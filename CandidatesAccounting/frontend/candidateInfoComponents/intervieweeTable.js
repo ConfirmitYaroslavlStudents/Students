@@ -9,20 +9,6 @@ export default class IntervieweeTable extends React.Component {
     this.getRow = this.getRow.bind(this);
   }
 
-  render() {
-    let rows = (this.props.interviewees.map((interviewee, index) =>
-      this.getRow(interviewee, index)
-    ));
-
-    return (
-      <BasicTable
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Interview date', 'Interview room',
-          <span className="float-right">Actions</span>] }
-        contentRows={rows}
-      />
-    );
-  }
-
   getRow(interviewee, index)
   {
     return [
@@ -31,9 +17,23 @@ export default class IntervieweeTable extends React.Component {
       interviewee.email,
       interviewee.birthDate,
       interviewee.interviewDate,
-      interviewee.interviewRoom,
+      '[upload] [download]',
       <CandidateRowControls candidate={interviewee} {...this.props}/>
     ];
+  }
+
+  render() {
+    let rows = (this.props.interviewees.map((interviewee, index) =>
+      this.getRow(interviewee, index)
+    ));
+
+    return (
+      <BasicTable
+        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Interview date', 'Resume',
+          <span className="float-right">Actions</span>] }
+        contentRows={rows}
+      />
+    );
   }
 }
 

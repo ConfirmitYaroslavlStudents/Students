@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const dns = require('dns');
 const path = require('path');
 const bodyParser  = require('body-parser');
 const favicon = require ('serve-favicon');
@@ -7,15 +8,15 @@ const {Interviewee, Student, Trainee, Comment} = require('./frontend/candidatesC
 
 let candidates = [
   new Interviewee(1, 'Олег', '07.01.1995', 'Oleg@mail.ru',
-    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №1')], '04.09.2017', '8'),
+    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №1')], [], '04.09.2017', 'TODO: resume'),
   new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com',
-    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №2')], 'frontend'),
+    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №2')], [], 'КБ-3', '04.08.2017', '30.09.2017'),
   new Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com',
-    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №3')], 'backend'),
+    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №3')], [], 'ПМИ-3', '04.08.2017', '30.09.2017'),
   new Trainee(4, 'Оксана', '02.02.1992', 'Oksana@confirmit.com',
-    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №4')], 'Евгений Иванов'),
+    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №4')], [], 'Евгений Иванов'),
   new Trainee(5, 'Владимир', '02.02.1992', 'Vladimir@confirmit.com',
-    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №5')], 'Евгения Иванова')
+    [new Comment('Анна', '10:15 17 May 2017', 'Текст комментария №5')], [], 'Евгения Иванова')
 ];
 
 const app = express();
@@ -32,7 +33,9 @@ http.createServer(app).listen(app.get('port'), function() {
 });
 
 app.get('/candidates', (req, res) => {
+
   console.log('Send all candidates');
+  console.log(req.headers);
   res.send(candidates);
 });
 

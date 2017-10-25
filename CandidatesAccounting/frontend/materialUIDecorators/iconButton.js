@@ -18,7 +18,7 @@ export default function CustomIconButton(props) {
 }
 
 CustomIconButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   disabled: PropTypes.bool,
   icon: PropTypes.object,
   color: PropTypes.string,

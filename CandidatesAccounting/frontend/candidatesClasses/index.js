@@ -13,8 +13,9 @@ function CreateCandidate(status, args) {
         args.birthDate,
         args.email,
         args.comments,
+        args.tags,
         args.interviewDate,
-        args.interviewRoom
+        args.resume
       );
     case 'Student':
       return new Student(
@@ -23,7 +24,10 @@ function CreateCandidate(status, args) {
         args.birthDate,
         args.email,
         args.comments,
-        args.groupName
+        args.tags,
+        args.groupName,
+        args.startingDate,
+        args.endingDate
       );
     case 'Trainee':
       return new Trainee(
@@ -32,6 +36,7 @@ function CreateCandidate(status, args) {
         args.birthDate,
         args.email,
         args.comments,
+        args.tags,
         args.mentor
       );
     default:
@@ -41,6 +46,7 @@ function CreateCandidate(status, args) {
         args.birthDate,
         args.email,
         args.comments,
+        args.tags,
       );
   }
 }

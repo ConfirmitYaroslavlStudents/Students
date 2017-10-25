@@ -11,15 +11,18 @@ import IconButton from '../materialUIDecorators/iconButton';
 export default class AddCandidateDialog extends React.Component{
   constructor(props) {
     super(props);
+    this.state=({isOpen: false});
     let newCandidate = CreateCandidate(props.candidateStatus, {});
     newCandidate.status = props.candidateStatus;
     this.candidate = newCandidate;
-    this.state=({isOpen: false});
-    this.handleOpenClose = this.handleOpenClose.bind(this);
+  }
+
+  handleOpenClose(isOpen) {
+    this.setState({isOpen: isOpen});
   }
 
   render() {
-    const handleOpenClose = this.handleOpenClose;
+    const handleOpenClose = this.handleOpenClose.bind(this);
     let candidate = this.candidate;
     const props = this.props;
     let newCandidate = CreateCandidate(props.candidateStatus, {});
@@ -45,10 +48,6 @@ export default class AddCandidateDialog extends React.Component{
           }
         />
       </AddButtonWrapper>);
-  }
-
-  handleOpenClose(isOpen) {
-    this.setState({isOpen: isOpen});
   }
 }
 

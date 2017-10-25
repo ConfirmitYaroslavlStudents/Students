@@ -20,7 +20,6 @@ export default function CandidateControls(props) {
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
             icon={<CommentIcon />}
-            onClick={function () { }}
           />
         </Badge>
       </NavLink>

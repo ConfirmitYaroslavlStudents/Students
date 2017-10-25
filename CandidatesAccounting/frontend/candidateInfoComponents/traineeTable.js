@@ -9,6 +9,18 @@ export default class TraineeTable extends React.Component {
     this.getRow = this.getRow.bind(this);
   }
 
+  getRow(trainee, index)
+  {
+    return [
+      index + 1,
+      trainee.name,
+      trainee.email,
+      trainee.birthDate,
+      trainee.mentor,
+      <CandidateRowControls candidate={trainee} {...this.props}/>
+    ];
+  }
+
   render() {
     let rows = (this.props.trainees.map((trainee, index) =>
       this.getRow(trainee, index)
@@ -20,18 +32,6 @@ export default class TraineeTable extends React.Component {
         contentRows={rows}
       />
     );
-  }
-
-  getRow(trainee, index)
-  {
-    return [
-      index + 1,
-      trainee.name,
-      trainee.email,
-      trainee.birthDate,
-      trainee.mentor,
-      <CandidateRowControls candidate={trainee} {...this.props}/>
-    ];
   }
 }
 

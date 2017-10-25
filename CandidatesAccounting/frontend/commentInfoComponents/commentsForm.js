@@ -1,47 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Comment} from '../candidatesClasses/index';
 import styled from 'styled-components';
-import moment from 'moment';
 import CommentCloud from './commentCloud';
 import AddCommentPanel from './addCommentPanel';
 
 export default class CommentsForm extends React.Component {
   constructor(props) {
     super(props);
-    this.newCommentText = '';
     this.shouldScrollDown = false;
-    this.changeNewCommentText = this.changeNewCommentText.bind(this);
-    this.addNewComment = this.addNewComment.bind(this);
-    this.deleteComment = this.deleteComment.bind(this);
-  }
-
-  render() {
-    let deleteComment = this.deleteComment;
-
-    let comments = this.props.candidate.comments.map((comment, index) =>
-      <CommentCloud key={index} comment={comment} userName="Вы" commentIndex={index} deleteComment={deleteComment}/>);
-
-    if (this.props.candidate.comments.length === 0) {
-      comments = <NoComment><p>No comments</p></NoComment>
-    }
-
-    return (
-      <FormWrapper>
-        {comments}
-        <AddCommentPanelWrapper>
-          <AddCommentPanel
-            value={this.newCommentText}
-            onChange={this.changeNewCommentText}
-            onClick={this.addNewComment}
-          />
-        </AddCommentPanelWrapper>
-      </FormWrapper>
-    );
-  }
-
-  changeNewCommentText(text) {
-    this.newCommentText = text;
   }
 
   componentDidMount() {
@@ -55,23 +21,39 @@ export default class CommentsForm extends React.Component {
     }
   }
 
-  addNewComment() {
-    let newCommentText = this.newCommentText;
-    if (newCommentText.replace(/<[^>]+>/g,'').trim() !== '') {
-      if (newCommentText.slice(-11) === '<p><br></p>') {
-        newCommentText = newCommentText.substr(0, newCommentText.length - 11);
-      }
-      this.props.addComment(this.props.candidate.id, new Comment(
-        'Вы',
-        moment().format('H:MM:SS DD MMMM YYYY'),
-        newCommentText));
-      this.newCommentText = '';
-      this.shouldScrollDown = true;
-    }
+  handleNewCommentAdd() {
+    this.shouldScrollDown = true;
   }
 
   deleteComment(index) {
     this.props.deleteComment(this.props.candidate.id, index);
+  }
+
+  render() {
+    let comments = this.props.candidate.comments.map((comment, index) =>
+      <CommentCloud key={index}
+                    comment={comment}
+                    userName="Вы"
+                    commentIndex={index}
+                    deleteComment={this.deleteComment.bind(this)}
+      />
+    );
+    if (this.props.candidate.comments.length === 0) {
+      comments = <NoComment><p>No comments</p></NoComment>
+    }
+
+    return (
+      <FormWrapper>
+        {comments}
+        <AddCommentPanelWrapper>
+          <AddCommentPanel
+            addComment={this.props.addComment}
+            candidateId={this.props.candidate.id}
+            onClick={this.handleNewCommentAdd.bind(this)}
+          />
+        </AddCommentPanelWrapper>
+      </FormWrapper>
+    );
   }
 }
 

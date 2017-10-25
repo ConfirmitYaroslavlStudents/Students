@@ -15,13 +15,16 @@ export default class EditCandidateDialog extends React.Component {
     currentCandidate.status = props.candidate.constructor.name;
     this.candidate = currentCandidate;
     this.state = ({isOpen: false, commentText: ''});
-    this.handleOpenClose = this.handleOpenClose.bind(this);
+  }
+
+  handleOpenClose(isOpen) {
+    this.setState({isOpen: isOpen});
   }
 
   render() {
     let candidate = this.candidate;
     const props = this.props;
-    const handleOpenClose = this.handleOpenClose;
+    const handleOpenClose = this.handleOpenClose.bind(this);
     let currentCandidate = CreateCandidate(props.candidate.constructor.name, props.candidate);
     currentCandidate.status = props.candidate.constructor.name;
     candidate = currentCandidate;
@@ -44,10 +47,6 @@ export default class EditCandidateDialog extends React.Component {
         }
       />
     );
-  }
-
-  handleOpenClose(isOpen) {
-    this.setState({isOpen: isOpen});
   }
 }
 

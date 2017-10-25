@@ -9,19 +9,6 @@ export default class StudentTable extends React.Component {
     this.getRow = this.getRow.bind(this);
   }
 
-  render() {
-    let rows = (this.props.students.map((student, index) =>
-      this.getRow(student, index)
-    ));
-
-    return (
-      <BasicTable
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group Name', <span className="float-right">Actions</span>] }
-        contentRows={rows}
-      />
-    );
-  }
-
   getRow(student, index)
   {
     return [
@@ -30,8 +17,24 @@ export default class StudentTable extends React.Component {
       student.email,
       student.birthDate,
       student.groupName,
+      student.startingDate,
+      student.endingDate,
       <CandidateRowControls candidate={student} {...this.props}/>
     ];
+  }
+
+  render() {
+    let rows = (this.props.students.map((student, index) =>
+      this.getRow(student, index)
+    ));
+
+    return (
+      <BasicTable
+        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group', 'Starting Date', 'Ending date',
+          <span className="float-right">Actions</span>] }
+        contentRows={rows}
+      />
+    );
   }
 }
 

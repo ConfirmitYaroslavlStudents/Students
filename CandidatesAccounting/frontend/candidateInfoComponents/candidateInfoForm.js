@@ -10,10 +10,25 @@ export default class CandidateInfoForm extends React.Component {
     this.state = ({candidateStatus: props.candidate.status});
   }
 
+  changeInfo(key, value) {
+    this.props.candidate[key] = value;
+  }
+
+  changeCandidateStatus(status) {
+    this.setState({ candidateStatus: status });
+    this.props.candidate.status = status;
+    this.props.candidate['interviewDate'] = '';
+    this.props.candidate['resume'] = '';
+    this.props.candidate['startingDate'] = '';
+    this.props.candidate['endingDate'] = '';
+    this.props.candidate['groupName'] = '';
+    this.props.candidate['mentor'] = '';
+  }
+
   render() {
-    const props = this.props;
     const changeInfo = this.changeInfo.bind(this);
-    const changeCandidateType = this.changeCandidateStatus.bind(this);
+    const changeCandidateStatus = this.changeCandidateStatus.bind(this);
+
     let specialFields;
     switch (this.state.candidateStatus) {
       case 'Interviewee':
@@ -21,17 +36,15 @@ export default class CandidateInfoForm extends React.Component {
           <TextInput
             name="interviewDate"
             label="Interview date"
-            value={props.candidate.interviewDate}
+            value={this.props.candidate.interviewDate}
             placeholder="dd.mm.yyyy hh:mm"
-            onChange={function(value) {changeInfo('interviewDate', value)}}
+            onChange={(value) => {changeInfo('interviewDate', value)}}
             multiline={true}/>
-          <TextInput
-            name="interviewRoom"
-            label="Interview room"
-            value={props.candidate.interviewRoom}
-            placeholder="interview placement"
-            onChange={function(value) {changeInfo('interviewRoom', value)}}
-            multiline={true}/>
+          <div>
+            <span>
+              TODO: resume
+            </span>
+          </div>
         </div>;
         break;
 
@@ -40,8 +53,22 @@ export default class CandidateInfoForm extends React.Component {
           <TextInput
             name="groupName"
             label="Group name"
-            value={props.candidate.groupName}
-            onChange={function(value) {changeInfo('groupName', value)}}
+            value={this.props.candidate.groupName}
+            onChange={(value) => {changeInfo('groupName', value)}}
+            multiline={true}/>
+          <TextInput
+            name="startingDate"
+            label="Learning starting date"
+            value={this.props.candidate.startingDate}
+            placeholder="dd.mm.yyyy"
+            onChange={(value) => {changeInfo('startingDate', value)}}
+            multiline={true}/>
+          <TextInput
+            name="endingDate"
+            label="Learning edning date"
+            value={this.props.candidate.endingDate}
+            placeholder="dd.mm.yyyy"
+            onChange={(value) => {changeInfo('endingDate', value)}}
             multiline={true}/>
         </div>;
         break;
@@ -51,58 +78,46 @@ export default class CandidateInfoForm extends React.Component {
           <TextInput
             name="mentor"
             label="Mentor's name"
-            value={props.candidate.mentor}
-            onChange={function(value) {changeInfo('mentor', value)}}
+            value={this.props.candidate.mentor}
+            onChange={(value) => {changeInfo('mentor', value)}}
             multiline={true}/>
         </div>;
         break;
     }
+
     return (
       <FormWrapper>
         <SimpleSelect
           label="Candidate's status"
           options={['Interviewee', 'Student', 'Trainee']}
           selected={this.state.candidateStatus}
-          onChange={changeCandidateType}
+          onChange={changeCandidateStatus}
         />
         <TextInput
           name="name"
           label="Name"
-          value={props.candidate.name}
-          onChange={function(value) {changeInfo('name', value)}}
+          value={this.props.candidate.name}
+          onChange={(value) => {changeInfo('name', value)}}
           autoFocus={true}
           multiline={true}/>
         <TextInput
           name="birthDate"
           label="Birth date"
-          value={props.candidate.birthDate}
+          value={this.props.candidate.birthDate}
           placeholder="dd.mm.yyyy"
-          onChange={function(value) {changeInfo('birthDate', value)}}
+          onChange={(value) => {changeInfo('birthDate', value)}}
           multiline={true}/>
         <TextInput
           name="email"
           label="E-mail"
-          value={props.candidate.email}
+          value={this.props.candidate.email}
           placeholder="example@mail.com"
-          onChange={function(value) {changeInfo('email', value)}}
+          onChange={(value) => {changeInfo('email', value)}}
           multiline={true}/>
 
         {specialFields}
       </FormWrapper>
     );
-  }
-
-  changeInfo(key, value) {
-    this.props.candidate[key] = value;
-  }
-
-  changeCandidateStatus(status) {
-    this.setState({ candidateStatus: status });
-    this.props.candidate.status = status;
-    this.props.candidate['interviewDate'] = '';
-    this.props.candidate['interviewRoom'] = '';
-    this.props.candidate['groupName'] = '';
-    this.props.candidate['mentor'] = '';
   }
 }
 

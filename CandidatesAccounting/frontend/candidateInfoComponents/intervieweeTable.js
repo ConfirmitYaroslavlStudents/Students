@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
+import {isToday, isBirthDate} from '../moment';
 
 export default class IntervieweeTable extends React.Component {
   constructor(props) {
@@ -15,8 +16,8 @@ export default class IntervieweeTable extends React.Component {
       index + 1,
       interviewee.name,
       interviewee.email,
-      interviewee.birthDate,
-      interviewee.interviewDate,
+      <span className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>{interviewee.birthDate}</span>,
+      <span className={isToday(interviewee.interviewDate) ? 'today' : ''}>{interviewee.interviewDate}</span>,
       '[upload] [download]',
       <CandidateRowControls candidate={interviewee} {...this.props}/>
     ];

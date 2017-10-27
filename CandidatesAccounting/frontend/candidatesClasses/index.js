@@ -4,7 +4,7 @@ import Student from './student';
 import Trainee from './trainee';
 import Comment from './comment';
 
-function CreateCandidate(status, args) {
+function createCandidate(status, args) {
   switch (status) {
     case 'Interviewee':
       return new Interviewee(
@@ -51,5 +51,9 @@ function CreateCandidate(status, args) {
   }
 }
 
-module.exports = {Candidate, Interviewee, Student, Trainee, Comment, CreateCandidate};
+function writeCandidate(candidate) {
+  return ('status: ' + (candidate.status ? candidate.status : candidate.constructor.name));
+}
+
+module.exports = {Candidate, Interviewee, Student, Trainee, Comment, createCandidate: createCandidate, WriteCandidate: writeCandidate};
 

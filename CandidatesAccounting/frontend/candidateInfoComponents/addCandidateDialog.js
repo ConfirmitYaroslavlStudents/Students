@@ -1,18 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {CreateCandidate} from '../candidatesClasses/index';
+import {createCandidate, Comment, WriteCandidate} from '../candidatesClasses/index';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';
 import CloseIcon from 'material-ui-icons/Close';
 import CandidateInfoForm from './candidateInfoForm';
 import IconButton from '../materialUIDecorators/iconButton';
+import {getCurrentDateTime} from '../moment';
 
 export default class AddCandidateDialog extends React.Component{
   constructor(props) {
     super(props);
     this.state=({isOpen: false});
-    let newCandidate = CreateCandidate(props.candidateStatus, {});
+    let newCandidate = createCandidate(props.candidateStatus, {});
     newCandidate.status = props.candidateStatus;
     this.candidate = newCandidate;
   }
@@ -25,7 +26,7 @@ export default class AddCandidateDialog extends React.Component{
     const handleOpenClose = this.handleOpenClose.bind(this);
     let candidate = this.candidate;
     const props = this.props;
-    let newCandidate = CreateCandidate(props.candidateStatus, {});
+    let newCandidate = createCandidate(props.candidateStatus, {});
     newCandidate.status = props.candidateStatus;
     candidate = newCandidate;
     return (
@@ -40,6 +41,7 @@ export default class AddCandidateDialog extends React.Component{
           controls={
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
+                candidate.comments.push(new Comment('Вы', getCurrentDateTime(), 'Initial ' + WriteCandidate(candidate)));
                 props.addCandidate(candidate);
                 handleOpenClose(false);
               }}/>

@@ -1,6 +1,8 @@
 import { takeEvery, all, put, call} from 'redux-saga/effects';
 import { addCandidate, deleteCandidate, editCandidate} from './candidateService.js';
 import { addComment, deleteComment} from './commentService.js';
+import {addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+        setErrorMessage} from './actions';
 
 export default function* rootSaga() {
   yield all([
@@ -33,52 +35,51 @@ export function* watchCommentDelete() {
 }
 
 export function* addCandidateSaga(action) {
-
   try {
     yield call(addCandidate, action.candidate);
-    yield put({type: 'ADD_CANDIDATE_SUCCESS', candidate: action.candidate});
+    yield put(addCandidateSuccess(action.candidate));
   }
   catch (error) {
-    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Add candidate error. Please, refresh the page.'});
+    yield put(setErrorMessage(error + '. Add candidate error. Please, refresh the page.'));
   }
 }
 
 export function* deleteCandidateSaga(action) {
   try {
     yield call(deleteCandidate, action.id);
-    yield put({type: 'DELETE_CANDIDATE_SUCCESS', id: action.id});
+    yield put(deleteCandidateSuccess(action.id));
   }
   catch(error) {
-    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Delete candidate error. Please, refresh the page.'});
+    yield put(setErrorMessage(error + '. Delete candidate error. Please, refresh the page.'));
   }
 }
 
 export function* editCandidateSaga(action) {
   try {
     yield call(editCandidate, action.id, action.candidateNewState);
-    yield put({type: 'EDIT_CANDIDATE_SUCCESS', id: action.id, candidateNewState: action.candidateNewState});
+    yield put(editCandidateSuccess(action.id, action.candidateNewState));
   }
   catch(error) {
-    put({type: 'SET_ERROR_MESSAGE', message: error + '. Edit candidate error. Please, refresh the page.'});
+    put(setErrorMessage(error + '. Edit candidate error. Please, refresh the page.'));
   }
 }
 
 export function* addCommentSaga(action) {
   try {
     yield call(addComment, action.candidateId, action.comment);
-    yield put({type: 'ADD_COMMENT_SUCCESS', candidateId: action.candidateId, comment: action.comment});
+    yield put(addCommentSuccess(action.candidateId, action.comment));
   }
   catch(error) {
-    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Add comment error. Please, refresh the page.'});
+    yield put(setErrorMessage(error + '. Add comment error. Please, refresh the page.'));
   }
 }
 
 export function* deleteCommentSaga(action) {
   try {
     yield call(deleteComment, action.candidateId, action.commentId);
-    yield put({type: 'DELETE_COMMENT_SUCCESS', candidateId: action.candidateId, commentId: action.commentId});
+    yield put(deleteCommentSuccess(action.candidateId, action.commentId));
   }
   catch(error) {
-    yield put({type: 'SET_ERROR_MESSAGE', message: error + '. Delete comment error. Please, refresh the page.'});
+    yield put(setErrorMessage(error + '. Delete comment error. Please, refresh the page.'));
   }
 }

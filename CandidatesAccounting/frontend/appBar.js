@@ -11,6 +11,10 @@ export default class CustomAppBar extends React.Component{
     this.state = { selected: props.selected };
   };
 
+  handleChange(event, value) {
+    this.setState({selected: value });
+  };
+
   render() {
     this.state = { selected: this.props.selected };
     return (
@@ -37,10 +41,6 @@ export default class CustomAppBar extends React.Component{
       </AppBar>
     );
   }
-
-  handleChange(event, value) {
-    this.setState({selected: value });
-  };
 }
 
 CustomAppBar.PropTypes = {

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateControls from './candidateControls';
+import {isBirthDate} from '../moment';
 
 export default class CandidateTable extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export default class CandidateTable extends React.Component {
       candidate.name,
       candidate.constructor.name,
       candidate.email,
-      candidate.birthDate,
+      <span className={isBirthDate(candidate.birthDate) ? 'today' : ''}>{candidate.birthDate}</span>,
       <CandidateControls candidate={candidate} {...this.props}/>
     ];
   }

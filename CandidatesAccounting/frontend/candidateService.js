@@ -1,12 +1,12 @@
 import {fetchGet, fetchPost, fetchDelete, fetchPut} from './fetcher';
-import {CreateCandidate} from './candidatesClasses';
+import {createCandidate} from './candidatesClasses';
 
 export function getAllCandidates() {
   return fetchGet('/candidates')
     .then((candidates) => {
       let candidatesArray = [];
       for (let i = 0; i < candidates.length; i++) {
-        candidatesArray.push(CreateCandidate(candidates[i].status, candidates[i]));
+        candidatesArray.push(createCandidate(candidates[i].status, candidates[i]));
       }
       return candidatesArray;
     })

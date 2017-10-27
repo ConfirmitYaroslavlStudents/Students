@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import {CreateCandidate} from './candidatesClasses';
+import {createCandidate} from './candidatesClasses';
 
 export default function reducer(state = Map(), action) {
   let candidate;
@@ -16,10 +16,9 @@ export default function reducer(state = Map(), action) {
           lastId = candidates[i].id;
         }
       }
-      let newCandidate = CreateCandidate(action.candidate.status ? action.candidate.status
+      let newCandidate = createCandidate(action.candidate.status ? action.candidate.status
                                                                  : action.candidate.constructor.name, action.candidate);
       newCandidate.id = lastId + 1;
-      console.log('add_cand');
       return state.update('candidates', (candidates) => candidates.push(newCandidate));
 
     case 'DELETE_CANDIDATE_SUCCESS':
@@ -29,7 +28,7 @@ export default function reducer(state = Map(), action) {
       return state = state.update('candidates', (candidates) => candidates.splice(candidates.indexOf(candidates.find(c =>
         c.id === action.id)),
         1,
-        CreateCandidate(action.candidateNewState.status ? action.candidateNewState.status
+        createCandidate(action.candidateNewState.status ? action.candidateNewState.status
           : action.candidateNewState.constructor.name, action.candidateNewState)));
 
     case 'ADD_COMMENT_SUCCESS':

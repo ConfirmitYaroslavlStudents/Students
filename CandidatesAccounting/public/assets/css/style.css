@@ -68,3 +68,8 @@ p {
 .td:last-child {
     padding-right: 0;
 }
+
+.today {
+    color: red;
+    font-weight: bold;
+}

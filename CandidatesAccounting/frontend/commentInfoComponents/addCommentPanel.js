@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import {getCurrentDateTime} from '../moment';
 import IconButton from '../materialUIDecorators/iconButton';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
 import styled from 'styled-components';
@@ -25,7 +25,7 @@ export default class AddCommentPanel extends React.Component {
       }
       this.props.addComment(this.props.candidateId, new Comment(
         'Вы',
-        moment().format('H:MM:SS DD MMMM YYYY'),
+        getCurrentDateTime(),
         commentText));
       this.props.onClick();
       this.setState({commentText: ''});

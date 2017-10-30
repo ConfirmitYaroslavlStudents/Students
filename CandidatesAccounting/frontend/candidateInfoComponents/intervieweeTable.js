@@ -18,7 +18,18 @@ export default class IntervieweeTable extends React.Component {
       interviewee.email,
       <span className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>{interviewee.birthDate}</span>,
       <span className={isToday(interviewee.interviewDate) ? 'today' : ''}>{interviewee.interviewDate}</span>,
-      '[upload] [download]',
+      <div>
+        <span>resume.pdf </span>
+        <button>
+        view
+        </button>
+        <button>
+          upload
+        </button>
+        <button>
+        download
+        </button>
+      </div>,
       <CandidateRowControls candidate={interviewee} {...this.props}/>
     ];
   }

@@ -33,6 +33,7 @@ export default class AddCommentDialog extends React.Component {
               addComment={this.props.addComment}
               candidateId={this.props.candidate.id}
               onClick={() => { handleOpenClose(false); }}
+              userName={this.props.userName}
             />
           </FormWrapper>}
         label="Add new comment"
@@ -52,6 +53,7 @@ export default class AddCommentDialog extends React.Component {
 AddCommentDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 const FormWrapper = styled.div`

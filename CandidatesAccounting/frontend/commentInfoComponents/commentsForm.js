@@ -33,7 +33,7 @@ export default class CommentsForm extends React.Component {
     let comments = this.props.candidate.comments.map((comment, index) =>
       <CommentCloud key={index}
                     comment={comment}
-                    userName="Вы"
+                    userName={this.props.userName}
                     commentIndex={index}
                     deleteComment={this.deleteComment.bind(this)}
       />
@@ -50,6 +50,7 @@ export default class CommentsForm extends React.Component {
             addComment={this.props.addComment}
             candidateId={this.props.candidate.id}
             onClick={this.handleNewCommentAdd.bind(this)}
+            userName={this.props.userName}
           />
         </AddCommentPanelWrapper>
       </FormWrapper>
@@ -61,6 +62,7 @@ CommentsForm.propTypes = {
   candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 const FormWrapper = styled.div`

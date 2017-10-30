@@ -26,6 +26,7 @@ getAllCandidates()
     store.dispatch({
       type: "SET_INITIAL_STATE",
       state: {
+        userName: 'DmitryB',
         candidates: candidates,
         errorMessage: ''
       }

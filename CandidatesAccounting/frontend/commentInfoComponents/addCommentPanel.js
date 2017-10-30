@@ -24,7 +24,7 @@ export default class AddCommentPanel extends React.Component {
         commentText = commentText.substr(0, commentText.length - 11);
       }
       this.props.addComment(this.props.candidateId, new Comment(
-        'Вы',
+        this.props.userName,
         getCurrentDateTime(),
         commentText));
       this.props.onClick();
@@ -71,6 +71,7 @@ export default class AddCommentPanel extends React.Component {
 AddCommentPanel.PropTypes = {
   addComment: PropTypes.func.isRequired,
   candidateId: PropTypes.number.isRequired,
+  userName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
 

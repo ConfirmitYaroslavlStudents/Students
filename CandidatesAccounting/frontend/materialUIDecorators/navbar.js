@@ -12,7 +12,7 @@ export default function Navbar(props) {
         <Typography type="title" color="inherit" style={{flex: 1}}>
           {props.title}
         </Typography>
-        {props.controls}
+        {props.rightPart}
       </Toolbar>
     </AppBar>
   );
@@ -21,5 +21,5 @@ export default function Navbar(props) {
 Navbar.propTypes = {
   icon: PropTypes.object,
   title: PropTypes.string,
-  controls: PropTypes.object,
+  rightPart: PropTypes.object,
 };

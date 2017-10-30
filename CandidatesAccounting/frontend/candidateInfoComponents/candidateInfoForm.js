@@ -41,9 +41,17 @@ export default class CandidateInfoForm extends React.Component {
             onChange={(value) => {changeInfo('interviewDate', value)}}
             multiline={true}/>
           <div>
-            <span>
-              TODO: resume
-            </span>
+            <p>Resume</p>
+            <span>resume.pdf </span>
+            <button>
+              view
+            </button>
+            <button>
+              upload
+            </button>
+            <button>
+              download
+            </button>
           </div>
         </div>;
         break;

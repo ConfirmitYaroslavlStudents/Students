@@ -87,5 +87,13 @@ function setErrorMessage(message) {
   }
 }
 
+function setUserName(userName) {
+  return {
+    type: 'SET_USERNAME',
+    userName
+  }
+}
+
 module.exports = {setInitialState, addCandidate, deleteCandidate, editCandidate, addComment, deleteComment, setErrorMessage,
-                  addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess};
+                  addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+                  setUserName};

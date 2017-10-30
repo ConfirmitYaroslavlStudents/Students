@@ -50,6 +50,9 @@ export default function reducer(state = Map(), action) {
     case 'SET_ERROR_MESSAGE':
       return state = state.set('errorMessage', action.message);
 
+    case 'SET_USERNAME':
+      return state = state.set('userName', action.userName);
+
     default:
       return state;
   }

@@ -14,6 +14,7 @@ export default function CandidateControls(props) {
       <AddCommentDialog
         candidate={props.candidate}
         addComment={props.addComment}
+        userName={props.userName}
       />
 
       <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
@@ -42,4 +43,5 @@ CandidateControls.propTypes = {
   candidate: PropTypes.object.isRequired,
   editCandidate: PropTypes.func.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired,
 };

@@ -8993,6 +8993,7 @@
 	  store.dispatch({
 	    type: "SET_INITIAL_STATE",
 	    state: {
+	      userName: 'DmitryB',
 	      candidates: candidates,
 	      errorMessage: ''
 	    }
@@ -36333,6 +36334,9 @@
 	    case 'SET_ERROR_MESSAGE':
 	      return state = state.set('errorMessage', action.message);
 
+	    case 'SET_USERNAME':
+	      return state = state.set('userName', action.userName);
+
 	    default:
 	      return state;
 	  }
@@ -42073,8 +42077,16 @@
 	  };
 	}
 
+	function setUserName(userName) {
+	  return {
+	    type: 'SET_USERNAME',
+	    userName: userName
+	  };
+	}
+
 	module.exports = { setInitialState: setInitialState, addCandidate: addCandidate, deleteCandidate: deleteCandidate, editCandidate: editCandidate, addComment: addComment, deleteComment: deleteComment, setErrorMessage: setErrorMessage,
-	  addCandidateSuccess: addCandidateSuccess, deleteCandidateSuccess: deleteCandidateSuccess, editCandidateSuccess: editCandidateSuccess, addCommentSuccess: addCommentSuccess, deleteCommentSuccess: deleteCommentSuccess };
+	  addCandidateSuccess: addCandidateSuccess, deleteCandidateSuccess: deleteCandidateSuccess, editCandidateSuccess: editCandidateSuccess, addCommentSuccess: addCommentSuccess, deleteCommentSuccess: deleteCommentSuccess,
+	  setUserName: setUserName };
 
 /***/ }),
 /* 585 */
@@ -49483,13 +49495,13 @@
 	        _react2.default.createElement(_navbar2.default, {
 	          icon: _react2.default.createElement(_AccountCircle2.default, null),
 	          title: 'Candidate Accounting',
-	          controls: _react2.default.createElement(
+	          rightPart: _react2.default.createElement(
 	            'div',
-	            null,
+	            { style: { display: 'flex', alignItems: 'center' } },
 	            _react2.default.createElement(
 	              'span',
 	              null,
-	              ' '
+	              this.props.userName
 	            ),
 	            _react2.default.createElement(_iconButton2.default, { color: 'contrast', onClick: function onClick() {
 	                return alert('TODO');
@@ -49535,7 +49547,8 @@
 	                    return c.id === candidateId;
 	                  }),
 	                  addComment: props.addComment,
-	                  deleteComment: props.deleteComment });
+	                  deleteComment: props.deleteComment,
+	                  userName: _this2.props.userName });
 	              } })
 	          )
 	        ),
@@ -49552,6 +49565,7 @@
 
 	function mapStateToProps(state) {
 	  return {
+	    userName: state.get('userName'),
 	    candidates: state.get('candidates'),
 	    errorMessage: state.get('errorMessage')
 	  };
@@ -49605,7 +49619,7 @@
 	        { type: 'title', color: 'inherit', style: { flex: 1 } },
 	        props.title
 	      ),
-	      props.controls
+	      props.rightPart
 	    )
 	  );
 	}
@@ -49613,7 +49627,7 @@
 	Navbar.propTypes = {
 	  icon: _propTypes2.default.object,
 	  title: _propTypes2.default.string,
-	  controls: _propTypes2.default.object
+	  rightPart: _propTypes2.default.object
 	};
 
 /***/ }),
@@ -71918,9 +71932,29 @@
 	              'div',
 	              null,
 	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Resume'
+	              ),
+	              _react2.default.createElement(
 	                'span',
 	                null,
-	                'TODO: resume'
+	                'resume.pdf '
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                null,
+	                'view'
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                null,
+	                'upload'
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                null,
+	                'download'
 	              )
 	            )
 	          );
@@ -93057,7 +93091,7 @@
 	      var comments = this.props.candidate.comments.map(function (comment, index) {
 	        return _react2.default.createElement(_commentCloud2.default, { key: index,
 	          comment: comment,
-	          userName: '\u0412\u044B',
+	          userName: _this2.props.userName,
 	          commentIndex: index,
 	          deleteComment: _this2.deleteComment.bind(_this2)
 	        });
@@ -93084,7 +93118,8 @@
 	          _react2.default.createElement(_addCommentPanel2.default, {
 	            addComment: this.props.addComment,
 	            candidateId: this.props.candidate.id,
-	            onClick: this.handleNewCommentAdd.bind(this)
+	            onClick: this.handleNewCommentAdd.bind(this),
+	            userName: this.props.userName
 	          })
 	        )
 	      );
@@ -93100,7 +93135,8 @@
 	CommentsForm.propTypes = {
 	  candidate: _propTypes2.default.object.isRequired,
 	  addComment: _propTypes2.default.func.isRequired,
-	  deleteComment: _propTypes2.default.func.isRequired
+	  deleteComment: _propTypes2.default.func.isRequired,
+	  userName: _propTypes2.default.string.isRequired
 	};
 
 	var FormWrapper = _styledComponents2.default.div(_templateObject);
@@ -93347,7 +93383,7 @@
 	        if (commentText.slice(-11) === '<p><br></p>') {
 	          commentText = commentText.substr(0, commentText.length - 11);
 	        }
-	        this.props.addComment(this.props.candidateId, new _candidatesClasses.Comment('Вы', (0, _moment.getCurrentDateTime)(), commentText));
+	        this.props.addComment(this.props.candidateId, new _candidatesClasses.Comment(this.props.userName, (0, _moment.getCurrentDateTime)(), commentText));
 	        this.props.onClick();
 	        this.setState({ commentText: '' });
 	      }
@@ -93402,6 +93438,7 @@
 	AddCommentPanel.PropTypes = {
 	  addComment: _propTypes2.default.func.isRequired,
 	  candidateId: _propTypes2.default.number.isRequired,
+	  userName: _propTypes2.default.string.isRequired,
 	  onClick: _propTypes2.default.func
 	};
 
@@ -111586,7 +111623,8 @@
 	    { className: 'float-right' },
 	    _react2.default.createElement(_addCommentDialog2.default, {
 	      candidate: props.candidate,
-	      addComment: props.addComment
+	      addComment: props.addComment,
+	      userName: props.userName
 	    }),
 	    _react2.default.createElement(
 	      _reactRouterDom.NavLink,
@@ -111616,7 +111654,8 @@
 	CandidateControls.propTypes = {
 	  candidate: _propTypes2.default.object.isRequired,
 	  editCandidate: _propTypes2.default.func.isRequired,
-	  deleteCandidate: _propTypes2.default.func.isRequired
+	  deleteCandidate: _propTypes2.default.func.isRequired,
+	  userName: _propTypes2.default.string.isRequired
 	};
 
 /***/ }),
@@ -112144,7 +112183,8 @@
 	            candidateId: this.props.candidate.id,
 	            onClick: function onClick() {
 	              handleOpenClose(false);
-	            }
+	            },
+	            userName: this.props.userName
 	          })
 	        ),
 	        label: 'Add new comment',
@@ -112170,7 +112210,8 @@
 
 	AddCommentDialog.propTypes = {
 	  candidate: _propTypes2.default.object.isRequired,
-	  addComment: _propTypes2.default.func.isRequired
+	  addComment: _propTypes2.default.func.isRequired,
+	  userName: _propTypes2.default.string.isRequired
 	};
 
 	var FormWrapper = _styledComponents2.default.div(_templateObject);
@@ -112277,7 +112318,30 @@
 	        'span',
 	        { className: (0, _moment.isToday)(interviewee.interviewDate) ? 'today' : '' },
 	        interviewee.interviewDate
-	      ), '[upload] [download]', _react2.default.createElement(_candidateControls2.default, _extends({ candidate: interviewee }, this.props))];
+	      ), _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'span',
+	          null,
+	          'resume.pdf '
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          null,
+	          'view'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          null,
+	          'upload'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          null,
+	          'download'
+	        )
+	      ), _react2.default.createElement(_candidateControls2.default, _extends({ candidate: interviewee }, this.props))];
 	    }
 	  }, {
 	    key: 'render',

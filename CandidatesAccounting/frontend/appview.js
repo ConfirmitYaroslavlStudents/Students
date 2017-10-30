@@ -45,7 +45,10 @@ export default class AppView extends React.Component {
         <Navbar
           icon={<Logo />}
           title="Candidate Accounting"
-          controls={<div><span> </span><IconButton color="contrast" onClick={()=>alert('TODO')} icon={<SignOutIcon/>} /></div>}
+          rightPart={<div style={{display: 'flex', alignItems: 'center'}}>
+            <span>{this.props.userName}</span>
+            <IconButton color="contrast" onClick={()=>alert('TODO')} icon={<SignOutIcon/>} />
+          </div>}
         />
         <AppBar
           selected={selectedTableNumber}
@@ -70,7 +73,8 @@ export default class AppView extends React.Component {
               <CommentsForm
                 candidate={props.candidates.find(c => c.id === candidateId)}
                 addComment={props.addComment}
-                deleteComment={props.deleteComment}/>} />
+                deleteComment={props.deleteComment}
+                userName={this.props.userName} />}/>
           </Switch>
         </div>
         <SnackBar message={props.errorMessage} setErrorMessage={props.setErrorMessage}/>
@@ -81,6 +85,7 @@ export default class AppView extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    userName: state.get('userName'),
     candidates: state.get('candidates'),
     errorMessage: state.get('errorMessage')
   };

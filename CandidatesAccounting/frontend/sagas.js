@@ -10,7 +10,7 @@ export default function* rootSaga() {
     watchCandidateDelete(),
     watchCandidateEdit(),
     watchCommentAdd(),
-    watchCommentDelete()
+    watchCommentDelete(),
   ])
 }
 

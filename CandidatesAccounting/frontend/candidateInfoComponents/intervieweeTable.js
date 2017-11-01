@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
 import {isToday, isBirthDate} from '../moment';
+import Tag from '../materialUIDecorators/tag';
+import { NavLink } from 'react-router-dom';
 
 export default class IntervieweeTable extends React.Component {
   constructor(props) {
@@ -14,7 +16,10 @@ export default class IntervieweeTable extends React.Component {
   {
     return [
       index + 1,
-      interviewee.name,
+      <div>
+        {interviewee.name}
+        {interviewee.tags.map((tag, index) => (<NavLink to={"/tag/" + tag} key={index}><Tag content={tag} /></NavLink>))}
+      </div>,
       interviewee.email,
       <span className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>{interviewee.birthDate}</span>,
       <span className={isToday(interviewee.interviewDate) ? 'today' : ''}>{interviewee.interviewDate}</span>,

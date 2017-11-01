@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateControls from './candidateControls';
-import {isBirthDate} from '../moment';
+import { isBirthDate } from '../moment';
+import Tag from '../materialUIDecorators/tag';
+import { NavLink } from 'react-router-dom';
 
 export default class CandidateTable extends React.Component {
   constructor(props) {
@@ -14,7 +16,10 @@ export default class CandidateTable extends React.Component {
   {
     return [
       index + 1,
-      candidate.name,
+      <div>
+        {candidate.name}
+        {candidate.tags.map((tag, index) => (<NavLink to={"/tag/" + tag} key={index}><Tag content={tag} /></NavLink>))}
+      </div>,
       candidate.constructor.name,
       candidate.email,
       <span className={isBirthDate(candidate.birthDate) ? 'today' : ''}>{candidate.birthDate}</span>,
@@ -23,7 +28,7 @@ export default class CandidateTable extends React.Component {
   }
 
   render() {
-    let rows = (this.props.candidates.map((candidate, index) =>
+    let rows = (this.props.allCandidates.map((candidate, index) =>
       this.getRow(candidate, index)
     ));
 
@@ -37,5 +42,5 @@ export default class CandidateTable extends React.Component {
 }
 
 CandidateTable.propTypes = {
-  candidates: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  allCandidates: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };

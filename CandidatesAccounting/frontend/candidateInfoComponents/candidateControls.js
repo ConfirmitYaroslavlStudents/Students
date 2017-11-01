@@ -28,6 +28,7 @@ export default function CandidateControls(props) {
       <EditCandidateDialog
         candidate={props.candidate}
         editCandidate={props.editCandidate}
+        tags={props.tags}
       />
 
       <IconButton
@@ -44,4 +45,5 @@ CandidateControls.propTypes = {
   editCandidate: PropTypes.func.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
+  tags: PropTypes.object.isRequired,
 };

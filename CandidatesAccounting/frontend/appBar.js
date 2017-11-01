@@ -37,6 +37,7 @@ export default class CustomAppBar extends React.Component{
           <AddCandidateDialog
             addCandidate={this.props.addCandidate}
             candidateStatus={this.props.newCandidateDefaultType}
+            tags={this.props.tags}
           />
       </AppBar>
     );
@@ -44,5 +45,6 @@ export default class CustomAppBar extends React.Component{
 }
 
 CustomAppBar.PropTypes = {
+  tags: PropTypes.object.isRequired,
   selected: PropTypes.number,
 };

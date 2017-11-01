@@ -34,7 +34,10 @@ export default class EditCandidateDialog extends React.Component {
       <DialogWindow
         open={this.state.isOpen}
         content={
-          <CandidateInfoForm candidate={candidate} />
+          <CandidateInfoForm
+            candidate={candidate}
+            tags={this.props.tags}
+          />
         }
         label="Candidate edit"
         openButton={ <IconButton icon={<EditIcon />} onClick={() => {handleOpenClose(true)}}/> }
@@ -58,4 +61,5 @@ export default class EditCandidateDialog extends React.Component {
 EditCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   editCandidate: PropTypes.func.isRequired,
+  tags: PropTypes.object.isRequired,
 };

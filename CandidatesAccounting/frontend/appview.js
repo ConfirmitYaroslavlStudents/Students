@@ -35,11 +35,6 @@ export default class AppView extends React.Component {
         break;
     }
 
-    let candidateId = 0;
-    if (currentLocation[2] !== '') {
-      candidateId = parseInt(currentLocation[2]);
-    }
-
     return (
       <div>
         <Navbar
@@ -47,18 +42,22 @@ export default class AppView extends React.Component {
           title="Candidate Accounting"
           rightPart={<div style={{display: 'flex', alignItems: 'center'}}>
             <span>{this.props.userName}</span>
-            <IconButton color="contrast" onClick={()=>alert('TODO')} icon={<SignOutIcon/>} />
+            <IconButton color="contrast"  icon={<SignOutIcon/>} onClick={() => {
+              let newUserName = prompt('Logged out. Enter new userame:');
+              props.setUserName(newUserName);}
+            } />
           </div>}
         />
         <AppBar
           selected={selectedTableNumber}
           newCandidateDefaultType = {newCandidateDefaultType}
           addCandidate={props.addCandidate}
+          tags={props.tags}
         />
         <div className="custom-main">
           <Switch>
             <Route exact path="/" render={() =>
-              <CandidateTable candidates={props.candidates}
+              <CandidateTable allCandidates={props.candidates}
                               {...this.props}/>}/>
             <Route exact path="/interviewees" render={() =>
               <IntervieweeTable interviewees={props.candidates.filter((c) => c.constructor.name === 'Interviewee')}
@@ -71,10 +70,13 @@ export default class AppView extends React.Component {
                             {...this.props}/>}/>
             <Route path="/*/comments" render={() =>
               <CommentsForm
-                candidate={props.candidates.find(c => c.id === candidateId)}
+                candidate={props.candidates.find(c => c.id === parseInt(currentLocation[2]))}
                 addComment={props.addComment}
                 deleteComment={props.deleteComment}
                 userName={this.props.userName} />}/>
+            <Route path="/tag/*" render={() =>
+              <CandidateTable allCandidates={props.candidates.filter((c) => c.tags.includes(currentLocation[2]))}
+                              {...this.props}/>}/>
           </Switch>
         </div>
         <SnackBar message={props.errorMessage} setErrorMessage={props.setErrorMessage}/>
@@ -87,6 +89,7 @@ function mapStateToProps(state) {
   return {
     userName: state.get('userName'),
     candidates: state.get('candidates'),
+    tags: state.get('tags'),
     errorMessage: state.get('errorMessage')
   };
 }

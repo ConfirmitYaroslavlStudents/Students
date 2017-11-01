@@ -34,7 +34,10 @@ export default class AddCandidateDialog extends React.Component{
         <DialogWindow
           open={this.state.isOpen}
           content={
-            <CandidateInfoForm candidate={candidate} />
+            <CandidateInfoForm
+              candidate={candidate}
+              tags={this.props.tags}
+            />
           }
           label="Add new candidate"
           openButton={ <IconButton icon={<AddPersonIcon />} onClick={() => {handleOpenClose(true)}}/> }
@@ -56,6 +59,7 @@ export default class AddCandidateDialog extends React.Component{
 AddCandidateDialog.propTypes = {
   addCandidate: PropTypes.func.isRequired,
   candidateStatus: PropTypes.string.isRequired,
+  tags: PropTypes.object.isRequired
 };
 
 const AddButtonWrapper = styled.div`

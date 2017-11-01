@@ -12,6 +12,7 @@ import createPalette from 'material-ui/styles/createPalette';
 import {deepPurple} from 'material-ui/colors';
 import AppView from './appview';
 import {getAllCandidates} from './candidateService';
+import {getTags} from './tagService';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -23,26 +24,30 @@ sagaMiddleware.run(rootSaga);
 
 getAllCandidates()
   .then((candidates) => {
-    store.dispatch({
-      type: "SET_INITIAL_STATE",
-      state: {
-        userName: 'DmitryB',
-        candidates: candidates,
-        errorMessage: ''
-      }
-    });
+    getTags()
+      .then((tags) => {
+        store.dispatch({
+            type: "SET_INITIAL_STATE",
+            state: {
+              userName: 'DmitryB',
+              candidates: candidates,
+              tags: tags,
+              errorMessage: ''
+            }
+          }
+        );
 
-    ReactDOM.render(
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Route path="/" component={AppView} />
-          </BrowserRouter>
-        </Provider>
-      </MuiThemeProvider>,
-
-      document.getElementById('root')
-    );
+        ReactDOM.render(
+          <MuiThemeProvider theme={theme}>
+            <Provider store={store}>
+              <BrowserRouter>
+                <Route path="/" component={AppView}/>
+              </BrowserRouter>
+            </Provider>
+          </MuiThemeProvider>,
+          document.getElementById('root')
+        );
+      });
   });
 
 const theme = createMuiTheme({

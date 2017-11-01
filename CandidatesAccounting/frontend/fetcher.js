@@ -15,7 +15,6 @@ export function fetchPost(url, data) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Yes",
       },
       body: JSON.stringify({data: data})
     })

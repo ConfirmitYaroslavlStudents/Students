@@ -9,20 +9,24 @@ const {Interviewee, Student, Trainee, Comment} = require('./frontend/candidatesC
 
 let candidates = [
   new Interviewee(1, 'Олег', formatDate('27', '10', '1995'), 'Oleg@mail.ru',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №1')], [],
+    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №1')], ['backend', 'javascript', 'nodeJS'],
     formatDateTime('12', '00', '27', '10', '2017'), {}),
   new Student(2, 'Ольга', formatDate('11', '04', '1997'), 'solnishko14@rambler.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №2')], [],
+    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №2')], ['backend', 'C#', 'ASP.NET'],
     'КБ-3', formatDate('04', '08', '2017'), formatDate('30', '09', '2017')),
   new Student(3, 'Андрей', formatDate('12', '07', '1997'), 'andrey@gmail.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №3')], [],
+    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №3')], ['frontend', 'C#', 'react', 'javascript'],
     'ПМИ-3', formatDate('04', '08', '2017'), formatDate('30', '09', '2017')),
   new Trainee(4, 'Оксана', formatDate('07', '09', '1995'), 'Oksana@confirmit.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №4')], [],
+    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №4')], ['frontend', 'javascript', 'react', 'hub'],
     'Евгений Иванов'),
   new Trainee(5, 'Владимир', formatDate('07', '09', '1995'), 'Vladimir@confirmit.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №5')], [],
+    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №5')], ['backend', 'C#', 'ASP.NET', 'es'],
     'Евгения Иванова')
+];
+
+let tags = [
+  'backend', 'C#', 'javascript', 'frontend', 'react', 'ASP.NET', 'nodeJS', 'hub', 'es'
 ];
 
 const app = express();
@@ -45,13 +49,19 @@ app.use(bodyParser.json());
 //app.use(ntlm());
 
 http.createServer(app).listen(app.get('port'), function() {
-  console.log('Express server listening on port', app.get('port'));
+  console.log('Express server is listening on port', app.get('port'));
 });
 
 app.get('/candidates', (req, res) => {
   console.log('Send all candidates');
   //console.log(req.ntlm);
   res.send(candidates);
+});
+
+app.get('/tags', (req, res) => {
+  console.log('Send all tags');
+  //console.log(req.ntlm);
+  res.send(tags);
 });
 
 app.post('/candidates', (req, res) => {
@@ -64,6 +74,7 @@ app.post('/candidates', (req, res) => {
   let candidate = req.body.data;
   candidate.id = lastId + 1;
   candidates.push(candidate);
+  updateTags(candidate.tags);
   console.log('Add new candidate:', candidate);
   res.end();
 });
@@ -73,7 +84,9 @@ app.put('/candidates/:id', (req, res) => {
     if (candidates[i].id === parseInt(req.params.id)) {
       console.log('Edit candidate');
       console.log('Previous state:', candidates[i]);
-      candidates[i] = req.body.data;
+      let candidate = req.body.data;
+      candidates[i] = candidate;
+      updateTags(candidate.tags);
       console.log('New state:', candidates[i]);
       break;
     }
@@ -117,3 +130,11 @@ app.delete('/candidates/:candidateId/comments/:commentId', (req, res) => {
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+function updateTags(newTags) {
+  for(let i = 0; i < newTags.length; i++) {
+    if (!tags.includes(newTags[i])) {
+      tags.push(newTags[i]);
+    }
+  }
+}

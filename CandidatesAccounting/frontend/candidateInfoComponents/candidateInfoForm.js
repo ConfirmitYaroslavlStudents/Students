@@ -4,6 +4,7 @@ import TextInput from '../materialUIDecorators/textInput';
 import SimpleSelect from '../materialUIDecorators/simpleSelect';
 import styled from 'styled-components';
 import TagSelect from '../materialUIDecorators/tagSelect';
+import ResumeControls from './resumeControls';
 
 export default class CandidateInfoForm extends React.Component {
   constructor(props) {
@@ -46,19 +47,8 @@ export default class CandidateInfoForm extends React.Component {
             placeholder="dd.mm.yyyy hh:mm"
             onChange={(value) => {changeInfo('interviewDate', value)}}
             multiline={true}/>
-          <div>
-            <p>Resume</p>
-            <span>resume.pdf </span>
-            <button>
-              view
-            </button>
-            <button>
-              upload
-            </button>
-            <button>
-              download
-            </button>
-          </div>
+          <Label marginBottom="-10px">Resume</Label>
+          <ResumeControls fileName={this.props.candidate.resume}/>
         </div>;
         break;
 
@@ -152,6 +142,7 @@ const FormWrapper = styled.div`
 
 const Label = styled.p`
   margin-top: 16px;
+  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};;
   color: rgba(0,0,0,0.54);
   font-size: 80%;
 `;

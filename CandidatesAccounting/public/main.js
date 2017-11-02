@@ -8983,13 +8983,20 @@
 
 	var _candidateService = __webpack_require__(581);
 
-	var _tagService = __webpack_require__(1360);
+	var _tagService = __webpack_require__(1363);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var sagaMiddleware = (0, _reduxSaga2.default)();
+
 	var store = (0, _redux.createStore)(_reducer2.default, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), (0, _redux.applyMiddleware)(sagaMiddleware));
 	sagaMiddleware.run(_sagas2.default);
+
+	var theme = (0, _createMuiTheme2.default)({
+	  palette: (0, _createPalette2.default)({
+	    primary: _colors.indigo
+	  })
+	});
 
 	(0, _candidateService.getAllCandidates)().then(function (candidates) {
 	  (0, _tagService.getTags)().then(function (tags) {
@@ -9017,12 +9024,6 @@
 	      )
 	    ), document.getElementById('root'));
 	  });
-	});
-
-	var theme = (0, _createMuiTheme2.default)({
-	  palette: (0, _createPalette2.default)({
-	    primary: _colors.deepPurple
-	  })
 	});
 
 /***/ }),
@@ -49435,15 +49436,15 @@
 
 	var _intervieweeTable2 = _interopRequireDefault(_intervieweeTable);
 
-	var _studentTable = __webpack_require__(1353);
+	var _studentTable = __webpack_require__(1356);
 
 	var _studentTable2 = _interopRequireDefault(_studentTable);
 
-	var _traineeTable = __webpack_require__(1354);
+	var _traineeTable = __webpack_require__(1357);
 
 	var _traineeTable2 = _interopRequireDefault(_traineeTable);
 
-	var _snackbar = __webpack_require__(1355);
+	var _snackbar = __webpack_require__(1358);
 
 	var _snackbar2 = _interopRequireDefault(_snackbar);
 
@@ -59081,22 +59082,22 @@
 	            },
 	            _react2.default.createElement(_Tabs.Tab, { label: _react2.default.createElement(
 	                _reactRouterDom.NavLink,
-	                { exact: true, to: '/', className: 'nav-link', activeStyle: { color: '#673AB7' } },
+	                { exact: true, to: '/', className: 'nav-link', activeStyle: { color: '#3F51B5' } },
 	                'All'
 	              ) }),
 	            _react2.default.createElement(_Tabs.Tab, { label: _react2.default.createElement(
 	                _reactRouterDom.NavLink,
-	                { to: '/interviewees', className: 'nav-link', activeStyle: { color: '#673AB7' } },
+	                { to: '/interviewees', className: 'nav-link', activeStyle: { color: '#3F51B5' } },
 	                'Interviewees'
 	              ) }),
 	            _react2.default.createElement(_Tabs.Tab, { label: _react2.default.createElement(
 	                _reactRouterDom.NavLink,
-	                { to: '/students', className: 'nav-link', activeStyle: { color: '#673AB7' } },
+	                { to: '/students', className: 'nav-link', activeStyle: { color: '#3F51B5' } },
 	                'Students'
 	              ) }),
 	            _react2.default.createElement(_Tabs.Tab, { label: _react2.default.createElement(
 	                _reactRouterDom.NavLink,
-	                { to: '/trainees', className: 'nav-link', activeStyle: { color: '#673AB7' } },
+	                { to: '/trainees', className: 'nav-link', activeStyle: { color: '#3F51B5' } },
 	                'Trainees'
 	              ) })
 	          )
@@ -71872,7 +71873,7 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _templateObject = _taggedTemplateLiteral(['\n  padding: 15px 15px 10px;\n'], ['\n  padding: 15px 15px 10px;\n']),
-	    _templateObject2 = _taggedTemplateLiteral(['\n  margin-top: 16px;\n  color: rgba(0,0,0,0.54);\n  font-size: 80%;\n'], ['\n  margin-top: 16px;\n  color: rgba(0,0,0,0.54);\n  font-size: 80%;\n']);
+	    _templateObject2 = _taggedTemplateLiteral(['\n  margin-top: 16px;\n  margin-bottom: ', ';;\n  color: rgba(0,0,0,0.54);\n  font-size: 80%;\n'], ['\n  margin-top: 16px;\n  margin-bottom: ', ';;\n  color: rgba(0,0,0,0.54);\n  font-size: 80%;\n']);
 
 	var _react = __webpack_require__(330);
 
@@ -71897,6 +71898,10 @@
 	var _tagSelect = __webpack_require__(1091);
 
 	var _tagSelect2 = _interopRequireDefault(_tagSelect);
+
+	var _resumeControls = __webpack_require__(1353);
+
+	var _resumeControls2 = _interopRequireDefault(_resumeControls);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -71967,34 +71972,11 @@
 	              },
 	              multiline: true }),
 	            _react2.default.createElement(
-	              'div',
-	              null,
-	              _react2.default.createElement(
-	                'p',
-	                null,
-	                'Resume'
-	              ),
-	              _react2.default.createElement(
-	                'span',
-	                null,
-	                'resume.pdf '
-	              ),
-	              _react2.default.createElement(
-	                'button',
-	                null,
-	                'view'
-	              ),
-	              _react2.default.createElement(
-	                'button',
-	                null,
-	                'upload'
-	              ),
-	              _react2.default.createElement(
-	                'button',
-	                null,
-	                'download'
-	              )
-	            )
+	              Label,
+	              { marginBottom: '-10px' },
+	              'Resume'
+	            ),
+	            _react2.default.createElement(_resumeControls2.default, { fileName: this.props.candidate.resume })
 	          );
 	          break;
 
@@ -72111,7 +72093,9 @@
 
 	var FormWrapper = _styledComponents2.default.div(_templateObject);
 
-	var Label = _styledComponents2.default.p(_templateObject2);
+	var Label = _styledComponents2.default.p(_templateObject2, function (props) {
+	  return props.marginBottom ? props.marginBottom : '0';
+	});
 
 /***/ }),
 /* 1058 */
@@ -118986,6 +118970,10 @@
 
 	var _reactRouterDom = __webpack_require__(585);
 
+	var _resumeControls = __webpack_require__(1353);
+
+	var _resumeControls2 = _interopRequireDefault(_resumeControls);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -119028,30 +119016,7 @@
 	        'span',
 	        { className: (0, _moment.isToday)(interviewee.interviewDate) ? 'today' : '' },
 	        interviewee.interviewDate
-	      ), _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'span',
-	          null,
-	          'resume.pdf '
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          null,
-	          'view'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          null,
-	          'upload'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          null,
-	          'download'
-	        )
-	      ), _react2.default.createElement(_candidateControls2.default, _extends({ candidate: interviewee }, this.props))];
+	      ), _react2.default.createElement(_resumeControls2.default, { fileName: interviewee.resume }), _react2.default.createElement(_candidateControls2.default, _extends({ candidate: interviewee }, this.props))];
 	    }
 	  }, {
 	    key: 'render',
@@ -119085,6 +119050,190 @@
 
 /***/ }),
 /* 1353 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  align-items: center;\n'], ['\n  display: flex;\n  align-items: center;\n']),
+	    _templateObject2 = _taggedTemplateLiteral(['\n  font-style: italic;\n'], ['\n  font-style: italic;\n']),
+	    _templateObject3 = _taggedTemplateLiteral(['\n  font-style: italic;\n  color: rgba(0, 0, 0, 0.6);\n'], ['\n  font-style: italic;\n  color: rgba(0, 0, 0, 0.6);\n']);
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(555);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _styledComponents = __webpack_require__(997);
+
+	var _styledComponents2 = _interopRequireDefault(_styledComponents);
+
+	var _iconButton = __webpack_require__(857);
+
+	var _iconButton2 = _interopRequireDefault(_iconButton);
+
+	var _OpenInNew = __webpack_require__(1364);
+
+	var _OpenInNew2 = _interopRequireDefault(_OpenInNew);
+
+	var _FileUpload = __webpack_require__(1354);
+
+	var _FileUpload2 = _interopRequireDefault(_FileUpload);
+
+	var _FileDownload = __webpack_require__(1355);
+
+	var _FileDownload2 = _interopRequireDefault(_FileDownload);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ResumeControls = function (_React$Component) {
+	  _inherits(ResumeControls, _React$Component);
+
+	  function ResumeControls() {
+	    _classCallCheck(this, ResumeControls);
+
+	    return _possibleConstructorReturn(this, (ResumeControls.__proto__ || Object.getPrototypeOf(ResumeControls)).apply(this, arguments));
+	  }
+
+	  _createClass(ResumeControls, [{
+	    key: 'render',
+	    value: function render() {
+	      var fileIsLoaded = true;
+	      if (!this.props.fileName || this.props.fileName.trim() === '') {
+	        fileIsLoaded = false;
+	      }
+	      return _react2.default.createElement(
+	        Wrapper,
+	        null,
+	        _react2.default.createElement(
+	          FileName,
+	          null,
+	          fileIsLoaded ? this.props.fileName : _react2.default.createElement(
+	            NotLoaded,
+	            null,
+	            'not loaded'
+	          )
+	        ),
+	        fileIsLoaded ? _react2.default.createElement(_iconButton2.default, { onClick: function onClick() {}, icon: _react2.default.createElement(_OpenInNew2.default, null) }) : '',
+	        fileIsLoaded ? _react2.default.createElement(_iconButton2.default, { style: { marginLeft: -10 }, onClick: function onClick() {}, icon: _react2.default.createElement(_FileDownload2.default, null) }) : '',
+	        _react2.default.createElement(_iconButton2.default, { style: fileIsLoaded ? { marginLeft: -10 } : {}, onClick: function onClick() {}, icon: _react2.default.createElement(_FileUpload2.default, null) })
+	      );
+	    }
+	  }]);
+
+	  return ResumeControls;
+	}(_react2.default.Component);
+
+	exports.default = ResumeControls;
+
+
+	ResumeControls.propTypes = {
+	  fileName: _propTypes2.default.string.isRequired
+
+	};
+
+	var Wrapper = _styledComponents2.default.div(_templateObject);
+
+	var FileName = _styledComponents2.default.span(_templateObject2);
+
+	var NotLoaded = _styledComponents2.default.span(_templateObject3);
+
+/***/ }),
+/* 1354 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(850);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(855);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _ref = _react2.default.createElement('path', { d: 'M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z' });
+
+	var FileUpload = function FileUpload(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _ref
+	  );
+	};
+
+	FileUpload = (0, _pure2.default)(FileUpload);
+	FileUpload.muiName = 'SvgIcon';
+
+	exports.default = FileUpload;
+
+/***/ }),
+/* 1355 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(850);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(855);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _ref = _react2.default.createElement('path', { d: 'M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z' });
+
+	var FileDownload = function FileDownload(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _ref
+	  );
+	};
+
+	FileDownload = (0, _pure2.default)(FileDownload);
+	FileDownload.muiName = 'SvgIcon';
+
+	exports.default = FileDownload;
+
+/***/ }),
+/* 1356 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -119192,7 +119341,7 @@
 	};
 
 /***/ }),
-/* 1354 */
+/* 1357 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -119300,7 +119449,7 @@
 	};
 
 /***/ }),
-/* 1355 */
+/* 1358 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -119319,7 +119468,7 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _Snackbar = __webpack_require__(1356);
+	var _Snackbar = __webpack_require__(1359);
 
 	var _Snackbar2 = _interopRequireDefault(_Snackbar);
 
@@ -119389,7 +119538,7 @@
 	};
 
 /***/ }),
-/* 1356 */
+/* 1359 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -119398,7 +119547,7 @@
 	  value: true
 	});
 
-	var _Snackbar = __webpack_require__(1357);
+	var _Snackbar = __webpack_require__(1360);
 
 	Object.defineProperty(exports, 'default', {
 	  enumerable: true,
@@ -119407,7 +119556,7 @@
 	  }
 	});
 
-	var _SnackbarContent = __webpack_require__(1359);
+	var _SnackbarContent = __webpack_require__(1362);
 
 	Object.defineProperty(exports, 'SnackbarContent', {
 	  enumerable: true,
@@ -119419,7 +119568,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 1357 */
+/* 1360 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -119481,7 +119630,7 @@
 
 	var _transitions = __webpack_require__(681);
 
-	var _ClickAwayListener = __webpack_require__(1358);
+	var _ClickAwayListener = __webpack_require__(1361);
 
 	var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
 
@@ -119491,7 +119640,7 @@
 
 	var _Slide2 = _interopRequireDefault(_Slide);
 
-	var _SnackbarContent = __webpack_require__(1359);
+	var _SnackbarContent = __webpack_require__(1362);
 
 	var _SnackbarContent2 = _interopRequireDefault(_SnackbarContent);
 
@@ -119802,7 +119951,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(332)))
 
 /***/ }),
-/* 1358 */
+/* 1361 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -119926,7 +120075,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(332)))
 
 /***/ }),
-/* 1359 */
+/* 1362 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -120058,7 +120207,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(332)))
 
 /***/ }),
-/* 1360 */
+/* 1363 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -120084,6 +120233,45 @@
 	function addTag(tag) {
 	  return (0, _fetcher.fetchPost)('/tags', tag);
 	}
+
+/***/ }),
+/* 1364 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(330);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(850);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(855);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _ref = _react2.default.createElement('path', { d: 'M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z' });
+
+	var OpenInNew = function OpenInNew(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _ref
+	  );
+	};
+
+	OpenInNew = (0, _pure2.default)(OpenInNew);
+	OpenInNew.muiName = 'SvgIcon';
+
+	exports.default = OpenInNew;
 
 /***/ })
 /******/ ]);

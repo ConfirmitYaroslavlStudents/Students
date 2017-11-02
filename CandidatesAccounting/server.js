@@ -10,7 +10,7 @@ const {Interviewee, Student, Trainee, Comment} = require('./frontend/candidatesC
 let candidates = [
   new Interviewee(1, 'Олег', formatDate('27', '10', '1995'), 'Oleg@mail.ru',
     [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №1')], ['backend', 'javascript', 'nodeJS'],
-    formatDateTime('12', '00', '27', '10', '2017'), {}),
+    formatDateTime('12', '00', '27', '10', '2017'), 'resume.pdf'),
   new Student(2, 'Ольга', formatDate('11', '04', '1997'), 'solnishko14@rambler.com',
     [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №2')], ['backend', 'C#', 'ASP.NET'],
     'КБ-3', formatDate('04', '08', '2017'), formatDate('30', '09', '2017')),

@@ -34,10 +34,6 @@ p {
     height: 64px;
 }
 
-.error-snackbar {
-    background-color: indianred;
-}
-
 .float-right {
     float: right;
 }
@@ -55,7 +51,7 @@ p {
 }
 
 .nav-link:hover {
-    color: #673AB7;
+    color: #3F51B5;
 }
 
 .tabs-bar {

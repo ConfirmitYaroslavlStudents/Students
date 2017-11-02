@@ -5,6 +5,7 @@ import CandidateRowControls from './candidateControls';
 import {isToday, isBirthDate} from '../moment';
 import Tag from '../materialUIDecorators/tag';
 import { NavLink } from 'react-router-dom';
+import ResumeControls from './resumeControls';
 
 export default class IntervieweeTable extends React.Component {
   constructor(props) {
@@ -23,18 +24,7 @@ export default class IntervieweeTable extends React.Component {
       interviewee.email,
       <span className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>{interviewee.birthDate}</span>,
       <span className={isToday(interviewee.interviewDate) ? 'today' : ''}>{interviewee.interviewDate}</span>,
-      <div>
-        <span>resume.pdf </span>
-        <button>
-        view
-        </button>
-        <button>
-          upload
-        </button>
-        <button>
-        download
-        </button>
-      </div>,
+      <ResumeControls fileName={interviewee.resume}/>,
       <CandidateRowControls candidate={interviewee} {...this.props}/>
     ];
   }

@@ -9,18 +9,25 @@ import { BrowserRouter, Route} from 'react-router-dom';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
-import {deepPurple} from 'material-ui/colors';
+import {indigo} from 'material-ui/colors';
 import AppView from './appview';
 import {getAllCandidates} from './candidateService';
 import {getTags} from './tagService';
 
 const sagaMiddleware = createSagaMiddleware();
+
 const store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(sagaMiddleware)
 );
 sagaMiddleware.run(rootSaga);
+
+const theme = createMuiTheme({
+  palette: createPalette({
+    primary: indigo,
+  })
+});
 
 getAllCandidates()
   .then((candidates) => {
@@ -49,10 +56,3 @@ getAllCandidates()
         );
       });
   });
-
-const theme = createMuiTheme({
-  palette: createPalette({
-    primary: deepPurple,
-  })
-});
-

@@ -28,10 +28,10 @@ export default class CustomAppBar extends React.Component{
             centered
             onChange={this.handleChange.bind(this)}
           >
-            <Tab label={<NavLink exact to="/" className="nav-link" activeStyle={{color: '#673AB7'}}>All</NavLink>}/>
-            <Tab label={<NavLink to="/interviewees" className="nav-link" activeStyle={{color: '#673AB7'}}>Interviewees</NavLink>}/>
-            <Tab label={<NavLink to="/students" className="nav-link" activeStyle={{color: '#673AB7'}}>Students</NavLink>}/>
-            <Tab label={<NavLink to="/trainees" className="nav-link" activeStyle={{color: '#673AB7'}}>Trainees</NavLink>}/>
+            <Tab label={<NavLink exact to="/" className="nav-link" activeStyle={{color: '#3F51B5'}}>All</NavLink>}/>
+            <Tab label={<NavLink to="/interviewees" className="nav-link" activeStyle={{color: '#3F51B5'}}>Interviewees</NavLink>}/>
+            <Tab label={<NavLink to="/students" className="nav-link" activeStyle={{color: '#3F51B5'}}>Students</NavLink>}/>
+            <Tab label={<NavLink to="/trainees" className="nav-link" activeStyle={{color: '#3F51B5'}}>Trainees</NavLink>}/>
           </Tabs>
         </div>
           <AddCandidateDialog

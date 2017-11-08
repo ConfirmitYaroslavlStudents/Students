@@ -40,11 +40,11 @@ export default class AddCandidateDialog extends React.Component{
             />
           }
           label="Add new candidate"
-          openButton={ <IconButton icon={<AddPersonIcon />} onClick={() => {handleOpenClose(true)}}/> }
+          openButton={ <IconButton icon={<AddPersonIcon />} style={{height: 40, width: 40}} onClick={() => {handleOpenClose(true)}}/> }
           controls={
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
-                candidate.comments.push(new Comment('Вы', getCurrentDateTime(), 'Initial ' + WriteCandidate(candidate)));
+                candidate.comments.push(new Comment(props.userName, getCurrentDateTime(), 'Initial ' + WriteCandidate(candidate)));
                 props.addCandidate(candidate);
                 handleOpenClose(false);
               }}/>
@@ -59,7 +59,8 @@ export default class AddCandidateDialog extends React.Component{
 AddCandidateDialog.propTypes = {
   addCandidate: PropTypes.func.isRequired,
   candidateStatus: PropTypes.string.isRequired,
-  tags: PropTypes.object.isRequired
+  tags: PropTypes.object.isRequired,
+  userName: PropTypes.string.isRequired,
 };
 
 const AddButtonWrapper = styled.div`

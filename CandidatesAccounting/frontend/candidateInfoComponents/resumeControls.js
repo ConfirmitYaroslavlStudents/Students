@@ -6,6 +6,11 @@ import OpenIcon from 'material-ui-icons/OpenInNew';
 import UploadIcon from 'material-ui-icons/FileUpload';
 import DownloadIcon from 'material-ui-icons/FileDownload';
 
+const iconButtonStyle = {
+  height: 32,
+  width: 32,
+};
+
 export default class ResumeControls extends React.Component {
   render() {
     let fileIsLoaded = true;
@@ -13,25 +18,24 @@ export default class ResumeControls extends React.Component {
       fileIsLoaded = false;
     }
     return (
-      <Wrapper>
-        <FileName>
-          {fileIsLoaded ? this.props.fileName : <NotLoaded>not loaded</NotLoaded>}
-        </FileName>
-        {fileIsLoaded ?
-          <IconButton onClick={() => {}} icon={<OpenIcon/>}/> : ''
-        }
-        {fileIsLoaded ?
-          <IconButton style={{marginLeft: -10}} onClick={()=>{}} icon={<DownloadIcon/>}/> : ''
-        }
-        <IconButton style={fileIsLoaded ? {marginLeft: -10} : {}} onClick={()=>{}} icon={<UploadIcon/>}/>
-      </Wrapper>
+        fileIsLoaded ?
+          <Wrapper>
+            <FileName>{this.props.fileName}</FileName>
+            <IconButton style={iconButtonStyle} onClick={() => {}} icon={<OpenIcon/>}/>
+            <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<DownloadIcon/>}/>
+            <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
+          </Wrapper>
+          :
+          <Wrapper>
+            <NotLoaded>not loaded</NotLoaded>
+            <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
+          </Wrapper>
     );
   }
 }
 
 ResumeControls.propTypes = {
-  fileName: PropTypes.string.isRequired,
-
+  fileName: PropTypes.string,
 };
 
 const Wrapper = styled.div`

@@ -8,6 +8,11 @@ import Badge from '../materialUIDecorators/badge';
 import {NavLink} from 'react-router-dom';
 import AddCommentDialog from '../commentInfoComponents/addCommentDialog';
 
+const iconButtonStyle = {
+  height: 40,
+  width: 40,
+};
+
 export default function CandidateControls(props) {
   return (
     <div className="float-right">
@@ -21,6 +26,7 @@ export default function CandidateControls(props) {
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
             icon={<CommentIcon />}
+            style={iconButtonStyle}
           />
         </Badge>
       </NavLink>
@@ -29,10 +35,12 @@ export default function CandidateControls(props) {
         candidate={props.candidate}
         editCandidate={props.editCandidate}
         tags={props.tags}
+        userName={props.userName}
       />
 
       <IconButton
         icon={<RemoveIcon />}
+        style={iconButtonStyle}
         color="accent"
         onClick={() => { props.deleteCandidate(props.candidate.id) }}
       />

@@ -32,13 +32,13 @@ export default class AddCommentDialog extends React.Component {
             <AddCommentPanel
               addComment={this.props.addComment}
               candidateId={this.props.candidate.id}
-              onClick={() => { handleOpenClose(false); }}
+              onClick={() => { handleOpenClose(false) }}
               userName={this.props.userName}
             />
           </FormWrapper>}
         label="Add new comment"
         openButton={
-          <IconButton icon={<CommentIcon />} onClick={() => {handleOpenClose(true)}}/>
+          <IconButton icon={<CommentIcon />} style={{height: 40, width: 40}} onClick={() => {handleOpenClose(true)}}/>
         }
         controls={
           <div style={{display: 'inline-block'}}>

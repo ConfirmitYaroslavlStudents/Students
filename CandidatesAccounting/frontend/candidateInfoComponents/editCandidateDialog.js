@@ -40,12 +40,12 @@ export default class EditCandidateDialog extends React.Component {
           />
         }
         label="Candidate edit"
-        openButton={ <IconButton icon={<EditIcon />} onClick={() => {handleOpenClose(true)}}/> }
+        openButton={ <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} onClick={() => {handleOpenClose(true)}}/> }
         controls={
           <div style={{display: 'inline-block'}}>
             <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
               if (candidate.status !== initialStatus) {
-                candidate.comments.push(new Comment('Вы', getCurrentDateTime(), 'New ' + WriteCandidate(candidate)));
+                candidate.comments.push(new Comment(props.userName, getCurrentDateTime(), 'New ' + WriteCandidate(candidate)));
               }
               props.editCandidate(candidate.id, candidate);
               handleOpenClose(false);
@@ -62,4 +62,5 @@ EditCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   editCandidate: PropTypes.func.isRequired,
   tags: PropTypes.object.isRequired,
+  userName: PropTypes.string.isRequired,
 };

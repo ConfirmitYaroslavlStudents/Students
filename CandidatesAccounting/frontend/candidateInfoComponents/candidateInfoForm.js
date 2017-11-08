@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextInput from '../materialUIDecorators/textInput';
+import DatePicker from '../materialUIDecorators/customDatePicker';
+import DateTimePicker from '../materialUIDecorators/customDateTimePicker';
 import SimpleSelect from '../materialUIDecorators/simpleSelect';
 import styled from 'styled-components';
 import TagSelect from '../materialUIDecorators/tagSelect';
 import ResumeControls from './resumeControls';
+import {toDatePickerFormat, fromDatePickerFormat, toDateTimePickerFormat, fromDateTimePickerFormat} from "../moment";
 
 export default class CandidateInfoForm extends React.Component {
   constructor(props) {
@@ -40,13 +43,11 @@ export default class CandidateInfoForm extends React.Component {
     switch (this.state.candidateStatus) {
       case 'Interviewee':
         specialFields = <div>
-          <TextInput
-            name="interviewDate"
+          <DateTimePicker
             label="Interview date"
-            value={this.props.candidate.interviewDate}
-            placeholder="dd.mm.yyyy hh:mm"
-            onChange={(value) => {changeInfo('interviewDate', value)}}
-            multiline={true}/>
+            defaultValue={toDateTimePickerFormat(this.props.candidate.interviewDate)}
+            onChange={(value) => {changeInfo('interviewDate', fromDateTimePickerFormat(value))}}
+          />
           <Label marginBottom="-10px">Resume</Label>
           <ResumeControls fileName={this.props.candidate.resume}/>
         </div>;
@@ -60,20 +61,16 @@ export default class CandidateInfoForm extends React.Component {
             value={this.props.candidate.groupName}
             onChange={(value) => {changeInfo('groupName', value)}}
             multiline/>
-          <TextInput
-            name="startingDate"
-            label="Learning starting date"
-            value={this.props.candidate.startingDate}
-            placeholder="dd.mm.yyyy"
-            onChange={(value) => {changeInfo('startingDate', value)}}
-            multiline/>
-          <TextInput
-            name="endingDate"
-            label="Learning edning date"
-            value={this.props.candidate.endingDate}
-            placeholder="dd.mm.yyyy"
-            onChange={(value) => {changeInfo('endingDate', value)}}
-            multiline/>
+          <DatePicker
+            label="Learning start date"
+            defaultValue={toDatePickerFormat(this.props.candidate.startingDate)}
+            onChange={(value) => {changeInfo('startingDate', fromDatePickerFormat(value))}}
+          />
+          <DatePicker
+            label="Learning end date"
+            defaultValue={toDatePickerFormat(this.props.candidate.endingDate)}
+            onChange={(value) => {changeInfo('endingDate', fromDatePickerFormat(value))}}
+          />
         </div>;
         break;
 
@@ -83,6 +80,7 @@ export default class CandidateInfoForm extends React.Component {
             name="mentor"
             label="Mentor's name"
             value={this.props.candidate.mentor}
+            placeholder="full name"
             onChange={(value) => {changeInfo('mentor', value)}}
             multiline/>
         </div>;
@@ -108,14 +106,8 @@ export default class CandidateInfoForm extends React.Component {
           name="name"
           label="Name"
           value={this.props.candidate.name}
+          placeholder="full name"
           onChange={(value) => {changeInfo('name', value)}}
-          multiline/>
-        <TextInput
-          name="birthDate"
-          label="Birth date"
-          value={this.props.candidate.birthDate}
-          placeholder="dd.mm.yyyy"
-          onChange={(value) => {changeInfo('birthDate', value)}}
           multiline/>
         <TextInput
           name="email"
@@ -124,6 +116,11 @@ export default class CandidateInfoForm extends React.Component {
           placeholder="example@mail.com"
           onChange={(value) => {changeInfo('email', value)}}
           multiline/>
+        <DatePicker
+          label="Birth date"
+          defaultValue={toDatePickerFormat(this.props.candidate.birthDate)}
+          onChange={(value) => {changeInfo('birthDate', fromDatePickerFormat(value))}}
+        />
 
         {specialFields}
       </FormWrapper>

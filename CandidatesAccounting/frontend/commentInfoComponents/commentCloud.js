@@ -4,6 +4,7 @@ import AvatarIcon from 'material-ui-icons/AccountCircle';
 import IconButton from '../materialUIDecorators/iconButton';
 import RemoveIcon from 'material-ui-icons/Delete';
 import styled, { css } from 'styled-components';
+import {formatDateTime} from '../moment';
 
 export default function CommentCloud(props) {
   return (
@@ -28,7 +29,7 @@ export default function CommentCloud(props) {
           dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
         <CommentFooter>
-          {props.comment.date}
+          {formatDateTime(props.comment.date)}
           <AuthorName right={props.comment.author === props.userName}>
             {props.comment.author}
           </AuthorName>

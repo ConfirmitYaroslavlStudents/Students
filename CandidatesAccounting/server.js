@@ -1,27 +1,26 @@
 const express = require('express');
 const http = require('http');
-const ntlm = require('express-ntlm');
-const {formatDate, formatDateTime} = require('./frontend/moment');
+//const ntlm = require('express-ntlm');
 const path = require('path');
 const bodyParser  = require('body-parser');
 const favicon = require ('serve-favicon');
 const {Interviewee, Student, Trainee, Comment} = require('./frontend/candidatesClasses/');
 
 let candidates = [
-  new Interviewee(1, 'Олег', formatDate('27', '10', '1995'), 'Oleg@mail.ru',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №1')], ['backend', 'javascript', 'nodeJS'],
-    formatDateTime('12', '00', '27', '10', '2017'), 'resume.pdf'),
-  new Student(2, 'Ольга', formatDate('11', '04', '1997'), 'solnishko14@rambler.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №2')], ['backend', 'C#', 'ASP.NET'],
-    'КБ-3', formatDate('04', '08', '2017'), formatDate('30', '09', '2017')),
-  new Student(3, 'Андрей', formatDate('12', '07', '1997'), 'andrey@gmail.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №3')], ['frontend', 'C#', 'react', 'javascript'],
-    'ПМИ-3', formatDate('04', '08', '2017'), formatDate('30', '09', '2017')),
-  new Trainee(4, 'Оксана', formatDate('07', '09', '1995'), 'Oksana@confirmit.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №4')], ['frontend', 'javascript', 'react', 'hub'],
+  new Interviewee(1, 'Олег', '27.10.1995', 'Oleg@mail.ru',
+    [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №1')], ['backend', 'javascript', 'nodeJS'],
+    '12:00 27.10.2017', 'resume.pdf'),
+  new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com',
+    [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №2')], ['backend', 'C#', 'ASP.NET'],
+    'КБ-3', '04.08.2017', '30.09.2017'),
+  new Student(3, 'Андрей', '12.07.1997', 'andrey@gmail.com',
+    [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №3')], ['frontend', 'C#', 'react', 'javascript'],
+    'ПМИ-3', '04.08.2017', '30.09.2017'),
+  new Trainee(4, 'Оксана', '07.09.1995', 'Oksana@confirmit.com',
+    [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №4')], ['frontend', 'javascript', 'react', 'hub'],
     'Евгений Иванов'),
-  new Trainee(5, 'Владимир', formatDate('07', '09', '1995'), 'Vladimir@confirmit.com',
-    [new Comment('AnnaR', formatDateTime('15', '45', '17', '05', '2017'), 'Текст комментария №5')], ['backend', 'C#', 'ASP.NET', 'es'],
+  new Trainee(5, 'Владимир','07.09.1995', 'Vladimir@confirmit.com',
+    [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №5')], ['backend', 'C#', 'ASP.NET', 'es'],
     'Евгения Иванова')
 ];
 

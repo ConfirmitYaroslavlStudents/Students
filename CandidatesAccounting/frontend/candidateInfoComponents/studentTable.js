@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
-import {isBirthDate} from '../moment';
+import {formatDate, isBirthDate} from '../moment';
 import Tag from '../materialUIDecorators/tag';
 import { NavLink } from 'react-router-dom';
 
@@ -18,13 +18,13 @@ export default class StudentTable extends React.Component {
       index + 1,
       <div>
         {student.name}
-        {student.tags.map((tag, index) => (<NavLink to={"/tag/" + tag} key={index}><Tag content={tag} /></NavLink>))}
+        {student.tags.map((tag, index) => (<NavLink to={"/tag/" + encodeURIComponent(tag)} key={index}><Tag content={tag} /></NavLink>))}
       </div>,
       student.email,
-      <span className={isBirthDate(student.birthDate) ? 'today' : ''}>{student.birthDate}</span>,
+      <span className={isBirthDate(student.birthDate) ? 'today' : ''}>{formatDate(student.birthDate)}</span>,
       student.groupName,
-      student.startingDate,
-      student.endingDate,
+      formatDate(student.startingDate),
+      formatDate(student.endingDate),
       <CandidateRowControls candidate={student} {...this.props}/>
     ];
   }
@@ -36,7 +36,7 @@ export default class StudentTable extends React.Component {
 
     return (
       <BasicTable
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group', 'Starting Date', 'Ending date',
+        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group', 'Learning start', 'Learning end',
           <span className="float-right">Actions</span>] }
         contentRows={rows}
       />

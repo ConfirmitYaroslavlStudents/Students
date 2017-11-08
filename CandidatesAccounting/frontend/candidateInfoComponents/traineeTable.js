@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
-import {isBirthDate} from '../moment';
+import {formatDate, isBirthDate} from '../moment';
 import Tag from '../materialUIDecorators/tag';
 import { NavLink } from 'react-router-dom';
 
@@ -18,10 +18,10 @@ export default class TraineeTable extends React.Component {
       index + 1,
       <div>
         {trainee.name}
-        {trainee.tags.map((tag, index) => (<NavLink to={"/tag/" + tag} key={index}><Tag content={tag} /></NavLink>))}
+        {trainee.tags.map((tag, index) => (<NavLink to={"/tag/" + encodeURIComponent(tag)} key={index}><Tag content={tag} /></NavLink>))}
       </div>,
       trainee.email,
-      <span className={isBirthDate(trainee.birthDate) ? 'today' : ''}>{trainee.birthDate}</span>,
+      <span className={isBirthDate(trainee.birthDate) ? 'today' : ''}>{formatDate(trainee.birthDate)}</span>,
       trainee.mentor,
       <CandidateRowControls candidate={trainee} {...this.props}/>
     ];

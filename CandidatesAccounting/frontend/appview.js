@@ -50,9 +50,10 @@ export default class AppView extends React.Component {
         />
         <AppBar
           selected={selectedTableNumber}
-          newCandidateDefaultType = {newCandidateDefaultType}
+          newCandidateDefaultType={newCandidateDefaultType}
           addCandidate={props.addCandidate}
           tags={props.tags}
+          userName={props.userName}
         />
         <div className="custom-main">
           <Switch>
@@ -75,7 +76,7 @@ export default class AppView extends React.Component {
                 deleteComment={props.deleteComment}
                 userName={this.props.userName} />}/>
             <Route path="/tag/*" render={() =>
-              <CandidateTable allCandidates={props.candidates.filter((c) => c.tags.includes(currentLocation[2]))}
+              <CandidateTable allCandidates={props.candidates.filter((c) => c.tags.includes(decodeURIComponent(currentLocation[2])))}
                               {...this.props}/>}/>
           </Switch>
         </div>

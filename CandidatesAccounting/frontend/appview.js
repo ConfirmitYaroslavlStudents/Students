@@ -5,7 +5,7 @@ import actions from './actions';
 import Navbar from './materialUIDecorators/navbar';
 import Logo from 'material-ui-icons/AccountCircle';
 import IconButton from './materialUIDecorators/iconButton';
-import SignOutIcon from 'material-ui-icons/ExitToApp';
+import RenameIcon from 'material-ui-icons/ModeEdit';
 import AppBar from './appBar';
 import CommentsForm from './commentInfoComponents/commentsForm';
 import CandidateTable from './candidateInfoComponents/candidateTable';
@@ -42,8 +42,8 @@ export default class AppView extends React.Component {
           title="Candidate Accounting"
           rightPart={<div style={{display: 'flex', alignItems: 'center'}}>
             <span>{this.props.userName}</span>
-            <IconButton color="contrast"  icon={<SignOutIcon/>} onClick={() => {
-              let newUserName = prompt('Logged out. Enter new userame:');
+            <IconButton color="contrast"  icon={<RenameIcon/>} onClick={() => {
+              let newUserName = prompt('Enter new userame:');
               props.setUserName(newUserName);}
             } />
           </div>}

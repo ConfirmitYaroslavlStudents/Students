@@ -44,10 +44,12 @@ const Wrapper = styled.div`
 `;
 
 const FileName = styled.span`
-  font-style: italic;
+  padding-left: 4px;
+  color: rgba(0, 0, 0, 0.8);
 `;
 
 const NotLoaded = styled.span`
-  font-style: italic;
-  color: rgba(0, 0, 0, 0.6);
+  padding-left: 4px;
+  font-size: 90%;
+  color: rgba(0, 0, 0, 0.5);
 `;

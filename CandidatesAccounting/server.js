@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-//const ntlm = require('express-ntlm');
+const ntlm = require('express-ntlm');
 const path = require('path');
 const bodyParser  = require('body-parser');
 const favicon = require ('serve-favicon');
@@ -39,12 +39,13 @@ app.use(bodyParser.json());
 /*app.use(ntlm({
   debug: function() {
     var args = Array.prototype.slice.apply(arguments);
+
     console.log.apply(null, args);
   },
   domain: 'FIRM',
   domaincontroller: 'ldap://myad.example',
-}));
-*/
+}));*/
+
 //app.use(ntlm());
 
 http.createServer(app).listen(app.get('port'), function() {
@@ -59,7 +60,6 @@ app.get('/candidates', (req, res) => {
 
 app.get('/tags', (req, res) => {
   console.log('Send all tags');
-  //console.log(req.ntlm);
   res.send(tags);
 });
 

@@ -4,7 +4,7 @@ import AvatarIcon from 'material-ui-icons/AccountCircle';
 import IconButton from '../materialUIDecorators/iconButton';
 import RemoveIcon from 'material-ui-icons/Delete';
 import styled, { css } from 'styled-components';
-import {formatDateTime} from '../moment';
+import {formatDateTime} from '../customMoment';
 
 export default function CommentCloud(props) {
   return (

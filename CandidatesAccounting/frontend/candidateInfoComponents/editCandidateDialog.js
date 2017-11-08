@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../materialUIDecorators/dialogWindow';
 import CandidateInfoForm from './candidateInfoForm';
-import {createCandidate, WriteCandidate, Comment} from '../candidatesClasses/index';
+import {createCandidate, writeCandidate, checkCandidateValidation, Comment} from '../candidatesClasses/index';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
 import CloseIcon from 'material-ui-icons/Close';
 import IconButton from '../materialUIDecorators/iconButton';
-import {getCurrentDateTime} from '../moment';
+import {getCurrentDateTime} from '../customMoment';
 
 export default class EditCandidateDialog extends React.Component {
   constructor(props) {
@@ -44,11 +44,13 @@ export default class EditCandidateDialog extends React.Component {
         controls={
           <div style={{display: 'inline-block'}}>
             <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
-              if (candidate.status !== initialStatus) {
-                candidate.comments.push(new Comment(props.userName, getCurrentDateTime(), 'New ' + WriteCandidate(candidate)));
+              if (checkCandidateValidation(candidate)) {
+                if (candidate.status !== initialStatus) {
+                  candidate.comments.push(new Comment(props.userName, getCurrentDateTime(), 'New ' + writeCandidate(candidate)));
+                }
+                props.editCandidate(candidate.id, candidate);
+                handleOpenClose(false);
               }
-              props.editCandidate(candidate.id, candidate);
-              handleOpenClose(false);
             }}/>
             <IconButton color="inherit" icon={<CloseIcon />} onClick={() => {handleOpenClose(false)}}/>
           </div>

@@ -1,5 +1,11 @@
 export function fetchGet(url) {
-  return fetch(url)
+  return fetch(url,
+    {
+      method: "GET",
+      headers: {
+        "Authorization": "NTLM 435er35345et345",
+      },
+    })
     .then(function(response){
       if (response.status === 200) {
         return response.json();

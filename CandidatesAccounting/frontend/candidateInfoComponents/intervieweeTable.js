@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BasicTable from '../materialUIDecorators/basicTable';
 import CandidateRowControls from './candidateControls';
-import {formatDateTime, formatDate, isToday, isBirthDate} from '../moment';
+import {formatDateTime, formatDate, isToday, isBirthDate} from '../customMoment';
 import Tag from '../materialUIDecorators/tag';
 import { NavLink } from 'react-router-dom';
 import ResumeControls from './resumeControls';

@@ -7,7 +7,7 @@ import SimpleSelect from '../materialUIDecorators/simpleSelect';
 import styled from 'styled-components';
 import TagSelect from '../materialUIDecorators/tagSelect';
 import ResumeControls from './resumeControls';
-import {toDatePickerFormat, fromDatePickerFormat, toDateTimePickerFormat, fromDateTimePickerFormat} from "../moment";
+import {toDatePickerFormat, fromDatePickerFormat, toDateTimePickerFormat, fromDateTimePickerFormat} from "../customMoment";
 
 export default class CandidateInfoForm extends React.Component {
   constructor(props) {
@@ -104,17 +104,20 @@ export default class CandidateInfoForm extends React.Component {
         />
         <TextInput
           name="name"
-          label="Name"
+          label="Name*"
           value={this.props.candidate.name}
           placeholder="full name"
           onChange={(value) => {changeInfo('name', value)}}
-          multiline/>
+          validationCheck={(value) => {return value && value.trim() !== ''}}
+          multiline
+          autoFocus/>
         <TextInput
           name="email"
-          label="E-mail"
+          label="E-mail*"
           value={this.props.candidate.email}
           placeholder="example@mail.com"
           onChange={(value) => {changeInfo('email', value)}}
+          validationCheck={(value) => {return value && /.+@.+\..+/i.test(value)}}
           multiline/>
         <DatePicker
           label="Birth date"
@@ -123,6 +126,8 @@ export default class CandidateInfoForm extends React.Component {
         />
 
         {specialFields}
+
+        <span style={{color: 'rgba(0,0,0,0.5)', fontSize:'80%', float: 'right'}}>* - required</span>
       </FormWrapper>
     );
   }

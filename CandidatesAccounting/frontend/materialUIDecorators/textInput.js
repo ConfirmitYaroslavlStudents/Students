@@ -27,6 +27,7 @@ export default class TextInput extends React.Component {
         fullWidth
         margin="normal"
         autoFocus={this.props.autoFocus}
+        error={this.props.validationCheck ? !this.props.validationCheck(this.state.value) : false}
       />
     );
   }
@@ -45,4 +46,6 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   multiline: PropTypes.bool,
   autoFocus: PropTypes.bool,
+  error: PropTypes.bool,
+  validationCheck: PropTypes.func,
 };

@@ -6,14 +6,26 @@ export function getCurrentDateTime() {
 
 export function formatDate(dateString) {
   const date = dateString.split('.');
+  if (date.length !== 3) {
+    return '';
+  }
   const formatDate = moment(date[2] + '-' + date[1] + '-' + date[0]).locale('ru').format('D MMMM YYYY');
   return (formatDate !== 'Invalid date' ? formatDate : '');
 }
 
 export function formatDateTime(timeDateString) {
   const timeDate = timeDateString.split(' ');
+  if (timeDate.length !== 2) {
+    return '';
+  }
   const time = timeDate[0].split(':');
+  if (time.length !== 2) {
+    return '';
+  }
   const date = timeDate[1].split('.');
+  if (date.length !== 3) {
+    return '';
+  }
   const formatDateTime = moment(date[2] + '-' + date[1] + '-' + date[0] + ' ' + time[0] + ':' + time[1]).locale('ru').format('H:mm D MMMM YYYY');
   return (formatDateTime !== 'Invalid date' ? formatDateTime : '');
 }

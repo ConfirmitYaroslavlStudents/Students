@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getCurrentDateTime} from '../moment';
+import {getCurrentDateTime} from '../customMoment';
 import IconButton from '../materialUIDecorators/iconButton';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
 import styled from 'styled-components';
@@ -61,6 +61,7 @@ export default class AddCommentPanel extends React.Component {
           <IconButton
             icon={<AddIcon/>}
             onClick={this.addNewComment.bind(this)}
+            style={{width: 70, height: 70}}
           />
         </ButtonWrapper>
       </AddCommentWrapper>
@@ -78,8 +79,8 @@ AddCommentPanel.PropTypes = {
 const ButtonWrapper = styled.div`
   display: inline-block;
   position: absolute;
-  right: 5px;
-  bottom: 5px;
+  right: 2px;
+  bottom: 2px;
  `;
 
 const AddCommentWrapper = styled.div`
@@ -91,7 +92,7 @@ const AddCommentWrapper = styled.div`
 `;
 
 const CommentTextInput = styled.div`
-  padding-right: 58px;
+  padding-right: 74px;
 `;
 
 const CommentTextEdit = styled.div`

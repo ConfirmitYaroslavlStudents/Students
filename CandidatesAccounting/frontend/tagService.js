@@ -10,7 +10,3 @@ export function getTags() {
       return tagsArray;
     })
 }
-
-export function addTag(tag) {
-  return fetchPost('/tags', tag);
-}

@@ -7,5 +7,3 @@ export function addComment(candidateId, comment) {
 export function deleteComment(candidateId, commentId) {
   return fetchDelete('/candidates/' + candidateId + '/comments/' + commentId);
 }
-
-module.exports = {addComment, deleteComment};

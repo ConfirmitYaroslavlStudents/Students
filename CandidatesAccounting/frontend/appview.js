@@ -2,17 +2,18 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import actions from './actions';
-import Navbar from './materialUIDecorators/navbar';
+import Navbar from './UIComponentDecorators/navbar';
 import Logo from 'material-ui-icons/AccountCircle';
-import IconButton from './materialUIDecorators/iconButton';
+import IconButton from './UIComponentDecorators/iconButton';
 import RenameIcon from 'material-ui-icons/ModeEdit';
 import AppBar from './appBar';
-import CommentsForm from './commentInfoComponents/commentsForm';
-import CandidateTable from './candidateInfoComponents/candidateTable';
-import IntervieweeTable from './candidateInfoComponents/intervieweeTable';
-import StudentTable from './candidateInfoComponents/studentTable';
-import TraineeTable from './candidateInfoComponents/traineeTable';
-import SnackBar from './materialUIDecorators/snackbar';
+import CommentsForm from './commentComponents/commentsForm';
+import CandidateTable from './candidateTables/candidateTable';
+import IntervieweeTable from './candidateTables/intervieweeTable';
+import StudentTable from './candidateTables/studentTable';
+import TraineeTable from './candidateTables/traineeTable';
+import SnackBar from './UIComponentDecorators/snackbar';
+import Tooltip from './UIComponentDecorators/tooltip';
 
 export default class AppView extends React.Component {
   render() {
@@ -40,13 +41,16 @@ export default class AppView extends React.Component {
         <Navbar
           icon={<Logo />}
           title="Candidate Accounting"
-          rightPart={<div style={{display: 'flex', alignItems: 'center'}}>
-            <span>{this.props.userName}</span>
-            <IconButton color="contrast"  icon={<RenameIcon/>} onClick={() => {
-              let newUserName = prompt('Enter new userame:');
-              props.setUserName(newUserName);}
-            } />
-          </div>}
+          rightPart={
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <span>{this.props.userName}</span>
+              <Tooltip title="Change username">
+                <IconButton color="contrast" style={{width: 30, height: 30}}  icon={<RenameIcon/>} onClick={() => {
+                  let newUserName = prompt('Enter new userame:');
+                  props.setUserName(newUserName); }}
+                />
+              </Tooltip>
+            </div>}
         />
         <AppBar
           selected={selectedTableNumber}

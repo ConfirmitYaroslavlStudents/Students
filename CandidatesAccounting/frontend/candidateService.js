@@ -1,5 +1,5 @@
 import {fetchGet, fetchPost, fetchDelete, fetchPut} from './fetcher';
-import {createCandidate} from './candidatesClasses';
+import {createCandidate} from './databaseClasses';
 
 export function getAllCandidates() {
   return fetchGet('/candidates')
@@ -23,5 +23,3 @@ export function deleteCandidate(id) {
 export function editCandidate(id, candidateNewState) {
   return fetchPut('/candidates/' + id, candidateNewState);
 }
-
-module.exports = {getAllCandidates, addCandidate, deleteCandidate, editCandidate};

@@ -4,7 +4,7 @@ const ntlm = require('express-ntlm');
 const path = require('path');
 const bodyParser  = require('body-parser');
 const favicon = require ('serve-favicon');
-const {Interviewee, Student, Trainee, Comment} = require('./frontend/candidatesClasses/');
+const {Interviewee, Student, Trainee, Comment} = require('./frontend/databaseClasses/');
 
 let candidates = [
   new Interviewee(1, 'Олег', '27.10.1995', 'Oleg@mail.ru',

@@ -54,6 +54,10 @@ p {
     color: #3F51B5;
 }
 
+.ql-editor {
+    min-height: 120px;
+}
+
 .tabs-bar {
     position: fixed;
     width: 100%;

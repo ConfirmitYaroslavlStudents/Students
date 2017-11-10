@@ -17,10 +17,7 @@ module.exports = {
     loaders: [{
       test:    /\.js$/,
       include: path.join(__dirname, 'frontend'),
-      loader: ["babel-loader"],
-      query:{
-        presets:["es2015", "react"]
-      }
+      loader: ["babel-loader"]
     }]
   },
 

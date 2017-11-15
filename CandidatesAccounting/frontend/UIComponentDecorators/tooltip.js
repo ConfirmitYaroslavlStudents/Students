@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'material-ui/Tooltip';
@@ -8,11 +9,9 @@ export default function CustomTooltip(props) {
       title={props.title}
       label={props.title}
       placement={props.placement ? props.placement : 'bottom'}
-    >
-      <div style={{display: 'inline-block'}}>
-        {props.children}
-      </div>
-    </Tooltip>
+      children={<div style={{display: 'inline-block'}}>{props.children}</div>}
+      disableTriggerHover
+    />
   );
 }
 
@@ -20,3 +19,4 @@ CustomTooltip.propTypes = {
   title: PropTypes.string.isRequired,
   placement: PropTypes.string,
 };
+*/

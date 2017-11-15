@@ -1,18 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 export default function Tag(props) {
   return(
     <TagWrapper>
-      {props.content}
+      {props.children}
     </TagWrapper>
   );
 }
-
-Tag.propTypes = {
-  content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-};
 
 const TagWrapper = styled.div`
   display: inline-block;

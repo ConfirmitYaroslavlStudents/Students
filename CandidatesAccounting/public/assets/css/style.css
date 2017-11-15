@@ -34,10 +34,6 @@ p {
     height: 64px;
 }
 
-.float-right {
-    float: right;
-}
-
 .nav-link {
     text-decoration: none !important;
     color: dimgray;

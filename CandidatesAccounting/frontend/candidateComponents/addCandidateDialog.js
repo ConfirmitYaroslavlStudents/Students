@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {createCandidate, Comment, writeCandidate, checkCandidateValidation} from '../databaseClasses/index';
+import {createCandidate, Comment, checkCandidateValidation} from '../databaseClasses/index';
 import DialogWindow from '../UIComponentDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';
 import CloseIcon from 'material-ui-icons/Close';
@@ -29,10 +29,9 @@ export default class AddCandidateDialog extends React.Component{
 
   render() {
     const self = this;
-    let candidate = this.candidate;
     let newCandidate = createCandidate(this.props.candidateStatus, {});
     newCandidate.status = this.props.candidateStatus;
-    candidate = newCandidate;
+    this.candidate = newCandidate;
     return (
       <div style={{display: 'inline-block'}}>
         <IconButton icon={<AddPersonIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
@@ -43,9 +42,9 @@ export default class AddCandidateDialog extends React.Component{
           controls={
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
-                if (checkCandidateValidation(candidate)) {
-                  candidate.comments.push(new Comment(self.props.userName, getCurrentDateTime(), 'Initial ' + writeCandidate(candidate)));
-                  self.props.addCandidate(candidate);
+                if (checkCandidateValidation(self.candidate)) {
+                  self.candidate.comments.push(new Comment(self.props.userName, getCurrentDateTime(), 'Initial status: ' + self.candidate.status));
+                  self.props.addCandidate(self.candidate);
                   self.handleClose();
                 }
               }}/>
@@ -53,7 +52,7 @@ export default class AddCandidateDialog extends React.Component{
             </div>
           }>
             <CandidateInfoForm
-              candidate={candidate}
+              candidate={self.candidate}
               tags={this.props.tags}
             />
         </DialogWindow>

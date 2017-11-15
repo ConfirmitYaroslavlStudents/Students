@@ -3,42 +3,35 @@ import PropTypes from 'prop-types';
 import BasicTable from '../UIComponentDecorators/basicTable';
 import CandidateRowControls from '../candidateComponents/candidateControls';
 import {formatDate, isBirthDate} from '../customMoment';
-import Tag from '../UIComponentDecorators/tag';
-import { NavLink } from 'react-router-dom';
+import Tags from '../UIComponentDecorators/tags';
+import styled from 'styled-components';
 
 export default class StudentTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getRow = this.getRow.bind(this);
-  }
-
-  getRow(student, index)
-  {
-    return [
-      index + 1,
-      <div>
-        {student.name}
-        {student.tags.map((tag, index) => (<NavLink to={"/tag/" + encodeURIComponent(tag)} key={index}><Tag content={tag} /></NavLink>))}
-      </div>,
-      student.email,
-      <span className={isBirthDate(student.birthDate) ? 'today' : ''}>{formatDate(student.birthDate)}</span>,
-      student.groupName,
-      formatDate(student.startingDate),
-      formatDate(student.endingDate),
-      <CandidateRowControls candidate={student} {...this.props}/>
-    ];
-  }
-
   render() {
-    let rows = (this.props.students.map((student, index) =>
-      this.getRow(student, index)
-    ));
-
     return (
       <BasicTable
         heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group', 'Learning start', 'Learning end',
-          <span className="float-right">Actions</span>] }
-        contentRows={rows}
+          <span style={{float: 'right'}}>Actions</span>]}
+        contentRows={
+          (this.props.students.map((student, index) =>
+            [
+              index + 1,
+              <NameWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
+                <Tags tags={student.tags} />
+              </NameWrapper>,
+              student.email,
+              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
+                {formatDate(student.birthDate)}
+              </span>,
+              student.groupName,
+              <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
+              <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
+              <ControlsWrapper>
+                <CandidateRowControls candidate={student} {...this.props}/>
+              </ControlsWrapper>
+            ]
+          ))}
       />
     );
   }
@@ -47,3 +40,13 @@ export default class StudentTable extends React.Component {
 StudentTable.propTypes = {
   students: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };
+
+const NameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ControlsWrapper = styled.div`
+  display: flex;
+  float: right;
+`;

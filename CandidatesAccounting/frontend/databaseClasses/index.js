@@ -51,14 +51,10 @@ function createCandidate(status, args) {
   }
 }
 
-function writeCandidate(candidate) {
-  return ('status: ' + (candidate.status ? candidate.status : candidate.constructor.name));
-}
-
 function checkCandidateValidation(candidate) {
   const email = /.+@.+\..+/i;
   return (candidate.name && candidate.name.trim() !== '' && candidate.email && email.test(candidate.email));
 }
 
-module.exports = {Candidate, Interviewee, Student, Trainee, Comment, createCandidate, writeCandidate, checkCandidateValidation};
+module.exports = {Candidate, Interviewee, Student, Trainee, Comment, createCandidate, checkCandidateValidation};
 

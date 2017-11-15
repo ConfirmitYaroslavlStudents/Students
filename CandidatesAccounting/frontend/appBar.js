@@ -5,7 +5,6 @@ import AppBar from 'material-ui/AppBar';
 import { NavLink } from 'react-router-dom';
 import AddCandidateDialog from './candidateComponents/addCandidateDialog';
 import styled from 'styled-components';
-import Tooltip from './UIComponentDecorators/tooltip';
 
 export default class CustomAppBar extends React.Component{
   constructor(props) {
@@ -21,7 +20,7 @@ export default class CustomAppBar extends React.Component{
     this.state = { selected: this.props.selected };
     return (
       <AppBar className="tabs-bar" color="default">
-        <div style={{display: 'inline-block', position: 'absolute', left: '15%', right: '15%'}}>
+        <TabsWrapper>
           <Tabs
             value={this.state.selected}
             indicatorColor="primary"
@@ -35,16 +34,14 @@ export default class CustomAppBar extends React.Component{
             <Tab label={<NavLink to="/students" className="nav-link" activeStyle={{color: '#3F51B5'}}>Students</NavLink>}/>
             <Tab label={<NavLink to="/trainees" className="nav-link" activeStyle={{color: '#3F51B5'}}>Trainees</NavLink>}/>
           </Tabs>
-        </div>
+        </TabsWrapper>
         <AddButtonWrapper>
-          <Tooltip title="Add new candidate" placement="left">
-            <AddCandidateDialog
-              addCandidate={this.props.addCandidate}
-              candidateStatus={this.props.newCandidateDefaultType}
-              tags={this.props.tags}
-              userName={this.props.userName}
-            />
-          </Tooltip>
+          <AddCandidateDialog
+            addCandidate={this.props.addCandidate}
+            candidateStatus={this.props.newCandidateDefaultType}
+            tags={this.props.tags}
+            userName={this.props.userName}
+          />
         </AddButtonWrapper>
       </AppBar>
     );
@@ -58,6 +55,13 @@ CustomAppBar.PropTypes = {
   newCandidateDefaultType: PropTypes.string.isRequired,
   selected: PropTypes.number,
 };
+
+const TabsWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  left: 15%;
+  right: 15%;
+`;
 
 const AddButtonWrapper = styled.div`
   display: inline-block;

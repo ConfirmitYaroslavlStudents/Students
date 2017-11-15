@@ -93,9 +93,3 @@ const AddCommentWrapper = styled.div`
 const CommentTextInput = styled.div`
   padding-right: 74px;
 `;
-
-const CommentTextEdit = styled.div`
-  tabindex: 1;
-  min-height: 120px;
-  font-size: 96%;
-`;

@@ -2,10 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import actions from './actions';
-import Navbar from './UIComponentDecorators/navbar';
-import Logo from 'material-ui-icons/AccountCircle';
-import IconButton from './UIComponentDecorators/iconButton';
-import RenameIcon from 'material-ui-icons/ModeEdit';
+import Navbar from './mainNavbar';
 import AppBar from './appBar';
 import CommentsForm from './commentComponents/commentsForm';
 import CandidateTable from './candidateTables/candidateTable';
@@ -13,12 +10,10 @@ import IntervieweeTable from './candidateTables/intervieweeTable';
 import StudentTable from './candidateTables/studentTable';
 import TraineeTable from './candidateTables/traineeTable';
 import SnackBar from './UIComponentDecorators/snackbar';
-import Tooltip from './UIComponentDecorators/tooltip';
 
 export default class AppView extends React.Component {
   render() {
-    let props = this.props;
-    const currentLocation = props.location.pathname.split('/');
+    const currentLocation = this.props.location.pathname.split('/');
     let selectedTableNumber = 0;
     let newCandidateDefaultType = 'Interviewee';
     switch (currentLocation[1]) {
@@ -39,52 +34,42 @@ export default class AppView extends React.Component {
     return (
       <div>
         <Navbar
-          icon={<Logo />}
-          title="Candidate Accounting"
-          rightPart={
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <span>{this.props.userName}</span>
-              <Tooltip title="Change username">
-                <IconButton color="contrast" style={{width: 30, height: 30}}  icon={<RenameIcon/>} onClick={() => {
-                  let newUserName = prompt('Enter new userame:');
-                  props.setUserName(newUserName); }}
-                />
-              </Tooltip>
-            </div>}
+          userName={this.props.userName}
+          setUserName={this.props.setUserName}
         />
         <AppBar
           selected={selectedTableNumber}
           newCandidateDefaultType={newCandidateDefaultType}
-          addCandidate={props.addCandidate}
-          tags={props.tags}
-          userName={props.userName}
+          addCandidate={this.props.addCandidate}
+          tags={this.props.tags}
+          userName={this.props.userName}
         />
         <div className="custom-main">
           <Switch>
             <Route exact path="/" render={() =>
-              <CandidateTable allCandidates={props.candidates}
+              <CandidateTable allCandidates={this.props.candidates}
                               {...this.props}/>}/>
             <Route exact path="/interviewees" render={() =>
-              <IntervieweeTable interviewees={props.candidates.filter((c) => c.constructor.name === 'Interviewee')}
+              <IntervieweeTable interviewees={this.props.candidates.filter((c) => c.constructor.name === 'Interviewee')}
                                 {...this.props}/>}/>
             <Route exact path="/students" render={() =>
-              <StudentTable students={props.candidates.filter((c) => c.constructor.name === 'Student')}
+              <StudentTable students={this.props.candidates.filter((c) => c.constructor.name === 'Student')}
                             {...this.props}/>}/>
             <Route exact path="/trainees" render={() =>
-              <TraineeTable trainees={props.candidates.filter((c) => c.constructor.name === 'Trainee')}
+              <TraineeTable trainees={this.props.candidates.filter((c) => c.constructor.name === 'Trainee')}
                             {...this.props}/>}/>
             <Route path="/*/comments" render={() =>
               <CommentsForm
-                candidate={props.candidates.find(c => c.id === parseInt(currentLocation[2]))}
-                addComment={props.addComment}
-                deleteComment={props.deleteComment}
+                candidate={this.props.candidates.find(c => c.id === parseInt(currentLocation[2]))}
+                addComment={this.props.addComment}
+                deleteComment={this.props.deleteComment}
                 userName={this.props.userName} />}/>
             <Route path="/tag/*" render={() =>
-              <CandidateTable allCandidates={props.candidates.filter((c) => c.tags.includes(decodeURIComponent(currentLocation[2])))}
+              <CandidateTable allCandidates={this.props.candidates.filter((c) => c.tags.includes(decodeURIComponent(currentLocation[2])))}
                               {...this.props}/>}/>
           </Switch>
         </div>
-        <SnackBar message={props.errorMessage} setErrorMessage={props.setErrorMessage}/>
+        <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>
       </div>
     );
   }

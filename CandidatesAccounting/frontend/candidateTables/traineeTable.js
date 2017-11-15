@@ -3,39 +3,32 @@ import PropTypes from 'prop-types';
 import BasicTable from '../UIComponentDecorators/basicTable';
 import CandidateRowControls from '../candidateComponents/candidateControls';
 import {formatDate, isBirthDate} from '../customMoment';
-import Tag from '../UIComponentDecorators/tag';
-import { NavLink } from 'react-router-dom';
+import Tags from '../UIComponentDecorators/tags';
+import styled from 'styled-components';
 
 export default class TraineeTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getRow = this.getRow.bind(this);
-  }
-
-  getRow(trainee, index)
-  {
-    return [
-      index + 1,
-      <div>
-        {trainee.name}
-        {trainee.tags.map((tag, index) => (<NavLink to={"/tag/" + encodeURIComponent(tag)} key={index}><Tag content={tag} /></NavLink>))}
-      </div>,
-      trainee.email,
-      <span className={isBirthDate(trainee.birthDate) ? 'today' : ''}>{formatDate(trainee.birthDate)}</span>,
-      trainee.mentor,
-      <CandidateRowControls candidate={trainee} {...this.props}/>
-    ];
-  }
-
   render() {
-    let rows = (this.props.trainees.map((trainee, index) =>
-      this.getRow(trainee, index)
-    ));
-
     return (
       <BasicTable
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date', 'Mentor', <span className="float-right">Actions</span>] }
-        contentRows={rows}
+        heads={ ['#', 'Name', 'E-mail', 'Birth Date', 'Mentor', <span style={{float: 'right'}}>Actions</span>] }
+        contentRows={
+          (this.props.trainees.map((trainee, index) =>
+            [
+              index + 1,
+              <NameWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
+                <Tags tags={trainee.tags} />
+              </NameWrapper>,
+              trainee.email,
+              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
+                {formatDate(trainee.birthDate)}
+              </span>,
+              <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
+              <ControlsWrapper>
+                <CandidateRowControls candidate={trainee} {...this.props}/>
+              </ControlsWrapper>
+            ]
+          ))}
       />
     );
   }
@@ -44,3 +37,13 @@ export default class TraineeTable extends React.Component {
 TraineeTable.propTypes = {
   trainees: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };
+
+const NameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ControlsWrapper = styled.div`
+  display: flex;
+  float: right;
+`;

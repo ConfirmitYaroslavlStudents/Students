@@ -30,11 +30,10 @@ export default class EditCandidateDialog extends React.Component {
 
   render() {
     const self = this;
-    let candidate = this.candidate;
-    let initialStatus = candidate.status;
+    let initialStatus = this.candidate.status;
     let currentCandidate = createCandidate(this.props.candidate.constructor.name, this.props.candidate);
     currentCandidate.status = this.props.candidate.constructor.name;
-    candidate = currentCandidate;
+    this.candidate = currentCandidate;
     return (
       <div style={{display: 'inline-block'}}>
         <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
@@ -45,11 +44,11 @@ export default class EditCandidateDialog extends React.Component {
           controls={
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
-                if (checkCandidateValidation(candidate)) {
-                  if (candidate.status !== initialStatus) {
-                    candidate.comments.push(new Comment(self.props.userName, getCurrentDateTime(), 'New ' + writeCandidate(candidate)));
+                if (checkCandidateValidation(self.candidate)) {
+                  if (self.candidate.status !== initialStatus) {
+                    self.candidate.comments.push(new Comment(self.props.userName, getCurrentDateTime(), 'New status: ' + self.candidate.status));
                   }
-                  self.props.editCandidate(candidate.id, candidate);
+                  self.props.editCandidate(self.candidate.id, self.candidate);
                   self.handleClose();
                 }
               }}/>
@@ -57,7 +56,7 @@ export default class EditCandidateDialog extends React.Component {
             </div>
           }>
             <CandidateInfoForm
-              candidate={candidate}
+              candidate={self.candidate}
               tags={this.props.tags}
             />
         </DialogWindow>

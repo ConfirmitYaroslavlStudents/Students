@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import BasicTable from '../UIComponentDecorators/basicTable';
 import CandidateRowControls from '../candidateComponents/candidateControls';
 import {formatDate, isBirthDate} from '../customMoment';
-import Tags from '../UIComponentDecorators/tags';
+import Tags from '../candidateComponents/tags';
 import styled from 'styled-components';
 
 export default class StudentTable extends React.Component {
@@ -18,7 +18,7 @@ export default class StudentTable extends React.Component {
               index + 1,
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
-                <Tags tags={student.tags} />
+                <Tags tags={student.tags} currentLocation="/students"/>
               </NameWrapper>,
               student.email,
               <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>

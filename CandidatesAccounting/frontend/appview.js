@@ -15,19 +15,19 @@ export default class AppView extends React.Component {
   render() {
     const currentLocation = this.props.location.pathname.split('/');
     let selectedTableNumber = 0;
-    let newCandidateDefaultType = 'Interviewee';
+    let candidateType = 'Interviewee';
     switch (currentLocation[1]) {
       case 'interviewees':
         selectedTableNumber = 1;
-        newCandidateDefaultType = 'Interviewee';
+        candidateType = 'Interviewee';
         break;
       case 'students':
         selectedTableNumber = 2;
-        newCandidateDefaultType = 'Student';
+        candidateType = 'Student';
         break;
       case 'trainees':
         selectedTableNumber = 3;
-        newCandidateDefaultType = 'Trainee';
+        candidateType = 'Trainee';
         break;
     }
 
@@ -39,7 +39,7 @@ export default class AppView extends React.Component {
         />
         <AppBar
           selected={selectedTableNumber}
-          newCandidateDefaultType={newCandidateDefaultType}
+          newCandidateDefaultType={candidateType}
           addCandidate={this.props.addCandidate}
           tags={this.props.tags}
           userName={this.props.userName}
@@ -67,6 +67,28 @@ export default class AppView extends React.Component {
             <Route path="/tag/*" render={() =>
               <CandidateTable allCandidates={this.props.candidates.filter((c) => c.tags.includes(decodeURIComponent(currentLocation[2])))}
                               {...this.props}/>}/>
+            <Route path="/*/tag/*" render={() => {
+              switch (candidateType) {
+                case 'Interviewee':
+                  return (
+                    <IntervieweeTable {...this.props}
+                      interviewees={this.props.candidates.filter((c) => c.constructor.name === 'Interviewee'
+                      && c.tags.includes(decodeURIComponent(currentLocation[3])))}
+                />);
+                case 'Student':
+                  return (
+                    <StudentTable {...this.props}
+                      students={this.props.candidates.filter((c) => c.constructor.name === 'Student'
+                        && c.tags.includes(decodeURIComponent(currentLocation[3])))}
+                    />);
+                case 'Trainee':
+                  return (
+                    <TraineeTable {...this.props}
+                      trainees={this.props.candidates.filter((c) => c.constructor.name === 'Trainee'
+                      && c.tags.includes(decodeURIComponent(currentLocation[3])))}
+                    />)
+              }}}
+            />
           </Switch>
         </div>
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>

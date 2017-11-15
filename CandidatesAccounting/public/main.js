@@ -15572,7 +15572,7 @@ function Tags(props) {
     props.tags.map(function (tag, index) {
       return _react2.default.createElement(
         _reactRouterDom.NavLink,
-        { to: "/tag/" + encodeURIComponent(tag), key: index },
+        { to: props.currentLocation + "/tag/" + encodeURIComponent(tag), key: index },
         _react2.default.createElement(
           _tag2.default,
           null,
@@ -15584,7 +15584,8 @@ function Tags(props) {
 }
 
 Tags.propTypes = {
-  tags: _propTypes2.default.array.isRequired
+  tags: _propTypes2.default.array.isRequired,
+  currentLocation: _propTypes2.default.string.isRequired
 };
 
 var TagsWrapper = _styledComponents2.default.div(_templateObject);
@@ -88982,19 +88983,19 @@ var AppView = function (_React$Component) {
 
       var currentLocation = this.props.location.pathname.split('/');
       var selectedTableNumber = 0;
-      var newCandidateDefaultType = 'Interviewee';
+      var candidateType = 'Interviewee';
       switch (currentLocation[1]) {
         case 'interviewees':
           selectedTableNumber = 1;
-          newCandidateDefaultType = 'Interviewee';
+          candidateType = 'Interviewee';
           break;
         case 'students':
           selectedTableNumber = 2;
-          newCandidateDefaultType = 'Student';
+          candidateType = 'Student';
           break;
         case 'trainees':
           selectedTableNumber = 3;
-          newCandidateDefaultType = 'Trainee';
+          candidateType = 'Trainee';
           break;
       }
 
@@ -89007,7 +89008,7 @@ var AppView = function (_React$Component) {
         }),
         _react2.default.createElement(_appBar2.default, {
           selected: selectedTableNumber,
-          newCandidateDefaultType: newCandidateDefaultType,
+          newCandidateDefaultType: candidateType,
           addCandidate: this.props.addCandidate,
           tags: this.props.tags,
           userName: this.props.userName
@@ -89054,7 +89055,30 @@ var AppView = function (_React$Component) {
                     return c.tags.includes(decodeURIComponent(currentLocation[2]));
                   })
                 }, _this2.props));
-              } })
+              } }),
+            _react2.default.createElement(_reactRouterDom.Route, { path: '/*/tag/*', render: function render() {
+                switch (candidateType) {
+                  case 'Interviewee':
+                    return _react2.default.createElement(_intervieweeTable2.default, _extends({}, _this2.props, {
+                      interviewees: _this2.props.candidates.filter(function (c) {
+                        return c.constructor.name === 'Interviewee' && c.tags.includes(decodeURIComponent(currentLocation[3]));
+                      })
+                    }));
+                  case 'Student':
+                    return _react2.default.createElement(_studentTable2.default, _extends({}, _this2.props, {
+                      students: _this2.props.candidates.filter(function (c) {
+                        return c.constructor.name === 'Student' && c.tags.includes(decodeURIComponent(currentLocation[3]));
+                      })
+                    }));
+                  case 'Trainee':
+                    return _react2.default.createElement(_traineeTable2.default, _extends({}, _this2.props, {
+                      trainees: _this2.props.candidates.filter(function (c) {
+                        return c.constructor.name === 'Trainee' && c.tags.includes(decodeURIComponent(currentLocation[3]));
+                      })
+                    }));
+                }
+              }
+            })
           )
         ),
         _react2.default.createElement(_snackbar2.default, { message: this.props.errorMessage, setErrorMessage: this.props.setErrorMessage })
@@ -120962,7 +120986,7 @@ var CandidateTable = function (_React$Component) {
               { style: { whiteSpace: 'nowrap' } },
               candidate.name
             ),
-            _react2.default.createElement(_tags2.default, { tags: candidate.tags })
+            _react2.default.createElement(_tags2.default, { tags: candidate.tags, currentLocation: '' })
           ), candidate.constructor.name, candidate.email, _react2.default.createElement(
             'span',
             { style: { whiteSpace: 'nowrap' }, className: (0, _customMoment.isBirthDate)(candidate.birthDate) ? 'today' : '' },
@@ -123143,7 +123167,7 @@ var IntervieweeTable = function (_React$Component) {
               { style: { whiteSpace: 'nowrap' } },
               interviewee.name
             ),
-            _react2.default.createElement(_tags2.default, { tags: interviewee.tags })
+            _react2.default.createElement(_tags2.default, { tags: interviewee.tags, currentLocation: '/interviewees' })
           ), interviewee.email, _react2.default.createElement(
             'span',
             { style: { whiteSpace: 'nowrap' }, className: (0, _customMoment.isBirthDate)(interviewee.birthDate) ? 'today' : '' },
@@ -123259,7 +123283,7 @@ var StudentTable = function (_React$Component) {
               { style: { whiteSpace: 'nowrap' } },
               student.name
             ),
-            _react2.default.createElement(_tags2.default, { tags: student.tags })
+            _react2.default.createElement(_tags2.default, { tags: student.tags, currentLocation: '/students' })
           ), student.email, _react2.default.createElement(
             'span',
             { style: { whiteSpace: 'nowrap' }, className: (0, _customMoment.isBirthDate)(student.birthDate) ? 'today' : '' },
@@ -123379,7 +123403,7 @@ var TraineeTable = function (_React$Component) {
               { style: { whiteSpace: 'nowrap' } },
               trainee.name
             ),
-            _react2.default.createElement(_tags2.default, { tags: trainee.tags })
+            _react2.default.createElement(_tags2.default, { tags: trainee.tags, currentLocation: '/trainees' })
           ), trainee.email, _react2.default.createElement(
             'span',
             { style: { whiteSpace: 'nowrap' }, className: (0, _customMoment.isBirthDate)(trainee.birthDate) ? 'today' : '' },

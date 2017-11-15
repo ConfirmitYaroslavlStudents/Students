@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import BasicTable from '../UIComponentDecorators/basicTable';
 import CandidateRowControls from '../candidateComponents/candidateControls';
 import {formatDateTime, formatDate, isToday, isBirthDate} from '../customMoment';
-import Tags from '../UIComponentDecorators/tags';
+import Tags from '../candidateComponents/tags';
 import ResumeControls from '../candidateComponents/resumeControls';
 import styled from 'styled-components';
 
@@ -18,7 +18,7 @@ export default class IntervieweeTable extends React.Component {
               index + 1,
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
-                <Tags tags={interviewee.tags} />
+                <Tags tags={interviewee.tags} currentLocation="/interviewees"/>
               </NameWrapper>,
               interviewee.email,
               <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>

@@ -1,24 +1,31 @@
 var path = require('path');
 
 module.exports = {
-  context: path.join(__dirname, 'frontend'),
+  context: path.join(__dirname, 'client'),
 
   watch: true,
 
   entry: {
-    main: ['babel-polyfill', './main.js'],
+    main: ['babel-polyfill', './app/main.js'],
   },
   output: {
-    path:       path.join(__dirname, 'public'),
-    filename:   '[name].js'
+    path: path.join(__dirname, 'public', 'assets', 'javascript'),
+    filename: '[name].js'
   },
 
   module: {
-    loaders: [{
-      test:    /\.js$/,
-      include: path.join(__dirname, 'frontend'),
-      loader: ["babel-loader"]
-    }]
+    loaders: [
+      {
+      test: /\.js$/,
+      include: path.join(__dirname, 'client'),
+      loader: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        include: path.join(__dirname, 'client'),
+        loader: ['style-loader', 'css-loader']
+      },
+    ]
   },
 
   devServer: {

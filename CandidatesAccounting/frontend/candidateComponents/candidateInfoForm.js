@@ -60,7 +60,8 @@ export default class CandidateInfoForm extends React.Component {
             label="Group name"
             value={this.props.candidate.groupName}
             onChange={(value) => {changeInfo('groupName', value)}}
-            multiline/>
+            multiline
+            fullWidth/>
           <DatePicker
             label="Learning start date"
             defaultValue={toDatePickerFormat(this.props.candidate.startingDate)}
@@ -82,7 +83,8 @@ export default class CandidateInfoForm extends React.Component {
             value={this.props.candidate.mentor}
             placeholder="full name"
             onChange={(value) => {changeInfo('mentor', value)}}
-            multiline/>
+            multiline
+            fullWidth/>
         </div>;
         break;
     }
@@ -104,21 +106,25 @@ export default class CandidateInfoForm extends React.Component {
         />
         <TextInput
           name="name"
-          label="Name*"
+          label="Name"
+          required
           value={this.props.candidate.name}
           placeholder="full name"
           onChange={(value) => {changeInfo('name', value)}}
           validationCheck={(value) => {return value && value.trim() !== ''}}
           multiline
+          fullWidth
           autoFocus/>
         <TextInput
           name="email"
-          label="E-mail*"
+          label="E-mail"
+          required
           value={this.props.candidate.email}
           placeholder="example@mail.com"
           onChange={(value) => {changeInfo('email', value)}}
           validationCheck={(value) => {return value && /.+@.+\..+/i.test(value)}}
-          multiline/>
+          multiline
+          fullWidth/>
         <DatePicker
           label="Birth date"
           defaultValue={toDatePickerFormat(this.props.candidate.birthDate)}

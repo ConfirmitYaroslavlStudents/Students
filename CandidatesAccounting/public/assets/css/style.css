@@ -65,6 +65,12 @@ p {
     padding-right: 0;
 }
 
+.search {
+    color: #fff !important;
+    font-size: 90% !important;
+    border-bottom: 1px solid #fff;
+}
+
 .today {
     color: #ff4081;
     font-weight: bold;

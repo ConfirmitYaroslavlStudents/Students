@@ -5,6 +5,7 @@ import Navbar from './UIComponentDecorators/navbar';
 import Logo from 'material-ui-icons/AccountCircle';
 import IconButton from './UIComponentDecorators/iconButton';
 import RenameIcon from 'material-ui-icons/ModeEdit';
+import SearchForm from './searchForm';
 
 export default function MainNavbar(props) {
   return (
@@ -13,6 +14,7 @@ export default function MainNavbar(props) {
       title="Candidate Accounting"
       rightPart={
         <RightPartWrapper>
+          <SearchForm history={props.history}/>
           <span>{props.userName}</span>
           <IconButton
             color="contrast"
@@ -30,6 +32,7 @@ export default function MainNavbar(props) {
 MainNavbar.propTypes = {
   userName: PropTypes.string.isRequired,
   setUserName: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const RightPartWrapper = styled.div`

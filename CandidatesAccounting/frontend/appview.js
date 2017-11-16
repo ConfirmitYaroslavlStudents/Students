@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import actions from './actions';
 import Navbar from './mainNavbar';
 import AppBar from './appBar';
+import {searchCandidates} from './databaseClasses';
 import CommentsForm from './commentComponents/commentsForm';
 import CandidateTable from './candidateTables/candidateTable';
 import IntervieweeTable from './candidateTables/intervieweeTable';
@@ -36,6 +37,7 @@ export default class AppView extends React.Component {
         <Navbar
           userName={this.props.userName}
           setUserName={this.props.setUserName}
+          history={this.props.history}
         />
         <AppBar
           selected={selectedTableNumber}
@@ -86,6 +88,34 @@ export default class AppView extends React.Component {
                     <TraineeTable {...this.props}
                       trainees={this.props.candidates.filter((c) => c.constructor.name === 'Trainee'
                       && c.tags.includes(decodeURIComponent(currentLocation[3])))}
+                    />)
+              }}}
+            />
+            <Route path="/search/*" render={() =>
+              <CandidateTable allCandidates={searchCandidates(this.props.candidates._tail.array, decodeURIComponent(currentLocation[2]))}
+                              {...this.props}/>}/>
+            <Route path="/*/search/*" render={() => {
+              switch (candidateType) {
+                case 'Interviewee':
+                  return (
+                    <IntervieweeTable {...this.props}
+                                      interviewees={
+                                        searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Interviewee'),
+                                        decodeURIComponent(currentLocation[3]))}
+                    />);
+                case 'Student':
+                  return (
+                    <StudentTable {...this.props}
+                                  students={
+                                    searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Student'),
+                                    decodeURIComponent(currentLocation[3]))}
+                    />);
+                case 'Trainee':
+                  return (
+                    <TraineeTable {...this.props}
+                                  trainees={
+                                    searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Trainee'),
+                                    decodeURIComponent(currentLocation[3]))}
                     />)
               }}}
             />

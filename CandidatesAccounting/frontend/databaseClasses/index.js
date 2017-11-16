@@ -56,5 +56,30 @@ function checkCandidateValidation(candidate) {
   return (candidate.name && candidate.name.trim() !== '' && candidate.email && email.test(candidate.email));
 }
 
-module.exports = {Candidate, Interviewee, Student, Trainee, Comment, createCandidate, checkCandidateValidation};
+function searchCandidates(candidates, request) {
+  let result = [];
+  candidates.forEach((candidate) => {
+    if (candidate.name.toLowerCase().includes(request.toLowerCase())) {
+      result.push(candidate);
+      return;
+    }
+    if (candidate.email.toLowerCase().includes(request.toLowerCase())) {
+      result.push(candidate);
+      return;
+    }
+    if (candidate.mentor && candidate.mentor.toLowerCase().includes(request.toLowerCase())) {
+      result.push(candidate);
+      return;
+    }
+    for (let i = 0; i < candidate.tags.length; i++) {
+      if (candidate.tags[i].toLowerCase().includes(request.toLowerCase())) {
+        result.push(candidate);
+        break;
+      }
+    }
+  });
+  return result;
+}
+
+module.exports = {Candidate, Interviewee, Student, Trainee, Comment, createCandidate, checkCandidateValidation, searchCandidates};
 

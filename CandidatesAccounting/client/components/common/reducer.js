@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import {createCandidate} from '../candidates/candidateFunctions';
+import {createCandidate} from '../../utilities/candidateFunctions';
 
 export default function reducer(state = Map(), action) {
   let candidate;

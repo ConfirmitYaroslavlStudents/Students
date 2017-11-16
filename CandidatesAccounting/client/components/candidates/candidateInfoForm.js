@@ -7,7 +7,7 @@ import SimpleSelect from '../common/UIComponentDecorators/selectInput';
 import styled from 'styled-components';
 import TagSelect from '../common/UIComponentDecorators/tagSelect';
 import ResumeControls from '../interviewees/resumeControls';
-import {toDatePickerFormat, fromDatePickerFormat, toDateTimePickerFormat, fromDateTimePickerFormat} from "../common/customMoment";
+import {toDatePickerFormat, fromDatePickerFormat, toDateTimePickerFormat, fromDateTimePickerFormat} from "../../utilities/customMoment";
 
 export default class CandidateInfoForm extends React.Component {
   constructor(props) {

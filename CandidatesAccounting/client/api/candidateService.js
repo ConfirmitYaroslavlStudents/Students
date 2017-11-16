@@ -1,5 +1,5 @@
-import {fetchGet, fetchPost, fetchDelete, fetchPut} from '../common/fetcher';
-import {createCandidate} from './candidateFunctions';
+import {fetchGet, fetchPost, fetchDelete, fetchPut} from '../components/common/fetch';
+import {createCandidate} from '../utilities/candidateFunctions';
 
 export function getAllCandidates() {
   return fetchGet('/api/candidates')

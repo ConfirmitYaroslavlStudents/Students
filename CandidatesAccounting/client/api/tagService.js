@@ -1,4 +1,4 @@
-import {fetchGet} from '../common/fetcher';
+import {fetchGet} from '../components/common/fetch';
 
 export function getTags() {
   return fetchGet('/api/tags')

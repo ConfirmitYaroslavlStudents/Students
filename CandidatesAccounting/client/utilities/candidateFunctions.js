@@ -1,4 +1,4 @@
-import {Candidate, Interviewee, Student, Trainee} from '../../databaseDocumentPatterns';
+import {Candidate, Interviewee, Student, Trainee} from '../databaseDocumentPatterns/index';
 
 function createCandidate(status, args) {
   switch (status) {

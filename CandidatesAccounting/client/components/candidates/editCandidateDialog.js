@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import CandidateInfoForm from './candidateInfoForm';
-import {createCandidate, checkCandidateValidation} from './candidateFunctions';
+import {createCandidate, checkCandidateValidation} from '../../utilities/candidateFunctions';
 import {Comment} from '../../databaseDocumentPatterns';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
 import CloseIcon from 'material-ui-icons/Close';
 import IconButton from '../common/UIComponentDecorators/iconButton';
-import {getCurrentDateTime} from '../common/customMoment';
+import {getCurrentDateTime} from '../../utilities/customMoment';
 
 export default class EditCandidateDialog extends React.Component {
   constructor(props) {

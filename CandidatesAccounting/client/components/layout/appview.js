@@ -4,13 +4,14 @@ import {Switch, Route} from 'react-router-dom';
 import actions from '../common/actions';
 import Navbar from './navbar';
 import AppBar from './tablesbar';
-import {searchCandidates} from '../candidates/candidateFunctions';
+import {searchCandidates} from '../../utilities/candidateFunctions';
 import CommentsForm from '../comments/commentsForm';
 import CandidateTable from '../candidates/candidateTable';
 import IntervieweeTable from '../interviewees/intervieweeTable';
 import StudentTable from '../students/studentTable';
 import TraineeTable from '../trainees/traineeTable';
 import SnackBar from '../common/UIComponentDecorators/snackbar';
+import ErrorPage from './errorPage';
 
 export default class AppView extends React.Component {
   render() {
@@ -102,9 +103,7 @@ export default class AppView extends React.Component {
               <TraineeTable trainees={searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Trainee'),
                                       decodeURIComponent(currentLocation[3]))} {...this.props}/>}
             />
-            <Route path="">
-              <div>404 Page not found</div>
-            </Route>
+            <Route path="" render={() => <ErrorPage errorCode={404} errorMessage="Page not found"/>}/>
           </Switch>
         </div>
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>

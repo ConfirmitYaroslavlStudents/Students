@@ -1,5 +1,5 @@
 import {takeEvery, all, put, call} from 'redux-saga/effects';
-import {addCandidate, deleteCandidate, editCandidate} from '../candidates/candidateService.js';
+import {addCandidate, deleteCandidate, editCandidate} from '../../api/candidateService.js';
 import {addComment, deleteComment} from '../comments/commentService.js';
 import {addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
         setErrorMessage} from './actions';

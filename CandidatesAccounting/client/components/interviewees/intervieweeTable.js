@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Table from '../common/UIComponentDecorators/table';
 import CandidateRowControls from '../candidates/candidateControls';
-import {formatDateTime, formatDate, isToday, isBirthDate} from '../common/customMoment';
+import {formatDateTime, formatDate, isToday, isBirthDate} from '../../utilities/customMoment';
 import Tags from '../tags/tags';
 import ResumeControls from './resumeControls';
 import styled from 'styled-components';

@@ -13,8 +13,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import {indigo} from 'material-ui/colors';
 import AppView from '../components/layout/appview';
-import {getAllCandidates} from '../components/candidates/candidateService';
-import {getTags} from '../components/tags/tagService';
+import {getAllCandidates} from '../api/candidateService';
+import {getTags} from '../api/tagService';
 
 const sagaMiddleware = createSagaMiddleware();
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getCurrentDateTime} from '../common/customMoment';
+import {getCurrentDateTime} from '../../utilities/customMoment';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
 import styled from 'styled-components';

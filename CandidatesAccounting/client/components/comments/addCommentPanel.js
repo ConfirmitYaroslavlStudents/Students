@@ -5,7 +5,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
-import {Comment} from '../../databaseDocumentPatterns';
+import {Comment} from '../../databaseDocumentClasses';
 
 export default class AddCommentPanel extends React.Component {
   constructor(props) {

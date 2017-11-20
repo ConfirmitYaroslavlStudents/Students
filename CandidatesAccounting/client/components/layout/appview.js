@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {Switch, Route} from 'react-router-dom';
 import actions from '../common/actions';
 import Navbar from './navbar';
-import AppBar from './tablesbar';
-import {searchCandidates} from '../../utilities/candidateFunctions';
+import TablesBar from './tablesbar';
+import {searchByStatus, searchById, searchByRequest, searchByTag} from '../../utilities/candidateFilters';
 import CommentsForm from '../comments/commentsForm';
 import CandidateTable from '../candidates/candidateTable';
 import IntervieweeTable from '../interviewees/intervieweeTable';
@@ -40,68 +40,57 @@ export default class AppView extends React.Component {
           setUserName={this.props.setUserName}
           history={this.props.history}
         />
-        <AppBar
+        <TablesBar
           selected={selectedTableNumber}
           newCandidateDefaultType={candidateType}
           addCandidate={this.props.addCandidate}
           tags={this.props.tags}
           userName={this.props.userName}
+          history={this.props.history}
         />
         <div className="custom-main">
           <Switch>
             <Route exact path="/" render={() =>
-              <CandidateTable allCandidates={this.props.candidates}
-                              {...this.props}/>}/>
+              <CandidateTable allCandidates={searchByRequest(this.props.candidates, this.props.location.search !== "" ?
+                                  decodeURIComponent(this.props.location.search.substr(3)) : null)} {...this.props}/>}
+            />
             <Route exact path="/interviewees" render={() =>
-              <IntervieweeTable interviewees={this.props.candidates.filter((c) => c.constructor.name === 'Interviewee')}
-                                {...this.props}/>}/>
+              <IntervieweeTable interviewees={searchByRequest(searchByStatus(this.props.candidates, 'Interviewee'),
+                this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
+                                {...this.props}/>}
+            />
             <Route exact path="/students" render={() =>
-              <StudentTable students={this.props.candidates.filter((c) => c.constructor.name === 'Student')}
-                            {...this.props}/>}/>
+              <StudentTable students={searchByRequest(searchByStatus(this.props.candidates, 'Student'),
+                  this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
+                            {...this.props}/>}
+            />
             <Route exact path="/trainees" render={() =>
-              <TraineeTable trainees={this.props.candidates.filter((c) => c.constructor.name === 'Trainee')}
-                            {...this.props}/>}/>
-
+              <TraineeTable trainees={searchByRequest(searchByStatus(this.props.candidates, 'Trainee'),
+                  this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
+                            {...this.props}/>}
+            />
             <Route exact path='/(interviewees|students|trainees)/(\d+)/comments' render={() =>
               <CommentsForm
-                candidate={this.props.candidates.find(c => c.constructor.name === candidateType && c.id === parseInt(currentLocation[2]))}
+                candidate={searchById(this.props.candidates._tail.array, parseInt(currentLocation[2]))}
                 addComment={this.props.addComment}
                 deleteComment={this.props.deleteComment}
-                userName={this.props.userName} />}/>
-
+                userName={this.props.userName} />}
+            />
             <Route exact path="/tag/*" render={() =>
-              <CandidateTable allCandidates={this.props.candidates.filter((c) => c.tags.includes(decodeURIComponent(currentLocation[2])))}
-                              {...this.props}/>}/>
+              <CandidateTable allCandidates={searchByTag(this.props.candidates, decodeURIComponent(currentLocation[2]))}
+                              {...this.props}/>}
+            />
             <Route exact path="/interviewees/tag/*" render={() =>
               <IntervieweeTable {...this.props}
-                interviewees={this.props.candidates.filter((c) => c.constructor.name === 'Interviewee'
-                && c.tags.includes(decodeURIComponent(currentLocation[3])))}/>}
+                interviewees={searchByTag(searchByStatus(this.props.candidates, 'Interviewee'), decodeURIComponent(currentLocation[3]))}/>}
             />
             <Route exact path="/students/tag/*" render={() =>
               <StudentTable {...this.props}
-                students={this.props.candidates.filter((c) => c.constructor.name === 'Student'
-                && c.tags.includes(decodeURIComponent(currentLocation[3])))}/>}
+                students={searchByTag(searchByStatus(this.props.candidates, 'Student'), decodeURIComponent(currentLocation[3]))}/>}
             />
             <Route exact path="/trainees/tag/*" render={() =>
               <TraineeTable {...this.props}
-                trainees={this.props.candidates.filter((c) => c.constructor.name === 'Trainee'
-                && c.tags.includes(decodeURIComponent(currentLocation[3])))}/>}
-            />
-
-            <Route exact path="/search/*" render={() =>
-              <CandidateTable allCandidates={searchCandidates(this.props.candidates._tail.array, decodeURIComponent(currentLocation[2]))}
-                              {...this.props}/>}/>
-            <Route exact path="/interviewees/search/*" render={() =>
-              <IntervieweeTable interviewees={searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Interviewee'),
-                                              decodeURIComponent(currentLocation[3]))} {...this.props}/>}
-            />
-            <Route exact path="/students/search/*" render={() =>
-              <StudentTable students={searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Student'),
-                                      decodeURIComponent(currentLocation[3]))} {...this.props}/>}
-            />
-            <Route exact path="/trainees/search/*" render={() =>
-              <TraineeTable trainees={searchCandidates(this.props.candidates.filter((c) => c.constructor.name === 'Trainee'),
-                                      decodeURIComponent(currentLocation[3]))} {...this.props}/>}
+                trainees={searchByTag(searchByStatus(this.props.candidates, 'Trainee'), decodeURIComponent(currentLocation[3]))}/>}
             />
             <Route path="" render={() => <ErrorPage errorCode={404} errorMessage="Page not found"/>}/>
           </Switch>

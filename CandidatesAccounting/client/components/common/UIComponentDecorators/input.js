@@ -10,6 +10,7 @@ export default function CustomInput(props) {
       disableUnderline={props.disableUnderline}
       autoFocus={props.autoFocus}
       placeholder={props.placeholder}
+      onBlur={props.onBlur ? props.onBlur : () => {}}
     />
   );
 }
@@ -20,4 +21,5 @@ CustomInput.propTypes = {
   disableUnderline: PropTypes.bool,
   autoFocus: PropTypes.bool,
   placeholder: PropTypes.string,
+  onBlur: PropTypes.func,
 };

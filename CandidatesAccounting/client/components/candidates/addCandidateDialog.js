@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {createCandidate, checkCandidateValidation} from '../../utilities/candidateFunctions';
-import {Comment} from '../../databaseDocumentPatterns';
+import checkCandidateValidation from '../../utilities/candidateValidators';
+import {Comment, createCandidate} from '../../databaseDocumentClasses';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';
 import CloseIcon from 'material-ui-icons/Close';

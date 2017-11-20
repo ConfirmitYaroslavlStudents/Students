@@ -1,5 +1,5 @@
 import {fetchGet, fetchPost, fetchDelete, fetchPut} from '../components/common/fetch';
-import {createCandidate} from '../utilities/candidateFunctions';
+import {createCandidate} from '../databaseDocumentClasses';
 
 export function getAllCandidates() {
   return fetchGet('/api/candidates')

@@ -1,10 +1,13 @@
-const express = require('express');
-const http = require('http');
-const ntlm = require('express-ntlm');
-const path = require('path');
-const bodyParser  = require('body-parser');
-const favicon = require ('serve-favicon');
-const {Interviewee, Student, Trainee, Comment} = require('../client/databaseDocumentClasses');
+import express from 'express';
+import webpack from 'webpack';
+import config from '../webpack.config';
+import http from 'http';
+import  path from 'path';
+import bodyParser from 'body-parser';
+import favicon from 'serve-favicon';
+import {Interviewee, Student, Trainee, Comment} from '../client/databaseDocumentClasses';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 
 let candidates = [
   new Interviewee(1, 'Олег', '27.10.1995', 'Oleg@mail.ru',
@@ -32,29 +35,32 @@ const app = express();
 app.set('port', 3000);
 app.set('view endine', 'ejs');
 
+const compiler = webpack(config);
+app.use(webpackMiddleware(compiler, {
+  publicPath: config.output.publicPath,
+  hot: true,
+  stats: {
+    colors: true
+  }
+}));
+app.use(webpackHotMiddleware(compiler, {
+  log: console.log,
+  path: '/__webpack_hmr',
+  heartbeat: 10 * 1000
+}));
+
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-/*app.use(ntlm({
-  debug: function() {
-    var args = Array.prototype.slice.apply(arguments);
-
-    console.log.apply(null, args);
-  },
-  domain: 'FIRM',
-  domaincontroller: 'ldap://myad.example',
-}));*/
-
-//app.use(ntlm());
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server is listening on port', app.get('port'));
+  console.log('Webpack...');
 });
 
 app.get('/api/candidates', (req, res) => {
   console.log('Send all candidates');
-  //console.log(req.ntlm);
   res.send(candidates);
 });
 

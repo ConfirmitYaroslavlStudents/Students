@@ -58,3 +58,13 @@ getAllCandidates()
         );
       });
   });
+
+if (module.hot) {
+  module.hot.accept();
+  /*
+  module.hot.accept('../components/common/reducer', () => {
+    const nextRootReducer = require('../components/common/reducer');
+    store.replaceReducer(nextRootReducer);
+  });
+  */
+}

@@ -26,9 +26,7 @@ export default function DialogWindow(props) {
           {props.controls}
         </Toolbar>
       </AppBar>
-
       {props.children}
-
     </Dialog>
   );
 }

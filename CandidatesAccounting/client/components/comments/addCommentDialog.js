@@ -36,9 +36,7 @@ export default class AddCommentDialog extends React.Component {
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           controls={
-            <div style={{display: 'inline-block'}}>
-              <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
-            </div>
+            <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
           }>
             <FormWrapper>
               <AddCommentPanel

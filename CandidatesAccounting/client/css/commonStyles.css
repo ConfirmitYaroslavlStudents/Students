@@ -61,10 +61,6 @@ p {
     height: 48px;
 }
 
-.td:last-child {
-    padding-right: 0;
-}
-
 .search {
     color: #fff !important;
     font-size: 90% !important;

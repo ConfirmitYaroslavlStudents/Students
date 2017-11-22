@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import checkCandidateValidation from '../../utilities/candidateValidators';
+import {checkCandidateValidation} from '../../utilities/candidateValidators';
 import {Comment, createCandidate} from '../../databaseDocumentClasses';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';

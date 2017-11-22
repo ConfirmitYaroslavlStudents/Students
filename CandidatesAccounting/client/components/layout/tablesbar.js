@@ -8,10 +8,10 @@ import styled from 'styled-components';
 
 function getNewURL(currentLocation, newTableType) {
   let newURL = '';
-  let location = currentLocation.pathname.split('/', 1);
-  location[0] = newTableType;
-  location.forEach((loc) => {
-    newURL += '/' + loc;
+  let locations = currentLocation.pathname.split('/', 1);
+  locations[0] = newTableType;
+  locations.forEach((location) => {
+    newURL += '/' + location;
   });
   newURL += currentLocation.search;
   return newURL;

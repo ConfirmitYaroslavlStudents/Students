@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import CandidateInfoForm from './candidateInfoForm';
-import checkCandidateValidation from '../../utilities/candidateValidators';
+import {checkCandidateValidation} from '../../utilities/candidateValidators';
 import {Comment, createCandidate} from '../../databaseDocumentClasses';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';

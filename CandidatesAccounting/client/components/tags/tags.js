@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {NavLink} from 'react-router-dom';
-import Tag from '../common/UIComponentDecorators/tag';
+import Tag from './tag';
 
 export default function Tags(props) {
   return (

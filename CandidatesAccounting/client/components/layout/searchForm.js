@@ -39,16 +39,16 @@ export default class SearchForm extends React.Component {
     const currentLocation = this.props.history.location.pathname.split('/');
     switch (currentLocation[1]) {
       case "interviewees":
-        this.props.history.replace('/interviewees?q=' + this.state.request);
+        this.props.history.replace('/interviewees?q=' + encodeURIComponent(this.state.request));
         break;
       case "students":
-        this.props.history.replace('/students?q=' + this.state.request);
+        this.props.history.replace('/students?q=' + encodeURIComponent(this.state.request));
         break;
       case "trainees":
-        this.props.history.replace('/trainees?q=' + this.state.request);
+        this.props.history.replace('/trainees?q=' + encodeURIComponent(this.state.request));
         break;
       default:
-        this.props.history.replace('/?q=' + this.state.request);
+        this.props.history.replace('/?q=' + encodeURIComponent(this.state.request));
     }
   }
 

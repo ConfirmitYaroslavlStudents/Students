@@ -21,7 +21,6 @@ export default function CandidateControls(props) {
         addComment={props.addComment}
         userName={props.userName}
       />
-
       <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
@@ -30,14 +29,12 @@ export default function CandidateControls(props) {
           />
         </Badge>
       </NavLink>
-
       <EditCandidateDialog
         candidate={props.candidate}
         editCandidate={props.editCandidate}
         tags={props.tags}
         userName={props.userName}
       />
-
       <IconButton
         icon={<RemoveIcon />}
         style={iconButtonStyle}

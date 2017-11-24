@@ -1,8 +1,9 @@
-import {takeEvery, all, put, call} from 'redux-saga/effects';
+import {delay} from 'redux-saga';
+import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
 import {addCandidate, deleteCandidate, editCandidate} from '../../api/candidateService.js';
 import {addComment, deleteComment} from '../comments/commentService.js';
 import {addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        setErrorMessage} from './actions';
+        setErrorMessage, search} from './actions';
 
 export default function* rootSaga() {
   yield all([
@@ -11,6 +12,8 @@ export default function* rootSaga() {
     watchCandidateEdit(),
     watchCommentAdd(),
     watchCommentDelete(),
+    watchChangeSearchRequest(),
+    watchSearch()
   ])
 }
 
@@ -32,6 +35,14 @@ export function* watchCommentAdd() {
 
 export function* watchCommentDelete() {
   yield takeEvery('DELETE_COMMENT', deleteCommentSaga);
+}
+
+export function* watchChangeSearchRequest() {
+  yield takeLatest('SET_SEARCH_REQUEST', setSearchRequestSaga);
+}
+
+export function* watchSearch() {
+  yield takeLatest('SEARCH', searchSaga);
 }
 
 export function* addCandidateSaga(action) {
@@ -82,4 +93,19 @@ export function* deleteCommentSaga(action) {
   catch(error) {
     yield put(setErrorMessage(error + '. Delete comment error. Please, refresh the page.'));
   }
+}
+
+export function* setSearchRequestSaga(action) {
+  yield call(delay, 500);
+  yield put(search(action.searchRequest, action.browserHistory));
+}
+
+export function* searchSaga(action) {
+  let newURL = '';
+  if (action.searchRequest.trim() !== '') {
+    newURL = action.browserHistory.location.pathname + '?q=' + encodeURIComponent(action.searchRequest);
+  } else {
+    newURL = action.browserHistory.location.pathname;
+  }
+  action.browserHistory.replace(newURL);
 }

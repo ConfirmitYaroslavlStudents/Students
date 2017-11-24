@@ -36,6 +36,7 @@ export default class CommentsForm extends React.Component {
                       comment={comment}
                       userName={this.props.userName}
                       commentIndex={index}
+                      searchRequest={this.props.searchRequest}
                       deleteComment={this.deleteComment.bind(this)}
         />
       );
@@ -71,6 +72,7 @@ CommentsForm.propTypes = {
   deleteComment: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
   candidate: PropTypes.object,
+  searchRequest: PropTypes.string,
 };
 
 const FormWrapper = styled.div`

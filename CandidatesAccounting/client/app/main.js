@@ -50,6 +50,7 @@ getAllCandidates()
               userName: 'DmitryB',
               candidates: candidates,
               tags: tags,
+              searchRequest: '',
               errorMessage: ''
             }
           }

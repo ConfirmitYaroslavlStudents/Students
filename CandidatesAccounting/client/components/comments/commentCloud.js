@@ -7,6 +7,7 @@ import styled, {css} from 'styled-components';
 import {formatDateTime} from '../../utilities/customMoment';
 
 export default function CommentCloud(props) {
+  console.log(props.searchRequest);
   return (
     <CommentWrapper>
       <CommentIcons right={props.comment.author === props.userName}>
@@ -24,7 +25,10 @@ export default function CommentCloud(props) {
           ''
         }
       </CommentIcons>
-      <CommentMount userComment={props.comment.author === props.userName}>
+      <CommentMount
+        userComment={props.comment.author === props.userName}
+        highlighted={props.searchRequest && (props.comment.text.toLowerCase().includes(props.searchRequest.toLowerCase())
+          || props.comment.author.toLowerCase().includes(props.searchRequest.toLowerCase()))}>
         <CommentText
           dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
@@ -44,12 +48,13 @@ CommentCloud.propTypes = {
   userName: PropTypes.string.isRequired,
   commentIndex: PropTypes.number.isRequired,
   deleteComment: PropTypes.func.isRequired,
+  searchRequest: PropTypes.string,
 };
 
 const CommentWrapper = styled.div`  
   margin: 0 0 10px;
   overflow: hidden;
-  padding: 5px 0;
+  padding: 5px 0; 
 `;
 
 const CommentIcons = styled.div`
@@ -75,6 +80,9 @@ const CommentMount = styled.div`
   ${props => props.userComment && css`
 		float: right;
 		border-radius: 7px 2px 7px 7px;
+	`}	
+	${props => props.highlighted && css`
+		background: #BBDEFB;
 	`}
 `;
 

@@ -94,6 +94,22 @@ function setUserName(userName) {
   }
 }
 
+function setSearchRequest(searchRequest, browserHistory) {
+  return {
+    type: 'SET_SEARCH_REQUEST',
+    searchRequest,
+    browserHistory
+  }
+}
+
+function search(searchRequest, browserHistory) {
+  return {
+    type: 'SEARCH',
+    searchRequest,
+    browserHistory
+  }
+}
+
 module.exports = {setInitialState, addCandidate, deleteCandidate, editCandidate, addComment, deleteComment, setErrorMessage,
                   addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-                  setUserName};
+                  setUserName, setSearchRequest, search};

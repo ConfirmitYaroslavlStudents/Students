@@ -14,7 +14,12 @@ export default function MainNavbar(props) {
       title="Candidate Accounting"
       rightPart={
         <RightPartWrapper>
-          <SearchForm history={props.history}/>
+          <SearchForm
+            searchRequest={props.searchRequest}
+            setSearchRequest={props.setSearchRequest}
+            search={props.search}
+            history={props.history}
+          />
           <span>{props.userName}</span>
           <IconButton
             color="contrast"
@@ -33,6 +38,9 @@ MainNavbar.propTypes = {
   userName: PropTypes.string.isRequired,
   setUserName: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  searchRequest: PropTypes.string.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
+  search: PropTypes.func.isRequired,
 };
 
 const RightPartWrapper = styled.div`

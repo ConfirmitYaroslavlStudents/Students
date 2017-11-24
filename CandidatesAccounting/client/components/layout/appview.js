@@ -39,6 +39,9 @@ export default class AppView extends React.Component {
           userName={this.props.userName}
           setUserName={this.props.setUserName}
           history={this.props.history}
+          search={this.props.search}
+          setSearchRequest={this.props.setSearchRequest}
+          searchRequest={this.props.searchRequest}
         />
         <TablesBar
           selected={selectedTableNumber}
@@ -74,7 +77,8 @@ export default class AppView extends React.Component {
                 candidate={searchById(this.props.candidates._tail.array, parseInt(currentLocation[2]))}
                 addComment={this.props.addComment}
                 deleteComment={this.props.deleteComment}
-                userName={this.props.userName} />}
+                userName={this.props.userName}
+                searchRequest={decodeURIComponent(this.props.location.search.substr(3))}/>}
             />
             <Route exact path="/tag/*" render={() =>
               <CandidateTable allCandidates={searchByTag(this.props.candidates, decodeURIComponent(currentLocation[2]))}
@@ -106,6 +110,7 @@ function mapStateToProps(state) {
     userName: state.get('userName'),
     candidates: state.get('candidates'),
     tags: state.get('tags'),
+    searchRequest: state.get('searchRequest'),
     errorMessage: state.get('errorMessage')
   };
 }

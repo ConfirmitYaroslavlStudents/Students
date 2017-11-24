@@ -5,55 +5,19 @@ import SearchIcon from 'material-ui-icons/search';
 import Input from '../common/UIComponentDecorators/input';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 
-function debounce(func, wait, immediate) {
-  let timeout;
-  return function() {
-    const context = this;
-    const args = arguments;
-    let later = () => {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    let callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) {
-      func.apply(context, args);
-    }
-  };
-}
-
 export default class SearchForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {request: '', isOpen: false};
+    this.state = {isOpen: false};
     this.changeRequest = this.changeRequest.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.search = this.search.bind(this);
-    this.debounceSearch = debounce(this.debounceSearch.bind(this), 500);
   }
 
   search() {
-    const currentLocation = this.props.history.location.pathname.split('/');
-    switch (currentLocation[1]) {
-      case "interviewees":
-        this.props.history.replace('/interviewees?q=' + encodeURIComponent(this.state.request));
-        break;
-      case "students":
-        this.props.history.replace('/students?q=' + encodeURIComponent(this.state.request));
-        break;
-      case "trainees":
-        this.props.history.replace('/trainees?q=' + encodeURIComponent(this.state.request));
-        break;
-      default:
-        this.props.history.replace('/?q=' + encodeURIComponent(this.state.request));
-    }
-  }
-
-  debounceSearch() {
-    this.search();
+    this.props.search(this.props.searchRequest, this.props.history);
   }
 
   open() {
@@ -61,27 +25,23 @@ export default class SearchForm extends React.Component {
   }
 
   close() {
-    this.props.history.replace(this.props.history.location.pathname);
     this.setState({isOpen: false});
   }
 
   handleClick() {
     if (this.state.isOpen) {
-      this.search();
+      if (this.props.searchRequest === '') {
+        this.close();
+      } else {
+        this.search();
+      }
     } else {
       this.open();
     }
   }
 
   changeRequest(value) {
-    this.setState({request: value});
-    this.debounceSearch();
-  }
-
-  componentWillMount() {
-    if (!this.state.isOpen) {
-      this.props.history.replace(this.props.history.location.pathname);
-    }
+    this.props.setSearchRequest(value, this.props.history);
   }
 
   render() {
@@ -92,7 +52,6 @@ export default class SearchForm extends React.Component {
           icon={<SearchIcon/>}
           onClick={this.handleClick}
           placeholder="search"
-          defaultValue={this.state.request}
         />
         {
           this.state.isOpen ?
@@ -100,7 +59,8 @@ export default class SearchForm extends React.Component {
               onChange={this.changeRequest}
               className="search"
               placeholder="search"
-              onBlur={() => {if (this.state.request === '') this.close()}}
+              defaultValue={this.props.searchRequest}
+              onBlur={() => {if (this.props.searchRequest === '') this.close()}}
               disableUnderline
               autoFocus
             />
@@ -113,6 +73,9 @@ export default class SearchForm extends React.Component {
 
 SearchForm.propTypes = {
   history: PropTypes.object.isRequired,
+  searchRequest: PropTypes.string.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
+  search: PropTypes.func.isRequired,
 };
 
 const Form = styled.div`

@@ -21,7 +21,7 @@ export default function CandidateControls(props) {
         addComment={props.addComment}
         userName={props.userName}
       />
-      <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
+      <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'} onClick={()=>{props.setSearchRequest('', props.history)}}>
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
             icon={<CommentIcon />}
@@ -51,4 +51,6 @@ CandidateControls.propTypes = {
   deleteCandidate: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
   tags: PropTypes.object.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };

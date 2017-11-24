@@ -53,6 +53,10 @@ export default function reducer(state = Map(), action) {
     case 'SET_USERNAME':
       return state = state.set('userName', action.userName);
 
+    case 'SET_SEARCH_REQUEST':
+      console.log(action.searchRequest);
+      return state = state.set('searchRequest', action.searchRequest);
+
     default:
       return state;
   }

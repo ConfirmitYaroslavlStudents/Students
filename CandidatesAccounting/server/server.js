@@ -43,11 +43,7 @@ app.use(webpackMiddleware(compiler, {
     colors: true
   }
 }));
-app.use(webpackHotMiddleware(compiler, {
-  log: console.log,
-  path: '/__webpack_hmr',
-  heartbeat: 10 * 1000
-}));
+app.use(webpackHotMiddleware(compiler));
 
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -56,7 +52,7 @@ app.use(bodyParser.json());
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server is listening on port', app.get('port'));
-  console.log('Webpack...');
+  console.log('Waiting for webpack...');
 });
 
 app.get('/api/candidates', (req, res) => {

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "babel-node ./server/server.js --presets es2015,stage-2"
+    "start": "nodemon --exec \"babel-node ./server/server.js --presets es2015,stage-2\" -w ./server"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +42,7 @@
     "material-ui-icons": "^1.0.0-beta.10",
     "moment": "^2.18.1",
     "node-static": "^0.7.9",
+    "nodemon": "^1.12.1",
     "path": "^0.12.7",
     "path-parse": "^1.0.5",
     "prop-types": "^15.6.0",

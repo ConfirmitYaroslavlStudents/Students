@@ -18,11 +18,20 @@ import {getTags} from '../api/tagService';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(sagaMiddleware)
-);
+function configureStore(initialState) {
+  const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware));
+  if (module.hot) {
+    // Enable Webpack hot module replacement for reducers
+    module.hot.accept('../components/common/reducer', () => {
+      const nextRootReducer = require('../components/common/reducer');
+      store.replaceReducer(nextRootReducer);
+    });
+  }
+  return store;
+}
+
+const store = configureStore(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
 sagaMiddleware.run(rootSaga);
 
 const theme = createMuiTheme({
@@ -61,10 +70,4 @@ getAllCandidates()
 
 if (module.hot) {
   module.hot.accept();
-  /*
-  module.hot.accept('../components/common/reducer', () => {
-    const nextRootReducer = require('../components/common/reducer');
-    store.replaceReducer(nextRootReducer);
-  });
-  */
 }

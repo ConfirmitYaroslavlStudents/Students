@@ -17,7 +17,6 @@ export default function MainNavbar(props) {
           <SearchForm
             searchRequest={props.searchRequest}
             setSearchRequest={props.setSearchRequest}
-            search={props.search}
             history={props.history}
           />
           <span>{props.userName}</span>
@@ -40,7 +39,6 @@ MainNavbar.propTypes = {
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
-  search: PropTypes.func.isRequired,
 };
 
 const RightPartWrapper = styled.div`

@@ -6,27 +6,32 @@ import {NavLink} from 'react-router-dom';
 import AddCandidateDialog from '../candidates/addCandidateDialog';
 import styled from 'styled-components';
 
-function getNewURL(currentLocation, newTableType) {
-  let newURL = '';
-  let locations = currentLocation.pathname.split('/', 1);
-  locations[0] = newTableType;
-  locations.forEach((location) => {
-    newURL += '/' + location;
-  });
-  newURL += currentLocation.search;
-  return newURL;
-}
-
 export default class CustomAppBar extends React.Component{
   constructor(props) {
     super(props);
     this.state = { selected: props.selected };
     this.handleChange = this.handleChange.bind(this);
+    this.getNewURL = this.getNewURL.bind(this);
+    this.handleNavLinkClick = this.handleNavLinkClick.bind(this);
   };
 
   handleChange(event, value) {
     this.setState({selected: value });
   };
+
+  getNewURL(newTableType) {
+    let newURL = '/' + newTableType;
+    if (!this.props.history.location.pathname.includes('comments')) {
+      newURL += this.props.history.location.search;
+    }
+    return newURL;
+  }
+
+  handleNavLinkClick() {
+    if (this.props.history.location.pathname.includes('comments')) {
+      this.props.setSearchRequest('', this.props.history, 0);
+    }
+  }
 
   render() {
     this.state = { selected: this.props.selected };
@@ -41,13 +46,13 @@ export default class CustomAppBar extends React.Component{
             centered
             onChange={this.handleChange}
           >
-            <Tab label={<NavLink exact to={getNewURL(this.props.history.location, '')} className="nav-link"
+            <Tab label={<NavLink exact to={this.getNewURL('')} onClick={this.handleNavLinkClick} className="nav-link"
                                  activeStyle={{color: '#3F51B5'}}>All</NavLink>}/>
-            <Tab label={<NavLink to={getNewURL(this.props.history.location, 'interviewees')} className="nav-link"
+            <Tab label={<NavLink to={this.getNewURL('interviewees')} onClick={this.handleNavLinkClick} className="nav-link"
                                  activeStyle={{color: '#3F51B5'}}>Interviewees</NavLink>}/>
-            <Tab label={<NavLink to={getNewURL(this.props.history.location, 'students')} className="nav-link"
+            <Tab label={<NavLink to={this.getNewURL('students')} onClick={this.handleNavLinkClick} className="nav-link"
                                  activeStyle={{color: '#3F51B5'}}>Students</NavLink>}/>
-            <Tab label={<NavLink to={getNewURL(this.props.history.location, 'trainees')} className="nav-link"
+            <Tab label={<NavLink to={this.getNewURL('trainees')} onClick={this.handleNavLinkClick} className="nav-link"
                                  activeStyle={{color: '#3F51B5'}}>Trainees</NavLink>}/>
           </Tabs>
         </TabsWrapper>
@@ -70,6 +75,7 @@ CustomAppBar.PropTypes = {
   addCandidate: PropTypes.func.isRequired,
   newCandidateDefaultType: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
   selected: PropTypes.number,
 };
 

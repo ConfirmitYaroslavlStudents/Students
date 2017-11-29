@@ -96,7 +96,7 @@ function* deleteCommentSaga(action) {
 }
 
 function* setSearchRequestSaga(action) {
-  yield call(delay, 500);
+  yield call(delay, action.delay);
   yield put(search(action.searchRequest, action.browserHistory));
 }
 

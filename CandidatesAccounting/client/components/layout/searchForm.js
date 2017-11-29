@@ -8,40 +8,33 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 export default class SearchForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = {isActive: false};
     this.changeRequest = this.changeRequest.bind(this);
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
+    this.activate = this.activate.bind(this);
+    this.deactivate = this.deactivate.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.search = this.search.bind(this);
   }
 
-  search() {
-    this.props.search(this.props.searchRequest, this.props.history);
+  activate() {
+    this.setState({isActive: true});
   }
 
-  open() {
-    this.setState({isOpen: true});
-  }
-
-  close() {
-    this.setState({isOpen: false});
+  deactivate() {
+    this.setState({isActive: false});
   }
 
   handleClick() {
-    if (this.state.isOpen) {
-      if (this.props.searchRequest === '') {
-        this.close();
-      } else {
-        this.search();
-      }
+    if (this.props.searchRequest !== '') {
+      this.props.setSearchRequest(this.props.searchRequest, this.props.history, 0);
     } else {
-      this.open();
+      if (!this.state.isActive) {
+        this.setState({isActive: true});
+      }
     }
   }
 
   changeRequest(value) {
-    this.props.setSearchRequest(value, this.props.history);
+    this.props.setSearchRequest(value, this.props.history, 500);
   }
 
   render() {
@@ -54,13 +47,14 @@ export default class SearchForm extends React.Component {
           placeholder="search"
         />
         {
-          this.state.isOpen ?
+          this.state.isActive || this.props.searchRequest !== '' ?
             <Input
               onChange={this.changeRequest}
+              value={this.props.searchRequest}
               className="search"
               placeholder="search"
-              defaultValue={this.props.searchRequest}
-              onBlur={() => {if (this.props.searchRequest === '') this.close()}}
+              onFocus={() => {this.activate()}}
+              onBlur={() => {this.deactivate()}}
               disableUnderline
               autoFocus
             />
@@ -75,7 +69,6 @@ SearchForm.propTypes = {
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
-  search: PropTypes.func.isRequired,
 };
 
 const Form = styled.div`

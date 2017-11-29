@@ -94,11 +94,12 @@ function setUserName(userName) {
   }
 }
 
-function setSearchRequest(searchRequest, browserHistory) {
+function setSearchRequest(searchRequest, browserHistory, delay) {
   return {
     type: 'SET_SEARCH_REQUEST',
     searchRequest,
-    browserHistory
+    browserHistory,
+    delay
   }
 }
 

@@ -7,10 +7,30 @@ import bodyParser from 'body-parser';
 import favicon from 'serve-favicon';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import graphqlHTTP from 'express-graphql';
+import {buildSchema} from 'graphql';
 import {database, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment} from './database';
 
 const app = express();
 const compiler = webpack(config);
+
+// Construct a schema, using GraphQL schema language
+let schema = buildSchema(`
+  type Query {
+    hello: String,
+    text: String
+  }
+`);
+
+// The root provides a resolver function for each API endpoint
+let root = {
+  hello: () => {
+    return 'Hello world!';
+  },
+  text: () => {
+    return 'Text!';
+  },
+};
 
 app.set('port', 3000);
 app.set('view endine', 'ejs');
@@ -23,6 +43,11 @@ app.use(webpackMiddleware(compiler, {
   }
 }));
 app.use(webpackHotMiddleware(compiler));
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));

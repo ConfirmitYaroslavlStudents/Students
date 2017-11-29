@@ -39,7 +39,6 @@ export default class AppView extends React.Component {
           userName={this.props.userName}
           setUserName={this.props.setUserName}
           history={this.props.history}
-          search={this.props.search}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
         />
@@ -50,6 +49,7 @@ export default class AppView extends React.Component {
           tags={this.props.tags}
           userName={this.props.userName}
           history={this.props.history}
+          setSearchRequest={this.props.setSearchRequest}
         />
         <div className="custom-main">
           <Switch>

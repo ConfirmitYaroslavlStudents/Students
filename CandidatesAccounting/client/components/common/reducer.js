@@ -54,7 +54,6 @@ export default function reducer(state = Map(), action) {
       return state = state.set('userName', action.userName);
 
     case 'SET_SEARCH_REQUEST':
-      console.log(action.searchRequest);
       return state = state.set('searchRequest', action.searchRequest);
 
     default:

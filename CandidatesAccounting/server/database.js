@@ -2,7 +2,7 @@ import {Interviewee, Student, Trainee, Comment} from '../client/databaseDocument
 
 let database = {
   candidates: [
-    new Interviewee(1, 'Олег1', '27.10.1995', 'Oleg@mail.ru',
+    new Interviewee(1, 'Олег', '27.10.1995', 'Oleg@mail.ru',
       [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №1')], ['backend', 'javascript', 'nodeJS'],
       '12:00 27.10.2017', 'resume.pdf'),
     new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com',

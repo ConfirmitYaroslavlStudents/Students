@@ -17,35 +17,35 @@ export default function* rootSaga() {
   ])
 }
 
-export function* watchCandidateAdd() {
+function* watchCandidateAdd() {
   yield takeEvery('ADD_CANDIDATE', addCandidateSaga);
 }
 
-export function* watchCandidateDelete() {
+function* watchCandidateDelete() {
   yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga);
 }
 
-export function* watchCandidateEdit() {
+function* watchCandidateEdit() {
   yield takeEvery('EDIT_CANDIDATE', editCandidateSaga);
 }
 
-export function* watchCommentAdd() {
+function* watchCommentAdd() {
   yield takeEvery('ADD_COMMENT', addCommentSaga);
 }
 
-export function* watchCommentDelete() {
+function* watchCommentDelete() {
   yield takeEvery('DELETE_COMMENT', deleteCommentSaga);
 }
 
-export function* watchChangeSearchRequest() {
+function* watchChangeSearchRequest() {
   yield takeLatest('SET_SEARCH_REQUEST', setSearchRequestSaga);
 }
 
-export function* watchSearch() {
+function* watchSearch() {
   yield takeLatest('SEARCH', searchSaga);
 }
 
-export function* addCandidateSaga(action) {
+function* addCandidateSaga(action) {
   try {
     yield call(addCandidate, action.candidate);
     yield put(addCandidateSuccess(action.candidate));
@@ -55,7 +55,7 @@ export function* addCandidateSaga(action) {
   }
 }
 
-export function* deleteCandidateSaga(action) {
+function* deleteCandidateSaga(action) {
   try {
     yield call(deleteCandidate, action.id);
     yield put(deleteCandidateSuccess(action.id));
@@ -65,7 +65,7 @@ export function* deleteCandidateSaga(action) {
   }
 }
 
-export function* editCandidateSaga(action) {
+function* editCandidateSaga(action) {
   try {
     yield call(editCandidate, action.id, action.candidateNewState);
     yield put(editCandidateSuccess(action.id, action.candidateNewState));
@@ -75,7 +75,7 @@ export function* editCandidateSaga(action) {
   }
 }
 
-export function* addCommentSaga(action) {
+function* addCommentSaga(action) {
   try {
     yield call(addComment, action.candidateId, action.comment);
     yield put(addCommentSuccess(action.candidateId, action.comment));
@@ -85,7 +85,7 @@ export function* addCommentSaga(action) {
   }
 }
 
-export function* deleteCommentSaga(action) {
+function* deleteCommentSaga(action) {
   try {
     yield call(deleteComment, action.candidateId, action.commentId);
     yield put(deleteCommentSuccess(action.candidateId, action.commentId));
@@ -95,12 +95,12 @@ export function* deleteCommentSaga(action) {
   }
 }
 
-export function* setSearchRequestSaga(action) {
+function* setSearchRequestSaga(action) {
   yield call(delay, 500);
   yield put(search(action.searchRequest, action.browserHistory));
 }
 
-export function* searchSaga(action) {
+function* searchSaga(action) {
   let newURL = '';
   if (action.searchRequest.trim() !== '') {
     newURL = action.browserHistory.location.pathname + '?q=' + encodeURIComponent(action.searchRequest);

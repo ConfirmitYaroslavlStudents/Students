@@ -7,7 +7,6 @@ import styled, {css} from 'styled-components';
 import {formatDateTime} from '../../utilities/customMoment';
 
 export default function CommentCloud(props) {
-  console.log(props.searchRequest);
   return (
     <CommentWrapper>
       <CommentIcons right={props.comment.author === props.userName}>

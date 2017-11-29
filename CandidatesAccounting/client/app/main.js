@@ -16,29 +16,50 @@ import AppView from '../components/layout/appview';
 import {getAllCandidates} from '../api/candidateService';
 import {getTags} from '../api/tagService';
 
-const sagaMiddleware = createSagaMiddleware();
-
 function configureStore(initialState) {
+  const sagaMiddleware = createSagaMiddleware();
   const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware));
+  let sagaRun = sagaMiddleware.run(function* () {
+    yield rootSaga();
+  });
   if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
     module.hot.accept('../components/common/reducer', () => {
-      const nextRootReducer = require('../components/common/reducer');
-      store.replaceReducer(nextRootReducer);
+      const nextReducer = require('../components/common/reducer').default;
+      store.replaceReducer(nextReducer);
     });
+    module.hot.accept('../components/common/sagas', () => {
+      const newRootSaga = require('../components/common/sagas').default;
+      sagaRun.cancel();
+      sagaRun.done.then(() => {
+        sagaRun = sagaMiddleware.run(function* replaceSaga() {
+          yield newRootSaga();
+        })
+      })
+    })
   }
   return store;
 }
 
 const store = configureStore(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
-sagaMiddleware.run(rootSaga);
-
 const theme = createMuiTheme({
   palette: createPalette({
     primary: indigo,
   })
 });
+
+function renderApp(app) {
+  ReactDOM.render(
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Route path="/" component={app}/>
+        </BrowserRouter>
+      </Provider>
+    </MuiThemeProvider>,
+    document.getElementById('root')
+  );
+}
 
 getAllCandidates()
   .then((candidates) => {
@@ -55,20 +76,13 @@ getAllCandidates()
             }
           }
         );
-
-        ReactDOM.render(
-          <MuiThemeProvider theme={theme}>
-            <Provider store={store}>
-              <BrowserRouter>
-                <Route path="/" component={AppView}/>
-              </BrowserRouter>
-            </Provider>
-          </MuiThemeProvider>,
-          document.getElementById('root')
-        );
+        renderApp(AppView);
       });
   });
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept('../components/layout/appview', () => {
+    const nextApp = require('../components/layout/appview');
+    renderApp(nextApp);
+  })
 }

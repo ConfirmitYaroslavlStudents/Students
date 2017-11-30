@@ -81,7 +81,8 @@ const CommentMount = styled.div`
 		border-radius: 7px 2px 7px 7px;
 	`}	
 	${props => props.highlighted && css`
-		background: #BBDEFB;
+		background: #B3E5FC;
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 	`}
 `;
 

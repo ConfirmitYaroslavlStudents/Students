@@ -16,8 +16,7 @@ export default function reducer(state = Map(), action) {
           lastId = candidates[i].id;
         }
       }
-      let newCandidate = createCandidate(action.candidate.status ? action.candidate.status
-                                                                 : action.candidate.constructor.name, action.candidate);
+      let newCandidate = createCandidate(action.candidate.status, action.candidate);
       newCandidate.id = lastId + 1;
       return state.update('candidates', (candidates) => candidates.push(newCandidate));
 
@@ -28,8 +27,7 @@ export default function reducer(state = Map(), action) {
       return state = state.update('candidates', (candidates) => candidates.splice(candidates.indexOf(candidates.find(c =>
         c.id === action.id)),
         1,
-        createCandidate(action.candidateNewState.status ? action.candidateNewState.status
-          : action.candidateNewState.constructor.name, action.candidateNewState)));
+        createCandidate(action.candidateNewState.status, action.candidateNewState)));
 
     case 'ADD_COMMENT_SUCCESS':
       candidate = state.get('candidates').find(c => c.id === action.candidateId);

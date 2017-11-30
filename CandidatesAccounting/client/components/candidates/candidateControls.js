@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '../common/UIComponentDecorators/iconButton';
-import RemoveIcon from 'material-ui-icons/Delete';
 import EditCandidateDialog from './editCandidateDialog';
+import DeleteCandidateDialog from './deleteCandidateDialog';
 import CommentIcon from 'material-ui-icons/ViewList';
 import Badge from '../common/UIComponentDecorators/badge';
 import {NavLink} from 'react-router-dom';
@@ -35,12 +35,7 @@ export default function CandidateControls(props) {
         tags={props.tags}
         userName={props.userName}
       />
-      <IconButton
-        icon={<RemoveIcon />}
-        style={iconButtonStyle}
-        color="accent"
-        onClick={() => { props.deleteCandidate(props.candidate.id) }}
-      />
+      <DeleteCandidateDialog deleteCandidate={() => {props.deleteCandidate(props.candidate.id)}}/>
     </div>
   );
 }

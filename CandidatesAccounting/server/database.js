@@ -3,7 +3,8 @@ import {Interviewee, Student, Trainee, Comment} from '../client/databaseDocument
 let database = {
   candidates: [
     new Interviewee(1, 'Олег', '27.10.1995', 'Oleg@mail.ru',
-      [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №1')], ['backend', 'javascript', 'nodeJS'],
+      [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №1'),
+       new Comment('AnnaR', '17:40 17.05.2017', 'Текст комментария №6')], ['backend', 'javascript', 'nodeJS'],
       '12:00 27.10.2017', 'resume.pdf'),
     new Student(2, 'Ольга', '11.04.1997', 'solnishko14@rambler.com',
       [new Comment('AnnaR', '15:45 17.05.2017', 'Текст комментария №2')], ['backend', 'C#', 'ASP.NET'],
@@ -23,7 +24,15 @@ let database = {
   ]
 };
 
-function addCandidate(newCandidate) {
+export function getAllCandidates() {
+  return database.candidates;
+}
+
+export function getAllTags() {
+  return database.tags;
+}
+
+export function addCandidate(newCandidate) {
   let lastId = 0;
   database.candidates.forEach((candidate) => {
     if (candidate.id > lastId) {
@@ -35,41 +44,46 @@ function addCandidate(newCandidate) {
   updateTags(newCandidate.tags);
 }
 
-function updateCandidate(id, candidateNewState) {
+export function updateCandidate(id, candidateNewState) {
   for (let i = 0; i < database.candidates.length; i++) {
-    if (database.candidates[i].id === id) {
+    if (parseInt(database.candidates[i].id) === parseInt(id)) {
       database.candidates[i] = candidateNewState;
+      console.log(database.candidates);
       updateTags(database.candidates[i]);
-      break;
+      return;
     }
   }
+  throw 'Update candidate error. Candidate not found.';
 }
 
-function deleteCandidate(id) {
+export function deleteCandidate(id) {
   for (let i = 0; i < database.candidates.length; i++) {
-    if (database.candidates[i].id === id) {
+    if (parseInt(database.candidates[i].id) === parseInt(id)) {
       database.candidates.splice(i, 1);
-      break;
+      return;
     }
   }
+  throw 'Delete candidate error. Candidate not found.';
 }
 
-function addComment(candidateID, comment) {
+export function addComment(candidateID, comment) {
   for (let i = 0; i < database.candidates.length; i++) {
-    if (database.candidates[i].id === candidateID) {
+    if (parseInt(database.candidates[i].id) === parseInt(candidateID)) {
       database.candidates[i].comments.push(comment);
-      break;
+      return;
     }
   }
+  throw 'Add comment error. Candidate not found.';
 }
 
-function deleteComment(candidateID, commentID) {
+export function deleteComment(candidateID, commentNumber) {
   for (let i = 0; i < database.candidates.length; i++) {
-    if (database.candidates[i].id === candidateID) {
-      database.candidates[i].comments.splice(commentID, 1);
-      break;
+    if (parseInt(database.candidates[i].id) === parseInt(candidateID)) {
+      database.candidates[i].comments.splice(parseInt(commentNumber), 1);
+      return;
     }
   }
+  throw 'Delete comment error. Candidate or comment not found.';
 }
 
 function updateTags(newTags) {
@@ -79,5 +93,3 @@ function updateTags(newTags) {
     }
   }
 }
-
-module.exports = {database, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment};

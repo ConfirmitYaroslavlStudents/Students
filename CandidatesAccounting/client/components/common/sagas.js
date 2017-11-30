@@ -1,7 +1,7 @@
 import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
 import {addCandidate, deleteCandidate, editCandidate} from '../../api/candidateService.js';
-import {addComment, deleteComment} from '../comments/commentService.js';
+import {addComment, deleteComment} from '../../api/commentService.js';
 import {addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
         setErrorMessage, search} from './actions';
 
@@ -50,7 +50,7 @@ function* addCandidateSaga(action) {
     yield call(addCandidate, action.candidate);
     yield put(addCandidateSuccess(action.candidate));
   }
-  catch (error) {
+  catch(error) {
     yield put(setErrorMessage(error + '. Add candidate error. Please, refresh the page.'));
   }
 }
@@ -71,7 +71,7 @@ function* editCandidateSaga(action) {
     yield put(editCandidateSuccess(action.id, action.candidateNewState));
   }
   catch(error) {
-    put(setErrorMessage(error + '. Edit candidate error. Please, refresh the page.'));
+    yield put(setErrorMessage(error + '. Edit candidate error. Please, refresh the page.'));
   }
 }
 

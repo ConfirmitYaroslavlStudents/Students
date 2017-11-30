@@ -1,12 +1,16 @@
-import {fetchGet} from '../components/common/fetch';
+import {sendGraphQLQuery} from './graphqlClient';
 
 export function getTags() {
-  return fetchGet('/api/tags')
-    .then((tags) => {
-      let tagsArray = [];
-      for (let i = 0; i < tags.length; i++) {
-        tagsArray.push(tags[i]);
-      }
-      return tagsArray;
-    })
+  return sendGraphQLQuery(
+    `query {
+      tags
+    }`
+  )
+  .then((data) => {
+    let tagsArray = [];
+    for (let i = 0; i < data.tags.length; i++) {
+      tagsArray.push(data.tags[i]);
+    }
+    return tagsArray;
+  })
 }

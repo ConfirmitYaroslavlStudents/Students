@@ -1,25 +1,87 @@
-import {fetchGet, fetchPost, fetchDelete, fetchPut} from '../components/common/fetch';
+import {sendGraphQLQuery, sendGraphQLMutation} from './graphqlClient';
 import {createCandidate} from '../databaseDocumentClasses';
 
 export function getAllCandidates() {
-  return fetchGet('/api/candidates')
-    .then((candidates) => {
-      let candidatesArray = [];
-      for (let i = 0; i < candidates.length; i++) {
-        candidatesArray.push(createCandidate(candidates[i].status, candidates[i]));
+  return sendGraphQLQuery(
+    `query {
+      candidates {
+        id
+        name
+        status
+        birthDate
+        email
+        comments {
+          author
+          date
+          text
+        }
+        tags
+        interviewDate
+        resume
+        groupName
+        startingDate
+        endingDate
+        mentor
       }
-      return candidatesArray;
-    })
+    }`
+  )
+  .then((data) => {
+    let candidatesArray = [];
+    data.candidates.forEach((candidate) => {
+      candidatesArray.push(createCandidate(candidate.status, candidate));
+    });
+    return candidatesArray;
+  });
 }
 
 export function addCandidate(candidate) {
-  return fetchPost('/api/candidates', candidate);
+  return sendGraphQLMutation(
+    `mutation addCandidate($candidate: CandidateInput!) {
+      addCandidate(
+        candidate: $candidate
+      )
+    }`,
+    {candidate: candidate}
+  )
+  .then((data) => {
+    if (!data.addCandidate) {
+      throw 'Server error';
+    }
+  });
 }
 
 export function deleteCandidate(id) {
-  return fetchDelete('/api/candidates/' + id);
+  return sendGraphQLMutation(
+    `mutation deleteCandidate($id: ID!) {
+      deleteCandidate(
+        id: $id
+      )
+    }`,
+    {id: id}
+  )
+  .then((data) => {
+    if (!data.deleteCandidate) {
+      throw 'Server error';
+    }
+  });
 }
 
 export function editCandidate(id, candidateNewState) {
-  return fetchPut('/api/candidates/' + id, candidateNewState);
+  return sendGraphQLMutation(
+    `mutation updateCandidate($id: ID!, $candidate: CandidateInput!) {
+      updateCandidate(
+        id: $id
+        candidate: $candidate
+      )
+    }`,
+    {
+      id: id,
+      candidate: candidateNewState
+    }
+  )
+  .then((data) => {
+    if (!data.updateCandidate) {
+      throw 'Server error';
+    }
+  });
 }

@@ -15,7 +15,7 @@ export default function DialogWindow(props) {
     <Dialog
       open={props.isOpen}
       transition={Transition}
-      onRequestClose={(event) => { props.onRequestClose()}}
+      onRequestClose={(event) => {props.onRequestClose()}}
       ignoreBackdropClick
     >
       <AppBar style={{position: 'relative'}}>

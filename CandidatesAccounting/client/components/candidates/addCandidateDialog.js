@@ -13,9 +13,7 @@ export default class AddCandidateDialog extends React.Component{
   constructor(props) {
     super(props);
     this.state=({isOpen: false});
-    let newCandidate = createCandidate(props.candidateStatus, {});
-    newCandidate.status = props.candidateStatus;
-    this.candidate = newCandidate;
+    this.candidate = createCandidate(props.candidateStatus, {});
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
@@ -29,10 +27,7 @@ export default class AddCandidateDialog extends React.Component{
   }
 
   render() {
-    const self = this;
-    let newCandidate = createCandidate(this.props.candidateStatus, {});
-    newCandidate.status = this.props.candidateStatus;
-    this.candidate = newCandidate;
+    this.candidate = createCandidate(this.props.candidateStatus, {});
     return (
       <div style={{display: 'inline-block'}}>
         <IconButton icon={<AddPersonIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
@@ -43,17 +38,17 @@ export default class AddCandidateDialog extends React.Component{
           controls={
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
-                if (checkCandidateValidation(self.candidate)) {
-                  self.candidate.comments.push(new Comment(self.props.userName, getCurrentDateTime(), 'Initial status: ' + self.candidate.status));
-                  self.props.addCandidate(self.candidate);
-                  self.handleClose();
+                if (checkCandidateValidation(this.candidate)) {
+                  this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), 'Initial status: ' + this.candidate.status));
+                  this.props.addCandidate(this.candidate);
+                  this.handleClose();
                 }
               }}/>
               <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
             </div>
           }>
             <CandidateInfoForm
-              candidate={self.candidate}
+              candidate={this.candidate}
               tags={this.props.tags}
             />
         </DialogWindow>

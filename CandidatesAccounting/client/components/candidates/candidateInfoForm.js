@@ -21,18 +21,11 @@ export default class CandidateInfoForm extends React.Component {
 
   changeInfo(key, value) {
     this.props.candidate[key] = value;
-    this.forceUpdate();
   }
 
   changeCandidateStatus(status) {
-    this.setState({ candidateStatus: status });
+    this.setState({candidateStatus: status});
     this.props.candidate.status = status;
-    this.props.candidate['interviewDate'] = '';
-    this.props.candidate['resume'] = '';
-    this.props.candidate['startingDate'] = '';
-    this.props.candidate['endingDate'] = '';
-    this.props.candidate['groupName'] = '';
-    this.props.candidate['mentor'] = '';
   }
 
   setCandidateTags(tags) {
@@ -59,7 +52,7 @@ export default class CandidateInfoForm extends React.Component {
           <TextField
             onChange={(value) => {this.changeInfo('groupName', value)}}
             label="Group name"
-            defaultValue={this.props.candidate.groupName}
+            value={this.props.candidate.groupName}
             multiline
             fullWidth/>
           <DatePicker
@@ -81,7 +74,7 @@ export default class CandidateInfoForm extends React.Component {
             onChange={(value) => {this.changeInfo('mentor', value)}}
             label="Mentor's name"
             placeholder="full name"
-            defaultValue={this.props.candidate.mentor}
+            value={this.props.candidate.mentor}
             multiline
             fullWidth/>
         </div>;
@@ -105,8 +98,8 @@ export default class CandidateInfoForm extends React.Component {
           onChange={(value) => {this.changeInfo('name', value)}}
           label="Name"
           placeholder="full name"
-          defaultValue={this.props.candidate.name}
-          error={!checkName(this.props.candidate.name)}
+          value={this.props.candidate.name}
+          checkValid={checkName}
           required
           multiline
           fullWidth
@@ -115,8 +108,8 @@ export default class CandidateInfoForm extends React.Component {
           onChange={(value) => {this.changeInfo('email', value)}}
           label="E-mail"
           placeholder="example@mail.com"
-          defaultValue={this.props.candidate.email}
-          error={!checkEmail(this.props.candidate.email)}
+          value={this.props.candidate.email}
+          checkValid={checkEmail}
           required
           multiline
           fullWidth/>

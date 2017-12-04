@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {NavLink} from 'react-router-dom';
 import Tag from './tag';
 
-export default function Tags(props) {
+export default function TagList(props) {
   return (
     <TagsWrapper>
       {props.tags.map((tag, index) => (<NavLink to={props.currentLocation + "/tag/" + encodeURIComponent(tag)} key={index}><Tag>{tag}</Tag></NavLink>))}
@@ -12,7 +12,7 @@ export default function Tags(props) {
   )
 }
 
-Tags.propTypes = {
+TagList.propTypes = {
   tags: PropTypes.array.isRequired,
   currentLocation: PropTypes.string.isRequired,
 };

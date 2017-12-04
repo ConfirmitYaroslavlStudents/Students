@@ -21,7 +21,8 @@ export default function CandidateControls(props) {
         addComment={props.addComment}
         userName={props.userName}
       />
-      <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'} onClick={()=>{props.setSearchRequest('', props.history, 0)}}>
+      <NavLink to={'/' + props.candidate.constructor.name.toLowerCase() + 's/' + props.candidate.id + '/comments'}
+               onClick={()=>{props.setSearchRequest('', props.history, 0)}}>
         <Badge badgeContent={props.candidate.comments.length} badgeStyle="comment-badge">
           <IconButton
             icon={<CommentIcon />}

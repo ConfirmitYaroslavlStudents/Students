@@ -10,7 +10,7 @@ import Dialog, {
 import Slide from 'material-ui/transitions/Slide';
 
 function Transition(props) {
-  return <Slide direction="up" {...props} />;
+  return <Slide direction="left" {...props} />;
 }
 
 export default function DialogAlert(props) {

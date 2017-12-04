@@ -13,9 +13,7 @@ import {getCurrentDateTime} from '../../utilities/customMoment';
 export default class EditCandidateDialog extends React.Component {
   constructor(props) {
     super(props);
-    let currentCandidate = createCandidate(props.candidate.constructor.name, props.candidate);
-    currentCandidate.status = props.candidate.constructor.name;
-    this.candidate = currentCandidate;
+    this.candidate = createCandidate(props.candidate.status, props.candidate);
     this.state = ({isOpen: false});
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -30,11 +28,8 @@ export default class EditCandidateDialog extends React.Component {
   }
 
   render() {
-    const self = this;
-    let initialStatus = this.candidate.status;
-    let currentCandidate = createCandidate(this.props.candidate.constructor.name, this.props.candidate);
-    currentCandidate.status = this.props.candidate.constructor.name;
-    this.candidate = currentCandidate;
+    const initialStatus = this.candidate.status;
+    this.candidate = createCandidate(this.props.candidate.status, this.props.candidate);
     return (
       <div style={{display: 'inline-block'}}>
         <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
@@ -45,19 +40,19 @@ export default class EditCandidateDialog extends React.Component {
           controls={
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
-                if (checkCandidateValidation(self.candidate)) {
-                  if (self.candidate.status !== initialStatus) {
-                    self.candidate.comments.push(new Comment(self.props.userName, getCurrentDateTime(), 'New status: ' + self.candidate.status));
+                if (checkCandidateValidation(this.candidate)) {
+                  if (this.candidate.status !== initialStatus) {
+                    this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), 'New status: ' + this.candidate.status));
                   }
-                  self.props.editCandidate(self.candidate.id, self.candidate);
-                  self.handleClose();
+                  this.props.editCandidate(this.candidate.id, this.candidate);
+                  this.handleClose();
                 }
               }}/>
               <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
             </div>
           }>
             <CandidateInfoForm
-              candidate={self.candidate}
+              candidate={this.candidate}
               tags={this.props.tags}
             />
         </DialogWindow>

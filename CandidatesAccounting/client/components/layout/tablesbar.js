@@ -46,14 +46,14 @@ export default class CustomAppBar extends React.Component{
             centered
             onChange={this.handleChange}
           >
-            <Tab label={<NavLink exact to={this.getNewURL('')} onClick={this.handleNavLinkClick} className="nav-link"
-                                 activeStyle={{color: '#3F51B5'}}>All</NavLink>}/>
-            <Tab label={<NavLink to={this.getNewURL('interviewees')} onClick={this.handleNavLinkClick} className="nav-link"
-                                 activeStyle={{color: '#3F51B5'}}>Interviewees</NavLink>}/>
-            <Tab label={<NavLink to={this.getNewURL('students')} onClick={this.handleNavLinkClick} className="nav-link"
-                                 activeStyle={{color: '#3F51B5'}}>Students</NavLink>}/>
-            <Tab label={<NavLink to={this.getNewURL('trainees')} onClick={this.handleNavLinkClick} className="nav-link"
-                                 activeStyle={{color: '#3F51B5'}}>Trainees</NavLink>}/>
+            <Tab label={<NavLink exact to={this.getNewURL('')} onClick={this.handleNavLinkClick}
+                        className={'nav-link' + (this.state.selected === 0 ? ' active-nav-link' : '')}>All</NavLink>}/>
+            <Tab label={<NavLink to={this.getNewURL('interviewees')} onClick={this.handleNavLinkClick}
+                        className={'nav-link' + (this.state.selected === 1 ? ' active-nav-link' : '')}>Interviewees</NavLink>}/>
+            <Tab label={<NavLink to={this.getNewURL('students')} onClick={this.handleNavLinkClick}
+                        className={'nav-link' + (this.state.selected === 2 ? ' active-nav-link' : '')}>Students</NavLink>}/>
+            <Tab label={<NavLink to={this.getNewURL('trainees')} onClick={this.handleNavLinkClick}
+                        className={'nav-link' + (this.state.selected === 3 ? ' active-nav-link' : '')}>Trainees</NavLink>}/>
           </Tabs>
         </TabsWrapper>
         <AddButtonWrapper>

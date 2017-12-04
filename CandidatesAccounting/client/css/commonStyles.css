@@ -11,6 +11,10 @@ p {
     margin: 0;
 }
 
+.active-nav-link {
+    color: #3F51B5 !important;
+}
+
 .button-content {
     display: flex;
     align-items: center;

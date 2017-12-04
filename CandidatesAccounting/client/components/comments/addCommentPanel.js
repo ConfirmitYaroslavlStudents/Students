@@ -35,7 +35,6 @@ export default class AddCommentPanel extends React.Component {
   }
 
   render() {
-    const self = this;
     return (
       <AddCommentWrapper>
         <CommentTextInput>
@@ -45,11 +44,11 @@ export default class AddCommentPanel extends React.Component {
             placeholder="New comment"
             tabIndex={1}
             onKeyDown={
-              function (event) {
+              (event) => {
                 if (event.keyCode === 13) {
                   if (!event.shiftKey) {
                     event.preventDefault();
-                    self.addNewComment();
+                    this.addNewComment();
                   }
                 }
               }
@@ -59,7 +58,7 @@ export default class AddCommentPanel extends React.Component {
         <ButtonWrapper>
           <IconButton
             icon={<AddIcon/>}
-            onClick={this.addNewComment.bind(this)}
+            onClick={this.addNewComment}
             style={{width: 70, height: 70}}
           />
         </ButtonWrapper>

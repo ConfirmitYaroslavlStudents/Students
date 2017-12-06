@@ -13,8 +13,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import {indigo} from 'material-ui/colors';
 import AppView from '../components/layout/appview';
-import {getAllCandidates} from '../api/candidateService';
-import {getTags} from '../api/tagService';
+import {getInitialState} from '../api/commonService';
 
 function configureStore(initialState) {
   const sagaMiddleware = createSagaMiddleware();
@@ -61,23 +60,20 @@ function renderApp(app) {
   );
 }
 
-getAllCandidates()
-  .then((candidates) => {
-    getTags()
-      .then((tags) => {
-        store.dispatch({
-            type: "SET_INITIAL_STATE",
-            state: {
-              userName: 'DmitryB',
-              candidates: candidates,
-              tags: tags,
-              searchRequest: '',
-              errorMessage: ''
-            }
-          }
-        );
-        renderApp(AppView);
-      });
+getInitialState()
+  .then((result) => {
+    store.dispatch({
+        type: "SET_INITIAL_STATE",
+        state: {
+          userName: 'DmitryB',
+          candidates: result.candidates,
+          tags: result.tags,
+          searchRequest: '',
+          errorMessage: ''
+        }
+      }
+    );
+    renderApp(AppView);
   });
 
 if (module.hot) {

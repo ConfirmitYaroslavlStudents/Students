@@ -1,38 +1,4 @@
-import {sendGraphQLQuery, sendGraphQLMutation} from './graphqlClient';
-import {createCandidate} from '../databaseDocumentClasses';
-
-export function getAllCandidates() {
-  return sendGraphQLQuery(
-    `query {
-      candidates {
-        id
-        name
-        status
-        birthDate
-        email
-        comments {
-          author
-          date
-          text
-        }
-        tags
-        interviewDate
-        resume
-        groupName
-        startingDate
-        endingDate
-        mentor
-      }
-    }`
-  )
-  .then((data) => {
-    let candidatesArray = [];
-    data.candidates.forEach((candidate) => {
-      candidatesArray.push(createCandidate(candidate.status, candidate));
-    });
-    return candidatesArray;
-  });
-}
+import {sendGraphQLMutation} from './graphqlClient';
 
 export function addCandidate(candidate) {
   return sendGraphQLMutation(

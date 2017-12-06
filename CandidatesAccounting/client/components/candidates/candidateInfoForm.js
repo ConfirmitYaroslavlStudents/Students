@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '../common/UIComponentDecorators/textField';
 import DatePicker from '../common/UIComponentDecorators/datePicker';
-import DateTimePicker from '../common/UIComponentDecorators/dateTimePicker';
 import SelectInput from '../common/UIComponentDecorators/selectInput';
 import styled from 'styled-components';
 import TagSelect from '../common/UIComponentDecorators/tagSelect';
-import ResumeControls from '../interviewees/resumeControls';
-import {toDatePickerFormat, fromDatePickerFormat, toDateTimePickerFormat, fromDateTimePickerFormat} from '../../utilities/customMoment';
+import {toDatePickerFormat, fromDatePickerFormat} from '../../utilities/customMoment';
 import {checkName, checkEmail} from '../../utilities/candidateValidators';
+import IntervieweeSpecialFields from '../interviewees/intervieweeSpecialFields';
+import StudentSpecialFields from '../students/studentSpecialFields';
+import TraineeSpecialFields from '../trainees/traineeSpecialFields';
 
 export default class CandidateInfoForm extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class CandidateInfoForm extends React.Component {
     this.changeInfo = this.changeInfo.bind(this);
     this.changeCandidateStatus = this.changeCandidateStatus.bind(this);
     this.setCandidateTags = this.setCandidateTags.bind(this);
+    this.getSpecialFields = this.getSpecialFields.bind(this);
   }
 
   changeInfo(key, value) {
@@ -32,55 +34,18 @@ export default class CandidateInfoForm extends React.Component {
     this.props.candidate.tags = tags.map((tag) => (tag.label));
   }
 
-  render() {
-    let specialFields;
+  getSpecialFields() {
     switch (this.state.candidateStatus) {
       case 'Interviewee':
-        specialFields = <div>
-          <DateTimePicker
-            label="Interview date"
-            defaultValue={toDateTimePickerFormat(this.props.candidate.interviewDate)}
-            onChange={(value) => {this.changeInfo('interviewDate', fromDateTimePickerFormat(value))}}
-          />
-          <Label marginBottom="-10px">Resume</Label>
-          <ResumeControls fileName={this.props.candidate.resume}/>
-        </div>;
-        break;
-
+          return <IntervieweeSpecialFields interviewee={this.props.candidate} changeInfo={this.changeInfo}/>;
       case 'Student':
-        specialFields = <div>
-          <TextField
-            onChange={(value) => {this.changeInfo('groupName', value)}}
-            label="Group name"
-            value={this.props.candidate.groupName}
-            multiline
-            fullWidth/>
-          <DatePicker
-            label="Learning start date"
-            defaultValue={toDatePickerFormat(this.props.candidate.startingDate)}
-            onChange={(value) => {this.changeInfo('startingDate', fromDatePickerFormat(value))}}
-          />
-          <DatePicker
-            label="Learning end date"
-            defaultValue={toDatePickerFormat(this.props.candidate.endingDate)}
-            onChange={(value) => {this.changeInfo('endingDate', fromDatePickerFormat(value))}}
-          />
-        </div>;
-        break;
-
+        return <StudentSpecialFields student={this.props.candidate} changeInfo={this.changeInfo}/>;
       case 'Trainee':
-        specialFields = <div>
-          <TextField
-            onChange={(value) => {this.changeInfo('mentor', value)}}
-            label="Mentor's name"
-            placeholder="full name"
-            value={this.props.candidate.mentor}
-            multiline
-            fullWidth/>
-        </div>;
-        break;
+        return <TraineeSpecialFields trainee={this.props.candidate} changeInfo={this.changeInfo}/>;
     }
+  }
 
+  render() {
     return (
       <FormWrapper>
         <SelectInput
@@ -119,7 +84,7 @@ export default class CandidateInfoForm extends React.Component {
           onChange={(value) => {this.changeInfo('birthDate', fromDatePickerFormat(value))}}
         />
 
-        {specialFields}
+        {this.getSpecialFields()}
 
         <SmallSpan>* - required</SmallSpan>
       </FormWrapper>

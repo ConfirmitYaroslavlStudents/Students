@@ -5,7 +5,7 @@ export function getInitialState() {
   return sendGraphQLQuery(
     `query {
       candidates {
-        id
+        _id
         name
         status
         birthDate
@@ -30,7 +30,9 @@ export function getInitialState() {
     let result = {};
     let candidates = [];
     data.candidates.forEach((candidate) => {
-      candidates.push(createCandidate(candidate.status, candidate));
+      let validCandidate = candidate;
+      validCandidate .id = candidate._id;
+      candidates.push(createCandidate(validCandidate .status, validCandidate));
     });
     result.candidates = candidates;
     result.tags = data.tags;

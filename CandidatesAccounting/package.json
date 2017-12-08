@@ -43,6 +43,8 @@
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.10",
     "moment": "^2.19.2",
+    "mongodb": "2.2.23",
+    "mongoose": "^4.13.6",
     "node-static": "^0.7.9",
     "nodemon": "^1.12.1",
     "path": "^0.12.7",

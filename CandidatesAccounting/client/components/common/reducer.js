@@ -9,15 +9,7 @@ export default function reducer(state = Map(), action) {
       return state.merge(action.state);
 
     case 'ADD_CANDIDATE_SUCCESS':
-      let candidates = state.get('candidates').toArray();
-      let lastId = 0;
-      for (let i = 0; i < candidates.length; i++) {
-        if (candidates[i].id > lastId) {
-          lastId = candidates[i].id;
-        }
-      }
       let newCandidate = createCandidate(action.candidate.status, action.candidate);
-      newCandidate.id = lastId + 1;
       return state.update('candidates', (candidates) => candidates.push(newCandidate));
 
     case 'DELETE_CANDIDATE_SUCCESS':

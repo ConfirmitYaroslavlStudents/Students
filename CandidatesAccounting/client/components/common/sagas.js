@@ -47,8 +47,10 @@ function* watchSearch() {
 
 function* addCandidateSaga(action) {
   try {
-    yield call(addCandidate, action.candidate);
-    yield put(addCandidateSuccess(action.candidate));
+    const newCandidateID = yield call(addCandidate, action.candidate);
+    let newCandidate = action.candidate;
+    newCandidate.id = newCandidateID;
+    yield put(addCandidateSuccess(newCandidate));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Add candidate error. Please, refresh the page.'));
@@ -66,13 +68,13 @@ function* deleteCandidateSaga(action) {
 }
 
 function* editCandidateSaga(action) {
-  try {
+  //try {
     yield call(editCandidate, action.id, action.candidateNewState);
     yield put(editCandidateSuccess(action.id, action.candidateNewState));
-  }
-  catch(error) {
-    yield put(setErrorMessage(error + '. Edit candidate error. Please, refresh the page.'));
-  }
+  //}
+  //catch(error) {
+  //  yield put(setErrorMessage(error + '. Edit candidate error. Please, refresh the page.'));
+  //}
 }
 
 function* addCommentSaga(action) {

@@ -39,6 +39,35 @@ http.createServer(app).listen(app.get('port'), function() {
   console.log('Waiting for webpack...');
 });
 
+/*
+const Schema = mongoose.Schema;
+
+mongoose.connect('mongodb://localhost:27017/CandidateAccounting');
+mongoose.Promise = global.Promise;
+
+const CandidateSchema = new Schema({
+  status: String,
+  name: String,
+  email: String,
+  birthDate: String,
+  comments: [{author: String, date: String, text: String}],
+  tags: [],
+  intervieweeDate: String,
+  resume: String,
+  groupName: String,
+  startingDate: String,
+  endingDate: String,
+  mentorName: String
+});
+
+const Candidate = mongoose.model('Candidate', CandidateSchema);
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('MongoDB is connected');
+});
+*/
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });

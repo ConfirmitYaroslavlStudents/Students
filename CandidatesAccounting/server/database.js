@@ -1,4 +1,8 @@
 import {Interviewee, Student, Trainee, Comment} from '../client/databaseDocumentClasses';
+import mongodb from 'mongodb';
+
+const url = 'mongodb://localhost:27017/CandidateAccounting';
+const MongoClient = mongodb.MongoClient;
 
 let database = {
   candidates: [
@@ -25,45 +29,84 @@ let database = {
 };
 
 export function getAllCandidates() {
-  return database.candidates;
+  return MongoClient.connect(url)
+    .then((db) => {
+      return Promise.all([
+        db.collection('interviewees').find().toArray(),
+        db.collection('students').find().toArray(),
+        db.collection('trainees').find().toArray()
+      ])
+    })
+    .then((results) => {
+      let allCandidates = [];
+      results.forEach((candidates) => {
+          candidates.forEach((candidate) => {
+            allCandidates.push(candidate);
+          });
+      });
+      return allCandidates;
+    });
 }
 
 export function getAllTags() {
-  return database.tags;
+  return MongoClient.connect(url)
+    .then((db) => {
+      return db.collection('tags').find().toArray();
+    })
+    .then((result) => {
+      let tags = [];
+      result.forEach((tag) => {
+        tags.push(tag.name);
+      });
+      return tags;
+    });
 }
 
 export function addCandidate(newCandidate) {
-  let lastId = 0;
-  database.candidates.forEach((candidate) => {
-    if (candidate.id > lastId) {
-      lastId = candidate.id;
-    }
-  });
-  newCandidate.id = lastId + 1;
-  database.candidates.push(newCandidate);
-  updateTags(newCandidate.tags);
+  return MongoClient.connect(url)
+    .then((db) => {
+      switch(newCandidate.status) {
+        case 'Interviewee':
+          return db.collection('interviewees').insertOne(newCandidate);
+        case 'Student':
+          return db.collection('students').insertOne(newCandidate);
+        case 'Trainee':
+          return db.collection('trainees').insertOne(newCandidate);
+      }
+    })
+    .then((result) => {
+      console.log(result.ops[0]._id);
+      return result.ops[0]._id;
+    });
 }
 
-export function updateCandidate(id, candidateNewState) {
-  for (let i = 0; i < database.candidates.length; i++) {
-    if (parseInt(database.candidates[i].id) === parseInt(id)) {
-      database.candidates[i] = candidateNewState;
-      console.log(database.candidates);
-      updateTags(database.candidates[i]);
-      return;
-    }
-  }
-  throw 'Update candidate error. Candidate not found.';
+export function updateCandidate(candidate) {
+  return MongoClient.connect(url)
+    .then((db) => {
+      console.log('db', candidate);
+      switch(candidate.status) {
+        case 'Interviewee':
+          return db.collection('interviewees').replaceOne({_id: candidate.id}, candidate);
+        case 'Student':
+          return db.collection('students').replaceOne({_id: candidate.id}, candidate);
+        case 'Trainee':
+          return db.collection('trainees').replaceOne({_id: candidate.id}, candidate);
+      }
+    })
+    .then(() => {
+      return true;
+    });
 }
 
 export function deleteCandidate(id) {
-  for (let i = 0; i < database.candidates.length; i++) {
-    if (parseInt(database.candidates[i].id) === parseInt(id)) {
-      database.candidates.splice(i, 1);
-      return;
-    }
-  }
-  throw 'Delete candidate error. Candidate not found.';
+  return MongoClient.connect(url)
+    .then((db) => {
+      console.log('db', id);
+       return db.collection('interviewees').deleteOne({_id: id});
+    })
+    .then(() => {
+      return true;
+    });
 }
 
 export function addComment(candidateID, comment) {

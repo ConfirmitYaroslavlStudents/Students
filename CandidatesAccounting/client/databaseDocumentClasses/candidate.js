@@ -1,7 +1,7 @@
 export default class Candidate {
   constructor(id, name, birthDate, email, comments, tags) {
     this.status = 'Candidate';
-    this.id = id ? parseInt(id) : '';
+    this.id = id ? id : '';
     this.name = name ? name : '';
     this.birthDate = birthDate ? birthDate : '';
     this.email = email ? email : '';

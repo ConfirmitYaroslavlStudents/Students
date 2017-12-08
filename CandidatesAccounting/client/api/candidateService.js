@@ -12,6 +12,8 @@ export function addCandidate(candidate) {
   .then((data) => {
     if (!data.addCandidate) {
       throw 'Server error';
+    } else {
+      return data.addCandidate;
     }
   });
 }
@@ -34,14 +36,12 @@ export function deleteCandidate(id) {
 
 export function editCandidate(id, candidateNewState) {
   return sendGraphQLMutation(
-    `mutation updateCandidate($id: ID!, $candidate: CandidateInput!) {
+    `mutation updateCandidate($candidate: CandidateInput!) {
       updateCandidate(
-        id: $id
         candidate: $candidate
       )
     }`,
     {
-      id: id,
       candidate: candidateNewState
     }
   )

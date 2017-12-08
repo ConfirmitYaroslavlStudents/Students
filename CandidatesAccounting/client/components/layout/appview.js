@@ -72,9 +72,9 @@ export default class AppView extends React.Component {
                   this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
                             {...this.props}/>}
             />
-            <Route exact path='/(interviewees|students|trainees)/(\d+)/comments' render={() =>
+            <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
               <CommentsForm
-                candidate={searchById(this.props.candidates._tail.array, parseInt(currentLocation[2]))}
+                candidate={searchById(this.props.candidates._tail.array, currentLocation[2])}
                 addComment={this.props.addComment}
                 deleteComment={this.props.deleteComment}
                 userName={this.props.userName}

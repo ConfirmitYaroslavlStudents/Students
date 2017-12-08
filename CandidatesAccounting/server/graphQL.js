@@ -3,7 +3,7 @@ import {getAllCandidates, getAllTags, addCandidate, updateCandidate, deleteCandi
 
 export const schema = buildSchema(`    
   input CandidateInput {
-    id: ID!,
+    id: String!,
     name: String!,
     status: String!,
     birthDate: String!,
@@ -23,7 +23,7 @@ export const schema = buildSchema(`
     text: String!,
   }
   type Candidate {
-    id: ID!,
+    _id: ID!,
     name: String!,
     status: String!,
     birthDate: String!,
@@ -47,8 +47,8 @@ export const schema = buildSchema(`
     tags: [String]
   }
   type Mutation {
-    addCandidate(candidate: CandidateInput!): Boolean
-    updateCandidate(id: ID!, candidate: CandidateInput!): Boolean
+    addCandidate(candidate: CandidateInput!): String
+    updateCandidate(candidate: CandidateInput!): Boolean
     deleteCandidate(id: ID!): Boolean
     addComment(candidateID: ID!, comment: CommentInput!): Boolean
     deleteComment(candidateID: ID!, commentNumber: Int!): Boolean
@@ -63,58 +63,19 @@ export const root = {
     return getAllTags();
   },
   addCandidate: ({candidate}) => {
-    try {
-      addCandidate(candidate);
-      console.log('Added new candidate:', candidate);
-      return true;
-    }
-    catch(error) {
-      console.log(error);
-      return false;
-    }
+    return addCandidate(candidate);
   },
-  updateCandidate: ({id, candidate}) => {
-    try {
-      updateCandidate(id, candidate);
-      console.log('Updated candidate: id:', id, 'new state:', candidate);
-      return true;
-    }
-    catch(error) {
-      console.log(error);
-      return false;
-    }
+  updateCandidate: ({candidate}) => {
+    console.log('update', candidate);
+    return updateCandidate(candidate);
   },
   deleteCandidate: ({id}) => {
-    try {
-      deleteCandidate(id);
-      console.log('Deleted candidate', 'id:', id);
-      return true;
-      }
-    catch(error) {
-      console.log(error);
-      return false;
-    }
+    return deleteCandidate(id);
   },
   addComment: ({candidateID, comment}) => {
-    try {
-      addComment(candidateID, comment);
-      console.log('Added new comment:', 'id:', candidateID, 'comment:', comment);
-      return true;
-    }
-    catch(error) {
-      console.log(error);
-      return false;
-    }
+    return addComment(candidateID, comment);
   },
   deleteComment: ({candidateID, commentNumber}) => {
-    try {
-      deleteComment(candidateID, commentNumber);
-      console.log('Deleted comment:', 'candidateID:', candidateID, 'comment number:', commentNumber);
-      return true;
-    }
-    catch(error) {
-      console.log(error);
-      return false;
-    }
+    return deleteComment(candidateID, commentNumber);
   }
 };

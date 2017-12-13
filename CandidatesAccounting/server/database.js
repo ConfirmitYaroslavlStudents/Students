@@ -18,10 +18,10 @@ export function getAllTags() {
     .then((db) => {
       return db.collection('tags').find().toArray();
     })
-    .then((result) => {
+    .then((tagObjects) => {
       let tags = [];
-      result.forEach((tag) => {
-        tags.push(tag.name);
+      tagObjects.forEach((tagObject) => {
+        tags.push(tagObject.name);
       });
       return tags;
     });
@@ -33,6 +33,7 @@ export function addCandidate(newCandidate) {
       return db.collection("candidates").insertOne(newCandidate);
     })
     .then((result) => {
+      updateTags(result.ops[0].tags);
       return result.ops[0]._id;
     });
 }
@@ -42,6 +43,7 @@ export function updateCandidate(candidate) {
     .then((db) => {
       return db.collection("candidates").replaceOne({_id: mongodb.ObjectId(candidate.id)}, candidate)
         .then(() => {
+          updateTags(candidate.tags);
           return candidate.id;
         });
     });
@@ -70,5 +72,24 @@ export function deleteComment(candidateID, comment) {
     });
 }
 
-function updateTags(newTags) {
+function updateTags(probablyNewTags) {
+  getAllTags()
+    .then((tags) => {
+      let tagsToAdd = [];
+      probablyNewTags.forEach((tag) => {
+        if (!tags.includes(tag)) {
+          tagsToAdd.push({name: tag});
+        }
+      });
+      if (tagsToAdd.length > 0) {
+        addTags(tagsToAdd);
+      }
+    });
+}
+
+function addTags(tags) {
+  MongoClient.connect(url)
+    .then((db) => {
+      db.collection("tags").insertMany(tags);
+    });
 }

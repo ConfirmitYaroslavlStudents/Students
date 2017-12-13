@@ -48,10 +48,10 @@ export const schema = buildSchema(`
   }
   type Mutation {
     addCandidate(candidate: CandidateInput!): String
-    updateCandidate(candidate: CandidateInput!): Boolean
-    deleteCandidate(candidateID: ID!, candidateStatus: String!): Boolean
-    addComment(candidateID: ID!, candidateStatus: String!, comment: CommentInput!): Boolean
-    deleteComment(candidateID: ID!, candidateStatus: String!, commentNumber: Int!): Boolean
+    updateCandidate(candidate: CandidateInput!): String
+    deleteCandidate(candidateID: ID!): Boolean
+    addComment(candidateID: ID!, comment: CommentInput!): Boolean
+    deleteComment(candidateID: ID!, comment: CommentInput!): Boolean
   }
 `);
 
@@ -66,15 +66,24 @@ export const root = {
     return addCandidate(candidate);
   },
   updateCandidate: ({candidate}) => {
-    return updateCandidate(candidate);
+    return updateCandidate(candidate)
+      .then((candidateIDAfterUpdate) => {
+        return candidateIDAfterUpdate;
+      });
   },
-  deleteCandidate: ({candidateID, candidateStatus}) => {
-    return deleteCandidate(candidateID, candidateStatus);
+  deleteCandidate: ({candidateID}) => {
+    return deleteCandidate(candidateID)
+      .then(() => {
+        return true;
+      });
   },
-  addComment: ({candidateID, candidateStatus, comment}) => {
-    return addComment(candidateID, candidateStatus, comment);
+  addComment: ({candidateID, comment}) => {
+    return addComment(candidateID, comment)
+      .then(() => {
+        return true;
+      });
   },
-  deleteComment: ({candidateID, candidateStatus, commentNumber}) => {
-    return deleteComment(candidateID, candidateStatus, commentNumber);
+  deleteComment: ({candidateID, comment}) => {
+    return deleteComment(candidateID, comment);
   }
 };

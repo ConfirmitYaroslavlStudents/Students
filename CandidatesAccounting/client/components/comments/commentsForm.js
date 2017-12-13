@@ -8,6 +8,8 @@ export default class CommentsForm extends React.Component {
   constructor(props) {
     super(props);
     this.shouldScrollDown = false;
+    this.handleNewCommentAdd = this.handleNewCommentAdd.bind(this);
+    this.deleteComment = this.deleteComment.bind(this);
   }
 
   componentDidMount() {
@@ -25,8 +27,8 @@ export default class CommentsForm extends React.Component {
     this.shouldScrollDown = true;
   }
 
-  deleteComment(index) {
-    this.props.deleteComment(this.props.candidate.id, index);
+  deleteComment(comment) {
+    this.props.deleteComment(this.props.candidate.id, comment);
   }
 
   render() {
@@ -37,7 +39,7 @@ export default class CommentsForm extends React.Component {
                       userName={this.props.userName}
                       commentIndex={index}
                       searchRequest={this.props.searchRequest}
-                      deleteComment={this.deleteComment.bind(this)}
+                      deleteComment={() => {this.deleteComment(comment)}}
         />
       );
       if (this.props.candidate.comments.length === 0) {
@@ -50,8 +52,8 @@ export default class CommentsForm extends React.Component {
           <AddCommentPanelWrapper>
             <AddCommentPanel
               addComment={this.props.addComment}
-              candidateId={this.props.candidate.id}
-              onClick={this.handleNewCommentAdd.bind(this)}
+              candidateID={this.props.candidate.id}
+              onClick={this.handleNewCommentAdd}
               userName={this.props.userName}
             />
           </AddCommentPanelWrapper>

@@ -10,11 +10,10 @@ export default class TraineeTable extends React.Component {
   render() {
     return (
       <Table
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date', 'Mentor', <span style={{float: 'right'}}>Actions</span>] }
+        heads={ ['Name', 'E-mail', 'Birth Date', 'Mentor', <span style={{float: 'right'}}>Actions</span>] }
         contentRows={
           (this.props.trainees.map((trainee, index) =>
             [
-              index + 1,
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
                 <TagList tags={trainee.tags} currentLocation="/trainees"/>

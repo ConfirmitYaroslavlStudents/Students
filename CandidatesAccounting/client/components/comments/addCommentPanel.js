@@ -25,7 +25,7 @@ export default class AddCommentPanel extends React.Component {
       if (commentText.slice(-11) === '<p><br></p>') {
         commentText = commentText.substr(0, commentText.length - 11);
       }
-      this.props.addComment(this.props.candidateId, new Comment(
+      this.props.addComment(this.props.candidateID, new Comment(
         this.props.userName,
         getCurrentDateTime(),
         commentText));
@@ -69,7 +69,7 @@ export default class AddCommentPanel extends React.Component {
 
 AddCommentPanel.PropTypes = {
   addComment: PropTypes.func.isRequired,
-  candidateId: PropTypes.number.isRequired,
+  candidateID: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };

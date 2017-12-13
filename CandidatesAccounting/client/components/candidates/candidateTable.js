@@ -10,11 +10,10 @@ export default class CandidateTable extends React.Component {
   render() {
     return (
       <Table
-        heads={['#', 'Name', 'Status', 'E-mail', 'Birth Date', <span style={{float: 'right'}}>Actions</span>]}
+        heads={['Name', 'Status', 'E-mail', 'Birth Date', <span style={{float: 'right'}}>Actions</span>]}
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
             [
-              index + 1,
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
                 <TagList tags={candidate.tags} currentLocation=""/>

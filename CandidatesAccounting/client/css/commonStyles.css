@@ -11,6 +11,14 @@ p {
     margin: 0;
 }
 
+tr td:first-child {
+    padding-left: 30px;
+}
+
+tr th:first-child {
+    padding-left: 30px;
+}
+
 .active-nav-link {
     color: #3F51B5 !important;
 }

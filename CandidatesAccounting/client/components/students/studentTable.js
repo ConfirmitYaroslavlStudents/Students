@@ -10,12 +10,11 @@ export default class StudentTable extends React.Component {
   render() {
     return (
       <Table
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Group', 'Learning start', 'Learning end',
+        heads={ ['Name', 'E-mail', 'Birth Date',  'Group', 'Learning start', 'Learning end',
           <span style={{float: 'right'}}>Actions</span>]}
         contentRows={
           (this.props.students.map((student, index) =>
             [
-              index + 1,
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
                 <TagList tags={student.tags} currentLocation="/students"/>

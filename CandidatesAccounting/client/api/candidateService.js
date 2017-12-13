@@ -18,17 +18,15 @@ export function addCandidate(candidate) {
   });
 }
 
-export function deleteCandidate(candidateID, candidateStatus) {
+export function deleteCandidate(candidateID) {
   return sendGraphQLMutation(
-    `mutation deleteCandidate($candidateID: ID!, $candidateStatus: String!) {
+    `mutation deleteCandidate($candidateID: ID!) {
       deleteCandidate(
-        candidateID: $candidateID,
-        candidateStatus: $candidateStatus
+        candidateID: $candidateID
       )
     }`,
     {
-      candidateID: candidateID,
-      candidateStatus: candidateStatus
+      candidateID: candidateID
     }
   )
   .then((data) => {
@@ -38,7 +36,7 @@ export function deleteCandidate(candidateID, candidateStatus) {
   });
 }
 
-export function updateCandidate(candidateNewState) {
+export function updateCandidate(candidate) {
   return sendGraphQLMutation(
     `mutation updateCandidate($candidate: CandidateInput!) {
       updateCandidate(
@@ -46,12 +44,14 @@ export function updateCandidate(candidateNewState) {
       )
     }`,
     {
-      candidate: candidateNewState
+      candidate: candidate
     }
   )
   .then((data) => {
     if (!data.updateCandidate) {
       throw 'Server error';
+    } else {
+      return data.updateCandidate;
     }
   });
 }

@@ -11,11 +11,10 @@ export default class IntervieweeTable extends React.Component {
   render() {
     return (
       <Table
-        heads={ ['#', 'Name', 'E-mail', 'Birth Date',  'Interview date', 'Resume', <span style={{float: 'right'}}>Actions</span>] }
+        heads={ ['Name', 'E-mail', 'Birth Date',  'Interview date', 'Resume', <span style={{float: 'right'}}>Actions</span>] }
         contentRows={
           (this.props.interviewees.map((interviewee, index) =>
             [
-              index + 1,
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
                 <TagList tags={interviewee.tags} currentLocation="/interviewees"/>

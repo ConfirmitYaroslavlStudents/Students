@@ -4,7 +4,7 @@ export function addComment(candidateID, comment) {
   return sendGraphQLMutation(
     `mutation addComment($candidateID: ID!, $comment: CommentInput!) {
       addComment(
-        candidateID: $candidateID
+        candidateID: $candidateID,
         comment: $comment
       )
     }`,
@@ -20,17 +20,17 @@ export function addComment(candidateID, comment) {
   });
 }
 
-export function deleteComment(candidateID, commentNumber) {
+export function deleteComment(candidateID, comment) {
   return sendGraphQLMutation(
-    `mutation deleteComment($candidateID: ID!, $commentNumber: Int!) {
+    `mutation deleteComment($candidateID: ID!, $comment: CommentInput!) {
       deleteComment(
-        candidateID: $candidateID
-        commentNumber: $commentNumber
+        candidateID: $candidateID,
+        comment: $comment
       )
     }`,
     {
       candidateID: candidateID,
-      commentNumber: commentNumber
+      comment: comment
     }
   )
   .then((data) => {

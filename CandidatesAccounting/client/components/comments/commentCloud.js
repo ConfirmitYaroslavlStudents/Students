@@ -15,9 +15,7 @@ export default function CommentCloud(props) {
           <DeleteComment>
             <IconButton
               icon={<RemoveIcon/>}
-              onClick={function () {
-                props.deleteComment(props.commentIndex)
-              }}
+              onClick={props.deleteComment}
             />
           </DeleteComment>
           :

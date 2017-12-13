@@ -41,7 +41,7 @@ export default class AddCommentDialog extends React.Component {
             <FormWrapper>
               <AddCommentPanel
                 addComment={this.props.addComment}
-                candidateId={this.props.candidate.id}
+                candidateID={this.props.candidate.id}
                 onClick={this.handleClose}
                 userName={this.props.userName}
               />

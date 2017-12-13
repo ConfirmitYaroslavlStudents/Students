@@ -18,19 +18,17 @@ function addCandidateSuccess(candidate) {
   }
 }
 
-function deleteCandidate(candidateID, candidateStatus) {
+function deleteCandidate(candidateID) {
   return {
     type: 'DELETE_CANDIDATE',
-    candidateID,
-    candidateStatus
+    candidateID
   }
 }
 
-function deleteCandidateSuccess(candidateID, candidateStatus) {
+function deleteCandidateSuccess(candidateID) {
   return {
     type: 'DELETE_CANDIDATE_SUCCESS',
-    candidateID,
-    candidateStatus
+    candidateID
   }
 }
 
@@ -64,19 +62,19 @@ function addCommentSuccess(candidateID, comment) {
   }
 }
 
-function deleteComment(candidateID, commentNumber) {
+function deleteComment(candidateID, comment) {
   return {
     type: 'DELETE_COMMENT',
     candidateID,
-    commentNumber
+    comment
   }
 }
 
-function deleteCommentSuccess(candidateID, commentNumber) {
+function deleteCommentSuccess(candidateID, comment) {
   return {
     type: 'DELETE_COMMENT_SUCCESS',
     candidateID,
-    commentNumber
+    comment
   }
 }
 

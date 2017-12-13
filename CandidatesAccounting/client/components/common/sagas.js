@@ -48,9 +48,8 @@ function* watchSearch() {
 
 function* addCandidateSaga(action) {
   try {
-    const newCandidateID = yield call(addCandidate, action.candidate);
     let newCandidate = createCandidate(action.candidate.status, action.candidate);
-    newCandidate.id = newCandidateID;
+    newCandidate.id = yield call(addCandidate, newCandidate);
     yield put(addCandidateSuccess(newCandidate));
   }
   catch(error) {
@@ -60,8 +59,8 @@ function* addCandidateSaga(action) {
 
 function* deleteCandidateSaga(action) {
   try {
-    yield call(deleteCandidate, action.candidateID, action.candidateStatus);
-    yield put(deleteCandidateSuccess(action.candidateID, action.candidateStatus));
+    yield call(deleteCandidate, action.candidateID);
+    yield put(deleteCandidateSuccess(action.candidateID));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete candidate error. Please, refresh the page.'));
@@ -70,8 +69,9 @@ function* deleteCandidateSaga(action) {
 
 function* updateCandidateSaga(action) {
   try {
-    yield call(updateCandidate, action.candidate);
-    yield put(updateCandidateSuccess(createCandidate(action.candidate.status, action.candidate)));
+    let candidateNewState = createCandidate(action.candidate.status, action.candidate);
+    candidateNewState.id = yield call(updateCandidate, candidateNewState);
+    yield put(updateCandidateSuccess(candidateNewState));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Update candidate error. Please, refresh the page.'));
@@ -80,8 +80,8 @@ function* updateCandidateSaga(action) {
 
 function* addCommentSaga(action) {
   try {
-    yield call(addComment, action.candidateId, action.comment);
-    yield put(addCommentSuccess(action.candidateId, action.comment));
+    yield call(addComment, action.candidateID, action.comment);
+    yield put(addCommentSuccess(action.candidateID, action.comment));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Add comment error. Please, refresh the page.'));
@@ -90,8 +90,8 @@ function* addCommentSaga(action) {
 
 function* deleteCommentSaga(action) {
   try {
-    yield call(deleteComment, action.candidateId, action.commentId);
-    yield put(deleteCommentSuccess(action.candidateId, action.commentId));
+    yield call(deleteComment, action.candidateID, action.comment);
+    yield put(deleteCommentSuccess(action.candidateID, action.comment));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete comment error. Please, refresh the page.'));

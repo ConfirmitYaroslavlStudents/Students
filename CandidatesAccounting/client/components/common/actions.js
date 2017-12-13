@@ -18,65 +18,65 @@ function addCandidateSuccess(candidate) {
   }
 }
 
-function deleteCandidate(id) {
+function deleteCandidate(candidateID, candidateStatus) {
   return {
     type: 'DELETE_CANDIDATE',
-    id
+    candidateID,
+    candidateStatus
   }
 }
 
-function deleteCandidateSuccess(id) {
+function deleteCandidateSuccess(candidateID, candidateStatus) {
   return {
     type: 'DELETE_CANDIDATE_SUCCESS',
-    id
+    candidateID,
+    candidateStatus
   }
 }
 
-function editCandidate(id, candidateNewState) {
+function updateCandidate(candidate) {
   return {
-    type: 'EDIT_CANDIDATE',
-    id,
-    candidateNewState
+    type: 'UPDATE_CANDIDATE',
+    candidate
   }
 }
 
-function editCandidateSuccess(id, candidateNewState) {
+function updateCandidateSuccess(candidate) {
   return {
-    type: 'EDIT_CANDIDATE_SUCCESS',
-    id,
-    candidateNewState
+    type: 'UPDATE_CANDIDATE_SUCCESS',
+    candidate
   }
 }
 
-function addComment(candidateId, comment) {
+function addComment(candidateID, comment) {
   return {
     type: 'ADD_COMMENT',
-    candidateId,
+    candidateID,
     comment
   }
 }
 
-function addCommentSuccess(candidateId, comment) {
+function addCommentSuccess(candidateID, comment) {
   return {
     type: 'ADD_COMMENT_SUCCESS',
-    candidateId,
+    candidateID,
     comment
   }
 }
 
-function deleteComment(candidateId, commentId) {
+function deleteComment(candidateID, commentNumber) {
   return {
     type: 'DELETE_COMMENT',
-    candidateId,
-    commentId
+    candidateID,
+    commentNumber
   }
 }
 
-function deleteCommentSuccess(candidateId, commentId) {
+function deleteCommentSuccess(candidateID, commentNumber) {
   return {
     type: 'DELETE_COMMENT_SUCCESS',
-    candidateId,
-    commentId
+    candidateID,
+    commentNumber
   }
 }
 
@@ -111,6 +111,6 @@ function search(searchRequest, browserHistory) {
   }
 }
 
-module.exports = {setInitialState, addCandidate, deleteCandidate, editCandidate, addComment, deleteComment, setErrorMessage,
-                  addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+module.exports = {setInitialState, addCandidate, deleteCandidate, updateCandidate, addComment, deleteComment, setErrorMessage,
+                  addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
                   setUserName, setSearchRequest, search};

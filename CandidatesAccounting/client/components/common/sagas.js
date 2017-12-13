@@ -1,15 +1,16 @@
 import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
-import {addCandidate, deleteCandidate, editCandidate} from '../../api/candidateService.js';
+import {addCandidate, deleteCandidate, updateCandidate} from '../../api/candidateService.js';
 import {addComment, deleteComment} from '../../api/commentService.js';
-import {addCandidateSuccess, deleteCandidateSuccess, editCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+import {addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
         setErrorMessage, search} from './actions';
+import {createCandidate} from '../../databaseDocumentClasses';
 
 export default function* rootSaga() {
   yield all([
     watchCandidateAdd(),
     watchCandidateDelete(),
-    watchCandidateEdit(),
+    watchCandidateupdate(),
     watchCommentAdd(),
     watchCommentDelete(),
     watchChangeSearchRequest(),
@@ -25,8 +26,8 @@ function* watchCandidateDelete() {
   yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga);
 }
 
-function* watchCandidateEdit() {
-  yield takeEvery('EDIT_CANDIDATE', editCandidateSaga);
+function* watchCandidateupdate() {
+  yield takeEvery('UPDATE_CANDIDATE', updateCandidateSaga);
 }
 
 function* watchCommentAdd() {
@@ -48,7 +49,7 @@ function* watchSearch() {
 function* addCandidateSaga(action) {
   try {
     const newCandidateID = yield call(addCandidate, action.candidate);
-    let newCandidate = action.candidate;
+    let newCandidate = createCandidate(action.candidate.status, action.candidate);
     newCandidate.id = newCandidateID;
     yield put(addCandidateSuccess(newCandidate));
   }
@@ -59,22 +60,22 @@ function* addCandidateSaga(action) {
 
 function* deleteCandidateSaga(action) {
   try {
-    yield call(deleteCandidate, action.id);
-    yield put(deleteCandidateSuccess(action.id));
+    yield call(deleteCandidate, action.candidateID, action.candidateStatus);
+    yield put(deleteCandidateSuccess(action.candidateID, action.candidateStatus));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete candidate error. Please, refresh the page.'));
   }
 }
 
-function* editCandidateSaga(action) {
-  //try {
-    yield call(editCandidate, action.id, action.candidateNewState);
-    yield put(editCandidateSuccess(action.id, action.candidateNewState));
-  //}
-  //catch(error) {
-  //  yield put(setErrorMessage(error + '. Edit candidate error. Please, refresh the page.'));
-  //}
+function* updateCandidateSaga(action) {
+  try {
+    yield call(updateCandidate, action.candidate);
+    yield put(updateCandidateSuccess(createCandidate(action.candidate.status, action.candidate)));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Update candidate error. Please, refresh the page.'));
+  }
 }
 
 function* addCommentSaga(action) {

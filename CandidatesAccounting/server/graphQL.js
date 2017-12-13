@@ -49,9 +49,9 @@ export const schema = buildSchema(`
   type Mutation {
     addCandidate(candidate: CandidateInput!): String
     updateCandidate(candidate: CandidateInput!): Boolean
-    deleteCandidate(id: ID!): Boolean
-    addComment(candidateID: ID!, comment: CommentInput!): Boolean
-    deleteComment(candidateID: ID!, commentNumber: Int!): Boolean
+    deleteCandidate(candidateID: ID!, candidateStatus: String!): Boolean
+    addComment(candidateID: ID!, candidateStatus: String!, comment: CommentInput!): Boolean
+    deleteComment(candidateID: ID!, candidateStatus: String!, commentNumber: Int!): Boolean
   }
 `);
 
@@ -66,16 +66,15 @@ export const root = {
     return addCandidate(candidate);
   },
   updateCandidate: ({candidate}) => {
-    console.log('update', candidate);
     return updateCandidate(candidate);
   },
-  deleteCandidate: ({id}) => {
-    return deleteCandidate(id);
+  deleteCandidate: ({candidateID, candidateStatus}) => {
+    return deleteCandidate(candidateID, candidateStatus);
   },
-  addComment: ({candidateID, comment}) => {
-    return addComment(candidateID, comment);
+  addComment: ({candidateID, candidateStatus, comment}) => {
+    return addComment(candidateID, candidateStatus, comment);
   },
-  deleteComment: ({candidateID, commentNumber}) => {
-    return deleteComment(candidateID, commentNumber);
+  deleteComment: ({candidateID, candidateStatus, commentNumber}) => {
+    return deleteComment(candidateID, candidateStatus, commentNumber);
   }
 };

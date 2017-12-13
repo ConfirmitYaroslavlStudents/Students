@@ -1,5 +1,4 @@
 import {Map} from 'immutable';
-import {createCandidate} from '../../databaseDocumentClasses';
 
 export default function reducer(state = Map(), action) {
   let candidate;
@@ -9,20 +8,19 @@ export default function reducer(state = Map(), action) {
       return state.merge(action.state);
 
     case 'ADD_CANDIDATE_SUCCESS':
-      let newCandidate = createCandidate(action.candidate.status, action.candidate);
-      return state.update('candidates', (candidates) => candidates.push(newCandidate));
+      return state.update('candidates', (candidates) => candidates.push(action.candidate));
 
     case 'DELETE_CANDIDATE_SUCCESS':
-      return state.update('candidates', (candidates) => candidates.filterNot((candidate) => candidate.id === action.id));
+      return state.update('candidates', (candidates) => candidates.filterNot((candidate) => candidate.id === action.candidateID));
 
-    case 'EDIT_CANDIDATE_SUCCESS':
+    case 'UPDATE_CANDIDATE_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.splice(candidates.indexOf(candidates.find(c =>
-        c.id === action.id)),
+        c.id === action.candidate.id)),
         1,
-        createCandidate(action.candidateNewState.status, action.candidateNewState)));
+        action.candidate));
 
     case 'ADD_COMMENT_SUCCESS':
-      candidate = state.get('candidates').find(c => c.id === action.candidateId);
+      candidate = state.get('candidates').find(c => c.id === action.candidateID);
       candidate.comments.push(action.comment);
       return state = state.update('candidates', (candidates) => candidates.splice(candidates.indexOf(candidates.find(c =>
         c.id === candidate.id)),
@@ -30,8 +28,8 @@ export default function reducer(state = Map(), action) {
         candidate));
 
     case 'DELETE_COMMENT_SUCCESS':
-      candidate = state.get('candidates').find(c => c.id === action.candidateId);
-      candidate.comments.splice(action.commentId, 1);
+      candidate = state.get('candidates').find(c => c.id === action.candidateID);
+      candidate.comments.splice(action.commentNumber, 1);
       return state = state.update('candidates', (candidates) => candidates.splice(candidates.indexOf(candidates.find(c =>
         c.id === candidate.id)),
         1,

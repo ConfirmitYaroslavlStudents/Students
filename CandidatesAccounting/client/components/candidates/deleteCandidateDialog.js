@@ -30,7 +30,7 @@ export default class DeleteCandidateDialog extends React.Component {
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           onConfirmClick={() => {
-            this.props.deleteCandidate();
+            this.props.deleteCandidate(this.props.candidate.id, this.props.candidate.status);
             this.handleClose();}
           }
           onCancelClick={this.handleClose}
@@ -41,5 +41,6 @@ export default class DeleteCandidateDialog extends React.Component {
 }
 
 DeleteCandidateDialog.propTypes = {
+  candidate: PropTypes.object.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
 };

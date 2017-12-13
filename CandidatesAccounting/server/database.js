@@ -65,17 +65,9 @@ export function getAllTags() {
 export function addCandidate(newCandidate) {
   return MongoClient.connect(url)
     .then((db) => {
-      switch(newCandidate.status) {
-        case 'Interviewee':
-          return db.collection('interviewees').insertOne(newCandidate);
-        case 'Student':
-          return db.collection('students').insertOne(newCandidate);
-        case 'Trainee':
-          return db.collection('trainees').insertOne(newCandidate);
-      }
+      return db.collection(convertStatusToCollectionName(newCandidate.status)).insertOne(newCandidate);
     })
     .then((result) => {
-      console.log(result.ops[0]._id);
       return result.ops[0]._id;
     });
 }
@@ -83,26 +75,17 @@ export function addCandidate(newCandidate) {
 export function updateCandidate(candidate) {
   return MongoClient.connect(url)
     .then((db) => {
-      console.log('db', candidate);
-      switch(candidate.status) {
-        case 'Interviewee':
-          return db.collection('interviewees').replaceOne({_id: candidate.id}, candidate);
-        case 'Student':
-          return db.collection('students').replaceOne({_id: candidate.id}, candidate);
-        case 'Trainee':
-          return db.collection('trainees').replaceOne({_id: candidate.id}, candidate);
-      }
+      return db.collection(convertStatusToCollectionName(candidate.status)).replaceOne({_id: mongodb.ObjectId(candidate.id)}, candidate);
     })
     .then(() => {
       return true;
     });
 }
 
-export function deleteCandidate(id) {
+export function deleteCandidate(candidateID, candidateStatus) {
   return MongoClient.connect(url)
     .then((db) => {
-      console.log('db', id);
-       return db.collection('interviewees').deleteOne({_id: id});
+      return db.collection(convertStatusToCollectionName(candidateStatus)).deleteOne({_id: mongodb.ObjectId(candidateID)});
     })
     .then(() => {
       return true;
@@ -134,5 +117,16 @@ function updateTags(newTags) {
     if (!database.tags.includes(newTags[i])) {
       database.tags.push(newTags[i]);
     }
+  }
+}
+
+function convertStatusToCollectionName(candidateStatus) {
+  switch (candidateStatus) {
+    case 'Interviewee':
+      return 'interviewees';
+    case 'Student':
+      return 'students';
+    case 'Trainee':
+      return 'trainees';
   }
 }

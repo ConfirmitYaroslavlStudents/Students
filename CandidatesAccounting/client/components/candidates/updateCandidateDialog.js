@@ -10,7 +10,7 @@ import CloseIcon from 'material-ui-icons/Close';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 
-export default class EditCandidateDialog extends React.Component {
+export default class UpdateCandidateDialog extends React.Component {
   constructor(props) {
     super(props);
     this.candidate = createCandidate(props.candidate.status, props.candidate);
@@ -44,7 +44,7 @@ export default class EditCandidateDialog extends React.Component {
                   if (this.candidate.status !== initialStatus) {
                     this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), 'New status: ' + this.candidate.status));
                   }
-                  this.props.editCandidate(this.candidate.id, this.candidate);
+                  this.props.updateCandidate(this.candidate);
                   this.handleClose();
                 }
               }}/>
@@ -61,9 +61,9 @@ export default class EditCandidateDialog extends React.Component {
   }
 }
 
-EditCandidateDialog.propTypes = {
+UpdateCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
-  editCandidate: PropTypes.func.isRequired,
+  updateCandidate: PropTypes.func.isRequired,
   tags: PropTypes.object.isRequired,
   userName: PropTypes.string.isRequired,
 };

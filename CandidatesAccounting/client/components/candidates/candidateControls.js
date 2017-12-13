@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '../common/UIComponentDecorators/iconButton';
-import EditCandidateDialog from './editCandidateDialog';
+import UpdateCandidateDialog from './updateCandidateDialog';
 import DeleteCandidateDialog from './deleteCandidateDialog';
 import CommentIcon from 'material-ui-icons/ViewList';
 import Badge from '../common/UIComponentDecorators/badge';
@@ -30,20 +30,23 @@ export default function CandidateControls(props) {
           />
         </Badge>
       </NavLink>
-      <EditCandidateDialog
+      <UpdateCandidateDialog
         candidate={props.candidate}
-        editCandidate={props.editCandidate}
+        updateCandidate={props.updateCandidate}
         tags={props.tags}
         userName={props.userName}
       />
-      <DeleteCandidateDialog deleteCandidate={() => {props.deleteCandidate(props.candidate.id)}}/>
+      <DeleteCandidateDialog
+        candidate={props.candidate}
+        deleteCandidate={props.deleteCandidate}
+      />
     </div>
   );
 }
 
 CandidateControls.propTypes = {
   candidate: PropTypes.object.isRequired,
-  editCandidate: PropTypes.func.isRequired,
+  updateCandidate: PropTypes.func.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
   tags: PropTypes.object.isRequired,

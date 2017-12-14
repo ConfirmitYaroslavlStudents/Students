@@ -67,7 +67,7 @@ export default class AddCommentPanel extends React.Component {
   }
 }
 
-AddCommentPanel.PropTypes = {
+AddCommentPanel.propTypes = {
   addComment: PropTypes.func.isRequired,
   candidateID: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,

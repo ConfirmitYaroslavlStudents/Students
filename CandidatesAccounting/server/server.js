@@ -5,7 +5,7 @@ import http from 'http';
 import path from 'path';
 import bodyParser from 'body-parser';
 import favicon from 'serve-favicon';
-import webpackMiddleware from 'webpack-dev-middleware';
+import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import graphqlHTTP from 'express-graphql';
 import {schema, root} from './graphQL';
@@ -16,7 +16,7 @@ const compiler = webpack(config);
 app.set('port', 3000);
 app.set('view endine', 'ejs');
 
-app.use(webpackMiddleware(compiler, {
+app.use(webpackDevMiddleware(compiler, {
   publicPath: config.output.publicPath,
   hot: true,
   stats: {

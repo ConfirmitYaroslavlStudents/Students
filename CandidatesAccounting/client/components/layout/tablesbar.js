@@ -69,7 +69,7 @@ export default class CustomAppBar extends React.Component{
   }
 }
 
-CustomAppBar.PropTypes = {
+CustomAppBar.propTypes = {
   tags: PropTypes.object.isRequired,
   userName: PropTypes.string.isRequired,
   addCandidate: PropTypes.func.isRequired,

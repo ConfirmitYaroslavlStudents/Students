@@ -18,7 +18,7 @@ export default class CustomTextField extends React.Component{
     return (
       <TextField
         label={this.props.label}
-        placeholder={this.placeholder}
+        placeholder={this.props.placeholder}
         value={this.state.value}
         onChange={(event) => {
           this.handleChange(event.target.value)

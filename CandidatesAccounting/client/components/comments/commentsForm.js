@@ -48,6 +48,9 @@ export default class CommentsForm extends React.Component {
 
       return (
         <FormWrapper>
+          <CandidateNameWrapper>
+            {this.props.candidate.name}
+          </CandidateNameWrapper>
           {comments}
           <AddCommentPanelWrapper>
             <AddCommentPanel
@@ -88,9 +91,15 @@ const FormWrapper = styled.div`
   box-sizing: border-box;
 `;
 
+const CandidateNameWrapper = styled.div`
+  color: #aaa;
+  text-align: center;
+  margin-bottom: 12px;
+`;
+
 const NoResultWrapper = styled.div`
   padding: 5px;
-  color: #aaa;
+  color: #bbb;
   text-align: center;
   margin-bottom: 20px;
 `;

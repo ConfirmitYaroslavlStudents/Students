@@ -9,8 +9,8 @@ import {createCandidate} from '../../databaseDocumentClasses';
 export default function* rootSaga() {
   yield all([
     watchCandidateAdd(),
+    watchCandidateUpdate(),
     watchCandidateDelete(),
-    watchCandidateupdate(),
     watchCommentAdd(),
     watchCommentDelete(),
     watchChangeSearchRequest(),
@@ -22,12 +22,12 @@ function* watchCandidateAdd() {
   yield takeEvery('ADD_CANDIDATE', addCandidateSaga);
 }
 
-function* watchCandidateDelete() {
-  yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga);
+function* watchCandidateUpdate() {
+  yield takeEvery('UPDATE_CANDIDATE', updateCandidateSaga);
 }
 
-function* watchCandidateupdate() {
-  yield takeEvery('UPDATE_CANDIDATE', updateCandidateSaga);
+function* watchCandidateDelete() {
+  yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga);
 }
 
 function* watchCommentAdd() {
@@ -57,6 +57,17 @@ function* addCandidateSaga(action) {
   }
 }
 
+function* updateCandidateSaga(action) {
+  try {
+    let candidateNewState = createCandidate(action.candidate.status, action.candidate);
+    yield call(updateCandidate, candidateNewState);
+    yield put(updateCandidateSuccess(candidateNewState));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Update candidate error. Please, refresh the page.'));
+  }
+}
+
 function* deleteCandidateSaga(action) {
   try {
     yield call(deleteCandidate, action.candidateID);
@@ -64,17 +75,6 @@ function* deleteCandidateSaga(action) {
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete candidate error. Please, refresh the page.'));
-  }
-}
-
-function* updateCandidateSaga(action) {
-  try {
-    let candidateNewState = createCandidate(action.candidate.status, action.candidate);
-    candidateNewState.id = yield call(updateCandidate, candidateNewState);
-    yield put(updateCandidateSuccess(candidateNewState));
-  }
-  catch(error) {
-    yield put(setErrorMessage(error + '. Update candidate error. Please, refresh the page.'));
   }
 }
 

@@ -18,6 +18,24 @@ export function addCandidate(candidate) {
   });
 }
 
+export function updateCandidate(candidate) {
+  return sendGraphQLMutation(
+    `mutation updateCandidate($candidate: CandidateInput!) {
+      updateCandidate(
+        candidate: $candidate
+      )
+    }`,
+    {
+      candidate: candidate
+    }
+  )
+    .then((data) => {
+      if (!data.updateCandidate) {
+        throw 'Server error';
+      }
+    });
+}
+
 export function deleteCandidate(candidateID) {
   return sendGraphQLMutation(
     `mutation deleteCandidate($candidateID: ID!) {
@@ -32,26 +50,6 @@ export function deleteCandidate(candidateID) {
   .then((data) => {
     if (!data.deleteCandidate) {
       throw 'Server error';
-    }
-  });
-}
-
-export function updateCandidate(candidate) {
-  return sendGraphQLMutation(
-    `mutation updateCandidate($candidate: CandidateInput!) {
-      updateCandidate(
-        candidate: $candidate
-      )
-    }`,
-    {
-      candidate: candidate
-    }
-  )
-  .then((data) => {
-    if (!data.updateCandidate) {
-      throw 'Server error';
-    } else {
-      return data.updateCandidate;
     }
   });
 }

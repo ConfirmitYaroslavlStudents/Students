@@ -1,5 +1,5 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getAllTags, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment} from './database';
+import {getAllCandidates, getAllTags, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment} from './mongoose';
 
 export const schema = buildSchema(`    
   input CandidateInput {
@@ -23,7 +23,7 @@ export const schema = buildSchema(`
     text: String!,
   }
   type Candidate {
-    _id: ID!,
+    id: ID!,
     name: String!,
     status: String!,
     birthDate: String!,
@@ -48,7 +48,7 @@ export const schema = buildSchema(`
   }
   type Mutation {
     addCandidate(candidate: CandidateInput!): String
-    updateCandidate(candidate: CandidateInput!): String
+    updateCandidate(candidate: CandidateInput!): Boolean
     deleteCandidate(candidateID: ID!): Boolean
     addComment(candidateID: ID!, comment: CommentInput!): Boolean
     deleteComment(candidateID: ID!, comment: CommentInput!): Boolean
@@ -57,7 +57,16 @@ export const schema = buildSchema(`
 
 export const root = {
   candidates: () => {
-    return getAllCandidates();
+    return getAllCandidates()
+      .then((result) => {
+        let candidates = [];
+        result.forEach((candidate) => {
+          candidate.id = candidate._id;
+          delete candidate._id;
+          candidates.push(candidate);
+        });
+        return candidates
+      });
   },
   tags: () => {
     return getAllTags();
@@ -67,23 +76,26 @@ export const root = {
   },
   updateCandidate: ({candidate}) => {
     return updateCandidate(candidate)
-      .then((candidateIDAfterUpdate) => {
-        return candidateIDAfterUpdate;
+      .then((result) => {
+        return !!result;
       });
   },
   deleteCandidate: ({candidateID}) => {
     return deleteCandidate(candidateID)
-      .then(() => {
-        return true;
+      .then((result) => {
+        return !!result;
       });
   },
   addComment: ({candidateID, comment}) => {
     return addComment(candidateID, comment)
-      .then(() => {
-        return true;
+      .then((result) => {
+        return !!result;
       });
   },
   deleteComment: ({candidateID, comment}) => {
-    return deleteComment(candidateID, comment);
+    return deleteComment(candidateID, comment)
+      .then((result) => {
+        return !!result;
+      });
   }
 };

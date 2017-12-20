@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Table from '../common/UIComponentDecorators/table';
+import Table from '../common/sortableTable';
 import CandidateControls from './candidateControls';
 import {formatDate, isBirthDate} from '../../utilities/customMoment';
 import TagList from '../tags/tagList';
@@ -10,23 +10,33 @@ export default class CandidateTable extends React.Component {
   render() {
     return (
       <Table
-        heads={['Name', 'Status', 'E-mail', 'Birth Date', <span style={{float: 'right'}}>Actions</span>]}
+        heads={[
+          {title: 'Name', isSortable: true, sortType: 'byName'},
+          {title: 'Status'},
+          {title: 'E-mail'},
+          {title: 'Birth Date', isSortable: true, sortType: 'byDay'},
+          {title: 'Actions'}]}
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
             [
-              <NameWrapper>
-                <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
-                <TagList tags={candidate.tags} currentLocation=""/>
-              </NameWrapper>,
-              candidate.constructor.name,
-              candidate.email,
-              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
-                {formatDate(candidate.birthDate)}
-              </span>,
-              <ControlsWrapper>
-                <CandidateControls candidate={candidate} {...this.props}/>
-              </ControlsWrapper>
-            ]
+              {content:
+                <NameWrapper>
+                  <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
+                  <TagList tags={candidate.tags} currentLocation=""/>
+                </NameWrapper>,
+              value: candidate.name},
+              {content: candidate.status},
+              {content: candidate.email},
+              {content:
+                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                  {formatDate(candidate.birthDate)}
+                </span>,
+              value: candidate.birthDate},
+              {content:
+                <ControlsWrapper>
+                  <CandidateControls candidate={candidate} {...this.props}/>
+                </ControlsWrapper>
+              }]
           ))}
       />
     );

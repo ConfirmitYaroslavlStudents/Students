@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    font-weight: 300;
+    font-weight: normal;
     line-height: 1.5em;
     color: #333;
     background-color: #CCCCCC;
@@ -17,6 +17,10 @@ tr td:first-child {
 
 tr th:first-child {
     padding-left: 30px;
+}
+
+tr th:last-child  span {
+    float: right;
 }
 
 .active-nav-link {

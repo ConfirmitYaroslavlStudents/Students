@@ -5,12 +5,10 @@ import Table, { TableBody, TableCell, TableHead, TableRow} from 'material-ui/Tab
 import Paper from 'material-ui/Paper';
 
 export default function CustomTable(props) {
-  let contentRows = props.contentRows.map((row, index) =>
+  let heads = props.heads.map((head, index) => <TableCell key={'th' + index}>{head}</TableCell>);
+  let contentRows = props.rows.map((row, index) =>
     <TableRow key={'tr' + index}>
-      {
-        row.map((cell, cellIndex) =>
-          <TableCell key={'td' + cellIndex}>{cell}</TableCell>
-        )}
+      {row.map((cell, cellIndex) => <TableCell key={'td' + cellIndex}>{cell.content}</TableCell>)}
     </TableRow>
   );
   if (contentRows.size === 0 || contentRows.length === 0) {
@@ -25,11 +23,8 @@ export default function CustomTable(props) {
     }>
       <Table style={{minWidth: 1240}}>
         <TableHead>
-          <TableRow className="table-head">
-            {
-              props.heads.map((head, index) =>
-                <TableCell key={'th' + index}>{head}</TableCell>
-            )}
+          <TableRow>
+            {heads}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -38,11 +33,12 @@ export default function CustomTable(props) {
       </Table>
     </Paper>
   );
+
 }
 
 CustomTable.propTypes = {
-  heads: PropTypes.array,
-  contentRows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  heads: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  rows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };
 
 const EmptyTable = styled.div`

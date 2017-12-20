@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+export function getCurrentDate() {
+  return moment().format('DD.MM.YYYY');
+}
+
 export function getCurrentDateTime() {
   return moment().format('H:mm DD.MM.YYYY');
 }

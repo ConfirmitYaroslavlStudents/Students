@@ -29,7 +29,7 @@ export const CandidateSchema = new Schema({
       }
     }],
     tags: [String],
-    intervieweeDate: String,
+    interviewDate: String,
     resume: String,
     groupName: String,
     startingDate: String,
@@ -64,7 +64,7 @@ export const IntervieweeSchema = new Schema({
       }
     }],
     tags: [String],
-    intervieweeDate: String,
+    interviewDate: String,
     resume: String,
   });
 

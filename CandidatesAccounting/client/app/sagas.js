@@ -1,10 +1,10 @@
 import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
-import {addCandidate, deleteCandidate, updateCandidate} from '../../api/candidateService.js';
-import {addComment, deleteComment} from '../../api/commentService.js';
+import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
+import {addComment, deleteComment} from '../api/commentService.js';
 import {addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
         setErrorMessage, search} from './actions';
-import {createCandidate} from '../../databaseDocumentClasses';
+import {createCandidate} from '../databaseDocumentClasses/index';
 
 export default function* rootSaga() {
   yield all([

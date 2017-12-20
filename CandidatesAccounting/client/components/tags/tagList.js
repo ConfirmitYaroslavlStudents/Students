@@ -19,5 +19,6 @@ TagList.propTypes = {
 
 const TagsWrapper = styled.div`
   display: inline-block;
+  padding-top: 3px;
   min-width: 300px;
 `;

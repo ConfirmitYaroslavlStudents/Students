@@ -58,6 +58,7 @@ export default class AddCommentPanel extends React.Component {
         <ButtonWrapper>
           <IconButton
             icon={<AddIcon/>}
+            iconStyle="big-icon"
             onClick={this.addNewComment}
             style={{width: 70, height: 70}}
           />

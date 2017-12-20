@@ -27,6 +27,11 @@ tr th:last-child  span {
     color: #3F51B5 !important;
 }
 
+.big-icon {
+    height: 28px !important;
+    width: 28px !important;
+}
+
 .button-content {
     display: flex;
     align-items: center;
@@ -90,4 +95,9 @@ tr th:last-child  span {
 
 .simple-value:hover {
     color: #2196F3 !important;
+}
+
+.small-icon {
+    height: 20px !important;
+    width: 20px !important;
 }

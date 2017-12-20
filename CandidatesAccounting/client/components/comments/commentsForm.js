@@ -38,7 +38,11 @@ export default class CommentsForm extends React.Component {
                       comment={comment}
                       userName={this.props.userName}
                       commentIndex={index}
-                      searchRequest={this.props.searchRequest}
+                      highlighted={
+                        this.props.searchRequest ?
+                          comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
+                          comment.text.toLowerCase().includes(this.props.searchRequest.toLowerCase())
+                          : false}
                       deleteComment={() => {this.deleteComment(comment)}}
         />
       );

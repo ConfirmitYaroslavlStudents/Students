@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Switch, Route} from 'react-router-dom';
-import actions from '../common/actions';
+import actions from '../../app/actions';
 import Navbar from './navbar';
 import TablesBar from './tablesbar';
 import {searchByStatus, searchById, searchByRequest, searchByTag} from '../../utilities/candidateFilters';

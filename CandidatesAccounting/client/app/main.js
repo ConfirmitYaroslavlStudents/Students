@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import {Provider} from 'react-redux';
-import reducer from '../components/common/reducer';
-import rootSaga from '../components/common/sagas'
+import reducer from './reducer';
+import rootSaga from './sagas'
 import {BrowserRouter, Route} from 'react-router-dom';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -22,12 +22,12 @@ function configureStore(initialState) {
     yield rootSaga();
   });
   if (module.hot) {
-    module.hot.accept('../components/common/reducer', () => {
-      const nextReducer = require('../components/common/reducer').default;
+    module.hot.accept('./reducer', () => {
+      const nextReducer = require('./reducer').default;
       store.replaceReducer(nextReducer);
     });
-    module.hot.accept('../components/common/sagas', () => {
-      const newRootSaga = require('../components/common/sagas').default;
+    module.hot.accept('./sagas', () => {
+      const newRootSaga = require('./sagas').default;
       sagaRun.cancel();
       sagaRun.done.then(() => {
         sagaRun = sagaMiddleware.run(function* replaceSaga() {

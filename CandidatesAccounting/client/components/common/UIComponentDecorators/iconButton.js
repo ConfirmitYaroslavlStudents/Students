@@ -10,6 +10,7 @@ export default function CustomIconButton(props) {
         onClick={props.onClick}
         disabled={props.disabled}
         style={props.style}
+        classes={{icon: props.iconStyle}}
       >
         {props.icon}
       </IconButton>
@@ -21,6 +22,7 @@ CustomIconButton.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   icon: PropTypes.object,
+  iconStyle: PropTypes.string,
   color: PropTypes.string,
   style: PropTypes.object,
 };

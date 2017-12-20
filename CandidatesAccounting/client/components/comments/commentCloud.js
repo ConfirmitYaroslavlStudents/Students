@@ -1,41 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AvatarIcon from 'material-ui-icons/AccountCircle';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import RemoveIcon from 'material-ui-icons/Delete';
 import styled, {css} from 'styled-components';
 import {formatDateTime} from '../../utilities/customMoment';
 
 export default function CommentCloud(props) {
+  let isCurrentUserComment = props.comment.author === props.userName;
   return (
-    <CommentWrapper>
-      <CommentIcons right={props.comment.author === props.userName}>
-        <AvatarIcon/>
-        {props.comment.author === props.userName ?
-          <DeleteComment>
-            <IconButton
-              icon={<RemoveIcon/>}
-              onClick={props.deleteComment}
-            />
-          </DeleteComment>
-          :
-          ''
-        }
-      </CommentIcons>
-      <CommentMount
-        userComment={props.comment.author === props.userName}
-        highlighted={props.searchRequest && (props.comment.text.toLowerCase().includes(props.searchRequest.toLowerCase())
-          || props.comment.author.toLowerCase().includes(props.searchRequest.toLowerCase()))}>
+    <CommentWrapper right={isCurrentUserComment}>
+      <CommentMount highlighted={props.highlighted}>
         <CommentText
           dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
+      </CommentMount>
+      <div> </div>
+      {isCurrentUserComment ?
         <CommentFooter>
           {formatDateTime(props.comment.date)}
-          <AuthorName right={props.comment.author === props.userName}>
+          <AuthorName right>
+            {'Вы'}
+          </AuthorName>
+          <DeleteComment>
+            <IconButton
+              icon={<RemoveIcon/>}
+              iconStyle="small-icon"
+              onClick={props.deleteComment}
+              style={{height: 24, width: 24}}
+            />
+          </DeleteComment>
+        </CommentFooter>
+        :
+        <CommentFooter>
+          <AuthorName>
             {props.comment.author}
           </AuthorName>
+          {formatDateTime(props.comment.date)}
         </CommentFooter>
-      </CommentMount>
+      }
     </CommentWrapper>
   );
 }
@@ -45,39 +47,27 @@ CommentCloud.propTypes = {
   userName: PropTypes.string.isRequired,
   commentIndex: PropTypes.number.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  searchRequest: PropTypes.string,
+  highlighted: PropTypes.bool,
 };
 
 const CommentWrapper = styled.div`  
-  margin: 0 0 10px;
-  overflow: hidden;
-  padding: 5px 0; 
-`;
-
-const CommentIcons = styled.div`
-  display: inline-block;
-  float: left;
-  margin: 0 10px 0 10px;
-    
+  margin-bottom: 7px;
+  padding: 10px 15px 0 15px; 
+  
   ${props => props.right && css`
-		float: right;
-		margin: 0 0 0 10px;
+    text-align: right;
 	`}
 `;
 
 const CommentMount = styled.div`
   display: inline-block;
-  padding: 10px 10px 5px;
+  padding: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
   max-width: 70%;
-  float: left;
   background: #FFF;
-  border-radius: 3px 7px 7px 7px;
+  border-radius: 7px 7px 7px 7px;
+  margin-bottom: 1px;
   
-  ${props => props.userComment && css`
-		float: right;
-		border-radius: 7px 2px 7px 7px;
-	`}	
 	${props => props.highlighted && css`
 		background: #B3E5FC;
 		box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -89,28 +79,24 @@ const CommentText = styled.div`
   font-size: 96%;
 `;
 
-const CommentFooter = styled.div`  
-  text-align: left;
+const CommentFooter = styled.div`
+  display: inline-flex;
   font-size: smaller;
   color: dimgray;
-  text-align = left;
-  
-  ${props => props.right && css`
-		text-align: right;
-	`}
 `;
 
-const DeleteComment = styled.div`  
-  margin-left: -12px;
+const DeleteComment = styled.div`
+  display: inline-block;
+  margin-top: 3px;
 `;
 
 const AuthorName = styled.div`
-  float: left;
-  margin-right: 20px;
+  display: inline-block; 
+  margin:  0 15px 0 1px;
+  color: #222;
+  font-size: normal;
   
   ${props => props.right && css`
-    float: right;
-    margin-right: 0px;
-    margin-left: 20px;
+    margin:  0 12px;
 	`}
 `;

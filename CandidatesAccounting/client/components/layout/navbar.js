@@ -11,7 +11,7 @@ export default function MainNavbar(props) {
   return (
     <Navbar
       icon={<Logo />}
-      title="Candidate Accounting"
+      title={props.title}
       rightPart={
         <RightPartWrapper>
           <SearchForm
@@ -34,6 +34,7 @@ export default function MainNavbar(props) {
 }
 
 MainNavbar.propTypes = {
+  title: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
   setUserName: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,

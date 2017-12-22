@@ -27,6 +27,9 @@ export function getInitialState() {
     }`
   )
   .then((data) => {
+    if (!data) {
+      throw 'Connection error';
+    }
     let candidates = [];
     data.candidates.forEach((candidate) => {
       candidates.push(createCandidate(candidate.status, candidate));

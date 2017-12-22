@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import {Provider} from 'react-redux';
-import reducer from './reducer';
-import rootSaga from './sagas'
+import reducer from '../redux/reducer';
+import rootSaga from '../redux/sagas'
 import {BrowserRouter, Route} from 'react-router-dom';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -22,12 +22,12 @@ function configureStore(initialState) {
     yield rootSaga();
   });
   if (module.hot) {
-    module.hot.accept('./reducer', () => {
-      const nextReducer = require('./reducer').default;
+    module.hot.accept('../redux/reducer', () => {
+      const nextReducer = require('../redux/reducer').default;
       store.replaceReducer(nextReducer);
     });
-    module.hot.accept('./sagas', () => {
-      const newRootSaga = require('./sagas').default;
+    module.hot.accept('../redux/sagas', () => {
+      const newRootSaga = require('../redux/sagas').default;
       sagaRun.cancel();
       sagaRun.done.then(() => {
         sagaRun = sagaMiddleware.run(function* replaceSaga() {
@@ -68,6 +68,7 @@ getInitialState()
           userName: 'DmitryB',
           candidates: result.candidates,
           tags: result.tags,
+          pageTitle: 'Candidate Accounting',
           searchRequest: '',
           errorMessage: ''
         }

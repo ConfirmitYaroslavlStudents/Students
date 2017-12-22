@@ -7,13 +7,20 @@ import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class StudentTable extends React.Component {
+  componentWillMount() {
+    if (this.props.pageTitle !== 'Candidate Accounting') {
+      this.props.setPageTitle('Candidate Accounting');
+      this.props.setSearchRequest('', this.props.history, 0);
+    }
+  }
+
   render() {
     return (
       <Table
         heads={[
           {title: 'Name', sorting: 'byAlphabet'},
           {title: 'E-mail', sorting: 'byAlphabet'},
-          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Birth Date'},
           {title: 'Group', sorting: 'byAlphabet'},
           {title: 'Learning start', sorting: 'byDate'},
           {title: 'Learning end', sorting: 'byDate'},
@@ -38,8 +45,7 @@ export default class StudentTable extends React.Component {
                 content:
                   <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
                     {formatDate(student.birthDate)}
-                  </span>,
-                value: student.birthDate
+                  </span>
               },
               {
                 content: student.groupName,

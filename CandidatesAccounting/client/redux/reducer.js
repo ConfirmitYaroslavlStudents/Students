@@ -56,6 +56,9 @@ export default function reducer(state = Map(), action) {
     case 'SET_SEARCH_REQUEST':
       return state = state.set('searchRequest', action.searchRequest);
 
+    case 'SET_PAGE_TITLE':
+      return state = state.set('pageTitle', action.title);
+
     default:
       return state;
   }

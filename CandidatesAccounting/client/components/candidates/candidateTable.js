@@ -7,6 +7,13 @@ import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class CandidateTable extends React.Component {
+  componentWillMount() {
+    if (this.props.pageTitle !== 'Candidate Accounting') {
+      this.props.setPageTitle('Candidate Accounting');
+      this.props.setSearchRequest('', this.props.history, 0);
+    }
+  }
+
   render() {
     return (
       <Table
@@ -14,7 +21,7 @@ export default class CandidateTable extends React.Component {
           {title: 'Name', sorting: 'byAlphabet'},
           {title: 'Status', sorting: 'byAlphabet'},
           {title: 'E-mail', sorting: 'byAlphabet'},
-          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Birth Date'},
           {title: 'Actions'}]}
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
@@ -38,8 +45,7 @@ export default class CandidateTable extends React.Component {
                 content:
                   <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
                     {formatDate(candidate.birthDate)}
-                  </span>,
-                value: candidate.birthDate
+                  </span>
               },
               {
                 content: <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tabs, {Tab} from 'material-ui/Tabs';
-import AppBar from 'material-ui/AppBar';
 import {NavLink} from 'react-router-dom';
-import AddCandidateDialog from '../candidates/addCandidateDialog';
 import styled from 'styled-components';
+import Tabs from '../common/UIComponentDecorators/tabs';
+import AddCandidateDialog from '../candidates/addCandidateDialog';
 
 export default class CustomAppBar extends React.Component{
   constructor(props) {
@@ -12,7 +11,6 @@ export default class CustomAppBar extends React.Component{
     this.state = { selected: props.selected };
     this.handleChange = this.handleChange.bind(this);
     this.getNewURL = this.getNewURL.bind(this);
-    this.handleNavLinkClick = this.handleNavLinkClick.bind(this);
   };
 
   handleChange(event, value) {
@@ -20,41 +18,32 @@ export default class CustomAppBar extends React.Component{
   };
 
   getNewURL(newTableType) {
-    let newURL = '/' + newTableType;
-    if (!this.props.history.location.pathname.includes('comments')) {
-      newURL += this.props.history.location.search;
-    }
-    return newURL;
-  }
-
-  handleNavLinkClick() {
-    if (this.props.history.location.pathname.includes('comments')) {
-      this.props.setSearchRequest('', this.props.history, 0);
+    if (this.props.pageTitle === 'Candidate Accounting') {
+      return '/' + newTableType + this.props.history.location.search;
+    } else {
+      return '/' + newTableType;
     }
   }
 
   render() {
     this.state = { selected: this.props.selected };
     return (
-      <AppBar className="tabs-bar" color="default">
+      <TabsBar>
         <TabsWrapper>
           <Tabs
-            value={this.state.selected}
-            indicatorColor="primary"
-            textColor="primary"
-            fullWidth
-            centered
+            selected={this.state.selected}
             onChange={this.handleChange}
-          >
-            <Tab label={<NavLink exact to={this.getNewURL('')} onClick={this.handleNavLinkClick}
-                        className={'nav-link' + (this.state.selected === 0 ? ' active-nav-link' : '')}>All</NavLink>}/>
-            <Tab label={<NavLink to={this.getNewURL('interviewees')} onClick={this.handleNavLinkClick}
-                        className={'nav-link' + (this.state.selected === 1 ? ' active-nav-link' : '')}>Interviewees</NavLink>}/>
-            <Tab label={<NavLink to={this.getNewURL('students')} onClick={this.handleNavLinkClick}
-                        className={'nav-link' + (this.state.selected === 2 ? ' active-nav-link' : '')}>Students</NavLink>}/>
-            <Tab label={<NavLink to={this.getNewURL('trainees')} onClick={this.handleNavLinkClick}
-                        className={'nav-link' + (this.state.selected === 3 ? ' active-nav-link' : '')}>Trainees</NavLink>}/>
-          </Tabs>
+            tabs={[
+              <NavLink exact to={this.getNewURL('')}
+                       className={'nav-link' + (this.state.selected === 0 ? ' active-nav-link' : '')}>All</NavLink>,
+              <NavLink to={this.getNewURL('interviewees')}
+                       className={'nav-link' + (this.state.selected === 1 ? ' active-nav-link' : '')}>Interviewees</NavLink>,
+              <NavLink to={this.getNewURL('students')}
+                       className={'nav-link' + (this.state.selected === 2 ? ' active-nav-link' : '')}>Students</NavLink>,
+              <NavLink to={this.getNewURL('trainees')}
+                       className={'nav-link' + (this.state.selected === 3 ? ' active-nav-link' : '')}>Trainees</NavLink>
+            ]}
+          />
         </TabsWrapper>
         <AddButtonWrapper>
           <AddCandidateDialog
@@ -64,7 +53,7 @@ export default class CustomAppBar extends React.Component{
             userName={this.props.userName}
           />
         </AddButtonWrapper>
-      </AppBar>
+      </TabsBar>
     );
   }
 }
@@ -76,8 +65,26 @@ CustomAppBar.propTypes = {
   newCandidateDefaultType: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
+  pageTitle: PropTypes.string.isRequired,
   selected: PropTypes.number,
 };
+
+const TabsBar = styled.div`
+  display: flex;
+  z-index: 110;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+  top: 0;
+  left: auto;
+  right: 0;
+  position: fixed;
+  width: 100%;
+  flex-shrink: 0;
+  flex-direction: column;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  margin-top: 64px;
+  height: 48px;
+`;
 
 const TabsWrapper = styled.div`
   display: inline-block;

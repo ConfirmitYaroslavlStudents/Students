@@ -8,13 +8,20 @@ import ResumeControls from './resumeControls';
 import styled from 'styled-components';
 
 export default class IntervieweeTable extends React.Component {
+  componentWillMount() {
+    if (this.props.pageTitle !== 'Candidate Accounting') {
+      this.props.setPageTitle('Candidate Accounting');
+      this.props.setSearchRequest('', this.props.history, 0);
+    }
+  }
+
   render() {
     return (
       <Table
         heads={[
           {title: 'Name', sorting: 'byAlphabet'},
           {title: 'E-mail', sorting: 'byAlphabet'},
-          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Birth Date'},
           {title: 'Interview date', sorting: 'byTime'},
           {title: 'Resume'},
           {title: 'Actions'}]}
@@ -37,8 +44,7 @@ export default class IntervieweeTable extends React.Component {
                 content:
                   <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>
                     {formatDate(interviewee.birthDate)}
-                  </span>,
-                value: interviewee.birthDate
+                  </span>
               },
               {
                 content:

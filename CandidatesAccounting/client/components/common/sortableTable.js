@@ -12,7 +12,6 @@ export default class SortableTable extends React.Component {
     this.sortByAlphabet = this.sortByAlphabet.bind(this);
     this.sortByTime = this.sortByTime.bind(this);
     this.sortByDate = this.sortByDate.bind(this);
-    this.sortByDay = this.sortByDay.bind(this);
   }
 
   sortLabelHandleClick(index, sorting) {
@@ -44,9 +43,6 @@ export default class SortableTable extends React.Component {
           break;
         case 'byDate':
           sortedRows.sort(this.sortByDate);
-          break;
-        case 'byDay':
-          sortedRows.sort(this.sortByDay);
           break;
       }
 
@@ -97,27 +93,21 @@ export default class SortableTable extends React.Component {
       if (parseInt(firstDate[2]) < parseInt(secondDate[2])) {
         return -1;
       } else {
-        return this.sortByDay(first, second);
-      }
-    }
-  }
-
-  sortByDay(first, second) {
-    let firstDate = first[this.state.orderBy].value.split('.');
-    let secondDate = second[this.state.orderBy].value.split('.');
-    if (parseInt(firstDate[1]) > parseInt(secondDate[1])) {
-      return 1;
-    } else {
-      if (parseInt(firstDate[1]) < parseInt(secondDate[1])) {
-        return -1;
-      } else {
-        if (parseInt(firstDate[0]) > parseInt(secondDate[0])) {
+        if (parseInt(firstDate[1]) > parseInt(secondDate[1])) {
           return 1;
         } else {
-          if (parseInt(firstDate[0]) === parseInt(secondDate[0])) {
-            return 0;
-          } else {
+          if (parseInt(firstDate[1]) < parseInt(secondDate[1])) {
             return -1;
+          } else {
+            if (parseInt(firstDate[0]) > parseInt(secondDate[0])) {
+              return 1;
+            } else {
+              if (parseInt(firstDate[0]) === parseInt(secondDate[0])) {
+                return 0;
+              } else {
+                return -1;
+              }
+            }
           }
         }
       }

@@ -7,13 +7,20 @@ import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class TraineeTable extends React.Component {
+  componentWillMount() {
+    if (this.props.pageTitle !== 'Candidate Accounting') {
+      this.props.setPageTitle('Candidate Accounting');
+      this.props.setSearchRequest('', this.props.history, 0);
+    }
+  }
+
   render() {
     return (
       <Table
         heads={[
           {title: 'Name', sorting: 'byAlphabet'},
           {title: 'E-mail', sorting: 'byAlphabet'},
-          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Birth Date'},
           {title: 'Mentor', sorting: 'byAlphabet'},
           {title: 'Actions'}]}
         contentRows={
@@ -34,8 +41,8 @@ export default class TraineeTable extends React.Component {
                 content:
                   <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
                     {formatDate(trainee.birthDate)}
-                  </span>,
-                value: trainee.birthDate},
+                  </span>
+              },
               {
                 content: <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
                 value: trainee.mentor},

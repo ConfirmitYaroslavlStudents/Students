@@ -68,7 +68,6 @@ export function addCandidate(newCandidate) {
 export function updateCandidate(candidate) {
   return connect()
     .then(() => {
-    console.log(candidate);
       return identifyModel(candidate).replaceOne({_id: candidate.id}, candidate).exec(disconnect)
     })
     .then(() => {

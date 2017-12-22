@@ -12,6 +12,13 @@ export default class CommentsForm extends React.Component {
     this.deleteComment = this.deleteComment.bind(this);
   }
 
+  componentWillMount() {
+    if (this.props.pageTitle === 'Candidate Accounting') {
+      this.props.setSearchRequest('', this.props.history, 0);
+      this.props.setPageTitle(this.props.candidate.name);
+    }
+  }
+
   componentDidMount() {
     window.scrollTo(0, document.documentElement.scrollHeight);
   }
@@ -34,16 +41,17 @@ export default class CommentsForm extends React.Component {
   render() {
     if (this.props.candidate) {
       let comments = this.props.candidate.comments.map((comment, index) =>
-        <CommentCloud key={index}
-                      comment={comment}
-                      userName={this.props.userName}
-                      commentIndex={index}
-                      highlighted={
-                        this.props.searchRequest ?
-                          comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
-                          comment.text.toLowerCase().includes(this.props.searchRequest.toLowerCase())
-                          : false}
-                      deleteComment={() => {this.deleteComment(comment)}}
+        <CommentCloud
+          key={index}
+          comment={comment}
+          userName={this.props.userName}
+          commentIndex={index}
+          highlighted={
+            this.props.searchRequest ?
+              comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
+              comment.text.toLowerCase().includes(this.props.searchRequest.toLowerCase())
+              : false}
+          deleteComment={() => {this.deleteComment(comment)}}
         />
       );
       if (this.props.candidate.comments.length === 0) {
@@ -52,9 +60,6 @@ export default class CommentsForm extends React.Component {
 
       return (
         <FormWrapper>
-          <CandidateNameWrapper>
-            {this.props.candidate.name}
-          </CandidateNameWrapper>
           {comments}
           <AddCommentPanelWrapper>
             <AddCommentPanel
@@ -80,8 +85,12 @@ CommentsForm.propTypes = {
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
+  pageTitle: PropTypes.string.isRequired,
+  setPageTitle: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  searchRequest: PropTypes.string.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
   candidate: PropTypes.object,
-  searchRequest: PropTypes.string,
 };
 
 const FormWrapper = styled.div`
@@ -93,12 +102,6 @@ const FormWrapper = styled.div`
   padding-top: 134px;
   padding-bottom: 161px;
   box-sizing: border-box;
-`;
-
-const CandidateNameWrapper = styled.div`
-  color: #aaa;
-  text-align: center;
-  margin-bottom: 12px;
 `;
 
 const NoResultWrapper = styled.div`

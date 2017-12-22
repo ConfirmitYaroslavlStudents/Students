@@ -109,6 +109,13 @@ function search(searchRequest, browserHistory) {
   }
 }
 
+function setPageTitle(title) {
+  return {
+    type: 'SET_PAGE_TITLE',
+    title
+  }
+}
+
 module.exports = {setInitialState, addCandidate, deleteCandidate, updateCandidate, addComment, deleteComment, setErrorMessage,
                   addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-                  setUserName, setSearchRequest, search};
+                  setUserName, setSearchRequest, search, setPageTitle};

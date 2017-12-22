@@ -7,6 +7,7 @@ import {Comment, createCandidate} from '../../databaseDocumentClasses';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
 import CloseIcon from 'material-ui-icons/Close';
+import InfoIcon from '../common/UIComponentDecorators/infoIcon';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 
@@ -20,6 +21,7 @@ export default class UpdateCandidateDialog extends React.Component {
   }
 
   handleOpen() {
+    this.candidate = createCandidate(this.props.candidate.status, this.props.candidate);
     this.setState({isOpen: true});
   }
 
@@ -29,7 +31,6 @@ export default class UpdateCandidateDialog extends React.Component {
 
   render() {
     const initialStatus = this.candidate.status;
-    this.candidate = createCandidate(this.props.candidate.status, this.props.candidate);
     return (
       <div style={{display: 'inline-block'}}>
         <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
@@ -42,7 +43,7 @@ export default class UpdateCandidateDialog extends React.Component {
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
                   if (this.candidate.status !== initialStatus) {
-                    this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), 'New status: ' + this.candidate.status));
+                    this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' New status: ' + this.candidate.status));
                   }
                   this.props.updateCandidate(this.candidate);
                   this.handleClose();

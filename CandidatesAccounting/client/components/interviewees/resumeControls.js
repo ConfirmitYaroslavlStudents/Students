@@ -18,18 +18,18 @@ export default class ResumeControls extends React.Component {
       fileIsLoaded = false;
     }
     return (
-        fileIsLoaded ?
-          <Wrapper>
-            <FileName>{this.props.fileName}</FileName>
-            <IconButton style={iconButtonStyle} onClick={() => {}} icon={<OpenIcon/>}/>
-            <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<DownloadIcon/>}/>
-            <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
-          </Wrapper>
-          :
-          <Wrapper>
-            <NotLoaded>not loaded</NotLoaded>
-            <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
-          </Wrapper>
+      fileIsLoaded ?
+        <Wrapper>
+          <FileName>{this.props.fileName}</FileName>
+          <IconButton style={iconButtonStyle} onClick={() => {}} icon={<OpenIcon/>}/>
+          <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<DownloadIcon/>}/>
+          <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
+        </Wrapper>
+        :
+        <Wrapper>
+          <NotLoaded>not loaded</NotLoaded>
+          <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
+        </Wrapper>
     );
   }
 }

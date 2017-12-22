@@ -8,10 +8,10 @@ export function sendGraphQLQuery(query) {
       },
       body: JSON.stringify({query: query})
     })
-    .then(function(response){
+    .then((response) => {
       if (response.status === 200) {
         return response.json()
-          .then(function(response) {
+          .then((response) => {
             return response.data;
           });
       } else {
@@ -33,10 +33,10 @@ export function sendGraphQLMutation(query, variables) {
         variables: variables
       })
     })
-    .then(function(response){
+    .then((response) => {
       if (response.status === 200) {
         return response.json()
-          .then(function(response) {
+          .then((response) => {
             return response.data;
           });
       } else {

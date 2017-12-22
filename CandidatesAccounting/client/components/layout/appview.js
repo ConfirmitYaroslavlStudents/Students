@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Switch, Route} from 'react-router-dom';
-import actions from '../../app/actions';
+import actions from '../../redux/actions';
 import Navbar from './navbar';
 import TablesBar from './tablesbar';
 import {searchByStatus, searchById, searchByRequest, searchByTag} from '../../utilities/candidateFilters';
@@ -36,6 +36,7 @@ export default class AppView extends React.Component {
     return (
       <div>
         <Navbar
+          title={this.props.pageTitle}
           userName={this.props.userName}
           setUserName={this.props.setUserName}
           history={this.props.history}
@@ -50,6 +51,8 @@ export default class AppView extends React.Component {
           userName={this.props.userName}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
+          pageTitle={this.props.pageTitle}
+          setPageTitle={this.props.setPageTitle}
         />
         <div className="custom-main">
           <Switch>
@@ -78,7 +81,11 @@ export default class AppView extends React.Component {
                 addComment={this.props.addComment}
                 deleteComment={this.props.deleteComment}
                 userName={this.props.userName}
-                searchRequest={decodeURIComponent(this.props.location.search.substr(3))}/>}
+                pageTitle={this.props.pageTitle}
+                setPageTitle={this.props.setPageTitle}
+                history={this.props.history}
+                searchRequest={decodeURIComponent(this.props.location.search.substr(3))}
+                setSearchRequest={this.props.setSearchRequest}/>}
             />
             <Route exact path="/tag/*" render={() =>
               <CandidateTable allCandidates={searchByTag(this.props.candidates, decodeURIComponent(currentLocation[2]))}
@@ -110,6 +117,7 @@ function mapStateToProps(state) {
     userName: state.get('userName'),
     candidates: state.get('candidates'),
     tags: state.get('tags'),
+    pageTitle: state.get('pageTitle'),
     searchRequest: state.get('searchRequest'),
     errorMessage: state.get('errorMessage')
   };

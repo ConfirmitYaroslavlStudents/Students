@@ -4,7 +4,7 @@ import Badge from 'material-ui/Badge';
 
 export default function SimpleBadge(props) {
   return (
-      <Badge badgeContent={props.badgeContent} classes={{badge: props.badgeStyle}} color="primary">
+      <Badge badgeContent={props.badgeContent} classes={{badge: 'small-badge'}} color="primary">
         {props.children}
       </Badge>
   );
@@ -12,5 +12,4 @@ export default function SimpleBadge(props) {
 
 SimpleBadge.propTypes = {
   badgeContent: PropTypes.number,
-  badgeStyle: PropTypes.string,
 };

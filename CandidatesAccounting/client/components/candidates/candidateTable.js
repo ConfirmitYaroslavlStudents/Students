@@ -11,31 +11,38 @@ export default class CandidateTable extends React.Component {
     return (
       <Table
         heads={[
-          {title: 'Name', isSortable: true, sortType: 'byName'},
-          {title: 'Status'},
-          {title: 'E-mail'},
-          {title: 'Birth Date', isSortable: true, sortType: 'byDay'},
+          {title: 'Name', sorting: 'byAlphabet'},
+          {title: 'Status', sorting: 'byAlphabet'},
+          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Birth Date', sorting: 'byDay'},
           {title: 'Actions'}]}
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
             [
-              {content:
-                <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
-                  <TagList tags={candidate.tags} currentLocation=""/>
-                </NameWrapper>,
-              value: candidate.name},
-              {content: candidate.status},
-              {content: candidate.email},
-              {content:
-                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
-                  {formatDate(candidate.birthDate)}
-                </span>,
-              value: candidate.birthDate},
-              {content:
-                <ControlsWrapper>
-                  <CandidateControls candidate={candidate} {...this.props}/>
-                </ControlsWrapper>
+              {
+                content:
+                  <NameWrapper>
+                    <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
+                    <TagList tags={candidate.tags} currentLocation=""/>
+                  </NameWrapper>,
+                value: candidate.name},
+              {
+                content: candidate.status,
+                value: candidate.status
+              },
+              {
+                content: candidate.email,
+                value: candidate.email
+              },
+              {
+                content:
+                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                    {formatDate(candidate.birthDate)}
+                  </span>,
+                value: candidate.birthDate
+              },
+              {
+                content: <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
               }]
           ))}
       />

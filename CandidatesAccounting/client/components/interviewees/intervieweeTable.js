@@ -12,37 +12,46 @@ export default class IntervieweeTable extends React.Component {
     return (
       <Table
         heads={[
-          {title: 'Name', isSortable: true, sortType: 'byName'},
-          {title: 'E-mail'},
-          {title: 'Birth Date', isSortable: true, sortType: 'byDay'},
-          {title: 'Interview date', isSortable: true, sortType: 'byTime'},
+          {title: 'Name', sorting: 'byAlphabet'},
+          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Interview date', sorting: 'byTime'},
           {title: 'Resume'},
           {title: 'Actions'}]}
         contentRows={
           (this.props.interviewees.map((interviewee, index) =>
             [
-              {content:
-                <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
-                  <TagList tags={interviewee.tags} currentLocation="/interviewees"/>
-                </NameWrapper>,
-              value: interviewee.name},
-              {content: interviewee.email},
-              {content:
-                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>
-                  {formatDate(interviewee.birthDate)}
-                </span>,
-              value: interviewee.birthDate},
-              {content:
-                <span style={{whiteSpace: 'nowrap'}} className={isToday(interviewee.interviewDate) ? 'today' : ''}>
-                  {formatDateTime(interviewee.interviewDate)}
-                </span>,
-              value: interviewee.interviewDate},
-              {content: <ResumeControls fileName={interviewee.resume}/>},
-              {content:
-                <ControlsWrapper>
-                  <CandidateRowControls candidate={interviewee} {...this.props}/>
-                </ControlsWrapper>
+              {
+                content:
+                  <NameWrapper>
+                    <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
+                    <TagList tags={interviewee.tags} currentLocation="/interviewees"/>
+                  </NameWrapper>,
+                value: interviewee.name
+              },
+              {
+                content: interviewee.email,
+                value: interviewee.email
+              },
+              {
+                content:
+                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>
+                    {formatDate(interviewee.birthDate)}
+                  </span>,
+                value: interviewee.birthDate
+              },
+              {
+                content:
+                  <span style={{whiteSpace: 'nowrap'}} className={isToday(interviewee.interviewDate) ? 'today' : ''}>
+                    {formatDateTime(interviewee.interviewDate)}
+                  </span>,
+                value: interviewee.interviewDate
+              },
+              {
+                content: <ResumeControls fileName={interviewee.resume}/>
+              },
+              {
+                content: <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>
               }]
           ))}
       />

@@ -11,33 +11,37 @@ export default class TraineeTable extends React.Component {
     return (
       <Table
         heads={[
-          {title: 'Name', isSortable: true, sortType: 'byName'},
-          {title: 'E-mail'},
-          {title: 'Birth Date', isSortable: true, sortType: 'byDay'},
-          {title: 'Mentor', isSortable: true, sortType: 'byName'},
+          {title: 'Name', sorting: 'byAlphabet'},
+          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Mentor', sorting: 'byAlphabet'},
           {title: 'Actions'}]}
         contentRows={
           (this.props.trainees.map((trainee, index) =>
             [
-              {content:
-                <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
-                  <TagList tags={trainee.tags} currentLocation="/trainees"/>
-                </NameWrapper>,
-               value: trainee.name},
-              {content: trainee.email},
-              {content:
-                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
-                  {formatDate(trainee.birthDate)}
-                </span>,
-               value: trainee.birthDate},
-              {content: <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
-              value: trainee.mentor},
-              {content:
-                <ControlsWrapper>
-                  <CandidateRowControls candidate={trainee} {...this.props}/>
-                </ControlsWrapper>}
-            ]
+              {
+                content:
+                  <NameWrapper>
+                    <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
+                    <TagList tags={trainee.tags} currentLocation="/trainees"/>
+                  </NameWrapper>,
+                value: trainee.name},
+              {
+                content: trainee.email,
+                value: trainee.email
+              },
+              {
+                content:
+                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
+                    {formatDate(trainee.birthDate)}
+                  </span>,
+                value: trainee.birthDate},
+              {
+                content: <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
+                value: trainee.mentor},
+              {
+                content: <ControlsWrapper><CandidateRowControls candidate={trainee} {...this.props}/></ControlsWrapper>
+              }]
           ))}
       />
     );

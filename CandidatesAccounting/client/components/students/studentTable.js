@@ -11,40 +11,51 @@ export default class StudentTable extends React.Component {
     return (
       <Table
         heads={[
-          {title: 'Name', isSortable: true, sortType: 'byName'},
-          {title: 'E-mail'},
-          {title: 'Birth Date', isSortable: true, sortType: 'byDay'},
-          {title: 'Group'},
-          {title: 'Learning start', isSortable: true, sortType: 'byDate'},
-          {title: 'Learning end', isSortable: true, sortType: 'byDate'},
+          {title: 'Name', sorting: 'byAlphabet'},
+          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Birth Date', sorting: 'byDay'},
+          {title: 'Group', sorting: 'byAlphabet'},
+          {title: 'Learning start', sorting: 'byDate'},
+          {title: 'Learning end', sorting: 'byDate'},
           {title: 'Actions'}
         ]}
         contentRows={
           (this.props.students.map((student, index) =>
             [
-              {content:
-                <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
-                  <TagList tags={student.tags} currentLocation="/students"/>
-                </NameWrapper>,
-               value: student.name
+              {
+                content:
+                  <NameWrapper>
+                    <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
+                    <TagList tags={student.tags} currentLocation="/students"/>
+                  </NameWrapper>,
+                value: student.name
               },
-              {content: student.email},
-              {content:
-                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
-                  {formatDate(student.birthDate)}
-                </span>,
-                value: student.birthDate},
-              {content: student.groupName},
-              {content:
-                <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
-               value: student.startingDate},
-              {content: <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
-               value: student.endingDate},
-              {content: <ControlsWrapper>
-                <CandidateRowControls candidate={student} {...this.props}/>
-              </ControlsWrapper>}
-            ]
+              {
+                content: student.email,
+                value: student.email
+              },
+              {
+                content:
+                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
+                    {formatDate(student.birthDate)}
+                  </span>,
+                value: student.birthDate
+              },
+              {
+                content: student.groupName,
+                value: student.groupName
+              },
+              {
+                content: <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
+                value: student.startingDate
+              },
+              {
+                content: <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
+                value: student.endingDate
+              },
+              {
+                content: <ControlsWrapper><CandidateRowControls candidate={student} {...this.props}/></ControlsWrapper>
+              }]
           ))}
       />
     );

@@ -6,7 +6,7 @@ import TableSortLabel from './UIComponentDecorators/tableSortLabel';
 export default class SortableTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {orderBy: -1, direction: 'desc', sortType: ''};
+    this.state = {orderBy: -1, direction: 'desc', sorting: ''};
     this.sortLabelHandleClick = this.sortLabelHandleClick.bind(this);
     this.sortContentRows = this.sortContentRows.bind(this);
     this.sortByAlphabet = this.sortByAlphabet.bind(this);
@@ -15,9 +15,9 @@ export default class SortableTable extends React.Component {
     this.sortByDay = this.sortByDay.bind(this);
   }
 
-  sortLabelHandleClick(index, sortType) {
+  sortLabelHandleClick(index, sorting) {
     if (index !== this.state.orderBy) {
-      this.setState({orderBy: index, direction: 'desc', sortType: sortType})
+      this.setState({orderBy: index, direction: 'desc', sorting: sorting})
     } else {
       if (this.state.direction === 'desc') {
         this.setState({direction: 'asc'})
@@ -35,8 +35,8 @@ export default class SortableTable extends React.Component {
       this.props.contentRows.forEach((row) => {
         sortedRows.push(row);
       });
-      switch(this.state.sortType) {
-        case 'byName':
+      switch(this.state.sorting) {
+        case 'byAlphabet':
           sortedRows.sort(this.sortByAlphabet);
           break;
         case 'byTime':
@@ -128,14 +128,12 @@ export default class SortableTable extends React.Component {
     return (
       <Table
         heads={this.props.heads.map((head, index) =>
-          head.isSortable ?
+          head.sorting ?
             <TableSortLabel
               active={index === this.state.orderBy}
               direction={this.state.direction}
-              onClick={() => {this.sortLabelHandleClick(index, head.sortType)}}
-            >
-              {head.title}
-            </TableSortLabel>
+              onClick={() => {this.sortLabelHandleClick(index, head.sorting)}}
+            >{head.title}</TableSortLabel>
             :
             <span>{head.title}</span>)}
         rows={this.sortContentRows()}
@@ -147,8 +145,7 @@ export default class SortableTable extends React.Component {
 SortableTable.propTypes = {
   heads: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
-    isSortable: PropTypes.bool,
-    sortType: PropTypes.string
+    sorting: PropTypes.string
   })).isRequired,
   contentRows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 };

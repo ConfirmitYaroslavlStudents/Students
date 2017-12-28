@@ -65,7 +65,7 @@ export const root = {
           delete candidate._id;
           candidates.push(candidate);
         });
-        return candidates
+        return candidates;
       });
   },
   tags: () => {

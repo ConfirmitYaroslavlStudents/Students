@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "nodemon --exec \"babel-node ./server/server.js --presets es2015,stage-2\" -w ./server"
+    "start": "nodemon --exec \"babel-node ./server/server.js\" -w ./server"
   },
   "author": "DmitryB",
   "license": "ISC",
@@ -23,11 +23,9 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",
-    "express-ntlm": "^2.2.4",
     "extract-text-webpack-plugin": "^3.0.2",
     "favicon": "0.0.2",
     "graphql": "^0.11.7",
-    "http": "0.0.0",
     "immutable": "^3.8.2",
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.17",

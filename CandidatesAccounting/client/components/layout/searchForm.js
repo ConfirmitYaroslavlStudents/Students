@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SearchIcon from 'material-ui-icons/search';
 import Input from '../common/UIComponentDecorators/input';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 
-export default class SearchForm extends React.Component {
+export default class SearchForm extends Component {
   constructor(props) {
     super(props);
     this.state = {isActive: false};

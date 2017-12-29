@@ -27,9 +27,6 @@ export function searchByTag(candidates, tag) {
 }
 
 export function searchByRequest(candidates, searchRequest) {
-  if (!searchRequest) {
-    return candidates;
-  }
   const request = searchRequest.toLowerCase();
   let result = [];
   candidates.forEach((candidate) => {

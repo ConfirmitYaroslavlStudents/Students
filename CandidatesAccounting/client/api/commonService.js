@@ -1,5 +1,5 @@
 import {sendGraphQLQuery} from './graphqlClient';
-import {createCandidate} from '../databaseDocumentClasses';
+import createCandidate from '../utilities/createCandidate';
 
 export function getInitialState() {
   return sendGraphQLQuery(

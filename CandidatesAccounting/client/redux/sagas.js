@@ -4,7 +4,7 @@ import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateSe
 import {addComment, deleteComment} from '../api/commentService.js';
 import {addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
         setErrorMessage, search} from './actions';
-import {createCandidate} from '../databaseDocumentClasses/index';
+import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
   yield all([

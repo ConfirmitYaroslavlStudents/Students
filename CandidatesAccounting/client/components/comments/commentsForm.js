@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import CommentCloud from './commentCloud';
 import AddCommentPanel from './addCommentPanel';
 
-export default class CommentsForm extends React.Component {
+export default class CommentsForm extends Component {
   constructor(props) {
     super(props);
     this.shouldScrollDown = false;

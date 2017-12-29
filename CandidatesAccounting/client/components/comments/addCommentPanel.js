@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
-import {Comment} from '../../databaseDocumentClasses';
+import createComment from '../../utilities/createComment';
 
-export default class AddCommentPanel extends React.Component {
+export default class AddCommentPanel extends Component {
   constructor(props) {
     super(props);
     this.state = ({commentText: ''});
@@ -25,7 +25,7 @@ export default class AddCommentPanel extends React.Component {
       if (commentText.slice(-11) === '<p><br></p>') {
         commentText = commentText.substr(0, commentText.length - 11);
       }
-      this.props.addComment(this.props.candidateID, new Comment(
+      this.props.addComment(this.props.candidateID, createComment(
         this.props.userName,
         getCurrentDateTime(),
         commentText));

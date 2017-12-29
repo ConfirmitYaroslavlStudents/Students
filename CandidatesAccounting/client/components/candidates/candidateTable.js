@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Table from '../common/sortableTable';
 import CandidateControls from './candidateControls';
@@ -6,7 +6,7 @@ import {formatDate, isBirthDate} from '../../utilities/customMoment';
 import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
-export default class CandidateTable extends React.Component {
+export default class CandidateTable extends Component {
   componentWillMount() {
     if (this.props.pageTitle !== 'Candidate Accounting') {
       this.props.setPageTitle('Candidate Accounting');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import CommentIcon from 'material-ui-icons/InsertComment';
@@ -7,7 +7,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 import AddCommentPanel from './addCommentPanel';
 import styled from 'styled-components';
 
-export default class AddCommentDialog extends React.Component {
+export default class AddCommentDialog extends Component {
   constructor(props) {
     super(props);
     this.state = ({ isOpen: false });

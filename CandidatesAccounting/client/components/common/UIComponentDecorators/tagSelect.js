@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {MultiSelect} from 'react-selectize';
 
-export default class TagSelect extends React.Component{
+export default class TagSelect extends Component{
   render() {
     const props = this.props;
     let options = [];
@@ -39,7 +39,7 @@ export default class TagSelect extends React.Component{
 
 TagSelect.propTypes = {
   onValuesChange: PropTypes.func.isRequired,
-  options: PropTypes.object,
+  options: PropTypes.array,
   defaultValues: PropTypes.array,
   style: PropTypes.object,
   autofocus: PropTypes.bool,

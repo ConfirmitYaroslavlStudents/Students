@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Switch, Route} from 'react-router-dom';
 import actions from '../../redux/actions';
@@ -13,9 +13,19 @@ import TraineeTable from '../trainees/traineeTable';
 import SnackBar from '../common/UIComponentDecorators/snackbar';
 import ErrorPage from './errorPage';
 
-export default class AppView extends React.Component {
+export default class AppView extends Component {
   render() {
     const currentLocation = this.props.location.pathname.split('/');
+    const search = this.props.location.search;
+    const filter = function(candidates) {
+      if (search === '') {
+        return candidates;
+      }
+      if (search[1] === 't') {
+        return searchByTag(candidates, decodeURIComponent(search.substr(3)));
+      }
+      return searchByRequest(candidates, decodeURIComponent(search.substr(3)));
+    };
     let selectedTableNumber = 0;
     let candidateType = 'Interviewee';
     switch (currentLocation[1]) {
@@ -57,27 +67,20 @@ export default class AppView extends React.Component {
         <div className="custom-main">
           <Switch>
             <Route exact path="/" render={() =>
-              <CandidateTable allCandidates={searchByRequest(this.props.candidates, this.props.location.search !== "" ?
-                                  decodeURIComponent(this.props.location.search.substr(3)) : null)} {...this.props}/>}
+              <CandidateTable allCandidates={filter(this.props.candidates)} {...this.props}/>}
             />
             <Route exact path="/interviewees" render={() =>
-              <IntervieweeTable interviewees={searchByRequest(searchByStatus(this.props.candidates, 'Interviewee'),
-                this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
-                                {...this.props}/>}
+              <IntervieweeTable interviewees={filter(searchByStatus(this.props.candidates, 'Interviewee'))} {...this.props}/>}
             />
             <Route exact path="/students" render={() =>
-              <StudentTable students={searchByRequest(searchByStatus(this.props.candidates, 'Student'),
-                  this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
-                            {...this.props}/>}
+              <StudentTable students={filter(searchByStatus(this.props.candidates, 'Student'))} {...this.props}/>}
             />
             <Route exact path="/trainees" render={() =>
-              <TraineeTable trainees={searchByRequest(searchByStatus(this.props.candidates, 'Trainee'),
-                  this.props.location.search !== "" ? decodeURIComponent(this.props.location.search.substr(3)) : null)}
-                            {...this.props}/>}
+              <TraineeTable trainees={filter(searchByStatus(this.props.candidates, 'Trainee'))} {...this.props}/>}
             />
             <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
               <CommentsForm
-                candidate={searchById(this.props.candidates._tail.array, currentLocation[2])}
+                candidate={searchById(this.props.candidates, currentLocation[2])}
                 addComment={this.props.addComment}
                 deleteComment={this.props.deleteComment}
                 userName={this.props.userName}
@@ -86,22 +89,6 @@ export default class AppView extends React.Component {
                 history={this.props.history}
                 searchRequest={decodeURIComponent(this.props.location.search.substr(3))}
                 setSearchRequest={this.props.setSearchRequest}/>}
-            />
-            <Route exact path="/tag/*" render={() =>
-              <CandidateTable allCandidates={searchByTag(this.props.candidates, decodeURIComponent(currentLocation[2]))}
-                              {...this.props}/>}
-            />
-            <Route exact path="/interviewees/tag/*" render={() =>
-              <IntervieweeTable {...this.props}
-                interviewees={searchByTag(searchByStatus(this.props.candidates, 'Interviewee'), decodeURIComponent(currentLocation[3]))}/>}
-            />
-            <Route exact path="/students/tag/*" render={() =>
-              <StudentTable {...this.props}
-                students={searchByTag(searchByStatus(this.props.candidates, 'Student'), decodeURIComponent(currentLocation[3]))}/>}
-            />
-            <Route exact path="/trainees/tag/*" render={() =>
-              <TraineeTable {...this.props}
-                trainees={searchByTag(searchByStatus(this.props.candidates, 'Trainee'), decodeURIComponent(currentLocation[3]))}/>}
             />
             <Route path="" render={() => <ErrorPage errorCode={404} errorMessage="Page not found"/>}/>
           </Switch>
@@ -115,8 +102,8 @@ export default class AppView extends React.Component {
 function mapStateToProps(state) {
   return {
     userName: state.get('userName'),
-    candidates: state.get('candidates'),
-    tags: state.get('tags'),
+    candidates: state.get('candidates').toJS(),
+    tags: state.get('tags').toArray(),
     pageTitle: state.get('pageTitle'),
     searchRequest: state.get('searchRequest'),
     errorMessage: state.get('errorMessage')

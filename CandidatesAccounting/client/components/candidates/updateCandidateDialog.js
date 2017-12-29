@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import CandidateInfoForm from './candidateInfoForm';
 import {checkCandidateValidation} from '../../utilities/candidateValidators';
-import {Comment, createCandidate} from '../../databaseDocumentClasses';
+import createCandidate from '../../utilities/createCandidate';
+import createComment from '../../utilities/createComment';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
 import CloseIcon from 'material-ui-icons/Close';
@@ -43,7 +44,7 @@ export default class UpdateCandidateDialog extends React.Component {
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
                   if (this.candidate.status !== initialStatus) {
-                    this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' New status: ' + this.candidate.status));
+                    this.candidate.comments.push(createComment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' New status: ' + this.candidate.status));
                   }
                   this.props.updateCandidate(this.candidate);
                   this.handleClose();
@@ -65,6 +66,6 @@ export default class UpdateCandidateDialog extends React.Component {
 UpdateCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   updateCandidate: PropTypes.func.isRequired,
-  tags: PropTypes.object.isRequired,
+  tags: PropTypes.array.isRequired,
   userName: PropTypes.string.isRequired,
 };

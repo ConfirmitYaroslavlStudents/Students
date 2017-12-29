@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Input, { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
 import { FormControl } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 
-export default class SimpleSelect extends React.Component {
+export default class SimpleSelect extends Component {
   constructor(props) {
     super(props);
     this.state=({selected: props.selected ? props.selected : ''});

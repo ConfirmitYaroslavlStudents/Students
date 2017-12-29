@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {checkCandidateValidation} from '../../utilities/candidateValidators';
-import {Comment, createCandidate} from '../../databaseDocumentClasses';
+import createCandidate from '../../utilities/createCandidate';
+import createComment from '../../utilities/createComment';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';
 import CloseIcon from 'material-ui-icons/Close';
@@ -10,7 +11,7 @@ import InfoIcon from '../common/UIComponentDecorators/infoIcon';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 
-export default class AddCandidateDialog extends React.Component{
+export default class AddCandidateDialog extends Component{
   constructor(props) {
     super(props);
     this.state=({isOpen: false});
@@ -40,7 +41,7 @@ export default class AddCandidateDialog extends React.Component{
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
-                  this.candidate.comments.push(new Comment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' Initial status: ' + this.candidate.status));
+                  this.candidate.comments.push(createComment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' Initial status: ' + this.candidate.status));
                   this.props.addCandidate(this.candidate);
                   this.handleClose();
                 }
@@ -61,6 +62,6 @@ export default class AddCandidateDialog extends React.Component{
 AddCandidateDialog.propTypes = {
   addCandidate: PropTypes.func.isRequired,
   candidateStatus: PropTypes.string.isRequired,
-  tags: PropTypes.object.isRequired,
+  tags: PropTypes.array.isRequired,
   userName: PropTypes.string.isRequired,
 };

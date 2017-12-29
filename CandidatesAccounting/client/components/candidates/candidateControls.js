@@ -48,7 +48,7 @@ CandidateControls.propTypes = {
   updateCandidate: PropTypes.func.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
-  tags: PropTypes.object.isRequired,
+  tags: PropTypes.array.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };

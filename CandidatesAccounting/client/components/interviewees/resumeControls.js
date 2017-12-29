@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import IconButton from '../common/UIComponentDecorators/iconButton';
@@ -11,7 +11,7 @@ const iconButtonStyle = {
   width: 32,
 };
 
-export default class ResumeControls extends React.Component {
+export default class ResumeControls extends Component {
   render() {
     let fileIsLoaded = true;
     if (!this.props.fileName || this.props.fileName.trim() === '') {

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Snackbar from 'material-ui/Snackbar';
 
-export default class ErrorSnackbar extends React.Component {
+export default class ErrorSnackbar extends Component {
   constructor(props) {
     super(props);
     this.state = {

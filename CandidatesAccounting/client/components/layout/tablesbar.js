@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {NavLink} from 'react-router-dom';
 import styled from 'styled-components';
 import Tabs from '../common/UIComponentDecorators/tabs';
 import AddCandidateDialog from '../candidates/addCandidateDialog';
 
-export default class CustomAppBar extends React.Component{
+export default class TablesBar extends Component{
   constructor(props) {
     super(props);
     this.state = { selected: props.selected };
@@ -58,8 +58,8 @@ export default class CustomAppBar extends React.Component{
   }
 }
 
-CustomAppBar.propTypes = {
-  tags: PropTypes.object.isRequired,
+TablesBar.propTypes = {
+  tags: PropTypes.array.isRequired,
   userName: PropTypes.string.isRequired,
   addCandidate: PropTypes.func.isRequired,
   newCandidateDefaultType: PropTypes.string.isRequired,

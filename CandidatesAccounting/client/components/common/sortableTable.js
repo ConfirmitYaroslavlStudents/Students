@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Table from './UIComponentDecorators/table';
 import TableSortLabel from './UIComponentDecorators/tableSortLabel';
 
-export default class SortableTable extends React.Component {
+export default class SortableTable extends Component {
   constructor(props) {
     super(props);
     this.state = {orderBy: -1, direction: 'desc', sorting: ''};

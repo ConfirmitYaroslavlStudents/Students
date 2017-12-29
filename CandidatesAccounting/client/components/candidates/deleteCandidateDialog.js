@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import DeleteIcon from 'material-ui-icons/Delete';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import DialogAlert from '../common/UIComponentDecorators/dialogAlert';
 
-export default class DeleteCandidateDialog extends React.Component {
+export default class DeleteCandidateDialog extends Component {
   constructor(props) {
     super(props);
     this.state = ({isOpen: false});

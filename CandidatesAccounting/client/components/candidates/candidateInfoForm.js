@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import TextField from '../common/UIComponentDecorators/textField';
 import DatePicker from '../common/UIComponentDecorators/datePicker';
@@ -11,7 +11,7 @@ import IntervieweeSpecialFields from '../interviewees/intervieweeSpecialFields';
 import StudentSpecialFields from '../students/studentSpecialFields';
 import TraineeSpecialFields from '../trainees/traineeSpecialFields';
 
-export default class CandidateInfoForm extends React.Component {
+export default class CandidateInfoForm extends Component {
   constructor(props) {
     super(props);
     this.state = ({candidateStatus: props.candidate.status});
@@ -94,7 +94,7 @@ export default class CandidateInfoForm extends React.Component {
 
 CandidateInfoForm.propTypes = {
   candidate: PropTypes.object.isRequired,
-  tags: PropTypes.object.isRequired,
+  tags: PropTypes.array.isRequired,
 };
 
 const FormWrapper = styled.div`

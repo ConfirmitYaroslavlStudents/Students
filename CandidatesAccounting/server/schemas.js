@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
+export const AccountSchema = new Schema({
+  username: String,
+  password: String
+});
+
 export const CandidateSchema = new Schema({
     status: String,
     name: {

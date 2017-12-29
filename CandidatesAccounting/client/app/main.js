@@ -65,7 +65,7 @@ getInitialState()
     store.dispatch({
         type: "SET_INITIAL_STATE",
         state: {
-          userName: 'DmitryB',
+          userName: '',
           candidates: result.candidates,
           tags: result.tags,
           pageTitle: 'Candidate Accounting',

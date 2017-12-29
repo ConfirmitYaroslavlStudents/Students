@@ -5,6 +5,9 @@ export default function reducer(state = Map(), action) {
     case 'SET_INITIAL_STATE':
       return state.merge(action.state);
 
+    case 'LOGIN_SUCCESS':
+      return state = state.set('userName', action.email);
+
     case 'ADD_CANDIDATE_SUCCESS':
       return state.update('candidates', (candidates) => candidates.push(action.candidate));
 
@@ -49,9 +52,6 @@ export default function reducer(state = Map(), action) {
 
     case 'SET_ERROR_MESSAGE':
       return state = state.set('errorMessage', action.message);
-
-    case 'SET_USERNAME':
-      return state = state.set('userName', action.userName);
 
     case 'SET_SEARCH_REQUEST':
       return state = state.set('searchRequest', action.searchRequest);

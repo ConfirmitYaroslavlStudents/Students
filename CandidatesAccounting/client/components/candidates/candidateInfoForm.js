@@ -6,7 +6,7 @@ import SelectInput from '../common/UIComponentDecorators/selectInput';
 import styled from 'styled-components';
 import TagSelect from '../common/UIComponentDecorators/tagSelect';
 import {toDatePickerFormat, fromDatePickerFormat} from '../../utilities/customMoment';
-import {checkName, checkEmail} from '../../utilities/candidateValidators';
+import {isNotEmpty, isEmail} from '../../utilities/candidateValidators';
 import IntervieweeSpecialFields from '../interviewees/intervieweeSpecialFields';
 import StudentSpecialFields from '../students/studentSpecialFields';
 import TraineeSpecialFields from '../trainees/traineeSpecialFields';
@@ -64,7 +64,7 @@ export default class CandidateInfoForm extends Component {
           label="Name"
           placeholder="full name"
           value={this.props.candidate.name}
-          checkValid={checkName}
+          checkValid={isNotEmpty}
           required
           multiline
           fullWidth
@@ -74,7 +74,7 @@ export default class CandidateInfoForm extends Component {
           label="E-mail"
           placeholder="example@mail.com"
           value={this.props.candidate.email}
-          checkValid={checkEmail}
+          checkValid={isEmail}
           required
           multiline
           fullWidth/>

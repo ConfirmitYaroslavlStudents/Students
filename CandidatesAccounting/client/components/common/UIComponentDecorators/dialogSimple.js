@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
 import Dialog, {
-  DialogActions,
   DialogContent,
-  DialogContentText,
+  DialogActions,
   DialogTitle,
 } from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
 
 function Transition(props) {
-  return <Slide direction="left" {...props} />;
+  return <Slide direction="up" {...props} />;
 }
 
-export default function DialogAlert(props) {
+export default function SimpleDialog(props) {
   return (
     <div>
       <Dialog
@@ -23,28 +21,20 @@ export default function DialogAlert(props) {
       >
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {props.content}
-          </DialogContentText>
+          {props.content}
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onCancelClick} color="accent">
-            Cancel
-          </Button>
-          <Button onClick={props.onConfirmClick} color="primary">
-            Confirm
-          </Button>
+          {props.actions}
         </DialogActions>
       </Dialog>
     </div>
   );
 }
 
-DialogAlert.propTypes = {
+SimpleDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
-  onConfirmClick: PropTypes.func.isRequired,
-  onCancelClick: PropTypes.func.isRequired,
   title: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  actions: PropTypes.object,
 };

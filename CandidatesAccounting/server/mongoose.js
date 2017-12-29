@@ -1,19 +1,23 @@
 import mongoose from 'mongoose';
-import {CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from "./schemas";
+import passportLocalMongoose from 'passport-local-mongoose';
+import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from "./schemas";
 
 mongoose.Promise = Promise;
 
+export function connect() {
+  return mongoose.connect('mongodb://localhost:27017/CandidateAccounting', {
+    useMongoClient: true
+  });
+}
+
+connect();
+AccountSchema.plugin(passportLocalMongoose);
+export const Account = mongoose.model('Account', AccountSchema, 'accounts');
 const Candidate = mongoose.model('Candidate', CandidateSchema, 'candidates');
 const Interviewee = mongoose.model('Interviewee', IntervieweeSchema, 'candidates');
 const Student = mongoose.model('Student', StudentSchema, 'candidates');
 const Trainee = mongoose.model('Trainee', TraineeSchema, 'candidates');
 const Tag = mongoose.model('Tag', TagSchema, 'tags');
-
-function connect() {
-  return mongoose.connect('mongodb://localhost:27017/CandidateAccounting', {
-    useMongoClient: true
-  });
-}
 
 function disconnect(error) {
   mongoose.disconnect();

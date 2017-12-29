@@ -48,7 +48,7 @@ export default class AppView extends Component {
         <Navbar
           title={this.props.pageTitle}
           userName={this.props.userName}
-          setUserName={this.props.setUserName}
+          login={this.props.login}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}

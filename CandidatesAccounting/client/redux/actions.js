@@ -4,6 +4,22 @@ function setInitialState() {
   }
 }
 
+function login(email, password) {
+  return {
+    type: 'LOGIN',
+    email,
+    password
+  }
+}
+
+function loginSuccess(email, password) {
+  return {
+    type: 'LOGIN_SUCCESS',
+    email,
+    password
+  }
+}
+
 function addCandidate(candidate) {
   return {
     type: 'ADD_CANDIDATE',
@@ -85,13 +101,6 @@ function setErrorMessage(message) {
   }
 }
 
-function setUserName(userName) {
-  return {
-    type: 'SET_USERNAME',
-    userName
-  }
-}
-
 function setSearchRequest(searchRequest, browserHistory, delay) {
   return {
     type: 'SET_SEARCH_REQUEST',
@@ -116,6 +125,6 @@ function setPageTitle(title) {
   }
 }
 
-module.exports = {setInitialState, addCandidate, deleteCandidate, updateCandidate, addComment, deleteComment, setErrorMessage,
-                  addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-                  setUserName, setSearchRequest, search, setPageTitle};
+module.exports = {setInitialState, login, loginSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
+                  deleteComment, setErrorMessage, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess,
+                  addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};

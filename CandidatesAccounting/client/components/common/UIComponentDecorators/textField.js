@@ -27,6 +27,7 @@ export default class CustomTextField extends Component{
         fullWidth={this.props.fullWidth}
         required={this.props.required}
         autoFocus={this.props.autoFocus}
+        type={this.props.type}
         error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}
         margin="normal"
       />
@@ -44,4 +45,5 @@ CustomTextField.propTypes = {
   checkValid: PropTypes.func,
   fullWidth: PropTypes.bool,
   required: PropTypes.bool,
+  type: PropTypes.string,
 };

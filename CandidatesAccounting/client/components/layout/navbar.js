@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Navbar from '../common/UIComponentDecorators/navbar';
 import Logo from 'material-ui-icons/AccountCircle';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import RenameIcon from 'material-ui-icons/ModeEdit';
 import SearchForm from './searchForm';
+import LoginDialog from './loginDialog';
+import FlatButton from '../common/UIComponentDecorators/flatButton';
 
 export default function MainNavbar(props) {
   return (
@@ -19,15 +19,17 @@ export default function MainNavbar(props) {
             setSearchRequest={props.setSearchRequest}
             history={props.history}
           />
-          <span>{props.userName}</span>
-          <IconButton
-            color="contrast"
-            style={{width: 30, height: 30}}
-            icon={<RenameIcon/>}
-            onClick={() => {
-              props.setUserName(prompt('Enter new userame:'));
-            }}
-          />
+          {
+            props.userName === '' ?
+            <LoginDialog login={props.login}/>
+            :
+            <div style={{display: 'inline-block'}}>
+              <span style={{marginRight: 5, marginLeft: 5}}>{props.userName}</span>
+              <FlatButton color="contrast" onClick={() => {alert('to do')}}>
+                Sign out
+              </FlatButton>
+            </div>
+          }
         </RightPartWrapper>}
     />
   );
@@ -36,7 +38,7 @@ export default function MainNavbar(props) {
 MainNavbar.propTypes = {
   title: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
-  setUserName: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,

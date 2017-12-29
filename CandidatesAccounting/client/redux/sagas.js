@@ -1,13 +1,15 @@
 import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
+import {login, logout} from '../api/authorizationService';
 import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
 import {addComment, deleteComment} from '../api/commentService.js';
-import {addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+import {loginSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
         setErrorMessage, search} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
   yield all([
+    watchLogin(),
     watchCandidateAdd(),
     watchCandidateUpdate(),
     watchCandidateDelete(),
@@ -16,6 +18,10 @@ export default function* rootSaga() {
     watchChangeSearchRequest(),
     watchSearch()
   ])
+}
+
+function* watchLogin() {
+  yield takeEvery('LOGIN', loginSaga);
 }
 
 function* watchCandidateAdd() {
@@ -44,6 +50,16 @@ function* watchChangeSearchRequest() {
 
 function* watchSearch() {
   yield takeLatest('SEARCH', searchSaga);
+}
+
+function* loginSaga(action) {
+  try {
+    yield call(login, action.email, action.password);
+    yield put(loginSuccess(action.email, action.password));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Login error. Please, refresh the page.'));
+  }
 }
 
 function* addCandidateSaga(action) {

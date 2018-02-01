@@ -20,12 +20,14 @@ export default function MainNavbar(props) {
             history={props.history}
           />
           {
-            props.userName === '' ?
+            props.authorizationStatus === 'not-authorized' ?
             <LoginDialog login={props.login}/>
             :
             <div style={{display: 'inline-block'}}>
               <span style={{marginRight: 5, marginLeft: 5}}>{props.userName}</span>
-              <FlatButton color="contrast" onClick={() => {alert('to do')}}>
+              <FlatButton color="contrast" onClick={() => {
+                props.logout();
+              }}>
                 Sign out
               </FlatButton>
             </div>
@@ -38,7 +40,9 @@ export default function MainNavbar(props) {
 MainNavbar.propTypes = {
   title: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,

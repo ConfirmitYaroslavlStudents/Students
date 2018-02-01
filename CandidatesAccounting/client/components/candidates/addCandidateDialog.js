@@ -32,7 +32,7 @@ export default class AddCandidateDialog extends Component{
   render() {
     return (
       <div style={{display: 'inline-block'}}>
-        <IconButton icon={<AddPersonIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
+        <IconButton icon={<AddPersonIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
         <DialogWindow
           title="Add new candidate"
           isOpen={this.state.isOpen}
@@ -41,7 +41,7 @@ export default class AddCandidateDialog extends Component{
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
-                  this.candidate.comments.push(createComment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' Initial status: ' + this.candidate.status));
+                  this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), InfoIcon() + ' Initial status: ' + this.candidate.status));
                   this.props.addCandidate(this.candidate);
                   this.handleClose();
                 }
@@ -63,5 +63,5 @@ AddCandidateDialog.propTypes = {
   addCandidate: PropTypes.func.isRequired,
   candidateStatus: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
-  userName: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
 };

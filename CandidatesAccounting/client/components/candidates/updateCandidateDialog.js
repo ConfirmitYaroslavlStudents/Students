@@ -34,7 +34,7 @@ export default class UpdateCandidateDialog extends React.Component {
     const initialStatus = this.candidate.status;
     return (
       <div style={{display: 'inline-block'}}>
-        <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
+        <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
         <DialogWindow
           title="Candidate edit"
           isOpen={this.state.isOpen}
@@ -44,7 +44,7 @@ export default class UpdateCandidateDialog extends React.Component {
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
                   if (this.candidate.status !== initialStatus) {
-                    this.candidate.comments.push(createComment(this.props.userName, getCurrentDateTime(), InfoIcon() + ' New status: ' + this.candidate.status));
+                    this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), InfoIcon() + ' New status: ' + this.candidate.status));
                   }
                   this.props.updateCandidate(this.candidate);
                   this.handleClose();
@@ -67,5 +67,5 @@ UpdateCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   updateCandidate: PropTypes.func.isRequired,
   tags: PropTypes.array.isRequired,
-  userName: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
 };

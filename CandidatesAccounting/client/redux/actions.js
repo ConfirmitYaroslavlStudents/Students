@@ -20,6 +20,18 @@ function loginSuccess(email, password) {
   }
 }
 
+function logout() {
+  return {
+    type: 'LOGOUT'
+  }
+}
+
+function logoutSuccess() {
+  return {
+    type: 'LOGOUT_SUCCESS'
+  }
+}
+
 function addCandidate(candidate) {
   return {
     type: 'ADD_CANDIDATE',
@@ -125,6 +137,6 @@ function setPageTitle(title) {
   }
 }
 
-module.exports = {setInitialState, login, loginSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
+module.exports = {setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
                   deleteComment, setErrorMessage, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess,
                   addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};

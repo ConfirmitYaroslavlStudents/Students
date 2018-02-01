@@ -9,6 +9,7 @@ export default function CustomFlatButton(props) {
         color={props.color}
         onClick={props.onClick}
         style={props.style}
+        disabled={props.disabled}
       >
         {props.children}
       </Button>

@@ -23,7 +23,7 @@ export default class DeleteCandidateDialog extends Component {
   render() {
     return (
       <div style={{display: 'inline-block'}}>
-        <IconButton icon={<DeleteIcon />} color="accent" style={{height: 40, width: 40}} onClick={this.handleOpen}/>
+        <IconButton icon={<DeleteIcon />} color="accent" style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
         <DialogAlert
           title="Delete the candidate?"
           content="The candidate will be removed from database."
@@ -43,4 +43,5 @@ export default class DeleteCandidateDialog extends Component {
 DeleteCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };

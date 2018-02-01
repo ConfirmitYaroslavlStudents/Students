@@ -1,23 +1,30 @@
-import {Map} from 'immutable';
+import Immutable from 'immutable';
 
-export default function reducer(state = Map(), action) {
+export default function reducer(state = Immutable.Map(), action) {
   switch (action.type) {
     case 'SET_INITIAL_STATE':
       return state.merge(action.state);
 
     case 'LOGIN_SUCCESS':
-      return state = state.set('userName', action.email);
+      let userName = action.email.split('@')[0];
+      state = state.set('userName', userName);
+      return state = state.set('authorizationStatus', 'authorized');
+
+    case 'LOGOUT_SUCCESS':
+      state = state.set('userName', '');
+      return state = state.set('authorizationStatus', 'not-authorized');
 
     case 'ADD_CANDIDATE_SUCCESS':
-      return state.update('candidates', (candidates) => candidates.push(action.candidate));
+      return state.update('candidates', (candidates) => candidates.push(Immutable.fromJS(action.candidate)));
 
     case 'DELETE_CANDIDATE_SUCCESS':
-      return state.update('candidates', (candidates) => candidates.filterNot((candidate) => candidate.id === action.candidateID));
+      return state.update('candidates', (candidates) => candidates.filterNot((candidate) => candidate.get('id') === action.candidateID));
 
     case 'UPDATE_CANDIDATE_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
-        if (candidate.id === action.candidate.id) {
-          return action.candidate;
+        console.log(candidate);
+        if (candidate.get('id') === action.candidate.id) {
+          return Immutable.fromJS(action.candidate);
         } else {
           return candidate;
         }
@@ -25,9 +32,8 @@ export default function reducer(state = Map(), action) {
 
     case 'ADD_COMMENT_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
-        if (candidate.id === action.candidateID) {
-          candidate.comments.push(action.comment);
-          return candidate;
+        if (candidate.get('id') === action.candidateID) {
+          return candidate.update('comments', (comments) => comments.push(Immutable.fromJS(action.comment)));
         } else {
           return candidate;
         }
@@ -35,16 +41,11 @@ export default function reducer(state = Map(), action) {
 
     case 'DELETE_COMMENT_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
-        if (candidate.id === action.candidateID) {
-          for (let i = 0; i < candidate.comments.length; i++) {
-            if (candidate.comments[i].author === action.comment.author &&
-              candidate.comments[i].date === action.comment.date &&
-              candidate.comments[i].text === action.comment.text) {
-              candidate.comments.splice(i, 1);
-              break;
-            }
-          }
-          return candidate;
+        if (candidate.get('id') === action.candidateID) {
+          return candidate.update('comments', (comments) => comments.filterNot((comment) =>
+            comment.get('author') === action.comment.author &&
+            comment.get('date') === action.comment.date &&
+            comment.get('text') === action.comment.text));
         } else {
           return candidate;
         }

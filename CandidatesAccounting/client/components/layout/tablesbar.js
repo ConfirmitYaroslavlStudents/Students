@@ -51,6 +51,7 @@ export default class TablesBar extends Component{
             candidateStatus={this.props.newCandidateDefaultType}
             tags={this.props.tags}
             userName={this.props.userName}
+            disabled={this.props.authorizationStatus === 'not-authorized'}
           />
         </AddButtonWrapper>
       </TabsBar>
@@ -67,6 +68,7 @@ TablesBar.propTypes = {
   setSearchRequest: PropTypes.func.isRequired,
   pageTitle: PropTypes.string.isRequired,
   selected: PropTypes.number,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 const TabsBar = styled.div`

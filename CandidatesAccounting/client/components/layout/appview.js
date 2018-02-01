@@ -48,7 +48,9 @@ export default class AppView extends Component {
         <Navbar
           title={this.props.pageTitle}
           userName={this.props.userName}
+          authorizationStatus={this.props.authorizationStatus}
           login={this.props.login}
+          logout={this.props.logout}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
@@ -63,6 +65,7 @@ export default class AppView extends Component {
           setSearchRequest={this.props.setSearchRequest}
           pageTitle={this.props.pageTitle}
           setPageTitle={this.props.setPageTitle}
+          authorizationStatus={this.props.authorizationStatus}
         />
         <div className="custom-main">
           <Switch>
@@ -83,6 +86,7 @@ export default class AppView extends Component {
                 candidate={searchById(this.props.candidates, currentLocation[2])}
                 addComment={this.props.addComment}
                 deleteComment={this.props.deleteComment}
+                authorizationStatus={this.props.authorizationStatus}
                 userName={this.props.userName}
                 pageTitle={this.props.pageTitle}
                 setPageTitle={this.props.setPageTitle}
@@ -101,6 +105,7 @@ export default class AppView extends Component {
 
 function mapStateToProps(state) {
   return {
+    authorizationStatus: state.get('authorizationStatus'),
     userName: state.get('userName'),
     candidates: state.get('candidates').toJS(),
     tags: state.get('tags').toArray(),

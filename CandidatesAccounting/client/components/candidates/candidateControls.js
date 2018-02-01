@@ -20,6 +20,7 @@ export default function CandidateControls(props) {
         candidate={props.candidate}
         addComment={props.addComment}
         userName={props.userName}
+        disabled={props.authorizationStatus === 'not-authorized'}
       />
       <NavLink to={'/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
         <Badge badgeContent={props.candidate.comments.length}>
@@ -34,10 +35,12 @@ export default function CandidateControls(props) {
         updateCandidate={props.updateCandidate}
         tags={props.tags}
         userName={props.userName}
+        disabled={props.authorizationStatus === 'not-authorized'}
       />
       <DeleteCandidateDialog
         candidate={props.candidate}
         deleteCandidate={props.deleteCandidate}
+        disabled={props.authorizationStatus === 'not-authorized'}
       />
     </div>
   );
@@ -51,4 +54,5 @@ CandidateControls.propTypes = {
   tags: PropTypes.array.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };

@@ -30,7 +30,7 @@ export default class AddCommentDialog extends Component {
   render() {
     return (
       <div style={{display: 'inline-block'}}>
-        <IconButton icon={<CommentIcon />} style={{height: 40, width: 40}} onClick={this.handleOpen}/>
+        <IconButton icon={<CommentIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
         <DialogWindow
           title="Add new comment"
           isOpen={this.state.isOpen}
@@ -56,6 +56,7 @@ AddCommentDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
 };
 
 const FormWrapper = styled.div`

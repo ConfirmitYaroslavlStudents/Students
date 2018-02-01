@@ -65,6 +65,7 @@ getInitialState()
     store.dispatch({
         type: "SET_INITIAL_STATE",
         state: {
+          authorizationStatus: 'not-authorized',
           userName: '',
           candidates: result.candidates,
           tags: result.tags,

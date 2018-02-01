@@ -3,8 +3,15 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const AccountSchema = new Schema({
-  username: String,
-  password: String
+  username: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
 });
 
 export const CandidateSchema = new Schema({

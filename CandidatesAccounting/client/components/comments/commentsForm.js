@@ -67,6 +67,7 @@ export default class CommentsForm extends Component {
               candidateID={this.props.candidate.id}
               onClick={this.handleNewCommentAdd}
               userName={this.props.userName}
+              disabled={this.props.authorizationStatus === 'not-authorized'}
             />
           </AddCommentPanelWrapper>
         </FormWrapper>
@@ -90,6 +91,7 @@ CommentsForm.propTypes = {
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
   candidate: PropTypes.object,
 };
 

@@ -59,6 +59,7 @@ export default class AddCommentPanel extends Component {
           <IconButton
             icon={<AddIcon/>}
             iconStyle="big-icon"
+            disabled={this.props.disabled}
             onClick={this.addNewComment}
             style={{width: 70, height: 70}}
           />
@@ -73,6 +74,7 @@ AddCommentPanel.propTypes = {
   candidateID: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 const ButtonWrapper = styled.div`

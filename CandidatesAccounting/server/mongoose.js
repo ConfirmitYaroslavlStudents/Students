@@ -20,7 +20,7 @@ const Trainee = mongoose.model('Trainee', TraineeSchema, 'candidates');
 const Tag = mongoose.model('Tag', TagSchema, 'tags');
 
 function disconnect(error) {
-  mongoose.disconnect();
+  //mongoose.disconnect();
   if(error) {
     return console.log(error);
   }

@@ -13,6 +13,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
 import {indigo} from 'material-ui/colors';
 import AppView from '../components/layout/appview';
+import {getUsername} from '../api/authorizationService';
 import {getInitialState} from '../api/commonService';
 
 function configureStore(initialState) {
@@ -60,15 +61,15 @@ function renderApp(app) {
   );
 }
 
-getInitialState()
-  .then((result) => {
+getUsername().then((username) => {
+  getInitialState().then((initialState) => {
     store.dispatch({
         type: "SET_INITIAL_STATE",
         state: {
-          authorizationStatus: 'not-authorized',
-          userName: '',
-          candidates: result.candidates,
-          tags: result.tags,
+          userName: username,
+          authorizationStatus: !username || username === '' ? 'not-authorized' : 'authorized',
+          candidates: initialState.candidates,
+          tags: initialState.tags,
           pageTitle: 'Candidate Accounting',
           searchRequest: '',
           errorMessage: ''
@@ -77,6 +78,7 @@ getInitialState()
     );
     renderApp(AppView);
   });
+});
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {

@@ -2,6 +2,7 @@ export function sendGraphQLQuery(query) {
   return fetch('/graphql',
     {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -24,6 +25,7 @@ export function sendGraphQLMutation(query, variables) {
   return fetch('/graphql',
     {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

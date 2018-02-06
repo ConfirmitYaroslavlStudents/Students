@@ -12,11 +12,10 @@ function login(email, password) {
   }
 }
 
-function loginSuccess(email, password) {
+function loginSuccess(userName) {
   return {
     type: 'LOGIN_SUCCESS',
-    email,
-    password
+    userName
   }
 }
 

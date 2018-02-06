@@ -6,8 +6,7 @@ export default function reducer(state = Immutable.Map(), action) {
       return state.merge(action.state);
 
     case 'LOGIN_SUCCESS':
-      let userName = action.email.split('@')[0];
-      state = state.set('userName', userName);
+      state = state.set('userName', action.userName);
       return state = state.set('authorizationStatus', 'authorized');
 
     case 'LOGOUT_SUCCESS':

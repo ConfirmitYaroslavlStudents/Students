@@ -59,8 +59,8 @@ function* watchSearch() {
 
 function* loginSaga(action) {
   try {
-    yield call(login, action.email, action.password);
-    yield put(loginSuccess(action.email, action.password));
+    const userName = yield call(login, action.email, action.password);
+    yield put(loginSuccess(userName));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Incorrect login or password.'));

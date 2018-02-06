@@ -9,8 +9,7 @@ export const AccountSchema = new Schema({
     required: true
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
 });
 

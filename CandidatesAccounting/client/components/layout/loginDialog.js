@@ -20,6 +20,7 @@ export default class LoginDialog extends Component {
   }
 
   handleClose() {
+    this.account = {email: '', password: ''};
     this.setState({isOpen: false});
   }
 
@@ -31,10 +32,10 @@ export default class LoginDialog extends Component {
     return (
       <div style={{display: 'inline-block'}}>
         <FlatButton color="contrast" onClick={this.handleOpen}>
-          Sign in
+          Sign on / Sign in
         </FlatButton>
         <Dialog
-          title="Sign in"
+          title="Sign on / Sign in"
           content={<LoginForm account={this.account}/>}
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}

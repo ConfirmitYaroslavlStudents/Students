@@ -18,6 +18,7 @@ export default class CustomTextField extends Component{
     return (
       <TextField
         label={this.props.label}
+        name={this.props.name}
         placeholder={this.props.placeholder}
         value={this.state.value}
         onChange={(event) => {
@@ -46,4 +47,5 @@ CustomTextField.propTypes = {
   fullWidth: PropTypes.bool,
   required: PropTypes.bool,
   type: PropTypes.string,
+  name: PropTypes.string,
 };

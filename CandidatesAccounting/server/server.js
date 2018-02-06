@@ -15,9 +15,9 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 
 const app = express();
+
 app.set('port', 3000);
 app.set('view endine', 'ejs');
-//app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, {
@@ -29,97 +29,83 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 app.use(webpackHotMiddleware(compiler));
 
+app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
+app.use(expressSession({ secret: 'yDyTP3T3Dvc4206O8pm', resave: false, saveUninitialized: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new passportLocal.Strategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+app.use('/graphql', function(req, res, next) {
+  if (req.isAuthenticated() || !req.body.variables) {
+    next();
+  } else {
+    res.status(401).end();
+  }
+});
+
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
   graphiql: false,
 }));
 
-app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
-app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressSession({ secret: 'SECRET', resave: true, saveUninitialized: true }));
+connect();
 
-
-passport.use(new passportLocal.Strategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get('/', function (req, res) {
-  console.log(req.isAuthenticated());
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+app.get('/login', function(req, res) {
+  if (req.isAuthenticated()) {
+    res.json({username: req.user.username.split('@')[0]});
+  } else {
+    res.json({username: ''});
+  }
 });
-
-app.post('/register', function(req, res) {
-  return connect().then(() => {
-    Account.register(new Account({username: req.body.username}), req.body.password, function (err, account) {
-      if (err) {
-        console.log(err);
-        res.status(401).end();
-        return;
-      }
-      passport.authenticate('local')(req, res, function () {
-        res.redirect('/');
-      });
-    });
-    })
-});
-
 
 app.post('/login', function(req, res) {
-  return connect()
-    .then(() => {
+  Account.findOne({username: req.body.username}, function (findError, user) {
+    if (findError) {
+      return res.status(401).end();
+    }
+    if (!user) {
+      Account.register(new Account({username: req.body.username}), req.body.password, function (registerError, account) {
+        if (registerError) {
+          return res.status(401).end();
+        }
+        passport.authenticate('local')(req, res, function () {
+          console.log('User signed on:', req.user.username);
+          res.json({username: req.user.username.split('@')[0]});
+        });
+      });
+    } else {
       passport.authenticate('local')(req, res, function () {
-        res.redirect('/');
+        console.log('User signed in:', req.user.username);
+        res.json({username: req.user.username.split('@')[0]});
       });
-    });
-});
-
-app.get('/ping', function(req, res){
-  res.status(200).send("pong!");
-});
-
-
-
-/*
-
-app.post('/login', function(req, res) {
-  return connect()
-    .then(() => {
-      Account.findOne({username: req.body.username}, function (err, user) {
-        if (err) {
-          console.log(err);
-          res.status(401).end();
-          return;
-        }
-        if (!user) {
-          Account.register(new Account({username: req.body.username}), req.body.password, function (err, account) {
-            if (err) {
-              console.log(err);
-              res.status(401).end();
-              return;
-            }
-            passport.authenticate('local')(req, res, function () {
-              res.redirect('/');
-            });
-          });
-        } else {
-          passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
-          });
-        }
-      });
-    });
+    }
+  })
 });
 
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  req.session.destroy(function (err) {
+    res.redirect('/');
+  });
 });
-*/
+
+app.get('*', function (req, res) {
+  if (req.isAuthenticated()) {
+    console.log('Authenticated:', req.sessionID, req.user.username, req.cookies);
+  } else {
+    console.log('Not authenticated:', req.sessionID, req.cookies);
+  }
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.listen(app.get('port'), () => {
   console.log('Express server is listening on port', app.get('port'));

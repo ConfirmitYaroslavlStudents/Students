@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import CommentCloud from './commentCloud';
 import AddCommentPanel from './addCommentPanel';
+import getRandomColor from '../../utilities/getRandomColor';
 
 export default class CommentsForm extends Component {
   constructor(props) {
     super(props);
     this.shouldScrollDown = false;
+    this.userColors = {};
     this.handleNewCommentAdd = this.handleNewCommentAdd.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
   }
@@ -17,6 +19,12 @@ export default class CommentsForm extends Component {
       this.props.setSearchRequest('', this.props.history, 0);
       this.props.setPageTitle(this.props.candidate.name);
     }
+    this.userColors = {};
+    this.props.candidate.comments.forEach((comment) => {
+      if (!(comment.author in this.userColors)) {
+        this.userColors[comment.author] = getRandomColor();
+      }
+    });
   }
 
   componentDidMount() {
@@ -44,14 +52,15 @@ export default class CommentsForm extends Component {
         <CommentCloud
           key={index}
           comment={comment}
-          userName={this.props.userName}
-          commentIndex={index}
+          isCurrentUserComment={comment.author === this.props.userName}
+          markerColor={this.userColors[comment.author]}
           highlighted={
             this.props.searchRequest ?
               comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
               comment.text.toLowerCase().includes(this.props.searchRequest.toLowerCase())
               : false}
           deleteComment={() => {this.deleteComment(comment)}}
+          isSystem={comment.author === 'CandidateAccounting'}
         />
       );
       if (this.props.candidate.comments.length === 0) {

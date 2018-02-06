@@ -8,7 +8,6 @@ import createComment from '../../utilities/createComment';
 import SaveIcon from 'material-ui-icons/Save';
 import EditIcon from 'material-ui-icons/Edit';
 import CloseIcon from 'material-ui-icons/Close';
-import InfoIcon from '../common/UIComponentDecorators/infoIcon';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 
@@ -44,7 +43,7 @@ export default class UpdateCandidateDialog extends React.Component {
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
                   if (this.candidate.status !== initialStatus) {
-                    this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), InfoIcon() + ' New status: ' + this.candidate.status));
+                    this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), ' New status: ' + this.candidate.status));
                   }
                   this.props.updateCandidate(this.candidate);
                   this.handleClose();

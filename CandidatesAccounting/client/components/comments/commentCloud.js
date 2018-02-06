@@ -6,21 +6,25 @@ import styled, {css} from 'styled-components';
 import {formatDateTime} from '../../utilities/customMoment';
 
 export default function CommentCloud(props) {
-  let isCurrentUserComment = props.comment.author === props.userName;
   return (
-    <CommentWrapper right={isCurrentUserComment}>
-      <CommentMount highlighted={props.highlighted}>
+    <CommentWrapper right={props.isCurrentUserComment}>
+      <CommentMount markerColor={props.markerColor} highlighted={props.highlighted} right={props.isCurrentUserComment} isSystem={props.isSystem}>
+        {
+          props.isSystem ?
+            <svg height="24px" width="24px" fill="#FF8F00" focusable="false" viewBox="0 0 24 24" style={{margin: 'auto 5px auto 0'}}>'+'
+              <path
+                d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"/>
+              '+'
+            </svg> : ''
+        }
         <CommentText
           dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
       </CommentMount>
       <div> </div>
-      {isCurrentUserComment ?
+      {props.isCurrentUserComment ?
         <CommentFooter>
           {formatDateTime(props.comment.date)}
-          <AuthorName right>
-            {'Вы'}
-          </AuthorName>
           <DeleteComment>
             <IconButton
               icon={<RemoveIcon/>}
@@ -32,9 +36,12 @@ export default function CommentCloud(props) {
         </CommentFooter>
         :
         <CommentFooter>
-          <AuthorName>
-            {props.comment.author}
-          </AuthorName>
+          {
+            props.isSystem ? '' :
+            <AuthorName>
+              {props.comment.author}
+            </AuthorName>
+          }
           {formatDateTime(props.comment.date)}
         </CommentFooter>
       }
@@ -44,10 +51,10 @@ export default function CommentCloud(props) {
 
 CommentCloud.propTypes = {
   comment: PropTypes.object.isRequired,
-  userName: PropTypes.string.isRequired,
-  commentIndex: PropTypes.number.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  highlighted: PropTypes.bool,
+  markerColor: PropTypes.string,
+  isSystem: PropTypes.bool,
+  isCurrentUserComment: PropTypes.bool,
 };
 
 const CommentWrapper = styled.div`  
@@ -60,21 +67,43 @@ const CommentWrapper = styled.div`
 `;
 
 const CommentMount = styled.div`
-  display: inline-block;
-  padding: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  display: inline-flex;
+  padding: 11px 11px 11px 7px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
   max-width: 70%;
   background: #FFF;
-  border-radius: 7px 7px 7px 7px;
+  border-radius: 4px;
   margin-bottom: 1px;
+  border-left: 5px solid #999;
+  border-color: ${props => props.markerColor};
+	
+	${props => props.right && css`
+    border-left: none;
+    border-right: 5px solid #999;
+    border-color: #3949AB;
+    padding: 11px 7px 11px 11px;
+	`}
+	
+	${props => props.isSystem && css`
+    background-color: #FFF3E0;
+    border-color: #FF9800;
+    border-radius: 0px;
+    padding: 13px 13px 13px 7px;
+	`}	
   
 	${props => props.highlighted && css`
-		background: #B3E5FC;
-		box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+		background-color: #B3E5FC;
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
+	`}
+	
+	${props => props.highlighted && props.isSystem && css`
+		background-color: #FFECB3;
 	`}
 `;
 
 const CommentText = styled.div`
+  display: inline-block;
+  text-align: left;
   word-wrap: break-word;
   font-size: 96%;
 `;
@@ -88,6 +117,7 @@ const CommentFooter = styled.div`
 const DeleteComment = styled.div`
   display: inline-block;
   margin-top: 3px;
+  margin-left: 6px;
 `;
 
 const AuthorName = styled.div`

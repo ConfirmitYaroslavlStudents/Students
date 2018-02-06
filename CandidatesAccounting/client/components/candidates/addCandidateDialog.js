@@ -7,7 +7,6 @@ import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';
 import CloseIcon from 'material-ui-icons/Close';
 import CandidateInfoForm from './candidateInfoForm';
-import InfoIcon from '../common/UIComponentDecorators/infoIcon';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 
@@ -41,7 +40,7 @@ export default class AddCandidateDialog extends Component{
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
-                  this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), InfoIcon() + ' Initial status: ' + this.candidate.status));
+                  this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), ' Initial status: ' + this.candidate.status));
                   this.props.addCandidate(this.candidate);
                   this.handleClose();
                 }

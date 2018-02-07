@@ -71,16 +71,18 @@ export default class CommentsForm extends Component {
       return (
         <FormWrapper>
           <Grid container spacing={0} justify="center">
-            <Grid lg={6} md={9} sm={12} item>
+            <Grid item className="comment-grid" lg={6} md={9} sm={12}>
               {comments}
             </Grid>
           </Grid>
           <AddCommentPanelWrapper>
             <AddCommentPanel
               addComment={this.props.addComment}
-              candidateID={this.props.candidate.id}
+              candidate={this.props.candidate}
               onClick={this.handleNewCommentAdd}
               userName={this.props.userName}
+              subscribe={this.props.subscribe}
+              unsubscribe={this.props.unsubscribe}
               disabled={this.props.authorizationStatus === 'not-authorized'}
             />
           </AddCommentPanelWrapper>
@@ -100,6 +102,8 @@ CommentsForm.propTypes = {
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
+  subscribe: PropTypes.func.isRequired,
+  unsubscribe: PropTypes.func.isRequired,
   pageTitle: PropTypes.string.isRequired,
   setPageTitle: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
@@ -110,12 +114,13 @@ CommentsForm.propTypes = {
 };
 
 const FormWrapper = styled.div`
+  display: flex;
   width: 100%;
   min-height: 100vmin;
   background: #EEE;
   position: absolute;
   top: 0;
-  padding-top: 134px;
+  padding-top: 112px;
   padding-bottom: 161px;
   box-sizing: border-box;
 `;

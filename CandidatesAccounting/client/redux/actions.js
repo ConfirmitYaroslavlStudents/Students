@@ -105,6 +105,38 @@ function deleteCommentSuccess(candidateID, comment) {
   }
 }
 
+function subscribe(candidateID, email) {
+  return {
+    type: 'SUBSCRIBE',
+    candidateID,
+    email
+  }
+}
+
+function subscribeSuccess(candidateID, email) {
+  return {
+    type: 'SUBSCRIBE_SUCCESS',
+    candidateID,
+    email
+  }
+}
+
+function unsubscribe(candidateID, email) {
+  return {
+    type: 'UNSUBSCRIBE',
+    candidateID,
+    email
+  }
+}
+
+function unsubscribeSuccess(candidateID, email) {
+  return {
+    type: 'UNSUBSCRIBE_SUCCESS',
+    candidateID,
+    email
+  }
+}
+
 function setErrorMessage(message) {
   return {
     type: 'SET_ERROR_MESSAGE',
@@ -137,5 +169,5 @@ function setPageTitle(title) {
 }
 
 module.exports = {setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
-                  deleteComment, setErrorMessage, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess,
-                  addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};
+                  deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, setErrorMessage, addCandidateSuccess, deleteCandidateSuccess,
+                  updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};

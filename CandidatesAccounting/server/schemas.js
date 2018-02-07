@@ -40,6 +40,7 @@ export const CandidateSchema = new Schema({
       }
     }],
     tags: [String],
+    subscribers: [String],
     interviewDate: String,
     resume: String,
     groupName: String,
@@ -75,6 +76,7 @@ export const IntervieweeSchema = new Schema({
       }
     }],
     tags: [String],
+    subscribers: [String],
     interviewDate: String,
     resume: String,
   });
@@ -106,6 +108,7 @@ export const StudentSchema = new Schema({
       }
     }],
     tags: [String],
+    subscribers: [String],
     groupName: String,
     startingDate: String,
     endingDate: String
@@ -138,6 +141,7 @@ export const TraineeSchema = new Schema({
       }
     }],
     tags: [String],
+    subscribers: [String],
     mentor: String
   });
 

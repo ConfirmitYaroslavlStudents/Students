@@ -81,6 +81,7 @@ const CommentMount = styled.div`
     border-right: 5px solid #999;
     border-color: #3949AB;
     padding: 11px 7px 11px 11px;
+    margin-bottom: 0;
 	`}
 	
 	${props => props.isSystem && css`
@@ -117,6 +118,7 @@ const DeleteComment = styled.div`
   display: inline-block;
   margin-top: 3px;
   margin-left: 6px;
+  margin-bottom: -5px;
 `;
 
 const AuthorName = styled.div`

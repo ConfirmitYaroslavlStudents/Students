@@ -7,6 +7,7 @@ export default function createCandidate(status, fields) {
     email: fields.email ? fields.email : '',
     comments: fields.comments ? fields.comments.slice() : [],
     tags: fields.tags ? fields.tags.slice() : [],
+    subscribers: fields.subscribers ? fields.subscribers.slice() : [],
   };
 
   switch (status) {

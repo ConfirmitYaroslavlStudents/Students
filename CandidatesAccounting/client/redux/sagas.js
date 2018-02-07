@@ -3,8 +3,9 @@ import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
 import {login, logout} from '../api/authorizationService';
 import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
 import {addComment, deleteComment} from '../api/commentService.js';
+import {subscribe, unsubscribe} from '../api/subscribeService';
 import {loginSuccess, logoutSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        setErrorMessage, search} from './actions';
+        subscribeSuccess, unsubscribeSuccess, setErrorMessage, search} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
@@ -16,6 +17,8 @@ export default function* rootSaga() {
     watchCandidateDelete(),
     watchCommentAdd(),
     watchCommentDelete(),
+    watchSubscribe(),
+    watchUnsubscribe(),
     watchChangeSearchRequest(),
     watchSearch()
   ])
@@ -47,6 +50,14 @@ function* watchCommentAdd() {
 
 function* watchCommentDelete() {
   yield takeEvery('DELETE_COMMENT', deleteCommentSaga);
+}
+
+function* watchSubscribe() {
+  yield takeEvery('SUBSCRIBE', subscribeSaga);
+}
+
+function* watchUnsubscribe() {
+  yield takeEvery('UNSUBSCRIBE', unsubscribeSaga);
 }
 
 function* watchChangeSearchRequest() {
@@ -125,6 +136,26 @@ function* deleteCommentSaga(action) {
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete comment error.'));
+  }
+}
+
+function* subscribeSaga(action) {
+  try {
+    yield call(subscribe, action.candidateID, action.email);
+    yield put(subscribeSuccess(action.candidateID, action.email));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Subsribe error.'));
+  }
+}
+
+function* unsubscribeSaga(action) {
+  try {
+    yield call(unsubscribe, action.candidateID, action.email);
+    yield put(unsubscribeSuccess(action.candidateID, action.email));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Unsubsribe error.'));
   }
 }
 

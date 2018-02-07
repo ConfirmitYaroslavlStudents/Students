@@ -1,5 +1,5 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getAllTags, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment} from './mongoose';
+import {getAllCandidates, getAllTags, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment, subscribe, unsubscribe} from './mongoose';
 
 export const schema = buildSchema(`    
   input CandidateInput {
@@ -10,6 +10,7 @@ export const schema = buildSchema(`
     email: String!,
     comments: [CommentInput]!,
     tags: [String]!,
+    subscribers: [String]!,
     interviewDate: String,
     resume: String,
     groupName: String,
@@ -30,6 +31,7 @@ export const schema = buildSchema(`
     email: String!,
     comments: [Comment]!,
     tags: [String]!,
+    subscribers: [String]!,
     interviewDate: String,
     resume: String,
     groupName: String,
@@ -52,6 +54,8 @@ export const schema = buildSchema(`
     deleteCandidate(candidateID: ID!): Boolean
     addComment(candidateID: ID!, comment: CommentInput!): Boolean
     deleteComment(candidateID: ID!, comment: CommentInput!): Boolean
+    subscribe(candidateID: ID!, email: String!): Boolean
+    unsubscribe(candidateID: ID!, email: String!): Boolean
   }
 `);
 
@@ -89,6 +93,11 @@ export const root = {
   addComment: ({candidateID, comment}) => {
     return addComment(candidateID, comment)
       .then((result) => {
+        result.subscribers.forEach((subscriber) => {
+          if (subscriber !== comment.author) {
+            console.log('mailto:', subscriber, '\n', 'message:', '\n', comment);
+          }
+        });
         return !!result;
       });
   },
@@ -97,5 +106,17 @@ export const root = {
       .then((result) => {
         return !!result;
       });
-  }
+  },
+  subscribe: ({candidateID, email}) => {
+    return subscribe(candidateID, email)
+      .then((result) => {
+        return !!result;
+      });
+  },
+  unsubscribe: ({candidateID, email}) => {
+    return unsubscribe(candidateID, email)
+      .then((result) => {
+        return !!result;
+      });
+  },
 };

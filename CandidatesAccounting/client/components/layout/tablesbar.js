@@ -18,7 +18,7 @@ export default class TablesBar extends Component{
   };
 
   getNewURL(newTableType) {
-    if (this.props.pageTitle === 'Candidate Accounting') {
+    if (this.props.pageTitle === 'Candidate Accounting' && this.props.history.location.pathname !== '/' + newTableType) {
       return '/' + newTableType + this.props.history.location.search;
     } else {
       return '/' + newTableType;

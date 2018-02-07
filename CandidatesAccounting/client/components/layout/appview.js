@@ -88,6 +88,8 @@ export default class AppView extends Component {
                 deleteComment={this.props.deleteComment}
                 authorizationStatus={this.props.authorizationStatus}
                 userName={this.props.userName}
+                subscribe={this.props.subscribe}
+                unsubscribe={this.props.unsubscribe}
                 pageTitle={this.props.pageTitle}
                 setPageTitle={this.props.setPageTitle}
                 history={this.props.history}

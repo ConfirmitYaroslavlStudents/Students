@@ -16,6 +16,7 @@ export function getInitialState() {
           text
         }
         tags
+        subscribers
         interviewDate
         resume
         groupName

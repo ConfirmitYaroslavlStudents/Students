@@ -20,6 +20,8 @@ export default function CandidateControls(props) {
         candidate={props.candidate}
         addComment={props.addComment}
         userName={props.userName}
+        subscribe={props.subscribe}
+        unsubscribe={props.unsubscribe}
         disabled={props.authorizationStatus === 'not-authorized'}
       />
       <NavLink to={'/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments'}>

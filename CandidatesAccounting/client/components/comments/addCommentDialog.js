@@ -41,9 +41,12 @@ export default class AddCommentDialog extends Component {
             <FormWrapper>
               <AddCommentPanel
                 addComment={this.props.addComment}
-                candidateID={this.props.candidate.id}
+                candidate={this.props.candidate}
                 onClick={this.handleClose}
                 userName={this.props.userName}
+                subscribe={this.props.subscribe}
+                unsubscribe={this.props.unsubscribe}
+                disabled={this.props.disabled}
               />
             </FormWrapper>
         </DialogWindow>
@@ -56,6 +59,8 @@ AddCommentDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
+  subscribe: PropTypes.func.isRequired,
+  unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };
 

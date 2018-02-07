@@ -29,13 +29,13 @@ export default function reducer(state = Immutable.Map(), action) {
       }));
 
     case 'ADD_COMMENT_SUCCESS':
-      return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
-        if (candidate.get('id') === action.candidateID) {
-          return candidate.update('comments', (comments) => comments.push(Immutable.fromJS(action.comment)));
-        } else {
-          return candidate;
-        }
-      }));
+    return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
+      if (candidate.get('id') === action.candidateID) {
+        return candidate.update('comments', (comments) => comments.push(Immutable.fromJS(action.comment)));
+      } else {
+        return candidate;
+      }
+    }));
 
     case 'DELETE_COMMENT_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
@@ -44,6 +44,24 @@ export default function reducer(state = Immutable.Map(), action) {
             comment.get('author') === action.comment.author &&
             comment.get('date') === action.comment.date &&
             comment.get('text') === action.comment.text));
+        } else {
+          return candidate;
+        }
+      }));
+
+    case 'SUBSCRIBE_SUCCESS':
+      return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
+        if (candidate.get('id') === action.candidateID) {
+          return candidate.update('subscribers', (subscribers) => subscribers.push(Immutable.fromJS(action.email)));
+        } else {
+          return candidate;
+        }
+      }));
+
+    case 'UNSUBSCRIBE_SUCCESS':
+      return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
+        if (candidate.get('id') === action.candidateID) {
+          return candidate.update('subscribers', (subscribers) => subscribers.filterNot((email) => email === action.email));
         } else {
           return candidate;
         }

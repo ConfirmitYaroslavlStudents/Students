@@ -82,6 +82,14 @@ export function deleteComment(candidateID, comment) {
   return Candidate.findByIdAndUpdate(candidateID, {$pull: {comments: {author: comment.author, date: comment.date, text: comment.text}}}).exec();
 }
 
+export function subscribe(candidateID, email) {
+  return Candidate.findByIdAndUpdate(candidateID, {$push: {subscribers: email}}).exec();
+}
+
+export function unsubscribe(candidateID, email) {
+  return Candidate.findByIdAndUpdate(candidateID, {$pull: {subscribers: email}}).exec();
+}
+
 function updateTags(probablyNewTags) {
   getAllTags()
     .then((tags) => {

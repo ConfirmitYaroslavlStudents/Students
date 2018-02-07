@@ -21,7 +21,6 @@ export default function reducer(state = Immutable.Map(), action) {
 
     case 'UPDATE_CANDIDATE_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
-        console.log(candidate);
         if (candidate.get('id') === action.candidate.id) {
           return Immutable.fromJS(action.candidate);
         } else {

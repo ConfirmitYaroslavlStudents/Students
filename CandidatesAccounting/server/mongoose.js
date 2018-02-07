@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
-import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from "./schemas";
+import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from './schemas';
 
 mongoose.Promise = Promise;
 
@@ -10,7 +10,15 @@ export function connect() {
   });
 }
 
+export function disconnect(error) {
+  mongoose.disconnect();
+  if(error) {
+    return console.log(error);
+  }
+}
+
 connect();
+
 AccountSchema.plugin(passportLocalMongoose);
 export const Account = mongoose.model('Account', AccountSchema, 'accounts');
 const Candidate = mongoose.model('Candidate', CandidateSchema, 'candidates');
@@ -18,13 +26,6 @@ const Interviewee = mongoose.model('Interviewee', IntervieweeSchema, 'candidates
 const Student = mongoose.model('Student', StudentSchema, 'candidates');
 const Trainee = mongoose.model('Trainee', TraineeSchema, 'candidates');
 const Tag = mongoose.model('Tag', TagSchema, 'tags');
-
-function disconnect(error) {
-  //mongoose.disconnect();
-  if(error) {
-    return console.log(error);
-  }
-}
 
 function identifyModel(candidate) {
   switch (candidate.status) {
@@ -38,17 +39,11 @@ function identifyModel(candidate) {
 }
 
 export function getAllCandidates() {
-  return connect()
-    .then(() => {
-      return Candidate.find({}).exec(disconnect)
-    });
+  return Candidate.find({}).exec();
 }
 
 export function getAllTags() {
-  return connect()
-    .then(() => {
-      return Tag.find({}).exec(disconnect)
-    })
+  return Tag.find({}).exec()
     .then((result) => {
       let tags = [];
       result.forEach((tag) => {
@@ -59,21 +54,16 @@ export function getAllTags() {
 }
 
 export function addCandidate(newCandidate) {
-  return connect()
-    .then(() => {
-      return identifyModel(newCandidate).create(newCandidate, disconnect)
-    })
+  return identifyModel(newCandidate).create(newCandidate)
     .then((result) => {
+    console.log(result._id);
       updateTags(result.tags);
       return result._id;
     });
 }
 
 export function updateCandidate(candidate) {
-  return connect()
-    .then(() => {
-      return identifyModel(candidate).replaceOne({_id: candidate.id}, candidate).exec(disconnect)
-    })
+  return identifyModel(candidate).replaceOne({_id: candidate.id}, candidate)
     .then(() => {
       updateTags(candidate.tags);
       return candidate;
@@ -81,25 +71,15 @@ export function updateCandidate(candidate) {
 }
 
 export function deleteCandidate(candidateID) {
-  return connect()
-    .then(() => {
-      return Candidate.findByIdAndRemove(candidateID).exec(disconnect);
-    });
+  return Candidate.findByIdAndRemove(candidateID).exec();
 }
 
 export function addComment(candidateID, comment) {
-  return connect()
-    .then(() => {
-      return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec(disconnect);
-    });
+  return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec();
 }
 
 export function deleteComment(candidateID, comment) {
-  return connect()
-    .then(() => {
-      return Candidate.findByIdAndUpdate(candidateID,
-        {$pull: {comments: {author: comment.author, date: comment.date, text: comment.text}}}).exec(disconnect);
-    });
+  return Candidate.findByIdAndUpdate(candidateID, {$pull: {comments: {author: comment.author, date: comment.date, text: comment.text}}}).exec();
 }
 
 function updateTags(probablyNewTags) {
@@ -118,8 +98,5 @@ function updateTags(probablyNewTags) {
 }
 
 function addTags(tags) {
-  connect()
-    .then(() => {
-      Tag.create(tags, disconnect);
-    });
+  Tag.create(tags);
 }

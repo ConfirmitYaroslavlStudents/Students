@@ -42,7 +42,7 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 app.use('/graphql', function(req, res, next) {
-  if (req.isAuthenticated() || !req.body.variables) {
+  if (req.isAuthenticated() || !req.body.query.includes('mutation')) {
     next();
   } else {
     res.status(401).end();
@@ -55,18 +55,16 @@ app.use('/graphql', graphqlHTTP({
   graphiql: false,
 }));
 
-connect();
-
 app.get('/login', function(req, res) {
   if (req.isAuthenticated()) {
-    res.json({username: req.user.username.split('@')[0]});
+    res.json({username: req.user.username});
   } else {
-    res.json({username: ''});
+    res.status(401).end();
   }
 });
 
 app.post('/login', function(req, res) {
-  Account.findOne({username: req.body.username}, function (findError, user) {
+  return Account.findOne({username: req.body.username}, function (findError, user) {
     if (findError) {
       return res.status(401).end();
     }
@@ -77,16 +75,16 @@ app.post('/login', function(req, res) {
         }
         passport.authenticate('local')(req, res, function () {
           console.log('User signed on:', req.user.username);
-          res.json({username: req.user.username.split('@')[0]});
+          res.json({username: req.user.username});
         });
       });
     } else {
       passport.authenticate('local')(req, res, function () {
         console.log('User signed in:', req.user.username);
-        res.json({username: req.user.username.split('@')[0]});
+        res.json({username: req.user.username});
       });
     }
-  })
+  });
 });
 
 app.get('/logout', function(req, res){
@@ -97,15 +95,12 @@ app.get('/logout', function(req, res){
 });
 
 app.get('*', function (req, res) {
-  if (req.isAuthenticated()) {
-    console.log('Authenticated:', req.sessionID, req.user.username, req.cookies);
-  } else {
-    console.log('Not authenticated:', req.sessionID, req.cookies);
-  }
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
+
+connect();
 
 app.listen(app.get('port'), () => {
   console.log('Express server is listening on port', app.get('port'));

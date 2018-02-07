@@ -6,6 +6,7 @@ import Logo from 'material-ui-icons/AccountCircle';
 import SearchForm from './searchForm';
 import LoginDialog from './loginDialog';
 import FlatButton from '../common/UIComponentDecorators/flatButton';
+import formatUserName from '../../utilities/formatUserName';
 
 export default function MainNavbar(props) {
   return (
@@ -24,7 +25,7 @@ export default function MainNavbar(props) {
             <LoginDialog login={props.login}/>
             :
             <div style={{display: 'inline-block'}}>
-              <span style={{marginRight: 5, marginLeft: 5}}>{props.userName}</span>
+              <span style={{marginRight: 5, marginLeft: 5}}>{formatUserName(props.userName)}</span>
               <FlatButton color="contrast" onClick={() => {
                 props.logout();
               }}>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CommentCloud from './commentCloud';
 import AddCommentPanel from './addCommentPanel';
 import getRandomColor from '../../utilities/getRandomColor';
+import Grid from 'material-ui/Grid';
 
 export default class CommentsForm extends Component {
   constructor(props) {
@@ -52,15 +53,15 @@ export default class CommentsForm extends Component {
         <CommentCloud
           key={index}
           comment={comment}
-          isCurrentUserComment={comment.author === this.props.userName}
           markerColor={this.userColors[comment.author]}
+          deleteComment={() => {this.deleteComment(comment)}}
+          isSystem={comment.author === 'SYSTEM'}
+          isCurrentUserComment={comment.author === this.props.userName}
           highlighted={
             this.props.searchRequest ?
               comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
               comment.text.toLowerCase().includes(this.props.searchRequest.toLowerCase())
               : false}
-          deleteComment={() => {this.deleteComment(comment)}}
-          isSystem={comment.author === 'CandidateAccounting'}
         />
       );
       if (this.props.candidate.comments.length === 0) {
@@ -69,7 +70,11 @@ export default class CommentsForm extends Component {
 
       return (
         <FormWrapper>
-          {comments}
+          <Grid container spacing={0} justify="center">
+            <Grid lg={6} md={9} sm={12} item>
+              {comments}
+            </Grid>
+          </Grid>
           <AddCommentPanelWrapper>
             <AddCommentPanel
               addComment={this.props.addComment}

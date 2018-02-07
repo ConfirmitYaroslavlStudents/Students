@@ -40,7 +40,7 @@ export default class AddCandidateDialog extends Component{
             <div style={{display: 'inline-block'}}>
               <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
-                  this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), ' Initial status: ' + this.candidate.status));
+                  this.candidate.comments.push(createComment('SYSTEM', getCurrentDateTime(), ' Initial status: ' + this.candidate.status));
                   this.props.addCandidate(this.candidate);
                   this.handleClose();
                 }

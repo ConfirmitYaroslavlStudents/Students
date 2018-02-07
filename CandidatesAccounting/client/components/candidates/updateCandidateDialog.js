@@ -43,7 +43,7 @@ export default class UpdateCandidateDialog extends React.Component {
               <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
                   if (this.candidate.status !== initialStatus) {
-                    this.candidate.comments.push(createComment("CandidateAccounting", getCurrentDateTime(), ' New status: ' + this.candidate.status));
+                    this.candidate.comments.push(createComment('SYSTEM', getCurrentDateTime(), ' New status: ' + this.candidate.status));
                   }
                   this.props.updateCandidate(this.candidate);
                   this.handleClose();

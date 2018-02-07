@@ -25,9 +25,7 @@ export function updateCandidate(candidate) {
         candidate: $candidate
       )
     }`,
-    {
-      candidate: candidate
-    }
+    {candidate: candidate}
   )
     .then((data) => {
       if (!data.updateCandidate) {
@@ -43,9 +41,7 @@ export function deleteCandidate(candidateID) {
         candidateID: $candidateID
       )
     }`,
-    {
-      candidateID: candidateID
-    }
+    {candidateID: candidateID}
   )
   .then((data) => {
     if (!data.deleteCandidate) {

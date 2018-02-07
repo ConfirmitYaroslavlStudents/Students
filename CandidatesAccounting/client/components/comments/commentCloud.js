@@ -4,11 +4,12 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 import RemoveIcon from 'material-ui-icons/Delete';
 import styled, {css} from 'styled-components';
 import {formatDateTime} from '../../utilities/customMoment';
+import formatUserName from '../../utilities/formatUserName';
 
 export default function CommentCloud(props) {
   return (
     <CommentWrapper right={props.isCurrentUserComment}>
-      <CommentMount markerColor={props.markerColor} highlighted={props.highlighted} right={props.isCurrentUserComment} isSystem={props.isSystem}>
+      <CommentMount markerColor={props.markerColor} isSystem={props.isSystem} right={props.isCurrentUserComment} highlighted={props.highlighted}>
         {
           props.isSystem ?
             <svg height="24px" width="24px" fill="#FF8F00" focusable="false" viewBox="0 0 24 24" style={{margin: 'auto 5px auto 0'}}>'+'
@@ -22,9 +23,16 @@ export default function CommentCloud(props) {
         </CommentText>
       </CommentMount>
       <div> </div>
-      {props.isCurrentUserComment ?
-        <CommentFooter>
-          {formatDateTime(props.comment.date)}
+      <CommentFooter>
+      {
+        !props.isSystem && !props.isCurrentUserComment ?
+          <AuthorName>
+            {formatUserName(props.comment.author)}
+          </AuthorName> : ''
+      }
+      {formatDateTime(props.comment.date)}
+      {
+        props.isCurrentUserComment ?
           <DeleteComment>
             <IconButton
               icon={<RemoveIcon/>}
@@ -32,19 +40,9 @@ export default function CommentCloud(props) {
               onClick={props.deleteComment}
               style={{height: 24, width: 24}}
             />
-          </DeleteComment>
-        </CommentFooter>
-        :
-        <CommentFooter>
-          {
-            props.isSystem ? '' :
-            <AuthorName>
-              {props.comment.author}
-            </AuthorName>
-          }
-          {formatDateTime(props.comment.date)}
-        </CommentFooter>
+          </DeleteComment> : ''
       }
+    </CommentFooter>
     </CommentWrapper>
   );
 }
@@ -55,6 +53,7 @@ CommentCloud.propTypes = {
   markerColor: PropTypes.string,
   isSystem: PropTypes.bool,
   isCurrentUserComment: PropTypes.bool,
+  highlighted: PropTypes.bool,
 };
 
 const CommentWrapper = styled.div`  
@@ -122,11 +121,7 @@ const DeleteComment = styled.div`
 
 const AuthorName = styled.div`
   display: inline-block; 
-  margin:  0 15px 0 1px;
+  margin:  0 10px 0 1px;
   color: #222;
   font-size: normal;
-  
-  ${props => props.right && css`
-    margin:  0 12px;
-	`}
 `;

@@ -67,6 +67,15 @@ export default function reducer(state = Immutable.Map(), action) {
         }
       }));
 
+    case 'NOTICE_NOTIFICATION_SUCCESS':
+      return state = state.update('notifications', (notifications) => notifications.map((notification) => {
+        if (notification.get('id') === action.notificationID) {
+          return notification.update('recent', (recent) => false);
+        } else {
+          return notification;
+        }
+      }));
+
     case 'SET_ERROR_MESSAGE':
       return state = state.set('errorMessage', action.message);
 

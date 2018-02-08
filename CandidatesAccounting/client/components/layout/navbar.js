@@ -5,8 +5,10 @@ import Navbar from '../common/UIComponentDecorators/navbar';
 import Logo from 'material-ui-icons/AccountCircle';
 import SearchForm from './searchForm';
 import LoginDialog from './loginDialog';
-import FlatButton from '../common/UIComponentDecorators/flatButton';
+import IconButton from '../common/UIComponentDecorators/iconButton';
+import SignOutIcon from 'material-ui-icons/ExitToApp';
 import formatUserName from '../../utilities/formatUserName';
+import NotificationCenter from './notificationCenter';
 
 export default function MainNavbar(props) {
   return (
@@ -24,14 +26,20 @@ export default function MainNavbar(props) {
             props.authorizationStatus === 'not-authorized' ?
             <LoginDialog login={props.login}/>
             :
-            <div style={{display: 'inline-block'}}>
+            <UserControls>
               <span style={{marginRight: 5, marginLeft: 5}}>{formatUserName(props.userName)}</span>
-              <FlatButton color="contrast" onClick={() => {
-                props.logout();
-              }}>
-                Sign out
-              </FlatButton>
-            </div>
+              <NotificationCenter
+                notifications={props.notifications}
+                noticeNotification={props.noticeNotification}
+                userName={props.userName}
+              />
+              <IconButton
+                icon={<SignOutIcon />}
+                color="contrast"
+                onClick={() => {
+                  props.logout();
+                }}/>
+            </UserControls>
           }
         </RightPartWrapper>}
     />
@@ -44,6 +52,8 @@ MainNavbar.propTypes = {
   authorizationStatus: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
+  notifications: PropTypes.array.isRequired,
+  noticeNotification: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
@@ -51,5 +61,10 @@ MainNavbar.propTypes = {
 
 const RightPartWrapper = styled.div`
   display: flex;
+  align-items: center;
+`;
+
+const UserControls= styled.div`
+  display: inline-flex;
   align-items: center;
 `;

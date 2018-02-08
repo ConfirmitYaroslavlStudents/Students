@@ -8,9 +8,12 @@ export const AccountSchema = new Schema({
     unique: true,
     required: true
   },
-  password: {
-    type: String
-  },
+  password: String,
+  notifications: [{
+    recent: Boolean,
+    source: {},
+    content: {}
+  }],
 });
 
 export const CandidateSchema = new Schema({

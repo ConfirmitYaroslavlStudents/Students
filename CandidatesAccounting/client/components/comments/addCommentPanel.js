@@ -59,6 +59,7 @@ export default class AddCommentPanel extends Component {
         <ButtonWrapper>
           <NotificationsWrapper>
             <SubscribeButton
+              active={!this.props.disabled && this.props.candidate.subscribers.includes(this.props.userName)}
               candidate={this.props.candidate}
               userName={this.props.userName}
               subscribe={this.props.subscribe}

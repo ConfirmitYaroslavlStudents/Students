@@ -1,5 +1,5 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getAllTags, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment, subscribe, unsubscribe} from './mongoose';
+import {getAllCandidates, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment, subscribe, unsubscribe, noticeNotification} from './mongoose';
 
 export const schema = buildSchema(`    
   input CandidateInput {
@@ -44,9 +44,16 @@ export const schema = buildSchema(`
     date: String!,
     text: String!,
   }
+  type Notification {
+    id: ID!,
+    recent: Boolean!,
+    source: Candidate!,
+    content: Comment!
+  }
   type Query {
     candidates: [Candidate],
-    tags: [String]
+    tags: [String],
+    notifications(username: String!): [Notification]
   }
   type Mutation {
     addCandidate(candidate: CandidateInput!): String
@@ -56,6 +63,7 @@ export const schema = buildSchema(`
     deleteComment(candidateID: ID!, comment: CommentInput!): Boolean
     subscribe(candidateID: ID!, email: String!): Boolean
     unsubscribe(candidateID: ID!, email: String!): Boolean
+    noticeNotification(username: String!, notificationID: ID!): Boolean
   }
 `);
 
@@ -75,6 +83,23 @@ export const root = {
   tags: () => {
     return getAllTags();
   },
+  notifications: ({username}) => {
+    if (!username || username.trim() === '') {
+      return [];
+    }
+    return getNotifications(username)
+      .then((result) => {
+        let notifications = [];
+        result.forEach((notification) => {
+          notification.id = notification._id;
+          delete notification._id;
+          notification.source.id = notification.source._id;
+          delete notification.source._id;
+          notifications.push(notification);
+        });
+        return notifications;
+      });
+  },
   addCandidate: ({candidate}) => {
     return addCandidate(candidate);
   },
@@ -93,11 +118,12 @@ export const root = {
   addComment: ({candidateID, comment}) => {
     return addComment(candidateID, comment)
       .then((result) => {
-        result.subscribers.forEach((subscriber) => {
-          if (subscriber !== comment.author) {
-            console.log('mailto:', subscriber, '\n', 'message:', '\n', comment);
-          }
-        });
+        return !!result;
+      });
+  },
+  noticeNotification: ({username, notificationID}) => {
+    return noticeNotification(username, notificationID)
+      .then((result) => {
         return !!result;
       });
   },

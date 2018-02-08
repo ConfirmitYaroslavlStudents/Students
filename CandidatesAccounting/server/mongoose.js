@@ -53,6 +53,13 @@ export function getAllTags() {
     });
 }
 
+export function getNotifications(username) {
+  return Account.findOne({username: username}).exec()
+    .then((account) => {
+      return account.notifications;
+    });
+}
+
 export function addCandidate(newCandidate) {
   return identifyModel(newCandidate).create(newCandidate)
     .then((result) => {
@@ -75,7 +82,15 @@ export function deleteCandidate(candidateID) {
 }
 
 export function addComment(candidateID, comment) {
-  return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec();
+  return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec()
+    .then((result) => {
+      result.subscribers.forEach((subscriber) => {
+        if (subscriber !== comment.author) {
+          addNotification(result, subscriber, comment);
+        }
+      });
+      return result;
+    });
 }
 
 export function deleteComment(candidateID, comment) {
@@ -88,6 +103,10 @@ export function subscribe(candidateID, email) {
 
 export function unsubscribe(candidateID, email) {
   return Candidate.findByIdAndUpdate(candidateID, {$pull: {subscribers: email}}).exec();
+}
+
+export function noticeNotification(username, notificationID) {
+  return Account.updateOne({username: username, 'notifications._id': notificationID}, {'$set': {'notifications.$.recent': false}}).exec();
 }
 
 function updateTags(probablyNewTags) {
@@ -107,4 +126,8 @@ function updateTags(probablyNewTags) {
 
 function addTags(tags) {
   Tag.create(tags);
+}
+
+function addNotification(source, recipient, notification) {
+  Account.findOneAndUpdate({username: recipient}, {$push: {notifications: {recent: true, source: source, content: notification}}}).exec();
 }

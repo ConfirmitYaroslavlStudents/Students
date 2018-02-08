@@ -1,7 +1,7 @@
-import {sendGraphQLMutation} from './graphqlClient';
+import sendGraphQLQuery from './graphqlClient';
 
 export function addCandidate(candidate) {
-  return sendGraphQLMutation(
+  return sendGraphQLQuery(
     `mutation addCandidate($candidate: CandidateInput!) {
       addCandidate(
         candidate: $candidate
@@ -19,7 +19,7 @@ export function addCandidate(candidate) {
 }
 
 export function updateCandidate(candidate) {
-  return sendGraphQLMutation(
+  return sendGraphQLQuery(
     `mutation updateCandidate($candidate: CandidateInput!) {
       updateCandidate(
         candidate: $candidate
@@ -35,7 +35,7 @@ export function updateCandidate(candidate) {
 }
 
 export function deleteCandidate(candidateID) {
-  return sendGraphQLMutation(
+  return sendGraphQLQuery(
     `mutation deleteCandidate($candidateID: ID!) {
       deleteCandidate(
         candidateID: $candidateID

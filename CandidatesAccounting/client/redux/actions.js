@@ -1,6 +1,7 @@
-function setInitialState() {
+function setInitialState(state) {
   return {
-    type: 'SET_INITIAL_STATE'
+    type: 'SET_INITIAL_STATE',
+    state
   }
 }
 
@@ -137,6 +138,22 @@ function unsubscribeSuccess(candidateID, email) {
   }
 }
 
+function noticeNotification(username, notificationID) {
+  return {
+    type: 'NOTICE_NOTIFICATION',
+    username,
+    notificationID
+  }
+}
+
+function noticeNotificationSuccess(username, notificationID) {
+  return {
+    type: 'NOTICE_NOTIFICATION_SUCCESS',
+    username,
+    notificationID
+  }
+}
+
 function setErrorMessage(message) {
   return {
     type: 'SET_ERROR_MESSAGE',
@@ -168,6 +185,7 @@ function setPageTitle(title) {
   }
 }
 
-module.exports = {setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
-                  deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, setErrorMessage, addCandidateSuccess, deleteCandidateSuccess,
-                  updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};
+module.exports = {
+  setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
+  deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess, setErrorMessage,
+  addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};

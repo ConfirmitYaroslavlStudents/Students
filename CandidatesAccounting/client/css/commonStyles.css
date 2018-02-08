@@ -27,6 +27,10 @@ tr th:last-child  span {
     color: #3F51B5 !important;
 }
 
+.badge-contrast {
+    background-color: #ff4081;
+}
+
 .big-icon {
     height: 28px !important;
     width: 28px !important;
@@ -47,6 +51,10 @@ tr th:last-child  span {
     margin-top: 112px;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .nav-link {
     text-decoration: none !important;
     color: dimgray;
@@ -61,6 +69,11 @@ tr th:last-child  span {
 
 .nav-link:hover {
     color: #3F51B5;
+}
+
+.notification-link {
+    text-decoration: none !important;
+    color: inherit;
 }
 
 .ql-editor {

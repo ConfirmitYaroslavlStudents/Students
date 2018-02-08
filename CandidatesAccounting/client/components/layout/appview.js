@@ -51,6 +51,8 @@ export default class AppView extends Component {
           authorizationStatus={this.props.authorizationStatus}
           login={this.props.login}
           logout={this.props.logout}
+          notifications={this.props.notifications}
+          noticeNotification={this.props.noticeNotification}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
@@ -111,6 +113,7 @@ function mapStateToProps(state) {
     userName: state.get('userName'),
     candidates: state.get('candidates').toJS(),
     tags: state.get('tags').toArray(),
+    notifications: state.get('notifications').toJS(),
     pageTitle: state.get('pageTitle'),
     searchRequest: state.get('searchRequest'),
     errorMessage: state.get('errorMessage')

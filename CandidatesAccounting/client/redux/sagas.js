@@ -1,11 +1,13 @@
 import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
+import {getInitialState} from '../api/commonService';
 import {login, logout} from '../api/authorizationService';
 import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
 import {addComment, deleteComment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
-import {loginSuccess, logoutSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        subscribeSuccess, unsubscribeSuccess, setErrorMessage, search} from './actions';
+import {noticeNotification} from '../api/notificationService';
+import {setInitialState, loginSuccess, logoutSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, setErrorMessage, search} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
@@ -19,6 +21,7 @@ export default function* rootSaga() {
     watchCommentDelete(),
     watchSubscribe(),
     watchUnsubscribe(),
+    watchNoticeNotification(),
     watchChangeSearchRequest(),
     watchSearch()
   ])
@@ -56,6 +59,10 @@ function* watchSubscribe() {
   yield takeEvery('SUBSCRIBE', subscribeSaga);
 }
 
+function* watchNoticeNotification() {
+  yield takeEvery('NOTICE_NOTIFICATION', noticeNotificationSaga);
+}
+
 function* watchUnsubscribe() {
   yield takeEvery('UNSUBSCRIBE', unsubscribeSaga);
 }
@@ -72,6 +79,14 @@ function* loginSaga(action) {
   try {
     const userName = yield call(login, action.email, action.password);
     yield put(loginSuccess(userName));
+    let newState = yield call(getInitialState, userName);
+    yield put(setInitialState({
+      userName: userName,
+      authorizationStatus: 'authorized',
+      candidates: newState.candidates,
+      tags: newState.tags,
+      notifications: newState.notifications
+    }));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Incorrect login or password.'));
@@ -82,6 +97,14 @@ function* logoutSaga(action) {
   try {
     yield call(logout);
     yield put(logoutSuccess());
+    let newState = yield call(getInitialState, '');
+    yield put(setInitialState({
+      userName: '',
+      authorizationStatus: 'not-authorized',
+      candidates: newState.candidates,
+      tags: newState.tags,
+      notifications: newState.notifications
+    }));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Logout error.'));
@@ -156,6 +179,16 @@ function* unsubscribeSaga(action) {
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Unsubsribe error.'));
+  }
+}
+
+function* noticeNotificationSaga(action) {
+  try {
+    yield call(noticeNotification, action.username, action.notificationID);
+    yield put(noticeNotificationSuccess(action.username, action.notificationID));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Notice notification error.'));
   }
 }
 

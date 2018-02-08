@@ -62,7 +62,7 @@ function renderApp(app) {
 }
 
 getUsername().then((username) => {
-  getInitialState().then((initialState) => {
+  getInitialState(username).then((initialState) => {
     store.dispatch({
         type: "SET_INITIAL_STATE",
         state: {
@@ -70,6 +70,7 @@ getUsername().then((username) => {
           authorizationStatus: !username || username === '' ? 'not-authorized' : 'authorized',
           candidates: initialState.candidates,
           tags: initialState.tags,
+          notifications: initialState.notifications,
           pageTitle: 'Candidate Accounting',
           searchRequest: '',
           errorMessage: ''

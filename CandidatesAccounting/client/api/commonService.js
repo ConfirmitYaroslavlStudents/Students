@@ -1,9 +1,9 @@
-import {sendGraphQLQuery} from './graphqlClient';
+import sendGraphQLQuery from './graphqlClient';
 import createCandidate from '../utilities/createCandidate';
 
-export function getInitialState() {
+export function getInitialState(username) {
   return sendGraphQLQuery(
-    `query {
+    `query($username: String!) {
       candidates {
         id
         name
@@ -25,7 +25,22 @@ export function getInitialState() {
         mentor
       }
       tags
-    }`
+      notifications(username: $username) {
+    		id
+        recent
+        source {
+          id
+          name
+          status
+        }
+        content {
+          date
+          author
+          text
+        }
+      }
+    }`,
+    {username: username}
   )
   .then((data) => {
     if (!data) {
@@ -37,7 +52,8 @@ export function getInitialState() {
     });
     return {
       candidates: candidates,
-      tags: data.tags
+      tags: data.tags,
+      notifications: data.notifications
     };
   });
 }

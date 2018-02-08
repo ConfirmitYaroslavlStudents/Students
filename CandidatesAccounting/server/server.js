@@ -40,19 +40,19 @@ app.use(passport.session());
 passport.use(new passportLocal.Strategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
-
+/*
 app.use('/graphql', function(req, res, next) {
-  if (req.isAuthenticated() || !req.body.query.includes('mutation')) {
+  if (req.isAuthenticated() || !req.body || !req.body.query || !req.body.query.includes('mutation')) {
     next();
   } else {
     res.status(401).end();
   }
-});
+});*/
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: false,
+  graphiql: true,
 }));
 
 app.get('/login', function(req, res) {

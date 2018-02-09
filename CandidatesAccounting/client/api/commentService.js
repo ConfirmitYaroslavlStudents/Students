@@ -17,20 +17,21 @@ export function addComment(candidateID, comment) {
     if (!data.addComment) {
       throw 'Server error';
     }
+    return data.addComment;
   });
 }
 
-export function deleteComment(candidateID, comment) {
+export function deleteComment(candidateID, commentID) {
   return sendGraphQLQuery(
-    `mutation deleteComment($candidateID: ID!, $comment: CommentInput!) {
+    `mutation deleteComment($candidateID: ID!, $commentID: ID!) {
       deleteComment(
         candidateID: $candidateID,
-        comment: $comment
+        commentID: $commentID
       )
     }`,
     {
       candidateID: candidateID,
-      comment: comment
+      commentID: commentID
     }
   )
   .then((data) => {

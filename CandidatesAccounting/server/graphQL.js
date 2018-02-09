@@ -40,6 +40,7 @@ export const schema = buildSchema(`
     mentor: String,
   }
   type Comment {
+    id: ID!,
     author: String!,
     date: String!,
     text: String!,
@@ -59,8 +60,8 @@ export const schema = buildSchema(`
     addCandidate(candidate: CandidateInput!): String
     updateCandidate(candidate: CandidateInput!): Boolean
     deleteCandidate(candidateID: ID!): Boolean
-    addComment(candidateID: ID!, comment: CommentInput!): Boolean
-    deleteComment(candidateID: ID!, comment: CommentInput!): Boolean
+    addComment(candidateID: ID!, comment: CommentInput!): String
+    deleteComment(candidateID: ID!, commentID: ID!): Boolean
     subscribe(candidateID: ID!, email: String!): Boolean
     unsubscribe(candidateID: ID!, email: String!): Boolean
     noticeNotification(username: String!, notificationID: ID!): Boolean
@@ -75,6 +76,10 @@ export const root = {
         result.forEach((candidate) => {
           candidate.id = candidate._id;
           delete candidate._id;
+          candidate.comments.forEach((comment) => {
+            comment.id = comment._id;
+            delete comment._id;
+          });
           candidates.push(candidate);
         });
         return candidates;
@@ -110,16 +115,10 @@ export const root = {
       });
   },
   deleteCandidate: ({candidateID}) => {
-    return deleteCandidate(candidateID)
-      .then((result) => {
-        return !!result;
-      });
+    return deleteCandidate(candidateID);
   },
   addComment: ({candidateID, comment}) => {
-    return addComment(candidateID, comment)
-      .then((result) => {
-        return !!result;
-      });
+    return addComment(candidateID, comment);
   },
   noticeNotification: ({username, notificationID}) => {
     return noticeNotification(username, notificationID)
@@ -127,8 +126,8 @@ export const root = {
         return !!result;
       });
   },
-  deleteComment: ({candidateID, comment}) => {
-    return deleteComment(candidateID, comment)
+  deleteComment: ({candidateID, commentID}) => {
+    return deleteComment(candidateID, commentID)
       .then((result) => {
         return !!result;
       });

@@ -144,8 +144,9 @@ function* deleteCandidateSaga(action) {
 
 function* addCommentSaga(action) {
   try {
-    yield call(addComment, action.candidateID, action.comment);
-    yield put(addCommentSuccess(action.candidateID, action.comment));
+    let comment = action.comment;
+    comment.id = yield call(addComment, action.candidateID, action.comment);
+    yield put(addCommentSuccess(action.candidateID, comment));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Add comment error.'));
@@ -154,8 +155,8 @@ function* addCommentSaga(action) {
 
 function* deleteCommentSaga(action) {
   try {
-    yield call(deleteComment, action.candidateID, action.comment);
-    yield put(deleteCommentSuccess(action.candidateID, action.comment));
+    yield call(deleteComment, action.candidateID, action.commentID);
+    yield put(deleteCommentSuccess(action.candidateID, action.commentID));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete comment error.'));

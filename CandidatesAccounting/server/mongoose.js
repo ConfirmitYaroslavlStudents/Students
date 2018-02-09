@@ -82,6 +82,8 @@ export function deleteCandidate(candidateID) {
 }
 
 export function addComment(candidateID, comment) {
+  const id = mongoose.Types.ObjectId();
+  comment._id = id;
   return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec()
     .then((result) => {
       result.subscribers.forEach((subscriber) => {
@@ -89,12 +91,12 @@ export function addComment(candidateID, comment) {
           addNotification(result, subscriber, comment);
         }
       });
-      return result;
+      return id;
     });
 }
 
-export function deleteComment(candidateID, comment) {
-  return Candidate.findByIdAndUpdate(candidateID, {$pull: {comments: {author: comment.author, date: comment.date, text: comment.text}}}).exec();
+export function deleteComment(candidateID, commentID) {
+  return Candidate.findByIdAndUpdate(candidateID, {$pull: {comments: {_id: commentID}}}).exec();
 }
 
 export function subscribe(candidateID, email) {

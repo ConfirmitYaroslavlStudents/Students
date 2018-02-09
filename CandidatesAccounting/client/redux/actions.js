@@ -90,19 +90,19 @@ function addCommentSuccess(candidateID, comment) {
   }
 }
 
-function deleteComment(candidateID, comment) {
+function deleteComment(candidateID, commentID) {
   return {
     type: 'DELETE_COMMENT',
     candidateID,
-    comment
+    commentID
   }
 }
 
-function deleteCommentSuccess(candidateID, comment) {
+function deleteCommentSuccess(candidateID, commentID) {
   return {
     type: 'DELETE_COMMENT_SUCCESS',
     candidateID,
-    comment
+    commentID
   }
 }
 

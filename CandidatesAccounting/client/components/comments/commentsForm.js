@@ -43,8 +43,8 @@ export default class CommentsForm extends Component {
     this.shouldScrollDown = true;
   }
 
-  deleteComment(comment) {
-    this.props.deleteComment(this.props.candidate.id, comment);
+  deleteComment(commentID) {
+    this.props.deleteComment(this.props.candidate.id, commentID);
   }
 
   render() {
@@ -54,7 +54,7 @@ export default class CommentsForm extends Component {
           key={index}
           comment={comment}
           markerColor={this.userColors[comment.author]}
-          deleteComment={() => {this.deleteComment(comment)}}
+          deleteComment={() => {this.deleteComment(comment.id)}}
           isSystem={comment.author === 'SYSTEM'}
           isCurrentUserComment={comment.author === this.props.userName}
           highlighted={

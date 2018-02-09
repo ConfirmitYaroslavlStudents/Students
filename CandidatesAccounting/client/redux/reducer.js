@@ -41,9 +41,7 @@ export default function reducer(state = Immutable.Map(), action) {
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
         if (candidate.get('id') === action.candidateID) {
           return candidate.update('comments', (comments) => comments.filterNot((comment) =>
-            comment.get('author') === action.comment.author &&
-            comment.get('date') === action.comment.date &&
-            comment.get('text') === action.comment.text));
+            comment.get('id') === action.commentID));
         } else {
           return candidate;
         }

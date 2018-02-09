@@ -87,6 +87,7 @@ const NotificationWrapper = styled.div`
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
     background-color: #fff;
     z-index: 10000;
+    color: #3F51B5;
   }
   
   ${props => props.recent && css`  
@@ -111,6 +112,7 @@ const DateWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
+  color: #000;
 `;
 
 const MessageWrapper = styled.div`

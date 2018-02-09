@@ -108,7 +108,11 @@ export function unsubscribe(candidateID, email) {
 }
 
 export function noticeNotification(username, notificationID) {
-  return Account.updateOne({username: username, 'notifications._id': notificationID}, {'$set': {'notifications.$.recent': false}}).exec();
+  return Account.updateOne({username: username, 'notifications._id': notificationID}, {$set: {'notifications.$.recent': false}}).exec();
+}
+
+export function deleteNotification(username, notificationID) {
+  return Account.updateOne({username: username}, {$pull: {notifications: {_id: notificationID}}}).exec();
 }
 
 function updateTags(probablyNewTags) {

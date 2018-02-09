@@ -74,6 +74,9 @@ export default function reducer(state = Immutable.Map(), action) {
         }
       }));
 
+    case 'DELETE_NOTIFICATION_SUCCESS':
+      return state.update('notifications', (notifications) => notifications.filterNot((notification) => notification.get('id') === action.notificationID));
+
     case 'SET_ERROR_MESSAGE':
       return state = state.set('errorMessage', action.message);
 

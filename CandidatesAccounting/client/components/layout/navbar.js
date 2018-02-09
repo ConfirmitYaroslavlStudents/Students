@@ -31,6 +31,7 @@ export default function MainNavbar(props) {
               <NotificationCenter
                 notifications={props.notifications}
                 noticeNotification={props.noticeNotification}
+                deleteNotification={props.deleteNotification}
                 userName={props.userName}
               />
               <IconButton
@@ -54,6 +55,7 @@ MainNavbar.propTypes = {
   logout: PropTypes.func.isRequired,
   notifications: PropTypes.array.isRequired,
   noticeNotification: PropTypes.func.isRequired,
+  deleteNotification: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,

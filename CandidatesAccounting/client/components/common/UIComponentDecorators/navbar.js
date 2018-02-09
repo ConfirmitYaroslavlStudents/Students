@@ -9,12 +9,12 @@ export default function Navbar(props) {
     <AppBar
       style={{
         position: 'fixed',
-        height: 64,
+        height: 60,
         boxShadow: 'none'
       }}
       color="primary"
     >
-      <Toolbar style={{paddingRight: 8}}>
+      <Toolbar style={{paddingRight: 8, minHeight: 60}}>
         {props.icon}
         <Typography type="title" color="inherit" style={{flex: 1}}>
           {props.title}

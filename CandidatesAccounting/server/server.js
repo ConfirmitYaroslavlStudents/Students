@@ -52,8 +52,9 @@ app.use('/graphql', function(req, res, next) {
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: true,
+  graphiql: false,
 }));
+
 app.get('/login', function(req, res) {
   if (req.isAuthenticated()) {
     res.json({username: req.user.username});

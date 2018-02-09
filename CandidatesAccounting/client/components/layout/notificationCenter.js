@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
+import NotificationIcon from 'material-ui-icons/Notifications';
+import DeleteAllIcon from 'material-ui-icons/DeleteSweep';
+import NoticeIcon from 'material-ui-icons/Markunread';
 import Popover from '../common/UIComponentDecorators/popover';
 import Badge from '../common/UIComponentDecorators/badge';
-import NotificationIcon from 'material-ui-icons/Notifications';
-import formatUserName from '../../utilities/formatUserName';
-import {formatDateTime} from '../../utilities/customMoment';
-import {NavLink} from 'react-router-dom';
+import IconButton from '../common/UIComponentDecorators/iconButton';
+import NotificationBlock from '../common/notificationBlock';
 
 export default function NotificationCenter(props) {
-  let countOfRecentNotifications = 0;
-  let invertedNotifications = [];
+  let numberOfRecentNotifications = 0;
+  let reversedNotificationsList = [];
   for (let i = props.notifications.length - 1; i >= 0; i--) {
-    invertedNotifications.push(props.notifications[i]);
-    if (props.notifications[i].recent) {
-      countOfRecentNotifications++;
+    if(props.notifications[i].recent) {
+      numberOfRecentNotifications++;
     }
+    reversedNotificationsList.push(props.notifications[i]);
   }
   return (
     props.notifications.length === 0 ?
@@ -25,38 +26,50 @@ export default function NotificationCenter(props) {
         content={<CenterWrapper><NoNewWrapper>No notifications</NoNewWrapper></CenterWrapper>}
       />
     :
-      <Badge badgeContent={countOfRecentNotifications} color="accent">
+      <Badge badgeContent={numberOfRecentNotifications} color="accent">
         <Popover
           icon={<NotificationIcon />}
           iconColor="contrast"
           content={
             <CenterWrapper>
-              {invertedNotifications.map((notification, index) =>
-              <NavLink
-                key={index}
-                to={'/' + notification.source.status.toLowerCase() + 's/' + notification.source.id + '/comments'}
-                className={'notification-link'}
-                onClick={() => {
-                  props.noticeNotification(props.userName, notification.id);
-                }}
-              >
-                <NotificationWrapper recent={notification.recent}>
-                  <InfoWrapper>
-                    <CandidateNameWrapper>
-                      {notification.source.name}
-                    </CandidateNameWrapper>
-                    <DateWrapper>
-                      {formatDateTime(notification.content.date)}
-                    </DateWrapper>
-                  </InfoWrapper>
-                  <ContentWrapper>
-                    <p>{formatUserName(notification.content.author)} <span style={{color: '#777'}}> has left the comment:</span></p>
-                    <MessageWrapper
-                      dangerouslySetInnerHTML={{__html: notification.content.text}}>
-                    </MessageWrapper>
-                  </ContentWrapper>
-                </NotificationWrapper>
-              </NavLink>)}
+              <TitleWrapper>
+                <Title>
+                  Notifications
+                </Title>
+                <ControlsWrapper>
+                  <IconButton
+                    icon={<NoticeIcon />}
+                    style={{width: 30, height: 30}}
+                    onClick={() => {
+                      props.notifications.forEach((notification) => {
+                        if (notification.recent) {
+                          props.noticeNotification(props.userName, notification.id);
+                        }
+                      });
+                    }}
+                  />
+                  <ButtonWrapper>
+                    <IconButton
+                      icon={<DeleteAllIcon />}
+                      style={{width: 30, height: 30}}
+                      onClick={() => {
+                        props.notifications.forEach((notification) => {
+                          props.deleteNotification(props.userName, notification.id);
+                        });
+                      }}
+                    />
+                  </ButtonWrapper>
+                </ControlsWrapper>
+              </TitleWrapper>
+              {reversedNotificationsList.map((notification, index) =>
+                <NotificationBlock
+                  key={index}
+                  notification={notification}
+                  noticeNotification={props.noticeNotification}
+                  deleteNotification={props.deleteNotification}
+                  userName={props.userName}
+                />
+              )}
             </CenterWrapper>}
         />
       </Badge>
@@ -66,6 +79,7 @@ export default function NotificationCenter(props) {
 NotificationCenter.propTypes = {
   notifications: PropTypes.array.isRequired,
   noticeNotification: PropTypes.func.isRequired,
+  deleteNotification: PropTypes.func.isRequired,
   userName: PropTypes.string.isRequired,
 };
 
@@ -74,50 +88,21 @@ const CenterWrapper = styled.div`
   flex-direction: column;
 `;
 
-const NotificationWrapper = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  width: 400px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-  border-left: 5px solid #999;
-  padding: 12px;
-  background-color: #fff;
-  
-  &:hover {
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-    z-index: 10000;
-    color: #3F51B5;
-  }
-  
-  ${props => props.recent && css`  
-    border-left: 5px solid #42A5F5;
-    background-color: #fff;
-	`}	
+const TitleWrapper = styled.div`
+  padding: 4px;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.25);
+  z-index: 2;
 `;
 
-const InfoWrapper = styled.div`
-  margin-bottom: 4px;
-`;
-
-const CandidateNameWrapper = styled.div`
+const ControlsWrapper = styled.div`
   display: inline-flex;
-`;
-
-const DateWrapper = styled.div`
-  display: inline-flex;
+  padding-top: 2px;
   float: right;
-  color: #888;
-  font-size: 96%;
 `;
 
-const ContentWrapper = styled.div`
-  color: #000;
-`;
-
-const MessageWrapper = styled.div`
-  background-color: #f3f3f3;
-  padding: 8px;
+const ButtonWrapper = styled.div`
+  display: inline-flex;
+  margin-left: 10px;
 `;
 
 const NoNewWrapper = styled.div`
@@ -128,4 +113,10 @@ const NoNewWrapper = styled.div`
   color: #777;
   font-size: 110%;
   text-align: center;
+`;
+
+const Title = styled.div`
+  display: inline-block;
+  color: #636363;
+  margin: 6px 0 0 8px;
 `;

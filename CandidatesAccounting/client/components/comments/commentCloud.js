@@ -69,7 +69,7 @@ const CommentMount = styled.div`
   display: inline-flex;
   padding: 11px 11px 11px 7px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
-  max-width: 90%;
+  max-width: 85%;
   background: #FFF;
   border-radius: 4px;
   margin-bottom: 1px;

@@ -1,5 +1,6 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment, deleteComment, subscribe, unsubscribe, noticeNotification} from './mongoose';
+import {getAllCandidates, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
+  deleteComment, subscribe, unsubscribe, noticeNotification, deleteNotification} from './mongoose';
 
 export const schema = buildSchema(`    
   input CandidateInput {
@@ -65,6 +66,7 @@ export const schema = buildSchema(`
     subscribe(candidateID: ID!, email: String!): Boolean
     unsubscribe(candidateID: ID!, email: String!): Boolean
     noticeNotification(username: String!, notificationID: ID!): Boolean
+    deleteNotification(username: String!, notificationID: ID!): Boolean
   }
 `);
 
@@ -120,12 +122,6 @@ export const root = {
   addComment: ({candidateID, comment}) => {
     return addComment(candidateID, comment);
   },
-  noticeNotification: ({username, notificationID}) => {
-    return noticeNotification(username, notificationID)
-      .then((result) => {
-        return !!result;
-      });
-  },
   deleteComment: ({candidateID, commentID}) => {
     return deleteComment(candidateID, commentID)
       .then((result) => {
@@ -144,4 +140,16 @@ export const root = {
         return !!result;
       });
   },
+  noticeNotification: ({username, notificationID}) => {
+    return noticeNotification(username, notificationID)
+      .then((result) => {
+        return !!result;
+      });
+  },
+  deleteNotification: ({username, notificationID}) => {
+    return deleteNotification(username, notificationID)
+      .then((result) => {
+        return !!result;
+      });
+  }
 };

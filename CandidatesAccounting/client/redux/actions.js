@@ -154,6 +154,22 @@ function noticeNotificationSuccess(username, notificationID) {
   }
 }
 
+function deleteNotification(username, notificationID) {
+  return {
+    type: 'DELETE_NOTIFICATION',
+    username,
+    notificationID
+  }
+}
+
+function deleteNotificationSuccess(username, notificationID) {
+  return {
+    type: 'DELETE_NOTIFICATION_SUCCESS',
+    username,
+    notificationID
+  }
+}
+
 function setErrorMessage(message) {
   return {
     type: 'SET_ERROR_MESSAGE',
@@ -187,5 +203,6 @@ function setPageTitle(title) {
 
 module.exports = {
   setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
-  deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess, setErrorMessage,
+  deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
+  setErrorMessage, deleteNotification, deleteNotificationSuccess,
   addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};

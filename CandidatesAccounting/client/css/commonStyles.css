@@ -27,8 +27,13 @@ tr th:last-child  span {
     color: #3F51B5 !important;
 }
 
-.badge-contrast {
+.badge-accent {
     background-color: #ff4081;
+    margin-top: 17px;
+    margin-right: 10px;
+    width: 19px !important;
+    height: 19px !important;
+    font-size: smaller !important;
 }
 
 .big-icon {
@@ -44,11 +49,11 @@ tr th:last-child  span {
 .comment-grid {
     background-color: #f6f6f6;
     padding: 24px 4px;
-    box-shadow: 0 0 7px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 0 7px 5px rgba(0, 0, 0, 0.05);
 }
 
 .custom-main {
-    margin-top: 112px;
+    margin-top: 108px;
 }
 
 .hidden {
@@ -74,6 +79,10 @@ tr th:last-child  span {
 .notification-link {
     text-decoration: none !important;
     color: inherit;
+}
+
+.notification-link:hover {
+    color: #42A5F5;
 }
 
 .ql-editor {

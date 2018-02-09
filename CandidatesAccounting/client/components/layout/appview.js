@@ -53,6 +53,7 @@ export default class AppView extends Component {
           logout={this.props.logout}
           notifications={this.props.notifications}
           noticeNotification={this.props.noticeNotification}
+          deleteNotification={this.props.deleteNotification}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
@@ -69,18 +70,18 @@ export default class AppView extends Component {
           setPageTitle={this.props.setPageTitle}
           authorizationStatus={this.props.authorizationStatus}
         />
-        <div className="custom-main">
+        <div className='custom-main'>
           <Switch>
-            <Route exact path="/" render={() =>
+            <Route exact path='/' render={() =>
               <CandidateTable allCandidates={filter(this.props.candidates)} {...this.props}/>}
             />
-            <Route exact path="/interviewees" render={() =>
+            <Route exact path='/interviewees' render={() =>
               <IntervieweeTable interviewees={filter(searchByStatus(this.props.candidates, 'Interviewee'))} {...this.props}/>}
             />
-            <Route exact path="/students" render={() =>
+            <Route exact path='/students' render={() =>
               <StudentTable students={filter(searchByStatus(this.props.candidates, 'Student'))} {...this.props}/>}
             />
-            <Route exact path="/trainees" render={() =>
+            <Route exact path='/trainees' render={() =>
               <TraineeTable trainees={filter(searchByStatus(this.props.candidates, 'Trainee'))} {...this.props}/>}
             />
             <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
@@ -98,7 +99,7 @@ export default class AppView extends Component {
                 searchRequest={decodeURIComponent(this.props.location.search.substr(3))}
                 setSearchRequest={this.props.setSearchRequest}/>}
             />
-            <Route path="" render={() => <ErrorPage errorCode={404} errorMessage="Page not found"/>}/>
+            <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
           </Switch>
         </div>
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>

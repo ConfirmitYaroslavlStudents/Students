@@ -19,3 +19,23 @@ export function noticeNotification(username, notificationID) {
       }
     });
 }
+
+export function deleteNotification(username, notificationID) {
+  return sendGraphQLQuery(
+    `mutation deleteNotification($username: String!, $notificationID: ID!) {
+      deleteNotification(
+        username: $username,
+        notificationID: $notificationID
+      )
+    }`,
+    {
+      username: username,
+      notificationID: notificationID
+    }
+  )
+    .then((data) => {
+      if (!data.deleteNotification) {
+        throw 'Server error';
+      }
+    });
+}

@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import Popover from 'material-ui/Popover';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
 
 export default class CustomPopover extends Component {
   constructor(props) {
@@ -30,7 +28,7 @@ export default class CustomPopover extends Component {
 
   render() {
     return (
-      <div style={{display: 'inline-flex'}}>
+      <div style={{display: 'inline-block'}}>
         <IconButton
           ref={node => {
             this.button = node;
@@ -38,7 +36,6 @@ export default class CustomPopover extends Component {
           color={this.props.iconColor}
           onClick={this.handleClickButton}
         >
-
           {this.props.icon}
         </IconButton>
         <Popover

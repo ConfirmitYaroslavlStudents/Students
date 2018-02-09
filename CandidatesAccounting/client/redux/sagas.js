@@ -5,9 +5,9 @@ import {login, logout} from '../api/authorizationService';
 import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
 import {addComment, deleteComment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
-import {noticeNotification} from '../api/notificationService';
+import {noticeNotification, deleteNotification} from '../api/notificationService';
 import {setInitialState, loginSuccess, logoutSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, setErrorMessage, search} from './actions';
+        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, search} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
@@ -22,6 +22,7 @@ export default function* rootSaga() {
     watchSubscribe(),
     watchUnsubscribe(),
     watchNoticeNotification(),
+    watchDeleteNotification(),
     watchChangeSearchRequest(),
     watchSearch()
   ])
@@ -61,6 +62,10 @@ function* watchSubscribe() {
 
 function* watchNoticeNotification() {
   yield takeEvery('NOTICE_NOTIFICATION', noticeNotificationSaga);
+}
+
+function* watchDeleteNotification() {
+  yield takeEvery('DELETE_NOTIFICATION', deleteNotificationSaga);
 }
 
 function* watchUnsubscribe() {
@@ -190,6 +195,16 @@ function* noticeNotificationSaga(action) {
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Notice notification error.'));
+  }
+}
+
+function* deleteNotificationSaga(action) {
+  try {
+    yield call(deleteNotification, action.username, action.notificationID);
+    yield put(deleteNotificationSuccess(action.username, action.notificationID));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Delete notification error.'));
   }
 }
 

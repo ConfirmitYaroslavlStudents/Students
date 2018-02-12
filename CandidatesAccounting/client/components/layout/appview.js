@@ -12,13 +12,18 @@ import StudentTable from '../students/studentTable';
 import TraineeTable from '../trainees/traineeTable';
 import SnackBar from '../common/UIComponentDecorators/snackbar';
 import ErrorPage from './errorPage';
+import { CircularProgress } from 'material-ui/Progress';
 
 export default class AppView extends Component {
+  componentWillMount() {
+    this.props.changeURL(this.props.history.location.pathname + this.props.history.location.search, this.props.history);
+  }
+
   render() {
     const currentLocation = this.props.location.pathname.split('/');
     const search = this.props.location.search;
     const filter = function(candidates) {
-      if (search === '') {
+      if (true || search === '') {
         return candidates;
       }
       if (search[1] === 't') {
@@ -69,38 +74,46 @@ export default class AppView extends Component {
           pageTitle={this.props.pageTitle}
           setPageTitle={this.props.setPageTitle}
           authorizationStatus={this.props.authorizationStatus}
+          changeURL={this.props.changeURL}
         />
         <div className='custom-main'>
-          <Switch>
-            <Route exact path='/' render={() =>
-              <CandidateTable allCandidates={filter(this.props.candidates)} {...this.props}/>}
-            />
-            <Route exact path='/interviewees' render={() =>
-              <IntervieweeTable interviewees={filter(searchByStatus(this.props.candidates, 'Interviewee'))} {...this.props}/>}
-            />
-            <Route exact path='/students' render={() =>
-              <StudentTable students={filter(searchByStatus(this.props.candidates, 'Student'))} {...this.props}/>}
-            />
-            <Route exact path='/trainees' render={() =>
-              <TraineeTable trainees={filter(searchByStatus(this.props.candidates, 'Trainee'))} {...this.props}/>}
-            />
-            <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
-              <CommentsForm
-                candidate={searchById(this.props.candidates, currentLocation[2])}
-                addComment={this.props.addComment}
-                deleteComment={this.props.deleteComment}
-                authorizationStatus={this.props.authorizationStatus}
-                userName={this.props.userName}
-                subscribe={this.props.subscribe}
-                unsubscribe={this.props.unsubscribe}
-                pageTitle={this.props.pageTitle}
-                setPageTitle={this.props.setPageTitle}
-                history={this.props.history}
-                searchRequest={decodeURIComponent(this.props.location.search.substr(3))}
-                setSearchRequest={this.props.setSearchRequest}/>}
-            />
-            <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
-          </Switch>
+          {
+            this.props.status === 'loading'?
+              <div style={{textAlign: 'center', padding: 50}}>
+                <CircularProgress size={60}/>
+              </div>
+              :
+              <Switch>
+                <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
+                  <CommentsForm
+                    candidate={searchById(this.props.candidates, currentLocation[2])}
+                    addComment={this.props.addComment}
+                    deleteComment={this.props.deleteComment}
+                    authorizationStatus={this.props.authorizationStatus}
+                    userName={this.props.userName}
+                    subscribe={this.props.subscribe}
+                    unsubscribe={this.props.unsubscribe}
+                    pageTitle={this.props.pageTitle}
+                    setPageTitle={this.props.setPageTitle}
+                    history={this.props.history}
+                    searchRequest={decodeURIComponent(this.props.location.search.substr(3))}
+                    setSearchRequest={this.props.setSearchRequest}/>}
+                />
+                <Route exact path='/interviewees*' render={() =>
+                  <IntervieweeTable interviewees={filter(this.props.candidates)} {...this.props}/>}
+                />
+                <Route exact path='/students*' render={() =>
+                  <StudentTable students={filter(this.props.candidates)} {...this.props}/>}
+                />
+                <Route exact path='/trainees*' render={() =>
+                  <TraineeTable trainees={filter(this.props.candidates)} {...this.props}/>}
+                />
+                <Route exact path='/*' render={() =>
+                  <CandidateTable allCandidates={filter(this.props.candidates)} {...this.props}/>}
+                />
+                <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
+              </Switch>
+          }
         </div>
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>
       </div>
@@ -110,9 +123,13 @@ export default class AppView extends Component {
 
 function mapStateToProps(state) {
   return {
+    status: state.get('status'),
     authorizationStatus: state.get('authorizationStatus'),
     userName: state.get('userName'),
     candidates: state.get('candidates').toJS(),
+    candidatesOffset: state.get('candidatesOffset'),
+    candidatesPerPage: state.get('candidatesPerPage'),
+    candidatesTotalCount: state.get('candidatesTotalCount'),
     tags: state.get('tags').toArray(),
     notifications: state.get('notifications').toJS(),
     pageTitle: state.get('pageTitle'),

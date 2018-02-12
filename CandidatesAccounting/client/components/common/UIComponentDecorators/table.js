@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Table, { TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table';
+import Table, {
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableFooter
+} from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 
 export default function CustomTable(props) {
@@ -30,6 +36,13 @@ export default function CustomTable(props) {
         <TableBody>
           {contentRows}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={props.heads.length}>
+              {props.footerActions}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </Paper>
   );
@@ -39,6 +52,7 @@ export default function CustomTable(props) {
 CustomTable.propTypes = {
   heads: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   rows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  footerActions: PropTypes.object.isRequired,
 };
 
 const EmptyTable = styled.div`

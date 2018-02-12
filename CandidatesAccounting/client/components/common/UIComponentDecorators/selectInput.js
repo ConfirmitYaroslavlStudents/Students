@@ -5,7 +5,7 @@ import { MenuItem } from 'material-ui/Menu';
 import { FormControl } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 
-export default class SimpleSelect extends Component {
+export default class SelectInput extends Component {
   constructor(props) {
     super(props);
     this.state=({selected: props.selected ? props.selected : ''});
@@ -39,9 +39,9 @@ export default class SimpleSelect extends Component {
   }
 }
 
-SimpleSelect.propTypes = {
+SelectInput.propTypes = {
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
+  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.string]).isRequired,
   onChange: PropTypes.func,
   label: PropTypes.string,
 };

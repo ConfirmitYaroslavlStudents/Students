@@ -1,5 +1,5 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
+import {getAllCandidates, getCandidatesPaginated, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
   deleteComment, subscribe, unsubscribe, noticeNotification, deleteNotification} from './mongoose';
 
 export const schema = buildSchema(`    
@@ -52,8 +52,13 @@ export const schema = buildSchema(`
     source: Candidate!,
     content: Comment!
   }
+  type PaginateResult {
+    candidates: [Candidate]!,
+    total: Int!
+  }
   type Query {
     candidates: [Candidate],
+    candidatesPaginated(first: Int!, offset: Int!, status: String): PaginateResult,
     tags: [String],
     notifications(username: String!): [Notification]
   }
@@ -85,6 +90,25 @@ export const root = {
           candidates.push(candidate);
         });
         return candidates;
+      });
+  },
+  candidatesPaginated: ({first, offset, status}) => {
+    return getCandidatesPaginated(offset, first, status)
+      .then((result) => {
+        let candidates = [];
+        result.docs.forEach((candidate) => {
+          candidate.id = candidate._id;
+          delete candidate._id;
+          candidate.comments.forEach((comment) => {
+            comment.id = comment._id;
+            delete comment._id;
+          });
+          candidates.push(candidate);
+        });
+        return {
+          candidates: candidates,
+          total: result.total
+        }
       });
   },
   tags: () => {

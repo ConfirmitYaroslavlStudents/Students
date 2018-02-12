@@ -34,14 +34,14 @@ export default class TablesBar extends Component{
             selected={this.state.selected}
             onChange={this.handleChange}
             tabs={[
-              <NavLink exact to={this.getNewURL('')}
-                       className={'nav-link' + (this.state.selected === 0 ? ' active-nav-link' : '')}>All</NavLink>,
-              <NavLink to={this.getNewURL('interviewees')}
-                       className={'nav-link' + (this.state.selected === 1 ? ' active-nav-link' : '')}>Interviewees</NavLink>,
-              <NavLink to={this.getNewURL('students')}
-                       className={'nav-link' + (this.state.selected === 2 ? ' active-nav-link' : '')}>Students</NavLink>,
-              <NavLink to={this.getNewURL('trainees')}
-                       className={'nav-link' + (this.state.selected === 3 ? ' active-nav-link' : '')}>Trainees</NavLink>
+              <div onClick={() => {this.props.changeURL('/', this.props.history)}}
+                       className={'nav-link' + (this.state.selected === 0 ? ' active-nav-link' : '')}>All</div>,
+              <div onClick={() => {this.props.changeURL('/interviewees', this.props.history)}}
+                       className={'nav-link' + (this.state.selected === 1 ? ' active-nav-link' : '')}>Interviewees</div>,
+              <div onClick={() => {this.props.changeURL('/students', this.props.history)}}
+                       className={'nav-link' + (this.state.selected === 2 ? ' active-nav-link' : '')}>Students</div>,
+              <div onClick={() => {this.props.changeURL('/trainees', this.props.history)}}
+                       className={'nav-link' + (this.state.selected === 3 ? ' active-nav-link' : '')}>Trainees</div>
             ]}
           />
         </TabsWrapper>
@@ -69,6 +69,7 @@ TablesBar.propTypes = {
   pageTitle: PropTypes.string.isRequired,
   selected: PropTypes.number,
   authorizationStatus: PropTypes.string.isRequired,
+  changeURL: PropTypes.func.isRequired,
 };
 
 const TabsBar = styled.div`

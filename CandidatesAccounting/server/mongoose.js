@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
+import mongoosePaginate from 'mongoose-paginate';
 import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from './schemas';
 
 mongoose.Promise = Promise;
@@ -20,6 +21,10 @@ export function disconnect(error) {
 connect();
 
 AccountSchema.plugin(passportLocalMongoose);
+CandidateSchema.plugin(mongoosePaginate);
+IntervieweeSchema.plugin(mongoosePaginate);
+StudentSchema.plugin(mongoosePaginate);
+TraineeSchema.plugin(mongoosePaginate);
 export const Account = mongoose.model('Account', AccountSchema, 'accounts');
 const Candidate = mongoose.model('Candidate', CandidateSchema, 'candidates');
 const Interviewee = mongoose.model('Interviewee', IntervieweeSchema, 'candidates');
@@ -27,19 +32,25 @@ const Student = mongoose.model('Student', StudentSchema, 'candidates');
 const Trainee = mongoose.model('Trainee', TraineeSchema, 'candidates');
 const Tag = mongoose.model('Tag', TagSchema, 'tags');
 
-function identifyModel(candidate) {
-  switch (candidate.status) {
+function identifyModel(status) {
+  switch (status) {
     case 'Interviewee':
       return Interviewee;
     case 'Student':
       return Student;
     case 'Trainee':
       return Trainee;
+    default:
+      return Candidate;
   }
 }
 
 export function getAllCandidates() {
   return Candidate.find({}).exec();
+}
+
+export function getCandidatesPaginated(offset, limit, status) {
+  return identifyModel(status).paginate(status && status !== '' ? {status: status} : {}, {offset: offset, limit: limit});
 }
 
 export function getAllTags() {
@@ -61,7 +72,7 @@ export function getNotifications(username) {
 }
 
 export function addCandidate(newCandidate) {
-  return identifyModel(newCandidate).create(newCandidate)
+  return identifyModel(newCandidate.status).create(newCandidate)
     .then((result) => {
     console.log(result._id);
       updateTags(result.tags);
@@ -70,7 +81,7 @@ export function addCandidate(newCandidate) {
 }
 
 export function updateCandidate(candidate) {
-  return identifyModel(candidate).replaceOne({_id: candidate.id}, candidate)
+  return identifyModel(candidate.status).replaceOne({_id: candidate.id}, candidate)
     .then(() => {
       updateTags(candidate.tags);
       return candidate;

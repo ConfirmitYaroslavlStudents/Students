@@ -50,6 +50,11 @@ export default class TraineeTable extends Component {
                 content: <ControlsWrapper><CandidateRowControls candidate={trainee} {...this.props}/></ControlsWrapper>
               }]
           ))}
+        changeURL={this.props.changeURL}
+        history={this.props.history}
+        offset={this.props.candidatesOffset}
+        rowsPerPage={this.props.candidatesPerPage}
+        totalCount={this.props.candidatesTotalCount}
       />
     );
   }

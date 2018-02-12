@@ -52,7 +52,7 @@ app.use('/graphql', function(req, res, next) {
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: false,
+  graphiql: true,
 }));
 
 app.get('/login', function(req, res) {

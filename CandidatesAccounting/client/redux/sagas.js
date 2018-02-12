@@ -1,13 +1,13 @@
 import {delay} from 'redux-saga';
-import {takeEvery, takeLatest, all, put, call} from 'redux-saga/effects';
+import {takeEvery, takeLatest, all, put, call, select} from 'redux-saga/effects';
 import {getInitialState} from '../api/commonService';
 import {login, logout} from '../api/authorizationService';
-import {addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
+import {getCandidates, addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
 import {addComment, deleteComment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
 import {noticeNotification, deleteNotification} from '../api/notificationService';
 import {setInitialState, loginSuccess, logoutSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, search} from './actions';
+        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, search, setStatus} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
@@ -24,7 +24,8 @@ export default function* rootSaga() {
     watchNoticeNotification(),
     watchDeleteNotification(),
     watchChangeSearchRequest(),
-    watchSearch()
+    watchSearch(),
+    watchChangeURL(),
   ])
 }
 
@@ -80,6 +81,10 @@ function* watchSearch() {
   yield takeLatest('SEARCH', searchSaga);
 }
 
+function* watchChangeURL() {
+  yield takeLatest('CHANGE_URL', changeURLSaga);
+}
+
 function* loginSaga(action) {
   try {
     const userName = yield call(login, action.email, action.password);
@@ -88,7 +93,6 @@ function* loginSaga(action) {
     yield put(setInitialState({
       userName: userName,
       authorizationStatus: 'authorized',
-      candidates: newState.candidates,
       tags: newState.tags,
       notifications: newState.notifications
     }));
@@ -106,7 +110,6 @@ function* logoutSaga(action) {
     yield put(setInitialState({
       userName: '',
       authorizationStatus: 'not-authorized',
-      candidates: newState.candidates,
       tags: newState.tags,
       notifications: newState.notifications
     }));
@@ -221,4 +224,56 @@ function* searchSaga(action) {
     newURL = action.browserHistory.location.pathname;
   }
   action.browserHistory.replace(newURL);
+}
+
+function* changeURLSaga(action) {
+  try {
+    yield put(setStatus('loading'));
+    action.browserHistory.replace(action.newURL);
+    let separatedURL = separateURL(action.newURL);
+    let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
+    let serverResponse = yield call(getCandidates, separatedURL.args.take ? Number(separatedURL.args.take) : candidatesPerPage,
+      separatedURL.args.skip ? separatedURL.args.skip : 0, separatedURL.candidateStatus);
+    yield put(setInitialState({
+      candidates: serverResponse.candidates,
+      candidatesOffset: separatedURL.args.skip ? Number(separatedURL.args.skip) : 0,
+      candidatesPerPage: separatedURL.args.take ? Number(separatedURL.args.take) : candidatesPerPage,
+      candidatesTotalCount: serverResponse.total
+    }));
+
+    yield put(setStatus('ok'));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. ChangeURL notification error.'));
+  }
+}
+
+function separateURL(url) {
+  let splitedURL = url.split('?');
+  let path = splitedURL[0];
+  let candidateStatus = '';
+  switch (path.split('/')[1]) {
+    case 'interviewees':
+      candidateStatus = 'Interviewee';
+      break;
+    case 'students':
+      candidateStatus = 'Student';
+      break;
+    case 'trainees':
+      candidateStatus = 'Trainee';
+      break;
+  }
+  let args = splitedURL[1];
+  let argsObject = {};
+  if (args) {
+    let argsArray = args.split('&');
+    argsArray.forEach((arg) => {
+      let splited = arg.split('=');
+      argsObject[splited[0]] = splited[1];
+    });
+  }
+  return {
+    candidateStatus: candidateStatus,
+    args: argsObject
+  }
 }

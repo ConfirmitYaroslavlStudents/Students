@@ -116,5 +116,7 @@ const ServiceText = styled.span`
 const MessageWrapper = styled.div`
   background-color: #f3f3f3;
   color: #333;
-  padding: 8px;
+  padding: 8px;  
+  word-wrap: break-word;
+  overflow: hidden;
 `;

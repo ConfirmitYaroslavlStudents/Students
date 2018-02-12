@@ -201,8 +201,24 @@ function setPageTitle(title) {
   }
 }
 
+function changeURL(newURL, browserHistory) {
+  return {
+    type: 'CHANGE_URL',
+    newURL,
+    browserHistory
+  }
+}
+
+function setStatus(status) {
+  return {
+    type: 'SET_STATUS',
+    status
+  }
+}
+
 module.exports = {
   setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
   deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
   setErrorMessage, deleteNotification, deleteNotificationSuccess,
-  addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, search, setPageTitle};
+  addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest,
+  search, setPageTitle, changeURL, setStatus};

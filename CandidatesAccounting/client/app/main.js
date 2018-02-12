@@ -66,9 +66,13 @@ getUsername().then((username) => {
     store.dispatch({
         type: "SET_INITIAL_STATE",
         state: {
+          status: 'loading',
           userName: username,
           authorizationStatus: !username || username === '' ? 'not-authorized' : 'authorized',
-          candidates: initialState.candidates,
+          candidates: [],
+          candidatesOffset: 0,
+          candidatesPerPage: 5,
+          candidatesTotalCount: 0,
           tags: initialState.tags,
           notifications: initialState.notifications,
           pageTitle: 'Candidate Accounting',

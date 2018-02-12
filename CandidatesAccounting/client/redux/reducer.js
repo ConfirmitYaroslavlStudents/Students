@@ -86,6 +86,9 @@ export default function reducer(state = Immutable.Map(), action) {
     case 'SET_PAGE_TITLE':
       return state = state.set('pageTitle', action.title);
 
+    case 'SET_STATUS':
+      return state = state.set('status', action.status);
+
     default:
       return state;
   }

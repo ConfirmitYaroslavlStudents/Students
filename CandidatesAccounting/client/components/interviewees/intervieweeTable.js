@@ -60,6 +60,11 @@ export default class IntervieweeTable extends Component {
                 content: <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>
               }]
           ))}
+        changeURL={this.props.changeURL}
+        history={this.props.history}
+        offset={this.props.candidatesOffset}
+        rowsPerPage={this.props.candidatesPerPage}
+        totalCount={this.props.candidatesTotalCount}
       />
     );
   }

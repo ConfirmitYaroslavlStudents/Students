@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Switch, Route} from 'react-router-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 import actions from '../../redux/actions';
 import Navbar from './navbar';
 import TablesBar from './tablesbar';
-import {searchByStatus, searchById, searchByRequest, searchByTag} from '../../utilities/candidateFilters';
+import { searchById, searchByRequest, searchByTag } from '../../utilities/candidateFilters';
 import CommentsForm from '../comments/commentsForm';
 import CandidateTable from '../candidates/candidateTable';
 import IntervieweeTable from '../interviewees/intervieweeTable';
@@ -16,7 +16,33 @@ import { CircularProgress } from 'material-ui/Progress';
 
 export default class AppView extends Component {
   componentWillMount() {
-    this.props.changeURL(this.props.history.location.pathname + this.props.history.location.search, this.props.history);
+    let splitedURL = (this.props.history.location.pathname + this.props.history.location.search).split('?');
+    let path = splitedURL[0];
+    let candidateStatus = '';
+    switch (path.split('/')[1]) {
+      case 'interviewees':
+        candidateStatus = 'Interviewee';
+        break;
+      case 'students':
+        candidateStatus = 'Student';
+        break;
+      case 'trainees':
+        candidateStatus = 'Trainee';
+        break;
+    }
+    let args = splitedURL[1];
+    let argsObject = {};
+    if (args) {
+      let argsArray = args.split('&');
+      argsArray.forEach((arg) => {
+        let splited = arg.split('=');
+        argsObject[splited[0]] = splited[1];
+      });
+    }
+    this.props.setCandidateStatus(candidateStatus);
+    this.props.setOffset(argsObject.skip ? Number(argsObject.skip) : 0);
+    this.props.setCandidatesPerPage(argsObject.take ? Number(argsObject.take) : 15);
+    this.props.loadCandidates(this.props.history);
   }
 
   render() {
@@ -52,8 +78,7 @@ export default class AppView extends Component {
       <div>
         <Navbar
           title={this.props.pageTitle}
-          userName={this.props.userName}
-          authorizationStatus={this.props.authorizationStatus}
+          username={this.props.username}
           login={this.props.login}
           logout={this.props.logout}
           notifications={this.props.notifications}
@@ -62,23 +87,27 @@ export default class AppView extends Component {
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
+          getCandidate={this.props.getCandidate}
         />
         <TablesBar
           selected={selectedTableNumber}
           newCandidateDefaultType={candidateType}
           addCandidate={this.props.addCandidate}
           tags={this.props.tags}
-          userName={this.props.userName}
+          username={this.props.username}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           pageTitle={this.props.pageTitle}
           setPageTitle={this.props.setPageTitle}
-          authorizationStatus={this.props.authorizationStatus}
-          changeURL={this.props.changeURL}
+          candidatesPerPage={this.props.candidatesPerPage}
+          totalCount={this.props.totalCount}
+          setCandidateStatus={this.props.setCandidateStatus}
+          setOffset={this.props.setOffset}
+          loadCandidates={this.props.loadCandidates}
         />
         <div className='custom-main'>
           {
-            this.props.status === 'loading'?
+            this.props.applicationStatus === 'loading'?
               <div style={{textAlign: 'center', padding: 50}}>
                 <CircularProgress size={60}/>
               </div>
@@ -89,8 +118,7 @@ export default class AppView extends Component {
                     candidate={searchById(this.props.candidates, currentLocation[2])}
                     addComment={this.props.addComment}
                     deleteComment={this.props.deleteComment}
-                    authorizationStatus={this.props.authorizationStatus}
-                    userName={this.props.userName}
+                    username={this.props.username}
                     subscribe={this.props.subscribe}
                     unsubscribe={this.props.unsubscribe}
                     pageTitle={this.props.pageTitle}
@@ -123,18 +151,18 @@ export default class AppView extends Component {
 
 function mapStateToProps(state) {
   return {
-    status: state.get('status'),
-    authorizationStatus: state.get('authorizationStatus'),
-    userName: state.get('userName'),
+    applicationStatus: state.get('applicationStatus'),
+    username: state.get('username'),
+    pageTitle: state.get('pageTitle'),
+    errorMessage: state.get('errorMessage'),
+    searchRequest: state.get('searchRequest'),
+    candidateStatus: state.get('candidateStatus'),
+    offset: Number(state.get('offset')),
+    candidatesPerPage: Number(state.get('candidatesPerPage')),
+    totalCount: Number(state.get('totalCount')),
     candidates: state.get('candidates').toJS(),
-    candidatesOffset: state.get('candidatesOffset'),
-    candidatesPerPage: state.get('candidatesPerPage'),
-    candidatesTotalCount: state.get('candidatesTotalCount'),
     tags: state.get('tags').toArray(),
     notifications: state.get('notifications').toJS(),
-    pageTitle: state.get('pageTitle'),
-    searchRequest: state.get('searchRequest'),
-    errorMessage: state.get('errorMessage')
   };
 }
 

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {NavLink} from 'react-router-dom';
 import styled from 'styled-components';
 import Tabs from '../common/UIComponentDecorators/tabs';
+import NavLink from '../common/navLink';
 import AddCandidateDialog from '../candidates/addCandidateDialog';
 
 export default class TablesBar extends Component{
@@ -10,19 +10,24 @@ export default class TablesBar extends Component{
     super(props);
     this.state = { selected: props.selected };
     this.handleChange = this.handleChange.bind(this);
-    this.getNewURL = this.getNewURL.bind(this);
+    this.handleLinkClick = this.handleLinkClick.bind(this);
+    this.handleAddCandidate = this.handleAddCandidate.bind(this);
   };
 
   handleChange(event, value) {
     this.setState({selected: value });
   };
 
-  getNewURL(newTableType) {
-    if (this.props.pageTitle === 'Candidate Accounting' && this.props.history.location.pathname !== '/' + newTableType) {
-      return '/' + newTableType + this.props.history.location.search;
-    } else {
-      return '/' + newTableType;
-    }
+  handleLinkClick(candidateStatus) {
+    this.props.setCandidateStatus(candidateStatus);
+    this.props.setOffset(0);
+    this.props.loadCandidates(this.props.history);
+  }
+
+  handleAddCandidate(candidate) {
+    this.props.addCandidate(candidate);
+    this.props.setOffset(this.props.totalCount - this.props.totalCount % this.props.candidatesPerPage);
+    this.props.loadCandidates(this.props.history);
   }
 
   render() {
@@ -34,24 +39,19 @@ export default class TablesBar extends Component{
             selected={this.state.selected}
             onChange={this.handleChange}
             tabs={[
-              <div onClick={() => {this.props.changeURL('/', this.props.history)}}
-                       className={'nav-link' + (this.state.selected === 0 ? ' active-nav-link' : '')}>All</div>,
-              <div onClick={() => {this.props.changeURL('/interviewees', this.props.history)}}
-                       className={'nav-link' + (this.state.selected === 1 ? ' active-nav-link' : '')}>Interviewees</div>,
-              <div onClick={() => {this.props.changeURL('/students', this.props.history)}}
-                       className={'nav-link' + (this.state.selected === 2 ? ' active-nav-link' : '')}>Students</div>,
-              <div onClick={() => {this.props.changeURL('/trainees', this.props.history)}}
-                       className={'nav-link' + (this.state.selected === 3 ? ' active-nav-link' : '')}>Trainees</div>
+              <NavLink active={this.state.selected === 0} onClick={() => {this.handleLinkClick('');}}>All</NavLink>,
+              <NavLink active={this.state.selected === 1} onClick={() => {this.handleLinkClick('Interviewee');}}>Interviewees</NavLink>,
+              <NavLink active={this.state.selected === 2} onClick={() => {this.handleLinkClick('Student');}}>Students</NavLink>,
+              <NavLink active={this.state.selected === 3} onClick={() => {this.handleLinkClick('Trainee');}}>Trainees</NavLink>
             ]}
           />
         </TabsWrapper>
         <AddButtonWrapper>
           <AddCandidateDialog
-            addCandidate={this.props.addCandidate}
+            addCandidate={this.handleAddCandidate}
             candidateStatus={this.props.newCandidateDefaultType}
             tags={this.props.tags}
-            userName={this.props.userName}
-            disabled={this.props.authorizationStatus === 'not-authorized'}
+            disabled={this.props.username === ''}
           />
         </AddButtonWrapper>
       </TabsBar>
@@ -60,16 +60,19 @@ export default class TablesBar extends Component{
 }
 
 TablesBar.propTypes = {
+  username: PropTypes.string.isRequired,
+  pageTitle: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
-  userName: PropTypes.string.isRequired,
   addCandidate: PropTypes.func.isRequired,
   newCandidateDefaultType: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
-  pageTitle: PropTypes.string.isRequired,
+  setCandidateStatus: PropTypes.func.isRequired,
+  setOffset: PropTypes.func.isRequired,
+  candidatesPerPage: PropTypes.number.isRequired,
+  loadCandidates: PropTypes.func.isRequired,
+  totalCount: PropTypes.number.isRequired,
   selected: PropTypes.number,
-  authorizationStatus: PropTypes.string.isRequired,
-  changeURL: PropTypes.func.isRequired,
 };
 
 const TabsBar = styled.div`

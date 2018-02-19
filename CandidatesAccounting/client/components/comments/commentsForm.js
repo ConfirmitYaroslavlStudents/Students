@@ -56,7 +56,7 @@ export default class CommentsForm extends Component {
           markerColor={this.userColors[comment.author]}
           deleteComment={() => {this.deleteComment(comment.id)}}
           isSystem={comment.author === 'SYSTEM'}
-          isCurrentUserComment={comment.author === this.props.userName}
+          isCurrentUserComment={comment.author === this.props.username}
           highlighted={
             this.props.searchRequest ?
               comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
@@ -80,10 +80,10 @@ export default class CommentsForm extends Component {
               addComment={this.props.addComment}
               candidate={this.props.candidate}
               onClick={this.handleNewCommentAdd}
-              userName={this.props.userName}
+              username={this.props.username}
               subscribe={this.props.subscribe}
               unsubscribe={this.props.unsubscribe}
-              disabled={this.props.authorizationStatus === 'not-authorized'}
+              disabled={this.props.username === ''}
             />
           </AddCommentPanelWrapper>
         </FormWrapper>
@@ -99,18 +99,17 @@ export default class CommentsForm extends Component {
 }
 
 CommentsForm.propTypes = {
+  candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   pageTitle: PropTypes.string.isRequired,
   setPageTitle: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
-  setSearchRequest: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  candidate: PropTypes.object,
+  setSearchRequest: PropTypes.func.isRequired
 };
 
 const FormWrapper = styled.div`

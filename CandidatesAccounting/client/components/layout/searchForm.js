@@ -25,7 +25,7 @@ export default class SearchForm extends Component {
 
   handleClick() {
     if (this.props.searchRequest !== '') {
-      this.props.setSearchRequest(this.props.searchRequest, this.props.history, 0);
+      this.props.setSearchRequest(this.props.searchRequest, 0);
     } else {
       if (!this.state.isActive) {
         this.setState({isActive: true});
@@ -34,25 +34,25 @@ export default class SearchForm extends Component {
   }
 
   changeRequest(value) {
-    this.props.setSearchRequest(value, this.props.history, 500);
+    this.props.setSearchRequest(value, 500);
   }
 
   render() {
     return (
       <Form>
         <IconButton
-          color="contrast"
+          color='contrast'
           icon={<SearchIcon/>}
           onClick={this.handleClick}
-          placeholder="search"
+          placeholder='search'
         />
         {
           this.state.isActive || this.props.searchRequest !== '' ?
             <Input
               onChange={this.changeRequest}
               value={this.props.searchRequest}
-              className="search"
-              placeholder="search"
+              className='search'
+              placeholder='search'
               onFocus={() => {this.activate()}}
               onBlur={() => {this.deactivate()}}
               disableUnderline
@@ -66,7 +66,6 @@ export default class SearchForm extends Component {
 }
 
 SearchForm.propTypes = {
-  history: PropTypes.object.isRequired,
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
 };

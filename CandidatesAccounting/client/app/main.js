@@ -53,7 +53,7 @@ function renderApp(app) {
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <BrowserRouter>
-          <Route path="/" component={app}/>
+          <Route path='/' component={app}/>
         </BrowserRouter>
       </Provider>
     </MuiThemeProvider>,
@@ -64,20 +64,20 @@ function renderApp(app) {
 getUsername().then((username) => {
   getInitialState(username).then((initialState) => {
     store.dispatch({
-        type: "SET_INITIAL_STATE",
+        type: 'SET_STATE',
         state: {
-          status: 'loading',
-          userName: username,
-          authorizationStatus: !username || username === '' ? 'not-authorized' : 'authorized',
-          candidates: [],
-          candidatesOffset: 0,
-          candidatesPerPage: 5,
-          candidatesTotalCount: 0,
-          tags: initialState.tags,
-          notifications: initialState.notifications,
+          applicationStatus: 'loading',
           pageTitle: 'Candidate Accounting',
+          errorMessage: '',
+          username: username,
           searchRequest: '',
-          errorMessage: ''
+          candidateStatus: '',
+          offset: 0,
+          candidatesPerPage: 15,
+          totalCount: 0,
+          candidates: [],
+          tags: initialState.tags,
+          notifications: initialState.notifications
         }
       }
     );

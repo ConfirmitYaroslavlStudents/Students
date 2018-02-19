@@ -18,6 +18,13 @@ export default function NotificationCenter(props) {
     }
     reversedNotificationsList.push(props.notifications[i]);
   }
+  let unreadNotificationExists = false;
+  for (let i = 0; i < reversedNotificationsList.length; i++) {
+    if (reversedNotificationsList[i].recent) {
+      unreadNotificationExists = true;
+      break;
+    }
+  }
   return (
     props.notifications.length === 0 ?
       <Popover
@@ -43,10 +50,11 @@ export default function NotificationCenter(props) {
                     onClick={() => {
                       props.notifications.forEach((notification) => {
                         if (notification.recent) {
-                          props.noticeNotification(props.userName, notification.id);
+                          props.noticeNotification(props.username, notification.id);
                         }
                       });
                     }}
+                    disabled={!unreadNotificationExists}
                   />
                   <ButtonWrapper>
                     <IconButton
@@ -54,7 +62,7 @@ export default function NotificationCenter(props) {
                       style={{width: 30, height: 30}}
                       onClick={() => {
                         props.notifications.forEach((notification) => {
-                          props.deleteNotification(props.userName, notification.id);
+                          props.deleteNotification(props.username, notification.id);
                         });
                       }}
                     />
@@ -67,7 +75,9 @@ export default function NotificationCenter(props) {
                   notification={notification}
                   noticeNotification={props.noticeNotification}
                   deleteNotification={props.deleteNotification}
-                  userName={props.userName}
+                  username={props.username}
+                  getCandidate={props.getCandidate}
+                  history={props.history}
                 />
               )}
             </CenterWrapper>}
@@ -80,7 +90,9 @@ NotificationCenter.propTypes = {
   notifications: PropTypes.array.isRequired,
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  getCandidate: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const CenterWrapper = styled.div`

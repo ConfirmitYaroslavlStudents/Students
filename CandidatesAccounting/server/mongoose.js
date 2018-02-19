@@ -53,6 +53,10 @@ export function getCandidatesPaginated(offset, limit, status) {
   return identifyModel(status).paginate(status && status !== '' ? {status: status} : {}, {offset: offset, limit: limit});
 }
 
+export function getCandidateByID(id) {
+  return Candidate.findById(id).exec();
+}
+
 export function getAllTags() {
   return Tag.find({}).exec()
     .then((result) => {

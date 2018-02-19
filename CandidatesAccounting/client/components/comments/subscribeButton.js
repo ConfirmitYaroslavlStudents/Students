@@ -20,9 +20,9 @@ export default function SubscribeButton(props){
       disabled={props.disabled}
       onClick={() => {
         if (props.active) {
-          props.unsubscribe(props.candidate.id, props.userName);
+          props.unsubscribe(props.candidate.id, props.username);
         } else {
-          props.subscribe(props.candidate.id, props.userName);
+          props.subscribe(props.candidate.id, props.username);
         }
       }}
     />
@@ -32,7 +32,7 @@ export default function SubscribeButton(props){
 SubscribeButton.propTypes = {
   active: PropTypes.bool.isRequired,
   candidate: PropTypes.object.isRequired,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

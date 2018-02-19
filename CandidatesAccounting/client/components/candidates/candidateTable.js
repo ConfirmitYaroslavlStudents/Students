@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Table from '../common/sortableTable';
+import Table from '../layout/table';
 import CandidateControls from './candidateControls';
 import {formatDate, isBirthDate} from '../../utilities/customMoment';
 import TagList from '../tags/tagList';
@@ -51,11 +51,13 @@ export default class CandidateTable extends Component {
                 content: <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
               }]
           ))}
-        changeURL={this.props.changeURL}
         history={this.props.history}
-        offset={this.props.candidatesOffset}
+        offset={this.props.offset}
         rowsPerPage={this.props.candidatesPerPage}
-        totalCount={this.props.candidatesTotalCount}
+        totalCount={this.props.totalCount}
+        setOffset={this.props.setOffset}
+        setRowsPerPage={this.props.setCandidatesPerPage}
+        loadCandidates={this.props.loadCandidates}
       />
     );
   }

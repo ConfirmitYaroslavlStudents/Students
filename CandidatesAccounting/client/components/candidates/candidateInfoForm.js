@@ -52,6 +52,7 @@ export default class CandidateInfoForm extends Component {
           label="Candidate's status"
           options={['Interviewee', 'Student', 'Trainee']}
           selected={this.state.candidateStatus}
+          minWidth={240}
           onChange={this.changeCandidateStatus}/>
         <Label>Tags</Label>
         <TagSelect

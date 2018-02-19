@@ -2,22 +2,32 @@ import Immutable from 'immutable';
 
 export default function reducer(state = Immutable.Map(), action) {
   switch (action.type) {
-    case 'SET_INITIAL_STATE':
+    case 'SET_STATE':
       return state.merge(action.state);
 
-    case 'LOGIN_SUCCESS':
-      state = state.set('userName', action.userName);
-      return state = state.set('authorizationStatus', 'authorized');
+    case 'SET_APPLICATION_STATUS':
+      return state = state.set('applicationStatus', action.status);
 
-    case 'LOGOUT_SUCCESS':
-      state = state.set('userName', '');
-      return state = state.set('authorizationStatus', 'not-authorized');
+    case 'SET_PAGE_TITLE':
+      return state = state.set('pageTitle', action.title);
+
+    case 'SET_ERROR_MESSAGE':
+      return state = state.set('errorMessage', action.message);
+
+    case 'SET_CANDIDATE_STATUS':
+      return state.set('candidateStatus', action.status);
+
+    case 'SET_OFFSET':
+      return state.set('offset', action.offset);
+
+    case 'SET_CANDIDATES_PER_PAGE':
+      return state.set('candidatesPerPage', action.candidatesPerPage);
+
+    case 'SET_SEARCH_REQUEST':
+      return state = state.set('searchRequest', action.searchRequest);
 
     case 'ADD_CANDIDATE_SUCCESS':
       return state.update('candidates', (candidates) => candidates.push(Immutable.fromJS(action.candidate)));
-
-    case 'DELETE_CANDIDATE_SUCCESS':
-      return state.update('candidates', (candidates) => candidates.filterNot((candidate) => candidate.get('id') === action.candidateID));
 
     case 'UPDATE_CANDIDATE_SUCCESS':
       return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
@@ -76,18 +86,6 @@ export default function reducer(state = Immutable.Map(), action) {
 
     case 'DELETE_NOTIFICATION_SUCCESS':
       return state.update('notifications', (notifications) => notifications.filterNot((notification) => notification.get('id') === action.notificationID));
-
-    case 'SET_ERROR_MESSAGE':
-      return state = state.set('errorMessage', action.message);
-
-    case 'SET_SEARCH_REQUEST':
-      return state = state.set('searchRequest', action.searchRequest);
-
-    case 'SET_PAGE_TITLE':
-      return state = state.set('pageTitle', action.title);
-
-    case 'SET_STATUS':
-      return state = state.set('status', action.status);
 
     default:
       return state;

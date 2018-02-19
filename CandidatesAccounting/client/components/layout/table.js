@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Table from './UIComponentDecorators/table';
-import TableSortLabel from './UIComponentDecorators/tableSortLabel';
-import IconButton from './UIComponentDecorators/iconButton';
+import styled from 'styled-components';
+import Table from '../common/UIComponentDecorators/table';
+import TableSortLabel from '../common/UIComponentDecorators/tableSortLabel';
+import IconButton from '../common/UIComponentDecorators/iconButton';
 import FirstPageIcon from 'material-ui-icons/FirstPage';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import LastPageIcon from 'material-ui-icons/LastPage';
-import SelectInput from './UIComponentDecorators/selectInput';
+import SelectInput from '../common/UIComponentDecorators/selectInput';
 
 export default class SortableTableWithPagination extends Component {
   constructor(props) {
@@ -130,31 +131,35 @@ export default class SortableTableWithPagination extends Component {
     }
   }
 
-  handleFirstPageButtonClick(event) {
-    this.handleChangePage(event, 0);
+  handleFirstPageButtonClick() {
+    this.handleChangePage(0);
   };
 
-  handleBackButtonClick(event) {
-    this.handleChangePage(event, Math.max(this.props.offset - this.props.rowsPerPage, 0));
+  handleBackButtonClick() {
+    this.handleChangePage(Math.max(this.props.offset - this.props.rowsPerPage, 0));
   };
 
-  handleNextButtonClick(event) {
-    this.handleChangePage(event, Math.min(this.props.offset + this.props.rowsPerPage, this.props.totalCount));
+  handleNextButtonClick() {
+    this.handleChangePage(Math.min(this.props.offset + this.props.rowsPerPage, this.props.totalCount));
   };
 
-  handleLastPageButtonClick(event) {
+  handleLastPageButtonClick() {
     this.handleChangePage(
-      event,
-      this.props.totalCount - this.props.totalCount % this.props.rowsPerPage,
+      this.props.totalCount % this.props.rowsPerPage === 0 ?
+        this.props.totalCount - this.props.rowsPerPage
+        :
+        this.props.totalCount - this.props.totalCount % this.props.rowsPerPage
     );
   };
 
-  handleChangePage(event, offset) {
-    this.props.changeURL(this.props.history.location.pathname + '?take=' + this.props.rowsPerPage + '&skip=' + offset, this.props.history);
+  handleChangePage(offset) {
+    this.props.setOffset(offset);
+    this.props.loadCandidates(this.props.history);
   };
 
   handleChangeRowsPerPage(rowsPerPage) {
-    this.props.changeURL(this.props.history.location.pathname + '?take=' + rowsPerPage + '&skip=' + this.props.offset, this.props.history);
+    this.props.setRowsPerPage(rowsPerPage);
+    this.props.loadCandidates(this.props.history);
   };
 
   render() {
@@ -171,15 +176,15 @@ export default class SortableTableWithPagination extends Component {
             <span>{head.title}</span>)}
         rows={this.sortContentRows()}
         footerActions={
-          <div style={{display: 'flex', alignItems: 'center', float: 'right', marginRight: -18}}>
-            <div style={{display: 'inline-flex', alignItems: 'center', spacing: 5, marginRight: 25}}>
+          <ActionsWrapper>
+            <ItemsPerPageWrapper>
+              <FooterText>Candidates per page: </FooterText>
               <SelectInput
-                options={[3, 5, 10, 15, 20, 25]}
+                options={[10, 15, 20, 25]}
                 selected={this.props.rowsPerPage}
                 onChange={this.handleChangeRowsPerPage}
-                label="Candidates per page"
               />
-            </div>
+            </ItemsPerPageWrapper>
             <span>
               {Math.min(this.props.offset + 1, this.props.totalCount)}
               -
@@ -205,7 +210,7 @@ export default class SortableTableWithPagination extends Component {
               disabled={this.props.offset + this.props.rowsPerPage >= this.props.totalCount}
               icon={<LastPageIcon />}
             />
-          </div>
+          </ActionsWrapper>
         }
       />
     );
@@ -221,6 +226,26 @@ SortableTableWithPagination.propTypes = {
   offset: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
-  changeURL: PropTypes.func.isRequired,
+  setOffset: PropTypes.func.isRequired,
+  setRowsPerPage: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  loadCandidates: PropTypes.func.isRequired,
 };
+
+const ActionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  float: right;
+  margin-right: -18px;
+`;
+
+const ItemsPerPageWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  spacing: 5;
+  margin-right: 24px;
+`;
+
+const FooterText = styled.span`
+  margin-right: 8px;
+`;

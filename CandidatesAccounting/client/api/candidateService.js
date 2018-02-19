@@ -50,6 +50,43 @@ export function getCandidates(take, skip, status) {
     });
 }
 
+export function getCandidate(id) {
+  return sendGraphQLQuery(
+    `query($id: String!) {
+      candidate(id: $id) {
+        id
+        name
+        status
+        birthDate
+        email
+        comments {
+          id
+          author
+          date
+          text
+        }
+        tags
+        subscribers
+        interviewDate
+        resume
+        groupName
+        startingDate
+        endingDate
+        mentor
+      }      
+    }`,
+    {
+      id: id,
+    }
+  )
+    .then((data) => {
+      if (!data) {
+        throw 'Connection error';
+      }
+      return createCandidate(data.candidate.status, data.candidate);
+    });
+}
+
 export function addCandidate(candidate) {
   return sendGraphQLQuery(
     `mutation addCandidate($candidate: CandidateInput!) {

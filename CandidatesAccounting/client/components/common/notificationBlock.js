@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, {css} from 'styled-components';
-import {NavLink} from 'react-router-dom';
+import NavLink from './navLink';
 import DeleteIcon from 'material-ui-icons/Cancel';
 import formatUserName from '../../utilities/formatUserName';
 import {formatDateTime} from '../../utilities/customMoment';
@@ -10,11 +10,13 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 export default function NotificationBlock(props) {
   return (
     <NavLink
-      to={'/' + props.notification.source.status.toLowerCase() + 's/' + props.notification.source.id + '/comments'}
       className={'notification-link'}
       onClick={() => {
+        console.log('link');
+        props.getCandidate(props.notification.source.id);
+        props.history.replace('/' + props.notification.source.status.toLowerCase() + 's/' + props.notification.source.id + '/comments');
         if (props.notification.recent) {
-          props.noticeNotification(props.userName, props.notification.id);
+          props.noticeNotification(props.username, props.notification.id);
         }
       }}
     >
@@ -31,8 +33,9 @@ export default function NotificationBlock(props) {
                 style={{width: 24, height: 24}}
                 iconStyle='small-icon'
                 onClick={(event) => {
-                  event.preventDefault();
-                  props.deleteNotification(props.userName, props.notification.id);
+                  console.log('del');
+                  props.deleteNotification(props.username, props.notification.id);
+                  event.stopPropagation();
                 }}
               />
             </ButtonWrapper>
@@ -53,7 +56,9 @@ NotificationBlock.propTypes = {
   notification: PropTypes.object.isRequired,
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  getCandidate: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const NotificationWrapper = styled.div`
@@ -100,6 +105,7 @@ const DateWrapper = styled.div`
 
 const ButtonWrapper = styled.div`
   display: inline-flex;
+  z-index: 10;
   margin-left: 4px;
   margin-right: -6px;
   margin-top: -6px;

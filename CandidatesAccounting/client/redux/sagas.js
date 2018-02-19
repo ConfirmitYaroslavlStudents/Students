@@ -2,12 +2,12 @@ import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call, select} from 'redux-saga/effects';
 import {getInitialState} from '../api/commonService';
 import {login, logout} from '../api/authorizationService';
-import {getCandidates, addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
+import {getCandidates, getCandidate, addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
 import {addComment, deleteComment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
 import {noticeNotification, deleteNotification} from '../api/notificationService';
-import {setInitialState, loginSuccess, logoutSuccess, addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, search, setStatus} from './actions';
+import {setState, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, search, setApplicationStatus} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
@@ -25,7 +25,8 @@ export default function* rootSaga() {
     watchDeleteNotification(),
     watchChangeSearchRequest(),
     watchSearch(),
-    watchChangeURL(),
+    watchLoadCandidates(),
+    watchGetCandidate(),
   ])
 }
 
@@ -81,49 +82,53 @@ function* watchSearch() {
   yield takeLatest('SEARCH', searchSaga);
 }
 
-function* watchChangeURL() {
-  yield takeLatest('CHANGE_URL', changeURLSaga);
+function* watchLoadCandidates() {
+  yield takeLatest('LOAD_CANDIDATES', loadCandidatesSaga);
+}
+
+function* watchGetCandidate() {
+  yield takeLatest('GET_CANDIDATE', getCandidateSaga);
 }
 
 function* loginSaga(action) {
   try {
-    const userName = yield call(login, action.email, action.password);
-    yield put(loginSuccess(userName));
-    let newState = yield call(getInitialState, userName);
-    yield put(setInitialState({
-      userName: userName,
-      authorizationStatus: 'authorized',
+    yield put(setApplicationStatus('loading'));
+    const username = yield call(login, action.email, action.password);
+    let newState = yield call(getInitialState, username);
+    yield put(setState({
+      username: username,
       tags: newState.tags,
       notifications: newState.notifications
     }));
+    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Incorrect login or password.'));
+    yield put(setApplicationStatus('error'));
   }
 }
 
 function* logoutSaga(action) {
   try {
+    yield put(setApplicationStatus('loading'));
     yield call(logout);
-    yield put(logoutSuccess());
     let newState = yield call(getInitialState, '');
-    yield put(setInitialState({
-      userName: '',
-      authorizationStatus: 'not-authorized',
+    yield put(setState({
+      username: '',
       tags: newState.tags,
       notifications: newState.notifications
     }));
+    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Logout error.'));
+    yield put(setApplicationStatus('error'));
   }
 }
 
 function* addCandidateSaga(action) {
   try {
-    let newCandidate = createCandidate(action.candidate.status, action.candidate);
-    newCandidate.id = yield call(addCandidate, newCandidate);
-    yield put(addCandidateSuccess(newCandidate));
+    yield call(addCandidate, createCandidate(action.candidate.status, action.candidate));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Add candidate error.'));
@@ -143,7 +148,6 @@ function* updateCandidateSaga(action) {
 function* deleteCandidateSaga(action) {
   try {
     yield call(deleteCandidate, action.candidateID);
-    yield put(deleteCandidateSuccess(action.candidateID));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete candidate error.'));
@@ -217,63 +221,48 @@ function* setSearchRequestSaga(action) {
 }
 
 function* searchSaga(action) {
-  let newURL = '';
+  let newURL = action.browserHistory.location.pathname;
   if (action.searchRequest.trim() !== '') {
-    newURL = action.browserHistory.location.pathname + '?q=' + encodeURIComponent(action.searchRequest);
-  } else {
-    newURL = action.browserHistory.location.pathname;
+    newURL += '?q=' + encodeURIComponent(action.searchRequest);
   }
   action.browserHistory.replace(newURL);
 }
 
-function* changeURLSaga(action) {
+function* loadCandidatesSaga(action) {
   try {
-    yield put(setStatus('loading'));
-    action.browserHistory.replace(action.newURL);
-    let separatedURL = separateURL(action.newURL);
+    yield put(setApplicationStatus('loading'));
+    let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
     let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
-    let serverResponse = yield call(getCandidates, separatedURL.args.take ? Number(separatedURL.args.take) : candidatesPerPage,
-      separatedURL.args.skip ? separatedURL.args.skip : 0, separatedURL.candidateStatus);
-    yield put(setInitialState({
+    let candidatesOffset = yield select((state) => {return state.get('offset')});
+    let serverResponse = yield call(getCandidates, candidatesPerPage, candidatesOffset, candidateStatus);
+    yield put(setState({
       candidates: serverResponse.candidates,
-      candidatesOffset: separatedURL.args.skip ? Number(separatedURL.args.skip) : 0,
-      candidatesPerPage: separatedURL.args.take ? Number(separatedURL.args.take) : candidatesPerPage,
-      candidatesTotalCount: serverResponse.total
+      totalCount: serverResponse.total
     }));
-
-    yield put(setStatus('ok'));
+    yield call(action.browserHistory.replace, '/' + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
+      + '?take=' + candidatesPerPage
+      + '&skip=' + candidatesOffset);
+    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. ChangeURL notification error.'));
+    yield put(setErrorMessage(error + '. Load candidates error.'));
+    yield put(setApplicationStatus('error'));
   }
 }
 
-function separateURL(url) {
-  let splitedURL = url.split('?');
-  let path = splitedURL[0];
-  let candidateStatus = '';
-  switch (path.split('/')[1]) {
-    case 'interviewees':
-      candidateStatus = 'Interviewee';
-      break;
-    case 'students':
-      candidateStatus = 'Student';
-      break;
-    case 'trainees':
-      candidateStatus = 'Trainee';
-      break;
+function* getCandidateSaga(action) {
+  try {
+    yield put(setApplicationStatus('loading'));
+    let candidates = [];
+    let candidate = yield call(getCandidate, action.id);
+    candidates.push(candidate);
+    yield put(setState({
+      candidates: candidates
+    }));
+    yield put(setApplicationStatus('ok'));
   }
-  let args = splitedURL[1];
-  let argsObject = {};
-  if (args) {
-    let argsArray = args.split('&');
-    argsArray.forEach((arg) => {
-      let splited = arg.split('=');
-      argsObject[splited[0]] = splited[1];
-    });
-  }
-  return {
-    candidateStatus: candidateStatus,
-    args: argsObject
+  catch(error) {
+    yield put(setErrorMessage(error + '. Get candidate error.'));
+    yield put(setApplicationStatus('error'));
   }
 }

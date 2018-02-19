@@ -1,5 +1,5 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getCandidatesPaginated, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
+import {getAllCandidates, getCandidatesPaginated, getCandidateByID, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
   deleteComment, subscribe, unsubscribe, noticeNotification, deleteNotification} from './mongoose';
 
 export const schema = buildSchema(`    
@@ -20,6 +20,7 @@ export const schema = buildSchema(`
     mentor: String,
   }
   input CommentInput {
+    id: String!,
     author: String!,
     date: String!,
     text: String!,
@@ -58,6 +59,7 @@ export const schema = buildSchema(`
   }
   type Query {
     candidates: [Candidate],
+    candidate(id: String!): Candidate,
     candidatesPaginated(first: Int!, offset: Int!, status: String): PaginateResult,
     tags: [String],
     notifications(username: String!): [Notification]
@@ -90,6 +92,14 @@ export const root = {
           candidates.push(candidate);
         });
         return candidates;
+      });
+  },
+  candidate: ({id}) => {
+    return getCandidateByID(id)
+      .then((candidate) => {
+        candidate.id = candidate._id;
+        delete candidate._id;
+        return candidate;
       });
   },
   candidatesPaginated: ({first, offset, status}) => {

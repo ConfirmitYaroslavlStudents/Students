@@ -27,7 +27,7 @@ export default class AddCommentPanel extends Component {
         commentText = commentText.substr(0, commentText.length - 11);
       }
       this.props.addComment(this.props.candidate.id, createComment(
-        this.props.userName,
+        this.props.username,
         getCurrentDateTime(),
         commentText));
       this.props.onClick();
@@ -59,9 +59,9 @@ export default class AddCommentPanel extends Component {
         <ButtonWrapper>
           <NotificationsWrapper>
             <SubscribeButton
-              active={!this.props.disabled && this.props.candidate.subscribers.includes(this.props.userName)}
+              active={!this.props.disabled && this.props.candidate.subscribers.includes(this.props.username)}
               candidate={this.props.candidate}
-              userName={this.props.userName}
+              username={this.props.username}
               subscribe={this.props.subscribe}
               unsubscribe={this.props.unsubscribe}
               disabled={this.props.disabled}
@@ -85,7 +85,7 @@ export default class AddCommentPanel extends Component {
 AddCommentPanel.propTypes = {
   addComment: PropTypes.func.isRequired,
   candidate: PropTypes.object.isRequired,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   onClick: PropTypes.func,

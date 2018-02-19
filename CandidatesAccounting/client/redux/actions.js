@@ -1,7 +1,66 @@
-function setInitialState(state) {
+function setState(state) {
   return {
-    type: 'SET_INITIAL_STATE',
+    type: 'SET_STATE',
     state
+  }
+}
+
+function setApplicationStatus(status) {
+  return {
+    type: 'SET_APPLICATION_STATUS',
+    status
+  }
+}
+
+function setPageTitle(title) {
+  return {
+    type: 'SET_PAGE_TITLE',
+    title
+  }
+}
+
+function setSearchRequest(searchRequest, browserHistory, delay) {
+  return {
+    type: 'SET_SEARCH_REQUEST',
+    searchRequest,
+    browserHistory,
+    delay
+  }
+}
+
+function search(searchRequest, browserHistory) {
+  return {
+    type: 'SEARCH',
+    searchRequest,
+    browserHistory
+  }
+}
+
+function setErrorMessage(message) {
+  return {
+    type: 'SET_ERROR_MESSAGE',
+    message
+  }
+}
+
+function setCandidateStatus(status) {
+  return {
+    type: 'SET_CANDIDATE_STATUS',
+    status
+  }
+}
+
+function setOffset(offset) {
+  return {
+    type: 'SET_OFFSET',
+    offset
+  }
+}
+
+function setCandidatesPerPage(candidatesPerPage) {
+  return {
+    type: 'SET_CANDIDATES_PER_PAGE',
+    candidatesPerPage
   }
 }
 
@@ -13,22 +72,23 @@ function login(email, password) {
   }
 }
 
-function loginSuccess(userName) {
+function loadCandidates(browserHistory) {
   return {
-    type: 'LOGIN_SUCCESS',
-    userName
+    type: 'LOAD_CANDIDATES',
+    browserHistory
+  }
+}
+
+function getCandidate(id) {
+  return {
+    type: 'GET_CANDIDATE',
+    id
   }
 }
 
 function logout() {
   return {
     type: 'LOGOUT'
-  }
-}
-
-function logoutSuccess() {
-  return {
-    type: 'LOGOUT_SUCCESS'
   }
 }
 
@@ -49,13 +109,6 @@ function addCandidateSuccess(candidate) {
 function deleteCandidate(candidateID) {
   return {
     type: 'DELETE_CANDIDATE',
-    candidateID
-  }
-}
-
-function deleteCandidateSuccess(candidateID) {
-  return {
-    type: 'DELETE_CANDIDATE_SUCCESS',
     candidateID
   }
 }
@@ -170,55 +223,10 @@ function deleteNotificationSuccess(username, notificationID) {
   }
 }
 
-function setErrorMessage(message) {
-  return {
-    type: 'SET_ERROR_MESSAGE',
-    message
-  }
-}
-
-function setSearchRequest(searchRequest, browserHistory, delay) {
-  return {
-    type: 'SET_SEARCH_REQUEST',
-    searchRequest,
-    browserHistory,
-    delay
-  }
-}
-
-function search(searchRequest, browserHistory) {
-  return {
-    type: 'SEARCH',
-    searchRequest,
-    browserHistory
-  }
-}
-
-function setPageTitle(title) {
-  return {
-    type: 'SET_PAGE_TITLE',
-    title
-  }
-}
-
-function changeURL(newURL, browserHistory) {
-  return {
-    type: 'CHANGE_URL',
-    newURL,
-    browserHistory
-  }
-}
-
-function setStatus(status) {
-  return {
-    type: 'SET_STATUS',
-    status
-  }
-}
-
 module.exports = {
-  setInitialState, login, loginSuccess, logout, logoutSuccess, addCandidate, deleteCandidate, updateCandidate, addComment,
+  setState, login, logout, addCandidate, deleteCandidate, updateCandidate, addComment,
   deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
-  setErrorMessage, deleteNotification, deleteNotificationSuccess,
-  addCandidateSuccess, deleteCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest,
-  search, setPageTitle, changeURL, setStatus};
+  setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, getCandidate,
+  addCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest,
+  search, setPageTitle, setApplicationStatus, setCandidateStatus, setOffset, setCandidatesPerPage
+};

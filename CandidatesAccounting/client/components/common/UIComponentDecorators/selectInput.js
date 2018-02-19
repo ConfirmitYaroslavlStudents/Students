@@ -21,8 +21,8 @@ export default class SelectInput extends Component {
 
   render() {
     return (
-      <FormControl style={{minWidth: 240}}>
-        <InputLabel htmlFor="simple-select">{this.props.label}</InputLabel>
+      <FormControl style={{minWidth: this.props.minWidth}}>
+        {this.props.label ? <InputLabel htmlFor="simple-select">{this.props.label}</InputLabel> : ''}
         <Select
           value={this.state.selected}
           onChange={this.handleChange}
@@ -42,6 +42,7 @@ export default class SelectInput extends Component {
 SelectInput.propTypes = {
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   selected: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.string]).isRequired,
+  minWidth: PropTypes.number,
   onChange: PropTypes.func,
   label: PropTypes.string,
 };

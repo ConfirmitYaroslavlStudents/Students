@@ -43,7 +43,7 @@ export default class AddCommentDialog extends Component {
                 addComment={this.props.addComment}
                 candidate={this.props.candidate}
                 onClick={this.handleClose}
-                userName={this.props.userName}
+                username={this.props.username}
                 subscribe={this.props.subscribe}
                 unsubscribe={this.props.unsubscribe}
                 disabled={this.props.disabled}
@@ -58,7 +58,7 @@ export default class AddCommentDialog extends Component {
 AddCommentDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

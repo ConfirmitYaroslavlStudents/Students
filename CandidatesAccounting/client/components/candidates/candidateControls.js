@@ -19,10 +19,10 @@ export default function CandidateControls(props) {
       <AddCommentDialog
         candidate={props.candidate}
         addComment={props.addComment}
-        userName={props.userName}
+        username={props.username}
         subscribe={props.subscribe}
         unsubscribe={props.unsubscribe}
-        disabled={props.authorizationStatus === 'not-authorized'}
+        disabled={props.username === ''}
       />
       <NavLink to={'/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
         <Badge badgeContent={props.candidate.comments.length}>
@@ -36,13 +36,19 @@ export default function CandidateControls(props) {
         candidate={props.candidate}
         updateCandidate={props.updateCandidate}
         tags={props.tags}
-        userName={props.userName}
-        disabled={props.authorizationStatus === 'not-authorized'}
+        username={props.username}
+        disabled={props.username === ''}
       />
       <DeleteCandidateDialog
         candidate={props.candidate}
-        deleteCandidate={props.deleteCandidate}
-        disabled={props.authorizationStatus === 'not-authorized'}
+        deleteCandidate={(candidateID) => {
+          props.deleteCandidate(candidateID);
+          if (props.totalCount - props.offset <= 1) {
+            props.setOffset(props.totalCount - 1 - props.candidatesPerPage);
+          }
+          props.loadCandidates(props.history);
+        }}
+        disabled={props.username === ''}
       />
     </div>
   );
@@ -52,9 +58,13 @@ CandidateControls.propTypes = {
   candidate: PropTypes.object.isRequired,
   updateCandidate: PropTypes.func.isRequired,
   deleteCandidate: PropTypes.func.isRequired,
-  userName: PropTypes.string.isRequired,
+  loadCandidates: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
+  offset: PropTypes.number.isRequired,
+  candidatesPerPage: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  setOffset: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
 };

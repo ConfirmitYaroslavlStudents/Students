@@ -19,10 +19,10 @@ export default class IntervieweeTable extends Component {
     return (
       <Table
         heads={[
-          {title: 'Name', sorting: 'byAlphabet'},
-          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Name', sortingField: 'name'},
+          {title: 'E-mail', sortingField: 'email'},
           {title: 'Birth Date'},
-          {title: 'Interview date', sorting: 'byTime'},
+          {title: 'Interview date', sortingField: 'interviewDate'},
           {title: 'Resume'},
           {title: 'Actions'}]}
         contentRows={
@@ -66,6 +66,10 @@ export default class IntervieweeTable extends Component {
         totalCount={this.props.totalCount}
         setOffset={this.props.setOffset}
         setRowsPerPage={this.props.setCandidatesPerPage}
+        sortingField={this.props.sortingField}
+        setSortingField={this.props.setSortingField}
+        sortingDirection={this.props.sortingDirection}
+        setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
       />
     );

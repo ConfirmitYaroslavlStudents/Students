@@ -60,7 +60,7 @@ export const schema = buildSchema(`
   type Query {
     candidates: [Candidate],
     candidate(id: String!): Candidate,
-    candidatesPaginated(first: Int!, offset: Int!, status: String): PaginateResult,
+    candidatesPaginated(first: Int!, offset: Int!, status: String, sort: String, sortDir: String): PaginateResult,
     tags: [String],
     notifications(username: String!): [Notification]
   }
@@ -102,8 +102,8 @@ export const root = {
         return candidate;
       });
   },
-  candidatesPaginated: ({first, offset, status}) => {
-    return getCandidatesPaginated(offset, first, status)
+  candidatesPaginated: ({first, offset, status, sort, sortDir}) => {
+    return getCandidatesPaginated(offset, first, status, sort, sortDir)
       .then((result) => {
         let candidates = [];
         result.docs.forEach((candidate) => {

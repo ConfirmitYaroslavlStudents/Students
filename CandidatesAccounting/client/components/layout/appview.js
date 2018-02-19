@@ -42,6 +42,8 @@ export default class AppView extends Component {
     this.props.setCandidateStatus(candidateStatus);
     this.props.setOffset(argsObject.skip ? Number(argsObject.skip) : 0);
     this.props.setCandidatesPerPage(argsObject.take ? Number(argsObject.take) : 15);
+    this.props.setSortingField(argsObject.sort ? argsObject.sort : '');
+    this.props.setSortingDirection(argsObject.sortDir ? argsObject.sortDir : 'desc');
     this.props.loadCandidates(this.props.history);
   }
 
@@ -104,6 +106,8 @@ export default class AppView extends Component {
           setCandidateStatus={this.props.setCandidateStatus}
           setOffset={this.props.setOffset}
           loadCandidates={this.props.loadCandidates}
+          setSortingField={this.props.setSortingField}
+          setSortingDirection={this.props.setSortingDirection}
         />
         <div className='custom-main'>
           {
@@ -160,6 +164,8 @@ function mapStateToProps(state) {
     offset: Number(state.get('offset')),
     candidatesPerPage: Number(state.get('candidatesPerPage')),
     totalCount: Number(state.get('totalCount')),
+    sortingField: state.get('sortingField'),
+    sortingDirection: state.get('sortingDirection'),
     candidates: state.get('candidates').toJS(),
     tags: state.get('tags').toArray(),
     notifications: state.get('notifications').toJS(),

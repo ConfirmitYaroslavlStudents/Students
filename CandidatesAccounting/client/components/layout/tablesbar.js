@@ -21,6 +21,8 @@ export default class TablesBar extends Component{
   handleLinkClick(candidateStatus) {
     this.props.setCandidateStatus(candidateStatus);
     this.props.setOffset(0);
+    this.props.setSortingField('');
+    this.props.setSortingDirection('desc');
     this.props.loadCandidates(this.props.history);
   }
 
@@ -69,8 +71,10 @@ TablesBar.propTypes = {
   setSearchRequest: PropTypes.func.isRequired,
   setCandidateStatus: PropTypes.func.isRequired,
   setOffset: PropTypes.func.isRequired,
-  candidatesPerPage: PropTypes.number.isRequired,
+  setSortingField: PropTypes.func.isRequired,
+  setSortingDirection: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
+  candidatesPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   selected: PropTypes.number,
 };

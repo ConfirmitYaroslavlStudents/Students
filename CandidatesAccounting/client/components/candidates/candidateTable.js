@@ -18,9 +18,9 @@ export default class CandidateTable extends Component {
     return (
       <Table
         heads={[
-          {title: 'Name', sorting: 'byAlphabet'},
-          {title: 'Status', sorting: 'byAlphabet'},
-          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Name', sortingField: 'name'},
+          {title: 'Status', sortingField:'status'},
+          {title: 'E-mail', sortingField: 'email'},
           {title: 'Birth Date'},
           {title: 'Actions'}]}
         contentRows={
@@ -57,6 +57,10 @@ export default class CandidateTable extends Component {
         totalCount={this.props.totalCount}
         setOffset={this.props.setOffset}
         setRowsPerPage={this.props.setCandidatesPerPage}
+        sortingField={this.props.sortingField}
+        setSortingField={this.props.setSortingField}
+        sortingDirection={this.props.sortingDirection}
+        setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
       />
     );

@@ -64,11 +64,17 @@ function setCandidatesPerPage(candidatesPerPage) {
   }
 }
 
-function login(email, password) {
+function setSortingField(field) {
   return {
-    type: 'LOGIN',
-    email,
-    password
+    type: 'SET_SORTING_FIELD',
+    field
+  }
+}
+
+function setSortingDirection(direction) {
+  return {
+    type: 'SET_SORTING_DIRECTION',
+    direction
   }
 }
 
@@ -83,6 +89,14 @@ function getCandidate(id) {
   return {
     type: 'GET_CANDIDATE',
     id
+  }
+}
+
+function login(email, password) {
+  return {
+    type: 'LOGIN',
+    email,
+    password
   }
 }
 
@@ -226,7 +240,7 @@ function deleteNotificationSuccess(username, notificationID) {
 module.exports = {
   setState, login, logout, addCandidate, deleteCandidate, updateCandidate, addComment,
   deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
-  setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, getCandidate,
+  setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, getCandidate, setSortingField, setSortingDirection,
   addCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest,
   search, setPageTitle, setApplicationStatus, setCandidateStatus, setOffset, setCandidatesPerPage
 };

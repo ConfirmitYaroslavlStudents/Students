@@ -49,8 +49,14 @@ export function getAllCandidates() {
   return Candidate.find({}).exec();
 }
 
-export function getCandidatesPaginated(offset, limit, status) {
-  return identifyModel(status).paginate(status && status !== '' ? {status: status} : {}, {offset: offset, limit: limit});
+export function getCandidatesPaginated(offset, limit, status, sort, sortDir) {
+  if (sort !== '' && sortDir !== '') {
+    let sortSettings = {};
+    sortSettings[sort] = sortDir;
+    return identifyModel(status).paginate(status !== '' ? {status: status} : {}, {offset: offset, limit: limit, sort: sortSettings});
+  } else {
+    return identifyModel(status).paginate(status !== '' ? {status: status} : {}, {offset: offset, limit: limit});
+  }
 }
 
 export function getCandidateByID(id) {

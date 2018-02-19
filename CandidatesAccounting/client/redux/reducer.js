@@ -23,6 +23,12 @@ export default function reducer(state = Immutable.Map(), action) {
     case 'SET_CANDIDATES_PER_PAGE':
       return state.set('candidatesPerPage', action.candidatesPerPage);
 
+    case 'SET_SORTING_FIELD':
+      return state.set('sortingField', action.field);
+
+    case 'SET_SORTING_DIRECTION':
+      return state.set('sortingDirection', action.direction);
+
     case 'SET_SEARCH_REQUEST':
       return state = state.set('searchRequest', action.searchRequest);
 

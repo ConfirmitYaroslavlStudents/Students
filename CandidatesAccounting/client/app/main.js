@@ -75,6 +75,8 @@ getUsername().then((username) => {
           offset: 0,
           candidatesPerPage: 15,
           totalCount: 0,
+          sortingField: '',
+          sortingDirection: 'desc',
           candidates: [],
           tags: initialState.tags,
           notifications: initialState.notifications

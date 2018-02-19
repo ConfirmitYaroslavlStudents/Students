@@ -59,7 +59,7 @@ app.get('/login', function(req, res) {
   if (req.isAuthenticated()) {
     res.json({username: req.user.username});
   } else {
-    res.status(401).end();
+    res.json({username: ''});
   }
 });
 

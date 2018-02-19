@@ -18,10 +18,10 @@ export default class TraineeTable extends Component {
     return (
       <Table
         heads={[
-          {title: 'Name', sorting: 'byAlphabet'},
-          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Name', sortingField: 'name'},
+          {title: 'E-mail', sortingField: 'email'},
           {title: 'Birth Date'},
-          {title: 'Mentor', sorting: 'byAlphabet'},
+          {title: 'Mentor', sortingField: 'mentor'},
           {title: 'Actions'}]}
         contentRows={
           (this.props.trainees.map((trainee, index) =>
@@ -56,6 +56,10 @@ export default class TraineeTable extends Component {
         totalCount={this.props.totalCount}
         setOffset={this.props.setOffset}
         setRowsPerPage={this.props.setCandidatesPerPage}
+        sortingField={this.props.sortingField}
+        setSortingField={this.props.setSortingField}
+        sortingDirection={this.props.sortingDirection}
+        setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
       />
     );

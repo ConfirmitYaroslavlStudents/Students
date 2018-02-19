@@ -234,14 +234,18 @@ function* loadCandidatesSaga(action) {
     let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
     let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
     let candidatesOffset = yield select((state) => {return state.get('offset')});
-    let serverResponse = yield call(getCandidates, candidatesPerPage, candidatesOffset, candidateStatus);
+    let sortingField = yield select((state) => {return state.get('sortingField')});
+    let sortingDirection = yield select((state) => {return state.get('sortingDirection')});
+    let serverResponse = yield call(getCandidates, candidatesPerPage, candidatesOffset, candidateStatus, sortingField, sortingDirection);
     yield put(setState({
       candidates: serverResponse.candidates,
       totalCount: serverResponse.total
     }));
-    yield call(action.browserHistory.replace, '/' + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
+    yield call(action.browserHistory.replace, '/'
+      + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
       + '?take=' + candidatesPerPage
-      + '&skip=' + candidatesOffset);
+      + (candidatesOffset === 0 ? '' : '&skip=' + candidatesOffset)
+      + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection));
     yield put(setApplicationStatus('ok'));
   }
   catch(error) {

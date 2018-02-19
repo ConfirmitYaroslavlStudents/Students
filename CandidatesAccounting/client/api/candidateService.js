@@ -1,10 +1,10 @@
 import sendGraphQLQuery from './graphqlClient';
 import createCandidate from '../utilities/createCandidate';
 
-export function getCandidates(take, skip, status) {
+export function getCandidates(take, skip, status, sort, sortDir) {
   return sendGraphQLQuery(
-    `query($first: Int!, $offset: Int!, $status: String) {
-      candidatesPaginated(first: $first, offset: $offset, status: $status) {
+    `query($first: Int!, $offset: Int!, $status: String, $sort: String, $sortDir: String) {
+      candidatesPaginated(first: $first, offset: $offset, status: $status, sort: $sort, sortDir: $sortDir) {
         candidates {
           id
           name
@@ -32,7 +32,9 @@ export function getCandidates(take, skip, status) {
     {
       first: take,
       offset: skip,
-      status: status
+      status: status,
+      sort: sort,
+      sortDir: sortDir === 'desc' ? 'asc' : 'desc'
     }
   )
     .then((data) => {

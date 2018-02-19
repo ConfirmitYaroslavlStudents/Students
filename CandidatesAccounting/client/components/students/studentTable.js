@@ -18,12 +18,12 @@ export default class StudentTable extends Component {
     return (
       <Table
         heads={[
-          {title: 'Name', sorting: 'byAlphabet'},
-          {title: 'E-mail', sorting: 'byAlphabet'},
+          {title: 'Name', sortingField: 'name'},
+          {title: 'E-mail', sortingField: 'email'},
           {title: 'Birth Date'},
-          {title: 'Group', sorting: 'byAlphabet'},
-          {title: 'Learning start', sorting: 'byDate'},
-          {title: 'Learning end', sorting: 'byDate'},
+          {title: 'Group', sortingField: 'group'},
+          {title: 'Learning start', sortingField: 'startingDate'},
+          {title: 'Learning end', sortingField: 'endingDate'},
           {title: 'Actions'}
         ]}
         contentRows={
@@ -69,6 +69,10 @@ export default class StudentTable extends Component {
         totalCount={this.props.totalCount}
         setOffset={this.props.setOffset}
         setRowsPerPage={this.props.setCandidatesPerPage}
+        sortingField={this.props.sortingField}
+        setSortingField={this.props.setSortingField}
+        sortingDirection={this.props.sortingDirection}
+        setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
       />
     );

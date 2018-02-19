@@ -7,7 +7,7 @@ import {addComment, deleteComment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
 import {noticeNotification, deleteNotification} from '../api/notificationService';
 import {setState, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
-        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, search, setApplicationStatus} from './actions';
+        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, loadCandidates, setApplicationStatus} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {
@@ -24,7 +24,6 @@ export default function* rootSaga() {
     watchNoticeNotification(),
     watchDeleteNotification(),
     watchChangeSearchRequest(),
-    watchSearch(),
     watchLoadCandidates(),
     watchGetCandidate(),
   ])
@@ -76,10 +75,6 @@ function* watchUnsubscribe() {
 
 function* watchChangeSearchRequest() {
   yield takeLatest('SET_SEARCH_REQUEST', setSearchRequestSaga);
-}
-
-function* watchSearch() {
-  yield takeLatest('SEARCH', searchSaga);
 }
 
 function* watchLoadCandidates() {
@@ -217,26 +212,20 @@ function* deleteNotificationSaga(action) {
 
 function* setSearchRequestSaga(action) {
   yield call(delay, action.delay);
-  yield put(search(action.searchRequest, action.browserHistory));
-}
-
-function* searchSaga(action) {
-  let newURL = action.browserHistory.location.pathname;
-  if (action.searchRequest.trim() !== '') {
-    newURL += '?q=' + encodeURIComponent(action.searchRequest);
-  }
-  action.browserHistory.replace(newURL);
+  yield put(setState({ searchRequest: action.searchRequest }));
+  yield put(loadCandidates(action.browserHistory));
 }
 
 function* loadCandidatesSaga(action) {
-  try {
+  //try {
     yield put(setApplicationStatus('loading'));
     let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
     let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
     let candidatesOffset = yield select((state) => {return state.get('offset')});
     let sortingField = yield select((state) => {return state.get('sortingField')});
     let sortingDirection = yield select((state) => {return state.get('sortingDirection')});
-    let serverResponse = yield call(getCandidates, candidatesPerPage, candidatesOffset, candidateStatus, sortingField, sortingDirection);
+    let searchRequest = yield select((state) => {return state.get('searchRequest')});
+    let serverResponse = yield call(getCandidates, candidatesPerPage, candidatesOffset, candidateStatus, sortingField, sortingDirection, searchRequest);
     yield put(setState({
       candidates: serverResponse.candidates,
       totalCount: serverResponse.total
@@ -245,13 +234,14 @@ function* loadCandidatesSaga(action) {
       + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
       + '?take=' + candidatesPerPage
       + (candidatesOffset === 0 ? '' : '&skip=' + candidatesOffset)
-      + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection));
+      + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection)
+      + (searchRequest === '' ? '' : '&q=' + searchRequest));
     yield put(setApplicationStatus('ok'));
-  }
-  catch(error) {
-    yield put(setErrorMessage(error + '. Load candidates error.'));
-    yield put(setApplicationStatus('error'));
-  }
+  //}
+  //catch(error) {
+  //  yield put(setErrorMessage(error + '. Load candidates error.'));
+  //  yield put(setApplicationStatus('error'));
+  //}
 }
 
 function* getCandidateSaga(action) {

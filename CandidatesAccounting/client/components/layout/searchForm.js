@@ -34,7 +34,7 @@ export default class SearchForm extends Component {
   }
 
   changeRequest(value) {
-    this.props.setSearchRequest(value, 500);
+    this.props.setSearchRequest(value, this.props.history, 500);
   }
 
   render() {
@@ -67,6 +67,7 @@ export default class SearchForm extends Component {
 
 SearchForm.propTypes = {
   searchRequest: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
 };
 

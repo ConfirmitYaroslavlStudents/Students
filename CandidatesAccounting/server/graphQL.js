@@ -60,7 +60,7 @@ export const schema = buildSchema(`
   type Query {
     candidates: [Candidate],
     candidate(id: String!): Candidate,
-    candidatesPaginated(first: Int!, offset: Int!, status: String, sort: String, sortDir: String): PaginateResult,
+    candidatesPaginated(first: Int!, offset: Int!, status: String, sort: String, sortDir: String, searchRequest: String): PaginateResult,
     tags: [String],
     notifications(username: String!): [Notification]
   }
@@ -102,24 +102,43 @@ export const root = {
         return candidate;
       });
   },
-  candidatesPaginated: ({first, offset, status, sort, sortDir}) => {
-    return getCandidatesPaginated(offset, first, status, sort, sortDir)
-      .then((result) => {
-        let candidates = [];
-        result.docs.forEach((candidate) => {
-          candidate.id = candidate._id;
-          delete candidate._id;
-          candidate.comments.forEach((comment) => {
-            comment.id = comment._id;
-            delete comment._id;
-          });
-          candidates.push(candidate);
+  candidatesPaginated: ({first, offset, status, sort, sortDir, searchRequest}) => {
+    if (searchRequest && searchRequest.trim() !== '') {
+      return getAllCandidates(status)
+        .then((result) => {
+          let validCandidates = search(result, searchRequest);
+          let paginatedCandidates = [];
+          for (let i = Number(offset); i < Number(offset) + Number(first) && i < validCandidates.length; i++) {
+            validCandidates[i].id = validCandidates[i]._id;
+            delete validCandidates[i]._id;
+            validCandidates[i].comments.forEach((comment) => {
+              comment.id = comment._id;
+              delete comment._id;
+            });
+            paginatedCandidates.push(validCandidates[i]);
+          }
+          return {
+            candidates: paginatedCandidates,
+            total: validCandidates.length
+          };
         });
-        return {
-          candidates: candidates,
-          total: result.total
-        }
-      });
+    } else {
+      return getCandidatesPaginated(offset, first, status, sort, sortDir)
+        .then((result) => {
+          result.docs.forEach((candidate) => {
+            candidate.id = candidate._id;
+            delete candidate._id;
+            candidate.comments.forEach((comment) => {
+              comment.id = comment._id;
+              delete comment._id;
+            });
+          });
+          return {
+            candidates: result.docs,
+            total: result.total
+          }
+        });
+    }
   },
   tags: () => {
     return getAllTags();
@@ -187,3 +206,22 @@ export const root = {
       });
   }
 };
+
+function search(candidates, searchRequest) {
+  let requestLowerCase = searchRequest.toLowerCase();
+  let validCandidates = [];
+  candidates.forEach((candidate) => {
+    if (
+      candidate.id === searchRequest
+      || candidate.name.toLowerCase().includes(requestLowerCase)
+      || candidate.status.toLowerCase().includes(requestLowerCase)
+      || candidate.email.toLowerCase().includes(requestLowerCase)
+      || (candidate.groupName && candidate.groupName.toLowerCase().includes(requestLowerCase))
+      || (candidate.mentor && candidate.mentor.toLowerCase().includes(requestLowerCase))
+      || candidate.tags.includes(searchRequest)
+    ) {
+      validCandidates.push(candidate);
+    }
+  });
+  return validCandidates;
+}

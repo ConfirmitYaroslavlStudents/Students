@@ -45,8 +45,8 @@ function identifyModel(status) {
   }
 }
 
-export function getAllCandidates() {
-  return Candidate.find({}).exec();
+export function getAllCandidates(status) {
+  return identifyModel(status).find({}).exec();
 }
 
 export function getCandidatesPaginated(offset, limit, status, sort, sortDir) {

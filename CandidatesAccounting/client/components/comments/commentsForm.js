@@ -16,10 +16,6 @@ export default class CommentsForm extends Component {
   }
 
   componentWillMount() {
-    if (this.props.pageTitle === 'Candidate Accounting') {
-      this.props.setSearchRequest('', this.props.history, 0);
-      this.props.setPageTitle(this.props.candidate.name);
-    }
     this.userColors = {};
     this.props.candidate.comments.forEach((comment) => {
       if (!(comment.author in this.userColors)) {
@@ -57,11 +53,6 @@ export default class CommentsForm extends Component {
           deleteComment={() => {this.deleteComment(comment.id)}}
           isSystem={comment.author === 'SYSTEM'}
           isCurrentUserComment={comment.author === this.props.username}
-          highlighted={
-            this.props.searchRequest ?
-              comment.author.toLowerCase().includes(this.props.searchRequest.toLowerCase()) ||
-              comment.text.toLowerCase().includes(this.props.searchRequest.toLowerCase())
-              : false}
         />
       );
       if (this.props.candidate.comments.length === 0) {
@@ -99,17 +90,13 @@ export default class CommentsForm extends Component {
 }
 
 CommentsForm.propTypes = {
-  candidate: PropTypes.object.isRequired,
+  candidate: PropTypes.object,
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
-  pageTitle: PropTypes.string.isRequired,
-  setPageTitle: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  searchRequest: PropTypes.string.isRequired,
-  setSearchRequest: PropTypes.func.isRequired
 };
 
 const FormWrapper = styled.div`

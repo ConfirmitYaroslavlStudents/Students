@@ -9,7 +9,7 @@ import formatUserName from '../../utilities/formatUserName';
 export default function CommentCloud(props) {
   return (
     <CommentWrapper right={props.isCurrentUserComment}>
-      <CommentMount markerColor={props.markerColor} isSystem={props.isSystem} right={props.isCurrentUserComment} highlighted={props.highlighted}>
+      <CommentMount markerColor={props.markerColor} isSystem={props.isSystem} right={props.isCurrentUserComment}>
         {
           props.isSystem ?
             <svg height="24px" width="24px" fill="#FF8F00" focusable="false" viewBox="0 0 24 24" style={{margin: 'auto 5px auto 0'}}>'+'
@@ -52,8 +52,7 @@ CommentCloud.propTypes = {
   deleteComment: PropTypes.func.isRequired,
   markerColor: PropTypes.string,
   isSystem: PropTypes.bool,
-  isCurrentUserComment: PropTypes.bool,
-  highlighted: PropTypes.bool,
+  isCurrentUserComment: PropTypes.bool
 };
 
 const CommentWrapper = styled.div`  
@@ -89,15 +88,6 @@ const CommentMount = styled.div`
     border-color: #FF9800;
     border-radius: 0px;
     padding: 13px 13px 13px 7px;
-	`}	
-  
-	${props => props.highlighted && css`
-		background-color: #B3E5FC;
-		box-shadow: 0 0 15px rgba(0, 0, 0, 0.35);
-	`}
-	
-	${props => props.highlighted && props.isSystem && css`
-		background-color: #FFECB3;
 	`}
 `;
 

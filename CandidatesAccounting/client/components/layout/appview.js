@@ -18,33 +18,39 @@ export default class AppView extends Component {
   componentWillMount() {
     let splitedURL = (this.props.history.location.pathname + this.props.history.location.search).split('?');
     let path = splitedURL[0];
-    let candidateStatus = '';
-    switch (path.split('/')[1]) {
-      case 'interviewees':
-        candidateStatus = 'Interviewee';
-        break;
-      case 'students':
-        candidateStatus = 'Student';
-        break;
-      case 'trainees':
-        candidateStatus = 'Trainee';
-        break;
+    let splitedPath = path.split('/');
+    if (splitedPath[3] === 'comments') {
+      this.props.getCandidate(splitedPath[2]);
+    } else {
+      let candidateStatus = '';
+      switch (splitedPath[1]) {
+        case 'interviewees':
+          candidateStatus = 'Interviewee';
+          break;
+        case 'students':
+          candidateStatus = 'Student';
+          break;
+        case 'trainees':
+          candidateStatus = 'Trainee';
+          break;
+      }
+      let args = splitedURL[1];
+      let argsObject = {};
+      if (args) {
+        let argsArray = args.split('&');
+        argsArray.forEach((arg) => {
+          let splited = arg.split('=');
+          argsObject[splited[0]] = splited[1];
+        });
+      }
+      this.props.setCandidateStatus(candidateStatus);
+      this.props.setOffset(argsObject.skip ? Number(argsObject.skip) : 0);
+      this.props.setCandidatesPerPage(argsObject.take ? Number(argsObject.take) : 15);
+      this.props.setSortingField(argsObject.sort ? argsObject.sort : '');
+      this.props.setSortingDirection(argsObject.sortDir ? argsObject.sortDir : 'desc');
+      this.props.setSearchRequest(argsObject.q ? argsObject.q : '', this.props.history, 0);
+      this.props.loadCandidates(this.props.history);
     }
-    let args = splitedURL[1];
-    let argsObject = {};
-    if (args) {
-      let argsArray = args.split('&');
-      argsArray.forEach((arg) => {
-        let splited = arg.split('=');
-        argsObject[splited[0]] = splited[1];
-      });
-    }
-    this.props.setCandidateStatus(candidateStatus);
-    this.props.setOffset(argsObject.skip ? Number(argsObject.skip) : 0);
-    this.props.setCandidatesPerPage(argsObject.take ? Number(argsObject.take) : 15);
-    this.props.setSortingField(argsObject.sort ? argsObject.sort : '');
-    this.props.setSortingDirection(argsObject.sortDir ? argsObject.sortDir : 'desc');
-    this.props.loadCandidates(this.props.history);
   }
 
   render() {

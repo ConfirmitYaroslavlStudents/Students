@@ -17,10 +17,15 @@ export default function MainNavbar(props) {
       title={props.title}
       rightPart={
         <RightPartWrapper>
-          <SearchForm
-            searchRequest={props.searchRequest}
-            setSearchRequest={props.setSearchRequest}
-          />
+          {
+            props.title === 'Candidate Accounting' ?
+              <SearchForm
+                searchRequest={props.searchRequest}
+                setSearchRequest={props.setSearchRequest}
+                history={props.history}
+              />
+              : ''
+          }
           {
             props.username === '' ?
             <LoginDialog login={props.login}/>

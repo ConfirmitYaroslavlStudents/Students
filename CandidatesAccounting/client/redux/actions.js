@@ -28,14 +28,6 @@ function setSearchRequest(searchRequest, browserHistory, delay) {
   }
 }
 
-function search(searchRequest, browserHistory) {
-  return {
-    type: 'SEARCH',
-    searchRequest,
-    browserHistory
-  }
-}
-
 function setErrorMessage(message) {
   return {
     type: 'SET_ERROR_MESSAGE',
@@ -242,5 +234,5 @@ module.exports = {
   deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
   setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, getCandidate, setSortingField, setSortingDirection,
   addCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest,
-  search, setPageTitle, setApplicationStatus, setCandidateStatus, setOffset, setCandidatesPerPage
+  setPageTitle, setApplicationStatus, setCandidateStatus, setOffset, setCandidatesPerPage
 };

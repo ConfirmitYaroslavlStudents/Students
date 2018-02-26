@@ -94,6 +94,12 @@ app.get('/logout', function(req, res){
   });
 });
 
+app.get('/resume/*', function(req, res) {
+  let fileName = req.url.split('/')[2];
+  res.setHeader('Content-Disposition', 'attachment; filename=' + fileName); //TODO: ask how would it be better
+  res.sendFile(path.join(__dirname, '..', 'public', fileName));
+});
+
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });

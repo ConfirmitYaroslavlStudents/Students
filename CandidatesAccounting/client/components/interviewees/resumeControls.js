@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import IconButton from '../common/UIComponentDecorators/iconButton';
@@ -11,31 +11,29 @@ const iconButtonStyle = {
   width: 32,
 };
 
-export default class ResumeControls extends Component {
-  render() {
-    let fileIsLoaded = true;
-    if (!this.props.fileName || this.props.fileName.trim() === '') {
-      fileIsLoaded = false;
-    }
-    return (
-      fileIsLoaded ?
-        <Wrapper>
-          <FileName>{this.props.fileName}</FileName>
-          <IconButton style={iconButtonStyle} onClick={() => {}} icon={<OpenIcon/>}/>
-          <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<DownloadIcon/>}/>
-          <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
-        </Wrapper>
-        :
-        <Wrapper>
-          <NotLoaded>not loaded</NotLoaded>
-          <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
-        </Wrapper>
-    );
-  }
+export default function ResumeControls(props) {
+  return (
+    (props.fileName.trim() !== '') ?
+      <Wrapper>
+        <FileName>{props.fileName}</FileName>
+        <IconButton icon={<OpenIcon/>} style={iconButtonStyle} onClick={() => {
+          window.open(window.location.origin + '/resume/' + props.fileName);
+        }} />
+          <IconButton icon={<DownloadIcon/>} style={iconButtonStyle} onClick={() => {
+
+          }} />
+        <IconButton icon={<UploadIcon/>} style={iconButtonStyle} onClick={()=>{}} />
+      </Wrapper>
+      :
+      <Wrapper>
+        <NotLoaded>no resume</NotLoaded>
+        <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
+      </Wrapper>
+  );
 }
 
 ResumeControls.propTypes = {
-  fileName: PropTypes.string,
+  fileName: PropTypes.string.isRequired,
 };
 
 const Wrapper = styled.div`
@@ -50,6 +48,5 @@ const FileName = styled.span`
 
 const NotLoaded = styled.span`
   padding-left: 4px;
-  font-size: 90%;
   color: rgba(0, 0, 0, 0.5);
 `;

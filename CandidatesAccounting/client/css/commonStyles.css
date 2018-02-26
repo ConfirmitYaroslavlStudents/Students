@@ -60,7 +60,7 @@ tr th:last-child  span {
     visibility: hidden;
 }
 
-.nav-link {
+.table-link {
     text-decoration: none !important;
     color: dimgray;
     display: inline-block;
@@ -70,18 +70,20 @@ tr th:last-child  span {
     padding: 16px 0;
     top: 0;
     left: 0;
+    cursor: pointer;
 }
 
-.nav-link:hover {
+.table-link:hover {
     color: #3F51B5;
 }
 
-.notification-link {
+.nav-link {
+    display: inline-block;
     text-decoration: none !important;
     color: inherit;
 }
 
-.notification-link:hover {
+.nav-link:hover {
     color: #42A5F5;
 }
 
@@ -110,6 +112,7 @@ tr th:last-child  span {
     width: 19px !important;
     height: 19px !important;
     font-size: smaller !important;
+    cursor: pointer;
 }
 
 .small-icon {

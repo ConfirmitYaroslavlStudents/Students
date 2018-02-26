@@ -19,12 +19,10 @@ function setPageTitle(title) {
   }
 }
 
-function setSearchRequest(searchRequest, browserHistory, delay) {
+function setSearchRequest(searchRequest) {
   return {
     type: 'SET_SEARCH_REQUEST',
-    searchRequest,
-    browserHistory,
-    delay
+    searchRequest
   }
 }
 

@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {NavLink} from 'react-router-dom';
 
 export default function TagList(props) {
   return (
     <Wrapper>
-      {props.tags.map((tag, index) => (<NavLink to={props.currentLocation + "?t=" + encodeURIComponent(tag)} key={index}><Tag>{tag}</Tag></NavLink>))}
+      {props.tags.map((tag, index) => (<Tag key={index} onClick={() => {
+        props.setSearchRequest(tag);
+        props.loadCandidates(props.history);
+      }}>{tag}</Tag>))}
     </Wrapper>
   )
 }
 
 TagList.propTypes = {
   tags: PropTypes.array.isRequired,
-  currentLocation: PropTypes.string.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
+  loadCandidates: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const Wrapper = styled.div`
@@ -23,6 +27,7 @@ const Wrapper = styled.div`
 `;
 
 const Tag = styled.div`
+  cursor: pointer;
   display: inline-block;
   padding: 0px 4px;
   background: #f2f9fc;

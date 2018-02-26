@@ -8,50 +8,58 @@ import AddCandidateDialog from '../candidates/addCandidateDialog';
 export default class TablesBar extends Component{
   constructor(props) {
     super(props);
-    this.state = { selected: props.selected };
-    this.handleChange = this.handleChange.bind(this);
     this.handleLinkClick = this.handleLinkClick.bind(this);
-    this.handleAddCandidate = this.handleAddCandidate.bind(this);
-  };
-
-  handleChange(event, value) {
-    this.setState({selected: value });
   };
 
   handleLinkClick(candidateStatus) {
-    this.props.setCandidateStatus(candidateStatus);
+    if (candidateStatus === this.props.candidateStatus) {
+      this.props.setSearchRequest('');
+    } else {
+      this.props.setCandidateStatus(candidateStatus);
+    }
     this.props.setOffset(0);
     this.props.setSortingField('');
     this.props.setSortingDirection('desc');
     this.props.loadCandidates(this.props.history);
   }
 
-  handleAddCandidate(candidate) {
-    this.props.addCandidate(candidate);
-    this.props.setOffset(this.props.totalCount - this.props.totalCount % this.props.candidatesPerPage);
-    this.props.loadCandidates(this.props.history);
-  }
-
   render() {
-    this.state = { selected: this.props.selected };
+    let selected = 0;
+    switch(this.props.candidateStatus) {
+      case 'Interviewee':
+        selected = 1;
+        break;
+      case 'Student':
+        selected = 2;
+        break;
+      case 'Trainee':
+        selected = 3;
+        break;
+    }
+
     return (
       <TabsBar>
         <TabsWrapper>
           <Tabs
-            selected={this.state.selected}
-            onChange={this.handleChange}
+            selected={selected}
+            onChange={() => {}}
             tabs={[
-              <NavLink active={this.state.selected === 0} onClick={() => {this.handleLinkClick('');}}>All</NavLink>,
-              <NavLink active={this.state.selected === 1} onClick={() => {this.handleLinkClick('Interviewee');}}>Interviewees</NavLink>,
-              <NavLink active={this.state.selected === 2} onClick={() => {this.handleLinkClick('Student');}}>Students</NavLink>,
-              <NavLink active={this.state.selected === 3} onClick={() => {this.handleLinkClick('Trainee');}}>Trainees</NavLink>
+              <NavLink className="table-link" active={selected === 0} onClick={() => {this.handleLinkClick('');}}>All</NavLink>,
+              <NavLink className="table-link" active={selected === 1} onClick={() => {this.handleLinkClick('Interviewee');}}>Interviewees</NavLink>,
+              <NavLink className="table-link" active={selected === 2} onClick={() => {this.handleLinkClick('Student');}}>Students</NavLink>,
+              <NavLink className="table-link" active={selected === 3} onClick={() => {this.handleLinkClick('Trainee');}}>Trainees</NavLink>
             ]}
           />
         </TabsWrapper>
         <AddButtonWrapper>
           <AddCandidateDialog
-            addCandidate={this.handleAddCandidate}
-            candidateStatus={this.props.newCandidateDefaultType}
+            addCandidate={
+              (candidate) => {
+                this.props.addCandidate(candidate);
+                this.props.setOffset(this.props.totalCount - this.props.totalCount % this.props.candidatesPerPage);
+                this.props.loadCandidates(this.props.history);
+              }}
+            candidateStatus={this.props.newCandidateDefaultType === '' ? 'Interviewee' : this.props.newCandidateDefaultType}
             tags={this.props.tags}
             disabled={this.props.username === ''}
           />
@@ -74,9 +82,9 @@ TablesBar.propTypes = {
   setSortingField: PropTypes.func.isRequired,
   setSortingDirection: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
+  candidateStatus: PropTypes.string.isRequired,
   candidatesPerPage: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  selected: PropTypes.number,
+  totalCount: PropTypes.number.isRequired
 };
 
 const TabsBar = styled.div`

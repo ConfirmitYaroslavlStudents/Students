@@ -7,7 +7,9 @@ export default function SimpleBadge(props) {
     <Badge
       badgeContent={props.badgeContent}
       classes={{badge: props.badgeContent !== 0 ? 'small-badge' : 'hidden', colorAccent: 'badge-accent'}}
-      color={props.color ? props.color : 'primary'}>
+      color={props.color ? props.color : 'primary'}
+      onClick={props.onClick ? props.onClick : () => {}}
+    >
       {props.children}
     </Badge>
   );
@@ -16,4 +18,5 @@ export default function SimpleBadge(props) {
 SimpleBadge.propTypes = {
   badgeContent: PropTypes.number,
   color: PropTypes.string,
+  onClick: PropTypes.func,
 };

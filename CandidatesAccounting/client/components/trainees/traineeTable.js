@@ -30,7 +30,12 @@ export default class TraineeTable extends Component {
                 content:
                   <NameWrapper>
                     <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
-                    <TagList tags={trainee.tags} currentLocation="/trainees"/>
+                    <TagList
+                      tags={trainee.tags}
+                      setSearchRequest={this.props.setSearchRequest}
+                      loadCandidates={this.props.loadCandidates}
+                      history={this.props.history}
+                    />
                   </NameWrapper>,
                 value: trainee.name},
               {

@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import actions from '../../redux/actions';
 import Navbar from './navbar';
 import TablesBar from './tablesbar';
-import { searchById, searchByRequest, searchByTag } from '../../utilities/candidateFilters';
+import { searchById } from '../../utilities/candidateFilters';
 import CommentsForm from '../comments/commentsForm';
 import CandidateTable from '../candidates/candidateTable';
 import IntervieweeTable from '../interviewees/intervieweeTable';
@@ -48,40 +48,12 @@ export default class AppView extends Component {
       this.props.setCandidatesPerPage(argsObject.take ? Number(argsObject.take) : 15);
       this.props.setSortingField(argsObject.sort ? argsObject.sort : '');
       this.props.setSortingDirection(argsObject.sortDir ? argsObject.sortDir : 'desc');
-      this.props.setSearchRequest(argsObject.q ? argsObject.q : '', this.props.history, 0);
+      this.props.setSearchRequest(argsObject.q ? decodeURIComponent(argsObject.q) : '');
       this.props.loadCandidates(this.props.history);
     }
   }
 
   render() {
-    const currentLocation = this.props.location.pathname.split('/');
-    const search = this.props.location.search;
-    const filter = function(candidates) {
-      if (true || search === '') {
-        return candidates;
-      }
-      if (search[1] === 't') {
-        return searchByTag(candidates, decodeURIComponent(search.substr(3)));
-      }
-      return searchByRequest(candidates, decodeURIComponent(search.substr(3)));
-    };
-    let selectedTableNumber = 0;
-    let candidateType = 'Interviewee';
-    switch (currentLocation[1]) {
-      case 'interviewees':
-        selectedTableNumber = 1;
-        candidateType = 'Interviewee';
-        break;
-      case 'students':
-        selectedTableNumber = 2;
-        candidateType = 'Student';
-        break;
-      case 'trainees':
-        selectedTableNumber = 3;
-        candidateType = 'Trainee';
-        break;
-    }
-
     return (
       <div>
         <Navbar
@@ -95,11 +67,12 @@ export default class AppView extends Component {
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
+          loadCandidates={this.props.loadCandidates}
+          setCandidateStatus={this.props.setCandidateStatus}
           getCandidate={this.props.getCandidate}
         />
         <TablesBar
-          selected={selectedTableNumber}
-          newCandidateDefaultType={candidateType}
+          newCandidateDefaultType={this.props.candidateStatus}
           addCandidate={this.props.addCandidate}
           tags={this.props.tags}
           username={this.props.username}
@@ -112,6 +85,7 @@ export default class AppView extends Component {
           setCandidateStatus={this.props.setCandidateStatus}
           setOffset={this.props.setOffset}
           loadCandidates={this.props.loadCandidates}
+          candidateStatus={this.props.candidateStatus}
           setSortingField={this.props.setSortingField}
           setSortingDirection={this.props.setSortingDirection}
         />
@@ -125,29 +99,26 @@ export default class AppView extends Component {
               <Switch>
                 <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
                   <CommentsForm
-                    candidate={searchById(this.props.candidates, currentLocation[2])}
+                    candidate={searchById(this.props.candidates, this.props.history.location.pathname.split('/')[2])}
                     addComment={this.props.addComment}
                     deleteComment={this.props.deleteComment}
                     username={this.props.username}
                     subscribe={this.props.subscribe}
                     unsubscribe={this.props.unsubscribe}
-                    pageTitle={this.props.pageTitle}
                     setPageTitle={this.props.setPageTitle}
-                    history={this.props.history}
-                    searchRequest={decodeURIComponent(this.props.location.search.substr(3))}
-                    setSearchRequest={this.props.setSearchRequest}/>}
+                    setCandidateStatus={this.props.setCandidateStatus}/>}
                 />
                 <Route exact path='/interviewees*' render={() =>
-                  <IntervieweeTable interviewees={filter(this.props.candidates)} {...this.props}/>}
+                  <IntervieweeTable interviewees={this.props.candidates} {...this.props}/>}
                 />
                 <Route exact path='/students*' render={() =>
-                  <StudentTable students={filter(this.props.candidates)} {...this.props}/>}
+                  <StudentTable students={this.props.candidates} {...this.props}/>}
                 />
                 <Route exact path='/trainees*' render={() =>
-                  <TraineeTable trainees={filter(this.props.candidates)} {...this.props}/>}
+                  <TraineeTable trainees={this.props.candidates} {...this.props}/>}
                 />
                 <Route exact path='/*' render={() =>
-                  <CandidateTable allCandidates={filter(this.props.candidates)} {...this.props}/>}
+                  <CandidateTable allCandidates={this.props.candidates} {...this.props}/>}
                 />
                 <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
               </Switch>

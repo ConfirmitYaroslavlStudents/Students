@@ -1,5 +1,5 @@
 import {buildSchema} from 'graphql';
-import {getAllCandidates, getCandidatesPaginated, getCandidateByID, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
+import {getCandidates, getCandidatesPaginated, getCandidateByID, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
   deleteComment, subscribe, unsubscribe, noticeNotification, deleteNotification} from './mongoose';
 
 export const schema = buildSchema(`    
@@ -79,19 +79,9 @@ export const schema = buildSchema(`
 
 export const root = {
   candidates: () => {
-    return getAllCandidates()
+    return getCandidates('Candidate')
       .then((result) => {
-        let candidates = [];
-        result.forEach((candidate) => {
-          candidate.id = candidate._id;
-          delete candidate._id;
-          candidate.comments.forEach((comment) => {
-            comment.id = comment._id;
-            delete comment._id;
-          });
-          candidates.push(candidate);
-        });
-        return candidates;
+        return formatCandidates(result);
       });
   },
   candidate: ({id}) => {
@@ -104,37 +94,23 @@ export const root = {
   },
   candidatesPaginated: ({first, offset, status, sort, sortDir, searchRequest}) => {
     if (searchRequest && searchRequest.trim() !== '') {
-      return getAllCandidates(status)
+      return getCandidates(status && status !== '' ? status : 'Candidate', sort, sortDir)
         .then((result) => {
           let validCandidates = search(result, searchRequest);
           let paginatedCandidates = [];
           for (let i = Number(offset); i < Number(offset) + Number(first) && i < validCandidates.length; i++) {
-            validCandidates[i].id = validCandidates[i]._id;
-            delete validCandidates[i]._id;
-            validCandidates[i].comments.forEach((comment) => {
-              comment.id = comment._id;
-              delete comment._id;
-            });
             paginatedCandidates.push(validCandidates[i]);
           }
           return {
-            candidates: paginatedCandidates,
+            candidates: formatCandidates(paginatedCandidates),
             total: validCandidates.length
           };
         });
     } else {
-      return getCandidatesPaginated(offset, first, status, sort, sortDir)
+      return getCandidatesPaginated(offset, first, status && status !== '' ? status : 'Candidate', sort, sortDir)
         .then((result) => {
-          result.docs.forEach((candidate) => {
-            candidate.id = candidate._id;
-            delete candidate._id;
-            candidate.comments.forEach((comment) => {
-              comment.id = comment._id;
-              delete comment._id;
-            });
-          });
           return {
-            candidates: result.docs,
+            candidates: formatCandidates(result.docs),
             total: result.total
           }
         });
@@ -222,6 +198,20 @@ function search(candidates, searchRequest) {
     ) {
       validCandidates.push(candidate);
     }
+  });
+  return validCandidates;
+}
+
+function formatCandidates(candidates) {
+  let validCandidates = [];
+  candidates.forEach((candidate) => {
+    candidate.id = candidate._id;
+    delete candidate._id;
+    candidate.comments.forEach((comment) => {
+      comment.id = comment._id;
+      delete comment._id;
+    });
+    validCandidates.push(candidate);
   });
   return validCandidates;
 }

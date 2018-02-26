@@ -33,7 +33,12 @@ export default class StudentTable extends Component {
                 content:
                   <NameWrapper>
                     <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
-                    <TagList tags={student.tags} currentLocation="/students"/>
+                    <TagList
+                      tags={student.tags}
+                      setSearchRequest={this.props.setSearchRequest}
+                      loadCandidates={this.props.loadCandidates}
+                      history={this.props.history}
+                    />
                   </NameWrapper>,
                 value: student.name
               },

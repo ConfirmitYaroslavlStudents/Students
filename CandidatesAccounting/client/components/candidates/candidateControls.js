@@ -5,7 +5,7 @@ import UpdateCandidateDialog from './updateCandidateDialog';
 import DeleteCandidateDialog from './deleteCandidateDialog';
 import CommentIcon from 'material-ui-icons/ViewList';
 import Badge from '../common/UIComponentDecorators/badge';
-import {NavLink} from 'react-router-dom';
+import NavLink from '../../components/common/navLink';
 import AddCommentDialog from '../comments/addCommentDialog';
 
 const iconButtonStyle = {
@@ -24,7 +24,10 @@ export default function CandidateControls(props) {
         unsubscribe={props.unsubscribe}
         disabled={props.username === ''}
       />
-      <NavLink to={'/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments'}>
+      <NavLink onClick={() => {
+        props.setPageTitle(props.candidate.name);
+        props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments');
+      }}>
         <Badge badgeContent={props.candidate.comments.length}>
           <IconButton
             icon={<CommentIcon />}

@@ -30,7 +30,12 @@ export default class CandidateTable extends Component {
                 content:
                   <NameWrapper>
                     <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
-                    <TagList tags={candidate.tags} currentLocation=""/>
+                    <TagList
+                      tags={candidate.tags}
+                      setSearchRequest={this.props.setSearchRequest}
+                      loadCandidates={this.props.loadCandidates}
+                      history={this.props.history}
+                    />
                   </NameWrapper>,
                 value: candidate.name},
               {

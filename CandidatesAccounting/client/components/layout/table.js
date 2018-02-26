@@ -63,8 +63,10 @@ export default class SortableTableWithPagination extends Component {
   };
 
   handleChangeRowsPerPage(rowsPerPage) {
-    this.props.setRowsPerPage(rowsPerPage);
-    this.props.loadCandidates(this.props.history);
+    if (rowsPerPage !== this.props.rowsPerPage) {
+      this.props.setRowsPerPage(rowsPerPage);
+      this.props.loadCandidates(this.props.history);
+    }
   };
 
   render() {

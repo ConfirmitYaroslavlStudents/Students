@@ -32,7 +32,12 @@ export default class IntervieweeTable extends Component {
                 content:
                   <NameWrapper>
                     <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
-                    <TagList tags={interviewee.tags} currentLocation="/interviewees"/>
+                    <TagList
+                      tags={interviewee.tags}
+                      setSearchRequest={this.props.setSearchRequest}
+                      loadCandidates={this.props.loadCandidates}
+                      history={this.props.history}
+                    />
                   </NameWrapper>,
                 value: interviewee.name
               },

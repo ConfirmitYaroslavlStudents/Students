@@ -10,9 +10,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 export default function NotificationBlock(props) {
   return (
     <NavLink
-      className={'notification-link'}
       onClick={() => {
-        console.log('link');
         props.getCandidate(props.notification.source.id);
         props.history.replace('/' + props.notification.source.status.toLowerCase() + 's/' + props.notification.source.id + '/comments');
         if (props.notification.recent) {
@@ -69,6 +67,7 @@ const NotificationWrapper = styled.div`
   border-left: 5px solid #999;
   padding: 12px;
   background-color: #fafafa;
+  cursor: pointer;
   
   ${props => props.recent && css`  
     border-left: 5px solid #42A5F5;

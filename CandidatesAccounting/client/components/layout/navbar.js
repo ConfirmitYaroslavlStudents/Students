@@ -23,6 +23,7 @@ export default function MainNavbar(props) {
                 searchRequest={props.searchRequest}
                 setSearchRequest={props.setSearchRequest}
                 history={props.history}
+                loadCandidates={props.loadCandidates}
               />
               : ''
           }
@@ -64,6 +65,7 @@ MainNavbar.propTypes = {
   searchRequest: PropTypes.string.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
   getCandidate: PropTypes.func.isRequired,
+  loadCandidates: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 

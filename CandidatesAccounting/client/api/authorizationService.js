@@ -33,9 +33,6 @@ export function getUsername() {
             return data.username;
           });
       } else {
-        if (response.status === 401) {
-          return '';
-        }
         throw response.status;
       }
     });

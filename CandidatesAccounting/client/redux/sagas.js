@@ -23,7 +23,6 @@ export default function* rootSaga() {
     watchUnsubscribe(),
     watchNoticeNotification(),
     watchDeleteNotification(),
-    watchChangeSearchRequest(),
     watchLoadCandidates(),
     watchGetCandidate(),
   ])
@@ -71,10 +70,6 @@ function* watchDeleteNotification() {
 
 function* watchUnsubscribe() {
   yield takeEvery('UNSUBSCRIBE', unsubscribeSaga);
-}
-
-function* watchChangeSearchRequest() {
-  yield takeLatest('SET_SEARCH_REQUEST', setSearchRequestSaga);
 }
 
 function* watchLoadCandidates() {
@@ -210,14 +205,8 @@ function* deleteNotificationSaga(action) {
   }
 }
 
-function* setSearchRequestSaga(action) {
-  yield call(delay, action.delay);
-  yield put(setState({ searchRequest: action.searchRequest }));
-  yield put(loadCandidates(action.browserHistory));
-}
-
 function* loadCandidatesSaga(action) {
-  //try {
+  try {
     yield put(setApplicationStatus('loading'));
     let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
     let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
@@ -235,13 +224,13 @@ function* loadCandidatesSaga(action) {
       + '?take=' + candidatesPerPage
       + (candidatesOffset === 0 ? '' : '&skip=' + candidatesOffset)
       + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection)
-      + (searchRequest === '' ? '' : '&q=' + searchRequest));
+      + (searchRequest === '' ? '' : '&q=' + encodeURIComponent(searchRequest)));
     yield put(setApplicationStatus('ok'));
-  //}
-  //catch(error) {
-  //  yield put(setErrorMessage(error + '. Load candidates error.'));
-  //  yield put(setApplicationStatus('error'));
-  //}
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Load candidates error.'));
+    yield put(setApplicationStatus('error'));
+  }
 }
 
 function* getCandidateSaga(action) {

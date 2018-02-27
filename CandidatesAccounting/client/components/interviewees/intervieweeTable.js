@@ -59,7 +59,7 @@ export default class IntervieweeTable extends Component {
                 value: interviewee.interviewDate
               },
               {
-                content: <ResumeControls fileName={interviewee.resume}/>
+                content: <ResumeControls fileName={interviewee.resume} username={this.props.username}/>
               },
               {
                 content: <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>

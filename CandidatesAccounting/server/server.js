@@ -14,6 +14,11 @@ import expressSession  from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 
+import mongoose from 'mongoose';
+import fs from 'fs';
+
+let gridFs = null;
+
 const app = express();
 
 app.set('port', 3000);
@@ -95,9 +100,37 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/resume/*', function(req, res) {
-  let fileName = req.url.split('/')[2];
-  res.setHeader('Content-Disposition', 'attachment; filename=' + fileName); //TODO: ask how would it be better
-  res.sendFile(path.join(__dirname, '..', 'public', fileName));
+  let file = req.url.split('/')[2];
+  let fileName = file.split('.')[0];
+  let fileType = file.split('.')[1];
+  console.log(fileName, fileType);
+  res.setHeader('Content-Type', 'application/' + fileType);
+  res.setHeader('Content-Disposition', 'attachment; filename=' + file); //TODO: ask how would it be better
+  gridFs.model.readById(fileName, function(error, content){
+    if (error) {
+      console.log(error);
+      return res.status(500).end();
+    }
+    console.log(content);
+    res.send(content);
+  });
+});
+
+app.put('/resume*', function(req, res) {
+  let file = req.headers['Content-Disposition'].split('=')[1];
+  let fileType = file.split('.')[1];
+  gridFs.model.write({
+      filename: file,
+      contentType:'application/' + fileType
+    },
+    req.body,
+    function(error, createdFile){
+      if (error) {
+        console.log(error);
+        return res.status(500).end();
+      }
+      res.json({resumeID: createdFile._id});
+    });
 });
 
 app.get('*', function (req, res) {
@@ -106,7 +139,14 @@ app.get('*', function (req, res) {
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-connect();
+connect().then(() => {
+  gridFs = require('mongoose-gridfs')({
+    collection:'attachments',
+    model:'Attachment',
+    mongooseConnection: mongoose.connection
+  });
+});
+
 
 app.listen(app.get('port'), () => {
   console.log('Express server is listening on port', app.get('port'));

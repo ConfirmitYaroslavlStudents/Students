@@ -6,38 +6,47 @@ import OpenIcon from 'material-ui-icons/OpenInNew';
 import UploadIcon from 'material-ui-icons/FileUpload';
 import DownloadIcon from 'material-ui-icons/FileDownload';
 
-const iconButtonStyle = {
-  height: 32,
-  width: 32,
+const buttonStyle = {
+  height: 28,
+  width: 28,
 };
 
 export default function ResumeControls(props) {
   return (
-    (props.fileName.trim() !== '') ?
-      <Wrapper>
-        <FileName>{props.fileName}</FileName>
-        <IconButton icon={<OpenIcon/>} style={iconButtonStyle} onClick={() => {
-          window.open(window.location.origin + '/resume/' + props.fileName);
-        }} />
-          <IconButton icon={<DownloadIcon/>} style={iconButtonStyle} onClick={() => {
-
+    <Wrapper>
+      {
+        props.fileName.trim() !== '' ?
+          <FileName>{props.fileName}</FileName>
+          :
+          <NotLoaded>no resume</NotLoaded>
+      }
+      {
+        props.fileName.trim() !== '' ?
+          <div style={{display: 'inline-flex'}}>
+          <IconButton icon={<OpenIcon/>} style={buttonStyle} iconStyle='small-icon' onClick={() => {
+            //view
           }} />
-        <IconButton icon={<UploadIcon/>} style={iconButtonStyle} onClick={()=>{}} />
-      </Wrapper>
-      :
-      <Wrapper>
-        <NotLoaded>no resume</NotLoaded>
-        <IconButton style={iconButtonStyle} onClick={()=>{}} icon={<UploadIcon/>}/>
-      </Wrapper>
+          <IconButton icon={<DownloadIcon/>} style={buttonStyle} iconStyle='small-icon' onClick={() => {
+            window.open(window.location.origin + '/resume/' + props.fileName); //download
+          }} />
+          </div>
+        : ''
+      }
+      <IconButton icon={<UploadIcon/>} style={buttonStyle} iconStyle='small-icon' disabled={props.username === ''} onClick={()=>{
+        //upload
+      }} />
+    </Wrapper>
   );
 }
 
 ResumeControls.propTypes = {
+  username: PropTypes.string.isRequired,
   fileName: PropTypes.string.isRequired,
 };
 
 const Wrapper = styled.div`
-  display: flex;
+  display: inline-flex;
+  content-align: center;
   align-items: center;
 `;
 

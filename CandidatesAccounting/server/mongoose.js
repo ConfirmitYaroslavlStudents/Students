@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
 import mongoosePaginate from 'mongoose-paginate';
+//import fs from 'fs';
 import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from './schemas';
 
 mongoose.Promise = Promise;
@@ -17,6 +18,8 @@ export function disconnect(error) {
     return console.log(error);
   }
 }
+
+//Attachment = gridfs.model;
 
 connect();
 

@@ -1,14 +1,22 @@
 import mongoose from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
 import mongoosePaginate from 'mongoose-paginate';
-//import fs from 'fs';
 import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from './schemas';
+import streamifer from 'streamifier';
+
+let gridFs = null;
 
 mongoose.Promise = Promise;
 
 export function connect() {
   return mongoose.connect('mongodb://localhost:27017/CandidateAccounting', {
     useMongoClient: true
+  }).then((connection) => {
+    gridFs = require('mongoose-gridfs')({
+      collection: 'attachments',
+      model: 'Attachment',
+      mongooseConnection: connection
+    });
   });
 }
 
@@ -18,10 +26,6 @@ export function disconnect(error) {
     return console.log(error);
   }
 }
-
-//Attachment = gridfs.model;
-
-connect();
 
 AccountSchema.plugin(passportLocalMongoose);
 CandidateSchema.plugin(mongoosePaginate);
@@ -143,6 +147,54 @@ export function noticeNotification(username, notificationID) {
 
 export function deleteNotification(username, notificationID) {
   return Account.updateOne({username: username}, {$pull: {notifications: {_id: notificationID}}}).exec();
+}
+
+export function getResume(intervieweeID) {
+  return getCandidateByID(intervieweeID)
+    .then((interviewee) => {
+        console.log(interviewee);
+        return {
+          resumeName: interviewee.resume,
+          resumeData: interviewee.resumeFile.buffer
+        };
+      });
+}
+
+export function addResume(intervieweeID, resumeName, resumeData) {
+  return getCandidateByID(intervieweeID)
+    .then((interviewee) => {
+      interviewee.resume = resumeName;
+      interviewee.resumeFile = resumeData;
+      console.log(interviewee);
+      return updateCandidate(interviewee);
+    });
+}
+
+export function getAttachment(attachmentID) {
+  return new Promise((resolve, reject) => {
+    gridFs.model.readById(attachmentID, function(error, content){
+      if (error) {
+        reject(error);
+      }
+      resolve(content);
+    });
+  });
+}
+
+export function addAttachment(fileName, fileData) {
+  return new Promise((resolve, reject) => {
+    gridFs.model.write({
+        filename: fileName,
+        contentType: 'multipart/form-data'
+      },
+      streamifer.createReadStream(fileData),
+      function(error, createdFile){
+        if (error) {
+          reject(error);
+        }
+        resolve(createdFile);
+      });
+  });
 }
 
 function updateTags(probablyNewTags) {

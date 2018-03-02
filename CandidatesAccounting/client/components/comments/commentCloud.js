@@ -67,10 +67,10 @@ const CommentWrapper = styled.div`
 const CommentMount = styled.div`
   display: inline-flex;
   padding: 11px 11px 11px 7px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.20);
   max-width: 85%;
   background: #FFF;
-  border-radius: 4px;
+  border-radius: 2px;
   margin-bottom: 1px;
   border-left: 5px solid #999;
   border-color: ${props => props.markerColor};
@@ -84,6 +84,7 @@ const CommentMount = styled.div`
 	`}
 	
 	${props => props.isSystem && css`
+	  color: #905600;
     background-color: #FFF3E0;
     border-color: #FF9800;
     border-radius: 0px;
@@ -116,5 +117,4 @@ const AuthorName = styled.div`
   display: inline-block; 
   margin:  0 10px 0 1px;
   color: #222;
-  font-size: normal;
 `;

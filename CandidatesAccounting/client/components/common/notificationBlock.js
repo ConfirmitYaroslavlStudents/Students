@@ -63,9 +63,9 @@ const NotificationWrapper = styled.div`
   display: inline-flex;
   flex-direction: column;
   width: 400px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   border-left: 5px solid #999;
-  padding: 12px;
+  padding: 20px 12px;
   background-color: #fafafa;
   cursor: pointer;
   

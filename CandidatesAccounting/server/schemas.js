@@ -82,6 +82,7 @@ export const IntervieweeSchema = new Schema({
     subscribers: [String],
     interviewDate: String,
     resume: String,
+    resumeFile: Buffer,
   });
 
 export const StudentSchema = new Schema({

@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import config from '../webpack.config';
 import path from 'path';
 import bodyParser from 'body-parser';
+import fileUpload from 'express-fileupload';
 import cookieParser from 'cookie-parser';
 import favicon from 'serve-favicon';
 import webpackDevMiddleware from 'webpack-dev-middleware';
@@ -13,11 +14,7 @@ import {Account, connect} from './mongoose';
 import expressSession  from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
-
-import mongoose from 'mongoose';
-import fs from 'fs';
-
-let gridFs = null;
+import {getAttachment, addAttachment, getResume, addResume} from './mongoose';
 
 const app = express();
 
@@ -37,7 +34,7 @@ app.use(webpackHotMiddleware(compiler));
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
 app.use(expressSession({ secret: 'yDyTP3T3Dvc4206O8pm', resave: false, saveUninitialized: false }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileUpload());
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -79,13 +76,11 @@ app.post('/login', function(req, res) {
           return res.status(401).end();
         }
         passport.authenticate('local')(req, res, function () {
-          console.log('User signed on:', req.user.username);
           res.json({username: req.user.username});
         });
       });
     } else {
       passport.authenticate('local')(req, res, function () {
-        console.log('User signed in:', req.user.username);
         res.json({username: req.user.username});
       });
     }
@@ -100,37 +95,52 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/resume/*', function(req, res) {
-  let file = req.url.split('/')[2];
-  let fileName = file.split('.')[0];
-  let fileType = file.split('.')[1];
-  console.log(fileName, fileType);
-  res.setHeader('Content-Type', 'application/' + fileType);
-  res.setHeader('Content-Disposition', 'attachment; filename=' + file); //TODO: ask how would it be better
-  gridFs.model.readById(fileName, function(error, content){
+  let fileName = req.url.split('/')[2].split('.')[0];
+
+  return getAttachment(fileName).then((result, error) => {
     if (error) {
-      console.log(error);
       return res.status(500).end();
     }
-    console.log(content);
-    res.send(content);
+    res.send(result);
   });
 });
 
-app.put('/resume*', function(req, res) {
-  let file = req.headers['Content-Disposition'].split('=')[1];
-  let fileType = file.split('.')[1];
-  gridFs.model.write({
-      filename: file,
-      contentType:'application/' + fileType
-    },
-    req.body,
-    function(error, createdFile){
-      if (error) {
-        console.log(error);
-        return res.status(500).end();
-      }
-      res.json({resumeID: createdFile._id});
-    });
+app.post('/resume*', function(req, res) {
+  let file = req.files[Object.keys(req.files)[0]];
+
+  return addAttachment(file.name, file.data).then((result, error) => {
+    if (error) {
+      return res.status(500).end();
+    }
+    res.json({attachmentID: result._id});
+  });
+});
+
+app.get('/interviewees/*/resume', function(req, res) {
+  let intervieweeID = req.url.split('/')[2];
+  console.log(intervieweeID);
+  return getResume(intervieweeID).then((result, error) => {
+    // зависает где-то здесь
+    console.log(result);
+    if (error) {
+      return res.status(500).end();
+    }
+    let resumeType = result.resumeName.split('.')[1];
+    res.setHeader('Content-Disposition', 'application/' + resumeType + '; filename=' + result.resumeName);
+    res.send(result.resumeData);
+  });
+});
+
+app.post('/interviewees/*/resume', function(req, res) {
+  let intervieweeID = req.url.split('/')[2];
+  let file = req.files[Object.keys(req.files)[0]];
+
+  return addResume(intervieweeID, file.name, file.data).then((result, error) => {
+    if (error) {
+      return res.status(500).end();
+    }
+    res.end();
+  });
 });
 
 app.get('*', function (req, res) {
@@ -139,14 +149,7 @@ app.get('*', function (req, res) {
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-connect().then(() => {
-  gridFs = require('mongoose-gridfs')({
-    collection:'attachments',
-    model:'Attachment',
-    mongooseConnection: mongoose.connection
-  });
-});
-
+connect();
 
 app.listen(app.get('port'), () => {
   console.log('Express server is listening on port', app.get('port'));

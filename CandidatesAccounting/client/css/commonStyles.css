@@ -25,6 +25,8 @@ tr th:last-child  span {
 
 .active-nav-link {
     color: #3F51B5 !important;
+    border-bottom: 2px solid #3F51B5;
+    box-sizing: border-box;
 }
 
 .badge-accent {
@@ -60,14 +62,21 @@ tr th:last-child  span {
     visibility: hidden;
 }
 
+.hidden-input {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
 .table-link {
     text-decoration: none !important;
     color: dimgray;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    text-align:center;
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 16px 0;
     top: 0;
     left: 0;
     cursor: pointer;

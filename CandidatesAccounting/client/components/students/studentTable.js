@@ -37,6 +37,7 @@ export default class StudentTable extends Component {
                       tags={student.tags}
                       setSearchRequest={this.props.setSearchRequest}
                       loadCandidates={this.props.loadCandidates}
+                      changeURL={this.props.changeURL}
                       history={this.props.history}
                     />
                   </NameWrapper>,
@@ -79,6 +80,7 @@ export default class StudentTable extends Component {
         sortingDirection={this.props.sortingDirection}
         setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
+        changeURL={this.props.changeURL}
       />
     );
   }

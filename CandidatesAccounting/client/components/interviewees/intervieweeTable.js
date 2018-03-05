@@ -36,6 +36,7 @@ export default class IntervieweeTable extends Component {
                       tags={interviewee.tags}
                       setSearchRequest={this.props.setSearchRequest}
                       loadCandidates={this.props.loadCandidates}
+                      changeURL={this.props.changeURL}
                       history={this.props.history}
                     />
                   </NameWrapper>,
@@ -59,7 +60,8 @@ export default class IntervieweeTable extends Component {
                 value: interviewee.interviewDate
               },
               {
-                content: <ResumeControls fileName={interviewee.resume} username={this.props.username}/>
+                content: <ResumeControls interviewee={interviewee} enableDownload enableUpload authorized={this.props.username !== ''}
+                  uploadResume={this.props.uploadResume}/>
               },
               {
                 content: <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>
@@ -76,6 +78,7 @@ export default class IntervieweeTable extends Component {
         sortingDirection={this.props.sortingDirection}
         setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
+        changeURL={this.props.changeURL}
       />
     );
   }

@@ -73,7 +73,7 @@ export function getCandidatesPaginated(offset, limit, status, sort, sortDir) {
 }
 
 export function getCandidateByID(id) {
-  return Candidate.findById(id).exec();
+  return Candidate.findById(mongoose.Types.ObjectId(id)).exec();
 }
 
 export function getAllTags() {
@@ -152,12 +152,11 @@ export function deleteNotification(username, notificationID) {
 export function getResume(intervieweeID) {
   return getCandidateByID(intervieweeID)
     .then((interviewee) => {
-        console.log(interviewee);
-        return {
-          resumeName: interviewee.resume,
-          resumeData: interviewee.resumeFile.buffer
-        };
-      });
+      return {
+        resumeName: interviewee.resume,
+        resumeData: interviewee.resumeFile
+      };
+    });
 }
 
 export function addResume(intervieweeID, resumeName, resumeData) {
@@ -165,7 +164,6 @@ export function addResume(intervieweeID, resumeName, resumeData) {
     .then((interviewee) => {
       interviewee.resume = resumeName;
       interviewee.resumeFile = resumeData;
-      console.log(interviewee);
       return updateCandidate(interviewee);
     });
 }

@@ -1,4 +1,3 @@
-import {delay} from 'redux-saga';
 import {takeEvery, takeLatest, all, put, call, select} from 'redux-saga/effects';
 import {getInitialState} from '../api/commonService';
 import {login, logout} from '../api/authorizationService';
@@ -6,7 +5,8 @@ import {getCandidates, getCandidate, addCandidate, deleteCandidate, updateCandid
 import {addComment, deleteComment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
 import {noticeNotification, deleteNotification} from '../api/notificationService';
-import {setState, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess,
+import {uploadResume} from '../api/resumeService';
+import {setState, addCommentSuccess, deleteCommentSuccess,
         subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, loadCandidates, setApplicationStatus} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
@@ -14,6 +14,7 @@ export default function* rootSaga() {
   yield all([
     watchLogin(),
     watchLogout(),
+    watchUploadResume(),
     watchCandidateAdd(),
     watchCandidateUpdate(),
     watchCandidateDelete(),
@@ -24,6 +25,7 @@ export default function* rootSaga() {
     watchNoticeNotification(),
     watchDeleteNotification(),
     watchLoadCandidates(),
+    watchChangeURL(),
     watchGetCandidate(),
   ])
 }
@@ -34,6 +36,10 @@ function* watchLogin() {
 
 function* watchLogout() {
   yield takeEvery('LOGOUT', logoutSaga);
+}
+
+function* watchUploadResume() {
+  yield takeEvery('UPLOAD_RESUME', uploadResumeSaga);
 }
 
 function* watchCandidateAdd() {
@@ -76,6 +82,10 @@ function* watchLoadCandidates() {
   yield takeLatest('LOAD_CANDIDATES', loadCandidatesSaga);
 }
 
+function* watchChangeURL() {
+  yield takeLatest('CHANGE_URL', changeURLSaga);
+}
+
 function* watchGetCandidate() {
   yield takeLatest('GET_CANDIDATE', getCandidateSaga);
 }
@@ -116,19 +126,38 @@ function* logoutSaga(action) {
   }
 }
 
-function* addCandidateSaga(action) {
+function* uploadResumeSaga(action) {
   try {
-    yield call(addCandidate, createCandidate(action.candidate.status, action.candidate));
+    yield put(setApplicationStatus('loading'));
+    yield call(uploadResume, action.intervieweeID, action.resume);
+    yield put(loadCandidates());
+    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Add candidate error.'));
+    yield put(setApplicationStatus('error'));
+  }
+}
+
+function* addCandidateSaga(action) {
+  try {
+    yield put(setApplicationStatus('loading'));
+    yield call(addCandidate, createCandidate(action.candidate.status, action.candidate));
+    yield put(loadCandidates());
+    yield put(setApplicationStatus('ok'));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Add candidate error.'));
+    yield put(setApplicationStatus('error'));
   }
 }
 
 function* updateCandidateSaga(action) {
   try {
+    yield put(setApplicationStatus('loading'));
     yield call(updateCandidate, action.candidate);
-    yield put(updateCandidateSuccess(action.candidate));
+    yield put(loadCandidates());
+    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Update candidate error.'));
@@ -137,10 +166,14 @@ function* updateCandidateSaga(action) {
 
 function* deleteCandidateSaga(action) {
   try {
+    yield put(setApplicationStatus('loading'));
     yield call(deleteCandidate, action.candidateID);
+    yield put(loadCandidates());
+    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Delete candidate error.'));
+    yield put(setApplicationStatus('error'));
   }
 }
 
@@ -205,7 +238,7 @@ function* deleteNotificationSaga(action) {
   }
 }
 
-function* loadCandidatesSaga(action) {
+function* loadCandidatesSaga() {
   try {
     yield put(setApplicationStatus('loading'));
     let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
@@ -219,17 +252,31 @@ function* loadCandidatesSaga(action) {
       candidates: serverResponse.candidates,
       totalCount: serverResponse.total
     }));
+    yield put(setApplicationStatus('ok'));
+  }
+  catch(error) {
+    yield put(setErrorMessage(error + '. Load candidates error.'));
+    yield put(setApplicationStatus('error'));
+  }
+}
+
+function* changeURLSaga(action) {
+  try {
+    let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
+    let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
+    let candidatesOffset = yield select((state) => {return state.get('offset')});
+    let sortingField = yield select((state) => {return state.get('sortingField')});
+    let sortingDirection = yield select((state) => {return state.get('sortingDirection')});
+    let searchRequest = yield select((state) => {return state.get('searchRequest')});
     yield call(action.browserHistory.replace, '/'
       + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
       + '?take=' + candidatesPerPage
       + (candidatesOffset === 0 ? '' : '&skip=' + candidatesOffset)
       + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection)
       + (searchRequest === '' ? '' : '&q=' + encodeURIComponent(searchRequest)));
-    yield put(setApplicationStatus('ok'));
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Load candidates error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Change URL error.'));
   }
 }
 

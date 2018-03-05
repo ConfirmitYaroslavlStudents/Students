@@ -14,7 +14,7 @@ export default function IntervieweeSpecialFields(props) {
         onChange={(value) => {props.changeInfo('interviewDate', fromDateTimePickerFormat(value))}}
       />
       <Label marginBottom="-10px">Resume</Label>
-      <ResumeControls fileName={props.interviewee.resume}/>
+      <ResumeControls interviewee={props.interviewee} enableUpload authorized/>
     </div>);
 }
 

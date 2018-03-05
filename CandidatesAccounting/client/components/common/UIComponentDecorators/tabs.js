@@ -5,12 +5,12 @@ import Tabs, {Tab} from 'material-ui/Tabs';
 export default function CustomTabs(props){
   return (
     <Tabs
-      value={props.selected}
+      value={false}
       indicatorColor="primary"
       textColor="primary"
       fullWidth
       centered
-      onChange={props.onChange}
+      onChange={() => {if (props.onChange) { props.onChange(); }}}
     >
       {
         props.tabs.map((tabContent, index) =>
@@ -23,6 +23,5 @@ export default function CustomTabs(props){
 
 CustomTabs.propTypes = {
   tabs: PropTypes.array.isRequired,
-  selected: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
 };

@@ -20,7 +20,8 @@ export default class TablesBar extends Component{
     this.props.setOffset(0);
     this.props.setSortingField('');
     this.props.setSortingDirection('desc');
-    this.props.loadCandidates(this.props.history);
+    this.props.loadCandidates();
+    this.props.changeURL(this.props.history);
   }
 
   render() {
@@ -41,8 +42,6 @@ export default class TablesBar extends Component{
       <TabsBar>
         <TabsWrapper>
           <Tabs
-            selected={selected}
-            onChange={() => {}}
             tabs={[
               <NavLink className="table-link" active={selected === 0} onClick={() => {this.handleLinkClick('');}}>All</NavLink>,
               <NavLink className="table-link" active={selected === 1} onClick={() => {this.handleLinkClick('Interviewee');}}>Interviewees</NavLink>,
@@ -55,9 +54,10 @@ export default class TablesBar extends Component{
           <AddCandidateDialog
             addCandidate={
               (candidate) => {
-                this.props.addCandidate(candidate);
+                this.props.setApplicationStatus('loading');
                 this.props.setOffset(this.props.totalCount - this.props.totalCount % this.props.candidatesPerPage);
-                this.props.loadCandidates(this.props.history);
+                this.props.changeURL(this.props.history);
+                this.props.addCandidate(candidate);
               }}
             candidateStatus={this.props.newCandidateDefaultType === '' ? 'Interviewee' : this.props.newCandidateDefaultType}
             tags={this.props.tags}
@@ -70,6 +70,7 @@ export default class TablesBar extends Component{
 }
 
 TablesBar.propTypes = {
+  setApplicationStatus: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
   pageTitle: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
@@ -82,6 +83,7 @@ TablesBar.propTypes = {
   setSortingField: PropTypes.func.isRequired,
   setSortingDirection: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
+  changeURL: PropTypes.func.isRequired,
   candidateStatus: PropTypes.string.isRequired,
   candidatesPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired

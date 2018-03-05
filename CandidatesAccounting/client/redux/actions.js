@@ -68,9 +68,15 @@ function setSortingDirection(direction) {
   }
 }
 
-function loadCandidates(browserHistory) {
+function loadCandidates() {
   return {
-    type: 'LOAD_CANDIDATES',
+    type: 'LOAD_CANDIDATES'
+  }
+}
+
+function changeURL(browserHistory) {
+  return {
+    type: 'CHANGE_URL',
     browserHistory
   }
 }
@@ -79,6 +85,14 @@ function getCandidate(id) {
   return {
     type: 'GET_CANDIDATE',
     id
+  }
+}
+
+function uploadResume(intervieweeID, resume) {
+  return {
+    type: 'UPLOAD_RESUME',
+    intervieweeID,
+    resume
   }
 }
 
@@ -120,13 +134,6 @@ function deleteCandidate(candidateID) {
 function updateCandidate(candidate) {
   return {
     type: 'UPDATE_CANDIDATE',
-    candidate
-  }
-}
-
-function updateCandidateSuccess(candidate) {
-  return {
-    type: 'UPDATE_CANDIDATE_SUCCESS',
     candidate
   }
 }
@@ -230,7 +237,7 @@ function deleteNotificationSuccess(username, notificationID) {
 module.exports = {
   setState, login, logout, addCandidate, deleteCandidate, updateCandidate, addComment,
   deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
-  setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, getCandidate, setSortingField, setSortingDirection,
-  addCandidateSuccess, updateCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest,
+  setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, changeURL, getCandidate, setSortingField, setSortingDirection,
+  addCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, uploadResume,
   setPageTitle, setApplicationStatus, setCandidateStatus, setOffset, setCandidatesPerPage
 };

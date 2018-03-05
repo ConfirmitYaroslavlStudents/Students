@@ -49,7 +49,8 @@ export default class AppView extends Component {
       this.props.setSortingField(argsObject.sort ? argsObject.sort : '');
       this.props.setSortingDirection(argsObject.sortDir ? argsObject.sortDir : 'desc');
       this.props.setSearchRequest(argsObject.q ? decodeURIComponent(argsObject.q) : '');
-      this.props.loadCandidates(this.props.history);
+      this.props.loadCandidates();
+      this.props.changeURL(this.props.history);
     }
   }
 
@@ -75,6 +76,7 @@ export default class AppView extends Component {
           newCandidateDefaultType={this.props.candidateStatus}
           addCandidate={this.props.addCandidate}
           tags={this.props.tags}
+          setApplicationStatus={this.props.setApplicationStatus}
           username={this.props.username}
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
@@ -85,6 +87,7 @@ export default class AppView extends Component {
           setCandidateStatus={this.props.setCandidateStatus}
           setOffset={this.props.setOffset}
           loadCandidates={this.props.loadCandidates}
+          changeURL={this.props.changeURL}
           candidateStatus={this.props.candidateStatus}
           setSortingField={this.props.setSortingField}
           setSortingDirection={this.props.setSortingDirection}

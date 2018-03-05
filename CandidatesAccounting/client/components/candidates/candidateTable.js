@@ -34,6 +34,7 @@ export default class CandidateTable extends Component {
                       tags={candidate.tags}
                       setSearchRequest={this.props.setSearchRequest}
                       loadCandidates={this.props.loadCandidates}
+                      changeURL={this.props.changeURL}
                       history={this.props.history}
                     />
                   </NameWrapper>,
@@ -67,6 +68,7 @@ export default class CandidateTable extends Component {
         sortingDirection={this.props.sortingDirection}
         setSortingDirection={this.props.setSortingDirection}
         loadCandidates={this.props.loadCandidates}
+        changeURL={this.props.changeURL}
       />
     );
   }

@@ -26,10 +26,6 @@ export default function NotificationCenter(props) {
     }
   }
 
-  let openCenter = () => {
-
-  };
-
   return (
     props.notifications.length === 0 ?
       <Popover

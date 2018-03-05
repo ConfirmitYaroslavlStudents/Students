@@ -35,15 +35,6 @@ export default function reducer(state = Immutable.Map(), action) {
     case 'ADD_CANDIDATE_SUCCESS':
       return state.update('candidates', (candidates) => candidates.push(Immutable.fromJS(action.candidate)));
 
-    case 'UPDATE_CANDIDATE_SUCCESS':
-      return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
-        if (candidate.get('id') === action.candidate.id) {
-          return Immutable.fromJS(action.candidate);
-        } else {
-          return candidate;
-        }
-      }));
-
     case 'ADD_COMMENT_SUCCESS':
     return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
       if (candidate.get('id') === action.candidateID) {

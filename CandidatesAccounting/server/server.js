@@ -118,15 +118,11 @@ app.post('/resume*', function(req, res) {
 
 app.get('/interviewees/*/resume', function(req, res) {
   let intervieweeID = req.url.split('/')[2];
-  console.log(intervieweeID);
   return getResume(intervieweeID).then((result, error) => {
-    // зависает где-то здесь
-    console.log(result);
     if (error) {
       return res.status(500).end();
     }
-    let resumeType = result.resumeName.split('.')[1];
-    res.setHeader('Content-Disposition', 'application/' + resumeType + '; filename=' + result.resumeName);
+    res.attachment(result.resumeName);
     res.send(result.resumeData);
   });
 });

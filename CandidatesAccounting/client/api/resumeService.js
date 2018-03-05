@@ -1,16 +1,16 @@
-export function downloadResume(fileName) {
-  return fetch('/resume/' + fileName,
+export function uploadResume(intervieweeID, resume) {
+  let formData = new FormData();
+  formData.append('resume', resume);
+
+  return fetch('/interviewees/' + intervieweeID + '/resume',
     {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
-      headers: {
-        'ContentDisposition': 'attachment; filename=' + fileName // TODO: need better header
-      }
+      body: formData
     })
     .then((response) => {
       if (response.status === 200) {
-        console.log(response.body);
-        return response.body;
+        return true;
       } else {
         throw response.status;
       }

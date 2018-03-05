@@ -33,7 +33,8 @@ export default class SortableTableWithPagination extends Component {
         this.props.setSortingDirection('desc');
       }
     }
-    this.props.loadCandidates(this.props.history);
+    this.props.loadCandidates();
+    this.props.changeURL(this.props.history);
   }
 
   handleFirstPageButtonClick() {
@@ -59,13 +60,15 @@ export default class SortableTableWithPagination extends Component {
 
   handleChangePage(offset) {
     this.props.setOffset(offset);
-    this.props.loadCandidates(this.props.history);
+    this.props.loadCandidates();
+    this.props.changeURL(this.props.history);
   };
 
   handleChangeRowsPerPage(rowsPerPage) {
     if (rowsPerPage !== this.props.rowsPerPage) {
       this.props.setRowsPerPage(rowsPerPage);
-      this.props.loadCandidates(this.props.history);
+      this.props.loadCandidates();
+      this.props.changeURL(this.props.history);
     }
   };
 
@@ -142,6 +145,7 @@ SortableTableWithPagination.propTypes = {
   setRowsPerPage: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,
+  changeURL: PropTypes.func.isRequired,
 };
 
 const ActionsWrapper = styled.div`

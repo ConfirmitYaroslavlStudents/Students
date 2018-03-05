@@ -25,7 +25,6 @@ export default function CandidateControls(props) {
         disabled={props.username === ''}
       />
       <NavLink onClick={() => {
-        props.setPageTitle(props.candidate.name);
         props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments');
       }}>
         <Badge badgeContent={props.candidate.comments.length}>
@@ -49,7 +48,8 @@ export default function CandidateControls(props) {
           if (props.totalCount - props.offset <= 1) {
             props.setOffset(props.totalCount - 1 - props.candidatesPerPage);
           }
-          props.loadCandidates(props.history);
+          props.loadCandidates();
+          props.changeURL(props.history);
         }}
         disabled={props.username === ''}
       />

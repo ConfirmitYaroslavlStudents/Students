@@ -46,6 +46,7 @@ export const CandidateSchema = new Schema({
     subscribers: [String],
     interviewDate: String,
     resume: String,
+    resumeFile: Buffer,
     groupName: String,
     startingDate: String,
     endingDate: String,

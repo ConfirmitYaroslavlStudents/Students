@@ -26,13 +26,17 @@ export default function ResumeControls(props) {
       }
       {
         props.enableUpload ?
-          <FileUploader accept='.doc, .docx, .txt, .pdf'
-                        onChange={(files) => {
-                          props.uploadResume(props.interviewee.id, files[0]);
-                        }}>
-            <IconButton icon={<UploadIcon/>} style={buttonStyle} iconStyle='small-icon' disabled={!props.authorized} onClick={() => { }}/>
-          </FileUploader>
-            : ''
+          props.authorized ?
+            <FileUploader accept='.doc, .docx, .txt, .pdf'
+
+                          onChange={(files) => {
+                            props.uploadResume(props.interviewee.id, files[0]);
+                          }}>
+              <IconButton icon={<UploadIcon/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
+            </FileUploader>
+            :
+            <IconButton disabled icon={<UploadIcon/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
+          : ''
       }
     </Wrapper>
   );

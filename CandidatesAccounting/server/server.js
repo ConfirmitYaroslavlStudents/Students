@@ -128,6 +128,9 @@ app.get('/interviewees/*/resume', function(req, res) {
 });
 
 app.post('/interviewees/*/resume', function(req, res) {
+  if (!req.isAuthenticated()) {
+    return res.status(401).end();
+  }
   let intervieweeID = req.url.split('/')[2];
   let file = req.files[Object.keys(req.files)[0]];
 

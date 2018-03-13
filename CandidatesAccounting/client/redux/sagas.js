@@ -134,7 +134,7 @@ function* uploadResumeSaga(action) {
     yield put(setApplicationStatus('ok'));
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Add candidate error.'));
+    yield put(setErrorMessage(error + '. Upload resume error.'));
     yield put(setApplicationStatus('error'));
   }
 }

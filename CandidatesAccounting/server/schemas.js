@@ -40,7 +40,9 @@ export const CandidateSchema = new Schema({
       text: {
         type: String,
         required: true
-      }
+      },
+      attachment: String,
+      attachmentFile: Buffer,
     }],
     tags: [String],
     subscribers: [String],
@@ -77,7 +79,9 @@ export const IntervieweeSchema = new Schema({
       text: {
         type: String,
         required: true
-      }
+      },
+      attachment: String,
+      attachmentFile: Buffer,
     }],
     tags: [String],
     subscribers: [String],
@@ -110,7 +114,9 @@ export const StudentSchema = new Schema({
       text: {
         type: String,
         required: true
-      }
+      },
+      attachment: String,
+      attachmentFile: Buffer,
     }],
     tags: [String],
     subscribers: [String],
@@ -143,7 +149,9 @@ export const TraineeSchema = new Schema({
       text: {
         type: String,
         required: true
-      }
+      },
+      attachment: String,
+      attachmentFile: Buffer,
     }],
     tags: [String],
     subscribers: [String],

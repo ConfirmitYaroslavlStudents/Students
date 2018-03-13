@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import RemoveIcon from 'material-ui-icons/Delete';
+import AttachIcon from 'material-ui-icons/AttachFile';
+import FileUploader from 'react-input-files';
 import styled, {css} from 'styled-components';
 import {formatDateTime} from '../../utilities/customMoment';
 import formatUserName from '../../utilities/formatUserName';
@@ -21,19 +23,34 @@ export default function CommentCloud(props) {
         <CommentText
           dangerouslySetInnerHTML={{__html: props.comment.text}}>
         </CommentText>
+        {
+          props.comment.attachment ?
+            <AttachmentWrapper onClick={() => {
+              window.open(window.location.origin + '/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments/' + props.comment.id + '/attachment');
+            }}>
+              <AttachIcon style={{width: 16, height: 16}}/>{props.comment.attachment}
+            </AttachmentWrapper>
+            : ''
+        }
       </CommentMount>
       <div> </div>
       <CommentFooter>
-      {
-        !props.isSystem && !props.isCurrentUserComment ?
-          <AuthorName>
-            {formatUserName(props.comment.author)}
-          </AuthorName> : ''
-      }
+        {
+          !props.isSystem && !props.isCurrentUserComment ?
+            <AuthorName>
+              {formatUserName(props.comment.author)}
+            </AuthorName> : ''
+        }
       {formatDateTime(props.comment.date)}
       {
         props.isCurrentUserComment ?
           <DeleteComment>
+            <FileUploader accept='.doc, .docx, .txt, .pdf'
+                          onChange={(files) => {
+                            //props.uploadResume(props.interviewee.id, files[0]);
+                          }}>
+              <IconButton icon={<AttachIcon/>} style={{height: 24, width: 24}} iconStyle='small-icon' onClick={() => { }}/>
+            </FileUploader>
             <IconButton
               icon={<RemoveIcon/>}
               iconStyle="small-icon"
@@ -50,6 +67,7 @@ export default function CommentCloud(props) {
 CommentCloud.propTypes = {
   comment: PropTypes.object.isRequired,
   deleteComment: PropTypes.func.isRequired,
+  candidate: PropTypes.object.isRequired,
   markerColor: PropTypes.string,
   isSystem: PropTypes.bool,
   isCurrentUserComment: PropTypes.bool
@@ -66,6 +84,7 @@ const CommentWrapper = styled.div`
 
 const CommentMount = styled.div`
   display: inline-flex;
+  flex-direction: column;
   padding: 11px 11px 11px 7px;
   box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.20);
   max-width: 85%;
@@ -84,6 +103,7 @@ const CommentMount = styled.div`
 	`}
 	
 	${props => props.isSystem && css`
+	  flex-direction: row;
 	  color: #905600;
     background-color: #FFF3E0;
     border-color: #FF9800;
@@ -93,11 +113,22 @@ const CommentMount = styled.div`
 `;
 
 const CommentText = styled.div`
-  display: inline-block;
   text-align: left;
   word-wrap: break-word;
   overflow: hidden;
   font-size: 96%;
+`;
+
+const AttachmentWrapper = styled.div`
+  color: #42A5F5;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  float: right;
+  
+  &:hover {
+    color: #64B5F6;   
+   }
 `;
 
 const CommentFooter = styled.div`

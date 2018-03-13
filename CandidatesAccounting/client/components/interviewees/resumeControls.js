@@ -28,7 +28,6 @@ export default function ResumeControls(props) {
         props.enableUpload ?
           props.authorized ?
             <FileUploader accept='.doc, .docx, .txt, .pdf'
-
                           onChange={(files) => {
                             props.uploadResume(props.interviewee.id, files[0]);
                           }}>

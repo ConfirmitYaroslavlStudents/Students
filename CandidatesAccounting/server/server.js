@@ -14,7 +14,7 @@ import {Account, connect} from './mongoose';
 import expressSession  from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import {getAttachment, addAttachment, getResume, addResume} from './mongoose';
+import {getResume, addResume, getAttachment, addAttachment} from './mongoose';
 
 const app = express();
 
@@ -94,31 +94,8 @@ app.get('/logout', function(req, res){
   });
 });
 
-app.get('/resume/*', function(req, res) {
-  let fileName = req.url.split('/')[2].split('.')[0];
-
-  return getAttachment(fileName).then((result, error) => {
-    if (error) {
-      return res.status(500).end();
-    }
-    res.send(result);
-  });
-});
-
-app.post('/resume*', function(req, res) {
-  let file = req.files[Object.keys(req.files)[0]];
-
-  return addAttachment(file.name, file.data).then((result, error) => {
-    if (error) {
-      return res.status(500).end();
-    }
-    res.json({attachmentID: result._id});
-  });
-});
-
-app.get('/interviewees/*/resume', function(req, res) {
-  let intervieweeID = req.url.split('/')[2];
-  return getResume(intervieweeID).then((result, error) => {
+app.get('/interviewees/:intervieweeID/resume', function(req, res) {
+  return getResume(req.params.intervieweeID).then((result, error) => {
     if (error) {
       return res.status(500).end();
     }
@@ -127,14 +104,37 @@ app.get('/interviewees/*/resume', function(req, res) {
   });
 });
 
-app.post('/interviewees/*/resume', function(req, res) {
+app.post('/interviewees/:intervieweeID/resume', function(req, res) {
   if (!req.isAuthenticated()) {
     return res.status(401).end();
   }
-  let intervieweeID = req.url.split('/')[2];
-  let file = req.files[Object.keys(req.files)[0]];
 
-  return addResume(intervieweeID, file.name, file.data).then((result, error) => {
+  let file = req.files[Object.keys(req.files)[0]];
+  return addResume(req.params.intervieweeID, file.name, file.data).then((result, error) => {
+    if (error) {
+      return res.status(500).end();
+    }
+    res.end();
+  });
+});
+
+app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', function(req, res) {
+  return getAttachment(req.params.candidateID, req.params.commentID,).then((result, error) => {
+    if (error) {
+      return res.status(500).end();
+    }
+    res.attachment(result.attachmentName);
+    res.send(result.attachmentData);
+  });
+});
+
+app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', function(req, res) {
+  //if (!req.isAuthenticated()) {
+  //  return res.status(401).end();
+  //}
+
+  let file = req.files[Object.keys(req.files)[0]];
+  return addAttachment(req.params.candidateID, req.params.commentID, file.name, file.data).then((result, error) => {
     if (error) {
       return res.status(500).end();
     }

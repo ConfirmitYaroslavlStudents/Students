@@ -103,11 +103,11 @@ export function addCandidate(newCandidate) {
     });
 }
 
-export function updateCandidate(candidate) {
-  return identifyModel(candidate.status).replaceOne({_id: candidate.id}, candidate)
-    .then(() => {
-      updateTags(candidate.tags);
-      return candidate;
+export function updateCandidate(candidateID, candidateNewState) {
+  return identifyModel(candidateNewState.status).replaceOne({_id: candidateID}, candidateNewState)
+    .then((result) => {
+      updateTags(candidateNewState.tags);
+      return result;
     });
 }
 
@@ -168,31 +168,35 @@ export function addResume(intervieweeID, resumeName, resumeData) {
     });
 }
 
-export function getAttachment(attachmentID) {
-  return new Promise((resolve, reject) => {
-    gridFs.model.readById(attachmentID, function(error, content){
-      if (error) {
-        reject(error);
+export function getAttachment(candidateID, commentID) {
+  return getCandidateByID(candidateID)
+    .then((candidate) => {
+      for (let i = 0; i < candidate.comments.length; i++) {
+        if (candidate.comments[i]._id === commentID) {
+          return {
+            attachmentName: candidate.comments[i].attachment,
+            attachmentData: candidate.comments[i].attachmentFile
+          };
+        }
       }
-      resolve(content);
+      return {
+        attachmentName: '',
+        attachmentData: null
+      };
     });
-  });
 }
 
-export function addAttachment(fileName, fileData) {
-  return new Promise((resolve, reject) => {
-    gridFs.model.write({
-        filename: fileName,
-        contentType: 'multipart/form-data'
-      },
-      streamifer.createReadStream(fileData),
-      function(error, createdFile){
-        if (error) {
-          reject(error);
+export function addAttachment(candidateID, commentID, attachmentName, attachmentData) {
+  return getCandidateByID(candidateID)
+    .then((candidate) => {
+      for (let i = 0; i < candidate.comments.length; i++) {
+        if (candidate.comments[i]._id.toString() === commentID) {
+          candidate.comments[i].attachment = attachmentName;
+          candidate.comments[i].attachmentFile = attachmentData;
+          return updateCandidate(candidate._id, candidate);
         }
-        resolve(createdFile);
-      });
-  });
+      }
+    });
 }
 
 function updateTags(probablyNewTags) {

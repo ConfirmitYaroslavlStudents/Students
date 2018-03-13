@@ -24,6 +24,7 @@ export const schema = buildSchema(`
     author: String!,
     date: String!,
     text: String!,
+    attachment: String
   }
   type Candidate {
     id: ID!,
@@ -46,6 +47,7 @@ export const schema = buildSchema(`
     author: String!,
     date: String!,
     text: String!,
+    attachment: String
   }
   type Notification {
     id: ID!,
@@ -140,7 +142,7 @@ export const root = {
     return addCandidate(candidate);
   },
   updateCandidate: ({candidate}) => {
-    return updateCandidate(candidate)
+    return updateCandidate(candidate.id, candidate)
       .then((result) => {
         return !!result;
       });

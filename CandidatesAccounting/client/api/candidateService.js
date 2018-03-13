@@ -16,6 +16,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
             author
             date
             text
+            attachment
           }
           tags
           subscribers
@@ -67,6 +68,7 @@ export function getCandidate(id) {
           author
           date
           text
+          attachment
         }
         tags
         subscribers

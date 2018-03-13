@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 import IconButton from '../common/UIComponentDecorators/iconButton';
+import AttachIcon from 'material-ui-icons/AttachFile';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import createComment from '../../utilities/createComment';
 import SubscribeButton from './subscribeButton';
+import FileUploader from 'react-input-files';
 
 export default class AddCommentPanel extends Component {
   constructor(props) {
@@ -67,13 +69,26 @@ export default class AddCommentPanel extends Component {
               disabled={this.props.disabled}
             />
           </NotificationsWrapper>
+          <AddAttachmentButtonWrapper>
+            {
+              this.props.disabled ?
+                <IconButton icon={<AttachIcon/>} iconStyle="big-icon" disabled onClick={ () => { } } />
+                :
+                <FileUploader accept='.doc, .docx, .txt, .pdf'
+                              onChange={(files) => {
+                                //props.uploadResume(props.interviewee.id, files[0]);
+                              }}>
+                  <IconButton icon={<AttachIcon/>} iconStyle="big-icon" onClick={ () => { } } />
+                </FileUploader>
+            }
+          </AddAttachmentButtonWrapper>
           <AddButtonWrapper>
             <IconButton
               icon={<AddIcon/>}
               iconStyle="big-icon"
               disabled={this.props.disabled}
               onClick={this.addNewComment}
-              style={{width: 70, height: 70}}
+              style={{width: 60, height: 60}}
             />
           </AddButtonWrapper>
         </ButtonWrapper>
@@ -117,11 +132,18 @@ const NotificationsWrapper = styled.div`
   right: 11px;
 `;
 
+const AddAttachmentButtonWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  bottom: 60px;
+  right: 11px;
+`;
+
 const AddButtonWrapper = styled.div`
   display: inline-block;
   position: absolute;
   bottom: 0px;
-  right: 0px;
+  right: 5px;
 `;
 
 const CommentTextInput = styled.div`

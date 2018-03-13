@@ -51,6 +51,7 @@ export default class CommentsForm extends Component {
         <CommentCloud
           key={index}
           comment={comment}
+          candidate={this.props.candidate}
           markerColor={this.userColors[comment.author]}
           deleteComment={() => {this.deleteComment(comment.id)}}
           isSystem={comment.author === 'SYSTEM'}

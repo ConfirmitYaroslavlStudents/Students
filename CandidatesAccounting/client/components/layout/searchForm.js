@@ -40,7 +40,8 @@ export default class SearchForm extends Component {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(() => {
-      this.props.loadCandidates(this.props.history);
+      this.props.changeURL(this.props.history);
+      this.props.loadCandidates();
       this.timer = null;
     }, 900);
   }
@@ -75,6 +76,7 @@ export default class SearchForm extends Component {
 
 SearchForm.propTypes = {
   searchRequest: PropTypes.string.isRequired,
+  changeURL: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   setSearchRequest: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,

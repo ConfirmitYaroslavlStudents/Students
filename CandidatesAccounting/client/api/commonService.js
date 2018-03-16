@@ -16,6 +16,7 @@ export function getInitialState(username) {
           date
           author
           text
+          attachment
         }
       }
     }`,

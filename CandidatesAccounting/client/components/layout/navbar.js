@@ -22,6 +22,7 @@ export default function MainNavbar(props) {
               <SearchForm
                 searchRequest={props.searchRequest}
                 setSearchRequest={props.setSearchRequest}
+                changeURL={props.changeURL}
                 history={props.history}
                 loadCandidates={props.loadCandidates}
               />
@@ -66,6 +67,7 @@ MainNavbar.propTypes = {
   setSearchRequest: PropTypes.func.isRequired,
   getCandidate: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
+  changeURL: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 

@@ -187,16 +187,52 @@ export const root = {
 
 function search(candidates, searchRequest) {
   let requestLowerCase = searchRequest.toLowerCase();
+  let searchWords = requestLowerCase.split(' ');
+  let foundCandidates = [];
+
+  let searchMode = 'and'; //TODO: ask about search mode
+
+  if (searchMode === 'or') {
+    searchWords.forEach((searchWord) => {
+      if (searchWord !== '') {
+        let validCandidates = searchByWord(candidates, searchWord);
+        validCandidates.forEach((candidate) => {
+          if (!foundCandidates.includes(candidate)) {
+            foundCandidates.push(candidate);
+          }
+        });
+      }
+    });
+  } else { // 'and' mode
+    candidates.forEach((candidate) => {
+      let candidateIsValid = true;
+      for (let i = 0; i < searchWords.length; i++) {
+        if (searchWords[i] !== '') {
+          if (searchByWord([candidate], searchWords[i]).length === 0) {
+            candidateIsValid = false;
+            break;
+          }
+        }
+      }
+      if (candidateIsValid) {
+        foundCandidates.push(candidate);
+      }
+    });
+  }
+  return foundCandidates;
+}
+
+function searchByWord(candidates, searchWord) {
   let validCandidates = [];
   candidates.forEach((candidate) => {
     if (
-      candidate.id === searchRequest
-      || candidate.name.toLowerCase().includes(requestLowerCase)
-      || candidate.status.toLowerCase().includes(requestLowerCase)
-      || candidate.email.toLowerCase().includes(requestLowerCase)
-      || (candidate.groupName && candidate.groupName.toLowerCase().includes(requestLowerCase))
-      || (candidate.mentor && candidate.mentor.toLowerCase().includes(requestLowerCase))
-      || candidate.tags.includes(searchRequest)
+      candidate.id === searchWord
+      || candidate.name.toLowerCase().includes(searchWord)
+      || candidate.status.toLowerCase().includes(searchWord)
+      || candidate.email.toLowerCase().includes(searchWord)
+      || (candidate.groupName && candidate.groupName.toLowerCase().includes(searchWord))
+      || (candidate.mentor && candidate.mentor.toLowerCase().includes(searchWord))
+      || candidate.tags.includes(searchWord)
     ) {
       validCandidates.push(candidate);
     }

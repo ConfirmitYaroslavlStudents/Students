@@ -68,6 +68,7 @@ export default class AppView extends Component {
           history={this.props.history}
           setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
+          changeURL={this.props.changeURL}
           loadCandidates={this.props.loadCandidates}
           setCandidateStatus={this.props.setCandidateStatus}
           getCandidate={this.props.getCandidate}

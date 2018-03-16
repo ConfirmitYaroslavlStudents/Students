@@ -6,6 +6,7 @@ import DeleteIcon from 'material-ui-icons/Cancel';
 import formatUserName from '../../utilities/formatUserName';
 import {formatDateTime} from '../../utilities/customMoment';
 import IconButton from '../common/UIComponentDecorators/iconButton';
+import AttachIcon from 'material-ui-icons/AttachFile';
 
 export default function NotificationBlock(props) {
   return (
@@ -41,8 +42,13 @@ export default function NotificationBlock(props) {
         </InfoWrapper>
         <ContentWrapper>
           <p>{formatUserName(props.notification.content.author)} <ServiceText> has left the comment:</ServiceText></p>
-          <MessageWrapper
-            dangerouslySetInnerHTML={{__html: props.notification.content.text}}>
+          <MessageWrapper>
+            <div dangerouslySetInnerHTML={{__html: props.notification.content.text}} />
+            {
+              props.notification.content.attachment ?
+                <AttachmentWrapper><AttachIcon style={{width: 16, height: 16}}/>{props.notification.content.attachment}</AttachmentWrapper>
+                : ''
+            }
           </MessageWrapper>
         </ContentWrapper>
       </NotificationWrapper>
@@ -124,4 +130,10 @@ const MessageWrapper = styled.div`
   padding: 8px;  
   word-wrap: break-word;
   overflow: hidden;
+`;
+
+const AttachmentWrapper = styled.div`  
+  display: inline-flex;
+  align-items: center;
+  color: #777;
 `;

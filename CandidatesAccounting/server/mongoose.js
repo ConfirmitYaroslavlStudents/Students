@@ -164,7 +164,7 @@ export function addResume(intervieweeID, resumeName, resumeData) {
     .then((interviewee) => {
       interviewee.resume = resumeName;
       interviewee.resumeFile = resumeData;
-      return updateCandidate(interviewee);
+      return updateCandidate(intervieweeID, interviewee);
     });
 }
 
@@ -172,7 +172,7 @@ export function getAttachment(candidateID, commentID) {
   return getCandidateByID(candidateID)
     .then((candidate) => {
       for (let i = 0; i < candidate.comments.length; i++) {
-        if (candidate.comments[i]._id === commentID) {
+        if (candidate.comments[i]._id.toString() === commentID) {
           return {
             attachmentName: candidate.comments[i].attachment,
             attachmentData: candidate.comments[i].attachmentFile
@@ -193,7 +193,7 @@ export function addAttachment(candidateID, commentID, attachmentName, attachment
         if (candidate.comments[i]._id.toString() === commentID) {
           candidate.comments[i].attachment = attachmentName;
           candidate.comments[i].attachmentFile = attachmentData;
-          return updateCandidate(candidate._id, candidate);
+          return updateCandidate(candidateID, candidate);
         }
       }
     });

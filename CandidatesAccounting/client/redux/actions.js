@@ -138,11 +138,12 @@ function updateCandidate(candidate) {
   }
 }
 
-function addComment(candidateID, comment) {
+function addComment(candidateID, comment, commentAttachment) {
   return {
     type: 'ADD_COMMENT',
     candidateID,
-    comment
+    comment,
+    commentAttachment
   }
 }
 

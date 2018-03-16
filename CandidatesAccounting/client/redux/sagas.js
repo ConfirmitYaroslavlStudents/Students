@@ -2,7 +2,7 @@ import {takeEvery, takeLatest, all, put, call, select} from 'redux-saga/effects'
 import {getInitialState} from '../api/commonService';
 import {login, logout} from '../api/authorizationService';
 import {getCandidates, getCandidate, addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
-import {addComment, deleteComment} from '../api/commentService.js';
+import {addComment, deleteComment, addCommentAttachment} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
 import {noticeNotification, deleteNotification} from '../api/notificationService';
 import {uploadResume} from '../api/resumeService';
@@ -181,6 +181,9 @@ function* addCommentSaga(action) {
   try {
     let comment = action.comment;
     comment.id = yield call(addComment, action.candidateID, action.comment);
+    if (action.commentAttachment) {
+      yield call(addCommentAttachment, action.candidateID, action.comment.id, action.commentAttachment);
+    }
     yield put(addCommentSuccess(action.candidateID, comment));
   }
   catch(error) {

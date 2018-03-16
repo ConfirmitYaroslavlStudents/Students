@@ -54,7 +54,7 @@ app.use('/graphql', function(req, res, next) {
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: true,
+  graphiql: false,
 }));
 
 app.get('/login', function(req, res) {
@@ -108,7 +108,9 @@ app.post('/interviewees/:intervieweeID/resume', function(req, res) {
   if (!req.isAuthenticated()) {
     return res.status(401).end();
   }
-
+  if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
+    return res.status(500).end();
+  }
   let file = req.files[Object.keys(req.files)[0]];
   return addResume(req.params.intervieweeID, file.name, file.data).then((result, error) => {
     if (error) {
@@ -129,10 +131,12 @@ app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments
 });
 
 app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', function(req, res) {
-  //if (!req.isAuthenticated()) {
-  //  return res.status(401).end();
-  //}
-
+  if (!req.isAuthenticated()) {
+    return res.status(401).end();
+  }
+  if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
+    return res.status(500).end();
+  }
   let file = req.files[Object.keys(req.files)[0]];
   return addAttachment(req.params.candidateID, req.params.commentID, file.name, file.data).then((result, error) => {
     if (error) {

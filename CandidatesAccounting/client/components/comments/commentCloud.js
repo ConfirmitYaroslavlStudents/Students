@@ -25,11 +25,13 @@ export default function CommentCloud(props) {
         </CommentText>
         {
           props.comment.attachment ?
-            <AttachmentWrapper onClick={() => {
-              window.open(window.location.origin + '/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments/' + props.comment.id + '/attachment');
-            }}>
-              <AttachIcon style={{width: 16, height: 16}}/>{props.comment.attachment}
-            </AttachmentWrapper>
+            <MountFooter right={!props.isCurrentUserComment}>
+              <AttachmentWrapper onClick={() => {
+                window.open(window.location.origin + '/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments/' + props.comment.id + '/attachment');
+              }}>
+                <AttachIcon style={{width: 16, height: 16}}/>{props.comment.attachment}
+              </AttachmentWrapper>
+            </MountFooter>
             : ''
         }
       </CommentMount>
@@ -45,12 +47,15 @@ export default function CommentCloud(props) {
       {
         props.isCurrentUserComment ?
           <DeleteComment>
-            <FileUploader accept='.doc, .docx, .txt, .pdf'
-                          onChange={(files) => {
-                            //props.uploadResume(props.interviewee.id, files[0]);
-                          }}>
-              <IconButton icon={<AttachIcon/>} style={{height: 24, width: 24}} iconStyle='small-icon' onClick={() => { }}/>
-            </FileUploader>
+            {/* // Do comment attachment editable?
+              <FileUploader accept='.doc, .docx, .txt, .pdf'
+                            onChange={(files) => {
+                              //props.uploadResume(props.interviewee.id, files[0]);
+                            }}>
+                <IconButton icon={<AttachIcon/>} style={{height: 24, width: 24}} iconStyle='small-icon' onClick={() => {
+                }}/>
+              </FileUploader>
+            */}
             <IconButton
               icon={<RemoveIcon/>}
               iconStyle="small-icon"
@@ -119,12 +124,20 @@ const CommentText = styled.div`
   font-size: 96%;
 `;
 
+const MountFooter = styled.div`
+  display: flex;
+  margin: 0 0 0 auto;
+  
+  ${props => props.right && css`
+    margin: 0 0 0 -3px;
+	`}
+`;
+
 const AttachmentWrapper = styled.div`
   color: #42A5F5;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  float: right;
   
   &:hover {
     color: #64B5F6;   

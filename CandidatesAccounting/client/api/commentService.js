@@ -40,3 +40,22 @@ export function deleteComment(candidateID, commentID) {
     }
   });
 }
+
+export function addCommentAttachment(candidateID, commentID, attachment) {
+  let formData = new FormData();
+  formData.append('attachment', attachment);
+
+  return fetch('/interviewees/' + candidateID + '/comments/' + commentID + '/attachment',
+    {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return true;
+      } else {
+        throw response.status;
+      }
+    });
+}

@@ -10,11 +10,21 @@ import createComment from '../../utilities/createComment';
 import SubscribeButton from './subscribeButton';
 import FileUploader from 'react-input-files';
 
+const customReactQuillModules = {
+  toolbar: [
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    ['bold', 'italic', 'underline','strike'],
+    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+    ['link'],
+  ],
+};
+
 export default class AddCommentPanel extends Component {
   constructor(props) {
     super(props);
-    this.state = ({commentText: ''});
+    this.state = ({commentText: '', commentAttachment: null});
     this.handleChange = this.handleChange.bind(this);
+    this.handleAttachFile = this.handleAttachFile.bind(this);
     this.addNewComment = this.addNewComment.bind(this);
   }
 
@@ -22,18 +32,24 @@ export default class AddCommentPanel extends Component {
     this.setState({commentText: text});
   }
 
+  handleAttachFile(file) {
+    this.setState({commentAttachment: file});
+  }
+
   addNewComment() {
     let commentText = this.state.commentText;
-    if (commentText.replace(/<[^>]+>/g,'').trim() !== '') {
+    if (commentText.replace(/<[^>]+>/g,'').trim() !== '' || this.state.commentAttachment) {
       if (commentText.slice(-11) === '<p><br></p>') {
         commentText = commentText.substr(0, commentText.length - 11);
       }
       this.props.addComment(this.props.candidate.id, createComment(
         this.props.username,
         getCurrentDateTime(),
-        commentText));
+        commentText,
+        this.state.commentAttachment.name
+        ), this.state.commentAttachment);
       this.props.onClick();
-      this.setState({commentText: ''});
+      this.setState({commentText: '', commentAttachment: null});
     }
   }
 
@@ -46,6 +62,7 @@ export default class AddCommentPanel extends Component {
             onChange={this.handleChange}
             placeholder="New comment"
             tabIndex={1}
+            modules={customReactQuillModules}
             onKeyDown={
               (event) => {
                 if (event.keyCode === 13) {
@@ -57,6 +74,24 @@ export default class AddCommentPanel extends Component {
               }
             }
           />
+          <AddAttachmentButtonWrapper>
+            {
+              this.props.disabled ?
+                <IconButton icon={<AttachIcon/>} disabled onClick={ () => { } } />
+                :
+                <FileUploader accept='.doc, .docx, .txt, .pdf'
+                              onChange={(files) => {
+                                this.handleAttachFile(files[0]);
+                              }}>
+                  <IconButton icon={<AttachIcon/>} onClick={ () => { } } />
+                </FileUploader>
+              }
+              {
+                !this.props.disabled && this.state.commentAttachment ?
+                  <AttachmentFileNameWrapper>{this.state.commentAttachment.name}</AttachmentFileNameWrapper>
+                  : ''
+              }
+          </AddAttachmentButtonWrapper>
         </CommentTextInput>
         <ButtonWrapper>
           <NotificationsWrapper>
@@ -69,19 +104,6 @@ export default class AddCommentPanel extends Component {
               disabled={this.props.disabled}
             />
           </NotificationsWrapper>
-          <AddAttachmentButtonWrapper>
-            {
-              this.props.disabled ?
-                <IconButton icon={<AttachIcon/>} iconStyle="big-icon" disabled onClick={ () => { } } />
-                :
-                <FileUploader accept='.doc, .docx, .txt, .pdf'
-                              onChange={(files) => {
-                                //props.uploadResume(props.interviewee.id, files[0]);
-                              }}>
-                  <IconButton icon={<AttachIcon/>} iconStyle="big-icon" onClick={ () => { } } />
-                </FileUploader>
-            }
-          </AddAttachmentButtonWrapper>
           <AddButtonWrapper>
             <IconButton
               icon={<AddIcon/>}
@@ -115,6 +137,21 @@ const AddCommentWrapper = styled.div`
   background: #FFF;
 `;
 
+const AddAttachmentButtonWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0px;
+  right: 74px;
+  color: #777;
+`;
+
+const AttachmentFileNameWrapper = styled.div`
+  display: inline-flex;
+  font-size: 90%;
+  padding-right: 12px;
+`;
+
 const ButtonWrapper = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -129,13 +166,6 @@ const NotificationsWrapper = styled.div`
   display: inline-block;
   position: relative;
   top: 11px;
-  right: 11px;
-`;
-
-const AddAttachmentButtonWrapper = styled.div`
-  display: inline-block;
-  position: absolute;
-  bottom: 60px;
   right: 11px;
 `;
 

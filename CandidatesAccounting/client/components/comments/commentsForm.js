@@ -110,7 +110,7 @@ const FormWrapper = styled.div`
   background: #EEE;
   position: absolute;
   top: 0;
-  padding-top: 112px;
+  padding-top: 110px;
   padding-bottom: 161px;
   box-sizing: border-box;
 `;

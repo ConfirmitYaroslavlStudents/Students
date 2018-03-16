@@ -28,44 +28,27 @@ export default class IntervieweeTable extends Component {
         contentRows={
           (this.props.interviewees.map((interviewee, index) =>
             [
-              {
-                content:
-                  <NameWrapper>
-                    <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
-                    <TagList
-                      tags={interviewee.tags}
-                      setSearchRequest={this.props.setSearchRequest}
-                      loadCandidates={this.props.loadCandidates}
-                      changeURL={this.props.changeURL}
-                      history={this.props.history}
-                    />
-                  </NameWrapper>,
-                value: interviewee.name
-              },
-              {
-                content: interviewee.email,
-                value: interviewee.email
-              },
-              {
-                content:
-                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>
-                    {formatDate(interviewee.birthDate)}
-                  </span>
-              },
-              {
-                content:
-                  <span style={{whiteSpace: 'nowrap'}} className={isToday(interviewee.interviewDate) ? 'today' : ''}>
-                    {formatDateTime(interviewee.interviewDate)}
-                  </span>,
-                value: interviewee.interviewDate
-              },
-              {
-                content: <ResumeControls interviewee={interviewee} enableDownload enableUpload authorized={this.props.username !== ''}
-                  uploadResume={this.props.uploadResume}/>
-              },
-              {
-                content: <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>
-              }]
+              <NameWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
+                <TagList
+                  tags={interviewee.tags}
+                  setSearchRequest={this.props.setSearchRequest}
+                  loadCandidates={this.props.loadCandidates}
+                  changeURL={this.props.changeURL}
+                  history={this.props.history}
+                />
+              </NameWrapper>,
+              interviewee.email,
+              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>
+                {formatDate(interviewee.birthDate)}
+              </span>,
+              <span style={{whiteSpace: 'nowrap'}} className={isToday(interviewee.interviewDate) ? 'today' : ''}>
+                {formatDateTime(interviewee.interviewDate)}
+              </span>,
+              <ResumeControls interviewee={interviewee} enableDownload enableUpload authorized={this.props.username !== ''}
+                  uploadResume={this.props.uploadResume}/>,
+              <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>
+            ]
           ))}
         history={this.props.history}
         offset={this.props.offset}

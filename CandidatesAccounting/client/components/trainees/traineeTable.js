@@ -26,35 +26,23 @@ export default class TraineeTable extends Component {
         contentRows={
           (this.props.trainees.map((trainee, index) =>
             [
-              {
-                content:
-                  <NameWrapper>
-                    <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
-                    <TagList
-                      tags={trainee.tags}
-                      setSearchRequest={this.props.setSearchRequest}
-                      loadCandidates={this.props.loadCandidates}
-                      changeURL={this.props.changeURL}
-                      history={this.props.history}
-                    />
-                  </NameWrapper>,
-                value: trainee.name},
-              {
-                content: trainee.email,
-                value: trainee.email
-              },
-              {
-                content:
-                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
-                    {formatDate(trainee.birthDate)}
-                  </span>
-              },
-              {
-                content: <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
-                value: trainee.mentor},
-              {
-                content: <ControlsWrapper><CandidateRowControls candidate={trainee} {...this.props}/></ControlsWrapper>
-              }]
+              <NameWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
+                <TagList
+                  tags={trainee.tags}
+                  setSearchRequest={this.props.setSearchRequest}
+                  loadCandidates={this.props.loadCandidates}
+                  changeURL={this.props.changeURL}
+                  history={this.props.history}
+                />
+              </NameWrapper>,
+              trainee.email,
+              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
+                {formatDate(trainee.birthDate)}
+              </span>,
+              <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
+              <ControlsWrapper><CandidateRowControls candidate={trainee} {...this.props}/></ControlsWrapper>
+            ]
           ))}
         history={this.props.history}
         offset={this.props.offset}

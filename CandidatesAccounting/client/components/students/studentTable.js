@@ -29,45 +29,25 @@ export default class StudentTable extends Component {
         contentRows={
           (this.props.students.map((student, index) =>
             [
-              {
-                content:
-                  <NameWrapper>
-                    <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
-                    <TagList
-                      tags={student.tags}
-                      setSearchRequest={this.props.setSearchRequest}
-                      loadCandidates={this.props.loadCandidates}
-                      changeURL={this.props.changeURL}
-                      history={this.props.history}
-                    />
-                  </NameWrapper>,
-                value: student.name
-              },
-              {
-                content: student.email,
-                value: student.email
-              },
-              {
-                content:
-                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
+              <NameWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
+                <TagList
+                  tags={student.tags}
+                  setSearchRequest={this.props.setSearchRequest}
+                  loadCandidates={this.props.loadCandidates}
+                  changeURL={this.props.changeURL}
+                  history={this.props.history}
+                />
+              </NameWrapper>,
+              student.email,<span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
                     {formatDate(student.birthDate)}
                   </span>
-              },
-              {
-                content: student.groupName,
-                value: student.groupName
-              },
-              {
-                content: <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
-                value: student.startingDate
-              },
-              {
-                content: <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
-                value: student.endingDate
-              },
-              {
-                content: <ControlsWrapper><CandidateRowControls candidate={student} {...this.props}/></ControlsWrapper>
-              }]
+              ,
+              student.groupName,
+              <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
+              <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
+              <ControlsWrapper><CandidateRowControls candidate={student} {...this.props}/></ControlsWrapper>
+            ]
           ))}
         history={this.props.history}
         offset={this.props.offset}

@@ -26,36 +26,23 @@ export default class CandidateTable extends Component {
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
             [
-              {
-                content:
-                  <NameWrapper>
-                    <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
-                    <TagList
-                      tags={candidate.tags}
-                      setSearchRequest={this.props.setSearchRequest}
-                      loadCandidates={this.props.loadCandidates}
-                      changeURL={this.props.changeURL}
-                      history={this.props.history}
-                    />
-                  </NameWrapper>,
-                value: candidate.name},
-              {
-                content: candidate.status,
-                value: candidate.status
-              },
-              {
-                content: candidate.email,
-                value: candidate.email
-              },
-              {
-                content:
-                  <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
-                    {formatDate(candidate.birthDate)}
-                  </span>
-              },
-              {
-                content: <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
-              }]
+              <NameWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
+                <TagList
+                  tags={candidate.tags}
+                  setSearchRequest={this.props.setSearchRequest}
+                  loadCandidates={this.props.loadCandidates}
+                  changeURL={this.props.changeURL}
+                  history={this.props.history}
+                />
+              </NameWrapper>,
+              candidate.status,
+              candidate.email,
+              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                {formatDate(candidate.birthDate)}
+              </span>,
+              <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
+            ]
           ))}
         history={this.props.history}
         offset={this.props.offset}

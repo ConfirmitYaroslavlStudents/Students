@@ -28,9 +28,8 @@ export default function NotificationBlock(props) {
             </DateWrapper>
             <ButtonWrapper>
               <IconButton
-                icon={<DeleteIcon />}
+                icon={<DeleteIcon style={{width: 20, height: 20}}/>}
                 style={{width: 24, height: 24}}
-                iconStyle='small-icon'
                 onClick={(event) => {
                   console.log('del');
                   props.deleteNotification(props.username, props.notification.id);
@@ -72,12 +71,12 @@ const NotificationWrapper = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   border-left: 5px solid #999;
   padding: 20px 12px;
-  background-color: #fafafa;
+  background-color: #fefefe;
   cursor: pointer;
   
   ${props => props.recent && css`  
     border-left: 5px solid #42A5F5;
-    background-color: #fefefe;
+    background-color: #fff;
 	`}	
   
   &:hover {

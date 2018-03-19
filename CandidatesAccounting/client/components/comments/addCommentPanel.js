@@ -46,7 +46,7 @@ export default class AddCommentPanel extends Component {
         this.props.username,
         getCurrentDateTime(),
         commentText,
-        this.state.commentAttachment.name
+        this.state.commentAttachment ? this.state.commentAttachment.name : ''
         ), this.state.commentAttachment);
       this.props.onClick();
       this.setState({commentText: '', commentAttachment: null});
@@ -77,13 +77,13 @@ export default class AddCommentPanel extends Component {
           <AddAttachmentButtonWrapper>
             {
               this.props.disabled ?
-                <IconButton icon={<AttachIcon/>} disabled onClick={ () => { } } />
+                <IconButton icon={<AttachIcon style={{width: 22, height: 22}}/>} disabled onClick={ () => { } } />
                 :
                 <FileUploader accept='.doc, .docx, .txt, .pdf'
                               onChange={(files) => {
                                 this.handleAttachFile(files[0]);
                               }}>
-                  <IconButton icon={<AttachIcon/>} onClick={ () => { } } />
+                  <IconButton icon={<AttachIcon style={{width: 22, height: 22}}/>} onClick={ () => { } } />
                 </FileUploader>
               }
               {
@@ -106,7 +106,7 @@ export default class AddCommentPanel extends Component {
           </NotificationsWrapper>
           <AddButtonWrapper>
             <IconButton
-              icon={<AddIcon/>}
+              icon={<AddIcon style={{width: 28, height: 28}}/>}
               iconStyle="big-icon"
               disabled={this.props.disabled}
               onClick={this.addNewComment}

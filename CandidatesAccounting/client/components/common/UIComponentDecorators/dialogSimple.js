@@ -17,7 +17,7 @@ export default function SimpleDialog(props) {
       <Dialog
         open={props.isOpen}
         transition={Transition}
-        onRequestClose={(event) => {props.onRequestClose()}}
+        onBackdropClick={(event) => {props.onRequestClose()}}
       >
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>

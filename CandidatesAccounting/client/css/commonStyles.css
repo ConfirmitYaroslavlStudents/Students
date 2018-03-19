@@ -11,18 +11,6 @@ p {
     margin: 0;
 }
 
-tr td:first-child {
-    padding-left: 30px;
-}
-
-tr th:first-child {
-    padding-left: 30px;
-}
-
-tr th:last-child  span {
-    float: right;
-}
-
 .active-nav-link {
     color: #3F51B5 !important;
     border-bottom: 2px solid #3F51B5;
@@ -56,6 +44,10 @@ tr th:last-child  span {
 
 .custom-main {
     margin-top: 108px;
+}
+
+.disabled-cell {
+    opacity: 0.5;
 }
 
 .hidden {

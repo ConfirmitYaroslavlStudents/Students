@@ -19,7 +19,7 @@ export default function DialogAlert(props) {
       <Dialog
         open={props.isOpen}
         transition={Transition}
-        onRequestClose={(event) => {props.onRequestClose()}}
+        onBackdropClick={(event) => {props.onRequestClose()}}
       >
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
@@ -28,7 +28,7 @@ export default function DialogAlert(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onCancelClick} color="accent">
+          <Button onClick={props.onCancelClick} color="secondary">
             Cancel
           </Button>
           <Button onClick={props.onConfirmClick} color="primary">

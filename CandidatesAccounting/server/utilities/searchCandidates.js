@@ -1,7 +1,6 @@
 export default function searchCandidates(candidates, searchRequest) {
-  let requestLowerCase = searchRequest.toLowerCase();
-  let searchWords = requestLowerCase.split(' ');
-  searchWords = searchWords.filter(word => word.length > 0);
+  let searchWords = searchRequest.split(' ').filter(word => word.length > 0);
+
   let foundCandidates = [];
 
   candidates.forEach((candidate) => {
@@ -21,13 +20,14 @@ export default function searchCandidates(candidates, searchRequest) {
 }
 
 function searchByWord(candidate, searchWord) {
+  let lowerCasedSearchWord = searchWord.toLowerCase();
   return (
     candidate.id === searchWord
-    || candidate.name.toLowerCase().includes(searchWord)
-    || candidate.status.toLowerCase().includes(searchWord)
-    || candidate.email.toLowerCase().includes(searchWord)
-    || (candidate.groupName && candidate.groupName.toLowerCase().includes(searchWord))
-    || (candidate.mentor && candidate.mentor.toLowerCase().includes(searchWord))
+    || candidate.name.toLowerCase().includes(lowerCasedSearchWord)
+    || candidate.status.toLowerCase().includes(lowerCasedSearchWord)
+    || candidate.email.toLowerCase().includes(lowerCasedSearchWord)
+    || (candidate.groupName && candidate.groupName.toLowerCase().includes(lowerCasedSearchWord))
+    || (candidate.mentor && candidate.mentor.toLowerCase().includes(lowerCasedSearchWord))
     || candidate.tags.includes(searchWord)
   );
 }

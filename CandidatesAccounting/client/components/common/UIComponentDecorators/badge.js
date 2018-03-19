@@ -6,7 +6,7 @@ export default function SimpleBadge(props) {
   return (
     <Badge
       badgeContent={props.badgeContent}
-      classes={{badge: props.badgeContent !== 0 ? 'small-badge' : 'hidden', colorAccent: 'badge-accent'}}
+      classes={{badge: props.badgeContent !== 0 ? 'small-badge' : 'hidden', colorSecondary: 'badge-accent'}}
       color={props.color ? props.color : 'primary'}
       onClick={props.onClick ? props.onClick : () => {}}
     >

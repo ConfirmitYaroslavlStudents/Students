@@ -65,5 +65,5 @@ AddCommentDialog.propTypes = {
 };
 
 const FormWrapper = styled.div`
-  width: 500px;
+  width: 504px;
 `;

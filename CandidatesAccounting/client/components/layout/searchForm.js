@@ -50,7 +50,7 @@ export default class SearchForm extends Component {
     return (
       <Form>
         <IconButton
-          color='contrast'
+          color='inherit'
           icon={<SearchIcon/>}
           onClick={this.handleClick}
           placeholder='search'

@@ -41,7 +41,7 @@ export default class CustomPopover extends Component {
         <Popover
           open={this.state.open}
           anchorReference={'anchorEl'}
-          onRequestClose={(event) => {this.handleClose()}}
+          onBackdropClick={(event) => {this.handleClose()}}
           anchorEl={this.state.anchorEl}
           anchorPosition={{ top: 200, left: 400 }}
           anchorOrigin={{

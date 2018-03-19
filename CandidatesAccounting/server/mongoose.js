@@ -12,9 +12,7 @@ import {
 mongoose.Promise = Promise;
 
 export function connect() {
-  return mongoose.connect('mongodb://localhost:27017/CandidateAccounting', {
-    useMongoClient: true
-  });
+  return mongoose.connect('mongodb://localhost:27017/CandidateAccounting');
 }
 
 export function disconnect(error) {
@@ -94,7 +92,6 @@ export function getNotifications(username) {
 export function addCandidate(newCandidate) {
   return identifyModel(newCandidate.status).create(newCandidate)
     .then((result) => {
-    console.log(result._id);
       updateTags(result.tags);
       return result._id;
     });

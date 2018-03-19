@@ -96,7 +96,7 @@ export default class AppView extends Component {
         <div className='custom-main'>
           {
             this.props.applicationStatus === 'loading'?
-              <div style={{textAlign: 'center', padding: 50}}>
+              <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '38%', width: '100%'}}>
                 <CircularProgress size={60}/>
               </div>
               :
@@ -128,6 +128,13 @@ export default class AppView extends Component {
               </Switch>
           }
         </div>
+        {
+          this.props.applicationStatus === 'reloading-page' ?
+            <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '38%', width: '100%'}}>
+              <CircularProgress size={60}/>
+            </div>
+            : ''
+        }
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>
       </div>
     );

@@ -31,7 +31,7 @@ export default class LoginDialog extends Component {
   render() {
     return (
       <div style={{display: 'inline-block'}}>
-        <FlatButton color="contrast" onClick={this.handleOpen}>
+        <FlatButton color="inherit" onClick={this.handleOpen}>
           Sign on / Sign in
         </FlatButton>
         <Dialog
@@ -41,7 +41,7 @@ export default class LoginDialog extends Component {
           onRequestClose={this.handleClose}
           actions={
             <div>
-              <FlatButton color="accent" onClick={()=>{this.handleClose()}}>
+              <FlatButton color="inherit" onClick={()=>{this.handleClose()}}>
                 Cancel
               </FlatButton>
               <FlatButton color="primary" onClick={()=>{

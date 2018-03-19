@@ -47,18 +47,9 @@ export default function CommentCloud(props) {
       {
         props.isCurrentUserComment ?
           <DeleteComment>
-            {/* // Do comment attachment editable?
-              <FileUploader accept='.doc, .docx, .txt, .pdf'
-                            onChange={(files) => {
-                              //props.uploadResume(props.interviewee.id, files[0]);
-                            }}>
-                <IconButton icon={<AttachIcon/>} style={{height: 24, width: 24}} iconStyle='small-icon' onClick={() => {
-                }}/>
-              </FileUploader>
-            */}
             <IconButton
-              icon={<RemoveIcon/>}
-              iconStyle="small-icon"
+              icon={<RemoveIcon style={{height: 20, width: 20}}/>}
+              size="small"
               onClick={props.deleteComment}
               style={{height: 24, width: 24}}
             />

@@ -30,14 +30,14 @@ export default function NotificationCenter(props) {
     props.notifications.length === 0 ?
       <Popover
         icon={<NotificationIcon />}
-        iconColor="contrast"
+        iconColor='inherit'
         content={<CenterWrapper><NoNewWrapper>No notifications</NoNewWrapper></CenterWrapper>}
       />
     :
-      <Badge badgeContent={numberOfRecentNotifications} color="accent">
+      <Badge badgeContent={numberOfRecentNotifications} color="secondary">
         <Popover
           icon={<NotificationIcon />}
-          iconColor="contrast"
+          iconColor="inherit"
           content={
             <CenterWrapper>
               <TitleWrapper>

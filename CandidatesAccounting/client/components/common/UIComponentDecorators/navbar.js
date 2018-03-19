@@ -16,7 +16,7 @@ export default function Navbar(props) {
     >
       <Toolbar style={{paddingRight: 8, minHeight: 60}}>
         {props.icon}
-        <Typography type="title" color="inherit" style={{flex: 1}}>
+        <Typography variant="title" color="inherit" style={{flex: 1}}>
           {props.title}
         </Typography>
         {props.rightPart}

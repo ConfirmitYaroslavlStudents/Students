@@ -44,7 +44,7 @@ export default function MainNavbar(props) {
               />
               <IconButton
                 icon={<SignOutIcon />}
-                color="contrast"
+                color="inherit"
                 onClick={() => {
                   props.logout();
                 }}/>

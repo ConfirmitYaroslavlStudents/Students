@@ -15,11 +15,11 @@ export default function DialogWindow(props) {
     <Dialog
       open={props.isOpen}
       transition={Transition}
-      onRequestClose={(event) => {props.onRequestClose()}}
+      disableBackdropClick
     >
       <AppBar style={{position: 'relative'}}>
         <Toolbar style={{paddingRight: 8}}>
-          <Typography type="title" color="inherit" style={{flex: 1}}>
+          <Typography variant="title" color="inherit" style={{flex: 1}}>
             {props.title}
           </Typography>
           {props.controls}

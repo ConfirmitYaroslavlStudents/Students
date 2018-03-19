@@ -1,13 +1,32 @@
 import {takeEvery, takeLatest, all, put, call, select} from 'redux-saga/effects';
 import {getInitialState} from '../api/commonService';
 import {login, logout} from '../api/authorizationService';
-import {getCandidates, getCandidate, addCandidate, deleteCandidate, updateCandidate} from '../api/candidateService.js';
-import {addComment, deleteComment, addCommentAttachment} from '../api/commentService.js';
+import {
+  getCandidates,
+  getCandidate,
+  addCandidate,
+  deleteCandidate,
+  updateCandidate
+} from '../api/candidateService.js';
+import {
+  addComment,
+  deleteComment,
+  addCommentAttachment
+} from '../api/commentService.js';
 import {subscribe, unsubscribe} from '../api/subscribeService';
 import {noticeNotification, deleteNotification} from '../api/notificationService';
 import {uploadResume} from '../api/resumeService';
-import {setState, addCommentSuccess, deleteCommentSuccess,
-        subscribeSuccess, unsubscribeSuccess, noticeNotificationSuccess, deleteNotificationSuccess, setErrorMessage, loadCandidates, setApplicationStatus} from './actions';
+import {
+  setState,
+  addCommentSuccess,
+  deleteCommentSuccess,
+  subscribeSuccess,
+  unsubscribeSuccess,
+  noticeNotificationSuccess,
+  deleteNotificationSuccess,
+  setErrorMessage,
+  loadCandidates,
+  setApplicationStatus} from './actions';
 import createCandidate from '../utilities/createCandidate';
 
 export default function* rootSaga() {

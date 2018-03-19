@@ -1,22 +1,19 @@
 import mongoose from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
 import mongoosePaginate from 'mongoose-paginate';
-import {AccountSchema, CandidateSchema, IntervieweeSchema, StudentSchema, TraineeSchema, TagSchema} from './schemas';
-import streamifer from 'streamifier';
-
-let gridFs = null;
+import {
+  AccountSchema,
+  CandidateSchema,
+  IntervieweeSchema,
+  StudentSchema,
+  TraineeSchema,
+  TagSchema} from './schemas';
 
 mongoose.Promise = Promise;
 
 export function connect() {
   return mongoose.connect('mongodb://localhost:27017/CandidateAccounting', {
     useMongoClient: true
-  }).then((connection) => {
-    gridFs = require('mongoose-gridfs')({
-      collection: 'attachments',
-      model: 'Attachment',
-      mongooseConnection: connection
-    });
   });
 }
 

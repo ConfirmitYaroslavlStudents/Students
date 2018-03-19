@@ -1,6 +1,21 @@
 import {buildSchema} from 'graphql';
-import {getCandidates, getCandidatesPaginated, getCandidateByID, getAllTags, getNotifications, addCandidate, updateCandidate, deleteCandidate, addComment,
-  deleteComment, subscribe, unsubscribe, noticeNotification, deleteNotification} from './mongoose';
+import searchCandidates from './utilities/searchCandidates';
+import {
+  getCandidates,
+  getCandidatesPaginated,
+  getCandidateByID,
+  getAllTags,
+  getNotifications,
+  addCandidate,
+  updateCandidate,
+  deleteCandidate,
+  addComment,
+  deleteComment,
+  subscribe,
+  unsubscribe,
+  noticeNotification,
+  deleteNotification
+} from './mongoose';
 
 export const schema = buildSchema(`    
   input CandidateInput {
@@ -83,36 +98,42 @@ export const root = {
   candidates: () => {
     return getCandidates('Candidate')
       .then((result) => {
-        return formatCandidates(result);
+        let validCandidates = [];
+        result.forEach(candidate => {
+          validCandidates.push(formatCandidate(candidate));
+        });
+        return validCandidates;
       });
   },
   candidate: ({id}) => {
     return getCandidateByID(id)
       .then((candidate) => {
-        candidate.id = candidate._id;
-        delete candidate._id;
-        return candidate;
+        return formatCandidate(candidate);
       });
   },
   candidatesPaginated: ({first, offset, status, sort, sortDir, searchRequest}) => {
     if (searchRequest && searchRequest.trim() !== '') {
       return getCandidates(status && status !== '' ? status : 'Candidate', sort, sortDir)
         .then((result) => {
-          let validCandidates = search(result, searchRequest);
+          let validCandidates = searchCandidates(result, searchRequest);
           let paginatedCandidates = [];
           for (let i = Number(offset); i < Number(offset) + Number(first) && i < validCandidates.length; i++) {
-            paginatedCandidates.push(validCandidates[i]);
+            paginatedCandidates.push(formatCandidate(validCandidates[i]));
           }
           return {
-            candidates: formatCandidates(paginatedCandidates),
+            candidates: paginatedCandidates,
             total: validCandidates.length
           };
         });
     } else {
       return getCandidatesPaginated(offset, first, status && status !== '' ? status : 'Candidate', sort, sortDir)
         .then((result) => {
+          let validCandidates = [];
+          result.docs.forEach(candidate => {
+            validCandidates.push(formatCandidate(candidate));
+          });
           return {
-            candidates: formatCandidates(result.docs),
+            candidates: validCandidates,
             total: result.total
           }
         });
@@ -129,11 +150,7 @@ export const root = {
       .then((result) => {
         let notifications = [];
         result.forEach((notification) => {
-          notification.id = notification._id;
-          delete notification._id;
-          notification.source.id = notification.source._id;
-          delete notification.source._id;
-          notifications.push(notification);
+          notifications.push(formatNotification(notification));
         });
         return notifications;
       });
@@ -185,71 +202,20 @@ export const root = {
   }
 };
 
-function search(candidates, searchRequest) {
-  let requestLowerCase = searchRequest.toLowerCase();
-  let searchWords = requestLowerCase.split(' ');
-  let foundCandidates = [];
-
-  let searchMode = 'and'; //TODO: ask about search mode
-
-  if (searchMode === 'or') {
-    searchWords.forEach((searchWord) => {
-      if (searchWord !== '') {
-        let validCandidates = searchByWord(candidates, searchWord);
-        validCandidates.forEach((candidate) => {
-          if (!foundCandidates.includes(candidate)) {
-            foundCandidates.push(candidate);
-          }
-        });
-      }
-    });
-  } else { // 'and' mode
-    candidates.forEach((candidate) => {
-      let candidateIsValid = true;
-      for (let i = 0; i < searchWords.length; i++) {
-        if (searchWords[i] !== '') {
-          if (searchByWord([candidate], searchWords[i]).length === 0) {
-            candidateIsValid = false;
-            break;
-          }
-        }
-      }
-      if (candidateIsValid) {
-        foundCandidates.push(candidate);
-      }
-    });
-  }
-  return foundCandidates;
+function formatCandidate(candidate) {
+  candidate.id = candidate._id;
+  delete candidate._id;
+  candidate.comments.forEach((comment) => {
+    comment.id = comment._id;
+    delete comment._id;
+  });
+  return candidate;
 }
 
-function searchByWord(candidates, searchWord) {
-  let validCandidates = [];
-  candidates.forEach((candidate) => {
-    if (
-      candidate.id === searchWord
-      || candidate.name.toLowerCase().includes(searchWord)
-      || candidate.status.toLowerCase().includes(searchWord)
-      || candidate.email.toLowerCase().includes(searchWord)
-      || (candidate.groupName && candidate.groupName.toLowerCase().includes(searchWord))
-      || (candidate.mentor && candidate.mentor.toLowerCase().includes(searchWord))
-      || candidate.tags.includes(searchWord)
-    ) {
-      validCandidates.push(candidate);
-    }
-  });
-  return validCandidates;
-}
-
-function formatCandidates(candidates) {
-  let validCandidates = [];
-  candidates.forEach((candidate) => {
-    candidate.id = candidate._id;
-    delete candidate._id;
-    candidate.comments.forEach((comment) => {
-      comment.id = comment._id;
-      delete comment._id;
-    });
-    validCandidates.push(candidate);
-  });
-  return validCandidates;
+function formatNotification(notification) {
+  notification.id = notification._id;
+  delete notification._id;
+  notification.source.id = notification.source._id;
+  delete notification.source._id;
+  return notification;
 }

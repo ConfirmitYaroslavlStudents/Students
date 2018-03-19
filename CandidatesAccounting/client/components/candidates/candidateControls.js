@@ -22,7 +22,7 @@ export default function CandidateControls(props) {
         username={props.username}
         subscribe={props.subscribe}
         unsubscribe={props.unsubscribe}
-        disabled={props.username === ''}
+        disabled={props.applicationStatus === 'reloading' || props.username === ''}
       />
       <NavLink onClick={() => {
         props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments');
@@ -31,6 +31,7 @@ export default function CandidateControls(props) {
           <IconButton
             icon={<CommentIcon />}
             style={iconButtonStyle}
+            disabled={props.applicationStatus === 'reloading'}
           />
         </Badge>
       </NavLink>
@@ -39,7 +40,7 @@ export default function CandidateControls(props) {
         updateCandidate={props.updateCandidate}
         tags={props.tags}
         username={props.username}
-        disabled={props.username === ''}
+        disabled={props.applicationStatus === 'reloading' || props.username === ''}
       />
       <DeleteCandidateDialog
         candidate={props.candidate}
@@ -51,7 +52,7 @@ export default function CandidateControls(props) {
           props.loadCandidates();
           props.changeURL(props.history);
         }}
-        disabled={props.username === ''}
+        disabled={props.applicationStatus === 'reloading' || props.username === ''}
       />
     </div>
   );

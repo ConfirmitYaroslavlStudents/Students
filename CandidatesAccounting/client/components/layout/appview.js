@@ -96,7 +96,7 @@ export default class AppView extends Component {
         <div className='custom-main'>
           {
             this.props.applicationStatus === 'loading'?
-              <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '38%', width: '100%'}}>
+              <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '20%', width: '100%'}}>
                 <CircularProgress size={60}/>
               </div>
               :
@@ -129,8 +129,8 @@ export default class AppView extends Component {
           }
         </div>
         {
-          this.props.applicationStatus === 'reloading-page' ?
-            <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '38%', width: '100%'}}>
+          this.props.applicationStatus === 'reloading' ?
+            <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '20%', width: '100%'}}>
               <CircularProgress size={60}/>
             </div>
             : ''

@@ -260,9 +260,9 @@ function* deleteNotificationSaga(action) {
   }
 }
 
-function* loadCandidatesSaga() {
+function* loadCandidatesSaga(action) {
   try {
-    yield put(setApplicationStatus('loading'));
+    yield put(setApplicationStatus(action.applicationStatus ? action.applicationStatus : 'loading'));
     let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
     let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
     let candidatesOffset = yield select((state) => {return state.get('offset')});

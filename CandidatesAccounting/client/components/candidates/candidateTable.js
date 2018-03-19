@@ -6,6 +6,13 @@ import {formatDate, isBirthDate} from '../../utilities/customMoment';
 import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
+function createRow(cells, isDisabled) {
+  return {
+    cells: cells,
+    isDisabled: isDisabled
+  }
+}
+
 export default class CandidateTable extends Component {
   componentWillMount() {
     if (this.props.pageTitle !== 'Candidate Accounting') {
@@ -25,7 +32,7 @@ export default class CandidateTable extends Component {
           {title: 'Actions'}]}
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
-            [
+            createRow([
               <NameWrapper>
                 <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
                 <TagList
@@ -42,7 +49,7 @@ export default class CandidateTable extends Component {
                 {formatDate(candidate.birthDate)}
               </span>,
               <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
-            ]
+            ], this.props.applicationStatus === 'reloading')
           ))}
         history={this.props.history}
         offset={this.props.offset}

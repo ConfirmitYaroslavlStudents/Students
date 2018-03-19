@@ -68,9 +68,10 @@ function setSortingDirection(direction) {
   }
 }
 
-function loadCandidates() {
+function loadCandidates(applicationStatus) {
   return {
-    type: 'LOAD_CANDIDATES'
+    type: 'LOAD_CANDIDATES',
+    applicationStatus
   }
 }
 

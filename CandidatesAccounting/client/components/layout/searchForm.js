@@ -41,7 +41,7 @@ export default class SearchForm extends Component {
     }
     this.timer = setTimeout(() => {
       this.props.changeURL(this.props.history);
-      this.props.loadCandidates();
+      this.props.loadCandidates('reloading');
       this.timer = null;
     }, 900);
   }

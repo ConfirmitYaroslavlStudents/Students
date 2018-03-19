@@ -14,7 +14,7 @@ export default function CustomTable(props) {
   let heads = props.heads.map((head, index) => <TableCell key={'th' + index}>{head}</TableCell>);
   let contentRows = props.rows.map((row, index) =>
     <TableRow key={'tr' + index}>
-      {row.map((cell, cellIndex) => <TableCell key={'td' + cellIndex}>{cell}</TableCell>)}
+      {row.cells.map((cell, cellIndex) => <TableCell classes={{root: row.isDisabled ? 'disabled-cell' : ''}} key={'td' + cellIndex}>{cell}</TableCell>)}
     </TableRow>
   );
   if (contentRows.size === 0 || contentRows.length === 0) {

@@ -64,10 +64,8 @@ MainNavbar.propTypes = {
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
   searchRequest: PropTypes.string.isRequired,
-  setSearchRequest: PropTypes.func.isRequired,
   getCandidate: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
-  changeURL: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 

@@ -8,42 +8,58 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 export default class SearchForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
+    this.state = {isOpen: false, searchRequest: this.props.searchRequest};
     this.handleChange = this.handleChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.search = this.search.bind(this);
     this.timer = null;
   }
 
   handleOpen() {
-    this.setState({isOpen: true});
+    this.setState({isOpen: true, searchRequest: this.props.searchRequest});
   }
 
   handleClose() {
-    this.setState({isOpen: false});
+    if (this.state.searchRequest === '') {
+      this.setState({isOpen: false, searchRequest: ''});
+    }
   }
 
   handleClick() {
-    if (this.props.searchRequest !== '') {
-      this.props.setSearchRequest(this.props.searchRequest);
+    if (this.state.searchRequest !== '' && this.state.isOpen) {
+      this.timer = null;
+      this.search(this.state.searchRequest);
     } else {
-      if (!this.state.isOpen) {
-        this.setState({isOpen: true});
+      if (this.state.isOpen) {
+        this.handleClose();
+      } else {
+        this.handleOpen();
       }
     }
   }
 
   handleChange(value) {
-    this.props.setSearchRequest(value);
+    this.setState({searchRequest: value});
     if (this.timer) {
       clearTimeout(this.timer);
     }
     this.timer = setTimeout(() => {
-      this.props.changeURL(this.props.history);
-      this.props.loadCandidates('reloading');
+      if (this.timer) {
+        this.search(value);
+      }
       this.timer = null;
     }, 900);
+  }
+
+  search(searchRequest) {
+    this.props.loadCandidates(
+      {
+        applicationStatus: 'refreshing',
+        searchRequest: searchRequest
+      },
+      this.props.history);
   }
 
   render() {
@@ -56,14 +72,18 @@ export default class SearchForm extends Component {
           placeholder='search'
         />
         {
-          this.state.isOpen || this.props.searchRequest !== '' ?
+          this.state.isOpen || this.state.searchRequest !== '' ?
             <Input
               onChange={this.handleChange}
-              value={this.props.searchRequest}
+              value={this.state.searchRequest}
               className='search'
               placeholder='search'
               onFocus={() => {this.handleOpen()}}
-              onBlur={() => {this.handleClose()}}
+              onBlur={() => {
+                if (this.state.searchRequest === '') {
+                  this.handleClose();
+                }
+              }}
               disableUnderline
               autoFocus
             />
@@ -76,9 +96,7 @@ export default class SearchForm extends Component {
 
 SearchForm.propTypes = {
   searchRequest: PropTypes.string.isRequired,
-  changeURL: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  setSearchRequest: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
 };
 

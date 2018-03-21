@@ -11,10 +11,12 @@ import Table, {
 import Paper from 'material-ui/Paper';
 
 export default function CustomTable(props) {
-  let heads = props.heads.map((head, index) => <TableCell key={'th' + index}>{head}</TableCell>);
+  let heads = props.heads.map((head, index) =>
+    <TableCell key={'th' + index}>{head}</TableCell>);
   let contentRows = props.rows.map((row, index) =>
     <TableRow key={'tr' + index}>
-      {row.cells.map((cell, cellIndex) => <TableCell classes={{root: row.isDisabled ? 'disabled-cell' : ''}} key={'td' + cellIndex}>{cell}</TableCell>)}
+      {row.cells.map((cell, cellIndex) =>
+        <TableCell key={'td' + cellIndex} classes={{root: row.isDisabled ? 'disabled-cell' : ''}}>{cell}</TableCell>)}
     </TableRow>
   );
   if (contentRows.size === 0 || contentRows.length === 0) {

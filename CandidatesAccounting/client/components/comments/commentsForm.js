@@ -16,8 +16,12 @@ export default class CommentsForm extends Component {
   }
 
   componentWillMount() {
-    this.props.setPageTitle(this.props.candidate.name);
-    this.props.setCandidateStatus(this.props.candidate.status);
+    this.props.setState(
+      {
+        pageTitle: this.props.candidate.name,
+        candidateStatus: this.props.candidate.status
+      }
+    );
     this.userColors = {};
     this.props.candidate.comments.forEach((comment) => {
       if (!(comment.author in this.userColors)) {
@@ -99,8 +103,7 @@ CommentsForm.propTypes = {
   username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
-  setPageTitle: PropTypes.func.isRequired,
-  setCandidateStatus: PropTypes.func.isRequired,
+  setState: PropTypes.func.isRequired
 };
 
 const FormWrapper = styled.div`

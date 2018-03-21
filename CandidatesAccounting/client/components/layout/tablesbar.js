@@ -12,16 +12,19 @@ export default class TablesBar extends Component{
   };
 
   handleLinkClick(candidateStatus) {
+    let stateChanges = {};
     if (candidateStatus === this.props.candidateStatus) {
-      this.props.setSearchRequest('');
+      stateChanges['searchRequest'] = '';
     } else {
-      this.props.setCandidateStatus(candidateStatus);
+      stateChanges['candidateStatus'] = candidateStatus;
     }
-    this.props.setOffset(0);
-    this.props.setSortingField('');
-    this.props.setSortingDirection('desc');
-    this.props.loadCandidates();
-    this.props.changeURL(this.props.history);
+    stateChanges['offset'] = 0;
+    stateChanges['sortingField'] = '';
+    stateChanges['sortingDirection'] = 'desc';
+    this.props.loadCandidates(
+      stateChanges,
+      this.props.history
+    );
   }
 
   render() {
@@ -54,10 +57,14 @@ export default class TablesBar extends Component{
           <AddCandidateDialog
             addCandidate={
               (candidate) => {
-                this.props.setApplicationStatus('loading');
-                this.props.setOffset(this.props.totalCount - this.props.totalCount % this.props.candidatesPerPage);
-                this.props.changeURL(this.props.history);
                 this.props.addCandidate(candidate);
+                this.props.loadCandidates(
+                  {
+                    applicationStatus: 'refreshing',
+                    offset: this.props.totalCount - this.props.totalCount % this.props.candidatesPerPage
+                  },
+                  this.props.history
+                )
               }}
             candidateStatus={this.props.newCandidateDefaultType === '' ? 'Interviewee' : this.props.newCandidateDefaultType}
             tags={this.props.tags}
@@ -77,13 +84,7 @@ TablesBar.propTypes = {
   addCandidate: PropTypes.func.isRequired,
   newCandidateDefaultType: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
-  setSearchRequest: PropTypes.func.isRequired,
-  setCandidateStatus: PropTypes.func.isRequired,
-  setOffset: PropTypes.func.isRequired,
-  setSortingField: PropTypes.func.isRequired,
-  setSortingDirection: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
-  changeURL: PropTypes.func.isRequired,
   candidateStatus: PropTypes.string.isRequired,
   candidatesPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired

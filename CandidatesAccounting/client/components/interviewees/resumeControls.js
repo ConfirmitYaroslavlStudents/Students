@@ -5,6 +5,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 import UploadIcon from 'material-ui-icons/FileUpload';
 import DownloadIcon from 'material-ui-icons/FileDownload';
 import FileUploader from 'react-input-files';
+import { CircularProgress } from 'material-ui/Progress';
 
 const buttonStyle = {
   height: 24,
@@ -20,10 +21,18 @@ export default function ResumeControls(props) {
   let resumeIsUploaded = props.interviewee.resume && props.interviewee.resume.trim() !== '';
   return (
     <Wrapper>
-      { resumeIsUploaded ? <FileName>{props.interviewee.resume}</FileName> : <NotLoaded>no resume</NotLoaded> }
+      {
+        props.onUploading ?
+          <CircularProgress size={20}/>
+          :
+          resumeIsUploaded ?
+            <FileName>{props.interviewee.resume}</FileName>
+            :
+            <NotLoaded>no resume</NotLoaded>
+      }
       {
         props.enableDownload ?
-          <IconButton icon={<DownloadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' disabled={!resumeIsUploaded}
+          <IconButton icon={<DownloadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' disabled={!resumeIsUploaded || props.onUploading}
                       onClick={() => {
                         window.open(window.location.origin + '/interviewees/' + props.interviewee.id + '/resume');
                       }}/>
@@ -34,9 +43,11 @@ export default function ResumeControls(props) {
           props.authorized ?
             <FileUploader accept='.doc, .docx, .txt, .pdf'
                           onChange={(files) => {
-                            props.uploadResume(props.interviewee.id, files[0]);
+                            if (!props.onUploading && files.length > 0) {
+                              props.uploadResume(props.interviewee.id, files[0]);
+                            }
                           }}>
-              <IconButton icon={<UploadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
+              <IconButton disabled={props.onUploading} icon={<UploadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
             </FileUploader>
             :
             <IconButton disabled icon={<UploadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
@@ -48,6 +59,7 @@ export default function ResumeControls(props) {
 
 ResumeControls.propTypes = {
   interviewee: PropTypes.object.isRequired,
+  onUploading: PropTypes.bool,
   uploadResume: PropTypes.func,
   enableUpload: PropTypes.bool,
   enableDownload: PropTypes.bool,

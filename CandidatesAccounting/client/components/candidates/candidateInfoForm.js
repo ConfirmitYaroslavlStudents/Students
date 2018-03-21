@@ -5,8 +5,14 @@ import DatePicker from '../common/UIComponentDecorators/datePicker';
 import SelectInput from '../common/UIComponentDecorators/selectInput';
 import styled from 'styled-components';
 import TagSelect from '../common/UIComponentDecorators/tagSelect';
-import {toDatePickerFormat, fromDatePickerFormat} from '../../utilities/customMoment';
-import {isNotEmpty, isEmail} from '../../utilities/candidateValidators';
+import {
+  toDatePickerFormat,
+  fromDatePickerFormat
+} from '../../utilities/customMoment';
+import {
+  isNotEmpty,
+  isEmail
+} from '../../utilities/candidateValidators';
 import IntervieweeSpecialFields from '../interviewees/intervieweeSpecialFields';
 import StudentSpecialFields from '../students/studentSpecialFields';
 import TraineeSpecialFields from '../trainees/traineeSpecialFields';

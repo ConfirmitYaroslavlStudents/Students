@@ -2,12 +2,18 @@ import '../css/commonStyles.css';
 import '../css/selectizeStyles.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, applyMiddleware} from 'redux';
+import {
+  createStore,
+  applyMiddleware
+} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import {Provider} from 'react-redux';
 import reducer from '../redux/reducer';
 import rootSaga from '../redux/sagas'
-import {BrowserRouter, Route} from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route
+} from 'react-router-dom';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';

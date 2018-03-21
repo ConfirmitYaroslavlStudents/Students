@@ -6,9 +6,13 @@ export default function TagList(props) {
   return (
     <Wrapper>
       {props.tags.map((tag, index) => (<Tag key={index} onClick={() => {
-        props.setSearchRequest(tag);
-        props.loadCandidates();
-        props.changeURL(props.history);
+        props.loadCandidates(
+          {
+            applicationStatus: 'refreshing',
+            searchRequest: tag
+          },
+          props.history
+        );
       }}>{tag}</Tag>))}
     </Wrapper>
   )
@@ -16,9 +20,7 @@ export default function TagList(props) {
 
 TagList.propTypes = {
   tags: PropTypes.array.isRequired,
-  setSearchRequest: PropTypes.func.isRequired,
   loadCandidates: PropTypes.func.isRequired,
-  changeURL: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 

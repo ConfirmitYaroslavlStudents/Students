@@ -12,20 +12,6 @@ function setApplicationStatus(status) {
   }
 }
 
-function setPageTitle(title) {
-  return {
-    type: 'SET_PAGE_TITLE',
-    title
-  }
-}
-
-function setSearchRequest(searchRequest) {
-  return {
-    type: 'SET_SEARCH_REQUEST',
-    searchRequest
-  }
-}
-
 function setErrorMessage(message) {
   return {
     type: 'SET_ERROR_MESSAGE',
@@ -33,51 +19,10 @@ function setErrorMessage(message) {
   }
 }
 
-function setCandidateStatus(status) {
-  return {
-    type: 'SET_CANDIDATE_STATUS',
-    status
-  }
-}
-
-function setOffset(offset) {
-  return {
-    type: 'SET_OFFSET',
-    offset
-  }
-}
-
-function setCandidatesPerPage(candidatesPerPage) {
-  return {
-    type: 'SET_CANDIDATES_PER_PAGE',
-    candidatesPerPage
-  }
-}
-
-function setSortingField(field) {
-  return {
-    type: 'SET_SORTING_FIELD',
-    field
-  }
-}
-
-function setSortingDirection(direction) {
-  return {
-    type: 'SET_SORTING_DIRECTION',
-    direction
-  }
-}
-
-function loadCandidates(applicationStatus) {
+function loadCandidates(stateChanges, browserHistory) {
   return {
     type: 'LOAD_CANDIDATES',
-    applicationStatus
-  }
-}
-
-function changeURL(browserHistory) {
-  return {
-    type: 'CHANGE_URL',
+    stateChanges,
     browserHistory
   }
 }
@@ -97,6 +42,14 @@ function uploadResume(intervieweeID, resume) {
   }
 }
 
+function uploadResumeSuccess(intervieweeID, resume) {
+  return {
+    type: 'UPLOAD_RESUME_SUCCESS',
+    intervieweeID,
+    resume
+  }
+}
+
 function login(email, password) {
   return {
     type: 'LOGIN',
@@ -111,17 +64,11 @@ function logout() {
   }
 }
 
-function addCandidate(candidate) {
+function addCandidate(candidate, browserHistory) {
   return {
     type: 'ADD_CANDIDATE',
-    candidate
-  }
-}
-
-function addCandidateSuccess(candidate) {
-  return {
-    type: 'ADD_CANDIDATE_SUCCESS',
-    candidate
+    candidate,
+    browserHistory
   }
 }
 
@@ -135,6 +82,13 @@ function deleteCandidate(candidateID) {
 function updateCandidate(candidate) {
   return {
     type: 'UPDATE_CANDIDATE',
+    candidate
+  }
+}
+
+function updateCandidateSuccess(candidate) {
+  return {
+    type: 'UPDATE_CANDIDATE_SUCCESS',
     candidate
   }
 }
@@ -239,7 +193,7 @@ function deleteNotificationSuccess(username, notificationID) {
 module.exports = {
   setState, login, logout, addCandidate, deleteCandidate, updateCandidate, addComment,
   deleteComment, subscribe, subscribeSuccess, unsubscribe, unsubscribeSuccess, noticeNotification, noticeNotificationSuccess,
-  setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, changeURL, getCandidate, setSortingField, setSortingDirection,
-  addCandidateSuccess, addCommentSuccess, deleteCommentSuccess, setSearchRequest, uploadResume,
-  setPageTitle, setApplicationStatus, setCandidateStatus, setOffset, setCandidatesPerPage
+  uploadResumeSuccess, updateCandidateSuccess, setErrorMessage, deleteNotification, deleteNotificationSuccess, loadCandidates, getCandidate,
+  addCommentSuccess, deleteCommentSuccess, uploadResume,
+  setApplicationStatus,
 };

@@ -30,7 +30,6 @@ export default class ErrorSnackbar extends Component {
           open={open}
           message={this.props.message}
           autoHideDuration={this.props.autoHideDuration ? this.props.autoHideDuration : 10000}
-          onRequestClose={this.handleRequestClose}
           anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
         />
       </div>

@@ -38,7 +38,7 @@ export default class AddCandidateDialog extends Component{
           onRequestClose={this.handleClose}
           controls={
             <div style={{display: 'inline-block'}}>
-              <IconButton color="inherit" icon={<AddPersonIcon />} onClick={() => {
+              <IconButton color='inherit' icon={<AddPersonIcon />} onClick={() => {
                 if (checkCandidateValidation(this.candidate)) {
                   this.candidate.comments.push(createComment('SYSTEM', getCurrentDateTime(), ' Initial status: ' + this.candidate.status));
                   this.props.addCandidate(this.candidate);

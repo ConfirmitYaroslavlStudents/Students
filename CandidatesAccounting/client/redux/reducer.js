@@ -8,32 +8,17 @@ export default function reducer(state = Immutable.Map(), action) {
     case 'SET_APPLICATION_STATUS':
       return state = state.set('applicationStatus', action.status);
 
-    case 'SET_PAGE_TITLE':
-      return state = state.set('pageTitle', action.title);
-
     case 'SET_ERROR_MESSAGE':
       return state = state.set('errorMessage', action.message);
 
-    case 'SET_CANDIDATE_STATUS':
-      return state.set('candidateStatus', action.status);
-
-    case 'SET_OFFSET':
-      return state.set('offset', action.offset);
-
-    case 'SET_CANDIDATES_PER_PAGE':
-      return state.set('candidatesPerPage', action.candidatesPerPage);
-
-    case 'SET_SORTING_FIELD':
-      return state.set('sortingField', action.field);
-
-    case 'SET_SORTING_DIRECTION':
-      return state.set('sortingDirection', action.direction);
-
-    case 'SET_SEARCH_REQUEST':
-      return state = state.set('searchRequest', action.searchRequest);
-
-    case 'ADD_CANDIDATE_SUCCESS':
-      return state.update('candidates', (candidates) => candidates.push(Immutable.fromJS(action.candidate)));
+    case 'UPDATE_CANDIDATE_SUCCESS':
+      return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
+        if (candidate.get('id') === action.candidate.id) {
+          return Immutable.fromJS(action.candidate);
+        } else {
+          return candidate;
+        }
+      }));
 
     case 'ADD_COMMENT_SUCCESS':
     return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
@@ -83,6 +68,15 @@ export default function reducer(state = Immutable.Map(), action) {
 
     case 'DELETE_NOTIFICATION_SUCCESS':
       return state.update('notifications', (notifications) => notifications.filterNot((notification) => notification.get('id') === action.notificationID));
+
+    case 'UPLOAD_RESUME_SUCCESS':
+      return state = state.update('candidates', (candidates) => candidates.map((candidate) => {
+        if (candidate.get('id') === action.intervieweeID) {
+          return candidate.update('resume', (resume) => Immutable.fromJS(action.resume));
+        } else {
+          return candidate;
+        }
+      }));
 
     default:
       return state;

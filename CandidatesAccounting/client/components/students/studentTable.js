@@ -3,18 +3,26 @@ import PropTypes from 'prop-types';
 import Table from '../layout/table';
 import CandidateRowControls from '../candidates/candidateControls';
 import {formatDate, isBirthDate} from '../../utilities/customMoment';
+import createRow from '../../utilities/createRow';
 import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class StudentTable extends Component {
   componentWillMount() {
     if (this.props.pageTitle !== 'Candidate Accounting') {
-      this.props.setPageTitle('Candidate Accounting');
-      this.props.setSearchRequest('', this.props.history, 0);
+      this.props.setState(
+        {
+          pageTitle: 'Candidate Accounting',
+          searchRequest: ''
+        }
+      );
     }
   }
 
   render() {
+    const onRefreshing = this.props.applicationStatus === 'refreshing';
+    const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : '';
+    const candidateOnDeleting = this.props.applicationStatus.slice(0, 8) === 'deleting' ? this.props.applicationStatus.slice(9) : '';
     return (
       <Table
         heads={[
@@ -28,26 +36,28 @@ export default class StudentTable extends Component {
         ]}
         contentRows={
           (this.props.students.map((student, index) =>
-            [
-              <NameWrapper>
-                <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
-                <TagList
-                  tags={student.tags}
-                  setSearchRequest={this.props.setSearchRequest}
-                  loadCandidates={this.props.loadCandidates}
-                  changeURL={this.props.changeURL}
-                  history={this.props.history}
-                />
-              </NameWrapper>,
-              student.email,<span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
-                    {formatDate(student.birthDate)}
-                  </span>
-              ,
-              student.groupName,
-              <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
-              <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
-              <ControlsWrapper><CandidateRowControls candidate={student} {...this.props}/></ControlsWrapper>
-            ]
+            createRow(
+              [
+                <NameWrapper>
+                  <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
+                  <TagList
+                    tags={student.tags}
+                    setSearchRequest={this.props.setSearchRequest}
+                    loadCandidates={this.props.loadCandidates}
+                    changeURL={this.props.changeURL}
+                    history={this.props.history}
+                  />
+                </NameWrapper>,
+                student.email,<span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
+                      {formatDate(student.birthDate)}
+                    </span>
+                ,
+                student.groupName,
+                <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
+                <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
+                <ControlsWrapper><CandidateRowControls candidate={student} {...this.props}/></ControlsWrapper>
+              ],
+              onRefreshing || student.id === candidateOnUpdating) || student.id === candidateOnDeleting
           ))}
         history={this.props.history}
         offset={this.props.offset}

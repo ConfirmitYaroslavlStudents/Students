@@ -19,4 +19,5 @@ SimpleBadge.propTypes = {
   badgeContent: PropTypes.number,
   color: PropTypes.string,
   onClick: PropTypes.func,
+  disabled: PropTypes.bool,
 };

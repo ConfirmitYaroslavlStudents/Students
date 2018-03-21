@@ -23,18 +23,17 @@ export default class SortableTableWithPagination extends Component {
   }
 
   sortLabelHandleClick(sortingField) {
-    if (sortingField !== this.props.sortingField) {
-      this.props.setSortingField(sortingField);
-      this.props.setSortingDirection('desc');
-    } else {
-      if (this.props.sortingDirection === 'desc') {
-        this.props.setSortingDirection('asc');
-      } else {
-        this.props.setSortingDirection('desc');
-      }
-    }
-    this.props.loadCandidates();
-    this.props.changeURL(this.props.history);
+    this.props.loadCandidates(
+      {
+        applicationStatus: 'refreshing',
+        sortingField: sortingField,
+        sortingDirection : sortingField !== this.props.sortingField ?
+          'desc'
+          :
+          this.props.sortingDirection === 'desc' ?
+            'asc' : 'desc'
+      },
+      this.props.history);
   }
 
   handleFirstPageButtonClick() {
@@ -59,16 +58,18 @@ export default class SortableTableWithPagination extends Component {
   };
 
   handleChangePage(offset) {
-    this.props.setOffset(offset);
-    this.props.loadCandidates();
-    this.props.changeURL(this.props.history);
+    this.props.loadCandidates(
+      { offset: offset },
+      this.props.history
+    );
   };
 
   handleChangeRowsPerPage(rowsPerPage) {
     if (rowsPerPage !== this.props.rowsPerPage) {
-      this.props.setRowsPerPage(rowsPerPage);
-      this.props.loadCandidates();
-      this.props.changeURL(this.props.history);
+      this.props.loadCandidates(
+        { candidatesPerPage: rowsPerPage },
+        this.props.history
+      );
     }
   };
 
@@ -140,12 +141,8 @@ SortableTableWithPagination.propTypes = {
   sortingField: PropTypes.string.isRequired,
   setSortingField: PropTypes.func.isRequired,
   sortingDirection: PropTypes.string.isRequired,
-  setSortingDirection: PropTypes.func.isRequired,
-  setOffset: PropTypes.func.isRequired,
-  setRowsPerPage: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,
-  changeURL: PropTypes.func.isRequired,
 };
 
 const ActionsWrapper = styled.div`

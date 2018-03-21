@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import {
+  Switch,
+  Route
+} from 'react-router-dom';
 import actions from '../../redux/actions';
 import Navbar from './navbar';
 import TablesBar from './tablesbar';
@@ -43,14 +46,16 @@ export default class AppView extends Component {
           argsObject[splited[0]] = splited[1];
         });
       }
-      this.props.setCandidateStatus(candidateStatus);
-      this.props.setOffset(argsObject.skip ? Number(argsObject.skip) : 0);
-      this.props.setCandidatesPerPage(argsObject.take ? Number(argsObject.take) : 15);
-      this.props.setSortingField(argsObject.sort ? argsObject.sort : '');
-      this.props.setSortingDirection(argsObject.sortDir ? argsObject.sortDir : 'desc');
-      this.props.setSearchRequest(argsObject.q ? decodeURIComponent(argsObject.q) : '');
-      this.props.loadCandidates();
-      this.props.changeURL(this.props.history);
+      this.props.loadCandidates(
+        {
+          candidateStatus: candidateStatus,
+          offset: argsObject.skip ? Number(argsObject.skip) : 0,
+          candidatesPerPage: argsObject.take ? Number(argsObject.take) : 15,
+          sortingField: argsObject.sort ? argsObject.sort : '',
+          sortingDirection: argsObject.sortDir ? argsObject.sortDir : 'desc',
+          searchRequest: argsObject.q ? decodeURIComponent(argsObject.q) : ''
+        },
+        this.props.history);
     }
   }
 
@@ -66,11 +71,8 @@ export default class AppView extends Component {
           noticeNotification={this.props.noticeNotification}
           deleteNotification={this.props.deleteNotification}
           history={this.props.history}
-          setSearchRequest={this.props.setSearchRequest}
           searchRequest={this.props.searchRequest}
-          changeURL={this.props.changeURL}
           loadCandidates={this.props.loadCandidates}
-          setCandidateStatus={this.props.setCandidateStatus}
           getCandidate={this.props.getCandidate}
         />
         <TablesBar
@@ -80,18 +82,11 @@ export default class AppView extends Component {
           setApplicationStatus={this.props.setApplicationStatus}
           username={this.props.username}
           history={this.props.history}
-          setSearchRequest={this.props.setSearchRequest}
           pageTitle={this.props.pageTitle}
-          setPageTitle={this.props.setPageTitle}
           candidatesPerPage={this.props.candidatesPerPage}
           totalCount={this.props.totalCount}
-          setCandidateStatus={this.props.setCandidateStatus}
-          setOffset={this.props.setOffset}
           loadCandidates={this.props.loadCandidates}
-          changeURL={this.props.changeURL}
           candidateStatus={this.props.candidateStatus}
-          setSortingField={this.props.setSortingField}
-          setSortingDirection={this.props.setSortingDirection}
         />
         <div className='custom-main'>
           {
@@ -109,8 +104,7 @@ export default class AppView extends Component {
                     username={this.props.username}
                     subscribe={this.props.subscribe}
                     unsubscribe={this.props.unsubscribe}
-                    setPageTitle={this.props.setPageTitle}
-                    setCandidateStatus={this.props.setCandidateStatus}/>}
+                    setState={this.props.setState}/>}
                 />
                 <Route exact path='/interviewees*' render={() =>
                   <IntervieweeTable interviewees={this.props.candidates} {...this.props}/>}
@@ -129,7 +123,7 @@ export default class AppView extends Component {
           }
         </div>
         {
-          this.props.applicationStatus === 'reloading' ?
+          this.props.applicationStatus === 'refreshing' ?
             <div style={{textAlign: 'center', zIndex: 100, position: 'fixed', top: '20%', width: '100%'}}>
               <CircularProgress size={60}/>
             </div>

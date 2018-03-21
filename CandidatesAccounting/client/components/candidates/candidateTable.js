@@ -3,25 +3,26 @@ import PropTypes from 'prop-types';
 import Table from '../layout/table';
 import CandidateControls from './candidateControls';
 import {formatDate, isBirthDate} from '../../utilities/customMoment';
+import createRow from '../../utilities/createRow';
 import TagList from '../tags/tagList';
 import styled from 'styled-components';
-
-function createRow(cells, isDisabled) {
-  return {
-    cells: cells,
-    isDisabled: isDisabled
-  }
-}
 
 export default class CandidateTable extends Component {
   componentWillMount() {
     if (this.props.pageTitle !== 'Candidate Accounting') {
-      this.props.setPageTitle('Candidate Accounting');
-      this.props.setSearchRequest('', this.props.history, 0);
+      this.props.setState(
+        {
+          pageTitle: 'Candidate Accounting',
+          searchRequest: ''
+        }
+      );
     }
   }
 
   render() {
+    const onRefreshing = this.props.applicationStatus === 'refreshing';
+    const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : '';
+    const candidateOnDeleting = this.props.applicationStatus.slice(0, 8) === 'deleting' ? this.props.applicationStatus.slice(9) : '';
     return (
       <Table
         heads={[
@@ -32,24 +33,26 @@ export default class CandidateTable extends Component {
           {title: 'Actions'}]}
         contentRows={
           (this.props.allCandidates.map((candidate, index) =>
-            createRow([
-              <NameWrapper>
-                <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
-                <TagList
-                  tags={candidate.tags}
-                  setSearchRequest={this.props.setSearchRequest}
-                  loadCandidates={this.props.loadCandidates}
-                  changeURL={this.props.changeURL}
-                  history={this.props.history}
-                />
-              </NameWrapper>,
-              candidate.status,
-              candidate.email,
-              <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
-                {formatDate(candidate.birthDate)}
-              </span>,
-              <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
-            ], this.props.applicationStatus === 'reloading')
+            createRow(
+              [
+                <NameWrapper>
+                  <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
+                  <TagList
+                    tags={candidate.tags}
+                    setSearchRequest={this.props.setSearchRequest}
+                    loadCandidates={this.props.loadCandidates}
+                    changeURL={this.props.changeURL}
+                    history={this.props.history}
+                  />
+                </NameWrapper>,
+                candidate.status,
+                candidate.email,
+                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                  {formatDate(candidate.birthDate)}
+                </span>,
+                <ControlsWrapper><CandidateControls candidate={candidate} {...this.props}/></ControlsWrapper>
+              ],
+              onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
           ))}
         history={this.props.history}
         offset={this.props.offset}

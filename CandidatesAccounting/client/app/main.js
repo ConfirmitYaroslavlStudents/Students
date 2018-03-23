@@ -21,6 +21,7 @@ import {indigo} from 'material-ui/colors';
 import AppView from '../components/layout/appview';
 import {getUsername} from '../api/authorizationService';
 import {getInitialState} from '../api/commonService';
+import Spinner from '../components/common/UIComponentDecorators/spinner';
 
 function configureStore(initialState) {
   const sagaMiddleware = createSagaMiddleware();
@@ -67,31 +68,67 @@ function renderApp(app) {
   );
 }
 
-getUsername().then((username) => {
-  getInitialState(username).then((initialState) => {
-    store.dispatch({
-        type: 'SET_STATE',
-        state: {
-          applicationStatus: 'loading',
-          pageTitle: 'Candidate Accounting',
-          errorMessage: '',
-          username: username,
-          searchRequest: '',
-          candidateStatus: '',
-          offset: 0,
-          candidatesPerPage: 15,
-          totalCount: 0,
-          sortingField: '',
-          sortingDirection: 'desc',
-          candidates: [],
-          tags: initialState.tags,
-          notifications: initialState.notifications
-        }
-      }
-    );
-    renderApp(AppView);
-  });
+renderApp(() => {
+  return (
+    <div style={{textAlign: 'center', position: 'fixed', top: '20%', width: '100%'}}>
+      <Spinner big/>
+    </div>
+  );
 });
+
+let candidateStatus = '';
+let args = {};
+
+let splitedURL = (window.location.pathname + window.location.search).split('?');
+let path = splitedURL[0];
+let splitedPath = path.split('/');
+switch (splitedPath[1]) {
+  case 'interviewees':
+    candidateStatus = 'Interviewee';
+    break;
+  case 'students':
+    candidateStatus = 'Student';
+    break;
+  case 'trainees':
+    candidateStatus = 'Trainee';
+    break;
+}
+let URLargs = splitedURL[1];
+if (URLargs) {
+  let argsArray = URLargs.split('&');
+  argsArray.forEach((arg) => {
+    let splited = arg.split('=');
+    args[splited[0]] = splited[1];
+  });
+}
+
+getUsername().then((username) => {
+  getInitialState(username, args.take ? Number(args.take) : 15, args.skip ? Number(args.skip) : 0, candidateStatus,
+    args.sort ? args.sort : '', args.sortDir ? args.sortDir : 'desc', args.q ? decodeURIComponent(args.q) : '')
+    .then((initialState) => {
+      store.dispatch({
+          type: 'SET_STATE',
+          state: {
+            applicationStatus: 'ok',
+            pageTitle: 'Candidate Accounting',
+            errorMessage: '',
+            username: username,
+            searchRequest: args.q ? decodeURIComponent(args.q) : '',
+            candidateStatus: candidateStatus,
+            offset: args.skip ? Number(args.skip) : 0,
+            candidatesPerPage: args.take ? Number(args.take) : 15,
+            totalCount: initialState.total,
+            sortingField: args.sort ? args.sort : '',
+            sortingDirection: args.sortDir ? args.sortDir : 'desc',
+            candidates: initialState.candidates,
+            tags: initialState.tags,
+            notifications: initialState.notifications
+          }
+        }
+      );
+      renderApp(AppView);
+    });
+  });
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {

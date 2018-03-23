@@ -139,7 +139,6 @@ SortableTableWithPagination.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   sortingField: PropTypes.string.isRequired,
-  setSortingField: PropTypes.func.isRequired,
   sortingDirection: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,

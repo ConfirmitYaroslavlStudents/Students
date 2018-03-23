@@ -7,7 +7,7 @@ import CommentIcon from 'material-ui-icons/ViewList';
 import Badge from '../common/UIComponentDecorators/badge';
 import NavLink from '../../components/common/navLink';
 import AddCommentDialog from '../comments/addCommentDialog';
-import { CircularProgress } from 'material-ui/Progress';
+import Spinner from '../common/UIComponentDecorators/spinner';
 
 const iconButtonStyle = {
   height: 40,
@@ -30,7 +30,7 @@ export default function CandidateControls(props) {
         disabled={onRefreshing || onDeleting || !authorized}
       />
       <NavLink onClick={() => {
-        if (!onRefreshing) {
+        if (!onRefreshing && !onDeleting) {
           props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments');
         }
       }}>
@@ -44,7 +44,7 @@ export default function CandidateControls(props) {
       </NavLink>
       {
         onUpdating ?
-          <CircularProgress size={40}/>
+          <Spinner />
           :
           <UpdateCandidateDialog
             candidate={props.candidate}
@@ -56,7 +56,7 @@ export default function CandidateControls(props) {
       }
       {
         onDeleting ?
-          <CircularProgress size={40}/>
+          <Spinner />
           :
           <DeleteCandidateDialog
             candidate={props.candidate}

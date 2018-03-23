@@ -8,7 +8,7 @@ export default function Navbar(props) {
   return (
     <AppBar
       style={{
-        position: 'fixed',
+        position: 'static',
         height: 60,
         boxShadow: 'none'
       }}

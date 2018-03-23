@@ -148,6 +148,7 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comment
 
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+  //TODO: отправить авторизационную информацию вместе с index.html. Использовать templates
 });
 
 app.use(express.static(path.join(__dirname, '..', 'public')));

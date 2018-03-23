@@ -95,15 +95,10 @@ const TabsBar = styled.div`
   z-index: 110;
   color: rgba(0, 0, 0, 0.87);
   background-color: #f5f5f5;
-  top: 0;
-  left: auto;
-  right: 0;
-  position: fixed;
   width: 100%;
   flex-shrink: 0;
   flex-direction: column;
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-  margin-top: 60px;
   height: 48px;
 `;
 
@@ -118,5 +113,5 @@ const AddButtonWrapper = styled.div`
   display: inline-block;
   position: absolute;
   right: 5px;
-  top: 5px;
+  top: 64px;
 `;

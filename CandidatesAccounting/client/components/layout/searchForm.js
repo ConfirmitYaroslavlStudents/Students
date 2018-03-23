@@ -8,7 +8,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 export default class SearchForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false, searchRequest: this.props.searchRequest};
+    this.state = {isOpen: this.props.searchRequest !== ''};
     this.handleChange = this.handleChange.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -18,19 +18,17 @@ export default class SearchForm extends Component {
   }
 
   handleOpen() {
-    this.setState({isOpen: true, searchRequest: this.props.searchRequest});
+    this.setState({isOpen: true});
   }
 
   handleClose() {
-    if (this.state.searchRequest === '') {
-      this.setState({isOpen: false, searchRequest: ''});
-    }
+    this.setState({isOpen: false});
   }
 
   handleClick() {
-    if (this.state.searchRequest !== '' && this.state.isOpen) {
+    if (this.props.searchRequest !== '' && this.state.isOpen) {
       this.timer = null;
-      this.search(this.state.searchRequest);
+      this.search(this.props.searchRequest);
     } else {
       if (this.state.isOpen) {
         this.handleClose();
@@ -41,7 +39,7 @@ export default class SearchForm extends Component {
   }
 
   handleChange(value) {
-    this.setState({searchRequest: value});
+    this.props.setState({searchRequest: value});
     if (this.timer) {
       clearTimeout(this.timer);
     }
@@ -72,15 +70,15 @@ export default class SearchForm extends Component {
           placeholder='search'
         />
         {
-          this.state.isOpen || this.state.searchRequest !== '' ?
+          this.state.isOpen || this.props.searchRequest !== '' ?
             <Input
               onChange={this.handleChange}
-              value={this.state.searchRequest}
+              value={this.props.searchRequest}
               className='search'
               placeholder='search'
               onFocus={() => {this.handleOpen()}}
               onBlur={() => {
-                if (this.state.searchRequest === '') {
+                if (this.props.searchRequest === '') {
                   this.handleClose();
                 }
               }}
@@ -98,6 +96,7 @@ SearchForm.propTypes = {
   searchRequest: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,
+  setState: PropTypes.func.isRequired,
 };
 
 const Form = styled.div`

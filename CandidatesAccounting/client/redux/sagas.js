@@ -1,21 +1,12 @@
-import {takeEvery, takeLatest, all, put, call, select} from 'redux-saga/effects';
-import {getInitialState} from '../api/commonService';
-import {login, logout} from '../api/authorizationService';
 import {
-  getCandidates,
-  getCandidate,
-  addCandidate,
-  deleteCandidate,
-  updateCandidate
-} from '../api/candidateService.js';
-import {
-  addComment,
-  deleteComment,
-  addCommentAttachment
-} from '../api/commentService.js';
-import {subscribe, unsubscribe} from '../api/subscribeService';
-import {noticeNotification, deleteNotification} from '../api/notificationService';
-import {uploadResume} from '../api/resumeService';
+  takeEvery,
+  takeLatest,
+  all,
+  put,
+  call,
+  select
+} from 'redux-saga/effects';
+import createCandidate from '../utilities/createCandidate';
 import {
   setState,
   updateCandidateSuccess,
@@ -29,7 +20,35 @@ import {
   setApplicationStatus,
   uploadResumeSuccess,
 } from './actions';
-import createCandidate from '../utilities/createCandidate';
+import {
+  login,
+  logout
+} from '../api/authorizationService';
+import {
+  getInitialState,
+  getUserState
+} from '../api/commonService';
+import {
+  getCandidates,
+  getCandidate,
+  addCandidate,
+  deleteCandidate,
+  updateCandidate
+} from '../api/candidateService.js';
+import {
+  addComment,
+  deleteComment,
+  addCommentAttachment
+} from '../api/commentService.js';
+import {
+  subscribe,
+  unsubscribe
+} from '../api/subscribeService';
+import {
+  noticeNotification,
+  deleteNotification
+} from '../api/notificationService';
+import { uploadResume } from '../api/resumeService';
 
 export default function* rootSaga() {
   yield all([
@@ -110,10 +129,9 @@ function* loginSaga(action) {
   try {
     yield put(setApplicationStatus('refreshing'));
     const username = yield call(login, action.email, action.password);
-    let newState = yield call(getInitialState, username);
+    let newState = yield call(getUserState, username);
     yield put(setState({
       username: username,
-      tags: newState.tags,
       notifications: newState.notifications
     }));
     yield put(setApplicationStatus('ok'));
@@ -128,10 +146,9 @@ function* logoutSaga(action) {
   try {
     yield put(setApplicationStatus('refreshing'));
     yield call(logout);
-    let newState = yield call(getInitialState, '');
+    let newState = yield call(getUserState, '');
     yield put(setState({
       username: '',
-      tags: newState.tags,
       notifications: newState.notifications
     }));
     yield put(setApplicationStatus('ok'));

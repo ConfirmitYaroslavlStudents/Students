@@ -19,7 +19,6 @@ import Spinner from '../common/UIComponentDecorators/spinner';
 
 export default class AppView extends Component {
   render() {
-    console.log('appview render');
     return (
       <div>
         <Navbar {...this.props}/>

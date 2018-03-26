@@ -34,7 +34,7 @@ export default function ResumeControls(props) {
         props.enableDownload ?
           <IconButton icon={<DownloadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' disabled={!resumeIsUploaded || props.onUploading}
                       onClick={() => {
-                        window.open(window.location.origin + '/interviewees/' + props.interviewee.id + '/resume');
+                        window.open(window.location.origin + '/interviewees/' + props.interviewee.id + '/resume', '_self');
                       }}/>
           : ''
       }

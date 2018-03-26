@@ -27,7 +27,7 @@ export default function CommentCloud(props) {
           props.comment.attachment ?
             <MountFooter right={!props.isCurrentUserComment}>
               <AttachmentWrapper onClick={() => {
-                window.open(window.location.origin + '/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments/' + props.comment.id + '/attachment');
+                window.open(window.location.origin + '/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments/' + props.comment.id + '/attachment', '_self');
               }}>
                 <AttachIcon style={{width: 16, height: 16}}/>{props.comment.attachment}
               </AttachmentWrapper>

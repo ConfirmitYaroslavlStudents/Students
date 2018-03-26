@@ -72,3 +72,34 @@ export function getInitialState(username, take, skip, status, sort, sortDir, sea
     };
   });
 }
+
+export function getUserState(username) {
+  return sendGraphQLQuery(
+    `query($username: String!) {
+      notifications(username: $username) {
+    		id
+        recent
+        source {
+          id
+          name
+          status
+        }
+        content {
+          date
+          author
+          text
+          attachment
+        }
+      }
+    }`,
+    {
+      username: username
+    }
+  )
+  .then((data) => {
+    if (!data) {
+      throw 'Connection error';
+    }
+    return data;
+  });
+}

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Snackbar from 'material-ui/Snackbar';
+import Fade from 'material-ui/transitions/Fade';
 
 export default class ErrorSnackbar extends Component {
   constructor(props) {
@@ -26,8 +27,10 @@ export default class ErrorSnackbar extends Component {
     return (
       <div>
         <Snackbar
-          action="Error"
+          action='Error'
           open={open}
+          onClose={this.handleRequestClose}
+          transition={Fade}
           message={this.props.message}
           autoHideDuration={this.props.autoHideDuration ? this.props.autoHideDuration : 10000}
           anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}

@@ -7,7 +7,7 @@ import {
   applyMiddleware
 } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import reducer from '../redux/reducer';
 import rootSaga from '../redux/sagas'
 import {
@@ -17,10 +17,10 @@ import {
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createPalette from 'material-ui/styles/createPalette';
-import {indigo} from 'material-ui/colors';
+import { indigo } from 'material-ui/colors';
 import AppView from '../components/layout/appview';
-import {getUsername} from '../api/authorizationService';
-import {getInitialState} from '../api/commonService';
+import { getUsername } from '../api/authorizationService';
+import { getInitialState } from '../api/commonService';
 import Spinner from '../components/common/UIComponentDecorators/spinner';
 
 function configureStore(initialState) {

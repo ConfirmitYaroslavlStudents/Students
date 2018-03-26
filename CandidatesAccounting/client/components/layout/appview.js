@@ -38,6 +38,7 @@ export default class AppView extends Component {
                     unsubscribe={this.props.unsubscribe}
                     setState={this.props.setState}/>}
                 />
+
                 <Route exact path='/interviewees*' render={() =>
                   <IntervieweeTable interviewees={this.props.candidates} {...this.props}/>}
                 />

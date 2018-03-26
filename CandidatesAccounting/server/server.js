@@ -1,6 +1,6 @@
 import express from 'express';
 import webpack from 'webpack';
-import config from '../webpack.config';
+import config from '../webpack.development.config';
 import path from 'path';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
@@ -9,27 +9,33 @@ import favicon from 'serve-favicon';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import graphqlHTTP from 'express-graphql';
-import {schema, root} from './graphQL';
-import {Account, connect} from './mongoose';
+import { schema, root } from './graphQL';
+import { Account, connect } from './mongoose';
 import expressSession  from 'express-session';
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import {getResume, addResume, getAttachment, addAttachment} from './mongoose';
+import { getResume, addResume, getAttachment, addAttachment } from './mongoose';
+
+const developmentMode = process.argv[3] === 'development';
+console.log(developmentMode ? 'Starting with development mode...' : 'Starting with production mode...');
 
 const app = express();
 
 app.set('port', 3000);
 app.set('view endine', 'ejs');
 
-const compiler = webpack(config);
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: config.output.publicPath,
-  hot: true,
-  stats: {
-    colors: true
-  }
-}));
-app.use(webpackHotMiddleware(compiler));
+const compiler = webpack(require(developmentMode ? '../webpack.development.config' : '../webpack.production.config'));
+
+if (developmentMode) {
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath,
+    hot: true,
+    stats: {
+      colors: true
+    }
+  }));
+  app.use(webpackHotMiddleware(compiler));
+}
 
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
 app.use(expressSession({ secret: 'yDyTP3T3Dvc4206O8pm', resave: false, saveUninitialized: false }));
@@ -54,7 +60,7 @@ app.use('/graphql', function(req, res, next) {
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: false,
+  graphiql: developmentMode,
 }));
 
 app.get('/login', function(req, res) {

@@ -14,13 +14,14 @@ export default class TablesBar extends Component{
   handleLinkClick(candidateStatus) {
     let stateChanges = {};
     if (candidateStatus === this.props.candidateStatus) {
-      stateChanges['searchRequest'] = '';
+      stateChanges.searchRequest = '';
     } else {
       stateChanges['candidateStatus'] = candidateStatus;
     }
-    stateChanges['offset'] = 0;
-    stateChanges['sortingField'] = '';
-    stateChanges['sortingDirection'] = 'desc';
+    stateChanges.offset = 0;
+    stateChanges.sortingField = '';
+    stateChanges.sortingDirection = 'desc';
+    stateChanges.pageTitle = 'Candidate Accounting';
     this.props.loadCandidates(
       stateChanges,
       this.props.history

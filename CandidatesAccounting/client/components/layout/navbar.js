@@ -8,6 +8,7 @@ export default function Navbar(props) {
     <NavbarWrapper>
       <Appbar
         title={props.pageTitle}
+        applicationStatus={props.applicationStatus}
         username={props.username}
         login={props.login}
         logout={props.logout}

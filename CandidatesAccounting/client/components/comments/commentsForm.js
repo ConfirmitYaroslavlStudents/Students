@@ -15,7 +15,7 @@ export default class CommentsForm extends Component {
     this.deleteComment = this.deleteComment.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.setState(
       {
         pageTitle: this.props.candidate.name,

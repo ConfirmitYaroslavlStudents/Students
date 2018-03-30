@@ -1,13 +1,15 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
   mode: 'production',
+
   entry: {
     main: [
       'babel-polyfill',
       path.join(__dirname, 'client', 'app', 'main.js')
     ],
   },
+
   output: {
     path: path.join(__dirname, 'public'),
     publicPath: '/',

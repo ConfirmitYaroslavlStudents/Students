@@ -8,17 +8,6 @@ import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class TraineeTable extends Component {
-  componentWillMount() {
-    if (this.props.pageTitle !== 'Candidate Accounting') {
-      this.props.setState(
-        {
-          pageTitle: 'Candidate Accounting',
-          searchRequest: ''
-        }
-      );
-    }
-  }
-
   render() {
     const onRefreshing = this.props.applicationStatus === 'refreshing';
     const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : '';
@@ -32,27 +21,27 @@ export default class TraineeTable extends Component {
           {title: 'Mentor', sortingField: 'mentor'},
           {title: 'Actions'}]}
         contentRows={
-          (this.props.trainees.map((trainee, index) =>
+          (this.props.candidates.map((candidate, index) =>
             createRow(
               [
                 <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{trainee.name}</span>
+                  <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
                   <TagList
-                    tags={trainee.tags}
+                    tags={candidate.tags}
                     setSearchRequest={this.props.setSearchRequest}
                     loadCandidates={this.props.loadCandidates}
                     changeURL={this.props.changeURL}
                     history={this.props.history}
                   />
                 </NameWrapper>,
-                trainee.email,
-                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(trainee.birthDate) ? 'today' : ''}>
-                  {formatDate(trainee.birthDate)}
+                candidate.email,
+                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                  {formatDate(candidate.birthDate)}
                 </span>,
-                <span style={{whiteSpace: 'nowrap'}}>{trainee.mentor}</span>,
-                <ControlsWrapper><CandidateRowControls candidate={trainee} {...this.props}/></ControlsWrapper>
+                <span style={{whiteSpace: 'nowrap'}}>{candidate.mentor}</span>,
+                <ControlsWrapper><CandidateRowControls candidate={candidate} {...this.props}/></ControlsWrapper>
               ],
-              onRefreshing || trainee.id === candidateOnUpdating) || trainee.id === candidateOnDeleting
+              onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
           ))}
         history={this.props.history}
         offset={this.props.offset}
@@ -70,10 +59,6 @@ export default class TraineeTable extends Component {
     );
   }
 }
-
-TraineeTable.propTypes = {
-  trainees: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-};
 
 const NameWrapper = styled.div`
   display: flex;

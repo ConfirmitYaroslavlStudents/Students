@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import FlatButton from '../common/UIComponentDecorators/flatButton';
 import Dialog from '../common/UIComponentDecorators/dialogSimple';
 import LoginForm from './loginForm';
+import Spinner from '../common/UIComponentDecorators/spinner';
 import {isNotEmpty, isEmail} from '../../utilities/candidateValidators';
 
 export default class LoginDialog extends Component {
@@ -31,9 +32,14 @@ export default class LoginDialog extends Component {
   render() {
     return (
       <div style={{display: 'inline-block'}}>
-        <FlatButton color="inherit" onClick={this.handleOpen}>
-          Sign on / Sign in
-        </FlatButton>
+        {
+          this.props.loading ?
+            <Spinner color="inherit"/>
+            :
+            <FlatButton color="inherit" onClick={this.handleOpen}>
+              Sign on / Sign in
+            </FlatButton>
+        }
         <Dialog
           title="Sign on / Sign in"
           content={<LoginForm account={this.account}/>}
@@ -62,4 +68,5 @@ export default class LoginDialog extends Component {
 
 LoginDialog.propTypes = {
   login: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };

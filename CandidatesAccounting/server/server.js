@@ -24,9 +24,9 @@ const app = express();
 app.set('port', 3000);
 app.set('view endine', 'ejs');
 
-const compiler = webpack(require(developmentMode ? '../webpack.development.config' : '../webpack.production.config'));
 
 if (developmentMode) {
+  const compiler = webpack(require('../webpack.development.config'));
   app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
     hot: true,
@@ -152,16 +152,18 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comment
   });
 });
 
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
   //TODO: отправить авторизационную информацию вместе с index.html. Использовать templates
 });
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
-
 connect();
 
 app.listen(app.get('port'), () => {
   console.log('Express server is listening on port', app.get('port'));
-  console.log('Waiting for webpack...');
+  if (developmentMode) {
+    console.log('Waiting for webpack...');
+  }
 });

@@ -1,4 +1,4 @@
 {
-  "plugins": ["transform-react-jsx", "react-hot-loader/babel"],
-  "presets": [ "es2015", "react" ]
+  "plugins": ["transform-react-jsx", "react-hot-loader/babel", "babel-plugin-styled-components"],
+  "presets": [ "env", "react" ]
 }

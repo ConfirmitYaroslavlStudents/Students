@@ -40,16 +40,16 @@ export default class AppView extends Component {
                 />
 
                 <Route exact path='/interviewees*' render={() =>
-                  <IntervieweeTable interviewees={this.props.candidates} {...this.props}/>}
+                  <IntervieweeTable {...this.props}/>}
                 />
                 <Route exact path='/students*' render={() =>
-                  <StudentTable students={this.props.candidates} {...this.props}/>}
+                  <StudentTable {...this.props}/>}
                 />
                 <Route exact path='/trainees*' render={() =>
-                  <TraineeTable trainees={this.props.candidates} {...this.props}/>}
+                  <TraineeTable {...this.props}/>}
                 />
                 <Route exact path='/*' render={() =>
-                  <CandidateTable allCandidates={this.props.candidates} {...this.props}/>}
+                  <CandidateTable {...this.props}/>}
                 />
                 <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
               </Switch>

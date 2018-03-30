@@ -9,17 +9,6 @@ import ResumeControls from './resumeControls';
 import styled from 'styled-components';
 
 export default class IntervieweeTable extends Component {
-  componentWillMount() {
-    if (this.props.pageTitle !== 'Candidate Accounting') {
-      this.props.setState(
-        {
-          pageTitle: 'Candidate Accounting',
-          searchRequest: ''
-        }
-      );
-    }
-  }
-
   render() {
     const onRefreshing = this.props.applicationStatus === 'refreshing';
     const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : '';
@@ -35,36 +24,36 @@ export default class IntervieweeTable extends Component {
           {title: 'Resume'},
           {title: 'Actions'}]}
         contentRows={
-          (this.props.interviewees.map((interviewee, index) =>
+          (this.props.candidates.map((candidate, index) =>
             createRow(
               [
                 <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{interviewee.name}</span>
+                  <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
                   <TagList
-                    tags={interviewee.tags}
+                    tags={candidate.tags}
                     setSearchRequest={this.props.setSearchRequest}
                     loadCandidates={this.props.loadCandidates}
                     changeURL={this.props.changeURL}
                     history={this.props.history}
                   />
                 </NameWrapper>,
-                interviewee.email,
-                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(interviewee.birthDate) ? 'today' : ''}>
-                  {formatDate(interviewee.birthDate)}
+                candidate.email,
+                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                  {formatDate(candidate.birthDate)}
                 </span>,
-                <span style={{whiteSpace: 'nowrap'}} className={isToday(interviewee.interviewDate) ? 'today' : ''}>
-                  {formatDateTime(interviewee.interviewDate)}
+                <span style={{whiteSpace: 'nowrap'}} className={isToday(candidate.interviewDate) ? 'today' : ''}>
+                  {formatDateTime(candidate.interviewDate)}
                 </span>,
                 <ResumeControls
-                  interviewee={interviewee}
-                  onUploading={interviewee.id === candidateOnUploading}
+                  interviewee={candidate}
+                  onUploading={candidate.id === candidateOnUploading}
                   enableDownload
                   enableUpload
                   authorized={this.props.username !== ''}
                   uploadResume={this.props.uploadResume}/>,
-                <ControlsWrapper><CandidateRowControls candidate={interviewee} {...this.props}/></ControlsWrapper>
+                <ControlsWrapper><CandidateRowControls candidate={candidate} {...this.props}/></ControlsWrapper>
               ],
-              onRefreshing || interviewee.id === candidateOnUpdating) || interviewee.id === candidateOnDeleting
+              onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
           ))}
         history={this.props.history}
         offset={this.props.offset}
@@ -82,10 +71,6 @@ export default class IntervieweeTable extends Component {
     );
   }
 }
-
-IntervieweeTable.propTypes = {
-  interviewees: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-};
 
 const NameWrapper = styled.div`
   display: flex;

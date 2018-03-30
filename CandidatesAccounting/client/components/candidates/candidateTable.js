@@ -8,17 +8,6 @@ import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class CandidateTable extends Component {
-  componentWillMount() {
-    if (this.props.pageTitle !== 'Candidate Accounting') {
-      this.props.setState(
-        {
-          pageTitle: 'Candidate Accounting',
-          searchRequest: ''
-        }
-      );
-    }
-  }
-
   render() {
     const onRefreshing = this.props.applicationStatus === 'refreshing';
     const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : '';
@@ -32,7 +21,7 @@ export default class CandidateTable extends Component {
           {title: 'Birth Date'},
           {title: 'Actions'}]}
         contentRows={
-          (this.props.allCandidates.map((candidate, index) =>
+          (this.props.candidates.map((candidate, index) =>
             createRow(
               [
                 <NameWrapper>
@@ -70,10 +59,6 @@ export default class CandidateTable extends Component {
     );
   }
 }
-
-CandidateTable.propTypes = {
-  allCandidates: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-};
 
 const NameWrapper = styled.div`
   display: flex;

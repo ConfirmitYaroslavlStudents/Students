@@ -8,17 +8,6 @@ import TagList from '../tags/tagList';
 import styled from 'styled-components';
 
 export default class StudentTable extends Component {
-  componentWillMount() {
-    if (this.props.pageTitle !== 'Candidate Accounting') {
-      this.props.setState(
-        {
-          pageTitle: 'Candidate Accounting',
-          searchRequest: ''
-        }
-      );
-    }
-  }
-
   render() {
     const onRefreshing = this.props.applicationStatus === 'refreshing';
     const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : '';
@@ -35,29 +24,29 @@ export default class StudentTable extends Component {
           {title: 'Actions'}
         ]}
         contentRows={
-          (this.props.students.map((student, index) =>
+          (this.props.candidates.map((candidate, index) =>
             createRow(
               [
                 <NameWrapper>
-                  <span style={{whiteSpace: 'nowrap'}}>{student.name}</span>
+                  <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
                   <TagList
-                    tags={student.tags}
+                    tags={candidate.tags}
                     setSearchRequest={this.props.setSearchRequest}
                     loadCandidates={this.props.loadCandidates}
                     changeURL={this.props.changeURL}
                     history={this.props.history}
                   />
                 </NameWrapper>,
-                student.email,<span style={{whiteSpace: 'nowrap'}} className={isBirthDate(student.birthDate) ? 'today' : ''}>
-                      {formatDate(student.birthDate)}
+                candidate.email,<span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                      {formatDate(candidate.birthDate)}
                     </span>
                 ,
-                student.groupName,
-                <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.startingDate)}</span>,
-                <span style={{whiteSpace: 'nowrap'}}>{formatDate(student.endingDate)}</span>,
-                <ControlsWrapper><CandidateRowControls candidate={student} {...this.props}/></ControlsWrapper>
+                candidate.groupName,
+                <span style={{whiteSpace: 'nowrap'}}>{formatDate(candidate.startingDate)}</span>,
+                <span style={{whiteSpace: 'nowrap'}}>{formatDate(candidate.endingDate)}</span>,
+                <ControlsWrapper><CandidateRowControls candidate={candidate} {...this.props}/></ControlsWrapper>
               ],
-              onRefreshing || student.id === candidateOnUpdating) || student.id === candidateOnDeleting
+              onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
           ))}
         history={this.props.history}
         offset={this.props.offset}
@@ -75,10 +64,6 @@ export default class StudentTable extends Component {
     );
   }
 }
-
-StudentTable.propTypes = {
-  students: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-};
 
 const NameWrapper = styled.div`
   display: flex;

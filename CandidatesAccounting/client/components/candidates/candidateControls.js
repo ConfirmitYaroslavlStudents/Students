@@ -9,11 +9,6 @@ import NavLink from '../../components/common/navLink';
 import AddCommentDialog from '../comments/addCommentDialog';
 import Spinner from '../common/UIComponentDecorators/spinner';
 
-const iconButtonStyle = {
-  height: 40,
-  width: 40,
-};
-
 export default function CandidateControls(props) {
   const authorized = props.username !== '';
   const onRefreshing = props.applicationStatus === 'refreshing';
@@ -37,7 +32,7 @@ export default function CandidateControls(props) {
         <Badge badgeContent={props.candidate.comments.length} disabled={onRefreshing}>
           <IconButton
             icon={<CommentIcon />}
-            style={iconButtonStyle}
+            style={{height: 40, width: 40 }}
             disabled={onRefreshing || onDeleting}
           />
         </Badge>

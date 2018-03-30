@@ -31,7 +31,7 @@ export default function Appbar(props) {
           }
           {
             props.username === '' ?
-            <LoginDialog login={props.login}/>
+            <LoginDialog login={props.login} loading={props.applicationStatus === 'loading'}/>
             :
             <UserControls>
               <span style={{marginRight: 5, marginLeft: 5}}>{formatUserName(props.username)}</span>
@@ -45,7 +45,7 @@ export default function Appbar(props) {
               />
               <IconButton
                 icon={<SignOutIcon />}
-                color="inherit"
+                color='inherit'
                 onClick={() => {
                   props.logout();
                 }}/>
@@ -58,6 +58,7 @@ export default function Appbar(props) {
 
 Appbar.propTypes = {
   title: PropTypes.string.isRequired,
+  applicationStatus: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,

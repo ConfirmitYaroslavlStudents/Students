@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
-import CandidateInfoForm from './candidateInfoForm';
+import LoadableCandidateInfoForm from './loadableCandidateInfoForm';
 import {checkCandidateValidation} from '../../utilities/candidateValidators';
 import createCandidate from '../../utilities/createCandidate';
 import createComment from '../../utilities/createComment';
@@ -52,7 +52,7 @@ export default class UpdateCandidateDialog extends React.Component {
               <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
             </div>
           }>
-            <CandidateInfoForm
+            <LoadableCandidateInfoForm
               candidate={this.candidate}
               tags={this.props.tags}
             />

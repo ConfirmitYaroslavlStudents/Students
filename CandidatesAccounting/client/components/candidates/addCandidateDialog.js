@@ -6,7 +6,7 @@ import createComment from '../../utilities/createComment';
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import AddPersonIcon from 'material-ui-icons/PersonAdd';
 import CloseIcon from 'material-ui-icons/Close';
-import CandidateInfoForm from './candidateInfoForm';
+import LoadableCandidateInfoForm from './loadableCandidateInfoForm';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import {getCurrentDateTime} from '../../utilities/customMoment';
 
@@ -48,7 +48,7 @@ export default class AddCandidateDialog extends Component{
               <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
             </div>
           }>
-            <CandidateInfoForm
+            <LoadableCandidateInfoForm
               candidate={this.candidate}
               tags={this.props.tags}
             />

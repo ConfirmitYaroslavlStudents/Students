@@ -31,7 +31,7 @@ export default function Appbar(props) {
           }
           {
             props.username === '' ?
-            <LoginDialog login={props.login} loading={props.applicationStatus === 'loading'}/>
+            <LoginDialog login={props.login} applicationStatus={props.applicationStatus}/>
             :
             <UserControls>
               <span style={{marginRight: 5, marginLeft: 5}}>{formatUserName(props.username)}</span>

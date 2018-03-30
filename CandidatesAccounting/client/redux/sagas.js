@@ -127,7 +127,7 @@ function* watchGetCandidate() {
 
 function* loginSaga(action) {
   try {
-    yield put(setApplicationStatus('refreshing'));
+    yield put(setApplicationStatus('signining'));
     const username = yield call(login, action.email, action.password);
     let newState = yield call(getUserState, username);
     yield put(setState({

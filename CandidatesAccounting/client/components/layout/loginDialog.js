@@ -53,7 +53,7 @@ export default class LoginDialog extends Component {
                 }}>
                   Sign in
                 </FlatButton>
-              { signining ? <div style={{margin: '8px -8px -8px -8px'}}><LinearProgress /></div> : '' }
+              { signining ? <div style={{margin: '0px -8px -8px -8px'}}><LinearProgress /></div> : '' }
             </div>
           }
         />

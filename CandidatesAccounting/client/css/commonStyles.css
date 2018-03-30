@@ -46,6 +46,10 @@ p {
     opacity: 0.5;
 }
 
+.disabled-nav-link {
+    color: #555;
+}
+
 .hidden {
     visibility: hidden;
 }

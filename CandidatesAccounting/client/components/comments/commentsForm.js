@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import CommentCloud from './commentCloud';
-import AddCommentPanel from './addCommentPanel';
+import LoadableAddCommentPanel from './loadableAddCommentPanel';
 import getRandomColor from '../../utilities/getRandomColor';
 import Grid from 'material-ui/Grid';
 
@@ -74,7 +74,7 @@ export default class CommentsForm extends Component {
             </Grid>
           </Grid>
           <AddCommentPanelWrapper>
-            <AddCommentPanel
+            <LoadableAddCommentPanel
               addComment={this.props.addComment}
               candidate={this.props.candidate}
               onClick={this.handleNewCommentAdd}

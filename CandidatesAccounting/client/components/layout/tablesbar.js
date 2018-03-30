@@ -78,9 +78,7 @@ export default class TablesBar extends Component{
 }
 
 TablesBar.propTypes = {
-  setApplicationStatus: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
-  pageTitle: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
   addCandidate: PropTypes.func.isRequired,
   newCandidateDefaultType: PropTypes.string.isRequired,

@@ -4,8 +4,8 @@ import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
 import CommentIcon from 'material-ui-icons/InsertComment';
 import CloseIcon from 'material-ui-icons/Close';
 import IconButton from '../common/UIComponentDecorators/iconButton';
-import AddCommentPanel from './addCommentPanel';
 import styled from 'styled-components';
+import LoadableAddCommentPanel from './loadableAddCommentPanel';
 
 export default class AddCommentDialog extends Component {
   constructor(props) {
@@ -31,6 +31,7 @@ export default class AddCommentDialog extends Component {
     return (
       <div style={{display: 'inline-block'}}>
         <IconButton icon={<CommentIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
+
         <DialogWindow
           title="Add new comment"
           isOpen={this.state.isOpen}
@@ -39,15 +40,17 @@ export default class AddCommentDialog extends Component {
             <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
           }>
             <FormWrapper>
-              <AddCommentPanel
-                addComment={this.props.addComment}
-                candidate={this.props.candidate}
-                onClick={this.handleClose}
-                username={this.props.username}
-                subscribe={this.props.subscribe}
-                unsubscribe={this.props.unsubscribe}
-                disabled={this.props.disabled}
-              />
+              {
+                <LoadableAddCommentPanel
+                  addComment={this.props.addComment}
+                  candidate={this.props.candidate}
+                  onClick={this.handleClose}
+                  username={this.props.username}
+                  subscribe={this.props.subscribe}
+                  unsubscribe={this.props.unsubscribe}
+                  disabled={this.props.disabled}
+                />
+              }
             </FormWrapper>
         </DialogWindow>
       </div>

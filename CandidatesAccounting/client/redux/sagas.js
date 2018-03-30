@@ -271,14 +271,14 @@ function* deleteNotificationSaga(action) {
 
 function* loadCandidatesSaga(action) {
   try {
-    yield put(setApplicationStatus(action.stateChanges['applicationStatus'] ? action.stateChanges['applicationStatus'] : 'loading'));
+    yield put(setApplicationStatus(action.stateChanges.applicationStatus ? action.stateChanges.applicationStatus : 'loading'));
     yield put(setState(action.stateChanges));
-    let candidateStatus = yield select((state) => {return state.get('candidateStatus')});
-    let candidatesPerPage = yield select((state) => {return state.get('candidatesPerPage')});
-    let candidatesOffset = yield select((state) => {return state.get('offset')});
-    let sortingField = yield select((state) => {return state.get('sortingField')});
-    let sortingDirection = yield select((state) => {return state.get('sortingDirection')});
-    let searchRequest = yield select((state) => {return state.get('searchRequest')});
+    let candidateStatus = yield select((state) => {return state.candidateStatus});
+    let candidatesPerPage = yield select((state) => {return state.candidatesPerPage});
+    let candidatesOffset = yield select((state) => {return state.offset});
+    let sortingField = yield select((state) => {return state.sortingField});
+    let sortingDirection = yield select((state) => {return state.sortingDirection});
+    let searchRequest = yield select((state) => {return state.searchRequest});
     yield call(action.browserHistory.replace, '/'
       + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
       + '?take=' + candidatesPerPage

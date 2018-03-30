@@ -25,10 +25,8 @@ export default function Navbar(props) {
         newCandidateDefaultType={props.candidateStatus}
         addCandidate={props.addCandidate}
         tags={props.tags}
-        setApplicationStatus={props.setApplicationStatus}
         username={props.username}
         history={props.history}
-        pageTitle={props.pageTitle}
         candidatesPerPage={props.candidatesPerPage}
         totalCount={props.totalCount}
         loadCandidates={props.loadCandidates}

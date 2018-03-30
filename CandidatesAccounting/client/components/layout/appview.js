@@ -8,11 +8,11 @@ import {
 import actions from '../../redux/actions';
 import Navbar from './navbar';
 import { searchById } from '../../utilities/candidateFilters';
-import CommentsForm from '../comments/commentsForm';
 import CandidateTable from '../candidates/candidateTable';
 import IntervieweeTable from '../interviewees/intervieweeTable';
 import StudentTable from '../students/studentTable';
 import TraineeTable from '../trainees/traineeTable';
+import CommentForm from '../comments/commentsForm';
 import SnackBar from '../common/UIComponentDecorators/snackbar';
 import ErrorPage from './errorPage';
 import Spinner from '../common/UIComponentDecorators/spinner';
@@ -25,19 +25,19 @@ export default class AppView extends Component {
         <Main>
           {
             this.props.applicationStatus === 'loading'?
-              <Spinner big/>
+              <Spinner size="big"/>
               :
               <Switch>
                 <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
-                  <CommentsForm
+                  <CommentForm
                     candidate={searchById(this.props.candidates, this.props.history.location.pathname.split('/')[2])}
                     addComment={this.props.addComment}
                     deleteComment={this.props.deleteComment}
                     username={this.props.username}
                     subscribe={this.props.subscribe}
                     unsubscribe={this.props.unsubscribe}
-                    setState={this.props.setState}/>}
-                />
+                    setState={this.props.setState}/>
+                }/>
 
                 <Route exact path='/interviewees*' render={() =>
                   <IntervieweeTable {...this.props}/>}
@@ -57,7 +57,7 @@ export default class AppView extends Component {
         </Main>
         {
           this.props.applicationStatus === 'refreshing' ?
-            <Spinner big/>
+            <Spinner size="big"/>
             : ''
         }
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>
@@ -68,20 +68,20 @@ export default class AppView extends Component {
 
 function mapStateToProps(state) {
   return {
-    applicationStatus: state.get('applicationStatus'),
-    username: state.get('username'),
-    pageTitle: state.get('pageTitle'),
-    errorMessage: state.get('errorMessage'),
-    searchRequest: state.get('searchRequest'),
-    candidateStatus: state.get('candidateStatus'),
-    offset: Number(state.get('offset')),
-    candidatesPerPage: Number(state.get('candidatesPerPage')),
-    totalCount: Number(state.get('totalCount')),
-    sortingField: state.get('sortingField'),
-    sortingDirection: state.get('sortingDirection'),
-    candidates: state.get('candidates').toJS(),
-    tags: state.get('tags').toArray(),
-    notifications: state.get('notifications').toJS(),
+    applicationStatus: state.applicationStatus,
+    username: state.username,
+    pageTitle: state.pageTitle,
+    errorMessage: state.errorMessage,
+    searchRequest: state.searchRequest,
+    candidateStatus: state.candidateStatus,
+    offset: Number(state.offset),
+    candidatesPerPage: Number(state.candidatesPerPage),
+    totalCount: Number(state.totalCount),
+    sortingField: state.sortingField,
+    sortingDirection: state.sortingDirection,
+    candidates: state.candidates,
+    tags: state.tags,
+    notifications: state.notifications,
   };
 }
 

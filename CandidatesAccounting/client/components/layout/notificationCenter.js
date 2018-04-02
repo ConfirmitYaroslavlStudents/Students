@@ -11,23 +11,20 @@ import NotificationBlock from '../common/notificationBlock';
 
 export default function NotificationCenter(props) {
   let numberOfRecentNotifications = 0;
-  let reversedNotificationsList = [];
-  for (let i = props.notifications.length - 1; i >= 0; i--) {
-    if(props.notifications[i].recent) {
-      numberOfRecentNotifications++;
-    }
-    reversedNotificationsList.push(props.notifications[i]);
-  }
+  let notificationsList = [];
   let unreadNotificationExists = false;
-  for (let i = 0; i < reversedNotificationsList.length; i++) {
-    if (reversedNotificationsList[i].recent) {
+  Object.keys(props.notifications).forEach(notificationID => {
+    let notification = props.notifications[notificationID];
+    if(notification.recent) {
+      numberOfRecentNotifications++;
       unreadNotificationExists = true;
-      break;
     }
-  }
+    notificationsList.push(notification);
+  });
+  notificationsList.reverse();
 
   return (
-    props.notifications.length === 0 ?
+    Object.keys(props.notifications).length === 0 ?
       <Popover
         icon={<NotificationIcon />}
         iconColor='inherit'
@@ -49,7 +46,8 @@ export default function NotificationCenter(props) {
                     icon={<NoticeIcon />}
                     style={{width: 30, height: 30}}
                     onClick={() => {
-                      props.notifications.forEach((notification) => {
+                      Object.keys(props.notifications).forEach(notificationID => {
+                        let notification = props.notifications[notificationID];
                         if (notification.recent) {
                           props.noticeNotification(props.username, notification.id);
                         }
@@ -62,15 +60,18 @@ export default function NotificationCenter(props) {
                       icon={<DeleteAllIcon />}
                       style={{width: 30, height: 30}}
                       onClick={() => {
-                        props.notifications.forEach((notification) => {
-                          props.deleteNotification(props.username, notification.id);
+                        Object.keys(props.notifications).forEach(notificationID => {
+                          let notification = props.notifications[notificationID];
+                          if (notification.recent) {
+                            props.deleteNotification(props.username, notification.id);
+                          }
                         });
                       }}
                     />
                   </ButtonWrapper>
                 </ControlsWrapper>
               </TitleWrapper>
-              {reversedNotificationsList.map((notification, index) =>
+              {notificationsList.map((notification, index) =>
                 <NotificationBlock
                   key={index}
                   notification={notification}
@@ -88,7 +89,7 @@ export default function NotificationCenter(props) {
 }
 
 NotificationCenter.propTypes = {
-  notifications: PropTypes.array.isRequired,
+  notifications: PropTypes.object.isRequired,
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,

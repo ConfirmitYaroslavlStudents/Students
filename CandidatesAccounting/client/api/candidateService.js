@@ -43,9 +43,9 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
       if (!data) {
         throw 'Connection error';
       }
-      let candidates = [];
+      let candidates = {};
       data.candidatesPaginated.candidates.forEach((candidate) => {
-        candidates.push(createCandidate(candidate.status, candidate));
+        candidates[candidate.id] = createCandidate(candidate.status, candidate);
       });
       return {
         candidates: candidates,
@@ -99,7 +99,7 @@ export function addCandidate(candidate) {
         candidate: $candidate
       )
     }`,
-    {candidate: candidate}
+    {candidate: convertToGraphQLType(candidate)}
   )
   .then((data) => {
     if (!data.addCandidate) {
@@ -117,7 +117,7 @@ export function updateCandidate(candidate) {
         candidate: $candidate
       )
     }`,
-    {candidate: candidate}
+    {candidate: convertToGraphQLType(candidate)}
   )
     .then((data) => {
       if (!data.updateCandidate) {
@@ -140,4 +140,12 @@ export function deleteCandidate(candidateID) {
       throw 'Server error';
     }
   });
+}
+
+function convertToGraphQLType(candidate) {
+  return {
+    ...candidate,
+    comments: Object.keys(candidate.comments).map(commentID => candidate.comments[commentID]),
+    subscribers: Object.keys(candidate.subscribers).map(email => email)
+  }
 }

@@ -5,9 +5,9 @@ export default function createCandidate(status, fields) {
     name: fields.name ? fields.name : '',
     birthDate: fields.birthDate ? fields.birthDate : '',
     email: fields.email ? fields.email : '',
-    comments: fields.comments ? fields.comments.slice() : [],
+    comments: fields.comments ? commentArrayToCommentDictionary(fields.comments) : {},
     tags: fields.tags ? fields.tags.slice() : [],
-    subscribers: fields.subscribers ? fields.subscribers.slice() : [],
+    subscribers: fields.subscribers ? subscriberArrayToSubscriberDictionary(fields.subscribers) : {},
   };
 
   switch (status) {
@@ -28,4 +28,28 @@ export default function createCandidate(status, fields) {
       break;
   }
   return candidate;
+}
+
+function commentArrayToCommentDictionary(commentArray) {
+  if (commentArray instanceof Array) {
+    let commentDictionary = {};
+    commentArray.forEach(comment => {
+      commentDictionary[comment.id] = comment;
+    });
+    return commentDictionary;
+  } else {
+    return commentArray;
+  }
+}
+
+function subscriberArrayToSubscriberDictionary(subscriberArray) {
+  if (subscriberArray instanceof Array) {
+    let subscriberDictionary = {};
+    subscriberArray.forEach(email => {
+      subscriberDictionary[email] = email;
+    });
+    return subscriberDictionary;
+  } else {
+    return subscriberArray;
+  }
 }

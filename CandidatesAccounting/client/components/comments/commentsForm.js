@@ -5,6 +5,7 @@ import CommentCloud from './commentCloud';
 import LoadableAddCommentPanel from './loadableAddCommentPanel';
 import getRandomColor from '../../utilities/getRandomColor';
 import Grid from 'material-ui/Grid';
+import Spinner from '../common/UIComponentDecorators/spinner';
 
 export default class CommentsForm extends Component {
   constructor(props) {
@@ -23,7 +24,8 @@ export default class CommentsForm extends Component {
       }
     );
     this.userColors = {};
-    this.props.candidate.comments.forEach((comment) => {
+    Object.keys(this.props.candidate.comments).forEach((commentID) => {
+      const comment = this.props.candidate.comments[commentID];
       if (!(comment.author in this.userColors)) {
         this.userColors[comment.author] = getRandomColor();
       }
@@ -50,19 +52,24 @@ export default class CommentsForm extends Component {
   }
 
   render() {
+    if (this.props.applicationStatus !== 'ok') {
+      return <Spinner size="big"/>
+    }
     if (this.props.candidate) {
-      let comments = this.props.candidate.comments.map((comment, index) =>
-        <CommentCloud
-          key={index}
-          comment={comment}
-          candidate={this.props.candidate}
-          markerColor={this.userColors[comment.author]}
-          deleteComment={() => {this.deleteComment(comment.id)}}
-          isSystem={comment.author === 'SYSTEM'}
-          isCurrentUserComment={comment.author === this.props.username}
-        />
-      );
-      if (this.props.candidate.comments.length === 0) {
+      let comments = Object.keys(this.props.candidate.comments).map(commentId => {
+        const comment = this.props.candidate.comments[commentId];
+        return (
+          <CommentCloud
+            key={commentId}
+            comment={comment}
+            candidate={this.props.candidate}
+            markerColor={this.userColors[comment.author]}
+            deleteComment={() => {this.deleteComment(comment.id)}}
+            isSystem={comment.author === 'SYSTEM'}
+            isCurrentUserComment={comment.author === this.props.username}
+          />);
+      });
+      if (Object.keys(this.props.candidate.comments).length === 0) {
         comments = <NoResultWrapper><p>No comments</p></NoResultWrapper>
       }
 
@@ -98,6 +105,7 @@ export default class CommentsForm extends Component {
 
 CommentsForm.propTypes = {
   candidate: PropTypes.object,
+  applicationStatus: PropTypes.string.isRequired,
   addComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,

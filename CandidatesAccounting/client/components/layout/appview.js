@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import actions from '../../redux/actions';
 import Navbar from './navbar';
-import { searchById } from '../../utilities/candidateFilters';
 import CandidateTable from '../candidates/candidateTable';
 import IntervieweeTable from '../interviewees/intervieweeTable';
 import StudentTable from '../students/studentTable';
@@ -30,7 +29,8 @@ export default class AppView extends Component {
               <Switch>
                 <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
                   <CommentForm
-                    candidate={searchById(this.props.candidates, this.props.history.location.pathname.split('/')[2])}
+                    candidate={this.props.candidates[this.props.history.location.pathname.split('/')[2]]}
+                    applicationStatus={this.props.applicationStatus}
                     addComment={this.props.addComment}
                     deleteComment={this.props.deleteComment}
                     username={this.props.username}

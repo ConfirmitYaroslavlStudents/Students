@@ -29,7 +29,7 @@ export default function CandidateControls(props) {
           props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments');
         }
       }}>
-        <Badge badgeContent={props.candidate.comments.length} disabled={onRefreshing}>
+        <Badge badgeContent={Object.keys(props.candidate.comments).length} disabled={onRefreshing}>
           <IconButton
             icon={<CommentIcon />}
             style={{height: 40, width: 40 }}

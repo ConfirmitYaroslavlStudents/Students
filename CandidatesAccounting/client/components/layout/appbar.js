@@ -62,7 +62,7 @@ Appbar.propTypes = {
   username: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
-  notifications: PropTypes.array.isRequired,
+  notifications: PropTypes.object.isRequired,
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
   searchRequest: PropTypes.string.isRequired,

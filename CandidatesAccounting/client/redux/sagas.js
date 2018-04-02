@@ -301,9 +301,9 @@ function* loadCandidatesSaga(action) {
 function* getCandidateSaga(action) {
   try {
     yield put(setApplicationStatus('loading'));
-    let candidates = [];
+    let candidates = {};
     let candidate = yield call(getCandidate, action.id);
-    candidates.push(candidate);
+    candidates[candidate.id] = candidate;
     yield put(setState({
       candidates: candidates
     }));

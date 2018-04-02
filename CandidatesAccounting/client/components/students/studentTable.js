@@ -24,8 +24,9 @@ export default class StudentTable extends Component {
           {title: 'Actions'}
         ]}
         contentRows={
-          (this.props.candidates.map((candidate, index) =>
-            createRow(
+          Object.keys(this.props.candidates).map(candidateID => {
+            const candidate = this.props.candidates[candidateID];
+            return createRow(
               [
                 <NameWrapper>
                   <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
@@ -37,7 +38,8 @@ export default class StudentTable extends Component {
                     history={this.props.history}
                   />
                 </NameWrapper>,
-                candidate.email,<span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+                candidate.email,
+                <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
                       {formatDate(candidate.birthDate)}
                     </span>
                 ,
@@ -47,7 +49,7 @@ export default class StudentTable extends Component {
                 <ControlsWrapper><CandidateRowControls candidate={candidate} {...this.props}/></ControlsWrapper>
               ],
               onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
-          ))}
+          })}
         history={this.props.history}
         offset={this.props.offset}
         rowsPerPage={this.props.candidatesPerPage}

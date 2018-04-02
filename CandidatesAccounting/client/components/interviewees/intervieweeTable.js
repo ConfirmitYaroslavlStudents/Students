@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import Table from '../layout/table';
 import CandidateRowControls from '../candidates/candidateControls';
 import {formatDateTime, formatDate, isToday, isBirthDate} from '../../utilities/customMoment';
@@ -24,8 +23,9 @@ export default class IntervieweeTable extends Component {
           {title: 'Resume'},
           {title: 'Actions'}]}
         contentRows={
-          (this.props.candidates.map((candidate, index) =>
-            createRow(
+          Object.keys(this.props.candidates).map(candidateID => {
+            const candidate = this.props.candidates[candidateID];
+            return createRow(
               [
                 <NameWrapper>
                   <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
@@ -54,7 +54,7 @@ export default class IntervieweeTable extends Component {
                 <ControlsWrapper><CandidateRowControls candidate={candidate} {...this.props}/></ControlsWrapper>
               ],
               onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
-          ))}
+          })}
         history={this.props.history}
         offset={this.props.offset}
         rowsPerPage={this.props.candidatesPerPage}

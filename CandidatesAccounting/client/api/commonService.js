@@ -60,13 +60,17 @@ export function getInitialState(username, take, skip, status, sort, sortDir, sea
     if (!data) {
       throw 'Connection error';
     }
-    let candidates = [];
+    let candidates = {};
+    let notifications = {};
     data.candidatesPaginated.candidates.forEach((candidate) => {
-      candidates.push(createCandidate(candidate.status, candidate));
+      candidates[candidate.id] = (createCandidate(candidate.status, candidate));
+    });
+    data.notifications.forEach((notification) => {
+      notifications[notification.id] = notification;
     });
     return {
       tags: data.tags,
-      notifications: data.notifications,
+      notifications: notifications,
       candidates: candidates,
       total: data.candidatesPaginated.total
     };
@@ -100,6 +104,10 @@ export function getUserState(username) {
     if (!data) {
       throw 'Connection error';
     }
-    return data;
+    let notifications = {};
+    data.notifications.forEach((notification) => {
+      notifications[notification.id] = notification;
+    });
+    return { notifications };
   });
 }

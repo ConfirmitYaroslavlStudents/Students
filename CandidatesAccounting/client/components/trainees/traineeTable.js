@@ -21,8 +21,9 @@ export default class TraineeTable extends Component {
           {title: 'Mentor', sortingField: 'mentor'},
           {title: 'Actions'}]}
         contentRows={
-          (this.props.candidates.map((candidate, index) =>
-            createRow(
+          Object.keys(this.props.candidates).map(candidateID => {
+            const candidate = this.props.candidates[candidateID];
+            return createRow(
               [
                 <NameWrapper>
                   <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
@@ -42,7 +43,7 @@ export default class TraineeTable extends Component {
                 <ControlsWrapper><CandidateRowControls candidate={candidate} {...this.props}/></ControlsWrapper>
               ],
               onRefreshing || candidate.id === candidateOnUpdating) || candidate.id === candidateOnDeleting
-          ))}
+          })}
         history={this.props.history}
         offset={this.props.offset}
         rowsPerPage={this.props.candidatesPerPage}

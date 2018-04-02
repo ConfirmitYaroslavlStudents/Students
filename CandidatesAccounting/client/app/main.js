@@ -109,7 +109,7 @@ store.dispatch({
       totalCount: 0,
       candidates: [],
       tags: [],
-      notifications: []
+      notifications: {}
     }
   }
 );

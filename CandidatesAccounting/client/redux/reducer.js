@@ -1,6 +1,6 @@
 export default function reducer(state, action) {
-  let candidates = [];
-  let notifications = [];
+  let candidates = {};
+  let notifications = {};
 
   switch (action.type) {
     case 'SET_STATE':
@@ -22,108 +22,60 @@ export default function reducer(state, action) {
       };
 
     case 'UPDATE_CANDIDATE_SUCCESS':
-      for (let i = 0; i < state.candidates.length; i++) {
-        if (state.candidates[i].id === action.candidate.id) {
-          state.candidates[i] = action.candidate;
-          break;
-        }
-      }
+      state.candidates[action.candidate.id] = action.candidate;
       return state;
 
     case 'ADD_COMMENT_SUCCESS':
-      for (let i = 0; i < state.candidates.length; i++) {
-        if (state.candidates[i].id === action.candidateID) {
-          state.candidates[i].comments.push(action.comment);
-          break;
-        }
-      }
+      candidates = { ...state.candidates };
+      candidates[action.candidateID].comments[action.comment.id] = action.comment;
       return {
         ...state,
+        candidates : candidates
       };
 
     case 'DELETE_COMMENT_SUCCESS':
-      candidates = state.candidates.slice();
-      for (let i = 0; i < candidates.length; i++) {
-        if (candidates[i].id === action.candidateID) {
-          for (let j = 0; j < candidates[i].comments.length; j++) {
-            if (candidates[i].comments[j] === action.commentID) {
-              candidates[i].comments.splice(j, 1);
-              i = candidates.length;
-              break;
-            }
-          }
-        }
-      }
+      candidates = { ...state.candidates };
+      delete candidates[action.candidateID].comments[action.commentID];
       return {
         ...state,
         candidates: candidates
       };
 
     case 'SUBSCRIBE_SUCCESS':
-      candidates = state.candidates.slice();
-      for (let i = 0; i < candidates.length; i++) {
-        if (candidates[i].id === action.candidateID) {
-          candidates[i].subscribers.push(action.email);
-          break;
-        }
-      }
+      candidates = { ...state.candidates };
+      candidates[action.candidateID].subscribers[action.email] = action.email;
       return {
         ...state,
         candidates: candidates
       };
 
     case 'UNSUBSCRIBE_SUCCESS':
-      candidates = state.candidates.slice();
-      for (let i = 0; i < candidates.length; i++) {
-        if (candidates[i].id === action.candidateID) {
-          for (let j = 0; j < candidates[i].subscribers.length; j++) {
-            if (candidates[i].subscribers[j] === action.email) {
-              candidates[i].subscribers.splice(j, 1);
-              i = candidates.length;
-              break;
-            }
-          }
-        }
-      }
+      candidates = { ...state.candidates };
+      delete candidates[action.candidateID].subscribers[action.email];
       return {
         ...state,
         candidates: candidates
       };
 
     case 'NOTICE_NOTIFICATION_SUCCESS':
-      notifications = state.notifications.slice();
-      for (let i = 0; i < notifications.length; i++) {
-        if (notifications[i].id === action.notificationID) {
-          notifications[i].recent = false;
-          break;
-        }
-      }
+      notifications = { ...state.notifications };
+      notifications[action.notificationID].recent = false;
       return {
         ...state,
         notifications: notifications
       };
 
     case 'DELETE_NOTIFICATION_SUCCESS':
-      notifications = state.notifications.slice();
-      for (let i = 0; i < notifications.length; i++) {
-        if (notifications[i].id === action.notificationID) {
-          notifications.splice(i, 1);
-          break;
-        }
-      }
+      notifications = { ...state.notifications };
+      delete notifications[action.notificationID];
       return {
         ...state,
         notifications: notifications
       };
 
     case 'UPLOAD_RESUME_SUCCESS':
-      candidates = state.candidates.slice();
-      for (let i = 0; i < candidates.length; i++) {
-        if (candidates[i].id === action.intervieweeID) {
-          candidates[i].resume = action.resume;
-          break;
-        }
-      }
+      candidates = { ...state.candidates };
+      candidates[action.intervieweeID].resume = action.resume;
       return {
         ...state,
         candidates: candidates

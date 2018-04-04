@@ -22,16 +22,28 @@ export default function reducer(state, action) {
       };
 
     case 'UPDATE_CANDIDATE_SUCCESS':
-      state.candidates[action.candidate.id] = action.candidate;
-      return state;
-
-    case 'ADD_COMMENT_SUCCESS':
-      candidates = { ...state.candidates };
-      candidates[action.candidateID].comments[action.comment.id] = action.comment;
       return {
         ...state,
-        candidates : candidates
-      };
+        candidates: {
+          ...state.candidates,
+          [action.candidate.id] : action.candidate
+        }
+      }
+
+    case 'ADD_COMMENT_SUCCESS':
+      return {
+        ...state,
+        candidates: {
+          ...state.candidates,
+          [action.candidateID] : {
+            ...state.candidates[action.candidateID],
+            comments: {
+              ...state.candidates[action.candidateID].comments,
+              [action.comment.id]: action.comment,
+            }
+          }
+        }
+      }
 
     case 'DELETE_COMMENT_SUCCESS':
       candidates = { ...state.candidates };
@@ -42,11 +54,18 @@ export default function reducer(state, action) {
       };
 
     case 'SUBSCRIBE_SUCCESS':
-      candidates = { ...state.candidates };
-      candidates[action.candidateID].subscribers[action.email] = action.email;
       return {
         ...state,
-        candidates: candidates
+        candidates: {
+          ...candidates,
+          [action.candidateID]: {
+            ...candidates[action.candidateID],
+            subscribers: {
+              ...candidates[action.candidateID].subscribers,
+              [action.email]: action.email
+            }
+          }
+        }
       };
 
     case 'UNSUBSCRIBE_SUCCESS':
@@ -62,7 +81,13 @@ export default function reducer(state, action) {
       notifications[action.notificationID].recent = false;
       return {
         ...state,
-        notifications: notifications
+        notifications: {
+          ...state.notifications,
+          [action.notificationID]: {
+            ...state.notifications[action.notificationID],
+            recent: false
+          }
+        }
       };
 
     case 'DELETE_NOTIFICATION_SUCCESS':
@@ -74,11 +99,15 @@ export default function reducer(state, action) {
       };
 
     case 'UPLOAD_RESUME_SUCCESS':
-      candidates = { ...state.candidates };
-      candidates[action.intervieweeID].resume = action.resume;
       return {
         ...state,
-        candidates: candidates
+        candidates: {
+          ...candidates,
+          [action.intervieweeID]: {
+            ...candidates[action.intervieweeID],
+            resume: action.resume
+          }
+        }
       };
 
     default:

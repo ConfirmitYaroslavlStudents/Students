@@ -5,6 +5,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 import UploadIcon from 'material-ui-icons/FileUpload';
 import DownloadIcon from 'material-ui-icons/FileDownload';
 import FileUploader from 'react-input-files';
+import CustomFileUploader from '../common/fileUploader';
 import { CircularProgress } from 'material-ui/Progress';
 
 const buttonStyle = {
@@ -40,18 +41,15 @@ export default function ResumeControls(props) {
       }
       {
         props.enableUpload ?
-          props.authorized ?
-            <FileUploader accept='.doc, .docx, .txt, .pdf'
-                          onChange={(files) => {
-                            if (!props.onUploading && files.length > 0) {
-                              props.uploadResume(props.interviewee.id, files[0]);
-                            }
-                          }}>
-              <IconButton disabled={props.onUploading} icon={<UploadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
-            </FileUploader>
-            :
-            <IconButton disabled icon={<UploadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' onClick={() => { }}/>
-          : ''
+          <CustomFileUploader
+            uploadFile={(file) => {
+              if (!props.onUploading && file) {
+                props.uploadResume(props.interviewee.id, file);
+              }
+            }}
+            icon={<UploadIcon style={buttonIconStyle}/>}
+            disabled={!props.authorized}
+          /> : ''
       }
     </Wrapper>
   );

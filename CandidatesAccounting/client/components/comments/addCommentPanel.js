@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {getCurrentDateTime} from '../../utilities/customMoment';
+import { getCurrentDateTime } from '../../utilities/customMoment';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import AttachIcon from 'material-ui-icons/AttachFile';
 import AddIcon from 'material-ui-icons/AddCircleOutline';
@@ -8,16 +8,7 @@ import styled from 'styled-components';
 import ReactQuill from 'react-quill';
 import createComment from '../../utilities/createComment';
 import SubscribeButton from './subscribeButton';
-import FileUploader from 'react-input-files';
-
-const customReactQuillModules = {
-  toolbar: [
-    [{ 'size': ['small', false, 'large', 'huge'] }],
-    ['bold', 'italic', 'underline','strike'],
-    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-    ['link'],
-  ],
-};
+import FileUploader from '../common/fileUploader';
 
 export default class AddCommentPanel extends Component {
   constructor(props) {
@@ -26,6 +17,7 @@ export default class AddCommentPanel extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleAttachFile = this.handleAttachFile.bind(this);
     this.addNewComment = this.addNewComment.bind(this);
+    this.createCustomQuillToolbar = this.createCustomQuillToolbar.bind(this)
   }
 
   handleChange(text) {
@@ -34,6 +26,33 @@ export default class AddCommentPanel extends Component {
 
   handleAttachFile(file) {
     this.setState({commentAttachment: file});
+  }
+
+  createCustomQuillToolbar() {
+    return (
+      <div id="toolbar" style={{display: 'flex', alignItems: 'center'}}>
+        <select defaultValue={''} className="ql-size">
+          <option value='small' />
+          <option value='' />
+          <option value='large' />
+          <option value='huge' />
+        </select>
+        <button className="ql-bold" />
+        <button className="ql-italic" />
+        <button className="ql-underline" />
+        <button className="ql-strike" />
+        <button className="ql-list" value="ordered" />
+        <button className="ql-list" value="bullet" />
+        <button className="ql-indent" value="-1" />
+        <button className="ql-indent" value="+1" />
+        <button className="ql-link" />
+        <FileUploader
+          uploadFile={this.handleAttachFile}
+          icon={<AttachIcon style={{width: 20, height: 20}}/>}
+          attachment={this.state.commentAttachment}
+          disabled={this.props.disabled}/>
+      </div>
+    )
   }
 
   addNewComment() {
@@ -57,12 +76,13 @@ export default class AddCommentPanel extends Component {
     return (
       <AddCommentWrapper>
         <CommentTextInput>
+          {this.createCustomQuillToolbar()}
           <ReactQuill
             value={this.state.commentText}
             onChange={this.handleChange}
             placeholder="New comment"
             tabIndex={1}
-            modules={customReactQuillModules}
+            modules={AddCommentPanel.modules}
             onKeyDown={
               (event) => {
                 if (event.keyCode === 13) {
@@ -74,24 +94,6 @@ export default class AddCommentPanel extends Component {
               }
             }
           />
-          <AddAttachmentButtonWrapper>
-            {
-              this.props.disabled ?
-                <IconButton icon={<AttachIcon style={{width: 22, height: 22}}/>} disabled onClick={ () => { } } />
-                :
-                <FileUploader accept='.doc, .docx, .txt, .pdf'
-                              onChange={(files) => {
-                                this.handleAttachFile(files[0]);
-                              }}>
-                  <IconButton icon={<AttachIcon style={{width: 22, height: 22}}/>} onClick={ () => { } } />
-                </FileUploader>
-              }
-              {
-                !this.props.disabled && this.state.commentAttachment ?
-                  <AttachmentFileNameWrapper>{this.state.commentAttachment.name}</AttachmentFileNameWrapper>
-                  : ''
-              }
-          </AddAttachmentButtonWrapper>
         </CommentTextInput>
         <ButtonWrapper>
           <NotificationsWrapper>
@@ -129,27 +131,18 @@ AddCommentPanel.propTypes = {
   disabled: PropTypes.bool,
 };
 
+AddCommentPanel.modules = {
+  toolbar: {
+    container: "#toolbar",
+  }
+}
+
 const AddCommentWrapper = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   position: relative;
   width: 100%;
   clear: both;
   background: #FFF;
-`;
-
-const AddAttachmentButtonWrapper = styled.div`
-  display: inline-flex;
-  align-items: center;
-  position: absolute;
-  bottom: 0px;
-  right: 74px;
-  color: #777;
-`;
-
-const AttachmentFileNameWrapper = styled.div`
-  display: inline-flex;
-  font-size: 90%;
-  padding-right: 12px;
 `;
 
 const ButtonWrapper = styled.div`

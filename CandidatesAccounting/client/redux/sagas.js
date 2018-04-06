@@ -6,7 +6,6 @@ import {
   call,
   select
 } from 'redux-saga/effects';
-import createCandidate from '../utilities/createCandidate';
 import {
   setState,
   updateCandidateSuccess,
@@ -20,14 +19,13 @@ import {
   setApplicationStatus,
   uploadResumeSuccess,
 } from './actions';
-import {
-  login,
-  logout
-} from '../api/authorizationService';
-import {
-  getInitialState,
-  getUserState
-} from '../api/commonService';
+import { login, logout } from '../api/authorizationService';
+import { getUserState } from '../api/commonService';
+import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js';
+import { subscribe, unsubscribe } from '../api/subscribeService';
+import { noticeNotification, deleteNotification } from '../api/notificationService';
+import { uploadResume } from '../api/resumeService';
+import createCandidate from '../utilities/candidate';
 import {
   getCandidates,
   getCandidate,
@@ -35,20 +33,6 @@ import {
   deleteCandidate,
   updateCandidate
 } from '../api/candidateService.js';
-import {
-  addComment,
-  deleteComment,
-  addCommentAttachment
-} from '../api/commentService.js';
-import {
-  subscribe,
-  unsubscribe
-} from '../api/subscribeService';
-import {
-  noticeNotification,
-  deleteNotification
-} from '../api/notificationService';
-import { uploadResume } from '../api/resumeService';
 
 export default function* rootSaga() {
   yield all([
@@ -70,11 +54,11 @@ export default function* rootSaga() {
 }
 
 function* watchLogin() {
-  yield takeEvery('LOGIN', loginSaga);
+  yield takeLatest('LOGIN', loginSaga);
 }
 
 function* watchLogout() {
-  yield takeEvery('LOGOUT', logoutSaga);
+  yield takeLatest('LOGOUT', logoutSaga);
 }
 
 function* watchUploadResume() {
@@ -127,190 +111,198 @@ function* watchGetCandidate() {
 
 function* loginSaga(action) {
   try {
-    yield put(setApplicationStatus('signining'));
-    const username = yield call(login, action.email, action.password);
-    let newState = yield call(getUserState, username);
+    yield put(setApplicationStatus('signining'))
+    const username = yield call(login, action.email, action.password)
+    let newState = yield call(getUserState, username)
     yield put(setState({
       username: username,
       notifications: newState.notifications
     }));
-    yield put(setApplicationStatus('ok'));
+    yield put(setApplicationStatus('ok'))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Incorrect login or password.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Incorrect login or password.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
-function* logoutSaga(action) {
+function* logoutSaga() {
   try {
-    yield put(setApplicationStatus('refreshing'));
-    yield call(logout);
-    let newState = yield call(getUserState, '');
+    yield put(setApplicationStatus('refreshing'))
+    yield call(logout)
+    let newState = yield call(getUserState, '')
     yield put(setState({
       username: '',
       notifications: newState.notifications
     }));
-    yield put(setApplicationStatus('ok'));
+    yield put(setApplicationStatus('ok'))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Logout error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Logout error.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
 function* uploadResumeSaga(action) {
   try {
-    yield put(setApplicationStatus('uploading-' + action.intervieweeID));
-    yield call(uploadResume, action.intervieweeID, action.resume);
-    yield put(uploadResumeSuccess(action.intervieweeID, action.resume.name));
-    yield put(setApplicationStatus('ok'));
+    yield put(setApplicationStatus('uploading-' + action.intervieweeID))
+    yield call(uploadResume, action.intervieweeID, action.resume)
+    yield put(uploadResumeSuccess(action.intervieweeID, action.resume.name))
+    yield put(setApplicationStatus('ok'))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Upload resume error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Upload resume error.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
 function* addCandidateSaga(action) {
   try {
-    yield call(addCandidate, createCandidate(action.candidate.status, action.candidate));
+    yield call(addCandidate, createCandidate(action.candidate.status, action.candidate))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Add candidate error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Add candidate error.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
 function* updateCandidateSaga(action) {
   try {
-    yield put(setApplicationStatus('updating-' + action.candidate.id));
-    yield call(updateCandidate, action.candidate);
-    yield put(updateCandidateSuccess(action.candidate));
-    yield put(setApplicationStatus('ok'));
+    yield put(setApplicationStatus('updating-' + action.candidate.id))
+    yield call(updateCandidate, action.candidate)
+    yield put(updateCandidateSuccess(action.candidate))
+    yield put(setApplicationStatus('ok'))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Update candidate error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Update candidate error.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
 function* deleteCandidateSaga(action) {
   try {
-    yield call(deleteCandidate, action.candidateID);
+    yield call(deleteCandidate, action.candidateID)
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Delete candidate error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Delete candidate error.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
 function* addCommentSaga(action) {
   try {
-    let comment = action.comment;
-    comment.id = yield call(addComment, action.candidateID, action.comment);
+    const comment = action.comment
+    comment.id = yield call(addComment, action.candidateID, action.comment)
     if (action.commentAttachment) {
-      yield call(addCommentAttachment, action.candidateID, action.comment.id, action.commentAttachment);
+      yield call(addCommentAttachment, action.candidateID, action.comment.id, action.commentAttachment)
     }
-    yield put(addCommentSuccess(action.candidateID, comment));
+    yield put(addCommentSuccess(action.candidateID, comment))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Add comment error.'));
+    yield put(setErrorMessage(error + '. Add comment error.'))
   }
 }
 
 function* deleteCommentSaga(action) {
   try {
-    yield call(deleteComment, action.candidateID, action.commentID);
-    yield put(deleteCommentSuccess(action.candidateID, action.commentID));
+    yield call(deleteComment, action.candidateID, action.commentID)
+    yield put(deleteCommentSuccess(action.candidateID, action.commentID))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Delete comment error.'));
+    yield put(setErrorMessage(error + '. Delete comment error.'))
   }
 }
 
 function* subscribeSaga(action) {
   try {
-    yield call(subscribe, action.candidateID, action.email);
-    yield put(subscribeSuccess(action.candidateID, action.email));
+    yield call(subscribe, action.candidateID, action.email)
+    yield put(subscribeSuccess(action.candidateID, action.email))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Subsribe error.'));
+    yield put(setErrorMessage(error + '. Subsribe error.'))
   }
 }
 
 function* unsubscribeSaga(action) {
   try {
-    yield call(unsubscribe, action.candidateID, action.email);
-    yield put(unsubscribeSuccess(action.candidateID, action.email));
+    yield call(unsubscribe, action.candidateID, action.email)
+    yield put(unsubscribeSuccess(action.candidateID, action.email))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Unsubsribe error.'));
+    yield put(setErrorMessage(error + '. Unsubsribe error.'))
   }
 }
 
 function* noticeNotificationSaga(action) {
   try {
-    yield call(noticeNotification, action.username, action.notificationID);
-    yield put(noticeNotificationSuccess(action.username, action.notificationID));
+    yield call(noticeNotification, action.username, action.notificationID)
+    yield put(noticeNotificationSuccess(action.username, action.notificationID))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Notice notification error.'));
+    yield put(setErrorMessage(error + '. Notice notification error.'))
   }
 }
 
 function* deleteNotificationSaga(action) {
   try {
-    yield call(deleteNotification, action.username, action.notificationID);
-    yield put(deleteNotificationSuccess(action.username, action.notificationID));
+    yield call(deleteNotification, action.username, action.notificationID)
+    yield put(deleteNotificationSuccess(action.username, action.notificationID))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Delete notification error.'));
+    yield put(setErrorMessage(error + '. Delete notification error.'))
   }
 }
 
 function* loadCandidatesSaga(action) {
   try {
-    yield put(setApplicationStatus(action.stateChanges.applicationStatus ? action.stateChanges.applicationStatus : 'loading'));
+    const applicationStatus = action.stateChanges.applicationStatus ? action.stateChanges.applicationStatus : 'loading'
+    yield put(setApplicationStatus(applicationStatus))
     yield put(setState(action.stateChanges));
-    let candidateStatus = yield select((state) => {return state.candidateStatus});
-    let candidatesPerPage = yield select((state) => {return state.candidatesPerPage});
-    let candidatesOffset = yield select((state) => {return state.offset});
-    let sortingField = yield select((state) => {return state.sortingField});
-    let sortingDirection = yield select((state) => {return state.sortingDirection});
-    let searchRequest = yield select((state) => {return state.searchRequest});
+    const candidateStatus = yield select((state) => { return state.candidateStatus })
+    const candidatesPerPage = yield select((state) => { return state.candidatesPerPage })
+    const candidatesOffset = yield select((state) => { return state.offset })
+    const sortingField = yield select((state) => { return state.sortingField })
+    const sortingDirection = yield select((state) => { return state.sortingDirection })
+    const searchRequest = yield select((state) => { return state.searchRequest })
     yield call(action.browserHistory.replace, '/'
       + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
       + '?take=' + candidatesPerPage
       + (candidatesOffset === 0 ? '' : '&skip=' + candidatesOffset)
       + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection)
-      + (searchRequest === '' ? '' : '&q=' + encodeURIComponent(searchRequest)));
-    let serverResponse = yield call(getCandidates, candidatesPerPage, candidatesOffset, candidateStatus, sortingField, sortingDirection, searchRequest);
+      + (searchRequest === '' ? '' : '&q=' + encodeURIComponent(searchRequest)))
+    const serverResponse = yield call(
+      getCandidates,
+      candidatesPerPage,
+      candidatesOffset,
+      candidateStatus,
+      sortingField,
+      sortingDirection,
+      searchRequest)
     yield put(setState({
       candidates: serverResponse.candidates,
       totalCount: serverResponse.total
-    }));
-    yield put(setApplicationStatus('ok'));
+    }))
+    yield put(setApplicationStatus('ok'))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Load candidates error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Load candidates error.'))
+    yield put(setApplicationStatus('error'))
   }
 }
 
 function* getCandidateSaga(action) {
   try {
-    yield put(setApplicationStatus('loading'));
-    let candidates = {};
-    let candidate = yield call(getCandidate, action.id);
-    candidates[candidate.id] = candidate;
+    yield put(setApplicationStatus('loading'))
+    const candidate = yield call(getCandidate, action.id)
+    const candidates = {}
+    candidates[candidate.id] = candidate
     yield put(setState({
       candidates: candidates
     }));
-    yield put(setApplicationStatus('ok'));
+    yield put(setApplicationStatus('ok'))
   }
   catch(error) {
-    yield put(setErrorMessage(error + '. Get candidate error.'));
-    yield put(setApplicationStatus('error'));
+    yield put(setErrorMessage(error + '. Get candidate error.'))
+    yield put(setApplicationStatus('error'))
   }
 }

@@ -1,4 +1,4 @@
-import sendGraphQLQuery from './graphqlClient';
+import sendGraphQLQuery from './graphqlClient'
 
 export function noticeNotification(username, notificationID) {
   return sendGraphQLQuery(
@@ -15,7 +15,7 @@ export function noticeNotification(username, notificationID) {
   )
     .then((data) => {
       if (!data.noticeNotification) {
-        throw 'Server error';
+        throw 'Server error'
       }
     });
 }
@@ -35,7 +35,7 @@ export function deleteNotification(username, notificationID) {
   )
     .then((data) => {
       if (!data.deleteNotification) {
-        throw 'Server error';
+        throw 'Server error'
       }
     });
 }

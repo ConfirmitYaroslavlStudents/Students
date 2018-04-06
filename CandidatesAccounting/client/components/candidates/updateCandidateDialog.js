@@ -1,64 +1,66 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
-import LoadableCandidateInfoForm from './loadableCandidateInfoForm';
-import {checkCandidateValidation} from '../../utilities/candidateValidators';
-import createCandidate from '../../utilities/createCandidate';
-import createComment from '../../utilities/createComment';
-import SaveIcon from 'material-ui-icons/Save';
-import EditIcon from 'material-ui-icons/Edit';
-import CloseIcon from 'material-ui-icons/Close';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import {getCurrentDateTime} from '../../utilities/customMoment';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { InlineFlexDiv } from '../common/styledComponents'
+import { MediumButtonStyle } from '../common/styleObjects'
+import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
+import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
+import { checkCandidateValidation } from '../../utilities/candidateValidators'
+import Candidate from '../../utilities/candidate'
+import Comment from '../../utilities/comment'
+import SaveIcon from 'material-ui-icons/Save'
+import EditIcon from 'material-ui-icons/Edit'
+import CloseIcon from 'material-ui-icons/Close'
+import IconButton from '../common/UIComponentDecorators/iconButton'
 
 export default class UpdateCandidateDialog extends React.Component {
   constructor(props) {
-    super(props);
-    this.candidate = createCandidate(props.candidate.status, props.candidate);
-    this.state = ({isOpen: false});
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    super(props)
+    this.candidate = new Candidate(props.candidate.status, props.candidate)
+    this.state = ({ isOpen: false })
+    this.initialStatus = props.candidate.status
   }
 
-  handleOpen() {
-    this.candidate = createCandidate(this.props.candidate.status, this.props.candidate);
-    this.setState({isOpen: true});
+  handleOpen = () => {
+    this.candidate = new Candidate(this.props.candidate.status, this.props.candidate)
+    this.setState({isOpen: true})
   }
 
-  handleClose() {
-    this.setState({isOpen: false});
+  handleClose = () => {
+    this.setState({isOpen: false})
+  }
+
+  updateCandidate = () => {
+    if (checkCandidateValidation(this.candidate)) {
+      if (this.candidate.status !== this.initialStatus) {
+        this.candidate.comments['newStatus'] = new Comment('SYSTEM', ' New status: ' + this.candidate.status)
+      }
+      this.props.updateCandidate(this.candidate)
+      this.handleClose()
+    }
   }
 
   render() {
-    const initialStatus = this.candidate.status;
+    this.initialStatus = this.candidate.status
     return (
-      <div style={{display: 'inline-block'}}>
-        <IconButton icon={<EditIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
+      <InlineFlexDiv>
+        <IconButton icon={<EditIcon />} style={MediumButtonStyle} disabled={this.props.disabled} onClick={this.handleOpen}/>
         <DialogWindow
-          title="Candidate edit"
+          title='Candidate edit'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           controls={
-            <div style={{display: 'inline-block'}}>
-              <IconButton color="inherit" icon={<SaveIcon />} onClick={() => {
-                if (checkCandidateValidation(this.candidate)) {
-                  if (this.candidate.status !== initialStatus) {
-                    this.candidate.comments.push(createComment('SYSTEM', getCurrentDateTime(), ' New status: ' + this.candidate.status));
-                  }
-                  this.props.updateCandidate(this.candidate);
-                  this.handleClose();
-                }
-              }}/>
-              <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
-            </div>
+            <InlineFlexDiv>
+              <IconButton color='inherit' icon={<SaveIcon />} onClick={this.updateCandidate}/>
+              <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/>
+            </InlineFlexDiv>
           }>
             <LoadableCandidateInfoForm
               candidate={this.candidate}
               tags={this.props.tags}
             />
         </DialogWindow>
-      </div>
-    );
+      </InlineFlexDiv>
+    )
   }
 }
 
@@ -67,4 +69,4 @@ UpdateCandidateDialog.propTypes = {
   updateCandidate: PropTypes.func.isRequired,
   tags: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-};
+}

@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import TextField from 'material-ui/TextField'
 
 export default class CustomTextField extends Component{
   constructor(props) {
-    super(props);
-    this.state = {value: props.value ? props.value : ''};
-    this.handleChange = this.handleChange.bind(this);
+    super(props)
+    this.state = {value: props.value ? props.value : ''}
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(value) {
-    this.props.onChange(value);
-    this.setState({value: value});
+    this.props.onChange(value)
+    this.setState({value: value})
   }
 
   render() {
@@ -24,15 +24,15 @@ export default class CustomTextField extends Component{
         onChange={(event) => {
           this.handleChange(event.target.value)
         }}
-        multiline={this.props.multiline}
-        fullWidth={this.props.fullWidth}
         required={this.props.required}
         autoFocus={this.props.autoFocus}
         type={this.props.type}
         error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}
-        margin="normal"
+        margin='normal'
+        multiline
+        fullWidth
       />
-    );
+    )
   }
 }
 
@@ -41,11 +41,8 @@ CustomTextField.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  multiline: PropTypes.bool,
   autoFocus: PropTypes.bool,
   checkValid: PropTypes.func,
-  fullWidth: PropTypes.bool,
   required: PropTypes.bool,
-  type: PropTypes.string,
   name: PropTypes.string,
-};
+}

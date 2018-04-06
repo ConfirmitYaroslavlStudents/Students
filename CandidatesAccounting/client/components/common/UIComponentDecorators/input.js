@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Input from 'material-ui/Input';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Input from 'material-ui/Input'
 
 export default function CustomInput(props) {
   return (
@@ -14,7 +14,7 @@ export default function CustomInput(props) {
       onFocus={(event) => {if (props.onFocus) {props.onFocus(event)}}}
       onBlur={(event) => {if (props.onBlur) {props.onBlur(event)}}}
     />
-  );
+  )
 }
 
 CustomInput.propTypes = {
@@ -26,4 +26,4 @@ CustomInput.propTypes = {
   placeholder: PropTypes.string,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
-};
+}

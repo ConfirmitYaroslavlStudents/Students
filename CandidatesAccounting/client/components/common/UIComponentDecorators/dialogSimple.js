@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Slide from 'material-ui/transitions/Slide'
 import Dialog, {
   DialogContent,
   DialogActions,
   DialogTitle,
-} from 'material-ui/Dialog';
-import Slide from 'material-ui/transitions/Slide';
+} from 'material-ui/Dialog'
 
 function Transition(props) {
-  return <Slide direction="up" {...props} />;
+  return <Slide direction='up' {...props} />
 }
 
 export default function SimpleDialog(props) {
@@ -28,7 +28,7 @@ export default function SimpleDialog(props) {
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }
 
 SimpleDialog.propTypes = {
@@ -37,4 +37,4 @@ SimpleDialog.propTypes = {
   title: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   actions: PropTypes.object,
-};
+}

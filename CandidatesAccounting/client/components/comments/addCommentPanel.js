@@ -1,102 +1,104 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { getCurrentDateTime } from '../../utilities/customMoment';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import AttachIcon from 'material-ui-icons/AttachFile';
-import AddIcon from 'material-ui-icons/AddCircleOutline';
-import styled from 'styled-components';
-import ReactQuill from 'react-quill';
-import createComment from '../../utilities/createComment';
-import SubscribeButton from './subscribeButton';
-import FileUploader from '../common/fileUploader';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { BigButtonStyle, SmallestIconStyle, SmallIconStyle } from '../common/styleObjects'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import AttachIcon from 'material-ui-icons/AttachFile'
+import AddIcon from 'material-ui-icons/AddCircleOutline'
+import ReactQuill from 'react-quill'
+import Comment from '../../utilities/comment'
+import SubscribeButton from './subscribeButton'
+import FileUploader from '../common/fileUploader'
+import {
+  CenteredDiv,
+  AddCommentPanelWrapper,
+  QuillWrapper,
+  AddCommentPanelButtonsWrapper,
+  SubscribeButtonWrapper,
+  AddCommentButtonWrapper
+} from '../common/styledComponents'
 
 export default class AddCommentPanel extends Component {
   constructor(props) {
     super(props);
-    this.state = ({commentText: '', commentAttachment: null});
-    this.handleChange = this.handleChange.bind(this);
-    this.handleAttachFile = this.handleAttachFile.bind(this);
-    this.addNewComment = this.addNewComment.bind(this);
-    this.createCustomQuillToolbar = this.createCustomQuillToolbar.bind(this)
+    this.state = ({ commentText: '', commentAttachment: null })
   }
 
-  handleChange(text) {
-    this.setState({commentText: text});
+  handleChange = (text) => {
+    this.setState({ commentText: text })
   }
 
-  handleAttachFile(file) {
-    this.setState({commentAttachment: file});
+  handleAttachFile = (file) => {
+    this.setState({ commentAttachment: file })
   }
 
-  createCustomQuillToolbar() {
+  createCustomQuillToolbar = () => {
     return (
-      <div id="toolbar" style={{display: 'flex', alignItems: 'center'}}>
-        <select defaultValue={''} className="ql-size">
+      <CenteredDiv id='toolbar'>
+        <select defaultValue='' className='ql-size'>
           <option value='small' />
           <option value='' />
           <option value='large' />
           <option value='huge' />
         </select>
-        <button className="ql-bold" />
-        <button className="ql-italic" />
-        <button className="ql-underline" />
-        <button className="ql-strike" />
-        <button className="ql-list" value="ordered" />
-        <button className="ql-list" value="bullet" />
-        <button className="ql-indent" value="-1" />
-        <button className="ql-indent" value="+1" />
-        <button className="ql-link" />
+        <button className='ql-bold' />
+        <button className='ql-italic' />
+        <button className='ql-underline' />
+        <button className='ql-strike' />
+        <button className='ql-list' value='ordered' />
+        <button className='ql-list' value='bullet' />
+        <button className='ql-indent' value='-1' />
+        <button className='ql-indent' value='+1' />
+        <button className='ql-link' />
         <FileUploader
           uploadFile={this.handleAttachFile}
-          icon={<AttachIcon style={{width: 20, height: 20}}/>}
+          icon={<AttachIcon style={SmallestIconStyle} />}
           attachment={this.state.commentAttachment}
-          disabled={this.props.disabled}/>
-      </div>
+          disabled={this.props.disabled} />
+      </CenteredDiv>
     )
   }
 
-  addNewComment() {
-    let commentText = this.state.commentText;
+  handleEnterPress = (event) => {
+    if (event.keyCode === 13) {
+      if (!event.shiftKey) {
+        event.preventDefault()
+        this.addNewComment()
+      }
+    }
+  }
+
+  addNewComment = () => {
+    let commentText = this.state.commentText
     if (commentText.replace(/<[^>]+>/g,'').trim() !== '' || this.state.commentAttachment) {
       if (commentText.slice(-11) === '<p><br></p>') {
-        commentText = commentText.substr(0, commentText.length - 11);
+        commentText = commentText.substr(0, commentText.length - 11)
       }
-      this.props.addComment(this.props.candidate.id, createComment(
+      this.props.addComment(this.props.candidate.id, new Comment(
         this.props.username,
-        getCurrentDateTime(),
         commentText,
         this.state.commentAttachment ? this.state.commentAttachment.name : ''
-        ), this.state.commentAttachment);
-      this.props.onClick();
-      this.setState({commentText: '', commentAttachment: null});
+        ), this.state.commentAttachment)
+      this.props.onClick()
+      this.setState({ commentText: '', commentAttachment: null })
     }
   }
 
   render() {
     return (
-      <AddCommentWrapper>
-        <CommentTextInput>
+      <AddCommentPanelWrapper>
+        <QuillWrapper>
           {this.createCustomQuillToolbar()}
           <ReactQuill
             value={this.state.commentText}
             onChange={this.handleChange}
-            placeholder="New comment"
+            placeholder='New comment'
             tabIndex={1}
             modules={AddCommentPanel.modules}
-            onKeyDown={
-              (event) => {
-                if (event.keyCode === 13) {
-                  if (!event.shiftKey) {
-                    event.preventDefault();
-                    this.addNewComment();
-                  }
-                }
-              }
-            }
+            onKeyDown={this.handleEnterPress}
           />
-        </CommentTextInput>
-        <ButtonWrapper>
-          <NotificationsWrapper>
+        </QuillWrapper>
+        <AddCommentPanelButtonsWrapper>
+          <SubscribeButtonWrapper>
             <SubscribeButton
               active={!this.props.disabled && !!this.props.candidate.subscribers[this.props.username]}
               candidate={this.props.candidate}
@@ -105,19 +107,18 @@ export default class AddCommentPanel extends Component {
               unsubscribe={this.props.unsubscribe}
               disabled={this.props.disabled}
             />
-          </NotificationsWrapper>
-          <AddButtonWrapper>
+          </SubscribeButtonWrapper>
+          <AddCommentButtonWrapper>
             <IconButton
-              icon={<AddIcon style={{width: 28, height: 28}}/>}
-              iconStyle="big-icon"
+              icon={<AddIcon style={SmallIconStyle}/>}
               disabled={this.props.disabled}
               onClick={this.addNewComment}
-              style={{width: 60, height: 60}}
+              style={BigButtonStyle}
             />
-          </AddButtonWrapper>
-        </ButtonWrapper>
-      </AddCommentWrapper>
-    );
+          </AddCommentButtonWrapper>
+        </AddCommentPanelButtonsWrapper>
+      </AddCommentPanelWrapper>
+    )
   }
 }
 
@@ -129,46 +130,10 @@ AddCommentPanel.propTypes = {
   unsubscribe: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-};
+}
 
 AddCommentPanel.modules = {
   toolbar: {
-    container: "#toolbar",
+    container: '#toolbar',
   }
 }
-
-const AddCommentWrapper = styled.div`
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  width: 100%;
-  clear: both;
-  background: #FFF;
-`;
-
-const ButtonWrapper = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  height: 100%;
-  right: 2px;
-  bottom: 2px;
- `;
-
-const NotificationsWrapper = styled.div`
-  display: inline-block;
-  position: relative;
-  top: 11px;
-  right: 11px;
-`;
-
-const AddButtonWrapper = styled.div`
-  display: inline-block;
-  position: absolute;
-  bottom: 0px;
-  right: 5px;
-`;
-
-const CommentTextInput = styled.div`
-  padding-right: 74px;
-`;

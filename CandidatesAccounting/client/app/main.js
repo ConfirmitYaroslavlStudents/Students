@@ -1,58 +1,52 @@
-import '../css/commonStyles.css';
-import '../css/selectizeStyles.css';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {
-  createStore,
-  applyMiddleware
-} from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import { Provider } from 'react-redux';
-import reducer from '../redux/reducer';
+import '../css/commonStyles.css'
+import '../css/selectizeStyles.css'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import { Provider } from 'react-redux'
+import reducer from '../redux/reducer'
 import rootSaga from '../redux/sagas'
-import {
-  BrowserRouter,
-  Route
-} from 'react-router-dom';
-import createMuiTheme from 'material-ui/styles/createMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import createPalette from 'material-ui/styles/createPalette';
-import { indigo } from 'material-ui/colors';
-import AppView from '../components/layout/appview';
-import { getUsername } from '../api/authorizationService';
-import { getInitialState } from '../api/commonService';
+import { BrowserRouter, Route } from 'react-router-dom'
+import createMuiTheme from 'material-ui/styles/createMuiTheme'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import createPalette from 'material-ui/styles/createPalette'
+import { indigo } from 'material-ui/colors'
+import AppView from '../components/layout/appview'
+import { getUsername } from '../api/authorizationService'
+import { getInitialState } from '../api/commonService'
 
 function configureStore(initialState) {
-  const sagaMiddleware = createSagaMiddleware();
-  const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware));
+  const sagaMiddleware = createSagaMiddleware()
+  const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware))
   let sagaRun = sagaMiddleware.run(function* () {
-    yield rootSaga();
+    yield rootSaga()
   });
   if (module.hot) {
     module.hot.accept('../redux/reducer', () => {
-      const nextReducer = require('../redux/reducer').default;
-      store.replaceReducer(nextReducer);
+      const nextReducer = require('../redux/reducer').default
+      store.replaceReducer(nextReducer)
     });
     module.hot.accept('../redux/sagas', () => {
-      const newRootSaga = require('../redux/sagas').default;
-      sagaRun.cancel();
+      const newRootSaga = require('../redux/sagas').default
+      sagaRun.cancel()
       sagaRun.done.then(() => {
         sagaRun = sagaMiddleware.run(function* replaceSaga() {
-          yield newRootSaga();
+          yield newRootSaga()
         })
       })
     })
   }
-  return store;
+  return store
 }
 
-const store = configureStore(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = configureStore(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const theme = createMuiTheme({
   palette: createPalette({
     primary: indigo,
   })
-});
+})
 
 function renderApp(app) {
   ReactDOM.render(
@@ -67,30 +61,31 @@ function renderApp(app) {
   );
 }
 
-let candidateStatus = '';
-let args = {};
+let candidateStatus = ''
+let args = {}
 
-let splitedURL = (window.location.pathname + window.location.search).split('?');
-let path = splitedURL[0];
-let splitedPath = path.split('/');
-switch (splitedPath[1]) {
+const splitedURL = (window.location.pathname + window.location.search).split('?')
+const path = splitedURL[0]
+const splitedPath = path.split('/')
+const tableName = splitedPath[1]
+switch (tableName) {
   case 'interviewees':
-    candidateStatus = 'Interviewee';
+    candidateStatus = 'Interviewee'
     break;
   case 'students':
-    candidateStatus = 'Student';
+    candidateStatus = 'Student'
     break;
   case 'trainees':
-    candidateStatus = 'Trainee';
+    candidateStatus = 'Trainee'
     break;
 }
-let URLargs = splitedURL[1];
+const URLargs = splitedURL[1]
 if (URLargs) {
-  let argsArray = URLargs.split('&');
+  const argsArray = URLargs.split('&')
   argsArray.forEach((arg) => {
-    let splited = arg.split('=');
-    args[splited[0]] = splited[1];
-  });
+    const splitedArg = arg.split('=')
+    args[splitedArg[0]] = splitedArg[1]
+  })
 }
 
 store.dispatch({
@@ -114,7 +109,7 @@ store.dispatch({
   }
 );
 
-renderApp(AppView);
+renderApp(AppView)
 
 getUsername().then((username) => {
   getInitialState(username, args.take ? Number(args.take) : 15, args.skip ? Number(args.skip) : 0, candidateStatus,
@@ -131,13 +126,13 @@ getUsername().then((username) => {
             notifications: initialState.notifications
           }
         }
-      );
-    });
-  });
+      )
+    })
+  })
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {
-    const nextApp = require('../components/layout/appview');
-    renderApp(nextApp);
+    const nextApp = require('../components/layout/appview')
+    renderApp(nextApp)
   })
 }

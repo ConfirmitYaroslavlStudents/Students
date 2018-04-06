@@ -23,6 +23,22 @@ module.exports = {
     }),
   ],
 
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: "async",
+      minSize: 10000,
+      minChunks: 1,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules\\[*lodash*|react\-dom\-factories]/,
+          name: "vendors",
+          chunks: "all"
+        }
+      }
+    }
+  },
+
   module: {
     rules: [
       {

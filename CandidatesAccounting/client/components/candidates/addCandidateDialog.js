@@ -1,60 +1,60 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {checkCandidateValidation} from '../../utilities/candidateValidators';
-import createCandidate from '../../utilities/createCandidate';
-import createComment from '../../utilities/createComment';
-import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
-import AddPersonIcon from 'material-ui-icons/PersonAdd';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { InlineFlexDiv } from '../common/styledComponents'
+import { checkCandidateValidation } from '../../utilities/candidateValidators'
+import Candidate from '../../utilities/candidate'
+import Comment from '../../utilities/comment'
+import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
+import AddPersonIcon from 'material-ui-icons/PersonAdd'
 import CloseIcon from 'material-ui-icons/Close';
-import LoadableCandidateInfoForm from './loadableCandidateInfoForm';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import {getCurrentDateTime} from '../../utilities/customMoment';
+import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
+import IconButton from '../common/UIComponentDecorators/iconButton'
 
 export default class AddCandidateDialog extends Component{
   constructor(props) {
     super(props);
-    this.state=({isOpen: false});
-    this.candidate = createCandidate(props.candidateStatus, {});
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.state = ({ isOpen: false });
+    this.candidate = new Candidate(props.candidateStatus);
   }
 
-  handleOpen() {
-    this.candidate = createCandidate(this.props.candidateStatus, {});
+  handleOpen = () => {
+    this.newCandidate = new Candidate(this.props.candidateStatus);
     this.setState({isOpen: true});
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({isOpen: false});
+  }
+
+  addCandidate = () => {
+    if (checkCandidateValidation(this.newCandidate)) {
+      this.newCandidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + this.newCandidate.status)
+      this.props.addCandidate(this.newCandidate)
+      this.handleClose()
+    }
   }
 
   render() {
     return (
-      <div style={{display: 'inline-block'}}>
-        <IconButton icon={<AddPersonIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
+      <InlineFlexDiv>
+        <IconButton icon={<AddPersonIcon />} disabled={this.props.disabled} onClick={this.handleOpen} />
         <DialogWindow
-          title="Add new candidate"
+          title='Add new candidate'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           controls={
-            <div style={{display: 'inline-block'}}>
-              <IconButton color='inherit' icon={<AddPersonIcon />} onClick={() => {
-                if (checkCandidateValidation(this.candidate)) {
-                  this.candidate.comments.push(createComment('SYSTEM', getCurrentDateTime(), ' Initial status: ' + this.candidate.status));
-                  this.props.addCandidate(this.candidate);
-                  this.handleClose();
-                }
-              }}/>
-              <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
-            </div>
+            <InlineFlexDiv>
+              <IconButton color='inherit' icon={<AddPersonIcon />} onClick={this.addCandidate}/>
+              <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose} />
+            </InlineFlexDiv>
           }>
             <LoadableCandidateInfoForm
-              candidate={this.candidate}
+              candidate={this.newCandidate}
               tags={this.props.tags}
             />
         </DialogWindow>
-      </div>
-    );
+      </InlineFlexDiv>
+    )
   }
 }
 
@@ -63,4 +63,4 @@ AddCandidateDialog.propTypes = {
   candidateStatus: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-};
+}

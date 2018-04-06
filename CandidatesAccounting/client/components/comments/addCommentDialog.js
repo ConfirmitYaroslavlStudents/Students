@@ -1,59 +1,56 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import DialogWindow from '../common/UIComponentDecorators/dialogWindow';
-import CommentIcon from 'material-ui-icons/InsertComment';
-import CloseIcon from 'material-ui-icons/Close';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import styled from 'styled-components';
-import LoadableAddCommentPanel from './loadableAddCommentPanel';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { InlineFlexDiv, AddCommentDialogFormWrapper } from '../common/styledComponents'
+import { MediumButtonStyle } from '../common/styleObjects'
+import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
+import CommentIcon from 'material-ui-icons/InsertComment'
+import CloseIcon from 'material-ui-icons/Close'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import LoadableAddCommentPanel from './loadableAddCommentPanel'
 
 export default class AddCommentDialog extends Component {
   constructor(props) {
     super(props);
-    this.state = ({ isOpen: false });
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.state = ({ isOpen: false })
   }
 
-  changeCommentText(text) {
-    this.setState({commentText: text});
+  changeCommentText = (text) => {
+    this.setState({ commentText: text })
   }
 
   handleOpen() {
-    this.setState({isOpen: true});
+    this.setState({ isOpen: true })
   }
 
   handleClose() {
-    this.setState({isOpen: false});
+    this.setState({ isOpen: false })
   }
 
   render() {
     return (
-      <div style={{display: 'inline-block'}}>
-        <IconButton icon={<CommentIcon />} style={{height: 40, width: 40}} disabled={this.props.disabled} onClick={this.handleOpen}/>
-
+      <InlineFlexDiv>
+        <IconButton icon={<CommentIcon />} style={MediumButtonStyle} disabled={this.props.disabled} onClick={this.handleOpen}/>
         <DialogWindow
-          title="Add new comment"
+          title='Add new comment'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
-          controls={
-            <IconButton color="inherit" icon={<CloseIcon />} onClick={this.handleClose}/>
-          }>
-            <FormWrapper>
-              {
-                <LoadableAddCommentPanel
-                  addComment={this.props.addComment}
-                  candidate={this.props.candidate}
-                  onClick={this.handleClose}
-                  username={this.props.username}
-                  subscribe={this.props.subscribe}
-                  unsubscribe={this.props.unsubscribe}
-                  disabled={this.props.disabled}
-                />
-              }
-            </FormWrapper>
+          controls={ <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/> }
+        >
+          <AddCommentDialogFormWrapper>
+            {
+              <LoadableAddCommentPanel
+                addComment={this.props.addComment}
+                candidate={this.props.candidate}
+                onClick={this.handleClose}
+                username={this.props.username}
+                subscribe={this.props.subscribe}
+                unsubscribe={this.props.unsubscribe}
+                disabled={this.props.disabled}
+              />
+            }
+          </AddCommentDialogFormWrapper>
         </DialogWindow>
-      </div>
+      </InlineFlexDiv>
     );
   }
 }
@@ -65,8 +62,4 @@ AddCommentDialog.propTypes = {
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-};
-
-const FormWrapper = styled.div`
-  width: 504px;
-`;
+}

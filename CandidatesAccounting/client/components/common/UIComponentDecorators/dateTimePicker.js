@@ -1,25 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import React from 'react'
+import PropTypes from 'prop-types'
+import TextField from 'material-ui/TextField'
 
 export default function CustomDateTimePicker(props) {
   return (
     <TextField
       label={props.label}
-      type="datetime-local"
+      type='datetime-local'
       defaultValue={props.defaultValue}
-      onChange={(event) => { props.onChange(event.target.value); }}
+      onChange={(event) => { props.onChange(event.target.value) }}
       fullWidth
-      margin="normal"
+      margin='normal'
       InputLabelProps={{
         shrink: true
       }}
     />
-  );
+  )
 }
 
 CustomDateTimePicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   defaultValue: PropTypes.string, //yyyy-mm-ddThh:mm
-};
+}

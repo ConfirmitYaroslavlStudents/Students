@@ -1,5 +1,5 @@
-import sendGraphQLQuery from './graphqlClient';
-import createCandidate from '../utilities/createCandidate';
+import sendGraphQLQuery from './graphqlClient'
+import Candidate from '../utilities/candidate'
 
 export function getCandidates(take, skip, status, sort, sortDir, searchRequest) {
   return sendGraphQLQuery(
@@ -41,17 +41,17 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
   )
     .then((data) => {
       if (!data) {
-        throw 'Connection error';
+        throw 'Connection error'
       }
       let candidates = {};
       data.candidatesPaginated.candidates.forEach((candidate) => {
-        candidates[candidate.id] = createCandidate(candidate.status, candidate);
-      });
+        candidates[candidate.id] = new Candidate(candidate.status, candidate)
+      })
       return {
         candidates: candidates,
         total: data.candidatesPaginated.total
-      };
-    });
+      }
+    })
 }
 
 export function getCandidate(id) {
@@ -86,10 +86,10 @@ export function getCandidate(id) {
   )
     .then((data) => {
       if (!data) {
-        throw 'Connection error';
+        throw 'Connection error'
       }
-      return createCandidate(data.candidate.status, data.candidate);
-    });
+      return new Candidate(data.candidate.status, data.candidate)
+    })
 }
 
 export function addCandidate(candidate) {
@@ -103,11 +103,11 @@ export function addCandidate(candidate) {
   )
   .then((data) => {
     if (!data.addCandidate) {
-      throw 'Server error';
+      throw 'Server error'
     } else {
-      return data.addCandidate;
+      return data.addCandidate
     }
-  });
+  })
 }
 
 export function updateCandidate(candidate) {
@@ -121,9 +121,9 @@ export function updateCandidate(candidate) {
   )
     .then((data) => {
       if (!data.updateCandidate) {
-        throw 'Server error';
+        throw 'Server error'
       }
-    });
+    })
 }
 
 export function deleteCandidate(candidateID) {
@@ -137,9 +137,9 @@ export function deleteCandidate(candidateID) {
   )
   .then((data) => {
     if (!data.deleteCandidate) {
-      throw 'Server error';
+      throw 'Server error'
     }
-  });
+  })
 }
 
 function convertToGraphQLType(candidate) {

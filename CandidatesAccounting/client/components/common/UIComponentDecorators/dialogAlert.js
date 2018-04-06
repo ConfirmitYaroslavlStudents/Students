@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
+import PropTypes from 'prop-types'
+import Button from 'material-ui/Button'
+import Slide from 'material-ui/transitions/Slide'
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from 'material-ui/Dialog';
-import Slide from 'material-ui/transitions/Slide';
+} from 'material-ui/Dialog'
 
 function Transition(props) {
-  return <Slide direction="left" {...props} />;
+  return <Slide direction="left" {...props} />
 }
 
 export default function DialogAlert(props) {
@@ -19,7 +19,7 @@ export default function DialogAlert(props) {
       <Dialog
         open={props.isOpen}
         transition={Transition}
-        onBackdropClick={(event) => {props.onRequestClose()}}
+        onBackdropClick={() => {props.onRequestClose()}}
       >
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
@@ -28,16 +28,16 @@ export default function DialogAlert(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onCancelClick} color="secondary">
+          <Button onClick={props.onCancelClick} color='secondary'>
             Cancel
           </Button>
-          <Button onClick={props.onConfirmClick} color="primary">
+          <Button onClick={props.onConfirmClick} color='primary'>
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }
 
 DialogAlert.propTypes = {
@@ -47,4 +47,4 @@ DialogAlert.propTypes = {
   onCancelClick: PropTypes.func.isRequired,
   title: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-};
+}

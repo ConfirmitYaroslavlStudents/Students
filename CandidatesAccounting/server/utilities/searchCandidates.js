@@ -1,26 +1,26 @@
 export default function searchCandidates(candidates, searchRequest) {
-  let searchWords = searchRequest.split(' ').filter(word => word.length > 0);
+  const searchWords = searchRequest.split(' ').filter(word => word.length > 0)
 
-  let foundCandidates = [];
+  const foundCandidates = []
 
   candidates.forEach((candidate) => {
-    let candidateIsValid = true;
+    let candidateIsValid = true
     for (let i = 0; i < searchWords.length; i++) {
       if (!searchByWord(candidate, searchWords[i])) {
-        candidateIsValid = false;
-        break;
+        candidateIsValid = false
+        break
       }
     }
     if (candidateIsValid) {
-      foundCandidates.push(candidate);
+      foundCandidates.push(candidate)
     }
-  });
+  })
 
-  return foundCandidates;
+  return foundCandidates
 }
 
 function searchByWord(candidate, searchWord) {
-  let lowerCasedSearchWord = searchWord.toLowerCase();
+  let lowerCasedSearchWord = searchWord.toLowerCase()
   return (
     candidate.id === searchWord
     || candidate.name.toLowerCase().includes(lowerCasedSearchWord)
@@ -29,5 +29,5 @@ function searchByWord(candidate, searchWord) {
     || (candidate.groupName && candidate.groupName.toLowerCase().includes(lowerCasedSearchWord))
     || (candidate.mentor && candidate.mentor.toLowerCase().includes(lowerCasedSearchWord))
     || candidate.tags.includes(searchWord)
-  );
+  )
 }

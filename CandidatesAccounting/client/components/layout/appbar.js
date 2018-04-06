@@ -47,13 +47,13 @@ export default function Appbar(props) {
                 icon={<SignOutIcon />}
                 color='inherit'
                 onClick={() => {
-                  props.logout();
+                  props.logout()
                 }}/>
             </UserControls>
           }
         </RightPartWrapper>}
     />
-  );
+  )
 }
 
 Appbar.propTypes = {
@@ -75,9 +75,9 @@ Appbar.propTypes = {
 const RightPartWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
+`
 
 const UserControls= styled.div`
   display: inline-flex;
   align-items: center;
-`;
+`

@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Tabs, {Tab} from 'material-ui/Tabs';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Tabs, {Tab} from 'material-ui/Tabs'
 
 export default function CustomTabs(props){
   return (
@@ -18,10 +18,10 @@ export default function CustomTabs(props){
         )
       }
     </Tabs>
-  );
+  )
 }
 
 CustomTabs.propTypes = {
   tabs: PropTypes.array.isRequired,
   onChange: PropTypes.func,
-};
+}

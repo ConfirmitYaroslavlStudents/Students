@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TextField from '../common/UIComponentDecorators/textField';
-import {isNotEmpty, isEmail} from '../../utilities/candidateValidators';
+import React from 'react'
+import PropTypes from 'prop-types'
+import TextField from '../common/UIComponentDecorators/textField'
+import {isNotEmpty, isEmail} from '../../utilities/candidateValidators'
 
 export default function LoginForm(props) {
   return (
@@ -16,7 +16,7 @@ export default function LoginForm(props) {
           fullWidth
           checkValid={isEmail}
           onChange={(email)=>{
-            props.account.email = email;
+            props.account.email = email
           }}
         />
         <TextField
@@ -27,7 +27,7 @@ export default function LoginForm(props) {
           fullWidth
           checkValid={isNotEmpty}
           onChange={(password)=>{
-            props.account.password = password;
+            props.account.password = password
           }}
         />
       </form>
@@ -37,4 +37,4 @@ export default function LoginForm(props) {
 
 LoginForm.propTypes = {
   account: PropTypes.object.isRequired,
-};
+}

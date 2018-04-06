@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 export default function TagList(props) {
   return (
@@ -12,7 +12,7 @@ export default function TagList(props) {
             searchRequest: tag
           },
           props.history
-        );
+        )
       }}>{tag}</Tag>))}
     </Wrapper>
   )
@@ -22,13 +22,13 @@ TagList.propTypes = {
   tags: PropTypes.array.isRequired,
   loadCandidates: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-};
+}
 
 const Wrapper = styled.div`
   display: inline-block;
   padding-top: 3px;
   min-width: 300px;
-`;
+`
 
 const Tag = styled.div`
   cursor: pointer;
@@ -44,4 +44,4 @@ const Tag = styled.div`
   &:hover {
     color: #2196F3;
   }
-`;
+`

@@ -1,4 +1,4 @@
-import sendGraphQLQuery from './graphqlClient';
+import sendGraphQLQuery from './graphqlClient'
 
 export function addComment(candidateID, comment) {
   return sendGraphQLQuery(
@@ -15,9 +15,9 @@ export function addComment(candidateID, comment) {
   )
   .then((data) => {
     if (!data.addComment) {
-      throw 'Server error';
+      throw 'Server error'
     }
-    return data.addComment;
+    return data.addComment
   });
 }
 
@@ -36,14 +36,14 @@ export function deleteComment(candidateID, commentID) {
   )
   .then((data) => {
     if (!data.deleteComment) {
-      throw 'Server error';
+      throw 'Server error'
     }
   });
 }
 
 export function addCommentAttachment(candidateID, commentID, attachment) {
-  let formData = new FormData();
-  formData.append('attachment', attachment);
+  let formData = new FormData()
+  formData.append('attachment', attachment)
 
   return fetch('/interviewees/' + candidateID + '/comments/' + commentID + '/attachment',
     {
@@ -53,9 +53,9 @@ export function addCommentAttachment(candidateID, commentID, attachment) {
     })
     .then((response) => {
       if (response.status === 200) {
-        return true;
+        return true
       } else {
-        throw response.status;
+        throw response.status
       }
-    });
+    })
 }

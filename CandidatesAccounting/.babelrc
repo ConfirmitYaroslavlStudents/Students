@@ -1,4 +1,11 @@
 {
-  "plugins": ["transform-react-jsx", "transform-object-rest-spread", "react-hot-loader/babel", "babel-plugin-styled-components", "syntax-dynamic-import"],
+  "plugins": [
+    "transform-react-jsx",
+    "transform-object-rest-spread",
+    "react-hot-loader/babel",
+    "babel-plugin-styled-components",
+    "syntax-dynamic-import",
+    "transform-class-properties"
+  ],
   "presets": [ "env", "react" ]
 }

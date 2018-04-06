@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled, {css} from 'styled-components';
-import NavLink from './navLink';
-import DeleteIcon from 'material-ui-icons/Cancel';
-import formatUserName from '../../utilities/formatUserName';
-import {formatDateTime} from '../../utilities/customMoment';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import AttachIcon from 'material-ui-icons/AttachFile';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled, {css} from 'styled-components'
+import NavLink from './navLink'
+import DeleteIcon from 'material-ui-icons/Cancel'
+import formatUserName from '../../utilities/formatUserName'
+import {formatDateTime} from '../../utilities/customMoment'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import AttachIcon from 'material-ui-icons/AttachFile'
 
 export default function NotificationBlock(props) {
   return (
@@ -31,9 +31,8 @@ export default function NotificationBlock(props) {
                 icon={<DeleteIcon style={{width: 20, height: 20}}/>}
                 style={{width: 24, height: 24}}
                 onClick={(event) => {
-                  console.log('del');
-                  props.deleteNotification(props.username, props.notification.id);
-                  event.stopPropagation();
+                  props.deleteNotification(props.username, props.notification.id)
+                  event.stopPropagation()
                 }}
               />
             </ButtonWrapper>
@@ -52,7 +51,7 @@ export default function NotificationBlock(props) {
         </ContentWrapper>
       </NotificationWrapper>
     </NavLink>
-  );
+  )
 }
 
 NotificationBlock.propTypes = {
@@ -62,7 +61,7 @@ NotificationBlock.propTypes = {
   username: PropTypes.string.isRequired,
   getCandidate: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-};
+}
 
 const NotificationWrapper = styled.div`
   display: inline-flex;
@@ -87,25 +86,25 @@ const NotificationWrapper = styled.div`
       border-left: 5px solid #64B5F6;
     `}	
   }
-`;
+`
 
 const InfoWrapper = styled.div`
   margin-bottom: 4px;
-`;
+`
 
 const CandidateNameWrapper = styled.div`
   display: inline-flex;
-`;
+`
 
 const ControlsWrapper = styled.div`
   display: inline-flex;
   float: right;
-`;
+`
 
 const DateWrapper = styled.div`
   color: #888;
   font-size: 96%;
-`;
+`
 
 const ButtonWrapper = styled.div`
   display: inline-flex;
@@ -113,15 +112,15 @@ const ButtonWrapper = styled.div`
   margin-left: 4px;
   margin-right: -6px;
   margin-top: -6px;
-`;
+`
 
 const ContentWrapper = styled.div`
   color: #000;
-`;
+`
 
 const ServiceText = styled.span`
   color: #777;
-`;
+`
 
 const MessageWrapper = styled.div`
   background-color: #f3f3f3;
@@ -129,10 +128,10 @@ const MessageWrapper = styled.div`
   padding: 8px;  
   word-wrap: break-word;
   overflow: hidden;
-`;
+`
 
 const AttachmentWrapper = styled.div`  
   display: inline-flex;
   align-items: center;
   color: #777;
-`;
+`

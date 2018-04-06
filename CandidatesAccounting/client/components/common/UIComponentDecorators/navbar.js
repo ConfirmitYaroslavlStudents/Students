@@ -22,11 +22,11 @@ export default function Navbar(props) {
         {props.rightPart}
       </Toolbar>
     </AppBar>
-  );
+  )
 }
 
 Navbar.propTypes = {
   icon: PropTypes.object,
   title: PropTypes.string,
   rightPart: PropTypes.object,
-};
+}

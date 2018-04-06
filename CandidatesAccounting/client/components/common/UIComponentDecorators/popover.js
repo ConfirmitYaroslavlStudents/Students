@@ -7,31 +7,29 @@ import Popover from 'material-ui/Popover';
 export default class CustomPopover extends Component {
   constructor(props) {
     super(props);
-    this.state = {open: false, button: null};
-    this.button = null;
-    this.handleClickButton = this.handleClickButton.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.state = { open: false, button: null }
+    this.button = null
   }
 
-  handleClickButton() {
+  handleClickButton = () => {
     this.setState({
       open: true,
       anchorEl: ReactDOM.findDOMNode(this.button)
-    });
-  };
+    })
+  }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({
       open: false,
-    });
-  };
+    })
+  }
 
   render() {
     return (
       <div style={{display: 'inline-block', zIndex: 100}}>
         <IconButton
           ref={node => {
-            this.button = node;
+            this.button = node
           }}
           color={this.props.iconColor}
           onClick={this.handleClickButton}
@@ -56,7 +54,7 @@ export default class CustomPopover extends Component {
           {this.props.content}
         </Popover>
       </div>
-    );
+    )
   }
 }
 
@@ -64,4 +62,4 @@ CustomPopover.propTypes = {
   content: PropTypes.object,
   icon: PropTypes.object,
   iconColor: PropTypes.string,
-};
+}

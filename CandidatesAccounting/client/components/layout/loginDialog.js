@@ -1,36 +1,33 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import FlatButton from '../common/UIComponentDecorators/flatButton';
-import Dialog from '../common/UIComponentDecorators/dialogSimple';
-import LoginForm from './loginForm';
-import {isNotEmpty, isEmail} from '../../utilities/candidateValidators';
-import { LinearProgress } from 'material-ui/Progress';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import FlatButton from '../common/UIComponentDecorators/flatButton'
+import Dialog from '../common/UIComponentDecorators/dialogSimple'
+import LoginForm from './loginForm'
+import {isNotEmpty, isEmail} from '../../utilities/candidateValidators'
+import { LinearProgress } from 'material-ui/Progress'
 
 export default class LoginDialog extends Component {
   constructor(props) {
-    super(props);
-    this.state = ({isOpen: false});
-    this.account = {email: '', password: ''};
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.login = this.login.bind(this);
+    super(props)
+    this.state = ({isOpen: false})
+    this.account = {email: '', password: ''}
   }
 
-  handleOpen() {
-    this.setState({isOpen: true, logining: false});
+  handleOpen = () => {
+    this.setState({isOpen: true, logining: false})
   }
 
-  handleClose() {
-    this.account = {email: '', password: ''};
-    this.setState({isOpen: false});
+  handleClose = () => {
+    this.account = {email: '', password: ''}
+    this.setState({isOpen: false})
   }
 
-  login() {
-    this.props.login(this.account.email, this.account.password);
+  login = () => {
+    this.props.login(this.account.email, this.account.password)
   }
 
   render() {
-    const signining = this.props.applicationStatus === 'signining';
+    const signining = this.props.applicationStatus === 'signining'
     return (
       <div style={{display: 'inline-block'}}>
         <FlatButton color="inherit" onClick={this.handleOpen}>
@@ -48,7 +45,7 @@ export default class LoginDialog extends Component {
               </FlatButton>
                 <FlatButton color="primary" disabled={signining} onClick={()=>{
                   if (isEmail(this.account.email) && isNotEmpty(this.account.password)) {
-                    this.login();
+                    this.login()
                   }
                 }}>
                   Sign in
@@ -58,11 +55,11 @@ export default class LoginDialog extends Component {
           }
         />
       </div>
-    );
+    )
   }
 }
 
 LoginDialog.propTypes = {
   login: PropTypes.func.isRequired,
   applicationStatus: PropTypes.string.isRequired,
-};
+}

@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Badge from 'material-ui/Badge';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Badge from 'material-ui/Badge'
 
 export default function SimpleBadge(props) {
   return (
@@ -20,4 +20,4 @@ SimpleBadge.propTypes = {
   color: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-};
+}

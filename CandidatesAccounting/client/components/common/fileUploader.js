@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import FileUploader from 'react-input-files';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import FileUploader from 'react-input-files'
 
 export default function CustomFileUploader(props) {
   if (props.disabled) {
@@ -15,7 +15,7 @@ export default function CustomFileUploader(props) {
       </FileUploader>
       { props.attachment ? <AttachmentFileNameWrapper>{props.attachment.name}</AttachmentFileNameWrapper> : '' }
     </div>
-  );
+  )
 }
 
 CustomFileUploader.propTypes = {
@@ -33,4 +33,4 @@ const AttachmentFileNameWrapper = styled.div`
   padding-right: 12px;
   font-weight: bold;
   color: #665;
-`;
+`

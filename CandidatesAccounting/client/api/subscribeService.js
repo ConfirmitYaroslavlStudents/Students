@@ -15,7 +15,7 @@ export function subscribe(candidateID, email) {
   )
     .then((data) => {
       if (!data.subscribe) {
-        throw 'Server error';
+        throw 'Server error'
       }
     });
 }
@@ -35,7 +35,7 @@ export function unsubscribe(candidateID, email) {
   )
     .then((data) => {
       if (!data.unsubscribe) {
-        throw 'Server error';
+        throw 'Server error'
       }
     });
 }

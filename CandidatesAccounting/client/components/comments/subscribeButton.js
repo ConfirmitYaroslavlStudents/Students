@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import NotificationsIcon from 'material-ui-icons/Notifications';
-import NotificationsOffIcon from 'material-ui-icons/NotificationsOff';
-import NotificationsActiveIcon from 'material-ui-icons/NotificationsActive';
+import React from 'react'
+import PropTypes from 'prop-types'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import NotificationsIcon from 'material-ui-icons/Notifications'
+import NotificationsOffIcon from 'material-ui-icons/NotificationsOff'
+import NotificationsActiveIcon from 'material-ui-icons/NotificationsActive'
 
 export default function SubscribeButton(props){
   return (
@@ -26,7 +26,7 @@ export default function SubscribeButton(props){
         }
       }}
     />
-  );
+  )
 }
 
 SubscribeButton.propTypes = {
@@ -36,4 +36,4 @@ SubscribeButton.propTypes = {
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-};
+}

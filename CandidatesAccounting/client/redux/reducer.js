@@ -1,32 +1,32 @@
 export default function reducer(state, action) {
-  let candidates = {};
-  let notifications = {};
-
   switch (action.type) {
     case 'SET_STATE':
       return {
         ...state,
         ...action.state
-      };
+      }
 
     case 'SET_APPLICATION_STATUS':
       return {
         ...state,
         applicationStatus: action.status
-      };
+      }
 
     case 'SET_ERROR_MESSAGE':
       return {
         ...state,
         errorMessage: action.message
-      };
+      }
 
     case 'UPDATE_CANDIDATE_SUCCESS':
       return {
         ...state,
         candidates: {
           ...state.candidates,
-          [action.candidate.id] : action.candidate
+          [action.candidate.id] : {
+            ...state.candidates[action.candidate.id],
+            ...action.candidate
+          }
         }
       }
 
@@ -46,12 +46,18 @@ export default function reducer(state, action) {
       }
 
     case 'DELETE_COMMENT_SUCCESS':
-      candidates = { ...state.candidates };
-      delete candidates[action.candidateID].comments[action.commentID];
+      let comments = { ...state.candidates[action.candidateID].comments }
+      delete comments[action.commentID]
       return {
         ...state,
-        candidates: candidates
-      };
+        candidates: {
+          ...state.candidates,
+          [action.candidateID]: {
+            ...state.candidates[action.candidateID],
+            comments: comments
+          }
+        }
+      }
 
     case 'SUBSCRIBE_SUCCESS':
       return {
@@ -66,15 +72,21 @@ export default function reducer(state, action) {
             }
           }
         }
-      };
+      }
 
     case 'UNSUBSCRIBE_SUCCESS':
-      candidates = { ...state.candidates };
-      delete candidates[action.candidateID].subscribers[action.email];
+      let subscribers = { ...state.candidates[action.candidateID].subscribers }
+      delete subscribers[action.email]
       return {
         ...state,
-        candidates: candidates
-      };
+        candidates: {
+          ...state.candidates,
+          [action.candidateID]: {
+            ...state.candidates[action.candidateID],
+            subscribers: subscribers
+          }
+        }
+      }
 
     case 'NOTICE_NOTIFICATION_SUCCESS':
       return {
@@ -86,15 +98,15 @@ export default function reducer(state, action) {
             recent: false
           }
         }
-      };
+      }
 
     case 'DELETE_NOTIFICATION_SUCCESS':
-      notifications = { ...state.notifications };
+      let notifications = { ...state.notifications };
       delete notifications[action.notificationID];
       return {
         ...state,
         notifications: notifications
-      };
+      }
 
     case 'UPLOAD_RESUME_SUCCESS':
       return {
@@ -106,9 +118,9 @@ export default function reducer(state, action) {
             resume: action.resume
           }
         }
-      };
+      }
 
     default:
-      return state;
+      return state
   }
 }

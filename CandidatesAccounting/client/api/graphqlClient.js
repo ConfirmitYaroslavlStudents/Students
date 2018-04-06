@@ -16,10 +16,10 @@ export default function sendGraphQLQuery(query, variables) {
       if (response.status === 200) {
         return response.json()
           .then((response) => {
-            return response.data;
+            return response.data
           });
       } else {
-        throw response.status;
+        throw response.status
       }
     });
 }

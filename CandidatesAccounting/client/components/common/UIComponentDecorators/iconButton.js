@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import IconButton from 'material-ui/IconButton';
+import React from 'react'
+import PropTypes from 'prop-types'
+import IconButton from 'material-ui/IconButton'
 
 export default function CustomIconButton(props) {
   return (
@@ -15,7 +15,7 @@ export default function CustomIconButton(props) {
         {props.icon}
       </IconButton>
     </div>
-  );
+  )
 }
 
 CustomIconButton.propTypes = {

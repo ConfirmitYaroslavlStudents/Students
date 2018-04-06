@@ -1,21 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import UpdateCandidateDialog from './updateCandidateDialog';
-import DeleteCandidateDialog from './deleteCandidateDialog';
-import CommentIcon from 'material-ui-icons/ViewList';
-import Badge from '../common/UIComponentDecorators/badge';
-import NavLink from '../../components/common/navLink';
-import AddCommentDialog from '../comments/addCommentDialog';
-import Spinner from '../common/UIComponentDecorators/spinner';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { FlexDiv } from '../common/styledComponents'
+import { MediumButtonStyle } from '../common/styleObjects'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import UpdateCandidateDialog from './updateCandidateDialog'
+import DeleteCandidateDialog from './deleteCandidateDialog'
+import CommentIcon from 'material-ui-icons/ViewList'
+import Badge from '../common/UIComponentDecorators/badge'
+import NavLink from '../../components/common/navLink'
+import AddCommentDialog from '../comments/addCommentDialog'
+import Spinner from '../common/UIComponentDecorators/spinner'
 
 export default function CandidateControls(props) {
-  const authorized = props.username !== '';
-  const onRefreshing = props.applicationStatus === 'refreshing';
-  const onUpdating = props.applicationStatus.slice(0, 8) === 'updating' && props.applicationStatus.slice(9) === props.candidate.id;
-  const onDeleting = props.applicationStatus.slice(0, 8) === 'deleting' && props.applicationStatus.slice(9) === props.candidate.id;
+  const authorized = props.username !== ''
+  const onRefreshing = props.applicationStatus === 'refreshing'
+  const onUpdating = props.applicationStatus.slice(0, 8) === 'updating' && props.applicationStatus.slice(9) === props.candidate.id
+  const onDeleting = props.applicationStatus.slice(0, 8) === 'deleting' && props.applicationStatus.slice(9) === props.candidate.id
+
+  const openCandidateCommentPage = () => {
+    if (!onRefreshing && !onDeleting) {
+      props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments')
+    }
+  }
+
+  const commentAmount = Object.keys(props.candidate.comments).length
+
+  const deleteCandidate = (candidateID) => {
+    props.deleteCandidate(candidateID)
+    props.loadCandidates({
+        applicationStatus: 'deleting-' + candidateID,
+        offset: props.totalCount - props.offset <= 1 ? props.totalCount - 1 - props.candidatesPerPage : props.offset
+      },
+      props.history)
+  }
+
   return (
-    <div style={{display: 'flex'}}>
+    <FlexDiv>
       <AddCommentDialog
         candidate={props.candidate}
         addComment={props.addComment}
@@ -24,15 +44,11 @@ export default function CandidateControls(props) {
         unsubscribe={props.unsubscribe}
         disabled={onRefreshing || onDeleting || !authorized}
       />
-      <NavLink onClick={() => {
-        if (!onRefreshing && !onDeleting) {
-          props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments');
-        }
-      }}>
-        <Badge badgeContent={Object.keys(props.candidate.comments).length} disabled={onRefreshing}>
+      <NavLink onClick={openCandidateCommentPage}>
+        <Badge badgeContent={commentAmount} disabled={onRefreshing}>
           <IconButton
             icon={<CommentIcon />}
-            style={{height: 40, width: 40 }}
+            style={MediumButtonStyle}
             disabled={onRefreshing || onDeleting}
           />
         </Badge>
@@ -56,18 +72,11 @@ export default function CandidateControls(props) {
           <DeleteCandidateDialog
             candidate={props.candidate}
             disabled={onRefreshing || onUpdating || !authorized}
-            deleteCandidate={(candidateID) => {
-              props.deleteCandidate(candidateID);
-              props.loadCandidates({
-                applicationStatus: 'deleting-' + candidateID,
-                offset: props.totalCount - props.offset <= 1 ? props.totalCount - 1 - props.candidatesPerPage : props.offset
-              },
-              props.history);
-            }}
+            deleteCandidate={deleteCandidate}
           />
       }
-    </div>
-  );
+    </FlexDiv>
+  )
 }
 
 CandidateControls.propTypes = {

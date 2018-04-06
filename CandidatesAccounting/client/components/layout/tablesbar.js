@@ -1,22 +1,17 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import Tabs from '../common/UIComponentDecorators/tabs';
-import NavLink from '../common/navLink';
-import AddCandidateDialog from '../candidates/addCandidateDialog';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import Tabs from '../common/UIComponentDecorators/tabs'
+import NavLink from '../common/navLink'
+import AddCandidateDialog from '../candidates/addCandidateDialog'
 
 export default class TablesBar extends Component{
-  constructor(props) {
-    super(props);
-    this.handleLinkClick = this.handleLinkClick.bind(this);
-  };
-
-  handleLinkClick(candidateStatus) {
-    let stateChanges = {};
+  handleLinkClick = (candidateStatus) => {
+    let stateChanges = {}
     if (candidateStatus === this.props.candidateStatus) {
-      stateChanges.searchRequest = '';
+      stateChanges.searchRequest = ''
     } else {
-      stateChanges['candidateStatus'] = candidateStatus;
+      stateChanges['candidateStatus'] = candidateStatus
     }
     stateChanges.offset = 0;
     stateChanges.sortingField = '';
@@ -25,21 +20,21 @@ export default class TablesBar extends Component{
     this.props.loadCandidates(
       stateChanges,
       this.props.history
-    );
+    )
   }
 
   render() {
     let selected = 0;
     switch(this.props.candidateStatus) {
       case 'Interviewee':
-        selected = 1;
-        break;
+        selected = 1
+        break
       case 'Student':
-        selected = 2;
-        break;
+        selected = 2
+        break
       case 'Trainee':
-        selected = 3;
-        break;
+        selected = 3
+        break
     }
 
     return (
@@ -73,7 +68,7 @@ export default class TablesBar extends Component{
           />
         </AddButtonWrapper>
       </TabsBar>
-    );
+    )
   }
 }
 
@@ -87,7 +82,7 @@ TablesBar.propTypes = {
   candidateStatus: PropTypes.string.isRequired,
   candidatesPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired
-};
+}
 
 const TabsBar = styled.div`
   display: flex;
@@ -99,19 +94,18 @@ const TabsBar = styled.div`
   flex-direction: column;
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
   height: 48px;
-  position: static;
-`;
+`
 
 const TabsWrapper = styled.div`
   display: inline-block;
   position: absolute;
   left: 15%;
   right: 15%;
-`;
+`
 
 const AddButtonWrapper = styled.div`
   display: inline-block;
   position: absolute;
-  right: 5px;
-  top: 64px;
-`;
+  right: 6px;
+  top: 60px;
+`

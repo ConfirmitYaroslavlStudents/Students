@@ -7,11 +7,8 @@ import {
 } from 'react-router-dom';
 import actions from '../../redux/actions';
 import Navbar from './navbar';
-import CandidateTable from '../candidates/candidateTable';
-import IntervieweeTable from '../interviewees/intervieweeTable';
-import StudentTable from '../students/studentTable';
-import TraineeTable from '../trainees/traineeTable';
-import CommentForm from '../comments/commentsForm';
+import CandidatesTable from './candidatesTable'
+import CommentForm from '../comments/commentsPage';
 import SnackBar from '../common/UIComponentDecorators/snackbar';
 import ErrorPage from './errorPage';
 import Spinner from '../common/UIComponentDecorators/spinner';
@@ -40,16 +37,16 @@ export default class AppView extends Component {
                 }/>
 
                 <Route exact path='/interviewees*' render={() =>
-                  <IntervieweeTable {...this.props}/>}
+                  <CandidatesTable type='Interviewee' {...this.props} />}
                 />
                 <Route exact path='/students*' render={() =>
-                  <StudentTable {...this.props}/>}
+                  <CandidatesTable type='Student' {...this.props} />}
                 />
                 <Route exact path='/trainees*' render={() =>
-                  <TraineeTable {...this.props}/>}
+                  <CandidatesTable type='Trainee' {...this.props} />}
                 />
                 <Route exact path='/*' render={() =>
-                  <CandidateTable {...this.props}/>}
+                  <CandidatesTable type='Candidate' {...this.props} />}
                 />
                 <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
               </Switch>
@@ -62,7 +59,7 @@ export default class AppView extends Component {
         }
         <SnackBar message={this.props.errorMessage} setErrorMessage={this.props.setErrorMessage}/>
       </div>
-    );
+    )
   }
 }
 
@@ -82,11 +79,11 @@ function mapStateToProps(state) {
     candidates: state.candidates,
     tags: state.tags,
     notifications: state.notifications,
-  };
+  }
 }
 
 const Main = styled.div`
   margin-top: 108px;
-`;
+`
 
-module.exports = connect(mapStateToProps, actions)(AppView);
+module.exports = connect(mapStateToProps, actions)(AppView)

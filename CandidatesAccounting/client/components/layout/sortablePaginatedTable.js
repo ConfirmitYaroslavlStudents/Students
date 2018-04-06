@@ -10,19 +10,8 @@ import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import LastPageIcon from 'material-ui-icons/LastPage';
 import SelectInput from '../common/UIComponentDecorators/selectInput';
 
-export default class SortableTableWithPagination extends Component {
-  constructor(props) {
-    super(props);
-    this.sortLabelHandleClick = this.sortLabelHandleClick.bind(this);
-    this.handleFirstPageButtonClick = this.handleFirstPageButtonClick.bind(this);
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-    this.handleNextButtonClick = this.handleNextButtonClick.bind(this);
-    this.handleLastPageButtonClick = this.handleLastPageButtonClick.bind(this);
-    this.handleChangePage = this.handleChangePage.bind(this);
-    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
-  }
-
-  sortLabelHandleClick(sortingField) {
+export default class SortablePaginatedTable extends Component {
+  sortLabelHandleClick = (sortingField) => {
     this.props.loadCandidates(
       {
         applicationStatus: 'refreshing',
@@ -33,59 +22,59 @@ export default class SortableTableWithPagination extends Component {
           this.props.sortingDirection === 'desc' ?
             'asc' : 'desc'
       },
-      this.props.history);
+      this.props.history)
   }
 
-  handleFirstPageButtonClick() {
+  handleFirstPageButtonClick = () => {
     this.handleChangePage(0);
-  };
+  }
 
-  handleBackButtonClick() {
-    this.handleChangePage(Math.max(this.props.offset - this.props.rowsPerPage, 0));
-  };
+  handleBackButtonClick = () => {
+    this.handleChangePage(Math.max(this.props.offset - this.props.rowsPerPage, 0))
+  }
 
-  handleNextButtonClick() {
-    this.handleChangePage(Math.min(this.props.offset + this.props.rowsPerPage, this.props.totalCount));
-  };
+  handleNextButtonClick = () => {
+    this.handleChangePage(Math.min(this.props.offset + this.props.rowsPerPage, this.props.totalCount))
+  }
 
-  handleLastPageButtonClick() {
+  handleLastPageButtonClick = () => {
     this.handleChangePage(
       this.props.totalCount % this.props.rowsPerPage === 0 ?
         this.props.totalCount - this.props.rowsPerPage
         :
         this.props.totalCount - this.props.totalCount % this.props.rowsPerPage
-    );
-  };
+    )
+  }
 
-  handleChangePage(offset) {
+  handleChangePage = (offset) => {
     this.props.loadCandidates(
       { offset: offset },
       this.props.history
-    );
-  };
+    )
+  }
 
-  handleChangeRowsPerPage(rowsPerPage) {
+  handleChangeRowsPerPage = (rowsPerPage) => {
     if (rowsPerPage !== this.props.rowsPerPage) {
       this.props.loadCandidates(
         { candidatesPerPage: rowsPerPage },
         this.props.history
-      );
+      )
     }
-  };
+  }
 
   render() {
     return (
       <Table
-        heads={this.props.heads.map((head, index) =>
-          head.sortingField ?
+        headers={this.props.headers.map((header, index) =>
+          header.sortingField ?
             <TableSortLabel
               key={index}
-              active={head.sortingField === this.props.sortingField}
+              active={header.sortingField === this.props.sortingField}
               direction={this.props.sortingDirection}
-              onClick={() => {this.sortLabelHandleClick(head.sortingField)}}
-            >{head.title}</TableSortLabel>
+              onClick={() => {this.sortLabelHandleClick(header.sortingField)}}
+            >{header.title}</TableSortLabel>
             :
-            <span key={index}>{head.title}</span>)}
+            <span key={index}>{header.title}</span>)}
         rows={this.props.contentRows}
         footerActions={
           <ActionsWrapper>
@@ -125,12 +114,12 @@ export default class SortableTableWithPagination extends Component {
           </ActionsWrapper>
         }
       />
-    );
+    )
   }
 }
 
-SortableTableWithPagination.propTypes = {
-  heads: PropTypes.arrayOf(PropTypes.shape({
+SortablePaginatedTable.propTypes = {
+  headers: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     sortingField: PropTypes.string
   })).isRequired,
@@ -142,22 +131,22 @@ SortableTableWithPagination.propTypes = {
   sortingDirection: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,
-};
+}
 
 const ActionsWrapper = styled.div`
   display: flex;
   align-items: center;
   float: right;
   margin-right: -18px;
-`;
+`
 
 const ItemsPerPageWrapper = styled.div`
   display: inline-flex;
   align-items: center;
   spacing: 5;
   margin-right: 24px;
-`;
+`
 
 const FooterText = styled.span`
   margin-right: 8px;
-`;
+`

@@ -1,19 +1,17 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import CommentCloud from './commentCloud';
-import LoadableAddCommentPanel from './loadableAddCommentPanel';
-import getRandomColor from '../../utilities/getRandomColor';
-import Grid from 'material-ui/Grid';
-import Spinner from '../common/UIComponentDecorators/spinner';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import CommentCloud from './commentCloud'
+import LoadableAddCommentPanel from './loadableAddCommentPanel'
+import getRandomColor from '../../utilities/getRandomColor'
+import Grid from 'material-ui/Grid'
+import Spinner from '../common/UIComponentDecorators/spinner'
 
-export default class CommentsForm extends Component {
+export default class CommentsPage extends Component {
   constructor(props) {
-    super(props);
-    this.shouldScrollDown = false;
-    this.userColors = {};
-    this.handleNewCommentAdd = this.handleNewCommentAdd.bind(this);
-    this.deleteComment = this.deleteComment.bind(this);
+    super(props)
+    this.shouldScrollDown = false
+    this.userColors = {}
   }
 
   UNSAFE_componentWillMount() {
@@ -22,42 +20,42 @@ export default class CommentsForm extends Component {
         pageTitle: this.props.candidate.name,
         candidateStatus: this.props.candidate.status
       }
-    );
-    this.userColors = {};
+    )
+    this.userColors = {}
     Object.keys(this.props.candidate.comments).forEach((commentID) => {
-      const comment = this.props.candidate.comments[commentID];
+      const comment = this.props.candidate.comments[commentID]
       if (!(comment.author in this.userColors)) {
-        this.userColors[comment.author] = getRandomColor();
+        this.userColors[comment.author] = getRandomColor()
       }
-    });
+    })
   }
 
   componentDidMount() {
-    window.scrollTo(0, document.documentElement.scrollHeight);
+    window.scrollTo(0, document.documentElement.scrollHeight)
   }
 
   componentDidUpdate() {
     if (this.shouldScrollDown) {
-      window.scrollTo(0, document.documentElement.scrollHeight);
-      this.shouldScrollDown = false;
+      window.scrollTo(0, document.documentElement.scrollHeight)
+      this.shouldScrollDown = false
     }
   }
 
-  handleNewCommentAdd() {
-    this.shouldScrollDown = true;
+  handleNewCommentAdd = () => {
+    this.shouldScrollDown = true
   }
 
-  deleteComment(commentID) {
-    this.props.deleteComment(this.props.candidate.id, commentID);
+  deleteComment = (commentID) => {
+    this.props.deleteComment(this.props.candidate.id, commentID)
   }
 
   render() {
     if (this.props.applicationStatus !== 'ok') {
-      return <Spinner size="big"/>
+      return <Spinner size='big'/>
     }
     if (this.props.candidate) {
       let comments = Object.keys(this.props.candidate.comments).map(commentId => {
-        const comment = this.props.candidate.comments[commentId];
+        const comment = this.props.candidate.comments[commentId]
         return (
           <CommentCloud
             key={commentId}
@@ -67,8 +65,8 @@ export default class CommentsForm extends Component {
             deleteComment={() => {this.deleteComment(comment.id)}}
             isSystem={comment.author === 'SYSTEM'}
             isCurrentUserComment={comment.author === this.props.username}
-          />);
-      });
+          />)
+      })
       if (Object.keys(this.props.candidate.comments).length === 0) {
         comments = <NoResultWrapper><p>No comments</p></NoResultWrapper>
       }
@@ -92,18 +90,18 @@ export default class CommentsForm extends Component {
             />
           </AddCommentPanelWrapper>
         </FormWrapper>
-      );
+      )
     } else {
       return (
         <FormWrapper>
           <NoResultWrapper><p>Candidate not found</p></NoResultWrapper>
         </FormWrapper>
-      );
+      )
     }
   }
 }
 
-CommentsForm.propTypes = {
+CommentsPage.propTypes = {
   candidate: PropTypes.object,
   applicationStatus: PropTypes.string.isRequired,
   addComment: PropTypes.func.isRequired,
@@ -112,7 +110,7 @@ CommentsForm.propTypes = {
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   setState: PropTypes.func.isRequired
-};
+}
 
 const FormWrapper = styled.div`
   display: flex;
@@ -124,17 +122,17 @@ const FormWrapper = styled.div`
   padding-top: 110px;
   padding-bottom: 161px;
   box-sizing: border-box;
-`;
+`
 
 const NoResultWrapper = styled.div`
   padding: 5px;
   color: #bbb;
   text-align: center;
   margin-bottom: 20px;
-`;
+`
 
 const AddCommentPanelWrapper = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-`;
+`

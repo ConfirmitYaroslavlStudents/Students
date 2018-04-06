@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Slide from 'material-ui/transitions/Slide';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Dialog from 'material-ui/Dialog'
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Slide from 'material-ui/transitions/Slide'
 
 function Transition(props) {
-  return <Slide direction="up" {...props} />;
+  return <Slide direction='up' {...props} />
 }
 
 export default function DialogWindow(props) {
@@ -27,7 +27,7 @@ export default function DialogWindow(props) {
       </AppBar>
       {props.children}
     </Dialog>
-  );
+  )
 }
 
 DialogWindow.propTypes = {
@@ -35,4 +35,4 @@ DialogWindow.propTypes = {
   onRequestClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   controls: PropTypes.object,
-};
+}

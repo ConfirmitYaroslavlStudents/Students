@@ -7,57 +7,52 @@ import IconButton from '../common/UIComponentDecorators/iconButton';
 
 export default class SearchForm extends Component {
   constructor(props) {
-    super(props);
-    this.state = {isOpen: this.props.searchRequest !== ''};
-    this.handleChange = this.handleChange.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.search = this.search.bind(this);
-    this.timer = null;
+    super(props)
+    this.state = {isOpen: this.props.searchRequest !== ''}
+    this.timer = null
   }
 
-  handleOpen() {
-    this.setState({isOpen: true});
+  handleOpen = () => {
+    this.setState({isOpen: true})
   }
 
-  handleClose() {
-    this.setState({isOpen: false});
+  handleClose = () => {
+    this.setState({isOpen: false})
   }
 
-  handleClick() {
+  handleClick = () => {
     if (this.props.searchRequest !== '' && this.state.isOpen) {
-      this.timer = null;
-      this.search(this.props.searchRequest);
+      this.timer = null
+      this.search(this.props.searchRequest)
     } else {
       if (this.state.isOpen) {
-        this.handleClose();
+        this.handleClose()
       } else {
-        this.handleOpen();
+        this.handleOpen()
       }
     }
   }
 
-  handleChange(value) {
-    this.props.setState({searchRequest: value});
+  handleChange = (value) => {
+    this.props.setState({searchRequest: value})
     if (this.timer) {
-      clearTimeout(this.timer);
+      clearTimeout(this.timer)
     }
     this.timer = setTimeout(() => {
       if (this.timer) {
-        this.search(value);
+        this.search(value)
       }
-      this.timer = null;
-    }, 900);
+      this.timer = null
+    }, 900)
   }
 
-  search(searchRequest) {
+  search = (searchRequest) => {
     this.props.loadCandidates(
       {
         applicationStatus: 'refreshing',
         searchRequest: searchRequest
       },
-      this.props.history);
+      this.props.history)
   }
 
   render() {
@@ -88,7 +83,7 @@ export default class SearchForm extends Component {
             : ''
         }
       </Form>
-    );
+    )
   }
 }
 
@@ -97,9 +92,9 @@ SearchForm.propTypes = {
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,
   setState: PropTypes.func.isRequired,
-};
+}
 
 const Form = styled.div`
   display: flex;
   align-items: center;
-`;
+`

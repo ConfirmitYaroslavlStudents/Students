@@ -1,5 +1,5 @@
-import sendGraphQLQuery from './graphqlClient';
-import createCandidate from '../utilities/createCandidate';
+import sendGraphQLQuery from './graphqlClient'
+import Candidate from '../utilities/candidate'
 
 export function getInitialState(username, take, skip, status, sort, sortDir, searchRequest) {
   return sendGraphQLQuery(
@@ -58,23 +58,23 @@ export function getInitialState(username, take, skip, status, sort, sortDir, sea
   )
   .then((data) => {
     if (!data) {
-      throw 'Connection error';
+      throw 'Connection error'
     }
-    let candidates = {};
-    let notifications = {};
+    const candidates = {}
     data.candidatesPaginated.candidates.forEach((candidate) => {
-      candidates[candidate.id] = (createCandidate(candidate.status, candidate));
-    });
+      candidates[candidate.id] = (new Candidate(candidate.status, candidate))
+    })
+    const notifications = {}
     data.notifications.forEach((notification) => {
-      notifications[notification.id] = notification;
-    });
+      notifications[notification.id] = notification
+    })
     return {
       tags: data.tags,
       notifications: notifications,
       candidates: candidates,
       total: data.candidatesPaginated.total
-    };
-  });
+    }
+  })
 }
 
 export function getUserState(username) {
@@ -102,12 +102,12 @@ export function getUserState(username) {
   )
   .then((data) => {
     if (!data) {
-      throw 'Connection error';
+      throw 'Connection error'
     }
     let notifications = {};
     data.notifications.forEach((notification) => {
-      notifications[notification.id] = notification;
+      notifications[notification.id] = notification
     });
-    return { notifications };
+    return { notifications }
   });
 }

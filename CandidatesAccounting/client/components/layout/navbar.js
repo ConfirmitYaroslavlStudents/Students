@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import Appbar from './appbar';
-import TablesBar from './tablesbar';
+import React from 'react'
+import styled from 'styled-components'
+import Appbar from './appbar'
+import TablesBar from './tablesbar'
 
 export default function Navbar(props) {
   return (
@@ -33,7 +33,7 @@ export default function Navbar(props) {
         candidateStatus={props.candidateStatus}
       />
     </NavbarWrapper>
-  );
+  )
 }
 
 const NavbarWrapper = styled.div`
@@ -43,4 +43,4 @@ const NavbarWrapper = styled.div`
   left: 0;
   height: 108px;
   z-index: 100;
-`;
+`

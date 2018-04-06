@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Button from 'material-ui/Button'
 
 export default function CustomFlatButton(props) {
   return (
@@ -14,7 +14,7 @@ export default function CustomFlatButton(props) {
         {props.children}
       </Button>
     </div>
-  );
+  )
 }
 
 CustomFlatButton.propTypes = {
@@ -22,4 +22,4 @@ CustomFlatButton.propTypes = {
   disabled: PropTypes.bool,
   color: PropTypes.string,
   style: PropTypes.object,
-};
+}

@@ -1,12 +1,11 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {MultiSelect} from 'react-selectize';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import {MultiSelect} from 'react-selectize'
 
 export default class TagSelect extends Component{
   render() {
-    const props = this.props;
-    let options = [];
-    this.props.options.map((tag) => (options.push({label: tag, value: tag})));
+    const options = []
+    this.props.options.map((tag) => (options.push({label: tag, value: tag})))
 
     return (
       <MultiSelect
@@ -28,12 +27,12 @@ export default class TagSelect extends Component{
             }()}
           </div>
         }}
-        onValuesChange = {(tags) => {props.onValuesChange(tags)}}
+        onValuesChange = {(tags) => {this.props.onValuesChange(tags)}}
         defaultValues={this.props.defaultValues.map((tag) => ({label: tag, value: tag}))}
         options={options}
-        style={this.props.style}
+        style={{width: '100%'}}
         autofocus={this.props.autofocus}
-      />);
+      />)
   }
 }
 
@@ -41,6 +40,5 @@ TagSelect.propTypes = {
   onValuesChange: PropTypes.func.isRequired,
   options: PropTypes.array,
   defaultValues: PropTypes.array,
-  style: PropTypes.object,
   autofocus: PropTypes.bool,
-};
+}

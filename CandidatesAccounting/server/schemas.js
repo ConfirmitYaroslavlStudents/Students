@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 export const AccountSchema = new Schema({
   username: {
@@ -14,7 +14,7 @@ export const AccountSchema = new Schema({
     source: {},
     content: {}
   }],
-});
+})
 
 export const CandidateSchema = new Schema({
     status: String,
@@ -53,7 +53,7 @@ export const CandidateSchema = new Schema({
     startingDate: String,
     endingDate: String,
     mentor: String
-  });
+  })
 
 export const IntervieweeSchema = new Schema({
     status: String,
@@ -88,7 +88,7 @@ export const IntervieweeSchema = new Schema({
     interviewDate: String,
     resume: String,
     resumeFile: Buffer,
-  });
+  })
 
 export const StudentSchema = new Schema({
     status: String,
@@ -123,7 +123,7 @@ export const StudentSchema = new Schema({
     groupName: String,
     startingDate: String,
     endingDate: String
-  });
+  })
 
 export const TraineeSchema = new Schema({
     status: String,
@@ -156,11 +156,11 @@ export const TraineeSchema = new Schema({
     tags: [String],
     subscribers: [String],
     mentor: String
-  });
+  })
 
 export const TagSchema = new Schema({
     title: {
       type: String,
       required: true
     }
-  });
+  })

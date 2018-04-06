@@ -1,3 +1,21 @@
+export function getUsername() {
+  return fetch('/login',
+    {
+      method: 'GET',
+      credentials: 'include',
+    })
+  .then((response) => {
+    if (response.status === 200) {
+      return response.json()
+      .then((data) => {
+        return data.username
+      });
+    } else {
+      throw response.status
+    }
+  })
+}
+
 export function login(username, password) {
   return fetch('/login',
     {
@@ -12,30 +30,12 @@ export function login(username, password) {
       if (response.status === 200) {
         return response.json()
           .then((data) => {
-            return data.username;
+            return data.username
           });
       } else {
-        throw response.status;
+        throw response.status
       }
-    });
-}
-
-export function getUsername() {
-  return fetch('/login',
-    {
-      method: 'GET',
-      credentials: 'include',
     })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json()
-          .then((data) => {
-            return data.username;
-          });
-      } else {
-        throw response.status;
-      }
-    });
 }
 
 export function logout() {
@@ -46,9 +46,9 @@ export function logout() {
     })
     .then((response) => {
       if (response.status === 200) {
-        return true;
+        return true
       } else {
-        throw response.status;
+        throw response.status
       }
-    });
+    })
 }

@@ -1,24 +1,24 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import Paper from 'material-ui/Paper'
 import Table, {
   TableBody,
   TableHead,
   TableRow,
   TableCell,
   TableFooter
-} from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
+} from 'material-ui/Table'
 
 export default function CustomTable(props) {
-  let heads = props.heads.map((head, index) =>
-    <TableCell key={'th' + index}>{head}</TableCell>);
+  let heads = props.headers.map((head, index) =>
+    <TableCell key={'th' + index}>{head}</TableCell>)
   let contentRows = props.rows.map((row, index) =>
     <TableRow key={'tr' + index}>
       {row.cells.map((cell, cellIndex) =>
         <TableCell key={'td' + cellIndex} classes={{root: row.isDisabled ? 'disabled-cell' : ''}}>{cell}</TableCell>)}
     </TableRow>
-  );
+  )
   if (contentRows.size === 0 || contentRows.length === 0) {
     contentRows = (<TableRow><TableCell><EmptyTable>The table is empty</EmptyTable></TableCell></TableRow>);
   }
@@ -40,22 +40,22 @@ export default function CustomTable(props) {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={props.heads.length}>
+            <TableCell colSpan={props.headers.length}>
               {props.footerActions}
             </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
     </Paper>
-  );
+  )
 
 }
 
 CustomTable.propTypes = {
-  heads: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  headers: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   rows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   footerActions: PropTypes.object.isRequired,
-};
+}
 
 const EmptyTable = styled.div`
   color: #aaa;
@@ -63,4 +63,4 @@ const EmptyTable = styled.div`
   position: absolute;
   width: 100%;
   margin-top: -12px;
-`;
+`

@@ -1,12 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import RemoveIcon from 'material-ui-icons/Delete';
-import AttachIcon from 'material-ui-icons/AttachFile';
-import FileUploader from 'react-input-files';
-import styled, {css} from 'styled-components';
-import {formatDateTime} from '../../utilities/customMoment';
-import formatUserName from '../../utilities/formatUserName';
+import React from 'react'
+import PropTypes from 'prop-types'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import RemoveIcon from 'material-ui-icons/Delete'
+import AttachIcon from 'material-ui-icons/AttachFile'
+import styled, {css} from 'styled-components'
+import {formatDateTime} from '../../utilities/customMoment'
+import formatUserName from '../../utilities/formatUserName'
 
 export default function CommentCloud(props) {
   return (
@@ -57,7 +56,7 @@ export default function CommentCloud(props) {
       }
     </CommentFooter>
     </CommentWrapper>
-  );
+  )
 }
 
 CommentCloud.propTypes = {
@@ -67,7 +66,7 @@ CommentCloud.propTypes = {
   markerColor: PropTypes.string,
   isSystem: PropTypes.bool,
   isCurrentUserComment: PropTypes.bool
-};
+}
 
 const CommentWrapper = styled.div`  
   margin-bottom: 7px;
@@ -76,7 +75,7 @@ const CommentWrapper = styled.div`
   ${props => props.right && css`
     text-align: right;
 	`}
-`;
+`
 
 const CommentMount = styled.div`
   display: inline-flex;
@@ -106,14 +105,14 @@ const CommentMount = styled.div`
     border-radius: 0px;
     padding: 13px 13px 13px 7px;
 	`}
-`;
+`
 
 const CommentText = styled.div`
   text-align: left;
   word-wrap: break-word;
   overflow: hidden;
   font-size: 96%;
-`;
+`
 
 const MountFooter = styled.div`
   display: flex;
@@ -122,7 +121,7 @@ const MountFooter = styled.div`
   ${props => props.right && css`
     margin: 0 0 0 -3px;
 	`}
-`;
+`
 
 const AttachmentWrapper = styled.div`
   color: #42A5F5;
@@ -133,23 +132,23 @@ const AttachmentWrapper = styled.div`
   &:hover {
     color: #64B5F6;   
    }
-`;
+`
 
 const CommentFooter = styled.div`
   display: inline-flex;
   font-size: smaller;
   color: dimgray;
-`;
+`
 
 const DeleteComment = styled.div`
   display: inline-block;
   margin-top: 3px;
   margin-left: 6px;
   margin-bottom: -5px;
-`;
+`
 
 const AuthorName = styled.div`
   display: inline-block; 
   margin:  0 10px 0 1px;
   color: #222;
-`;
+`

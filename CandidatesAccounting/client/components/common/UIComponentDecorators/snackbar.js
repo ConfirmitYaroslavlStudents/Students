@@ -1,28 +1,27 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import Snackbar from 'material-ui/Snackbar';
-import Fade from 'material-ui/transitions/Fade';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Snackbar from 'material-ui/Snackbar'
+import Fade from 'material-ui/transitions/Fade'
 
 export default class ErrorSnackbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-    };
-    this.handleRequestClose = this.handleRequestClose.bind(this);
+    }
   }
 
-  handleRequestClose() {
+  handleRequestClose = () => {
     this.setState({
       open: false,
     });
-    this.props.setErrorMessage('');
-  };
+    this.props.setErrorMessage('')
+  }
 
   render() {
-    let open = this.state.open;
+    let open = this.state.open
     if (this.props.message !== '') {
-      open = true;
+      open = true
     }
     return (
       <div>
@@ -36,7 +35,7 @@ export default class ErrorSnackbar extends Component {
           anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -44,4 +43,4 @@ ErrorSnackbar.propTypes = {
   message: PropTypes.string,
   autoHideDuration: PropTypes.number,
   setErrorMessage: PropTypes.func,
-};
+}

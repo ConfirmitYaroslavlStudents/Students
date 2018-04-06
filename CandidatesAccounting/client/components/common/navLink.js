@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 export default function CustomNavLink(props) {
   return (
@@ -10,11 +10,11 @@ export default function CustomNavLink(props) {
     }>
       <a style={{margin: 'auto'}}>{props.children}</a>
     </div>
-  );
+  )
 }
 
 CustomNavLink.propTypes = {
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
   active: PropTypes.bool
-};
+}

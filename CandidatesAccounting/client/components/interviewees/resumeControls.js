@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import IconButton from '../common/UIComponentDecorators/iconButton';
 import UploadIcon from 'material-ui-icons/FileUpload';
 import DownloadIcon from 'material-ui-icons/FileDownload';
-import FileUploader from 'react-input-files';
-import CustomFileUploader from '../common/fileUploader';
+import FileUploader from '../common/fileUploader';
+import FileDownloader from '../common/fileDownloader';
 import { CircularProgress } from 'material-ui/Progress';
 
 const buttonStyle = {
@@ -19,37 +18,33 @@ const buttonIconStyle = {
 };
 
 export default function ResumeControls(props) {
-  let resumeIsUploaded = props.interviewee.resume && props.interviewee.resume.trim() !== '';
+  const resumeIsUploaded = props.interviewee.resume && props.interviewee.resume.trim() !== '';
   return (
     <Wrapper>
+      { resumeIsUploaded ? <FileName>{props.interviewee.resume}</FileName> : <NotLoaded>no resume</NotLoaded> }
+      {
+        props.enableDownload ?
+          <FileDownloader
+            icon={<DownloadIcon style={buttonIconStyle}/>}
+            buttonStyle={buttonStyle}
+            disabled={!resumeIsUploaded || props.onUploading}
+            downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
+          /> : ''
+      }
       {
         props.onUploading ?
           <CircularProgress size={20}/>
           :
-          resumeIsUploaded ?
-            <FileName>{props.interviewee.resume}</FileName>
-            :
-            <NotLoaded>no resume</NotLoaded>
-      }
-      {
-        props.enableDownload ?
-          <IconButton icon={<DownloadIcon style={buttonIconStyle}/>} style={buttonStyle} iconStyle='small-icon' disabled={!resumeIsUploaded || props.onUploading}
-                      onClick={() => {
-                        window.open(window.location.origin + '/interviewees/' + props.interviewee.id + '/resume', '_self');
-                      }}/>
-          : ''
-      }
-      {
-        props.enableUpload ?
-          <CustomFileUploader
+          <FileUploader
             uploadFile={(file) => {
               if (!props.onUploading && file) {
                 props.uploadResume(props.interviewee.id, file);
               }
             }}
             icon={<UploadIcon style={buttonIconStyle}/>}
+            buttonStyle={buttonStyle}
             disabled={!props.authorized}
-          /> : ''
+          />
       }
     </Wrapper>
   );
@@ -59,7 +54,6 @@ ResumeControls.propTypes = {
   interviewee: PropTypes.object.isRequired,
   onUploading: PropTypes.bool,
   uploadResume: PropTypes.func,
-  enableUpload: PropTypes.bool,
   enableDownload: PropTypes.bool,
   authorized: PropTypes.bool,
 };

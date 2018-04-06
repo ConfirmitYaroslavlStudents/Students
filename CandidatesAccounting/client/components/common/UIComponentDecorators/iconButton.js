@@ -7,7 +7,7 @@ export default function CustomIconButton(props) {
     <div style={{display: 'inline-block'}}>
       <IconButton
         color={props.color}
-        onClick={props.onClick}
+        onClick={props.onClick ? props.onClick : () => {}}
         disabled={props.disabled}
         style={props.style}
         size={props.size}

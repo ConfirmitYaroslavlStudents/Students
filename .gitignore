@@ -240,4 +240,4 @@ CandidatesAccounting/node_modules/
 CandidatesAccounting/.vs/
 CandidatesAccounting/public/assets/
 *.pdf
-*.json
+*stats*.json

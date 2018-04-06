@@ -57,11 +57,11 @@ export default function reducer(state, action) {
       return {
         ...state,
         candidates: {
-          ...candidates,
+          ...state.candidates,
           [action.candidateID]: {
-            ...candidates[action.candidateID],
+            ...state.candidates[action.candidateID],
             subscribers: {
-              ...candidates[action.candidateID].subscribers,
+              ...state.candidates[action.candidateID].subscribers,
               [action.email]: action.email
             }
           }
@@ -77,8 +77,6 @@ export default function reducer(state, action) {
       };
 
     case 'NOTICE_NOTIFICATION_SUCCESS':
-      notifications = { ...state.notifications };
-      notifications[action.notificationID].recent = false;
       return {
         ...state,
         notifications: {
@@ -102,9 +100,9 @@ export default function reducer(state, action) {
       return {
         ...state,
         candidates: {
-          ...candidates,
+          ...state.candidates,
           [action.intervieweeID]: {
-            ...candidates[action.intervieweeID],
+            ...state.candidates[action.intervieweeID],
             resume: action.resume
           }
         }

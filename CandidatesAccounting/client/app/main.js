@@ -1,8 +1,10 @@
 import '../css/commonStyles.css'
 import '../css/selectizeStyles.css'
+import 'typeface-roboto'
+import 'react-quill/dist/quill.snow.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux'
 import reducer from '../redux/reducer'
@@ -13,20 +15,30 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import createPalette from 'material-ui/styles/createPalette'
 import { indigo } from 'material-ui/colors'
 import AppView from '../components/layout/appview'
-import { getUsername } from '../api/authorizationService'
 import { getInitialState } from '../api/commonService'
 
+const username = window['APP_CONFIG'].username
+
 function configureStore(initialState) {
+  const composeMiddlewares = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
   const sagaMiddleware = createSagaMiddleware()
-  const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware))
+  let middlewares = applyMiddleware(sagaMiddleware)
+
+  if (module.hot) {
+    middlewares = composeMiddlewares(applyMiddleware(sagaMiddleware))
+  }
+
+  const store = createStore(reducer, initialState, middlewares)
+
   let sagaRun = sagaMiddleware.run(function* () {
     yield rootSaga()
-  });
+  })
+
   if (module.hot) {
     module.hot.accept('../redux/reducer', () => {
       const nextReducer = require('../redux/reducer').default
       store.replaceReducer(nextReducer)
-    });
+    })
     module.hot.accept('../redux/sagas', () => {
       const newRootSaga = require('../redux/sagas').default
       sagaRun.cancel()
@@ -40,12 +52,13 @@ function configureStore(initialState) {
   return store
 }
 
-const store = configureStore(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-
 const theme = createMuiTheme({
   palette: createPalette({
     primary: indigo,
-  })
+  }),
+  typography: {
+    fontWeightMedium: 400
+  }
 })
 
 function renderApp(app) {
@@ -58,11 +71,11 @@ function renderApp(app) {
       </Provider>
     </MuiThemeProvider>,
     document.getElementById('root')
-  );
+  )
 }
 
 let candidateStatus = ''
-let args = {}
+const args = {}
 
 const splitedURL = (window.location.pathname + window.location.search).split('?')
 const path = splitedURL[0]
@@ -71,13 +84,13 @@ const tableName = splitedPath[1]
 switch (tableName) {
   case 'interviewees':
     candidateStatus = 'Interviewee'
-    break;
+    break
   case 'students':
     candidateStatus = 'Student'
-    break;
+    break
   case 'trainees':
     candidateStatus = 'Trainee'
-    break;
+    break
 }
 const URLargs = splitedURL[1]
 if (URLargs) {
@@ -88,46 +101,44 @@ if (URLargs) {
   })
 }
 
-store.dispatch({
-    type: 'SET_STATE',
-    state: {
-      applicationStatus: 'loading',
-      pageTitle: 'Candidate Accounting',
-      errorMessage: '',
-      username: '',
-      searchRequest: args.q ? decodeURIComponent(args.q) : '',
-      candidateStatus: candidateStatus,
-      offset: args.skip ? Number(args.skip) : 0,
-      candidatesPerPage: args.take ? Number(args.take) : 15,
-      sortingField: args.sort ? args.sort : '',
-      sortingDirection: args.sortDir ? args.sortDir : 'desc',
-      totalCount: 0,
-      candidates: [],
-      tags: [],
-      notifications: {}
-    }
-  }
-);
+const searchRequest = args.q ? decodeURIComponent(args.q) : ''
+const offset = args.skip ? Number(args.skip) : 0
+const candidatesPerPage = args.take ? Number(args.take) : 15
+const sortingField = args.sort ? args.sort : ''
+const sortingDirection = args.sortDir ? args.sortDir : 'desc'
+
+const store = configureStore({
+  applicationStatus: 'loading',
+  pageTitle: 'Candidate Accounting',
+  errorMessage: '',
+  username,
+  searchRequest,
+  candidateStatus,
+  offset,
+  candidatesPerPage,
+  sortingField,
+  sortingDirection,
+  totalCount: 0,
+  candidates: {},
+  tags: [],
+  notifications: {}
+})
 
 renderApp(AppView)
 
-getUsername().then((username) => {
-  getInitialState(username, args.take ? Number(args.take) : 15, args.skip ? Number(args.skip) : 0, candidateStatus,
-    args.sort ? args.sort : '', args.sortDir ? args.sortDir : 'desc', args.q ? decodeURIComponent(args.q) : '')
-    .then((initialState) => {
-      store.dispatch({
-          type: 'SET_STATE',
-          state: {
-            applicationStatus: 'ok',
-            username: username,
-            totalCount: initialState.total,
-            candidates: initialState.candidates,
-            tags: initialState.tags,
-            notifications: initialState.notifications
-          }
+getInitialState(username, candidatesPerPage, offset, candidateStatus, sortingField, sortingDirection, searchRequest)
+  .then((initialState) => {
+    store.dispatch({
+        type: 'SET_STATE',
+        state: {
+          applicationStatus: 'ok',
+          totalCount: initialState.total,
+          candidates: initialState.candidates,
+          tags: initialState.tags,
+          notifications: initialState.notifications
         }
-      )
-    })
+      }
+    )
   })
 
 if (module.hot) {

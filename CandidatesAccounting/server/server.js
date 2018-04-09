@@ -15,15 +15,23 @@ import expressSession  from 'express-session'
 import passport from 'passport'
 import passportLocal from 'passport-local'
 import { getResume, addResume, getAttachment, addAttachment } from './mongoose'
+import template from './template'
 
 const developmentMode = process.argv[3] === 'development'
 console.log(developmentMode ? 'Starting with development mode...' : 'Starting with production mode...')
+
+const getUsername = (req) => {
+  if (req.isAuthenticated()) {
+    return req.user.username;
+  } else {
+    return ''
+  }
+}
 
 const app = express()
 
 app.set('port', 3000)
 app.set('view endine', 'ejs')
-
 
 if (developmentMode) {
   const compiler = webpack(require('../webpack.development.config'))
@@ -64,11 +72,7 @@ app.use('/graphql', graphqlHTTP({
 }))
 
 app.get('/login', function(req, res) {
-  if (req.isAuthenticated()) {
-    res.json({username: req.user.username});
-  } else {
-    res.json({username: ''})
-  }
+  res.json({username: getUsername(req)})
 })
 
 app.post('/login', function(req, res) {
@@ -154,9 +158,11 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comment
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
-  //TODO: отправить авторизационную информацию вместе с index.html. Использовать templates
+app.get('/*', function (req, res) {
+  res.send(template({
+    assetsRoot: path.join('/', 'assets'),
+    username: getUsername(req),
+  }))
 })
 
 connect()

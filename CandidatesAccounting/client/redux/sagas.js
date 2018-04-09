@@ -117,7 +117,7 @@ function* loginSaga(action) {
     yield put(setState({
       username: username,
       notifications: newState.notifications
-    }));
+    }))
     yield put(setApplicationStatus('ok'))
   }
   catch(error) {

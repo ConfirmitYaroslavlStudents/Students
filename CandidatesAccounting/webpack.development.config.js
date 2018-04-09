@@ -26,6 +26,22 @@ module.exports = {
     }),
   ],
 
+  optimization: {
+    minimize: false,
+    splitChunks: {
+      chunks: "async",
+      minSize: 10000,
+      minChunks: 1,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules\\[*lodash*|react\-dom\-factories]/,
+          name: "vendors",
+          chunks: "all"
+        }
+      }
+    }
+  },
+
   module: {
     rules: [
       {
@@ -35,9 +51,15 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: path.join(__dirname, 'client'),
         loader: ['style-loader', 'css-loader']
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: 'fonts/[name].[ext]'
+        }
+      }
     ]
   },
 

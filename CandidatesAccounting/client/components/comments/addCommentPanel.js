@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { BigButtonStyle, SmallestIconStyle, SmallIconStyle } from '../common/styleObjects'
+import { BigButtonStyle, SmallerIconStyle, SmallIconStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import AttachIcon from 'material-ui-icons/AttachFile'
 import AddIcon from 'material-ui-icons/AddCircleOutline'
@@ -23,12 +23,12 @@ export default class AddCommentPanel extends Component {
     this.state = ({ commentText: '', commentAttachment: null })
   }
 
-  handleChange = (text) => {
-    this.setState({ commentText: text })
+  handleChange = (commentText) => {
+    this.setState({ commentText })
   }
 
-  handleAttachFile = (file) => {
-    this.setState({ commentAttachment: file })
+  handleAttachFile = (commentAttachment) => {
+    this.setState({ commentAttachment })
   }
 
   createCustomQuillToolbar = () => {
@@ -51,7 +51,7 @@ export default class AddCommentPanel extends Component {
         <button className='ql-link' />
         <FileUploader
           uploadFile={this.handleAttachFile}
-          icon={<AttachIcon style={SmallestIconStyle} />}
+          icon={<AttachIcon style={SmallerIconStyle} />}
           attachment={this.state.commentAttachment}
           disabled={this.props.disabled} />
       </CenteredDiv>
@@ -87,7 +87,7 @@ export default class AddCommentPanel extends Component {
     return (
       <AddCommentPanelWrapper>
         <QuillWrapper>
-          {this.createCustomQuillToolbar()}
+          { this.createCustomQuillToolbar() }
           <ReactQuill
             value={this.state.commentText}
             onChange={this.handleChange}

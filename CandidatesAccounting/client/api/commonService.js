@@ -107,7 +107,7 @@ export function getUserState(username) {
     let notifications = {};
     data.notifications.forEach((notification) => {
       notifications[notification.id] = notification
-    });
+    })
     return { notifications }
-  });
+  })
 }

@@ -1,3 +1,8 @@
+export const SmallButtonStyle = {
+  height: 24,
+  width: 24
+}
+
 export const MediumButtonStyle = {
   height: 40,
   width: 40
@@ -9,6 +14,11 @@ export const BigButtonStyle = {
 }
 
 export const SmallestIconStyle = {
+  height: 16,
+  width: 16
+}
+
+export const SmallerIconStyle = {
   height: 20,
   width: 20
 }

@@ -48,9 +48,24 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: path.join(__dirname, 'client'),
-        loader: ['style-loader', 'css-loader']
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: true
+            }
+          }]
       },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: 'fonts/[name].[ext]'
+        }
+      }
     ]
   }
 };

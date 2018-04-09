@@ -6,25 +6,28 @@ import NotificationsOffIcon from 'material-ui-icons/NotificationsOff'
 import NotificationsActiveIcon from 'material-ui-icons/NotificationsActive'
 
 export default function SubscribeButton(props){
+  const buttonIcon =
+    props.disabled ?
+      <NotificationsIcon/>
+      :
+      props.active ?
+        <NotificationsActiveIcon/>
+        :
+        <NotificationsOffIcon/>
+
+  const onClick = () => {
+    if (props.active) {
+      props.unsubscribe(props.candidate.id, props.username);
+    } else {
+      props.subscribe(props.candidate.id, props.username);
+    }
+  }
+
   return (
     <IconButton
-      icon={
-        props.disabled ?
-          <NotificationsIcon/>
-          :
-          props.active ?
-            <NotificationsActiveIcon/>
-            :
-            <NotificationsOffIcon/>
-      }
+      icon={buttonIcon}
       disabled={props.disabled}
-      onClick={() => {
-        if (props.active) {
-          props.unsubscribe(props.candidate.id, props.username);
-        } else {
-          props.subscribe(props.candidate.id, props.username);
-        }
-      }}
+      onClick={onClick}
     />
   )
 }

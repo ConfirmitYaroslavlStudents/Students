@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import IconButton from '../common/UIComponentDecorators/iconButton'
+import { CenteredInlineDiv } from './styledComponents'
 import FileUploader from 'react-input-files'
 
 export default function CustomFileUploader(props) {
@@ -9,12 +10,12 @@ export default function CustomFileUploader(props) {
     return <IconButton icon={props.icon} style={props.buttonStyle} disabled />
   }
   return (
-    <div style={{display: 'inline-flex', alignItems: 'center'}}>
+    <CenteredInlineDiv>
       <FileUploader accept='.doc, .docx, .txt, .pdf' onChange={(files) => { props.uploadFile(files[0]) }}>
         <IconButton icon={props.icon} style={props.buttonStyle} />
       </FileUploader>
       { props.attachment ? <AttachmentFileNameWrapper>{props.attachment.name}</AttachmentFileNameWrapper> : '' }
-    </div>
+    </CenteredInlineDiv>
   )
 }
 

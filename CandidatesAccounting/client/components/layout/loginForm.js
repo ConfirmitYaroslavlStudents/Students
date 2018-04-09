@@ -9,6 +9,7 @@ export default function LoginForm(props) {
       <form>
         <TextField
           name="email"
+          type="email"
           value={props.account.email}
           label="E-mail"
           placeholder="example@mail.com"
@@ -21,9 +22,9 @@ export default function LoginForm(props) {
         />
         <TextField
           name="password"
+          type="password"
           value={props.account.password}
           label="Password"
-          type="password"
           fullWidth
           checkValid={isNotEmpty}
           onChange={(password)=>{

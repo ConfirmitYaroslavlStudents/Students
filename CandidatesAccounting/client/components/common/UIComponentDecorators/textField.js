@@ -17,7 +17,9 @@ export default class CustomTextField extends Component{
   render() {
     return (
       <TextField
+        autoComplete="really"
         label={this.props.label}
+        type={this.props.type}
         name={this.props.name}
         placeholder={this.props.placeholder}
         value={this.state.value}
@@ -26,7 +28,6 @@ export default class CustomTextField extends Component{
         }}
         required={this.props.required}
         autoFocus={this.props.autoFocus}
-        type={this.props.type}
         error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}
         margin='normal'
         multiline
@@ -45,4 +46,5 @@ CustomTextField.propTypes = {
   checkValid: PropTypes.func,
   required: PropTypes.bool,
   name: PropTypes.string,
+  type: PropTypes.string,
 }

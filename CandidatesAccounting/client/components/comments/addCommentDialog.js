@@ -14,15 +14,11 @@ export default class AddCommentDialog extends Component {
     this.state = ({ isOpen: false })
   }
 
-  changeCommentText = (text) => {
-    this.setState({ commentText: text })
-  }
-
-  handleOpen() {
+  handleOpen = () => {
     this.setState({ isOpen: true })
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({ isOpen: false })
   }
 
@@ -51,7 +47,7 @@ export default class AddCommentDialog extends Component {
           </AddCommentDialogFormWrapper>
         </DialogWindow>
       </InlineFlexDiv>
-    );
+    )
   }
 }
 

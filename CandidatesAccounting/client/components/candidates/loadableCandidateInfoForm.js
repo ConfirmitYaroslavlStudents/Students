@@ -8,4 +8,4 @@ const LoadableCandidateInfoForm = Loadable({
   loading: () => <LoadingCandidateInfoWrapper> <Spinner size="medium"/> </LoadingCandidateInfoWrapper>,
 })
 
-export default LoadableCandidateInfoForm;
+export default LoadableCandidateInfoForm

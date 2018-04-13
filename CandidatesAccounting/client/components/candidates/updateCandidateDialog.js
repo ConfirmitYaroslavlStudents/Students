@@ -48,7 +48,7 @@ export default class UpdateCandidateDialog extends React.Component {
           title='Candidate edit'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
-          controls={
+          actions={
             <InlineFlexDiv>
               <IconButton color='inherit' icon={<SaveIcon />} onClick={this.updateCandidate}/>
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/>

@@ -9,9 +9,12 @@ export default function CustomFileUploader(props) {
   if (props.disabled) {
     return <IconButton icon={props.icon} style={props.buttonStyle} disabled />
   }
+  const uploadFile = (files) => {
+    props.uploadFile(files[0])
+  }
   return (
     <CenteredInlineDiv>
-      <FileUploader accept='.doc, .docx, .txt, .pdf' onChange={(files) => { props.uploadFile(files[0]) }}>
+      <FileUploader accept='.doc, .docx, .txt, .pdf' onChange={uploadFile} style={{display: 'inline-flex'}}>
         <IconButton icon={props.icon} style={props.buttonStyle} />
       </FileUploader>
       { props.attachment ? <AttachmentFileNameWrapper>{props.attachment.name}</AttachmentFileNameWrapper> : '' }

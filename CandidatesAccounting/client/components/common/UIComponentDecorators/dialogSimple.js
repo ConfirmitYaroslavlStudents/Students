@@ -21,7 +21,7 @@ export default function SimpleDialog(props) {
       >
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
-          {props.content}
+          {props.children}
         </DialogContent>
         <DialogActions>
           {props.actions}
@@ -35,6 +35,5 @@ SimpleDialog.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
   title: PropTypes.string,
-  content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   actions: PropTypes.object,
 }

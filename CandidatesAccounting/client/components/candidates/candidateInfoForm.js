@@ -22,8 +22,8 @@ export default class CandidateInfoForm extends Component {
   }
 
   changeCandidateStatus = (status) => {
-    this.setState({candidateStatus: status});
     this.props.candidate.status = status;
+    this.setState({candidateStatus: status});
   }
 
   setCandidateTags = (tags) => {
@@ -33,11 +33,11 @@ export default class CandidateInfoForm extends Component {
   getSpecialFields = () => {
     switch (this.state.candidateStatus) {
       case 'Interviewee':
-          return <IntervieweeSpecialFields interviewee={this.props.candidate} changeProperty={this.changeProperty}/>;
+        return <IntervieweeSpecialFields interviewee={this.props.candidate} changeProperty={this.changeProperty}/>
       case 'Student':
-        return <StudentSpecialFields student={this.props.candidate} changeProperty={this.changeProperty}/>;
+        return <StudentSpecialFields student={this.props.candidate} changeProperty={this.changeProperty}/>
       case 'Trainee':
-        return <TraineeSpecialFields trainee={this.props.candidate} changeProperty={this.changeProperty}/>;
+        return <TraineeSpecialFields trainee={this.props.candidate} changeProperty={this.changeProperty}/>
     }
   }
 

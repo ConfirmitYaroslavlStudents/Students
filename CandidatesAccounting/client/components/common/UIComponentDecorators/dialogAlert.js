@@ -24,7 +24,7 @@ export default function DialogAlert(props) {
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {props.content}
+            {props.children}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -45,6 +45,5 @@ DialogAlert.propTypes = {
   onRequestClose: PropTypes.func.isRequired,
   onConfirmClick: PropTypes.func.isRequired,
   onCancelClick: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  title: PropTypes.string
 }

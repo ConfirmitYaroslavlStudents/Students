@@ -14,5 +14,5 @@ export function uploadResume(intervieweeID, resume) {
       } else {
         throw response.status
       }
-    });
+    })
 }

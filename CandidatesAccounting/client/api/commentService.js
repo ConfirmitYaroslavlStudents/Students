@@ -38,14 +38,15 @@ export function deleteComment(candidateID, commentID) {
     if (!data.deleteComment) {
       throw 'Server error'
     }
-  });
+  })
 }
 
 export function addCommentAttachment(candidateID, commentID, attachment) {
   let formData = new FormData()
   formData.append('attachment', attachment)
 
-  return fetch('/interviewees/' + candidateID + '/comments/' + commentID + '/attachment',
+  return fetch(
+    '/interviewees/' + candidateID + '/comments/' + commentID + '/attachment',
     {
       method: 'POST',
       credentials: 'include',

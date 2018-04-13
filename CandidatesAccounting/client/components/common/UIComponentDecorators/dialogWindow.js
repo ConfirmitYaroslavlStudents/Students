@@ -22,7 +22,7 @@ export default function DialogWindow(props) {
           <Typography variant="title" color="inherit" style={{flex: 1}}>
             {props.title}
           </Typography>
-          {props.controls}
+          {props.actions}
         </Toolbar>
       </AppBar>
       {props.children}
@@ -34,5 +34,5 @@ DialogWindow.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
   title: PropTypes.string,
-  controls: PropTypes.object,
+  actions: PropTypes.object,
 }

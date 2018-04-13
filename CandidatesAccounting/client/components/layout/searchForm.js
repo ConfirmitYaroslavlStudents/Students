@@ -67,6 +67,7 @@ export default class SearchForm extends Component {
         {
           this.state.isOpen || this.props.searchRequest !== '' ?
             <Input
+              id='search-input'
               onChange={this.handleChange}
               value={this.props.searchRequest}
               className='search'

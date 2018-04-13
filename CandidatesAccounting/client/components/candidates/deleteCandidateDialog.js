@@ -36,12 +36,13 @@ export default class DeleteCandidateDialog extends Component {
           onClick={this.handleOpen}/>
         <DialogAlert
           title='Delete the candidate?'
-          content='The candidate will be removed from database.'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           onConfirmClick={this.deleteCandidate}
           onCancelClick={this.handleClose}
-        />
+        >
+          The candidate will be removed from database.
+        </DialogAlert>
       </InlineFlexDiv>
     )
   }

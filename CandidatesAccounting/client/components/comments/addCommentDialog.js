@@ -30,7 +30,7 @@ export default class AddCommentDialog extends Component {
           title='Add new comment'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
-          controls={ <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/> }
+          actions={ <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/> }
         >
           <AddCommentDialogFormWrapper>
             {

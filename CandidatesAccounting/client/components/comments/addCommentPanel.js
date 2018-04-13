@@ -31,33 +31,6 @@ export default class AddCommentPanel extends Component {
     this.setState({ commentAttachment })
   }
 
-  createCustomQuillToolbar = () => {
-    return (
-      <CenteredDiv id='toolbar'>
-        <select defaultValue='' className='ql-size'>
-          <option value='small' />
-          <option value='' />
-          <option value='large' />
-          <option value='huge' />
-        </select>
-        <button className='ql-bold' />
-        <button className='ql-italic' />
-        <button className='ql-underline' />
-        <button className='ql-strike' />
-        <button className='ql-list' value='ordered' />
-        <button className='ql-list' value='bullet' />
-        <button className='ql-indent' value='-1' />
-        <button className='ql-indent' value='+1' />
-        <button className='ql-link' />
-        <FileUploader
-          uploadFile={this.handleAttachFile}
-          icon={<AttachIcon style={SmallerIconStyle} />}
-          attachment={this.state.commentAttachment}
-          disabled={this.props.disabled} />
-      </CenteredDiv>
-    )
-  }
-
   handleEnterPress = (event) => {
     if (event.keyCode === 13) {
       if (!event.shiftKey) {
@@ -81,6 +54,33 @@ export default class AddCommentPanel extends Component {
       this.props.onClick()
       this.setState({ commentText: '', commentAttachment: null })
     }
+  }
+
+  createCustomQuillToolbar = () => {
+    return (
+      <CenteredDiv id='toolbar'>
+        <select defaultValue='' className='ql-size'>
+          <option value='small' />
+          <option value='' />
+          <option value='large' />
+          <option value='huge' />
+        </select>
+        <button className='ql-bold' />
+        <button className='ql-italic' />
+        <button className='ql-underline' />
+        <button className='ql-strike' />
+        <button className='ql-list' value='ordered' />
+        <button className='ql-list' value='bullet' />
+        <button className='ql-indent' value='-1' />
+        <button className='ql-indent' value='+1' />
+        <button className='ql-link'/>
+        <FileUploader
+          uploadFile={this.handleAttachFile}
+          icon={<AttachIcon style={SmallerIconStyle} />}
+          attachment={this.state.commentAttachment}
+          disabled={this.props.disabled} />
+      </CenteredDiv>
+    )
   }
 
   render() {

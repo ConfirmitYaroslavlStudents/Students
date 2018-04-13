@@ -34,7 +34,7 @@ export const LoadingCandidateInfoWrapper = styled.div`
 `
 
 export const AddCommentDialogFormWrapper = styled.div`
-  width: 504px;
+  width: 470px;
 `
 
 export const CenteredDiv = styled.div`

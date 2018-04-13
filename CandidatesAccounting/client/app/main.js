@@ -16,6 +16,7 @@ import createPalette from 'material-ui/styles/createPalette'
 import { indigo } from 'material-ui/colors'
 import AppView from '../components/layout/appview'
 import { getInitialState } from '../api/commonService'
+import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
 
 const username = window['APP_CONFIG'].username
 
@@ -74,59 +75,37 @@ function renderApp(app) {
   )
 }
 
-let candidateStatus = ''
-const args = {}
-
-const splitedURL = (window.location.pathname + window.location.search).split('?')
-const path = splitedURL[0]
-const splitedPath = path.split('/')
-const tableName = splitedPath[1]
-switch (tableName) {
-  case 'interviewees':
-    candidateStatus = 'Interviewee'
-    break
-  case 'students':
-    candidateStatus = 'Student'
-    break
-  case 'trainees':
-    candidateStatus = 'Trainee'
-    break
-}
-const URLargs = splitedURL[1]
-if (URLargs) {
-  const argsArray = URLargs.split('&')
-  argsArray.forEach((arg) => {
-    const splitedArg = arg.split('=')
-    args[splitedArg[0]] = splitedArg[1]
-  })
-}
-
-const searchRequest = args.q ? decodeURIComponent(args.q) : ''
-const offset = args.skip ? Number(args.skip) : 0
-const candidatesPerPage = args.take ? Number(args.take) : 15
-const sortingField = args.sort ? args.sort : ''
-const sortingDirection = args.sortDir ? args.sortDir : 'desc'
+const stateArgs = getStateArgsFromURL(window.location.pathname + window.location.search)
 
 const store = configureStore({
   applicationStatus: 'loading',
   pageTitle: 'Candidate Accounting',
   errorMessage: '',
   username,
-  searchRequest,
-  candidateStatus,
-  offset,
-  candidatesPerPage,
-  sortingField,
-  sortingDirection,
+  searchRequest: stateArgs.searchRequest,
+  candidateStatus: stateArgs.tableType,
+  offset: stateArgs.offset,
+  candidatesPerPage: stateArgs.candidatesPerPage,
+  sortingField: stateArgs.sortingField,
+  sortingDirection: stateArgs.sortingDirection,
   totalCount: 0,
   candidates: {},
   tags: [],
   notifications: {}
 })
 
+/*________________________________________________________________________*/
+
 renderApp(AppView)
 
-getInitialState(username, candidatesPerPage, offset, candidateStatus, sortingField, sortingDirection, searchRequest)
+getInitialState(
+  username,
+  stateArgs.candidatesPerPage,
+  stateArgs.offset,
+  stateArgs.tableType,
+  stateArgs.sortingField,
+  stateArgs.sortingDirection,
+  stateArgs.searchRequest)
   .then((initialState) => {
     store.dispatch({
         type: 'SET_STATE',

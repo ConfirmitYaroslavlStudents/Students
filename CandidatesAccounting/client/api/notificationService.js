@@ -13,11 +13,11 @@ export function noticeNotification(username, notificationID) {
       notificationID: notificationID
     }
   )
-    .then((data) => {
-      if (!data.noticeNotification) {
-        throw 'Server error'
-      }
-    });
+  .then((data) => {
+    if (!data.noticeNotification) {
+      throw 'Server error'
+    }
+  })
 }
 
 export function deleteNotification(username, notificationID) {
@@ -33,9 +33,9 @@ export function deleteNotification(username, notificationID) {
       notificationID: notificationID
     }
   )
-    .then((data) => {
-      if (!data.deleteNotification) {
-        throw 'Server error'
-      }
-    });
+  .then((data) => {
+    if (!data.deleteNotification) {
+      throw 'Server error'
+    }
+  })
 }

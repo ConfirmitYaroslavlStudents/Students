@@ -12,18 +12,11 @@ import AddCommentDialog from '../comments/addCommentDialog'
 import Spinner from '../common/UIComponentDecorators/spinner'
 
 export default function CandidateControls(props) {
-  const authorized = props.username !== ''
-  const onRefreshing = props.applicationStatus === 'refreshing'
-  const onUpdating = props.applicationStatus.slice(0, 8) === 'updating' && props.applicationStatus.slice(9) === props.candidate.id
-  const onDeleting = props.applicationStatus.slice(0, 8) === 'deleting' && props.applicationStatus.slice(9) === props.candidate.id
-
   const openCandidateCommentPage = () => {
     if (!onRefreshing && !onDeleting) {
       props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments')
     }
   }
-
-  const commentAmount = Object.keys(props.candidate.comments).length
 
   const deleteCandidate = (candidateID) => {
     props.deleteCandidate(candidateID)
@@ -33,6 +26,34 @@ export default function CandidateControls(props) {
       },
       props.history)
   }
+
+  const authorized = props.username !== ''
+  const commentAmount = Object.keys(props.candidate.comments).length
+  const onRefreshing = props.applicationStatus === 'refreshing'
+  const onUpdating = props.applicationStatus.slice(0, 8) === 'updating' && props.applicationStatus.slice(9) === props.candidate.id
+  const onDeleting = props.applicationStatus.slice(0, 8) === 'deleting' && props.applicationStatus.slice(9) === props.candidate.id
+
+  const updateCandidateDialog =
+    onUpdating ?
+      <Spinner />
+      :
+      <UpdateCandidateDialog
+        candidate={props.candidate}
+        updateCandidate={props.updateCandidate}
+        tags={props.tags}
+        username={props.username}
+        disabled={onRefreshing || onDeleting || !authorized}
+      />
+
+  const deleteCandidateDialog =
+    onDeleting ?
+      <Spinner />
+      :
+      <DeleteCandidateDialog
+        candidate={props.candidate}
+        disabled={onRefreshing || onUpdating || !authorized}
+        deleteCandidate={deleteCandidate}
+      />
 
   return (
     <FlexDiv>
@@ -53,28 +74,8 @@ export default function CandidateControls(props) {
           />
         </Badge>
       </NavLink>
-      {
-        onUpdating ?
-          <Spinner />
-          :
-          <UpdateCandidateDialog
-            candidate={props.candidate}
-            updateCandidate={props.updateCandidate}
-            tags={props.tags}
-            username={props.username}
-            disabled={onRefreshing || onDeleting || !authorized}
-          />
-      }
-      {
-        onDeleting ?
-          <Spinner />
-          :
-          <DeleteCandidateDialog
-            candidate={props.candidate}
-            disabled={onRefreshing || onUpdating || !authorized}
-            deleteCandidate={deleteCandidate}
-          />
-      }
+      { updateCandidateDialog }
+      { deleteCandidateDialog }
     </FlexDiv>
   )
 }
@@ -90,4 +91,4 @@ CandidateControls.propTypes = {
   candidatesPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   history: PropTypes.object.isRequired,
-};
+}

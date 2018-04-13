@@ -34,8 +34,7 @@ export default class LoginDialog extends Component {
           Sign on / Sign in
         </FlatButton>
         <Dialog
-          title="Sign on / Sign in"
-          content={ <LoginForm account={this.account} /> }
+          title='Sign on / Sign in'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           actions={
@@ -53,7 +52,9 @@ export default class LoginDialog extends Component {
               { signining ? <div style={{margin: '4px -8px -8px -8px'}}><LinearProgress /></div> : '' }
             </div>
           }
-        />
+        >
+          <LoginForm account={this.account} />
+        </Dialog>
       </div>
     )
   }

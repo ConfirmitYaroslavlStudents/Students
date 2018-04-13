@@ -21,5 +21,5 @@ export default function sendGraphQLQuery(query, variables) {
       } else {
         throw response.status
       }
-    });
+    })
 }

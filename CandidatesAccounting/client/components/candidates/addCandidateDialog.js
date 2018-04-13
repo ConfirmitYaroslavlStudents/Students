@@ -13,17 +13,17 @@ import IconButton from '../common/UIComponentDecorators/iconButton'
 export default class AddCandidateDialog extends Component{
   constructor(props) {
     super(props);
-    this.state = ({ isOpen: false });
-    this.candidate = new Candidate(props.candidateStatus);
+    this.state = ({ isOpen: false })
+    this.candidate = new Candidate(props.candidateStatus)
   }
 
   handleOpen = () => {
-    this.newCandidate = new Candidate(this.props.candidateStatus);
-    this.setState({isOpen: true});
+    this.newCandidate = new Candidate(this.props.candidateStatus)
+    this.setState({isOpen: true})
   }
 
   handleClose = () => {
-    this.setState({isOpen: false});
+    this.setState({isOpen: false})
   }
 
   addCandidate = () => {
@@ -42,7 +42,7 @@ export default class AddCandidateDialog extends Component{
           title='Add new candidate'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
-          controls={
+          actions={
             <InlineFlexDiv>
               <IconButton color='inherit' icon={<AddPersonIcon />} onClick={this.addCandidate}/>
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose} />

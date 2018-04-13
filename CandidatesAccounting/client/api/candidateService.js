@@ -39,19 +39,19 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
       searchRequest: searchRequest
     }
   )
-    .then((data) => {
-      if (!data) {
-        throw 'Connection error'
-      }
-      let candidates = {};
-      data.candidatesPaginated.candidates.forEach((candidate) => {
-        candidates[candidate.id] = new Candidate(candidate.status, candidate)
-      })
-      return {
-        candidates: candidates,
-        total: data.candidatesPaginated.total
-      }
+  .then((data) => {
+    if (!data) {
+      throw 'Connection error'
+    }
+    let candidates = {};
+    data.candidatesPaginated.candidates.forEach((candidate) => {
+      candidates[candidate.id] = new Candidate(candidate.status, candidate)
     })
+    return {
+      candidates: candidates,
+      total: data.candidatesPaginated.total
+    }
+  })
 }
 
 export function getCandidate(id) {
@@ -84,12 +84,12 @@ export function getCandidate(id) {
       id: id,
     }
   )
-    .then((data) => {
-      if (!data) {
-        throw 'Connection error'
-      }
-      return new Candidate(data.candidate.status, data.candidate)
-    })
+  .then((data) => {
+    if (!data) {
+      throw 'Connection error'
+    }
+    return new Candidate(data.candidate.status, data.candidate)
+  })
 }
 
 export function addCandidate(candidate) {
@@ -119,11 +119,11 @@ export function updateCandidate(candidate) {
     }`,
     {candidate: convertToGraphQLType(candidate)}
   )
-    .then((data) => {
-      if (!data.updateCandidate) {
-        throw 'Server error'
-      }
-    })
+  .then((data) => {
+    if (!data.updateCandidate) {
+      throw 'Server error'
+    }
+  })
 }
 
 export function deleteCandidate(candidateID) {

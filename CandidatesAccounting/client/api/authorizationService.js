@@ -13,7 +13,7 @@ export function login(username, password) {
         return response.json()
           .then((data) => {
             return data.username
-          });
+          })
       } else {
         throw response.status
       }

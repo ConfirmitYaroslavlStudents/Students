@@ -6,10 +6,9 @@ export default class CustomTextField extends Component{
   constructor(props) {
     super(props)
     this.state = {value: props.value ? props.value : ''}
-    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(value) {
+  handleChange = (value) => {
     this.props.onChange(value)
     this.setState({value: value})
   }
@@ -17,7 +16,6 @@ export default class CustomTextField extends Component{
   render() {
     return (
       <TextField
-        autoComplete="really"
         label={this.props.label}
         type={this.props.type}
         name={this.props.name}

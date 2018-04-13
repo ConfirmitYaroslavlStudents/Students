@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { CommentPageWrapper, NoResultWrapper, CommentPageFooter } from '../common/styledComponents'
-import CommentCloud from './commentCloud'
+import Comment from './comment'
+import CurrentUserComment from './currentUserComment'
+import SystemComment from './systemComment'
 import LoadableAddCommentPanel from './loadableAddCommentPanel'
 import getRandomColor from '../../utilities/getRandomColor'
 import Grid from 'material-ui/Grid'
@@ -62,29 +64,27 @@ export default class CommentsPage extends Component {
       )
     }
 
-    let commentClouds = Object.keys(this.props.candidate.comments).map(commentId => {
+    let comments = Object.keys(this.props.candidate.comments).map(commentId => {
       const comment = this.props.candidate.comments[commentId]
-      return (
-        <CommentCloud
-          key={commentId}
-          comment={comment}
-          candidate={this.props.candidate}
-          markerColor={this.userColors[comment.author]}
-          deleteComment={() => {this.deleteComment(comment.id)}}
-          isSystem={comment.author === 'SYSTEM'}
-          isCurrentUserComment={comment.author === this.props.username}
-        />)
+      switch (comment.author) {
+        case 'SYSTEM':
+          return <SystemComment key={commentId} comment={comment}/>
+        case this.props.username:
+          return <CurrentUserComment key={commentId}  comment={comment} candidate={this.props.candidate} deleteComment={() => {this.deleteComment(commentId)}}/>
+        default:
+          return <Comment key={commentId} comment={comment} candidate={this.props.candidate} markerColor={this.userColors[comment.author]}/>
+      }
     })
 
-    if (Object.keys(this.props.candidate.comments).length === 0) {
-      commentClouds = <NoResultWrapper>No comments</NoResultWrapper>
+    if (comments.length === 0) {
+      comments = <NoResultWrapper>No comments</NoResultWrapper>
     }
 
     return (
       <CommentPageWrapper>
         <Grid container spacing={0} justify='center'>
           <Grid item className='comment-grid' lg={6} md={9} sm={12}>
-            {commentClouds}
+            {comments}
           </Grid>
         </Grid>
         <CommentPageFooter>

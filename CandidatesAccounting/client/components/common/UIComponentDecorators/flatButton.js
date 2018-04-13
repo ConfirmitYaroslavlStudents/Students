@@ -4,16 +4,14 @@ import Button from 'material-ui/Button'
 
 export default function CustomFlatButton(props) {
   return (
-    <div style={{display: 'inline-block'}}>
-      <Button
-        color={props.color}
-        onClick={props.onClick}
-        style={props.style}
-        disabled={props.disabled}
-      >
-        {props.children}
-      </Button>
-    </div>
+    <Button
+      color={props.color}
+      onClick={props.onClick}
+      style={props.style}
+      disabled={props.disabled}
+    >
+      {props.children}
+    </Button>
   )
 }
 

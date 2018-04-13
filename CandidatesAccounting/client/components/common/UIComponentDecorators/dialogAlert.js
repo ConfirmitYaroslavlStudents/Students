@@ -15,28 +15,26 @@ function Transition(props) {
 
 export default function DialogAlert(props) {
   return (
-    <div>
-      <Dialog
-        open={props.isOpen}
-        transition={Transition}
-        onBackdropClick={() => {props.onRequestClose()}}
-      >
-        <DialogTitle>{props.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {props.children}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onCancelClick} color='secondary'>
-            Cancel
-          </Button>
-          <Button onClick={props.onConfirmClick} color='primary'>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog
+      open={props.isOpen}
+      transition={Transition}
+      onBackdropClick={() => {props.onRequestClose()}}
+    >
+      <DialogTitle>{props.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {props.children}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onCancelClick} color='secondary'>
+          Cancel
+        </Button>
+        <Button onClick={props.onConfirmClick} color='primary'>
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 

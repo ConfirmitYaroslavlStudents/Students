@@ -3,16 +3,19 @@ import PropTypes from 'prop-types'
 import TextField from '../common/UIComponentDecorators/textField'
 
 export default function TraineeSpecialFields(props) {
+  const handleMentorChange = value => {
+    props.changeProperty('mentor', value)
+  }
+
   return (
     <div>
       <TextField
-        onChange={(value) => {props.changeProperty('mentor', value)}}
+        onChange={handleMentorChange}
         label="Mentor's name"
-        placeholder="full name"
-        value={props.trainee.mentor}
-        multiline
-        fullWidth/>
-    </div>)
+        placeholder='full name'
+        value={props.trainee.mentor}/>
+    </div>
+  )
 }
 
 TraineeSpecialFields.propTypes = {

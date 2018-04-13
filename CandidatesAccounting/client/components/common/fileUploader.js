@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { AttachmentFileNameWrapper } from './styledComponents'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import { CenteredInlineDiv } from './styledComponents'
 import FileUploader from 'react-input-files'
@@ -29,12 +29,3 @@ CustomFileUploader.propTypes = {
   attachment: PropTypes.object,
   disabled: PropTypes.bool,
 }
-
-const AttachmentFileNameWrapper = styled.div`
-  display: inline-flex;
-  align-items: center;
-  font-size: 80%;
-  padding-right: 12px;
-  font-weight: bold;
-  color: #665;
-`

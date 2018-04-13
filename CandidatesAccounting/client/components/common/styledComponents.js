@@ -1,58 +1,14 @@
 import styled, { css } from 'styled-components';
 
-export const InlineFlexDiv = styled.div`
-  display: inline-flex;
-`
-
-export const FlexDiv = styled.div`
-  display: flex;
-`
-
-export const CandidateFormWrapper = styled.div`
-  padding: 15px 15px 10px;
-  margin-right: 1px;
-`
-
-export const TextFieldLabel = styled.p`
-  margin-top: 16px;
-  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};;
-  color: rgba(0,0,0,0.54);
-  font-size: 80%;
-`
-
-export const SmallNoteSpan = styled.span`
-  color: rgba(0,0,0,0.5);
-  fontSize: 80%;
-  float: right;
-`
-
-export const LoadingCandidateInfoWrapper = styled.div`
-  height: 517px;
-  width: 547px;
-  display: flex;
-  backgroundColor: #fff;
-`
-
 export const AddCommentDialogFormWrapper = styled.div`
   width: 470px;
 `
 
-export const CenteredDiv = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-export const CenteredInlineDiv = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-export const AddCommentPanelWrapper = styled.div`
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  width: 100%;
-  clear: both;
-  background: #FFF;
+export const AddCommentButtonWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
 `
 
 export const AddCommentPanelButtonsWrapper = styled.div`
@@ -65,31 +21,53 @@ export const AddCommentPanelButtonsWrapper = styled.div`
   bottom: 2px;
  `
 
-export const SubscribeButtonWrapper = styled.div`
-  display: inline-block;
+export const AddCommentPanelWrapper = styled.div`
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   position: relative;
-  top: 11px;
-  right: 11px;
+  width: 100%;
+  clear: both;
+  background: #FFF;
 `
 
-export const AddCommentButtonWrapper = styled.div`
-  display: inline-block;
-  position: absolute;
-  bottom: 0px;
-  right: 5px;
+export const AttachmentFileNameWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  font-size: 80%;
+  padding-right: 12px;
+  font-weight: bold;
+  color: #665;
 `
 
-export const QuillWrapper = styled.div`
-  padding-right: 74px;
+export const CandidateFormWrapper = styled.div`
+  padding: 15px 15px 10px;
+  margin-right: 1px;
 `
 
-export const CommentWrapper = styled.div`  
-  margin-bottom: 7px;
-  padding: 10px 15px 0 15px; 
+export const CenteredDiv = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const CenteredInlineDiv = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const CommentAttachmentWrapper = styled.div`
+  color: #42A5F5;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   
-  ${props => props.right && css`
-    text-align: right;
-	`}
+  &:hover {
+    color: #64B5F6;   
+   }
+`
+
+export const CommentAuthorName = styled.div`
+  display: inline-block; 
+  margin:  0 10px 0 1px;
+  color: #222;
 `
 
 export const CommentMount = styled.div`
@@ -138,34 +116,16 @@ export const CommentMountFooter = styled.div`
 	`}
 `
 
-export const CommentAttachmentWrapper = styled.div`
-  color: #42A5F5;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  
-  &:hover {
-    color: #64B5F6;   
-   }
-`
-
 export const CommentFooter = styled.div`
   display: inline-flex;
   font-size: smaller;
   color: dimgray;
 `
 
-export const DeleteCommentWrapper = styled.div`
-  display: inline-block;
-  margin-top: 3px;
-  margin-left: 6px;
-  margin-bottom: -5px;
-`
-
-export const CommentAuthorName = styled.div`
-  display: inline-block; 
-  margin:  0 10px 0 1px;
-  color: #222;
+export const CommentPageFooter = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 `
 
 export const CommentPageWrapper = styled.div`
@@ -180,17 +140,49 @@ export const CommentPageWrapper = styled.div`
   box-sizing: border-box;
 `
 
-export const NoResultWrapper = styled.div`
-  padding: 5px;
-  color: #bbb;
-  text-align: center;
-  margin-bottom: 20px;
+export const CommentWrapper = styled.div`  
+  margin-bottom: 7px;
+  padding: 10px 15px 0 15px; 
+  
+  ${props => props.right && css`
+    text-align: right;
+	`}
 `
 
-export const CommentPageFooter = styled.div`
-  position: fixed;
-  bottom: 0;
+export const DeleteCommentWrapper = styled.div`
+  display: inline-block;
+  margin-top: 3px;
+  margin-left: 6px;
+  margin-bottom: -5px;
+`
+
+export const EmptyTable = styled.div`
+  color: #aaa;
+  text-align: center;
+  position: absolute;
   width: 100%;
+  margin-top: -12px;
+`
+
+export const FlexDiv = styled.div`
+  display: flex;
+`
+
+export const InlineFlexDiv = styled.div`
+  display: inline-flex;
+`
+export const InputLabel = styled.p`
+  margin-top: 16px;
+  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};
+  color: rgba(0,0,0,0.54);
+  font-size: 80%;
+`
+
+export const LoadingCandidateInfoWrapper = styled.div`
+  height: 517px;
+  width: 547px;
+  display: flex;
+  backgroundColor: #fff;
 `
 
 export const LoadingAddCommentPanelWrapper = styled.div`
@@ -198,4 +190,148 @@ export const LoadingAddCommentPanelWrapper = styled.div`
   display: flex;
   background-color: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+`
+
+export const NoResultWrapper = styled.div`
+  padding: 5px;
+  color: #bbb;
+  text-align: center;
+  margin-bottom: 20px;
+`
+
+export const NotificationAttachmentWrapper = styled.div`  
+  display: inline-flex;
+  align-items: center;
+  color: #777;
+`
+
+export const NotificationButtonWrapper = styled.div`
+  display: inline-flex;
+  z-index: 10;
+  margin-left: 4px;
+  margin-right: -6px;
+  margin-top: -6px;
+`
+
+
+export const NotificationCandidateNameWrapper = styled.div`
+  display: inline-flex;
+`
+
+export const NotificationControlsWrapper = styled.div`
+  display: inline-flex;
+  float: right;
+`
+
+export const NotificationContentWrapper = styled.div`
+  color: #000;
+`
+
+export const NotificationDateWrapper = styled.div`
+  color: #888;
+  font-size: 96%;
+`
+
+export const NotificationInfoWrapper = styled.div`
+  margin-bottom: 4px;
+`
+
+export const NotificationMessageWrapper = styled.div`
+  background-color: #f3f3f3;
+  color: #333;
+  padding: 8px;  
+  word-wrap: break-word;
+  overflow: hidden;
+`
+
+export const NotificationServiceText = styled.span`
+  color: #777;
+`
+
+export const NotificationWrapper = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  width: 400px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  border-left: 5px solid #999;
+  padding: 20px 12px;
+  background-color: #fefefe;
+  cursor: pointer;
+  
+  ${props => props.recent && css`  
+    border-left: 5px solid #42A5F5;
+    background-color: #fff;
+	`}	
+  
+  &:hover {
+    border-left: 5px solid #aaa;    
+    background-color: #fff;    
+    
+    ${props => props.recent && css`    
+      border-left: 5px solid #64B5F6;
+    `}	
+  }
+`
+
+export const QuillWrapper = styled.div`
+  padding-right: 74px;
+`
+
+export const ResumeWrapper = styled.div`
+  display: inline-flex;
+  content-align: center;
+  align-items: center;
+`
+
+export const ResumeFileName = styled.span`
+  color: rgba(0, 0, 0, 0.8);
+  margin-right: 4px;
+  white-space: nowrap;
+`
+
+export const ResumeNotLoaded = styled.span`
+  padding-left: 4px;
+  color: rgba(0, 0, 0, 0.5);
+`
+
+export const SmallNoteSpan = styled.span`
+  color: rgba(0,0,0,0.5);
+  fontSize: 80%;
+  float: right;
+`
+
+export const SubscribeButtonWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  top: 11px;
+  right: 11px;
+`
+
+export const TagWrapper = styled.div`
+  display: inline-block;
+  padding-top: 3px;
+  min-width: 300px;
+`
+
+export const Tag = styled.div`
+  cursor: pointer;
+  display: inline-block;
+  padding: 0px 4px;
+  background: #f2f9fc;
+  border: 1px solid #c9e6f2;
+  border-radius: 2px;
+  color: #08c;
+  vertical-align: middle;
+  margin-left: 3px;
+  margin-bottom: 3px;
+  &:hover {
+    color: #2196F3;
+  }
+`
+
+export const TextFieldLabel = styled.p`
+  margin-top: 16px;
+  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};;
+  color: rgba(0,0,0,0.54);
+  font-size: 80%;
 `

@@ -26,7 +26,7 @@ export default class CustomPopover extends Component {
 
   render() {
     return (
-      <div style={{display: 'inline-block', zIndex: 100}}>
+      <div style={{display: 'inline-flex', zIndex: 100}}>
         <IconButton
           ref={node => {
             this.button = node

@@ -8,9 +8,9 @@ export default class CustomTextField extends Component{
     this.state = {value: props.value ? props.value : ''}
   }
 
-  handleChange = (value) => {
-    this.props.onChange(value)
-    this.setState({value: value})
+  handleChange = (event) => {
+    this.props.onChange(event.target.value)
+    this.setState({value: event.target.value})
   }
 
   render() {
@@ -21,9 +21,7 @@ export default class CustomTextField extends Component{
         name={this.props.name}
         placeholder={this.props.placeholder}
         value={this.state.value}
-        onChange={(event) => {
-          this.handleChange(event.target.value)
-        }}
+        onChange={this.handleChange(event.target.value)}
         required={this.props.required}
         autoFocus={this.props.autoFocus}
         error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}

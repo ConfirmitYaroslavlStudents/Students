@@ -13,21 +13,19 @@ function Transition(props) {
 
 export default function SimpleDialog(props) {
   return (
-    <div>
-      <Dialog
-        open={props.isOpen}
-        transition={Transition}
-        disableBackdropClick
-      >
-        <DialogTitle>{props.title}</DialogTitle>
-        <DialogContent>
-          {props.children}
-        </DialogContent>
-        <DialogActions>
-          {props.actions}
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog
+      open={props.isOpen}
+      transition={Transition}
+      disableBackdropClick
+    >
+      <DialogTitle>{props.title}</DialogTitle>
+      <DialogContent>
+        {props.children}
+      </DialogContent>
+      <DialogActions>
+        {props.actions}
+      </DialogActions>
+    </Dialog>
   )
 }
 

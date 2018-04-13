@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {TableSortLabel} from 'material-ui/Table'
+import { TableSortLabel } from 'material-ui/Table'
 
 export default function SortLabel(props) {
   return (

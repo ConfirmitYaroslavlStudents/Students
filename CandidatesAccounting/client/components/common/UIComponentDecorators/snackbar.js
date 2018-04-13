@@ -6,16 +6,12 @@ import Fade from 'material-ui/transitions/Fade'
 export default class ErrorSnackbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      open: false,
-    }
+    this.state = { open: false }
   }
 
   handleRequestClose = () => {
-    this.setState({
-      open: false,
-    });
     this.props.setErrorMessage('')
+    this.setState({ open: false })
   }
 
   render() {

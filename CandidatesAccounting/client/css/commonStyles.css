@@ -16,6 +16,15 @@ p {
     box-sizing: border-box;
 }
 
+.badge {
+    margin-top: 17px;
+    margin-right: 10px;
+    width: 19px !important;
+    height: 19px !important;
+    font-size: smaller !important;
+    cursor: pointer;
+}
+
 .badge-accent {
     background-color: #ff4081;
     margin-top: 17px;
@@ -97,25 +106,16 @@ p {
     border-bottom: 1px solid #fff;
 }
 
-.today {
-    color: #ff4081;
-    font-weight: bold;
-}
-
 .simple-value:hover {
     color: #2196F3 !important;
-}
-
-.small-badge {
-    margin-top: 17px;
-    margin-right: 10px;
-    width: 19px !important;
-    height: 19px !important;
-    font-size: smaller !important;
-    cursor: pointer;
 }
 
 .small-icon {
     height: 20px !important;
     width: 20px !important;
+}
+
+.today {
+    color: #ff4081;
+    font-weight: bold;
 }

@@ -5,7 +5,8 @@ export default function CustomNavLink(props) {
   return (
     <div
       onClick={props.onClick}
-      className={(props.className ? props.className : 'nav-link') + (props.active ? ' active-nav-link' : '')}>
+      className={(props.className ? props.className : 'nav-link') + (props.active ? ' active-nav-link' : '')}
+    >
       <a style={{margin: 'auto'}}>{props.children}</a>
     </div>
   )

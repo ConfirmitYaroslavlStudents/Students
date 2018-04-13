@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import SortablePaginatedTable from './sortablePaginatedTable'
+import SortablePaginatedTable from '../common/sortablePaginatedTable'
 import getCandidateTableHeaders from '../candidates/candidateTableHeaders'
 import getIntervieweeTableHeaders from '../interviewees/intervieweeTableHeaders'
 import getStudentTableHeaders from '../students/studentTableHeaders'
@@ -9,11 +9,13 @@ import CandidateControls from '../candidates/candidateControls'
 import { formatDateTime, formatDate, isToday, isBirthDate } from '../../utilities/customMoment'
 import TagList from '../tags/tagList'
 import ResumeControls from '../interviewees/resumeControls'
-import styled from 'styled-components'
+import { CandidateNameWrapper, CandidateControlsWrapper } from '../common/styledComponents'
+import { Date } from '../common/styledComponents'
 
-export default class CandidatesTable extends Component {
-  getHeaders = () => {
-    switch (this.props.type) {
+
+export default function CandidatesTable(props) {
+  const getHeaders = () => {
+    switch (props.type) {
       case 'Candidate':
         return getCandidateTableHeaders()
       case 'Interviewee':
@@ -25,105 +27,94 @@ export default class CandidatesTable extends Component {
     }
   }
 
-  createRow = (candidate, disabled) => {
+  const createRow = (candidate, disabled) => {
     const row = { cells: [], isDisabled: disabled }
-    // Filling row cells according to the candidate status
+
     row.cells.push(
-      <NameWrapper>
+      <CandidateNameWrapper>
         <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
         <TagList
           tags={candidate.tags}
-          setSearchRequest={this.props.setSearchRequest}
-          loadCandidates={this.props.loadCandidates}
-          changeURL={this.props.changeURL}
-          history={this.props.history}
+          setSearchRequest={props.setSearchRequest}
+          loadCandidates={props.loadCandidates}
+          changeURL={props.changeURL}
+          history={props.history}
         />
-      </NameWrapper>
+      </CandidateNameWrapper>
     )
 
-    if (this.props.type === 'Candidate') {
+    if (props.type === 'Candidate') {
       row.cells.push(candidate.status)
     }
 
     row.cells.push(candidate.email)
     row.cells.push(
-      <span style={{whiteSpace: 'nowrap'}} className={isBirthDate(candidate.birthDate) ? 'today' : ''}>
+      <Date highlighted={isBirthDate(candidate.birthDate)}>
         {formatDate(candidate.birthDate)}
-      </span>)
+      </Date>)
 
-    if (this.props.type === 'Interviewee') {
-      const candidateOnUploading = this.props.applicationStatus.slice(0, 9) === 'uploading' ? this.props.applicationStatus.slice(10) : ''
-      row.cells.push(
-       <span style={{whiteSpace: 'nowrap'}} className={isToday(candidate.interviewDate) ? 'today' : ''}>
-        {formatDateTime(candidate.interviewDate)}
-      </span>)
-      row.cells.push(<ResumeControls
-        interviewee={candidate}
-        onUploading={candidate.id === candidateOnUploading}
-        enableDownload
-        enableUpload
-        authorized={this.props.username !== ''}
-        uploadResume={this.props.uploadResume}/>)
-    }
+    switch (props.type) {
+      case 'Interviewee':
+        const candidateOnUploading = props.applicationStatus.slice(0, 9) === 'uploading' ? props.applicationStatus.slice(10) : ''
+        row.cells.push(
+          <Date highlighted={isToday(candidate.interviewDate)}>
+            {formatDateTime(candidate.interviewDate)}
+          </Date>)
+        row.cells.push(<ResumeControls
+          interviewee={candidate}
+          onUploading={candidate.id === candidateOnUploading}
+          enableDownload
+          enableUpload
+          authorized={props.username !== ''}
+          uploadResume={props.uploadResume}/>)
+        break
 
-    if (this.props.type === 'Student') {
-      row.cells.push(candidate.groupName)
-      row.cells.push(<span style={{whiteSpace: 'nowrap'}}>{formatDate(candidate.startingDate)}</span>)
-      row.cells.push(<span style={{whiteSpace: 'nowrap'}}>{formatDate(candidate.endingDate)}</span>)
-    }
+      case 'Student':
+        row.cells.push(candidate.groupName)
+        row.cells.push(<Date>{formatDate(candidate.startingDate)}</Date>)
+        row.cells.push(<Date>{formatDate(candidate.endingDate)}</Date>)
+        break
 
-    if (this.props.type === 'Trainee') {
-      row.cells.push(<span style={{whiteSpace: 'nowrap'}}>{candidate.mentor}</span>)
+      case 'Trainee':
+        row.cells.push(<Date>{candidate.mentor}</Date>)
+        break
     }
 
     row.cells.push(
-      <ControlsWrapper>
-        <CandidateControls candidate={candidate} {...this.props}/>
-      </ControlsWrapper>)
+      <CandidateControlsWrapper>
+        <CandidateControls candidate={candidate} {...props}/>
+      </CandidateControlsWrapper>)
 
     return row
   }
 
-  render() {
-    const onRefreshing = this.props.applicationStatus === 'refreshing';
-    const candidateOnUpdating = this.props.applicationStatus.slice(0, 8) === 'updating' ? this.props.applicationStatus.slice(9) : ''
-    const candidateOnDeleting = this.props.applicationStatus.slice(0, 8) === 'deleting' ? this.props.applicationStatus.slice(9) : ''
+  const onRefreshing = props.applicationStatus === 'refreshing';
+  const candidateOnUpdating = props.applicationStatus.slice(0, 8) === 'updating' ? props.applicationStatus.slice(9) : ''
+  const candidateOnDeleting = props.applicationStatus.slice(0, 8) === 'deleting' ? props.applicationStatus.slice(9) : ''
 
-    const candidates = Object.keys(this.props.candidates).map(candidateID => { return this.props.candidates[candidateID] })
+  const candidates = Object.keys(props.candidates).map(candidateID => { return props.candidates[candidateID] })
 
-    return (
-      <SortablePaginatedTable
-        headers={this.getHeaders()}
-        contentRows={ candidates.map(candidate => {
-            return this.createRow(candidate, onRefreshing || candidate.id === candidateOnUpdating || candidate.id === candidateOnDeleting)
-        })}
-        history={this.props.history}
-        offset={this.props.offset}
-        rowsPerPage={this.props.candidatesPerPage}
-        totalCount={this.props.totalCount}
-        setOffset={this.props.setOffset}
-        setRowsPerPage={this.props.setCandidatesPerPage}
-        sortingField={this.props.sortingField}
-        setSortingField={this.props.setSortingField}
-        sortingDirection={this.props.sortingDirection}
-        setSortingDirection={this.props.setSortingDirection}
-        loadCandidates={this.props.loadCandidates}
-        changeURL={this.props.changeURL}
-      />
-    )
-  }
+  return (
+    <SortablePaginatedTable
+      headers={getHeaders()}
+      contentRows={ candidates.map(candidate => {
+          return createRow(candidate, onRefreshing || candidate.id === candidateOnUpdating || candidate.id === candidateOnDeleting)
+      })}
+      history={props.history}
+      offset={props.offset}
+      rowsPerPage={props.candidatesPerPage}
+      totalCount={props.totalCount}
+      setOffset={props.setOffset}
+      sortingField={props.sortingField}
+      setSortingField={props.setSortingField}
+      sortingDirection={props.sortingDirection}
+      setSortingDirection={props.setSortingDirection}
+      loadCandidates={props.loadCandidates}
+      changeURL={props.changeURL}
+    />
+  )
 }
 
 CandidatesTable.propTypes = {
   type: PropTypes.string.isRequired
 }
-
-const NameWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const ControlsWrapper = styled.div`
-  display: flex;
-  float: right;
-`

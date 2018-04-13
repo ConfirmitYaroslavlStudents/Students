@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import TextField from '../common/UIComponentDecorators/textField'
-import Input from '../common/UIComponentDecorators/input'
-import {isNotEmpty, isEmail} from '../../utilities/candidateValidators'
+import Input from './UIComponentDecorators/input'
+import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
+import { LoginFormWrapper, PasswordInputWrapper } from './styledComponents'
 
 export default class LoginForm extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ export default class LoginForm extends Component {
 
   render() {
     return (
-      <div style={{width: 400}}>
+      <LoginFormWrapper>
         <Input
           id='email-input'
           type='email'
@@ -34,7 +34,7 @@ export default class LoginForm extends Component {
           checkValid={isEmail}
           onChange={this.handleEmailChange}
         />
-        <div style={{marginTop: 24}}>
+        <PasswordInputWrapper>
           <Input
             id='password-input'
             type='password'
@@ -44,8 +44,8 @@ export default class LoginForm extends Component {
             checkValid={isNotEmpty}
             onChange={this.handlePasswordChange}
           />
-        </div>
-      </div>
+        </PasswordInputWrapper>
+      </LoginFormWrapper>
     )
   }
 }

@@ -21,7 +21,7 @@ export default class CustomTextField extends Component{
         name={this.props.name}
         placeholder={this.props.placeholder}
         value={this.state.value}
-        onChange={this.handleChange(event.target.value)}
+        onChange={this.handleChange}
         required={this.props.required}
         autoFocus={this.props.autoFocus}
         error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}

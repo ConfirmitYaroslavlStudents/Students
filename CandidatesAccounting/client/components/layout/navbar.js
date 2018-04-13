@@ -1,11 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
-import Appbar from './appbar'
+import Appbar from '../common/appbar'
+import Navbar from '../common/UIComponentDecorators/navbar'
 import TablesBar from './tablesbar'
 
-export default function Navbar(props) {
+export default function CustomNavbar(props) {
   return (
-    <NavbarWrapper>
+    <Navbar>
       <Appbar
         title={props.pageTitle}
         applicationStatus={props.applicationStatus}
@@ -32,15 +32,6 @@ export default function Navbar(props) {
         loadCandidates={props.loadCandidates}
         candidateStatus={props.candidateStatus}
       />
-    </NavbarWrapper>
+    </Navbar>
   )
 }
-
-const NavbarWrapper = styled.div`
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  height: 108px;
-  z-index: 100;
-`

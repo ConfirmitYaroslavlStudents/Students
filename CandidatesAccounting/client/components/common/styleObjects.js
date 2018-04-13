@@ -3,6 +3,11 @@ export const SmallButtonStyle = {
   width: 24
 }
 
+export const MediumSmallButtonStyle = {
+  height: 30,
+  width: 30
+}
+
 export const MediumButtonStyle = {
   height: 40,
   width: 40

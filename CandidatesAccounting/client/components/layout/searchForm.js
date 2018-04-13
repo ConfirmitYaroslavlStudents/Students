@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import SearchIcon from 'material-ui-icons/search';
-import Input from '../common/UIComponentDecorators/input';
-import IconButton from '../common/UIComponentDecorators/iconButton';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import SearchIcon from 'material-ui-icons/search'
+import Input from '../common/UIComponentDecorators/input'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import { CenteredDiv } from '../common/styledComponents'
 
 export default class SearchForm extends Component {
   constructor(props) {
     super(props)
-    this.state = {isOpen: this.props.searchRequest !== ''}
+    this.state = { isOpen: this.props.searchRequest !== '' }
     this.timer = null
   }
 
@@ -56,34 +56,35 @@ export default class SearchForm extends Component {
   }
 
   render() {
+    const searchInput =
+      this.state.isOpen || this.props.searchRequest !== '' ?
+        <Input
+          id='search-input'
+          onChange={this.handleChange}
+          value={this.props.searchRequest}
+          className='search'
+          placeholder='search'
+          onFocus={() => {this.handleOpen()}}
+          onBlur={() => {
+            if (this.props.searchRequest === '') {
+              this.handleClose();
+            }
+          }}
+          disableUnderline
+          autoFocus
+        />
+        : ''
+
     return (
-      <Form>
+      <CenteredDiv>
         <IconButton
           color='inherit'
           icon={<SearchIcon/>}
           onClick={this.handleClick}
           placeholder='search'
         />
-        {
-          this.state.isOpen || this.props.searchRequest !== '' ?
-            <Input
-              id='search-input'
-              onChange={this.handleChange}
-              value={this.props.searchRequest}
-              className='search'
-              placeholder='search'
-              onFocus={() => {this.handleOpen()}}
-              onBlur={() => {
-                if (this.props.searchRequest === '') {
-                  this.handleClose();
-                }
-              }}
-              disableUnderline
-              autoFocus
-            />
-            : ''
-        }
-      </Form>
+        { searchInput }
+      </CenteredDiv>
     )
   }
 }
@@ -94,8 +95,3 @@ SearchForm.propTypes = {
   loadCandidates: PropTypes.func.isRequired,
   setState: PropTypes.func.isRequired,
 }
-
-const Form = styled.div`
-  display: flex;
-  align-items: center;
-`

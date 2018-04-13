@@ -1,5 +1,12 @@
 import styled, { css } from 'styled-components';
 
+export const AddCandidateButtonWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  right: 6px;
+  top: 60px;
+`
+
 export const AddCommentDialogFormWrapper = styled.div`
   width: 470px;
 `
@@ -29,6 +36,30 @@ export const AddCommentPanelWrapper = styled.div`
   background: #FFF;
 `
 
+export const AppbarControlsWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  right: 6px;
+`
+
+export const AppbarTitleWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  left: 16px;
+  font-size: 125%;
+`
+
+export const AppbarUsernameWrapper = styled.span`
+  margin: 0 5px;
+`
+
+export const AppbarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+`
+
 export const AttachmentFileNameWrapper = styled.div`
   display: inline-flex;
   align-items: center;
@@ -36,6 +67,16 @@ export const AttachmentFileNameWrapper = styled.div`
   padding-right: 12px;
   font-weight: bold;
   color: #665;
+`
+
+export const CandidateNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const CandidateControlsWrapper = styled.div`
+  display: flex;
+  float: right;
 `
 
 export const CandidateFormWrapper = styled.div`
@@ -149,11 +190,25 @@ export const CommentWrapper = styled.div`
 	`}
 `
 
+export const Date = styled.div`
+  white-space: nowrap;
+  
+  ${props => props.highlighted && css`
+    color: #ff4081;
+    font-weight: bold;
+	`}
+`
+
 export const DeleteCommentWrapper = styled.div`
   display: inline-block;
   margin-top: 3px;
   margin-left: 6px;
   margin-bottom: -5px;
+`
+
+export const DialogActionsWrapper = styled.div`
+  width: 100%;
+  text-align: right;
 `
 
 export const EmptyTable = styled.div`
@@ -162,6 +217,30 @@ export const EmptyTable = styled.div`
   position: absolute;
   width: 100%;
   margin-top: -12px;
+`
+
+export const ErrorPageWrapper = styled.div`
+  width: 100%;
+  min-height: 100vmin;
+  background: #EEE;
+  position: absolute;
+  top: 0;
+  padding-top: 160px;
+  box-sizing: border-box;
+  text-align: center;
+`
+
+export const ErrorCodeWrapper = styled.div`
+  display: inline-block;
+  font-size: 220%;
+  color: #666;
+  margin-right: 10px;
+`
+
+export const ErrorMessageWrapper = styled.div`
+  display: inline-block;
+  font-size: 150%;
+  color: #888;
 `
 
 export const FlexDiv = styled.div`
@@ -178,6 +257,10 @@ export const InputLabel = styled.p`
   font-size: 80%;
 `
 
+export const LinearProgressWrapper = styled.div`
+  margin: 4px -8px -8px -8px;
+`
+
 export const LoadingCandidateInfoWrapper = styled.div`
   height: 517px;
   width: 547px;
@@ -192,11 +275,57 @@ export const LoadingAddCommentPanelWrapper = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 `
 
+export const LoginFormWrapper = styled.div`
+  width: 400px;
+`
+
+export const MainWrapper = styled.div`
+  margin-top: 108px;
+`
+
 export const NoResultWrapper = styled.div`
   padding: 5px;
   color: #bbb;
   text-align: center;
   margin-bottom: 20px;
+`
+
+export const NotificationCenterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const NotificationCenterHeaderWrapper = styled.div`
+  padding: 4px;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+`
+
+export const NotificationCenterControlsWrapper = styled.div`
+  display: inline-flex;
+  padding-top: 2px;
+  float: right;
+`
+
+export const NotificationCenterButtonWrapper = styled.div`
+  display: inline-flex;
+  margin-left: 10px;
+`
+
+export const NotificationCenterNoNotificationsWrapper = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 24px;
+  color: #777;
+  font-size: 110%;
+  text-align: center;
+`
+
+export const NotificationCenterTitleWrapper = styled.div`
+  display: inline-block;
+  color: #636363;
+  margin: 6px 0 0 8px;
 `
 
 export const NotificationAttachmentWrapper = styled.div`  
@@ -212,7 +341,6 @@ export const NotificationButtonWrapper = styled.div`
   margin-right: -6px;
   margin-top: -6px;
 `
-
 
 export const NotificationCandidateNameWrapper = styled.div`
   display: inline-flex;
@@ -273,6 +401,10 @@ export const NotificationWrapper = styled.div`
   }
 `
 
+export const PasswordInputWrapper = styled.div`
+  margin-top: 24px;
+`
+
 export const QuillWrapper = styled.div`
   padding-right: 74px;
 `
@@ -300,11 +432,59 @@ export const SmallNoteSpan = styled.span`
   float: right;
 `
 
+export const SortableTableActionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  float: right;
+  margin-right: -18px;
+`
+
+export const SortableTableRowsPerPageWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  spacing: 5;
+  margin-right: 24px;
+`
+
+export const SortableTableFooterText = styled.span`
+  margin-right: 8px;
+`
+
 export const SubscribeButtonWrapper = styled.div`
   display: inline-block;
   position: relative;
   top: 11px;
   right: 11px;
+`
+
+export const TablesBarWrapper = styled.div`
+  display: flex;
+  z-index: 110;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+  width: 100%;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  height: 48px;
+`
+
+export const TabsWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  height: 48px;
+  margin: 0 auto;
+`
+
+export const Tabs = styled.div`
+  display: inline-flex;
+  margin: 0 auto;
+`
+
+export const Tab = styled.div`
+  display: inline-flex;
+  height: 48px;
+  width: 200px;
 `
 
 export const TagWrapper = styled.div`

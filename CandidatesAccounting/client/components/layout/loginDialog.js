@@ -2,15 +2,16 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import FlatButton from '../common/UIComponentDecorators/flatButton'
 import Dialog from '../common/UIComponentDecorators/dialogSimple'
-import LoginForm from './loginForm'
+import LoginForm from '../common/loginForm'
 import {isNotEmpty, isEmail} from '../../utilities/candidateValidators'
 import { LinearProgress } from 'material-ui/Progress'
+import { CenteredInlineDiv, DialogActionsWrapper, LinearProgressWrapper } from '../common/styledComponents'
 
 export default class LoginDialog extends Component {
   constructor(props) {
     super(props)
-    this.state = ({isOpen: false})
-    this.account = {email: '', password: ''}
+    this.state = ({ isOpen: false })
+    this.account = { email: '', password: '' }
   }
 
   handleOpen = () => {
@@ -23,14 +24,18 @@ export default class LoginDialog extends Component {
   }
 
   login = () => {
-    this.props.login(this.account.email, this.account.password)
+    if (isEmail(this.account.email) && isNotEmpty(this.account.password)) {
+      this.props.login(this.account.email, this.account.password)
+    }
   }
 
   render() {
     const signining = this.props.applicationStatus === 'signining'
+    const linearProgress = signining ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : ''
+
     return (
-      <div style={{display: 'inline-block'}}>
-        <FlatButton color="inherit" onClick={this.handleOpen}>
+      <CenteredInlineDiv>
+        <FlatButton color='inherit' onClick={this.handleOpen}>
           Sign on / Sign in
         </FlatButton>
         <Dialog
@@ -38,24 +43,20 @@ export default class LoginDialog extends Component {
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           actions={
-            <div style={{width: '100%', textAlign: 'right'}}>
-              <FlatButton color="inherit" disabled={signining} onClick={()=>{this.handleClose()}}>
+            <DialogActionsWrapper>
+              <FlatButton color='inherit' disabled={signining} onClick={this.handleClose}>
                 Cancel
               </FlatButton>
-                <FlatButton color="primary" disabled={signining} onClick={()=>{
-                  if (isEmail(this.account.email) && isNotEmpty(this.account.password)) {
-                    this.login()
-                  }
-                }}>
-                  Sign in
-                </FlatButton>
-              { signining ? <div style={{margin: '4px -8px -8px -8px'}}><LinearProgress /></div> : '' }
-            </div>
+              <FlatButton color='primary' disabled={signining} onClick={this.login}>
+                Sign in
+              </FlatButton>
+              { linearProgress }
+            </DialogActionsWrapper>
           }
         >
           <LoginForm account={this.account} />
         </Dialog>
-      </div>
+      </CenteredInlineDiv>
     )
   }
 }

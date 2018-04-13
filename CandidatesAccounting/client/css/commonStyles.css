@@ -74,11 +74,9 @@ p {
     display: inline-flex;
     align-items: center;
     text-align:center;
-    position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
+    font-size: 95%;
     cursor: pointer;
 }
 
@@ -108,14 +106,4 @@ p {
 
 .simple-value:hover {
     color: #2196F3 !important;
-}
-
-.small-icon {
-    height: 20px !important;
-    width: 20px !important;
-}
-
-.today {
-    color: #ff4081;
-    font-weight: bold;
 }

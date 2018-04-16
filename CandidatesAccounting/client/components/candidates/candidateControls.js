@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FlexDiv } from '../common/styledComponents'
 import { MediumButtonStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import UpdateCandidateDialog from './updateCandidateDialog'
@@ -12,36 +11,53 @@ import AddCommentDialog from '../comments/addCommentDialog'
 import Spinner from '../common/UIComponentDecorators/spinner'
 
 export default function CandidateControls(props) {
-  const openCandidateCommentPage = () => {
+  const {
+    applicationStatus,
+    addComment,
+    candidate,
+    updateCandidate,
+    deleteCandidate,
+    loadCandidates,
+    username,
+    tags,
+    offset,
+    candidatesPerPage,
+    totalCount,
+    history,
+    subscribe,
+    unsubscribe
+  } = props
+
+  const authorized = username !== ''
+  const commentAmount = Object.keys(candidate.comments).length
+  const onRefreshing = applicationStatus === 'refreshing'
+  const onUpdating = applicationStatus.slice(0, 8) === 'updating' && applicationStatus.slice(9) === candidate.id
+  const onDeleting = applicationStatus.slice(0, 8) === 'deleting' && applicationStatus.slice(9) === candidate.id
+
+  const handleCandidateCommentPageOpen = () => {
     if (!onRefreshing && !onDeleting) {
-      props.history.replace('/' + props.candidate.status.toLowerCase() + 's/' + props.candidate.id + '/comments')
+      history.replace('/' + candidate.status.toLowerCase() + 's/' + candidate.id + '/comments')
     }
   }
 
-  const deleteCandidate = (candidateID) => {
-    props.deleteCandidate(candidateID)
-    props.loadCandidates({
+  const handleCandidateDelete = (candidateID) => {
+    deleteCandidate(candidateID)
+    loadCandidates({
         applicationStatus: 'deleting-' + candidateID,
-        offset: props.totalCount - props.offset <= 1 ? props.totalCount - 1 - props.candidatesPerPage : props.offset
+        offset: totalCount - offset <= 1 ? totalCount - 1 - candidatesPerPage : offset
       },
-      props.history)
+      history)
   }
-
-  const authorized = props.username !== ''
-  const commentAmount = Object.keys(props.candidate.comments).length
-  const onRefreshing = props.applicationStatus === 'refreshing'
-  const onUpdating = props.applicationStatus.slice(0, 8) === 'updating' && props.applicationStatus.slice(9) === props.candidate.id
-  const onDeleting = props.applicationStatus.slice(0, 8) === 'deleting' && props.applicationStatus.slice(9) === props.candidate.id
 
   const updateCandidateDialog =
     onUpdating ?
       <Spinner />
       :
       <UpdateCandidateDialog
-        candidate={props.candidate}
-        updateCandidate={props.updateCandidate}
-        tags={props.tags}
-        username={props.username}
+        candidate={candidate}
+        updateCandidate={updateCandidate}
+        tags={tags}
+        username={username}
         disabled={onRefreshing || onDeleting || !authorized}
       />
 
@@ -50,22 +66,22 @@ export default function CandidateControls(props) {
       <Spinner />
       :
       <DeleteCandidateDialog
-        candidate={props.candidate}
+        candidate={candidate}
         disabled={onRefreshing || onUpdating || !authorized}
-        deleteCandidate={deleteCandidate}
+        deleteCandidate={handleCandidateDelete}
       />
 
   return (
-    <FlexDiv>
+    <div className='flex'>
       <AddCommentDialog
-        candidate={props.candidate}
-        addComment={props.addComment}
-        username={props.username}
-        subscribe={props.subscribe}
-        unsubscribe={props.unsubscribe}
+        candidate={candidate}
+        addComment={addComment}
+        username={username}
+        subscribe={subscribe}
+        unsubscribe={unsubscribe}
         disabled={onRefreshing || onDeleting || !authorized}
       />
-      <NavLink onClick={openCandidateCommentPage}>
+      <NavLink onClick={handleCandidateCommentPageOpen}>
         <Badge badgeContent={commentAmount} disabled={onRefreshing}>
           <IconButton
             icon={<CommentIcon />}
@@ -76,7 +92,7 @@ export default function CandidateControls(props) {
       </NavLink>
       { updateCandidateDialog }
       { deleteCandidateDialog }
-    </FlexDiv>
+    </div>
   )
 }
 

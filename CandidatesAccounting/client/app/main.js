@@ -81,6 +81,7 @@ const store = configureStore({
   applicationStatus: 'loading',
   pageTitle: 'Candidate Accounting',
   errorMessage: '',
+  authorized: username.trim() !== '',
   username,
   searchRequest: stateArgs.searchRequest,
   candidateStatus: stateArgs.tableType,

@@ -4,7 +4,7 @@ import LoginDialog from './loginDialog';
 import IconButton from '../common/UIComponentDecorators/iconButton';
 import SignOutIcon from 'material-ui-icons/ExitToApp';
 import formatUserName from '../../utilities/formatUserName';
-import NotificationCenter from './notificationCenter';
+import NotificationCenter from './notificationCenterPopover';
 import { CenteredInlineDiv, AppbarUsernameWrapper } from '../common/styledComponents'
 
 export default function UserControls(props) {

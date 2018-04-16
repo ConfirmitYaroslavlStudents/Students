@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { BigButtonStyle, SmallerIconStyle, SmallIconStyle } from '../common/styleObjects'
+import { BigButtonStyle, SmallIconStyle, QuillToolbarButtonStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import AttachIcon from 'material-ui-icons/AttachFile'
 import AddIcon from 'material-ui-icons/AddCircleOutline'
@@ -76,7 +76,7 @@ export default class AddCommentPanel extends Component {
         <button className='ql-link'/>
         <FileUploader
           uploadFile={this.handleAttachFile}
-          icon={<AttachIcon style={SmallerIconStyle} />}
+          icon={<AttachIcon style={QuillToolbarButtonStyle}/>}
           attachment={this.state.commentAttachment}
           disabled={this.props.disabled} />
       </CenteredDiv>

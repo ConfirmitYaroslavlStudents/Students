@@ -1,3 +1,9 @@
+export const QuillToolbarButtonStyle = {
+  height: 20,
+  width: 20,
+  color: '#434343'
+}
+
 export const SmallButtonStyle = {
   height: 24,
   width: 24

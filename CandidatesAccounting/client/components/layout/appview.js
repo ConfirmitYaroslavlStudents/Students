@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 import actions from '../../redux/actions'
 import Navbar from './navbar'
 import CandidatesTable from './candidatesTable'
-import CommentForm from '../comments/commentsPage'
+import CommentPage from '../comments/commentsPage'
 import SnackBar from '../common/UIComponentDecorators/snackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../common/UIComponentDecorators/spinner'
@@ -18,7 +18,7 @@ export default class AppView extends Component {
         :
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
-            <CommentForm
+            <CommentPage
               candidate={this.props.candidates[this.props.history.location.pathname.split('/')[2]]}
               applicationStatus={this.props.applicationStatus}
               addComment={this.props.addComment}
@@ -65,6 +65,7 @@ export default class AppView extends Component {
 function mapStateToProps(state) {
   return {
     applicationStatus: state.applicationStatus,
+    authorized: state.authorized,
     username: state.username,
     pageTitle: state.pageTitle,
     errorMessage: state.errorMessage,

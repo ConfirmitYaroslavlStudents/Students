@@ -38,17 +38,6 @@ export default function TablesBar(props) {
     props.loadCandidates(stateChanges, props.history)
   }
 
-  const addCandidate = candidate => {
-    props.addCandidate(candidate);
-    props.loadCandidates(
-      {
-        applicationStatus: 'refreshing',
-        offset: props.totalCount - props.totalCount % props.candidatesPerPage
-      },
-      props.history
-    )
-  }
-
   return (
     <TablesBarWrapper>
       <TabsWrapper>
@@ -68,12 +57,7 @@ export default function TablesBar(props) {
         </Tabs>
       </TabsWrapper>
       <AddCandidateButtonWrapper>
-        <AddCandidateDialog
-          addCandidate={addCandidate}
-          candidateStatus={props.newCandidateDefaultType === '' ? 'Interviewee' : props.newCandidateDefaultType}
-          tags={props.tags}
-          disabled={props.username === ''}
-        />
+        <AddCandidateDialog history={props.history} />
       </AddCandidateButtonWrapper>
     </TablesBarWrapper>
   )

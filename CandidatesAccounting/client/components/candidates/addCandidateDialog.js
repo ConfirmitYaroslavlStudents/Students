@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import actions from '../../redux/actions'
 import PropTypes from 'prop-types'
-import { InlineFlexDiv } from '../common/styledComponents'
 import { checkCandidateValidation } from '../../utilities/candidateValidators'
 import Candidate from '../../utilities/candidate'
 import Comment from '../../utilities/comment'
@@ -9,8 +10,9 @@ import AddPersonIcon from 'material-ui-icons/PersonAdd'
 import CloseIcon from 'material-ui-icons/Close';
 import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
 import IconButton from '../common/UIComponentDecorators/iconButton'
+import {MediumButtonStyle} from '../common/styleObjects'
 
-export default class AddCandidateDialog extends Component{
+class AddCandidateDialog extends Component{
   constructor(props) {
     super(props);
     this.state = ({ isOpen: false })
@@ -19,48 +21,66 @@ export default class AddCandidateDialog extends Component{
 
   handleOpen = () => {
     this.newCandidate = new Candidate(this.props.candidateStatus)
-    this.setState({isOpen: true})
+    this.setState({ isOpen: true })
   }
 
   handleClose = () => {
-    this.setState({isOpen: false})
+    this.setState({ isOpen: false })
   }
 
-  addCandidate = () => {
+  handleCandidateAdd = () => {
+    const {addCandidate, loadCandidates, totalCount, candidatesPerPage, history} = this.props
+
     if (checkCandidateValidation(this.newCandidate)) {
       this.newCandidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + this.newCandidate.status)
-      this.props.addCandidate(this.newCandidate)
+      addCandidate(this.newCandidate)
+      loadCandidates(
+        {
+          applicationStatus: 'refreshing',
+          offset: totalCount - totalCount % candidatesPerPage
+        },
+        history
+      )
       this.handleClose()
     }
   }
 
   render() {
+    const {authorized, tags} = this.props
+
     return (
-      <InlineFlexDiv>
-        <IconButton icon={<AddPersonIcon />} disabled={this.props.disabled} onClick={this.handleOpen} />
+      <div className='inline-flex'>
+        <IconButton icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={!authorized} onClick={this.handleOpen} />
         <DialogWindow
           title='Add new candidate'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           actions={
-            <InlineFlexDiv>
-              <IconButton color='inherit' icon={<AddPersonIcon />} onClick={this.addCandidate}/>
+            <div className='inline-flex'>
+              <IconButton color='inherit' icon={<AddPersonIcon />} onClick={this.handleCandidateAdd}/>
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose} />
-            </InlineFlexDiv>
+            </div>
           }>
             <LoadableCandidateInfoForm
               candidate={this.newCandidate}
-              tags={this.props.tags}
+              tags={tags}
             />
         </DialogWindow>
-      </InlineFlexDiv>
+      </div>
     )
   }
 }
 
 AddCandidateDialog.propTypes = {
-  addCandidate: PropTypes.func.isRequired,
-  candidateStatus: PropTypes.string.isRequired,
-  tags: PropTypes.array.isRequired,
-  disabled: PropTypes.bool,
+  history: PropTypes.object.isRequired
 }
+
+export default connect(state => {
+  return {
+    authorized: state.authorized,
+    candidateStatus: state.candidateStatus,
+    totalCount: state.totalCount,
+    candidatesPerPage: state.candidatesPerPage,
+    tags: state.tags
+  }
+}, actions)(AddCandidateDialog)

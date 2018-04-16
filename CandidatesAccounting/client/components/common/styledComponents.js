@@ -1,10 +1,9 @@
 import styled, { css } from 'styled-components';
 
 export const AddCandidateButtonWrapper = styled.div`
-  display: inline-block;
+  display: inline-flex;
   position: absolute;
   right: 6px;
-  top: 60px;
 `
 
 export const AddCommentDialogFormWrapper = styled.div`
@@ -459,6 +458,7 @@ export const SubscribeButtonWrapper = styled.div`
 
 export const TablesBarWrapper = styled.div`
   display: flex;
+  align-items: center;
   z-index: 110;
   color: rgba(0, 0, 0, 0.87);
   background-color: #f5f5f5;
@@ -511,7 +511,7 @@ export const Tag = styled.div`
 
 export const TextFieldLabel = styled.p`
   margin-top: 16px;
-  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};;
+  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};
   color: rgba(0,0,0,0.54);
   font-size: 80%;
 `

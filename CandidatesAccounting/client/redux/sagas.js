@@ -5,7 +5,7 @@ import {
   put,
   call,
   select
-} from 'redux-saga/effects';
+} from 'redux-saga/effects'
 import {
   setState,
   updateCandidateSuccess,
@@ -18,21 +18,20 @@ import {
   setErrorMessage,
   setApplicationStatus,
   uploadResumeSuccess,
-} from './actions';
-import { login, logout } from '../api/authorizationService';
-import { getUserState } from '../api/commonService';
-import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js';
-import { subscribe, unsubscribe } from '../api/subscribeService';
-import { noticeNotification, deleteNotification } from '../api/notificationService';
-import { uploadResume } from '../api/resumeService';
-import createCandidate from '../utilities/candidate';
+} from './actions'
+import { login, logout } from '../api/authorizationService'
+import { getNotifications } from '../api/commonService'
+import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js'
+import { subscribe, unsubscribe } from '../api/subscribeService'
+import { noticeNotification, deleteNotification } from '../api/notificationService'
+import { uploadResume } from '../api/resumeService'
 import {
   getCandidates,
   getCandidate,
   addCandidate,
   deleteCandidate,
   updateCandidate
-} from '../api/candidateService.js';
+} from '../api/candidateService.js'
 
 export default function* rootSaga() {
   yield all([
@@ -54,70 +53,71 @@ export default function* rootSaga() {
 }
 
 function* watchLogin() {
-  yield takeLatest('LOGIN', loginSaga);
+  yield takeLatest('LOGIN', loginSaga)
 }
 
 function* watchLogout() {
-  yield takeLatest('LOGOUT', logoutSaga);
+  yield takeLatest('LOGOUT', logoutSaga)
 }
 
 function* watchUploadResume() {
-  yield takeEvery('UPLOAD_RESUME', uploadResumeSaga);
+  yield takeEvery('UPLOAD_RESUME', uploadResumeSaga)
 }
 
 function* watchCandidateAdd() {
-  yield takeEvery('ADD_CANDIDATE', addCandidateSaga);
+  yield takeEvery('ADD_CANDIDATE', addCandidateSaga)
 }
 
 function* watchCandidateUpdate() {
-  yield takeEvery('UPDATE_CANDIDATE', updateCandidateSaga);
+  yield takeEvery('UPDATE_CANDIDATE', updateCandidateSaga)
 }
 
 function* watchCandidateDelete() {
-  yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga);
+  yield takeEvery('DELETE_CANDIDATE', deleteCandidateSaga)
 }
 
 function* watchCommentAdd() {
-  yield takeEvery('ADD_COMMENT', addCommentSaga);
+  yield takeEvery('ADD_COMMENT', addCommentSaga)
 }
 
 function* watchCommentDelete() {
-  yield takeEvery('DELETE_COMMENT', deleteCommentSaga);
+  yield takeEvery('DELETE_COMMENT', deleteCommentSaga)
 }
 
 function* watchSubscribe() {
-  yield takeEvery('SUBSCRIBE', subscribeSaga);
+  yield takeEvery('SUBSCRIBE', subscribeSaga)
 }
 
 function* watchNoticeNotification() {
-  yield takeEvery('NOTICE_NOTIFICATION', noticeNotificationSaga);
+  yield takeEvery('NOTICE_NOTIFICATION', noticeNotificationSaga)
 }
 
 function* watchDeleteNotification() {
-  yield takeEvery('DELETE_NOTIFICATION', deleteNotificationSaga);
+  yield takeEvery('DELETE_NOTIFICATION', deleteNotificationSaga)
 }
 
 function* watchUnsubscribe() {
-  yield takeEvery('UNSUBSCRIBE', unsubscribeSaga);
+  yield takeEvery('UNSUBSCRIBE', unsubscribeSaga)
 }
 
 function* watchLoadCandidates() {
-  yield takeLatest('LOAD_CANDIDATES', loadCandidatesSaga);
+  yield takeLatest('LOAD_CANDIDATES', loadCandidatesSaga)
 }
 
 function* watchGetCandidate() {
-  yield takeLatest('GET_CANDIDATE', getCandidateSaga);
+  yield takeLatest('GET_CANDIDATE', getCandidateSaga)
 }
 
 function* loginSaga(action) {
   try {
     yield put(setApplicationStatus('signining'))
     const username = yield call(login, action.email, action.password)
-    let newState = yield call(getUserState, username)
     yield put(setState({
-      username: username,
-      notifications: newState.notifications
+      username,
+      authorized: true
     }))
+    let notifications = yield call(getNotifications, username)
+    yield put(setState({ notifications }))
     yield put(setApplicationStatus('ok'))
   }
   catch(error) {
@@ -130,11 +130,11 @@ function* logoutSaga() {
   try {
     yield put(setApplicationStatus('refreshing'))
     yield call(logout)
-    let newState = yield call(getUserState, '')
     yield put(setState({
       username: '',
-      notifications: newState.notifications
-    }));
+      authorized: false,
+      notifications: {}
+    }))
     yield put(setApplicationStatus('ok'))
   }
   catch(error) {
@@ -158,7 +158,7 @@ function* uploadResumeSaga(action) {
 
 function* addCandidateSaga(action) {
   try {
-    yield call(addCandidate, createCandidate(action.candidate.status, action.candidate))
+    yield call(addCandidate, action.candidate)
   }
   catch(error) {
     yield put(setErrorMessage(error + '. Add candidate error.'))

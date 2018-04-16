@@ -77,7 +77,7 @@ export function getInitialState(username, take, skip, status, sort, sortDir, sea
   })
 }
 
-export function getUserState(username) {
+export function getNotifications(username) {
   return sendGraphQLQuery(
     `query($username: String!) {
       notifications(username: $username) {
@@ -104,10 +104,10 @@ export function getUserState(username) {
     if (!data) {
       throw 'Connection error'
     }
-    let notifications = {};
+    let notifications = {}
     data.notifications.forEach((notification) => {
       notifications[notification.id] = notification
     })
-    return { notifications }
+    return notifications
   })
 }

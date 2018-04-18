@@ -1,5 +1,5 @@
 import React from 'react'
-import Appbar from '../common/appbar'
+import Appbar from './appbar'
 import Navbar from '../common/UIComponentDecorators/navbar'
 import TablesBar from './tablesbar'
 

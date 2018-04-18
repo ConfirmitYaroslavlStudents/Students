@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import NavLink from './navLink'
+import NavLink from '../common/navLink'
 import DeleteIcon from 'material-ui-icons/Cancel'
 import formatUserName from '../../utilities/formatUserName'
 import { formatDateTime } from '../../utilities/customMoment'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import AttachIcon from 'material-ui-icons/AttachFile'
-import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from './styleObjects'
+import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from '../common/styleObjects'
 import {
   NotificationAttachmentWrapper,
   NotificationButtonWrapper,
@@ -18,7 +18,7 @@ import {
   NotificationMessageWrapper,
   NotificationServiceText,
   NotificationWrapper
-} from './styledComponents'
+} from '../common/styledComponents'
 
 export default function NotificationBlock(props) {
   const openCandidateComments = () => {

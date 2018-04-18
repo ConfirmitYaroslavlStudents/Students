@@ -15,11 +15,11 @@ export default function SubscribeButton(props){
         :
         <NotificationsOffIcon/>
 
-  const onClick = () => {
+  const handleClick = () => {
     if (props.active) {
-      props.unsubscribe(props.candidate.id, props.username);
+      props.unsubscribe()
     } else {
-      props.subscribe(props.candidate.id, props.username);
+      props.subscribe()
     }
   }
 
@@ -27,15 +27,13 @@ export default function SubscribeButton(props){
     <IconButton
       icon={buttonIcon}
       disabled={props.disabled}
-      onClick={onClick}
+      onClick={handleClick}
     />
   )
 }
 
 SubscribeButton.propTypes = {
   active: PropTypes.bool.isRequired,
-  candidate: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

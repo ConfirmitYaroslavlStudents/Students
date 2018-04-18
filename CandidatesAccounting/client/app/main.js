@@ -7,8 +7,8 @@ import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux'
-import reducer from '../redux/reducer'
-import rootSaga from '../redux/sagas'
+import reducer from '../reducers/reducer'
+import rootSaga from '../sagas/sagas'
 import { BrowserRouter, Route } from 'react-router-dom'
 import createMuiTheme from 'material-ui/styles/createMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -36,12 +36,12 @@ function configureStore(initialState) {
   })
 
   if (module.hot) {
-    module.hot.accept('../redux/reducer', () => {
-      const nextReducer = require('../redux/reducer').default
+    module.hot.accept('../reducers/reducer', () => {
+      const nextReducer = require('../reducers/reducer').default
       store.replaceReducer(nextReducer)
     })
-    module.hot.accept('../redux/sagas', () => {
-      const newRootSaga = require('../redux/sagas').default
+    module.hot.accept('../sagas/sagas', () => {
+      const newRootSaga = require('../sagas/sagas').default
       sagaRun.cancel()
       sagaRun.done.then(() => {
         sagaRun = sagaMiddleware.run(function* replaceSaga() {
@@ -81,17 +81,22 @@ const store = configureStore({
   applicationStatus: 'loading',
   pageTitle: 'Candidate Accounting',
   errorMessage: '',
-  authorized: username.trim() !== '',
-  username,
   searchRequest: stateArgs.searchRequest,
-  candidateStatus: stateArgs.tableType,
+
+  authorizationStatus: username.trim() === '' ? 'not-authorized' : 'authorized',
+  username,
+
   offset: stateArgs.offset,
   candidatesPerPage: stateArgs.candidatesPerPage,
+  totalCount: 0,
   sortingField: stateArgs.sortingField,
   sortingDirection: stateArgs.sortingDirection,
-  totalCount: 0,
+
+  candidateStatus: stateArgs.tableType,
   candidates: {},
+
   tags: [],
+
   notifications: {}
 })
 

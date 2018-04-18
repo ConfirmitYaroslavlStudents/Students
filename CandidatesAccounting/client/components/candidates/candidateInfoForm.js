@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { CandidateFormWrapper, TextFieldLabel, SmallNoteSpan } from '../common/styledComponents'
+import { connect } from 'react-redux'
 import TextField from '../common/UIComponentDecorators/textField'
 import DatePicker from '../common/UIComponentDecorators/datePicker'
 import SelectInput from '../common/UIComponentDecorators/selectInput'
@@ -10,38 +10,43 @@ import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
 import IntervieweeSpecialFields from '../interviewees/intervieweeSpecialFields'
 import StudentSpecialFields from '../students/studentSpecialFields'
 import TraineeSpecialFields from '../trainees/traineeSpecialFields'
+import styled from 'styled-components'
 
-export default class CandidateInfoForm extends Component {
+class CandidateInfoForm extends Component {
   constructor(props) {
-    super(props);
-    this.state = ({candidateStatus: props.candidate.status});
+    super(props)
+    this.state = ({ candidateStatus: props.candidate.status })
   }
 
   changeProperty = (key, value) => {
-    this.props.candidate[key] = value;
+    this.props.candidate[key] = value
   }
 
   changeCandidateStatus = (status) => {
-    this.props.candidate.status = status;
-    this.setState({candidateStatus: status});
+    this.props.candidate.status = status
+    this.setState({ candidateStatus: status })
   }
 
   setCandidateTags = (tags) => {
-    this.props.candidate.tags = tags.map(tag => tag.label);
+    this.props.candidate.tags = tags.map(tag => tag.label)
   }
 
   getSpecialFields = () => {
+    const { candidate } = this.props
+
     switch (this.state.candidateStatus) {
       case 'Interviewee':
-        return <IntervieweeSpecialFields interviewee={this.props.candidate} changeProperty={this.changeProperty}/>
+        return <IntervieweeSpecialFields interviewee={candidate} changeProperty={this.changeProperty}/>
       case 'Student':
-        return <StudentSpecialFields student={this.props.candidate} changeProperty={this.changeProperty}/>
+        return <StudentSpecialFields student={candidate} changeProperty={this.changeProperty}/>
       case 'Trainee':
-        return <TraineeSpecialFields trainee={this.props.candidate} changeProperty={this.changeProperty}/>
+        return <TraineeSpecialFields trainee={candidate} changeProperty={this.changeProperty}/>
     }
   }
 
   render() {
+    const { candidate, tags } = this.props
+
     return (
       <CandidateFormWrapper>
         <SelectInput
@@ -53,27 +58,27 @@ export default class CandidateInfoForm extends Component {
         <TextFieldLabel>Tags</TextFieldLabel>
         <TagSelect
           onValuesChange={this.setCandidateTags}
-          options={this.props.tags}
-          defaultValues={this.props.candidate.tags}/>
+          options={tags}
+          defaultValues={candidate.tags}/>
         <TextField
-          onChange={(value) => {this.changeProperty('name', value)}}
+          onChange={value => {this.changeProperty('name', value)}}
           label='Name'
           placeholder='full name'
-          value={this.props.candidate.name}
+          value={candidate.name}
           checkValid={isNotEmpty}
           required
           autoFocus/>
         <TextField
-          onChange={(value) => {this.changeProperty('email', value)}}
+          onChange={value => {this.changeProperty('email', value)}}
           label='E-mail'
           placeholder='example@mail.com'
-          value={this.props.candidate.email}
+          value={candidate.email}
           checkValid={isEmail}
           required/>
         <DatePicker
           label='Birth date'
-          defaultValue={toDatePickerFormat(this.props.candidate.birthDate)}
-          onChange={(value) => {this.changeProperty('birthDate', fromDatePickerFormat(value))}}
+          defaultValue={toDatePickerFormat(candidate.birthDate)}
+          onChange={value => {this.changeProperty('birthDate', fromDatePickerFormat(value))}}
         />
 
         {this.getSpecialFields()}
@@ -85,6 +90,29 @@ export default class CandidateInfoForm extends Component {
 }
 
 CandidateInfoForm.propTypes = {
-  candidate: PropTypes.object.isRequired,
-  tags: PropTypes.array.isRequired,
+  candidate: PropTypes.object.isRequired
 }
+
+const CandidateFormWrapper = styled.div`
+  padding: 15px 15px 10px;
+  margin-right: 1px;
+`
+
+const TextFieldLabel = styled.p`
+  margin-top: 16px;
+  margin-bottom: ${props => props.marginBottom ? props.marginBottom : '0'};
+  color: rgba(0,0,0,0.54);
+  font-size: 80%;
+`
+
+const SmallNoteSpan = styled.span`
+  color: rgba(0,0,0,0.5);
+  fontSize: 80%;
+  float: right;
+`
+
+export default connect(state => {
+  return {
+    tags: state.tags
+  }
+})(CandidateInfoForm)

@@ -66,11 +66,7 @@ export default function TablesBar(props) {
 TablesBar.propTypes = {
   username: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
-  addCandidate: PropTypes.func.isRequired,
-  newCandidateDefaultType: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   loadCandidates: PropTypes.func.isRequired,
-  candidateStatus: PropTypes.string.isRequired,
-  candidatesPerPage: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired
+  candidateStatus: PropTypes.string.isRequired
 }

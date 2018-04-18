@@ -1,20 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import LoginDialog from './loginDialog';
-import IconButton from '../common/UIComponentDecorators/iconButton';
-import SignOutIcon from 'material-ui-icons/ExitToApp';
-import formatUserName from '../../utilities/formatUserName';
-import NotificationCenter from './notificationCenterPopover';
-import { CenteredInlineDiv, AppbarUsernameWrapper } from '../common/styledComponents'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import actions from '../../actions/actions'
+import LoginDialog from './loginDialog'
+import IconButton from '../common/UIComponentDecorators/iconButton'
+import SignOutIcon from 'material-ui-icons/ExitToApp'
+import formatUserName from '../../utilities/formatUserName'
+import NotificationCenterPopover from './notificationCenterPopover'
+import styled from 'styled-components'
 
-export default function UserControls(props) {
+function UserControls(props) {
   const authorized = props.username.trim() !== ''
 
   return (
     authorized ?
-      <CenteredInlineDiv>
+      <div className='inline-flex centered'>
         <AppbarUsernameWrapper>{formatUserName(props.username)}</AppbarUsernameWrapper>
-        <NotificationCenter
+        <NotificationCenterPopover
           notifications={props.notifications}
           noticeNotification={props.noticeNotification}
           deleteNotification={props.deleteNotification}
@@ -26,7 +28,7 @@ export default function UserControls(props) {
           icon={<SignOutIcon />}
           color='inherit'
           onClick={props.logout}/>
-      </CenteredInlineDiv>
+      </div>
       :
       <LoginDialog login={props.login} applicationStatus={props.applicationStatus}/>
   )
@@ -34,7 +36,6 @@ export default function UserControls(props) {
 
 UserControls.propTypes = {
   applicationStatus: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   notifications: PropTypes.object.isRequired,
@@ -43,3 +44,13 @@ UserControls.propTypes = {
   getCandidate: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 }
+
+const AppbarUsernameWrapper = styled.span`
+  margin: 0 5px;
+`
+
+export default connect(state => {
+  return {
+    username: state.username
+  }
+}, actions)(UserControls)

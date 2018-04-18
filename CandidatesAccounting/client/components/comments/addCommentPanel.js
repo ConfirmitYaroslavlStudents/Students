@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import actions from '../../actions/actions'
 import { BigButtonStyle, SmallIconStyle, QuillToolbarButtonStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import AttachIcon from 'material-ui-icons/AttachFile'
@@ -8,16 +10,9 @@ import ReactQuill from 'react-quill'
 import Comment from '../../utilities/comment'
 import SubscribeButton from './subscribeButton'
 import FileUploader from '../common/fileUploader'
-import {
-  CenteredDiv,
-  AddCommentPanelWrapper,
-  QuillWrapper,
-  AddCommentPanelButtonsWrapper,
-  SubscribeButtonWrapper,
-  AddCommentButtonWrapper
-} from '../common/styledComponents'
+import styled from 'styled-components'
 
-export default class AddCommentPanel extends Component {
+class AddCommentPanel extends Component {
   constructor(props) {
     super(props);
     this.state = ({ commentText: '', commentAttachment: null })
@@ -40,25 +35,27 @@ export default class AddCommentPanel extends Component {
     }
   }
 
-  addNewComment = () => {
+  handleCommentAdd = () => {
+    const {addComment, username, onCommentAdd, candidate } = this.props
+
     let commentText = this.state.commentText
     if (commentText.replace(/<[^>]+>/g,'').trim() !== '' || this.state.commentAttachment) {
       if (commentText.slice(-11) === '<p><br></p>') {
         commentText = commentText.substr(0, commentText.length - 11)
       }
-      this.props.addComment(this.props.candidate.id, new Comment(
-        this.props.username,
+      addComment(candidate.id, new Comment(
+        username,
         commentText,
         this.state.commentAttachment ? this.state.commentAttachment.name : ''
         ), this.state.commentAttachment)
-      this.props.onClick()
+      onCommentAdd()
       this.setState({ commentText: '', commentAttachment: null })
     }
   }
 
-  createCustomQuillToolbar = () => {
+  customQuillToolbar = () => {
     return (
-      <CenteredDiv id='toolbar'>
+      <div id='toolbar' className='flex centered'>
         <select defaultValue='' className='ql-size'>
           <option value='small' />
           <option value='' />
@@ -79,15 +76,17 @@ export default class AddCommentPanel extends Component {
           icon={<AttachIcon style={QuillToolbarButtonStyle}/>}
           attachment={this.state.commentAttachment}
           disabled={this.props.disabled} />
-      </CenteredDiv>
+      </div>
     )
   }
 
   render() {
+    const { disabled, candidate, username, subscribe, unsubscribe } = this.props
+
     return (
       <AddCommentPanelWrapper>
         <QuillWrapper>
-          { this.createCustomQuillToolbar() }
+          { this.customQuillToolbar() }
           <ReactQuill
             value={this.state.commentText}
             onChange={this.handleChange}
@@ -100,19 +99,17 @@ export default class AddCommentPanel extends Component {
         <AddCommentPanelButtonsWrapper>
           <SubscribeButtonWrapper>
             <SubscribeButton
-              active={!this.props.disabled && !!this.props.candidate.subscribers[this.props.username]}
-              candidate={this.props.candidate}
-              username={this.props.username}
-              subscribe={this.props.subscribe}
-              unsubscribe={this.props.unsubscribe}
-              disabled={this.props.disabled}
+              active={!disabled && !!candidate.subscribers[username]}
+              subscribe={() => { subscribe(candidate.id, username) }}
+              unsubscribe={() => { unsubscribe(candidate.id, username) }}
+              disabled={disabled}
             />
           </SubscribeButtonWrapper>
           <AddCommentButtonWrapper>
             <IconButton
               icon={<AddIcon style={SmallIconStyle}/>}
-              disabled={this.props.disabled}
-              onClick={this.addNewComment}
+              disabled={disabled}
+              onClick={this.handleCommentAdd}
               style={BigButtonStyle}
             />
           </AddCommentButtonWrapper>
@@ -123,12 +120,9 @@ export default class AddCommentPanel extends Component {
 }
 
 AddCommentPanel.propTypes = {
-  addComment: PropTypes.func.isRequired,
   candidate: PropTypes.object.isRequired,
   username: PropTypes.string.isRequired,
-  subscribe: PropTypes.func.isRequired,
-  unsubscribe: PropTypes.func.isRequired,
-  onClick: PropTypes.func,
+  onCommentAdd: PropTypes.func,
   disabled: PropTypes.bool,
 }
 
@@ -137,3 +131,41 @@ AddCommentPanel.modules = {
     container: '#toolbar',
   }
 }
+
+export default connect(() => { return {} }, actions)(AddCommentPanel)
+
+const AddCommentPanelButtonsWrapper = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  height: 100%;
+  right: 2px;
+  bottom: 2px;
+ `
+
+const AddCommentPanelWrapper = styled.div`
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 100%;
+  clear: both;
+  background: #FFF;
+`
+
+const AddCommentButtonWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
+`
+
+const QuillWrapper = styled.div`
+  padding-right: 74px;
+`
+
+const SubscribeButtonWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  top: 11px;
+  right: 11px;
+`

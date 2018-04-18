@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import actions from '../../redux/actions'
+import actions from '../../actions/actions'
 import PropTypes from 'prop-types'
 import { checkCandidateValidation } from '../../utilities/candidateValidators'
 import Candidate from '../../utilities/candidate'
@@ -46,11 +46,11 @@ class AddCandidateDialog extends Component{
   }
 
   render() {
-    const {authorized, tags} = this.props
+    const { authorizationStatus } = this.props
 
     return (
       <div className='inline-flex'>
-        <IconButton icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={!authorized} onClick={this.handleOpen} />
+        <IconButton icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={authorizationStatus !== 'authorized'} onClick={this.handleOpen} />
         <DialogWindow
           title='Add new candidate'
           isOpen={this.state.isOpen}
@@ -63,7 +63,6 @@ class AddCandidateDialog extends Component{
           }>
             <LoadableCandidateInfoForm
               candidate={this.newCandidate}
-              tags={tags}
             />
         </DialogWindow>
       </div>
@@ -77,10 +76,9 @@ AddCandidateDialog.propTypes = {
 
 export default connect(state => {
   return {
-    authorized: state.authorized,
+    authorizationStatus: state.authorizationStatus,
     candidateStatus: state.candidateStatus,
     totalCount: state.totalCount,
-    candidatesPerPage: state.candidatesPerPage,
-    tags: state.tags
+    candidatesPerPage: state.candidatesPerPage
   }
 }, actions)(AddCandidateDialog)

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InlineFlexDiv } from '../common/styledComponents'
+import { connect } from 'react-redux'
+import actions from '../../actions/actions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
@@ -12,7 +13,7 @@ import EditIcon from 'material-ui-icons/Edit'
 import CloseIcon from 'material-ui-icons/Close'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 
-export default class UpdateCandidateDialog extends React.Component {
+class UpdateCandidateDialog extends React.Component {
   constructor(props) {
     super(props)
     this.candidate = new Candidate(props.candidate.status, props.candidate)
@@ -22,51 +23,54 @@ export default class UpdateCandidateDialog extends React.Component {
 
   handleOpen = () => {
     this.candidate = new Candidate(this.props.candidate.status, this.props.candidate)
-    this.setState({isOpen: true})
+    this.setState({ isOpen: true })
   }
 
   handleClose = () => {
-    this.setState({isOpen: false})
+    this.setState({ isOpen: false })
   }
 
-  updateCandidate = () => {
+  handleCandidateUpdate = () => {
+    const { updateCandidate } = this.props
+
     if (checkCandidateValidation(this.candidate)) {
       if (this.candidate.status !== this.initialStatus) {
         this.candidate.comments['newStatus'] = new Comment('SYSTEM', ' New status: ' + this.candidate.status)
       }
-      this.props.updateCandidate(this.candidate)
+      updateCandidate(this.candidate)
       this.handleClose()
     }
   }
 
   render() {
+    const { disabled, candidate } = this.props
     this.initialStatus = this.candidate.status
+
     return (
-      <InlineFlexDiv>
-        <IconButton icon={<EditIcon />} style={MediumButtonStyle} disabled={this.props.disabled} onClick={this.handleOpen}/>
+      <div className='inline-flex'>
+        <IconButton icon={<EditIcon />} style={MediumButtonStyle} disabled={disabled} onClick={this.handleOpen}/>
         <DialogWindow
           title='Candidate edit'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           actions={
-            <InlineFlexDiv>
-              <IconButton color='inherit' icon={<SaveIcon />} onClick={this.updateCandidate}/>
+            <div className='inline-flex'>
+              <IconButton color='inherit' icon={<SaveIcon />} onClick={this.handleCandidateUpdate}/>
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/>
-            </InlineFlexDiv>
+            </div>
           }>
             <LoadableCandidateInfoForm
-              candidate={this.candidate}
-              tags={this.props.tags}
+              candidate={candidate}
             />
         </DialogWindow>
-      </InlineFlexDiv>
+      </div>
     )
   }
 }
 
 UpdateCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
-  updateCandidate: PropTypes.func.isRequired,
-  tags: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
 }
+
+export default connect(() => { return {} }, actions)(UpdateCandidateDialog)

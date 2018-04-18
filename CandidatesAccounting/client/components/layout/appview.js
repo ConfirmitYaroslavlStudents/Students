@@ -2,19 +2,22 @@ import React, { Component } from 'react'
 import { MainWrapper } from '../common/styledComponents'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import actions from '../../redux/actions'
+import actions from '../../actions/actions'
 import Navbar from './navbar'
 import CandidatesTable from './candidatesTable'
 import CommentPage from '../comments/commentsPage'
 import SnackBar from '../common/UIComponentDecorators/snackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../common/UIComponentDecorators/spinner'
+import styled from 'styled-components'
 
 export default class AppView extends Component {
   render() {
     const tableSwitch =
       this.props.applicationStatus === 'loading' ?
-        <Spinner size='big'/>
+        <SpinnerWrapper>
+          <Spinner size={60}/>
+        </SpinnerWrapper>
         :
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
@@ -46,7 +49,9 @@ export default class AppView extends Component {
 
     const refreshingSpinner =
       this.props.applicationStatus === 'refreshing' ?
-        <Spinner size="big"/>
+        <SpinnerWrapper>
+          <Spinner size={60}/>
+        </SpinnerWrapper>
         : ''
 
     return (
@@ -65,7 +70,7 @@ export default class AppView extends Component {
 function mapStateToProps(state) {
   return {
     applicationStatus: state.applicationStatus,
-    authorized: state.authorized,
+    authorizationStatus: state.authorizationStatus,
     username: state.username,
     pageTitle: state.pageTitle,
     errorMessage: state.errorMessage,
@@ -81,5 +86,13 @@ function mapStateToProps(state) {
     notifications: state.notifications,
   }
 }
+
+const SpinnerWrapper = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: 48%;
+  width: 100%;
+  text-align: center;
+`
 
 module.exports = connect(mapStateToProps, actions)(AppView)

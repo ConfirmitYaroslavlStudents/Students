@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import actions from '../../actions/actions'
 import SearchIcon from 'material-ui-icons/search'
 import Input from '../common/UIComponentDecorators/input'
 import IconButton from '../common/UIComponentDecorators/iconButton'
-import { CenteredDiv } from '../common/styledComponents'
 
-export default class SearchForm extends Component {
+class SearchForm extends Component {
   constructor(props) {
     super(props)
-    this.state = { isOpen: this.props.searchRequest !== '' }
+    this.state = { isOpen: props.searchRequest !== '' }
     this.timer = null
   }
 
   handleOpen = () => {
-    this.setState({isOpen: true})
+    this.setState({ isOpen: true })
   }
 
   handleClose = () => {
-    this.setState({isOpen: false})
+    this.setState({ isOpen: false })
   }
 
   handleClick = () => {
@@ -33,14 +34,14 @@ export default class SearchForm extends Component {
     }
   }
 
-  handleChange = (value) => {
-    this.props.setState({searchRequest: value})
+  handleChange = (searchRequest) => {
+    this.props.setState({ searchRequest })
     if (this.timer) {
       clearTimeout(this.timer)
     }
     this.timer = setTimeout(() => {
       if (this.timer) {
-        this.search(value)
+        this.search(searchRequest)
       }
       this.timer = null
     }, 900)
@@ -56,18 +57,20 @@ export default class SearchForm extends Component {
   }
 
   render() {
+    const { searchRequest } = this.props
+
     const searchInput =
-      this.state.isOpen || this.props.searchRequest !== '' ?
+      this.state.isOpen || searchRequest !== '' ?
         <Input
           id='search-input'
           onChange={this.handleChange}
-          value={this.props.searchRequest}
+          value={searchRequest}
           className='search'
           placeholder='search'
-          onFocus={() => {this.handleOpen()}}
+          onFocus={this.handleOpen}
           onBlur={() => {
-            if (this.props.searchRequest === '') {
-              this.handleClose();
+            if (searchRequest === '') {
+              this.handleClose()
             }
           }}
           disableUnderline
@@ -76,7 +79,7 @@ export default class SearchForm extends Component {
         : ''
 
     return (
-      <CenteredDiv>
+      <div className='flex centered'>
         <IconButton
           color='inherit'
           icon={<SearchIcon/>}
@@ -84,14 +87,17 @@ export default class SearchForm extends Component {
           placeholder='search'
         />
         { searchInput }
-      </CenteredDiv>
+      </div>
     )
   }
 }
 
 SearchForm.propTypes = {
-  searchRequest: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
-  loadCandidates: PropTypes.func.isRequired,
-  setState: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 }
+
+export default connect(state => {
+  return {
+    searchRequest: state.searchRequest
+  }
+}, actions)(SearchForm)

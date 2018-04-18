@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import DeleteAllIcon from 'material-ui-icons/DeleteSweep'
 import NoticeIcon from 'material-ui-icons/Markunread'
 import IconButton from '../common/UIComponentDecorators/iconButton'
-import NotificationBlock from '../common/notificationBlock'
+import NotificationBlock from './notificationBlock'
 import { MediumSmallButtonStyle } from '../common/styleObjects'
 import {
   NotificationCenterWrapper,

@@ -18,7 +18,7 @@ import {
   setErrorMessage,
   setApplicationStatus,
   uploadResumeSuccess,
-} from './actions'
+} from '../actions/actions'
 import { login, logout } from '../api/authorizationService'
 import { getNotifications } from '../api/commonService'
 import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js'

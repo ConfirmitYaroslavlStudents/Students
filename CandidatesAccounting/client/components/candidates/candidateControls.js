@@ -9,26 +9,12 @@ import Badge from '../common/UIComponentDecorators/badge'
 import NavLink from '../../components/common/navLink'
 import AddCommentDialog from '../comments/addCommentDialog'
 import Spinner from '../common/UIComponentDecorators/spinner'
+import styled from 'styled-components'
 
 export default function CandidateControls(props) {
-  const {
-    applicationStatus,
-    addComment,
-    candidate,
-    updateCandidate,
-    deleteCandidate,
-    loadCandidates,
-    username,
-    tags,
-    offset,
-    candidatesPerPage,
-    totalCount,
-    history,
-    subscribe,
-    unsubscribe
-  } = props
+  const { applicationStatus, authorizationStatus, username, candidate, history } = props
 
-  const authorized = username !== ''
+  const authorized = authorizationStatus === 'authorized'
   const commentAmount = Object.keys(candidate.comments).length
   const onRefreshing = applicationStatus === 'refreshing'
   const onUpdating = applicationStatus.slice(0, 8) === 'updating' && applicationStatus.slice(9) === candidate.id
@@ -40,45 +26,30 @@ export default function CandidateControls(props) {
     }
   }
 
-  const handleCandidateDelete = (candidateID) => {
-    deleteCandidate(candidateID)
-    loadCandidates({
-        applicationStatus: 'deleting-' + candidateID,
-        offset: totalCount - offset <= 1 ? totalCount - 1 - candidatesPerPage : offset
-      },
-      history)
-  }
-
   const updateCandidateDialog =
     onUpdating ?
-      <Spinner />
+      <SpinnerWrapper><Spinner size={26}/></SpinnerWrapper>
       :
       <UpdateCandidateDialog
         candidate={candidate}
-        updateCandidate={updateCandidate}
-        tags={tags}
-        username={username}
         disabled={onRefreshing || onDeleting || !authorized}
       />
 
   const deleteCandidateDialog =
     onDeleting ?
-      <Spinner />
+      <SpinnerWrapper><Spinner size={26}/></SpinnerWrapper>
       :
       <DeleteCandidateDialog
-        candidate={candidate}
+        candidateID={candidate.id}
         disabled={onRefreshing || onUpdating || !authorized}
-        deleteCandidate={handleCandidateDelete}
+        history={props.history}
       />
 
   return (
     <div className='flex'>
       <AddCommentDialog
         candidate={candidate}
-        addComment={addComment}
         username={username}
-        subscribe={subscribe}
-        unsubscribe={unsubscribe}
         disabled={onRefreshing || onDeleting || !authorized}
       />
       <NavLink onClick={handleCandidateCommentPageOpen}>
@@ -98,13 +69,16 @@ export default function CandidateControls(props) {
 
 CandidateControls.propTypes = {
   candidate: PropTypes.object.isRequired,
-  updateCandidate: PropTypes.func.isRequired,
-  deleteCandidate: PropTypes.func.isRequired,
-  loadCandidates: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
-  tags: PropTypes.array.isRequired,
-  offset: PropTypes.number.isRequired,
-  candidatesPerPage: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
   history: PropTypes.object.isRequired,
 }
+
+const SpinnerWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  padding-left: 7px;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+`

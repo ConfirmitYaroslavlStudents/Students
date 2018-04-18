@@ -1,15 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import actions from '../../actions/actions'
 import PropTypes from 'prop-types'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import NotificationIcon from 'material-ui-icons/Notifications'
 import Popover from '../common/UIComponentDecorators/popover'
 import Badge from '../common/UIComponentDecorators/badge'
 import { NotificationCenterNoNotificationsWrapper } from '../common/styledComponents'
-import NotificationCenter from '../common/notificationCenter'
+import NotificationCenter from '../notifications/notificationCenter'
+import styled from 'styled-components'
 
 function NotificationCenterPopover(props) {
-  const notifications = Object.keys(props.notifications).map(notificationId => props.notifications[notificationId])
+  const {
+    notifications,
+    history,
+    getCandidate,
+    noticeNotification,
+    deleteNotification,
+    username,
+    applicationStatus,
+    authorizationStatus
+  } = props
+
   let recentNotificationNumber = 0
   const notificationReversedList = []
 
@@ -24,11 +36,11 @@ function NotificationCenterPopover(props) {
   let popoverContent =
     <NotificationCenter
       notifications={notificationReversedList}
-      history={props.history}
-      getCandidate={props.getCandidate}
-      noticeNotification={props.noticeNotification}
-      deleteNotification={props.deleteNotification}
-      username={props.username}
+      history={history}
+      getCandidate={getCandidate}
+      noticeNotification={noticeNotification}
+      deleteNotification={deleteNotification}
+      username={username}
     />
 
   if (notifications.length === 0) {
@@ -38,10 +50,10 @@ function NotificationCenterPopover(props) {
       </NotificationCenterNoNotificationsWrapper>
   }
 
-  if (props.applicationStatus === 'loading' || props.applicationStatus === 'signining') {
+  if (applicationStatus === 'loading' || authorizationStatus === 'authorizing') {
     popoverContent =
       <NotificationCenterNoNotificationsWrapper>
-        <Spinner size='medium'/>
+        <SpinnerWrapper><Spinner size={50}/></SpinnerWrapper>
       </NotificationCenterNoNotificationsWrapper>
   }
 
@@ -57,16 +69,23 @@ function NotificationCenterPopover(props) {
 }
 
 NotificationCenterPopover.propTypes = {
-  notifications: PropTypes.object.isRequired,
-  noticeNotification: PropTypes.func.isRequired,
-  deleteNotification: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  getCandidate: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 }
 
 export default connect(state => {
   return {
-    applicationStatus: state.applicationStatus
+    applicationStatus: state.applicationStatus,
+    authorizationStatus: state.authorizationStatus,
+    notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
+    username: state.username
   }
-})(NotificationCenterPopover)
+}, actions)(NotificationCenterPopover)
+
+const SpinnerWrapper = styled.div`
+  display: inline-flex;
+  boxSizing: border-box;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  margin: auto;
+`

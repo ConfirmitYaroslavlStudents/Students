@@ -11,9 +11,7 @@ export default function CustomDateTimePicker(props) {
       onChange={(event) => { props.onChange(event.target.value) }}
       fullWidth
       margin='normal'
-      InputLabelProps={{
-        shrink: true
-      }}
+      InputLabelProps={{ shrink: true }}
     />
   )
 }

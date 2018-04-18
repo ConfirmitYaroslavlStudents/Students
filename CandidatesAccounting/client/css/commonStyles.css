@@ -44,6 +44,12 @@ p {
     align-items: center;
 }
 
+.centered {
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
 .comment-grid {
     background-color: #f6f6f6;
     padding: 24px 4px;

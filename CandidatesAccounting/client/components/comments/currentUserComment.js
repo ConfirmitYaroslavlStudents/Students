@@ -11,7 +11,7 @@ import {
   CommentMountFooter,
   CommentFooter,
   CommentAuthorName
-} from '../common/styledComponents'
+} from './commentStyledComponents'
 
 export default function CurrentUserComment(props) {
   const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''

@@ -12,12 +12,11 @@ export default function SimpleBadge(props) {
     >
       {props.children}
     </Badge>
-  );
+  )
 }
 
 SimpleBadge.propTypes = {
   badgeContent: PropTypes.number,
   color: PropTypes.string,
   onClick: PropTypes.func,
-  disabled: PropTypes.bool,
 }

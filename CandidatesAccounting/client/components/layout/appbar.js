@@ -1,21 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Logo from 'material-ui-icons/AccountCircle'
-import SearchForm from '../layout/searchForm'
-import UserControls from '../layout/userControls'
-import { AppbarWrapper, AppbarControlsWrapper, AppbarTitleWrapper } from './styledComponents'
+import SearchForm from './searchForm'
+import UserControls from './userControls'
+import { AppbarWrapper, AppbarControlsWrapper, AppbarTitleWrapper } from '../common/styledComponents'
 
 export default function Appbar(props) {
   const searchForm =
     props.title === 'Candidate Accounting' ?
-      <SearchForm
-        searchRequest={props.searchRequest}
-        setSearchRequest={props.setSearchRequest}
-        changeURL={props.changeURL}
-        history={props.history}
-        loadCandidates={props.loadCandidates}
-        setState={props.setState}
-      />
+      <SearchForm history={props.history} />
       : ''
 
   return (

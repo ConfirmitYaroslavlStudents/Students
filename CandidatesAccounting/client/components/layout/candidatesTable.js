@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import * as actions from '../../actions/actions'
 import SortablePaginatedTable from '../common/sortablePaginatedTable'
 import getCandidateTableHeaders from '../candidates/candidateTableHeaders'
 import getIntervieweeTableHeaders from '../interviewees/intervieweeTableHeaders'
@@ -12,9 +14,26 @@ import ResumeControls from '../interviewees/resumeControls'
 import { CandidateNameWrapper, CandidateControlsWrapper } from '../common/styledComponents'
 import { Date } from '../common/styledComponents'
 
-export default function CandidatesTable(props) {
+function CandidatesTable(props) {
+  const {
+    candidates,
+    authorized,
+    type,
+    setSearchRequest,
+    search,
+    history,
+    fetching,
+    inactiveCandidateId,
+    offset,
+    candidatesPerPage,
+    totalCount,
+    sortingField,
+    sortingDirection,
+    changeTableOptions
+  } = props
+
   const getHeaders = () => {
-    switch (props.type) {
+    switch (type) {
       case 'Candidate':
         return getCandidateTableHeaders()
       case 'Interviewee':
@@ -27,22 +46,22 @@ export default function CandidatesTable(props) {
   }
 
   const createRow = (candidate, disabled) => {
+
     const row = { cells: [], isDisabled: disabled }
 
     row.cells.push(
       <CandidateNameWrapper>
-        <span style={{whiteSpace: 'nowrap'}}>{candidate.name}</span>
+        <span className='nowrap'>{candidate.name}</span>
         <TagList
           tags={candidate.tags}
-          setSearchRequest={props.setSearchRequest}
-          loadCandidates={props.loadCandidates}
-          changeURL={props.changeURL}
-          history={props.history}
+          setSearchRequest={setSearchRequest}
+          search={search}
+          history={history}
         />
       </CandidateNameWrapper>
     )
 
-    if (props.type === 'Candidate') {
+    if (type === 'Candidate') {
       row.cells.push(candidate.status)
     }
 
@@ -52,19 +71,18 @@ export default function CandidatesTable(props) {
         {formatDate(candidate.birthDate)}
       </Date>)
 
-    switch (props.type) {
+    switch (type) {
       case 'Interviewee':
-        const candidateOnUploading = props.applicationStatus.slice(0, 9) === 'uploading' ? props.applicationStatus.slice(10) : ''
         row.cells.push(
           <Date highlighted={isToday(candidate.interviewDate)}>
             {formatDateTime(candidate.interviewDate)}
           </Date>)
         row.cells.push(<ResumeControls
           interviewee={candidate}
-          onUploading={candidate.id === candidateOnUploading}
+          disabled={disabled}
           enableDownload
           enableUpload
-          authorized={props.username !== ''}
+          authorized={authorized}
           uploadResume={props.uploadResume}/>)
         break
 
@@ -87,33 +105,39 @@ export default function CandidatesTable(props) {
     return row
   }
 
-  const onRefreshing = props.applicationStatus === 'refreshing';
-  const candidateOnUpdating = props.applicationStatus.slice(0, 8) === 'updating' ? props.applicationStatus.slice(9) : ''
-  const candidateOnDeleting = props.applicationStatus.slice(0, 8) === 'deleting' ? props.applicationStatus.slice(9) : ''
-
-  const candidates = Object.keys(props.candidates).map(candidateID => { return props.candidates[candidateID] })
-
   return (
     <SortablePaginatedTable
       headers={getHeaders()}
       contentRows={ candidates.map(candidate => {
-          return createRow(candidate, onRefreshing || candidate.id === candidateOnUpdating || candidate.id === candidateOnDeleting)
+        return createRow(candidate, fetching || inactiveCandidateId === candidate.id)
       })}
-      history={props.history}
-      offset={props.offset}
-      rowsPerPage={props.candidatesPerPage}
-      totalCount={props.totalCount}
-      setOffset={props.setOffset}
-      sortingField={props.sortingField}
-      setSortingField={props.setSortingField}
-      sortingDirection={props.sortingDirection}
-      setSortingDirection={props.setSortingDirection}
-      loadCandidates={props.loadCandidates}
-      changeURL={props.changeURL}
+      offset={offset}
+      rowsPerPage={candidatesPerPage}
+      totalCount={totalCount}
+      sortingField={sortingField}
+      sortingDirection={sortingDirection}
+      changeTableOptions={changeTableOptions}
+      history={history}
     />
   )
 }
 
 CandidatesTable.propTypes = {
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
 }
+
+export default connect(state => {
+  return {
+    authorized: state.authorized,
+    candidates: Object.keys(state.candidates).map(candidateID => { return state.candidates[candidateID] }),
+    searchRequest: state.searchRequest,
+    fetching: state.fetching,
+    inactiveCandidateId: state.inactiveCandidateId,
+    offset: state.offset,
+    candidatesPerPage: state.candidatesPerPage,
+    totalCount: state.totalCount,
+    sortingField: state.sortingField,
+    sortingDirection: state.sortingDirection,
+  }
+}, actions)(CandidatesTable)

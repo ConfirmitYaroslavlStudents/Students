@@ -14,42 +14,41 @@ import {
 
 export default function ResumeControls(props) {
   const resumeIsUploaded = props.interviewee.resume && props.interviewee.resume.trim() !== ''
-  const resumeFileName = resumeIsUploaded ? <ResumeFileName>{props.interviewee.resume}</ResumeFileName> : <ResumeNotLoaded>no resume</ResumeNotLoaded>
+  const resumeFileName =
+    resumeIsUploaded ?
+      <ResumeFileName>{props.interviewee.resume}</ResumeFileName>
+      :
+      <ResumeNotLoaded>no resume</ResumeNotLoaded>
 
   const fileDownloader = props.enableDownload ?
     <FileDownloader
       icon={<DownloadIcon style={SmallerIconStyle}/>}
       buttonStyle={SmallButtonStyle}
-      disabled={!resumeIsUploaded || props.onUploading}
+      disabled={!resumeIsUploaded || props.inactive}
       downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
     /> : ''
-
-  const fileUploader = props.onUploading ?
-    <Spinner size='smaller'/>
-    :
-    <FileUploader
-      uploadFile={(file) => {
-        if (!props.onUploading && file) {
-          props.uploadResume(props.interviewee.id, file);
-        }
-      }}
-      icon={<UploadIcon style={SmallerIconStyle}/>}
-      buttonStyle={SmallButtonStyle}
-      disabled={!props.authorized}
-    />
 
   return (
     <ResumeWrapper>
       { resumeFileName }
       { fileDownloader }
-      { fileUploader  }
+      <FileUploader
+        uploadFile={(file) => {
+          if (!props.inactive && file) {
+            props.uploadResume(props.interviewee.id, file);
+          }
+        }}
+        icon={<UploadIcon style={SmallerIconStyle}/>}
+        buttonStyle={SmallButtonStyle}
+        disabled={!props.authorized}
+      />
     </ResumeWrapper>
   )
 }
 
 ResumeControls.propTypes = {
   interviewee: PropTypes.object.isRequired,
-  onUploading: PropTypes.bool,
+  inactive: PropTypes.bool,
   uploadResume: PropTypes.func,
   enableDownload: PropTypes.bool,
   authorized: PropTypes.bool,

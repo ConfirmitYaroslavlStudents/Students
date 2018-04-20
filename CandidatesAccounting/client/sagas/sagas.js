@@ -8,7 +8,7 @@ import {
 } from 'redux-saga/effects'
 import * as A from '../actions/actions'
 import { login, logout } from '../api/authorizationService'
-import { getNotifications } from '../api/commonService'
+import { getInitialState, getNotifications } from '../api/commonService'
 import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js'
 import { subscribe, unsubscribe } from '../api/subscribeService'
 import { noticeNotification, deleteNotification } from '../api/notificationService'
@@ -23,6 +23,7 @@ import {
 
 export default function* rootSaga() {
   yield all([
+    watchFetchInitialState(),
     watchLogin(),
     watchLogout(),
     watchUploadResume(),
@@ -36,8 +37,15 @@ export default function* rootSaga() {
     watchNoticeNotification(),
     watchDeleteNotification(),
     watchLoadCandidates(),
+    watchGetCandidates(),
     watchGetCandidate(),
+    watchSearch(),
+    watchTableChange(),
   ])
+}
+
+function* watchFetchInitialState() {
+  yield takeLatest(A.fetchInitialState, fetchInitialStateSaga)
 }
 
 function* watchLogin() {
@@ -89,46 +97,66 @@ function* watchUnsubscribe() {
 }
 
 function* watchLoadCandidates() {
-  yield takeLatest(A.loadCandidates, loadCandidatesSaga)
+  yield takeLatest(A.refreshRows, loadCandidatesSaga)
+}
+
+function* watchGetCandidates() {
+  yield takeLatest(A.getCandidates, getCandidatesSaga)
 }
 
 function* watchGetCandidate() {
   yield takeLatest(A.getCandidate, getCandidateSaga)
 }
 
-function* loginSaga(action) {
+function* watchSearch() {
+  yield takeLatest(A.search, searchSaga)
+}
+
+function* watchTableChange() {
+  yield takeLatest(A.changeTable, changeTableSaga)
+}
+
+/*___SAGAS_______________________________________________________*/
+
+function* fetchInitialStateSaga() {
   try {
-    const { email, password } = action.payload
-    yield put(A.setApplicationStatus('signining'))
-    const username = yield call(login, email, password)
-    yield put(A.setState({
-      username,
-      authorizationStatus: 'authorized'
-    }))
-    let notifications = yield call(getNotifications, username)
-    yield put(A.setState({ notifications }))
-    yield put(A.setApplicationStatus('ok'))
+    const state = yield select(state => state)
+    const initialState = yield call(getInitialState,
+      state.username,
+      state.candidatesPerPage,
+      state.offset,
+      state.candidateStatus,
+      state.sortingField,
+      state.sortingDirection,
+      state.searchRequest)
+    yield put(A.fetchInitialStateSuccess(initialState))
   }
   catch(error) {
     yield put(A.setErrorMessage(error + '. Incorrect login or password.'))
-    yield put(A.setApplicationStatus('error'))
+  }
+}
+
+function* loginSaga(action) {
+  try {
+    const { email, password } = action.payload
+    yield put(A.setAuthorizingStatus(true))
+    const username = yield call(login, email, password)
+    let notifications = yield call(getNotifications, username)
+    yield put(A.loginSuccess({username, notifications}))
+  }
+  catch(error) {
+    yield put(A.setErrorMessage(error + '. Incorrect login or password.'))
   }
 }
 
 function* logoutSaga() {
   try {
-    yield put(A.setApplicationStatus('refreshing'))
+    yield put(A.setAuthorizingStatus(true))
     yield call(logout)
-    yield put(A.setState({
-      username: '',
-      authorizationStatus: 'not-authorized',
-      notifications: {}
-    }))
-    yield put(A.setApplicationStatus('ok'))
+    yield put(A.logoutSuccess())
   }
   catch(error) {
     yield put(A.setErrorMessage(error + '. Logout error.'))
-    yield put(A.setApplicationStatus('error'))
   }
 }
 
@@ -279,19 +307,70 @@ function* loadCandidatesSaga(action) {
   }
 }
 
+function* getCandidatesSaga(action) {
+  try {
+    const history = action.payload
+    const candidateStatus = yield select(state => state.candidateStatus)
+    const candidatesPerPage = yield select(state => state.candidatesPerPage)
+    const candidatesOffset = yield select(state => state.offset)
+    const sortingField = yield select(state => state.sortingField)
+    const sortingDirection = yield select(state => state.sortingDirection)
+    const searchRequest = yield select(state => state.searchRequest)
+    yield call(history.replace, '/'
+      + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
+      + '?take=' + candidatesPerPage
+      + (candidatesOffset === 0 ? '' : '&skip=' + candidatesOffset)
+      + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection)
+      + (searchRequest === '' ? '' : '&q=' + encodeURIComponent(searchRequest)))
+    const serverResponse = yield call(
+      getCandidates,
+      candidatesPerPage,
+      candidatesOffset,
+      candidateStatus,
+      sortingField,
+      sortingDirection,
+      searchRequest)
+    yield put(A.getCandidatesSuccess({
+      candidates: serverResponse.candidates,
+      totalCount: serverResponse.total
+    }))
+  }
+  catch(error) {
+    yield put(A.setErrorMessage(error + '. Get candidates error.'))
+  }
+}
+
 function* getCandidateSaga(action) {
   try {
-    yield put(A.setApplicationStatus('loading'))
-    const candidate = yield call(getCandidate, action.id)
-    const candidates = {}
-    candidates[candidate.id] = candidate
-    yield put(A.setState({
-      candidates: candidates
-    }))
-    yield put(A.setApplicationStatus('ok'))
+    const { candidateId } = action.payload
+    yield put(A.setFetchStatus(true))
+    const candidate = yield call(getCandidate, candidateId)
+    yield put(A.getCandidatesSuccess(candidate))
   }
   catch(error) {
     yield put(A.setErrorMessage(error + '. Get candidate error.'))
-    yield put(A.setApplicationStatus('error'))
+  }
+}
+
+function* searchSaga(action) {
+  try {
+    const history = action.payload
+    yield put(A.setFetchStatus(true))
+    yield put(A.getCandidates(history))
+  }
+  catch(error) {
+    yield put(A.setErrorMessage(error + '. Search error.'))
+  }
+}
+
+function* changeTableSaga(action) {
+  try {
+    const { newCandidateStatus, history } = action.payload
+    yield put(A.setFetchStatus(true))
+    yield put(A.changeTableSuccess(newCandidateStatus))
+    yield put(A.getCandidates(history))
+  }
+  catch(error) {
+    yield put(A.setErrorMessage(error + '. Search error.'))
   }
 }

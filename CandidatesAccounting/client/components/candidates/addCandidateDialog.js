@@ -29,18 +29,16 @@ class AddCandidateDialog extends Component{
   }
 
   handleCandidateAdd = () => {
-    const {addCandidate, loadCandidates, totalCount, candidatesPerPage, history} = this.props
+    const {addCandidate, setOffset, totalCount, candidatesPerPage, setApplicationStatus, getCandidates, history} = this.props
 
     if (checkCandidateValidation(this.newCandidate)) {
       this.newCandidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + this.newCandidate.status)
-      addCandidate(this.newCandidate)
-      loadCandidates(
-        {
-          applicationStatus: 'refreshing',
-          offset: totalCount - totalCount % candidatesPerPage,
-          history
-        }
-      )
+
+      setApplicationStatus('refreshing')
+      addCandidate({candidate: this.newCandidate})
+      setOffset(totalCount - totalCount % candidatesPerPage)
+      getCandidates({history})
+
       this.handleClose()
     }
   }

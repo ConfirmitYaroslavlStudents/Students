@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import * as actions from '../../actions/actions'
 import NavLink from '../common/navLink'
 import AddCandidateDialog from '../candidates/addCandidateDialog'
 import {
@@ -10,9 +12,11 @@ import {
   AddCandidateButtonWrapper
 } from '../common/styledComponents'
 
-export default function TablesBar(props) {
+function TablesBar(props) {
+  const { candidateStatus, changeTable, history } = props
+
   let selected = 0;
-  switch(props.candidateStatus) {
+  switch(candidateStatus) {
     case 'Interviewee':
       selected = 1
       break
@@ -24,19 +28,8 @@ export default function TablesBar(props) {
       break
   }
 
-  const handleLinkClick = candidateStatus => () => {
-    const stateChanges = {}
-    if (candidateStatus === props.candidateStatus) {
-      stateChanges.searchRequest = ''
-    } else {
-      stateChanges['candidateStatus'] = candidateStatus
-    }
-    stateChanges.offset = 0
-    stateChanges.sortingField = ''
-    stateChanges.sortingDirection = 'desc'
-    stateChanges.pageTitle = 'Candidate Accounting'
-    stateChanges.history = props.history
-    props.loadCandidates(stateChanges)
+  const handleLinkClick = newCandidateStatus => () => {
+    changeTable({newCandidateStatus, history})
   }
 
   return (
@@ -65,9 +58,11 @@ export default function TablesBar(props) {
 }
 
 TablesBar.propTypes = {
-  username: PropTypes.string.isRequired,
-  tags: PropTypes.array.isRequired,
   history: PropTypes.object.isRequired,
-  loadCandidates: PropTypes.func.isRequired,
-  candidateStatus: PropTypes.string.isRequired
 }
+
+export default connect(state => {
+  return {
+    candidateStatus: state.candidateStatus
+  }
+}, actions)(TablesBar)

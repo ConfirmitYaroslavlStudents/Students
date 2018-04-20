@@ -7,43 +7,43 @@ import IconButton from '../common/UIComponentDecorators/iconButton'
 import SignOutIcon from 'material-ui-icons/ExitToApp'
 import formatUserName from '../../utilities/formatUserName'
 import NotificationCenterPopover from './notificationCenterPopover'
+import Spinner from '../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
 function UserControls(props) {
   const {
-    authorizationStatus,
-    applicationStatus,
-    login,
+    authorized,
+    authorizing,
     logout,
     username,
-    notifications,
-    noticeNotification,
-    deleteNotification,
-    getCandidate,
     history
   } = props
 
-  if (authorizationStatus === 'not-authorized') {
-    return <LoginDialog login={login} applicationStatus={applicationStatus}/>
-  } else {
-    return (
-      <div className='inline-flex centered'>
-        <AppbarUsernameWrapper>{formatUserName(username)}</AppbarUsernameWrapper>
-        <NotificationCenterPopover
-          notifications={notifications}
-          noticeNotification={noticeNotification}
-          deleteNotification={deleteNotification}
-          username={username}
-          getCandidate={getCandidate}
-          history={history}
-        />
-        <IconButton
-          icon={<SignOutIcon/>}
-          color='inherit'
-          onClick={logout}/>
-      </div>
-    )
+  const logoutButton =
+    authorizing ?
+      <SpinnerWrapper>
+        <Spinner size={30} color='inherit'/>
+      </SpinnerWrapper>
+      :
+      <IconButton
+        icon={<SignOutIcon/>}
+        color='inherit'
+        onClick={logout}
+      />
+
+  if (!authorized) {
+    return <LoginDialog />
   }
+
+  return (
+    <div className='inline-flex centered'>
+      <AppbarUsernameWrapper>{formatUserName(username)}</AppbarUsernameWrapper>
+      <NotificationCenterPopover
+        history={history}
+      />
+      { logoutButton }
+    </div>
+  )
 }
 
 UserControls.propTypes = {
@@ -54,11 +54,18 @@ const AppbarUsernameWrapper = styled.span`
   margin: 0 5px;
 `
 
+const SpinnerWrapper = styled.div`
+  display: inline-flex;
+  box-sizing: border-box;
+  padding: 8px;
+  width: 48px;
+  height: 48px;
+`
+
 export default connect(state => {
   return {
-    applicationStatus: state.applicationStatus,
-    authorizationStatus: state.authorizationStatus,
-    notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
+    authorized: state.authorized,
+    authorizing: state.authorizing,
     username: state.username
   }
 }, actions)(UserControls)

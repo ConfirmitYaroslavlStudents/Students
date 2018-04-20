@@ -108,6 +108,10 @@ p {
     color: #42A5F5;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .ql-editor {
     min-height: 120px;
 }

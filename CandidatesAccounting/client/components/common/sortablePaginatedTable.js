@@ -16,33 +16,39 @@ import {
 
 export default function SortablePaginatedTable(props) {
   const handlePageChange = (offset) => {
-    props.loadCandidates(
-      { offset },
-      props.history
-    )
+    props.changeTableOptions({
+      offset,
+      candidatesPerPage: props.rowsPerPage,
+      sortingField: props.sortingField,
+      sortingDirection: props.sortingDirection,
+      history: props.history
+    })
   }
 
   const handleRowsPerPageChange = (rowsPerPage) => {
     if (rowsPerPage !== props.rowsPerPage) {
-      props.loadCandidates(
-        { candidatesPerPage : rowsPerPage },
-        props.history
-      )
+      props.changeTableOptions({
+        offset: props.offset,
+        candidatesPerPage: rowsPerPage,
+        sortingField: props.sortingField,
+        sortingDirection: props.sortingDirection,
+        history: props.history
+      })
     }
   }
 
   const handleSortLabelClick = (sortingField) => {
-    props.loadCandidates(
-      {
-        applicationStatus: 'refreshing',
-        sortingField: sortingField,
-        sortingDirection : sortingField !== props.sortingField ?
-          'desc'
-          :
-          props.sortingDirection === 'desc' ?
-            'asc' : 'desc'
-      },
-      props.history)
+    props.changeTableOptions({
+      offset: props.offset,
+      candidatesPerPage: props.rowsPerPage,
+      sortingField: sortingField,
+      sortingDirection: sortingField !== props.sortingField ?
+        'desc'
+        :
+        props.sortingDirection === 'desc' ?
+          'asc' : 'desc',
+      history: props.history
+    })
   }
 
   const handleFirstPageButtonClick = () => {
@@ -136,5 +142,5 @@ SortablePaginatedTable.propTypes = {
   sortingField: PropTypes.string.isRequired,
   sortingDirection: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
-  loadCandidates: PropTypes.func.isRequired,
+  changeTableOptions: PropTypes.func.isRequired,
 }

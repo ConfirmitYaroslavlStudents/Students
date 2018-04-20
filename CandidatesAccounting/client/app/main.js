@@ -12,10 +12,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import createPalette from 'material-ui/styles/createPalette'
 import { indigo } from 'material-ui/colors'
 import AppView from '../components/layout/appview'
-import { getInitialState } from '../api/commonService'
 import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
 import configureStore from '../stores/createStore'
-import { setState } from '../actions/actions'
+import { fetchInitialState } from '../actions/actions'
 
 const username = window['APP_CONFIG'].username
 
@@ -43,33 +42,19 @@ function renderApp(app) {
 
 const stateArgs = getStateArgsFromURL(window.location.pathname + window.location.search)
 
-const store = configureStore(reducer, stateArgs)
+const initialState = {
+  ...stateArgs,
+  username
+}
+
+const store = configureStore(reducer, initialState)
 
 /*________________________________________________________________________*/
 
 renderApp(AppView)
 
-const state = store.getState()
-
-getInitialState(
-  username,
-  state.candidatesPerPage,
-  state.offset,
-  state.candidateStatus,
-  state.sortingField,
-  state.sortingDirection,
-  state.searchRequest)
-  .then(initialState => {
-    store.dispatch(setState({
-          applicationStatus: 'ok',
-          totalCount: initialState.total,
-          candidates: initialState.candidates,
-          tags: initialState.tags,
-          notifications: initialState.notifications
-        }
-      )
-    )
-  })
+// TODO: divide on three different fetch requests
+store.dispatch(fetchInitialState())
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {

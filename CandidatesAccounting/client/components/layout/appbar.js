@@ -1,31 +1,38 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Logo from 'material-ui-icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from './userControls'
 import { AppbarWrapper, AppbarControlsWrapper, AppbarTitleWrapper } from '../common/styledComponents'
 
-export default function Appbar(props) {
+function Appbar(props) {
+  const { pageTitle, history } = props
+
   const searchForm =
-    props.title === 'Candidate Accounting' ?
-      <SearchForm history={props.history} />
+    pageTitle === 'Candidate Accounting' ?
+      <SearchForm history={history} />
       : ''
 
   return (
     <AppbarWrapper>
       <AppbarTitleWrapper>
-        <Logo /> {props.title}
+        <Logo /> {pageTitle}
       </AppbarTitleWrapper>
       <AppbarControlsWrapper>
         {searchForm}
-        <UserControls
-          history={props.history}/>
+        <UserControls history={history} />
       </AppbarControlsWrapper>
     </AppbarWrapper>
   )
 }
 
 Appbar.propTypes = {
-  title: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
 }
+
+export default connect(state => {
+  return {
+    pageTitle: state.pageTitle
+  }
+})(Appbar)

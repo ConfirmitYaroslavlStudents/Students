@@ -4,17 +4,43 @@ import { createAction } from 'redux-actions'
 
 export const init = createAction('INIT')
 
+export const fetchInitialState = createAction('FETCH_INITIAL_STATE')
+
+export const fetchInitialStateSuccess = createAction('FETCH_INITIAL_STATE_SUCCESS')
+
+export const setFetchStatus = createAction('SET_FETCH_STATUS')
+
 export const setState = createAction('SET_STATE')
 
 export const setApplicationStatus = createAction('SET_APPLICATION_STATUS')
 
 export const setErrorMessage = createAction('SET_ERROR_MESSAGE')
 
-/*___AUTHORIZATION______________________________________*/
+export const setOffset = createAction('SET_OFFSET')
+
+export const setSearchRequest = createAction('SET_SEARCH_REQUEST')
+
+export const search = createAction('SEARCH')
+
+export const changeTable = createAction('CHANGE_TABLE')
+
+export const changeTableSuccess = createAction('CHANGE_TABLE_SUCCESS')
+
+export const changeTableOptions = createAction('CHANGE_TABLE_OPTIONS')
+
+export const changeTableOptionsSuccess = createAction('CHANGE_TABLE_OPTIONS_SUCCESS')
+
+/*____AUTHORIZATION______________________________________*/
 
 export const login = createAction('LOGIN')
 
+export const loginSuccess = createAction('LOGIN_SUCCESS')
+
 export const logout = createAction('LOGOUT')
+
+export const logoutSuccess = createAction('LOGOUT_SUCCESS')
+
+export const setAuthorizingStatus = createAction('SET_AUTHORIZING_STATUS')
 
 /*_____CANDIDATES________________________________________*/
 
@@ -22,7 +48,11 @@ export const loadCandidates = createAction('LOAD_CANDIDATES')
 
 export const getCandidates = createAction('GET_CANDIDATES')
 
+export const getCandidatesSuccess = createAction('GET_CANDIDATES_SUCCESS')
+
 export const getCandidate = createAction('GET_CANDIDATE')
+
+export const getCandidateSuccess = createAction('GET_CANDIDATE_SUCCESS')
 
 export const addCandidate = createAction('ADD_CANDIDATE')
 

@@ -13,25 +13,20 @@ import styled from 'styled-components'
 
 export default class AppView extends Component {
   render() {
+    const extractCandidateId = (url) => {
+      return this.props.candidates[url.split('/')[2]]
+    }
+
     const tableSwitch =
-      this.props.applicationStatus === 'loading' ?
+      this.props.initializing || this.props.fetching ?  //TODO: blur old table instead of removing it
         <SpinnerWrapper>
           <Spinner size={60}/>
         </SpinnerWrapper>
         :
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
-            <CommentPage
-              candidate={this.props.candidates[this.props.history.location.pathname.split('/')[2]]}
-              applicationStatus={this.props.applicationStatus}
-              addComment={this.props.addComment}
-              deleteComment={this.props.deleteComment}
-              username={this.props.username}
-              subscribe={this.props.subscribe}
-              unsubscribe={this.props.unsubscribe}
-              setState={this.props.setState}/>
-          }/>
-
+            <CommentPage candidate={extractCandidateId(this.props.history.location.pathname)} />}
+          />
           <Route exact path='/interviewees*' render={() =>
             <CandidatesTable type='Interviewee' {...this.props} />}
           />
@@ -48,7 +43,7 @@ export default class AppView extends Component {
         </Switch>
 
     const refreshingSpinner =
-      this.props.applicationStatus === 'refreshing' ?
+      this.props.fetching ?
         <SpinnerWrapper>
           <Spinner size={60}/>
         </SpinnerWrapper>
@@ -69,21 +64,7 @@ export default class AppView extends Component {
 
 function mapStateToProps(state) {
   return {
-    applicationStatus: state.applicationStatus,
-    authorizationStatus: state.authorizationStatus,
-    username: state.username,
-    pageTitle: state.pageTitle,
-    errorMessage: state.errorMessage,
-    searchRequest: state.searchRequest,
-    candidateStatus: state.candidateStatus,
-    offset: Number(state.offset),
-    candidatesPerPage: Number(state.candidatesPerPage),
-    totalCount: Number(state.totalCount),
-    sortingField: state.sortingField,
-    sortingDirection: state.sortingDirection,
-    candidates: state.candidates,
-    tags: state.tags,
-    notifications: state.notifications,
+    ...state
   }
 }
 

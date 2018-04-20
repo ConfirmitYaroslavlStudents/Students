@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import * as actions from '../../actions/actions'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import NotificationIcon from 'material-ui-icons/Notifications'
 import Popover from '../common/UIComponentDecorators/popover'
@@ -16,8 +18,7 @@ function NotificationCenterPopover(props) {
     noticeNotification,
     deleteNotification,
     username,
-    applicationStatus,
-    authorizationStatus
+    initializing
   } = props
 
   let recentNotificationNumber = 0
@@ -48,7 +49,7 @@ function NotificationCenterPopover(props) {
       </NotificationCenterNoNotificationsWrapper>
   }
 
-  if (applicationStatus === 'loading' || authorizationStatus === 'authorizing') {
+  if (initializing) {
     popoverContent =
       <NotificationCenterNoNotificationsWrapper>
         <SpinnerWrapper><Spinner size={50}/></SpinnerWrapper>
@@ -67,15 +68,16 @@ function NotificationCenterPopover(props) {
 }
 
 NotificationCenterPopover.propTypes = {
-  applicationStatus: PropTypes.string.isRequired,
-  authorizationStatus: PropTypes.string,
-  notifications: PropTypes.array.isRequired,
-  username: PropTypes.string.isRequired,
-  getCandidate: PropTypes.func.isRequired,
-  noticeNotification: PropTypes.func.isRequired,
-  deleteNotification: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 }
+
+export default connect(state => {
+  return {
+    initializing: state.initializing,
+    notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
+    username: state.username
+  }
+}, actions)(NotificationCenterPopover)
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

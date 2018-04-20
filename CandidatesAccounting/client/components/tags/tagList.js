@@ -4,13 +4,8 @@ import { TagWrapper, Tag } from '../common/styledComponents'
 
 export default function TagList(props) {
   const handleTagClick = tag => () => {
-    props.loadCandidates(
-      {
-        applicationStatus: 'refreshing',
-        searchRequest: tag,
-        history,
-      }
-    )
+    props.setSearchRequest(tag)
+    props.search(props.history)
   }
 
   return (
@@ -26,6 +21,7 @@ export default function TagList(props) {
 
 TagList.propTypes = {
   tags: PropTypes.array.isRequired,
-  loadCandidates: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  setSearchRequest: PropTypes.func.isRequired,
+  search: PropTypes.func.isRequired,
 }

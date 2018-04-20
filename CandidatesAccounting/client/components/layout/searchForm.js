@@ -24,7 +24,7 @@ class SearchForm extends Component {
   handleClick = () => {
     if (this.props.searchRequest !== '' && this.state.isOpen) {
       this.timer = null
-      this.search(this.props.searchRequest)
+      this.search()
     } else {
       if (this.state.isOpen) {
         this.handleClose()
@@ -35,25 +35,20 @@ class SearchForm extends Component {
   }
 
   handleChange = (searchRequest) => {
-    this.props.setState({ searchRequest })
+    this.props.setSearchRequest(searchRequest)
     if (this.timer) {
       clearTimeout(this.timer)
     }
     this.timer = setTimeout(() => {
       if (this.timer) {
-        this.search(searchRequest)
+        this.search()
       }
       this.timer = null
     }, 900)
   }
 
-  search = (searchRequest) => {
-    this.props.loadCandidates(
-      {
-        applicationStatus: 'refreshing',
-        searchRequest: searchRequest,
-        history
-      })
+  search = () => {
+    this.props.search(this.props.history)
   }
 
   render() {

@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
 import FlatButton from '../common/UIComponentDecorators/flatButton'
@@ -32,7 +31,8 @@ class LoginDialog extends Component {
   }
 
   render() {
-    const authorizing = this.props.authorizationStatus === 'authorizing'
+    const { authorizing } = this.props
+    console.log(authorizing)
     const linearProgress = authorizing ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : ''
 
     return (
@@ -65,6 +65,6 @@ class LoginDialog extends Component {
 
 export default connect(state => {
   return {
-    authorizationStatus: state.authorizationStatus
+    authorizing: state.authorizing
   }
 }, actions)(LoginDialog)

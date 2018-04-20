@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import actions from '../../actions/actions'
+import * as actions from '../../actions/actions'
 import PropTypes from 'prop-types'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DeleteIcon from 'material-ui-icons/Delete'
@@ -26,10 +26,10 @@ class DeleteCandidateDialog extends Component {
 
     deleteCandidate(candidateID)
     loadCandidates({
-        applicationStatus: 'deleting-' + candidateID,
-        offset: totalCount - offset <= 1 ? totalCount - 1 - candidatesPerPage : offset
-      },
-      history)
+      applicationStatus: 'deleting-' + candidateID,
+      offset: totalCount - offset <= 1 ? totalCount - 1 - candidatesPerPage : offset,
+      history
+    })
     this.handleClose()
   }
 

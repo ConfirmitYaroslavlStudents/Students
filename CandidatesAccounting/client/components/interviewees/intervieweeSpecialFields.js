@@ -17,7 +17,7 @@ export default function IntervieweeSpecialFields(props) {
         defaultValue={toDateTimePickerFormat(props.interviewee.interviewDate)}
         onChange={handleInterviewDateChange}
       />
-      <InputLabel marginBottom="-10px">Resume</InputLabel>
+      <InputLabel marginBottom='-10px'>Resume</InputLabel>
       <ResumeControls interviewee={props.interviewee} authorized/>
     </div>)
 }

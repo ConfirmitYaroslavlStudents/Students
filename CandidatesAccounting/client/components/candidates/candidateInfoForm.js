@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import TextField from '../common/UIComponentDecorators/textField'
 import DatePicker from '../common/UIComponentDecorators/datePicker'
 import SelectInput from '../common/UIComponentDecorators/selectInput'
@@ -12,7 +11,7 @@ import StudentSpecialFields from '../students/studentSpecialFields'
 import TraineeSpecialFields from '../trainees/traineeSpecialFields'
 import styled from 'styled-components'
 
-class CandidateInfoForm extends Component {
+export default class CandidateInfoForm extends Component {
   constructor(props) {
     super(props)
     this.state = ({ candidateStatus: props.candidate.status })
@@ -90,7 +89,8 @@ class CandidateInfoForm extends Component {
 }
 
 CandidateInfoForm.propTypes = {
-  candidate: PropTypes.object.isRequired
+  candidate: PropTypes.object.isRequired,
+  tags: PropTypes.array.isRequired,
 }
 
 const CandidateFormWrapper = styled.div`
@@ -110,9 +110,3 @@ const SmallNoteSpan = styled.span`
   fontSize: 80%;
   float: right;
 `
-
-export default connect(state => {
-  return {
-    tags: state.tags
-  }
-})(CandidateInfoForm)

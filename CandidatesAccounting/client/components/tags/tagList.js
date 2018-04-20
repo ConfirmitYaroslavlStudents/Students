@@ -7,9 +7,9 @@ export default function TagList(props) {
     props.loadCandidates(
       {
         applicationStatus: 'refreshing',
-        searchRequest: tag
-      },
-      props.history
+        searchRequest: tag,
+        history,
+      }
     )
   }
 

@@ -35,7 +35,8 @@ export default function TablesBar(props) {
     stateChanges.sortingField = ''
     stateChanges.sortingDirection = 'desc'
     stateChanges.pageTitle = 'Candidate Accounting'
-    props.loadCandidates(stateChanges, props.history)
+    stateChanges.history = props.history
+    props.loadCandidates(stateChanges)
   }
 
   return (

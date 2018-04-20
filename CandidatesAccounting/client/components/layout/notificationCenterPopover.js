@@ -1,6 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import actions from '../../actions/actions'
 import PropTypes from 'prop-types'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import NotificationIcon from 'material-ui-icons/Notifications'
@@ -69,17 +67,15 @@ function NotificationCenterPopover(props) {
 }
 
 NotificationCenterPopover.propTypes = {
+  applicationStatus: PropTypes.string.isRequired,
+  authorizationStatus: PropTypes.string,
+  notifications: PropTypes.array.isRequired,
+  username: PropTypes.string.isRequired,
+  getCandidate: PropTypes.func.isRequired,
+  noticeNotification: PropTypes.func.isRequired,
+  deleteNotification: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 }
-
-export default connect(state => {
-  return {
-    applicationStatus: state.applicationStatus,
-    authorizationStatus: state.authorizationStatus,
-    notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
-    username: state.username
-  }
-}, actions)(NotificationCenterPopover)
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

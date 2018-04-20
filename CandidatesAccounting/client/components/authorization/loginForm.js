@@ -10,12 +10,12 @@ export default class LoginForm extends Component {
     this.state = {email: '', password: ''}
   }
 
-  handleEmailChange = (email) => {
+  handleEmailChange = email => {
     this.props.account.email = email
     this.setState({ email })
   }
 
-  handlePasswordChange = (password) => {
+  handlePasswordChange = password => {
     this.props.account.password = password
     this.setState({ password })
   }

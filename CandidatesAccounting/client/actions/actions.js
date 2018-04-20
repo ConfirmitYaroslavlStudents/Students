@@ -1,219 +1,67 @@
-function setState(state) {
-  return {
-    type: 'SET_STATE',
-    state
-  }
-}
+import { createAction } from 'redux-actions'
 
-function setApplicationStatus(status) {
-  return {
-    type: 'SET_APPLICATION_STATUS',
-    status
-  }
-}
+/*_____APPLICATION__________________________________*/
 
-function setErrorMessage(message) {
-  return {
-    type: 'SET_ERROR_MESSAGE',
-    message
-  }
-}
+export const init = createAction('INIT')
 
-function loadCandidates(stateChanges, browserHistory) {
-  return {
-    type: 'LOAD_CANDIDATES',
-    stateChanges,
-    browserHistory
-  }
-}
+export const setState = createAction('SET_STATE')
 
-function getCandidate(id) {
-  return {
-    type: 'GET_CANDIDATE',
-    id
-  }
-}
+export const setApplicationStatus = createAction('SET_APPLICATION_STATUS')
 
-function uploadResume(intervieweeID, resume) {
-  return {
-    type: 'UPLOAD_RESUME',
-    intervieweeID,
-    resume
-  }
-}
+export const setErrorMessage = createAction('SET_ERROR_MESSAGE')
 
-function uploadResumeSuccess(intervieweeID, resume) {
-  return {
-    type: 'UPLOAD_RESUME_SUCCESS',
-    intervieweeID,
-    resume
-  }
-}
+/*___AUTHORIZATION______________________________________*/
 
-function login(email, password) {
-  return {
-    type: 'LOGIN',
-    email,
-    password
-  }
-}
+export const login = createAction('LOGIN')
 
-function logout() {
-  return {
-    type: 'LOGOUT'
-  }
-}
+export const logout = createAction('LOGOUT')
 
-function addCandidate(candidate, browserHistory) {
-  return {
-    type: 'ADD_CANDIDATE',
-    candidate,
-    browserHistory
-  }
-}
+/*_____CANDIDATES________________________________________*/
 
-function deleteCandidate(candidateID) {
-  return {
-    type: 'DELETE_CANDIDATE',
-    candidateID
-  }
-}
+export const loadCandidates = createAction('LOAD_CANDIDATES')
 
-function updateCandidate(candidate) {
-  return {
-    type: 'UPDATE_CANDIDATE',
-    candidate
-  }
-}
+export const getCandidates = createAction('GET_CANDIDATES')
 
-function updateCandidateSuccess(candidate) {
-  return {
-    type: 'UPDATE_CANDIDATE_SUCCESS',
-    candidate
-  }
-}
+export const getCandidate = createAction('GET_CANDIDATE')
 
-function addComment(candidateID, comment, commentAttachment) {
-  return {
-    type: 'ADD_COMMENT',
-    candidateID,
-    comment,
-    commentAttachment
-  }
-}
+export const addCandidate = createAction('ADD_CANDIDATE')
 
-function addCommentSuccess(candidateID, comment) {
-  return {
-    type: 'ADD_COMMENT_SUCCESS',
-    candidateID,
-    comment
-  }
-}
+export const deleteCandidate = createAction('DELETE_CANDIDATE')
 
-function deleteComment(candidateID, commentID) {
-  return {
-    type: 'DELETE_COMMENT',
-    candidateID,
-    commentID
-  }
-}
+export const updateCandidate = createAction('UPDATE_CANDIDATE')
 
-function deleteCommentSuccess(candidateID, commentID) {
-  return {
-    type: 'DELETE_COMMENT_SUCCESS',
-    candidateID,
-    commentID
-  }
-}
+export const updateCandidateSuccess = createAction('UPDATE_CANDIDATE_SUCCESS')
 
-function subscribe(candidateID, email) {
-  return {
-    type: 'SUBSCRIBE',
-    candidateID,
-    email
-  }
-}
+/*____RESUME___________________________________________*/
 
-function subscribeSuccess(candidateID, email) {
-  return {
-    type: 'SUBSCRIBE_SUCCESS',
-    candidateID,
-    email
-  }
-}
+export const uploadResume = createAction('UPLOAD_RESUME')
 
-function unsubscribe(candidateID, email) {
-  return {
-    type: 'UNSUBSCRIBE',
-    candidateID,
-    email
-  }
-}
+export const uploadResumeSuccess = createAction('UPLOAD_RESUME_SUCCESS')
 
-function unsubscribeSuccess(candidateID, email) {
-  return {
-    type: 'UNSUBSCRIBE_SUCCESS',
-    candidateID,
-    email
-  }
-}
+/*____COMMENTS_________________________________________*/
 
-function noticeNotification(username, notificationID) {
-  return {
-    type: 'NOTICE_NOTIFICATION',
-    username,
-    notificationID
-  }
-}
+export const addComment = createAction('ADD_COMMENT')
 
-function noticeNotificationSuccess(username, notificationID) {
-  return {
-    type: 'NOTICE_NOTIFICATION_SUCCESS',
-    username,
-    notificationID
-  }
-}
+export const addCommentSuccess = createAction('ADD_COMMENT_SUCCESS')
 
-function deleteNotification(username, notificationID) {
-  return {
-    type: 'DELETE_NOTIFICATION',
-    username,
-    notificationID
-  }
-}
+export const deleteComment = createAction('DELETE_COMMENT')
 
-function deleteNotificationSuccess(username, notificationID) {
-  return {
-    type: 'DELETE_NOTIFICATION_SUCCESS',
-    username,
-    notificationID
-  }
-}
+export const deleteCommentSuccess = createAction('DELETE_COMMENT_SUCCESS')
 
-module.exports = {
-  setState,
-  login,
-  logout,
-  addCandidate,
-  deleteCandidate,
-  updateCandidate,
-  addComment,
-  deleteComment,
-  subscribe,
-  subscribeSuccess,
-  unsubscribe,
-  unsubscribeSuccess,
-  noticeNotification,
-  noticeNotificationSuccess,
-  uploadResumeSuccess,
-  updateCandidateSuccess,
-  setErrorMessage,
-  deleteNotification,
-  deleteNotificationSuccess,
-  loadCandidates,
-  getCandidate,
-  addCommentSuccess,
-  deleteCommentSuccess,
-  uploadResume,
-  setApplicationStatus,
-}
+/*____NOTIFICATIONS___________________________________*/
+
+export const subscribe = createAction('SUBSCRIBE')
+
+export const subscribeSuccess = createAction('SUBSCRIBE_SUCCESS')
+
+export const unsubscribe = createAction('UNSUBSCRIBE')
+
+export const unsubscribeSuccess = createAction('UNSUBSCRIBE_SUCCESS')
+
+export const noticeNotification = createAction('NOTICE_NOTIFICATION')
+
+export const noticeNotificationSuccess = createAction('NOTICE_NOTIFICATION_SUCCESS')
+
+export const deleteNotification = createAction('DELETE_NOTIFICATION')
+
+export const deleteNotificationSuccess = createAction('DELETE_NOTIFICATION_SUCCESS')

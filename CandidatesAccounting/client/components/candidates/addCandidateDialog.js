@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import actions from '../../actions/actions'
+import * as actions from '../../actions/actions'
 import PropTypes from 'prop-types'
 import { checkCandidateValidation } from '../../utilities/candidateValidators'
 import Candidate from '../../utilities/candidate'
@@ -37,16 +37,16 @@ class AddCandidateDialog extends Component{
       loadCandidates(
         {
           applicationStatus: 'refreshing',
-          offset: totalCount - totalCount % candidatesPerPage
-        },
-        history
+          offset: totalCount - totalCount % candidatesPerPage,
+          history
+        }
       )
       this.handleClose()
     }
   }
 
   render() {
-    const { authorizationStatus } = this.props
+    const { authorizationStatus, tags } = this.props
 
     return (
       <div className='inline-flex'>
@@ -63,6 +63,7 @@ class AddCandidateDialog extends Component{
           }>
             <LoadableCandidateInfoForm
               candidate={this.newCandidate}
+              tags={tags}
             />
         </DialogWindow>
       </div>
@@ -79,6 +80,7 @@ export default connect(state => {
     authorizationStatus: state.authorizationStatus,
     candidateStatus: state.candidateStatus,
     totalCount: state.totalCount,
-    candidatesPerPage: state.candidatesPerPage
+    candidatesPerPage: state.candidatesPerPage,
+    tags: state.tags
   }
 }, actions)(AddCandidateDialog)

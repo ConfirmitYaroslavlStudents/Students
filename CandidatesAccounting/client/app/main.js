@@ -4,11 +4,8 @@ import 'typeface-roboto'
 import 'react-quill/dist/quill.snow.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware, compose } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import { Provider } from 'react-redux'
 import reducer from '../reducers/reducer'
-import rootSaga from '../sagas/sagas'
+import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 import createMuiTheme from 'material-ui/styles/createMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -17,41 +14,10 @@ import { indigo } from 'material-ui/colors'
 import AppView from '../components/layout/appview'
 import { getInitialState } from '../api/commonService'
 import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
+import configureStore from '../stores/createStore'
+import { setState } from '../actions/actions'
 
 const username = window['APP_CONFIG'].username
-
-function configureStore(initialState) {
-  const composeMiddlewares = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-  const sagaMiddleware = createSagaMiddleware()
-  let middlewares = applyMiddleware(sagaMiddleware)
-
-  if (module.hot) {
-    middlewares = composeMiddlewares(applyMiddleware(sagaMiddleware))
-  }
-
-  const store = createStore(reducer, initialState, middlewares)
-
-  let sagaRun = sagaMiddleware.run(function* () {
-    yield rootSaga()
-  })
-
-  if (module.hot) {
-    module.hot.accept('../reducers/reducer', () => {
-      const nextReducer = require('../reducers/reducer').default
-      store.replaceReducer(nextReducer)
-    })
-    module.hot.accept('../sagas/sagas', () => {
-      const newRootSaga = require('../sagas/sagas').default
-      sagaRun.cancel()
-      sagaRun.done.then(() => {
-        sagaRun = sagaMiddleware.run(function* replaceSaga() {
-          yield newRootSaga()
-        })
-      })
-    })
-  }
-  return store
-}
 
 const theme = createMuiTheme({
   palette: createPalette({
@@ -77,52 +43,31 @@ function renderApp(app) {
 
 const stateArgs = getStateArgsFromURL(window.location.pathname + window.location.search)
 
-const store = configureStore({
-  applicationStatus: 'loading',
-  pageTitle: 'Candidate Accounting',
-  errorMessage: '',
-  searchRequest: stateArgs.searchRequest,
-
-  authorizationStatus: username.trim() === '' ? 'not-authorized' : 'authorized',
-  username,
-
-  offset: stateArgs.offset,
-  candidatesPerPage: stateArgs.candidatesPerPage,
-  totalCount: 0,
-  sortingField: stateArgs.sortingField,
-  sortingDirection: stateArgs.sortingDirection,
-
-  candidateStatus: stateArgs.tableType,
-  candidates: {},
-
-  tags: [],
-
-  notifications: {}
-})
+const store = configureStore(reducer, stateArgs)
 
 /*________________________________________________________________________*/
 
 renderApp(AppView)
 
+const state = store.getState()
+
 getInitialState(
   username,
-  stateArgs.candidatesPerPage,
-  stateArgs.offset,
-  stateArgs.tableType,
-  stateArgs.sortingField,
-  stateArgs.sortingDirection,
-  stateArgs.searchRequest)
-  .then((initialState) => {
-    store.dispatch({
-        type: 'SET_STATE',
-        state: {
+  state.candidatesPerPage,
+  state.offset,
+  state.candidateStatus,
+  state.sortingField,
+  state.sortingDirection,
+  state.searchRequest)
+  .then(initialState => {
+    store.dispatch(setState({
           applicationStatus: 'ok',
           totalCount: initialState.total,
           candidates: initialState.candidates,
           tags: initialState.tags,
           notifications: initialState.notifications
         }
-      }
+      )
     )
   })
 

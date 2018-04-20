@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import actions from '../../actions/actions'
+import * as actions from '../../actions/actions'
 import LoginDialog from './loginDialog'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import SignOutIcon from 'material-ui-icons/ExitToApp'
@@ -10,39 +10,44 @@ import NotificationCenterPopover from './notificationCenterPopover'
 import styled from 'styled-components'
 
 function UserControls(props) {
-  const authorized = props.username.trim() !== ''
+  const {
+    authorizationStatus,
+    applicationStatus,
+    login,
+    logout,
+    username,
+    notifications,
+    noticeNotification,
+    deleteNotification,
+    getCandidate,
+    history
+  } = props
 
-  return (
-    authorized ?
+  if (authorizationStatus === 'not-authorized') {
+    return <LoginDialog login={login} applicationStatus={applicationStatus}/>
+  } else {
+    return (
       <div className='inline-flex centered'>
-        <AppbarUsernameWrapper>{formatUserName(props.username)}</AppbarUsernameWrapper>
+        <AppbarUsernameWrapper>{formatUserName(username)}</AppbarUsernameWrapper>
         <NotificationCenterPopover
-          notifications={props.notifications}
-          noticeNotification={props.noticeNotification}
-          deleteNotification={props.deleteNotification}
-          username={props.username}
-          getCandidate={props.getCandidate}
-          history={props.history}
+          notifications={notifications}
+          noticeNotification={noticeNotification}
+          deleteNotification={deleteNotification}
+          username={username}
+          getCandidate={getCandidate}
+          history={history}
         />
         <IconButton
-          icon={<SignOutIcon />}
+          icon={<SignOutIcon/>}
           color='inherit'
-          onClick={props.logout}/>
+          onClick={logout}/>
       </div>
-      :
-      <LoginDialog login={props.login} applicationStatus={props.applicationStatus}/>
-  )
+    )
+  }
 }
 
 UserControls.propTypes = {
-  applicationStatus: PropTypes.string.isRequired,
-  login: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  notifications: PropTypes.object.isRequired,
-  noticeNotification: PropTypes.func.isRequired,
-  deleteNotification: PropTypes.func.isRequired,
-  getCandidate: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 }
 
 const AppbarUsernameWrapper = styled.span`
@@ -51,6 +56,9 @@ const AppbarUsernameWrapper = styled.span`
 
 export default connect(state => {
   return {
+    applicationStatus: state.applicationStatus,
+    authorizationStatus: state.authorizationStatus,
+    notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
     username: state.username
   }
 }, actions)(UserControls)

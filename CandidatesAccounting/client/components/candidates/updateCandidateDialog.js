@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import actions from '../../actions/actions'
+import * as actions from '../../actions/actions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
@@ -43,7 +43,7 @@ class UpdateCandidateDialog extends React.Component {
   }
 
   render() {
-    const { disabled, candidate } = this.props
+    const { disabled, candidate, tags } = this.props
     this.initialStatus = this.candidate.status
 
     return (
@@ -61,6 +61,7 @@ class UpdateCandidateDialog extends React.Component {
           }>
             <LoadableCandidateInfoForm
               candidate={candidate}
+              tags={tags}
             />
         </DialogWindow>
       </div>
@@ -73,4 +74,8 @@ UpdateCandidateDialog.propTypes = {
   disabled: PropTypes.bool,
 }
 
-export default connect(() => { return {} }, actions)(UpdateCandidateDialog)
+export default connect((state) => {
+  return {
+    tags: state.tags
+  }
+}, actions)(UpdateCandidateDialog)

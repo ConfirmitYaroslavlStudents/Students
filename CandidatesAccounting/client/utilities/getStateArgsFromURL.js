@@ -3,17 +3,17 @@ export default function getStateArgsFromURL(url) {
 
   const path = splitedURL[0]
   const splitedPath = path.split('/')
-  const tableName = splitedPath[1]
-  let tableType = ''
-  switch (tableName) {
+  const tableType = splitedPath[1]
+  let candidateStatus = 'Candidate'
+  switch (tableType) {
     case 'interviewees':
-      tableType = 'Interviewee'
+      candidateStatus = 'Interviewee'
       break
     case 'students':
-      tableType = 'Student'
+      candidateStatus = 'Student'
       break
     case 'trainees':
-      tableType = 'Trainee'
+      candidateStatus = 'Trainee'
       break
   }
 
@@ -27,12 +27,23 @@ export default function getStateArgsFromURL(url) {
     })
   }
 
-  return {
-    tableType,
-    searchRequest: args.q ? decodeURIComponent(args.q) : '',
-    offset: args.skip ? Number(args.skip) : 0,
-    candidatesPerPage: args.take ? Number(args.take) : 15,
-    sortingField: args.sort ? args.sort : '',
-    sortingDirection: args.sortDir ? args.sortDir : 'desc'
+  let result = {}
+  result.candidateStatus = candidateStatus
+  if (args.q) {
+    result.searchRequest = decodeURIComponent(args.q)
   }
+  if (args.skip) {
+    result.offset = Number(args.skip)
+  }
+  if (args.take) {
+    result.candidatesPerPage = Number(args.take)
+  }
+  if (args.sort) {
+    result.sortingField = args.sort
+  }
+  if (args.sortDir) {
+    result.sortingDirection = args.sortDir
+  }
+
+  return result
 }

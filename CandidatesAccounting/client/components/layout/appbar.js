@@ -19,14 +19,6 @@ export default function Appbar(props) {
       <AppbarControlsWrapper>
         {searchForm}
         <UserControls
-          applicationStatus={props.applicationStatus}
-          username={props.username}
-          login={props.login}
-          logout={props.logout}
-          notifications={props.notifications}
-          noticeNotification={props.noticeNotification}
-          deleteNotification={props.deleteNotification}
-          getCandidate={props.getCandidate}
           history={props.history}/>
       </AppbarControlsWrapper>
     </AppbarWrapper>
@@ -35,16 +27,5 @@ export default function Appbar(props) {
 
 Appbar.propTypes = {
   title: PropTypes.string.isRequired,
-  applicationStatus: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
-  login: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  notifications: PropTypes.object.isRequired,
-  noticeNotification: PropTypes.func.isRequired,
-  deleteNotification: PropTypes.func.isRequired,
-  searchRequest: PropTypes.string.isRequired,
-  getCandidate: PropTypes.func.isRequired,
-  loadCandidates: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  setState: PropTypes.func.isRequired,
 }

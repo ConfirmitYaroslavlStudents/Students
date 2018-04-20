@@ -12,7 +12,6 @@ import ResumeControls from '../interviewees/resumeControls'
 import { CandidateNameWrapper, CandidateControlsWrapper } from '../common/styledComponents'
 import { Date } from '../common/styledComponents'
 
-
 export default function CandidatesTable(props) {
   const getHeaders = () => {
     switch (props.type) {

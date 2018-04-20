@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import actions from '../../actions/actions'
+import * as actions from '../../actions/actions'
 import SearchIcon from 'material-ui-icons/search'
 import Input from '../common/UIComponentDecorators/input'
 import IconButton from '../common/UIComponentDecorators/iconButton'
@@ -51,9 +51,9 @@ class SearchForm extends Component {
     this.props.loadCandidates(
       {
         applicationStatus: 'refreshing',
-        searchRequest: searchRequest
-      },
-      this.props.history)
+        searchRequest: searchRequest,
+        history
+      })
   }
 
   render() {

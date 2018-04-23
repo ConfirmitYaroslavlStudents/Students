@@ -5,73 +5,68 @@ import NoticeIcon from 'material-ui-icons/Markunread'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import NotificationBlock from './notificationBlock'
 import { MediumSmallButtonStyle } from '../common/styleObjects'
-import {
-  NotificationCenterWrapper,
-  NotificationCenterHeaderWrapper,
-  NotificationCenterTitleWrapper,
-  NotificationCenterControlsWrapper,
-  NotificationCenterButtonWrapper
-} from '../common/styledComponents'
+import styled from 'styled-components'
 
 export default function NotificationCenter(props) {
+  const { notifications, username, noticeNotification, deleteNotification, openCommentPage } = props
+
   const noticeAllNotifications = () => {
-    props.notifications.forEach(notification => {
+    notifications.forEach(notification => {
       if (notification.recent) {
-        props.noticeNotification(props.username, notification.id)
+        noticeNotification(username, notification.id)
       }
     })
   }
 
   const deleteAllNotifications = () => {
-    props.notifications.forEach(notification => {
+    notifications.forEach(notification => {
       if (notification.recent) {
-        props.deleteNotification(props.username, notification.id)
+        deleteNotification(username, notification.id)
       }
     })
   }
 
   let unreadNotificationExists = false
-  for (let i = 0; i < props.notifications.length; i++) {
-    if(props.notifications[i].recent) {
+  for (let i = 0; i < notifications.length; i++) {
+    if(notifications[i].recent) {
       unreadNotificationExists = true
       break
     }
   }
 
   return (
-    <NotificationCenterWrapper>
-      <NotificationCenterHeaderWrapper>
-        <NotificationCenterTitleWrapper>
+    <CenterWrapper>
+      <HeaderWrapper>
+        <TitleWrapper>
           Notifications
-        </NotificationCenterTitleWrapper>
-        <NotificationCenterControlsWrapper>
+        </TitleWrapper>
+        <ControlsWrapper>
           <IconButton
             icon={<NoticeIcon />}
             style={MediumSmallButtonStyle}
             onClick={noticeAllNotifications}
             disabled={!unreadNotificationExists}
           />
-          <NotificationCenterButtonWrapper>
+          <ButtonWrapper>
             <IconButton
               icon={<DeleteAllIcon />}
               style={MediumSmallButtonStyle}
               onClick={deleteAllNotifications}
             />
-          </NotificationCenterButtonWrapper>
-        </NotificationCenterControlsWrapper>
-      </NotificationCenterHeaderWrapper>
-      {props.notifications.map((notification, index) =>
+          </ButtonWrapper>
+        </ControlsWrapper>
+      </HeaderWrapper>
+      {notifications.map((notification, index) =>
         <NotificationBlock
           key={index}
           notification={notification}
-          noticeNotification={props.noticeNotification}
-          deleteNotification={props.deleteNotification}
-          username={props.username}
-          getCandidate={props.getCandidate}
-          history={props.history}
+          noticeNotification={noticeNotification}
+          deleteNotification={deleteNotification}
+          openCommentPage={openCommentPage}
+          username={username}
         />
       )}
-    </NotificationCenterWrapper>
+    </CenterWrapper>
   )
 }
 
@@ -80,6 +75,33 @@ NotificationCenter.propTypes = {
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
-  getCandidate: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
+  openCommentPage: PropTypes.func.isRequired,
 }
+
+const CenterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const HeaderWrapper = styled.div`
+  padding: 4px;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+`
+
+const ControlsWrapper = styled.div`
+  display: inline-flex;
+  padding-top: 2px;
+  float: right;
+`
+
+const ButtonWrapper = styled.div`
+  display: inline-flex;
+  margin-left: 10px;
+`
+
+const TitleWrapper = styled.div`
+  display: inline-block;
+  color: #636363;
+  margin: 6px 0 0 8px;
+`

@@ -7,44 +7,39 @@ import { formatDateTime } from '../../utilities/customMoment'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import AttachIcon from 'material-ui-icons/AttachFile'
 import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from '../common/styleObjects'
-import {
-  NotificationAttachmentWrapper,
-  NotificationButtonWrapper,
-  NotificationCandidateNameWrapper,
-  NotificationContentWrapper,
-  NotificationControlsWrapper,
-  NotificationDateWrapper,
-  NotificationInfoWrapper,
-  NotificationMessageWrapper,
-  NotificationServiceText,
-  NotificationWrapper
-} from '../common/styledComponents'
+import styled, { css } from 'styled-components'
 
 export default function NotificationBlock(props) {
+  const { notification, username, noticeNotification, deleteNotification, openCommentPage } = props
+
   const openCandidateComments = () => {
-    props.getCandidate(props.notification.source.id);
-    props.history.replace('/' + props.notification.source.status.toLowerCase() + 's/' + props.notification.source.id + '/comments');
-    if (props.notification.recent) {
-      props.noticeNotification(props.username, props.notification.id);
+    openCommentPage(notification.source)
+    if (notification.recent) {
+      noticeNotification(username, notification.id)
     }
   }
 
   const handleDeleteNotificationClick = (event) => {
-    props.deleteNotification(props.username, props.notification.id)
+    deleteNotification(username, notification.id)
     event.stopPropagation()
   }
 
-  const commentAttachment = props.notification.content.attachment ?
-    <NotificationAttachmentWrapper><AttachIcon style={SmallestIconStyle}/>{props.notification.content.attachment}</NotificationAttachmentWrapper> : ''
+  const commentAttachment =
+    notification.content.attachment ?
+      <NotificationAttachmentWrapper>
+        <AttachIcon style={SmallestIconStyle}/>
+        {notification.content.attachment}
+      </NotificationAttachmentWrapper>
+      : ''
 
   return (
     <NavLink onClick={openCandidateComments}>
-      <NotificationWrapper recent={props.notification.recent}>
+      <NotificationWrapper recent={notification.recent}>
         <NotificationInfoWrapper>
-          <NotificationCandidateNameWrapper>{props.notification.source.name}</NotificationCandidateNameWrapper>
+          <NotificationCandidateNameWrapper>{notification.source.name}</NotificationCandidateNameWrapper>
           <NotificationControlsWrapper>
             <NotificationDateWrapper>
-              {formatDateTime(props.notification.content.date)}
+              {formatDateTime(notification.content.date)}
             </NotificationDateWrapper>
             <NotificationButtonWrapper>
               <IconButton
@@ -56,9 +51,9 @@ export default function NotificationBlock(props) {
           </NotificationControlsWrapper>
         </NotificationInfoWrapper>
         <NotificationContentWrapper>
-          <p>{formatUserName(props.notification.content.author)} <NotificationServiceText> has left the comment:</NotificationServiceText></p>
+          <p>{formatUserName(notification.content.author)} <NotificationServiceText> has left the comment:</NotificationServiceText></p>
           <NotificationMessageWrapper>
-            <div dangerouslySetInnerHTML={{__html: props.notification.content.text}} />
+            <div dangerouslySetInnerHTML={{__html: notification.content.text}} />
             { commentAttachment }
           </NotificationMessageWrapper>
         </NotificationContentWrapper>
@@ -71,7 +66,79 @@ NotificationBlock.propTypes = {
   notification: PropTypes.object.isRequired,
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
+  openCommentPage: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
-  getCandidate: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
 }
+
+const NotificationAttachmentWrapper = styled.div`  
+  display: inline-flex;
+  align-items: center;
+  color: #777;
+`
+
+const NotificationButtonWrapper = styled.div`
+  display: inline-flex;
+  z-index: 10;
+  margin-left: 4px;
+  margin-right: -6px;
+  margin-top: -6px;
+`
+
+const NotificationCandidateNameWrapper = styled.div`
+  display: inline-flex;
+`
+
+const NotificationControlsWrapper = styled.div`
+  display: inline-flex;
+  float: right;
+`
+
+const NotificationContentWrapper = styled.div`
+  color: #000;
+`
+
+const NotificationDateWrapper = styled.div`
+  color: #888;
+  font-size: 96%;
+`
+
+const NotificationInfoWrapper = styled.div`
+  margin-bottom: 4px;
+`
+
+const NotificationMessageWrapper = styled.div`
+  background-color: #f3f3f3;
+  color: #333;
+  padding: 8px;  
+  word-wrap: break-word;
+  overflow: hidden;
+`
+
+const NotificationServiceText = styled.span`
+  color: #777;
+`
+
+const NotificationWrapper = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  width: 400px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  border-left: 5px solid #999;
+  padding: 20px 12px;
+  background-color: #fefefe;
+  cursor: pointer;
+  
+  ${props => props.recent && css`  
+    border-left: 5px solid #42A5F5;
+    background-color: #fff;
+	`}	
+  
+  &:hover {
+    border-left: 5px solid #aaa;    
+    background-color: #fff;    
+    
+    ${props => props.recent && css`    
+      border-left: 5px solid #64B5F6;
+    `}	
+  }
+`

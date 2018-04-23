@@ -31,19 +31,17 @@ class UpdateCandidateDialog extends React.Component {
   }
 
   handleCandidateUpdate = () => {
-    const { updateCandidate } = this.props
-
     if (checkCandidateValidation(this.candidate)) {
       if (this.candidate.status !== this.initialStatus) {
         this.candidate.comments['newStatus'] = new Comment('SYSTEM', ' New status: ' + this.candidate.status)
       }
-      updateCandidate(this.candidate)
+      this.props.updateCandidate({ candidate: this.candidate })
       this.handleClose()
     }
   }
 
   render() {
-    const { disabled, candidate, tags } = this.props
+    const { disabled, tags } = this.props
     this.initialStatus = this.candidate.status
 
     return (
@@ -60,7 +58,7 @@ class UpdateCandidateDialog extends React.Component {
             </div>
           }>
             <LoadableCandidateInfoForm
-              candidate={candidate}
+              candidate={this.candidate}
               tags={tags}
             />
         </DialogWindow>

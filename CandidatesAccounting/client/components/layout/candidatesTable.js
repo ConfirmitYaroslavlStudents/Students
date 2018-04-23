@@ -11,25 +11,27 @@ import CandidateControls from '../candidates/candidateControls'
 import { formatDateTime, formatDate, isToday, isBirthDate } from '../../utilities/customMoment'
 import TagList from '../tags/tagList'
 import ResumeControls from '../interviewees/resumeControls'
-import { CandidateNameWrapper, CandidateControlsWrapper } from '../common/styledComponents'
-import { Date } from '../common/styledComponents'
+import styled, { css } from 'styled-components'
 
 function CandidatesTable(props) {
   const {
     candidates,
-    authorized,
     type,
     setSearchRequest,
     search,
     history,
     fetching,
-    inactiveCandidateId,
+    onUpdating,
+    onDeleting,
     offset,
     candidatesPerPage,
     totalCount,
     sortingField,
     sortingDirection,
-    changeTableOptions
+    setOffset,
+    setCandidatesPerPage,
+    setSortingField,
+    setSortingDirection
   } = props
 
   const getHeaders = () => {
@@ -80,10 +82,7 @@ function CandidatesTable(props) {
         row.cells.push(<ResumeControls
           interviewee={candidate}
           disabled={disabled}
-          enableDownload
-          enableUpload
-          authorized={authorized}
-          uploadResume={props.uploadResume}/>)
+          downloadingEnabled/>)
         break
 
       case 'Student':
@@ -99,25 +98,47 @@ function CandidatesTable(props) {
 
     row.cells.push(
       <CandidateControlsWrapper>
-        <CandidateControls candidate={candidate} {...props}/>
+        <CandidateControls candidate={candidate} history={history}/>
       </CandidateControlsWrapper>)
 
     return row
   }
 
+  const handleOffsetCange = (offset) => {
+    setOffset({offset, history})
+  }
+
+  const handleCandidatesPerPageChange = (candidatesPerPage) => {
+    setCandidatesPerPage({candidatesPerPage, history})
+  }
+
+  const handleSortingFieldChange = (sortingField) => {
+    setSortingField({sortingField, history})
+  }
+
+  const handleSortingDirectionChange = () => {
+    setSortingDirection({history})
+  }
+
+  const headers = getHeaders()
+
+  const contentRows = candidates.map(candidate => {
+    return createRow(candidate, fetching || candidate.id === onUpdating || candidate.id === onDeleting)
+  })
+
   return (
     <SortablePaginatedTable
-      headers={getHeaders()}
-      contentRows={ candidates.map(candidate => {
-        return createRow(candidate, fetching || inactiveCandidateId === candidate.id)
-      })}
+      headers={headers}
+      contentRows={contentRows}
+      totalCount={totalCount}
       offset={offset}
       rowsPerPage={candidatesPerPage}
-      totalCount={totalCount}
       sortingField={sortingField}
       sortingDirection={sortingDirection}
-      changeTableOptions={changeTableOptions}
-      history={history}
+      onOffsetChange={handleOffsetCange}
+      onRowsPerPageChange={handleCandidatesPerPageChange}
+      onSortingFieldChange={handleSortingFieldChange}
+      onSortingDirectionChange={handleSortingDirectionChange}
     />
   )
 }
@@ -129,11 +150,11 @@ CandidatesTable.propTypes = {
 
 export default connect(state => {
   return {
-    authorized: state.authorized,
     candidates: Object.keys(state.candidates).map(candidateID => { return state.candidates[candidateID] }),
     searchRequest: state.searchRequest,
     fetching: state.fetching,
-    inactiveCandidateId: state.inactiveCandidateId,
+    onUpdating: state.onUpdating,
+    onDeleting: state.onDeleting,
     offset: state.offset,
     candidatesPerPage: state.candidatesPerPage,
     totalCount: state.totalCount,
@@ -141,3 +162,22 @@ export default connect(state => {
     sortingDirection: state.sortingDirection,
   }
 }, actions)(CandidatesTable)
+
+const CandidateNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const CandidateControlsWrapper = styled.div`
+  display: flex;
+  float: right;
+`
+
+const Date = styled.div`
+  white-space: nowrap;
+  
+  ${props => props.highlighted && css`
+    color: #ff4081;
+    font-weight: bold;
+	`}
+`

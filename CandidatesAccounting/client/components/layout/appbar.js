@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Logo from 'material-ui-icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from './userControls'
-import { AppbarWrapper, AppbarControlsWrapper, AppbarTitleWrapper } from '../common/styledComponents'
+import styled from 'styled-components'
 
 function Appbar(props) {
   const { pageTitle, history } = props
@@ -36,3 +36,23 @@ export default connect(state => {
     pageTitle: state.pageTitle
   }
 })(Appbar)
+
+const AppbarControlsWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  right: 6px;
+`
+
+const AppbarTitleWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  left: 16px;
+  font-size: 125%;
+`
+
+const AppbarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+`

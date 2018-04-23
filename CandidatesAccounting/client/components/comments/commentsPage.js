@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import actions from '../../actions/actions'
-import { CommentPageWrapper, NoResultWrapper, CommentPageFooter } from '../common/styledComponents'
+import * as actions from '../../actions/actions'
 import Comment from './comment'
 import CurrentUserComment from './currentUserComment'
 import SystemComment from './systemComment'
@@ -22,14 +21,8 @@ class CommentsPage extends Component {
   UNSAFE_componentWillMount() {
     const { candidate } = this.props
 
-    this.props.setState(
-      {
-        pageTitle: candidate.name,
-        candidateStatus: candidate.status
-      }
-    )
     this.userColors = {}
-    Object.keys(candidate.comments).forEach((commentID) => {
+    Object.keys(this.props.candidate.comments).forEach((commentID) => {
       const comment = candidate.comments[commentID]
       if (!(comment.author in this.userColors)) {
         this.userColors[comment.author] = getRandomColor()
@@ -57,10 +50,10 @@ class CommentsPage extends Component {
   }
 
   render() {
-    const { applicationStatus, authorizationStatus, candidate, username } = this.props
+    const { initializing, fetching, authorized, candidate, username } = this.props
     const comments = Object.keys(candidate.comments).map(commentId => candidate.comments[commentId])
 
-    if (applicationStatus !== 'ok') {
+    if (initializing || fetching) {
       return <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
     }
 
@@ -98,7 +91,7 @@ class CommentsPage extends Component {
           <LoadableAddCommentPanel
             candidate={candidate}
             onCommentAdd={this.handleNewCommentAdd}
-            disabled={authorizationStatus !== 'authorized'}
+            disabled={!authorized}
             username={username}
           />
         </CommentPageFooter>
@@ -111,6 +104,15 @@ CommentsPage.propTypes = {
   candidate: PropTypes.object
 }
 
+export default connect(state => {
+  return {
+    initializing: state.initializing,
+    fetching: state.fetching,
+    authorized: state.authorized,
+    username: state.username
+  }
+}, actions)(CommentsPage)
+
 const SpinnerWrapper = styled.div`
   position: fixed;
   z-index: 100;
@@ -119,10 +121,27 @@ const SpinnerWrapper = styled.div`
   text-align: center;
 `
 
-export default connect(state => {
-  return {
-    applicationStatus: state.applicationStatus,
-    authorizationStatus: state.authorizationStatus,
-    username: state.username
-  }
-}, actions)(CommentsPage)
+const CommentPageFooter = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+`
+
+const CommentPageWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  min-height: 100vmin;
+  background: #EEE;
+  position: absolute;
+  top: 0;
+  padding-top: 110px;
+  padding-bottom: 161px;
+  box-sizing: border-box;
+`
+
+const NoResultWrapper = styled.div`
+  padding: 5px;
+  color: #bbb;
+  text-align: center;
+  margin-bottom: 20px;
+`

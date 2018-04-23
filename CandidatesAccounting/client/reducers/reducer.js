@@ -6,12 +6,9 @@ const initialState = {
   authorizing: true,
   username: '',
   notifications: {},
-  authorizationStatus: 'not-authorized',
 
-  fetching: false,
   initializing: true,
-  applicationStatus: 'loading',
-  inactiveCandidateId: '',
+  fetching: false,
   pageTitle: 'Candidate Accounting',
   errorMessage: '',
   searchRequest: '',
@@ -22,6 +19,9 @@ const initialState = {
   totalCount: 0,
   sortingField: '',
   sortingDirection: 'desc',
+  onUpdating: '',
+  onDeleting: '',
+  onResumeUploading: '',
 
   candidates: {},
 
@@ -29,6 +29,9 @@ const initialState = {
 }
 
 export default createReducer(initialState, {
+
+  /*_____APPLICATION__________________________________*/
+
   [A.init]: (state, {payload}) => ({
     ...state,
     ...initialState,
@@ -43,57 +46,9 @@ export default createReducer(initialState, {
     initializing: false
   }),
 
-  [A.setState]: (state, {payload}) => ({
+  [A.setFetching]: (state, {payload}) => ({
     ...state,
-    ...payload
-  }),
-
-  [A.getCandidatesSuccess]: (state, {payload}) => ({
-    ...state,
-    candidates: payload.candidates,
-    totalCount: payload.totalCount,
-    fetching: false,
-  }),
-
-  [A.getCandidateSuccess]: (state, {payload}) => ({
-    ...state,
-    candidates: { [payload.id]: payload },
-    totalCount: 1,
-    fetching: false,
-  }),
-
-  [A.setFetchStatus]: (state, {payload}) => ({
-    ...state,
-    fetching: payload
-  }),
-
-  [A.loginSuccess]: (state, {payload}) => ({
-    ...state,
-    authorizing: false,
-    authorized: true,
-    username: payload.username,
-    notifications: payload.notifications
-  }),
-
-  [A.logoutSuccess]: (state, {payload}) => ({
-    ...state,
-    authorizing: false,
-    authorized: false,
-    username: '',
-    notifications: {}
-  }),
-
-  [A.setAuthorizingStatus]: (state, {payload}) => ({
-    ...state,
-    authorizing: payload
-  }),
-
-  [A.changeTableOptionsSuccess]: (state, {payload}) => ({
-    ...state,
-    offset: payload.offset,
-    candidatesPerPage: payload.candidatesPerPage,
-    sortingField: payload.sortingField,
-    sortingDirection: payload.sortingDirection,
+    fetching: payload.fetching
   }),
 
   [A.setSearchRequest]: (state, {payload}) => ({
@@ -101,7 +56,7 @@ export default createReducer(initialState, {
     searchRequest: payload
   }),
 
-  [A.changeTableSuccess]: (state, {payload}) => ({
+  [A.setCandidateStatusSuccess]: (state, {payload}) => ({
     ...state,
     searchRequest: payload === state.candidateStatus ? '' : state.searchRequest,
     candidateStatus: payload,
@@ -111,19 +66,57 @@ export default createReducer(initialState, {
     pageTitle: 'Candidate Accounting'
   }),
 
-  [A.setApplicationStatus]: (state, {payload}) => ({
-    ...state,
-    applicationStatus: payload
-  }),
-
   [A.setErrorMessage]: (state, {payload}) => ({
     ...state,
-    errorMessage: payload
+    errorMessage: payload.message
   }),
 
-  [A.setOffset]: (state, {payload}) => ({
+  /*____AUTHORIZATION______________________________________*/
+
+  [A.loginSuccess]: (state, {payload}) => ({
     ...state,
-    offset: payload
+    authorizing: false,
+    authorized: true,
+    username: payload.username,
+    notifications: payload.notifications
+  }),
+
+  [A.logoutSuccess]: state => ({
+    ...state,
+    authorizing: false,
+    authorized: false,
+    username: '',
+    notifications: {}
+  }),
+
+  [A.setAuthorizing]: (state, {payload}) => ({
+    ...state,
+    authorizing: payload.authorizing
+  }),
+
+  /*_____CANDIDATES________________________________________*/
+
+  [A.getCandidatesSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: payload.candidates,
+    totalCount: payload.totalCount,
+    fetching: false,
+    onUpdating: '',
+    onDeleting: '',
+  }),
+
+  [A.openCommentPageSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: { [payload.candidate.id]: payload.candidate },
+    candidateStatus: payload.candidate.status,
+    pageTitle: payload.candidate.name,
+    totalCount: 1,
+    fetching: false,
+  }),
+
+  [A.addCandidateSuccess]: state => ({
+    ...state,
+    offset: state.totalCount - state.totalCount % state.candidatesPerPage
   }),
 
   [A.updateCandidateSuccess]: (state, {payload}) => ({
@@ -134,8 +127,73 @@ export default createReducer(initialState, {
         ...state.candidates[payload.candidate.id],
         ...payload.candidate
       }
-    }
+    },
+    onUpdating: ''
   }),
+
+  [A.deleteCandidateSuccess]: (state) => ({
+    ...state,
+    offset:
+      state.totalCount - state.offset - 1 === 0 ?
+        state.offset > state.candidatesPerPage ?
+          state.offset - state.candidatesPerPage
+          :
+          0
+        :
+        state.offset
+  }),
+
+  [A.setOnUpdating]: (state, { payload }) => ({
+    ...state,
+    onUpdating: payload.candidateId
+  }),
+
+  [A.setOnDeleting]: (state, { payload }) => ({
+    ...state,
+    onDeleting: payload.candidateId
+  }),
+
+  [A.setOffsetSuccess]: (state, {payload}) => ({
+    ...state,
+    offset: payload
+  }),
+
+  [A.setCandidatesPerPageSuccess]: (state, {payload}) => ({
+    ...state,
+    candidatesPerPage: payload
+  }),
+
+  [A.setSortingFieldSuccess]: (state, {payload}) => ({
+    ...state,
+    sortingField: payload,
+    sortingDirection: 'desc'
+  }),
+
+  [A.setSortingDirectionSuccess]: (state) => ({
+    ...state,
+    sortingDirection: state.sortingDirection === 'desc' ? 'asc' : 'desc'
+  }),
+
+  /*____RESUME___________________________________________*/
+
+  [A.setOnResumeUploading]: (state, {payload}) => ({
+    ...state,
+    onResumeUploading: payload.intervieweeId
+  }),
+
+  [A.uploadResumeSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: {
+      ...state.candidates,
+      [payload.intervieweeId]: {
+        ...state.candidates[payload.intervieweeId],
+        resume: payload.resume
+      }
+    },
+    onResumeUploading: ''
+  }),
+
+  /*____COMMENTS_________________________________________*/
 
   [A.addCommentSuccess]: (state, {payload}) => ({
     ...state,
@@ -165,6 +223,8 @@ export default createReducer(initialState, {
       }
     }
   },
+
+  /*____NOTIFICATIONS___________________________________*/
 
   [A.subscribeSuccess]: (state, {payload}) => ({
     ...state,
@@ -214,15 +274,4 @@ export default createReducer(initialState, {
       notifications: notifications
     }
   },
-
-  [A.uploadResumeSuccess]: (state, {payload}) => ({
-    ...state,
-    candidates: {
-      ...state.candidates,
-      [payload.intervieweeID]: {
-        ...state.candidates[payload.intervieweeID],
-        resume: payload.resume
-      }
-    }
-  }),
 })

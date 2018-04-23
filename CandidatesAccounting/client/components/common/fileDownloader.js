@@ -3,18 +3,23 @@ import PropTypes from 'prop-types'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 
 export default function fileDownloader(props) {
-  const downloadFile = () => {
-    window.open(props.downloadLink, '_self')
+  const { downloadLink, disabled, icon, buttonStyle, children } = props
+
+  const handleDownloadFile = () => {
+    if (!disabled) {
+      window.open(downloadLink, '_self')
+    }
   }
 
   return (
-    <div onClick={downloadFile}>
+    <div onClick={handleDownloadFile}>
       <IconButton
-        icon={props.icon}
-        style={props.buttonStyle}
-        disabled={props.disabled}
-        onClick={downloadFile}/>
-      {props.children}
+        icon={icon}
+        style={buttonStyle}
+        disabled={disabled}
+        onClick={handleDownloadFile}
+      />
+      {children}
     </div>
   )
 }

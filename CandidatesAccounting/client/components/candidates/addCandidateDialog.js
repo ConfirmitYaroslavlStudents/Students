@@ -16,7 +16,8 @@ class AddCandidateDialog extends Component{
   constructor(props) {
     super(props);
     this.state = ({ isOpen: false })
-    this.candidate = new Candidate(props.candidateStatus)
+    const candidateStatus = props.candidateStatus === 'Student' && props.candidateStatus === 'Trainee' ? props.candidateStatus : 'Interviewee'
+    this.candidate = new Candidate(candidateStatus)
   }
 
   handleOpen = () => {
@@ -29,26 +30,21 @@ class AddCandidateDialog extends Component{
   }
 
   handleCandidateAdd = () => {
-    const {addCandidate, setOffset, totalCount, candidatesPerPage, setApplicationStatus, getCandidates, history} = this.props
+    const { addCandidate, history } = this.props
 
     if (checkCandidateValidation(this.newCandidate)) {
       this.newCandidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + this.newCandidate.status)
-
-      setApplicationStatus('refreshing')
-      addCandidate({candidate: this.newCandidate})
-      setOffset(totalCount - totalCount % candidatesPerPage)
-      getCandidates({history})
-
+      addCandidate({candidate: this.newCandidate, history})
       this.handleClose()
     }
   }
 
   render() {
-    const { authorizationStatus, tags } = this.props
+    const { authorized, tags } = this.props
 
     return (
       <div className='inline-flex'>
-        <IconButton icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={authorizationStatus !== 'authorized'} onClick={this.handleOpen} />
+        <IconButton icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={!authorized} onClick={this.handleOpen} />
         <DialogWindow
           title='Add new candidate'
           isOpen={this.state.isOpen}
@@ -75,10 +71,8 @@ AddCandidateDialog.propTypes = {
 
 export default connect(state => {
   return {
-    authorizationStatus: state.authorizationStatus,
+    authorized: state.authorized,
     candidateStatus: state.candidateStatus,
-    totalCount: state.totalCount,
-    candidatesPerPage: state.candidatesPerPage,
     tags: state.tags
   }
 }, actions)(AddCandidateDialog)

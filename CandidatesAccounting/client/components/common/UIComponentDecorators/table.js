@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { EmptyTable } from '../styledComponents'
+import styled from 'styled-components'
 import Paper from 'material-ui/Paper'
 import Table, {
   TableBody,
@@ -53,3 +53,11 @@ CustomTable.propTypes = {
   rows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   footerActions: PropTypes.object.isRequired,
 }
+
+const EmptyTable = styled.div`
+  color: #aaa;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  margin-top: -12px;
+`

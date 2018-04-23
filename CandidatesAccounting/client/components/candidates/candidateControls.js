@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import * as actions from '../../actions/actions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import UpdateCandidateDialog from './updateCandidateDialog'
@@ -11,37 +13,36 @@ import AddCommentDialog from '../comments/addCommentDialog'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
-export default function CandidateControls(props) {
-  const { applicationStatus, authorizationStatus, username, candidate, history } = props
+function CandidateControls(props) {
+  const { fetching, authorized, onUpdating, onDeleting, username, candidate, openCommentPage, history } = props
 
-  const authorized = authorizationStatus === 'authorized'
   const commentAmount = Object.keys(candidate.comments).length
-  const onRefreshing = applicationStatus === 'refreshing'
-  const onUpdating = applicationStatus.slice(0, 8) === 'updating' && applicationStatus.slice(9) === candidate.id
-  const onDeleting = applicationStatus.slice(0, 8) === 'deleting' && applicationStatus.slice(9) === candidate.id
+  // TODO: blur correct controls
+  const candidateOnUpdating = candidate.id === onUpdating
+  const candidateOnDeleting = candidate.id === onDeleting
 
   const handleCandidateCommentPageOpen = () => {
-    if (!onRefreshing && !onDeleting) {
-      history.replace('/' + candidate.status.toLowerCase() + 's/' + candidate.id + '/comments')
+    if (!fetching && !candidateOnDeleting) {
+      openCommentPage({ candidate, history })
     }
   }
 
   const updateCandidateDialog =
-    onUpdating ?
+    candidateOnUpdating ?
       <SpinnerWrapper><Spinner size={26}/></SpinnerWrapper>
       :
       <UpdateCandidateDialog
         candidate={candidate}
-        disabled={onRefreshing || onDeleting || !authorized}
+        disabled={fetching || candidateOnDeleting || !authorized}
       />
 
   const deleteCandidateDialog =
-    onDeleting ?
+    candidateOnDeleting ?
       <SpinnerWrapper><Spinner size={26}/></SpinnerWrapper>
       :
       <DeleteCandidateDialog
-        candidateID={candidate.id}
-        disabled={onRefreshing || onUpdating || !authorized}
+        candidateId={candidate.id}
+        disabled={fetching || candidateOnUpdating || !authorized}
         history={props.history}
       />
 
@@ -50,14 +51,14 @@ export default function CandidateControls(props) {
       <AddCommentDialog
         candidate={candidate}
         username={username}
-        disabled={onRefreshing || onDeleting || !authorized}
+        disabled={fetching || candidateOnDeleting || !authorized}
       />
       <NavLink onClick={handleCandidateCommentPageOpen}>
-        <Badge badgeContent={commentAmount} disabled={onRefreshing}>
+        <Badge badgeContent={commentAmount} disabled={fetching}>
           <IconButton
             icon={<CommentIcon />}
             style={MediumButtonStyle}
-            disabled={onRefreshing || onDeleting}
+            disabled={fetching || candidateOnDeleting}
           />
         </Badge>
       </NavLink>
@@ -69,10 +70,18 @@ export default function CandidateControls(props) {
 
 CandidateControls.propTypes = {
   candidate: PropTypes.object.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
 }
+
+export default connect(state => {
+  return {
+    fetching: state.fetching,
+    authorized: state.authorized,
+    onUpdating: state.onUpdating,
+    onDeleting: state.onDeleting,
+    username: state.username,
+  }
+}, actions)(CandidateControls)
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

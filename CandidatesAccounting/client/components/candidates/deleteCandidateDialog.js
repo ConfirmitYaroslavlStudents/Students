@@ -22,14 +22,9 @@ class DeleteCandidateDialog extends Component {
   }
 
   handleCandidateDelete = () => {
-    const { deleteCandidate, loadCandidates, history, candidateID, offset, candidatesPerPage, totalCount } = this.props
+    const { deleteCandidate, history, candidateId } = this.props
 
-    deleteCandidate(candidateID)
-    loadCandidates({
-      applicationStatus: 'deleting-' + candidateID,
-      offset: totalCount - offset <= 1 ? totalCount - 1 - candidatesPerPage : offset,
-      history
-    })
+    deleteCandidate({ candidateId, history })
     this.handleClose()
   }
 
@@ -59,15 +54,9 @@ class DeleteCandidateDialog extends Component {
 }
 
 DeleteCandidateDialog.propTypes = {
-  candidateID: PropTypes.string.isRequired,
+  candidateId: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 }
 
-export default connect(state => {
-  return {
-    offset: state.offset,
-    candidatesPerPage: state.candidatesPerPage,
-    totalCount: state.totalCount
-  }
-}, actions)(DeleteCandidateDialog)
+export default connect(() => { return {} }, actions)(DeleteCandidateDialog)

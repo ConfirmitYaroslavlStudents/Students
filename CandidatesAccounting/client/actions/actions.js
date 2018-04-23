@@ -8,27 +8,23 @@ export const fetchInitialState = createAction('FETCH_INITIAL_STATE')
 
 export const fetchInitialStateSuccess = createAction('FETCH_INITIAL_STATE_SUCCESS')
 
-export const setFetchStatus = createAction('SET_FETCH_STATUS')
+export const setFetching = createAction('SET_FETCHING')
 
 export const setState = createAction('SET_STATE')
 
-export const setApplicationStatus = createAction('SET_APPLICATION_STATUS')
-
 export const setErrorMessage = createAction('SET_ERROR_MESSAGE')
-
-export const setOffset = createAction('SET_OFFSET')
 
 export const setSearchRequest = createAction('SET_SEARCH_REQUEST')
 
 export const search = createAction('SEARCH')
 
-export const changeTable = createAction('CHANGE_TABLE')
+export const setCandidateStatus = createAction('SET_CANDIDATE_STATUS')
 
-export const changeTableSuccess = createAction('CHANGE_TABLE_SUCCESS')
+export const setCandidateStatusSuccess = createAction('SET_CANDIDATE_STATUS_SUCCESS')
 
-export const changeTableOptions = createAction('CHANGE_TABLE_OPTIONS')
+export const openCommentPage = createAction('OPEN_COMMENT_PAGE')
 
-export const changeTableOptionsSuccess = createAction('CHANGE_TABLE_OPTIONS_SUCCESS')
+export const openCommentPageSuccess = createAction('OPEN_COMMENT_PAGE_SUCCESS')
 
 /*____AUTHORIZATION______________________________________*/
 
@@ -40,27 +36,47 @@ export const logout = createAction('LOGOUT')
 
 export const logoutSuccess = createAction('LOGOUT_SUCCESS')
 
-export const setAuthorizingStatus = createAction('SET_AUTHORIZING_STATUS')
+export const setAuthorizing = createAction('SET_AUTHORIZING')
 
 /*_____CANDIDATES________________________________________*/
-
-export const loadCandidates = createAction('LOAD_CANDIDATES')
 
 export const getCandidates = createAction('GET_CANDIDATES')
 
 export const getCandidatesSuccess = createAction('GET_CANDIDATES_SUCCESS')
 
-export const getCandidate = createAction('GET_CANDIDATE')
-
-export const getCandidateSuccess = createAction('GET_CANDIDATE_SUCCESS')
-
 export const addCandidate = createAction('ADD_CANDIDATE')
 
+export const addCandidateSuccess = createAction('ADD_CANDIDATE_SUCCESS')
+
 export const deleteCandidate = createAction('DELETE_CANDIDATE')
+
+export const deleteCandidateSuccess = createAction('DELETE_CANDIDATE_SUCCESS')
 
 export const updateCandidate = createAction('UPDATE_CANDIDATE')
 
 export const updateCandidateSuccess = createAction('UPDATE_CANDIDATE_SUCCESS')
+
+export const setOffset = createAction('SET_OFFSET')
+
+export const setOffsetSuccess = createAction('SET_OFFSET_SUCCESS')
+
+export const setCandidatesPerPage = createAction('SET_CANDIDATES_PER_PAGE')
+
+export const setCandidatesPerPageSuccess = createAction('SET_CANDIDATES_PER_PAGE_SUCCESS')
+
+export const setSortingField = createAction('SET_SORTING_FIELD')
+
+export const setSortingFieldSuccess = createAction('SET_SORTING_FIELD_SUCCESS')
+
+export const setSortingDirection = createAction('SET_SORTING_DIRECTION')
+
+export const setSortingDirectionSuccess = createAction('SET_SORTING_DIRECTION_SUCCESS')
+
+export const setOnUpdating = createAction('SET_ON_UPDATING')
+
+export const setOnDeleting = createAction('SET_ON_DELETING')
+
+export const setOnResumeUploading = createAction('SET_ON_RESUME_UPLOADING')
 
 /*____RESUME___________________________________________*/
 

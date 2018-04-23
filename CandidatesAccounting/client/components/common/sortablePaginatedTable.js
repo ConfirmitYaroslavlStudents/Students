@@ -8,47 +8,25 @@ import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft'
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight'
 import LastPageIcon from 'material-ui-icons/LastPage'
 import SelectInput from './UIComponentDecorators/selectInput'
-import {
-  SortableTableActionsWrapper,
-  SortableTableRowsPerPageWrapper,
-  SortableTableFooterText
-} from './styledComponents'
+import styled from 'styled-components'
 
 export default function SortablePaginatedTable(props) {
   const handlePageChange = (offset) => {
-    props.changeTableOptions({
-      offset,
-      candidatesPerPage: props.rowsPerPage,
-      sortingField: props.sortingField,
-      sortingDirection: props.sortingDirection,
-      history: props.history
-    })
+    props.onOffsetChange(offset)
   }
 
   const handleRowsPerPageChange = (rowsPerPage) => {
     if (rowsPerPage !== props.rowsPerPage) {
-      props.changeTableOptions({
-        offset: props.offset,
-        candidatesPerPage: rowsPerPage,
-        sortingField: props.sortingField,
-        sortingDirection: props.sortingDirection,
-        history: props.history
-      })
+      props.onRowsPerPageChange(rowsPerPage)
     }
   }
 
   const handleSortLabelClick = (sortingField) => {
-    props.changeTableOptions({
-      offset: props.offset,
-      candidatesPerPage: props.rowsPerPage,
-      sortingField: sortingField,
-      sortingDirection: sortingField !== props.sortingField ?
-        'desc'
-        :
-        props.sortingDirection === 'desc' ?
-          'asc' : 'desc',
-      history: props.history
-    })
+    if (sortingField !== props.sortingField) {
+      props.onSortingFieldChange(sortingField)
+    } else {
+      props.onSortingDirectionChange()
+    }
   }
 
   const handleFirstPageButtonClick = () => {
@@ -90,15 +68,15 @@ export default function SortablePaginatedTable(props) {
       headers={headers}
       rows={props.contentRows}
       footerActions={
-        <SortableTableActionsWrapper>
-          <SortableTableRowsPerPageWrapper>
-            <SortableTableFooterText>Candidates per page: </SortableTableFooterText>
+        <ActionsWrapper>
+          <RowsPerPageWrapper>
+            <FooterText>Candidates per page: </FooterText>
             <SelectInput
               options={rowsPerPageOptions}
               selected={props.rowsPerPage}
               onChange={handleRowsPerPageChange}
             />
-          </SortableTableRowsPerPageWrapper>
+          </RowsPerPageWrapper>
           <span>
             {Math.min(props.offset + 1, props.totalCount)}
             -
@@ -124,7 +102,7 @@ export default function SortablePaginatedTable(props) {
             disabled={props.offset + props.rowsPerPage >= props.totalCount}
             icon={<LastPageIcon />}
           />
-        </SortableTableActionsWrapper>
+        </ActionsWrapper>
       }
     />
   )
@@ -135,12 +113,32 @@ SortablePaginatedTable.propTypes = {
     title: PropTypes.string,
     sortingField: PropTypes.string
   })).isRequired,
-  contentRows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
+  contentRows: PropTypes.array.isRequired,
   offset: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   sortingField: PropTypes.string.isRequired,
   sortingDirection: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
-  changeTableOptions: PropTypes.func.isRequired,
+  onOffsetChange: PropTypes.func.isRequired,
+  onRowsPerPageChange: PropTypes.func.isRequired,
+  onSortingFieldChange: PropTypes.func.isRequired,
+  onSortingDirectionChange: PropTypes.func.isRequired,
 }
+
+const ActionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  float: right;
+  margin-right: -18px;
+`
+
+const RowsPerPageWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  spacing: 5;
+  margin-right: 24px;
+`
+
+const FooterText = styled.span`
+  margin-right: 8px;
+`

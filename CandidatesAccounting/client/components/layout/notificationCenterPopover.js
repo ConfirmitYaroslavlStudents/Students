@@ -6,7 +6,6 @@ import Spinner from '../common/UIComponentDecorators/spinner'
 import NotificationIcon from 'material-ui-icons/Notifications'
 import Popover from '../common/UIComponentDecorators/popover'
 import Badge from '../common/UIComponentDecorators/badge'
-import { NotificationCenterNoNotificationsWrapper } from '../common/styledComponents'
 import NotificationCenter from '../notifications/notificationCenter'
 import styled from 'styled-components'
 
@@ -17,9 +16,14 @@ function NotificationCenterPopover(props) {
     getCandidate,
     noticeNotification,
     deleteNotification,
+    openCommentPage,
     username,
-    initializing
+    initializing,
   } = props
+
+  const handleOpenCommentPage = (candidate) => {
+    openCommentPage({ candidate, history })
+  }
 
   let recentNotificationNumber = 0
   const notificationReversedList = []
@@ -35,25 +39,25 @@ function NotificationCenterPopover(props) {
   let popoverContent =
     <NotificationCenter
       notifications={notificationReversedList}
-      history={history}
       getCandidate={getCandidate}
       noticeNotification={noticeNotification}
       deleteNotification={deleteNotification}
+      openCommentPage={handleOpenCommentPage}
       username={username}
     />
 
   if (notifications.length === 0) {
     popoverContent =
-      <NotificationCenterNoNotificationsWrapper>
+      <NoNotificationsWrapper>
         No notifications
-      </NotificationCenterNoNotificationsWrapper>
+      </NoNotificationsWrapper>
   }
 
   if (initializing) {
     popoverContent =
-      <NotificationCenterNoNotificationsWrapper>
+      <NoNotificationsWrapper>
         <SpinnerWrapper><Spinner size={50}/></SpinnerWrapper>
-      </NotificationCenterNoNotificationsWrapper>
+      </NoNotificationsWrapper>
   }
 
   return (
@@ -86,4 +90,14 @@ const SpinnerWrapper = styled.div`
   height: 50px;
   width: 50px;
   margin: auto;
+`
+
+export const NoNotificationsWrapper = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 24px;
+  color: #777;
+  font-size: 110%;
+  text-align: center;
 `

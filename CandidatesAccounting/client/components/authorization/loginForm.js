@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Input from '../common/UIComponentDecorators/input'
 import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
-import { LoginFormWrapper, PasswordInputWrapper } from '../common/styledComponents'
+import styled from 'styled-components'
 
 export default class LoginForm extends Component {
   constructor(props) {
@@ -53,3 +53,11 @@ export default class LoginForm extends Component {
 LoginForm.propTypes = {
   account: PropTypes.object.isRequired,
 }
+
+const LoginFormWrapper = styled.div`
+  width: 400px;
+`
+
+const PasswordInputWrapper = styled.div`
+  margin-top: 24px;
+`

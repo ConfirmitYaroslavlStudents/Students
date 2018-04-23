@@ -4,16 +4,10 @@ import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
 import NavLink from '../common/navLink'
 import AddCandidateDialog from '../candidates/addCandidateDialog'
-import {
-  TablesBarWrapper,
-  TabsWrapper,
-  Tabs,
-  Tab,
-  AddCandidateButtonWrapper
-} from '../common/styledComponents'
+import styled from 'styled-components'
 
 function TablesBar(props) {
-  const { candidateStatus, changeTable, history } = props
+  const { candidateStatus, setCandidateStatus, history } = props
 
   let selected = 0;
   switch(candidateStatus) {
@@ -29,7 +23,7 @@ function TablesBar(props) {
   }
 
   const handleLinkClick = newCandidateStatus => () => {
-    changeTable({newCandidateStatus, history})
+    setCandidateStatus({newCandidateStatus, history})
   }
 
   return (
@@ -66,3 +60,40 @@ export default connect(state => {
     candidateStatus: state.candidateStatus
   }
 }, actions)(TablesBar)
+
+const TablesBarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  z-index: 110;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+  width: 100%;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  height: 48px;
+`
+
+const TabsWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  height: 48px;
+  margin: 0 auto;
+`
+
+const Tabs = styled.div`
+  display: inline-flex;
+  margin: 0 auto;
+`
+
+const Tab = styled.div`
+  display: inline-flex;
+  height: 48px;
+  width: 200px;
+`
+
+const AddCandidateButtonWrapper = styled.div`
+  display: inline-flex;
+  position: absolute;
+  right: 6px;
+`

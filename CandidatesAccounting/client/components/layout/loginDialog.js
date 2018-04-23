@@ -6,7 +6,7 @@ import Dialog from '../common/UIComponentDecorators/dialogSimple'
 import LoginForm from '../authorization/loginForm'
 import {isNotEmpty, isEmail} from '../../utilities/candidateValidators'
 import { LinearProgress } from 'material-ui/Progress'
-import { CenteredInlineDiv, DialogActionsWrapper, LinearProgressWrapper } from '../common/styledComponents'
+import styled from 'styled-components'
 
 class LoginDialog extends Component {
   constructor(props) {
@@ -32,11 +32,10 @@ class LoginDialog extends Component {
 
   render() {
     const { authorizing } = this.props
-    console.log(authorizing)
     const linearProgress = authorizing ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : ''
 
     return (
-      <CenteredInlineDiv>
+      <div className='inline-flex centered'>
         <FlatButton color='inherit' onClick={this.handleOpen}>
           Sign on / Sign in
         </FlatButton>
@@ -58,7 +57,7 @@ class LoginDialog extends Component {
         >
           <LoginForm account={this.account} />
         </Dialog>
-      </CenteredInlineDiv>
+      </div>
     )
   }
 }
@@ -68,3 +67,12 @@ export default connect(state => {
     authorizing: state.authorizing
   }
 }, actions)(LoginDialog)
+
+const DialogActionsWrapper = styled.div`
+  width: 100%;
+  text-align: right;
+`
+
+const LinearProgressWrapper = styled.div`
+  margin: 4px -8px -8px -8px;
+`

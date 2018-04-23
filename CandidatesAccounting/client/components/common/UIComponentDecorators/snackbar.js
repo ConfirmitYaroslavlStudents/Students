@@ -10,7 +10,7 @@ export default class ErrorSnackbar extends Component {
   }
 
   handleRequestClose = () => {
-    this.props.setErrorMessage('')
+    this.props.onClose()
     this.setState({ open: false })
   }
 
@@ -36,7 +36,7 @@ export default class ErrorSnackbar extends Component {
 }
 
 ErrorSnackbar.propTypes = {
-  message: PropTypes.string,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
   autoHideDuration: PropTypes.number,
-  setErrorMessage: PropTypes.func,
 }

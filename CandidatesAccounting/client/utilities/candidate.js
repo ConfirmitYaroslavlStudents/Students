@@ -2,7 +2,7 @@ export default class Candidate {
   constructor(status, candidateProperties) {
     const properties = candidateProperties ? candidateProperties : {}
     this.status = status
-    this.id = properties.id ? properties.id : ''
+    this.id = properties.id ? properties.id : 'noId'
     this.name = properties.name ? properties.name : ''
     this.birthDate = properties.birthDate ? properties.birthDate : ''
     this.email = properties.email ? properties.email : ''

@@ -45,12 +45,12 @@ class CommentsPage extends Component {
     this.shouldScrollDown = true
   }
 
-  deleteComment = (commentID) => () => {
-    this.props.deleteComment(this.props.candidate.id, commentID)
+  deleteComment = (commentId) => () => {
+    this.props.deleteComment({ candidateId: this.props.candidate.id, commentId })
   }
 
   render() {
-    const { initializing, fetching, authorized, candidate, username } = this.props
+    const { initializing, fetching, authorized, candidate, username, addComment, subscribe, unsubscribe } = this.props
     const comments = Object.keys(candidate.comments).map(commentId => candidate.comments[commentId])
 
     if (initializing || fetching) {
@@ -90,9 +90,12 @@ class CommentsPage extends Component {
         <CommentPageFooter>
           <LoadableAddCommentPanel
             candidate={candidate}
+            username={username}
+            addComment={addComment}
+            subscribe={subscribe}
+            unsubscribe={unsubscribe}
             onCommentAdd={this.handleNewCommentAdd}
             disabled={!authorized}
-            username={username}
           />
         </CommentPageFooter>
       </CommentPageWrapper>

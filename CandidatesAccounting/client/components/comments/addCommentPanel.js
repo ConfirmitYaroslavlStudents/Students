@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
 import { BigButtonStyle, SmallIconStyle, QuillToolbarButtonStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import AttachIcon from 'material-ui-icons/AttachFile'
@@ -12,7 +10,7 @@ import SubscribeButton from './subscribeButton'
 import FileUploader from '../common/fileUploader'
 import styled from 'styled-components'
 
-class AddCommentPanel extends Component {
+export default class AddCommentPanel extends Component {
   constructor(props) {
     super(props);
     this.state = ({ commentText: '', commentAttachment: null })
@@ -30,7 +28,7 @@ class AddCommentPanel extends Component {
     if (event.keyCode === 13) {
       if (!event.shiftKey) {
         event.preventDefault()
-        this.addNewComment()
+        this.handleCommentAdd()
       }
     }
   }
@@ -43,11 +41,15 @@ class AddCommentPanel extends Component {
       if (commentText.slice(-11) === '<p><br></p>') {
         commentText = commentText.substr(0, commentText.length - 11)
       }
-      addComment(candidate.id, new Comment(
-        username,
-        commentText,
-        this.state.commentAttachment ? this.state.commentAttachment.name : ''
-        ), this.state.commentAttachment)
+      addComment({
+        candidateId: candidate.id,
+        comment: new Comment(
+          username,
+          commentText,
+          this.state.commentAttachment ? this.state.commentAttachment.name : ''
+        ),
+        commentAttachment: this.state.commentAttachment
+      })
       onCommentAdd()
       this.setState({ commentText: '', commentAttachment: null })
     }
@@ -122,6 +124,9 @@ class AddCommentPanel extends Component {
 AddCommentPanel.propTypes = {
   candidate: PropTypes.object.isRequired,
   username: PropTypes.string.isRequired,
+  addComment: PropTypes.func.isRequired,
+  subscribe: PropTypes.func.isRequired,
+  unsubscribe: PropTypes.func.isRequired,
   onCommentAdd: PropTypes.func,
   disabled: PropTypes.bool,
 }
@@ -131,8 +136,6 @@ AddCommentPanel.modules = {
     container: '#toolbar',
   }
 }
-
-export default connect(() => { return {} }, actions)(AddCommentPanel)
 
 const AddCommentPanelButtonsWrapper = styled.div`
   display: inline-flex;

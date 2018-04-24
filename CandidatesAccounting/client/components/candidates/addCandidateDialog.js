@@ -16,12 +16,15 @@ class AddCandidateDialog extends Component{
   constructor(props) {
     super(props);
     this.state = ({ isOpen: false })
-    const candidateStatus = props.candidateStatus === 'Student' && props.candidateStatus === 'Trainee' ? props.candidateStatus : 'Interviewee'
-    this.candidate = new Candidate(candidateStatus)
+    this.newCandidate = {}
   }
 
   handleOpen = () => {
-    this.newCandidate = new Candidate(this.props.candidateStatus)
+    const candidateStatus = this.props.candidateStatus === 'Student' || this.props.candidateStatus === 'Trainee' ?
+      this.props.candidateStatus
+      :
+      'Interviewee'
+    this.newCandidate = new Candidate(candidateStatus)
     this.setState({ isOpen: true })
   }
 

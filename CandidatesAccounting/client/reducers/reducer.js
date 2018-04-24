@@ -58,8 +58,8 @@ export default createReducer(initialState, {
 
   [A.setCandidateStatusSuccess]: (state, {payload}) => ({
     ...state,
-    searchRequest: payload === state.candidateStatus ? '' : state.searchRequest,
-    candidateStatus: payload,
+    searchRequest: payload.status === state.candidateStatus ? '' : state.searchRequest,
+    candidateStatus: payload.status,
     offset: 0,
     sortingField: '',
     sortingDirection:'desc',
@@ -199,10 +199,10 @@ export default createReducer(initialState, {
     ...state,
     candidates: {
       ...state.candidates,
-      [payload.candidateID] : {
-        ...state.candidates[payload.candidateID],
+      [payload.candidateId] : {
+        ...state.candidates[payload.candidateId],
         comments: {
-          ...state.candidates[payload.candidateID].comments,
+          ...state.candidates[payload.candidateId].comments,
           [payload.comment.id]: payload.comment,
         }
       }
@@ -210,14 +210,14 @@ export default createReducer(initialState, {
   }),
 
   [A.deleteCommentSuccess]: (state, {payload}) => {
-    let comments = { ...state.candidates[payload.candidateID].comments }
-    delete comments[payload.commentID]
+    let comments = { ...state.candidates[payload.candidateId].comments }
+    delete comments[payload.commentId]
     return {
       ...state,
       candidates: {
         ...state.candidates,
-        [payload.candidateID]: {
-          ...state.candidates[payload.candidateID],
+        [payload.candidateId]: {
+          ...state.candidates[payload.candidateId],
           comments: comments
         }
       }

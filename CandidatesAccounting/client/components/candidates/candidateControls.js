@@ -50,7 +50,6 @@ function CandidateControls(props) {
     <div className='flex'>
       <AddCommentDialog
         candidate={candidate}
-        username={username}
         disabled={fetching || candidateOnDeleting || !authorized}
       />
       <NavLink onClick={handleCandidateCommentPageOpen}>

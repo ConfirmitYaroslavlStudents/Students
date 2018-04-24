@@ -9,6 +9,9 @@ export function getCurrentDateTime() {
 }
 
 export function formatDate(dateString) {
+  if (!dateString || dateString.trim() === '') {
+    return 'error'
+  }
   const date = dateString.split('.')
   if (date.length !== 3) {
     return ''
@@ -18,6 +21,9 @@ export function formatDate(dateString) {
 }
 
 export function formatDateTime(timeDateString) {
+  if (!timeDateString || timeDateString.trim() === '') {
+    return 'error'
+  }
   const timeDate = timeDateString.split(' ')
   if (timeDate.length !== 2) {
     return ''

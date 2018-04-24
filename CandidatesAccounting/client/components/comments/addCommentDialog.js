@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import * as actions from '../../actions/actions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import CommentIcon from 'material-ui-icons/InsertComment'
@@ -8,7 +10,7 @@ import IconButton from '../common/UIComponentDecorators/iconButton'
 import LoadableAddCommentPanel from './loadableAddCommentPanel'
 import styled from 'styled-components'
 
-export default class AddCommentDialog extends Component {
+class AddCommentDialog extends Component {
   constructor(props) {
     super(props);
     this.state = ({ isOpen: false })
@@ -23,7 +25,7 @@ export default class AddCommentDialog extends Component {
   }
 
   render() {
-    const { disabled, candidate, username } = this.props
+    const { disabled, candidate, username, addComment, subscribe, unsubscribe } = this.props
 
     return (
       <div className='inline-flex'>
@@ -38,8 +40,11 @@ export default class AddCommentDialog extends Component {
             {
               <LoadableAddCommentPanel
                 candidate={candidate}
-                onCommentAdd={this.handleClose}
                 username={username}
+                addComment={addComment}
+                subscribe={subscribe}
+                unsubscribe={unsubscribe}
+                onCommentAdd={this.handleClose}
               />
             }
           </AddCommentDialogFormWrapper>
@@ -51,9 +56,14 @@ export default class AddCommentDialog extends Component {
 
 AddCommentDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
 }
+
+export default connect(state => {
+  return {
+    username: state.username,
+  }
+}, actions)(AddCommentDialog)
 
 const AddCommentDialogFormWrapper = styled.div`
   width: 470px;

@@ -24,13 +24,14 @@ function ResumeControls(props) {
       :
       <ResumeNotLoaded>no resume</ResumeNotLoaded>
 
-  const fileDownloader = downloadingEnabled ?
-    <FileDownloader
-      icon={<DownloadIcon style={SmallerIconStyle}/>}
-      buttonStyle={SmallButtonStyle}
-      disabled={!resumeIsUploaded || disabled}
-      downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
-    /> : ''
+  const fileDownloader =
+    downloadingEnabled ?
+      <FileDownloader
+        icon={<DownloadIcon style={SmallerIconStyle}/>}
+        buttonStyle={SmallButtonStyle}
+        disabled={!resumeIsUploaded || disabled}
+        downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
+      /> : ''
 
   const fileUploader =
     interviewee.id !== onResumeUploading ?

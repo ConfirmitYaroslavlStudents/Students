@@ -23,7 +23,7 @@ function TablesBar(props) {
   }
 
   const handleLinkClick = newCandidateStatus => () => {
-    setCandidateStatus({newCandidateStatus, history})
+    setCandidateStatus({ newCandidateStatus, history })
   }
 
   return (

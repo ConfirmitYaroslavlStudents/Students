@@ -1,11 +1,4 @@
-import {
-  takeEvery,
-  takeLatest,
-  all,
-  put,
-  call,
-  select
-} from 'redux-saga/effects'
+import { takeEvery, takeLatest, all, put, call, select } from 'redux-saga/effects'
 import * as A from '../actions/actions'
 import { login, logout } from '../api/authorizationService'
 import { getInitialState, getNotifications } from '../api/commonService'
@@ -13,13 +6,7 @@ import { addComment, deleteComment, addCommentAttachment } from '../api/commentS
 import { subscribe, unsubscribe } from '../api/subscribeService'
 import { noticeNotification, deleteNotification } from '../api/notificationService'
 import { uploadResume } from '../api/resumeService'
-import {
-  getCandidates,
-  getCandidate,
-  addCandidate,
-  deleteCandidate,
-  updateCandidate
-} from '../api/candidateService.js'
+import { getCandidates, getCandidate, addCandidate, deleteCandidate, updateCandidate } from '../api/candidateService.js'
 
 export default function* rootSaga() {
   yield all([
@@ -256,25 +243,26 @@ function* deleteCandidateSaga(action) {
 
 function* addCommentSaga(action) {
   try {
-    const comment = action.comment
-    comment.id = yield call(addComment, action.candidateID, action.comment)
-    if (action.commentAttachment) {
-      yield call(addCommentAttachment, action.candidateID, action.comment.id, action.commentAttachment)
+    const { candidateId, comment, commentAttachment } = action.payload
+    comment.id = yield call(addComment, candidateId, comment)
+    if (commentAttachment) {
+      yield call(addCommentAttachment, candidateId, comment.id, commentAttachment)
     }
-    yield put(A.addCommentSuccess(action.candidateID, comment))
+    yield put(A.addCommentSuccess({ candidateId, comment }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Add comment error.'))
+    yield put(A.setErrorMessage({ message: error + '. Add comment error.' }))
   }
 }
 
 function* deleteCommentSaga(action) {
   try {
-    yield call(deleteComment, action.candidateID, action.commentID)
-    yield put(A.deleteCommentSuccess(action.candidateID, action.commentID))
+    const { candidateId, commentId } = action.payload
+    yield call(deleteComment, candidateId, commentId)
+    yield put(A.deleteCommentSuccess({ candidateId, commentId }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Delete comment error.'))
+    yield put(A.setErrorMessage({ message: error + '. Delete comment error.' }))
   }
 }
 
@@ -333,7 +321,7 @@ function* setCandidateStatusSaga(action) {
   try {
     const { newCandidateStatus, history } = action.payload
     yield put(A.setFetching({ fetching: true }))
-    yield put(A.setCandidateStatusSuccess(newCandidateStatus))
+    yield put(A.setCandidateStatusSuccess({ status: newCandidateStatus }))
     yield put(A.getCandidates({history}))
   }
   catch(error) {

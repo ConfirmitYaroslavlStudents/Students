@@ -10,53 +10,53 @@ import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from '../common
 import styled, { css } from 'styled-components'
 
 export default function NotificationBlock(props) {
-  const { notification, username, noticeNotification, deleteNotification, openCommentPage } = props
+  const { notification, noticeNotification, deleteNotification, openCommentPage } = props
 
   const openCandidateComments = () => {
     openCommentPage(notification.source)
     if (notification.recent) {
-      noticeNotification(username, notification.id)
+      noticeNotification(notification.id)
     }
   }
 
   const handleDeleteNotificationClick = (event) => {
-    deleteNotification(username, notification.id)
+    deleteNotification(notification.id)
     event.stopPropagation()
   }
 
   const commentAttachment =
     notification.content.attachment ?
-      <NotificationAttachmentWrapper>
+      <AttachmentWrapper>
         <AttachIcon style={SmallestIconStyle}/>
         {notification.content.attachment}
-      </NotificationAttachmentWrapper>
+      </AttachmentWrapper>
       : ''
 
   return (
     <NavLink onClick={openCandidateComments}>
       <NotificationWrapper recent={notification.recent}>
-        <NotificationInfoWrapper>
-          <NotificationCandidateNameWrapper>{notification.source.name}</NotificationCandidateNameWrapper>
-          <NotificationControlsWrapper>
-            <NotificationDateWrapper>
+        <InfoWrapper>
+          <CandidateNameWrapper>{notification.source.name}</CandidateNameWrapper>
+          <ControlsWrapper>
+            <DateWrapper>
               {formatDateTime(notification.content.date)}
-            </NotificationDateWrapper>
-            <NotificationButtonWrapper>
+            </DateWrapper>
+            <ButtonWrapper>
               <IconButton
                 icon={<DeleteIcon style={SmallerIconStyle}/>}
                 style={SmallButtonStyle}
                 onClick={handleDeleteNotificationClick}
               />
-            </NotificationButtonWrapper>
-          </NotificationControlsWrapper>
-        </NotificationInfoWrapper>
-        <NotificationContentWrapper>
-          <p>{formatUserName(notification.content.author)} <NotificationServiceText> has left the comment:</NotificationServiceText></p>
-          <NotificationMessageWrapper>
+            </ButtonWrapper>
+          </ControlsWrapper>
+        </InfoWrapper>
+        <ContentWrapper>
+          <p>{formatUserName(notification.content.author)} <ServiceText> has left the comment:</ServiceText></p>
+          <MessageWrapper>
             <div dangerouslySetInnerHTML={{__html: notification.content.text}} />
             { commentAttachment }
-          </NotificationMessageWrapper>
-        </NotificationContentWrapper>
+          </MessageWrapper>
+        </ContentWrapper>
       </NotificationWrapper>
     </NavLink>
   )
@@ -67,16 +67,15 @@ NotificationBlock.propTypes = {
   noticeNotification: PropTypes.func.isRequired,
   deleteNotification: PropTypes.func.isRequired,
   openCommentPage: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
 }
 
-const NotificationAttachmentWrapper = styled.div`  
+const AttachmentWrapper = styled.div`  
   display: inline-flex;
   align-items: center;
   color: #777;
 `
 
-const NotificationButtonWrapper = styled.div`
+const ButtonWrapper = styled.div`
   display: inline-flex;
   z-index: 10;
   margin-left: 4px;
@@ -84,29 +83,29 @@ const NotificationButtonWrapper = styled.div`
   margin-top: -6px;
 `
 
-const NotificationCandidateNameWrapper = styled.div`
+const CandidateNameWrapper = styled.div`
   display: inline-flex;
 `
 
-const NotificationControlsWrapper = styled.div`
+const ControlsWrapper = styled.div`
   display: inline-flex;
   float: right;
 `
 
-const NotificationContentWrapper = styled.div`
+const ContentWrapper = styled.div`
   color: #000;
 `
 
-const NotificationDateWrapper = styled.div`
+const DateWrapper = styled.div`
   color: #888;
   font-size: 96%;
 `
 
-const NotificationInfoWrapper = styled.div`
+const InfoWrapper = styled.div`
   margin-bottom: 4px;
 `
 
-const NotificationMessageWrapper = styled.div`
+const MessageWrapper = styled.div`
   background-color: #f3f3f3;
   color: #333;
   padding: 8px;  
@@ -114,7 +113,7 @@ const NotificationMessageWrapper = styled.div`
   overflow: hidden;
 `
 
-const NotificationServiceText = styled.span`
+const ServiceText = styled.span`
   color: #777;
 `
 

@@ -102,8 +102,8 @@ export default class AddCommentPanel extends Component {
           <SubscribeButtonWrapper>
             <SubscribeButton
               active={!disabled && !!candidate.subscribers[username]}
-              subscribe={() => { subscribe(candidate.id, username) }}
-              unsubscribe={() => { unsubscribe(candidate.id, username) }}
+              subscribe={() => { subscribe({ candidateId: candidate.id, email: username })}}
+              unsubscribe={() => { unsubscribe({ candidateId: candidate.id, email: username })}}
               disabled={disabled}
             />
           </SubscribeButtonWrapper>

@@ -268,52 +268,56 @@ function* deleteCommentSaga(action) {
 
 function* subscribeSaga(action) {
   try {
-    yield call(subscribe, action.candidateID, action.email)
-    yield put(A.subscribeSuccess(action.candidateID, action.email))
+    const { candidateId, email } = action.payload
+    yield call(subscribe, candidateId, email)
+    yield put(A.subscribeSuccess({ candidateId, email }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Subsribe error.'))
+    yield put(A.setErrorMessage({ message: error + '. Subsribe error.' }))
   }
 }
 
 function* unsubscribeSaga(action) {
   try {
-    yield call(unsubscribe, action.candidateID, action.email)
-    yield put(A.unsubscribeSuccess(action.candidateID, action.email))
+    const { candidateId, email } = action.payload
+    yield call(unsubscribe, candidateId, email)
+    yield put(A.unsubscribeSuccess({ candidateId, email }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Unsubsribe error.'))
+    yield put(A.setErrorMessage({ message: error + '. Unsubsribe error.' }))
   }
 }
 
 function* noticeNotificationSaga(action) {
   try {
-    yield call(noticeNotification, action.username, action.notificationID)
-    yield put(A.noticeNotificationSuccess(action.username, action.notificationID))
+    const { username, notificationId } = action.payload
+    yield call(noticeNotification, username, notificationId)
+    yield put(A.noticeNotificationSuccess({ notificationId }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Notice notification error.'))
+    yield put(A.setErrorMessage({ message: error + '. Notice notification error.' }))
   }
 }
 
 function* deleteNotificationSaga(action) {
   try {
-    yield call(deleteNotification, action.username, action.notificationID)
-    yield put(A.deleteNotificationSuccess(action.username, action.notificationID))
+    const { username, notificationId } = action.payload
+    yield call(deleteNotification, username, notificationId)
+    yield put(A.deleteNotificationSuccess({ notificationId }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Delete notification error.'))
+    yield put(A.setErrorMessage({ message: error + '. Delete notification error.' }))
   }
 }
 
 function* searchSaga(action) {
   try {
-    const history = action.payload
+    const { history } = action.payload
     yield put(A.setFetching({ fetching: true }))
     yield put(A.getCandidates({history}))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Search error.'))
+    yield put(A.setErrorMessage({ message: error + '. Search error.' }))
   }
 }
 
@@ -325,7 +329,7 @@ function* setCandidateStatusSaga(action) {
     yield put(A.getCandidates({history}))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Set candidate status error.'))
+    yield put(A.setErrorMessage({ message: error + '. Set candidate status error.' }))
   }
 }
 
@@ -337,7 +341,7 @@ function* setOffsetSaga(action) {
     yield put(A.getCandidates({history}))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Set offset error.'))
+    yield put(A.setErrorMessage({ message: error + '. Set offset error.' }))
   }
 }
 
@@ -349,7 +353,7 @@ function* setCandidatesPerPageSaga(action) {
     yield put(A.getCandidates({history}))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Set candidates per page error.'))
+    yield put(A.setErrorMessage({ message: error + '. Set candidates per page error.' }))
   }
 }
 
@@ -361,7 +365,7 @@ function* setSortingFieldSaga(action) {
     yield put(A.getCandidates({history}))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Set offset error.'))
+    yield put(A.setErrorMessage({ message: error + '. Set offset error.' }))
   }
 }
 
@@ -373,7 +377,7 @@ function* setSortingDirectionSaga(action) {
     yield put(A.getCandidates({history}))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Set offset error.'))
+    yield put(A.setErrorMessage({ message: error + '. Set offset error.' }))
   }
 }
 
@@ -385,6 +389,6 @@ function* uploadResumeSaga(action) {
     yield put(A.uploadResumeSuccess({ intervieweeId, resume: resume.name }))
   }
   catch(error) {
-    yield put(A.setErrorMessage(error + '. Upload resume error.'))
+    yield put(A.setErrorMessage({ message: error + '. Upload resume error.' }))
   }
 }

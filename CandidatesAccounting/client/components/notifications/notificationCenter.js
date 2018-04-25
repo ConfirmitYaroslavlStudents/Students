@@ -13,17 +13,23 @@ export default function NotificationCenter(props) {
   const noticeAllNotifications = () => {
     notifications.forEach(notification => {
       if (notification.recent) {
-        noticeNotification(username, notification.id)
+        handleNoticeNotification(notification.id)
       }
     })
   }
 
   const deleteAllNotifications = () => {
     notifications.forEach(notification => {
-      if (notification.recent) {
-        deleteNotification(username, notification.id)
-      }
+      handleDeleteNotification(notification.id)
     })
+  }
+
+  const handleNoticeNotification = (notificationId) => {
+    noticeNotification({ username, notificationId })
+  }
+
+  const handleDeleteNotification = (notificationId) => {
+    deleteNotification({ username, notificationId })
   }
 
   let unreadNotificationExists = false
@@ -60,10 +66,9 @@ export default function NotificationCenter(props) {
         <NotificationBlock
           key={index}
           notification={notification}
-          noticeNotification={noticeNotification}
-          deleteNotification={deleteNotification}
+          noticeNotification={handleNoticeNotification}
+          deleteNotification={handleDeleteNotification }
           openCommentPage={openCommentPage}
-          username={username}
         />
       )}
     </CenterWrapper>

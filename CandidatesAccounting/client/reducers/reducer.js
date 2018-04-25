@@ -230,10 +230,10 @@ export default createReducer(initialState, {
     ...state,
     candidates: {
       ...state.candidates,
-      [payload.candidateID]: {
-        ...state.candidates[payload.candidateID],
+      [payload.candidateId]: {
+        ...state.candidates[payload.candidateId],
         subscribers: {
-          ...state.candidates[payload.candidateID].subscribers,
+          ...state.candidates[payload.candidateId].subscribers,
           [payload.email]: payload.email
         }
       }
@@ -241,14 +241,14 @@ export default createReducer(initialState, {
   }),
 
   [A.unsubscribeSuccess]: (state, {payload}) => {
-    let subscribers = { ...state.candidates[payload.candidateID].subscribers }
+    let subscribers = { ...state.candidates[payload.candidateId].subscribers }
     delete subscribers[payload.email]
     return {
       ...state,
       candidates: {
         ...state.candidates,
-        [payload.candidateID]: {
-          ...state.candidates[payload.candidateID],
+        [payload.candidateId]: {
+          ...state.candidates[payload.candidateId],
           subscribers: subscribers
         }
       }
@@ -259,8 +259,8 @@ export default createReducer(initialState, {
     ...state,
     notifications: {
       ...state.notifications,
-      [payload.notificationID]: {
-        ...state.notifications[payload.notificationID],
+      [payload.notificationId]: {
+        ...state.notifications[payload.notificationId],
         recent: false
       }
     }
@@ -268,7 +268,7 @@ export default createReducer(initialState, {
 
   [A.deleteNotificationSuccess]: (state, {payload}) => {
     let notifications = { ...state.notifications }
-    delete notifications[payload.notificationID]
+    delete notifications[payload.notificationId]
     return {
       ...state,
       notifications: notifications

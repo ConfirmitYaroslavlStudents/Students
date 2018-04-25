@@ -48,7 +48,7 @@ class SearchForm extends Component {
   }
 
   search = () => {
-    this.props.search(this.props.history)
+    this.props.search({ history: this.props.history })
   }
 
   render() {

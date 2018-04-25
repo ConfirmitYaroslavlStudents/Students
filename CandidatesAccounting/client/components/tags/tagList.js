@@ -5,7 +5,7 @@ import styled from 'styled-components'
 export default function TagList(props) {
   const handleTagClick = tag => () => {
     props.setSearchRequest(tag)
-    props.search(props.history)
+    props.search({ history: props.history })
   }
 
   return (

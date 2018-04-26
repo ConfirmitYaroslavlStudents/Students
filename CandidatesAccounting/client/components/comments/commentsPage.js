@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as commentActions from '../../actions/commentActions'
+import * as notificationActions from '../../actions/notificationActions'
 import Comment from './comment'
 import CurrentUserComment from './currentUserComment'
 import SystemComment from './systemComment'
@@ -108,7 +109,7 @@ export default connect(state => {
     authorized: state.authorized,
     username: state.username
   }
-}, actions)(CommentsPage)
+}, {...commentActions, ...notificationActions})(CommentsPage)
 
 const SpinnerWrapper = styled.div`
   position: fixed;

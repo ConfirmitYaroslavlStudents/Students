@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as applicationActions from '../../actions/applicationActions'
+import * as candidateActions from '../../actions/candidateActions'
 import SortablePaginatedTable from '../common/sortablePaginatedTable'
 import getCandidateTableHeaders from '../candidates/candidateTableHeaders'
 import getIntervieweeTableHeaders from '../interviewees/intervieweeTableHeaders'
@@ -154,7 +155,7 @@ export default connect(state => {
     sortingField: state.sortingField,
     sortingDirection: state.sortingDirection,
   }
-}, actions)(CandidatesTable)
+}, {...applicationActions, ...candidateActions})(CandidatesTable)
 
 const CandidateNameWrapper = styled.div`
   display: flex;

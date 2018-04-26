@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as candidateActions from '../../actions/candidateActions'
+import * as notificationActions from '../../actions/notificationActions'
+import * as commentActions from '../../actions/commentActions'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import NotificationIcon from 'material-ui-icons/Notifications'
 import Popover from '../common/UIComponentDecorators/popover'
@@ -75,7 +77,7 @@ export default connect(state => {
     notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
     username: state.username
   }
-}, actions)(NotificationCenterPopover)
+}, {...candidateActions, ...notificationActions, ...commentActions})(NotificationCenterPopover)
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

@@ -17,12 +17,15 @@ import passportLocal from 'passport-local'
 import { getResume, addResume, getAttachment, addAttachment } from './mongoose'
 import template from './template'
 
+const port = 3000
+
 const developmentMode = process.argv[3] === 'development'
+
 console.log(developmentMode ? 'Starting with development mode...' : 'Starting with production mode...')
 
 const getUsername = (req) => {
   if (req.isAuthenticated()) {
-    return req.user.username;
+    return req.user.username
   } else {
     return ''
   }
@@ -30,7 +33,7 @@ const getUsername = (req) => {
 
 const app = express()
 
-app.set('port', 3000)
+app.set('port', port)
 app.set('view endine', 'ejs')
 
 if (developmentMode) {
@@ -57,7 +60,7 @@ passport.use(new passportLocal.Strategy(Account.authenticate()))
 passport.serializeUser(Account.serializeUser())
 passport.deserializeUser(Account.deserializeUser())
 
-app.use('/graphql', function(req, res, next) {
+app.use('/graphql', (req, res, next) => {
   if (req.isAuthenticated() || !req.body || !req.body.query || !req.body.query.includes('mutation')) {
     next()
   } else {
@@ -71,40 +74,40 @@ app.use('/graphql', graphqlHTTP({
   graphiql: developmentMode,
 }))
 
-app.get('/login', function(req, res) {
+app.get('/login', (req, res) => {
   res.json({username: getUsername(req)})
 })
 
-app.post('/login', function(req, res) {
-  return Account.findOne({username: req.body.username}, function (findError, user) {
+app.post('/login', (req, res) => {
+  return Account.findOne({username: req.body.username}, (findError, user) => {
     if (findError) {
       return res.status(401).end()
     }
     if (!user) {
-      Account.register(new Account({username: req.body.username}), req.body.password, function (registerError) {
+      Account.register(new Account({username: req.body.username}), req.body.password, (registerError) => {
         if (registerError) {
           return res.status(401).end()
         }
-        passport.authenticate('local')(req, res, function () {
+        passport.authenticate('local')(req, res, () => {
           res.json({username: req.user.username})
         })
       })
     } else {
-      passport.authenticate('local')(req, res, function () {
+      passport.authenticate('local')(req, res, () => {
         res.json({username: req.user.username})
       })
     }
   })
 })
 
-app.get('/logout', function(req, res){
-  req.logout();
-  req.session.destroy(function () {
-    res.redirect('/');
+app.get('/logout', (req, res) => {
+  req.logout()
+  req.session.destroy(() => {
+    res.redirect('/')
   })
 })
 
-app.get('/interviewees/:intervieweeID/resume', function(req, res) {
+app.get('/interviewees/:intervieweeID/resume', (req, res) => {
   return getResume(req.params.intervieweeID).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -114,7 +117,7 @@ app.get('/interviewees/:intervieweeID/resume', function(req, res) {
   })
 })
 
-app.post('/interviewees/:intervieweeID/resume', function(req, res) {
+app.post('/interviewees/:intervieweeID/resume', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }
@@ -130,7 +133,7 @@ app.post('/interviewees/:intervieweeID/resume', function(req, res) {
   })
 })
 
-app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', function(req, res) {
+app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', (req, res) => {
   return getAttachment(req.params.candidateID, req.params.commentID,).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -140,7 +143,7 @@ app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments
   })
 })
 
-app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', function(req, res) {
+app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }
@@ -158,7 +161,7 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comment
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
-app.get('/*', function (req, res) {
+app.get('/*', (req, res) => {
   res.send(template({
     assetsRoot: path.join('/', 'assets'),
     username: getUsername(req),

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as commentActions from '../../actions/commentActions'
+import * as notificationActions from '../../actions/notificationActions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import CommentIcon from 'material-ui-icons/InsertComment'
@@ -63,7 +64,7 @@ export default connect(state => {
   return {
     username: state.username,
   }
-}, actions)(AddCommentDialog)
+}, {...commentActions, ...notificationActions})(AddCommentDialog)
 
 const AddCommentDialogFormWrapper = styled.div`
   width: 470px;

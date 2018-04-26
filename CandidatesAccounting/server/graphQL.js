@@ -2,7 +2,6 @@ import { buildSchema } from 'graphql'
 import searchCandidates from './utilities/searchCandidates'
 import {
   getCandidates,
-  getCandidatesPaginated,
   getCandidateByID,
   getAllTags,
   getNotifications,
@@ -91,7 +90,6 @@ export const schema = buildSchema(`
     total: Int!
   }
   type Query {
-    candidates: [CandidateWithComments],
     candidate(id: String!): CandidateWithComments,
     candidatesPaginated(first: Int!, offset: Int!, status: String, sort: String, sortDir: String, searchRequest: String): PaginateResult,
     tags: [String],
@@ -111,51 +109,27 @@ export const schema = buildSchema(`
 `);
 
 export const root = {
-  candidates: () => {
-    return getCandidates('Candidate')
-      .then((result) => {
-        const validCandidates = []
-        result.forEach(candidate => {
-          validCandidates.push(formatCandidateWithComments(candidate))
-        })
-        return validCandidates
-      })
-  },
-
   candidate: ({id}) => {
     return getCandidateByID(id)
-      .then((candidate) => {
-        return formatCandidateWithComments(candidate)
-      })
+      .then(candidate => formatCandidateWithComments(candidate))
   },
 
   candidatesPaginated: ({first, offset, status, sort, sortDir, searchRequest}) => {
-    if (searchRequest && searchRequest.trim() !== '') {
-      return getCandidates(status && status !== '' ? status : 'Candidate', sort, sortDir)
-        .then((result) => {
-          let validCandidates = searchCandidates(result, searchRequest)
-          let paginatedCandidates = []
-          for (let i = Number(offset); i < Number(offset) + Number(first) && i < validCandidates.length; i++) {
-            paginatedCandidates.push(formatCandidate(validCandidates[i]))
-          }
-          return {
-            candidates: paginatedCandidates,
-            total: validCandidates.length
-          }
-        })
-    } else {
-      return getCandidatesPaginated(offset, first, status && status !== '' ? status : 'Candidate', sort, sortDir)
-        .then((result) => {
-          let validCandidates = []
-          result.docs.forEach(candidate => {
-            validCandidates.push(formatCandidate(candidate))
-          })
-          return {
-            candidates: validCandidates,
-            total: result.total
-          }
-        })
-    }
+    return getCandidates(status !== '' ? status : 'Candidate', sort, sortDir)
+      .then(candidates => {
+        const totalAmount = candidates.length
+        if (searchRequest && searchRequest.trim() !== '') {
+          candidates = searchCandidates(candidates, searchRequest)
+        }
+        let paginatedCandidates = []
+        for (let i = Number(offset); i < Number(offset) + Number(first) && i < candidates.length; i++) {
+          paginatedCandidates.push(formatCandidate(candidates[i]))
+        }
+        return {
+          candidates,
+          total: totalAmount
+        }
+      })
   },
 
   tags: () => {
@@ -167,13 +141,7 @@ export const root = {
       return []
     }
     return getNotifications(username)
-      .then((result) => {
-        const notifications = []
-        result.forEach((notification) => {
-          notifications.push(formatNotification(notification));
-        })
-        return notifications
-      })
+      .then(notifications => notifications.map(notification => formatNotification(notification)))
   },
 
   addCandidate: ({candidate}) => {
@@ -184,9 +152,7 @@ export const root = {
     const comments = candidate.comments
     delete candidate.comments
     return updateCandidate(candidate.id, candidate, comments)
-      .then((result) => {
-        return !!result
-      })
+      .then(result => !!result)
   },
 
   deleteCandidate: ({candidateID}) => {
@@ -199,37 +165,27 @@ export const root = {
 
   deleteComment: ({candidateID, commentID}) => {
     return deleteComment(candidateID, commentID)
-      .then((result) => {
-        return !!result
-      })
+      .then(result => !!result)
   },
 
   subscribe: ({candidateID, email}) => {
     return subscribe(candidateID, email)
-      .then((result) => {
-        return !!result
-      })
+      .then(result => !!result)
   },
 
   unsubscribe: ({candidateID, email}) => {
     return unsubscribe(candidateID, email)
-      .then((result) => {
-        return !!result
-      })
+      .then(result => !!result)
   },
 
   noticeNotification: ({username, notificationID}) => {
     return noticeNotification(username, notificationID)
-      .then((result) => {
-        return !!result
-      })
+      .then(result => !!result)
   },
 
   deleteNotification: ({username, notificationID}) => {
     return deleteNotification(username, notificationID)
-      .then((result) => {
-        return !!result
-      })
+      .then(result => !!result)
   }
 }
 
@@ -244,7 +200,7 @@ function formatCandidate(candidate) {
 function formatCandidateWithComments(candidate) {
   candidate.id = candidate._id
   delete candidate._id
-  candidate.comments.forEach((comment) => {
+  candidate.comments.forEach(comment => {
     comment.id = comment._id
     delete comment._id
   })

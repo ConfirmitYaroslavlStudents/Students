@@ -34,7 +34,11 @@ export default class AddCommentPanel extends Component {
   }
 
   handleCommentAdd = () => {
-    const {addComment, username, onCommentAdd, candidate } = this.props
+    const {addComment, username, onCommentAdd, candidate, disabled } = this.props
+
+    if (disabled) {
+      return
+    }
 
     let commentText = this.state.commentText
     if (commentText.replace(/<[^>]+>/g,'').trim() !== '' || this.state.commentAttachment) {

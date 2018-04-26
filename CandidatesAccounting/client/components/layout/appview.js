@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import * as actions from '../../actions/actions'
+import * as applicationActions from '../../actions/applicationActions'
 import Navbar from '../common/UIComponentDecorators/navbar'
 import Appbar from './appbar'
 import TablesBar from './tablesbar'
@@ -93,4 +93,4 @@ const MainWrapper = styled.div`
   margin-top: 108px;
 `
 
-module.exports = connect(mapStateToProps, actions)(AppView)
+module.exports = connect(mapStateToProps, applicationActions)(AppView)

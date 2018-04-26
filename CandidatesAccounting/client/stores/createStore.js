@@ -1,12 +1,8 @@
-import '../css/commonStyles.css'
-import '../css/selectizeStyles.css'
-import 'typeface-roboto'
-import 'react-quill/dist/quill.snow.css'
 import React from 'react'
 import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import sagaCreator from '../sagas/sagas'
-import { init } from '../actions/actions'
+import { init } from '../actions/applicationActions'
 
 export default (reducer, initialState, history) => {
   const composeMiddlewares = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -25,8 +21,8 @@ export default (reducer, initialState, history) => {
   })
 
   if (module.hot) {
-    module.hot.accept('../reducers/reducer', () => {
-      const nextReducer = require('../reducers/reducer').default
+    module.hot.accept('../reducers/rootReducer', () => {
+      const nextReducer = require('../reducers/rootReducer').default
       store.replaceReducer(nextReducer)
     })
     module.hot.accept('../sagas/sagas', () => {

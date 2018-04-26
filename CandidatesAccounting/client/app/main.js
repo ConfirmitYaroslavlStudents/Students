@@ -17,7 +17,7 @@ import AppView from '../components/layout/appview'
 import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
 import getCandidateIdFromURL from '../utilities/getCandidateIdFromURL'
 import configureStore from '../stores/createStore'
-import { initialServerFetch } from '../actions/actions'
+import { initialServerFetch } from '../actions/applicationActions'
 
 const username = window['APP_CONFIG'].username
 

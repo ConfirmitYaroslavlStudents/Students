@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as authorizationActions from '../../actions/authorizationActions'
 import LoginDialog from './loginDialog'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import SignOutIcon from 'material-ui-icons/ExitToApp'
@@ -60,4 +60,4 @@ export default connect(state => {
     authorizing: state.authorizing,
     username: state.username
   }
-}, actions)(UserControls)
+}, authorizationActions)(UserControls)

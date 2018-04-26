@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as candidateActions from '../../actions/candidateActions'
 import UploadIcon from 'material-ui-icons/FileUpload'
 import DownloadIcon from 'material-ui-icons/FileDownload'
 import FileUploader from '../common/fileUploader'
@@ -64,7 +64,7 @@ export default connect(state => {
     authorized: state.authorized,
     onResumeUploading: state.onResumeUploading
   }
-}, actions)(ResumeControls)
+}, candidateActions)(ResumeControls)
 
 const ResumeWrapper = styled.div`
   display: inline-flex;

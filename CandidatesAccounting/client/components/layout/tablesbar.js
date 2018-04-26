@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as candidateActions from '../../actions/candidateActions'
 import NavLink from '../common/navLink'
 import AddCandidateDialog from '../candidates/addCandidateDialog'
 import styled from 'styled-components'
@@ -54,7 +54,7 @@ export default connect(state => {
   return {
     candidateStatus: state.candidateStatus
   }
-}, actions)(TablesBar)
+}, candidateActions)(TablesBar)
 
 const TablesBarWrapper = styled.div`
   display: flex;

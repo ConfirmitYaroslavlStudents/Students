@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as applicationActions from '../../actions/applicationActions'
 import SearchIcon from 'material-ui-icons/search'
 import Input from '../common/UIComponentDecorators/input'
 import IconButton from '../common/UIComponentDecorators/iconButton'
@@ -90,4 +90,4 @@ export default connect(state => {
   return {
     searchRequest: state.searchRequest
   }
-}, actions)(SearchForm)
+}, applicationActions)(SearchForm)

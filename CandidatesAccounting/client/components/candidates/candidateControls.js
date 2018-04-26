@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as commentActions from '../../actions/commentActions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 import UpdateCandidateDialog from './updateCandidateDialog'
@@ -75,7 +75,7 @@ export default connect(state => {
     onUpdating: state.onUpdating,
     onDeleting: state.onDeleting
   }
-}, actions)(CandidateControls)
+}, commentActions)(CandidateControls)
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

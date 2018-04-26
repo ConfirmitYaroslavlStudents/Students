@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as candidateActions from '../../actions/candidateActions'
 import PropTypes from 'prop-types'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DeleteIcon from 'material-ui-icons/Delete'
@@ -56,4 +56,4 @@ DeleteCandidateDialog.propTypes = {
   disabled: PropTypes.bool,
 }
 
-export default connect(() => { return {} }, actions)(DeleteCandidateDialog)
+export default connect(() => { return {} }, candidateActions)(DeleteCandidateDialog)

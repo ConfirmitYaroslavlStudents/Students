@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
-import mongoosePaginate from 'mongoose-paginate'
 import {
   AccountSchema,
   CandidateSchema,
@@ -17,10 +16,6 @@ export function connect() {
 }
 
 AccountSchema.plugin(passportLocalMongoose)
-CandidateSchema.plugin(mongoosePaginate)
-IntervieweeSchema.plugin(mongoosePaginate)
-StudentSchema.plugin(mongoosePaginate)
-TraineeSchema.plugin(mongoosePaginate)
 export const Account = mongoose.model('Account', AccountSchema, 'accounts')
 const Candidate = mongoose.model('Candidate', CandidateSchema, 'candidates')
 const Interviewee = mongoose.model('Interviewee', IntervieweeSchema, 'candidates')
@@ -41,22 +36,13 @@ function identifyModel(status) {
   }
 }
 
-export function getCandidates(status, sort, sortDir) {
-  if (sort !== '' && sortDir !== '') {
-    const sortSettings = { [sort] : sortDir }
-    return identifyModel(status).find(status === 'Candidate' ? {} : {status: status}).sort(sortSettings).exec()
-  } else {
-    return identifyModel(status).find(status === 'Candidate' ? {} : {status: status}).exec()
+export function getCandidates(status, sortingField, sortDirection) {
+  const findSettings = status === 'Candidate' ? {} : { status }
+  if (sortingField !== '' && sortDirection !== '') {
+    const sortingSettings = { [sortingField] : sortDirection }
+    return identifyModel(status).find(findSettings).sort(sortingSettings).exec()
   }
-}
-
-export function getCandidatesPaginated(offset, limit, status, sort, sortDir) {
-  if (sort !== '' && sortDir !== '') {
-    let sortSettings = { [sort] : sortDir }
-    return identifyModel(status).paginate(status === 'Candidate' ? {} : {status: status}, {offset: offset, limit: limit, sort: sortSettings})
-  } else {
-    return identifyModel(status).paginate(status === 'Candidate' ? {} : {status: status}, {offset: offset, limit: limit})
-  }
+  return identifyModel(status).find(findSettings).exec()
 }
 
 export function getCandidateByID(id) {
@@ -65,42 +51,30 @@ export function getCandidateByID(id) {
 
 export function getAllTags() {
   return Tag.find({}).exec()
-    .then((result) => {
-      const tags = []
-      result.forEach((tag) => {
-        tags.push(tag.title)
-      })
-      return tags
-    })
+    .then(tags => tags.map(tag => tag.title))
 }
 
 export function getNotifications(username) {
   return Account.findOne({username: username}).exec()
-    .then((account) => {
-      return account.notifications
-    })
+    .then(account => account.notifications)
 }
 
 export function addCandidate(newCandidate) {
   return identifyModel(newCandidate.status).create(newCandidate)
-    .then((result) => {
-      updateTags(result.tags)
-      return result._id
+    .then(candidate => {
+      updateTags(candidate.tags)
+      return candidate._id
     })
 }
 
 export function updateCandidate(candidateID, candidateNewState, comments) {
   return identifyModel(candidateNewState.status).updateOne({_id: candidateID}, {
-    '$set': {
-      ...candidateNewState
-    },
-    '$push': {
-      comments
-    }
+    '$set': { ...candidateNewState },
+    '$push': { comments }
   })
-    .then((result) => {
-      updateTags(candidateNewState.tags)
-      return result
+    .then(candidate => {
+      updateTags(candidate.tags)
+      return candidate
     })
 }
 
@@ -112,10 +86,10 @@ export function addComment(candidateID, comment) {
   const id = mongoose.Types.ObjectId()
   comment._id = id
   return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec()
-    .then((result) => {
-      result.subscribers.forEach((subscriber) => {
+    .then(candidate => {
+      candidate.subscribers.forEach(subscriber => {
         if (subscriber !== comment.author) {
-          addNotification(result, subscriber, comment)
+          addNotification(candidate, subscriber, comment)
         }
       })
       return id
@@ -135,16 +109,16 @@ export function unsubscribe(candidateID, email) {
 }
 
 export function noticeNotification(username, notificationID) {
-  return Account.updateOne({username: username, 'notifications._id': notificationID}, {$set: {'notifications.$.recent': false}}).exec()
+  return Account.updateOne({username, 'notifications._id': notificationID}, {$set: {'notifications.$.recent': false}}).exec()
 }
 
 export function deleteNotification(username, notificationID) {
-  return Account.updateOne({username: username}, {$pull: {notifications: {_id: notificationID}}}).exec()
+  return Account.updateOne({username}, {$pull: {notifications: {_id: notificationID}}}).exec()
 }
 
 export function getResume(intervieweeID) {
   return getCandidateByID(intervieweeID)
-    .then((interviewee) => {
+    .then(interviewee => {
       return {
         resumeName: interviewee.resume,
         resumeData: interviewee.resumeFile
@@ -154,7 +128,7 @@ export function getResume(intervieweeID) {
 
 export function addResume(intervieweeID, resumeName, resumeData) {
   return getCandidateByID(intervieweeID)
-    .then((interviewee) => {
+    .then(interviewee => {
       interviewee.resume = resumeName
       interviewee.resumeFile = resumeData
       return updateCandidate(intervieweeID, interviewee)
@@ -163,7 +137,7 @@ export function addResume(intervieweeID, resumeName, resumeData) {
 
 export function getAttachment(candidateID, commentID) {
   return getCandidateByID(candidateID)
-    .then((candidate) => {
+    .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
         if (candidate.comments[i]._id.toString() === commentID) {
           return {
@@ -181,7 +155,7 @@ export function getAttachment(candidateID, commentID) {
 
 export function addAttachment(candidateID, commentID, attachmentName, attachmentData) {
   return getCandidateByID(candidateID)
-    .then((candidate) => {
+    .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
         if (candidate.comments[i]._id.toString() === commentID) {
           candidate.comments[i].attachment = attachmentName
@@ -194,13 +168,13 @@ export function addAttachment(candidateID, commentID, attachmentName, attachment
 
 function updateTags(probablyNewTags) {
   getAllTags()
-    .then((tags) => {
+    .then(tags => {
       const tagsToAdd = [];
-      probablyNewTags.forEach((tag) => {
+      probablyNewTags.forEach(tag => {
         if (!tags.includes(tag)) {
           tagsToAdd.push({title: tag})
         }
-      });
+      })
       if (tagsToAdd.length > 0) {
         addTags(tagsToAdd)
       }

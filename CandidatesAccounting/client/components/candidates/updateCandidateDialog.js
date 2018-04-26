@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as candidateActions from '../../actions/candidateActions'
 import { MediumButtonStyle } from '../common/styleObjects'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
@@ -72,4 +72,4 @@ export default connect((state) => {
   return {
     tags: state.tags
   }
-}, actions)(UpdateCandidateDialog)
+}, candidateActions)(UpdateCandidateDialog)

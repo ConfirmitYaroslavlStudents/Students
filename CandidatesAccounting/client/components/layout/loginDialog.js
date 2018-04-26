@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as authorizationActions from '../../actions/authorizationActions'
 import FlatButton from '../common/UIComponentDecorators/flatButton'
 import Dialog from '../common/UIComponentDecorators/dialogSimple'
 import LoginForm from '../authorization/loginForm'
@@ -66,7 +66,7 @@ export default connect(state => {
   return {
     authorizing: state.authorizing
   }
-}, actions)(LoginDialog)
+}, authorizationActions)(LoginDialog)
 
 const DialogActionsWrapper = styled.div`
   width: 100%;

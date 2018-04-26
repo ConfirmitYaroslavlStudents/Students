@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as actions from '../../actions/actions'
+import * as candidateActions from '../../actions/candidateActions'
 import { checkCandidateValidation } from '../../utilities/candidateValidators'
 import Candidate from '../../utilities/candidate'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
@@ -71,4 +71,4 @@ export default connect(state => {
     candidateStatus: state.candidateStatus,
     tags: state.tags
   }
-}, actions)(AddCandidateDialog)
+}, candidateActions)(AddCandidateDialog)

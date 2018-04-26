@@ -130,8 +130,8 @@ export const root = {
         .then((result) => {
           let validCandidates = []
           result.docs.forEach(candidate => {
-            validCandidates.push(formatCandidate(candidate));
-          });
+            validCandidates.push(formatCandidate(candidate))
+          })
           return {
             candidates: validCandidates,
             total: result.total

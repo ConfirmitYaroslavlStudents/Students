@@ -14,10 +14,9 @@ import Spinner from '../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
 function CandidateControls(props) {
-  const { fetching, authorized, onUpdating, onDeleting, username, candidate, openCommentPage, history } = props
+  const { fetching, authorized, onUpdating, onDeleting, candidate, openCommentPage, history } = props
 
   const commentAmount = Object.keys(candidate.comments).length
-  // TODO: blur correct controls
   const candidateOnUpdating = candidate.id === onUpdating
   const candidateOnDeleting = candidate.id === onDeleting
 
@@ -77,8 +76,7 @@ export default connect(state => {
     fetching: state.fetching,
     authorized: state.authorized,
     onUpdating: state.onUpdating,
-    onDeleting: state.onDeleting,
-    username: state.username,
+    onDeleting: state.onDeleting
   }
 }, actions)(CandidateControls)
 

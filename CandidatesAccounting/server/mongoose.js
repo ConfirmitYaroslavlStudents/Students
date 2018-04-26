@@ -7,7 +7,8 @@ import {
   IntervieweeSchema,
   StudentSchema,
   TraineeSchema,
-  TagSchema} from './schemas'
+  TagSchema
+} from './schemas'
 
 mongoose.Promise = Promise
 
@@ -42,7 +43,7 @@ function identifyModel(status) {
 
 export function getCandidates(status, sort, sortDir) {
   if (sort !== '' && sortDir !== '') {
-    const sortSettings = { sort : sortDir }
+    const sortSettings = { [sort] : sortDir }
     return identifyModel(status).find(status === 'Candidate' ? {} : {status: status}).sort(sortSettings).exec()
   } else {
     return identifyModel(status).find(status === 'Candidate' ? {} : {status: status}).exec()
@@ -51,7 +52,7 @@ export function getCandidates(status, sort, sortDir) {
 
 export function getCandidatesPaginated(offset, limit, status, sort, sortDir) {
   if (sort !== '' && sortDir !== '') {
-    let sortSettings = { sort : sortDir }
+    let sortSettings = { [sort] : sortDir }
     return identifyModel(status).paginate(status === 'Candidate' ? {} : {status: status}, {offset: offset, limit: limit, sort: sortSettings})
   } else {
     return identifyModel(status).paginate(status === 'Candidate' ? {} : {status: status}, {offset: offset, limit: limit})

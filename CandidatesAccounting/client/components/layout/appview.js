@@ -25,7 +25,7 @@ export default class AppView extends Component {
     }
 
     const tableSwitch =
-      initializing ?  //TODO: blur old table instead of removing it
+      initializing ?
         <SpinnerWrapper>
           <Spinner size={60}/>
         </SpinnerWrapper>

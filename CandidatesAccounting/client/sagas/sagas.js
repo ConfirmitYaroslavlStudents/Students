@@ -166,12 +166,6 @@ function* getCandidatesSaga(action) {
   try {
     const { history } = action.payload
     const state = yield select(state => state)
-    yield call(history.replace, '/'
-      + (state.candidateStatus === '' ? '' : state.candidateStatus.toLowerCase() + 's')
-      + '?take=' + state.candidatesPerPage
-      + (state.offset === 0 ? '' : '&skip=' + state.offset)
-      + (state.sortingField === '' ? '' : '&sort=' + state.sortingField + '&sortDir=' + state.sortingDirection)
-      + (state.searchRequest === '' ? '' : '&q=' + encodeURIComponent(state.searchRequest)))
     const serverResponse = yield call(
       getCandidates,
       state.candidatesPerPage,
@@ -180,6 +174,12 @@ function* getCandidatesSaga(action) {
       state.sortingField,
       state.sortingDirection,
       state.searchRequest)
+    yield call(history.replace, '/'
+      + (state.candidateStatus === '' ? '' : state.candidateStatus.toLowerCase() + 's')
+      + '?take=' + state.candidatesPerPage
+      + (state.offset === 0 ? '' : '&skip=' + state.offset)
+      + (state.sortingField === '' ? '' : '&sort=' + state.sortingField + '&sortDir=' + state.sortingDirection)
+      + (state.searchRequest === '' ? '' : '&q=' + encodeURIComponent(state.searchRequest)))
     yield put(A.getCandidatesSuccess({
       candidates: serverResponse.candidates,
       totalCount: serverResponse.total

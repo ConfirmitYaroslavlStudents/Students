@@ -1,5 +1,5 @@
 import sendGraphQLQuery from './graphqlClient'
-import Candidate from '../utilities/candidate'
+import Candidate, { commentArrayToCommentDictionary } from '../utilities/candidate'
 
 export function getCandidates(take, skip, status, sort, sortDir, searchRequest) {
   return sendGraphQLQuery(
@@ -11,13 +11,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
           status
           birthDate
           email
-          comments {
-            id
-            author
-            date
-            text
-            attachment
-          }
+          commentAmount
           tags
           subscribers
           interviewDate
@@ -88,7 +82,10 @@ export function getCandidate(id) {
     if (!data) {
       throw 'Connection error'
     }
-    return new Candidate(data.candidate.status, data.candidate)
+    return {
+      candidate: new Candidate(data.candidate.status, data.candidate),
+      comments: commentArrayToCommentDictionary(data.candidate.comments)
+    }
   })
 }
 

@@ -41,13 +41,29 @@ export const schema = buildSchema(`
     text: String!,
     attachment: String
   }
-  type Candidate {
+  type CandidateWithComments {
     id: ID!,
     name: String!,
     status: String!,
     birthDate: String!,
     email: String!,
     comments: [Comment]!,
+    tags: [String]!,
+    subscribers: [String]!,
+    interviewDate: String,
+    resume: String,
+    groupName: String,
+    startingDate: String,
+    endingDate: String,
+    mentor: String,
+  }
+  type Candidate {
+    id: ID!,
+    name: String!,
+    status: String!,
+    birthDate: String!,
+    email: String!,
+    commentAmount: Int!,
     tags: [String]!,
     subscribers: [String]!,
     interviewDate: String,
@@ -75,8 +91,8 @@ export const schema = buildSchema(`
     total: Int!
   }
   type Query {
-    candidates: [Candidate],
-    candidate(id: String!): Candidate,
+    candidates: [CandidateWithComments],
+    candidate(id: String!): CandidateWithComments,
     candidatesPaginated(first: Int!, offset: Int!, status: String, sort: String, sortDir: String, searchRequest: String): PaginateResult,
     tags: [String],
     notifications(username: String!): [Notification]
@@ -100,17 +116,19 @@ export const root = {
       .then((result) => {
         const validCandidates = []
         result.forEach(candidate => {
-          validCandidates.push(formatCandidate(candidate))
+          validCandidates.push(formatCandidateWithComments(candidate))
         })
         return validCandidates
       })
   },
+
   candidate: ({id}) => {
     return getCandidateByID(id)
       .then((candidate) => {
-        return formatCandidate(candidate)
+        return formatCandidateWithComments(candidate)
       })
   },
+
   candidatesPaginated: ({first, offset, status, sort, sortDir, searchRequest}) => {
     if (searchRequest && searchRequest.trim() !== '') {
       return getCandidates(status && status !== '' ? status : 'Candidate', sort, sortDir)
@@ -139,9 +157,11 @@ export const root = {
         })
     }
   },
+
   tags: () => {
     return getAllTags()
   },
+
   notifications: ({username}) => {
     if (!username || username.trim() === '') {
       return []
@@ -155,54 +175,71 @@ export const root = {
         return notifications
       })
   },
+
   addCandidate: ({candidate}) => {
     return addCandidate(candidate)
   },
+
   updateCandidate: ({candidate}) => {
     return updateCandidate(candidate.id, candidate)
       .then((result) => {
         return !!result
       })
   },
+
   deleteCandidate: ({candidateID}) => {
     return deleteCandidate(candidateID)
   },
+
   addComment: ({candidateID, comment}) => {
     return addComment(candidateID, comment)
   },
+
   deleteComment: ({candidateID, commentID}) => {
     return deleteComment(candidateID, commentID)
       .then((result) => {
         return !!result
       })
   },
+
   subscribe: ({candidateID, email}) => {
     return subscribe(candidateID, email)
       .then((result) => {
         return !!result
       })
   },
+
   unsubscribe: ({candidateID, email}) => {
     return unsubscribe(candidateID, email)
       .then((result) => {
         return !!result
       })
   },
+
   noticeNotification: ({username, notificationID}) => {
     return noticeNotification(username, notificationID)
       .then((result) => {
         return !!result
       })
   },
+
   deleteNotification: ({username, notificationID}) => {
     return deleteNotification(username, notificationID)
       .then((result) => {
         return !!result
       })
   }
-};
+}
 
 function formatCandidate(candidate) {
+  candidate.id = candidate._id
+  delete candidate._id
+  candidate.commentAmount = candidate.comments.length
+  delete candidate.comments
+  return candidate
+}
+
+function formatCandidateWithComments(candidate) {
   candidate.id = candidate._id
   delete candidate._id
   candidate.comments.forEach((comment) => {

@@ -1,16 +1,17 @@
 import { takeEvery, takeLatest, all, put, call, select } from 'redux-saga/effects'
 import * as A from '../actions/actions'
 import { login, logout } from '../api/authorizationService'
-import { getInitialState, getNotifications } from '../api/commonService'
 import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js'
 import { subscribe, unsubscribe } from '../api/subscribeService'
-import { noticeNotification, deleteNotification } from '../api/notificationService'
+import { noticeNotification, deleteNotification, getNotifications } from '../api/notificationService'
+import { getTags } from '../api/tagService'
 import { uploadResume } from '../api/resumeService'
 import { getCandidates, getCandidate, addCandidate, deleteCandidate, updateCandidate } from '../api/candidateService.js'
 
 export default function* rootSaga() {
   yield all([
-    watchFetchInitialState(),
+    watchGetNotifications(),
+    watchGetTags(),
     watchLogin(),
     watchLogout(),
     watchUploadResume(),
@@ -34,8 +35,12 @@ export default function* rootSaga() {
   ])
 }
 
-function* watchFetchInitialState() {
-  yield takeLatest(A.fetchInitialState, fetchInitialStateSaga)
+function* watchGetNotifications() {
+  yield takeLatest(A.getNotifications, getNotificationsSaga)
+}
+
+function* watchGetTags() {
+  yield takeLatest(A.getTags, getTagsSaga)
 }
 
 function* watchLogin() {
@@ -120,21 +125,24 @@ function* watchSetSortingDirection() {
 
 /*___SAGAS_______________________________________________________*/
 
-function* fetchInitialStateSaga() {
+function* getNotificationsSaga(action) {
   try {
-    const state = yield select(state => state)
-    const initialState = yield call(getInitialState,
-      state.username,
-      state.candidatesPerPage,
-      state.offset,
-      state.candidateStatus,
-      state.sortingField,
-      state.sortingDirection,
-      state.searchRequest)
-    yield put(A.fetchInitialStateSuccess(initialState))
+    const { username } = action.payload
+    const notifications = yield call(getNotifications, username)
+    yield put(A.getNotificationsSuccess({ notifications }))
   }
   catch(error) {
-    yield put(A.setErrorMessage({ message: error + '. Fetching initial state error.' }))
+    yield put(A.setErrorMessage({ message: error + '. Get notifications error.' }))
+  }
+}
+
+function* getTagsSaga() {
+  try {
+    const tags = yield call(getTags)
+    yield put(A.getTagsSuccess({ tags }))
+  }
+  catch(error) {
+    yield put(A.setErrorMessage({ message: error + '. Get tags error.' }))
   }
 }
 
@@ -174,12 +182,14 @@ function* getCandidatesSaga(action) {
       state.sortingField,
       state.sortingDirection,
       state.searchRequest)
-    yield call(history.replace, '/'
-      + (state.candidateStatus === '' ? '' : state.candidateStatus.toLowerCase() + 's')
-      + '?take=' + state.candidatesPerPage
-      + (state.offset === 0 ? '' : '&skip=' + state.offset)
-      + (state.sortingField === '' ? '' : '&sort=' + state.sortingField + '&sortDir=' + state.sortingDirection)
-      + (state.searchRequest === '' ? '' : '&q=' + encodeURIComponent(state.searchRequest)))
+    if (history) {
+      yield call(history.replace, '/'
+        + (state.candidateStatus === '' ? '' : state.candidateStatus.toLowerCase() + 's')
+        + '?take=' + state.candidatesPerPage
+        + (state.offset === 0 ? '' : '&skip=' + state.offset)
+        + (state.sortingField === '' ? '' : '&sort=' + state.sortingField + '&sortDir=' + state.sortingDirection)
+        + (state.searchRequest === '' ? '' : '&q=' + encodeURIComponent(state.searchRequest)))
+    }
     yield put(A.getCandidatesSuccess({
       candidates: serverResponse.candidates,
       totalCount: serverResponse.total
@@ -194,9 +204,11 @@ function* openCommentPageSaga(action) {
   try {
     const { candidate, history } = action.payload
     yield put(A.setFetching({ fetching: true }))
-    yield call(history.replace, '/' + candidate.status.toLowerCase() + 's/' + candidate.id + '/comments')
-    const commentPageOwner = yield call(getCandidate, candidate.id)
-    yield put(A.openCommentPageSuccess({ candidate: commentPageOwner }))
+    if (history) {
+      yield call(history.replace, '/' + candidate.status.toLowerCase() + 's/' + candidate.id + '/comments')
+    }
+    const getCandidateResult = yield call(getCandidate, candidate.id)
+    yield put(A.openCommentPageSuccess({ ...getCandidateResult }))
   }
   catch(error) {
     yield put(A.setErrorMessage({ message: error + '. Open comment page error.' }))

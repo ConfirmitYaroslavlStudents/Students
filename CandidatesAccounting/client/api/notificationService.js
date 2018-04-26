@@ -1,5 +1,40 @@
 import sendGraphQLQuery from './graphqlClient'
 
+export function getNotifications(username) {
+  return sendGraphQLQuery(
+    `query($username: String!) {
+      notifications(username: $username) {
+    		id
+        recent
+        source {
+          id
+          name
+          status
+        }
+        content {
+          date
+          author
+          text
+          attachment
+        }
+      }
+    }`,
+    {
+      username: username
+    }
+  )
+  .then((data) => {
+    if (!data) {
+      throw 'Connection error'
+    }
+    let notifications = {}
+    data.notifications.forEach((notification) => {
+      notifications[notification.id] = notification
+    })
+    return notifications
+  })
+}
+
 export function noticeNotification(username, notificationID) {
   return sendGraphQLQuery(
     `mutation noticeNotification($username: String!, $notificationID: ID!) {

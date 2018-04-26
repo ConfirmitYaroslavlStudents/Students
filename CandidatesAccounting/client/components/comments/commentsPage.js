@@ -18,18 +18,6 @@ class CommentsPage extends Component {
     this.userColors = {}
   }
 
-  UNSAFE_componentWillMount() {
-    const { candidate } = this.props
-
-    this.userColors = {}
-    Object.keys(this.props.candidate.comments).forEach((commentID) => {
-      const comment = candidate.comments[commentID]
-      if (!(comment.author in this.userColors)) {
-        this.userColors[comment.author] = getRandomColor()
-      }
-    })
-  }
-
   componentDidMount() {
     window.scrollTo(0, document.documentElement.scrollHeight)
   }
@@ -50,8 +38,7 @@ class CommentsPage extends Component {
   }
 
   render() {
-    const { initializing, fetching, authorized, candidate, username, addComment, subscribe, unsubscribe } = this.props
-    const comments = Object.keys(candidate.comments).map(commentId => candidate.comments[commentId])
+    const { initializing, fetching, authorized, candidate, comments, username, addComment, subscribe, unsubscribe } = this.props
 
     if (initializing || fetching) {
       return <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
@@ -64,6 +51,12 @@ class CommentsPage extends Component {
         </FormWrapper>
       )
     }
+
+    comments.forEach(comment => {
+      if (!(comment.author in this.userColors)) {
+        this.userColors[comment.author] = getRandomColor()
+      }
+    })
 
     let commentClouds = comments.map((comment, index) => {
       switch (comment.author) {
@@ -109,6 +102,7 @@ CommentsPage.propTypes = {
 
 export default connect(state => {
   return {
+    comments: Object.keys(state.comments).map(commentId => state.comments[commentId]),
     initializing: state.initializing,
     fetching: state.fetching,
     authorized: state.authorized,

@@ -6,7 +6,14 @@ export default class Candidate {
     this.name = properties.name ? properties.name : ''
     this.birthDate = properties.birthDate ? properties.birthDate : ''
     this.email = properties.email ? properties.email : ''
-    this.comments = properties.comments ? commentArrayToCommentDictionary(properties.comments) : {}
+    this.commentAmount =
+      properties.commentAmount ?
+        properties.commentAmount
+        :
+        properties.comments ?
+          properties.comments.length
+          :
+          0
     this.tags = properties.tags ? properties.tags.slice() : []
     this.subscribers = properties.subscribers ? subscriberArrayToSubscriberDictionary(properties.subscribers) : {}
 
@@ -26,19 +33,19 @@ export default class Candidate {
   }
 }
 
-function commentArrayToCommentDictionary(commentArray) {
+export function commentArrayToCommentDictionary(commentArray) {
   if (commentArray instanceof Array) {
     const commentDictionary = {}
     commentArray.forEach(comment => {
       commentDictionary[comment.id] = comment
-    });
+    })
     return commentDictionary
   } else {
     return commentArray
   }
 }
 
-function subscriberArrayToSubscriberDictionary(subscriberArray) {
+export function subscriberArrayToSubscriberDictionary(subscriberArray) {
   if (subscriberArray instanceof Array) {
     let subscriberDictionary = {}
     subscriberArray.forEach(email => {

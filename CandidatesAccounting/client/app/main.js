@@ -13,8 +13,9 @@ import createPalette from 'material-ui/styles/createPalette'
 import { indigo } from 'material-ui/colors'
 import AppView from '../components/layout/appview'
 import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
+import getCandidateIdFromURL from '../utilities/getCandidateIdFromURL'
 import configureStore from '../stores/createStore'
-import { fetchInitialState } from '../actions/actions'
+import { getNotifications, getCandidates, openCommentPage, getTags } from '../actions/actions'
 
 const username = window['APP_CONFIG'].username
 
@@ -53,8 +54,18 @@ const store = configureStore(reducer, initialState)
 
 renderApp(AppView)
 
-// TODO: divide on three different fetch requests
-store.dispatch(fetchInitialState())
+if (username !== '') {
+  store.dispatch(getNotifications({ username }))
+}
+
+const candidateId = getCandidateIdFromURL(window.location.pathname + window.location.search)
+if (candidateId) {
+  store.dispatch(openCommentPage({ candidate: { id: candidateId, status: stateArgs.status }}))
+} else {
+  store.dispatch(getCandidates({}))
+}
+
+store.dispatch(getTags())
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {

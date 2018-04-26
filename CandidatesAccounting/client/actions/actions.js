@@ -4,9 +4,13 @@ import { createAction } from 'redux-actions'
 
 export const init = createAction('INIT')
 
-export const fetchInitialState = createAction('FETCH_INITIAL_STATE')
+export const getNotifications = createAction('GET_NOTIFICATIONS')
 
-export const fetchInitialStateSuccess = createAction('FETCH_INITIAL_STATE_SUCCESS')
+export const getNotificationsSuccess = createAction('GET_NOTIFICATIONS_SUCCESS')
+
+export const getTags = createAction('GET_TAGS')
+
+export const getTagsSuccess = createAction('GET_TAGS_SUCCESS')
 
 export const setFetching = createAction('SET_FETCHING')
 

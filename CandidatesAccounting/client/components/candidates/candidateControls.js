@@ -16,7 +16,6 @@ import styled from 'styled-components'
 function CandidateControls(props) {
   const { fetching, authorized, onUpdating, onDeleting, candidate, openCommentPage, history } = props
 
-  const commentAmount = Object.keys(candidate.comments).length
   const candidateOnUpdating = candidate.id === onUpdating
   const candidateOnDeleting = candidate.id === onDeleting
 
@@ -52,7 +51,7 @@ function CandidateControls(props) {
         disabled={fetching || candidateOnDeleting || !authorized}
       />
       <NavLink onClick={handleCandidateCommentPageOpen}>
-        <Badge badgeContent={commentAmount} disabled={fetching}>
+        <Badge badgeContent={candidate.commentAmount} disabled={fetching}>
           <IconButton
             icon={<CommentIcon />}
             style={MediumButtonStyle}

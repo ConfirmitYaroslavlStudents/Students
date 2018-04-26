@@ -19,7 +19,6 @@ function CandidatesTable(props) {
     type,
     setSearchRequest,
     search,
-    history,
     fetching,
     onUpdating,
     onDeleting,
@@ -31,7 +30,7 @@ function CandidatesTable(props) {
     setOffset,
     setCandidatesPerPage,
     setSortingField,
-    setSortingDirection
+    toggleSortingDirection
   } = props
 
   const getHeaders = () => {
@@ -58,7 +57,6 @@ function CandidatesTable(props) {
           tags={candidate.tags}
           setSearchRequest={setSearchRequest}
           search={search}
-          history={history}
         />
       </CandidateNameWrapper>
     )
@@ -98,26 +96,22 @@ function CandidatesTable(props) {
 
     row.cells.push(
       <CandidateControlsWrapper>
-        <CandidateControls candidate={candidate} history={history}/>
+        <CandidateControls candidate={candidate}/>
       </CandidateControlsWrapper>)
 
     return row
   }
 
   const handleOffsetCange = (offset) => {
-    setOffset({offset, history})
+    setOffset({ offset })
   }
 
   const handleCandidatesPerPageChange = (candidatesPerPage) => {
-    setCandidatesPerPage({candidatesPerPage, history})
+    setCandidatesPerPage({candidatesPerPage})
   }
 
   const handleSortingFieldChange = (sortingField) => {
-    setSortingField({sortingField, history})
-  }
-
-  const handleSortingDirectionChange = () => {
-    setSortingDirection({history})
+    setSortingField({sortingField})
   }
 
   const headers = getHeaders()
@@ -138,14 +132,13 @@ function CandidatesTable(props) {
       onOffsetChange={handleOffsetCange}
       onRowsPerPageChange={handleCandidatesPerPageChange}
       onSortingFieldChange={handleSortingFieldChange}
-      onSortingDirectionChange={handleSortingDirectionChange}
+      onSortingDirectionChange={toggleSortingDirection}
     />
   )
 }
 
 CandidatesTable.propTypes = {
-  type: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired
 }
 
 export default connect(state => {

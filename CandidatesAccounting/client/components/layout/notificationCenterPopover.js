@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
 import Spinner from '../common/UIComponentDecorators/spinner'
@@ -12,7 +11,6 @@ import styled from 'styled-components'
 function NotificationCenterPopover(props) {
   const {
     notifications,
-    history,
     getCandidate,
     noticeNotification,
     deleteNotification,
@@ -22,7 +20,7 @@ function NotificationCenterPopover(props) {
   } = props
 
   const handleOpenCommentPage = (candidate) => {
-    openCommentPage({ candidate, history })
+    openCommentPage({ candidate })
   }
 
   let recentNotificationNumber = 0
@@ -69,10 +67,6 @@ function NotificationCenterPopover(props) {
       />
     </Badge>
   )
-}
-
-NotificationCenterPopover.propTypes = {
-  history: PropTypes.object.isRequired,
 }
 
 export default connect(state => {

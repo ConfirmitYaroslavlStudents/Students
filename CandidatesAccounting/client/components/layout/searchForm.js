@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
 import SearchIcon from 'material-ui-icons/search'
@@ -24,7 +23,7 @@ class SearchForm extends Component {
   handleClick = () => {
     if (this.props.searchRequest !== '' && this.state.isOpen) {
       this.timer = null
-      this.search()
+      this.search(this.props.searchRequest)
     } else {
       if (this.state.isOpen) {
         this.handleClose()
@@ -35,20 +34,20 @@ class SearchForm extends Component {
   }
 
   handleChange = (searchRequest) => {
-    this.props.setSearchRequest(searchRequest)
+    this.props.setSearchRequest({ searchRequest })
     if (this.timer) {
       clearTimeout(this.timer)
     }
     this.timer = setTimeout(() => {
       if (this.timer) {
-        this.search()
+        this.search(searchRequest)
       }
       this.timer = null
     }, 900)
   }
 
-  search = () => {
-    this.props.search({ history: this.props.history })
+  search = searchRequest => {
+    this.props.search({ searchRequest })
   }
 
   render() {
@@ -85,10 +84,6 @@ class SearchForm extends Component {
       </div>
     )
   }
-}
-
-SearchForm.propTypes = {
-  history: PropTypes.object.isRequired
 }
 
 export default connect(state => {

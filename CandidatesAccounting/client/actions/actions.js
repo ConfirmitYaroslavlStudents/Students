@@ -4,6 +4,8 @@ import { createAction } from 'redux-actions'
 
 export const init = createAction('INIT')
 
+export const initialServerFetch = createAction('INITIAL_SERVER_FETCH')
+
 export const getNotifications = createAction('GET_NOTIFICATIONS')
 
 export const getNotificationsSuccess = createAction('GET_NOTIFICATIONS_SUCCESS')
@@ -36,9 +38,13 @@ export const login = createAction('LOGIN')
 
 export const loginSuccess = createAction('LOGIN_SUCCESS')
 
+export const loginFailure = createAction('LOGIN_FAILURE')
+
 export const logout = createAction('LOGOUT')
 
 export const logoutSuccess = createAction('LOGOUT_SUCCESS')
+
+export const logoutFailure = createAction('LOGOUT_FAILURE')
 
 export const setAuthorizing = createAction('SET_AUTHORIZING')
 
@@ -72,9 +78,9 @@ export const setSortingField = createAction('SET_SORTING_FIELD')
 
 export const setSortingFieldSuccess = createAction('SET_SORTING_FIELD_SUCCESS')
 
-export const setSortingDirection = createAction('SET_SORTING_DIRECTION')
+export const toggleSortingDirection = createAction('TOGGLE_SORTING_DIRECTION')
 
-export const setSortingDirectionSuccess = createAction('SET_SORTING_DIRECTION_SUCCESS')
+export const toggleSortingDirectionSuccess = createAction('TOGGLE_SORTING_DIRECTION_SUCCESS')
 
 export const setOnUpdating = createAction('SET_ON_UPDATING')
 

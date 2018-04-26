@@ -14,14 +14,14 @@ import Spinner from '../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
 function CandidateControls(props) {
-  const { fetching, authorized, onUpdating, onDeleting, candidate, openCommentPage, history } = props
+  const { fetching, authorized, onUpdating, onDeleting, candidate, openCommentPage } = props
 
   const candidateOnUpdating = candidate.id === onUpdating
   const candidateOnDeleting = candidate.id === onDeleting
 
   const handleCandidateCommentPageOpen = () => {
     if (!fetching && !candidateOnDeleting) {
-      openCommentPage({ candidate, history })
+      openCommentPage({ candidate })
     }
   }
 
@@ -41,7 +41,6 @@ function CandidateControls(props) {
       <DeleteCandidateDialog
         candidateId={candidate.id}
         disabled={fetching || candidateOnUpdating || !authorized}
-        history={props.history}
       />
 
   return (
@@ -66,8 +65,7 @@ function CandidateControls(props) {
 }
 
 CandidateControls.propTypes = {
-  candidate: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+  candidate: PropTypes.object.isRequired
 }
 
 export default connect(state => {

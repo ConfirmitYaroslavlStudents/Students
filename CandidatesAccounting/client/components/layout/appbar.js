@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Logo from 'material-ui-icons/AccountCircle'
 import SearchForm from './searchForm'
@@ -7,11 +6,11 @@ import UserControls from './userControls'
 import styled from 'styled-components'
 
 function Appbar(props) {
-  const { pageTitle, history } = props
+  const { pageTitle } = props
 
   const searchForm =
     pageTitle === 'Candidate Accounting' ?
-      <SearchForm history={history} />
+      <SearchForm />
       : ''
 
   return (
@@ -21,14 +20,10 @@ function Appbar(props) {
       </AppbarTitleWrapper>
       <AppbarControlsWrapper>
         {searchForm}
-        <UserControls history={history} />
+        <UserControls />
       </AppbarControlsWrapper>
     </AppbarWrapper>
   )
-}
-
-Appbar.propTypes = {
-  history: PropTypes.object.isRequired,
 }
 
 export default connect(state => {

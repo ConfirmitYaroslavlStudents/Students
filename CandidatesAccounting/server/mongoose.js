@@ -89,8 +89,15 @@ export function addCandidate(newCandidate) {
     })
 }
 
-export function updateCandidate(candidateID, candidateNewState) {
-  return identifyModel(candidateNewState.status).replaceOne({_id: candidateID}, candidateNewState)
+export function updateCandidate(candidateID, candidateNewState, comments) {
+  return identifyModel(candidateNewState.status).updateOne({_id: candidateID}, {
+    '$set': {
+      ...candidateNewState
+    },
+    '$push': {
+      comments
+    }
+  })
     .then((result) => {
       updateTags(candidateNewState.tags)
       return result

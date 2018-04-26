@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
 import NavLink from '../common/navLink'
@@ -7,7 +6,7 @@ import AddCandidateDialog from '../candidates/addCandidateDialog'
 import styled from 'styled-components'
 
 function TablesBar(props) {
-  const { candidateStatus, setCandidateStatus, history } = props
+  const { candidateStatus, setCandidateStatus } = props
 
   let selected = 0;
   switch(candidateStatus) {
@@ -23,7 +22,7 @@ function TablesBar(props) {
   }
 
   const handleLinkClick = newCandidateStatus => () => {
-    setCandidateStatus({ newCandidateStatus, history })
+    setCandidateStatus({ newCandidateStatus })
   }
 
   return (
@@ -45,14 +44,10 @@ function TablesBar(props) {
         </Tabs>
       </TabsWrapper>
       <AddCandidateButtonWrapper>
-        <AddCandidateDialog history={props.history} />
+        <AddCandidateDialog />
       </AddCandidateButtonWrapper>
     </TablesBarWrapper>
   )
-}
-
-TablesBar.propTypes = {
-  history: PropTypes.object.isRequired,
 }
 
 export default connect(state => {

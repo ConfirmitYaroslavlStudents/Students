@@ -35,16 +35,16 @@ export default class AppView extends Component {
             <CommentPage candidate={candidates[extractCandidateId(history.location.pathname)]} />}
           />
           <Route exact path='/interviewees*' render={() =>
-            <CandidatesTable type='Interviewee' history={history} />}
+            <CandidatesTable type='Interviewee' />}
           />
           <Route exact path='/students*' render={() =>
-            <CandidatesTable type='Student' history={history} />}
+            <CandidatesTable type='Student' />}
           />
           <Route exact path='/trainees*' render={() =>
-            <CandidatesTable type='Trainee' history={history} />}
+            <CandidatesTable type='Trainee' />}
           />
           <Route exact path='/*' render={() =>
-            <CandidatesTable type='Candidate' history={history} />}
+            <CandidatesTable type='Candidate' />}
           />
           <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
         </Switch>
@@ -59,8 +59,8 @@ export default class AppView extends Component {
     return (
       <div>
         <Navbar>
-          <Appbar history={history} />
-          <TablesBar history={history} />
+          <Appbar />
+          <TablesBar />
         </Navbar>
         <MainWrapper>
           { tableSwitch }

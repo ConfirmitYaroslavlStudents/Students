@@ -55,7 +55,7 @@ class LoginDialog extends Component {
             </DialogActionsWrapper>
           }
         >
-          <LoginForm account={this.account} />
+          <LoginForm account={this.account} onEnterPress={this.login}/>
         </Dialog>
       </div>
     )

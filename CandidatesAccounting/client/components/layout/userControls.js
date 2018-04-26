@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
 import LoginDialog from './loginDialog'
@@ -15,8 +14,7 @@ function UserControls(props) {
     authorized,
     authorizing,
     logout,
-    username,
-    history
+    username
   } = props
 
   const logoutButton =
@@ -38,16 +36,10 @@ function UserControls(props) {
   return (
     <div className='inline-flex centered'>
       <AppbarUsernameWrapper>{formatUserName(username)}</AppbarUsernameWrapper>
-      <NotificationCenterPopover
-        history={history}
-      />
+      <NotificationCenterPopover />
       { logoutButton }
     </div>
   )
-}
-
-UserControls.propTypes = {
-  history: PropTypes.object.isRequired
 }
 
 const AppbarUsernameWrapper = styled.span`

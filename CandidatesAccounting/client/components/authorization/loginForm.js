@@ -20,6 +20,13 @@ export default class LoginForm extends Component {
     this.setState({ password })
   }
 
+  handleKeyDown = event => {
+    if (event.keyCode === 13) {
+      event.preventDefault()
+      this.props.onEnterPress(event)
+    }
+  }
+
   render() {
     return (
       <LoginFormWrapper>
@@ -33,6 +40,7 @@ export default class LoginForm extends Component {
           fullWidth
           checkValid={isEmail}
           onChange={this.handleEmailChange}
+          onKeyDown={this.handleKeyDown}
         />
         <PasswordInputWrapper>
           <Input
@@ -43,6 +51,7 @@ export default class LoginForm extends Component {
             fullWidth
             checkValid={isNotEmpty}
             onChange={this.handlePasswordChange}
+            onKeyDown={this.handleKeyDown}
           />
         </PasswordInputWrapper>
       </LoginFormWrapper>
@@ -52,6 +61,7 @@ export default class LoginForm extends Component {
 
 LoginForm.propTypes = {
   account: PropTypes.object.isRequired,
+  onEnterPress: PropTypes.func
 }
 
 const LoginFormWrapper = styled.div`

@@ -59,7 +59,7 @@ export default createReducer(initialState, {
 
   [A.setSearchRequest]: (state, {payload}) => ({
     ...state,
-    searchRequest: payload
+    searchRequest: payload.searchRequest
   }),
 
   [A.setCandidateStatusSuccess]: (state, {payload}) => ({
@@ -87,12 +87,27 @@ export default createReducer(initialState, {
     notifications: payload.notifications
   }),
 
+  [A.loginFailure]: (state, {payload}) => ({
+    ...state,
+    authorizing: false,
+    authorized: false,
+    username: '',
+    notifications: {},
+    errorMessage: payload.error + '. Login failure.'
+  }),
+
   [A.logoutSuccess]: state => ({
     ...state,
     authorizing: false,
     authorized: false,
     username: '',
     notifications: {}
+  }),
+
+  [A.logoutFailure]: (state, {payload}) => ({
+    ...state,
+    authorizing: false,
+    errorMessage: payload.error + '. Logout failure.'
   }),
 
   [A.setAuthorizing]: (state, {payload}) => ({
@@ -110,7 +125,7 @@ export default createReducer(initialState, {
     onUpdating: '',
     onDeleting: '',
     initializing: false,
-    fetching: false,
+    fetching: false
   }),
 
   [A.openCommentPageSuccess]: (state, {payload}) => ({
@@ -129,17 +144,31 @@ export default createReducer(initialState, {
     offset: state.totalCount - state.totalCount % state.candidatesPerPage
   }),
 
-  [A.updateCandidateSuccess]: (state, {payload}) => ({
-    ...state,
-    candidates: {
-      ...state.candidates,
-      [payload.candidate.id] : {
-        ...state.candidates[payload.candidate.id],
-        ...payload.candidate
+  [A.updateCandidateSuccess]: (state, {payload}) => {
+    if (payload.shouldMoveToAnotherTable) {
+      let candidates = state.candidates
+      delete candidates[payload.candidate.id]
+      return {
+        ...state,
+        candidates: {
+          ...candidates
+        },
+        onUpdating: ''
       }
-    },
-    onUpdating: ''
-  }),
+    } else {
+      return {
+        ...state,
+        candidates: {
+          ...state.candidates,
+          [payload.candidate.id] : {
+            ...state.candidates[payload.candidate.id],
+            ...payload.candidate
+          }
+        },
+        onUpdating: ''
+      }
+    }
+  },
 
   [A.deleteCandidateSuccess]: (state) => ({
     ...state,
@@ -179,7 +208,7 @@ export default createReducer(initialState, {
     sortingDirection: 'desc'
   }),
 
-  [A.setSortingDirectionSuccess]: (state) => ({
+  [A.toggleSortingDirectionSuccess]: (state) => ({
     ...state,
     sortingDirection: state.sortingDirection === 'desc' ? 'asc' : 'desc'
   }),

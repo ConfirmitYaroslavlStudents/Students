@@ -181,7 +181,9 @@ export const root = {
   },
 
   updateCandidate: ({candidate}) => {
-    return updateCandidate(candidate.id, candidate)
+    const comments = candidate.comments
+    delete candidate.comments
+    return updateCandidate(candidate.id, candidate, comments)
       .then((result) => {
         return !!result
       })

@@ -7,7 +7,6 @@ import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
 import { checkCandidateValidation } from '../../utilities/candidateValidators'
 import Candidate from '../../utilities/candidate'
-import Comment from '../../utilities/comment'
 import SaveIcon from 'material-ui-icons/Save'
 import EditIcon from 'material-ui-icons/Edit'
 import CloseIcon from 'material-ui-icons/Close'
@@ -18,7 +17,7 @@ class UpdateCandidateDialog extends React.Component {
     super(props)
     this.candidate = new Candidate(props.candidate.status, props.candidate)
     this.state = ({ isOpen: false })
-    this.initialStatus = props.candidate.status
+    this.previousStatus = props.candidate.status
   }
 
   handleOpen = () => {
@@ -32,17 +31,14 @@ class UpdateCandidateDialog extends React.Component {
 
   handleCandidateUpdate = () => {
     if (checkCandidateValidation(this.candidate)) {
-      if (this.candidate.status !== this.initialStatus) {
-        this.candidate.comments['newStatus'] = new Comment('SYSTEM', ' New status: ' + this.candidate.status)
-      }
-      this.props.updateCandidate({ candidate: this.candidate })
+      this.props.updateCandidate({ candidate: this.candidate, previousStatus: this.previousStatus })
       this.handleClose()
     }
   }
 
   render() {
     const { disabled, tags } = this.props
-    this.initialStatus = this.candidate.status
+    this.previousStatus = this.candidate.status
 
     return (
       <div className='inline-flex'>

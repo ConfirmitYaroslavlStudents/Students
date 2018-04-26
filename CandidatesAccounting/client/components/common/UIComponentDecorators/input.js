@@ -17,6 +17,7 @@ export default function CustomInput(props) {
         onChange={(event) => {props.onChange(event.target.value)}}
         onFocus={(event) => {if (props.onFocus) {props.onFocus(event)}}}
         onBlur={(event) => {if (props.onBlur) {props.onBlur(event)}}}
+        onKeyDown={props.onKeyDown}
         error={props.checkValid ? !props.checkValid(props.value) : false}
         fullWidth={props.fullWidth}
       />
@@ -37,4 +38,5 @@ CustomInput.propTypes = {
   fullWidth: PropTypes.bool,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
 }

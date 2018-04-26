@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from '../../actions/actions'
-import PropTypes from 'prop-types'
 import { checkCandidateValidation } from '../../utilities/candidateValidators'
 import Candidate from '../../utilities/candidate'
-import Comment from '../../utilities/comment'
 import DialogWindow from '../common/UIComponentDecorators/dialogWindow'
 import AddPersonIcon from 'material-ui-icons/PersonAdd'
 import CloseIcon from 'material-ui-icons/Close';
@@ -33,11 +31,10 @@ class AddCandidateDialog extends Component{
   }
 
   handleCandidateAdd = () => {
-    const { addCandidate, history } = this.props
+    const { addCandidate } = this.props
 
     if (checkCandidateValidation(this.newCandidate)) {
-      this.newCandidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + this.newCandidate.status)
-      addCandidate({candidate: this.newCandidate, history})
+      addCandidate({ candidate: this.newCandidate })
       this.handleClose()
     }
   }
@@ -66,10 +63,6 @@ class AddCandidateDialog extends Component{
       </div>
     )
   }
-}
-
-AddCandidateDialog.propTypes = {
-  history: PropTypes.object.isRequired
 }
 
 export default connect(state => {

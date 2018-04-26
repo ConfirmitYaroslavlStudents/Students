@@ -4,8 +4,7 @@ import styled from 'styled-components'
 
 export default function TagList(props) {
   const handleTagClick = tag => () => {
-    props.setSearchRequest(tag)
-    props.search({ history: props.history })
+    props.search({ searchRequest: tag})
   }
 
   return (
@@ -21,8 +20,6 @@ export default function TagList(props) {
 
 TagList.propTypes = {
   tags: PropTypes.array.isRequired,
-  history: PropTypes.object.isRequired,
-  setSearchRequest: PropTypes.func.isRequired,
   search: PropTypes.func.isRequired,
 }
 

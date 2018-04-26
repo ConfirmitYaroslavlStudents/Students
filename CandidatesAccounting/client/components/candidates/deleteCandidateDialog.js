@@ -22,9 +22,7 @@ class DeleteCandidateDialog extends Component {
   }
 
   handleCandidateDelete = () => {
-    const { deleteCandidate, history, candidateId } = this.props
-
-    deleteCandidate({ candidateId, history })
+    this.props.deleteCandidate({ candidateId: this.props.candidateId })
     this.handleClose()
   }
 
@@ -55,7 +53,6 @@ class DeleteCandidateDialog extends Component {
 
 DeleteCandidateDialog.propTypes = {
   candidateId: PropTypes.string.isRequired,
-  history: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 }
 

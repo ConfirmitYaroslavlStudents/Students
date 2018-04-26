@@ -4,7 +4,7 @@ export default function getStateArgsFromURL(url) {
   const path = splitedURL[0]
   const splitedPath = path.split('/')
   const tableType = splitedPath[1]
-  let candidateStatus = 'Candidate'
+  let candidateStatus = ''
   switch (tableType) {
     case 'interviewees':
       candidateStatus = 'Interviewee'

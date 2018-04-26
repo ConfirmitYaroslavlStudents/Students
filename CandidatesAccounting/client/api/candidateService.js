@@ -140,6 +140,7 @@ export function deleteCandidate(candidateID) {
 }
 
 function convertToGraphQLType(candidate) {
+  delete candidate.commentAmount
   return {
     ...candidate,
     comments: Object.keys(candidate.comments).map(commentID => candidate.comments[commentID]),

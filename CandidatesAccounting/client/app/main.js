@@ -6,7 +6,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import reducer from '../reducers/reducer'
 import { Provider } from 'react-redux'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Router } from 'react-router'
+import { Route } from 'react-router-dom'
+import createBrowserHistory from 'history/createBrowserHistory'
 import createMuiTheme from 'material-ui/styles/createMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import createPalette from 'material-ui/styles/createPalette'
@@ -15,7 +17,7 @@ import AppView from '../components/layout/appview'
 import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
 import getCandidateIdFromURL from '../utilities/getCandidateIdFromURL'
 import configureStore from '../stores/createStore'
-import { getNotifications, getCandidates, openCommentPage, getTags } from '../actions/actions'
+import { initialServerFetch } from '../actions/actions'
 
 const username = window['APP_CONFIG'].username
 
@@ -28,13 +30,15 @@ const theme = createMuiTheme({
   }
 })
 
+const history = createBrowserHistory()
+
 function renderApp(app) {
   ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
-        <BrowserRouter>
+        <Router history={history}>
           <Route path='/' component={app}/>
-        </BrowserRouter>
+        </Router>
       </Provider>
     </MuiThemeProvider>,
     document.getElementById('root')
@@ -42,30 +46,20 @@ function renderApp(app) {
 }
 
 const stateArgs = getStateArgsFromURL(window.location.pathname + window.location.search)
+const candidateId = getCandidateIdFromURL(window.location.pathname + window.location.search)
 
 const initialState = {
   ...stateArgs,
   username
 }
 
-const store = configureStore(reducer, initialState)
+const store = configureStore(reducer, initialState, history)
 
 /*________________________________________________________________________*/
 
 renderApp(AppView)
 
-if (username !== '') {
-  store.dispatch(getNotifications({ username }))
-}
-
-const candidateId = getCandidateIdFromURL(window.location.pathname + window.location.search)
-if (candidateId) {
-  store.dispatch(openCommentPage({ candidate: { id: candidateId, status: stateArgs.status }}))
-} else {
-  store.dispatch(getCandidates({}))
-}
-
-store.dispatch(getTags())
+store.dispatch(initialServerFetch({ username, candidateStatus: stateArgs.status, candidateId}))
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {

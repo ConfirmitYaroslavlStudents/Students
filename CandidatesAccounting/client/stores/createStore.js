@@ -5,10 +5,10 @@ import 'react-quill/dist/quill.snow.css'
 import React from 'react'
 import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import rootSaga from '../sagas/sagas'
+import sagaCreator from '../sagas/sagas'
 import { init } from '../actions/actions'
 
-export default (reducer, initialState) => {
+export default (reducer, initialState, history) => {
   const composeMiddlewares = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
   const sagaMiddleware = createSagaMiddleware()
   let middlewares = applyMiddleware(sagaMiddleware)
@@ -21,7 +21,7 @@ export default (reducer, initialState) => {
   store.dispatch(init(initialState))
 
   let sagaRun = sagaMiddleware.run(function* () {
-    yield rootSaga()
+    yield sagaCreator({ history })
   })
 
   if (module.hot) {

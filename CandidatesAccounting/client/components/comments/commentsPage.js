@@ -41,7 +41,7 @@ class CommentsPage extends Component {
   render() {
     const { initializing, fetching, authorized, candidate, comments, username, addComment, subscribe, unsubscribe } = this.props
 
-    if (initializing || fetching) {
+    if (initializing) {
       return <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
     }
 
@@ -74,6 +74,13 @@ class CommentsPage extends Component {
       commentClouds = <NoResultWrapper>No comments</NoResultWrapper>
     }
 
+    const fethcingSpinner =
+      fetching && !initializing ?
+        <FetchingWrapper>
+          <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
+        </FetchingWrapper>
+        : ''
+
     return (
       <CommentPageWrapper>
         <Grid container spacing={0} justify='center'>
@@ -83,8 +90,8 @@ class CommentsPage extends Component {
         </Grid>
         <CommentPageFooter>
           <LoadableAddCommentPanel
-            candidate={candidate}
             username={username}
+            candidate={candidate}
             addComment={addComment}
             subscribe={subscribe}
             unsubscribe={unsubscribe}
@@ -92,6 +99,7 @@ class CommentsPage extends Component {
             disabled={!authorized}
           />
         </CommentPageFooter>
+        {fethcingSpinner}
       </CommentPageWrapper>
     )
   }
@@ -103,21 +111,14 @@ CommentsPage.propTypes = {
 
 export default connect(state => {
   return {
-    comments: Object.keys(state.comments).map(commentId => state.comments[commentId]),
-    initializing: state.initializing,
-    fetching: state.fetching,
-    authorized: state.authorized,
-    username: state.username
+    comments: Object.keys(state.comments.comments).map(commentId => state.comments.comments[commentId]),
+    initializing: state.application.initializing,
+    fetching: state.application.fetching,
+    authorized: state.authorization.authorized,
+    username: state.authorization.username
   }
 }, {...commentActions, ...notificationActions})(CommentsPage)
 
-const SpinnerWrapper = styled.div`
-  position: fixed;
-  z-index: 100;
-  top: 48%;
-  width: 100%;
-  text-align: center;
-`
 
 const CommentPageFooter = styled.div`
   position: fixed;
@@ -132,7 +133,6 @@ const CommentPageWrapper = styled.div`
   background: #EEE;
   position: absolute;
   top: 0;
-  padding-top: 110px;
   padding-bottom: 161px;
   box-sizing: border-box;
 `
@@ -142,4 +142,22 @@ const NoResultWrapper = styled.div`
   color: #bbb;
   text-align: center;
   margin-bottom: 20px;
+`
+
+const FetchingWrapper = styled.div`
+  position: fixed;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgb(255, 255, 255, 0.5);
+`
+
+const SpinnerWrapper = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: 48%;
+  width: 100%;
+  text-align: center;
 `

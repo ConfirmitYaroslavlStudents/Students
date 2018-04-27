@@ -70,6 +70,6 @@ UpdateCandidateDialog.propTypes = {
 
 export default connect((state) => {
   return {
-    tags: state.tags
+    tags: state.tags.tags
   }
 }, candidateActions)(UpdateCandidateDialog)

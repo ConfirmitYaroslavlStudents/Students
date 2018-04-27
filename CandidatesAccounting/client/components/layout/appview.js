@@ -26,9 +26,9 @@ export default class AppView extends Component {
 
     const tableSwitch =
       initializing ?
-        <SpinnerWrapper>
+        <InitSpinnerWrapper >
           <Spinner size={60}/>
-        </SpinnerWrapper>
+        </InitSpinnerWrapper>
         :
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
@@ -46,14 +46,14 @@ export default class AppView extends Component {
           <Route exact path='/*' render={() =>
             <CandidatesTable type='Candidate' />}
           />
-          <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
+          <Route psath='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
         </Switch>
 
     const refreshingSpinner =
-      fetching ?
-        <SpinnerWrapper>
+      fetching && !initializing ?
+        <RefreshSpinnerWrapper>
           <Spinner size={60}/>
-        </SpinnerWrapper>
+        </RefreshSpinnerWrapper>
         : ''
 
     return (
@@ -64,8 +64,8 @@ export default class AppView extends Component {
         </Navbar>
         <MainWrapper>
           { tableSwitch }
+          { refreshingSpinner }
         </MainWrapper>
-        { refreshingSpinner }
         <SnackBar message={errorMessage} onClose={handleSnackbarClose} />
       </div>
     )
@@ -74,14 +74,14 @@ export default class AppView extends Component {
 
 function mapStateToProps(state) {
   return {
-    initializing: state.initializing,
-    fetching: state.fetching,
-    candidates: state.candidates,
-    errorMessage: state.errorMessage
+    initializing: state.application.initializing,
+    fetching: state.application.fetching,
+    candidates: state.candidates.candidates,
+    errorMessage: state.application.errorMessage
   }
 }
 
-const SpinnerWrapper = styled.div`
+const InitSpinnerWrapper = styled.div`
   position: fixed;
   z-index: 100;
   top: 48%;
@@ -89,7 +89,16 @@ const SpinnerWrapper = styled.div`
   text-align: center;
 `
 
+const RefreshSpinnerWrapper = styled.div`
+  position: absolute;
+  z-index: 100;
+  top: 38%;
+  width: 100%;
+  text-align: center;
+`
+
 const MainWrapper = styled.div`
+  position: relative;
   margin-top: 108px;
 `
 

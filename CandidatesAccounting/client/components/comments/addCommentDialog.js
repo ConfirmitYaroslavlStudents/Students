@@ -40,8 +40,8 @@ class AddCommentDialog extends Component {
           <AddCommentDialogFormWrapper>
             {
               <LoadableAddCommentPanel
-                candidate={candidate}
                 username={username}
+                candidate={candidate}
                 addComment={addComment}
                 subscribe={subscribe}
                 unsubscribe={unsubscribe}
@@ -60,11 +60,9 @@ AddCommentDialog.propTypes = {
   disabled: PropTypes.bool,
 }
 
-export default connect(state => {
-  return {
-    username: state.username,
-  }
-}, {...commentActions, ...notificationActions})(AddCommentDialog)
+export default connect(state => ({
+  username: state.authorization.username
+}), {...commentActions, ...notificationActions})(AddCommentDialog)
 
 const AddCommentDialogFormWrapper = styled.div`
   width: 470px;

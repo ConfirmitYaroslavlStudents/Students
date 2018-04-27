@@ -56,8 +56,8 @@ const SpinnerWrapper = styled.div`
 
 export default connect(state => {
   return {
-    authorized: state.authorized,
-    authorizing: state.authorizing,
-    username: state.username
+    authorized: state.authorization.authorized,
+    authorizing: state.authorization.authorizing,
+    username: state.authorization.username
   }
 }, authorizationActions)(UserControls)

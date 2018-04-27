@@ -67,8 +67,8 @@ class AddCandidateDialog extends Component{
 
 export default connect(state => {
   return {
-    authorized: state.authorized,
-    candidateStatus: state.candidateStatus,
-    tags: state.tags
+    authorized: state.authorization.authorized,
+    candidateStatus: state.candidates.candidateStatus,
+    tags: state.tags.tags
   }
 }, candidateActions)(AddCandidateDialog)

@@ -1,7 +1,16 @@
 import createReducer from './createReducer'
-import * as A from '../actions/tagActions'
+import A from '../actions'
 
-export default createReducer({}, {
+const initialState = {
+  tags: []
+}
+
+export default createReducer(initialState, {
+  [A.initSuccess]: (state, {payload}) => ({
+    ...state,
+    ...initialState
+  }),
+
   [A.getTagsSuccess]: (state, {payload}) => ({
     ...state,
     tags: payload.tags

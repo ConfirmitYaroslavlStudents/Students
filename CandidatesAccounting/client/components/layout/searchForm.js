@@ -88,6 +88,6 @@ class SearchForm extends Component {
 
 export default connect(state => {
   return {
-    searchRequest: state.searchRequest
+    searchRequest: state.application.searchRequest
   }
 }, applicationActions)(SearchForm)

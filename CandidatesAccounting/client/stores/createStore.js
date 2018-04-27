@@ -4,7 +4,7 @@ import createSagaMiddleware from 'redux-saga'
 import sagaCreator from '../sagas/sagas'
 import { init } from '../actions/applicationActions'
 
-export default (reducer, initialState, history) => {
+export default (reducer, username, history) => {
   const composeMiddlewares = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
   const sagaMiddleware = createSagaMiddleware()
   let middlewares = applyMiddleware(sagaMiddleware)
@@ -14,11 +14,11 @@ export default (reducer, initialState, history) => {
   }
 
   const store = createStore(reducer, middlewares)
-  store.dispatch(init(initialState))
-
   let sagaRun = sagaMiddleware.run(function* () {
     yield sagaCreator({ history })
   })
+
+  store.dispatch(init({ username }))
 
   if (module.hot) {
     module.hot.accept('../reducers/rootReducer', () => {

@@ -3,9 +3,11 @@ import { createAction } from 'redux-actions'
 
 export const init = createAction('INIT')
 
-export const initialServerFetch = createAction('INITIAL_SERVER_FETCH')
+export const initSuccess = createAction('INIT_SUCCESS')
 
-export const setFetching = createAction('SET_FETCHING')
+export const getInitialStateFromServer = createAction('GET_INITIAL_STATE_FROM_SERVER')
+
+export const enableFetching = createAction('SET_FETCHING')
 
 export const setErrorMessage = createAction('SET_ERROR_MESSAGE')
 

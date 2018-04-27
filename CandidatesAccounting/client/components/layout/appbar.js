@@ -28,7 +28,7 @@ function Appbar(props) {
 
 export default connect(state => {
   return {
-    pageTitle: state.pageTitle
+    pageTitle: state.application.pageTitle
   }
 })(Appbar)
 

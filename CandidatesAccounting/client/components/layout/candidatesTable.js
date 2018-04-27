@@ -144,16 +144,16 @@ CandidatesTable.propTypes = {
 
 export default connect(state => {
   return {
-    candidates: Object.keys(state.candidates).map(candidateID => { return state.candidates[candidateID] }),
-    searchRequest: state.searchRequest,
-    fetching: state.fetching,
-    onUpdating: state.onUpdating,
-    onDeleting: state.onDeleting,
-    offset: state.offset,
-    candidatesPerPage: state.candidatesPerPage,
-    totalCount: state.totalCount,
-    sortingField: state.sortingField,
-    sortingDirection: state.sortingDirection,
+    candidates: Object.keys(state.candidates.candidates).map(candidateID => state.candidates.candidates[candidateID]),
+    searchRequest: state.application.searchRequest,
+    fetching: state.application.fetching,
+    onUpdating: state.candidates.onUpdating,
+    onDeleting: state.candidates.onDeleting,
+    offset: state.candidates.offset,
+    candidatesPerPage: state.candidates.candidatesPerPage,
+    totalCount: state.candidates.totalCount,
+    sortingField: state.candidates.sortingField,
+    sortingDirection: state.candidates.sortingDirection,
   }
 }, {...applicationActions, ...candidateActions})(CandidatesTable)
 

@@ -1,16 +1,19 @@
 import createReducer from './createReducer'
-import * as A from '../actions/commentActions'
+import A from '../actions'
 
-export default createReducer({}, {
+const initialState = {
+  comments: {}
+}
+
+export default createReducer(initialState, {
+  [A.initSuccess]: (state, {payload}) => ({
+    ...state,
+    ...initialState
+  }),
+
   [A.openCommentPageSuccess]: (state, {payload}) => ({
     ...state,
-    comments: payload.comments,
-    candidates: { [payload.candidate.id]: payload.candidate },
-    candidateStatus: payload.candidate.status,
-    pageTitle: payload.candidate.name,
-    totalCount: 1,
-    initializing: false,
-    fetching: false,
+    comments: payload.comments
   }),
 
   [A.addCommentSuccess]: (state, {payload}) => ({
@@ -18,13 +21,6 @@ export default createReducer({}, {
     comments: {
       ...state.comments,
       [payload.comment.id]: payload.comment
-    },
-    candidates: {
-      ...state.candidates,
-      [payload.candidateId] : {
-        ...state.candidates[payload.candidateId],
-        commentAmount: state.candidates[payload.candidateId].commentAmount + 1
-      }
     }
   }),
 
@@ -35,14 +31,12 @@ export default createReducer({}, {
       ...state,
       comments: {
         ...comments
-      },
-      candidates: {
-        ...state.candidates,
-        [payload.candidateId]: {
-          ...state.candidates[payload.candidateId],
-          commentAmount: state.candidates[payload.candidateId].commentAmount - 1
-        }
       }
     }
   },
+
+  [A.getCandidatesSuccess]: (state, {payload}) => ({
+    ...state,
+    comments: {}
+  }),
 })

@@ -52,7 +52,7 @@ function TablesBar(props) {
 
 export default connect(state => {
   return {
-    candidateStatus: state.candidateStatus
+    candidateStatus: state.candidates.candidateStatus
   }
 }, candidateActions)(TablesBar)
 

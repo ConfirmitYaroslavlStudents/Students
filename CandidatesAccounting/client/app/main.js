@@ -4,7 +4,7 @@ import 'typeface-roboto'
 import 'react-quill/dist/quill.snow.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import reducer from '../reducers/reducer'
+import reducer from '../reducers/rootReducer'
 import { Provider } from 'react-redux'
 import { Router } from 'react-router'
 import { Route } from 'react-router-dom'
@@ -14,10 +14,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import createPalette from 'material-ui/styles/createPalette'
 import { indigo } from 'material-ui/colors'
 import AppView from '../components/layout/appview'
-import getStateArgsFromURL from '../utilities/getStateArgsFromURL'
-import getCandidateIdFromURL from '../utilities/getCandidateIdFromURL'
 import configureStore from '../stores/createStore'
-import { initialServerFetch } from '../actions/applicationActions'
+import { getInitialStateFromServer } from '../actions/applicationActions'
 
 const username = window['APP_CONFIG'].username
 
@@ -45,21 +43,13 @@ function renderApp(app) {
   )
 }
 
-const stateArgs = getStateArgsFromURL(window.location.pathname + window.location.search)
-const candidateId = getCandidateIdFromURL(window.location.pathname + window.location.search)
-
-const initialState = {
-  ...stateArgs,
-  username
-}
-
-const store = configureStore(reducer, initialState, history)
+const store = configureStore(reducer, username, history)
 
 /*________________________________________________________________________*/
 
 renderApp(AppView)
 
-store.dispatch(initialServerFetch({ username, candidateStatus: stateArgs.status, candidateId}))
+store.dispatch(getInitialStateFromServer())
 
 if (module.hot) {
   module.hot.accept('../components/layout/appview', () => {

@@ -64,7 +64,7 @@ class LoginDialog extends Component {
 
 export default connect(state => {
   return {
-    authorizing: state.authorizing
+    authorizing: state.authorization.authorizing
   }
 }, authorizationActions)(LoginDialog)
 

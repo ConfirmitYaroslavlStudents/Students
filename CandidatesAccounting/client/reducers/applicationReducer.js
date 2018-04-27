@@ -1,47 +1,24 @@
 import createReducer from './createReducer'
-import * as A from '../actions/applicationActions'
+import A from '../actions'
 
 const initialState = {
-  authorized: false,
-  authorizing: true,
-  username: '',
-  notifications: {},
-
   initializing: true,
   fetching: false,
   pageTitle: 'Candidate Accounting',
   errorMessage: '',
   searchRequest: '',
-
-  candidateStatus: '',
-  offset: 0,
-  candidatesPerPage: 15,
-  totalCount: 0,
-  sortingField: '',
-  sortingDirection: 'desc',
-  onUpdating: '',
-  onDeleting: '',
-  onResumeUploading: '',
-
-  candidates: {},
-
-  comments: {},
-
-  tags: [],
 }
 
 export default createReducer(initialState, {
-  [A.init]: (state, {payload}) => ({
+  [A.initSuccess]: (state, {payload}) => ({
     ...state,
     ...initialState,
-    ...payload,
-    authorized: payload.username !== '',
-    authorizing: false
+    searchRequest: payload.initialState.searchRequest ? payload.initialState.searchRequest : initialState.searchRequest
   }),
 
-  [A.setFetching]: (state, {payload}) => ({
+  [A.enableFetching]: state => ({
     ...state,
-    fetching: payload.fetching
+    fetching: true
   }),
 
   [A.setSearchRequest]: (state, {payload}) => ({
@@ -52,5 +29,34 @@ export default createReducer(initialState, {
   [A.setErrorMessage]: (state, {payload}) => ({
     ...state,
     errorMessage: payload.message
+  }),
+
+  [A.setCandidateStatusSuccess]: (state, {payload}) => ({
+    ...state,
+    searchRequest: payload.status === state.candidateStatus ? '' : state.searchRequest
+  }),
+
+  [A.getCandidatesSuccess]: (state, {payload}) => ({
+    ...state,
+    pageTitle: 'Candidate Accounting',
+    initializing: false,
+    fetching: false
+  }),
+
+  [A.openCommentPageSuccess]: (state, {payload}) => ({
+    ...state,
+    pageTitle: payload.candidate.name,
+    initializing: false,
+    fetching: false,
+  }),
+
+  [A.loginFailure]: (state, {payload}) => ({
+    ...state,
+    errorMessage: payload.error + '. Login failure.'
+  }),
+
+  [A.logoutFailure]: (state, {payload}) => ({
+    ...state,
+    errorMessage: payload.error + '. Logout failure.'
   }),
 })

@@ -70,10 +70,10 @@ CandidateControls.propTypes = {
 
 export default connect(state => {
   return {
-    fetching: state.fetching,
-    authorized: state.authorized,
-    onUpdating: state.onUpdating,
-    onDeleting: state.onDeleting
+    fetching: state.application.fetching,
+    authorized: state.authorization.authorized,
+    onUpdating: state.candidates.onUpdating,
+    onDeleting: state.candidates.onDeleting
   }
 }, commentActions)(CandidateControls)
 

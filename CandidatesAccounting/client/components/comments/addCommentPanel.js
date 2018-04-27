@@ -17,7 +17,7 @@ export default class AddCommentPanel extends Component {
   }
 
   handleChange = (commentText) => {
-    this.setState({ commentText })
+    this.setState({commentText})
   }
 
   handleAttachFile = (commentAttachment) => {
@@ -106,8 +106,8 @@ export default class AddCommentPanel extends Component {
           <SubscribeButtonWrapper>
             <SubscribeButton
               active={!disabled && !!candidate.subscribers[username]}
-              subscribe={() => { subscribe({ candidateId: candidate.id, email: username })}}
-              unsubscribe={() => { unsubscribe({ candidateId: candidate.id, email: username })}}
+              subscribe={() => { subscribe({ candidateId: candidate.id })}}
+              unsubscribe={() => { unsubscribe({ candidateId: candidate.id })}}
               disabled={disabled}
             />
           </SubscribeButtonWrapper>
@@ -126,8 +126,8 @@ export default class AddCommentPanel extends Component {
 }
 
 AddCommentPanel.propTypes = {
-  candidate: PropTypes.object.isRequired,
   username: PropTypes.string.isRequired,
+  candidate: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,

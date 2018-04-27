@@ -1,26 +1,44 @@
 import createReducer from './createReducer'
-import * as A from '../actions/candidateActions'
+import A from '../actions'
 
-export default createReducer({}, {
+const initialState = {
+  candidates: {},
+  candidateStatus: '',
+  offset: 0,
+  candidatesPerPage: 15,
+  totalCount: 0,
+  sortingField: '',
+  sortingDirection: 'desc',
+  onUpdating: '',
+  onDeleting: '',
+  onResumeUploading: ''
+}
+
+export default createReducer(initialState, {
+  [A.initSuccess]: (state, {payload}) => ({
+    ...state,
+    ...initialState,
+    candidateStatus: payload.initialState.candidateStatus ? payload.initialState.candidateStatus : initialState.candidateStatus,
+    offset: payload.initialState.offset ? payload.initialState.offset : initialState.offset,
+    candidatesPerPage: payload.initialState.candidatesPerPage ? payload.initialState.candidatesPerPage : initialState.candidatesPerPage,
+    sortingField: payload.initialState.sortingField ? payload.initialState.sortingField : initialState.sortingField,
+    sortingDirection: payload.initialState.sortingDirection ? payload.initialState.sortingDirection : initialState.sortingDirection
+  }),
+
   [A.setCandidateStatusSuccess]: (state, {payload}) => ({
     ...state,
-    searchRequest: payload.status === state.candidateStatus ? '' : state.searchRequest,
     candidateStatus: payload.status,
     offset: 0,
     sortingField: '',
     sortingDirection:'desc',
-    pageTitle: 'Candidate Accounting'
   }),
 
   [A.getCandidatesSuccess]: (state, {payload}) => ({
     ...state,
-    comments: {},
     candidates: payload.candidates,
     totalCount: payload.totalCount,
     onUpdating: '',
     onDeleting: '',
-    initializing: false,
-    fetching: false
   }),
 
   [A.addCandidateSuccess]: state => ({
@@ -113,4 +131,60 @@ export default createReducer({}, {
     ...state,
     onDeleting: payload.candidateId
   }),
+
+  [A.openCommentPageSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: { [payload.candidate.id]: payload.candidate },
+    candidateStatus: payload.candidate.status,
+    totalCount: 1,
+  }),
+
+  [A.addCommentSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: {
+      ...state.candidates,
+      [payload.candidateId] : {
+        ...state.candidates[payload.candidateId],
+        commentAmount: state.candidates[payload.candidateId].commentAmount + 1
+      }
+    }
+  }),
+
+  [A.deleteCommentSuccess]: (state, {payload}) => ({
+    candidates: {
+      ...state.candidates,
+      [payload.candidateId]: {
+        ...state.candidates[payload.candidateId],
+        commentAmount: state.candidates[payload.candidateId].commentAmount - 1
+      }
+    }
+  }),
+
+  [A.subscribeSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: {
+      ...state.candidates,
+      [payload.candidateId]: {
+        ...state.candidates[payload.candidateId],
+        subscribers: {
+          ...state.candidates[payload.candidateId].subscribers,
+          [payload.username]: payload.username
+        }
+      }
+    }
+  }),
+
+  [A.unsubscribeSuccess]: (state, {payload}) => {
+    const subscribers = state.candidates[payload.candidateId].subscribers
+    delete subscribers[payload.username]
+    return {
+      ...state,
+      candidates: {
+        ...state.candidates,
+        [payload.candidateId]: {
+          ...state.candidates[payload.candidateId],
+          subscribers: subscribers
+        }
+    }
+  }},
 })

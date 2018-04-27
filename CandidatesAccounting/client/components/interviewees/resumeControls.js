@@ -61,8 +61,8 @@ ResumeControls.propTypes = {
 
 export default connect(state => {
   return {
-    authorized: state.authorized,
-    onResumeUploading: state.onResumeUploading
+    authorized: state.authorization.authorized,
+    onResumeUploading: state.candidates.onResumeUploading
   }
 }, candidateActions)(ResumeControls)
 

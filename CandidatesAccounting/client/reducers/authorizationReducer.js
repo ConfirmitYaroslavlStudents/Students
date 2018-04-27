@@ -1,13 +1,26 @@
 import createReducer from './createReducer'
-import * as A from '../actions/authorizationActions'
+import A from '../actions'
 
-export default createReducer({}, {
+const initialState = {
+  authorized: false,
+  authorizing: true,
+  username: '',
+}
+
+export default createReducer(initialState, {
+  [A.initSuccess]: (state, {payload}) => ({
+    ...state,
+    ...initialState,
+    username: payload.initialState.username,
+    authorized: payload.initialState.username !== '',
+    authorizing: false
+  }),
+
   [A.loginSuccess]: (state, {payload}) => ({
     ...state,
     authorizing: false,
     authorized: true,
-    username: payload.username,
-    notifications: payload.notifications
+    username: payload.username
   }),
 
   [A.loginFailure]: (state, {payload}) => ({
@@ -15,26 +28,22 @@ export default createReducer({}, {
     authorizing: false,
     authorized: false,
     username: '',
-    notifications: {},
-    errorMessage: payload.error + '. Login failure.'
   }),
 
   [A.logoutSuccess]: state => ({
     ...state,
     authorizing: false,
     authorized: false,
-    username: '',
-    notifications: {}
+    username: ''
   }),
 
   [A.logoutFailure]: (state, {payload}) => ({
     ...state,
-    authorizing: false,
-    errorMessage: payload.error + '. Logout failure.'
+    authorizing: false
   }),
 
-  [A.setAuthorizing]: (state, {payload}) => ({
+  [A.enableAuthorizing]: state => ({
     ...state,
-    authorizing: payload.authorizing
+    authorizing: true
   }),
 })

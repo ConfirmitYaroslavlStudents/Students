@@ -73,9 +73,9 @@ function NotificationCenterPopover(props) {
 
 export default connect(state => {
   return {
-    initializing: state.initializing,
-    notifications: Object.keys(state.notifications).map(notificationId => state.notifications[notificationId]),
-    username: state.username
+    initializing: state.application.initializing,
+    notifications: Object.keys(state.notifications.notifications).map(notificationId => state.notifications.notifications[notificationId]),
+    username: state.authorization.username
   }
 }, {...candidateActions, ...notificationActions, ...commentActions})(NotificationCenterPopover)
 

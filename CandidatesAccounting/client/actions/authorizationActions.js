@@ -13,4 +13,4 @@ export const logoutSuccess = createAction('LOGOUT_SUCCESS')
 
 export const logoutFailure = createAction('LOGOUT_FAILURE')
 
-export const setAuthorizing = createAction('SET_AUTHORIZING')
+export const enableAuthorizing = createAction('SET_AUTHORIZING')

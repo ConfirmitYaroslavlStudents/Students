@@ -1,40 +1,20 @@
 import createReducer from './createReducer'
-import * as A from '../actions/notificationActions'
+import A from '../actions'
 
-export default createReducer({}, {
+const initialState = {
+  notifications: {}
+}
+
+export default createReducer(initialState, {
+  [A.initSuccess]: (state, {payload}) => ({
+    ...state,
+    ...initialState
+  }),
+
   [A.getNotificationsSuccess]: (state, {payload}) => ({
     ...state,
     notifications: payload.notifications
   }),
-
-  [A.subscribeSuccess]: (state, {payload}) => ({
-    ...state,
-    candidates: {
-      ...state.candidates,
-      [payload.candidateId]: {
-        ...state.candidates[payload.candidateId],
-        subscribers: {
-          ...state.candidates[payload.candidateId].subscribers,
-          [payload.email]: payload.email
-        }
-      }
-    }
-  }),
-
-  [A.unsubscribeSuccess]: (state, {payload}) => {
-    let subscribers = { ...state.candidates[payload.candidateId].subscribers }
-    delete subscribers[payload.email]
-    return {
-      ...state,
-      candidates: {
-        ...state.candidates,
-        [payload.candidateId]: {
-          ...state.candidates[payload.candidateId],
-          subscribers: subscribers
-        }
-      }
-    }
-  },
 
   [A.noticeNotificationSuccess]: (state, {payload}) => ({
     ...state,
@@ -55,4 +35,19 @@ export default createReducer({}, {
       notifications: notifications
     }
   },
+
+  [A.loginSuccess]: (state, {payload}) => ({
+    ...state,
+    notifications: payload.notifications
+  }),
+
+  [A.loginFailure]: (state, {payload}) => ({
+    ...state,
+    notifications: {}
+  }),
+
+  [A.logoutSuccess]: state => ({
+    ...state,
+    notifications: {}
+  }),
 })

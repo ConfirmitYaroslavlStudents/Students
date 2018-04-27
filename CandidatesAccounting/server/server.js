@@ -17,7 +17,7 @@ import passportLocal from 'passport-local'
 import { getResume, addResume, getAttachment, addAttachment } from './mongoose'
 import template from './template'
 
-const port = 3000
+const port = 4000
 
 const developmentMode = process.argv[3] === 'development'
 

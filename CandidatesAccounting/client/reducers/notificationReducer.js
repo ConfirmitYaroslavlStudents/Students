@@ -51,3 +51,7 @@ export default createReducer(initialState, {
     notifications: {}
   }),
 })
+
+export const SELECTORS = {
+  NOTIFICATIONS: state => state.notifications
+}

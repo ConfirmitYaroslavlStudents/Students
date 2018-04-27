@@ -47,3 +47,9 @@ export default createReducer(initialState, {
     authorizing: true
   }),
 })
+
+export const SELECTORS = {
+  AUTHORIZED: state => state.authorized,
+  AUTHORIZING: state => state.authorizing,
+  USERNAME: state => state.username,
+}

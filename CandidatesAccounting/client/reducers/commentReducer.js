@@ -40,3 +40,7 @@ export default createReducer(initialState, {
     comments: {}
   }),
 })
+
+export const SELECTORS = {
+  COMMENTS: state => state.comments
+}

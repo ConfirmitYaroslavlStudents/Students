@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { SELECTORS } from '../../reducers/rootReducer'
 import { Switch, Route } from 'react-router-dom'
 import * as applicationActions from '../../actions/applicationActions'
 import Navbar from '../common/UIComponentDecorators/navbar'

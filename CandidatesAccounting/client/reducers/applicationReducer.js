@@ -60,3 +60,11 @@ export default createReducer(initialState, {
     errorMessage: payload.error + '. Logout failure.'
   }),
 })
+
+export const SELECTORS = {
+  INITIALIZING: state => state.initializing,
+  FETCHING: state => state.fetching,
+  PAGETITLE: state => state.pageTitle,
+  ERORRMESSAGE: state => state.errorMessage,
+  SEARCHREQUEST: state => state.searchRequest,
+}

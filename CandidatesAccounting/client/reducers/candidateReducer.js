@@ -188,3 +188,16 @@ export default createReducer(initialState, {
     }
   }},
 })
+
+export const SELECTORS = {
+  CANDIDATES: state => state.candidates,
+  CANDIDATESTATUS: state => state.candidateStatus,
+  OFFSET: state => state.offset,
+  CANDIDATESPERPAGE: state => state.candidatesPerPage,
+  TOTALCOUNT: state => state.totalCount,
+  SORTINGFIELD: state => state.sortingField,
+  SORTINGDIRECTION: state => state.sortingDirection,
+  ONUPDATING: state => state.onUpdating,
+  ONDELETING: state => state.onDeleting,
+  ONRESUMEUPLOADING: state => state.onResumeUploading
+}

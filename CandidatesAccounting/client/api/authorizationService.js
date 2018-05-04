@@ -6,14 +6,11 @@ export function login(username, password) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({username: username, password: password})
+      body: JSON.stringify({ username, password })
     })
-    .then((response) => {
+    .then(response => {
       if (response.status === 200) {
-        return response.json()
-          .then((data) => {
-            return data.username
-          })
+        return response.json().then(data => data.username)
       } else {
         throw response.status
       }
@@ -26,7 +23,7 @@ export function logout() {
       method: 'GET',
       credentials: 'include',
     })
-    .then((response) => {
+    .then(response => {
       if (response.status === 200) {
         return true
       } else {

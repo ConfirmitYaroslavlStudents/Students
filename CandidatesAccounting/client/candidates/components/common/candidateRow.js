@@ -1,0 +1,1 @@
+// TODO: simplify candidatesTable with exctracting candidate/interviewee/student/trainee rows from it

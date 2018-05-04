@@ -19,9 +19,7 @@ export function getNotifications(username) {
         }
       }
     }`,
-    {
-      username: username
-    }
+    { username }
   )
   .then((data) => {
     if (!data) {

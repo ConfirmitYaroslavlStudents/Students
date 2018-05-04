@@ -9,7 +9,7 @@ module.exports = {
     main: [
       'babel-polyfill',
       'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-      path.join(__dirname, 'client', 'app', 'main.js')
+      path.join(__dirname, 'client', 'main.js')
     ],
   },
   output: {

@@ -17,7 +17,7 @@ import passportLocal from 'passport-local'
 import { getResume, addResume, getAttachment, addAttachment } from './mongoose'
 import template from './template'
 
-const port = 4000
+const port = 3000
 
 const developmentMode = process.argv[3] === 'development'
 
@@ -133,7 +133,7 @@ app.post('/interviewees/:intervieweeID/resume', (req, res) => {
   })
 })
 
-app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', (req, res) => {
+app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/commentsActions/:commentID/attachment', (req, res) => {
   return getAttachment(req.params.candidateID, req.params.commentID,).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -143,7 +143,7 @@ app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments
   })
 })
 
-app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments/:commentID/attachment', (req, res) => {
+app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/commentsActions/:commentID/attachment', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }

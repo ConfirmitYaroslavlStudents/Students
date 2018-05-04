@@ -8,17 +8,14 @@ export function addComment(candidateID, comment) {
         comment: $comment
       )
     }`,
-    {
-      candidateID: candidateID,
-      comment: comment
-    }
+    { candidateID, comment }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.addComment) {
       throw 'Server error'
     }
     return data.addComment
-  });
+  })
 }
 
 export function deleteComment(candidateID, commentID) {
@@ -29,12 +26,9 @@ export function deleteComment(candidateID, commentID) {
         commentID: $commentID
       )
     }`,
-    {
-      candidateID: candidateID,
-      commentID: commentID
-    }
+    { candidateID, commentID }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.deleteComment) {
       throw 'Server error'
     }
@@ -46,13 +40,13 @@ export function addCommentAttachment(candidateID, commentID, attachment) {
   formData.append('attachment', attachment)
 
   return fetch(
-    '/interviewees/' + candidateID + '/comments/' + commentID + '/attachment',
+    '/interviewees/' + candidateID + '/commentsActions/' + commentID + '/attachment',
     {
       method: 'POST',
       credentials: 'include',
       body: formData
     })
-    .then((response) => {
+    .then(response => {
       if (response.status === 200) {
         return true
       } else {

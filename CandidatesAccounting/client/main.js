@@ -1,7 +1,5 @@
-import './css/commonStyles.css'
-import './css/selectizeStyles.css'
+import './css/index.css'
 import 'typeface-roboto'
-import 'react-quill/dist/quill.snow.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import reducer from './rootReducer'

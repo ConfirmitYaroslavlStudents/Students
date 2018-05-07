@@ -122,6 +122,30 @@ p {
     border-bottom: 1px solid #fff;
 }
 
+.Select-control {
+    color: #08c !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #999 !important;
+}
+
+.Select-control:hover {
+    border-bottom: 2px solid #222 !important;
+}
+
+.Select-control:focus {
+    border-bottom: 2px solid #3F51B5 !important;
+}
+
+.Select-value {
+    background: #f2f9fc !important;
+    border: 1px solid #c9e6f2 !important;
+    border-radius: 2px !important;
+    color: #08c !important;
+    vertical-align: middle !important;
+}
+
 .simple-value:hover {
     color: #2196F3 !important;
 }

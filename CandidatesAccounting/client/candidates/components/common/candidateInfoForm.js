@@ -14,7 +14,7 @@ import styled from 'styled-components'
 export default class CandidateInfoForm extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ candidateStatus: props.candidate.status })
+    this.state = ({ status: props.candidate.status, tags: props.candidate.tags })
   }
 
   changeProperty = (key, value) => {
@@ -23,17 +23,18 @@ export default class CandidateInfoForm extends Component {
 
   changeCandidateStatus = (status) => {
     this.props.candidate.status = status
-    this.setState({ candidateStatus: status })
+    this.setState({ status })
   }
 
   setCandidateTags = (tags) => {
     this.props.candidate.tags = tags.map(tag => tag.label)
+    this.setState({ tags: tags.map(tag => tag.label) })
   }
 
   getSpecialFields = () => {
     const { candidate } = this.props
 
-    switch (this.state.candidateStatus) {
+    switch (this.state.status) {
       case 'Interviewee':
         return <IntervieweeSpecialFields interviewee={candidate} changeProperty={this.changeProperty}/>
       case 'Student':
@@ -51,14 +52,14 @@ export default class CandidateInfoForm extends Component {
         <SelectInput
           label="Candidate's status"
           options={['Interviewee', 'Student', 'Trainee']}
-          selected={this.state.candidateStatus}
+          selected={this.state.status}
           minWidth={240}
           onChange={this.changeCandidateStatus}/>
         <TextFieldLabel>Tags</TextFieldLabel>
         <TagSelect
           onValuesChange={this.setCandidateTags}
           options={tags}
-          defaultValues={candidate.tags}/>
+          values={this.state.tags}/>
         <TextField
           onChange={value => {this.changeProperty('name', value)}}
           label='Name'

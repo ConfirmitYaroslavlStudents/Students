@@ -1,3 +1,4 @@
+import 'react-quill/dist/quill.snow.css'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { BigButtonStyle, SmallIconStyle, QuillToolbarButtonStyle } from '../../common/styleObjects'

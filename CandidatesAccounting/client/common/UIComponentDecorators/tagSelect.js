@@ -1,44 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { MultiSelect } from 'react-selectize'
+import Select from 'react-select'
+import 'react-select/dist/react-select.css';
 
 export default function TagSelect(props){
   const options = props.options.map(tag => ({label: tag, value: tag}))
-  const defaultValues = props.defaultValues.map(tag => ({label: tag, value: tag}))
-
-  const createFromSearch = (options, values, search) => {
-    const labels = values.map(value => value.label)
-    if (search.trim().length === 0 || labels.indexOf(search.trim()) !== -1)
-      return null;
-    return { label: search.trim(), value: search.trim() }
-  }
-
-  const renderNoResultsFound = (values, search) =>
-    <div className='no-results-found'>
-      {
-        search.trim().length === 0 ?
-          'Type a few characters to create a tag'
-          :
-          values.map(item => item.label).indexOf(search.trim()) !== -1 ?
-            'Tag already exists'
-            :
-            ''
-      }
-    </div>
+  const values = props.values.map(tag => ({label: tag, value: tag}))
 
   return (
-    <MultiSelect
+    <Select.Creatable
+      multi
       options={options}
-      defaultValues={defaultValues}
-      createFromSearch={ createFromSearch }
-      renderNoResultsFound={ renderNoResultsFound }
-      onValuesChange={props.onValuesChange}
-      style={{width: '100%'}}
-    />)
+      onChange={props.onValuesChange}
+      value={values}
+    />
+  )
 }
 
 TagSelect.propTypes = {
   onValuesChange: PropTypes.func.isRequired,
-  options: PropTypes.array,
-  defaultValues: PropTypes.array,
+  options: PropTypes.array.isRequired,
+  values: PropTypes.array.isRequired,
 }

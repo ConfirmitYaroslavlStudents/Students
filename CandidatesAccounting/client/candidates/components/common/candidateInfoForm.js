@@ -6,9 +6,9 @@ import SelectInput from '../../../common/UIComponentDecorators/selectInput'
 import TagSelect from '../../../common/UIComponentDecorators/tagSelect'
 import { toDatePickerFormat, fromDatePickerFormat } from '../../../utilities/customMoment'
 import { isNotEmpty, isEmail } from '../../../utilities/candidateValidators'
-import IntervieweeSpecialFields from '../interviewees/intervieweeSpecialFields'
-import StudentSpecialFields from '../students/studentSpecialFields'
-import TraineeSpecialFields from '../trainees/traineeSpecialFields'
+import IntervieweeSpecialFields from '../interviewees/specialFields'
+import StudentSpecialFields from '../students/specialFields'
+import TraineeSpecialFields from '../trainees/specialFields'
 import styled from 'styled-components'
 
 export default class CandidateInfoForm extends Component {

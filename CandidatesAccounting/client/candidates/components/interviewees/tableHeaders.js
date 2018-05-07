@@ -5,5 +5,6 @@ export default function getIntervieweeTableHeaders() {
     {title: 'Birth Date'},
     {title: 'Interview date', sortingField: 'interviewDate'},
     {title: 'Resume'},
-    {title: 'Actions'}]
+    {title: 'Actions'}
+  ]
 }

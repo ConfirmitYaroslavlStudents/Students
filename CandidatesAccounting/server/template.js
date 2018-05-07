@@ -14,8 +14,11 @@ const template = (props) => {
             <link rel="icon" href ="/favicon.ico" type= "image/x-icon" >
             <link rel="shortcut icon" href ="/favicon.ico" type="image/x-icon" >
         </head>
-        <body>
+        <body style="background-color: #CCC">
             <div id="root">
+                <div style="margin: -10px; font-size: 190%; font-weight: bold; color: #888; font-family: sans-serif; text-align: center; padding-top: 200px;">
+                    CandidateAccounting is loading...
+                </div>
             </div>
             <script type="text/javascript">
               window['APP_CONFIG'] = ${JSON.stringify(config)}

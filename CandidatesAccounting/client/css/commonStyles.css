@@ -125,3 +125,7 @@ p {
 .simple-value:hover {
     color: #2196F3 !important;
 }
+
+th:last-child {
+    text-align: right !important;
+}

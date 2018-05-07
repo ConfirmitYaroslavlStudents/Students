@@ -4,15 +4,14 @@ import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { SELECTORS } from '../../../rootReducer'
 import SortablePaginatedTable from '../../../common/sortablePaginatedTable'
-import getCandidateTableHeaders from './candidateTableHeaders'
-import getIntervieweeTableHeaders from '../interviewees/intervieweeTableHeaders'
-import getStudentTableHeaders from '../students/studentTableHeaders'
-import getTraineeTableHeaders from '../trainees/traineeTableHeaders'
-import CandidateControls from './candidateControls'
-import { formatDateTime, formatDate, isToday, isBirthDate } from '../../../utilities/customMoment'
-import TagList from '../../../tags/components/tagList'
-import ResumeControls from '../interviewees/resumeControls'
-import styled, { css } from 'styled-components'
+import CandidateTableHeaders from './candidateTableHeaders'
+import CandidateTableRow from './candidateTableRow'
+import IntervieweeTableHeaders from '../interviewees/tableHeaders'
+import IntervieweeTableRow from '../interviewees/tableRow'
+import StudentTableHeaders from '../students/tableHeaders'
+import StudentTableRow from '../students/tableRow'
+import TraineeTableHeaders from '../trainees/tableHeaders'
+import TraineeTableRow from '../trainees/tableRow'
 
 function CandidatesTable(props) {
   const {
@@ -35,65 +34,33 @@ function CandidatesTable(props) {
   const getHeaders = () => {
     switch (type) {
       case 'Candidate':
-        return getCandidateTableHeaders()
+        return CandidateTableHeaders()
       case 'Interviewee':
-        return getIntervieweeTableHeaders()
+        return IntervieweeTableHeaders()
       case 'Student':
-        return getStudentTableHeaders()
+        return StudentTableHeaders()
       case 'Trainee':
-        return getTraineeTableHeaders()
+        return TraineeTableHeaders()
     }
   }
 
-  const createRow = (candidate, disabled) => {
-    const row = { cells: [], isDisabled: disabled }
-
-    row.cells.push(
-      <CandidateNameWrapper>
-        <span className='nowrap'>{candidate.name}</span>
-        <TagList candidateTags={candidate.tags} />
-      </CandidateNameWrapper>
-    )
-
-    if (type === 'Candidate') {
-      row.cells.push(candidate.status)
-    }
-
-    row.cells.push(candidate.email)
-    row.cells.push(
-      <Date highlighted={isBirthDate(candidate.birthDate)}>
-        {formatDate(candidate.birthDate)}
-      </Date>)
-
-    switch (type) {
+  const getRow = (candidate, disabled) => {
+    let cells = []
+    switch (type)
+    {
       case 'Interviewee':
-        row.cells.push(
-          <Date highlighted={isToday(candidate.interviewDate)}>
-            {formatDateTime(candidate.interviewDate)}
-          </Date>)
-        row.cells.push(<ResumeControls
-          interviewee={candidate}
-          disabled={disabled}
-          downloadingEnabled/>)
+        cells = IntervieweeTableRow({ candidate, disabled})
         break
-
       case 'Student':
-        row.cells.push(candidate.groupName)
-        row.cells.push(<Date>{formatDate(candidate.startingDate)}</Date>)
-        row.cells.push(<Date>{formatDate(candidate.endingDate)}</Date>)
+        cells = StudentTableRow({ candidate })
         break
-
       case 'Trainee':
-        row.cells.push(<Date>{candidate.mentor}</Date>)
+        cells = TraineeTableRow({ candidate })
         break
+      default:
+        cells = CandidateTableRow({ candidate })
     }
-
-    row.cells.push(
-      <CandidateControlsWrapper>
-        <CandidateControls candidate={candidate}/>
-      </CandidateControlsWrapper>)
-
-    return row
+    return { cells, isDisabled: disabled}
   }
 
   const handleOffsetCange = offset => {
@@ -108,17 +75,17 @@ function CandidatesTable(props) {
     setSortingField({sortingField})
   }
 
-  const headers = getHeaders()
+  const candidateHeaders = getHeaders()
 
   const candidatesArray =  Object.keys(candidates).map(candidateID => candidates[candidateID])
 
-  const contentRows = candidatesArray.map(candidate =>
-    createRow(candidate, fetching || candidate.id === onUpdating || candidate.id === onDeleting))
+  const candidateRows = candidatesArray.map(candidate =>
+    getRow(candidate, fetching || candidate.id === onUpdating || candidate.id === onDeleting))
 
   return (
     <SortablePaginatedTable
-      headers={headers}
-      contentRows={contentRows}
+      headers={candidateHeaders}
+      contentRows={candidateRows}
       totalCount={totalCount}
       offset={offset}
       rowsPerPage={candidatesPerPage}
@@ -142,7 +109,11 @@ CandidatesTable.propTypes = {
   candidatesPerPage: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   sortingField: PropTypes.string.isRequired,
-  sortingDirection: PropTypes.string.isRequired
+  sortingDirection: PropTypes.string.isRequired,
+  setOffset: PropTypes.func.isRequired,
+  setCandidatesPerPage: PropTypes.func.isRequired,
+  setSortingField: PropTypes.func.isRequired,
+  toggleSortingDirection: PropTypes.func.isRequired
 }
 
 export default connect(state => ({
@@ -157,22 +128,3 @@ export default connect(state => ({
     sortingDirection: SELECTORS.CANDIDATES.SORTINGDIRECTION(state)
   }
 ), {...actions})(CandidatesTable)
-
-const CandidateNameWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const CandidateControlsWrapper = styled.div`
-  display: flex;
-  float: right;
-`
-
-const Date = styled.div`
-  white-space: nowrap;
-  
-  ${props => props.highlighted && css`
-    color: #ff4081;
-    font-weight: bold;
-	`}
-`

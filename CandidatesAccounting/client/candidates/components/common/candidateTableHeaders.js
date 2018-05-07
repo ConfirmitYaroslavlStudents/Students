@@ -4,5 +4,6 @@ export default function getCandidateTableHeaders() {
     {title: 'Status', sortingField:'status'},
     {title: 'E-mail', sortingField: 'email'},
     {title: 'Birth Date'},
-    {title: 'Actions'}]
+    {title: 'Actions'}
+  ]
 }

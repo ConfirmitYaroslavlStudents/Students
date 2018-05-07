@@ -48,9 +48,9 @@ class CommentsPage extends Component {
 
     if (!candidate) {
       return (
-        <FormWrapper>
+        <CommentPageWrapper>
           <NoResultWrapper>Candidate not found</NoResultWrapper>
-        </FormWrapper>
+        </CommentPageWrapper>
       )
     }
 

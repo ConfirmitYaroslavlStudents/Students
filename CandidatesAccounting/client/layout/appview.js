@@ -13,7 +13,6 @@ import SnackBar from '../common/UIComponentDecorators/snackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
-
 class AppView extends Component {
   render() {
     const {
@@ -22,12 +21,8 @@ class AppView extends Component {
       candidates,
       errorMessage,
       setErrorMessage,
-      history
+      currentCandidateId
     } = this.props
-
-    const extractCandidateId = (url) => {
-      return url.split('/')[2]
-    }
 
     const handleSnackbarClose = () => {
       setErrorMessage({message: ''})
@@ -41,7 +36,8 @@ class AppView extends Component {
         :
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
-            <CommentPage candidate={candidates[extractCandidateId(history.location.pathname)]} />}
+            <CommentPage candidate={candidates[currentCandidateId]} />
+          }
           />
           <Route exact path='/interviewees*' render={() =>
             <CandidatesTable type='Interviewee' />}
@@ -87,14 +83,15 @@ AppView.propTypes = {
   candidates: PropTypes.object.isRequired,
   errorMessage: PropTypes.string.isRequired,
   setErrorMessage: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
+  currentCandidateId: PropTypes.string.isRequired
 }
 
 export default connect(state => ({
     initializing: SELECTORS.APPLICATION.INITIALIZING(state),
     fetching: SELECTORS.APPLICATION.FETCHING(state),
     candidates: SELECTORS.CANDIDATES.CANDIDATES(state),
-    errorMessage: SELECTORS.APPLICATION.ERRORMESSAGE(state)
+    errorMessage: SELECTORS.APPLICATION.ERRORMESSAGE(state),
+    currentCandidateId: SELECTORS.COMMENTS.CURRENTCANDIDATEID(state)
   }
 ), actions)(AppView)
 

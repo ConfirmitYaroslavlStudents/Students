@@ -30,6 +30,8 @@ const theme = createMuiTheme({
 
 const history = createBrowserHistory()
 
+const store = createStore(reducer, username, history)
+
 function renderApp(app) {
   ReactDOM.render(
     <MuiThemeProvider theme={theme}>
@@ -42,8 +44,6 @@ function renderApp(app) {
     document.getElementById('root')
   )
 }
-
-const store = createStore(reducer, username, history)
 
 /*________________________________________________________________________*/
 

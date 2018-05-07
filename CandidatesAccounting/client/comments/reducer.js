@@ -4,7 +4,8 @@ import * as comments from './actions'
 import * as candidates from '../candidates/actions'
 
 const initialState = {
-  comments: {}
+  comments: {},
+  currentCandidateId: ''
 }
 
 export default createReducer(initialState, {
@@ -15,6 +16,7 @@ export default createReducer(initialState, {
 
   [comments.openCommentPageSuccess]: (state, {payload}) => ({
     ...state,
+    currentCandidateId: payload.candidate.id,
     comments: payload.comments
   }),
 
@@ -39,10 +41,12 @@ export default createReducer(initialState, {
 
   [candidates.getCandidatesSuccess]: (state, {payload}) => ({
     ...state,
+    currentCandidateId: '',
     comments: {}
   }),
 })
 
 export const SELECTORS = {
-  COMMENTS: state => state.comments
+  COMMENTS: state => state.comments,
+  CURRENTCANDIDATEID: state => state.currentCandidateId
 }

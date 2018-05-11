@@ -13,4 +13,6 @@ export const setErrorMessage = createAction('SET_ERROR_MESSAGE')
 
 export const setSearchRequest = createAction('SET_SEARCH_REQUEST')
 
+export const resetSearchRequest = createAction('RESET_SEARCH_REQUEST')
+
 export const search = createAction('SEARCH')

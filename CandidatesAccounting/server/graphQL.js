@@ -98,13 +98,13 @@ export const schema = buildSchema(`
   type Mutation {
     addCandidate(candidate: CandidateInput!): String
     updateCandidate(candidate: CandidateInput!): Boolean
-    deleteCandidate(candidateID: ID!): Boolean
-    addComment(candidateID: ID!, comment: CommentInput!): String
-    deleteComment(candidateID: ID!, commentID: ID!): Boolean
-    subscribe(candidateID: ID!, email: String!): Boolean
-    unsubscribe(candidateID: ID!, email: String!): Boolean
-    noticeNotification(username: String!, notificationID: ID!): Boolean
-    deleteNotification(username: String!, notificationID: ID!): Boolean
+    deleteCandidate(candidateId: ID!): Boolean
+    addComment(candidateId: ID!, comment: CommentInput!): String
+    deleteComment(candidateId: ID!, commentId: ID!): Boolean
+    subscribe(candidateId: ID!, email: String!): Boolean
+    unsubscribe(candidateId: ID!, email: String!): Boolean
+    noticeNotification(username: String!, notificationId: ID!): Boolean
+    deleteNotification(username: String!, notificationId: ID!): Boolean
   }
 `);
 
@@ -155,36 +155,36 @@ export const root = {
       .then(result => !!result)
   },
 
-  deleteCandidate: ({candidateID}) => {
-    return deleteCandidate(candidateID)
+  deleteCandidate: ({candidateId}) => {
+    return deleteCandidate(candidateId)
   },
 
-  addComment: ({candidateID, comment}) => {
-    return addComment(candidateID, comment)
+  addComment: ({candidateId, comment}) => {
+    return addComment(candidateId, comment)
   },
 
-  deleteComment: ({candidateID, commentID}) => {
-    return deleteComment(candidateID, commentID)
+  deleteComment: ({candidateId, commentId}) => {
+    return deleteComment(candidateId, commentId)
       .then(result => !!result)
   },
 
-  subscribe: ({candidateID, email}) => {
-    return subscribe(candidateID, email)
+  subscribe: ({candidateId, email}) => {
+    return subscribe(candidateId, email)
       .then(result => !!result)
   },
 
-  unsubscribe: ({candidateID, email}) => {
-    return unsubscribe(candidateID, email)
+  unsubscribe: ({candidateId, email}) => {
+    return unsubscribe(candidateId, email)
       .then(result => !!result)
   },
 
-  noticeNotification: ({username, notificationID}) => {
-    return noticeNotification(username, notificationID)
+  noticeNotification: ({username, notificationId}) => {
+    return noticeNotification(username, notificationId)
       .then(result => !!result)
   },
 
-  deleteNotification: ({username, notificationID}) => {
-    return deleteNotification(username, notificationID)
+  deleteNotification: ({username, notificationId}) => {
+    return deleteNotification(username, notificationId)
       .then(result => !!result)
   }
 }

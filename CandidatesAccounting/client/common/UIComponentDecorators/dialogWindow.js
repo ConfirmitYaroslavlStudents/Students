@@ -14,7 +14,7 @@ export default function DialogWindow(props) {
   return (
     <Dialog
       open={props.isOpen}
-      transition={Transition}
+      TransitionComponent={Transition}
       disableBackdropClick
     >
       <AppBar style={{position: 'relative'}}>

@@ -4,7 +4,7 @@ export function login(username, password) {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ username, password })
     })
@@ -21,7 +21,7 @@ export function logout() {
   return fetch('/logout',
     {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'include'
     })
     .then(response => {
       if (response.status === 200) {

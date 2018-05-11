@@ -1,39 +1,39 @@
-import sendGraphQLQuery from './graphqlClient';
+import sendGraphQLQuery from './graphqlClient'
 
-export function subscribe(candidateID, email) {
+export function subscribe(candidateId, email) {
   return sendGraphQLQuery(
-    `mutation subscribe($candidateID: ID!, $email: String!) {
+    `mutation subscribe($candidateId: ID!, $email: String!) {
       subscribe(
-        candidateID: $candidateID,
+        candidateId: $candidateId,
         email: $email
       )
     }`,
     {
-      candidateID: candidateID,
-      email: email
+      candidateId,
+      email
     }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.subscribe) {
       throw 'Server error'
     }
   })
 }
 
-export function unsubscribe(candidateID, email) {
+export function unsubscribe(candidateId, email) {
   return sendGraphQLQuery(
-    `mutation unsubscribe($candidateID: ID!, $email: String!) {
+    `mutation unsubscribe($candidateId: ID!, $email: String!) {
       unsubscribe(
-        candidateID: $candidateID,
+        candidateId: $candidateId,
         email: $email
       )
     }`,
     {
-      candidateID: candidateID,
-      email: email
+      candidateId,
+      email
     }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.unsubscribe) {
       throw 'Server error'
     }

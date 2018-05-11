@@ -55,7 +55,7 @@ export function getAllTags() {
 }
 
 export function getNotifications(username) {
-  return Account.findOne({username: username}).exec()
+  return Account.findOne({ username }).exec()
     .then(account => account.notifications)
 }
 
@@ -67,8 +67,8 @@ export function addCandidate(newCandidate) {
     })
 }
 
-export function updateCandidate(candidateID, candidateNewState, comments) {
-  return identifyModel(candidateNewState.status).updateOne({_id: candidateID}, {
+export function updateCandidate(candidateId, candidateNewState, comments) {
+  return identifyModel(candidateNewState.status).updateOne({_id: candidateId}, {
     '$set': { ...candidateNewState },
     '$push': { comments }
   })
@@ -78,14 +78,14 @@ export function updateCandidate(candidateID, candidateNewState, comments) {
     })
 }
 
-export function deleteCandidate(candidateID) {
-  return Candidate.findByIdAndRemove(candidateID).exec()
+export function deleteCandidate(candidateId) {
+  return Candidate.findByIdAndRemove(candidateId).exec()
 }
 
-export function addComment(candidateID, comment) {
+export function addComment(candidateId, comment) {
   const id = mongoose.Types.ObjectId()
   comment._id = id
-  return Candidate.findByIdAndUpdate(candidateID, {$push: {comments: comment}}).exec()
+  return Candidate.findByIdAndUpdate(candidateId, {$push: {comments: comment}}).exec()
     .then(candidate => {
       candidate.subscribers.forEach(subscriber => {
         if (subscriber !== comment.author) {
@@ -96,28 +96,28 @@ export function addComment(candidateID, comment) {
     })
 }
 
-export function deleteComment(candidateID, commentID) {
-  return Candidate.findByIdAndUpdate(candidateID, {$pull: {comments: {_id: commentID}}}).exec()
+export function deleteComment(candidateId, commentId) {
+  return Candidate.findByIdAndUpdate(candidateId, {$pull: {comments: {_id: commentId}}}).exec()
 }
 
-export function subscribe(candidateID, email) {
-  return Candidate.findByIdAndUpdate(candidateID, {$push: {subscribers: email}}).exec()
+export function subscribe(candidateId, email) {
+  return Candidate.findByIdAndUpdate(candidateId, {$push: {subscribers: email}}).exec()
 }
 
-export function unsubscribe(candidateID, email) {
-  return Candidate.findByIdAndUpdate(candidateID, {$pull: {subscribers: email}}).exec()
+export function unsubscribe(candidateId, email) {
+  return Candidate.findByIdAndUpdate(candidateId, {$pull: {subscribers: email}}).exec()
 }
 
-export function noticeNotification(username, notificationID) {
-  return Account.updateOne({username, 'notifications._id': notificationID}, {$set: {'notifications.$.recent': false}}).exec()
+export function noticeNotification(username, notificationId) {
+  return Account.updateOne({username, 'notifications._id': notificationId}, {$set: {'notifications.$.recent': false}}).exec()
 }
 
-export function deleteNotification(username, notificationID) {
-  return Account.updateOne({username}, {$pull: {notifications: {_id: notificationID}}}).exec()
+export function deleteNotification(username, notificationId) {
+  return Account.updateOne({username}, {$pull: {notifications: {_id: notificationId}}}).exec()
 }
 
-export function getResume(intervieweeID) {
-  return getCandidateByID(intervieweeID)
+export function getResume(intervieweeId) {
+  return getCandidateByID(intervieweeId)
     .then(interviewee => {
       return {
         resumeName: interviewee.resume,
@@ -126,20 +126,20 @@ export function getResume(intervieweeID) {
     })
 }
 
-export function addResume(intervieweeID, resumeName, resumeData) {
-  return getCandidateByID(intervieweeID)
+export function addResume(intervieweeId, resumeName, resumeData) {
+  return getCandidateByID(intervieweeId)
     .then(interviewee => {
       interviewee.resume = resumeName
       interviewee.resumeFile = resumeData
-      return updateCandidate(intervieweeID, interviewee)
+      return updateCandidate(intervieweeId, interviewee)
     })
 }
 
-export function getAttachment(candidateID, commentID) {
-  return getCandidateByID(candidateID)
+export function getAttachment(candidateId, commentId) {
+  return getCandidateByID(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
-        if (candidate.comments[i]._id.toString() === commentID) {
+        if (candidate.comments[i]._id.toString() === commentId) {
           return {
             attachmentName: candidate.comments[i].attachment,
             attachmentData: candidate.comments[i].attachmentFile
@@ -153,14 +153,14 @@ export function getAttachment(candidateID, commentID) {
     })
 }
 
-export function addAttachment(candidateID, commentID, attachmentName, attachmentData) {
-  return getCandidateByID(candidateID)
+export function addAttachment(candidateId, commentId, attachmentName, attachmentData) {
+  return getCandidateByID(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
-        if (candidate.comments[i]._id.toString() === commentID) {
+        if (candidate.comments[i]._id.toString() === commentId) {
           candidate.comments[i].attachment = attachmentName
           candidate.comments[i].attachmentFile = attachmentData
-          return updateCandidate(candidateID, candidate)
+          return updateCandidate(candidateId, candidate)
         }
       }
     })
@@ -172,7 +172,7 @@ function updateTags(probablyNewTags) {
       const tagsToAdd = [];
       probablyNewTags.forEach(tag => {
         if (!tags.includes(tag)) {
-          tagsToAdd.push({title: tag})
+          tagsToAdd.push({ title: tag })
         }
       })
       if (tagsToAdd.length > 0) {

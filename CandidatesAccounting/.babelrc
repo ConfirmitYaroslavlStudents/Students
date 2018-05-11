@@ -7,5 +7,10 @@
     "syntax-dynamic-import",
     "transform-class-properties"
   ],
-  "presets": [ "env", "react" ]
+  "presets": [
+    ["env", {
+      "loose": true
+    }],
+    "react"
+  ]
 }

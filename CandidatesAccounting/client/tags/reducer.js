@@ -15,7 +15,7 @@ export default createReducer(initialState, {
   [tags.getTagsSuccess]: (state, {payload}) => ({
     ...state,
     tags: payload.tags
-  }),
+  })
 })
 
 export const SELECTORS = {

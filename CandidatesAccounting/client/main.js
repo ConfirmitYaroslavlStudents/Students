@@ -4,13 +4,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import reducer from './rootReducer'
 import { Provider } from 'react-redux'
-import { Router } from 'react-router'
-import { Route } from 'react-router-dom'
+import Router from 'react-router/Router'
+import Route from 'react-router-dom/Route'
 import createBrowserHistory from 'history/createBrowserHistory'
 import createMuiTheme from 'material-ui/styles/createMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import createPalette from 'material-ui/styles/createPalette'
-import { indigo } from 'material-ui/colors'
+import indigo from 'material-ui/colors/indigo'
 import AppView from './layout/appview'
 import createStore from './utilities/createStore'
 import { getInitialStateFromServer } from './applicationActions'
@@ -19,7 +19,7 @@ const username = window['APP_CONFIG'].username
 
 const theme = createMuiTheme({
   palette: createPalette({
-    primary: indigo,
+    primary: indigo
   }),
   typography: {
     fontWeightMedium: 400

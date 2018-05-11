@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../applicationActions'
 import { SELECTORS } from '../rootReducer'
-import { Switch, Route } from 'react-router-dom'
+import Switch from 'react-router-dom/Switch'
+import Route from 'react-router-dom/Route'
 import Navbar from '../common/UIComponentDecorators/navbar'
 import Appbar from './appbar'
 import TablesBar from './tablesbar'
@@ -13,6 +14,7 @@ import SnackBar from '../common/UIComponentDecorators/snackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
+
 class AppView extends Component {
   render() {
     const {

@@ -29,6 +29,11 @@ export default createReducer(initialState, {
     searchRequest: payload.searchRequest
   }),
 
+  [application.resetSearchRequest]: state => ({
+    ...state,
+    searchRequest: ''
+  }),
+
   [application.setErrorMessage]: (state, {payload}) => ({
     ...state,
     errorMessage: payload.message
@@ -50,7 +55,7 @@ export default createReducer(initialState, {
     ...state,
     pageTitle: payload.candidate.name,
     initializing: false,
-    fetching: false,
+    fetching: false
   }),
 
   [authorization.loginFailure]: (state, {payload}) => ({
@@ -61,7 +66,7 @@ export default createReducer(initialState, {
   [authorization.logoutFailure]: (state, {payload}) => ({
     ...state,
     errorMessage: payload.error + '. Logout failure.'
-  }),
+  })
 })
 
 export const SELECTORS = {

@@ -139,9 +139,13 @@ const creator = ({ history }) => {
 
   function* setCandidateStatusSaga(action) {
     try {
-      const {newCandidateStatus} = action.payload
+      const { status } = action.payload
+      const previousStatus = yield select(state => state.candidates.candidateStatus)
       yield put(applicationActions.enableFetching())
-      yield put(actions.setCandidateStatusSuccess({status: newCandidateStatus}))
+      if (status === previousStatus) {
+        yield put(applicationActions.resetSearchRequest())
+      }
+      yield put(actions.setCandidateStatusSuccess({ status }))
       yield put(actions.getCandidates())
     }
     catch (error) {

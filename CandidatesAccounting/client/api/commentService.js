@@ -1,14 +1,14 @@
 import sendGraphQLQuery from './graphqlClient'
 
-export function addComment(candidateID, comment) {
+export function addComment(candidateId, comment) {
   return sendGraphQLQuery(
-    `mutation addComment($candidateID: ID!, $comment: CommentInput!) {
+    `mutation addComment($candidateId: ID!, $comment: CommentInput!) {
       addComment(
-        candidateID: $candidateID,
+        candidateId: $candidateId,
         comment: $comment
       )
     }`,
-    { candidateID, comment }
+    { candidateId, comment }
   )
   .then(data => {
     if (!data.addComment) {
@@ -18,15 +18,15 @@ export function addComment(candidateID, comment) {
   })
 }
 
-export function deleteComment(candidateID, commentID) {
+export function deleteComment(candidateId, commentId) {
   return sendGraphQLQuery(
-    `mutation deleteComment($candidateID: ID!, $commentID: ID!) {
+    `mutation deleteComment($candidateId: ID!, $commentId: ID!) {
       deleteComment(
-        candidateID: $candidateID,
-        commentID: $commentID
+        candidateId: $candidateId,
+        commentId: $commentId
       )
     }`,
-    { candidateID, commentID }
+    { candidateId, commentId }
   )
   .then(data => {
     if (!data.deleteComment) {
@@ -35,12 +35,12 @@ export function deleteComment(candidateID, commentID) {
   })
 }
 
-export function addCommentAttachment(candidateID, commentID, attachment) {
+export function addCommentAttachment(candidateId, commentId, attachment) {
   let formData = new FormData()
   formData.append('attachment', attachment)
 
   return fetch(
-    '/interviewees/' + candidateID + '/commentsActions/' + commentID + '/attachment',
+    '/interviewees/' + candidateId + '/commentsActions/' + commentId + '/attachment',
     {
       method: 'POST',
       credentials: 'include',

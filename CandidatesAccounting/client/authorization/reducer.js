@@ -5,7 +5,7 @@ import * as authorization from './actions'
 const initialState = {
   authorized: false,
   authorizing: true,
-  username: '',
+  username: ''
 }
 
 export default createReducer(initialState, {
@@ -46,11 +46,11 @@ export default createReducer(initialState, {
   [authorization.enableAuthorizing]: state => ({
     ...state,
     authorizing: true
-  }),
+  })
 })
 
 export const SELECTORS = {
   AUTHORIZED: state => state.authorized,
   AUTHORIZING: state => state.authorizing,
-  USERNAME: state => state.username,
+  USERNAME: state => state.username
 }

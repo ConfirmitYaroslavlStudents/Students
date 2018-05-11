@@ -61,7 +61,7 @@ export default class LoginForm extends Component {
 
 LoginForm.propTypes = {
   account: PropTypes.object.isRequired,
-  onEnterPress: PropTypes.func
+  onEnterPress: PropTypes.func.isRequired
 }
 
 const LoginFormWrapper = styled.div`

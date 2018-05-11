@@ -1,4 +1,5 @@
 import moment from 'moment'
+import 'moment/locale/ru.js'
 
 export function getCurrentDate() {
   return moment().format('DD.MM.YYYY')

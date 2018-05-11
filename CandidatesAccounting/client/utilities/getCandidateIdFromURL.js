@@ -1,4 +1,4 @@
-export default function getStateArgsFromURL(url) {
+export default function getCandidateIdFromURL(url) {
   const splitedURL = url.split('?')
 
   const path = splitedURL[0]

@@ -1,3 +1,5 @@
+import convertArrayToDictionary from './convertArrayToDictionary'
+
 export default class Candidate {
   constructor(status, candidateProperties) {
     const properties = candidateProperties ? candidateProperties : {}
@@ -15,7 +17,7 @@ export default class Candidate {
           :
           0
     this.tags = properties.tags ? properties.tags.slice() : []
-    this.subscribers = properties.subscribers ? subscriberArrayToSubscriberDictionary(properties.subscribers) : {}
+    this.subscribers = properties.subscribers ? convertArrayToDictionary(properties.subscribers) : {}
 
     switch (status) {
       case 'Interviewee':
@@ -33,26 +35,3 @@ export default class Candidate {
   }
 }
 
-export function commentArrayToCommentDictionary(commentArray) {
-  if (commentArray instanceof Array) {
-    const commentDictionary = {}
-    commentArray.forEach(comment => {
-      commentDictionary[comment.id] = comment
-    })
-    return commentDictionary
-  } else {
-    return commentArray
-  }
-}
-
-export function subscriberArrayToSubscriberDictionary(subscriberArray) {
-  if (subscriberArray instanceof Array) {
-    let subscriberDictionary = {}
-    subscriberArray.forEach(email => {
-      subscriberDictionary[email] = email
-    })
-    return subscriberDictionary
-  } else {
-    return subscriberArray
-  }
-}

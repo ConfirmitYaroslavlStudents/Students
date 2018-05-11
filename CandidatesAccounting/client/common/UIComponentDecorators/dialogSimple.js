@@ -15,7 +15,7 @@ export default function SimpleDialog(props) {
   return (
     <Dialog
       open={props.isOpen}
-      transition={Transition}
+      TransitionComponent={Transition}
       disableBackdropClick
     >
       <DialogTitle>{props.title}</DialogTitle>

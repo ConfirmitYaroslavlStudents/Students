@@ -17,7 +17,7 @@ export default function DialogAlert(props) {
   return (
     <Dialog
       open={props.isOpen}
-      transition={Transition}
+      TransitionComponent={Transition}
       onBackdropClick={props.onRequestClose}
     >
       <DialogTitle>{props.title}</DialogTitle>

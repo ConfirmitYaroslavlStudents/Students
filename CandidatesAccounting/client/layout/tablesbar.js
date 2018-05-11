@@ -23,8 +23,8 @@ function TablesBar(props) {
       break
   }
 
-  const handleLinkClick = newCandidateStatus => () => {
-    setCandidateStatus({ newCandidateStatus })
+  const handleLinkClick = status => () => {
+    setCandidateStatus({ status })
   }
 
   return (

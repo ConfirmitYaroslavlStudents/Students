@@ -51,7 +51,7 @@ export default createReducer(initialState, {
   [authorization.logoutSuccess]: state => ({
     ...state,
     notifications: {}
-  }),
+  })
 })
 
 export const SELECTORS = {

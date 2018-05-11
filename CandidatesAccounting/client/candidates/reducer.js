@@ -33,7 +33,7 @@ export default createReducer(initialState, {
     candidateStatus: payload.status,
     offset: 0,
     sortingField: '',
-    sortingDirection:'desc',
+    sortingDirection:'desc'
   }),
 
   [candidates.getCandidatesSuccess]: (state, {payload}) => ({
@@ -41,7 +41,7 @@ export default createReducer(initialState, {
     candidates: payload.candidates,
     totalCount: payload.totalCount,
     onUpdating: '',
-    onDeleting: '',
+    onDeleting: ''
   }),
 
   [candidates.addCandidateSuccess]: state => ({
@@ -139,7 +139,7 @@ export default createReducer(initialState, {
     ...state,
     candidates: { [payload.candidate.id]: payload.candidate },
     candidateStatus: payload.candidate.status,
-    totalCount: 1,
+    totalCount: 1
   }),
 
   [comments.addCommentSuccess]: (state, {payload}) => ({
@@ -190,7 +190,7 @@ export default createReducer(initialState, {
           subscribers: subscribers
         }
     }
-  }},
+  }}
 })
 
 export const SELECTORS = {

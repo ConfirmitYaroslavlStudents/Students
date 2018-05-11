@@ -1,5 +1,6 @@
 import sendGraphQLQuery from './graphqlClient'
-import Candidate, { commentArrayToCommentDictionary } from '../utilities/candidate'
+import Candidate from '../utilities/candidate'
+import convertArrayToDictionary from '../utilities/convertArrayToDictionary'
 
 export function getCandidates(take, skip, status, sort, sortDir, searchRequest) {
   return sendGraphQLQuery(
@@ -28,21 +29,19 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
       first: take,
       offset: skip,
       status: status,
-      sort: sort,
+      sort,
       sortDir: sortDir === 'desc' ? 'asc' : 'desc',
-      searchRequest: searchRequest
+      searchRequest
     }
   )
-  .then((data) => {
+  .then(data => {
     if (!data) {
       throw 'Connection error'
     }
-    let candidates = {};
-    data.candidatesPaginated.candidates.forEach((candidate) => {
-      candidates[candidate.id] = new Candidate(candidate.status, candidate)
-    })
+    let candidates = data.candidatesPaginated.candidates.map(candidate => new Candidate(candidate.status, candidate))
+    candidates = convertArrayToDictionary(candidates)
     return {
-      candidates: candidates,
+      candidates,
       total: data.candidatesPaginated.total
     }
   })
@@ -74,17 +73,15 @@ export function getCandidate(id) {
         mentor
       }      
     }`,
-    {
-      id: id,
-    }
+    { id }
   )
-  .then((data) => {
+  .then(data => {
     if (!data) {
       throw 'Connection error'
     }
     return {
       candidate: new Candidate(data.candidate.status, data.candidate),
-      comments: commentArrayToCommentDictionary(data.candidate.comments)
+      comments: convertArrayToDictionary(data.candidate.comments)
     }
   })
 }
@@ -96,9 +93,9 @@ export function addCandidate(candidate) {
         candidate: $candidate
       )
     }`,
-    {candidate: convertToGraphQLType(candidate)}
+    { candidate: convertToGraphQLType(candidate) }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.addCandidate) {
       throw 'Server error'
     } else {
@@ -114,23 +111,23 @@ export function updateCandidate(candidate) {
         candidate: $candidate
       )
     }`,
-    {candidate: convertToGraphQLType(candidate)}
+    { candidate: convertToGraphQLType(candidate) }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.updateCandidate) {
       throw 'Server error'
     }
   })
 }
 
-export function deleteCandidate(candidateID) {
+export function deleteCandidate(candidateId) {
   return sendGraphQLQuery(
-    `mutation deleteCandidate($candidateID: ID!) {
+    `mutation deleteCandidate($candidateId: ID!) {
       deleteCandidate(
-        candidateID: $candidateID
+        candidateId: $candidateId
       )
     }`,
-    {candidateID: candidateID}
+    { candidateId }
   )
   .then((data) => {
     if (!data.deleteCandidate) {

@@ -1,4 +1,5 @@
 import sendGraphQLQuery from './graphqlClient'
+import convertArrayToDictinary from '../utilities/convertArrayToDictionary'
 
 export function getNotifications(username) {
   return sendGraphQLQuery(
@@ -25,48 +26,44 @@ export function getNotifications(username) {
     if (!data) {
       throw 'Connection error'
     }
-    let notifications = {}
-    data.notifications.forEach((notification) => {
-      notifications[notification.id] = notification
-    })
-    return notifications
+    return convertArrayToDictinary(data.notifications)
   })
 }
 
-export function noticeNotification(username, notificationID) {
+export function noticeNotification(username, notificationId) {
   return sendGraphQLQuery(
-    `mutation noticeNotification($username: String!, $notificationID: ID!) {
+    `mutation noticeNotification($username: String!, $notificationId: ID!) {
       noticeNotification(
         username: $username,
-        notificationID: $notificationID
+        notificationId: $notificationId
       )
     }`,
     {
-      username: username,
-      notificationID: notificationID
+      username,
+      notificationId
     }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.noticeNotification) {
       throw 'Server error'
     }
   })
 }
 
-export function deleteNotification(username, notificationID) {
+export function deleteNotification(username, notificationId) {
   return sendGraphQLQuery(
-    `mutation deleteNotification($username: String!, $notificationID: ID!) {
+    `mutation deleteNotification($username: String!, $notificationId: ID!) {
       deleteNotification(
         username: $username,
-        notificationID: $notificationID
+        notificationId: $notificationId
       )
     }`,
     {
-      username: username,
-      notificationID: notificationID
+      username,
+      notificationId
     }
   )
-  .then((data) => {
+  .then(data => {
     if (!data.deleteNotification) {
       throw 'Server error'
     }

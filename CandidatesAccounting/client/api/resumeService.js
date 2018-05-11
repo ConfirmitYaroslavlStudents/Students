@@ -1,16 +1,16 @@
-export function uploadResume(intervieweeID, resume) {
+export function uploadResume(intervieweeId, resume) {
   const formData = new FormData()
   formData.append('resume', resume)
 
-  return fetch('/interviewees/' + intervieweeID + '/resume',
+  return fetch('/interviewees/' + intervieweeId + '/resume',
     {
       method: 'POST',
       credentials: 'include',
       body: formData
     })
-    .then((response) => {
+    .then(response => {
       if (response.status === 200) {
-        return true;
+        return true
       } else {
         throw response.status
       }

@@ -43,7 +43,7 @@ export default createReducer(initialState, {
     ...state,
     currentCandidateId: '',
     comments: {}
-  }),
+  })
 })
 
 export const SELECTORS = {

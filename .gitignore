@@ -239,5 +239,6 @@ CandidatesAccounting/node_modules/
 .idea/
 CandidatesAccounting/.vs/
 CandidatesAccounting/public/assets/
+CandidatesAccounting/public/fonts/
 *.pdf
 *stats*.json

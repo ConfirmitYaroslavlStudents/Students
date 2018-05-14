@@ -24,14 +24,11 @@ module.exports = {
   optimization: {
     minimize: true,
     splitChunks: {
-      chunks: "async",
-      minSize: 10000,
-      minChunks: 1,
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules\\[*lodash*|react\-dom\-factories]/,
           name: "vendors",
-          chunks: "all"
+          chunks: "initial"
         }
       }
     }
@@ -58,10 +55,10 @@ module.exports = {
           }]
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
-          name: 'fonts/[name].[ext]'
+          name: 'fonts/[name].[hash:5].[ext]'
         }
       }
     ]

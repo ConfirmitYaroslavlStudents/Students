@@ -42,7 +42,10 @@ export const CandidateSchema = new Schema({
         required: true
       },
       attachment: String,
-      attachmentFile: Buffer,
+      attachmentFile: {
+        type: Buffer,
+        default: new Buffer('')
+      },
     }],
     tags: [String],
     subscribers: [String],
@@ -81,13 +84,19 @@ export const IntervieweeSchema = new Schema({
         required: true
       },
       attachment: String,
-      attachmentFile: Buffer,
+      attachmentFile: {
+        type: Buffer,
+        default: new Buffer('')
+      },
     }],
     tags: [String],
     subscribers: [String],
     interviewDate: String,
     resume: String,
-    resumeFile: Buffer,
+    resumeFile: {
+      type: Buffer,
+      default: new Buffer('')
+    },
   })
 
 export const StudentSchema = new Schema({
@@ -116,7 +125,10 @@ export const StudentSchema = new Schema({
         required: true
       },
       attachment: String,
-      attachmentFile: Buffer,
+      attachmentFile: {
+        type: Buffer,
+        default: new Buffer('')
+      },
     }],
     tags: [String],
     subscribers: [String],
@@ -151,7 +163,10 @@ export const TraineeSchema = new Schema({
         required: true
       },
       attachment: String,
-      attachmentFile: Buffer,
+      attachmentFile: {
+        type: Buffer,
+        default: new Buffer('')
+      },
     }],
     tags: [String],
     subscribers: [String],

@@ -2,7 +2,7 @@ import { buildSchema } from 'graphql'
 import searchCandidates from './utilities/searchCandidates'
 import {
   getCandidates,
-  getCandidateByID,
+  getCandidateById,
   getAllTags,
   getNotifications,
   addCandidate,
@@ -110,7 +110,7 @@ export const schema = buildSchema(`
 
 export const root = {
   candidate: ({id}) => {
-    return getCandidateByID(id)
+    return getCandidateById(id)
       .then(candidate => formatCandidateWithComments(candidate))
   },
 
@@ -149,9 +149,7 @@ export const root = {
   },
 
   updateCandidate: ({candidate}) => {
-    const comments = candidate.comments
-    delete candidate.comments
-    return updateCandidate(candidate.id, candidate, comments)
+    return updateCandidate(candidate.id, candidate)
       .then(result => !!result)
   },
 

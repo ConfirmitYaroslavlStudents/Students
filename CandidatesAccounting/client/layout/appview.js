@@ -41,17 +41,17 @@ class AppView extends Component {
             <CommentPage candidate={candidates[currentCandidateId]} />
           }
           />
-          <Route exact path='/interviewees*' render={() =>
-            <CandidatesTable type='Interviewee' />}
+          <Route exact path='/interviewees*' render={props =>
+            <CandidatesTable type='Interviewee' {...props} />}
           />
-          <Route exact path='/students*' render={() =>
-            <CandidatesTable type='Student' />}
+          <Route exact path='/students*' render={props =>
+            <CandidatesTable type='Student' {...props} />}
           />
-          <Route exact path='/trainees*' render={() =>
-            <CandidatesTable type='Trainee' />}
+          <Route exact path='/trainees*' render={props =>
+            <CandidatesTable type='Trainee' {...props} />}
           />
-          <Route exact path='/*' render={() =>
-            <CandidatesTable type='Candidate' />}
+          <Route exact path='/*' render={props =>
+            <CandidatesTable type='Candidate' {...props} />}
           />
           <Route psath='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
         </Switch>
@@ -107,7 +107,7 @@ const InitSpinnerWrapper = styled.div`
 
 const RefreshSpinnerWrapper = styled.div`
   position: absolute;
-  z-index: 100;
+  z-index: 3;
   top: 38%;
   width: 100%;
   text-align: center;

@@ -107,8 +107,8 @@ app.get('/logout', (req, res) => {
   })
 })
 
-app.get('/interviewees/:intervieweeID/resume', (req, res) => {
-  return getResume(req.params.intervieweeID).then((result, error) => {
+app.get('/interviewees/:intervieweeId/resume', (req, res) => {
+  return getResume(req.params.intervieweeId).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }
@@ -117,15 +117,15 @@ app.get('/interviewees/:intervieweeID/resume', (req, res) => {
   })
 })
 
-app.post('/interviewees/:intervieweeID/resume', (req, res) => {
+app.post('/interviewees/:intervieweeId/resume', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }
   if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
     return res.status(500).end()
   }
-  let file = req.files[Object.keys(req.files)[0]];
-  return addResume(req.params.intervieweeID, file.name, file.data).then((result, error) => {
+  let file = req.files[Object.keys(req.files)[0]]
+  return addResume(req.params.intervieweeId, file.name, file.data).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }
@@ -133,8 +133,8 @@ app.post('/interviewees/:intervieweeID/resume', (req, res) => {
   })
 })
 
-app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/commentsActions/:commentID/attachment', (req, res) => {
-  return getAttachment(req.params.candidateID, req.params.commentID,).then((result, error) => {
+app.get('/:candidateStatus(interviewees|students|trainees)/:candidateId/commentsActions/:commentID/attachment', (req, res) => {
+  return getAttachment(req.params.candidateId, req.params.commentId,).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }
@@ -143,7 +143,7 @@ app.get('/:candidateStatus(interviewees|students|trainees)/:candidateID/comments
   })
 })
 
-app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/commentsActions/:commentID/attachment', (req, res) => {
+app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/commentsActions/:commentID/attachment', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }
@@ -151,7 +151,7 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateID/comment
     return res.status(500).end()
   }
   let file = req.files[Object.keys(req.files)[0]];
-  return addAttachment(req.params.candidateID, req.params.commentID, file.name, file.data).then((result, error) => {
+  return addAttachment(req.params.candidateId, req.params.commentId, file.name, file.data).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }

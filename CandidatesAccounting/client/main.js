@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import reducer from './rootReducer'
 import { Provider } from 'react-redux'
 import Router from 'react-router/Router'
-import Route from 'react-router-dom/Route'
+import Route from 'react-router/Route'
 import createBrowserHistory from 'history/createBrowserHistory'
 import createMuiTheme from 'material-ui/styles/createMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -51,7 +51,7 @@ store.dispatch(getInitialStateFromServer())
 
 if (module.hot) {
   module.hot.accept('./layout/appview', () => {
-    const nextApp = require('./layout/appview')
+    const nextApp = require('./layout/appview').default
     renderApp(nextApp)
   })
 }

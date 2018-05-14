@@ -25,7 +25,7 @@ export default class ErrorSnackbar extends Component {
           action='Error'
           open={open}
           onClose={this.handleRequestClose}
-          transition={Fade}
+          TransitionComponent={Fade}
           message={this.props.message}
           autoHideDuration={this.props.autoHideDuration ? this.props.autoHideDuration : 10000}
           anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}

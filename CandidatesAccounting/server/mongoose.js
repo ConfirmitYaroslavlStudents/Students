@@ -45,7 +45,7 @@ export function getCandidates(status, sortingField, sortDirection) {
   return identifyModel(status).find(findSettings).exec()
 }
 
-export function getCandidateByID(id) {
+export function getCandidateById(id) {
   return Candidate.findById(mongoose.Types.ObjectId(id)).exec()
 }
 
@@ -67,11 +67,8 @@ export function addCandidate(newCandidate) {
     })
 }
 
-export function updateCandidate(candidateId, candidateNewState, comments) {
-  return identifyModel(candidateNewState.status).updateOne({_id: candidateId}, {
-    '$set': { ...candidateNewState },
-    '$push': { comments }
-  })
+export function updateCandidate(id, candidateNewState) {
+  return identifyModel(candidateNewState.status).updateOne({_id: id}, candidateNewState)
     .then(candidate => {
       updateTags(candidate.tags)
       return candidate
@@ -117,7 +114,7 @@ export function deleteNotification(username, notificationId) {
 }
 
 export function getResume(intervieweeId) {
-  return getCandidateByID(intervieweeId)
+  return getCandidateById(intervieweeId)
     .then(interviewee => {
       return {
         resumeName: interviewee.resume,
@@ -126,17 +123,17 @@ export function getResume(intervieweeId) {
     })
 }
 
-export function addResume(intervieweeId, resumeName, resumeData) {
-  return getCandidateByID(intervieweeId)
+export function addResume(id, resumeName, resumeData) {
+  return getCandidateById(id)
     .then(interviewee => {
       interviewee.resume = resumeName
       interviewee.resumeFile = resumeData
-      return updateCandidate(intervieweeId, interviewee)
+      return updateCandidate(id, interviewee)
     })
 }
 
 export function getAttachment(candidateId, commentId) {
-  return getCandidateByID(candidateId)
+  return getCandidateById(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
         if (candidate.comments[i]._id.toString() === commentId) {
@@ -154,7 +151,7 @@ export function getAttachment(candidateId, commentId) {
 }
 
 export function addAttachment(candidateId, commentId, attachmentName, attachmentData) {
-  return getCandidateByID(candidateId)
+  return getCandidateById(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
         if (candidate.comments[i]._id.toString() === commentId) {

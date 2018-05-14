@@ -138,9 +138,11 @@ const CommentPageWrapper = styled.div`
   min-height: 100vmin;
   background: #EEE;
   position: absolute;
-  top: 0;
+  top: -108px;
+  padding-top: 108px;
   padding-bottom: 161px;
   box-sizing: border-box;
+  z-index: 4;
 `
 
 const NoResultWrapper = styled.div`

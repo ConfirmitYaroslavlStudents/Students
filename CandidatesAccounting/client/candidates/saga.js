@@ -93,9 +93,14 @@ const creator = ({ history }) => {
     try {
       const {candidate} = action.payload
       yield put(applicationActions.enableFetching())
+      const resumeFile = candidate.resumeFile
+      delete candidate.resumeFile
       candidate.comments = {}
       candidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + candidate.status)
-      yield call(addCandidate, candidate)
+      const candidateId = yield call(addCandidate, candidate)
+      if (resumeFile) {
+        yield call(uploadResume, candidateId, resumeFile)
+      }
       yield put(actions.addCandidateSuccess())
       yield put(actions.getCandidates())
     }

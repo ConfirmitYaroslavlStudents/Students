@@ -2,12 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DateTimePicker from '../../../common/UIComponentDecorators/dateTimePicker'
 import styled from 'styled-components'
-import ResumeControls from './resumeControls'
+import ResumeField from './resumeField'
 import { toDateTimePickerFormat, fromDateTimePickerFormat } from '../../../utilities/customMoment'
 
 export default function IntervieweeSpecialFields(props) {
-  const handleInterviewDateChange = (value) => {
+  const handleInterviewDateChange = value => {
     props.changeProperty('interviewDate', fromDateTimePickerFormat(value))
+  }
+
+  const handleResumeUploadChange = file => {
+    props.changeProperty('resume', file.name)
+    props.changeProperty('resumeFile', file)
   }
 
   return (
@@ -18,7 +23,7 @@ export default function IntervieweeSpecialFields(props) {
         onChange={handleInterviewDateChange}
       />
       <InputLabel>Resume</InputLabel>
-      <ResumeControls interviewee={props.interviewee} authorized/>
+      <ResumeField interviewee={props.interviewee} onResumeUpload={handleResumeUploadChange}/>
     </div>)
 }
 

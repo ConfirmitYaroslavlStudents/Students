@@ -133,7 +133,7 @@ app.post('/interviewees/:intervieweeId/resume', (req, res) => {
   })
 })
 
-app.get('/:candidateStatus(interviewees|students|trainees)/:candidateId/commentsActions/:commentID/attachment', (req, res) => {
+app.get('/:candidateStatus(interviewees|students|trainees)/:candidateId/commentsActions/:commentId/attachment', (req, res) => {
   return getAttachment(req.params.candidateId, req.params.commentId,).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -143,7 +143,7 @@ app.get('/:candidateStatus(interviewees|students|trainees)/:candidateId/comments
   })
 })
 
-app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/commentsActions/:commentID/attachment', (req, res) => {
+app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/commentsActions/:commentId/attachment', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }

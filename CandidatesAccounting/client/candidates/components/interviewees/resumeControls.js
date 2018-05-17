@@ -12,7 +12,7 @@ import Spinner from '../../../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
 function ResumeControls(props) {
-  const { interviewee, authorized, disabled, downloadingEnabled, onResumeUploading, uploadResume } = props
+  const { interviewee, authorized, disabled, onResumeUploading, uploadResume } = props
   const resumeIsUploaded = interviewee.resume && interviewee.resume.trim() !== ''
 
   const handleFileUpload = file => {
@@ -24,15 +24,6 @@ function ResumeControls(props) {
       <ResumeFileName>{interviewee.resume}</ResumeFileName>
       :
       <ResumeNotLoaded>no resume</ResumeNotLoaded>
-
-  const fileDownloader =
-    downloadingEnabled ?
-      <FileDownloader
-        icon={<DownloadIcon style={SmallerIconStyle}/>}
-        buttonStyle={SmallButtonStyle}
-        disabled={!resumeIsUploaded || disabled}
-        downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
-      /> : ''
 
   const fileUploader =
     interviewee.id !== onResumeUploading ?
@@ -48,7 +39,12 @@ function ResumeControls(props) {
   return (
     <ResumeWrapper>
       { resumeFileName }
-      { fileDownloader }
+      <FileDownloader
+        icon={<DownloadIcon style={SmallerIconStyle}/>}
+        buttonStyle={SmallButtonStyle}
+        disabled={!resumeIsUploaded || disabled}
+        downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
+      />
       { fileUploader }
     </ResumeWrapper>
   )
@@ -59,8 +55,7 @@ ResumeControls.propTypes = {
   authorized: PropTypes.bool.isRequired,
   onResumeUploading: PropTypes.string.isRequired,
   uploadResume: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
-  downloadingEnabled: PropTypes.bool
+  disabled: PropTypes.bool
 }
 
 export default connect(state => ({

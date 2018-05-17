@@ -68,7 +68,23 @@ export function addCandidate(newCandidate) {
 }
 
 export function updateCandidate(id, candidateNewState) {
-  return identifyModel(candidateNewState.status).updateOne({_id: id}, candidateNewState)
+  return identifyModel(candidateNewState.status).updateOne({_id: id}, {
+    '$set': {
+      status: candidateNewState.status,
+      name: candidateNewState.name,
+      email: candidateNewState.email,
+      birthDate: candidateNewState.birthDate,
+      tags: candidateNewState.tags,
+      subscribers: candidateNewState.subscribers,
+      interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : undefined,
+      resume: candidateNewState.resume ? candidateNewState.resume : undefined,
+      resumeFile: candidateNewState.resumeFile ? candidateNewState.resumeFile : undefined,
+      groupName: candidateNewState.groupName ? candidateNewState.groupName : undefined,
+      startingDate: candidateNewState.startingDate ? candidateNewState.startingDate : undefined,
+      endingDate: candidateNewState.endingDate ? candidateNewState.endingDate : undefined,
+      mentor: candidateNewState.mentor ? candidateNewState.mentor : undefined
+    },
+    '$push': {comments: candidateNewState.comments ? candidateNewState.comments : []}})
     .then(candidate => {
       updateTags(candidate.tags)
       return candidate
@@ -95,6 +111,13 @@ export function addComment(candidateId, comment) {
 
 export function deleteComment(candidateId, commentId) {
   return Candidate.findByIdAndUpdate(candidateId, {$pull: {comments: {_id: commentId}}}).exec()
+}
+
+export function updateComment(candidateStatus, candidateId, commentId, comment) {
+  return identifyModel(candidateStatus).updateOne({_id: candidateId, 'comments._id': commentId}, {$set: {'comments.$': comment}}).exec()
+    .then(() => {
+      return candidateId
+    })
 }
 
 export function subscribe(candidateId, email) {
@@ -157,7 +180,7 @@ export function addAttachment(candidateId, commentId, attachmentName, attachment
         if (candidate.comments[i]._id.toString() === commentId) {
           candidate.comments[i].attachment = attachmentName
           candidate.comments[i].attachmentFile = attachmentData
-          return updateCandidate(candidateId, candidate)
+          return updateComment(candidate.status, candidateId, commentId, candidate.comments[i])
         }
       }
     })

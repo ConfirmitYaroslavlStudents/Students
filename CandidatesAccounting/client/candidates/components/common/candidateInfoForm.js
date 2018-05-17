@@ -19,6 +19,7 @@ export default class CandidateInfoForm extends Component {
 
   changeProperty = (key, value) => {
     this.props.candidate[key] = value
+    this.setState({ })
   }
 
   changeCandidateStatus = (status) => {

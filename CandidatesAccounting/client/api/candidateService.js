@@ -30,7 +30,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
       offset: skip,
       status: status,
       sort,
-      sortDir: sortDir === 'desc' ? 'asc' : 'desc',
+      sortDir,
       searchRequest
     }
   )

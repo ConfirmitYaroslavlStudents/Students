@@ -36,12 +36,8 @@ function identifyModel(status) {
   }
 }
 
-export function getCandidates(status, sortingField, sortDirection) {
+export function getCandidates(status) {
   const findSettings = status === 'Candidate' ? {} : { status }
-  if (sortingField !== '' && sortDirection !== '') {
-    const sortingSettings = { [sortingField] : sortDirection }
-    return identifyModel(status).find(findSettings).sort(sortingSettings).exec()
-  }
   return identifyModel(status).find(findSettings).exec()
 }
 
@@ -151,6 +147,7 @@ export function addResume(id, resumeName, resumeData) {
     .then(interviewee => {
       interviewee.resume = resumeName
       interviewee.resumeFile = resumeData
+      interviewee.comments = []
       return updateCandidate(id, interviewee)
     })
 }

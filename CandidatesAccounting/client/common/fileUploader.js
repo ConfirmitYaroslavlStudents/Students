@@ -49,4 +49,5 @@ const AttachmentFileNameWrapper = styled.div`
   padding-right: 12px;
   font-weight: bold;
   color: #665;
+  white-space: nowrap;
 `

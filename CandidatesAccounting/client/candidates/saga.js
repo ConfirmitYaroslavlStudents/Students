@@ -85,7 +85,7 @@ const creator = ({ history }) => {
       }))
     }
     catch (error) {
-      yield put(applicationActions.setErrorMessage({message: error + '. Get actions error.'}))
+      yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
     }
   }
 

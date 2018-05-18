@@ -70,5 +70,5 @@ export default connect(state => ({
 }), {...actions, ...notificationActions})(AddCommentDialog)
 
 const AddCommentDialogFormWrapper = styled.div`
-  width: 470px;
+  min-width: 470px;
 `

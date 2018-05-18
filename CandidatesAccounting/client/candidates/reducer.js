@@ -135,6 +135,11 @@ export default createReducer(initialState, {
     onDeleting: payload.candidateId
   }),
 
+  [application.setSearchRequest]: state => ({
+    ...state,
+    offset: 0
+  }),
+
   [comments.openCommentPageSuccess]: (state, {payload}) => ({
     ...state,
     candidates: { [payload.candidate.id]: payload.candidate },

@@ -1,5 +1,6 @@
 import { buildSchema } from 'graphql'
 import searchCandidates from './utilities/searchCandidates'
+import sortCandidates from './utilities/sortCandidates'
 import {
   getCandidates,
   getCandidateById,
@@ -106,7 +107,7 @@ export const schema = buildSchema(`
     noticeNotification(username: String!, notificationId: ID!): Boolean
     deleteNotification(username: String!, notificationId: ID!): Boolean
   }
-`);
+`)
 
 export const root = {
   candidate: ({id}) => {
@@ -115,18 +116,22 @@ export const root = {
   },
 
   candidatesPaginated: ({first, offset, status, sort, sortDir, searchRequest}) => {
-    return getCandidates(status !== '' ? status : 'Candidate', sort, sortDir)
+    return getCandidates(status !== '' ? status : 'Candidate')
       .then(candidates => {
-        const totalAmount = candidates.length
+        let totalAmount = candidates.length
         if (searchRequest && searchRequest.trim() !== '') {
           candidates = searchCandidates(candidates, searchRequest)
+          totalAmount = candidates.length
+        }
+        if (sort && sort !== '' && sortDir && sortDir !== '') {
+          candidates = sortCandidates(candidates, sort, sortDir)
         }
         let paginatedCandidates = []
         for (let i = Number(offset); i < Number(offset) + Number(first) && i < candidates.length; i++) {
           paginatedCandidates.push(formatCandidate(candidates[i]))
         }
         return {
-          candidates,
+          candidates: paginatedCandidates,
           total: totalAmount
         }
       })

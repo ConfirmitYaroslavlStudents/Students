@@ -6,7 +6,7 @@ export default class Candidate {
     this.status = status
     this.id = properties.id ? properties.id : 'noId'
     this.name = properties.name ? properties.name : ''
-    this.birthDate = properties.birthDate ? properties.birthDate : ''
+    this.phoneNumber = properties.phoneNumber ? properties.phoneNumber : ''
     this.email = properties.email ? properties.email : ''
     this.commentAmount =
       properties.commentAmount ?

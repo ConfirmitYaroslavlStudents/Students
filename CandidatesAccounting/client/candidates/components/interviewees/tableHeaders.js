@@ -1,10 +1,10 @@
 export default function getIntervieweeTableHeaders() {
   return [
     {title: 'Name', sortingField: 'name'},
-    {title: 'E-mail', sortingField: 'email'},
-    {title: 'Birth Date'},
-    {title: 'Interview date', sortingField: 'interviewDate'},
+    {title: 'Actions'},
     {title: 'Resume'},
-    {title: 'Actions'}
+    {title: 'Interview date', sortingField: 'interviewDate'},
+    {title: 'E-mail', sortingField: 'email'},
+    {title: 'Phone number'}
   ]
 }

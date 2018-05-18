@@ -26,7 +26,7 @@ export default function CustomFileUploader(props) {
 
   return (
     <div className='inline-flex centered'>
-      <FileUploader accept='.doc, .docx, .txt, .pdf' onChange={handleUploadFile} style={{display: 'inline-flex'}}>
+      <FileUploader accept='.doc, .docx, .txt, .pdf, .png, .jpg, .jpeg, .svg, .eps, .ico' onChange={handleUploadFile} style={{display: 'inline-flex'}}>
         <IconButton icon={icon} style={buttonStyle} />
       </FileUploader>
       { attachedFile }

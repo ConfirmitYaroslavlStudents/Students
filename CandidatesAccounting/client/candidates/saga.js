@@ -62,7 +62,7 @@ const creator = ({ history }) => {
   }
 
   function* getCandidatesSaga() {
-    try {
+    //try {
       const candidateState = yield select(state => state.candidates)
       const searchRequest = yield select(state => state.application.searchRequest)
       const serverResponse = yield call(
@@ -83,10 +83,10 @@ const creator = ({ history }) => {
         candidates: serverResponse.candidates,
         totalCount: serverResponse.total
       }))
-    }
-    catch (error) {
-      yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
-    }
+    //}
+    //catch (error) {
+    //  yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
+    //}
   }
 
   function* addCandidateSaga(action) {
@@ -115,7 +115,10 @@ const creator = ({ history }) => {
       const candidateStatus = yield select(state => state.candidates.candidateStatus)
       candidate.comments = {}
       if (candidate.status !== previousStatus) {
-        candidate.comments['newStatus'] = new Comment('SYSTEM', ' New status: ' + candidate.status)
+        candidate.comments['newStatus'] = new Comment('SYSTEM',
+          ' New status: ' + candidate.status + '</br>'
+          + ' Previous: ' + previousStatus
+        )
       }
       yield put(actions.setOnUpdating({candidateId: candidate.id}))
       yield call(updateCandidate, candidate)

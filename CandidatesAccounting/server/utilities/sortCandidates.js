@@ -1,6 +1,12 @@
 export default function SortCandidates(candidates, sortingField, sortingDirection) {
   const sortResult = sortingDirection === 'desc' ? 1 : -1
   return candidates.sort((a, b) => {
+    if (!a[sortingField] || a[sortingField] === null) {
+      return sortResult
+    }
+    if (!b[sortingField] || b[sortingField] === null) {
+      return -sortResult
+    }
     switch (sortingField) {
       case 'learningStart':
         return sortResult * sortByDate(a[sortingField], b[sortingField])
@@ -28,10 +34,10 @@ function sortByAlphabet(a, b) {
 
 function sortByDate(a, b) {
   const aDate = a.split('.')
-  const aResult = aDate[2]*10000 + aDate[1]*100 + aDate[0]
+  const aResult = Number(aDate[2])*10000 + Number(aDate[1])*100 + Number(aDate[0])
 
   const bDate = b.split('.')
-  const bResult = bDate[2]*10000 + bDate[1]*100 + bDate[0]
+  const bResult = Number(bDate[2])*10000 + Number(bDate[1])*100 + Number(bDate[0])
 
   if (aResult > bResult) {
     return 1
@@ -48,12 +54,12 @@ function sortByDateTime(a, b) {
   const aSplited = a.split(' ')
   const aTime = aSplited[0].split(':')
   const aDate = aSplited[1].split('.')
-  const aResult = aDate[2]*100000000 + aDate[1]*1000000 + aDate[0]*10000 + aTime[0]*100 + aTime[1]
+  const aResult = Number(aDate[2])*100000000 + Number(aDate[1])*1000000 + Number(aDate[0])*10000 + Number(aTime[0])*100 + Number(aTime[1])
 
   const bSplited = b.split(' ')
   const bTime = bSplited[0].split(':')
   const bDate = bSplited[1].split('.')
-  const bResult = bDate[2]*100000000 + bDate[1]*1000000 + bDate[0]*10000 + bTime[0]*100 + bTime[1]
+  const bResult = Number(bDate[2])*100000000 + Number(bDate[1])*1000000 + Number(bDate[0])*10000 + Number(bTime[0])*100 + Number(bTime[1])
 
   if (aResult > bResult) {
     return 1

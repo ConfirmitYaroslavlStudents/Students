@@ -69,7 +69,7 @@ export function updateCandidate(id, candidateNewState) {
       status: candidateNewState.status,
       name: candidateNewState.name,
       email: candidateNewState.email,
-      birthDate: candidateNewState.birthDate,
+      phoneNumber: candidateNewState.phoneNumber,
       tags: candidateNewState.tags,
       subscribers: candidateNewState.subscribers,
       interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : undefined,

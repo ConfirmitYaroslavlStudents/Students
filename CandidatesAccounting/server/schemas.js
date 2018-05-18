@@ -27,7 +27,7 @@ export const CandidateSchema = new Schema({
       required: true,
       match: /.+@.+\..+/i
     },
-    birthDate: String,
+    phoneNumber: String,
     comments: [{
       author: {
         type: String,
@@ -69,7 +69,7 @@ export const IntervieweeSchema = new Schema({
       required: true,
       match: /.+@.+\..+/i
     },
-    birthDate: String,
+    phoneNumber: String,
     comments: [{
       author: {
         type: String,
@@ -110,7 +110,7 @@ export const StudentSchema = new Schema({
       required: true,
       match: /.+@.+\..+/i
     },
-    birthDate: String,
+    phoneNumber: String,
     comments: [{
       author: {
         type: String,
@@ -148,7 +148,7 @@ export const TraineeSchema = new Schema({
       required: true,
       match: /.+@.+\..+/i
     },
-    birthDate: String,
+    phoneNumber: String,
     comments: [{
       author: {
         type: String,

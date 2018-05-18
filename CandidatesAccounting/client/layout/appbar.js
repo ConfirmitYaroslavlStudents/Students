@@ -5,20 +5,28 @@ import { SELECTORS } from '../rootReducer'
 import Logo from 'material-ui-icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from '../authorization/components/userControls'
+import UpdateCandidateDialog from '../candidates/components/common/updateCandidateDialog'
 import styled from 'styled-components'
 
 function Appbar(props) {
-  const { pageTitle } = props
+  const { pageTitle, candidates, authorized } = props
 
   const searchForm =
     pageTitle === 'Candidate Accounting' ?
       <SearchForm />
       : ''
 
+  // TODO: decide is the button useful
+  const updateCandidateButton =
+    pageTitle !== 'Candidate Accounting' && false ?
+      <UpdateCandidateDialog candidate={candidates[Object.keys(candidates)[0]]} disabled={!authorized}/>
+      : ''
+
   return (
     <AppbarWrapper>
       <AppbarTitleWrapper>
         <Logo /> {pageTitle}
+        { updateCandidateButton }
       </AppbarTitleWrapper>
       <AppbarControlsWrapper>
         {searchForm}
@@ -29,11 +37,15 @@ function Appbar(props) {
 }
 
 Appbar.propTypes = {
-  pageTitle: PropTypes.string.isRequired
+  pageTitle: PropTypes.string.isRequired,
+  authorized: PropTypes.bool.isRequired,
+  candidates: PropTypes.object.isRequired
 }
 
 export default connect(state => ({
-    pageTitle: SELECTORS.APPLICATION.PAGETITLE(state)
+    pageTitle: SELECTORS.APPLICATION.PAGETITLE(state),
+    authorized: SELECTORS.AUTHORIZATION.AUTHORIZED(state),
+    candidates: SELECTORS.CANDIDATES.CANDIDATES(state)
   }
 ))(Appbar)
 

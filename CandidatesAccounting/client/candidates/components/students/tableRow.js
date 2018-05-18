@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import CandidateControls from '../common/candidateControls'
-import { formatDate, isBirthDate } from '../../../utilities/customMoment'
+import { formatDate } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/tagList'
 import styled, { css } from 'styled-components'
 
@@ -13,16 +13,12 @@ export default function StudentTableRow(props) {
       <span className='nowrap'>{candidate.name}</span>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
-    <p>{candidate.email}</p>,
-    <Date highlighted={isBirthDate(candidate.birthDate)}>
-      {formatDate(candidate.birthDate)}
-    </Date>,
-    <p>{candidate.groupName}</p>,
+    <CandidateControls candidate={candidate}/>,
     <Date>{formatDate(candidate.startingDate)}</Date>,
     <Date>{formatDate(candidate.endingDate)}</Date>,
-    <CandidateControlsWrapper>
-      <CandidateControls candidate={candidate}/>
-    </CandidateControlsWrapper>
+    <p>{candidate.groupName}</p>,
+    <p><a className='link' href={'mailto:' + candidate.email}>{candidate.email}</a></p>,
+    <p><a className='link' href={'tel:' + candidate.phoneNumber.trim()}>{candidate.phoneNumber}</a></p>
   ]
 }
 
@@ -33,11 +29,6 @@ StudentTableRow.propTypes = {
 const CandidateNameWrapper = styled.div`
   display: flex;
   align-items: center;
-`
-
-const CandidateControlsWrapper = styled.div`
-  display: flex;
-  float: right;
 `
 
 const Date = styled.div`

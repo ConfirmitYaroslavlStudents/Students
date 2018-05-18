@@ -8,7 +8,7 @@ import AddCandidateDialog from '../candidates/components/common/addCandidateDial
 import styled from 'styled-components'
 
 function TablesBar(props) {
-  const { candidateStatus, setCandidateStatus } = props
+  const { candidateStatus, setCandidateStatus, pageTitle } = props
 
   let selected = 0;
   switch(candidateStatus) {
@@ -26,6 +26,13 @@ function TablesBar(props) {
   const handleLinkClick = status => () => {
     setCandidateStatus({ status })
   }
+
+  const addCandidateButton =
+    pageTitle === 'Candidate Accounting' ?
+      <AddCandidateButtonWrapper>
+        <AddCandidateDialog />
+      </AddCandidateButtonWrapper>
+      : ''
 
   return (
     <TablesBarWrapper>
@@ -45,20 +52,20 @@ function TablesBar(props) {
           </Tab>
         </Tabs>
       </TabsWrapper>
-      <AddCandidateButtonWrapper>
-        <AddCandidateDialog />
-      </AddCandidateButtonWrapper>
+      { addCandidateButton }
     </TablesBarWrapper>
   )
 }
 
 TablesBar.propTypes = {
   candidateStatus: PropTypes.string.isRequired,
-  setCandidateStatus: PropTypes.func.isRequired
+  setCandidateStatus: PropTypes.func.isRequired,
+  pageTitle: PropTypes.string.isRequired
 }
 
 export default connect(state => ({
-    candidateStatus: SELECTORS.CANDIDATES.CANDIDATESTATUS(state)
+    candidateStatus: SELECTORS.CANDIDATES.CANDIDATESTATUS(state),
+    pageTitle: SELECTORS.APPLICATION.PAGETITLE(state)
   }
 ), actions)(TablesBar)
 

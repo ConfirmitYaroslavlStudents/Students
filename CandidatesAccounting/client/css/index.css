@@ -64,6 +64,7 @@ p {
     color: #555;
 }
 
+
 .flex {
     display: flex;
 }
@@ -80,6 +81,15 @@ p {
 
 .inline-flex {
     display: inline-flex;
+}
+
+.link {
+    color: #08c;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #2196F3;
 }
 
 .table-link {
@@ -151,5 +161,9 @@ p {
 }
 
 th:last-child {
+    text-align: right !important;
+}
+
+td:last-child {
     text-align: right !important;
 }

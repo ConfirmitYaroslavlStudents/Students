@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import CandidateControls from '../common/candidateControls'
-import { formatDateTime, formatDate, isBirthDate, isToday } from '../../../utilities/customMoment'
+import { formatDateTime, isToday } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/tagList'
 import ResumeControls from '../interviewees/resumeControls'
 import styled, { css } from 'styled-components'
@@ -14,17 +14,13 @@ export default function IntervieweeTableRow(props) {
       <span className='nowrap'>{candidate.name}</span>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
-    <p>{candidate.email}</p>,
-    <Date highlighted={isBirthDate(candidate.birthDate)}>
-      {formatDate(candidate.birthDate)}
-    </Date>,
+      <CandidateControls candidate={candidate}/>,
+    <ResumeControls interviewee={candidate} disabled={disabled} downloadingEnabled/>,
     <Date highlighted={isToday(candidate.interviewDate)}>
       {formatDateTime(candidate.interviewDate)}
     </Date>,
-    <ResumeControls interviewee={candidate} disabled={disabled} downloadingEnabled/>,
-    <CandidateControlsWrapper>
-      <CandidateControls candidate={candidate}/>
-    </CandidateControlsWrapper>
+    <p><a className='link' href={'mailto:' + candidate.email}>{candidate.email}</a></p>,
+    <p><a className='link' href={'tel:' + candidate.phoneNumber.trim()}>{candidate.phoneNumber}</a></p>
   ]
 }
 
@@ -36,11 +32,6 @@ IntervieweeTableRow.propTypes = {
 const CandidateNameWrapper = styled.div`
   display: flex;
   align-items: center;
-`
-
-const CandidateControlsWrapper = styled.div`
-  display: flex;
-  float: right;
 `
 
 const Date = styled.div`

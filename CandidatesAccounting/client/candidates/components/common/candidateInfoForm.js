@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import TextField from '../../../common/UIComponentDecorators/textField'
-import DatePicker from '../../../common/UIComponentDecorators/datePicker'
+import PhoneNumberField from '../../../common/UIComponentDecorators/phoneNumberField'
 import SelectInput from '../../../common/UIComponentDecorators/selectInput'
 import TagSelect from '../../../common/UIComponentDecorators/tagSelect'
-import { toDatePickerFormat, fromDatePickerFormat } from '../../../utilities/customMoment'
 import { isNotEmpty, isEmail } from '../../../utilities/candidateValidators'
 import IntervieweeSpecialFields from '../interviewees/specialFields'
 import StudentSpecialFields from '../students/specialFields'
@@ -76,11 +75,10 @@ export default class CandidateInfoForm extends Component {
           value={candidate.email}
           checkValid={isEmail}
           required/>
-        <DatePicker
-          label='Birth date'
-          defaultValue={toDatePickerFormat(candidate.birthDate)}
-          onChange={value => {this.changeProperty('birthDate', fromDatePickerFormat(value))}}
-        />
+        <PhoneNumberField
+          onChange={value => {this.changeProperty('phoneNumber', value)}}
+          label='Phone number'
+          value={candidate.phoneNumber}/>
 
         {this.getSpecialFields()}
 
@@ -97,7 +95,6 @@ CandidateInfoForm.propTypes = {
 
 const CandidateFormWrapper = styled.div`
   padding: 15px 15px 10px;
-  margin-right: 1px;
 `
 
 const TextFieldLabel = styled.p`

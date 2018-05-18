@@ -5,7 +5,7 @@
   "main": "webpack.development.config.js",
   "scripts": {
     "test": "nodemon --exec \"babel-node ./server/server.js --mode development\" -w ./server",
-    "build": "webpack --config webpack.production.config.js",
+    "build": "webpack --progress --config webpack.production.config.js",
     "start": "babel-node ./server/server.js --mode production"
   },
   "author": "DmitryB",

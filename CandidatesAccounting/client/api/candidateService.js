@@ -10,7 +10,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
           id
           name
           status
-          birthDate
+          phoneNumber
           email
           commentAmount
           tags
@@ -54,7 +54,7 @@ export function getCandidate(id) {
         id
         name
         status
-        birthDate
+        phoneNumber
         email
         comments {
           id

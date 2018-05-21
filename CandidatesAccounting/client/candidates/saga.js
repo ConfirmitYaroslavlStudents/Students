@@ -4,6 +4,9 @@ import * as actions from './actions'
 import { uploadResume } from '../api/resumeService'
 import { getCandidates, addCandidate, deleteCandidate, updateCandidate } from '../api/candidateService.js'
 import Comment from '../utilities/comment'
+import findCandidateStateDifference from '../utilities/findCandidateStateDifference'
+import createCandidateUpdateMessage from '../utilities/createCandidateUpdateMessage'
+import createInterviewScheduledMessage from '../utilities/createInterviewScheduledMessage'
 
 const creator = ({ history }) => {
   function* candidatesSaga() {
@@ -62,7 +65,7 @@ const creator = ({ history }) => {
   }
 
   function* getCandidatesSaga() {
-    //try {
+    try {
       const candidateState = yield select(state => state.candidates)
       const searchRequest = yield select(state => state.application.searchRequest)
       const serverResponse = yield call(
@@ -83,10 +86,10 @@ const creator = ({ history }) => {
         candidates: serverResponse.candidates,
         totalCount: serverResponse.total
       }))
-    //}
-    //catch (error) {
-    //  yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
-    //}
+    }
+    catch (error) {
+      yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
+    }
   }
 
   function* addCandidateSaga(action) {
@@ -111,14 +114,18 @@ const creator = ({ history }) => {
 
   function* updateCandidateSaga(action) {
     try {
-      const {candidate, previousStatus} = action.payload
+      const { candidate, previousState } = action.payload
       const candidateStatus = yield select(state => state.candidates.candidateStatus)
+      const candidateStateDifference = findCandidateStateDifference(previousState, candidate)
       candidate.comments = {}
-      if (candidate.status !== previousStatus) {
-        candidate.comments['newStatus'] = new Comment('SYSTEM',
-          ' New status: ' + candidate.status + '</br>'
-          + ' Previous: ' + previousStatus
-        )
+      if (Object.keys(candidateStateDifference).length !== 0) {
+        candidate.comments['candidateUpdateUpdateMessage'] = new Comment('SYSTEM', createCandidateUpdateMessage(candidateStateDifference))
+        candidate.commentAmount++
+        console.log(candidateStateDifference)
+        if (candidateStateDifference.interviewDate && candidateStateDifference.interviewDate.newState && candidateStateDifference.interviewDate.newState !== '') {
+          candidate.comments['interviewSchduledMessage'] = new Comment('SYSTEM', createInterviewScheduledMessage(candidateStateDifference.interviewDate.newState))
+          candidate.commentAmount++
+        }
       }
       yield put(actions.setOnUpdating({candidateId: candidate.id}))
       yield call(updateCandidate, candidate)

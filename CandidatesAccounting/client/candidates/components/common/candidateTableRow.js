@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CandidateControls from './candidateControls'
 import TagList from '../../../tags/components/tagList'
+import EmailWrapper from '../../../common/emailWrapper'
+import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
 import styled from 'styled-components'
 
 export default function CandidateTableRow(props) {
@@ -14,8 +16,8 @@ export default function CandidateTableRow(props) {
     </CandidateNameWrapper>,
     <CandidateControls candidate={candidate}/>,
     <p>{candidate.status}</p>,
-    <p><a className='link' href={'mailto:' + candidate.email}>{candidate.email}</a></p>,
-    <p><a className='link' href={'tel:' + candidate.phoneNumber.trim()}>{candidate.phoneNumber}</a></p>
+    <p><EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper></p>,
+    <p><PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper></p>
   ]
 }
 

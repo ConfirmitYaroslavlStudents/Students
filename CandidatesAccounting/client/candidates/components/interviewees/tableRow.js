@@ -4,6 +4,8 @@ import CandidateControls from '../common/candidateControls'
 import { formatDateTime, isToday } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/tagList'
 import ResumeControls from '../interviewees/resumeControls'
+import EmailWrapper from '../../../common/emailWrapper'
+import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
 import styled, { css } from 'styled-components'
 
 export default function IntervieweeTableRow(props) {
@@ -19,8 +21,8 @@ export default function IntervieweeTableRow(props) {
     <Date highlighted={isToday(candidate.interviewDate)}>
       {formatDateTime(candidate.interviewDate)}
     </Date>,
-    <p><a className='link' href={'mailto:' + candidate.email}>{candidate.email}</a></p>,
-    <p><a className='link' href={'tel:' + candidate.phoneNumber.trim()}>{candidate.phoneNumber}</a></p>
+    <p><EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper></p>,
+    <p><PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper></p>
   ]
 }
 

@@ -18,7 +18,7 @@ class UpdateCandidateDialog extends React.Component {
     super(props)
     this.candidate = new Candidate(props.candidate.status, props.candidate)
     this.state = ({ isOpen: false })
-    this.previousStatus = props.candidate.status
+    this.previousState = new Candidate(props.candidate.status, props.candidate)
   }
 
   handleOpen = () => {
@@ -32,14 +32,14 @@ class UpdateCandidateDialog extends React.Component {
 
   handleCandidateUpdate = () => {
     if (checkCandidateValidation(this.candidate)) {
-      this.props.updateCandidate({ candidate: this.candidate, previousStatus: this.previousStatus })
+      this.props.updateCandidate({ candidate: new Candidate(this.candidate.status, this.candidate), previousState: this.previousState })
       this.handleClose()
     }
   }
 
   render() {
     const { disabled, tags } = this.props
-    this.previousStatus = this.candidate.status
+    this.previousState = new Candidate(this.candidate.status, this.candidate)
 
     return (
       <div className='inline-flex'>

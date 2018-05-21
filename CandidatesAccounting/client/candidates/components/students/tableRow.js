@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import CandidateControls from '../common/candidateControls'
 import { formatDate } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/tagList'
+import EmailWrapper from '../../../common/emailWrapper'
+import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
 import styled, { css } from 'styled-components'
 
 export default function StudentTableRow(props) {
@@ -17,8 +19,8 @@ export default function StudentTableRow(props) {
     <Date>{formatDate(candidate.startingDate)}</Date>,
     <Date>{formatDate(candidate.endingDate)}</Date>,
     <p>{candidate.groupName}</p>,
-    <p><a className='link' href={'mailto:' + candidate.email}>{candidate.email}</a></p>,
-    <p><a className='link' href={'tel:' + candidate.phoneNumber.trim()}>{candidate.phoneNumber}</a></p>
+    <p><EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper></p>,
+    <p><PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper></p>
   ]
 }
 

@@ -20,6 +20,7 @@ class AppView extends Component {
     const {
       initializing,
       fetching,
+      pageTitle,
       candidates,
       errorMessage,
       setErrorMessage,
@@ -57,7 +58,7 @@ class AppView extends Component {
         </Switch>
 
     const refreshingSpinner =
-      fetching && !initializing ?
+      fetching && !initializing && pageTitle === 'Candidate Accounting'?
         <RefreshSpinnerWrapper>
           <Spinner size={60}/>
         </RefreshSpinnerWrapper>
@@ -85,6 +86,7 @@ AppView.propTypes = {
   candidates: PropTypes.object.isRequired,
   errorMessage: PropTypes.string.isRequired,
   setErrorMessage: PropTypes.func.isRequired,
+  pageTitle: PropTypes.string.isRequired,
   currentCandidateId: PropTypes.string.isRequired
 }
 
@@ -93,6 +95,7 @@ export default connect(state => ({
     fetching: SELECTORS.APPLICATION.FETCHING(state),
     candidates: SELECTORS.CANDIDATES.CANDIDATES(state),
     errorMessage: SELECTORS.APPLICATION.ERRORMESSAGE(state),
+    pageTitle: SELECTORS.APPLICATION.PAGETITLE(state),
     currentCandidateId: SELECTORS.COMMENTS.CURRENTCANDIDATEID(state)
   }
 ), actions)(AppView)

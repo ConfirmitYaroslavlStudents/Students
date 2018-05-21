@@ -30,7 +30,7 @@ export default (reducer, username, history) => {
       sagaRun.cancel()
       sagaRun.done.then(() => {
         sagaRun = sagaMiddleware.run(function* replaceSaga() {
-          yield newRootSaga()
+          yield newRootSaga({ history })
         })
       })
     })

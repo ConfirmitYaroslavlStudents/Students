@@ -11,6 +11,7 @@ import LoadableAddCommentPanel from './loadableAddCommentPanel'
 import getRandomColor from '../../utilities/getRandomColor'
 import Grid from 'material-ui/Grid'
 import Spinner from '../../common/UIComponentDecorators/spinner'
+import CandidateCard from '../../candidates/components/common/candidateCard'
 import styled from 'styled-components'
 
 class CommentsPage extends Component {
@@ -40,7 +41,7 @@ class CommentsPage extends Component {
   }
 
   render() {
-    const { initializing, fetching, authorized, candidate, comments, username, addComment, subscribe, unsubscribe } = this.props
+    const { initializing, fetching, authorized, candidate, comments, tags, username, addComment, subscribe, unsubscribe } = this.props
 
     if (initializing) {
       return <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
@@ -85,9 +86,20 @@ class CommentsPage extends Component {
 
     return (
       <CommentPageWrapper>
-        <Grid container spacing={0} justify='center'>
-          <Grid item className='comment-grid' lg={6} md={9} sm={12}>
-            {commentClouds}
+        <Grid container spacing={0} justify='flex-start'>
+          <Grid item className='candidate-card-grid' lg={3} md={4} sm={4}>
+            <CandidateCardWrapper>
+              <CandidateCard candidate={candidate} tags={tags} authorized={authorized}/>
+            </CandidateCardWrapper>
+          </Grid>
+          <Grid container spacing={0} justify='flex-end'>
+            <Grid item lg={6} md={7} sm={7}>
+              <CommentsWrapper>
+                {commentClouds}
+              </CommentsWrapper>
+            </Grid>
+            <Grid item lg={3} md={1} sm={1}>
+            </Grid>
           </Grid>
         </Grid>
         <CommentPageFooter>
@@ -113,6 +125,10 @@ CommentsPage.propTypes = {
   fetching: PropTypes.bool.isRequired,
   authorized: PropTypes.bool.isRequired,
   username: PropTypes.string.isRequired,
+  addComment: PropTypes.func.isRequired,
+  subscribe:PropTypes.func.isRequired,
+  unsubscribe: PropTypes.func.isRequired,
+  tags: PropTypes.array.isRequired,
   candidate: PropTypes.object
 }
 
@@ -121,28 +137,27 @@ export default connect(state => ({
     initializing: SELECTORS.APPLICATION.INITIALIZING(state),
     fetching: SELECTORS.APPLICATION.FETCHING(state),
     authorized: SELECTORS.AUTHORIZATION.AUTHORIZED(state),
-    username: SELECTORS.AUTHORIZATION.USERNAME(state)
+    username: SELECTORS.AUTHORIZATION.USERNAME(state),
+    tags: SELECTORS.TAGS.TAGS(state)
   }
 ), {...actions, ...notificationActions})(CommentsPage)
-
-
-const CommentPageFooter = styled.div`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-`
 
 const CommentPageWrapper = styled.div`
   display: flex;
   width: 100%;
   min-height: 100vmin;
-  background: #EEE;
-  position: absolute;
-  top: -108px;
-  padding-top: 108px;
-  padding-bottom: 161px;
+  margin-top: -156px;
+  padding-top: 156px;
+  padding-bottom: 164px;
   box-sizing: border-box;
+  background: #EEE;
   z-index: 4;
+`
+
+const CommentPageFooter = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 `
 
 const NoResultWrapper = styled.div`
@@ -159,7 +174,25 @@ const FetchingWrapper = styled.div`
   width: 100%;
   top: 0;
   left: 0;
-  background-color: rgb(255, 255, 255, 0.5);
+  box-shadow: 2px 2px 4px 2px rgba(0,0,0,0.1);
+`
+
+const CandidateCardWrapper = styled.div`
+  background-color: #f6f6f6;
+  padding: 24px;
+  margin: 32px 16px 32px 32px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px 2px rgba(0,0,0,0.1);
+`
+
+const CommentsWrapper = styled.div`
+  height: 100%;
+  background-color: #f6f6f6;
+  padding: 24px 4px;
+  margin: 0 32px 0 16px;
+  box-shadow: 0 0 7px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  min-width: 500px;
 `
 
 const SpinnerWrapper = styled.div`

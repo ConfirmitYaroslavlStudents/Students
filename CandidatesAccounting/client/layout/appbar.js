@@ -16,17 +16,10 @@ function Appbar(props) {
       <SearchForm />
       : ''
 
-  // TODO: decide is the button useful
-  const updateCandidateButton =
-    pageTitle !== 'Candidate Accounting' && false ?
-      <UpdateCandidateDialog candidate={candidates[Object.keys(candidates)[0]]} disabled={!authorized}/>
-      : ''
-
   return (
     <AppbarWrapper>
       <AppbarTitleWrapper>
         <Logo /> {pageTitle}
-        { updateCandidateButton }
       </AppbarTitleWrapper>
       <AppbarControlsWrapper>
         {searchForm}

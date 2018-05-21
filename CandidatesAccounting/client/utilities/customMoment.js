@@ -84,10 +84,3 @@ export function isToday(date) {
           dateToCheck.month() === currentDate.month() &&
           dateToCheck.year() === currentDate.year())
 }
-
-export function isBirthDate(birthdate) {
-  const currentDate = moment()
-  const dateToCheck = moment(birthdate, 'DD.MM.YYYY')
-  return (dateToCheck.date() === currentDate.date() &&
-    dateToCheck.month() === currentDate.month())
-}

@@ -10,7 +10,7 @@ export default function CommentAttachment(props) {
     window.location.origin + '/'
     + props.candidate.status.toLowerCase() + 's/'
     + props.candidate.id
-    + '/commentsActions/'
+    + '/comments/'
     + props.comment.id
     + '/attachment'
 

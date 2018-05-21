@@ -50,9 +50,15 @@ p {
     align-content: center;
 }
 
-.comment-grid {
+.candidate-card-grid {
+    position: fixed;
+    overflow: hidden;
+}
+
+.comment-clouds-wrapper {
     background-color: #f6f6f6;
     padding: 24px 4px;
+    margin: 0 32px 0 16px;
     box-shadow: 0 0 7px 5px rgba(0, 0, 0, 0.05);
 }
 
@@ -86,6 +92,7 @@ p {
 .link {
     color: #08c;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .link:hover {

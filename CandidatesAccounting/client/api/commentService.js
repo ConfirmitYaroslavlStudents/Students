@@ -40,7 +40,7 @@ export function addCommentAttachment(candidateId, commentId, attachment) {
   formData.append('attachment', attachment)
 
   return fetch(
-    '/interviewees/' + candidateId + '/commentsActions/' + commentId + '/attachment',
+    '/interviewees/' + candidateId + '/comments/' + commentId + '/attachment',
     {
       method: 'POST',
       credentials: 'include',

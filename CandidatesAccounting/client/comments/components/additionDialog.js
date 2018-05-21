@@ -9,7 +9,7 @@ import DialogWindow from '../../common/UIComponentDecorators/dialogWindow'
 import CommentIcon from 'material-ui-icons/InsertComment'
 import CloseIcon from 'material-ui-icons/Close'
 import IconButton from '../../common/UIComponentDecorators/iconButton'
-import LoadableAddCommentPanel from './loadableAddCommentPanel'
+import LoadableAddCommentPanel from './loadableAdditionPanel'
 import styled from 'styled-components'
 
 class AddCommentDialog extends Component {

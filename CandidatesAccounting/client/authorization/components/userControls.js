@@ -7,7 +7,7 @@ import LoginDialog from './loginDialog'
 import IconButton from '../../common/UIComponentDecorators/iconButton'
 import SignOutIcon from 'material-ui-icons/ExitToApp'
 import formatUserName from '../../utilities/formatUserName'
-import NotificationCenterPopover from '../../notifications/components/notificationCenterPopover'
+import NotificationCenterPopover from '../../notifications/components/centerPopover'
 import Spinner from '../../common/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dialog from 'material-ui/Dialog'
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
-import Typography from 'material-ui/Typography'
-import Slide from 'material-ui/transitions/Slide'
+import Dialog from '@material-ui/core/Dialog'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Slide from '@material-ui/core/Slide'
 
 function Transition(props) {
   return <Slide direction='up' {...props} />

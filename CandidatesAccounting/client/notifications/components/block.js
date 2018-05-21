@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import NavLink from '../../common/navLink'
+import NavLink from '../../common/linkWrapper'
 import DeleteIcon from 'material-ui-icons/Cancel'
 import formatUserName from '../../utilities/formatUserName'
 import { formatDateTime } from '../../utilities/customMoment'

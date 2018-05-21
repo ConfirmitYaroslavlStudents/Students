@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Spinner from '../../../common/UIComponentDecorators/spinner'
 
 const LoadableCandidateInfoForm = Loadable({
-  loader: () => import('./candidateInfoForm'),
+  loader: () => import('./infoForm'),
   loading: () =>
     <LoadingCandidateInfoWrapper>
       <SpinnerWrapper>

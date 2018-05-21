@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Paper from 'material-ui/Paper'
-import Table, {
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableFooter
-} from 'material-ui/Table'
+import Paper from '@material-ui/core/Paper'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
+import TableFooter from '@material-ui/core/TableFooter'
 
 export default function CustomTable(props) {
   const headers = props.headers.map((header, index) =>

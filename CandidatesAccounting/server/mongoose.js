@@ -9,10 +9,12 @@ import {
   TagSchema
 } from './schemas'
 
+const connectionURL = 'mongodb://localhost:27017/CandidateAccounting'
+
 mongoose.Promise = Promise
 
 export function connect() {
-  return mongoose.connect('mongodb://localhost:27017/CandidateAccounting')
+  return mongoose.connect(connectionURL)
 }
 
 AccountSchema.plugin(passportLocalMongoose)

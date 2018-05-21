@@ -7,7 +7,7 @@ import FlatButton from '../../common/UIComponentDecorators/flatButton'
 import Dialog from '../../common/UIComponentDecorators/dialogSimple'
 import LoginForm from './loginForm'
 import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
-import { LinearProgress } from 'material-ui/Progress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
 
 class LoginDialog extends Component {

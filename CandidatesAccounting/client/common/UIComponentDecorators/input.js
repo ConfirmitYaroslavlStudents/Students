@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Input, { InputLabel } from 'material-ui/Input'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
 
 export default function CustomInput(props) {
   return (

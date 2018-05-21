@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Snackbar from 'material-ui/Snackbar'
-import Fade from 'material-ui/transitions/Fade'
+import Snackbar from '@material-ui/core/Snackbar'
+import Fade from '@material-ui/core/Fade'
 
 export default class ErrorSnackbar extends Component {
   constructor(props) {

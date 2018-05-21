@@ -29,12 +29,12 @@ CommentAttachment.propTypes = {
 }
 
 export const CommentAttachmentWrapper = styled.div`
-  color: #42A5F5;
+  color: #08c;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   
   &:hover {
-    color: #64B5F6;   
+    color: #2196F3;   
    }
 `

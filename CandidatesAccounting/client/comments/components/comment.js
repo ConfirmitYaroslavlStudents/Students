@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import CommentAttachment from './commentAttachment'
+import CommentAttachment from './attachment'
 import { formatDateTime } from '../../utilities/customMoment'
 import formatUserName from '../../utilities/formatUserName'
-import { CommentWrapper, CommentMount, CommentText, CommentMountFooter, CommentFooter, CommentAuthorName } from './commentStyledComponents'
+import { CommentWrapper, CommentMount, CommentText, CommentMountFooter, CommentFooter, CommentAuthorName } from './styledComponents'
 
 export default function Comment(props) {
   const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''

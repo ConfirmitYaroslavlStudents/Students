@@ -8,7 +8,7 @@ import Candidate from '../../../utilities/candidate'
 import DialogWindow from '../../../common/UIComponentDecorators/dialogWindow'
 import AddPersonIcon from 'material-ui-icons/PersonAdd'
 import CloseIcon from 'material-ui-icons/Close';
-import LoadableCandidateInfoForm from './loadableCandidateInfoForm'
+import LoadableCandidateInfoForm from './loadableInfoForm'
 import IconButton from '../../../common/UIComponentDecorators/iconButton'
 import {MediumButtonStyle} from '../../../common/styleObjects'
 

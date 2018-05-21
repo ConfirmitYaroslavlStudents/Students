@@ -104,7 +104,7 @@ const creator = ({ history }) => {
       if (resumeFile) {
         yield call(uploadResume, candidateId, resumeFile)
       }
-      yield put(actions.addCandidateSuccess())
+      yield put(actions.addCandidateSuccess({ candidate }))
       yield put(actions.getCandidates())
     }
     catch (error) {

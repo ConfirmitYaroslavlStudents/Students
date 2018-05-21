@@ -7,7 +7,7 @@ import {
   CommentMount,
   CommentText,
   CommentFooter,
-} from './commentStyledComponents'
+} from './styledComponents'
 
 export default function CommentCloud(props) {
   return (

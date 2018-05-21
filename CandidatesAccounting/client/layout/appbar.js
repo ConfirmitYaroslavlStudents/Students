@@ -5,11 +5,10 @@ import { SELECTORS } from '../rootReducer'
 import Logo from 'material-ui-icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from '../authorization/components/userControls'
-import UpdateCandidateDialog from '../candidates/components/common/updateCandidateDialog'
 import styled from 'styled-components'
 
 function Appbar(props) {
-  const { pageTitle, candidates, authorized } = props
+  const { pageTitle } = props
 
   const searchForm =
     pageTitle === 'Candidate Accounting' ?
@@ -30,15 +29,11 @@ function Appbar(props) {
 }
 
 Appbar.propTypes = {
-  pageTitle: PropTypes.string.isRequired,
-  authorized: PropTypes.bool.isRequired,
-  candidates: PropTypes.object.isRequired
+  pageTitle: PropTypes.string.isRequired
 }
 
 export default connect(state => ({
-    pageTitle: SELECTORS.APPLICATION.PAGETITLE(state),
-    authorized: SELECTORS.AUTHORIZATION.AUTHORIZED(state),
-    candidates: SELECTORS.CANDIDATES.CANDIDATES(state)
+    pageTitle: SELECTORS.APPLICATION.PAGETITLE(state)
   }
 ))(Appbar)
 

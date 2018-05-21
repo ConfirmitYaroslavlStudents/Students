@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import CommentAttachment from './commentAttachment'
-import DeleteCommentButton from './deleteCommentButton'
+import CommentAttachment from './attachment'
+import DeleteCommentButton from './deleteButton'
 import { formatDateTime } from '../../utilities/customMoment'
 import formatUserName from '../../utilities/formatUserName'
 import {
@@ -11,7 +11,7 @@ import {
   CommentMountFooter,
   CommentFooter,
   CommentAuthorName
-} from './commentStyledComponents'
+} from './styledComponents'
 
 export default function CurrentUserComment(props) {
   const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''

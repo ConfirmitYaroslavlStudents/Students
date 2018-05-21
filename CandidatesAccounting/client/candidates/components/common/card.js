@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import EmailWrapper from '../../../common/emailWrapper'
 import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
 import FileDownloader from '../../../common/fileDownloader'
-import UpdateCandidateDialog from './updateCandidateDialog'
+import UpdateCandidateDialog from './updateDialog'
+import TagList from '../../../tags/components/list'
 import styled from 'styled-components'
 
 export default function CandidateCard(props) {
@@ -15,6 +16,13 @@ export default function CandidateCard(props) {
     key: 'Full name: ',
     value: candidate.name
   })
+
+  if (candidate.tags && candidate.tags.length !== []) {
+    fields.push({
+      key: 'Tags: ',
+      value: <TagList candidateTags={candidate.tags} />
+    })
+  }
 
   fields.push({
     key: 'Status: ',
@@ -140,12 +148,12 @@ const ValueWrapper = styled.span`
 `
 
 const CVWrapper = styled.div`
-  color: #42A5F5;
+  color: #08c;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   
   &:hover {
-    color: #64B5F6;   
+    color: #2196F3;   
    }
 `

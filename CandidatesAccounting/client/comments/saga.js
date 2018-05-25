@@ -30,7 +30,7 @@ const creator = ({ history }) => {
       const {candidate} = action.payload
       yield put(applicationActions.enableFetching())
       const getCandidateResult = yield call(getCandidate, candidate.id)
-      yield call(history.replace, '/' + candidate.status.toLowerCase() + 's/' + candidate.id + '/comments')
+      yield call(history.replace, '/' + getCandidateResult.candidate.status.toLowerCase() + 's/' + getCandidateResult.candidate.id + '/comments')
       yield put(actions.openCommentPageSuccess({...getCandidateResult}))
     }
     catch (error) {

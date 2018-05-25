@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^1.0.0",
+    "@material-ui/icons": "^1.0.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.11",
@@ -25,7 +26,6 @@
     "file-loader": "^1.1.11",
     "graphql": "^0.13.2",
     "history": "^4.7.2",
-    "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.22.1",
     "mongodb": "2.2.23",
     "mongoose": "^5.1.1",

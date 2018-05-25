@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FileDownloader from '../../common/fileDownloader'
-import AttachIcon from 'material-ui-icons/AttachFile'
+import AttachIcon from '@material-ui/icons/AttachFile'
 import { SmallButtonStyle, SmallestIconStyle } from '../../common/styleObjects'
 import styled from 'styled-components'
 

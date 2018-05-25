@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../applicationActions'
 import { SELECTORS } from '../rootReducer'
-import SearchIcon from 'material-ui-icons/search'
+import SearchIcon from '@material-ui/icons/search'
 import Input from '../common/UIComponentDecorators/input'
 import IconButton from '../common/UIComponentDecorators/iconButton'
 

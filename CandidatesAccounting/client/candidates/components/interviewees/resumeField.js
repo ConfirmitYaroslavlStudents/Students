@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import UploadIcon from 'material-ui-icons/FileUpload'
+import UploadIcon from '@material-ui/icons/FileUpload'
 import FileUploader from '../../../common/fileUploader'
 import { SmallerIconStyle, SmallButtonStyle } from '../../../common/styleObjects'
 import styled from 'styled-components'

@@ -24,6 +24,11 @@ export default createReducer(initialState, {
     fetching: true
   }),
 
+  [application.enableFetching]: state => ({
+    ...state,
+    fetching: false
+  }),
+
   [application.setSearchRequest]: (state, {payload}) => ({
     ...state,
     searchRequest: payload.searchRequest

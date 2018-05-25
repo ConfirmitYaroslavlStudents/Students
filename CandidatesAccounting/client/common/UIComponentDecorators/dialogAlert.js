@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import Slide from '@material-ui/core/Slide'

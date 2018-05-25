@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { MediumButtonStyle } from '../../../common/styleObjects'
-import DeleteIcon from 'material-ui-icons/Delete'
+import DeleteIcon from '@material-ui/icons/Delete'
 import IconButton from '../../../common/UIComponentDecorators/iconButton'
 import DialogAlert from '../../../common/UIComponentDecorators/dialogAlert'
 

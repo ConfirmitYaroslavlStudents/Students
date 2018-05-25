@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import Popover from '@material-ui/core/Popover';
+import React, {Component} from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
+import IconButton from '@material-ui/core/IconButton'
+import Popover from '@material-ui/core/Popover'
 
 export default class CustomPopover extends Component {
   constructor(props) {

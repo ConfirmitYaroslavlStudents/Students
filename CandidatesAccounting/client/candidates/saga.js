@@ -116,23 +116,35 @@ const creator = ({ history }) => {
     try {
       const { candidate, previousState } = action.payload
       const candidateStatus = yield select(state => state.candidates.candidateStatus)
+      const pageTitle = yield select(state => state.application.pageTitle)
+
       const candidateStateDifference = findCandidateStateDifference(previousState, candidate)
       candidate.comments = {}
       if (Object.keys(candidateStateDifference).length !== 0) {
         candidate.comments['candidateUpdateUpdateMessage'] = new Comment('SYSTEM', createCandidateUpdateMessage(candidateStateDifference))
         candidate.commentAmount++
-        console.log(candidateStateDifference)
         if (candidateStateDifference.interviewDate && candidateStateDifference.interviewDate.newState && candidateStateDifference.interviewDate.newState !== '') {
           candidate.comments['interviewSchduledMessage'] = new Comment('SYSTEM', createInterviewScheduledMessage(candidateStateDifference.interviewDate.newState))
           candidate.commentAmount++
         }
       }
+
       yield put(actions.setOnUpdating({candidateId: candidate.id}))
       yield call(updateCandidate, candidate)
+
       yield put(actions.updateCandidateSuccess({
         candidate,
-        shouldMoveToAnotherTable: candidateStatus !== '' && candidateStatus !== candidate.status
+        shouldMoveToAnotherTable: candidateStatus !== '' && candidateStatus !== candidate.status && pageTitle === 'Candidate Accounting'
       }))
+
+      if (candidateStateDifference.status) {
+        yield call(history.replace,
+          history.location.pathname.replace(
+            candidateStateDifference.status.previousState.toLowerCase() + 's',
+            candidateStateDifference.status.newState.toLowerCase() + 's')
+          + history.location.search)
+        yield put(actions.setCandidateStatus({ status: candidateStateDifference.status.newState, refreshNotNeccessary: true}))
+      }
     }
     catch (error) {
       yield put(applicationActions.setErrorMessage({message: error + '. Update candidate error.'}))
@@ -154,14 +166,18 @@ const creator = ({ history }) => {
 
   function* setCandidateStatusSaga(action) {
     try {
-      const { status } = action.payload
+      const { status, refreshNotNeccessary } = action.payload
       const previousStatus = yield select(state => state.candidates.candidateStatus)
       yield put(applicationActions.enableFetching())
       if (status === previousStatus) {
         yield put(applicationActions.resetSearchRequest())
       }
       yield put(actions.setCandidateStatusSuccess({ status }))
-      yield put(actions.getCandidates())
+      if (!refreshNotNeccessary) {
+        yield put(actions.getCandidates())
+      } else {
+        yield put(applicationActions.disableFetching())
+      }
     }
     catch (error) {
       yield put(applicationActions.setErrorMessage({message: error + '. Set candidate status error.'}))

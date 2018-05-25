@@ -7,7 +7,9 @@ export const initSuccess = createAction('INIT_SUCCESS')
 
 export const getInitialStateFromServer = createAction('GET_INITIAL_STATE_FROM_SERVER')
 
-export const enableFetching = createAction('SET_FETCHING')
+export const enableFetching = createAction('ENADLE_FETCHING')
+
+export const disableFetching = createAction('DISABLE_FETCHING')
 
 export const setErrorMessage = createAction('SET_ERROR_MESSAGE')
 

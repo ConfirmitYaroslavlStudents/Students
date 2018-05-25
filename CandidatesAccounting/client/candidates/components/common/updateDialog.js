@@ -8,9 +8,9 @@ import DialogWindow from '../../../common/UIComponentDecorators/dialogWindow'
 import LoadableCandidateInfoForm from './loadableInfoForm'
 import { checkCandidateValidation } from '../../../utilities/candidateValidators'
 import Candidate from '../../../utilities/candidate'
-import SaveIcon from 'material-ui-icons/Save'
-import EditIcon from 'material-ui-icons/Edit'
-import CloseIcon from 'material-ui-icons/Close'
+import SaveIcon from '@material-ui/icons/Save'
+import EditIcon from '@material-ui/icons/Edit'
+import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '../../../common/UIComponentDecorators/iconButton'
 
 class UpdateCandidateDialog extends React.Component {

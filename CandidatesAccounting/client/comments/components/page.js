@@ -161,8 +161,11 @@ const CommentPageFooter = styled.div`
 `
 
 const NoResultWrapper = styled.div`
-  padding: 5px;
-  color: #bbb;
+  width: 100%;
+  padding: 100px 5px;
+  font-size: 200%;
+  font-weight: bold;
+  color: #aaa;
   text-align: center;
   margin-bottom: 20px;
 `

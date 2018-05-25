@@ -143,7 +143,7 @@ app.get('/:candidateStatus(interviewees|students|trainees)/:candidateId/comments
   })
 })
 
-app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/comments:commentId/attachment', (req, res) => {
+app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/comments/:commentId/attachment', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).end()
   }

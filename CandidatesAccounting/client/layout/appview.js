@@ -54,7 +54,7 @@ class AppView extends Component {
           <Route exact path='/*' render={props =>
             <CandidatesTable type='Candidate' {...props} />}
           />
-          <Route psath='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
+          <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
         </Switch>
 
     const refreshingSpinner =

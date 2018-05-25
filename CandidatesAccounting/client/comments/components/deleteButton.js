@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import IconButton from '../../common/UIComponentDecorators/iconButton'
-import RemoveIcon from 'material-ui-icons/Delete'
+import RemoveIcon from '@material-ui/icons/Delete'
 import { SmallerIconStyle, SmallButtonStyle } from '../../common/styleObjects'
 import styled from 'styled-components'
 

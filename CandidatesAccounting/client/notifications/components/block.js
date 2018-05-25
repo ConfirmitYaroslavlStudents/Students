@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NavLink from '../../common/linkWrapper'
-import DeleteIcon from 'material-ui-icons/Cancel'
+import DeleteIcon from '@material-ui/icons/Cancel'
 import formatUserName from '../../utilities/formatUserName'
 import { formatDateTime } from '../../utilities/customMoment'
 import IconButton from '../../common/UIComponentDecorators/iconButton'
-import AttachIcon from 'material-ui-icons/AttachFile'
+import AttachIcon from '@material-ui/icons/AttachFile'
 import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from '../../common/styleObjects'
 import styled, { css } from 'styled-components'
 

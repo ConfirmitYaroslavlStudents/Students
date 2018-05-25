@@ -38,12 +38,13 @@ const Tag = styled.div`
   display: inline-block;
   padding: 0px 4px;
   background: #f2f9fc;
-  border: 1px solid #c9e6f2;
+  border: 1px solid #BBDEFB;
   border-radius: 2px;
-  color: #08c;
+  color: #1976D2;
   vertical-align: middle;
   margin: 0px 2px 3px 2px;
   &:hover {
-    color: #2196F3;
+    color: #1E88E5;
+    border-color: #64B5F6;
   }
 `

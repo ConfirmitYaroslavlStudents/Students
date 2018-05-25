@@ -11,6 +11,7 @@ import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import createPalette from '@material-ui/core/styles/createPalette'
 import indigo from '@material-ui/core/colors/indigo'
+import deepOrange from '@material-ui/core/colors/deepOrange'
 import AppView from './layout/appview'
 import createStore from './utilities/createStore'
 import { getInitialStateFromServer } from './applicationActions'
@@ -19,9 +20,12 @@ const username = window['APP_CONFIG'].username
 
 const theme = createMuiTheme({
   palette: createPalette({
-    primary: indigo
+    primary: indigo,
+    secondary: deepOrange
   }),
   typography: {
+    fontFamily: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+    fontSize: 16,
     fontWeightMedium: 400
   }
 })

@@ -61,28 +61,31 @@ export default class AddCommentPanel extends Component {
   }
 
   customQuillToolbar = () => {
+    const { disabled } = this.props
     return (
-      <div id='toolbar' className='flex centered'>
-        <select defaultValue='' className='ql-size'>
-          <option value='small' />
-          <option value='' />
-          <option value='large' />
-          <option value='huge' />
-        </select>
-        <button className='ql-bold' />
-        <button className='ql-italic' />
-        <button className='ql-underline' />
-        <button className='ql-strike' />
-        <button className='ql-list' value='ordered' />
-        <button className='ql-list' value='bullet' />
-        <button className='ql-indent' value='-1' />
-        <button className='ql-indent' value='+1' />
-        <button className='ql-link'/>
-        <FileUploader
-          uploadFile={this.handleAttachFile}
-          icon={<AttachIcon style={QuillToolbarButtonStyle}/>}
-          attachment={this.state.commentAttachment}
-          disabled={this.props.disabled} />
+      <div id='toolbar'>
+        <div className={'flex centered' + (disabled ? ' disabled' : '')}>
+          <select defaultValue='' className='ql-size' disabled={disabled}>
+            <option value='small' />
+            <option value='' />
+            <option value='large' />
+            <option value='huge' />
+          </select>
+          <button className='ql-bold' disabled={disabled}/>
+          <button className='ql-italic' disabled={disabled}/>
+          <button className='ql-underline' disabled={disabled}/>
+          <button className='ql-strike' disabled={disabled}/>
+          <button className='ql-list' value='ordered' disabled={disabled}/>
+          <button className='ql-list' value='bullet' disabled={disabled}/>
+          <button className='ql-indent' value='-1' disabled={disabled}/>
+          <button className='ql-indent' value='+1' disabled={disabled}/>
+          <button className='ql-link' disabled={disabled}/>
+          <FileUploader
+            uploadFile={this.handleAttachFile}
+            icon={<AttachIcon style={QuillToolbarButtonStyle}/>}
+            attachment={this.state.commentAttachment}
+            disabled={disabled} />
+        </div>
       </div>
     )
   }

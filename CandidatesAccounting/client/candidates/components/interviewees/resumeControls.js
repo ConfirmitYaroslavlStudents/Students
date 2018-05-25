@@ -9,6 +9,7 @@ import FileUploader from '../../../common/fileUploader'
 import FileDownloader from '../../../common/fileDownloader'
 import { SmallerIconStyle, SmallButtonStyle } from '../../../common/styleObjects'
 import Spinner from '../../../common/UIComponentDecorators/spinner'
+import IconButton from '../../../common/UIComponentDecorators/iconButton'
 import styled from 'styled-components'
 
 function ResumeControls(props) {
@@ -40,11 +41,11 @@ function ResumeControls(props) {
     <ResumeWrapper>
       { resumeFileName }
       <FileDownloader
-        icon={<DownloadIcon style={SmallerIconStyle}/>}
-        buttonStyle={SmallButtonStyle}
         disabled={!resumeIsUploaded || disabled}
         downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
-      />
+      >
+        <IconButton icon={<DownloadIcon style={SmallerIconStyle}/>} style={SmallButtonStyle}/>
+      </FileDownloader>
       { fileUploader }
     </ResumeWrapper>
   )

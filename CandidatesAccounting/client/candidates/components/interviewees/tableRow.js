@@ -41,7 +41,7 @@ const Date = styled.div`
   white-space: nowrap;
   
   ${props => props.highlighted && css`
-    color: #ff4081;
+    color: #FF5722;
     font-weight: bold;
 	`}
 `

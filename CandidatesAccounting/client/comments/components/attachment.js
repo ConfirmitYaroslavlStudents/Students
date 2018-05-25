@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FileDownloader from '../../common/fileDownloader'
 import AttachIcon from '@material-ui/icons/AttachFile'
-import { SmallButtonStyle, SmallestIconStyle } from '../../common/styleObjects'
+import { SmallestIconStyle } from '../../common/styleObjects'
 import styled from 'styled-components'
 
 export default function CommentAttachment(props) {
@@ -15,11 +15,12 @@ export default function CommentAttachment(props) {
     + '/attachment'
 
   return (
-    <CommentAttachmentWrapper>
-      <FileDownloader downloadLink={downloadLink} icon={<AttachIcon style={SmallestIconStyle}/>} buttonStyle={SmallButtonStyle}>
-        {props.comment.attachment}
+      <FileDownloader downloadLink={downloadLink}>
+        <CommentAttachmentWrapper>
+          <AttachIcon style={SmallestIconStyle}/>
+          {props.comment.attachment}
+        </CommentAttachmentWrapper>
       </FileDownloader>
-    </CommentAttachmentWrapper>
   )
 }
 

@@ -1,3 +1,3 @@
 export default function createInterviewScheduledMessage(interviewDate) {
-  return 'An interview has been scheduled for ' + interviewDate
+  return '<p>' + 'An interview has been scheduled for ' + interviewDate + '</p>'
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import CommentText from './commentText'
 import SystemMessageIcon from '../../common/systemMessageIcon'
 import { formatDateTime } from '../../utilities/customMoment'
 import {
   CommentWrapper,
   CommentMount,
-  CommentText,
+  CommentTextWrapper,
   CommentFooter,
 } from './styledComponents'
 
@@ -14,9 +15,9 @@ export default function CommentCloud(props) {
     <CommentWrapper>
       <CommentMount isSystem>
         <SystemMessageIcon />
-        <CommentText
-          dangerouslySetInnerHTML={{__html: props.comment.text}}>
-        </CommentText>
+        <CommentTextWrapper>
+          <CommentText text={props.comment.text}/>
+        </CommentTextWrapper>
       </CommentMount>
       <div> </div>
       <CommentFooter>

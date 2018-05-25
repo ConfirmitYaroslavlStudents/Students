@@ -70,6 +70,26 @@ p {
     color: #555;
 }
 
+.expansion-panel-root {
+    background: none !important;
+}
+
+.expansion-summary-expanded {
+    min-height: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.expansion-summary-root {
+    margin: 0 !important;
+    padding: 0 8px !important;
+}
+
+.expansion-details-root {
+    margin: 0 !important;
+    padding: 0 8px 8px 8px !important;
+}
 
 .flex {
     display: flex;
@@ -130,8 +150,8 @@ p {
 }
 
 .ql-editor {
+    max-height: 120px;
     min-height: 120px;
-    height: 120px;
 }
 
 .search {

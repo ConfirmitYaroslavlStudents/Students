@@ -39,7 +39,7 @@ export const CommentMount = styled.div`
 	`}
 `
 
-export const CommentText = styled.div`
+export const CommentTextWrapper = styled.div`
   text-align: left;
   word-wrap: break-word;
   overflow: hidden;
@@ -53,11 +53,11 @@ export const CommentAuthorName = styled.div`
 `
 
 export const CommentMountFooter = styled.div`
-  display: flex;
-  margin: 0 0 0 auto;
+  display: block;
+  margin: 0;
   
   ${props => props.right && css`
-    margin: 0 0 0 -3px;
+    margin: 0 8px 0 auto;
 	`}
 `
 

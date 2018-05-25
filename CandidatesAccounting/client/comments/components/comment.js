@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import CommentAttachment from './attachment'
 import { formatDateTime } from '../../utilities/customMoment'
 import formatUserName from '../../utilities/formatUserName'
-import { CommentWrapper, CommentMount, CommentText, CommentMountFooter, CommentFooter, CommentAuthorName } from './styledComponents'
+import CommentText from './commentText'
+import { CommentWrapper, CommentMount, CommentTextWrapper, CommentMountFooter, CommentFooter, CommentAuthorName } from './styledComponents'
 
 export default function Comment(props) {
   const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''
@@ -11,9 +12,9 @@ export default function Comment(props) {
   return (
     <CommentWrapper>
       <CommentMount markerColor={props.markerColor}>
-        <CommentText
-          dangerouslySetInnerHTML={{__html: props.comment.text}}>
-        </CommentText>
+        <CommentTextWrapper>
+          <CommentText text={props.comment.text} />
+        </CommentTextWrapper>
         <CommentMountFooter>
           { commentAttachment }
         </CommentMountFooter>

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import CommentText from './commentText'
 import CommentAttachment from './attachment'
 import DeleteCommentButton from './deleteButton'
 import { formatDateTime } from '../../utilities/customMoment'
@@ -7,7 +8,7 @@ import formatUserName from '../../utilities/formatUserName'
 import {
   CommentWrapper,
   CommentMount,
-  CommentText,
+  CommentTextWrapper,
   CommentMountFooter,
   CommentFooter,
   CommentAuthorName
@@ -19,9 +20,9 @@ export default function CurrentUserComment(props) {
   return (
     <CommentWrapper right>
       <CommentMount right>
-        <CommentText
-          dangerouslySetInnerHTML={{__html: props.comment.text}}>
-        </CommentText>
+        <CommentTextWrapper>
+          <CommentText text={props.comment.text} />
+        </CommentTextWrapper>
         <CommentMountFooter right>
           { commentAttachment }
         </CommentMountFooter>

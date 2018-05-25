@@ -1,19 +1,18 @@
 export default function createCandidateUpdateMessage(differences) {
-  let message = 'Candidate has been updated:'
+  let message = '<p>' + 'Candidate has been updated:' + '</p>'
   for (const property in differences)
   {
     const previousState = differences[property].previousState
     const newState = differences[property].newState
-    message += '</br>'
     if (!previousState) {
-      message += '+ ' + getPropertyFullName(property) + ': ' +  newState
+      message += '<p>' + '+ ' + getPropertyFullName(property) + ': ' +  newState + '</p>'
       continue
     }
     if (!newState) {
-      message += '- ' + getPropertyFullName(property) + ': ' +  previousState
+      message += '<p>' + '- ' + getPropertyFullName(property) + ': ' +  previousState + '</p>'
       continue
     }
-    message += getPropertyFullName(property) + ': ' +  differences[property].previousState + ' -> ' + differences[property].newState
+    message += '<p>' + getPropertyFullName(property) + ': ' +  differences[property].previousState + ' -> ' + differences[property].newState + '</p>'
   }
   return message
 }

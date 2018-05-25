@@ -38,3 +38,13 @@ export const SmallIconStyle = {
   height: 28,
   width: 28
 }
+
+export const MediumIconStyle = {
+  height: 34,
+  width: 34
+}
+
+export const BigIconStyle = {
+  height: 56,
+  width: 56
+}

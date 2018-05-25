@@ -4,6 +4,7 @@ import CandidateControls from './controls'
 import TagList from '../../../tags/components/list'
 import EmailWrapper from '../../../common/emailWrapper'
 import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
+import CandidateNameLink from '../../../common/candidateNameLink'
 import styled from 'styled-components'
 
 export default function CandidateTableRow(props) {
@@ -11,13 +12,13 @@ export default function CandidateTableRow(props) {
 
   return [
     <CandidateNameWrapper>
-      <span className='nowrap'>{candidate.name}</span>
+      <CandidateNameLink candidate={candidate}>{candidate.name}</CandidateNameLink>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
     <CandidateControls candidate={candidate}/>,
     <p>{candidate.status}</p>,
-    <p><EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper></p>,
-    <p><PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper></p>
+    <EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper>,
+    <PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper>
   ]
 }
 

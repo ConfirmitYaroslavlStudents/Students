@@ -13,6 +13,9 @@ import Grid from '@material-ui/core/Grid'
 import Spinner from '../../common/UIComponentDecorators/spinner'
 import CandidateCard from '../../candidates/components/common/card'
 import styled from 'styled-components'
+import IconButton from '../../common/UIComponentDecorators/iconButton'
+import ArrowDownIcon from '@material-ui/icons/ArrowDownward'
+import { BigButtonStyle, MediumIconStyle } from '../../common/styleObjects'
 
 class CommentsPage extends Component {
   constructor(props) {
@@ -27,8 +30,7 @@ class CommentsPage extends Component {
 
   componentDidUpdate() {
     if (this.shouldScrollDown) {
-      window.scrollTo(0, document.documentElement.scrollHeight)
-      this.shouldScrollDown = false
+      this.scrollToEnd()
     }
   }
 
@@ -38,6 +40,11 @@ class CommentsPage extends Component {
 
   deleteComment = (commentId) => () => {
     this.props.deleteComment({ candidateId: this.props.candidate.id, commentId })
+  }
+
+  scrollToEnd = () => {
+    window.scrollTo(0, document.documentElement.scrollHeight)
+    this.shouldScrollDown = false
   }
 
   render() {
@@ -92,13 +99,13 @@ class CommentsPage extends Component {
               <CandidateCard candidate={candidate} tags={tags} authorized={authorized}/>
             </CandidateCardWrapper>
           </Grid>
-          <Grid container spacing={0} justify='flex-end'>
-            <Grid item lg={6} md={7} sm={7}>
+          <Grid container spacing={0} justify='flex-start'>
+            <Grid item lg={3} md={4} sm={4}>
+            </Grid>
+            <Grid item lg={6} md={7} sm={8}>
               <CommentsWrapper>
                 {commentClouds}
               </CommentsWrapper>
-            </Grid>
-            <Grid item lg={3} md={1} sm={1}>
             </Grid>
           </Grid>
         </Grid>
@@ -114,6 +121,9 @@ class CommentsPage extends Component {
           />
         </CommentPageFooter>
         {fethcingSpinner}
+        <ToEndButtonWrapper>
+          <IconButton icon={<ArrowDownIcon style={MediumIconStyle}/>} onClick={this.scrollToEnd} style={BigButtonStyle}/>
+        </ToEndButtonWrapper>
       </CommentPageWrapper>
     )
   }
@@ -204,4 +214,10 @@ const SpinnerWrapper = styled.div`
   top: 48%;
   width: 100%;
   text-align: center;
+`
+
+const ToEndButtonWrapper = styled.div`
+  position: fixed;
+  right: 16px;
+  bottom: 186px;
 `

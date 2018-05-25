@@ -5,6 +5,7 @@ import { formatDate } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/list'
 import EmailWrapper from '../../../common/emailWrapper'
 import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
+import CandidateNameLink from '../../../common/candidateNameLink'
 import styled, { css } from 'styled-components'
 
 export default function StudentTableRow(props) {
@@ -12,15 +13,15 @@ export default function StudentTableRow(props) {
 
   return [
     <CandidateNameWrapper>
-      <span className='nowrap'>{candidate.name}</span>
+      <CandidateNameLink candidate={candidate}>{candidate.name}</CandidateNameLink>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
     <CandidateControls candidate={candidate}/>,
     <Date>{formatDate(candidate.startingDate)}</Date>,
     <Date>{formatDate(candidate.endingDate)}</Date>,
     <p>{candidate.groupName}</p>,
-    <p><EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper></p>,
-    <p><PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper></p>
+    <EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper>,
+    <PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper>
   ]
 }
 

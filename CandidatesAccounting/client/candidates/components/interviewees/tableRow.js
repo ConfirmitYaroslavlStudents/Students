@@ -6,6 +6,7 @@ import TagList from '../../../tags/components/list'
 import ResumeControls from '../interviewees/resumeControls'
 import EmailWrapper from '../../../common/emailWrapper'
 import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
+import CandidateNameLink from '../../../common/candidateNameLink'
 import styled, { css } from 'styled-components'
 
 export default function IntervieweeTableRow(props) {
@@ -13,7 +14,7 @@ export default function IntervieweeTableRow(props) {
 
   return [
     <CandidateNameWrapper>
-      <span className='nowrap'>{candidate.name}</span>
+      <CandidateNameLink candidate={candidate}>{candidate.name}</CandidateNameLink>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
       <CandidateControls candidate={candidate}/>,
@@ -21,8 +22,8 @@ export default function IntervieweeTableRow(props) {
     <Date highlighted={isToday(candidate.interviewDate)}>
       {formatDateTime(candidate.interviewDate)}
     </Date>,
-    <p><EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper></p>,
-    <p><PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper></p>
+    <EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper>,
+    <PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper>
   ]
 }
 

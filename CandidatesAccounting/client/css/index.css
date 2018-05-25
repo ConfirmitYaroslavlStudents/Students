@@ -131,6 +131,7 @@ p {
 
 .ql-editor {
     min-height: 120px;
+    height: 120px;
 }
 
 .search {

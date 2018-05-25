@@ -42,7 +42,7 @@ const Tag = styled.div`
   border-radius: 2px;
   color: #08c;
   vertical-align: middle;
-  margin: 0px 2px 3px 2px;
+  margin: 0px 1px 3px 1px;
   &:hover {
     color: #2196F3;
   }

@@ -6,6 +6,7 @@ import FileDownloader from '../../../common/fileDownloader'
 import UpdateCandidateDialog from './updateDialog'
 import TagList from '../../../tags/components/list'
 import styled from 'styled-components'
+import { SmallerIconStyle } from '../../../common/styleObjects'
 
 export default function CandidateCard(props) {
   const { candidate, tags, authorized } = props
@@ -102,7 +103,7 @@ export default function CandidateCard(props) {
   return (
     <CandidateCardWrapper>
       <UpdateButtonWrapper>
-        <UpdateCandidateDialog candidate={candidate} tags={tags} disabled={!authorized}/>
+        <UpdateCandidateDialog candidate={candidate} tags={tags} disabled={!authorized} iconStyle={SmallerIconStyle}/>
       </UpdateButtonWrapper>
 
       {fields.map((field, index) =>
@@ -124,6 +125,7 @@ CandidateCard.propTypes = {
 const CandidateCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 
 const UpdateButtonWrapper = styled.div`

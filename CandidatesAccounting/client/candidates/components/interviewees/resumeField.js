@@ -24,6 +24,7 @@ export default function ResumeField(props) {
       { resumeFileName }
       <FileUploader
         uploadFile={handleFileUpload}
+        fileTypes={['pdf', 'doc', 'docx', 'txt']}
         icon={<UploadIcon style={SmallerIconStyle}/>}
         buttonStyle={SmallButtonStyle}
       />

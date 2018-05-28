@@ -14,7 +14,13 @@ import { Account, connect } from './mongoose'
 import expressSession  from 'express-session'
 import passport from 'passport'
 import passportLocal from 'passport-local'
-import { getResume, addResume, getAttachment, addAttachment } from './mongoose'
+import {
+  getAvatar,
+  addAvatar,
+  getResume,
+  addResume,
+  getAttachment,
+  addAttachment } from './mongoose'
 import template from './template'
 
 const port = 3000
@@ -107,13 +113,39 @@ app.get('/logout', (req, res) => {
   })
 })
 
+app.get('/:candidateStatus/:candidateId/avatar', (req, res) => {
+  return getAvatar(req.params.candidateId).then((result, error) => {
+    if (error) {
+      return res.status(500).end()
+    }
+    res.attachment('avatar.jpg')
+    res.send(result.avatarFile)
+  })
+})
+
+app.post('/:candidateStatus/:candidateId/avatar', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).end()
+  }
+  if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
+    return res.status(500).end()
+  }
+  let file = req.files[Object.keys(req.files)[0]]
+  return addAvatar(req.params.candidateId, file.data).then((result, error) => {
+    if (error) {
+      return res.status(500).end()
+    }
+    res.end()
+  })
+})
+
 app.get('/interviewees/:intervieweeId/resume', (req, res) => {
   return getResume(req.params.intervieweeId).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }
     res.attachment(result.resumeName)
-    res.send(result.resumeData)
+    res.send(result.resumeFile)
   })
 })
 

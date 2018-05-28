@@ -29,6 +29,7 @@ export const CandidateSchema = new Schema({
       match: /.+@.+\..+/i
     },
     phoneNumber: String,
+    avatar: Buffer,
     comments: [{
       author: {
         type: String,
@@ -46,7 +47,7 @@ export const CandidateSchema = new Schema({
       attachmentFile: {
         type: Buffer,
         default: new Buffer('')
-      },
+      }
     }],
     tags: [String],
     subscribers: [String],
@@ -72,6 +73,7 @@ export const IntervieweeSchema = new Schema({
       match: /.+@.+\..+/i
     },
     phoneNumber: String,
+    avatar: Buffer,
     comments: [{
       author: {
         type: String,
@@ -108,6 +110,7 @@ export const StudentSchema = new Schema({
       required: true
     },
     nickname: String,
+    avatar: Buffer,
     email: {
       type: String,
       required: true,
@@ -153,6 +156,7 @@ export const TraineeSchema = new Schema({
       match: /.+@.+\..+/i
     },
     phoneNumber: String,
+    avatar: Buffer,
     comments: [{
       author: {
         type: String,

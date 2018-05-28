@@ -39,8 +39,8 @@ function identifyModel(status) {
 }
 
 export function getCandidates(status) {
-  const findSettings = status === 'Candidate' ? {} : { status }
-  return identifyModel(status).find(findSettings).exec()
+  const searchSettings = status === 'Candidate' ? {} : { status }
+  return identifyModel(status).find(searchSettings).exec()
 }
 
 export function getCandidateById(id) {
@@ -73,6 +73,7 @@ export function updateCandidate(id, candidateNewState) {
       nickname: candidateNewState.nickname ? candidateNewState.nickname : undefined,
       email: candidateNewState.email,
       phoneNumber: candidateNewState.phoneNumber ? candidateNewState.phoneNumber : undefined,
+      avatar: candidateNewState.avatar ? candidateNewState.avatar : undefined,
       tags: candidateNewState.tags,
       subscribers: candidateNewState.subscribers,
       interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : undefined,
@@ -135,21 +136,39 @@ export function deleteNotification(username, notificationId) {
   return Account.updateOne({username}, {$pull: {notifications: {_id: notificationId}}}).exec()
 }
 
+export function getAvatar(candidateId) {
+  return getCandidateById(candidateId)
+  .then(candidate => {
+    return {
+      avatarFile: candidate.avatar
+    }
+  })
+}
+
+export function addAvatar(id, avatarFile) {
+  return getCandidateById(id)
+  .then(candidate => {
+    candidate.avatarFile = avatarFile
+    candidate.comments = []
+    return updateCandidate(id, candidate)
+  })
+}
+
 export function getResume(intervieweeId) {
   return getCandidateById(intervieweeId)
     .then(interviewee => {
       return {
         resumeName: interviewee.resume,
-        resumeData: interviewee.resumeFile
+        resumeFile: interviewee.resumeFile
       }
     })
 }
 
-export function addResume(id, resumeName, resumeData) {
+export function addResume(id, resumeName, resumeFile) {
   return getCandidateById(id)
     .then(interviewee => {
       interviewee.resume = resumeName
-      interviewee.resumeFile = resumeData
+      interviewee.resumeFile = resumeFile
       interviewee.comments = []
       return updateCandidate(id, interviewee)
     })

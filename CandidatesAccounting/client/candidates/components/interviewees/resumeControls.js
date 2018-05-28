@@ -30,6 +30,7 @@ function ResumeControls(props) {
     interviewee.id !== onResumeUploading ?
       <FileUploader
         uploadFile={handleFileUpload}
+        fileTypes={['pdf', 'doc', 'docx', 'txt']}
         icon={<UploadIcon style={SmallerIconStyle}/>}
         buttonStyle={SmallButtonStyle}
         disabled={!authorized}

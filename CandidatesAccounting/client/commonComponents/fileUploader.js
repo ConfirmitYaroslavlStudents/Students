@@ -5,7 +5,7 @@ import IconButton from './UIComponentDecorators/iconButton'
 import FileUploader from 'react-input-files'
 
 export default function CustomFileUploader(props) {
-  const { uploadFile, attachment, disabled, icon, buttonStyle } = props
+  const { uploadFile, attachment, fileTypes, disabled, icon, buttonStyle } = props
 
   const handleUploadFile = (files) => {
     if (!disabled && files && files[0]) {
@@ -24,9 +24,15 @@ export default function CustomFileUploader(props) {
     return <IconButton icon={icon} style={buttonStyle} disabled />
   }
 
+  let fileTypesString = ''
+  fileTypes.forEach(fileType => {
+    fileTypesString += '.' + fileType + ', '
+  })
+  fileTypesString = fileTypesString.slice(0, -2)
+
   return (
     <div className='inline-flex centered'>
-      <FileUploader accept='.doc, .docx, .txt, .pdf, .png, .jpg, .jpeg, .svg, .eps, .ico' onChange={handleUploadFile} style={{display: 'inline-flex'}}>
+      <FileUploader accept={fileTypesString} onChange={handleUploadFile} style={{display: 'inline-flex'}}>
         <IconButton icon={icon} style={buttonStyle} />
       </FileUploader>
       { attachedFile }
@@ -37,6 +43,7 @@ export default function CustomFileUploader(props) {
 CustomFileUploader.propTypes = {
   uploadFile: PropTypes.func.isRequired,
   icon: PropTypes.object.isRequired,
+  fileTypes: PropTypes.array.isRequired,
   buttonStyle: PropTypes.object,
   attachment: PropTypes.object,
   disabled: PropTypes.bool,

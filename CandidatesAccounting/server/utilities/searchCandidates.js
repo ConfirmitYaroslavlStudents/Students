@@ -24,6 +24,7 @@ function searchByWord(candidate, searchWord) {
   return (
     candidate.id === searchWord
     || candidate.name.toLowerCase().includes(lowerCasedSearchWord)
+    || candidate.nickname && candidate.nickname.toLowerCase().includes(lowerCasedSearchWord)
     || candidate.status.toLowerCase().includes(lowerCasedSearchWord)
     || candidate.email.toLowerCase().includes(lowerCasedSearchWord)
     || (candidate.groupName && candidate.groupName.toLowerCase().includes(lowerCasedSearchWord))

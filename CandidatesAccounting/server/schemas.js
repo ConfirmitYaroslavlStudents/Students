@@ -22,6 +22,7 @@ export const CandidateSchema = new Schema({
       type: String,
       required: true
     },
+    nickname: String,
     email: {
       type: String,
       required: true,
@@ -64,6 +65,7 @@ export const IntervieweeSchema = new Schema({
       type: String,
       required: true
     },
+    nickname: String,
     email: {
       type: String,
       required: true,
@@ -105,6 +107,7 @@ export const StudentSchema = new Schema({
       type: String,
       required: true
     },
+    nickname: String,
     email: {
       type: String,
       required: true,
@@ -143,6 +146,7 @@ export const TraineeSchema = new Schema({
       type: String,
       required: true
     },
+    nickname: String,
     email: {
       type: String,
       required: true,

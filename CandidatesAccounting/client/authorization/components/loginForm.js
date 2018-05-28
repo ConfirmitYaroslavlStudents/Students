@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Input from '../../common/UIComponentDecorators/input'
+import Input from '../../commonComponents/UIComponentDecorators/input'
 import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
 import styled from 'styled-components'
 

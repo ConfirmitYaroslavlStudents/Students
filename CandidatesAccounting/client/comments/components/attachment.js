@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FileDownloader from '../../common/fileDownloader'
+import FileDownloader from '../../commonComponents/fileDownloader'
 import AttachIcon from '@material-ui/icons/AttachFile'
-import { SmallestIconStyle } from '../../common/styleObjects'
+import { SmallestIconStyle } from '../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
 export default function CommentAttachment(props) {

@@ -1,14 +1,14 @@
 import 'react-quill/dist/quill.snow.css'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { BigButtonStyle, SmallIconStyle, QuillToolbarButtonStyle } from '../../common/styleObjects'
-import IconButton from '../../common/UIComponentDecorators/iconButton'
+import { BigButtonStyle, SmallIconStyle, QuillToolbarButtonStyle } from '../../commonComponents/styleObjects'
+import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
 import AttachIcon from '@material-ui/icons/AttachFile'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import ReactQuill from 'react-quill'
 import Comment from '../../utilities/comment'
 import SubscribeButton from './subscribeButton'
-import FileUploader from '../../common/fileUploader'
+import FileUploader from '../../commonComponents/fileUploader'
 import styled from 'styled-components'
 
 export default class AddCommentPanel extends Component {

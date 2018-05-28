@@ -1,10 +1,10 @@
 import React from 'react'
 import Loadable from 'react-loadable'
 import styled from 'styled-components'
-import Spinner from '../../../common/UIComponentDecorators/spinner'
+import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
 
 const LoadableCandidateInfoForm = Loadable({
-  loader: () => import('./infoForm'),
+  loader: () => import('./updateForm'),
   loading: () =>
     <LoadingCandidateInfoWrapper>
       <SpinnerWrapper>

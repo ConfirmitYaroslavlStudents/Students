@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
-import { MediumButtonStyle } from '../../../common/styleObjects'
+import { MediumButtonStyle } from '../../../commonComponents/styleObjects'
 import DeleteIcon from '@material-ui/icons/Delete'
-import IconButton from '../../../common/UIComponentDecorators/iconButton'
-import DialogAlert from '../../../common/UIComponentDecorators/dialogAlert'
+import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
+import DialogAlert from '../../../commonComponents/UIComponentDecorators/dialogAlert'
 
 class DeleteCandidateDialog extends Component {
   constructor(props) {

@@ -20,7 +20,8 @@ import {
 export const schema = buildSchema(`    
   input CandidateInput {
     id: String!,
-    name: String!,
+    name: String!,    
+    nickname: String,
     status: String!,
     phoneNumber: String!,
     email: String!,
@@ -43,7 +44,8 @@ export const schema = buildSchema(`
   }
   type CandidateWithComments {
     id: ID!,
-    name: String!,
+    name: String!,  
+    nickname: String,
     status: String!,
     phoneNumber: String!,
     email: String!,
@@ -59,7 +61,8 @@ export const schema = buildSchema(`
   }
   type Candidate {
     id: ID!,
-    name: String!,
+    name: String!,  
+    nickname: String,
     status: String!,
     phoneNumber: String!,
     email: String!,

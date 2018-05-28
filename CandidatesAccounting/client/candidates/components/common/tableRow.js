@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CandidateControls from './controls'
 import TagList from '../../../tags/components/list'
-import EmailWrapper from '../../../common/emailWrapper'
-import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
-import CandidateNameLink from '../../../common/candidateNameLink'
+import EmailWrapper from '../../../commonComponents/emailWrapper'
+import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
+import CandidateNameLink from '../../../commonComponents/candidateNameLink'
+import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
 import styled from 'styled-components'
 
 export default function CandidateTableRow(props) {
@@ -12,7 +13,10 @@ export default function CandidateTableRow(props) {
 
   return [
     <CandidateNameWrapper>
-      <CandidateNameLink candidate={candidate}>{candidate.name}</CandidateNameLink>
+      <CandidateNameLink candidate={candidate}>
+        {candidate.name}
+        <NicknameWrapper nickname={candidate.nickname} />
+      </CandidateNameLink>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
     <CandidateControls candidate={candidate}/>,

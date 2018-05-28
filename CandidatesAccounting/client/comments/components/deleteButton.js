@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconButton from '../../common/UIComponentDecorators/iconButton'
+import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
 import RemoveIcon from '@material-ui/icons/Delete'
-import { SmallerIconStyle, SmallButtonStyle } from '../../common/styleObjects'
+import { SmallerIconStyle, SmallButtonStyle } from '../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
 export default function DeleteCommentButton(props) {

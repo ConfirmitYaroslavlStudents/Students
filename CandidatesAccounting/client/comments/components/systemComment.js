@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import CommentText from './commentText'
-import SystemMessageIcon from '../../common/systemMessageIcon'
+import SystemMessageIcon from '../../commonComponents/systemMessageIcon'
 import { formatDateTime } from '../../utilities/customMoment'
 import {
   CommentWrapper,

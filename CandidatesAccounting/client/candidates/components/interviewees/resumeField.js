@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import UploadIcon from '@material-ui/icons/FileUpload'
-import FileUploader from '../../../common/fileUploader'
-import { SmallerIconStyle, SmallButtonStyle } from '../../../common/styleObjects'
+import FileUploader from '../../../commonComponents/fileUploader'
+import { SmallerIconStyle, SmallButtonStyle } from '../../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
 export default function ResumeField(props) {

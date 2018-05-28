@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import NavLink from '../../common/linkWrapper'
+import NavLink from '../../commonComponents/linkWrapper'
 import DeleteIcon from '@material-ui/icons/Cancel'
 import formatUserName from '../../utilities/formatUserName'
 import { formatDateTime } from '../../utilities/customMoment'
-import IconButton from '../../common/UIComponentDecorators/iconButton'
+import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
 import AttachIcon from '@material-ui/icons/AttachFile'
-import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from '../../common/styleObjects'
+import { SmallestIconStyle, SmallerIconStyle, SmallButtonStyle } from '../../commonComponents/styleObjects'
 import styled, { css } from 'styled-components'
 
 export default function NotificationBlock(props) {

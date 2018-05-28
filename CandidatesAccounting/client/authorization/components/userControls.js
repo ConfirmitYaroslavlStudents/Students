@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import * as actions from '../actions'
 import { SELECTORS } from '../../rootReducer'
 import LoginDialog from './loginDialog'
-import IconButton from '../../common/UIComponentDecorators/iconButton'
+import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
 import SignOutIcon from '@material-ui/icons/ExitToApp'
 import formatUserName from '../../utilities/formatUserName'
 import NotificationCenterPopover from '../../notifications/components/centerPopover'
-import Spinner from '../../common/UIComponentDecorators/spinner'
+import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
 function UserControls(props) {

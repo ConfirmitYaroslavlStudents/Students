@@ -4,9 +4,10 @@ import CandidateControls from '../common/controls'
 import { formatDateTime, isToday } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/list'
 import ResumeControls from '../interviewees/resumeControls'
-import EmailWrapper from '../../../common/emailWrapper'
-import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
-import CandidateNameLink from '../../../common/candidateNameLink'
+import EmailWrapper from '../../../commonComponents/emailWrapper'
+import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
+import CandidateNameLink from '../../../commonComponents/candidateNameLink'
+import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
 import styled, { css } from 'styled-components'
 
 export default function IntervieweeTableRow(props) {
@@ -14,7 +15,10 @@ export default function IntervieweeTableRow(props) {
 
   return [
     <CandidateNameWrapper>
-      <CandidateNameLink candidate={candidate}>{candidate.name}</CandidateNameLink>
+      <CandidateNameLink candidate={candidate}>
+        {candidate.name}
+        <NicknameWrapper nickname={candidate.nickname} />
+      </CandidateNameLink>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
       <CandidateControls candidate={candidate}/>,

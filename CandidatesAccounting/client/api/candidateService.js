@@ -9,6 +9,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
         candidates {
           id
           name
+          nickname
           status
           phoneNumber
           email
@@ -53,6 +54,7 @@ export function getCandidate(id) {
       candidate(id: $id) {
         id
         name
+        nickname
         status
         phoneNumber
         email

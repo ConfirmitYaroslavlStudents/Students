@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import EmailWrapper from '../../../common/emailWrapper'
-import PhoneNumberWrapper from '../../../common/phoneNumberWrapper'
-import FileDownloader from '../../../common/fileDownloader'
+import EmailWrapper from '../../../commonComponents/emailWrapper'
+import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
+import FileDownloader from '../../../commonComponents/fileDownloader'
 import UpdateCandidateDialog from './updateDialog'
 import TagList from '../../../tags/components/list'
+import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
 import styled from 'styled-components'
-import { SmallerIconStyle } from '../../../common/styleObjects'
+import { SmallerIconStyle } from '../../../commonComponents/styleObjects'
 
 export default function CandidateCard(props) {
   const { candidate, tags, authorized } = props
@@ -15,7 +16,11 @@ export default function CandidateCard(props) {
 
   fields.push({
     key: 'Full name: ',
-    value: candidate.name
+    value:
+      <div>
+        {candidate.name}
+        <NicknameWrapper nickname={candidate.nickname}/>
+      </div>
   })
 
   if (candidate.tags && candidate.tags.length !== []) {

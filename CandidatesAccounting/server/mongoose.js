@@ -70,8 +70,9 @@ export function updateCandidate(id, candidateNewState) {
     '$set': {
       status: candidateNewState.status,
       name: candidateNewState.name,
+      nickname: candidateNewState.nickname ? candidateNewState.nickname : undefined,
       email: candidateNewState.email,
-      phoneNumber: candidateNewState.phoneNumber,
+      phoneNumber: candidateNewState.phoneNumber ? candidateNewState.phoneNumber : undefined,
       tags: candidateNewState.tags,
       subscribers: candidateNewState.subscribers,
       interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : undefined,

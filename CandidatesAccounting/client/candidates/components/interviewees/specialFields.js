@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DateTimePicker from '../../../common/UIComponentDecorators/dateTimePicker'
+import DateTimePicker from '../../../commonComponents/UIComponentDecorators/dateTimePicker'
 import styled from 'styled-components'
 import ResumeField from './resumeField'
 import { toDateTimePickerFormat, fromDateTimePickerFormat } from '../../../utilities/customMoment'

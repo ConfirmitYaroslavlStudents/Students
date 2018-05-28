@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import TextField from '../../../common/UIComponentDecorators/textField'
-import PhoneNumberField from '../../../common/UIComponentDecorators/phoneNumberField'
-import SelectInput from '../../../common/UIComponentDecorators/selectInput'
-import TagSelect from '../../../common/UIComponentDecorators/tagSelect'
+import TextField from '../../../commonComponents/UIComponentDecorators/textField'
+import PhoneNumberField from '../../../commonComponents/UIComponentDecorators/phoneNumberField'
+import SelectInput from '../../../commonComponents/UIComponentDecorators/selectInput'
+import TagSelect from '../../../commonComponents/UIComponentDecorators/tagSelect'
 import { isNotEmpty, isEmail } from '../../../utilities/candidateValidators'
 import IntervieweeSpecialFields from '../interviewees/specialFields'
 import StudentSpecialFields from '../students/specialFields'
@@ -68,6 +68,12 @@ export default class CandidateInfoForm extends Component {
           checkValid={isNotEmpty}
           required
           autoFocus/>
+        <TextField
+          onChange={value => {this.changeProperty('nickname', value)}}
+          label='Nickname'
+          placeholder='nickname'
+          value={candidate.nickname}
+        />
         <TextField
           onChange={value => {this.changeProperty('email', value)}}
           label='E-mail'

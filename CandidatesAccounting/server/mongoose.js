@@ -148,7 +148,7 @@ export function getAvatar(candidateId) {
 export function addAvatar(id, avatarFile) {
   return getCandidateById(id)
   .then(candidate => {
-    candidate.avatarFile = avatarFile
+    candidate.avatar = avatarFile
     candidate.comments = []
     return updateCandidate(id, candidate)
   })

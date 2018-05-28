@@ -6,29 +6,39 @@ import Logo from '@material-ui/icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from '../authorization/components/userControls'
 import NicknameWrapper from '../commonComponents/nicknameWrapper'
+import Avatar from '../commonComponents/UIComponentDecorators/avatar'
 import styled from 'styled-components'
 
 function Appbar(props) {
   const { pageTitle, candidates, currentCandidateId } = props
 
-  const searchForm =
-    pageTitle === 'Candidate Accounting' ?
-      <SearchForm />
-      : ''
+  let logoContent = ''
+  let pageTitleContent = ''
+  let searchForm = ''
 
-  const pageTitleContent =
-    currentCandidateId === '' ?
-      <span>{pageTitle}</span>
-      :
+  if (pageTitle === 'Candidate Accounting' && currentCandidateId === '') {
+    logoContent = <Logo />
+    pageTitleContent = <span>{pageTitle}</span>
+    searchForm = <SearchForm />
+  } else {
+    logoContent =
+      <Avatar
+        src={'/' + candidates[currentCandidateId].name.toLowerCase() + 's/' + currentCandidateId + '/avatar'}
+        alt='L'
+      />
+    pageTitleContent =
       <div className='inline-flex'>
         {candidates[currentCandidateId].name}
         <NicknameWrapper nickname={candidates[currentCandidateId].nickname} />
       </div>
+    searchForm = ''
+  }
 
   return (
     <AppbarWrapper>
       <AppbarTitleWrapper>
-        <Logo /> {pageTitleContent}
+        {logoContent}
+        <PageTitleWrapper>{pageTitleContent}</PageTitleWrapper>
       </AppbarTitleWrapper>
       <AppbarControlsWrapper>
         {searchForm}
@@ -59,9 +69,15 @@ const AppbarControlsWrapper = styled.div`
 
 const AppbarTitleWrapper = styled.div`
   display: inline-flex;
+  align-items: center;
   position: absolute;
   left: 16px;
   font-size: 125%;
+`
+
+const PageTitleWrapper = styled.div`
+  display: inline-flex;
+  margin-left: 4px;
 `
 
 const AppbarWrapper = styled.div`

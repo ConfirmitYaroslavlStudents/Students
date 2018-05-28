@@ -2,6 +2,7 @@ import { all, takeEvery, takeLatest, put, call, select } from 'redux-saga/effect
 import * as applicationActions from '../applicationActions'
 import * as actions from './actions'
 import { uploadResume } from '../api/resumeService'
+import { uploadAvatar } from '../api/avatarService'
 import { getCandidates, addCandidate, deleteCandidate, updateCandidate } from '../api/candidateService.js'
 import Comment from '../utilities/comment'
 import findCandidateStateDifference from '../utilities/findCandidateStateDifference'
@@ -20,7 +21,8 @@ const creator = ({ history }) => {
       watchSetCandidatePerPage(),
       watchSetSortingField(),
       watchToggleSortingDirection(),
-      watchUploadResume()
+      watchUploadResume(),
+      watchUploadAvatar()
     ])
   }
 
@@ -64,8 +66,13 @@ const creator = ({ history }) => {
     yield takeEvery(actions.uploadResume, uploadResumeSaga)
   }
 
+  function* watchUploadAvatar() {
+    yield takeEvery(actions.uploadAvatar, uploadAvatarSaga)
+  }
+
+
   function* getCandidatesSaga() {
-    //try {
+    try {
       const candidateState = yield select(state => state.candidates)
       const searchRequest = yield select(state => state.application.searchRequest)
       const serverResponse = yield call(
@@ -86,10 +93,10 @@ const creator = ({ history }) => {
         candidates: serverResponse.candidates,
         totalCount: serverResponse.total
       }))
-    //}
-    //catch (error) {
-    //  yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
-    //}
+    }
+    catch (error) {
+      yield put(applicationActions.setErrorMessage({message: error + '. Get candidate error.'}))
+    }
   }
 
   function* addCandidateSaga(action) {
@@ -237,6 +244,16 @@ const creator = ({ history }) => {
       yield put(actions.setOnResumeUploading({intervieweeId}))
       yield call(uploadResume, intervieweeId, resume)
       yield put(actions.uploadResumeSuccess({intervieweeId, resume: resume.name}))
+    }
+    catch (error) {
+      yield put(applicationActions.setErrorMessage({message: error + '. Upload resume error.'}))
+    }
+  }
+
+  function* uploadAvatarSaga(action) {
+    try {
+      const {candidateStatus, candidateId, avatar} = action.payload
+      yield call(uploadAvatar, candidateStatus, candidateId, avatar)
     }
     catch (error) {
       yield put(applicationActions.setErrorMessage({message: error + '. Upload resume error.'}))

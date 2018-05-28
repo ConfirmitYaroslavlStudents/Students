@@ -38,7 +38,7 @@ class UpdateCandidateDialog extends React.Component {
   }
 
   render() {
-    const { disabled, tags, iconStyle } = this.props
+    const { disabled, tags, iconStyle, uploadAvatar } = this.props
     this.previousState = new Candidate(this.candidate.status, this.candidate)
 
     return (
@@ -57,6 +57,7 @@ class UpdateCandidateDialog extends React.Component {
             <LoadableCandidateInfoForm
               candidate={this.candidate}
               tags={tags}
+              uploadAvatar={uploadAvatar}
             />
         </DialogWindow>
       </div>
@@ -67,6 +68,7 @@ class UpdateCandidateDialog extends React.Component {
 UpdateCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   tags: PropTypes.array.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   iconStyle: PropTypes.object,
 }

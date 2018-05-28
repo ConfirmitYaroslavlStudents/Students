@@ -40,7 +40,7 @@ class AddCandidateDialog extends Component{
   }
 
   render() {
-    const { authorized, tags } = this.props
+    const { authorized, tags, uploadAvatar } = this.props
 
     return (
       <div className='inline-flex'>
@@ -58,6 +58,7 @@ class AddCandidateDialog extends Component{
             <LoadableCandidateInfoForm
               candidate={this.newCandidate}
               tags={tags}
+              uploadAvatar={uploadAvatar}
             />
         </DialogWindow>
       </div>
@@ -68,6 +69,7 @@ class AddCandidateDialog extends Component{
 AddCandidateDialog.propTypes = {
   authorized: PropTypes.bool.isRequired,
   candidateStatus: PropTypes.string.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
   tags: PropTypes.array.isRequired,
   addCandidate: PropTypes.func.isRequired
 }

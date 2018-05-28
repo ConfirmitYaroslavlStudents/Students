@@ -8,6 +8,8 @@ import { isNotEmpty, isEmail } from '../../../utilities/candidateValidators'
 import IntervieweeSpecialFields from '../interviewees/specialFields'
 import StudentSpecialFields from '../students/specialFields'
 import TraineeSpecialFields from '../trainees/specialFields'
+import FileUploader from '../../../commonComponents/fileUploader'
+import UploadIcon from '@material-ui/icons/FileUpload'
 import styled from 'styled-components'
 
 export default class CandidateInfoForm extends Component {
@@ -45,7 +47,10 @@ export default class CandidateInfoForm extends Component {
   }
 
   render() {
-    const { candidate, tags } = this.props
+    const { candidate, tags, uploadAvatar } = this.props
+
+    const avatarUploader = <FileUploader icon={<UploadIcon/>} fileTypes={['png', 'jpg', 'jpeg', 'gif']}
+                                         uploadFile={(file) => { uploadAvatar({candidateStatus: candidate.status, candidateId: candidate.id, file})}}/>
 
     return (
       <CandidateFormWrapper>
@@ -97,6 +102,7 @@ export default class CandidateInfoForm extends Component {
 CandidateInfoForm.propTypes = {
   candidate: PropTypes.object.isRequired,
   tags: PropTypes.array.isRequired,
+  uploadAvatar: PropTypes.func.isRequired
 }
 
 const CandidateFormWrapper = styled.div`

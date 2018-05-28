@@ -118,15 +118,19 @@ app.get('/:candidateStatus/:candidateId/avatar', (req, res) => {
     if (error) {
       return res.status(500).end()
     }
-    res.attachment('avatar.jpg')
-    res.send(result.avatarFile)
+    if (result.avatarFile) {
+      res.attachment('avatar.jpg')
+      res.send(result.avatarFile)
+    } else {
+      res.end()
+    }
   })
 })
 
 app.post('/:candidateStatus/:candidateId/avatar', (req, res) => {
-  if (!req.isAuthenticated()) {
+  /*if (!req.isAuthenticated()) {
     return res.status(401).end()
-  }
+  }*/
   if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
     return res.status(500).end()
   }

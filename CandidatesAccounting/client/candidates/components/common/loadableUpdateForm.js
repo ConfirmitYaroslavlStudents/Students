@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Loadable from 'react-loadable'
 import styled from 'styled-components'
 import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
@@ -12,6 +13,12 @@ const LoadableCandidateInfoForm = Loadable({
       </SpinnerWrapper>
     </LoadingCandidateInfoWrapper>,
 })
+
+LoadableCandidateInfoForm.propTypes = {
+  candidate: PropTypes.object.isRequired,
+  tags: PropTypes.array.isRequired,
+  uploadAvatar: PropTypes.func.isRequired
+}
 
 export default LoadableCandidateInfoForm
 

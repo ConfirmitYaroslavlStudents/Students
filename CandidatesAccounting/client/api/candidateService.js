@@ -39,7 +39,6 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
     if (!data) {
       throw 'Connection error'
     }
-    console.log(data)
     let candidates = data.candidatesPaginated.candidates.map(candidate => new Candidate(candidate.status, candidate))
     candidates = convertArrayToDictionary(candidates)
     return {

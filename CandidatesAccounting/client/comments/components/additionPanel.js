@@ -82,7 +82,7 @@ export default class AddCommentPanel extends Component {
           <button className='ql-link' disabled={disabled}/>
           <FileUploader
             uploadFile={this.handleAttachFile}
-            fileTypes={['pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'ico', 'bmp']}
+            fileTypes={['pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'bmp']}
             icon={<AttachIcon style={QuillToolbarButtonStyle}/>}
             attachment={this.state.commentAttachment}
             disabled={disabled} />

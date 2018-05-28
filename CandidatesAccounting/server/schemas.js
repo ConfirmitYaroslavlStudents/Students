@@ -29,7 +29,10 @@ export const CandidateSchema = new Schema({
       match: /.+@.+\..+/i
     },
     phoneNumber: String,
-    avatar: Buffer,
+    avatar: {
+      type: Buffer,
+      default: new Buffer('')
+    },
     comments: [{
       author: {
         type: String,
@@ -53,7 +56,10 @@ export const CandidateSchema = new Schema({
     subscribers: [String],
     interviewDate: String,
     resume: String,
-    resumeFile: Buffer,
+    resumeFile: {
+      type: Buffer,
+      default: new Buffer('')
+    },
     groupName: String,
     startingDate: String,
     endingDate: String,
@@ -73,7 +79,10 @@ export const IntervieweeSchema = new Schema({
       match: /.+@.+\..+/i
     },
     phoneNumber: String,
-    avatar: Buffer,
+    avatar: {
+      type: Buffer,
+      default: new Buffer('')
+    },
     comments: [{
       author: {
         type: String,
@@ -110,7 +119,10 @@ export const StudentSchema = new Schema({
       required: true
     },
     nickname: String,
-    avatar: Buffer,
+    avatar: {
+      type: Buffer,
+      default: new Buffer('')
+    },
     email: {
       type: String,
       required: true,
@@ -156,7 +168,10 @@ export const TraineeSchema = new Schema({
       match: /.+@.+\..+/i
     },
     phoneNumber: String,
-    avatar: Buffer,
+    avatar: {
+      type: Buffer,
+      default: new Buffer('')
+    },
     comments: [{
       author: {
         type: String,

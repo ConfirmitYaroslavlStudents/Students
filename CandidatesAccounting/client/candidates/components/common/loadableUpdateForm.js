@@ -16,8 +16,7 @@ const LoadableCandidateInfoForm = Loadable({
 
 LoadableCandidateInfoForm.propTypes = {
   candidate: PropTypes.object.isRequired,
-  tags: PropTypes.array.isRequired,
-  uploadAvatar: PropTypes.func.isRequired
+  tags: PropTypes.array.isRequired
 }
 
 export default LoadableCandidateInfoForm

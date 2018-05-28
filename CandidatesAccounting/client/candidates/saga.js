@@ -101,16 +101,26 @@ const creator = ({ history }) => {
 
   function* addCandidateSaga(action) {
     try {
-      const {candidate} = action.payload
+      const { candidate } = action.payload
       yield put(applicationActions.enableFetching())
-      const resumeFile = candidate.resumeFile
-      delete candidate.resumeFile
       candidate.comments = {}
       candidate.comments['initialStatus'] = new Comment('SYSTEM', ' Initial status: ' + candidate.status)
+
+      const resumeFile = candidate.resumeFile
+      delete candidate.resumeFile
+      const avatarFile = candidate.avatarFile
+      delete candidate.avatarFile
+
       const candidateId = yield call(addCandidate, candidate)
+
       if (resumeFile) {
         yield call(uploadResume, candidateId, resumeFile)
       }
+
+      if (avatarFile) {
+        yield call(uploadAvatar, candidate.status, candidateId, resumeFile)
+      }
+
       yield put(actions.addCandidateSuccess({ candidate }))
       yield put(actions.getCandidates())
     }
@@ -137,7 +147,21 @@ const creator = ({ history }) => {
       }
 
       yield put(actions.setOnUpdating({candidateId: candidate.id}))
+
+      const resumeFile = candidate.resumeFile
+      delete candidate.resumeFile
+      const avatarFile = candidate.avatarFile
+      delete candidate.avatarFile
+
       yield call(updateCandidate, candidate)
+
+      //TODO: fix bug with empty resume file
+      if (resumeFile) {
+        yield call(uploadResume, candidate.id, resumeFile)
+      }
+      if (avatarFile) {
+        yield call(uploadAvatar, candidate.status, candidate.id, resumeFile)
+      }
 
       yield put(actions.updateCandidateSuccess({
         candidate,

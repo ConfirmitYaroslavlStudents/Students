@@ -70,19 +70,19 @@ export function updateCandidate(id, candidateNewState) {
     '$set': {
       status: candidateNewState.status,
       name: candidateNewState.name,
-      nickname: candidateNewState.nickname ? candidateNewState.nickname : undefined,
+      nickname: candidateNewState.nickname ? candidateNewState.nickname : '',
       email: candidateNewState.email,
-      phoneNumber: candidateNewState.phoneNumber ? candidateNewState.phoneNumber : undefined,
-      avatar: candidateNewState.avatar ? candidateNewState.avatar : undefined,
+      phoneNumber: candidateNewState.phoneNumber ? candidateNewState.phoneNumber : '',
+      avatar: candidateNewState.avatar ? candidateNewState.avatar : '',
       tags: candidateNewState.tags,
       subscribers: candidateNewState.subscribers,
-      interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : undefined,
-      resume: candidateNewState.resume ? candidateNewState.resume : undefined,
-      resumeFile: candidateNewState.resumeFile ? candidateNewState.resumeFile : undefined,
-      groupName: candidateNewState.groupName ? candidateNewState.groupName : undefined,
-      startingDate: candidateNewState.startingDate ? candidateNewState.startingDate : undefined,
-      endingDate: candidateNewState.endingDate ? candidateNewState.endingDate : undefined,
-      mentor: candidateNewState.mentor ? candidateNewState.mentor : undefined
+      interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : '',
+      resume: candidateNewState.resume ? candidateNewState.resume : '',
+      resumeFile: candidateNewState.resumeFile ? candidateNewState.resumeFile : '',
+      groupName: candidateNewState.groupName ? candidateNewState.groupName : '',
+      startingDate: candidateNewState.startingDate ? candidateNewState.startingDate : '',
+      endingDate: candidateNewState.endingDate ? candidateNewState.endingDate : '',
+      mentor: candidateNewState.mentor ? candidateNewState.mentor : ''
     },
     '$push': {comments: candidateNewState.comments ? candidateNewState.comments : []}})
     .then(candidate => {

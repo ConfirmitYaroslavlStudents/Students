@@ -12,7 +12,7 @@ module.exports = {
     ],
   },
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'dist', 'public'),
     publicPath: '/',
     filename: path.join('assets', '[name].js'),
   },
@@ -58,7 +58,7 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.join(__dirname, '/public'),
+    contentBase: path.join(__dirname, 'dist', 'public'),
     hot: true,
     port: 3000,
   }

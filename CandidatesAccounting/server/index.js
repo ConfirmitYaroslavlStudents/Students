@@ -1,6 +1,5 @@
 import express from 'express'
 import webpack from 'webpack'
-import config from '../webpack.development.config'
 import path from 'path'
 import bodyParser from 'body-parser'
 import fileUpload from 'express-fileupload'
@@ -43,6 +42,7 @@ app.set('port', port)
 app.set('view endine', 'ejs')
 
 if (developmentMode) {
+  const config = require('../webpack.development.config')
   const compiler = webpack(require('../webpack.development.config'))
   app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -128,9 +128,9 @@ app.get('/:candidateStatus/:candidateId/avatar', (req, res) => {
 })
 
 app.post('/:candidateStatus/:candidateId/avatar', (req, res) => {
-  /*if (!req.isAuthenticated()) {
+  if (!req.isAuthenticated()) {
     return res.status(401).end()
-  }*/
+  }
   if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
     return res.status(500).end()
   }

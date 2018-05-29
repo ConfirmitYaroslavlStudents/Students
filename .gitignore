@@ -237,8 +237,10 @@ pip-log.txt
 node_modules/
 CandidatesAccounting/node_modules/
 .idea/
-CandidatesAccounting/.vs/
-CandidatesAccounting/public/assets/
-CandidatesAccounting/public/fonts/
+CandidatesAccounting/.vs
+!CandidatesAccounting/dist
+CandidatesAccounting/dist/public/assets
+CandidatesAccounting/dist/public/fonts
+CandidatesAccounting/dist/server
 *.pdf
 *stats*.json

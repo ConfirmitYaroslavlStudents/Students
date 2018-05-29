@@ -13,7 +13,7 @@ const template = (props) => {
             <meta name="theme-color" content="#3F51B5">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Candidate Accounting</title>
-            <link rel="manifest" href="${path.join(assetsRoot, 'manifest.json')}/">
+            <link rel="manifest" href="/manifest.json">
             <link rel="icon" href ="/favicon.ico" type= "image/x-icon" >
             <link rel="shortcut icon" href ="/favicon.ico" type="image/x-icon" >
         </head>

@@ -32,7 +32,7 @@ class UpdateCandidateDialog extends React.Component {
 
   handleCandidateUpdate = () => {
     if (checkCandidateValidation(this.candidate)) {
-      this.props.updateCandidate({ candidate: new Candidate(this.candidate.status, this.candidate), previousState: this.previousState })
+      this.props.updateCandidate({ candidate: this.candidate, previousState: this.previousState })
       this.handleClose()
     }
   }

@@ -70,6 +70,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
     "nodemon": "^1.17.5",
     "react-hot-loader": "^4.2.0",
     "react-loader": "^2.4.5",

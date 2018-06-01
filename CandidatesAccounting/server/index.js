@@ -4,7 +4,6 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import fileUpload from 'express-fileupload'
 import cookieParser from 'cookie-parser'
-import favicon from 'serve-favicon'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import graphqlHTTP from 'express-graphql'
@@ -54,7 +53,6 @@ if (developmentMode) {
   app.use(webpackHotMiddleware(compiler))
 }
 
-app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')))
 app.use(expressSession({ secret: 'yDyTP3T3Dvc4206O8pm', resave: false, saveUninitialized: false }))
 app.use(bodyParser.json())
 app.use(fileUpload())
@@ -160,7 +158,9 @@ app.post('/interviewees/:intervieweeId/resume', (req, res) => {
   if (!req.headers['content-length'] || Number(req.headers['content-length']) > 16000000) {
     return res.status(500).end()
   }
+
   let file = req.files[Object.keys(req.files)[0]]
+
   return addResume(req.params.intervieweeId, file.name, file.data).then((result, error) => {
     if (error) {
       return res.status(500).end()

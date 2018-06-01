@@ -135,6 +135,11 @@ const creator = ({ history }) => {
       const candidateStatus = yield select(state => state.candidates.candidateStatus)
       const pageTitle = yield select(state => state.application.pageTitle)
 
+      const resumeFile = candidate.resumeFile
+      delete candidate.resumeFile
+      const avatarFile = candidate.avatarFile
+      delete candidate.avatarFile
+
       const candidateStateDifference = findCandidateStateDifference(previousState, candidate)
       candidate.comments = {}
       if (Object.keys(candidateStateDifference).length !== 0) {
@@ -148,16 +153,10 @@ const creator = ({ history }) => {
 
       yield put(actions.setOnUpdating({candidateId: candidate.id}))
 
-      const resumeFile = candidate.resumeFile
-      delete candidate.resumeFile
-      const avatarFile = candidate.avatarFile
-      delete candidate.avatarFile
-
       yield call(updateCandidate, candidate)
 
-      //TODO: fix bug with empty resume file
       if (resumeFile) {
-        yield call(uploadResume, candidate.id, resumeFile)
+        yield put(actions.uploadResume({intervieweeId: candidate.id, resume: resumeFile}))
       }
       if (avatarFile) {
         yield call(uploadAvatar, candidate.status, candidate.id, resumeFile)

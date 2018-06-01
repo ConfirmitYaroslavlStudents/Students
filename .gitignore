@@ -234,13 +234,9 @@ pip-log.txt
 #############
 ## Dmitry Banokin CandidatesAccounting
 #############
-node_modules/
-CandidatesAccounting/node_modules/
-.idea/
+CandidatesAccounting/node_modules
+CandidatesAccounting/.idea
 CandidatesAccounting/.vs
-!CandidatesAccounting/dist
-CandidatesAccounting/dist/public/assets
-CandidatesAccounting/dist/public/fonts
-CandidatesAccounting/dist/server
+CandidatesAccounting/dist
 *.pdf
 *stats*.json

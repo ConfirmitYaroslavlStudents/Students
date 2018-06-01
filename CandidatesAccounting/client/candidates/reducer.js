@@ -120,6 +120,17 @@ export default createReducer(initialState, {
     onResumeUploading: ''
   }),
 
+  [candidates.uploadAvatarSuccess]: (state, {payload}) => ({
+    ...state,
+    candidates: {
+      ...state.candidates,
+      [payload.candidateId]: {
+        ...state.candidates[payload.candidateId],
+        hasAvatar: true
+      }
+    }
+  }),
+
   [candidates.setOnResumeUploading]: (state, {payload}) => ({
     ...state,
     onResumeUploading: payload.intervieweeId

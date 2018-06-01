@@ -13,6 +13,16 @@ export default function TagSelect(props){
       options={options}
       onChange={props.onValuesChange}
       value={values}
+      shouldKeyDownEventCreateNewOption={({keyCode}) => {
+        switch (keyCode) {
+          case 9:
+            return true
+          case 13:
+            return true
+          default:
+            return false
+        }
+      }}
     />
   )
 }

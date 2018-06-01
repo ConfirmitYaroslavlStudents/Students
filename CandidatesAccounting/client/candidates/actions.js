@@ -43,6 +43,8 @@ export const uploadResumeSuccess = createAction('UPLOAD_RESUME_SUCCESS')
 
 export const uploadAvatar = createAction('UPLOAD_AVATAR')
 
+export const uploadAvatarSuccess = createAction('UPLOAD_AVATAR_SUCCESS')
+
 export const setOnResumeUploading = createAction('SET_ON_RESUME_UPLOADING')
 
 export const setOnUpdating = createAction('SET_ON_UPDATING')

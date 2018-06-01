@@ -114,11 +114,11 @@ const creator = ({ history }) => {
       const candidateId = yield call(addCandidate, candidate)
 
       if (resumeFile) {
-        yield call(uploadResume, candidateId, resumeFile)
+        yield put(actions.uploadResume({intervieweeId: candidateId, resume: resumeFile}))
       }
 
       if (avatarFile) {
-        yield call(uploadAvatar, candidate.status, candidateId, resumeFile)
+        yield put(actions.uploadAvatar({candidateStatus: candidate.status, candidateId: candidateId, avatar: avatarFile}))
       }
 
       yield put(actions.addCandidateSuccess({ candidate }))
@@ -158,8 +158,9 @@ const creator = ({ history }) => {
       if (resumeFile) {
         yield put(actions.uploadResume({intervieweeId: candidate.id, resume: resumeFile}))
       }
+
       if (avatarFile) {
-        yield call(uploadAvatar, candidate.status, candidate.id, resumeFile)
+        yield put(actions.uploadAvatar({candidateStatus: candidate.status, candidateId: candidate.id, avatar: avatarFile}))
       }
 
       yield put(actions.updateCandidateSuccess({
@@ -277,9 +278,10 @@ const creator = ({ history }) => {
     try {
       const {candidateStatus, candidateId, avatar} = action.payload
       yield call(uploadAvatar, candidateStatus, candidateId, avatar)
+      yield put(actions.uploadAvatarSuccess({ candidateId }))
     }
     catch (error) {
-      yield put(applicationActions.setErrorMessage({message: error + '. Upload resume error.'}))
+      yield put(applicationActions.setErrorMessage({message: error + '. Upload avatar error.'}))
     }
   }
 

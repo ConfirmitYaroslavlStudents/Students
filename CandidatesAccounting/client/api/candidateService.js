@@ -16,6 +16,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
           commentAmount
           tags
           subscribers
+          hasAvatar
           interviewDate
           resume
           groupName
@@ -67,6 +68,7 @@ export function getCandidate(id) {
         }
         tags
         subscribers
+        hasAvatar
         interviewDate
         resume
         groupName

@@ -17,13 +17,13 @@ export default function CandidateCard(props) {
   fields.push({
     key: 'Full name: ',
     value:
-      <div>
+      <span>
         {candidate.name}
         <NicknameWrapper nickname={candidate.nickname}/>
-      </div>
+      </span>
   })
 
-  if (candidate.tags && candidate.tags.length !== []) {
+  if (candidate.tags && candidate.tags.length !== 0) {
     fields.push({
       key: 'Tags: ',
       value: <TagList candidateTags={candidate.tags} />
@@ -155,12 +155,12 @@ const ValueWrapper = styled.span`
 `
 
 const CVWrapper = styled.div`
-  color: #08c;
+  color: #1565C0;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   
   &:hover {
-    color: #2196F3;   
+    color: #1E88E5;   
    }
 `

@@ -19,6 +19,7 @@ export default class Candidate {
           0
     this.tags = properties.tags ? properties.tags.slice() : []
     this.subscribers = properties.subscribers ? convertArrayToDictionary(properties.subscribers) : {}
+    this.hasAvatar = !!properties.hasAvatar
 
     switch (status) {
       case 'Interviewee':

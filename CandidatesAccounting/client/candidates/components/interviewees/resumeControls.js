@@ -24,7 +24,7 @@ function ResumeControls(props) {
     resumeIsUploaded ?
       <ResumeFileName>{interviewee.resume}</ResumeFileName>
       :
-      <ResumeNotLoaded>no resume</ResumeNotLoaded>
+      <ResumeNotLoaded>no CV</ResumeNotLoaded>
 
   const fileUploader =
     interviewee.id !== onResumeUploading ?

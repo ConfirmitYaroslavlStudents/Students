@@ -1,2 +1,1 @@
-require("babel-register");
-require("./dist/server/index.js");
+require('./server/index.js');

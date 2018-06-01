@@ -113,6 +113,16 @@ p {
     display: inline-flex;
 }
 
+.letter-avatar {
+    background-color: #3F51B5 !important;
+    color: #F5F5F5 !important;
+}
+
+.letter-avatar-inverted {
+    background-color: #F5F5F5 !important;
+    color: #3F51B5 !important;
+}
+
 .link {
     color: #1565C0;
     text-decoration: none;

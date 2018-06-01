@@ -4,12 +4,9 @@
   "version": "0.1.0",
   "main": "webpack.development.config.js",
   "scripts": {
-    "build-client-dev": "webpack --progress --config webpack.development.config.js",
-    "build-client-prod": "webpack --progress --config webpack.production.config.js",
-    "build-server": "createDirectories.bat & babel ./server/index.js > ./dist/server/index.js && babel ./server/graphQL.js > ./dist/server/graphQL.js && babel ./server/mongoose.js > ./dist/server/mongoose.js && babel ./server/schemas.js > ./dist/server/schemas.js && babel ./server/template.js > ./dist/server/template.js && babel ./server/utilities/searchCandidates.js > ./dist/server/utilities/searchCandidates.js && babel ./server/utilities/sortCandidates.js > ./dist/server/utilities/sortCandidates.js",
-    "start-dev": "nodemon --exec \"babel-node ./server/index.js --mode development\" -w ./server",
-    "start-prod": "node ./index.js --mode production",
-    "start": "babel-node ./index.js --mode production"
+    "build": "createDistDirectory.bat & webpack --progress --config webpack.production.config.js & babel ./server/index.js > ./dist/server/index.js && babel ./server/graphQL.js > ./dist/server/graphQL.js && babel ./server/mongoose.js > ./dist/server/mongoose.js && babel ./server/schemas.js > ./dist/server/schemas.js && babel ./server/template.js > ./dist/server/template.js && babel ./server/utilities/searchCandidates.js > ./dist/server/utilities/searchCandidates.js && babel ./server/utilities/sortCandidates.js > ./dist/server/utilities/sortCandidates.js",
+    "prod": "npm run build && babel-node ./dist/index.js --mode production",
+    "dev": "babel-node ./server/index.js --mode development && nodemon -w ./server"
   },
   "author": "DmitryB",
   "license": "ISC",
@@ -70,7 +67,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "babel-register": "^6.26.0",
+    "copy-webpack-plugin": "^4.5.1",
     "nodemon": "^1.17.5",
     "react-hot-loader": "^4.2.0",
     "react-loader": "^2.4.5",

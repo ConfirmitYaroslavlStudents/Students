@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Avatar from '@material-ui/core/Avatar'
 import AccountIcon from '@material-ui/icons/AccountCircle'
 
-export default class ImageAvatars extends Component {
+export default class ImageAvatar extends Component {
   constructor(props) {
     super(props)
 
@@ -15,16 +15,17 @@ export default class ImageAvatars extends Component {
   }
 
   render() {
-    const {src, alt} = this.props
+    const {source, alternative} = this.props
+
     if (this.state.imageUploaded) {
-      return <Avatar src={src} imgProps={{onError: this.handleError}}/>
+      return <Avatar src={source} alt={alternative.toUpperCase()} imgProps={{onError: this.handleError}}/>
     } else {
       return <AccountIcon/>
     }
   }
 }
 
-ImageAvatars.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired
+ImageAvatar.propTypes = {
+  source: PropTypes.string.isRequired,
+  alternative: PropTypes.string.isRequired
 }

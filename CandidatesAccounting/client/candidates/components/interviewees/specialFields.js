@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DateTimePicker from '../../../commonComponents/UIComponentDecorators/dateTimePicker'
 import styled from 'styled-components'
-import ResumeField from './resumeField'
+import ResumeUploader from './resumeUploader'
 import { toDateTimePickerFormat, fromDateTimePickerFormat } from '../../../utilities/customMoment'
 
 export default function IntervieweeSpecialFields(props) {
@@ -23,7 +23,7 @@ export default function IntervieweeSpecialFields(props) {
         onChange={handleInterviewDateChange}
       />
       <InputLabel>Resume</InputLabel>
-      <ResumeField interviewee={props.interviewee} onResumeUpload={handleResumeUploadChange}/>
+      <ResumeUploader interviewee={props.interviewee} onResumeUpload={handleResumeUploadChange}/>
     </div>)
 }
 

@@ -1,5 +1,5 @@
 export function checkCandidateValidation(candidate) {
-  return (isNotEmpty(candidate.name) && isEmail(candidate.email))
+  return (isNotEmpty(candidate.name))
 }
 
 export function isNotEmpty(name) {

@@ -5,7 +5,7 @@ import * as actions from '../../actions'
 import { SELECTORS } from '../../../rootReducer'
 import { MediumButtonStyle } from '../../../commonComponents/styleObjects'
 import DialogWindow from '../../../commonComponents/UIComponentDecorators/dialogWindow'
-import LoadableCandidateInfoForm from './loadableUpdateForm'
+import LoadableCandidateUpdateForm from './loadableUpdateForm'
 import { checkCandidateValidation } from '../../../utilities/candidateValidators'
 import Candidate from '../../../utilities/candidate'
 import SaveIcon from '@material-ui/icons/Save'
@@ -54,7 +54,7 @@ class UpdateCandidateDialog extends React.Component {
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose}/>
             </div>
           }>
-            <LoadableCandidateInfoForm
+            <LoadableCandidateUpdateForm
               candidate={this.candidate}
               tags={tags}
             />

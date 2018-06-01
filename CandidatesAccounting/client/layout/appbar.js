@@ -6,31 +6,34 @@ import Logo from '@material-ui/icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from '../authorization/components/userControls'
 import NicknameWrapper from '../commonComponents/nicknameWrapper'
-import Avatar from '../commonComponents/UIComponentDecorators/avatar'
+import LetterAvatar from '../commonComponents/UIComponentDecorators/letterAvatar'
+import ImageAvatar from '../commonComponents/UIComponentDecorators/imageAvatar'
 import styled from 'styled-components'
 
 function Appbar(props) {
   const { pageTitle, candidates, currentCandidateId } = props
 
-  let logoContent = ''
-  let pageTitleContent = ''
-  let searchForm = ''
+  let logoContent = <Logo />
+  let pageTitleContent = <span>{pageTitle}</span>
+  let searchForm = <SearchForm />
 
-  if (pageTitle === 'Candidate Accounting' && currentCandidateId === '') {
-    logoContent = <Logo />
-    pageTitleContent = <span>{pageTitle}</span>
-    searchForm = <SearchForm />
-  } else {
+  if (pageTitle !== 'Candidate Accounting' && currentCandidateId !== '') {
+    const candidate = candidates[currentCandidateId]
     logoContent =
-      <Avatar
-        src={'/' + candidates[currentCandidateId].name.toLowerCase() + 's/' + currentCandidateId + '/avatar'}
-        alt='L'
-      />
+      candidate.hasAvatar ?
+        <ImageAvatar
+          source={'/' + candidate.name.toLowerCase() + 's/' + candidate.id + '/avatar'}
+          alternative={candidate.name[0]}
+        />
+        :
+        <LetterAvatar letters={candidate.name[0]} invertedColors/>
+
     pageTitleContent =
       <div className='inline-flex'>
         {candidates[currentCandidateId].name}
         <NicknameWrapper nickname={candidates[currentCandidateId].nickname} />
       </div>
+
     searchForm = ''
   }
 

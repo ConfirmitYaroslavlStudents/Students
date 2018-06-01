@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import AvatarUploader from './avatarUploader'
 import TextField from '../../../commonComponents/UIComponentDecorators/textField'
 import PhoneNumberField from '../../../commonComponents/UIComponentDecorators/phoneNumberField'
 import SelectInput from '../../../commonComponents/UIComponentDecorators/selectInput'
 import TagSelect from '../../../commonComponents/UIComponentDecorators/tagSelect'
-import { isNotEmpty, isEmail } from '../../../utilities/candidateValidators'
+import { isNotEmpty } from '../../../utilities/candidateValidators'
 import IntervieweeSpecialFields from '../interviewees/specialFields'
 import StudentSpecialFields from '../students/specialFields'
 import TraineeSpecialFields from '../trainees/specialFields'
@@ -49,12 +50,24 @@ export default class CandidateInfoForm extends Component {
 
     return (
       <CandidateFormWrapper>
-        <SelectInput
-          label="Candidate's status"
-          options={['Interviewee', 'Student', 'Trainee']}
-          selected={this.state.status}
-          minWidth={240}
-          onChange={this.changeCandidateStatus}/>
+        <StatusAvatarWrapper>
+          <SelectInput
+            label="Candidate's status"
+            options={['Interviewee', 'Student', 'Trainee']}
+            selected={this.state.status}
+            minWidth={240}
+            onChange={this.changeCandidateStatus}
+          />
+          <AvatarWrapper>
+            <AvatarUploader candidate={candidate} onAvatarUpload={
+              (file) => {
+                this.changeProperty('avatarFile', file)
+                this.changeProperty('hasAvatar', true)
+              }
+            }
+            />
+          </AvatarWrapper>
+        </StatusAvatarWrapper>
         <TextFieldLabel>Tags</TextFieldLabel>
         <TagSelect
           onValuesChange={this.setCandidateTags}
@@ -79,8 +92,7 @@ export default class CandidateInfoForm extends Component {
           label='E-mail'
           placeholder='example@mail.com'
           value={candidate.email}
-          checkValid={isEmail}
-          required/>
+        />
         <PhoneNumberField
           onChange={value => {this.changeProperty('phoneNumber', value)}}
           label='Phone number'
@@ -101,6 +113,17 @@ CandidateInfoForm.propTypes = {
 
 const CandidateFormWrapper = styled.div`
   padding: 15px 15px 10px;
+`
+
+const StatusAvatarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const AvatarWrapper = styled.div`
+  display: inline-flex;
+  padding-top: 4px;
+  margin-left: 32px;
 `
 
 const TextFieldLabel = styled.p`

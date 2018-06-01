@@ -17,12 +17,9 @@ CANDIDATE ACCOUNTING README
 
 *** Scripts ***
 
-    npm run build-client-dev - запускает webpack в dev-моде, собирает в ./public/assets
-    npm run build-client-prod - запускает webpack в prod-моде, собирает в ./public/assets
-    npm run build-server - подгатавливает сервер к запуску с помощью babel
-    npm run start-dev - запускает сервер в dev-моде с DevMiddleware и HotMiddleware (предварительная сборка через build-client-dev необязательна)
-    npm run start-prod - запускает сервер в prod-моду (предварительная сборка через build-dev необязательна)
-    npm start - запускает сервер в prod-моде (предварительная сборка через build-client-prod ОБЯЗАТЕЛЬНА)
+    npm run build - запускает сборку клиента и сервера в папку dist
+    npm run prod - выполняет build-скрипт и запускает сервер в prod-моде из папки dist
+    npm run dev - запускает сервер в dev-моде
 
 Сервер запускается на порте 3000 (настраивается в ./server/index.js port)
 

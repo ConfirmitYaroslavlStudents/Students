@@ -5,7 +5,7 @@ import FileUploader from '../../../commonComponents/fileUploader'
 import { SmallerIconStyle, SmallButtonStyle } from '../../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
-export default function ResumeField(props) {
+export default function ResumeUploader(props) {
   const { interviewee, onResumeUpload } = props
   const resumeIsUploaded = interviewee.resume && interviewee.resume.trim() !== ''
 
@@ -17,10 +17,10 @@ export default function ResumeField(props) {
     resumeIsUploaded ?
       <ResumeFileName>{interviewee.resume}</ResumeFileName>
       :
-      <ResumeNotLoaded>no resume</ResumeNotLoaded>
+      <ResumeNotLoaded>no CV</ResumeNotLoaded>
 
   return (
-    <ResumeWrapper>
+    <UploaderWrapper>
       { resumeFileName }
       <FileUploader
         uploadFile={handleFileUpload}
@@ -28,16 +28,16 @@ export default function ResumeField(props) {
         icon={<UploadIcon style={SmallerIconStyle}/>}
         buttonStyle={SmallButtonStyle}
       />
-    </ResumeWrapper>
+    </UploaderWrapper>
   )
 }
 
-ResumeField.propTypes = {
+ResumeUploader.propTypes = {
   interviewee: PropTypes.object.isRequired,
   onResumeUpload: PropTypes.func.isRequired
 }
 
-const ResumeWrapper = styled.div`
+const UploaderWrapper = styled.div`
   display: inline-flex;
   content-align: center;
   align-items: center;

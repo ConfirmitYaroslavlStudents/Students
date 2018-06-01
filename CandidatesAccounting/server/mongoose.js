@@ -3,9 +3,6 @@ import passportLocalMongoose from 'passport-local-mongoose'
 import {
   AccountSchema,
   CandidateSchema,
-  IntervieweeSchema,
-  StudentSchema,
-  TraineeSchema,
   TagSchema
 } from './schemas'
 
@@ -20,27 +17,11 @@ export function connect() {
 AccountSchema.plugin(passportLocalMongoose)
 export const Account = mongoose.model('Account', AccountSchema, 'accounts')
 const Candidate = mongoose.model('Candidate', CandidateSchema, 'candidates')
-const Interviewee = mongoose.model('Interviewee', IntervieweeSchema, 'candidates')
-const Student = mongoose.model('Student', StudentSchema, 'candidates')
-const Trainee = mongoose.model('Trainee', TraineeSchema, 'candidates')
 const Tag = mongoose.model('Tag', TagSchema, 'tags')
-
-function identifyModel(status) {
-  switch (status) {
-    case 'Interviewee':
-      return Interviewee
-    case 'Student':
-      return Student
-    case 'Trainee':
-      return Trainee
-    default:
-      return Candidate
-  }
-}
 
 export function getCandidates(status) {
   const searchSettings = status === 'Candidate' ? {} : { status }
-  return identifyModel(status).find(searchSettings).exec()
+  return Candidate.find(searchSettings).exec()
 }
 
 export function getCandidateById(id) {
@@ -58,7 +39,7 @@ export function getNotifications(username) {
 }
 
 export function addCandidate(newCandidate) {
-  return identifyModel(newCandidate.status).create(newCandidate)
+  return Candidate.create(newCandidate)
     .then(candidate => {
       updateTags(candidate.tags)
       return candidate._id
@@ -66,13 +47,14 @@ export function addCandidate(newCandidate) {
 }
 
 export function updateCandidate(id, candidateNewState) {
-  return identifyModel(candidateNewState.status).updateOne({_id: id}, {
+  return Candidate.updateOne({_id: id}, {
     '$set': {
       status: candidateNewState.status,
       name: candidateNewState.name,
       nickname: candidateNewState.nickname ? candidateNewState.nickname : '',
       email: candidateNewState.email,
       phoneNumber: candidateNewState.phoneNumber ? candidateNewState.phoneNumber : '',
+      hasAvatar: !!candidateNewState.hasAvatar,
       avatar: candidateNewState.avatar ? candidateNewState.avatar : '',
       tags: candidateNewState.tags,
       subscribers: candidateNewState.subscribers,
@@ -86,7 +68,7 @@ export function updateCandidate(id, candidateNewState) {
     },
     '$push': {comments: candidateNewState.comments ? candidateNewState.comments : []}})
     .then(candidate => {
-      updateTags(candidate.tags)
+      updateTags(candidateNewState.tags)
       return candidate
     })
 }
@@ -113,8 +95,8 @@ export function deleteComment(candidateId, commentId) {
   return Candidate.findByIdAndUpdate(candidateId, {$pull: {comments: {_id: commentId}}}).exec()
 }
 
-export function updateComment(candidateStatus, candidateId, commentId, comment) {
-  return identifyModel(candidateStatus).updateOne({_id: candidateId, 'comments._id': commentId}, {$set: {'comments.$': comment}}).exec()
+export function updateComment(candidateId, commentId, comment) {
+  return Candidate.updateOne({_id: candidateId, 'comments._id': commentId}, {$set: {'comments.$': comment}}).exec()
     .then(() => {
       return candidateId
     })
@@ -149,6 +131,7 @@ export function addAvatar(id, avatarFile) {
   return getCandidateById(id)
   .then(candidate => {
     candidate.avatar = avatarFile
+    candidate.hasAvatar = true
     candidate.comments = []
     return updateCandidate(id, candidate)
   })
@@ -199,7 +182,7 @@ export function addAttachment(candidateId, commentId, attachmentName, attachment
         if (candidate.comments[i]._id.toString() === commentId) {
           candidate.comments[i].attachment = attachmentName
           candidate.comments[i].attachmentFile = attachmentData
-          return updateComment(candidate.status, candidateId, commentId, candidate.comments[i])
+          return updateComment(candidateId, commentId, candidate.comments[i])
         }
       }
     })

@@ -7,8 +7,8 @@ import { checkCandidateValidation } from '../../../utilities/candidateValidators
 import Candidate from '../../../utilities/candidate'
 import DialogWindow from '../../../commonComponents/UIComponentDecorators/dialogWindow'
 import AddPersonIcon from '@material-ui/icons/PersonAdd'
-import CloseIcon from '@material-ui/icons/Close';
-import LoadableCandidateInfoForm from './loadableUpdateForm'
+import CloseIcon from '@material-ui/icons/Close'
+import LoadableCandidateUpdateForm from './loadableUpdateForm'
 import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
 import {MediumButtonStyle} from '../../../commonComponents/styleObjects'
 
@@ -55,7 +55,7 @@ class AddCandidateDialog extends Component{
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose} />
             </div>
           }>
-            <LoadableCandidateInfoForm
+            <LoadableCandidateUpdateForm
               candidate={this.newCandidate}
               tags={tags}
             />

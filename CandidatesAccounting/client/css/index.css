@@ -62,6 +62,11 @@ p {
     box-shadow: 0 0 7px 5px rgba(0, 0, 0, 0.05);
 }
 
+.comment-panel-grid {
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
 .disabled {
     opacity: 0.5;
 }
@@ -164,8 +169,8 @@ p {
 }
 
 .ql-editor {
-    max-height: 120px;
-    min-height: 120px;
+    max-height: 180px;
+    min-height: 180px;
 }
 
 .search {

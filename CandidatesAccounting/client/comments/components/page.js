@@ -110,15 +110,21 @@ class CommentsPage extends Component {
           </Grid>
         </Grid>
         <CommentPageFooter>
-          <LoadableAddCommentPanel
-            username={username}
-            candidate={candidate}
-            addComment={addComment}
-            subscribe={subscribe}
-            unsubscribe={unsubscribe}
-            onCommentAdd={this.handleNewCommentAdd}
-            disabled={!authorized}
-          />
+          <Grid container spacing={0} justify='flex-start' className={'comment-panel-grid'}>
+            <Grid item lg={3} md={4} sm={4}>
+            </Grid>
+            <Grid item lg={6} md={7} sm={8}>
+              <LoadableAddCommentPanel
+                username={username}
+                candidate={candidate}
+                addComment={addComment}
+                subscribe={subscribe}
+                unsubscribe={unsubscribe}
+                onCommentAdd={this.handleNewCommentAdd}
+                disabled={!authorized}
+              />
+            </Grid>
+          </Grid>
         </CommentPageFooter>
         {fethcingSpinner}
         <ToEndButtonWrapper>
@@ -158,7 +164,7 @@ const CommentPageWrapper = styled.div`
   min-height: 100vmin;
   margin-top: -156px;
   padding-top: 156px;
-  padding-bottom: 164px;
+  padding-bottom: 22n4px;
   box-sizing: border-box;
   background: #EEE;
   z-index: 4;
@@ -202,7 +208,7 @@ const CommentsWrapper = styled.div`
   height: 100%;
   background-color: #f6f6f6;
   padding: 24px 4px;
-  margin: 0 32px 0 16px;
+  margin: 0 1px 0 1px;
   box-shadow: 0 0 7px 5px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   min-width: 500px;
@@ -219,5 +225,5 @@ const SpinnerWrapper = styled.div`
 const ToEndButtonWrapper = styled.div`
   position: fixed;
   right: 16px;
-  bottom: 186px;
+  bottom: 246px;
 `

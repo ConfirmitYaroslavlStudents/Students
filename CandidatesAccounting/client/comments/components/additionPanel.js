@@ -157,10 +157,11 @@ const AddCommentPanelButtonsWrapper = styled.div`
  `
 
 const AddCommentPanelWrapper = styled.div`
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   position: relative;
+  box-sizing: border-box;
   width: 100%;
   clear: both;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
   background: #FFF;
 `
 

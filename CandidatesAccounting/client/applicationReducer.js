@@ -19,12 +19,17 @@ export default createReducer(initialState, {
     searchRequest: payload.initialState.searchRequest ? payload.initialState.searchRequest : initialState.searchRequest
   }),
 
+  [application.enableInitializing]: state => ({
+    ...state,
+    initializing: true
+  }),
+
   [application.enableFetching]: state => ({
     ...state,
     fetching: true
   }),
 
-  [application.enableFetching]: state => ({
+  [application.disableFetching]: state => ({
     ...state,
     fetching: false
   }),

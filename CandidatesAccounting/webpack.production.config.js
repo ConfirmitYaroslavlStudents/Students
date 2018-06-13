@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -25,7 +25,9 @@ module.exports = {
       {from: path.join(__dirname, 'manifest.json'), to: path.join(__dirname, 'dist', 'public', 'manifest.json')},
       {from: path.join(__dirname, 'index.js'), to: path.join(__dirname, 'dist', 'index.js')},
       {from: path.join(__dirname, 'package.json'), to: path.join(__dirname, 'dist', 'package.json')},
-      {from: path.join(__dirname, 'web.config'), to: path.join(__dirname, 'dist', 'web.config')}
+      {from: path.join(__dirname, 'web.config'), to: path.join(__dirname, 'dist', 'web.config')},
+      {from: path.join(__dirname, 'server', 'authorization.config.json'), to: path.join(__dirname, 'dist', 'server', 'authorization.config.json')},
+      {from: path.join(__dirname, 'server', 'server.config.json'), to: path.join(__dirname, 'dist', 'server', 'server.config.json')}
     ])
   ],
 

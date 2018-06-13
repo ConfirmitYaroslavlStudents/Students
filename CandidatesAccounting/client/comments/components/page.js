@@ -132,6 +132,7 @@ class CommentsPage extends Component {
         <ToEndButtonWrapper>
           <IconButton icon={<ArrowDownIcon style={MediumIconStyle}/>} onClick={this.scrollToEnd} style={BigButtonStyle}/>
         </ToEndButtonWrapper>
+        <GreyBackground />
       </CommentPageWrapper>
     )
   }
@@ -168,7 +169,6 @@ const CommentPageWrapper = styled.div`
   padding-top: 156px;
   padding-bottom: 224px;
   box-sizing: border-box;
-  background: #EEE;
   z-index: 4;
 `
 
@@ -232,4 +232,14 @@ const ToEndButtonWrapper = styled.div`
   position: fixed;
   right: 16px;
   bottom: 16px;
+`
+
+const GreyBackground = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1920px;
+  background-color: #eee;
+  z-index: -1;
 `

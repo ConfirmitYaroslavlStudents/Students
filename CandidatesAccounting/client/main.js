@@ -51,7 +51,9 @@ function renderApp(app) {
 
 renderApp(AppView)
 
-store.dispatch(getInitialStateFromServer())
+if (username !== '') {
+  store.dispatch(getInitialStateFromServer())
+}
 
 if (module.hot) {
   module.hot.accept('./layout/appview', () => {

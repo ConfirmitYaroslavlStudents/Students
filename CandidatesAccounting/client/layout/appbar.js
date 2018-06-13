@@ -17,10 +17,10 @@ function Appbar(props) {
   let pageTitleContent = <span>{pageTitle}</span>
   let searchForm = <SearchForm />
 
-  if (pageTitle !== 'Candidate Accounting' && currentCandidateId !== '') {
-    const candidate = candidates[currentCandidateId]
+  const candidate = candidates[currentCandidateId]
+  if (pageTitle !== 'Candidate Accounting' && candidate) {
     logoContent =
-      candidate.hasAvatar ?
+      candidate && candidate.hasAvatar ?
         <ImageAvatar
           source={'/' + candidate.name.toLowerCase() + 's/' + candidate.id + '/avatar'}
           alternative={candidate.name[0]}

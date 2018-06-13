@@ -1,5 +1,7 @@
 import { all, takeLatest, call, put } from 'redux-saga/effects'
 import * as actions from './actions'
+import * as applicationActions from '../applicationActions'
+import * as candidateActions from '../candidates/actions'
 import { login, logout } from '../api/authorizationService'
 import { getNotifications } from '../api/notificationService'
 
@@ -21,10 +23,14 @@ export default  function* authorizationSaga() {
   function* loginSaga(action) {
     try {
       const {email, password} = action.payload
+
       yield put(actions.enableAuthorizing())
       const username = yield call(login, email, password)
       const notifications = yield call(getNotifications, username)
       yield put(actions.loginSuccess({username, notifications}))
+
+      yield put(applicationActions.enableInitializing())
+      yield put(candidateActions.getCandidates())
     }
     catch (error) {
       yield put(actions.loginFailure({error}))

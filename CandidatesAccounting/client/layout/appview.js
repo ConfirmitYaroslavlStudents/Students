@@ -13,6 +13,7 @@ import CommentPage from '../comments/components/page'
 import SnackBar from '../commonComponents/UIComponentDecorators/snackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../commonComponents/UIComponentDecorators/spinner'
+import LoginDialog from '../authorization/components/loginDialog'
 import styled from 'styled-components'
 
 class AppView extends Component {
@@ -20,6 +21,7 @@ class AppView extends Component {
     const {
       initializing,
       fetching,
+      authorized,
       pageTitle,
       candidates,
       errorMessage,
@@ -31,12 +33,22 @@ class AppView extends Component {
       setErrorMessage({message: ''})
     }
 
+    const initializngSpinner =
+      <InitSpinnerWrapper >
+        <Spinner size={60}/>
+      </InitSpinnerWrapper>
+
+    const fetchingSpinner =
+      <RefreshSpinnerWrapper>
+        <Spinner size={60}/>
+      </RefreshSpinnerWrapper>
+
+    const loginDialog =
+      <LoginDialogWrapper>
+        <LoginDialog forced/>
+      </LoginDialogWrapper>
+
     const tableSwitch =
-      initializing ?
-        <InitSpinnerWrapper >
-          <Spinner size={60}/>
-        </InitSpinnerWrapper>
-        :
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
             <CommentPage candidate={candidates[currentCandidateId]} />
@@ -57,13 +69,6 @@ class AppView extends Component {
           <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
         </Switch>
 
-    const refreshingSpinner =
-      fetching && !initializing && pageTitle === 'Candidate Accounting'?
-        <RefreshSpinnerWrapper>
-          <Spinner size={60}/>
-        </RefreshSpinnerWrapper>
-        : ''
-
     return (
       <div>
         <Navbar>
@@ -71,8 +76,20 @@ class AppView extends Component {
           <TablesBar />
         </Navbar>
         <MainWrapper>
-          { tableSwitch }
-          { refreshingSpinner }
+          {
+            !authorized ?
+                loginDialog
+                :
+                initializing ?
+                  initializngSpinner
+                  :
+                  tableSwitch
+          }
+          {
+            fetching && !initializing && pageTitle === 'Candidate Accounting' ?
+              fetchingSpinner
+              : ''
+          }
         </MainWrapper>
         <SnackBar message={errorMessage} onClose={handleSnackbarClose} />
       </div>
@@ -83,6 +100,7 @@ class AppView extends Component {
 AppView.propTypes = {
   initializing: PropTypes.bool.isRequired,
   fetching: PropTypes.bool.isRequired,
+  authorized: PropTypes.bool.isRequired,
   candidates: PropTypes.object.isRequired,
   errorMessage: PropTypes.string.isRequired,
   setErrorMessage: PropTypes.func.isRequired,
@@ -93,6 +111,7 @@ AppView.propTypes = {
 export default connect(state => ({
     initializing: SELECTORS.APPLICATION.INITIALIZING(state),
     fetching: SELECTORS.APPLICATION.FETCHING(state),
+    authorized: SELECTORS.AUTHORIZATION.AUTHORIZED(state),
     candidates: SELECTORS.CANDIDATES.CANDIDATES(state),
     errorMessage: SELECTORS.APPLICATION.ERRORMESSAGE(state),
     pageTitle: SELECTORS.APPLICATION.PAGETITLE(state),
@@ -114,6 +133,10 @@ const RefreshSpinnerWrapper = styled.div`
   top: 38%;
   width: 100%;
   text-align: center;
+`
+
+const LoginDialogWrapper = styled.div`
+  display: none;
 `
 
 const MainWrapper = styled.div`

@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import graphqlHTTP from 'express-graphql'
+import authorizationConfig from './authorization.config.json'
+import serverConfig from './server.config.json'
 import { schema, root } from './graphQL'
 import { Account, connect } from './mongoose'
 import expressSession  from 'express-session'
@@ -21,7 +23,7 @@ import {
   addAttachment } from './mongoose'
 import template from './template'
 
-const port = 3000
+const port = serverConfig.port
 
 const developmentMode = process.argv[3] === 'development'
 
@@ -53,7 +55,7 @@ if (developmentMode) {
   app.use(webpackHotMiddleware(compiler))
 }
 
-app.use(expressSession({ secret: 'yDyTP3T3Dvc4206O8pm', resave: false, saveUninitialized: false }))
+app.use(expressSession({ secret: authorizationConfig.sessionSecret, resave: false, saveUninitialized: false }))
 app.use(bodyParser.json())
 app.use(fileUpload())
 app.use(cookieParser())
@@ -65,7 +67,7 @@ passport.serializeUser(Account.serializeUser())
 passport.deserializeUser(Account.deserializeUser())
 
 app.use('/graphql', (req, res, next) => {
-  if (req.isAuthenticated() || !req.body || !req.body.query || !req.body.query.includes('mutation')) {
+  if (req.isAuthenticated()) {
     next()
   } else {
     res.status(401).end()
@@ -83,12 +85,17 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  return Account.findOne({username: req.body.username}, (findError, user) => {
+  const username = req.body.username
+  const allowedLogins = authorizationConfig.allowedLogins;
+  if (allowedLogins && allowedLogins.length > 0 && !allowedLogins.includes(username)) {
+    return res.status(401).end()
+  }
+  return Account.findOne({ username }, (findError, user) => {
     if (findError) {
       return res.status(401).end()
     }
     if (!user) {
-      Account.register(new Account({username: req.body.username}), req.body.password, (registerError) => {
+      Account.register(new Account({ username }), req.body.password, (registerError) => {
         if (registerError) {
           return res.status(401).end()
         }
@@ -112,6 +119,9 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/:candidateStatus/:candidateId/avatar', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).end()
+  }
   return getAvatar(req.params.candidateId).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -142,6 +152,9 @@ app.post('/:candidateStatus/:candidateId/avatar', (req, res) => {
 })
 
 app.get('/interviewees/:intervieweeId/resume', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).end()
+  }
   return getResume(req.params.intervieweeId).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -170,6 +183,9 @@ app.post('/interviewees/:intervieweeId/resume', (req, res) => {
 })
 
 app.get('/:candidateStatus(interviewees|students|trainees)/:candidateId/comments/:commentId/attachment', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).end()
+  }
   return getAttachment(req.params.candidateId, req.params.commentId,).then((result, error) => {
     if (error) {
       return res.status(500).end()
@@ -198,10 +214,17 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/comment
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
 app.get('/*', (req, res) => {
-  res.send(template({
-    assetsRoot: path.join('/', 'assets'),
-    username: getUsername(req),
-  }))
+  if (req.isAuthenticated()) {
+    res.send(template({
+      assetsRoot: path.join('/', 'assets'),
+      username: getUsername(req),
+    }))
+  } else {
+    res.send(template({
+      assetsRoot: path.join('/', 'assets'),
+      username: '',
+    }))
+  }
 })
 
 connect()

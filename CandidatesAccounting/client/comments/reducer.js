@@ -1,5 +1,6 @@
 import createReducer from '../utilities/createReducer'
 import * as application from '../applicationActions'
+import * as authorization from '../authorization/actions'
 import * as comments from './actions'
 import * as candidates from '../candidates/actions'
 
@@ -38,6 +39,11 @@ export default createReducer(initialState, {
       }
     }
   },
+
+  [authorization.logoutSuccess]: state => ({
+    ...state,
+    ...initialState
+  }),
 
   [candidates.getCandidatesSuccess]: (state, {payload}) => ({
     ...state,

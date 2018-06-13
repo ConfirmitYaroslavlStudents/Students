@@ -6,7 +6,7 @@
   "scripts": {
     "build": "createDistDirectory.bat & webpack --progress --config webpack.production.config.js & babel ./server/index.js > ./dist/server/index.js && babel ./server/graphQL.js > ./dist/server/graphQL.js && babel ./server/mongoose.js > ./dist/server/mongoose.js && babel ./server/schemas.js > ./dist/server/schemas.js && babel ./server/template.js > ./dist/server/template.js && babel ./server/utilities/searchCandidates.js > ./dist/server/utilities/searchCandidates.js && babel ./server/utilities/sortCandidates.js > ./dist/server/utilities/sortCandidates.js",
     "prod": "npm run build && babel-node ./dist/index.js --mode production",
-    "dev": "babel-node ./server/index.js --mode development && nodemon -w ./server"
+    "dev": "nodemon --exec \"babel-node ./server/index.js --mode development\" -w ./server"
   },
   "author": "DmitryB",
   "license": "ISC",

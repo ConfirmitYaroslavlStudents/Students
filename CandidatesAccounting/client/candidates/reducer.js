@@ -1,5 +1,6 @@
 import createReducer from '../utilities/createReducer'
 import * as application from '../applicationActions'
+import * as authorization from '../authorization/actions'
 import * as candidates from './actions'
 import * as comments from '../comments/actions'
 import * as notifications from '../notifications/actions'
@@ -149,6 +150,18 @@ export default createReducer(initialState, {
   [application.setSearchRequest]: state => ({
     ...state,
     offset: 0
+  }),
+
+  [authorization.logoutSuccess]: state => ({
+    ...state,
+    candidates: {},
+    offset: 0,
+    totalCount: 0,
+    sortingField: '',
+    sortingDirection: 'desc',
+    onUpdating: '',
+    onDeleting: '',
+    onResumeUploading: ''
   }),
 
   [comments.openCommentPageSuccess]: (state, {payload}) => ({

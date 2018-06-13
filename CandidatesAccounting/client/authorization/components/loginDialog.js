@@ -13,7 +13,7 @@ import styled from 'styled-components'
 class LoginDialog extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ isOpen: false })
+    this.state = ({ isOpen: !!props.forced })
     this.account = { email: '', password: '' }
   }
 
@@ -33,7 +33,7 @@ class LoginDialog extends Component {
   }
 
   render() {
-    const { authorizing } = this.props
+    const { authorizing, forced } = this.props
     const linearProgress = authorizing ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : ''
 
     return (
@@ -47,9 +47,12 @@ class LoginDialog extends Component {
           onRequestClose={this.handleClose}
           actions={
             <DialogActionsWrapper>
-              <FlatButton color='inherit' disabled={authorizing} onClick={this.handleClose}>
-                Cancel
-              </FlatButton>
+              {
+                !forced ?
+                  <FlatButton color='inherit' disabled={authorizing} onClick={this.handleClose}>
+                    Cancel
+                  </FlatButton> : ''
+              }
               <FlatButton color='primary' disabled={authorizing} onClick={this.login}>
                 Sign in
               </FlatButton>
@@ -66,7 +69,7 @@ class LoginDialog extends Component {
 
 LoginDialog.propTypes = {
   authorizing: PropTypes.bool.isRequired,
-
+  forced: PropTypes.bool
 }
 
 export default connect(state => ({

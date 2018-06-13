@@ -7,6 +7,8 @@ export const initSuccess = createAction('INIT_SUCCESS')
 
 export const getInitialStateFromServer = createAction('GET_INITIAL_STATE_FROM_SERVER')
 
+export const enableInitializing = createAction('ENADLE_INITIALIZING')
+
 export const enableFetching = createAction('ENADLE_FETCHING')
 
 export const disableFetching = createAction('DISABLE_FETCHING')

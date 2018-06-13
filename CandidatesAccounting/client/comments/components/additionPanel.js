@@ -9,6 +9,7 @@ import ReactQuill from 'react-quill'
 import Comment from '../../utilities/comment'
 import SubscribeButton from './subscribeButton'
 import FileUploader from '../../commonComponents/fileUploader'
+import SetCursorToEnd from '../../utilities/setCursorToEnd'
 import styled from 'styled-components'
 
 export default class AddCommentPanel extends Component {
@@ -65,12 +66,16 @@ export default class AddCommentPanel extends Component {
     return (
       <div id='toolbar'>
         <div className={'flex centered' + (disabled ? ' disabled' : '')}>
-          <select defaultValue='' className='ql-size' disabled={disabled}>
-            <option value='small' />
-            <option value='' />
-            <option value='large' />
-            <option value='huge' />
-          </select>
+          {
+            /*
+            <select defaultValue='' className='ql-size' disabled={disabled}>
+              <option value='small'/>
+              <option value=''/>
+              <option value='large'/>
+              <option value='huge'/>
+            </select>
+            */
+          }
           <button className='ql-bold' disabled={disabled}/>
           <button className='ql-italic' disabled={disabled}/>
           <button className='ql-underline' disabled={disabled}/>
@@ -80,6 +85,9 @@ export default class AddCommentPanel extends Component {
           <button className='ql-indent' value='-1' disabled={disabled}/>
           <button className='ql-indent' value='+1' disabled={disabled}/>
           <button className='ql-link' disabled={disabled}/>
+          <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(n)') }} disabled={disabled}>Ο(n)</button>
+          <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(nlogn)') }} disabled={disabled}>Ο(nlogn)</button>
+          <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(n^2)') }} disabled={disabled}>Ο(n^2)</button>
           <FileUploader
             uploadFile={this.handleAttachFile}
             fileTypes={['pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'bmp']}
@@ -91,6 +99,20 @@ export default class AddCommentPanel extends Component {
     )
   }
 
+  addCommentPattern = (patternValue) => {
+    const commentTextDiv = document.getElementById('commentReactQuill').firstElementChild.firstElementChild
+    let innerHTML = commentTextDiv.innerHTML
+    let i = innerHTML.length - 1
+    for (; i >= 4; i--)
+    {
+      if (innerHTML[i] === '<' && (innerHTML[i - 1] !== '>' || innerHTML.substring(i - 4, i) === '<br>')) {
+        break
+      }
+    }
+    commentTextDiv.innerHTML = innerHTML.substring(0, i) + patternValue + innerHTML.substring(i, innerHTML.length)
+    SetCursorToEnd(commentTextDiv)
+  }
+
   render() {
     const { disabled, candidate, username, subscribe, unsubscribe } = this.props
 
@@ -99,6 +121,7 @@ export default class AddCommentPanel extends Component {
         <QuillWrapper>
           { this.customQuillToolbar() }
           <ReactQuill
+            id='commentReactQuill'
             value={this.state.commentText}
             onChange={this.handleChange}
             placeholder='New comment'

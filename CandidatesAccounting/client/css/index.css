@@ -10,6 +10,14 @@ p {
     margin: 0;
 }
 
+th:last-child {
+    text-align: right !important;
+}
+
+td:last-child {
+    text-align: right !important;
+}
+
 .active-nav-link {
     color: #3F51B5 !important;
     border-bottom: 2px solid #3F51B5;
@@ -60,11 +68,6 @@ p {
     padding: 24px 4px;
     margin: 0 32px 0 16px;
     box-shadow: 0 0 7px 5px rgba(0, 0, 0, 0.05);
-}
-
-.comment-panel-grid {
-    background-color: #fff;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
 .disabled {
@@ -207,10 +210,8 @@ p {
     color: #1E88E5 !important;
 }
 
-th:last-child {
-    text-align: right !important;
-}
-
-td:last-child {
-    text-align: right !important;
+.quill-custom-button {
+    width: auto !important;
+    font-weight: 900;
+    opacity: 0.9;
 }

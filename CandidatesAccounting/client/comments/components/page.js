@@ -110,19 +110,21 @@ class CommentsPage extends Component {
           </Grid>
         </Grid>
         <CommentPageFooter>
-          <Grid container spacing={0} justify='flex-start' className={'comment-panel-grid'}>
+          <Grid container spacing={0} justify='flex-start'>
             <Grid item lg={3} md={4} sm={4}>
             </Grid>
             <Grid item lg={6} md={7} sm={8}>
-              <LoadableAddCommentPanel
-                username={username}
-                candidate={candidate}
-                addComment={addComment}
-                subscribe={subscribe}
-                unsubscribe={unsubscribe}
-                onCommentAdd={this.handleNewCommentAdd}
-                disabled={!authorized}
-              />
+              <AddCommentPanelWrapper>
+                <LoadableAddCommentPanel
+                  username={username}
+                  candidate={candidate}
+                  addComment={addComment}
+                  subscribe={subscribe}
+                  unsubscribe={unsubscribe}
+                  onCommentAdd={this.handleNewCommentAdd}
+                  disabled={!authorized}
+                />
+              </AddCommentPanelWrapper>
             </Grid>
           </Grid>
         </CommentPageFooter>
@@ -164,7 +166,7 @@ const CommentPageWrapper = styled.div`
   min-height: 100vmin;
   margin-top: -156px;
   padding-top: 156px;
-  padding-bottom: 22n4px;
+  padding-bottom: 224px;
   box-sizing: border-box;
   background: #EEE;
   z-index: 4;
@@ -174,6 +176,10 @@ const CommentPageFooter = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
+`
+
+const AddCommentPanelWrapper = styled.div`
+    border-top: 1px solid #ccc;
 `
 
 const NoResultWrapper = styled.div`
@@ -225,5 +231,5 @@ const SpinnerWrapper = styled.div`
 const ToEndButtonWrapper = styled.div`
   position: fixed;
   right: 16px;
-  bottom: 246px;
+  bottom: 16px;
 `

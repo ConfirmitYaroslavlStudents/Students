@@ -7,12 +7,12 @@ import { SmallButtonStyle, SmallestIconStyle} from './styleObjects'
 export default function EmailWrapper(props) {
   return (
     <IconButton icon={<CopyIcon style={SmallestIconStyle}/>} style={{...SmallButtonStyle, marginLeft: 2}} onClick={() => {
-      const dummy = document.createElement('input')
-      document.body.appendChild(dummy)
-      dummy.setAttribute('value', props.text)
-      dummy.select()
+      const fakeInput = document.createElement('input')
+      document.body.appendChild(fakeInput)
+      fakeInput.setAttribute('value', props.text)
+      fakeInput.select()
       document.execCommand('copy')
-      document.body.removeChild(dummy)
+      document.body.removeChild(fakeInput)
     }}/>
   )
 }

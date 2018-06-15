@@ -40,8 +40,8 @@ class CommentsPage extends Component {
     this.shouldScrollDown = true
   }
 
-  deleteComment = (commentId) => () => {
-    this.props.deleteComment({ candidateId: this.props.candidate.id, commentId })
+  deleteComment = (comment) => () => {
+    this.props.deleteComment({ candidateId: this.props.candidate.id, comment })
   }
 
   restoreComment = (comment) => () => {
@@ -70,8 +70,8 @@ class CommentsPage extends Component {
     }
 
     let commentArray = Object.keys(comments).map(commentId => comments[commentId])
-    if (lastDeletedComment.author) {
-      lastDeletedComment.isDeleted = true;
+    if (lastDeletedComment) {
+      lastDeletedComment.isDeleted = true
       commentArray.push(lastDeletedComment)
     }
     commentArray = sortComments(commentArray)
@@ -89,7 +89,7 @@ class CommentsPage extends Component {
           if (comment.isDeleted)
             return <DeletedComment key={'comment-' + index} comment={comment} candidate={candidate} restoreComment={this.restoreComment(comment)}/>
           else
-            return <CurrentUserComment key={'comment-' + index} comment={comment} candidate={candidate} deleteComment={this.deleteComment(comment.id)}/>
+            return <CurrentUserComment key={'comment-' + index} comment={comment} candidate={candidate} deleteComment={this.deleteComment(comment)}/>
         default:
           return <Comment key={'comment-' + index} comment={comment} candidate={candidate} markerColor={this.userColors[comment.author]}/>
       }
@@ -155,7 +155,7 @@ class CommentsPage extends Component {
 
 CommentsPage.propTypes = {
   comments: PropTypes.object.isRequired,
-  lastDeletedComment: PropTypes.object.isRequired,
+  lastDeletedComment: PropTypes.object,
   initializing: PropTypes.bool.isRequired,
   fetching: PropTypes.bool.isRequired,
   authorized: PropTypes.bool.isRequired,

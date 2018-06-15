@@ -7,7 +7,8 @@ import * as candidates from '../candidates/actions'
 const initialState = {
   comments: {},
   currentCandidateId: '',
-  lastDeletedComment: {}
+  lastDeletedComment: null,
+  lastDeletedCommentAttachment: null
 }
 
 export default createReducer(initialState, {
@@ -20,7 +21,8 @@ export default createReducer(initialState, {
     ...state,
     currentCandidateId: payload.candidate.id,
     comments: payload.comments,
-    lastDeletedComment: {}
+    lastDeletedComment: null,
+    lastDeletedCommentAttachment: null
   }),
 
   [comments.addCommentSuccess]: (state, {payload}) => ({
@@ -40,7 +42,8 @@ export default createReducer(initialState, {
       comments: {
         ...comments
       },
-      lastDeletedComment
+      lastDeletedComment,
+      lastDeletedCommentAttachment: payload.commentAttachment
     }
   },
 
@@ -50,7 +53,8 @@ export default createReducer(initialState, {
       ...state.comments,
       [payload.comment.id]: payload.comment
     },
-    lastDeletedComment: {}
+    lastDeletedComment: null,
+    lastDeletedCommentAttachment: null
   }),
 
   [authorization.logoutSuccess]: state => ({
@@ -68,5 +72,6 @@ export default createReducer(initialState, {
 export const SELECTORS = {
   COMMENTS: state => state.comments,
   CURRENTCANDIDATEID: state => state.currentCandidateId,
-  LASTDELETEDCOMMENT: state => state.lastDeletedComment
+  LASTDELETEDCOMMENT: state => state.lastDeletedComment,
+  LASTDELETEDCOMMENTATTACHMENT: state => state.lastDeletedCommentAttachment
 }

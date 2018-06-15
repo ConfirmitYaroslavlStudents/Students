@@ -54,3 +54,22 @@ export function addCommentAttachment(candidateId, commentId, attachment) {
       }
     })
 }
+
+export function getCommentAttachment(candidateId, commentId) {
+  return fetch(
+    '/interviewees/' + candidateId + '/comments/' + commentId + '/attachment',
+    {
+      method: 'GET',
+      credentials: 'include'
+    })
+  .then(response => {
+    if (response.status === 200) {
+      const reader = response.body.getReader();
+      return reader.read().then(({ done, value }) => {
+        return value
+      })
+    } else {
+      throw response.status
+    }
+  })
+}

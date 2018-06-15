@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import CommentText from './commentText'
-import CommentAttachment from './attachment'
 import RestoreCommentButton from './restoreButton'
 import { formatDateTime } from '../../utilities/customMoment'
 import {
@@ -14,9 +13,6 @@ import {
 } from './styledComponents'
 
 export default function DeletedComment(props) {
-  //const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''
-  const commentAttachment = ''
-
   return (
     <CommentWrapper right>
       <CommentMount right deleted>
@@ -24,7 +20,6 @@ export default function DeletedComment(props) {
           <CommentText text='The comment has been deleted' />
         </CommentTextWrapper>
         <CommentMountFooter right>
-          { commentAttachment }
         </CommentMountFooter>
       </CommentMount>
       <div> </div>

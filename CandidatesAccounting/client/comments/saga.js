@@ -1,7 +1,7 @@
-import { all, takeEvery, takeLatest, put, call } from 'redux-saga/effects'
+import { all, takeEvery, takeLatest, put, call, select } from 'redux-saga/effects'
 import * as actions from './actions'
 import * as applicationActions from '../applicationActions'
-import { addComment, deleteComment, addCommentAttachment } from '../api/commentService.js'
+import { addComment, deleteComment, addCommentAttachment, getCommentAttachment } from '../api/commentService.js'
 import { getCandidate } from '../api/candidateService.js'
 
 const creator = ({ history }) => {
@@ -59,9 +59,15 @@ const creator = ({ history }) => {
 
   function* deleteCommentSaga(action) {
     try {
-      const {candidateId, commentId} = action.payload
-      yield call(deleteComment, candidateId, commentId)
-      yield put(actions.deleteCommentSuccess({candidateId, commentId}))
+      const {candidateId, comment} = action.payload
+      let commentAttachment = null
+      /*
+      if (comment.attachment && comment.attachment !== '') {
+        commentAttachment = yield call(getCommentAttachment, candidateId, comment.id)
+      }
+      */
+      yield call(deleteComment, candidateId, comment.id)
+      yield put(actions.deleteCommentSuccess({candidateId, commentId: comment.id, commentAttachment}))
     }
     catch (error) {
       yield put(applicationActions.setErrorMessage({message: error + '. Delete comment error.'}))
@@ -70,11 +76,15 @@ const creator = ({ history }) => {
 
   function* restoreCommentSaga(action) {
     try {
-      const {candidateId, comment, commentAttachment} = action.payload
+      const {candidateId, comment } = action.payload
       comment.id = yield call(addComment, candidateId, comment)
+      comment.attachment = ''
+      /*
+      let commentAttachment = yield select(state => state.comments.lastDeletedCommentAttachment)
       if (commentAttachment) {
         yield call(addCommentAttachment, candidateId, comment.id, commentAttachment)
       }
+      */
       yield put(actions.restoreCommentSuccess({candidateId, comment}))
     }
     catch (error) {

@@ -9,7 +9,8 @@ const creator = ({ history }) => {
     yield all([
       watchOpenCommentPage(),
       watchCommentAdd(),
-      watchCommentDelete()
+      watchCommentDelete(),
+      watchCommentRestore()
     ])
   }
 
@@ -23,6 +24,10 @@ const creator = ({ history }) => {
 
   function* watchCommentDelete() {
     yield takeEvery(actions.deleteComment, deleteCommentSaga)
+  }
+
+  function* watchCommentRestore() {
+    yield takeEvery(actions.restoreComment, restoreCommentSaga)
   }
 
   function* openCommentPageSaga(action) {
@@ -60,6 +65,20 @@ const creator = ({ history }) => {
     }
     catch (error) {
       yield put(applicationActions.setErrorMessage({message: error + '. Delete comment error.'}))
+    }
+  }
+
+  function* restoreCommentSaga(action) {
+    try {
+      const {candidateId, comment, commentAttachment} = action.payload
+      comment.id = yield call(addComment, candidateId, comment)
+      if (commentAttachment) {
+        yield call(addCommentAttachment, candidateId, comment.id, commentAttachment)
+      }
+      yield put(actions.restoreCommentSuccess({candidateId, comment}))
+    }
+    catch (error) {
+      yield put(applicationActions.setErrorMessage({message: error + '. Restore comment error.'}))
     }
   }
 

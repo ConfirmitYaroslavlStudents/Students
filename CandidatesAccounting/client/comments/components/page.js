@@ -5,9 +5,11 @@ import * as actions from '../actions'
 import * as notificationActions from '../../notifications/actions'
 import { SELECTORS } from '../../rootReducer'
 import Comment from './comment'
+import DeletedComment from './deletedComment'
 import CurrentUserComment from './currentUserComment'
 import SystemComment from './systemComment'
 import LoadableAddCommentPanel from './loadableAdditionPanel'
+import sortComments from '../../utilities/sortComments'
 import getRandomColor from '../../utilities/getRandomColor'
 import Grid from '@material-ui/core/Grid'
 import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
@@ -42,13 +44,18 @@ class CommentsPage extends Component {
     this.props.deleteComment({ candidateId: this.props.candidate.id, commentId })
   }
 
+  restoreComment = (comment) => () => {
+    delete comment.isDeleted
+    this.props.restoreComment({ candidateId: this.props.candidate.id, comment })
+  }
+
   scrollToEnd = () => {
     window.scrollTo(0, document.documentElement.scrollHeight)
     this.shouldScrollDown = false
   }
 
   render() {
-    const { initializing, fetching, authorized, candidate, comments, tags, username, addComment, subscribe, unsubscribe } = this.props
+    const { initializing, fetching, authorized, candidate, comments, lastDeletedComment, tags, username, addComment, subscribe, unsubscribe } = this.props
 
     if (initializing) {
       return <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
@@ -62,25 +69,33 @@ class CommentsPage extends Component {
       )
     }
 
-    const commentsArray = Object.keys(comments).map(commentId => comments[commentId])
-    commentsArray.forEach(comment => {
+    let commentArray = Object.keys(comments).map(commentId => comments[commentId])
+    if (lastDeletedComment.author) {
+      lastDeletedComment.isDeleted = true;
+      commentArray.push(lastDeletedComment)
+    }
+    commentArray = sortComments(commentArray)
+    commentArray.forEach(comment => {
       if (!(comment.author in this.userColors)) {
         this.userColors[comment.author] = getRandomColor()
       }
     })
 
-    let commentClouds = commentsArray.map((comment, index) => {
+    let commentClouds = commentArray.map((comment, index) => {
       switch (comment.author) {
         case 'SYSTEM':
           return <SystemComment key={'comment-' + index} comment={comment}/>
         case username:
-          return <CurrentUserComment key={'comment-' + index} comment={comment} candidate={candidate} deleteComment={this.deleteComment(comment.id)}/>
+          if (comment.isDeleted)
+            return <DeletedComment key={'comment-' + index} comment={comment} candidate={candidate} restoreComment={this.restoreComment(comment)}/>
+          else
+            return <CurrentUserComment key={'comment-' + index} comment={comment} candidate={candidate} deleteComment={this.deleteComment(comment.id)}/>
         default:
           return <Comment key={'comment-' + index} comment={comment} candidate={candidate} markerColor={this.userColors[comment.author]}/>
       }
     })
 
-    if (commentsArray.length === 0) {
+    if (commentArray.length === 0) {
       commentClouds = <NoResultWrapper>No comments</NoResultWrapper>
     }
 
@@ -140,11 +155,14 @@ class CommentsPage extends Component {
 
 CommentsPage.propTypes = {
   comments: PropTypes.object.isRequired,
+  lastDeletedComment: PropTypes.object.isRequired,
   initializing: PropTypes.bool.isRequired,
   fetching: PropTypes.bool.isRequired,
   authorized: PropTypes.bool.isRequired,
   username: PropTypes.string.isRequired,
   addComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  restoreComment: PropTypes.func.isRequired,
   subscribe:PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
   tags: PropTypes.array.isRequired,
@@ -153,6 +171,7 @@ CommentsPage.propTypes = {
 
 export default connect(state => ({
     comments: SELECTORS.COMMENTS.COMMENTS(state),
+    lastDeletedComment: SELECTORS.COMMENTS.LASTDELETEDCOMMENT(state),
     initializing: SELECTORS.APPLICATION.INITIALIZING(state),
     fetching: SELECTORS.APPLICATION.FETCHING(state),
     authorized: SELECTORS.AUTHORIZATION.AUTHORIZED(state),

@@ -29,6 +29,11 @@ export const CommentMount = styled.div`
     margin-bottom: 0;
 	`}
 	
+	${props => props.deleted && css`
+    background: #fafafa;
+    border-color: #f44336;
+	`}
+	
 	${props => props.isSystem && css`
 	  flex-direction: row;
 	  color: #905600;

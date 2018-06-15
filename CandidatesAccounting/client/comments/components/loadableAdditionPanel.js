@@ -16,7 +16,7 @@ const LoadableAddCommentPanel = Loadable({
 export default LoadableAddCommentPanel
 
 const LoadingAddCommentPanelWrapper = styled.div`
-  height: 164px;
+  height: 225px;
   display: flex;
   background-color: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);

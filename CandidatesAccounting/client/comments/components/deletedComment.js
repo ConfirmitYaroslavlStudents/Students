@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CommentText from './commentText'
 import CommentAttachment from './attachment'
-import DeleteCommentButton from './deleteButton'
+import RestoreCommentButton from './restoreButton'
 import { formatDateTime } from '../../utilities/customMoment'
 import {
   CommentWrapper,
@@ -13,14 +13,15 @@ import {
   CommentAuthorName
 } from './styledComponents'
 
-export default function CurrentUserComment(props) {
-  const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''
+export default function DeletedComment(props) {
+  //const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''
+  const commentAttachment = ''
 
   return (
     <CommentWrapper right>
-      <CommentMount right>
+      <CommentMount right deleted>
         <CommentTextWrapper>
-          <CommentText text={props.comment.text} />
+          <CommentText text='The comment has been deleted' />
         </CommentTextWrapper>
         <CommentMountFooter right>
           { commentAttachment }
@@ -31,14 +32,14 @@ export default function CurrentUserComment(props) {
         <CommentAuthorName>
         </CommentAuthorName>
         { formatDateTime(props.comment.date) }
-        <DeleteCommentButton deleteComment={props.deleteComment}/>
+        <RestoreCommentButton restoreComment={props.restoreComment}/>
       </CommentFooter>
     </CommentWrapper>
   )
 }
 
-CurrentUserComment.propTypes = {
+DeletedComment.propTypes = {
   comment: PropTypes.object.isRequired,
   candidate: PropTypes.object.isRequired,
-  deleteComment: PropTypes.func.isRequired,
+  restoreComment: PropTypes.func.isRequired,
 }

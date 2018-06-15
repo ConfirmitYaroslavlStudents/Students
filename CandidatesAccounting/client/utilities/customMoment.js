@@ -6,7 +6,7 @@ export function getCurrentDate() {
 }
 
 export function getCurrentDateTime() {
-  return moment().format('H:mm DD.MM.YYYY')
+  return moment().format('H:mm:ss DD.MM.YYYY')
 }
 
 export function formatDate(dateString) {
@@ -30,14 +30,16 @@ export function formatDateTime(timeDateString) {
     return ''
   }
   const time = timeDate[0].split(':')
-  if (time.length !== 2) {
+  if (!time[2])
+    time[2] = '00'
+  if (time.length !== 3) {
     return ''
   }
   const date = timeDate[1].split('.')
   if (date.length !== 3) {
     return ''
   }
-  const formatDateTime = moment(date[2] + '-' + date[1] + '-' + date[0] + ' ' + time[0] + ':' + time[1]).locale('ru').format('H:mm D MMMM YYYY')
+  const formatDateTime = moment(date[2] + '-' + date[1] + '-' + date[0] + ' ' + time[0] + ':' + time[1] + ':' + time[2]).locale('ru').format('H:mm D MMMM YYYY')
   return (formatDateTime !== 'Invalid date' ? formatDateTime : '')
 }
 

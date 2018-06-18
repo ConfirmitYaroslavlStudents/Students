@@ -14,7 +14,7 @@ import styled from 'styled-components'
 
 export default class AddCommentPanel extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = ({ commentText: '', commentAttachment: null })
   }
 
@@ -24,6 +24,10 @@ export default class AddCommentPanel extends Component {
 
   handleAttachFile = (commentAttachment) => {
     this.setState({ commentAttachment })
+  }
+
+  handleAttachCancel = () => {
+    this.setState({ commentAttachment: null })
   }
 
   handleEnterPress = (event) => {
@@ -66,16 +70,6 @@ export default class AddCommentPanel extends Component {
     return (
       <div id='toolbar'>
         <div className={'flex centered' + (disabled ? ' disabled' : '')}>
-          {
-            /*
-            <select defaultValue='' className='ql-size' disabled={disabled}>
-              <option value='small'/>
-              <option value=''/>
-              <option value='large'/>
-              <option value='huge'/>
-            </select>
-            */
-          }
           <button className='ql-bold' disabled={disabled}/>
           <button className='ql-italic' disabled={disabled}/>
           <button className='ql-underline' disabled={disabled}/>
@@ -89,7 +83,8 @@ export default class AddCommentPanel extends Component {
           <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(nlogn)') }} disabled={disabled}>Ο(nlogn)</button>
           <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(n^2)') }} disabled={disabled}>Ο(n^2)</button>
           <FileUploader
-            uploadFile={this.handleAttachFile}
+            onAccept={this.handleAttachFile}
+            onCancel={this.handleAttachCancel}
             fileTypes={['pdf', 'doc', 'docx', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'bmp']}
             icon={<AttachIcon style={QuillToolbarButtonStyle}/>}
             attachment={this.state.commentAttachment}

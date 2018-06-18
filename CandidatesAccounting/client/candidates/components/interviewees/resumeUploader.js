@@ -13,6 +13,10 @@ export default function ResumeUploader(props) {
     onResumeUpload(file)
   }
 
+  const handleCancel = () => {
+    onResumeUpload()
+  }
+
   const resumeFileName =
     resumeIsUploaded ?
       <ResumeFileName>{interviewee.resume}</ResumeFileName>
@@ -23,7 +27,8 @@ export default function ResumeUploader(props) {
     <UploaderWrapper>
       { resumeFileName }
       <FileUploader
-        uploadFile={handleFileUpload}
+        onAccept={handleFileUpload}
+        onCancel={handleCancel}
         fileTypes={['pdf', 'doc', 'docx', 'txt']}
         icon={<UploadIcon style={SmallerIconStyle}/>}
         buttonStyle={SmallButtonStyle}

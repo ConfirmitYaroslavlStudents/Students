@@ -5,11 +5,13 @@ import IconButton from './UIComponentDecorators/iconButton'
 import FileUploader from 'react-input-files'
 
 export default function CustomFileUploader(props) {
-  const { uploadFile, attachment, fileTypes, disabled, icon, buttonStyle } = props
+  const { onAccept, onCancel, attachment, fileTypes, disabled, icon, buttonStyle } = props
 
   const handleUploadFile = (files) => {
     if (!disabled && files && files[0]) {
-      uploadFile(files[0])
+      onAccept(files[0])
+    } else {
+      onCancel()
     }
   }
 
@@ -41,7 +43,8 @@ export default function CustomFileUploader(props) {
 }
 
 CustomFileUploader.propTypes = {
-  uploadFile: PropTypes.func.isRequired,
+  onAccept: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
   icon: PropTypes.object.isRequired,
   fileTypes: PropTypes.array.isRequired,
   buttonStyle: PropTypes.object,

@@ -65,8 +65,13 @@ export default class CandidateInfoForm extends Component {
           <AvatarWrapper>
             <AvatarUploader candidate={candidate} onAvatarUpload={
               (file) => {
-                this.changeProperty('avatarFile', file)
-                this.changeProperty('hasAvatar', true)
+                if (file) {
+                  this.changeProperty('avatarFile', file)
+                  this.changeProperty('hasAvatar', true)
+                } else {
+                  this.changeProperty('avatarFile', null)
+                  this.changeProperty('hasAvatar', false)
+                }
               }
             } />
             {this.state.updateAvatarMessage}

@@ -11,8 +11,13 @@ export default function IntervieweeSpecialFields(props) {
   }
 
   const handleResumeUploadChange = file => {
-    props.changeProperty('resume', file.name)
-    props.changeProperty('resumeFile', file)
+    if (file) {
+      props.changeProperty('resume', file.name)
+      props.changeProperty('resumeFile', file)
+    } else {
+      props.changeProperty('resume', '')
+      props.changeProperty('resumeFile', null)
+    }
   }
 
   return (

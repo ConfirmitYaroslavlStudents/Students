@@ -14,6 +14,10 @@ export default function AvatarUploader(props) {
     onAvatarUpload(file)
   }
 
+  const handleCancel = () => {
+    onAvatarUpload(null)
+  }
+
   const avatar =
     candidate.hasAvatar ?
       <ImageAvatar
@@ -30,7 +34,8 @@ export default function AvatarUploader(props) {
     <UploaderWrapper>
       { avatar }
       <FileUploader
-        uploadFile={handleFileUpload}
+        onAccept={handleFileUpload}
+        onCancel={handleCancel}
         fileTypes={['png', 'jpg', 'jpeg']}
         icon={<UploadIcon style={SmallerIconStyle}/>}
         buttonStyle={SmallButtonStyle}

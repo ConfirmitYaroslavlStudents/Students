@@ -30,7 +30,8 @@ function ResumeControls(props) {
   const fileUploader =
     interviewee.id !== onResumeUploading ?
       <FileUploader
-        uploadFile={handleFileUpload}
+        onAccept={handleFileUpload}
+        onCancel={() => {}}
         fileTypes={['pdf', 'doc', 'docx', 'txt']}
         icon={<UploadIcon style={SmallerIconStyle}/>}
         buttonStyle={SmallButtonStyle}

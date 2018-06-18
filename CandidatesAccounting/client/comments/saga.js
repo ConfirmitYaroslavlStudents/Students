@@ -1,7 +1,7 @@
 import { all, takeEvery, takeLatest, put, call, select } from 'redux-saga/effects'
 import * as actions from './actions'
 import * as applicationActions from '../applicationActions'
-import { addComment, deleteComment, addCommentAttachment, getCommentAttachment } from '../api/commentService.js'
+import { addComment, deleteComment, addCommentAttachment, getCommentAttachmentArrayBuffer } from '../api/commentService.js'
 import { getCandidate } from '../api/candidateService.js'
 
 const creator = ({ history }) => {
@@ -61,11 +61,12 @@ const creator = ({ history }) => {
     try {
       const {candidateId, comment} = action.payload
       let commentAttachment = null
-      /*
+
       if (comment.attachment && comment.attachment !== '') {
-        commentAttachment = yield call(getCommentAttachment, candidateId, comment.id)
+        const attachmentArrayBuffer = yield call(getCommentAttachmentArrayBuffer, candidateId, comment.id)
+        commentAttachment = new File([attachmentArrayBuffer], comment.attachment)
       }
-      */
+
       yield call(deleteComment, candidateId, comment.id)
       yield put(actions.deleteCommentSuccess({candidateId, commentId: comment.id, commentAttachment}))
     }
@@ -78,13 +79,12 @@ const creator = ({ history }) => {
     try {
       const {candidateId, comment } = action.payload
       comment.id = yield call(addComment, candidateId, comment)
-      comment.attachment = ''
-      /*
+
       let commentAttachment = yield select(state => state.comments.lastDeletedCommentAttachment)
       if (commentAttachment) {
         yield call(addCommentAttachment, candidateId, comment.id, commentAttachment)
       }
-      */
+
       yield put(actions.restoreCommentSuccess({candidateId, comment}))
     }
     catch (error) {

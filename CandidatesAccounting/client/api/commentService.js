@@ -55,7 +55,7 @@ export function addCommentAttachment(candidateId, commentId, attachment) {
     })
 }
 
-export function getCommentAttachment(candidateId, commentId) {
+export function getCommentAttachmentArrayBuffer(candidateId, commentId) {
   return fetch(
     '/interviewees/' + candidateId + '/comments/' + commentId + '/attachment',
     {
@@ -64,10 +64,8 @@ export function getCommentAttachment(candidateId, commentId) {
     })
   .then(response => {
     if (response.status === 200) {
-      const reader = response.body.getReader();
-      return reader.read().then(({ done, value }) => {
-        return value
-      })
+      const reader = response.body.getReader()
+      return reader.read().then(({ value }) => value.buffer)
     } else {
       throw response.status
     }

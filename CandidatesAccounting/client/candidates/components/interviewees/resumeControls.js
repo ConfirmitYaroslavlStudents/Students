@@ -15,6 +15,7 @@ import styled from 'styled-components'
 function ResumeControls(props) {
   const { interviewee, authorized, disabled, onResumeUploading, uploadResume } = props
   const resumeIsUploaded = interviewee.resume && interviewee.resume.trim() !== ''
+  const downloadButtonDisabled = !resumeIsUploaded || disabled
 
   const handleFileUpload = file => {
     uploadResume({ intervieweeId: interviewee.id, resume: file })
@@ -42,10 +43,10 @@ function ResumeControls(props) {
     <ResumeWrapper>
       { resumeFileName }
       <FileDownloader
-        disabled={!resumeIsUploaded || disabled}
+        disabled={downloadButtonDisabled}
         downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
       >
-        <IconButton icon={<DownloadIcon style={SmallerIconStyle}/>} style={SmallButtonStyle}/>
+        <IconButton icon={<DownloadIcon style={SmallerIconStyle}/>} style={SmallButtonStyle} disabled={downloadButtonDisabled} />
       </FileDownloader>
       { fileUploader }
     </ResumeWrapper>

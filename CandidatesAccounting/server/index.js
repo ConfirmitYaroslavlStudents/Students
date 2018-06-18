@@ -174,7 +174,7 @@ app.post('/interviewees/:intervieweeId/resume', (req, res) => {
 
   let file = req.files[Object.keys(req.files)[0]]
 
-  return addResume(req.params.intervieweeId, file.name, file.data).then((result, error) => {
+  return addResume(req.params.intervieweeId, file).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }
@@ -203,7 +203,7 @@ app.post('/:candidateStatus(interviewees|students|trainees)/:candidateId/comment
     return res.status(500).end()
   }
   let file = req.files[Object.keys(req.files)[0]];
-  return addAttachment(req.params.candidateId, req.params.commentId, file.name, file.data).then((result, error) => {
+  return addAttachment(req.params.candidateId, req.params.commentId, file).then((result, error) => {
     if (error) {
       return res.status(500).end()
     }

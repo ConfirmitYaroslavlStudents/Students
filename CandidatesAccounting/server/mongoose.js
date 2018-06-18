@@ -1,12 +1,13 @@
 import mongoose from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
+import serverConfig from './server.config.json'
 import {
   AccountSchema,
   CandidateSchema,
   TagSchema
 } from './schemas'
 
-const connectionURL = 'mongodb://localhost:27017/CandidateAccounting'
+const connectionURL = serverConfig.databaseConnectionURL
 
 mongoose.Promise = Promise
 
@@ -16,16 +17,20 @@ export function connect() {
 
 AccountSchema.plugin(passportLocalMongoose)
 export const Account = mongoose.model('Account', AccountSchema, 'accounts')
+
 const Candidate = mongoose.model('Candidate', CandidateSchema, 'candidates')
 const Tag = mongoose.model('Tag', TagSchema, 'tags')
 
-export function getCandidates(status) {
-  const searchSettings = status === 'Candidate' ? {} : { status }
+
+// Get database data
+
+export function getCandidates(candidateStatus) {
+  const searchSettings = candidateStatus === 'Candidate' ? {} : { status: candidateStatus }
   return Candidate.find(searchSettings).exec()
 }
 
-export function getCandidateById(id) {
-  return Candidate.findById(mongoose.Types.ObjectId(id)).exec()
+export function getCandidateById(candidateId) {
+  return Candidate.findById(mongoose.Types.ObjectId(candidateId)).exec()
 }
 
 export function getAllTags() {
@@ -33,10 +38,8 @@ export function getAllTags() {
     .then(tags => tags.map(tag => tag.title))
 }
 
-export function getNotifications(username) {
-  return Account.findOne({ username }).exec()
-    .then(account => account.notifications)
-}
+
+// Change database data
 
 export function addCandidate(newCandidate) {
   return Candidate.create(newCandidate)
@@ -46,31 +49,23 @@ export function addCandidate(newCandidate) {
     })
 }
 
-export function updateCandidate(id, candidateNewState) {
-  return Candidate.updateOne({_id: id}, {
+export function updateCandidate(candidateId, candidateNewState) {
+  let comments = candidateNewState.comments
+  if (!comments) {
+    comments = []
+  }
+  delete candidateNewState.comments
+  delete candidateNewState.id
+  return Candidate.updateOne({_id: candidateId}, {
     '$set': {
-      status: candidateNewState.status,
-      name: candidateNewState.name,
-      nickname: candidateNewState.nickname ? candidateNewState.nickname : '',
-      email: candidateNewState.email,
-      phoneNumber: candidateNewState.phoneNumber ? candidateNewState.phoneNumber : '',
-      hasAvatar: !!candidateNewState.hasAvatar,
-      avatar: candidateNewState.avatar ? candidateNewState.avatar : '',
-      tags: candidateNewState.tags,
-      subscribers: candidateNewState.subscribers,
-      interviewDate: candidateNewState.interviewDate ? candidateNewState.interviewDate : '',
-      resume: candidateNewState.resume ? candidateNewState.resume : '',
-      resumeFile: candidateNewState.resumeFile ? candidateNewState.resumeFile : '',
-      groupName: candidateNewState.groupName ? candidateNewState.groupName : '',
-      startingDate: candidateNewState.startingDate ? candidateNewState.startingDate : '',
-      endingDate: candidateNewState.endingDate ? candidateNewState.endingDate : '',
-      mentor: candidateNewState.mentor ? candidateNewState.mentor : ''
+      ...candidateNewState
     },
-    '$push': {comments: candidateNewState.comments ? candidateNewState.comments : []}})
-    .then(candidate => {
-      updateTags(candidateNewState.tags)
-      return candidate
-    })
+    '$push': { comments }
+  })
+  .then(candidate => {
+    updateTags(candidateNewState.tags)
+    return candidate
+  })
 }
 
 export function deleteCandidate(candidateId) {
@@ -91,16 +86,19 @@ export function addComment(candidateId, comment) {
     })
 }
 
+export function updateComment(candidateId, commentId, comment) {
+  return Candidate.updateOne({_id: candidateId, 'comments._id': commentId}, {$set: {'comments.$': comment}}).exec()
+  .then(() => {
+    return candidateId
+  })
+}
+
 export function deleteComment(candidateId, commentId) {
   return Candidate.findByIdAndUpdate(candidateId, {$pull: {comments: {_id: commentId}}}).exec()
 }
 
-export function updateComment(candidateId, commentId, comment) {
-  return Candidate.updateOne({_id: candidateId, 'comments._id': commentId}, {$set: {'comments.$': comment}}).exec()
-    .then(() => {
-      return candidateId
-    })
-}
+
+// Subscription methods
 
 export function subscribe(candidateId, email) {
   return Candidate.findByIdAndUpdate(candidateId, {$push: {subscribers: email}}).exec()
@@ -110,13 +108,8 @@ export function unsubscribe(candidateId, email) {
   return Candidate.findByIdAndUpdate(candidateId, {$pull: {subscribers: email}}).exec()
 }
 
-export function noticeNotification(username, notificationId) {
-  return Account.updateOne({username, 'notifications._id': notificationId}, {$set: {'notifications.$.recent': false}}).exec()
-}
 
-export function deleteNotification(username, notificationId) {
-  return Account.updateOne({username}, {$pull: {notifications: {_id: notificationId}}}).exec()
-}
+// Get/change avatar data
 
 export function getAvatar(candidateId) {
   return getCandidateById(candidateId)
@@ -127,18 +120,15 @@ export function getAvatar(candidateId) {
   })
 }
 
-export function addAvatar(id, avatarFile) {
-  return getCandidateById(id)
-  .then(candidate => {
-    candidate.avatar = avatarFile
-    candidate.hasAvatar = true
-    candidate.comments = []
-    return updateCandidate(id, candidate)
-  })
+export function addAvatar(candidateId, avatarFile) {
+  return updateCandidate(candidateId, { avatar: avatarFile, hasAvatar: true })
 }
 
-export function getResume(intervieweeId) {
-  return getCandidateById(intervieweeId)
+
+// Get/change resume data
+
+export function getResume(candidateId) {
+  return getCandidateById(candidateId)
     .then(interviewee => {
       return {
         resumeName: interviewee.resume,
@@ -147,24 +137,22 @@ export function getResume(intervieweeId) {
     })
 }
 
-export function addResume(id, resumeName, resumeFile) {
-  return getCandidateById(id)
-    .then(interviewee => {
-      interviewee.resume = resumeName
-      interviewee.resumeFile = resumeFile
-      interviewee.comments = []
-      return updateCandidate(id, interviewee)
-    })
+export function addResume(candidateId, resumeFile) {
+  return updateCandidate(candidateId, { resume: resumeFile.name, resumeFile: resumeFile.data })
 }
+
+
+// Get/change comment attachment data
 
 export function getAttachment(candidateId, commentId) {
   return getCandidateById(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
-        if (candidate.comments[i]._id.toString() === commentId) {
+        const comment = candidate.comments[i]
+        if (comment._id.toString() === commentId) {
           return {
-            attachmentName: candidate.comments[i].attachment,
-            attachmentData: candidate.comments[i].attachmentFile
+            attachmentName: comment.attachment,
+            attachmentData: comment.attachmentFile
           }
         }
       }
@@ -175,38 +163,54 @@ export function getAttachment(candidateId, commentId) {
     })
 }
 
-export function addAttachment(candidateId, commentId, attachmentName, attachmentData) {
+export function addAttachment(candidateId, commentId, attachmentFile) {
   return getCandidateById(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
-        if (candidate.comments[i]._id.toString() === commentId) {
-          candidate.comments[i].attachment = attachmentName
-          candidate.comments[i].attachmentFile = attachmentData
-          return updateComment(candidateId, commentId, candidate.comments[i])
+        let comment = candidate.comments[i]
+        if (comment._id.toString() === commentId) {
+          comment.attachment = attachmentFile.name
+          comment.attachmentFile = attachmentFile.data
+          return updateComment(candidateId, commentId, comment)
         }
       }
     })
 }
 
+
+// Get/change notification data
+
+export function getNotifications(username) {
+  return Account.findOne({ username }).exec()
+  .then(account => account.notifications)
+}
+
+function addNotification(source, recipient, notification) {
+  Account.findOneAndUpdate({ username: recipient }, {$push: {notifications: {recent: true, source: source, content: notification }}}).exec()
+}
+
+export function noticeNotification(username, notificationId) {
+  return Account.updateOne({ username, 'notifications._id': notificationId}, {$set: {'notifications.$.recent': false }}).exec()
+}
+
+export function deleteNotification(username, notificationId) {
+  return Account.updateOne({ username }, { $pull: { notifications: { _id: notificationId }}}).exec()
+}
+
+
+// Update tag database
+
 function updateTags(probablyNewTags) {
   getAllTags()
     .then(tags => {
-      const tagsToAdd = [];
+      const tagsToAdd = []
       probablyNewTags.forEach(tag => {
         if (!tags.includes(tag)) {
           tagsToAdd.push({ title: tag })
         }
       })
       if (tagsToAdd.length > 0) {
-        addTags(tagsToAdd)
+        Tag.create(tags)
       }
     })
-}
-
-function addTags(tags) {
-  Tag.create(tags)
-}
-
-function addNotification(source, recipient, notification) {
-  Account.findOneAndUpdate({username: recipient}, {$push: {notifications: {recent: true, source: source, content: notification}}}).exec()
 }

@@ -20,7 +20,7 @@ export default class ImageAvatar extends Component {
     if (this.state.imageUploaded) {
       return <Avatar src={source} alt={alternative.toUpperCase()} imgProps={{onError: this.handleError}}/>
     } else {
-      return <AccountIcon/>
+      return <AccountIcon style={{ height: 42, width: 42, color: '#3F51B5'}}/>
     }
   }
 }

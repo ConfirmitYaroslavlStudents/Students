@@ -14,12 +14,16 @@ import styled from 'styled-components'
 export default class CandidateInfoForm extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ status: props.candidate.status, tags: props.candidate.tags })
+    this.state = ({ status: props.candidate.status, tags: props.candidate.tags, updateAvatarMessage: '' })
   }
 
   changeProperty = (key, value) => {
     this.props.candidate[key] = value
-    this.setState({ })
+    if (key === 'avatarFile') {
+      this.setState({ updateAvatarMessage: 'avatar will be updated' })
+    } else {
+      this.setState({ })
+    }
   }
 
   changeCandidateStatus = (status) => {
@@ -64,8 +68,8 @@ export default class CandidateInfoForm extends Component {
                 this.changeProperty('avatarFile', file)
                 this.changeProperty('hasAvatar', true)
               }
-            }
-            />
+            } />
+            {this.state.updateAvatarMessage}
           </AvatarWrapper>
         </StatusAvatarWrapper>
         <TextFieldLabel>Tags</TextFieldLabel>
@@ -122,6 +126,7 @@ const StatusAvatarWrapper = styled.div`
 
 const AvatarWrapper = styled.div`
   display: inline-flex;
+  align-items: center;
   padding-top: 4px;
   margin-left: 32px;
 `

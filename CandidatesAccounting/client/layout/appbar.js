@@ -13,7 +13,7 @@ import styled from 'styled-components'
 function Appbar(props) {
   const { pageTitle, candidates, currentCandidateId } = props
 
-  let logoContent = <Logo />
+  let logoContent = <Logo style={{width: 38, height: 38}}/>
   let pageTitleContent = <span>{pageTitle}</span>
   let searchForm = <SearchForm />
 

@@ -122,11 +122,15 @@ td:last-child {
 }
 
 .letter-avatar {
+    width: 32px !important;
+    height: 32px !important;
     background-color: #3F51B5 !important;
     color: #F5F5F5 !important;
 }
 
 .letter-avatar-inverted {
+    width: 32px !important;
+    height: 32px !important;
     background-color: #F5F5F5 !important;
     color: #3F51B5 !important;
 }

@@ -29,7 +29,7 @@ MongoDB: https://www.mongodb.com/download-center#community
     databaseConnectionURL: connectionURL для MongoDB
 
 Конфигурационный файл авторизации (./server/authorization.config.json):
-    allowedLogins: список логинов (email'ов) пользователей, для которых разрешены регистрация и вход
+    allowedLogins: список логинов (email'ов) пользователей, для которых разрешены регистрация и вход (если пуст, то регистрация и вход разрешены для всех)
     sessionSecret: сессионный секретный ключ
 
 

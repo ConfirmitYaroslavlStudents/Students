@@ -175,6 +175,10 @@ td:last-child {
     white-space: nowrap;
 }
 
+.phone-number-input-label {
+    font-size: 90% !important;
+}
+
 .ql-editor {
     max-height: 180px;
     min-height: 180px;

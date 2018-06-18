@@ -1,65 +1,65 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import TextField from '@material-ui/core/TextField'
+import InputLabel from '@material-ui/core/InputLabel'
+import Input from '@material-ui/core/Input'
+import MaskedInput from 'react-text-mask'
+
+function TextMaskCustom(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={inputRef}
+      mask={['+', '7', ' ', /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  )
+}
+
+TextMaskCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+}
 
 export default class PhoneNumberField extends Component{
   constructor(props) {
     super(props)
-    this.state = {value: props.value ? props.value : ''}
+    this.state = { value: props.value }
   }
 
   handleChange = (event) => {
-    const formatedNumber = this.formatNumber(event.target.value)
-    this.props.onChange(formatedNumber)
-    this.setState({value: formatedNumber})
-  }
-
-  formatNumber = (number) => {
-    if (number.length >= 1 && number[0] !== '+') {
-      number = '+' + number
+    const phoneNumber = event.target.value
+    if (phoneNumber.replace(/\s/g, '').length === 14) {
+      this.props.onChange(phoneNumber)
+    } else {
+      this.props.onChange('')
     }
-    for (let i = 2; i < 14 && i < number.length; i++) {
-      if (i === 2 || i === 6) {
-        if (number[i] !== ' ') {
-          number = number.slice(0, i) + ' ' + number.slice(i)
-          i++
-        }
-      }
-      if (i === 10 || i === 13) {
-        if (number[i] !== '-') {
-          number = number.slice(0, i) + '-' + number.slice(i)
-          i++
-        }
-      }
-    }
-    return number.slice(0, 16)
+    this.setState({ value: phoneNumber })
   }
 
   render() {
+    const { label } = this.props
+
+    const id = 'phone-number-masked-input-' + label.replace(/\s/g, '-')
+
     return (
-      <TextField
-        label={this.props.label}
-        type='tel'
-        name={this.props.name}
-        placeholder={'+0 000 000-00-00'}
-        value={this.state.value}
-        onChange={this.handleChange}
-        required={this.props.required}
-        autoFocus={this.props.autoFocus}
-        error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}
-        margin='normal'
-        fullWidth
-      />
+      <div>
+        <InputLabel htmlFor={id} classes={{root: 'phone-number-input-label'}}>{label}</InputLabel>
+        <Input
+          id={id}
+          value={this.state.value}
+          onChange={this.handleChange}
+          inputComponent={TextMaskCustom}
+          fullWidth
+        />
+      </div>
     )
   }
 }
 
 PhoneNumberField.propTypes = {
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
   label: PropTypes.string,
-  autoFocus: PropTypes.bool,
-  checkValid: PropTypes.func,
-  required: PropTypes.bool,
-  name: PropTypes.string
 }

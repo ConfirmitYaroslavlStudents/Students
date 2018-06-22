@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import CommentText from './commentText'
-import RestoreCommentButton from './restoreButton'
+import RestoreCommentButton from './restoreCommentButton'
 import { formatDateTime } from '../../utilities/customMoment'
 import {
   CommentWrapper,

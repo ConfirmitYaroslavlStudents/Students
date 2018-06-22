@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import * as actions from '../candidates/actions'
 import { SELECTORS } from '../rootReducer'
 import NavLink from '../commonComponents/linkWrapper'
-import AddCandidateDialog from '../candidates/components/common/additionDialog'
+import AddCandidateDialog from '../candidates/components/common/addCandidateDialog'
 import styled from 'styled-components'
 
 function TablesBar(props) {

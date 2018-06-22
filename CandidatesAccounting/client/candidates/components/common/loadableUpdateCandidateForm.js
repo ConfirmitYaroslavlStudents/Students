@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
 
 const LoadableCandidateInfoForm = Loadable({
-  loader: () => import('./updateForm'),
+  loader: () => import('./updateCandidateForm'),
   loading: () =>
     <LoadingCandidateInfoWrapper>
       <SpinnerWrapper>

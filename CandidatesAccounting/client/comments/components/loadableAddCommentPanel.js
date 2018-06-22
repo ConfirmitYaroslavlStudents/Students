@@ -4,7 +4,7 @@ import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
 const LoadableAddCommentPanel = Loadable({
-  loader: () => import('./additionPanel'),
+  loader: () => import('./addCommentPanel'),
   loading: () =>
     <LoadingAddCommentPanelWrapper>
       <SpinnerWrapper>

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import CommentAttachment from './attachment'
+import CommentAttachment from './attachmentDownloader'
 import { formatDateTime } from '../../utilities/customMoment'
 import formatUserName from '../../utilities/formatUserName'
 import CommentText from './commentText'

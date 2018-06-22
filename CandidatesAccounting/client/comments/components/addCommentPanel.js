@@ -9,7 +9,7 @@ import ReactQuill from 'react-quill'
 import Comment from '../../utilities/comment'
 import SubscribeButton from './subscribeButton'
 import FileUploader from '../../commonComponents/fileUploader'
-import SetCursorToEnd from '../../utilities/setCursorToEnd'
+import getInnerHTMLCaretPosition from '../../utilities/getInnerHTMLCaretPosition'
 import styled from 'styled-components'
 
 export default class AddCommentPanel extends Component {
@@ -40,7 +40,7 @@ export default class AddCommentPanel extends Component {
   }
 
   handleCommentAdd = () => {
-    const {addComment, username, onCommentAdd, candidate, disabled } = this.props
+    const  { addComment, username, onCommentAdd, candidate, disabled } = this.props
 
     if (disabled) {
       return
@@ -79,9 +79,9 @@ export default class AddCommentPanel extends Component {
           <button className='ql-indent' value='-1' disabled={disabled}/>
           <button className='ql-indent' value='+1' disabled={disabled}/>
           <button className='ql-link' disabled={disabled}/>
-          <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(n)') }} disabled={disabled}>Ο(n)</button>
-          <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(nlogn)') }} disabled={disabled}>Ο(nlogn)</button>
-          <button className='quill-custom-button' onClick={() => { this.addCommentPattern('&#x039F(n^2)') }} disabled={disabled}>Ο(n^2)</button>
+          <button className='quill-custom-button' onClick={() => { this.addCommentTemplate('&#x039F(n)') }} disabled={disabled}>Ο(n)</button>
+          <button className='quill-custom-button' onClick={() => { this.addCommentTemplate('&#x039F(nlogn)') }} disabled={disabled}>Ο(nlogn)</button>
+          <button className='quill-custom-button' onClick={() => { this.addCommentTemplate('&#x039F(n^2)') }} disabled={disabled}>Ο(n^2)</button>
           <FileUploader
             onAccept={this.handleAttachFile}
             onCancel={this.handleAttachCancel}
@@ -94,18 +94,22 @@ export default class AddCommentPanel extends Component {
     )
   }
 
-  addCommentPattern = (patternValue) => {
+  addCommentTemplate = (templateText) => {
     const commentTextDiv = document.getElementById('commentReactQuill').firstElementChild.firstElementChild
-    let innerHTML = commentTextDiv.innerHTML
-    let i = innerHTML.length - 1
-    for (; i >= 4; i--)
-    {
-      if (innerHTML[i] === '<' && (innerHTML[i - 1] !== '>' || innerHTML.substring(i - 4, i) === '<br>')) {
-        break
+
+    let htmlCaretPosition = getInnerHTMLCaretPosition(commentTextDiv)
+
+    let htmlContent = commentTextDiv.innerHTML
+    let resultHTMLContent = ''
+
+    for (let i = 0; i < htmlContent.length; i++) {
+      if (i === htmlCaretPosition) {
+        resultHTMLContent += templateText
       }
+      resultHTMLContent += htmlContent[i]
     }
-    commentTextDiv.innerHTML = innerHTML.substring(0, i) + patternValue + innerHTML.substring(i, innerHTML.length)
-    SetCursorToEnd(commentTextDiv)
+
+    commentTextDiv.innerHTML = resultHTMLContent
   }
 
   render() {

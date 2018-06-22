@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import CommentText from './commentText'
-import CommentAttachment from './attachment'
+import CommentAttachment from './attachmentDownloader'
 import DeleteCommentButton from './deleteButton'
 import { formatDateTime } from '../../utilities/customMoment'
 import {

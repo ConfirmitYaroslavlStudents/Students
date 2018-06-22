@@ -86,17 +86,19 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const username = req.body.username
-  const allowedLogins = authorizationConfig.allowedLogins;
+  const allowedLogins = authorizationConfig.allowedLogins
   if (allowedLogins && allowedLogins.length > 0 && !allowedLogins.includes(username)) {
     return res.status(401).end()
   }
   return Account.findOne({ username }, (findError, user) => {
     if (findError) {
+      console.log(findError)
       return res.status(401).end()
     }
     if (!user) {
       Account.register(new Account({ username }), req.body.password, (registerError) => {
         if (registerError) {
+          console.log(registerError)
           return res.status(401).end()
         }
         passport.authenticate('local')(req, res, () => {

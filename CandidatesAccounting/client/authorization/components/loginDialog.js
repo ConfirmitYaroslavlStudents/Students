@@ -53,7 +53,7 @@ class LoginDialog extends Component {
                     Cancel
                   </FlatButton> : ''
               }
-              <FlatButton color='primary' disabled={authorizing} onClick={this.login}>
+              <FlatButton id='sign-in-button' color='primary' disabled={authorizing} onClick={this.login}>
                 Sign in
               </FlatButton>
               { linearProgress }

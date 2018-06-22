@@ -8,10 +8,7 @@ export const AccountSchema = new Schema({
     unique: true,
     required: true
   },
-  password: {
-    type: String,
-    required: true
-  },
+  password: String,
   notifications: [{
     recent: Boolean,
     source: {},

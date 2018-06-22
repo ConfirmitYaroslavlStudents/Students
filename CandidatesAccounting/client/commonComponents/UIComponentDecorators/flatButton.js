@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 export default function CustomFlatButton(props) {
   return (
     <Button
+      id = {props.id}
       color={props.color}
       onClick={props.onClick}
       style={props.style}
@@ -18,6 +19,7 @@ export default function CustomFlatButton(props) {
 CustomFlatButton.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  id: PropTypes.string,
   color: PropTypes.string,
   style: PropTypes.object,
 }

@@ -44,14 +44,14 @@ class AddCandidateDialog extends Component{
 
     return (
       <div className='inline-flex'>
-        <IconButton icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={!authorized} onClick={this.handleOpen} />
+        <IconButton id='add-candidate-button' icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={!authorized} onClick={this.handleOpen} />
         <DialogWindow
           title='Add new candidate'
           isOpen={this.state.isOpen}
           onRequestClose={this.handleClose}
           actions={
             <div className='inline-flex'>
-              <IconButton color='inherit' icon={<AddPersonIcon />} onClick={this.handleCandidateAdd}/>
+              <IconButton id='confirm-add-candidate' color='inherit' icon={<AddPersonIcon />} onClick={this.handleCandidateAdd}/>
               <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose} />
             </div>
           }>

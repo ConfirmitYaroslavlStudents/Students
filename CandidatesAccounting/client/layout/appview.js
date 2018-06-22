@@ -13,7 +13,7 @@ import CommentPage from '../comments/components/page'
 import SnackBar from '../commonComponents/UIComponentDecorators/snackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../commonComponents/UIComponentDecorators/spinner'
-import LoginDialog from '../authorization/components/loginDialog'
+import LoginDialog from '../authorization/components/signInDialog'
 import styled from 'styled-components'
 
 class AppView extends Component {

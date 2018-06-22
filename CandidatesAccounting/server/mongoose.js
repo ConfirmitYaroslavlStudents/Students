@@ -63,7 +63,9 @@ export function updateCandidate(candidateId, candidateNewState) {
     '$push': { comments }
   })
   .then(candidate => {
-    updateTags(candidateNewState.tags)
+    if (candidateNewState.tags && candidateNewState.tags.length > 0) {
+      updateTags(candidateNewState.tags)
+    }
     return candidate
   })
 }

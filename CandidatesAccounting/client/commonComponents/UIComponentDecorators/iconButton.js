@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 export default function CustomIconButton(props) {
   return (
     <IconButton
+      id = {props.id}
       color={props.color}
       onClick={props.onClick ? props.onClick : () => {}}
       disabled={props.disabled}
@@ -23,4 +24,5 @@ CustomIconButton.propTypes = {
   size: PropTypes.string,
   color: PropTypes.string,
   style: PropTypes.object,
-};
+  id: PropTypes.string
+}

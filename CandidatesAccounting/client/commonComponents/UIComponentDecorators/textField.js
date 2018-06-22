@@ -19,6 +19,7 @@ export default class CustomTextField extends Component{
         label={this.props.label}
         type={this.props.type}
         name={this.props.name}
+        id={this.props.id}
         placeholder={this.props.placeholder}
         value={this.state.value}
         onChange={this.handleChange}
@@ -42,5 +43,6 @@ CustomTextField.propTypes = {
   checkValid: PropTypes.func,
   required: PropTypes.bool,
   name: PropTypes.string,
+  id: PropTypes.string,
   type: PropTypes.string,
 }

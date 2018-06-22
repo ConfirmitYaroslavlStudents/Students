@@ -8,6 +8,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import LastPageIcon from '@material-ui/icons/LastPage'
 import SelectInput from './UIComponentDecorators/selectInput'
+import RowAmountDisplay from './rowAmountDisplay'
 import styled from 'styled-components'
 
 export default function SortablePaginatedTable(props) {
@@ -77,11 +78,11 @@ export default function SortablePaginatedTable(props) {
               onChange={handleRowsPerPageChange}
             />
           </RowsPerPageWrapper>
-          <span>
-            {Math.min(props.offset + 1, props.totalCount)}
-            -
-            {Math.min(props.offset + props.rowsPerPage, props.totalCount)} of {props.totalCount}
-          </span>
+          <RowAmountDisplay
+            from={Math.min(props.offset + 1, props.totalCount)}
+            to={Math.min(props.offset + props.rowsPerPage, props.totalCount)}
+            total={props.totalCount}
+          />
           <IconButton
             onClick={handleFirstPageButtonClick}
             disabled={props.offset === 0}

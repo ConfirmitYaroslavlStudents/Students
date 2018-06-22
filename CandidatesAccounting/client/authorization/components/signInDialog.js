@@ -5,8 +5,9 @@ import * as actions from '../actions'
 import { SELECTORS } from '../../rootReducer'
 import FlatButton from '../../commonComponents/UIComponentDecorators/flatButton'
 import Dialog from '../../commonComponents/UIComponentDecorators/dialogSimple'
-import LoginForm from './loginForm'
+import LoginForm from './signInForm'
 import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
+import SignInButton from './signInButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
 
@@ -26,7 +27,7 @@ class LoginDialog extends Component {
     this.setState({ isOpen: false })
   }
 
-  login = () => {
+  signIn = () => {
     if (isEmail(this.account.email) && isNotEmpty(this.account.password)) {
       this.props.login({email: this.account.email, password: this.account.password})
     }
@@ -53,14 +54,12 @@ class LoginDialog extends Component {
                     Cancel
                   </FlatButton> : ''
               }
-              <FlatButton id='sign-in-button' color='primary' disabled={authorizing} onClick={this.login}>
-                Sign in
-              </FlatButton>
+              <SignInButton onClick={this.signIn} disabled={authorizing}/>
               { linearProgress }
             </DialogActionsWrapper>
           }
         >
-          <LoginForm account={this.account} onEnterPress={this.login}/>
+          <LoginForm account={this.account} onEnterPress={this.signIn}/>
         </Dialog>
       </div>
     )

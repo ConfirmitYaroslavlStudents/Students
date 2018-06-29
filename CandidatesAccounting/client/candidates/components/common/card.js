@@ -12,97 +12,91 @@ import { SmallerIconStyle } from '../../../commonComponents/styleObjects'
 export default function CandidateCard(props) {
   const { candidate, tags, authorized } = props
 
-  let fields = []
+  const fields = []
 
-  fields.push({
-    key: 'Full name: ',
-    value:
-      <span>
-        {candidate.name}
-        <NicknameWrapper nickname={candidate.nickname}/>
-      </span>
-  })
-
-  if (candidate.tags && candidate.tags.length !== 0) {
-    fields.push({
-      key: 'Tags: ',
-      value: <TagList candidateTags={candidate.tags} />
-    })
+  const addField = (label, value) => {
+    fields.push({ label: label, value: value })
   }
 
-  fields.push({
-    key: 'Status: ',
-    value: candidate.status
-  })
+  addField(
+    'Full name',
+    <span>
+      {candidate.name}
+      <NicknameWrapper nickname={candidate.nickname}/>
+    </span>
+  )
+
+  if (candidate.tags && candidate.tags.length !== 0) {
+    addField('Tags', <TagList candidateTags={candidate.tags} />)
+  }
+
+  addField('Status', candidate.status)
 
   if (candidate.email && candidate.email !== '') {
-    fields.push({
-      key: 'Email: ',
-      value:
-        <EmailWrapper email={candidate.email}>
-          {candidate.email}
-        </EmailWrapper>
-    })
+    addField(
+      'Email',
+      <EmailWrapper email={candidate.email}>
+        {candidate.email}
+      </EmailWrapper>
+    )
   }
 
   if (candidate.phoneNumber && candidate.phoneNumber !== '') {
-    fields.push({
-      key: 'Phone number: ',
-      value:
-        <PhoneNumberWrapper number={candidate.phoneNumber}>
-          {candidate.phoneNumber}
-        </PhoneNumberWrapper>
-    })
+    addField(
+      'Phone number',
+      <PhoneNumberWrapper number={candidate.phoneNumber}>
+        {candidate.phoneNumber}
+      </PhoneNumberWrapper>
+    )
   }
 
   if (candidate.interviewDate && candidate.interviewDate !== '') {
-    fields.push({
-      key: 'Interview date: ',
-      value: candidate.interviewDate
-    })
+    addField(
+      'Interview date',
+      candidate.interviewDate
+    )
   }
 
   if (candidate.resume && candidate.resume !== '') {
-    fields.push({
-      key: 'CV: ',
-      value:
-        <FileDownloader
-          downloadLink={window.location.origin + '/'
-          + props.candidate.status.toLowerCase() + 's/'
-          + props.candidate.id
-          + '/resume'}
-          withoutButton>
-          <CVWrapper>{candidate.resume}</CVWrapper>
-        </FileDownloader>
-    })
+    addField(
+      'CV',
+      <FileDownloader
+        downloadLink={window.location.origin + '/'
+        + props.candidate.status.toLowerCase() + 's/'
+        + props.candidate.id
+        + '/resume'}
+        withoutButton>
+        <CVWrapper>{candidate.resume}</CVWrapper>
+      </FileDownloader>
+    )
   }
 
   if (candidate.groupName && candidate.groupName !== '') {
-    fields.push({
-      key: 'Group name: ',
-      value: candidate.groupName
-    })
+    addField(
+      'Group name',
+      candidate.groupName
+    )
   }
 
   if (candidate.startingDate && candidate.startingDate !== '') {
-    fields.push({
-      key: 'Learning start: ',
-      value: candidate.startingDate
-    })
+    addField(
+      'Learning start',
+      candidate.startingDate
+    )
   }
 
   if (candidate.endingDate && candidate.endingDate !== '') {
-    fields.push({
-      key: 'Learning end: ',
-      value: candidate.endingDate
-    })
+    addField(
+      'Learning end',
+      candidate.endingDate
+    )
   }
 
   if (candidate.mentor && candidate.mentor !== '') {
-    fields.push({
-      key: 'Mentor: ',
-      value: candidate.mentor
-    })
+    addField(
+      'Mentor',
+      candidate.mentor
+    )
   }
 
   return (
@@ -112,10 +106,10 @@ export default function CandidateCard(props) {
       </UpdateButtonWrapper>
 
       {fields.map((field, index) =>
-        <KeyValueWrapper key={index}>
-          <KeyWrapper>{field.key}</KeyWrapper>
+        <FieldWrapper key={index}>
+          <LabelWrapper>{field.label + ': '}</LabelWrapper>
           <ValueWrapper>{field.value}</ValueWrapper>
-        </KeyValueWrapper>
+        </FieldWrapper>
       )}
     </CandidateCardWrapper>
   )
@@ -139,11 +133,11 @@ const UpdateButtonWrapper = styled.div`
   right: 20px;
 `
 
-const KeyValueWrapper = styled.div`
+const FieldWrapper = styled.div`
   margin: 6px;
 `
 
-const KeyWrapper = styled.span`
+const LabelWrapper = styled.span`
   font-size: 105%;
   font-weight: bold;
   color: #555;

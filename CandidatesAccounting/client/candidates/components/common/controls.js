@@ -3,16 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as commentActions from '../../../comments/actions'
 import { SELECTORS } from '../../../rootReducer'
-import { MediumButtonStyle } from '../../../commonComponents/styleObjects'
-import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
-import UpdateCandidateDialog from './updateCandidateDialog'
-import DeleteCandidateDialog from './deleteCandidateDialog'
-import CommentIcon from '@material-ui/icons/ViewList'
-import Badge from '../../../commonComponents/UIComponentDecorators/badge'
-import NavLink from '../../../commonComponents/linkWrapper'
 import AddCommentDialog from '../../../comments/components/addCommentDialog'
-import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
-import styled from 'styled-components'
+import OpenCommentPageButton from './openCommentPageButton'
+import UpdateCandidateControl from './updateCandidateControl'
+import DeleteCandidateControl from './deleteCandidateControl'
 
 function CandidateControls(props) {
   const { fetching, authorized, onUpdating, onDeleting, candidate, openCommentPage } = props
@@ -26,41 +20,27 @@ function CandidateControls(props) {
     }
   }
 
-  const updateCandidateDialog =
-    candidateOnUpdating ?
-      <SpinnerWrapper><Spinner size={26}/></SpinnerWrapper>
-      :
-      <UpdateCandidateDialog
-        candidate={candidate}
-        disabled={fetching || candidateOnDeleting || !authorized}
-      />
-
-  const deleteCandidateDialog =
-    candidateOnDeleting ?
-      <SpinnerWrapper><Spinner size={26}/></SpinnerWrapper>
-      :
-      <DeleteCandidateDialog
-        candidateId={candidate.id}
-        disabled={fetching || candidateOnUpdating || !authorized}
-      />
-
   return (
-    <div className='flex'>
+    <div className='block-div'>
       <AddCommentDialog
         candidate={candidate}
         disabled={fetching || candidateOnDeleting || !authorized}
       />
-      <NavLink onClick={handleCandidateCommentPageOpen}>
-        <Badge badgeContent={candidate.commentAmount} disabled={fetching}>
-          <IconButton
-            icon={<CommentIcon />}
-            style={MediumButtonStyle}
-            disabled={fetching || candidateOnDeleting}
-          />
-        </Badge>
-      </NavLink>
-      { updateCandidateDialog }
-      { deleteCandidateDialog }
+      <OpenCommentPageButton
+        onClick={handleCandidateCommentPageOpen}
+        commentAmount={candidate.commentAmount}
+        disabled={fetching}
+      />
+      <UpdateCandidateControl
+        candidate={candidate}
+        candidateIdOnUpdating={onUpdating}
+        disabled={fetching || candidateOnDeleting || !authorized}
+      />
+      <DeleteCandidateControl
+        candidateId={candidate.id}
+        candidateIdOnDeleting={onDeleting}
+        disabled={fetching || candidateOnUpdating || !authorized}
+      />
     </div>
   )
 }
@@ -81,12 +61,3 @@ export default connect(state => ({
     onDeleting: SELECTORS.CANDIDATES.ONDELETING(state)
   }
 ), commentActions)(CandidateControls)
-
-const SpinnerWrapper = styled.div`
-  display: inline-flex;
-  align-items: center;
-  padding-left: 7px;
-  box-sizing: border-box;
-  width: 40px;
-  height: 40px;
-`

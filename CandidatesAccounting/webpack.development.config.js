@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -18,6 +19,10 @@ module.exports = {
   },
 
   plugins: [
+    new CopyWebpackPlugin([
+      {from: path.join(__dirname, 'favicon.ico'), to: path.join(__dirname, 'server', 'favicon.ico')},
+      {from: path.join(__dirname, 'manifest.json'), to: path.join(__dirname, 'server', 'manifest.json')}
+    ]),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale?!\\ru.js$/, /moment$/)

@@ -68,11 +68,11 @@ function CandidatesTable(props) {
   }
 
   const handleCandidatesPerPageChange = candidatesPerPage => {
-    setCandidatesPerPage({candidatesPerPage})
+    setCandidatesPerPage({ candidatesPerPage })
   }
 
   const handleSortingFieldChange = sortingField => {
-    setSortingField({sortingField})
+    setSortingField({ sortingField })
   }
 
   const candidateHeaders = getHeaders()

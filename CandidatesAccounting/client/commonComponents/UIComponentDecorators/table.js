@@ -37,7 +37,7 @@ export default function CustomTable(props) {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={props.headers.length}>
-              {props.footerActions}
+              {props.footer}
             </TableCell>
           </TableRow>
         </TableFooter>
@@ -50,7 +50,7 @@ export default function CustomTable(props) {
 CustomTable.propTypes = {
   headers: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   rows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  footerActions: PropTypes.object.isRequired,
+  footer: PropTypes.object.isRequired,
 }
 
 const EmptyTable = styled.div`

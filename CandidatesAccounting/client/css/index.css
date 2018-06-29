@@ -47,6 +47,10 @@ td:last-child {
     width: 28px !important;
 }
 
+.block-div {
+    display: flex;
+}
+
 .button-content {
     display: flex;
     align-items: center;
@@ -115,6 +119,10 @@ td:last-child {
     opacity: 0;
     position: absolute;
     z-index: -1;
+}
+
+.inline-div {
+    display: inline-flex;
 }
 
 .inline-flex {

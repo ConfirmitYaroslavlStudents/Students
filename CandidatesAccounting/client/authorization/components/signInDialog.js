@@ -38,7 +38,7 @@ class LoginDialog extends Component {
     const linearProgress = authorizing ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : ''
 
     return (
-      <div className='inline-flex centered'>
+      <div className='inline-div centered'>
         <FlatButton color='inherit' onClick={this.handleOpen}>
           Sign on / Sign in
         </FlatButton>

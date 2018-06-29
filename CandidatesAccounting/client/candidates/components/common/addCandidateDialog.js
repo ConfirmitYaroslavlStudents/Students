@@ -6,21 +6,22 @@ import { SELECTORS } from '../../../rootReducer'
 import { checkCandidateValidation } from '../../../utilities/candidateValidators'
 import Candidate from '../../../utilities/candidate'
 import DialogWindow from '../../../commonComponents/UIComponentDecorators/dialogWindow'
-import AddPersonIcon from '@material-ui/icons/PersonAdd'
-import CloseIcon from '@material-ui/icons/Close'
 import LoadableCandidateUpdateForm from './loadableUpdateCandidateForm'
+import AddCandidateDialogActions from './addCandidateDialogActions'
+import AddPersonIcon from '@material-ui/icons/PersonAdd'
 import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
 import {MediumButtonStyle} from '../../../commonComponents/styleObjects'
 
 class AddCandidateDialog extends Component{
   constructor(props) {
-    super(props);
+    super(props)
     this.state = ({ isOpen: false })
     this.newCandidate = {}
   }
 
   handleOpen = () => {
-    const candidateStatus = this.props.candidateStatus === 'Student' || this.props.candidateStatus === 'Trainee' ?
+    const candidateStatus =
+      this.props.candidateStatus === 'Student' || this.props.candidateStatus === 'Trainee' ?
       this.props.candidateStatus
       :
       'Interviewee'
@@ -40,25 +41,22 @@ class AddCandidateDialog extends Component{
   }
 
   render() {
+    const { isOpen } = this.state
     const { authorized, tags } = this.props
 
     return (
-      <div className='inline-flex'>
-        <IconButton id='add-candidate-button' icon={<AddPersonIcon />} style={MediumButtonStyle} disabled={!authorized} onClick={this.handleOpen} />
+      <div className='inline-div'>
+        <IconButton icon={<AddPersonIcon />} onClick={this.handleOpen} style={MediumButtonStyle} disabled={!authorized} />
         <DialogWindow
           title='Add new candidate'
-          isOpen={this.state.isOpen}
+          isOpen={isOpen}
           onRequestClose={this.handleClose}
-          actions={
-            <div className='inline-flex'>
-              <IconButton id='confirm-add-candidate' color='inherit' icon={<AddPersonIcon />} onClick={this.handleCandidateAdd}/>
-              <IconButton color='inherit' icon={<CloseIcon />} onClick={this.handleClose} />
-            </div>
-          }>
-            <LoadableCandidateUpdateForm
-              candidate={this.newCandidate}
-              tags={tags}
-            />
+          actions={<AddCandidateDialogActions onAcceptClick={this.handleCandidateAdd} onCancelClick={this.handleClose} />}
+        >
+          <LoadableCandidateUpdateForm
+            candidate={this.newCandidate}
+            tags={tags}
+          />
         </DialogWindow>
       </div>
     )

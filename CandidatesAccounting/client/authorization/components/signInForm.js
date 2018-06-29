@@ -7,7 +7,7 @@ import styled from 'styled-components'
 export default class LoginForm extends Component {
   constructor(props) {
     super(props)
-    this.state = {email: '', password: ''}
+    this.state = { email: '', password: '' }
   }
 
   handleEmailChange = email => {
@@ -42,18 +42,17 @@ export default class LoginForm extends Component {
           onChange={this.handleEmailChange}
           onKeyDown={this.handleKeyDown}
         />
-        <PasswordInputWrapper>
-          <Input
-            id='password-input'
-            type='password'
-            value={this.state.password}
-            label='Password'
-            fullWidth
-            checkValid={isNotEmpty}
-            onChange={this.handlePasswordChange}
-            onKeyDown={this.handleKeyDown}
-          />
-        </PasswordInputWrapper>
+        <br />
+        <Input
+          id='password-input'
+          type='password'
+          value={this.state.password}
+          label='Password'
+          fullWidth
+          checkValid={isNotEmpty}
+          onChange={this.handlePasswordChange}
+          onKeyDown={this.handleKeyDown}
+        />
       </LoginFormWrapper>
     )
   }
@@ -66,8 +65,4 @@ LoginForm.propTypes = {
 
 const LoginFormWrapper = styled.div`
   width: 400px;
-`
-
-const PasswordInputWrapper = styled.div`
-  margin-top: 24px;
 `

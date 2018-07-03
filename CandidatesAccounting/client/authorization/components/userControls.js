@@ -6,7 +6,7 @@ import { SELECTORS } from '../../rootReducer'
 import LoginDialog from './signInDialog'
 import UsernameWrapper from './usernameWrapper'
 import NotificationCenterPopover from '../../notifications/components/centerPopover'
-import LogoutButton from './logoutButton'
+import LogoutButton from './signOutButton'
 
 function UserControls(props) {
   const { authorized, authorizing, logout, username } = props

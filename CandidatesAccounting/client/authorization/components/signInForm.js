@@ -41,6 +41,7 @@ export default class LoginForm extends Component {
           checkValid={isEmail}
           onChange={this.handleEmailChange}
           onKeyDown={this.handleKeyDown}
+          data-test-email-input
         />
         <br />
         <Input
@@ -52,6 +53,7 @@ export default class LoginForm extends Component {
           checkValid={isNotEmpty}
           onChange={this.handlePasswordChange}
           onKeyDown={this.handleKeyDown}
+          data-test-password-input
         />
       </LoginFormWrapper>
     )

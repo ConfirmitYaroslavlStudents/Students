@@ -8,6 +8,7 @@ export default function CustomInput(props) {
     <div>
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
       <Input
+        {...props}
         id={props.id}
         type={props.type}
         value={props.value}

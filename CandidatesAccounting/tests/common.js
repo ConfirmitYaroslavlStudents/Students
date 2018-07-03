@@ -1,15 +1,13 @@
-import { waitForReact, ReactSelector } from 'testcafe-react-selectors'
+import { Selector } from 'testcafe'
 
 const testEmail = 'test.test@confirmit.com'
 const testPassword = 'password'
 
 export function signIn() {
   return async t => {
-    await waitForReact()
-
-    const emailInput = ReactSelector('Input').withProps({ type: 'email' })
-    const passwordInput = ReactSelector('Input').withProps({ type: 'password' })
-    const signInButton = ReactSelector('SignInButton')
+    const emailInput = Selector('div[data-test-email-input]').find('input')
+    const passwordInput = Selector('div[data-test-password-input]').find('input')
+    const signInButton = Selector('button[data-test-sign-in-button]')
 
     await t
     .typeText(emailInput, testEmail)

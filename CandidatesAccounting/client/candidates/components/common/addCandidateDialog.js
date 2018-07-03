@@ -46,7 +46,7 @@ class AddCandidateDialog extends Component{
 
     return (
       <div className='inline-div'>
-        <IconButton icon={<AddPersonIcon />} onClick={this.handleOpen} style={MediumButtonStyle} disabled={!authorized} />
+        <IconButton icon={<AddPersonIcon />} onClick={this.handleOpen} style={MediumButtonStyle} disabled={!authorized} data-test-add-candidate-button/>
         <DialogWindow
           title='Add new candidate'
           isOpen={isOpen}

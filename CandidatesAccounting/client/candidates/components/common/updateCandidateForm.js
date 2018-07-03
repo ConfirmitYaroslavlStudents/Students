@@ -53,7 +53,7 @@ export default class CandidateInfoForm extends Component {
     const { candidate, tags } = this.props
 
     return (
-      <CandidateFormWrapper>
+      <CandidateFormWrapper data-test-candidate-form>
         <StatusAvatarWrapper>
           <SelectInput
             label="Candidate's status"

@@ -240,3 +240,4 @@ CandidatesAccounting/.vs
 CandidatesAccounting/dist
 *.pdf
 *stats*.json
+CandidatesAccounting/tests/__screenshots__/

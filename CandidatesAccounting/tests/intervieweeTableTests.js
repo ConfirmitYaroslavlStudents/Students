@@ -2,7 +2,7 @@ import { Selector } from 'testcafe'
 import { signIn } from './common'
 import handleScreenshot from './handleScreenshot'
 
-const screenshotDirectory = './tests/screenshots/'
+const screenshotDirectory = './tests/__screenshots__/intervieweeTableTests/'
 
 fixture `Interviewee table`
   .page(`http://localhost:3000/interviewees/`)
@@ -16,7 +16,7 @@ test('Empty update interviewee form', async t => {
 
   await t
   .click(openAddCandidateDialogButton)
-  .takeElementScreenshot(candidateForm, screenshotFileName)
+  .takeElementScreenshot(candidateForm, 'intervieweeTableTests/' + screenshotFileName)
 
   const screenshotHandleResult = await handleScreenshot(screenshotDirectory, screenshotFileName, 0)
 

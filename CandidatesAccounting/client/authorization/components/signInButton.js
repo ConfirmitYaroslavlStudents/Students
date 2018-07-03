@@ -4,7 +4,7 @@ import FlatButton from '../../commonComponents/UIComponentDecorators/flatButton'
 
 export default function SignInButton(props) {
   return (
-    <FlatButton color='primary' disabled={props.disabled} onClick={props.onClick}>
+    <FlatButton color='primary' disabled={props.disabled} onClick={props.onClick} data-test-sign-in-button>
       Sign in
     </FlatButton>
   )

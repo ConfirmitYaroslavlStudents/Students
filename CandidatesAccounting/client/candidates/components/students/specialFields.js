@@ -20,15 +20,19 @@ export default function StudentSpecialFields(props) {
       <TextField
         onChange={handleGroupNameChange}
         label='Group name'
-        value={props.student.groupName}/>
+        value={props.student.groupName}
+        mark='data-test-student-group-name-input'
+      />
       <DatePicker
         label='Learning start date'
         defaultValue={toDatePickerFormat(props.student.startingDate)}
-        onChange={handleLearningStartDateChange}/>
+        onChange={handleLearningStartDateChange}
+      />
       <DatePicker
         label='Learning end date'
         defaultValue={toDatePickerFormat(props.student.endingDate)}
-        onChange={handleLearningEndDateChange}/>
+        onChange={handleLearningEndDateChange}
+      />
     </div>
   )
 }

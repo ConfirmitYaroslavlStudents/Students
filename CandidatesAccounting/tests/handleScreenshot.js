@@ -1,51 +1,146 @@
 import fs from 'fs'
-import resemble from 'resemblejs'
+import compareImages from 'resemblejs/compareImages'
 
-resemble.outputSettings({
-  errorColor: {
-    red: 255,
-    green: 0,
-    blue: 0
+const defaultOptions = {
+  maxMisMatchPersentage: 2,
+  output: {
+    errorColor: {
+      red: 255,
+      green: 0,
+      blue: 0
+    },
+    errorType: 'movement',
+    transparency: 0.85,
+    largeImageThreshold: 1200,
+    useCrossOrigin: false,
+    outputDiff: true
   },
-  errorType: 'movement',
-  largeImageThreshold: 1200,
-  useCrossOrigin: false,
-})
+  scaleToSameSize: true,
+  ignore: 'antialiasing'
+}
 
-export default function handleScreenshot(screenshotDirectory, newScreenshotFileName, maxMisMatchPercentage) {
-  const newScreenshotPath = screenshotDirectory + newScreenshotFileName
-  const baseScreenshotPath = screenshotDirectory + newScreenshotFileName.split('.')[0] + '-base.png'
-  const diffScreenshotPath = screenshotDirectory + newScreenshotFileName.split('.')[0] + '-diff.png'
+export default async function handleScreenshot(t, selector, options) {
+  const comparisonOptions = {
+    ...defaultOptions,
+    ...options
+  }
 
-  return new Promise((resolve, reject) => {
-    if (fs.existsSync(baseScreenshotPath)) {
+  const browserName = t.testRun.browserConnection.browserInfo.providerName
+  const testName = formatName(t.testRun.test.name)
+  const fixtureFolderName = formatName(t.testRun.test.fixture.name)
 
-      // comparation with base screenshot
-      resemble(baseScreenshotPath).compareTo(newScreenshotPath).onComplete(data => {
-        if (!data || data.error) {
-          reject()
-        }
-        if (Number(data.misMatchPercentage) > maxMisMatchPercentage) {
+  const testScreenshotsPath = t.testRun.opts.screenshotPath + '\\' + fixtureFolderName + '\\' + browserName + '\\'
 
-          // differences output creation
-          fs.writeFileSync(diffScreenshotPath, data.getBuffer())
-          resolve(false)
-        } else {
+  const screenshotNumber = getScreenshotNumber(t, testName)
+  const newScreenshotName = testName + '-' + screenshotNumber + '.png'
+  const baseScreenshotName = testName + '-' + screenshotNumber + '-base.png'
+  const diffScreenshotName = testName + '-' + screenshotNumber + '-diff.png'
 
-          // no needed files removal
-          fs.unlinkSync(newScreenshotPath)
-          if (fs.existsSync(diffScreenshotPath)) {
-            fs.unlinkSync(diffScreenshotPath)
-          }
-          resolve(true)
-        }
-      })
+  let screenshotsAreDifferent = false
+  let misMatchPercentage = 0
 
+  const baseScreenshotExist = fs.existsSync(testScreenshotsPath + baseScreenshotName)
+  if (baseScreenshotExist) {
+    await t.takeElementScreenshot(selector, fixtureFolderName + '\\' + browserName + '\\' + newScreenshotName)
+
+    const comparisonResult =
+      await compareScreenshotWithBaseOne(
+        testScreenshotsPath + baseScreenshotName,
+        testScreenshotsPath + newScreenshotName,
+        comparisonOptions
+      )
+
+    logComparisonResult(comparisonResult, browserName, newScreenshotName, comparisonOptions)
+
+    misMatchPercentage = Number(comparisonResult.misMatchPercentage)
+
+    if (misMatchPercentage <= comparisonOptions.maxMisMatchPersentage) {
+      deleteScreenshot(testScreenshotsPath + newScreenshotName)
+      deleteScreenshot(testScreenshotsPath + diffScreenshotName)
     } else {
-
-      // base screenshot creation
-      fs.renameSync(newScreenshotPath, baseScreenshotPath)
-      resolve(true)
+      screenshotsAreDifferent = true
+      writeDifferenceScreenshot(testScreenshotsPath + diffScreenshotName, comparisonResult.getBuffer())
     }
-  })
+  } else {
+    await t.takeElementScreenshot(selector, fixtureFolderName + '\\' + browserName + '\\' + baseScreenshotName)
+    logBaseScreenshotCreation(browserName, baseScreenshotName)
+  }
+
+  const assertiondFailMessage = 'There is a difference between screenshots (' + misMatchPercentage + '%). Check ' + testScreenshotsPath + diffScreenshotName
+  await t.expect(screenshotsAreDifferent).notOk(assertiondFailMessage)
+
+  return t
+}
+
+
+function formatName(name) {
+  let testFolderName = ''
+  let spaceRemoved = false
+
+  for (let i = 0; i < name.length; i++) {
+    if (name[i] === ' ') {
+      spaceRemoved = true
+      continue
+    }
+    if (spaceRemoved) {
+      testFolderName += name[i].toUpperCase()
+      spaceRemoved = false
+    } else {
+      testFolderName += name[i].toLowerCase()
+    }
+  }
+
+  return testFolderName
+}
+
+
+function getScreenshotNumber(t, testName) {
+  let screenshotNumber = 1
+  if (!t.ctx[testName] || !t.ctx[testName].screenshotNumber) {
+    t.ctx[testName] = { screenshotNumber: 1 }
+  } else {
+    screenshotNumber++
+    t.ctx[testName].screenshotNumber = screenshotNumber
+  }
+  return screenshotNumber
+}
+
+
+async function compareScreenshotWithBaseOne(baseScreenshotPath, newScreenshotPath, options) {
+  const baseScreenshot = fs.readFileSync(baseScreenshotPath)
+  const newScreenshot = fs.readFileSync(newScreenshotPath)
+
+  return await compareImages(baseScreenshot, newScreenshot, options)
+}
+
+
+function deleteScreenshot(path) {
+  if (fs.existsSync(path)) {
+    fs.unlinkSync(path)
+  }
+}
+
+
+function writeDifferenceScreenshot(path, buffer) {
+  fs.writeFileSync(path, buffer)
+}
+
+
+function logComparisonResult(comparisonResult, browserName, screenshotName, options) {
+  const passed = comparisonResult.misMatchPercentage <= options.maxMisMatchPersentage
+  let consoleStyle = passed ? '\x1b[32m%s\x1b[0m' : '\x1b[31m%s\x1b[0m'
+
+  let message = 'Screenshot comparison (' + browserName + ') ' + (passed ? 'passed' : 'failed') + ': '
+  message += screenshotName + '. '
+  message += 'Difference ' + comparisonResult.misMatchPercentage + '% '
+  message += passed ? 'within the norm (<=' + options.maxMisMatchPersentage + '%). ' : 'outside the norm (>' + options.maxMisMatchPersentage + '%). '
+
+  console.log(consoleStyle, message)
+}
+
+
+function logBaseScreenshotCreation(browserName, baseScreenshotName) {
+  let consoleStyle = '\x1b[34m%s\x1b[0m'
+  let message = 'New base screenshot is created (' + browserName + '): ' + baseScreenshotName + '. '
+  console.log(consoleStyle, message)
 }

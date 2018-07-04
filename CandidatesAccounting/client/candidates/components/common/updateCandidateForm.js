@@ -81,7 +81,8 @@ export default class CandidateInfoForm extends Component {
         <TagSelect
           onValuesChange={this.setCandidateTags}
           options={tags}
-          values={this.state.tags}/>
+          values={this.state.tags}
+        />
         <TextField
           onChange={value => {this.changeProperty('name', value)}}
           label='Name'
@@ -89,7 +90,9 @@ export default class CandidateInfoForm extends Component {
           value={candidate.name}
           checkValid={isNotEmpty}
           required
-          autoFocus/>
+          autoFocus
+          mark='data-test-candidate-name-input'
+        />
         <TextField
           onChange={value => {this.changeProperty('nickname', value)}}
           label='Nickname'
@@ -101,6 +104,7 @@ export default class CandidateInfoForm extends Component {
           label='E-mail'
           placeholder='example@mail.com'
           value={candidate.email}
+          mark='data-test-candidate-email-input'
         />
         <PhoneNumberField
           onChange={value => {this.changeProperty('phoneNumber', value)}}

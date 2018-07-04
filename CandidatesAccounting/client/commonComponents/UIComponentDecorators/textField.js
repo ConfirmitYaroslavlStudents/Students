@@ -16,6 +16,7 @@ export default class CustomTextField extends Component{
   render() {
     return (
       <TextField
+        inputProps={{mark: this.props.mark}}
         label={this.props.label}
         type={this.props.type}
         name={this.props.name}

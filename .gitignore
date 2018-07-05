@@ -241,3 +241,5 @@ CandidatesAccounting/dist
 *.pdf
 *stats*.json
 CandidatesAccounting/tests/__screenshots__/
+ScreenshotHandler/.idea/
+ScreenshotHandler/node_modules/

@@ -98,6 +98,7 @@ export default class CandidateInfoForm extends Component {
           label='Nickname'
           placeholder='nickname'
           value={candidate.nickname}
+          mark='data-test-candidate-nickname-input'
         />
         <TextField
           onChange={value => {this.changeProperty('email', value)}}

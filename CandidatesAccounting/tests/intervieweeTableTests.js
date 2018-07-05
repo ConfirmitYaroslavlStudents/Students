@@ -1,27 +1,28 @@
 import { Selector } from 'testcafe'
 import { signIn } from './common'
-import handleScreenshot from './handleScreenshot'
+import toMatchScreenshot from './toMatchScreenshot'
 
 fixture(`Interviewee table tests`)
   .page(`http://localhost:3000/interviewees/`)
   .beforeEach(signIn)
 
-test('Add new interviewee form Name input', async t => {
+test('Add new interviewee form. Name input test', async t => {
   await t
   .click(Selector('button[data-test-add-candidate-button]'))
-
-  await handleScreenshot(t, Selector('div[data-test-candidate-form]'))
+  await toMatchScreenshot(t, Selector('div[data-test-candidate-form]'))
 
   await t
   .typeText(Selector('textarea[mark="data-test-candidate-name-input"]'), 'Иванов Иван Иванович')
+  await toMatchScreenshot(t, Selector('div[data-test-candidate-form]'))
 
-  await handleScreenshot(t, Selector('div[data-test-candidate-form]'))
+  await t
+  .typeText(Selector('textarea[mark="data-test-candidate-nickname-input"]'), 'Никнейм')
+  await toMatchScreenshot(t, Selector('div[data-test-candidate-form]'))
 })
 
-test('Add new interviewee form Email input', async t => {
+test('Add new interviewee form. Email input test', async t => {
   await t
   .click(Selector('button[data-test-add-candidate-button]'))
   .typeText(Selector('textarea[mark="data-test-candidate-email-input"]'), 'ivanov.ivan@mail.com')
-
-  await handleScreenshot(t, Selector('div[data-test-candidate-form]'))
+  await toMatchScreenshot(t, Selector('div[data-test-candidate-form]'))
 })

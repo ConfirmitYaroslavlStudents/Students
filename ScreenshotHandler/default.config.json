@@ -1,5 +1,11 @@
 {
-  "maxMisMatchPercentage": 2,
+  "maxMisMatchPercentage": 1,
+  "fallenTestFolder": "fallenTests",
+  "thumbnails": false,
+
+  "scaleToSameSize": true,
+  "ignore": "antialiasing",
+
   "output": {
     "errorColor": {
       "red": 255,
@@ -7,11 +13,9 @@
       "blue": 0
     },
     "errorType": "movement",
-    "transparency": 0.85,
+    "transparency": 0.95,
     "largeImageThreshold": 1200,
     "useCrossOrigin": false,
     "outputDiff": true
-  },
-  "scaleToSameSize": true,
-  "ignore": "antialiasing"
+  }
 }

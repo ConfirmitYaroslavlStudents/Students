@@ -10,6 +10,7 @@
   "dependencies": {
     "fs": "0.0.1-security",
     "path": "^0.12.7",
-    "resemblejs": "^2.10.3"
+    "resemblejs": "^2.10.3",
+    "testcafe": "^0.20.4"
   }
 }

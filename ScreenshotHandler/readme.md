@@ -1,15 +1,20 @@
 Screenshot testing with Testcafe + ResembleJS
+=====================
+***
 
-*** Usage ***
+Usage
+-----------------------------------
 
-import toMatchScreenshot from './toMatchScreenshot/index'
+```import toMatchScreenshot from './toMatchScreenshot/index'
 
 await toMatchScreenshot(testController, selector[, options])
+```
+***
 
+Example
+-----------------------------------
 
-*** Example ***
-
-import { Selector } from 'testcafe'
+```import { Selector } from 'testcafe'
 import toMatchScreenshot from './toMatchScreenshot'
 
 fixture(`Tests`)
@@ -21,17 +26,19 @@ test('Simple test', async t => {
 
   await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick' })
 })
+```
+***
 
+Configuration
+-----------------------------------
 
-*** Configuration ***
+### Config file
 
-* Config file *
-
-Create your configuration file ".matchScreenshot.config.json" in test file directory or above (up to project root directory).
+Create your configuration file `.matchScreenshot.config.json` in test file directory or above _(up to project root directory)_.
 
 Configuration file is a json file:
 
-{
+```{
   comparison: {
     ...
   },
@@ -52,24 +59,25 @@ Configuration file is a json file:
     }
   }
 }
+```
 
+#### Comparison options
 
-* Comparison options *
-
-comparison: {
+```comparison: {
   scaleToSameSize: true,
   ignore: "antialiasing", // "nothing", "less", "antialiasing", "colors", "alpha"
   maxMisMatchPercentage: 0
 }
+```
 
-scaleToSameSize (boolean) - scale new screenshot size to base one size
-ignore (string or array) - ignore mismatch rules
-maxMisMatchPercentage (number [0; 100)) - max allowed screenshot mismatch percentage for test to be passed
+`scaleToSameSize` _(boolean)_ - scale new screenshot size to base one size
+`ignore` _(string or array)_ - ignore mismatch rules
+`maxMisMatchPercentage` _(number)_ - max allowed screenshot mismatch percentage for test to be passed
 
 
-* Output options *
+#### Output options
 
-difference: {
+```difference: {
   errorType: "movementDifferenceIntensity",
   transparency: 0.95,
   largeImageThreshold: 0,
@@ -88,44 +96,49 @@ difference: {
     ...
   }
 }
+```
 
-errorType (string one of ["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]) - screenshots overlay difference output mode:
-  * flat, flatDifferenceIntensity - screenshots overlay with diferences highlighting
-  * movement, movementDifferenceIntensity - screenshots overlay with diferences highlighting (base and new elements have different colors)
-  * diffOnly - show only differences
+`errorType` _(string one of `["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]`)_ - screenshots overlay difference output mode:
+  * `flat`, `flatDifferenceIntensity` - screenshots overlay with diferences highlighting
+  * `movement`, `movementDifferenceIntensity` - screenshots overlay with diferences highlighting (base and new elements have different colors)
+  * `diffOnly` - show only differences
 
-transparency (number [0; 1]) - screenshots overlay matched parts transparency (1 - as is, 0 - invisible)
+`transparency` _(number [0..1])_ - screenshots overlay matched parts transparency (1 - as is, 0 - invisible)
 
-largeImageThreshold (number) - screenshot max size to be compared fully (optimization purposes) (0 - no threshold)
+`largeImageThreshold` _(number)_ - screenshot max size to be compared fully (optimization purposes) (0 - no threshold)
 
-useCrossOrigin (boolean) - ??? (check: https://github.com/HuddleEng/Resemble.js)
+`useCrossOrigin` _(boolean)_ - ??? (check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
 
-outputDiff (boolean) - ??? (check: https://github.com/HuddleEng/Resemble.js)
+`outputDiff` _(boolean)_ - ??? ((check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
 
-errorColor: {
+```errorColor: {
   red: 255,
   green: 0,
   blue: 0
 }
-(object) - screenshots overlay differences highlight color
+```
+_(object)_ - screenshots overlay differences highlight color
 
-boundingBox: {
+```boundingBox: {
   left: 100,
   top: 100,
   right: 100,
   bottom: 100
 }
-(object) - narrows down the area of comparison (from left top corner)
+```
+_(object)_ - narrows down the area of comparison (from left top corner)
 
-ignoredBox: {
+```ignoredBox: {
   left: 100,
   top: 100,
   right: 100,
   bottom: 100
 }
-(object) - exclude part of the image from comparison (from left tp corner)
+```
+_(object)_ - excludes part of the image from comparison (from left tp corner)
+***
 
+Contacts
+-----------------------------------
 
-*** Contacts ***
-
-email: dmitry.banokin@gmail.com
+`email`: `dmitry.banokin@gmail.com`

@@ -7,7 +7,7 @@
     "build": "createDistDirectory.bat & webpack --progress --config webpack.production.config.js & babel ./server/index.js > ./dist/server/index.js && babel ./server/graphQL.js > ./dist/server/graphQL.js && babel ./server/mongoose.js > ./dist/server/mongoose.js && babel ./server/schemas.js > ./dist/server/schemas.js && babel ./server/template.js > ./dist/server/template.js && babel ./server/utilities/searchCandidates.js > ./dist/server/utilities/searchCandidates.js && babel ./server/utilities/sortCandidates.js > ./dist/server/utilities/sortCandidates.js",
     "prod": "npm run build && babel-node ./dist/index.js --mode production",
     "dev": "nodemon --exec \"babel-node ./server/index.js --mode development\" -w ./server",
-    "tests": "testcafe --screenshots ./tests/__screenshots__/ chrome,firefox ./tests/*Tests.js"
+    "tests": "testcafe --screenshots ./tests/__screenshots__/ chrome ./tests/*Tests.js"
   },
   "author": "DmitryB",
   "license": "ISC",
@@ -73,7 +73,6 @@
     "nodemon": "^1.17.5",
     "react-hot-loader": "^4.3.3",
     "react-loader": "^2.4.5",
-    "resemblejs": "^2.10.3",
     "style-loader": "^0.21.0",
     "testcafe": "^0.20.4",
     "webpack": "^4.12.0",

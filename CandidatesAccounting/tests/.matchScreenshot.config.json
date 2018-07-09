@@ -1,0 +1,7 @@
+{
+  "comparison": {
+    "scaleToSameSize": true,
+    "ignore": "antialiasing",
+    "maxMisMatchPercentage": 1
+  }
+}

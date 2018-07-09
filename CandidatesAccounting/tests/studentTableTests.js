@@ -1,8 +1,8 @@
 import { Selector } from 'testcafe'
 import { signIn } from './common'
-import toMatchScreenshot from './toMatchScreenshot'
+import toMatchScreenshot from '../../ScreenshotHandler'
 
-fixture(`Student table tests`)
+fixture.skip(`Student table tests`)
   .page(`http://localhost:3000/students/`)
   .beforeEach(signIn)
 

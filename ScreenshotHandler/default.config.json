@@ -1,21 +1,27 @@
 {
-  "maxMisMatchPercentage": 1,
-  "fallenTestFolder": "fallenTests",
-  "thumbnails": false,
-
-  "scaleToSameSize": true,
-  "ignore": "antialiasing",
+  "comparison": {
+    "scaleToSameSize": true,
+    "ignore": "antialiasing",
+    "maxMisMatchPercentage": 0
+  },
 
   "output": {
-    "errorColor": {
-      "red": 255,
-      "green": 0,
-      "blue": 0
-    },
-    "errorType": "movement",
-    "transparency": 0.95,
-    "largeImageThreshold": 1200,
-    "useCrossOrigin": false,
-    "outputDiff": true
+    "fallenTestsInSeparateFolder": true,
+    "fallenTestFolder": "fallenTests",
+    "createThumbnails": false,
+
+    "difference": {
+      "errorType": "movementDifferenceIntensity",
+      "transparency": 0.95,
+      "largeImageThreshold": 0,
+      "useCrossOrigin": false,
+      "outputDiff": true,
+
+      "errorColor": {
+        "red": 255,
+        "green": 0,
+        "blue": 0
+      }
+    }
   }
 }

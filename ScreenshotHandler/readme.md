@@ -1,19 +1,15 @@
 Screenshot testing with Testcafe + ResembleJS
 =====================
-***
 
 Usage
 -----------------------------------
-
 ```import toMatchScreenshot from './toMatchScreenshot/index'
 
 await toMatchScreenshot(testController, selector[, options])
 ```
-***
 
 Example
 -----------------------------------
-
 ```import { Selector } from 'testcafe'
 import toMatchScreenshot from './toMatchScreenshot'
 
@@ -27,7 +23,6 @@ test('Simple test', async t => {
   await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick' })
 })
 ```
-***
 
 Configuration
 -----------------------------------
@@ -38,7 +33,8 @@ Create your configuration file `.matchScreenshot.config.json` in test file direc
 
 Configuration file is a json file:
 
-```{
+```
+{
   comparison: {
     ...
   },
@@ -63,7 +59,8 @@ Configuration file is a json file:
 
 #### Comparison options
 
-```comparison: {
+```
+comparison: {
   scaleToSameSize: true,
   ignore: "antialiasing", // "nothing", "less", "antialiasing", "colors", "alpha"
   maxMisMatchPercentage: 0
@@ -77,7 +74,8 @@ Configuration file is a json file:
 
 #### Output options
 
-```difference: {
+```
+difference: {
   errorType: "movementDifferenceIntensity",
   transparency: 0.95,
   largeImageThreshold: 0,
@@ -111,7 +109,8 @@ Configuration file is a json file:
 
 `outputDiff` _(boolean)_ - ??? ((check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
 
-```errorColor: {
+```
+errorColor: {
   red: 255,
   green: 0,
   blue: 0
@@ -119,7 +118,8 @@ Configuration file is a json file:
 ```
 _(object)_ - screenshots overlay differences highlight color
 
-```boundingBox: {
+```
+boundingBox: {
   left: 100,
   top: 100,
   right: 100,
@@ -128,17 +128,16 @@ _(object)_ - screenshots overlay differences highlight color
 ```
 _(object)_ - narrows down the area of comparison (from left top corner)
 
-```ignoredBox: {
+```
+ignoredBox: {
   left: 100,
   top: 100,
   right: 100,
   bottom: 100
 }
 ```
-_(object)_ - excludes part of the image from comparison (from left tp corner)
-***
+_(object)_ - excludes part of the image from comparison (from left tp corner
 
 Contacts
 -----------------------------------
-
 `email`: `dmitry.banokin@gmail.com`

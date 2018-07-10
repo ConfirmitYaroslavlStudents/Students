@@ -3,7 +3,8 @@ Screenshot testing with Testcafe && ResembleJS
 
 Usage
 -----------------------------------
-```import toMatchScreenshot from './toMatchScreenshot/index'
+```
+import toMatchScreenshot from './toMatchScreenshot/index'
 
 const result = await toMatchScreenshot(testController, selector[, options])
 ```
@@ -11,11 +12,11 @@ const result = await toMatchScreenshot(testController, selector[, options])
 `toMatchScreenshot` is a `async` function, which takes screenshot of selected element and compared it with base one (if base one doesn't exist, creates it). The function performs screenshot creation, comparison, result logging and Testcafe assertion).
 
 ### Arguments
-*`testController` - Testcafe TestController _(specific for the test (has `testRun`))_
-*`selector` - Testcafe Selector _(whole page or an element for testing)_
-*`options` _(optional)_ - test specific option object _(comdine with user general options from `.matchScreenshot.config.json`)_
+* `testController` - Testcafe TestController _(specific for the test (has `testRun`))_
+* `selector` - Testcafe Selector _(whole page or an element for testing)_
+* `options` _(optional)_ - test specific option object _(comdine with user general options from `.matchScreenshot.config.json`)_
 
-### Return
+### Result
 Returns object:
 ```
 {
@@ -111,11 +112,11 @@ comparison: {
   }
 }
 ```
-`fallenTestSaveStrategy` _(one of `["testFolder", "separate"]``)_ - strategy which determinates folder for fallen test screenshots:
-  *`testFolder` - base screenshot folder
-  *`separate` - separate folder for fallen tests `/__screenshots__/fallenTests/...`
+`fallenTestSaveStrategy` _(one of `["testFolder", "separate"]`)_ - strategy which determinates folder for fallen test screenshots:
+  * `testFolder` - base screenshot folder
+  * `separate` - separate folder for fallen tests `/__screenshots__/fallenTests/...`
 
-'createThumbnails' - create thumbnails for screenshots or not
+`createThumbnails` - create thumbnails for screenshots or not
 
 `errorType` _(string one of `["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]`, default: `movementDifferenceIntensity`)_ - screenshots overlay difference output mode:
   * `flat`, `flatDifferenceIntensity` - screenshots overlay with diferences highlighting

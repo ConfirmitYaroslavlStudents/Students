@@ -6,15 +6,15 @@ const BLACK = !RED;
 
 class Node{
 
-    constructor(color, key, value, size){
-        this.key = key;
-        this.value = value;
-        this.color = color;
+    constructor(color, key, value){
+        this.key    = key;
+        this.value  = value;
+        this.color  = color;
 
-        this.left = null;
-        this.right = null;
+        this.left   = null;
+        this.right  = null;
 
-        this.length = size || 1;
+        this.length = 1;
     }
 
     // region Insertion region
@@ -98,6 +98,14 @@ class Node{
                 node.right = Node.remove(node.right, key);
         }
         return Node.balance(node);
+        // while (node){
+        //     let cmp = Node.compare(key, node.key);
+        //     if      (cmp < 0) node = node.left;
+        //     else if (cmp > 0) node = node.right;
+        //     else              break;
+        // }
+        // if (!node) return;
+        // if (!node.left)  // case 1
     }
 
     /**

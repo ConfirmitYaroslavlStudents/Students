@@ -31,7 +31,7 @@ Returns object:
   isSameDimensions, //bollean
   dimensionDifference, //object
   diffBounds, //object
-  comparisonResult.analysisTime, //number, ms
+  analysisTime, //number, ms
   getDiffScreenshotBuffer, //function
   newScreenshotURL, //string
   diffScreeshotURL, //string
@@ -89,9 +89,10 @@ comparison: {
   maxMisMatchPercentage: //number, default: 0
 }
 ```
-
 `scaleToSameSize` - scale new screenshot size to base one size
+
 `ignore` _(some strings from `["nothing", "less", "antialiasing", "colors", "alpha"]`)_ - ignore mismatch rules
+
 `maxMisMatchPercentage` - max allowed screenshot mismatch percentage for test to be passed
 
 ### Output options
@@ -118,7 +119,7 @@ comparison: {
 
 `createThumbnails` - create thumbnails for screenshots or not
 
-`errorType` _(string one of `["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]`, default: `movementDifferenceIntensity`)_ - screenshots overlay difference output mode:
+`errorType` _(string one of `["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]`)_ - screenshots overlay difference output mode:
   * `flat`, `flatDifferenceIntensity` - screenshots overlay with diferences highlighting
   * `movement`, `movementDifferenceIntensity` - screenshots overlay with diferences highlighting (base and new elements have different colors)
   * `diffOnly` - show only differences
@@ -127,39 +128,39 @@ comparison: {
 
 `largeImageThreshold` - screenshot max size to be compared fully (optimization purposes) (0 - no threshold)
 
-`useCrossOrigin` - ??? (check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
+`useCrossOrigin` - check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js)
 
-`outputDiff` - ??? ((check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
+`outputDiff` - check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js)
 
 ```
 errorColor: {
-  red: 255,
-  green: 0,
-  blue: 0
+  red, //number, default: 255
+  green, //number, default: 0
+  blue, //number, default: 0
 }
 ```
-- screenshots overlay differences highlight color
+screenshots overlay differences highlight color
 
 ```
 boundingBox: {
-  left: 100,
-  top: 100,
-  right: 100,
-  bottom: 100
+  left, //number, default: none
+  top, //number, default: none
+  right, //number, default: none
+  bottom, //number, default: none
 }
 ```
-- narrows down the area of comparison (from left top corner)
+narrows down the area of comparison (in pixels, from left top corner)
 
 ```
 ignoredBox: {
-  left: 100,
-  top: 100,
-  right: 100,
-  bottom: 100
+  left, //number, default: none
+  top, //number, default: none
+  right, //number, default: none
+  bottom, //number, default: none
 }
 ```
-- excludes part of the image from comparison (from left tp corner
+excludes part of the image from comparison (in pixels, from left top corner)
 
 Contacts
 -----------------------------------
-*email: [dmitry.banokin@gmail.com](mailto:dmitry.banokin@gmail.com)*
+email: [dmitry.banokin@gmail.com](mailto:dmitry.banokin@gmail.com)

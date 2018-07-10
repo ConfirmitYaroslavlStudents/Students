@@ -1,12 +1,42 @@
-Screenshot testing with Testcafe + ResembleJS
+Screenshot testing with Testcafe && ResembleJS
 =====================
 
 Usage
 -----------------------------------
 ```import toMatchScreenshot from './toMatchScreenshot/index'
 
-await toMatchScreenshot(testController, selector[, options])
+const result = await toMatchScreenshot(testController, selector[, options])
 ```
+
+`toMatchScreenshot` is a `async` function, which takes screenshot of selected element and compared it with base one (if base one doesn't exist, creates it). The function performs screenshot creation, comparison, result logging and Testcafe assertion).
+
+### Arguments
+*`testController` - Testcafe TestController _(specific for the test (has `testRun`))_
+*`selector` - Testcafe Selector _(whole page or an element for testing)_
+*`options` _(optional)_ - test specific option object _(comdine with user general options from `.matchScreenshot.config.json`)_
+
+### Return
+Returns object:
+```
+{
+  testName, //string
+  browserName, //string
+  newBaseScreenshotWasCreated, //boolean
+  baseScreenshotURL, //string
+  maxMisMatchPercentage, //number
+  comparisonPerformed: //boolean,
+  comparisonPassed: //boolean,
+  misMatchPercentage, //number, difference degree between new screenshot and base one
+  isSameDimensions, //bollean
+  dimensionDifference, //object
+  diffBounds, //object
+  comparisonResult.analysisTime, //number, ms
+  getDiffScreenshotBuffer, //function
+  newScreenshotURL, //string
+  diffScreeshotURL, //string
+}
+```
+_Some properties may not be depending on the function execution process._
 
 Example
 -----------------------------------
@@ -26,10 +56,9 @@ test('Simple test', async t => {
 
 Configuration
 -----------------------------------
-
 ### Config file
 
-Create your configuration file `.matchScreenshot.config.json` in test file directory or above _(up to project root directory)_.
+Create your configuration file named `.matchScreenshot.config.json` in test file directory or above _(up to project root directory)_.
 
 Configuration file is a json file:
 
@@ -43,71 +72,63 @@ Configuration file is a json file:
     ...
     difference: {
       ...
-      errorColor: {
-        ...
-      },
-      boundingBox: {
-        ...
-      },
-      ignoredBox: {
-        ...
-      }
+      errorColor: { ... },
+      boundingBox: { ... },
+      ignoredBox: { ... }
     }
   }
 }
 ```
 
-#### Comparison options
-
+### Comparison options
 ```
 comparison: {
-  scaleToSameSize: true,
-  ignore: "antialiasing", // "nothing", "less", "antialiasing", "colors", "alpha"
-  maxMisMatchPercentage: 0
+  scaleToSameSize: //boolean, default: true
+  ignore: "antialiasing", //string or array, default: "antialiasing"
+  maxMisMatchPercentage: //number, default: 0
 }
 ```
 
-`scaleToSameSize` _(boolean)_ - scale new screenshot size to base one size
-`ignore` _(string or array)_ - ignore mismatch rules
-`maxMisMatchPercentage` _(number)_ - max allowed screenshot mismatch percentage for test to be passed
+`scaleToSameSize` - scale new screenshot size to base one size
+`ignore` _(some strings from `["nothing", "less", "antialiasing", "colors", "alpha"]`)_ - ignore mismatch rules
+`maxMisMatchPercentage` - max allowed screenshot mismatch percentage for test to be passed
 
-
-#### Output options
-
+### Output options
 ```
-difference: {
-  errorType: "movementDifferenceIntensity",
-  transparency: 0.95,
-  largeImageThreshold: 0,
-  useCrossOrigin: false,
-  outputDiff: true,
+"output": {
+  fallenTestSaveStrategy, //string, default: "separate"
+  createThumbnails, //boolean, default: false
 
-  errorColor: {
-    ...
-  },
-
-  boundingBox: {
-    ...
-  },
-
-  ignoredBox: {
-    ...
+  difference: {
+    errorType, //string, default: "movementDifferenceIntensity",
+    transparency, //number, default: 0.95,
+    largeImageThreshold, //number, default: 0
+    useCrossOrigin, //boolean, default: false
+    outputDiff, //boolean, default: true
+    errorColor, //rgb object, default: red
+    boundingBox, //object, default: none
+    ignoredBox //object, default: none
   }
 }
 ```
+`fallenTestSaveStrategy` _(one of `["testFolder", "separate"]``)_ - strategy which determinates folder for fallen test screenshots:
+  *`testFolder` - base screenshot folder
+  *`separate` - separate folder for fallen tests `/__screenshots__/fallenTests/...`
 
-`errorType` _(string one of `["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]`)_ - screenshots overlay difference output mode:
+'createThumbnails' - create thumbnails for screenshots or not
+
+`errorType` _(string one of `["flat", "movement", "flatDifferenceIntensity", "movementDifferenceIntensity", "diffOnly"]`, default: `movementDifferenceIntensity`)_ - screenshots overlay difference output mode:
   * `flat`, `flatDifferenceIntensity` - screenshots overlay with diferences highlighting
   * `movement`, `movementDifferenceIntensity` - screenshots overlay with diferences highlighting (base and new elements have different colors)
   * `diffOnly` - show only differences
 
-`transparency` _(number [0..1])_ - screenshots overlay matched parts transparency (1 - as is, 0 - invisible)
+`transparency` - screenshots overlay matched parts transparency (1 - as is, 0 - invisible)
 
-`largeImageThreshold` _(number)_ - screenshot max size to be compared fully (optimization purposes) (0 - no threshold)
+`largeImageThreshold` - screenshot max size to be compared fully (optimization purposes) (0 - no threshold)
 
-`useCrossOrigin` _(boolean)_ - ??? (check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
+`useCrossOrigin` - ??? (check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
 
-`outputDiff` _(boolean)_ - ??? ((check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
+`outputDiff` - ??? ((check [ResembleJS documentation](https://github.com/HuddleEng/Resemble.js))
 
 ```
 errorColor: {
@@ -116,7 +137,7 @@ errorColor: {
   blue: 0
 }
 ```
-_(object)_ - screenshots overlay differences highlight color
+- screenshots overlay differences highlight color
 
 ```
 boundingBox: {
@@ -126,7 +147,7 @@ boundingBox: {
   bottom: 100
 }
 ```
-_(object)_ - narrows down the area of comparison (from left top corner)
+- narrows down the area of comparison (from left top corner)
 
 ```
 ignoredBox: {
@@ -136,8 +157,8 @@ ignoredBox: {
   bottom: 100
 }
 ```
-_(object)_ - excludes part of the image from comparison (from left tp corner
+- excludes part of the image from comparison (from left tp corner
 
 Contacts
 -----------------------------------
-`email`: `dmitry.banokin@gmail.com`
+*email: [dmitry.banokin@gmail.com](mailto:dmitry.banokin@gmail.com)*

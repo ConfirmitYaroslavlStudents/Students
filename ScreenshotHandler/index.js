@@ -1,6 +1,27 @@
 import path from 'path'
 import ScreenshotHandler from './screenshotHandler'
 
+export const comparisonIgnoreRules = {
+  nothing: "nothing",
+  antialiasing: "antialiasing",
+  less: "less",
+  colors: "colors",
+  alpha: "alpha"
+}
+
+export const differenceDisplayMode = {
+  flat: "flat",
+  movement: "movement",
+  flatWithDifferenceIntensity: "flatDifferenceIntensity",
+  movementWithDifferenceIntensity: "movementDifferenceIntensity",
+  differenceOnly: "diffOnly"
+}
+
+export const fallenTestSaveStrategies = {
+  testFolder: 'testFolder',
+  separate: 'separate'
+}
+
 const toMatchScreenshot = async (testController, selector, options) => {
   const userOptions = {
     ...getUserGeneralOptions(testController.testRun.test.testFile.filename),
@@ -8,9 +29,8 @@ const toMatchScreenshot = async (testController, selector, options) => {
   }
 
   const screenshotHandler = new ScreenshotHandler(testController, userOptions)
-  await screenshotHandler.handleScreenshot(selector)
 
-  return testController
+  return await screenshotHandler.handleScreenshot(selector)
 }
 
 const getUserGeneralOptions = (initialConfigSearchPath) => {

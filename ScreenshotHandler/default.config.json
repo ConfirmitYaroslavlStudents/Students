@@ -6,8 +6,7 @@
   },
 
   "output": {
-    "fallenTestsInSeparateFolder": true,
-    "fallenTestFolder": "fallenTests",
+    "fallenTestSaveStrategy": "separate",
     "createThumbnails": false,
 
     "difference": {

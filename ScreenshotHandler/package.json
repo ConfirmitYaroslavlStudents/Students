@@ -1,14 +1,13 @@
 {
   "name": "ScreenshotHandler",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.2",
+  "description": "Screenshot testing with Testcafe && ResembleJS",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
-  "author": "",
+  "author": "DmitryB",
   "license": "ISC",
   "dependencies": {
-    "fs": "0.0.1-security",
     "path": "^0.12.7",
     "resemblejs": "^2.10.3",
     "testcafe": "^0.20.4"

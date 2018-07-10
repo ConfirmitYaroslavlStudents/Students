@@ -1,0 +1,9 @@
+# Webstorm cache
+.idea/
+
+# macOs
+.DS-Store
+
+# Node
+node_modules/
+package-lock.json

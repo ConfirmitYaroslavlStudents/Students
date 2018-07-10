@@ -1,0 +1,21 @@
+{
+  "name": "red-black-tree-node",
+  "version": "1.1.5",
+  "description": "The algorithm of a self-balancing tree is used (Red-Black tree)",
+  "author": "Vladislav Tupikin",
+  "license": "MIT",
+  "repository": "https://github.com/MrRefactoring/red-black-tree-node",
+  "main": "src/components/redBlackTree/redBlackTree.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "npm i qunit && qunit"
+  },
+  "devDependencies": {
+    "node-cmd": "^3.0.0",
+    "qunit": "^2.6.1"
+  },
+  "dependencies": {}
+}

@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import compareImages from 'resemblejs/compareImages'
 import defaultOptions from './default.config.json'
+import { fallenTestSaveStrategies } from './index'
 
 export default class ScreenshotHandler {
   constructor(testController, userOptions) {
@@ -52,19 +53,21 @@ export default class ScreenshotHandler {
     this.baseScreenshotRelativePath = path.join(this.testSpecificFolder, this.baseScreenshotName)
     this.baseScreenshotAbsPath = path.join(this.screenshotPath, this.baseScreenshotRelativePath)
 
-    if (this.options.output.fallenTestsInSeparateFolder) {
-      this.baseScreenshotCopyAbsPath = path.join(this.screenshotPath, this.options.output.fallenTestFolder, this.baseScreenshotRelativePath)
+    this.screenshotRelativePath = path.join(this.testSpecificFolder, this.screenshotName)
+    this.screenshotAbsPath = path.join(this.screenshotPath, this.screenshotRelativePath)
 
-      this.screenshotRelativePath = path.join(this.options.output.fallenTestFolder, this.testSpecificFolder, this.screenshotName)
+    this.diffScreenshotAbsPath = path.join(this.screenshotPath, this.testSpecificFolder, this.diffScreenshotName)
+
+    if (this.options.output.fallenTestSaveStrategy === fallenTestSaveStrategies.separate) {
+      this.fallenTestFolder = 'fallenTests'
+
+      this.baseScreenshotCopyAbsPath = path.join(this.screenshotPath, this.fallenTestFolder, this.baseScreenshotRelativePath)
+
+      this.screenshotRelativePath = path.join(this.fallenTestFolder, this.testSpecificFolder, this.screenshotName)
       this.screenshotAbsPath = path.join(this.screenshotPath, this.screenshotRelativePath)
 
       this.diffScreenshotAbsPath =
-        path.join(this.screenshotPath, this.options.output.fallenTestFolder, this.testSpecificFolder, this.diffScreenshotName)
-    } else {
-      this.screenshotRelativePath = path.join(this.testSpecificFolder, this.screenshotName)
-      this.screenshotAbsPath = path.join(this.screenshotPath, this.screenshotRelativePath)
-
-      this.diffScreenshotAbsPath = path.join(this.screenshotPath, this.testSpecificFolder, this.diffScreenshotName)
+        path.join(this.screenshotPath, this.fallenTestFolder, this.testSpecificFolder, this.diffScreenshotName)
     }
   }
 
@@ -108,14 +111,19 @@ export default class ScreenshotHandler {
 
     if (baseScreenshotDoesNotExist) {
       await this.createBaseScreenshot(selector)
+      return this.formatResult()
     } else {
       const comparisonResult = await this.compareNewScreenshotWithBaseOne(selector)
 
       const assertionFailedMessage =
         `There is a difference between screenshots (${comparisonResult.misMatchPercentage}%). `
         + `Check ${path.join(this.diffScreenshotAbsPath)}`
+
       await this.t.expect(comparisonResult.differenceWithinNorm).ok(assertionFailedMessage)
+
+      return this.formatResult(comparisonResult)
     }
+
   }
 
   createBaseScreenshot = async (selector) => {
@@ -151,7 +159,7 @@ export default class ScreenshotHandler {
   handleComparisonPassed = (comparisonResult) => {
     this.deleteScreenshot(this.screenshotAbsPath)
     this.deleteScreenshot(this.diffScreenshotAbsPath)
-    if (this.options.output.fallenTestsInSeparateFolder) {
+    if (this.options.output.fallenTestSaveStrategy === fallenTestSaveStrategies.separate) {
       this.deleteScreenshot(this.baseScreenshotCopyAbsPath)
     }
     this.removeFallenTestFolder()
@@ -167,10 +175,40 @@ export default class ScreenshotHandler {
 
   handleComparisonFailed = async (comparisonResult) => {
     fs.writeFileSync(this.diffScreenshotAbsPath, comparisonResult.getBuffer())
-    if (this.options.output.fallenTestsInSeparateFolder) {
+    if (this.options.output.fallenTestSaveStrategy === fallenTestSaveStrategies.separate) {
       fs.copyFileSync(this.baseScreenshotAbsPath, this.baseScreenshotCopyAbsPath)
     }
     this.logComparisonFailed(comparisonResult)
+  }
+
+  formatResult = (comparisonResult) => {
+    const result = {
+      testName: this.t.testRun.test.name,
+      browserName: this.browserName,
+      newBaseScreenshotWasCreated: false,
+      baseScreenshotURL: this.baseScreenshotAbsPath,
+      maxMisMatchPercentage: this.options.comparison.maxMisMatchPercentage,
+      comparisonPerformed: true,
+    }
+
+    if (comparisonResult) {
+      result.misMatchPercentage = Number(comparisonResult.misMatchPercentage)
+      result.isSameDimensions = comparisonResult.isSameDimensions
+      result.dimensionDifference = comparisonResult.dimensionDifference
+      result.diffBounds = comparisonResult.diffBounds
+      result.analysisTime = comparisonResult.analysisTime
+      result.getDiffScreenshotBuffer = comparisonResult.getBuffer
+      result.comparisonPassed = comparisonResult.differenceWithinNorm
+      if (!comparisonResult.differenceWithinNorm) {
+        result.newScreenshotURL = this.screenshotAbsPath
+        result.diffScreeshotURL = this.diffScreenshotAbsPath
+      }
+    } else {
+      result.newBaseScreenshotWasCreated = true
+      result.comparisonPerformed = false
+    }
+
+    return result
   }
 
 
@@ -210,7 +248,7 @@ export default class ScreenshotHandler {
   }
 
   removeFallenTestFolder = () => {
-    let pathToRemove = path.join(this.options.output.fallenTestFolder, this.testSpecificFolder)
+    let pathToRemove = path.join(this.fallenTestFolder, this.testSpecificFolder)
     while (pathToRemove.length > 1) {
       try {
         fs.rmdirSync(path.join(this.screenshotPath, pathToRemove))

@@ -60,7 +60,22 @@ namespace LinkedListLibraryTests
         [TestMethod]
         public void DeleteIn5Reverse()
         {
-            string expected = "5/4/2/1/";
+            string expected = "4/3/2/1/";
+            DoublyLinkedList testList = new DoublyLinkedList();
+            testList.AddLast("1");
+            testList.AddLast("2");
+            testList.AddLast("3");
+            testList.AddLast("4");
+            testList.AddLast("5");
+            testList.DeleteAtIndex(5);
+            string actual = testList.ReverseShow();
+            Assert.AreEqual(expected, actual);
+
+        }
+        [TestMethod]
+        public void DeleteX2In5Reverse()
+        {
+            string expected = "4/2/1/";
             DoublyLinkedList testList = new DoublyLinkedList();
             testList.AddLast("1");
             testList.AddLast("2");
@@ -68,6 +83,7 @@ namespace LinkedListLibraryTests
             testList.AddLast("4");
             testList.AddLast("5");
             testList.DeleteAtIndex(3);
+            testList.DeleteAtIndex(4);
             string actual = testList.ReverseShow();
             Assert.AreEqual(expected, actual);
 

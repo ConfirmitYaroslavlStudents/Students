@@ -13,19 +13,19 @@ namespace LinkedListLibrary
         private Node next;
         public Node(object Data)
         {
-            this.data = Data;
-            this.previous = null;
-            this.next = null;
+            data = Data;
+            previous = null;
+            next = null;
         }
         public Node Next
         {
-            get { return this.next; }
-            set { this.next = value; }
+            get { return next; }
+            set { next = value; }
         }
         public Node Previous
         {
-            get { return this.previous; }
-            set { this.previous = value; }
+            get { return previous; }
+            set { previous = value; }
         }
         public override string ToString()
         {
@@ -38,28 +38,22 @@ namespace LinkedListLibrary
         private Node head;
         private Node current;
         private Node tail;
+        private int count;
         public DoublyLinkedList()
         {
             head = null;
             current = null;
             tail = null;
+            count = 0;
         }
-        public int Count()
+        public int Count 
         {
-            int size = 0;
-            current = head;
-            while (current != null)
-            {
-                current = current.Next;
-                size++;
-            }
-
-            return size;
+           get { return count; }
         }
         public void AddLast(object NewData)
         {
             Node newNode = new Node(NewData);
-            if (this.head == null)
+            if (head == null)
             {
                 head = newNode;
                 tail = head;
@@ -70,11 +64,12 @@ namespace LinkedListLibrary
                 newNode.Previous = tail;
                 tail = newNode;
             }
+            count++;
         }
         public void AddFirst(object NewData)
         {
             Node newNode = new Node(NewData);
-            if (this.head == null)
+            if (head == null)
             {
                 head = newNode;
                 tail = head;
@@ -85,56 +80,58 @@ namespace LinkedListLibrary
                 newNode.Next = head;
                 head = newNode;
             }
+            count++;
         }
         public void AddAtIndex(object NewData, int Index)
         {
-            if (Index < 1 || Index > Count())
+            if (Index < 1 || Index > count)
             {
                // throw new InvalidOperationException();
             }
             else
             {
-                int count = 1;
+                int nodeNumber = 1;
                 current = head;
-                while (count != Index)
+                while (nodeNumber != Index)
                 {
                     current = current.Next;
-                    count++;
+                    nodeNumber++;
                 }
                 Node newNode = new Node(NewData);
                 newNode.Previous = current.Previous;
                 newNode.Next = current;
                 current.Previous = newNode;
                 newNode.Previous.Next = newNode;
+                count++;
             }
         }
+
         public void DeleteAtIndex(int Index)
         {
-            if (Index < 1 || Index > Count())
+            if (Index < 1 || Index > count)
             {
               ///  throw new InvalidOperationException();
             }
             else if (Index == 1)
             {
-                if (head.Next != null) head.Next.Previous = null;
-                head = head.Next;
+                PopFirst();
             }
-            else if (Index == Count())
+            else if (Index == count)
             {
-                tail.Previous.Next = null;
-                tail = tail.Previous;
+                PopLast();
             }
             else
             {
-                int count = 1;
+                int nodeNumber = 1;
                 current = head;
-                while (count != Index)
+                while (nodeNumber != Index)
                 {
                     current = current.Next;
-                    count++;
+                    nodeNumber++;
                 }
                 current.Previous.Next = current.Next;
                 current.Next.Previous = current.Previous;
+                count--;
             }
         }
         public object PopFirst()
@@ -145,7 +142,9 @@ namespace LinkedListLibrary
                 if (head.Next != null) head.Next.Previous = null;
                 else tail = null;
                 head = head.Next;
+                count--;
                 return element;
+                
             }
             else return "There's nothing to pop.";
 
@@ -158,6 +157,7 @@ namespace LinkedListLibrary
                 if (tail.Previous != null) tail.Previous.Next = null;
                 else head = null;
                 tail = tail.Previous;
+                count--;
                 return element;
             }
             else return "There's nothing to pop.";
@@ -165,32 +165,32 @@ namespace LinkedListLibrary
         }
         public string Show()
         {
-            int count = 1;
+            int nodeNumber = 1;
             string display = "";
             current = head;
             while (current != null)
             {
                 display = display+current.ToString() + "/";
-                count++;
+                nodeNumber++;
                 current = current.Next;
 
             }
-            if (count == 1) display = "The list is empty.";
+            if (nodeNumber == 1) display = "The list is empty.";
             return display;
         }
         public string ReverseShow()
         {
-            int count = 1;
+            int nodeNumber = 1;
             string display = "";
             current = tail;
             while (current != null)
             {
                 display = display + current.ToString() + "/";
-                count++;
+                nodeNumber++;
                 current = current.Previous;
 
             }
-            if (count == 1) display = "The list is empty.";
+            if (nodeNumber == 1) display = "The list is empty.";
             return display;
         }
     }

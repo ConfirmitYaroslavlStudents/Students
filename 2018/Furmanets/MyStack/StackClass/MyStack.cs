@@ -2,12 +2,12 @@
 
 namespace StackClass
 {
-    public class MyStack<T> where T:IComparable
+    public class MyStack<T> where T : IComparable
     {
         private int _capasity;
         private T[] _mass;
-        public  int Count { get; private set; }
-          
+        public int Count { get; private set; }
+
         public MyStack()
         {
             _capasity = 16;
@@ -26,7 +26,7 @@ namespace StackClass
             }
             catch (IndexOutOfRangeException)
             {
-                throw new Exception("Стек пуст");
+                throw new IndexOutOfRangeException("Стек пуст");
             }
             return result;
         }
@@ -37,18 +37,18 @@ namespace StackClass
 
             try
             {
-                result = _mass[Count-1];
+                result = _mass[Count - 1];
             }
             catch (IndexOutOfRangeException)
             {
-                throw new Exception("Стек пуст");
+                throw new IndexOutOfRangeException("Стек пуст");
             }
             return result;
         }
 
         public void Push(T obj)
         {
-            if (Count > _capasity)
+            if (Count >= _capasity)
             {
                 GetChangeSize();
             }
@@ -60,7 +60,7 @@ namespace StackClass
         {
             var index = Count;
 
-            while (index>0)
+            while (index > 0)
             {
                 index--;
                 if (_mass[index].Equals(obj))
@@ -71,7 +71,7 @@ namespace StackClass
 
             return false;
         }
-        
+
         public void Clear()
         {
             _capasity = 16;

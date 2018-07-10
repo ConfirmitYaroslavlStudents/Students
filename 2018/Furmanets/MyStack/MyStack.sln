@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "MyStack\Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackClass", "StackClass\StackClass.csproj", "{26CA4748-1C27-4E64-A30C-255EE84D1D6B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestsMyStack", "UnitTestsMyStack\UnitTestsMyStack.csproj", "{673AFAAA-DA9F-4BAD-A15A-AAB27A617501}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{26CA4748-1C27-4E64-A30C-255EE84D1D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26CA4748-1C27-4E64-A30C-255EE84D1D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26CA4748-1C27-4E64-A30C-255EE84D1D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673AFAAA-DA9F-4BAD-A15A-AAB27A617501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673AFAAA-DA9F-4BAD-A15A-AAB27A617501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673AFAAA-DA9F-4BAD-A15A-AAB27A617501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673AFAAA-DA9F-4BAD-A15A-AAB27A617501}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

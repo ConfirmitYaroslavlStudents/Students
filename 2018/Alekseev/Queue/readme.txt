@@ -1,1 +1,0 @@
-First implementation of readme

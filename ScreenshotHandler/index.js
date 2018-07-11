@@ -22,15 +22,38 @@ export const fallenTestSaveStrategies = {
   separate: 'separate'
 }
 
-const toMatchScreenshot = async (testController, selector, options) => {
+const toMatchScreenshot = async (testController, selector, options, callback) => {
+  options =
+    options && options instanceof Object ?
+      options
+      :
+      {}
+
+  callback =
+    callback ?
+      callback
+      :
+      options && options instanceof Function ?
+        options
+        :
+        null
+
   const userOptions = {
     ...getUserGeneralOptions(testController.testRun.test.testFile.filename),
     ...options
   }
 
   const screenshotHandler = new ScreenshotHandler(testController, userOptions)
+  screenshotHandler.comparisonResultHandling = !callback
+  screenshotHandler.logging = !callback
+  screenshotHandler.asserting = !callback
 
-  return await screenshotHandler.handleScreenshot(selector)
+  return (
+    callback ?
+      screenshotHandler.handleScreenshot(selector).then(callback)
+      :
+      screenshotHandler.handleScreenshot(selector)
+  )
 }
 
 const getUserGeneralOptions = (initialConfigSearchPath) => {

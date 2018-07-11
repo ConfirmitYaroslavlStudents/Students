@@ -351,9 +351,9 @@ qunit.test('value() on \'Hello World!\' tree', assert => {
 
 // endregion
 
-// region toJson() tests
+// region toJSON() tests
 
-qunit.test('toJson() on small tree', assert => {
+qunit.test('toJSON() on small tree', assert => {
     let tree = fillSmallTree();
 
     let cmp = [];
@@ -363,10 +363,10 @@ qunit.test('toJson() on small tree', assert => {
             value: element.toString()
         })
 
-    assert.deepEqual(JSON.parse(tree.toJson()), cmp)
+    assert.deepEqual(JSON.parse(tree.toJSON()), cmp)
 });
 
-qunit.test('toJson() on large tree', assert => {
+qunit.test('toJSON() on large tree', assert => {
     let tree = fillLargeTree();
 
     let cmp = [];
@@ -376,10 +376,10 @@ qunit.test('toJson() on large tree', assert => {
             value: i.toString()
         })
 
-    assert.deepEqual(tree.toJson(), JSON.stringify(cmp))
+    assert.deepEqual(tree.toJSON(), JSON.stringify(cmp))
 });
 
-qunit.test('toJson() on \'Hello World!\' tree', assert => {
+qunit.test('toJSON() on \'Hello World!\' tree', assert => {
     let tree = fillHelloWorldTree();
 
     let cmp = [];
@@ -389,7 +389,7 @@ qunit.test('toJson() on \'Hello World!\' tree', assert => {
             value: element !== 'h' && element !== 'w' ? element: element.toUpperCase()
         })
 
-    assert.deepEqual(JSON.parse(tree.toJson()), cmp)
+    assert.deepEqual(JSON.parse(tree.toJSON()), cmp)
 });
 
 // endregion

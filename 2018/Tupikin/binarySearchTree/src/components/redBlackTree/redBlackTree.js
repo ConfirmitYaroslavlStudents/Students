@@ -4,7 +4,7 @@
 /**
  * @author Vladislav Tupikin, 2018
  * @licence MIT
- * @version 1.1.5
+ * @version 1.1.7
  */
 
 const {Node}       = require('./node');
@@ -45,14 +45,14 @@ class RedBlackTree{
      * @returns value that corresponds to the key. If such a value is not found, then {@code undefined} is returned
      */
     find(key){
-        let currentNode = this._root;  // Start point for tree walk
-        while (!Node.isLeaf(currentNode)){  // Walking of the tree, until node not a leaf (analog of binary search)
-            let cmp = RedBlackTree.compare(key, currentNode.key);
-            if      (cmp < 0) currentNode = currentNode.left;
-            else if (cmp > 0) currentNode = currentNode.right;
-            else              return currentNode.value
+        let node = this._root;  // Start point for tree walk
+        while (!Node.isLeaf(node)){  // Walking of the tree, until node not a leaf (analog of binary search)
+            let cmp = RedBlackTree.compare(key, node.key);
+            if      (cmp < 0) node = node.left;
+            else if (cmp > 0) node = node.right;
+            else              return node.value
         }
-        if (currentNode && currentNode.key === key) return currentNode.value;
+        if (node && node.key === key) return node.value;
         return undefined;  // Returns undefined if the tree does not contain the node with key for searching
     }
 
@@ -190,10 +190,18 @@ class RedBlackTree{
     }
 
     /**
+     * Returns true if tree is empty
+     * @return {boolean}
+     */
+    isEmpty(){
+        return this.length() === 0
+    }
+
+    /**
      * Convert tree to Json structure
      * @return {String} json representation
      */
-    toJson(){
+    toJSON(){
         if (!this._root) return JSON.stringify([]);
         let nodes = [];
         Node.getNodes(this._root, nodes);
@@ -206,7 +214,7 @@ class RedBlackTree{
      * Convert Json to tree representation
      * @param json - input json string
      */
-    fromJson(json){
+    fromJSON(json){
         json = JSON.parse(json);
         for (let element of json)
             this.insert(element.key, element.value)
@@ -217,7 +225,7 @@ class RedBlackTree{
      * @return {RedBlackTree}
      */
     clone(){
-        return new RedBlackTree().fromJson(this.toJson());
+        return new RedBlackTree().fromJSON(this.toJSON());
     }
 
     static compare(a, b){

@@ -243,3 +243,4 @@ CandidatesAccounting/dist
 CandidatesAccounting/tests/__screenshots__/
 ScreenshotHandler/.idea/
 ScreenshotHandler/node_modules/
+/.vs

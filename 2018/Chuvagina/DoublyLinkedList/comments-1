@@ -1,0 +1,16 @@
+Books:
+
+- CLR via C# Richter
+- Troelsen
+- C# in nutshell
+
+Comments: 
+- private object data -  объяснить, что плохо и как исправить
+- AddLast vs AddFirst: code duplication
+- Data - rename
+- Show vs ReverseShow
+- SOLID
+- iterator
+
+use xUnit
+ - exception handling / show / showreverse

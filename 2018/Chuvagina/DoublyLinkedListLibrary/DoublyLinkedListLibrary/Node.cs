@@ -9,6 +9,7 @@ namespace DoublyLinkedListLibrary
     public class Node
     {
         public string Value { get; set; }
+
         public Node(string Value)
         {
             this.Value = Value;

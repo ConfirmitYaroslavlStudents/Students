@@ -191,16 +191,13 @@ namespace DoublyLinkedListTests
         [TestMethod]
         public void DeleteInEmptyList_IndexOutOfRangeExeption()
         {
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
-            try
-            {
-                testList.DeleteAtIndex(1);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Assert.IsTrue(true);
-            }
+            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();             
+            Assert.ThrowsException<IndexOutOfRangeException>(
+                  () => testList.DeleteAtIndex(1));
+           
         }
+            
+        
 
         [TestMethod]
         public void AddOneElementToTheMiddle_ElementsAreInRightOrder_FromHead()
@@ -243,17 +240,10 @@ namespace DoublyLinkedListTests
             testList.AddToTail("4");
             testList.AddToTail("5");
 
-            try
-            {
-                testList.AddAtIndex("3", 7);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Assert.IsTrue(true);
-            }
-
-
+            Assert.ThrowsException<IndexOutOfRangeException>(
+      () => testList.AddAtIndex("3", 7));          
         }
+
         [TestMethod]
         public void GetTheFirstElement_TheRightElementIsGotten()
         {
@@ -286,14 +276,9 @@ namespace DoublyLinkedListTests
         public void GetTheFirstElementInEmptyList_OutOfRangeException()
         {
             DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
-            try
-            {
-                string testElement = testList.FirstElement();
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Assert.IsTrue(true);
-            }
+            Assert.ThrowsException<IndexOutOfRangeException>(
+            () =>  testList.FirstElement());
+          
         }
 
         [TestMethod]
@@ -316,14 +301,9 @@ namespace DoublyLinkedListTests
         public void GetTheLastElementInEmptyList_OutOfRangeException()
         {
             DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
-            try
-            {
-                string testElement = testList.LastElement();
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Assert.IsTrue(true);
-            }
+            Assert.ThrowsException<IndexOutOfRangeException>(
+            () => testList.LastElement());
+            
         }
 
     }

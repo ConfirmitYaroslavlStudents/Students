@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoublyLinkedListLibrary", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoublyLinkedListTests", "DoublyLinkedListTests\DoublyLinkedListTests.csproj", "{54652446-74E4-4B1A-BFFD-A5005322D939}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoublyLinkedListXUnitTests", "DoublyLinkedListXUnitTests\DoublyLinkedListXUnitTests.csproj", "{D1A61E5B-A586-4EF8-9853-FCCB0F5E858C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{54652446-74E4-4B1A-BFFD-A5005322D939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54652446-74E4-4B1A-BFFD-A5005322D939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54652446-74E4-4B1A-BFFD-A5005322D939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1A61E5B-A586-4EF8-9853-FCCB0F5E858C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1A61E5B-A586-4EF8-9853-FCCB0F5E858C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1A61E5B-A586-4EF8-9853-FCCB0F5E858C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1A61E5B-A586-4EF8-9853-FCCB0F5E858C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

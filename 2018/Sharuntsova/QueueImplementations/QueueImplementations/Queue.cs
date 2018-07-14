@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace QueueImplementations
 {
@@ -18,56 +15,57 @@ namespace QueueImplementations
         }
 
     }
-    class Queue<T>
+
+    public class Queue<T> : IQueue<T>
     {
         private Node<T> _head;
         private Node<T> _tail;
-        private int count;
+        private int _count;
 
         public void Enqueue(T data)
         {
-            Node<T> newNode = new Node<T>(data);
-            Node<T> tempNode = _tail;
+            var newNode = new Node<T>(data);
+            var tempNode = _tail;
             _tail = newNode;
-            if (count==0)
+            if (_count == 0)
                 _head = _tail;
             else
                 tempNode.Next = newNode;
-            count++;
+            _count++;
         }
 
-        public T Dequeue ()
+        public T Dequeue()
         {
-            if (count == 0)
-                throw new Exception ("Queue is empty.");
+            if (_count == 0)
+                throw new InvalidOperationException("Queue is empty.");
             T result = _head.Data;
             _head = _head.Next;
-            count--;
+            _count--;
             return result;
         }
 
-        public int Count ()
+        public int Count()
         {
-            return count;
+            return _count;
         }
 
         public T First()
         {
-            if (count == 0)
-                throw new InvalidOperationException();
+            if (_count == 0)
+                throw new InvalidOperationException("Queue is empty.");
             return _head.Data;
         }
         public T Last()
         {
-            if (count == 0)
-                throw new InvalidOperationException();
+            if (_count == 0)
+                throw new InvalidOperationException("Queue is empty.");
             return _tail.Data;
         }
 
-        public bool Contains (T data)
+        public bool Contains(T data)
         {
-            Node<T> currentNode = _head;
-            while (currentNode!=null)
+            var currentNode = _head;
+            while (currentNode != null)
             {
                 if (currentNode.Data.Equals(data))
                     return true;
@@ -78,74 +76,93 @@ namespace QueueImplementations
 
     }
 
-    public class ArrayQueue<T>
+    public class ArrayQueue<T> : IQueue<T>
     {
         private T[] _array;
-        private int _augmentStep;
-        private int count;
+        private int _count;
+        private int _initialSizeArray = 100;
+        private int _firstElementIndex;
+        private int _lastElementIndex;
 
-        public ArrayQueue ()
+        public ArrayQueue()
         {
-            _array = new T[10];
-            _augmentStep = 10;
-        }
-
-        public ArrayQueue(int arrayLength)
-        {
-            _array = new T[arrayLength];
-            _augmentStep = 10;
-        }
-
-        public ArrayQueue(int arrayLength, int augmentStep)
-        {
-            _array = new T[arrayLength];
-            _augmentStep = augmentStep;
+            _array = new T[_initialSizeArray];
+            _lastElementIndex = -1;
         }
 
         public void Enqueue(T data)
         {
-            if (count == _array.Length)
+            if (_count == _array.Length)
                 ExpandArray();
-            _array[count] = data;
-            count++;
+
+            if (_lastElementIndex == _array.Length - 1)
+                _lastElementIndex = -1;
+            _array[_lastElementIndex + 1] = data;
+            _count++;
+            _lastElementIndex++;
         }
 
         public T Dequeue()
         {
-            if (count == 0)
-                throw new InvalidOperationException();
-            T output = _array[0];
-            for (int i = 0; i < _array.Length - 1; i++)
-                _array[i] = _array[i + 1];
+            if (_count == 0)
+                throw new InvalidOperationException("Queue is empty.");
+
+            T output = _array[_firstElementIndex];
+            if (_firstElementIndex == _array.Length - 1)
+                _firstElementIndex = 0;
+            else _firstElementIndex++;
+            _count--;
+            if (_count == 0)
+            {
+                _firstElementIndex = 0;
+                _lastElementIndex = 0;
+            }
             return output;
         }
 
         public T First()
         {
-            return _array[0];
+            if (_count == 0)
+                throw new InvalidOperationException("Queue is empty.");
+            return _array[_firstElementIndex];
         }
 
         public T Last()
         {
-            return _array[count - 1];
+            if (_count == 0)
+                throw new InvalidOperationException("Queue is empty.");
+            return _array[_lastElementIndex];
         }
 
         public int Count()
         {
-            return count;
+            return _count;
         }
 
-        public bool Contains (T data)
+        public bool Contains(T data)
         {
             return _array.Contains(data);
         }
 
         private void ExpandArray()
         {
-            T[] newArray = new T[_array.Length + _augmentStep];
-            for (int i =0; i<_array.Length; i++)
-                newArray[i] = _array[i];
+            T[] newArray = new T[2 * _array.Length];
+            if (_firstElementIndex < _lastElementIndex)
+            {
+                for (int i = 0; i < _array.Length; i++)
+                    newArray[i] = _array[i];
+            }
+            else
+            {
+                for (int i = _firstElementIndex; i < _array.Length; i++)
+                    newArray[i - _firstElementIndex] = _array[i];
+                int currentIndex = _array.Length - _firstElementIndex;
+                for (int i = 0; i <= _lastElementIndex; i++)
+                    newArray[i + currentIndex] = _array[i];
+            }
 
+            _firstElementIndex = 0;
+            _lastElementIndex = _count - 1;
             _array = newArray;
         }
     }

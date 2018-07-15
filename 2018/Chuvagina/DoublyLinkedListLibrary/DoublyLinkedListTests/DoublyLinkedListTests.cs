@@ -10,12 +10,9 @@ namespace DoublyLinkedListLibrary
         public List<string> CheckPreviousLinks(DoublyLinkedList<string> testList)
         {
             List<string> actual = new List<string>();
-            DoublyLinkedList<string>.Node item = testList.Tail;
-
-            while (item != null)
+            foreach (string item in testList.GetList(true))
             {
-                actual.Add(item.Value);
-                item = item.Previous;
+                actual.Add(item);
             }
 
             return actual;
@@ -25,7 +22,7 @@ namespace DoublyLinkedListLibrary
         {
             List<string> actual = new List<string>();
 
-            foreach (string item in testList)
+            foreach (string item in testList.GetList(false))
             {
                 actual.Add(item);
             }

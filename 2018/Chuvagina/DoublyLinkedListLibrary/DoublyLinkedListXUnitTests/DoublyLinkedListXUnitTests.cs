@@ -10,11 +10,23 @@ namespace DoublyLinkedListLibrary
    
     public class DoublyLinkedListXUnitTests
     {
-        public List<string> Check(DoublyLinkedList<string> testList)
+        public List<string> CheckPreviousLinks(DoublyLinkedList<string> testList)
+        {
+            List<string> actual = new List<string>();
+            foreach (string item in testList.GetList(true))
+            {
+                actual.Add(item);
+            }
+
+            return actual;
+        }
+
+
+        public List<string> CheckNextLinks(DoublyLinkedList<string> testList)
         {
             List<string> actual = new List<string>();
 
-            foreach (string item in testList)
+            foreach (string item in testList.GetList(false))
             {
                 actual.Add(item);
             }
@@ -37,8 +49,11 @@ namespace DoublyLinkedListLibrary
             testList.Insert(value,"0");
             expected.Insert(value - 1, "0");
 
-            List<string> actualNextLinks = Check(testList);
+            List<string> actualNextLinks = CheckNextLinks(testList);
+            List<string> actualPreviousLinks = CheckPreviousLinks(testList);
             CollectionAssert.AreEqual(actualNextLinks, expected);
+            expected.Reverse();
+            CollectionAssert.AreEqual(actualPreviousLinks, expected);
 
         }
 
@@ -57,8 +72,11 @@ namespace DoublyLinkedListLibrary
             testList.DeleteAtIndex(value);
             expected.RemoveAt(value-1);
             
-            List<string> actualNextLinks = Check(testList);
+            List<string> actualNextLinks = CheckNextLinks(testList);
+            List<string> actualPreviousLinks = CheckPreviousLinks(testList);
             CollectionAssert.AreEqual(actualNextLinks,expected);
+            expected.Reverse();
+            CollectionAssert.AreEqual(actualPreviousLinks, expected);
 
         }
 
@@ -88,8 +106,11 @@ namespace DoublyLinkedListLibrary
 
             testList.DeleteAtIndex(1);
 
-            List<string> actual = Check(testList);
-            CollectionAssert.AreEqual(expected, actual);
+            List<string> actualNextLinks = CheckNextLinks(testList);
+            List<string> actualPreviousLinks = CheckPreviousLinks(testList);
+            CollectionAssert.AreEqual(expected, actualNextLinks);
+            expected.Reverse();
+            CollectionAssert.AreEqual(expected, actualPreviousLinks);
         }
 
         [Fact]

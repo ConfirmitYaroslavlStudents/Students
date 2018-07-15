@@ -6,9 +6,9 @@ using System.Collections;
 namespace DoublyLinkedListLibrary
 {
 
-    public class DoublyLinkedList<T> : IEnumerable
+    public class DoublyLinkedList<T> 
     {
-        public class Node
+        private class Node
         {
             public T Value { get; set; }
 
@@ -24,10 +24,10 @@ namespace DoublyLinkedListLibrary
 
            public Node Next { get; set; }
           
-        }      
+        }
 
-        public Node Head { get; private set; }
-        public Node Tail { get; private set; }
+        private Node Head;
+        private Node Tail;
         private int _count;
 
         public DoublyLinkedList(params T[] list)
@@ -41,16 +41,32 @@ namespace DoublyLinkedListLibrary
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerable GetList(bool Reverse)
         {
-            Node element = Head;
-
-            while (element != null)
+            if (Reverse)
             {
-                yield return element.Value;
-                element = element.Next;
+                Node element = Tail;
+
+                while (element != null)
+                {
+                    yield return element.Value;
+                    element = element.Previous;
+                }
             }
+            else
+            {
+                Node element = Head;
+
+                while (element != null)
+                {
+                    yield return element.Value;
+                    element = element.Next;
+                }
+            }
+
         }
+
+        
 
 
         private void AddFirstElement(Node firstElement)

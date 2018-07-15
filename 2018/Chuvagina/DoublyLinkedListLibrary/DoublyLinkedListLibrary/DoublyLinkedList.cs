@@ -1,21 +1,44 @@
-﻿using DoublyLinkedListLibrary;
+﻿
 using System;
 using System.Collections;
 
 
-namespace DoublyLinkedList
+namespace DoublyLinkedListLibrary
 {
 
-    public class DoublyLinkedList : IEnumerable
+    public class DoublyLinkedList<T> : IEnumerable
     {
+        public class Node
+        {
+            public T Value { get; set; }
+
+            public Node(T Value)
+            {
+                this.Value = Value;
+                Previous = null;
+                Next = null;
+            }
+
+                       
+           public Node Previous { get; set; }
+
+           public Node Next { get; set; }
+          
+        }      
+
         public Node Head { get; private set; }
         public Node Tail { get; private set; }
         private int _count;
-        public DoublyLinkedList()
+
+        public DoublyLinkedList(params T[] list)
         {
             Head = null;
             Tail = null;
             _count = 0;
+            foreach (T item in list)
+            {
+                AddToTail(item);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -37,7 +60,7 @@ namespace DoublyLinkedList
             _count++;
         }
 
-        public void AddToTail(string newValue)
+        public void AddToTail(T newValue)
         {
             Node newElement = new Node(newValue);
 
@@ -47,6 +70,7 @@ namespace DoublyLinkedList
             }
             else
             {
+                
                 Tail.Next = newElement;
                 newElement.Previous = Tail;
                 Tail = newElement;
@@ -56,9 +80,9 @@ namespace DoublyLinkedList
 
         }
 
-        public void AddToHead(string newValue)
+        public void AddToHead(T newValue)
         {
-            Node newElement = new Node(newValue);
+            Node newElement = new Node (newValue);
 
             if (Head == null)
             {
@@ -74,7 +98,7 @@ namespace DoublyLinkedList
 
 
         }
-        public void AddAtIndex(string NewData, int Index)
+        public void Insert( int Index,T newValue)
         {
             if (Index < 1 || Index > _count)
             {
@@ -82,21 +106,27 @@ namespace DoublyLinkedList
             }
             else
             {
-                int nodeNumber = 1;
-                Node current = Head;
-
-                while (nodeNumber != Index)
+                if (Index == 1)
+                    AddToHead(newValue);
+                else
                 {
-                    current = current.Next;
-                    nodeNumber++;
-                }
+                    int item = 1;
+                    Node current = Head;
 
-                Node newNode = new Node(NewData);
-                newNode.Previous = current.Previous;
-                newNode.Next = current;
-                current.Previous = newNode;
-                newNode.Previous.Next = newNode;
-                _count++;
+                    while (item != Index)
+                    {
+                        current = current.Next;
+                        item++;
+                    }
+
+                    Node newNode = new Node(newValue);
+                    newNode.Previous = current.Previous;
+                    newNode.Next = current;
+                    current.Previous = newNode;
+                    newNode.Previous.Next = newNode;
+                    _count++;
+                }
+                
             }
         }
 
@@ -127,7 +157,7 @@ namespace DoublyLinkedList
                 _count--;
             }
         }
-        public string FirstElement()
+        public T FirstElement()
         {
             if (Head != null)
             {
@@ -137,7 +167,7 @@ namespace DoublyLinkedList
             throw new IndexOutOfRangeException();
 
         }
-        public string LastElement()
+        public T LastElement()
         {
             if (Tail != null)
             {
@@ -147,11 +177,11 @@ namespace DoublyLinkedList
             throw new IndexOutOfRangeException();
         }
 
-        public string ElementAtIndex(int Index)
+        public T ElementAtIndex(int Index)
         {
             if (Index < 1 || Index > _count)
             {
-                return null;
+                return default(T);
             }
 
             int item = 1;

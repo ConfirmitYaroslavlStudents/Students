@@ -157,5 +157,22 @@ namespace MyDictionaryTest
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void ClearMyDictionary()
+        {
+            MyDictionary<int, char> MD = new MyDictionary<int, char>();
+            MD.Add(1, 'a');
+            MD.Add(2, 'b');
+            MD.Add(3, 'c');
+            MD.Add(4, 'd');
+
+            MD.Clear();
+
+            int actual = MD.Count;
+            int expected = 0;
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

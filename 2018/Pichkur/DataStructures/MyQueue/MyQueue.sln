@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyQueue", "MyQueue\MyQueue.csproj", "{F3940E0D-8A13-41FD-94F6-DC6DEADE4263}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{BDBD94F0-B243-4C65-A401-7EE5B88CC9E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyQueueTestProject", "UnitTestProject\MyQueueTestProject.csproj", "{BDBD94F0-B243-4C65-A401-7EE5B88CC9E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

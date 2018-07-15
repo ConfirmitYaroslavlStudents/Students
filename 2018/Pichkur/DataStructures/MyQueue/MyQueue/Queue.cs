@@ -8,50 +8,47 @@ namespace MyQueue
 {
     public class Queue<T>
     {
-        private Node<T> First;
-        private Node<T> Last;
-        private int _count;
+        private Node<T> _first;
+        private Node<T> _last;
+
+        public int Count { get; private set; }
 
         public Queue()
         {
-            First = null;
-            Last = null;
-            _count = 0;
+            _first = null;
+            _last = null;
+            Count = 0;
         }
 
         public void Enqueue(T data)
         {
-            _count++;
-            if (First == null)
+            Count++;
+            if (_first == null)
             {
-                First = new Node<T>(data);
-                Last = First;
+                _first = new Node<T>(data);
+                _last = _first;
             }
             else
             {
                 Node<T> item = new Node<T>(data);
-                Last.Next = item;
-                Last = item;
+                _last.Next = item;
+                _last = item;
             }
         }
 
         public T Dequeue()
         {
             T item;
-            if (First != null)
+            if (_first != null)
             {
-                item = First.Value;
-                First = First.Next;
-                _count--;
+                item = _first.Value;
+                _first = _first.Next;
+                Count--;
                 return item;
             }
             else
                 throw new InvalidOperationException();
         }
-
-        public int Count()
-        {
-            return _count;
-        }
+        
     }
 }

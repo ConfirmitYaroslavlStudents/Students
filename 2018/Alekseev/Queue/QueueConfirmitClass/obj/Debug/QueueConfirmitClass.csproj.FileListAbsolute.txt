@@ -1,0 +1,6 @@
+C:\Users\a578\Documents\Visual Studio 2017\Projects\QueueConfirmitClass\QueueConfirmitClass\bin\Debug\QueueConfirmitClass.dll
+C:\Users\a578\Documents\Visual Studio 2017\Projects\QueueConfirmitClass\QueueConfirmitClass\bin\Debug\QueueConfirmitClass.pdb
+C:\Users\a578\Documents\Visual Studio 2017\Projects\QueueConfirmitClass\QueueConfirmitClass\obj\Debug\QueueConfirmitClass.csproj.CoreCompileInputs.cache
+C:\Users\a578\Documents\Visual Studio 2017\Projects\QueueConfirmitClass\QueueConfirmitClass\obj\Debug\QueueConfirmitClass.dll
+C:\Users\a578\Documents\Visual Studio 2017\Projects\QueueConfirmitClass\QueueConfirmitClass\obj\Debug\QueueConfirmitClass.pdb
+C:\Users\a578\Documents\Visual Studio 2017\Projects\QueueConfirmitClass\QueueConfirmitClass\obj\Debug\QueueConfirmitClass.csprojResolveAssemblyReference.cache

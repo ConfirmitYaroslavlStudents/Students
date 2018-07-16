@@ -5,40 +5,48 @@ Usage
 -----------------------------------
 ### Without callback (execution according to configuration file)
 ```
-const result = await toMatchScreenshot(testController, selector[, options])
+await toMatchScreenshot(testController, selector[, options])
 ```
 
-`toMatchScreenshot` is a `async` function, which takes screenshot of selected element and compares it with base one (if base screenshot doesn't exist, creates it). The function performs screenshot creation, comparison, result logging and TestCafe assertion.
+### With callback (only takes and compares screenshots, processing of the result depends on user)
+```
+await toMatchScreenshot(testController, selector, {callback: (result) => {
+  //comparison result processing
+}})
+```
 
-#### Arguments
+Callback gets an object:
+```
+{
+  testName, //string
+  browserName, //string
+  comparisonPerformed, //boolean
+  comparisonPassed, //boolean
+  baseScreenshotURL, //string
+  newScreenshotURL, //string
+  diffScreeshotURL, //string
+  analysisTime, //number
+  misMatchPercentage, //number
+  maxMisMatchPercentage, //number
+  isSameDimensions, //boolean
+  dimensionDifference, //object
+  diffBounds, //object
+  getDiffScreenshotBuffer, //function
+  handle, //function
+  log, //function
+  assert //function
+}
+```
+
+`testName`, `browserName`, `comparisonPerformed`, `newBaseScreenshotWasCreated`, `baseScreenshotURL` are always presented, others aren't (depending on the function execution process).
+
+### Arguments
 * `testController` - [Testcafe TestController](https://devexpress.github.io/testcafe/documentation/test-api/test-code-structure.html#test-controller) (specific for the test (contains `testRun` object));
 * `selector` - [Testcafe Selector](https://devexpress.github.io/testcafe/documentation/test-api/selecting-page-elements/selectors/) (whole page or an element for testing);
 * `options` _(optional)_ - test specific option object (combine with user general options from `.matchScreenshot.config.json`; for details check `Configuration` section).
 
-#### Result
-The function returns an object:
-```
-{
-  testName,
-  browserName,
-  comparisonPerformed,
-  comparisonPassed,
-  newBaseScreenshotWasCreated,
-  baseScreenshotURL,
-  newScreenshotURL,
-  diffScreeshotURL,
-  analysisTime,
-  misMatchPercentage,
-  maxMisMatchPercentage,
-  isSameDimensions,
-  dimensionDifference,
-  diffBounds
-}
-```
-
-`testName`, `browserName`, `comparisonPerformed`, `newBaseScreenshotWasCreated`, `baseScreenshotUR` are always presented, others aren't (depending on the function execution process).
-
-#### Example
+### Examples
+#### Without callback
 ```import { Selector } from 'testcafe'
 import toMatchScreenshot from './toMatchScreenshot'
 
@@ -53,50 +61,7 @@ test('Simple test', async t => {
 })
 ```
 
-### With callback (only takes and compares screenshots, processing of the result depends on user)
-```
-await toMatchScreenshot(testController, selector[, options], (data) => {
-  //comparison result processing
-})
-```
-
-`toMatchScreenshot` with callback is a `async` function, which takes screenshot of selected element and compares it with base one (if base screenshot doesn't exist, creates it). Comparison result returns in callback.
-
-#### Arguments
-* `testController` - [Testcafe TestController](https://devexpress.github.io/testcafe/documentation/test-api/test-code-structure.html#test-controller) (specific for the test (contains `testRun` object));
-* `selector` - [Testcafe Selector](https://devexpress.github.io/testcafe/documentation/test-api/selecting-page-elements/selectors/) (whole page or an element for testing);
-* `options` _(optional)_ - test specific option object (combine with user general options from `.matchScreenshot.config.json`; for details check `Configuration` section);
-* `callback` - callback function to procces comparison result.
-
-#### Result
-The function returns an object:
-```
-{
-  testName,
-  browserName,
-  comparisonPerformed,
-  comparisonPassed,
-  newBaseScreenshotWasCreated,
-  baseScreenshotURL,
-  newScreenshotURL,
-  analysisTime,
-  misMatchPercentage,
-  maxMisMatchPercentage,
-  isSameDimensions,
-  dimensionDifference,
-  diffBounds,
-  getDiffScreenshotBuffer,
-  handleResult,
-  logResult,
-  assert
-}
-```
-
-`testName`, `browserName`, `comparisonPerformed`, `newBaseScreenshotWasCreated`, `baseScreenshotUR` are always presented, others aren't (depending on the function execution process).
-
-`handleResult`, `logResult`, `assert` - functions, which implements `toMatchScreenshot` functions according to configuration file.
-
-#### Example
+##### With callback
 ```import { Selector } from 'testcafe'
 import toMatchScreenshot from './toMatchScreenshot'
 
@@ -107,13 +72,11 @@ test('Simple test', async t => {
   await t
   .click(Selector('button[test-button]'))
 
-  await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick' }, (data) => {
-    if (data.comparisonPerformed) {
-      console.log(data.comparisonPassed)
-      data.handleResult()
-      data.assert()
-    }
-  })
+  await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick', callback: (result) => {
+    result.handle()
+    console.log(result.comparisonPassed)
+    result.assert()
+  }})
 })
 ```
 
@@ -121,7 +84,7 @@ Configuration
 -----------------------------------
 ### Config file
 
-Create your configuration file named `.matchScreenshot.config.json` in test file directory or above (up to project root directory).
+Create your configuration file named `.toMatchScreenshot.config.js` in test file directory or above (up to project root directory).
 
 Configuration file is a json file:
 
@@ -139,7 +102,9 @@ Configuration file is a json file:
       boundingBox: { ... },
       ignoredBox: { ... }
     }
-  }
+  },
+
+  handleResult: (result) => { ... }
 }
 ```
 
@@ -225,7 +190,9 @@ ignoredBox: {
 ```
 excludes part of the image from comparison (in pixels, from left top corner).
 
+### Callback options
+```
+handleResult //function, default: none
+```
 
-Contacts
------------------------------------
-email: [dmitry.banokin@gmail.com](mailto:dmitry.banokin@gmail.com)
+`handleResult` - callback function which allows user to implement their own comparison result processing.

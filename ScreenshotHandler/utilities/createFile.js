@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export default (fileURL, buffer) => {
+const createFile = (fileURL, buffer) => {
   let currentDirectory = path.dirname(fileURL)
   const directoriesToCreate = []
 
@@ -19,3 +19,5 @@ export default (fileURL, buffer) => {
     }
   }
 }
+
+export default createFile

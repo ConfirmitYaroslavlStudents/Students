@@ -1,7 +1,9 @@
 import fs from 'fs'
 
-export default (fileURL) => {
+const deleteFile = (fileURL) => {
   if (fs.existsSync(fileURL)) {
     fs.unlinkSync(fileURL)
   }
 }
+
+export default deleteFile

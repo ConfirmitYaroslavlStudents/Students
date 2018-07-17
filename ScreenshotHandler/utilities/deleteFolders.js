@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export default (absPath, relativePathToDelete) => {
+const deleteFolders = (absPath, relativePathToDelete) => {
   while (relativePathToDelete.length > 1) {
     try {
       fs.rmdirSync(path.join(absPath, relativePathToDelete))
@@ -12,3 +12,5 @@ export default (absPath, relativePathToDelete) => {
     }
   }
 }
+
+export default deleteFolders

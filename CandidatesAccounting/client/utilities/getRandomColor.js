@@ -1,4 +1,4 @@
-export default function getRandomColor() {
+const getRandomColor = () => {
   const letters = '0123456789ABCDEF'
   let color = '#'
   for (let i = 0; i < 6; i++) {
@@ -6,3 +6,5 @@ export default function getRandomColor() {
   }
   return color
 }
+
+export default getRandomColor

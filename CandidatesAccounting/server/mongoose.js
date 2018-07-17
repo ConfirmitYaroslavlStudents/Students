@@ -1,17 +1,13 @@
 import mongoose from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
-import serverConfig from './server.config.json'
-import {
-  AccountSchema,
-  CandidateSchema,
-  TagSchema
-} from './schemas'
+import serverConfig from './server.config.js'
+import { AccountSchema, CandidateSchema, TagSchema } from './schemas'
 
 const connectionURL = serverConfig.databaseConnectionURL
 
 mongoose.Promise = Promise
 
-export function connect() {
+export const connect = () => {
   return mongoose.connect(connectionURL)
 }
 
@@ -24,16 +20,16 @@ const Tag = mongoose.model('Tag', TagSchema, 'tags')
 
 // Get database data
 
-export function getCandidates(candidateStatus) {
+export const getCandidates = (candidateStatus) => {
   const searchSettings = candidateStatus === 'Candidate' ? {} : { status: candidateStatus }
   return Candidate.find(searchSettings).exec()
 }
 
-export function getCandidateById(candidateId) {
+export const getCandidateById = (candidateId) => {
   return Candidate.findById(mongoose.Types.ObjectId(candidateId)).exec()
 }
 
-export function getAllTags() {
+export const getAllTags = () => {
   return Tag.find({}).exec()
     .then(tags => tags.map(tag => tag.title))
 }
@@ -41,7 +37,7 @@ export function getAllTags() {
 
 // Change database data
 
-export function addCandidate(newCandidate) {
+export const addCandidate = (newCandidate) => {
   return Candidate.create(newCandidate)
     .then(candidate => {
       updateTags(candidate.tags)
@@ -49,7 +45,7 @@ export function addCandidate(newCandidate) {
     })
 }
 
-export function updateCandidate(candidateId, candidateNewState) {
+export const updateCandidate = (candidateId, candidateNewState) => {
   let comments = candidateNewState.comments
   if (!comments) {
     comments = []
@@ -70,11 +66,11 @@ export function updateCandidate(candidateId, candidateNewState) {
   })
 }
 
-export function deleteCandidate(candidateId) {
+export const deleteCandidate = (candidateId) => {
   return Candidate.findByIdAndRemove(candidateId).exec()
 }
 
-export function addComment(candidateId, comment) {
+export const addComment = (candidateId, comment) => {
   const id = mongoose.Types.ObjectId()
   comment._id = id
   return Candidate.findByIdAndUpdate(candidateId, {$push: {comments: comment}}).exec()
@@ -88,32 +84,32 @@ export function addComment(candidateId, comment) {
     })
 }
 
-export function updateComment(candidateId, commentId, comment) {
+export const updateComment = (candidateId, commentId, comment) => {
   return Candidate.updateOne({_id: candidateId, 'comments._id': commentId}, {$set: {'comments.$': comment}}).exec()
   .then(() => {
     return candidateId
   })
 }
 
-export function deleteComment(candidateId, commentId) {
+export const deleteComment = (candidateId, commentId) => {
   return Candidate.findByIdAndUpdate(candidateId, {$pull: {comments: {_id: commentId}}}).exec()
 }
 
 
 // Subscription methods
 
-export function subscribe(candidateId, email) {
+export const subscribe = (candidateId, email) => {
   return Candidate.findByIdAndUpdate(candidateId, {$push: {subscribers: email}}).exec()
 }
 
-export function unsubscribe(candidateId, email) {
+export const unsubscribe = (candidateId, email) => {
   return Candidate.findByIdAndUpdate(candidateId, {$pull: {subscribers: email}}).exec()
 }
 
 
 // Get/change avatar data
 
-export function getAvatar(candidateId) {
+export const getAvatar = (candidateId) => {
   return getCandidateById(candidateId)
   .then(candidate => {
     return {
@@ -122,14 +118,14 @@ export function getAvatar(candidateId) {
   })
 }
 
-export function addAvatar(candidateId, avatarFile) {
+export const addAvatar = (candidateId, avatarFile) => {
   return updateCandidate(candidateId, { avatar: avatarFile, hasAvatar: true })
 }
 
 
 // Get/change resume data
 
-export function getResume(candidateId) {
+export const getResume = (candidateId) => {
   return getCandidateById(candidateId)
     .then(interviewee => {
       return {
@@ -139,14 +135,14 @@ export function getResume(candidateId) {
     })
 }
 
-export function addResume(candidateId, resumeFile) {
+export const addResume = (candidateId, resumeFile) => {
   return updateCandidate(candidateId, { resume: resumeFile.name, resumeFile: resumeFile.data })
 }
 
 
 // Get/change comment attachment data
 
-export function getAttachment(candidateId, commentId) {
+export const getAttachment = (candidateId, commentId) => {
   return getCandidateById(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
@@ -165,7 +161,7 @@ export function getAttachment(candidateId, commentId) {
     })
 }
 
-export function addAttachment(candidateId, commentId, attachmentFile) {
+export const addAttachment = (candidateId, commentId, attachmentFile) => {
   return getCandidateById(candidateId)
     .then(candidate => {
       for (let i = 0; i < candidate.comments.length; i++) {
@@ -182,27 +178,27 @@ export function addAttachment(candidateId, commentId, attachmentFile) {
 
 // Get/change notification data
 
-export function getNotifications(username) {
+export const getNotifications = (username) => {
   return Account.findOne({ username }).exec()
   .then(account => account.notifications)
 }
 
-function addNotification(source, recipient, notification) {
+const addNotification = (source, recipient, notification) => {
   Account.findOneAndUpdate({ username: recipient }, {$push: {notifications: {recent: true, source: source, content: notification }}}).exec()
 }
 
-export function noticeNotification(username, notificationId) {
+export const noticeNotification = (username, notificationId) => {
   return Account.updateOne({ username, 'notifications._id': notificationId}, {$set: {'notifications.$.recent': false }}).exec()
 }
 
-export function deleteNotification(username, notificationId) {
+export const deleteNotification = (username, notificationId) => {
   return Account.updateOne({ username }, { $pull: { notifications: { _id: notificationId }}}).exec()
 }
 
 
 // Update tag database
 
-function updateTags(probablyNewTags) {
+const updateTags = (probablyNewTags) => {
   getAllTags()
     .then(tags => {
       const tagsToAdd = []

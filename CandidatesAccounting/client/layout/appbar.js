@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { SELECTORS } from '../rootReducer'
@@ -10,45 +10,48 @@ import LetterAvatar from '../commonComponents/UIComponentDecorators/letterAvatar
 import ImageAvatar from '../commonComponents/UIComponentDecorators/imageAvatar'
 import styled from 'styled-components'
 
-function Appbar(props) {
-  const { pageTitle, candidates, currentCandidateId } = props
+class Appbar extends Component {
+  render() {
+    const { pageTitle, candidates, currentCandidateId } = this.props
 
-  let logoContent = <Logo style={{width: 38, height: 38}}/>
-  let pageTitleContent = <span>{pageTitle}</span>
-  let searchForm = <SearchForm />
+    const candidate = candidates[currentCandidateId]
 
-  const candidate = candidates[currentCandidateId]
-  if (pageTitle !== 'Candidate Accounting' && candidate) {
-    logoContent =
-      candidate && candidate.hasAvatar ?
-        <ImageAvatar
-          source={'/' + candidate.name.toLowerCase() + 's/' + candidate.id + '/avatar'}
-          alternative={candidate.name[0]}
-        />
-        :
-        <LetterAvatar letters={candidate.name[0]} invertedColors/>
+    let logoContent = <Logo style={{width: 38, height: 38}}/>
+    let pageTitleContent = <span>{pageTitle}</span>
+    let searchForm = <SearchForm/>
 
-    pageTitleContent =
-      <div className='inline-flex'>
-        {candidates[currentCandidateId].name}
-        <NicknameWrapper nickname={candidates[currentCandidateId].nickname} />
-      </div>
+    if (pageTitle !== 'Candidate Accounting' && candidate) {
+      logoContent =
+        candidate && candidate.hasAvatar ?
+          <ImageAvatar
+            source={'/' + candidate.name.toLowerCase() + 's/' + candidate.id + '/avatar'}
+            alternative={candidate.name[0]}
+          />
+          :
+          <LetterAvatar letters={candidate.name[0]} invertedColors/>
 
-    searchForm = ''
+      pageTitleContent =
+        <React.Fragment>
+          {candidates[currentCandidateId].name}
+          <NicknameWrapper nickname={candidates[currentCandidateId].nickname}/>
+        </React.Fragment>
+
+      searchForm = null
+    }
+
+    return (
+      <AppbarWrapper>
+        <AppbarTitleWrapper>
+          {logoContent}
+          <PageTitleWrapper>{pageTitleContent}</PageTitleWrapper>
+        </AppbarTitleWrapper>
+        <AppbarControlsWrapper>
+          {searchForm}
+          <UserControls />
+        </AppbarControlsWrapper>
+      </AppbarWrapper>
+    )
   }
-
-  return (
-    <AppbarWrapper>
-      <AppbarTitleWrapper>
-        {logoContent}
-        <PageTitleWrapper>{pageTitleContent}</PageTitleWrapper>
-      </AppbarTitleWrapper>
-      <AppbarControlsWrapper>
-        {searchForm}
-        <UserControls />
-      </AppbarControlsWrapper>
-    </AppbarWrapper>
-  )
 }
 
 Appbar.propTypes = {
@@ -63,6 +66,13 @@ export default connect(state => ({
     currentCandidateId: SELECTORS.COMMENTS.CURRENTCANDIDATEID(state)
   }
 ))(Appbar)
+
+const AppbarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+`
 
 const AppbarControlsWrapper = styled.div`
   display: inline-flex;
@@ -81,11 +91,4 @@ const AppbarTitleWrapper = styled.div`
 const PageTitleWrapper = styled.div`
   display: inline-flex;
   margin-left: 4px;
-`
-
-const AppbarWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 60px;
 `

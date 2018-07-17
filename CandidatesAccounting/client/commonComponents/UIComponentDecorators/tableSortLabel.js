@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 
-export default function SortLabel(props) {
+const SortLabel = (props) => {
   return (
     <TableSortLabel active={props.active} direction={props.direction} onClick={props.onClick}>
       {props.children}
@@ -13,5 +13,7 @@ SortLabel.propTypes = {
   active: PropTypes.bool,
   direction: PropTypes.oneOf(['desc', 'asc']),
   onClick: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 }
+
+export default SortLabel

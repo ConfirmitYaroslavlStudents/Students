@@ -1,4 +1,4 @@
-export default function createCandidateUpdateMessage(differences) {
+const createCandidateUpdateMessage = (differences) => {
   let message = '<p>' + 'Candidate has been updated:' + '</p>'
   for (const property in differences)
   {
@@ -43,3 +43,5 @@ function getPropertyFullName(property) {
       return property
   }
 }
+
+export default createCandidateUpdateMessage

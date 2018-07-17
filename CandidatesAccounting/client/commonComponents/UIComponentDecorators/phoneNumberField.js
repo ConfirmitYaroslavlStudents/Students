@@ -2,27 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
-import MaskedInput from 'react-text-mask'
+import PhoneNumberMaskedInput from './phoneNumberMaskedInput'
 
-function TextMaskCustom(props) {
-  const { inputRef, ...other } = props;
-
-  return (
-    <MaskedInput
-      {...other}
-      ref={inputRef}
-      mask={['+', '7', ' ', /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
-      placeholderChar={'\u2000'}
-      showMask
-    />
-  )
-}
-
-TextMaskCustom.propTypes = {
-  inputRef: PropTypes.func.isRequired,
-}
-
-export default class PhoneNumberField extends Component{
+class PhoneNumberField extends Component{
   constructor(props) {
     super(props)
     this.state = { value: props.value }
@@ -44,16 +26,16 @@ export default class PhoneNumberField extends Component{
     const id = 'phone-number-masked-input-' + label.replace(/\s/g, '-')
 
     return (
-      <div>
+      <React.Fragment>
         <InputLabel htmlFor={id} classes={{root: 'phone-number-input-label'}}>{label}</InputLabel>
         <Input
           id={id}
           value={this.state.value}
           onChange={this.handleChange}
-          inputComponent={TextMaskCustom}
+          inputComponent={PhoneNumberMaskedInput}
           fullWidth
         />
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -63,3 +45,5 @@ PhoneNumberField.propTypes = {
   value: PropTypes.string.isRequired,
   label: PropTypes.string,
 }
+
+export default PhoneNumberField

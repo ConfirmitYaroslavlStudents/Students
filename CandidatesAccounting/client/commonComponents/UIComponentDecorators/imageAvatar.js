@@ -3,10 +3,9 @@ import PropTypes from 'prop-types'
 import Avatar from '@material-ui/core/Avatar'
 import AccountIcon from '@material-ui/icons/AccountCircle'
 
-export default class ImageAvatar extends Component {
+class ImageAvatar extends Component {
   constructor(props) {
     super(props)
-
     this.state = { imageUploaded: true }
   }
 
@@ -29,3 +28,5 @@ ImageAvatar.propTypes = {
   source: PropTypes.string.isRequired,
   alternative: PropTypes.string.isRequired
 }
+
+export default ImageAvatar

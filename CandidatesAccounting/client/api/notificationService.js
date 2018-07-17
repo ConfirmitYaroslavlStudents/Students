@@ -1,7 +1,7 @@
 import sendGraphQLQuery from './graphqlClient'
 import convertArrayToDictinary from '../utilities/convertArrayToDictionary'
 
-export function getNotifications(username) {
+export const getNotifications = (username) => {
   return sendGraphQLQuery(
     `query($username: String!) {
       notifications(username: $username) {
@@ -30,7 +30,7 @@ export function getNotifications(username) {
   })
 }
 
-export function noticeNotification(username, notificationId) {
+export const noticeNotification = (username, notificationId) => {
   return sendGraphQLQuery(
     `mutation noticeNotification($username: String!, $notificationId: ID!) {
       noticeNotification(
@@ -50,7 +50,7 @@ export function noticeNotification(username, notificationId) {
   })
 }
 
-export function deleteNotification(username, notificationId) {
+export const deleteNotification = (username, notificationId) => {
   return sendGraphQLQuery(
     `mutation deleteNotification($username: String!, $notificationId: ID!) {
       deleteNotification(

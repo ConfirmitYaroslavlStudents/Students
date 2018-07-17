@@ -3,27 +3,34 @@ import PropTypes from 'prop-types'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 
-export default function CustomInput(props) {
+const CustomInput = (props) => {
+  const valueIsValid = props.checkValid ? props.checkValid(props.value) : true
+
+  const handleChange = (event) => { props.onChange(event.target.value) }
+
+  const handleFocus = props.onFocus ? props.onFocus : null
+
+  const handleBlur = props.onBlur ? props.onBlur : null
+
   return (
-    <div>
+    <React.Fragment>
       <InputLabel htmlFor={props.id}>{props.label}</InputLabel>
       <Input
-        {...props}
-        id={props.id}
         type={props.type}
         value={props.value}
         classes={{root: props.className}}
         disableUnderline={props.disableUnderline}
         autoFocus={props.autoFocus}
         placeholder={props.placeholder}
-        onChange={(event) => {props.onChange(event.target.value)}}
-        onFocus={(event) => {if (props.onFocus) {props.onFocus(event)}}}
-        onBlur={(event) => {if (props.onBlur) {props.onBlur(event)}}}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         onKeyDown={props.onKeyDown}
-        error={props.checkValid ? !props.checkValid(props.value) : false}
+        error={!valueIsValid}
         fullWidth={props.fullWidth}
+        inputProps={{id: props.id, mark: props.mark}}
       />
-    </div>
+    </React.Fragment>
   )
 }
 
@@ -42,3 +49,5 @@ CustomInput.propTypes = {
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
 }
+
+export default CustomInput

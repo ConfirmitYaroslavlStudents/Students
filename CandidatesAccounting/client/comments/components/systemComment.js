@@ -10,7 +10,7 @@ import {
   CommentFooter,
 } from './styledComponents'
 
-export default function CommentCloud(props) {
+const SystemComment = (props) => {
   return (
     <CommentWrapper>
       <CommentMount isSystem>
@@ -19,7 +19,7 @@ export default function CommentCloud(props) {
           <CommentText text={props.comment.text}/>
         </CommentTextWrapper>
       </CommentMount>
-      <div> </div>
+      <br />
       <CommentFooter>
         { formatDateTime(props.comment.date) }
       </CommentFooter>
@@ -27,6 +27,8 @@ export default function CommentCloud(props) {
   )
 }
 
-CommentCloud.propTypes = {
-  comment: PropTypes.object.isRequired,
+SystemComment.propTypes = {
+  comment: PropTypes.object.isRequired
 }
+
+export default SystemComment

@@ -4,12 +4,12 @@ import AddPersonIcon from '@material-ui/icons/PersonAdd'
 import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
 
-export default function AddCandidateDialogActions(props) {
+const AddCandidateDialogActions = (props) => {
   return (
-    <div className='inline-div'>
+    <React.Fragment>
       <IconButton icon={<AddPersonIcon />} onClick={props.onAcceptClick} color='inherit' />
       <IconButton icon={<CloseIcon />} onClick={props.onCancelClick} color='inherit' />
-    </div>
+    </React.Fragment>
   )
 }
 
@@ -17,3 +17,5 @@ AddCandidateDialogActions.propTypes = {
   onAcceptClick: PropTypes.func.isRequired,
   onCancelClick: PropTypes.func.isRequired
 }
+
+export default AddCandidateDialogActions

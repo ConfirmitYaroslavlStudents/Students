@@ -1,12 +1,12 @@
-export function checkCandidateValidation(candidate) {
+export const checkCandidateValidation = (candidate) => {
   return (isNotEmpty(candidate.name))
 }
 
-export function isNotEmpty(name) {
+export const isNotEmpty = (name) => {
   return (name && name.trim() !== '')
 }
 
-export function isEmail(email) {
+export const isEmail = (email) => {
   const validEmail = /.+@.+\..+/i;
   return (email && validEmail.test(email))
 }

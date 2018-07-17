@@ -1,16 +1,14 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import CandidateControls from '../common/controls'
+import { formatDate } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/list'
 import EmailWrapper from '../../../commonComponents/emailWrapper'
 import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
 import CandidateNameLink from '../../../commonComponents/candidateNameLink'
 import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export default function TraineeTableRow(props) {
-  const { candidate } = props
-
+const getStudentTableCells = (candidate) => {
   return [
     <CandidateNameWrapper>
       <CandidateNameLink candidate={candidate}>
@@ -20,17 +18,26 @@ export default function TraineeTableRow(props) {
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
     <CandidateControls candidate={candidate}/>,
-    <p>{candidate.mentor}</p>,
+    <Date>{formatDate(candidate.startingDate)}</Date>,
+    <Date>{formatDate(candidate.endingDate)}</Date>,
+    <p>{candidate.groupName}</p>,
     <EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper>,
     <PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper>
   ]
-}
-
-TraineeTableRow.propTypes = {
-  candidate: PropTypes.object.isRequired
 }
 
 const CandidateNameWrapper = styled.div`
   display: flex;
   align-items: center;
 `
+
+const Date = styled.div`
+  white-space: nowrap;
+  
+  ${props => props.highlighted && css`
+    color: #ff4081;
+    font-weight: bold;
+	`}
+`
+
+export default getStudentTableCells

@@ -11,7 +11,7 @@ import StudentSpecialFields from '../students/specialFields'
 import TraineeSpecialFields from '../trainees/specialFields'
 import styled from 'styled-components'
 
-export default class CandidateInfoForm extends Component {
+class CandidateInfoForm extends Component {
   constructor(props) {
     super(props)
     this.state = ({ status: props.candidate.status, tags: props.candidate.tags, updateAvatarMessage: '' })
@@ -110,11 +110,12 @@ export default class CandidateInfoForm extends Component {
         <PhoneNumberField
           onChange={value => {this.changeProperty('phoneNumber', value)}}
           label='Phone number'
-          value={candidate.phoneNumber}/>
+          value={candidate.phoneNumber}
+        />
 
         {this.getSpecialFields()}
 
-        <SmallNoteSpan>* - required</SmallNoteSpan>
+        <FormFooter>* - required</FormFooter>
       </CandidateFormWrapper>
     )
   }
@@ -124,6 +125,8 @@ CandidateInfoForm.propTypes = {
   candidate: PropTypes.object.isRequired,
   tags: PropTypes.array.isRequired
 }
+
+export default CandidateInfoForm
 
 const CandidateFormWrapper = styled.div`
   padding: 15px 15px 10px;
@@ -148,8 +151,7 @@ const TextFieldLabel = styled.p`
   font-size: 80%;
 `
 
-const SmallNoteSpan = styled.span`
+const FormFooter = styled.div`
   color: rgba(0,0,0,0.5);
-  fontSize: 80%;
-  float: right;
+  text-align: right;
 `

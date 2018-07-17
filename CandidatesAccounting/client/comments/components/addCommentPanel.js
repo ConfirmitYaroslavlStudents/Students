@@ -14,7 +14,7 @@ import getInnerHTMLCaretPosition from '../../utilities/getInnerHTMLCaretPosition
 import setCaretPosition from '../../utilities/setCaretPositionToElementWithChildren'
 import styled from 'styled-components'
 
-export default class AddCommentPanel extends Component {
+ class AddCommentPanel extends Component {
   constructor(props) {
     super(props)
     this.state = ({ commentText: '', commentAttachment: null })
@@ -172,6 +172,8 @@ AddCommentPanel.modules = {
     container: '#toolbar',
   }
 }
+
+export default AddCommentPanel
 
 const AddCommentPanelButtonsWrapper = styled.div`
   display: inline-flex;

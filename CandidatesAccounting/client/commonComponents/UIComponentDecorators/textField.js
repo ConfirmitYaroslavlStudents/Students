@@ -2,31 +2,33 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 
-export default class CustomTextField extends Component{
+class CustomTextField extends Component{
   constructor(props) {
     super(props)
-    this.state = {value: props.value ? props.value : ''}
+    this.state = { value: props.value ? props.value : '' }
   }
 
   handleChange = (event) => {
     this.props.onChange(event.target.value)
-    this.setState({value: event.target.value})
+    this.setState({ value: event.target.value })
   }
 
   render() {
+    const valueIsValid = this.props.checkValid ? this.props.checkValid(this.state.value) : true
+
     return (
       <TextField
-        inputProps={{mark: this.props.mark}}
-        label={this.props.label}
-        type={this.props.type}
         name={this.props.name}
         id={this.props.id}
+        label={this.props.label}
+        type={this.props.type}
         placeholder={this.props.placeholder}
         value={this.state.value}
         onChange={this.handleChange}
         required={this.props.required}
         autoFocus={this.props.autoFocus}
-        error={this.props.checkValid ? !this.props.checkValid(this.state.value) : false}
+        inputProps={{mark: this.props.mark}}
+        error={!valueIsValid}
         margin='normal'
         multiline
         fullWidth
@@ -46,4 +48,7 @@ CustomTextField.propTypes = {
   name: PropTypes.string,
   id: PropTypes.string,
   type: PropTypes.string,
+  onKeyDown: PropTypes.func
 }
+
+export default CustomTextField

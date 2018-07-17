@@ -5,7 +5,7 @@ import * as commentActions from '../comments/actions'
 import { SELECTORS } from '../rootReducer'
 import styled from 'styled-components'
 
-function CandidateNameLink(props) {
+const CandidateNameLink = (props) => {
   const { fetching, onDeleting, candidate, openCommentPage, children } = props
 
   const candidateOnDeleting = candidate.id === onDeleting

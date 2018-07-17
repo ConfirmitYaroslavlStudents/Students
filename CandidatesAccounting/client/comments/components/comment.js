@@ -6,7 +6,7 @@ import formatUserName from '../../utilities/formatUserName'
 import CommentText from './commentText'
 import { CommentWrapper, CommentMount, CommentTextWrapper, CommentMountFooter, CommentFooter, CommentAuthorName } from './styledComponents'
 
-export default function Comment(props) {
+const Comment = (props) => {
   const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''
 
   return (
@@ -19,7 +19,7 @@ export default function Comment(props) {
           { commentAttachment }
         </CommentMountFooter>
       </CommentMount>
-      <div> </div>
+      <br />
       <CommentFooter>
         <CommentAuthorName>
           { formatUserName(props.comment.author) }
@@ -35,3 +35,5 @@ Comment.propTypes = {
   candidate: PropTypes.object.isRequired,
   markerColor: PropTypes.string.isRequired,
 }
+
+export default Comment

@@ -5,7 +5,7 @@ import RemoveIcon from '@material-ui/icons/Delete'
 import { SmallerIconStyle, SmallButtonStyle } from '../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
-export default function DeleteCommentButton(props) {
+const DeleteCommentButton = (props) => {
   return (
     <DeleteCommentWrapper>
       <IconButton
@@ -18,8 +18,10 @@ export default function DeleteCommentButton(props) {
 }
 
 DeleteCommentButton.propTypes = {
-  deleteComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired
 }
+
+export default DeleteCommentButton
 
 const DeleteCommentWrapper = styled.div`
   display: inline-flex;

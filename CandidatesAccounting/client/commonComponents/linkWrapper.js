@@ -1,11 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function CustomNavLink(props) {
+const CustomNavLink = (props) => {
+  let className = props.className ? props.className : 'nav-link'
+  if (props.active) {
+    className += ' active-nav-link'
+  }
+
   return (
     <div
       onClick={props.onClick}
-      className={(props.className ? props.className : 'nav-link') + (props.active ? ' active-nav-link' : '')}
+      className={className}
     >
       <a style={{margin: 'auto'}}>{props.children}</a>
     </div>
@@ -17,3 +22,5 @@ CustomNavLink.propTypes = {
   className: PropTypes.string,
   active: PropTypes.bool
 }
+
+export default CustomNavLink

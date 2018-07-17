@@ -198,7 +198,7 @@ export const root = {
   }
 }
 
-function formatCandidate(candidate) {
+const formatCandidate = (candidate) => {
   candidate.id = candidate._id
   delete candidate._id
   candidate.commentAmount = candidate.comments.length
@@ -206,7 +206,7 @@ function formatCandidate(candidate) {
   return candidate
 }
 
-function formatCandidateWithComments(candidate) {
+const formatCandidateWithComments = (candidate) => {
   candidate.id = candidate._id
   delete candidate._id
   candidate.comments.forEach(comment => {
@@ -216,7 +216,7 @@ function formatCandidateWithComments(candidate) {
   return candidate
 }
 
-function formatNotification(notification) {
+const formatNotification = (notification) => {
   notification.id = notification._id
   delete notification._id
   notification.source.id = notification.source._id

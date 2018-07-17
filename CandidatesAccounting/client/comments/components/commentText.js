@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ExpansionPanel from '../../commonComponents/UIComponentDecorators/expansionPanel'
 
-export default function CommentText(props) {
+const CommentText = (props) => {
   const { text } = props
   let noTagText = text.replace(/<[/]p>/g, '\n')
   noTagText = noTagText.replace(/<[^>]*>/g, '')
@@ -18,18 +18,22 @@ export default function CommentText(props) {
     }
   }
 
+  const wholeText = <div dangerouslySetInnerHTML={{__html: text}} />
+
   if (lineCount > 9 || noTagText.length > 600) {
     return (
       <ExpansionPanel
         summary={firstLine.slice(0, 104) + '...'}
-        details={<div dangerouslySetInnerHTML={{__html: text}}/>}
+        details={wholeText}
       />
     )
-  } else {
-    return <div dangerouslySetInnerHTML={{__html: text}}/>
   }
+
+  return wholeText
 }
 
 CommentText.propTypes = {
   text: PropTypes.string.isRequired
 }
+
+export default CommentText

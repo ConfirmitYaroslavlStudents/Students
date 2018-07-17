@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import * as actions from '../actions'
 import styled from 'styled-components'
 
-function TagList(props) {
+const TagList = (props) => {
   const handleTagClick = tag => () => {
     props.searchByTag({ tag })
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function fileDownloader(props) {
+const FileDownloader = (props) => {
   const { downloadLink, disabled, children } = props
 
   const handleDownloadFile = () => {
@@ -17,7 +17,9 @@ export default function fileDownloader(props) {
   )
 }
 
-fileDownloader.propTypes = {
+FileDownloader.propTypes = {
   downloadLink: PropTypes.string.isRequired,
   disabled: PropTypes.bool
 }
+
+export default FileDownloader

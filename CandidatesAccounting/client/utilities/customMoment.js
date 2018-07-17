@@ -1,15 +1,11 @@
 import moment from 'moment'
 import 'moment/locale/ru.js'
 
-export function getCurrentDate() {
-  return moment().format('DD.MM.YYYY')
-}
-
-export function getCurrentDateTime() {
+export const getCurrentDateTime = () => {
   return moment().format('H:mm:ss DD.MM.YYYY')
 }
 
-export function formatDate(dateString) {
+export const formatDate = (dateString) => {
   if (!dateString) {
     return ''
   }
@@ -21,7 +17,7 @@ export function formatDate(dateString) {
   return (formatDate !== 'Invalid date' ? formatDate : '')
 }
 
-export function formatDateTime(timeDateString) {
+export const formatDateTime = (timeDateString) => {
   if (!timeDateString) {
     return ''
   }
@@ -43,7 +39,7 @@ export function formatDateTime(timeDateString) {
   return (formatDateTime !== 'Invalid date' ? formatDateTime : '')
 }
 
-export function toDatePickerFormat(momentDateString) {
+export const toDatePickerFormat = (momentDateString) => {
   if (momentDateString && momentDateString !== '') {
     const momentDate = moment(momentDateString, 'DD.MM.YYYY')
     return momentDate.format('YYYY-MM-DD')
@@ -52,7 +48,7 @@ export function toDatePickerFormat(momentDateString) {
   }
 }
 
-export function fromDatePickerFormat(datePickerDateString) {
+export const fromDatePickerFormat = (datePickerDateString) => {
   if (datePickerDateString && datePickerDateString !== '') {
     const datePickerDate = moment(datePickerDateString, 'YYYY-MM-DD')
     return datePickerDate.format('DD.MM.YYYY')
@@ -61,7 +57,7 @@ export function fromDatePickerFormat(datePickerDateString) {
   }
 }
 
-export function toDateTimePickerFormat(momentDateTimeString) {
+export const toDateTimePickerFormat = (momentDateTimeString) => {
   if (momentDateTimeString && momentDateTimeString!== '') {
     const momentDate = moment(momentDateTimeString, 'HH:mm DD.MM.YYYY')
     return momentDate.format('YYYY-MM-DDTHH:mm')
@@ -70,7 +66,7 @@ export function toDateTimePickerFormat(momentDateTimeString) {
   }
 }
 
-export function fromDateTimePickerFormat(datePickerDateTimeString) {
+export const fromDateTimePickerFormat = (datePickerDateTimeString) => {
   if (datePickerDateTimeString && datePickerDateTimeString !== '') {
     const datePickerDate = moment(datePickerDateTimeString, 'YYYY-MM-DDTHH:mm')
     return datePickerDate.format('HH:mm DD.MM.YYYY')
@@ -79,7 +75,7 @@ export function fromDateTimePickerFormat(datePickerDateTimeString) {
   }
 }
 
-export function isToday(date) {
+export const isToday = (date) => {
   const currentDate = moment()
   const dateToCheck = moment(date, 'HH:mm DD.MM.YYYY')
   return (dateToCheck.date() === currentDate.date() &&

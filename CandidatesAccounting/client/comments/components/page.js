@@ -55,7 +55,19 @@ class CommentsPage extends Component {
   }
 
   render() {
-    const { initializing, fetching, authorized, candidate, comments, lastDeletedComment, tags, username, addComment, subscribe, unsubscribe } = this.props
+    const {
+      initializing,
+      fetching,
+      authorized,
+      candidate,
+      comments,
+      lastDeletedComment,
+      tags,
+      username,
+      addComment,
+      subscribe,
+      unsubscribe
+    } = this.props
 
     if (initializing) {
       return <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
@@ -75,6 +87,7 @@ class CommentsPage extends Component {
       commentArray.push(lastDeletedComment)
     }
     commentArray = sortComments(commentArray)
+
     commentArray.forEach(comment => {
       if (!(comment.author in this.userColors)) {
         this.userColors[comment.author] = getRandomColor()
@@ -104,7 +117,8 @@ class CommentsPage extends Component {
         <FetchingWrapper>
           <SpinnerWrapper><Spinner size={60}/></SpinnerWrapper>
         </FetchingWrapper>
-        : ''
+        :
+        null
 
     return (
       <CommentPageWrapper>

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import ResumeUploader from './resumeUploader'
 import { toDateTimePickerFormat, fromDateTimePickerFormat } from '../../../utilities/customMoment'
 
-export default function IntervieweeSpecialFields(props) {
+const IntervieweeSpecialFields = (props) => {
   const handleInterviewDateChange = value => {
     props.changeProperty('interviewDate', fromDateTimePickerFormat(value))
   }
@@ -21,7 +21,7 @@ export default function IntervieweeSpecialFields(props) {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <DateTimePicker
         label='Interview date'
         defaultValue={toDateTimePickerFormat(props.interviewee.interviewDate)}
@@ -29,13 +29,15 @@ export default function IntervieweeSpecialFields(props) {
       />
       <InputLabel>Resume</InputLabel>
       <ResumeUploader interviewee={props.interviewee} onResumeUpload={handleResumeUploadChange}/>
-    </div>)
+    </React.Fragment>)
 }
 
 IntervieweeSpecialFields.propTypes = {
   interviewee: PropTypes.object.isRequired,
-  changeProperty: PropTypes.func.isRequired,
+  changeProperty: PropTypes.func.isRequired
 }
+
+export default IntervieweeSpecialFields
 
 const InputLabel = styled.p`
   margin-top: 16px;

@@ -9,7 +9,7 @@ import DialogAlert from '../../../commonComponents/UIComponentDecorators/dialogA
 
 class DeleteCandidateDialog extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = ({ isOpen: false })
   }
 
@@ -30,7 +30,7 @@ class DeleteCandidateDialog extends Component {
     const { disabled } = this.props
 
     return (
-      <div className='inline-flex'>
+      <React.Fragment>
         <IconButton
           icon={<DeleteIcon />}
           color='secondary'
@@ -46,14 +46,14 @@ class DeleteCandidateDialog extends Component {
         >
           The candidate will be removed from database.
         </DialogAlert>
-      </div>
+      </React.Fragment>
     )
   }
 }
 
 DeleteCandidateDialog.propTypes = {
   candidateId: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
+  disabled: PropTypes.bool
 }
 
 export default connect(() => ({}), actions)(DeleteCandidateDialog)

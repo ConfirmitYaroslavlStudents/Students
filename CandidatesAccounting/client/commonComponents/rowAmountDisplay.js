@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function RowAmountDisplay(props) {
+const RowAmountDisplay = (props) => {
   return (
-    <div className='inline-flex'>
+    <span>
       {props.from} - {props.to} of {props.total}
-    </div>
+    </span>
   )
 }
 
@@ -14,3 +14,5 @@ RowAmountDisplay.propTypes = {
   to: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired
 }
+
+export default RowAmountDisplay

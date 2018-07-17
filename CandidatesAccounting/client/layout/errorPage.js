@@ -4,10 +4,10 @@ import styled from 'styled-components'
 
 export default function ErrorPage(props) {
   return (
-    <ErrorPageWrapper>
-      <ErrorCodeWrapper>{props.errorCode}</ErrorCodeWrapper>
-      <ErrorMessageWrapper>{props.errorMessage}</ErrorMessageWrapper>
-    </ErrorPageWrapper>
+    <Wrapper>
+      <CodeWrapper>{props.errorCode}</CodeWrapper>
+      <MessageWrapper>{props.errorMessage}</MessageWrapper>
+    </Wrapper>
   )
 }
 
@@ -16,7 +16,7 @@ ErrorPage.propTypes = {
   errorMessage: PropTypes.string.isRequired
 }
 
-const ErrorPageWrapper = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   min-height: 100vmin;
   background: #EEE;
@@ -27,14 +27,14 @@ const ErrorPageWrapper = styled.div`
   text-align: center;
 `
 
-const ErrorCodeWrapper = styled.div`
+const CodeWrapper = styled.div`
   display: inline-block;
   font-size: 220%;
   color: #666;
   margin-right: 10px;
 `
 
-const ErrorMessageWrapper = styled.div`
+const MessageWrapper = styled.div`
   display: inline-block;
   font-size: 150%;
   color: #888;

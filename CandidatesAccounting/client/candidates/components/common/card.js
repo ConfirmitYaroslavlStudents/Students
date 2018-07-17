@@ -9,7 +9,7 @@ import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
 import styled from 'styled-components'
 import { SmallerIconStyle } from '../../../commonComponents/styleObjects'
 
-export default function CandidateCard(props) {
+function CandidateCard(props) {
   const { candidate, tags, authorized } = props
 
   const fields = []
@@ -120,6 +120,8 @@ CandidateCard.propTypes = {
   authorized: PropTypes.bool.isRequired,
   tags: PropTypes.array.isRequired
 }
+
+export default CandidateCard
 
 const CandidateCardWrapper = styled.div`
   display: flex;

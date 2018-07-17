@@ -12,13 +12,15 @@ Usage
 
 ### NPM Scripts
 `npm run build` - builds server and client applications into `dist` folder.
+
 `npm run prod` - starts `npm run build` script and then starts CandidateAccounting server in `production mode` from `dist` folder.
+
 `npm run dev` - starts CandidateAccounting server in `development mode`.
 
 Configuration
 -----------------------------------
 ### Server configuration file
-Location: `{project directory}/server/server.config.js`
+Location: `_{project directory}_/server/server.config.js`
 ```
 const serverConfig = {
   port: 3000,
@@ -28,10 +30,11 @@ const serverConfig = {
 module.exports = serverConfig
 ```
 `port` _(number, default: 3000)_ - server port number.
+
 `databaseConnectionURL` _(string, default: "mongodb://localhost:27017/CandidateAccounting")_ - MongoDB connection URL.
 
 ### Authorization configuration file
-Location: `{project directory}/server/authorization.config.js`
+Location: `_{project directory}_/server/authorization.config.js`
 ```
 const authorizationConfig = {
   allowedLogins: [],
@@ -41,4 +44,5 @@ const authorizationConfig = {
 module.exports = authorizationConfig
 ```
 `allowedLogins` _(array, default: empty)_ - login list for users allowed to register and login. If empty, all users are allowed to register and login.
+
 `sessionSecret` _(string, default: "secret")_ - secret session key used for authorization system.

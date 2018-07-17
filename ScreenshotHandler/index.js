@@ -38,8 +38,8 @@ const toMatchScreenshot = async (testController, selector, options) => {
       :
       (result) => {
         result.handle()
-        result.log()
         result.assert()
+        result.log()
       }
 
   return screenshotHandler.handleScreenshot(selector).then(callback)

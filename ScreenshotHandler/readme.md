@@ -10,7 +10,7 @@ await toMatchScreenshot(testController, selector[, options])
 
 ### With callback (only takes and compares screenshots, processing of the result depends on user)
 ```
-await toMatchScreenshot(testController, selector, {callback: (result) => {
+await toMatchScreenshot(testController, selector, {handleResult: (result) => {
   //comparison result processing
 }})
 ```
@@ -72,7 +72,7 @@ test('Simple test', async t => {
   await t
   .click(Selector('button[test-button]'))
 
-  await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick', callback: (result) => {
+  await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick', handleResult: (result) => {
     result.handle()
     console.log(result.comparisonPassed)
     result.assert()
@@ -86,10 +86,10 @@ Configuration
 
 Create your configuration file named `.toMatchScreenshot.config.js` in test file directory or above (up to project root directory).
 
-Configuration file is a json file:
+Configuration file is a js file:
 
 ```
-{
+const options = {
   comparison: {
     ...
   },
@@ -104,8 +104,10 @@ Configuration file is a json file:
     }
   },
 
-  handleResult: (result) => { ... }
+  handleResult: function (result) { ... }
 }
+
+module.exports = options
 ```
 
 ### Comparison options

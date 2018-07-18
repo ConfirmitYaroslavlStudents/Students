@@ -75,55 +75,46 @@ namespace TournamentGrid
             }
         }
 
-        private string EnterNames(int indexOfParticipant)
-        {
-            string nameOfNewParticipant;
-            bool inList = false ;
-            do
-            {
-                Console.Write("Name of {0} participant: ", indexOfParticipant + 1);
-                nameOfNewParticipant = Console.ReadLine();
-
-                if (nameOfNewParticipant.Length > _tournamentGrid.MaxLengthOfString())
-                    Console.WriteLine("Maximum length of name is {0} ", _tournamentGrid.MaxLengthOfString());
-
-                inList = IsInList(nameOfNewParticipant);
-                if (inList)
-                    Console.WriteLine("A participant with this name already exists. Rename current participant");
-
-                if (String.IsNullOrEmpty(nameOfNewParticipant))
-                    Console.WriteLine("You've entered an empty string. Rename current participant");
-
-            } while (nameOfNewParticipant.Length > _tournamentGrid.MaxLengthOfString() || inList || String.IsNullOrEmpty(nameOfNewParticipant));
-
-            return nameOfNewParticipant;
-        }
-
-        private bool IsInList(string newNaME)
-        {
-            bool isInList = false;
-            foreach (Participant participant in _allParticipants)
-                if (participant.Name.Equals(newNaME))
-                    isInList = true;
-            return isInList;
-        }
-
         private void SetNames()
         {
             string[] mixedParticipants = new string[Amount];
             string nameOfNewParticipant;
             for (int i = 0; i < Amount; i++)
             {
-                nameOfNewParticipant = EnterNames(i);
+                nameOfNewParticipant = EnterNames(i,mixedParticipants);
                 int indexOfNewParticipant = Mix();
-                mixedParticipants[indexOfNewParticipant] = nameOfNewParticipant;                          
+                mixedParticipants[indexOfNewParticipant] = nameOfNewParticipant;
             }
-            for (int i=0;i<Amount;i++)
+            for (int i = 0; i < Amount; i++)
             {
                 _allParticipants.Insert(i, new Participant(mixedParticipants[i]));
                 _tournamentGrid.AddInitialParticipants(mixedParticipants[i], i);
             }
         }
+
+        private string EnterNames(int indexOfParticipant, string[] mixedParticipants)
+        {
+            string nameOfNewParticipant;
+            int index;
+            do
+            {
+                Console.Write("Name of {0} participant: ", indexOfParticipant + 1);
+                nameOfNewParticipant = Console.ReadLine();
+                index= Array.IndexOf(mixedParticipants, nameOfNewParticipant);
+                
+                if (nameOfNewParticipant.Length > _tournamentGrid.MaxLengthOfString())
+                    Console.WriteLine("Maximum length of name is {0} ", _tournamentGrid.MaxLengthOfString());
+
+                if (index>=0)
+                    Console.WriteLine("A participant with this name already exists. Rename current participant");
+
+                if (String.IsNullOrEmpty(nameOfNewParticipant))
+                    Console.WriteLine("You've entered an empty string. Rename current participant");
+
+            } while (nameOfNewParticipant.Length > _tournamentGrid.MaxLengthOfString() || index>=0 || String.IsNullOrEmpty(nameOfNewParticipant));
+
+            return nameOfNewParticipant;
+        }    
 
         private int Mix()
         {
@@ -142,7 +133,7 @@ namespace TournamentGrid
  
         private void Round()
         {
-            _tournamentGrid.ChangeCurrentRound();
+            _tournamentGrid.IncreaseCurrentRound();
             List<Participant> currentParicipants = CreateCurrentPlayersList();
 
             _numberOfCurrentPlayers = currentParicipants.Count;
@@ -151,7 +142,7 @@ namespace TournamentGrid
                 DetectWinners(currentParicipants);
             else
                 _endOfTheGame = true;
-            _tournamentGrid.ChangeStep();
+            _tournamentGrid.IncreaseStep();
         }
 
         private List<Participant> CreateCurrentPlayersList()
@@ -173,25 +164,21 @@ namespace TournamentGrid
         private void DetectWinners(List<Participant> roundParticipants)
         {
             string winner;
-            int roundWinners = _numberOfCurrentPlayers / 2 + _numberOfCurrentPlayers % 2;
-
+            int indexOfGameInCurrentRound=0;
             for (int i = 1; i < roundParticipants.Count; i += 2)
             {
-                winner = ReadWinner(roundParticipants[i - 1].Name, roundParticipants[i].Name);
-                AddWinner(winner, i / 2, roundWinners);
+                winner = GetWinnersName(roundParticipants[i - 1].Name, roundParticipants[i].Name);
+                AddWinnerToNextRound(winner, indexOfGameInCurrentRound++);
             }
 
             if (roundParticipants.Count % 2 == 1)
             {
                 winner = roundParticipants[roundParticipants.Count - 1].Name;
-                AddWinner(winner, roundWinners - 1, roundWinners);
+                AddWinnerToNextRound(winner, indexOfGameInCurrentRound);
             }
-                
-            CompleteTreeWithNullElements(roundWinners);
-
         }
         
-        private string ReadWinner(string firstParicipantName, string secondParticipantName)
+        private string GetWinnersName(string firstParicipantName, string secondParticipantName)
         {
             bool firstIsWinner = false;
             bool secondIsWinner = false;
@@ -208,21 +195,10 @@ namespace TournamentGrid
             return winner;
         }
 
-        private void CompleteTreeWithNullElements(int numberOfRoundWinners)
-        {
-            NearestPowerOfTwo(numberOfRoundWinners, out int nearestPowerofTwo, out int amountOfRounds);
-
-            for (int i = Amount; i < nearestPowerofTwo; i++)
-            {
-                _allParticipants.Add(new Participant(null));
-            }
-        }
-
-        private void AddWinner(string participantName, int line, int roundWinners)
+        private void AddWinnerToNextRound(string participantName, int indexOfGameInCurrentRound)
         {
             _allParticipants.Add(new Participant(participantName));
-            _tournamentGrid.NumberOfCurrentPlayers = _numberOfCurrentPlayers;
-            _tournamentGrid.AddWinner( participantName, line, roundWinners);       
+            _tournamentGrid.AddWinner( participantName, indexOfGameInCurrentRound,_numberOfCurrentPlayers);       
         }
            
     }

@@ -6,7 +6,6 @@ namespace TournamentGrid
     class Grid
     {
         private List<string> ResultLines;
-        public int NumberOfCurrentPlayers;
         public int AmountOfRounds;
         private int _step = 2;
         private int _currentRound=0;
@@ -17,7 +16,7 @@ namespace TournamentGrid
             ResultLines = new List<string>();
         }
 
-        public void ChangeStep()
+        public void IncreaseStep()
         {
             _step *= 2;
         }
@@ -27,7 +26,7 @@ namespace TournamentGrid
             return maxLengthOfString;
         }
 
-        public void ChangeCurrentRound()
+        public void IncreaseCurrentRound()
         {
             _currentRound += 1;
         }
@@ -56,11 +55,13 @@ namespace TournamentGrid
                 Add(participantGridName + " ");
         }
 
-        public void AddWinner(string participantName, int line, int roundWinners)
+        public void AddWinner(string participantName, int indexOfGameInCurrentRound, int NumberOfCurrentPlayers)
         {
             int amountOfNextRoundPlayers = NumberOfCurrentPlayers / 2 + NumberOfCurrentPlayers % 2;
-            int indexOfCurrentLine = (line + 1) * _step - 1;
-            bool playingNextRound = (line != roundWinners - 1);
+            int indexOfCurrentLine = (indexOfGameInCurrentRound + 1) * _step - 1;
+            int roundWinners = NumberOfCurrentPlayers / 2 + NumberOfCurrentPlayers % 2;
+            bool playingNextRound = (indexOfGameInCurrentRound != roundWinners - 1);
+            bool isLast = indexOfGameInCurrentRound == roundWinners - 1;
 
             if (_currentRound == AmountOfRounds)
             {
@@ -68,14 +69,13 @@ namespace TournamentGrid
             }
 
             else if (playingNextRound)
-                AddRowInGrid(participantName, indexOfCurrentLine, line, line == roundWinners - 1);            
+                AddRowInGrid(participantName, indexOfCurrentLine, indexOfGameInCurrentRound, isLast);            
 
             else if (amountOfNextRoundPlayers % 2 == 0)
                 AddTheOnlyParticipant(participantName, "|");
 
             else if (amountOfNextRoundPlayers % 2 == 1)
                 AddTheOnlyParticipant(participantName, " ");
-
         }
 
         private void AddRowInGrid(string participantName, int indexOfCurrentLine, int line, bool isLast)

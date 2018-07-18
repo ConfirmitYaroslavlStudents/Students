@@ -1,7 +1,7 @@
 {
   "name": "tournamentgrid",
   "version": "1.0.0",
-  "description": "",
+  "description": "A small console application that helps to keep track of the leaders in the game and the next game sessions",
   "main": "tournament.js",
   "scripts": {
     "start": "node tournament.js",

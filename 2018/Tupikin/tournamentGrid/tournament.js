@@ -36,6 +36,8 @@ class Tournament {
   }
 }
 
-const tournament = new Tournament();
+const playersCount = process.argv.length === 3 ? process.argv[2] : undefined;
+
+const tournament = new Tournament(playersCount);
 tournament.enterNames();
 tournament.startTournament();

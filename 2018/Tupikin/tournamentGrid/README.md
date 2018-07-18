@@ -6,16 +6,27 @@ A small console application that helps to keep track of the leaders in the game 
 npm install
 ```
 ```text
-npm start
+npm start [number of players]
 ```
 **All actions are performed in the terminal. Running into the IDE does not guarantee the functionality of the application**
-# Example
+# Examples
 ```text
 npm start
 > Vlad
-> Scout
+> Phil
 > Dave
-> Ivan
+> Scott
+```
+```text
+npm start 8
+> Dave
+> Steve
+> Denis
+> Michael
+> Mike
+> Vlad
+> Phil
+> Scott
 ```
 
 # Credits

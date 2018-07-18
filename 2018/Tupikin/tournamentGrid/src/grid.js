@@ -2,6 +2,10 @@
 const clear = require('clear');
 const { Game } = require('./game');
 
+const cornerDown = '╗';
+const verticalLine = '║';
+const cornerUp = '╝';
+
 class Grid {
   constructor(players, numberOfMatches) {
     this.players = players;
@@ -18,11 +22,21 @@ class Grid {
   show() {
     clear();
     console.log('The tournament table at the moment:\n');
-
-    if (!this.isFinal) console.log('\nEnter name of winner');
+    const grid = this.__fillGrid();
+    grid[0] = grid[0].slice(0, grid[0].length - 1);
+    for (let x = 0; x < grid[0].length; x++) {
+      for (let y = 0; y < grid.length; y++)
+        process.stdout.write(grid[y][x]);
+      process.stdout.write('\n');
+    }
+    if (!this.isFinal)
+      console.log('\nEnter name of winner');
+    else
+      console.log(`\nWinner: ${this.games[this.games.length - 1][0].winner.trim()}!`);
   }
 
   addWinner(winner) {
+    winner += ' '.repeat(this.namesLength - winner.length + 1);
     for (let i = this.games.length - 1; i >= 0; i--) {
       for (let j = this.games[i].length - 1; j >= 0; j--) {
         const game = this.games[i][j];
@@ -30,7 +44,7 @@ class Grid {
           game.setWinner(winner);
           this.isFinal = this.isLastGame(i);
           if (this.isFinal) break;
-          this.games[i + 1][Math.floor(j / 2)].newPlayer(winner);
+          this.games[i + 1][Math.floor(j / 2)].newPlayer(winner, j);
           break;
         }
       }
@@ -41,12 +55,44 @@ class Grid {
     return pointer === this.games.length - 1;
   }
 
+  __fillGrid() {
+    const grid = [];
+    const emptyString = ' '.repeat(this.namesLength + 2);
+    const verticalString = ' '.repeat(this.namesLength + 1) + verticalLine;
+
+    for (let g = 0; g < this.games.length; g++) {
+      grid[g] = [];
+      const offset = g ? g * 2 - 1 : 0;
+      for (let i = 0; i < offset; i++)
+        grid[g].push(emptyString);
+      for (const game of this.games[g]) {
+        grid[g].push(game.firstPlayer + cornerDown);
+        for (let i = 0; i < offset * 2 + 1; i++)
+          grid[g].push(verticalString);
+        grid[g].push(game.secondPlayer + cornerUp);
+        for (let i = 0; i < offset * 2 + 1; i++)
+          grid[g].push(emptyString);
+      }
+    }
+
+    const winner = this.games.length;
+    grid[winner] = [];
+
+    for (let i = 0; i < this.players.length - 1; i++)
+      grid[winner].push(emptyString);
+    grid[winner].push(this.games[winner - 1][0].winner);
+    for (let i = 0; i < this.players.length - 1; i++)
+      grid[winner].push(emptyString);
+
+    return grid;
+  }
+
   __alignNamesLength() {
     for (const name of this.players)
       this.namesLength = Math.max(this.namesLength, name.length);
 
-    for (let name of this.players)
-      name += ' '.repeat(this.namesLength - name.length);
+    for (let i = 0; i < this.players.length; i++)
+      this.players[i] += ' '.repeat(this.namesLength - this.players[i].length + 1);
   }
 
   __shuffleNames() {
@@ -61,7 +107,7 @@ class Grid {
       this.games[i] = [];
       const gamesOfThisSeason = this.players.length / (2 * (i + 1));
       for (let j = 0; j < gamesOfThisSeason; j++)
-        this.games[i].push(new Game());
+        this.games[i].push(new Game(this.namesLength));
     }
 
     for (let i = 0; i < this.players.length; i += 2) {

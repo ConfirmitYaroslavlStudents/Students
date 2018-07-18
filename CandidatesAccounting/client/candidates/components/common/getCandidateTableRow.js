@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import CandidateControls from './controls'
 import TagList from '../../../tags/components/list'
 import EmailWrapper from '../../../commonComponents/emailWrapper'
@@ -8,9 +7,7 @@ import CandidateNameLink from '../../../commonComponents/candidateNameLink'
 import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
 import styled from 'styled-components'
 
-export default function CandidateTableRow(props) {
-  const { candidate } = props
-
+const getCandidateTableCells = (candidate) => {
   return [
     <CandidateNameWrapper>
       <CandidateNameLink candidate={candidate}>
@@ -26,11 +23,9 @@ export default function CandidateTableRow(props) {
   ]
 }
 
-CandidateTableRow.propTypes = {
-  candidate: PropTypes.object.isRequired
-}
-
 const CandidateNameWrapper = styled.div`
   display: flex;
   align-items: center;
 `
+
+export default getCandidateTableCells

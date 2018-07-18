@@ -1,20 +1,21 @@
 import path from 'path'
+import defaultOptions from './default.config.js'
 import ScreenshotHandler from './screenshotHandler'
 
 export const comparisonIgnoreRules = {
-  nothing: "nothing",
-  antialiasing: "antialiasing",
-  less: "less",
-  colors: "colors",
-  alpha: "alpha"
+  nothing: 'nothing',
+  antialiasing: 'antialiasing',
+  less: 'less',
+  colors: 'colors',
+  alpha: 'alpha'
 }
 
 export const differenceDisplayMode = {
-  flat: "flat",
-  movement: "movement",
-  flatWithDifferenceIntensity: "flatDifferenceIntensity",
-  movementWithDifferenceIntensity: "movementDifferenceIntensity",
-  differenceOnly: "diffOnly"
+  flat: 'flat',
+  movement: 'movement',
+  flatWithDifferenceIntensity: 'flatDifferenceIntensity',
+  movementWithDifferenceIntensity: 'movementDifferenceIntensity',
+  differenceOnly: 'diffOnly'
 }
 
 export const fallenTestSaveStrategies = {
@@ -22,38 +23,26 @@ export const fallenTestSaveStrategies = {
   separate: 'separate'
 }
 
-const toMatchScreenshot = async (testController, selector, options, callback) => {
-  options =
-    options && options instanceof Object ?
-      options
-      :
-      {}
-
-  callback =
-    callback ?
-      callback
-      :
-      options && options instanceof Function ?
-        options
-        :
-        null
-
-  const userOptions = {
+const toMatchScreenshot = async (testController, selector, options) => {
+  const screenshotHandlerOptions = {
+    ...defaultOptions,
     ...getUserGeneralOptions(testController.testRun.test.testFile.filename),
     ...options
   }
 
-  const screenshotHandler = new ScreenshotHandler(testController, userOptions)
-  screenshotHandler.comparisonResultHandling = !callback
-  screenshotHandler.logging = !callback
-  screenshotHandler.asserting = !callback
+  const screenshotHandler = new ScreenshotHandler(testController, screenshotHandlerOptions)
 
-  return (
-    callback ?
-      screenshotHandler.handleScreenshot(selector).then(callback)
+  const callback =
+    screenshotHandlerOptions.handleResult ?
+      screenshotHandlerOptions.handleResult
       :
-      screenshotHandler.handleScreenshot(selector)
-  )
+      async (result) => {
+        result.handle()
+        await result.assert()
+        result.log()
+      }
+
+  return screenshotHandler.handleScreenshot(selector).then(callback).then(() => { screenshotHandler.updateMetadata() })
 }
 
 const getUserGeneralOptions = (initialConfigSearchPath) => {
@@ -66,9 +55,9 @@ const getUserGeneralOptions = (initialConfigSearchPath) => {
   const stopSearchDirectory = path.join(rootDirectory, '..', '..')
 
   let searchDirectory = path.dirname(initialConfigSearchPath)
-  while (searchDirectory.length > 1 && path.basename(searchDirectory) !== path.basename(stopSearchDirectory)) {
+  while (searchDirectory.length > 1 && searchDirectory !== stopSearchDirectory) {
     try {
-      const userGeneralOptions = require(path.join(searchDirectory, '.matchScreenshot.config.json'))
+      const userGeneralOptions = require(path.join(searchDirectory, '.toMatchScreenshot.config.js'))
       if (userGeneralOptions) {
         options = userGeneralOptions
         break

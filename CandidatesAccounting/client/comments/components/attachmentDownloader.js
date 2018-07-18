@@ -5,7 +5,7 @@ import AttachIcon from '@material-ui/icons/AttachFile'
 import { SmallestIconStyle } from '../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
-export default function CommentAttachment(props) {
+const CommentAttachment = (props) => {
   const downloadLink =
     window.location.origin + '/'
     + props.candidate.status.toLowerCase() + 's/'
@@ -29,7 +29,9 @@ CommentAttachment.propTypes = {
   candidate: PropTypes.object.isRequired,
 }
 
-export const CommentAttachmentWrapper = styled.div`
+export default CommentAttachment
+
+const CommentAttachmentWrapper = styled.div`
   color: #08c;
   cursor: pointer;
   display: inline-flex;

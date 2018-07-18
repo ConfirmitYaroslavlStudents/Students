@@ -1,17 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import CandidateControls from '../common/controls'
-import { formatDate } from '../../../utilities/customMoment'
+import { formatDateTime, isToday } from '../../../utilities/customMoment'
 import TagList from '../../../tags/components/list'
+import ResumeControls from './resumeControls'
 import EmailWrapper from '../../../commonComponents/emailWrapper'
 import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
 import CandidateNameLink from '../../../commonComponents/candidateNameLink'
 import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
 import styled, { css } from 'styled-components'
 
-export default function StudentTableRow(props) {
-  const { candidate } = props
-
+const getIntervieweeTableCells = (candidate, disabled) => {
   return [
     <CandidateNameWrapper>
       <CandidateNameLink candidate={candidate}>
@@ -20,17 +18,14 @@ export default function StudentTableRow(props) {
       </CandidateNameLink>
       <TagList candidateTags={candidate.tags} />
     </CandidateNameWrapper>,
-    <CandidateControls candidate={candidate}/>,
-    <Date>{formatDate(candidate.startingDate)}</Date>,
-    <Date>{formatDate(candidate.endingDate)}</Date>,
-    <p>{candidate.groupName}</p>,
+      <CandidateControls candidate={candidate}/>,
+    <ResumeControls interviewee={candidate} disabled={disabled} downloadingEnabled/>,
+    <Date highlighted={isToday(candidate.interviewDate)}>
+      {formatDateTime(candidate.interviewDate)}
+    </Date>,
     <EmailWrapper email={candidate.email}>{candidate.email}</EmailWrapper>,
     <PhoneNumberWrapper number={candidate.phoneNumber}>{candidate.phoneNumber}</PhoneNumberWrapper>
   ]
-}
-
-StudentTableRow.propTypes = {
-  candidate: PropTypes.object.isRequired
 }
 
 const CandidateNameWrapper = styled.div`
@@ -42,7 +37,9 @@ const Date = styled.div`
   white-space: nowrap;
   
   ${props => props.highlighted && css`
-    color: #ff4081;
+    color: #FF5722;
     font-weight: bold;
 	`}
 `
+
+export default getIntervieweeTableCells

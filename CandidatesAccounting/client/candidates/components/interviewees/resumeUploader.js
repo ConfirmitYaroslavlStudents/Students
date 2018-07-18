@@ -5,7 +5,7 @@ import FileUploader from '../../../commonComponents/fileUploader'
 import { SmallerIconStyle, SmallButtonStyle } from '../../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
-export default function ResumeUploader(props) {
+const ResumeUploader = (props) => {
   const { interviewee, onResumeUpload } = props
   const resumeIsUploaded = interviewee.resume && interviewee.resume.trim() !== ''
 
@@ -41,6 +41,8 @@ ResumeUploader.propTypes = {
   interviewee: PropTypes.object.isRequired,
   onResumeUpload: PropTypes.func.isRequired
 }
+
+export default ResumeUploader
 
 const UploaderWrapper = styled.div`
   display: inline-flex;

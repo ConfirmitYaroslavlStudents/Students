@@ -3,23 +3,26 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
 import { SELECTORS } from '../../rootReducer'
-import LoginDialog from './signInDialog'
-import UsernameWrapper from './usernameWrapper'
-import NotificationCenterPopover from '../../notifications/components/centerPopover'
-import LogoutButton from './signOutButton'
+import SignInDialog from './signInDialog'
+import NotificationCenterPopover from '../../notifications/components/notificationCenterPopover'
+import SignOutButton from './signOutButton'
+import formatUserName from '../../utilities/formatUserName'
+import styled from 'styled-components'
 
-function UserControls(props) {
+const UserControls = (props) => {
   const { authorized, authorizing, logout, username } = props
 
   if (!authorized) {
-    return <LoginDialog />
+    return <SignInDialog />
   }
 
   return (
     <div className='inline-flex centered'>
-      <UsernameWrapper content={username} />
+      <AppbarUsernameWrapper>
+        {formatUserName(username)}
+      </AppbarUsernameWrapper>
       <NotificationCenterPopover />
-      <LogoutButton authorizing={authorizing} onClick={logout}/>
+      <SignOutButton authorizing={authorizing} onClick={logout}/>
     </div>
   )
 }
@@ -37,3 +40,7 @@ export default connect(state => ({
     username: SELECTORS.AUTHORIZATION.USERNAME(state)
   }
 ), actions)(UserControls)
+
+const AppbarUsernameWrapper = styled.span`
+  margin: 0 5px;
+`

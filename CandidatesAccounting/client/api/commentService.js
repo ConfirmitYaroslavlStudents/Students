@@ -1,6 +1,6 @@
 import sendGraphQLQuery from './graphqlClient'
 
-export function addComment(candidateId, comment) {
+export const addComment = (candidateId, comment) => {
   return sendGraphQLQuery(
     `mutation addComment($candidateId: ID!, $comment: CommentInput!) {
       addComment(
@@ -18,7 +18,7 @@ export function addComment(candidateId, comment) {
   })
 }
 
-export function deleteComment(candidateId, commentId) {
+export const deleteComment = (candidateId, commentId) => {
   return sendGraphQLQuery(
     `mutation deleteComment($candidateId: ID!, $commentId: ID!) {
       deleteComment(
@@ -35,7 +35,7 @@ export function deleteComment(candidateId, commentId) {
   })
 }
 
-export function addCommentAttachment(candidateId, commentId, attachment) {
+export const addCommentAttachment = (candidateId, commentId, attachment) => {
   let formData = new FormData()
   formData.append('attachment', attachment)
 
@@ -55,7 +55,7 @@ export function addCommentAttachment(candidateId, commentId, attachment) {
     })
 }
 
-export function getCommentAttachmentArrayBuffer(candidateId, commentId) {
+export const getCommentAttachmentArrayBuffer = (candidateId, commentId) => {
   return fetch(
     '/interviewees/' + candidateId + '/comments/' + commentId + '/attachment',
     {

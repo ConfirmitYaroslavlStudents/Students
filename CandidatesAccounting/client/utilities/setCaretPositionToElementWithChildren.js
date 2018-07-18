@@ -1,4 +1,4 @@
-export default function setCaretPositionToElementWithChildren(DOMelement, position) {
+const setCaretPositionToElementWithChildren = (DOMelement, position) => {
   DOMelement.focus()
   for (const child of DOMelement.childNodes) {
     if (child.nodeType === 3) {
@@ -22,3 +22,5 @@ export default function setCaretPositionToElementWithChildren(DOMelement, positi
   }
   return position
 }
+
+export default setCaretPositionToElementWithChildren

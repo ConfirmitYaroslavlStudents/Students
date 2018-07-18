@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 
-export default class SelectInput extends Component {
+class SelectInput extends Component {
   constructor(props) {
     super(props)
     this.state = ({ selected: props.selected ? props.selected : '' })
@@ -20,16 +20,26 @@ export default class SelectInput extends Component {
   }
 
   render() {
+    const { label, options, minWidth } = this.props
+
+    const id = 'simple-select-input-' + label.replace(/\s/g, '-')
+
+    const inputLabel =
+      label.trim().length > 0 ?
+        <InputLabel htmlFor='simple-select'>{label}</InputLabel>
+        :
+        null
+
     return (
-      <FormControl style={{minWidth: this.props.minWidth}}>
-        {this.props.label ? <InputLabel htmlFor='simple-select'>{this.props.label}</InputLabel> : ''}
+      <FormControl style={{minWidth: minWidth}}>
+        {inputLabel}
         <Select
           value={this.state.selected}
           onChange={this.handleChange}
-          input={<Input id='simple-select' />}
+          input={<Input id={id} />}
         >
-          {this.props.options.map((option, index) =>
-            <MenuItem key={'menuItem'+index} value={option}>
+          {options.map((option, index) =>
+            <MenuItem key={'menuItem' + index} value={option}>
               {option}
             </MenuItem>,
           )}
@@ -40,9 +50,11 @@ export default class SelectInput extends Component {
 }
 
 SelectInput.propTypes = {
+  label: PropTypes.string.isRequired,
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   selected: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.string]).isRequired,
   minWidth: PropTypes.number,
-  onChange: PropTypes.func,
-  label: PropTypes.string,
+  onChange: PropTypes.func
 }
+
+export default SelectInput

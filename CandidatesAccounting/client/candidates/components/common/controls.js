@@ -8,7 +8,7 @@ import OpenCommentPageButton from './openCommentPageButton'
 import UpdateCandidateControl from './updateCandidateControl'
 import DeleteCandidateControl from './deleteCandidateControl'
 
-function CandidateControls(props) {
+const CandidateControls = (props) => {
   const { fetching, authorized, onUpdating, onDeleting, candidate, openCommentPage } = props
 
   const candidateOnUpdating = candidate.id === onUpdating

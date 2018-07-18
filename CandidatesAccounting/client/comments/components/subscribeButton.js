@@ -5,7 +5,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications'
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff'
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive'
 
-export default function SubscribeButton(props){
+const SubscribeButton = (props) => {
   const buttonIcon =
     props.disabled ?
       <NotificationsIcon/>
@@ -38,3 +38,5 @@ SubscribeButton.propTypes = {
   unsubscribe: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 }
+
+export default SubscribeButton

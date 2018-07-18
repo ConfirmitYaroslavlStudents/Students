@@ -1,37 +1,41 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyQueue;
-namespace UnitTestProject
+namespace MyQueueTestProject
 {
     [TestClass]
-    public class UnitTest1
+    public class MyQueueTests
     {
         [TestMethod]
-        public void Enqueue_New_item()
+        public void EnqueueFewElement_CheckCorrectCount ()
         {
+            const int CountEnqueue= 4;
             Queue<int> queue = new Queue<int>();
-            queue.Enqueue(1);
-            queue.Enqueue(2);
-            queue.Enqueue(3);
-            queue.Enqueue(4);
 
-            int actual = queue.Dequeue();
-            int expected = 1;
+            for(int i=1;i<= CountEnqueue; i++)
+            queue.Enqueue(i);
+
+            int actual = queue.Count;
+            int expected = CountEnqueue;
 
             Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void Enqueue_And_Dequeue()
+        public void EnqueueFourElementDequeueOne_CheckFirstNumber()
         {
+            int ControlNumber = 5;
             Queue<int> queue = new Queue<int>();
-            queue.Enqueue(1);
-            queue.Enqueue(2);
-            queue.Enqueue(3);
-            queue.Enqueue(4);
+
+            queue.Enqueue(84324);
+            queue.Enqueue(ControlNumber);
+            queue.Enqueue(828);
+            queue.Enqueue(82);
+
             queue.Dequeue();
-            int actual = queue.Count();
-            int expected = 3;
+
+            int actual = queue.Dequeue();
+            int expected = ControlNumber;
 
             Assert.AreEqual(expected, actual);
         }

@@ -1,32 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using DoublyLinkedListLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DoublyLinkedListTests
+namespace DoublyLinkedListLibrary
 {
     [TestClass]
     public class DoublyLinkedListTest
     {
-        public List<string> CheckPreviousLinks(DoublyLinkedList.DoublyLinkedList testList)
+        public List<string> CheckPreviousLinks(DoublyLinkedList<string> testList)
         {
             List<string> actual = new List<string>();
-            Node item = testList.Tail;
-
-            while (item != null)
+            foreach (string item in testList.GetList(true))
             {
-                actual.Add(item.Value);
-                item = item.Previous;
+                actual.Add(item);
             }
 
             return actual;
         }
 
-        public List<string> CheckNextLinks(DoublyLinkedList.DoublyLinkedList testList)
+        public List<string> CheckNextLinks(DoublyLinkedList<string> testList)
         {
             List<string> actual = new List<string>();
 
-            foreach (string item in testList)
+            foreach (string item in testList.GetList(false))
             {
                 actual.Add(item);
             }
@@ -39,7 +35,7 @@ namespace DoublyLinkedListTests
         {
             List<string> expected = new List<string> { "1", "2", "3" };
 
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
 
             testList.AddToTail("1");
             testList.AddToTail("2");
@@ -54,7 +50,7 @@ namespace DoublyLinkedListTests
         {
             List<string> expected = new List<string> { "3", "2", "1" };
 
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
 
             testList.AddToTail("1");
             testList.AddToTail("2");
@@ -68,7 +64,7 @@ namespace DoublyLinkedListTests
         public void AddElementsToHead_ElementsAreAddedInRightOrder_FromHead()
         {
             List<string> expected = new List<string> { "3", "2", "1" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
 
             testList.AddToHead("1");
             testList.AddToHead("2");
@@ -82,7 +78,7 @@ namespace DoublyLinkedListTests
         public void AddElementsToHead_ElementsAreAddedInRightOrder_FromTail()
         {
             List<string> expected = new List<string> { "1", "2", "3" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
 
             testList.AddToHead("1");
             testList.AddToHead("2");
@@ -96,7 +92,7 @@ namespace DoublyLinkedListTests
         public void DeleteOneMiddleElement_ElementIsDeletedCorrectly_FromHead()
         {
             List<string> expected = new List<string> { "1", "2", "4", "5" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("3");
@@ -113,7 +109,7 @@ namespace DoublyLinkedListTests
         public void DeleteOneMiddleElement_ElementIsDeletedCorrectly_FromTail()
         {
             List<string> expected = new List<string> { "5", "4", "2", "1" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("3");
@@ -130,7 +126,7 @@ namespace DoublyLinkedListTests
         public void DeleteOneMiddleAndOneLastElements_ElementsAreDeletedCorrectly_FromHead()
         {
             List<string> expected = new List<string> { "1", "2", "4" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("3");
@@ -148,7 +144,7 @@ namespace DoublyLinkedListTests
         public void DeleteOneMiddleAndOneLastElements_ElementsAreDeletedCorrectly_FromTail()
         {
             List<string> expected = new List<string> { "4", "2", "1" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("3");
@@ -166,7 +162,7 @@ namespace DoublyLinkedListTests
         public void DeleteTheOnlyExistedElement_TheListIsEmpty_FromHead()
         {
             List<string> expected = new List<string> { };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
 
             testList.DeleteAtIndex(1);
@@ -179,7 +175,7 @@ namespace DoublyLinkedListTests
         public void DeleteTheOnlyExistedElement_TheListIsEmpty_FromTail()
         {
             List<string> expected = new List<string> { };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
 
             testList.DeleteAtIndex(1);
@@ -191,7 +187,7 @@ namespace DoublyLinkedListTests
         [TestMethod]
         public void DeleteInEmptyList_IndexOutOfRangeExeption()
         {
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();             
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();             
             Assert.ThrowsException<IndexOutOfRangeException>(
                   () => testList.DeleteAtIndex(1));
            
@@ -203,13 +199,13 @@ namespace DoublyLinkedListTests
         public void AddOneElementToTheMiddle_ElementsAreInRightOrder_FromHead()
         {
             List<string> expected = new List<string> { "1", "2", "3", "4", "5" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("4");
             testList.AddToTail("5");
 
-            testList.AddAtIndex("3", 3);
+            testList.Insert( 3,"3");
 
             List<string> actual = CheckNextLinks(testList);
             CollectionAssert.AreEqual(expected, actual);
@@ -219,13 +215,13 @@ namespace DoublyLinkedListTests
         public void AddOneElementToTheMiddle_ElementsAreInRightOrder_FromTail()
         {
             List<string> expected = new List<string> { "5", "4", "3", "2", "1" };
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("4");
             testList.AddToTail("5");
 
-            testList.AddAtIndex("3", 3);
+            testList.Insert( 3,"3");
 
             List<string> actual = CheckPreviousLinks(testList);
             CollectionAssert.AreEqual(expected, actual);
@@ -234,21 +230,21 @@ namespace DoublyLinkedListTests
         [TestMethod]
         public void AddAtWrongIndex_IndexOutOfRangeException()
         {
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("4");
             testList.AddToTail("5");
 
             Assert.ThrowsException<IndexOutOfRangeException>(
-      () => testList.AddAtIndex("3", 7));          
+      () => testList.Insert( 7,"3"));          
         }
 
         [TestMethod]
         public void GetTheFirstElement_TheRightElementIsGotten()
         {
             string expected = "1";
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("3");
@@ -264,7 +260,7 @@ namespace DoublyLinkedListTests
         public void GetTheOnlyFirstElement_TheElementIsGotten()
         {
             string expected = "1";
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
 
             string actual = testList.FirstElement();
@@ -275,7 +271,7 @@ namespace DoublyLinkedListTests
         [TestMethod]
         public void GetTheFirstElementInEmptyList_OutOfRangeException()
         {
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             Assert.ThrowsException<IndexOutOfRangeException>(
             () =>  testList.FirstElement());
           
@@ -285,7 +281,7 @@ namespace DoublyLinkedListTests
         public void GetTheLastElement_TheRightElementIsGotten()
         {
             string expected = "5";
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             testList.AddToTail("1");
             testList.AddToTail("2");
             testList.AddToTail("3");
@@ -300,7 +296,7 @@ namespace DoublyLinkedListTests
         [TestMethod]
         public void GetTheLastElementInEmptyList_OutOfRangeException()
         {
-            DoublyLinkedList.DoublyLinkedList testList = new DoublyLinkedList.DoublyLinkedList();
+            DoublyLinkedList<string> testList = new DoublyLinkedList<string>();
             Assert.ThrowsException<IndexOutOfRangeException>(
             () => testList.LastElement());
             

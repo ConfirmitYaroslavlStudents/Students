@@ -1,6 +1,6 @@
 import sendGraphQLQuery from './graphqlClient'
 
-export function subscribe(candidateId, email) {
+export const subscribe = (candidateId, email) => {
   return sendGraphQLQuery(
     `mutation subscribe($candidateId: ID!, $email: String!) {
       subscribe(
@@ -20,7 +20,7 @@ export function subscribe(candidateId, email) {
   })
 }
 
-export function unsubscribe(candidateId, email) {
+export const unsubscribe = (candidateId, email) => {
   return sendGraphQLQuery(
     `mutation unsubscribe($candidateId: ID!, $email: String!) {
       unsubscribe(

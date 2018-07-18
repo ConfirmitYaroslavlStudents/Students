@@ -6,11 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-function Transition(props) {
-  return <Slide direction='up' {...props} />
-}
+const Transition = (props) => <Slide direction='up' {...props} />
 
-export default function SimpleDialog(props) {
+const SimpleDialog = (props) => {
   return (
     <Dialog
       open={props.isOpen}
@@ -34,3 +32,5 @@ SimpleDialog.propTypes = {
   title: PropTypes.string,
   actions: PropTypes.object,
 }
+
+export default SimpleDialog

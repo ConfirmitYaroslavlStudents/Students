@@ -3,10 +3,10 @@ import { Selector } from 'testcafe'
 const testEmail = 'test.test@confirmit.com'
 const testPassword = 'password'
 
-export async function signIn(t) {
-  const emailInput = Selector('div[data-test-email-input]').find('input')
-  const passwordInput = Selector('div[data-test-password-input]').find('input')
-  const signInButton = Selector('button[data-test-sign-in-button]')
+export const signIn = async (t) => {
+  const emailInput = Selector('input[mark=data-test-email-input]')
+  const passwordInput = Selector('input[mark=data-test-password-input]')
+  const signInButton = Selector('button[mark="data-test-sign-in-button"]')
 
   await t
   .typeText(emailInput, testEmail)

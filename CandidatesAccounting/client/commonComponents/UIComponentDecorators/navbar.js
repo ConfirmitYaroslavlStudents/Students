@@ -1,7 +1,7 @@
 import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 
-export default function Navbar(props) {
+const Navbar = (props) => {
   return (
     <AppBar
       style={{
@@ -15,3 +15,5 @@ export default function Navbar(props) {
     </AppBar>
   )
 }
+
+export default Navbar

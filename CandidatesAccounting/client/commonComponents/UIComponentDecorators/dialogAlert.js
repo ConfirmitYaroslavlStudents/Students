@@ -8,11 +8,9 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-function Transition(props) {
-  return <Slide direction="left" {...props} />
-}
+const Transition = (props) => <Slide direction='left' {...props} />
 
-export default function DialogAlert(props) {
+const DialogAlert = (props) => {
   return (
     <Dialog
       open={props.isOpen}
@@ -44,3 +42,5 @@ DialogAlert.propTypes = {
   onCancelClick: PropTypes.func.isRequired,
   title: PropTypes.string
 }
+
+export default DialogAlert

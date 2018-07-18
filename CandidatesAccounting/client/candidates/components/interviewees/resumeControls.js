@@ -12,7 +12,7 @@ import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
 import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
 import styled from 'styled-components'
 
-function ResumeControls(props) {
+const ResumeControls = (props) => {
   const { interviewee, authorized, disabled, onResumeUploading, uploadResume } = props
   const resumeIsUploaded = interviewee.resume && interviewee.resume.trim() !== ''
   const downloadButtonDisabled = !resumeIsUploaded || disabled
@@ -47,7 +47,12 @@ function ResumeControls(props) {
         disabled={downloadButtonDisabled}
         downloadLink={window.location.origin + '/interviewees/' + props.interviewee.id + '/resume'}
       >
-        <IconButton icon={<DownloadIcon style={SmallerIconStyle}/>} style={SmallButtonStyle} disabled={downloadButtonDisabled} />
+        <IconButton
+          icon={<DownloadIcon style={SmallerIconStyle} />}
+          onClick={() => {}}
+          style={SmallButtonStyle}
+          disabled={downloadButtonDisabled}
+        />
       </FileDownloader>
       { fileUploader }
     </ResumeWrapper>

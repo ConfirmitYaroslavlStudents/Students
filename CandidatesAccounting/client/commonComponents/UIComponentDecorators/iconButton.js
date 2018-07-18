@@ -2,16 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton'
 
-export default function CustomIconButton(props) {
+const CustomIconButton = (props) => {
   return (
     <IconButton
       {...props}
-      id = {props.id}
+      onClick={props.onClick}
       color={props.color}
-      onClick={props.onClick ? props.onClick : () => {}}
-      disabled={props.disabled}
-      style={props.style}
       size={props.size}
+      style={props.style}
+      disabled={props.disabled}
     >
       {props.icon}
     </IconButton>
@@ -19,11 +18,12 @@ export default function CustomIconButton(props) {
 }
 
 CustomIconButton.propTypes = {
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   icon: PropTypes.object,
   size: PropTypes.string,
   color: PropTypes.string,
-  style: PropTypes.object,
-  id: PropTypes.string
+  style: PropTypes.object
 }
+
+export default CustomIconButton

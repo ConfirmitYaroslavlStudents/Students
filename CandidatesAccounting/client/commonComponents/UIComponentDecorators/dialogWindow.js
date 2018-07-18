@@ -6,11 +6,9 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Slide from '@material-ui/core/Slide'
 
-function Transition(props) {
-  return <Slide direction='up' {...props} />
-}
+const Transition = (props) => <Slide direction='up' {...props} />
 
-export default function DialogWindow(props) {
+const DialogWindow = (props) => {
   return (
     <Dialog
       open={props.isOpen}
@@ -36,3 +34,5 @@ DialogWindow.propTypes = {
   title: PropTypes.string,
   actions: PropTypes.object,
 }
+
+export default DialogWindow

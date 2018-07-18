@@ -1,4 +1,4 @@
-export default function getInnerTextCaretPosition(DOMelement) {
+const getInnerTextCaretPosition = (DOMelement) => {
   let caretPosition = 0
   const document = DOMelement.ownerDocument || DOMelement.document
   const window = document.defaultView || document.parentWindow
@@ -26,3 +26,5 @@ export default function getInnerTextCaretPosition(DOMelement) {
 
   return caretPosition
 }
+
+export default getInnerTextCaretPosition

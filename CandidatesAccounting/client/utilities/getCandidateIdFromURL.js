@@ -1,4 +1,4 @@
-export default function getCandidateIdFromURL(url) {
+const getCandidateIdFromURL = (url) => {
   const splitedURL = url.split('?')
 
   const path = splitedURL[0]
@@ -10,3 +10,5 @@ export default function getCandidateIdFromURL(url) {
 
   return candidateId
 }
+
+export default getCandidateIdFromURL

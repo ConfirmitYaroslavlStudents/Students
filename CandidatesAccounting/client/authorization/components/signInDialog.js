@@ -5,16 +5,15 @@ import * as actions from '../actions'
 import { SELECTORS } from '../../rootReducer'
 import FlatButton from '../../commonComponents/UIComponentDecorators/flatButton'
 import Dialog from '../../commonComponents/UIComponentDecorators/dialogSimple'
-import LoginForm from './signInForm'
+import SignInForm from './signInForm'
 import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
-import SignInButton from './signInButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import styled from 'styled-components'
 
-class LoginDialog extends Component {
+class SignInDialog extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ isOpen: !!props.forced })
+    this.state = ({ isOpen: true })
     this.account = { email: '', password: '' }
   }
 
@@ -34,11 +33,11 @@ class LoginDialog extends Component {
   }
 
   render() {
-    const { authorizing, forced } = this.props
-    const linearProgress = authorizing ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : ''
+    const { authorizing } = this.props
+    const linearProgress = authorizing ? <LinearProgressWrapper><LinearProgress /></LinearProgressWrapper> : null
 
     return (
-      <div className='inline-div centered'>
+      <React.Fragment>
         <FlatButton color='inherit' onClick={this.handleOpen}>
           Sign on / Sign in
         </FlatButton>
@@ -48,33 +47,28 @@ class LoginDialog extends Component {
           onRequestClose={this.handleClose}
           actions={
             <DialogActionsWrapper>
-              {
-                !forced ?
-                  <FlatButton color='inherit' disabled={authorizing} onClick={this.handleClose}>
-                    Cancel
-                  </FlatButton> : ''
-              }
-              <SignInButton onClick={this.signIn} disabled={authorizing}/>
+              <FlatButton color='primary' disabled={authorizing} onClick={this.signIn} mark='data-test-sign-in-button'>
+                Sign in
+              </FlatButton>
               { linearProgress }
             </DialogActionsWrapper>
           }
         >
-          <LoginForm account={this.account} onEnterPress={this.signIn}/>
+          <SignInForm account={this.account} onEnterPress={this.signIn} />
         </Dialog>
-      </div>
+      </React.Fragment>
     )
   }
 }
 
-LoginDialog.propTypes = {
-  authorizing: PropTypes.bool.isRequired,
-  forced: PropTypes.bool
+SignInDialog.propTypes = {
+  authorizing: PropTypes.bool.isRequired
 }
 
 export default connect(state => ({
     authorizing: SELECTORS.AUTHORIZATION.AUTHORIZING(state)
   }
-), actions)(LoginDialog)
+), actions)(SignInDialog)
 
 const DialogActionsWrapper = styled.div`
   width: 100%;

@@ -10,10 +10,9 @@ import Appbar from './appbar'
 import TablesBar from './tablebar'
 import CandidatesTable from '../candidates/components/common/table'
 import CommentPage from '../comments/components/page'
-import SnackBar from '../commonComponents/UIComponentDecorators/snackbar'
+import SnackBar from '../commonComponents/UIComponentDecorators/errorSnackbar'
 import ErrorPage from './errorPage'
 import Spinner from '../commonComponents/UIComponentDecorators/spinner'
-import LoginDialog from '../authorization/components/signInDialog'
 import styled from 'styled-components'
 
 class AppView extends Component {
@@ -30,25 +29,27 @@ class AppView extends Component {
     } = this.props
 
     const handleSnackbarClose = () => {
-      setErrorMessage({message: ''})
+      setErrorMessage({ message: '' })
     }
 
     const initializngSpinner =
-      <InitSpinnerWrapper >
-        <Spinner size={60}/>
-      </InitSpinnerWrapper>
+      initializing ?
+        <InitSpinnerWrapper >
+          <Spinner size={60}/>
+        </InitSpinnerWrapper>
+        :
+        null
 
     const fetchingSpinner =
-      <RefreshSpinnerWrapper>
-        <Spinner size={60}/>
-      </RefreshSpinnerWrapper>
-
-    const loginDialog =
-      <LoginDialogWrapper>
-        <LoginDialog forced/>
-      </LoginDialogWrapper>
+      fetching && !initializing && pageTitle === 'Candidate Accounting' ?
+        <RefreshSpinnerWrapper>
+          <Spinner size={60}/>
+        </RefreshSpinnerWrapper>
+        :
+        null
 
     const tableSwitch =
+      authorized && !initializing ?
         <Switch>
           <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
             <CommentPage candidate={candidates[currentCandidateId]} />
@@ -68,31 +69,24 @@ class AppView extends Component {
           />
           <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
         </Switch>
+        :
+        <ApplicationStatusWrapper>
+          CandidateAccounting is loading...
+        </ApplicationStatusWrapper>
 
     return (
-      <div>
+      <React.Fragment>
         <Navbar>
           <Appbar />
           <TablesBar />
         </Navbar>
         <MainWrapper>
-          {
-            !authorized ?
-                loginDialog
-                :
-                initializing ?
-                  initializngSpinner
-                  :
-                  tableSwitch
-          }
-          {
-            fetching && !initializing && pageTitle === 'Candidate Accounting' ?
-              fetchingSpinner
-              : ''
-          }
+          {initializngSpinner}
+          {fetchingSpinner}
+          {tableSwitch}
         </MainWrapper>
         <SnackBar message={errorMessage} onClose={handleSnackbarClose} />
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -135,11 +129,16 @@ const RefreshSpinnerWrapper = styled.div`
   text-align: center;
 `
 
-const LoginDialogWrapper = styled.div`
-  display: none;
-`
-
 const MainWrapper = styled.div`
   position: relative;
   margin-top: 108px;
+`
+
+const ApplicationStatusWrapper = styled.div`
+  margin: -10px;
+  font-size: 190%;
+  font-weight: bold;
+  color: #888;
+  text-align: center;
+  padding-top: 90px;
 `

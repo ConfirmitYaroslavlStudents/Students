@@ -174,7 +174,7 @@ const creator = ({ history }) => {
             candidateStateDifference.status.previousState.toLowerCase() + 's',
             candidateStateDifference.status.newState.toLowerCase() + 's')
           + history.location.search)
-        yield put(actions.setCandidateStatus({ status: candidateStateDifference.status.newState, refreshNotNeccessary: true}))
+        yield put(actions.setCandidateStatus({ status: candidateStateDifference.status.newState }))
       }
     }
     catch (error) {
@@ -197,18 +197,15 @@ const creator = ({ history }) => {
 
   function* setCandidateStatusSaga(action) {
     try {
-      const { status, refreshNotNeccessary } = action.payload
+      const { status } = action.payload
       const previousStatus = yield select(state => state.candidates.candidateStatus)
       yield put(applicationActions.enableFetching())
       if (status === previousStatus) {
         yield put(applicationActions.resetSearchRequest())
       }
       yield put(actions.setCandidateStatusSuccess({ status }))
-      if (!refreshNotNeccessary) {
-        yield put(actions.getCandidates())
-      } else {
-        yield put(applicationActions.disableFetching())
-      }
+
+      yield put(actions.getCandidates())
     }
     catch (error) {
       yield put(applicationActions.setErrorMessage({message: error + '. Set candidate status error.'}))

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export default (fileURL, buffer) => {
+const createFile = (fileURL, fileData) => {
   let currentDirectory = path.dirname(fileURL)
   const directoriesToCreate = []
 
@@ -11,7 +11,7 @@ export default (fileURL, buffer) => {
         currentDirectory = path.join(currentDirectory, directoriesToCreate.pop())
         fs.mkdirSync(currentDirectory)
       }
-      fs.writeFileSync(fileURL, buffer)
+      fs.writeFileSync(fileURL, fileData)
       break
     } else {
       directoriesToCreate.push(path.basename(currentDirectory))
@@ -19,3 +19,5 @@ export default (fileURL, buffer) => {
     }
   }
 }
+
+export default createFile

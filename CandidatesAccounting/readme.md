@@ -1,38 +1,48 @@
-CANDIDATE ACCOUNTING README
+CandidateAccounting
+=====================
+Usage
+-----------------------------------
+### Setting up MongoDB
+1. Create database `CandidateAccounting` _(configurable)_;
+2. Create three collections in the database:
+    * `accounts`;
+    * `candidates`;
+    * `tags`.
+3. Database will be automatically connected when CandidateAccounting server starts.
 
+### NPM Scripts
+`npm run build` - builds server and client applications into `dist` folder.
 
-*** MongoDB ***
+`npm run prod` - starts `npm run build` script and then starts CandidateAccounting server in `production mode` from `dist` folder.
 
-MongoDB: https://www.mongodb.com/download-center#community
-Параметры установки по умолчанию.
+`npm run dev` - starts CandidateAccounting server in `development mode`.
 
-1. Создайте базу данных с названием "CandidateAccounting" без пароля (можно создать базу с другим названием, но, в таком случае, необходимо обновить connectionURL для MongoDB в ./server/server.config.json (строка "databaseConnectionURL"))
-2. Создайте три пустые коллекции:
-    a. "accounts"
-    b. "candidates"
-    c. "tags"
-3. ConnectionURL для MongoDB указан в ./server/server.config.json строка "databaseConnectionURL"
-4. Подключение к базе данных осуществляется автоматически при запуске сервера
+Configuration
+-----------------------------------
+### Server configuration file
+Location: `_{project directory}_/server/server.config.js`
+```
+const serverConfig = {
+  port: 3000,
+  databaseConnectionURL: "mongodb://localhost:27017/CandidateAccounting"
+}
 
+module.exports = serverConfig
+```
+`port` _(number, default: 3000)_ - server port number.
 
-*** Scripts ***
+`databaseConnectionURL` _(string, default: "mongodb://localhost:27017/CandidateAccounting")_ - MongoDB connection URL.
 
-    npm run build - запускает сборку клиента и сервера в папку dist
-    npm run prod - выполняет build-скрипт и запускает сервер в prod-моде из папки dist
-    npm run dev - запускает сервер в dev-моде
+### Authorization configuration file
+Location: `_{project directory}_/server/authorization.config.js`
+```
+const authorizationConfig = {
+  allowedLogins: [],
+  sessionSecret: 'secret'
+}
 
+module.exports = authorizationConfig
+```
+`allowedLogins` _(array, default: empty)_ - login list for users allowed to register and login. If empty, all users are allowed to register and login.
 
-*** Configuration ***
-
-Конфигурационный файл сервера (./server/server.config.json):
-    port: номер порта, на котором работает сервер
-    databaseConnectionURL: connectionURL для MongoDB
-
-Конфигурационный файл авторизации (./server/authorization.config.json):
-    allowedLogins: список логинов (email'ов) пользователей, для которых разрешены регистрация и вход (если пуст, то регистрация и вход разрешены для всех)
-    sessionSecret: сессионный секретный ключ
-
-
-*** Contacts ***
-
-E-mail: dmitry.banokin@gmail.com
+`sessionSecret` _(string, default: "secret")_ - secret session key used for authorization system.

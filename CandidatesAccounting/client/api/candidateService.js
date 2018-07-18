@@ -2,7 +2,7 @@ import sendGraphQLQuery from './graphqlClient'
 import Candidate from '../utilities/candidate'
 import convertArrayToDictionary from '../utilities/convertArrayToDictionary'
 
-export function getCandidates(take, skip, status, sort, sortDir, searchRequest) {
+export const getCandidates = (take, skip, status, sort, sortDir, searchRequest) => {
   return sendGraphQLQuery(
     `query($first: Int!, $offset: Int!, $status: String, $sort: String, $sortDir: String, $searchRequest: String) {
       candidatesPaginated(first: $first, offset: $offset, status: $status, sort: $sort, sortDir: $sortDir, searchRequest: $searchRequest) {
@@ -30,7 +30,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
     {
       first: take,
       offset: skip,
-      status: status,
+      status,
       sort,
       sortDir,
       searchRequest
@@ -49,7 +49,7 @@ export function getCandidates(take, skip, status, sort, sortDir, searchRequest) 
   })
 }
 
-export function getCandidate(id) {
+export const getCandidate = (id) => {
   return sendGraphQLQuery(
     `query($id: String!) {
       candidate(id: $id) {
@@ -90,7 +90,7 @@ export function getCandidate(id) {
   })
 }
 
-export function addCandidate(candidate) {
+export const addCandidate = (candidate) => {
   return sendGraphQLQuery(
     `mutation addCandidate($candidate: CandidateInput!) {
       addCandidate(
@@ -108,7 +108,7 @@ export function addCandidate(candidate) {
   })
 }
 
-export function updateCandidate(candidate) {
+export const updateCandidate = (candidate) => {
   return sendGraphQLQuery(
     `mutation updateCandidate($candidate: CandidateInput!) {
       updateCandidate(
@@ -124,7 +124,7 @@ export function updateCandidate(candidate) {
   })
 }
 
-export function deleteCandidate(candidateId) {
+export const deleteCandidate = (candidateId) => {
   return sendGraphQLQuery(
     `mutation deleteCandidate($candidateId: ID!) {
       deleteCandidate(
@@ -140,7 +140,7 @@ export function deleteCandidate(candidateId) {
   })
 }
 
-function convertToGraphQLType(candidate) {
+const convertToGraphQLType = (candidate) => {
   const convertedCadidate = {
     ...candidate,
     comments: Object.keys(candidate.comments).map(commentID => candidate.comments[commentID]),

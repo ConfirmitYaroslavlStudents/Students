@@ -17,6 +17,7 @@ namespace MyDictionary
         public TValue Value { get; set; }
         public Node<TKey, TValue> Next { get; set; }
     }
+
     public class MyDictionary<TKey, TValue>
     {
         Node<TKey, TValue> first;
@@ -29,10 +30,10 @@ namespace MyDictionary
             last = null;
             count = 0;
         }
+
         public void Add(TKey key, TValue value)
         {
-            Node<TKey, TValue> node = new Node<TKey, TValue>(key, value);
-
+            var node = new Node<TKey, TValue>(key, value);
             if (first == null)
             {
                 first = node;
@@ -40,7 +41,6 @@ namespace MyDictionary
             else
             {
                 var current = first;
-
                 while (current != null)
                 {
                     if (!current.Key.Equals(node.Key))
@@ -49,58 +49,44 @@ namespace MyDictionary
                     }
                     else
                     {
-                        break;
+                        throw new ArgumentException("Элемент с тем же ключом уже был добавлен.");
                     }
                 }
-
-                if (current == null)
-                {
-                    last.Next = node;
-                }
-                else
-                {
-                    throw new ArgumentException("Элемент с тем же ключом уже был добавлен.");
-                }
+                last.Next = node;
             }
-
             last = node;
             count++;
-
         }
 
         public bool Remove(TKey key)
         {
-            Node<TKey, TValue> current = first;
-            Node<TKey, TValue> previous = null;
-
-            while (current != null)
+            if (first.Key.Equals(key))
             {
-                if (current.Key.Equals(key))
-                {
-                    if (previous != null)
-                    {
-                        previous.Next = current.Next;
-                        if (current.Next == null)
-                        {
-                            last = previous;
-                        }
-                    }
-                    else
-                    {
-                        first = first.Next;
-
-                        if (first == null)
-                        {
-                            last = null;
-                        }
-                    }
-                    count--;
-                    return true;
-                }
-                previous = current;
-                current = current.Next;
+                first = first.Next;
+                count--;
+                return true;
             }
-            return false;
+            else
+            {
+                var current = first;
+                while (current.Next != null && !current.Next.Key.Equals(key))
+                {
+                    current = current.Next;
+                }
+
+                if (current.Next == null)
+                {
+                    return false;
+                }
+
+                current.Next = current.Next.Next;
+                count--;
+                if (current.Next == null)
+                {
+                    last = current;
+                }
+                return true;
+            }
         }
 
         public bool ContainsKey(TKey key)
@@ -120,6 +106,13 @@ namespace MyDictionary
         public int Count
         {
             get { return count; }
+        }
+
+        public void Clear()
+        {
+            first = null;
+            last = null;
+            count = 0;
         }
 
         private Node<TKey, TValue> NodeByKey(TKey key)

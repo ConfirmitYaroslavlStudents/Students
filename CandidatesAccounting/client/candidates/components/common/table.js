@@ -1,102 +1,101 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { SELECTORS } from '../../../rootReducer'
 import SortablePaginatedTable from '../../../commonComponents/sortablePaginatedTable'
 import CandidateTableHeaders from './tableHeaders'
-import CandidateTableRow from './tableRow'
+import getCandidateTableCells from './getCandidateTableRow'
 import IntervieweeTableHeaders from '../interviewees/tableHeaders'
-import IntervieweeTableRow from '../interviewees/tableRow'
+import getIntervieweeTableCells from '../interviewees/getTableCells'
 import StudentTableHeaders from '../students/tableHeaders'
-import StudentTableRow from '../students/tableRow'
+import getStudentTableCells from '../students/getTableCells'
 import TraineeTableHeaders from '../trainees/tableHeaders'
-import TraineeTableRow from '../trainees/tableRow'
+import getTraineeTableCells from '../trainees/getTableCells'
 
-function CandidatesTable(props) {
-  const {
-    candidates,
-    type,
-    fetching,
-    onUpdating,
-    onDeleting,
-    offset,
-    candidatesPerPage,
-    totalCount,
-    sortingField,
-    sortingDirection,
-    setOffset,
-    setCandidatesPerPage,
-    setSortingField,
-    toggleSortingDirection
-  } = props
-
-  const getHeaders = () => {
+class CandidatesTable extends Component {
+  getHeaders = (type) => {
     switch (type) {
       case 'Candidate':
-        return CandidateTableHeaders()
+        return CandidateTableHeaders
       case 'Interviewee':
-        return IntervieweeTableHeaders()
+        return IntervieweeTableHeaders
       case 'Student':
-        return StudentTableHeaders()
+        return StudentTableHeaders
       case 'Trainee':
-        return TraineeTableHeaders()
+        return TraineeTableHeaders
     }
   }
 
-  const getRow = (candidate, disabled) => {
+  getRow = (type, candidate, disabled) => {
     let cells = []
-    switch (type)
-    {
+    switch (type) {
       case 'Interviewee':
-        cells = IntervieweeTableRow({ candidate, disabled})
+        cells = getIntervieweeTableCells(candidate, disabled)
         break
       case 'Student':
-        cells = StudentTableRow({ candidate })
+        cells = getStudentTableCells(candidate)
         break
       case 'Trainee':
-        cells = TraineeTableRow({ candidate })
+        cells = getTraineeTableCells(candidate)
         break
       default:
-        cells = CandidateTableRow({ candidate })
+        cells = getCandidateTableCells(candidate)
     }
-    return { cells, isDisabled: disabled}
+    return { cells, isDisabled: disabled }
   }
 
-  const handleOffsetCange = offset => {
-    setOffset({ offset })
+  handleOffsetCange = (offset) => {
+    this.props.setOffset({ offset })
   }
 
-  const handleCandidatesPerPageChange = candidatesPerPage => {
-    setCandidatesPerPage({ candidatesPerPage })
+  handleCandidatesPerPageChange = (candidatesPerPage) => {
+    this.props.setCandidatesPerPage({ candidatesPerPage })
   }
 
-  const handleSortingFieldChange = sortingField => {
-    setSortingField({ sortingField })
+  handleSortingFieldChange = (sortingField) => {
+    this.props.setSortingField({ sortingField })
   }
 
-  const candidateHeaders = getHeaders()
 
-  const candidatesArray =  Object.keys(candidates).map(candidateID => candidates[candidateID])
+  render() {
+    const {
+      candidates,
+      type,
+      fetching,
+      onUpdating,
+      onDeleting,
+      offset,
+      candidatesPerPage,
+      totalCount,
+      sortingField,
+      sortingDirection,
+      toggleSortingDirection
+    } = this.props
 
-  const candidateRows = candidatesArray.map(candidate =>
-    getRow(candidate, fetching || candidate.id === onUpdating || candidate.id === onDeleting))
+    const candidateHeaders = this.getHeaders(type)
 
-  return (
-    <SortablePaginatedTable
-      headers={candidateHeaders}
-      contentRows={candidateRows}
-      totalCount={totalCount}
-      offset={offset}
-      rowsPerPage={candidatesPerPage}
-      sortingField={sortingField}
-      sortingDirection={sortingDirection}
-      onOffsetChange={handleOffsetCange}
-      onRowsPerPageChange={handleCandidatesPerPageChange}
-      onSortingFieldChange={handleSortingFieldChange}
-      onSortingDirectionChange={toggleSortingDirection}
-    />
-  )
+    const candidatesArray = Object.keys(candidates).map(candidateID => candidates[candidateID])
+
+    const candidateRows = candidatesArray.map(candidate =>
+      this.getRow(type, candidate, fetching || candidate.id === onUpdating || candidate.id === onDeleting))
+
+    return (
+      <SortablePaginatedTable
+        headers={candidateHeaders}
+        contentRows={candidateRows}
+        totalCount={totalCount}
+        offset={offset}
+        rowsPerPage={candidatesPerPage}
+        sortingField={sortingField}
+        sortingDirection={sortingDirection}
+        onOffsetChange={this.handleOffsetCange}
+        onRowsPerPageChange={this.handleCandidatesPerPageChange}
+        onSortingFieldChange={this.handleSortingFieldChange}
+        onSortingDirectionChange={toggleSortingDirection}
+      />
+    )
+  }
 }
 
 CandidatesTable.propTypes = {

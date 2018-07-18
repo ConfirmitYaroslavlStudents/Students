@@ -80,6 +80,8 @@ test('Simple test', async t => {
 })
 ```
 
+**Note: `result.assert` is an `async` function. Perhaps, you need to use `await` keyword.**
+
 Configuration
 -----------------------------------
 ### Config file
@@ -103,6 +105,8 @@ const options = {
       ignoredBox: { ... }
     }
   },
+
+  metadataURL: '',
 
   handleResult: function (result) { ... }
 }
@@ -191,6 +195,13 @@ ignoredBox: {
 }
 ```
 excludes part of the image from comparison (in pixels, from left top corner).
+
+### Metadata options
+```
+metadataURL //string, default: './.metadata.json'
+```
+
+`metadataURL` - relative path for screenshot metadata file in `__screenshots__` folder.
 
 ### Callback options
 ```

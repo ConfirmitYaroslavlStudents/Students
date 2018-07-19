@@ -30,7 +30,7 @@ class AddCommentDialog extends Component {
     const { disabled, candidate, username, addComment, subscribe, unsubscribe } = this.props
 
     return (
-      <div className='inline-flex'>
+      <React.Fragment>
         <IconButton icon={<CommentIcon />} style={MediumButtonStyle} disabled={disabled} onClick={this.handleOpen}/>
         <DialogWindow
           title='Add new comment'
@@ -51,7 +51,7 @@ class AddCommentDialog extends Component {
             }
           </AddCommentDialogFormWrapper>
         </DialogWindow>
-      </div>
+      </React.Fragment>
     )
   }
 }

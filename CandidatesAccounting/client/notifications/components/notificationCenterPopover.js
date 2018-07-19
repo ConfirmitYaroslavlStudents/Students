@@ -9,7 +9,7 @@ import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
 import NotificationIcon from '@material-ui/icons/Notifications'
 import Popover from '../../commonComponents/UIComponentDecorators/popover'
 import Badge from '../../commonComponents/UIComponentDecorators/badge'
-import NotificationCenter from './center'
+import NotificationCenter from './notificationCenter'
 import styled from 'styled-components'
 
 function NotificationCenterPopover(props) {

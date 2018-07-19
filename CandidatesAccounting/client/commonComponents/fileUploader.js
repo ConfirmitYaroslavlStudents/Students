@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import IconButton from './UIComponentDecorators/iconButton'
 import FileUploader from 'react-input-files'
 
-export default function CustomFileUploader(props) {
+const CustomFileUploader = (props) => {
   const { onAccept, onCancel, attachment, fileTypes, disabled, icon, buttonStyle } = props
 
   const handleUploadFile = (files) => {
@@ -20,10 +20,11 @@ export default function CustomFileUploader(props) {
       <AttachmentFileNameWrapper>
         {attachment.name}
       </AttachmentFileNameWrapper>
-      : ''
+      :
+      null
 
   if (disabled) {
-    return <IconButton icon={icon} style={buttonStyle} disabled />
+    return <IconButton icon={icon} onClick={() => {}} style={buttonStyle} disabled />
   }
 
   let fileTypesString = ''
@@ -35,7 +36,7 @@ export default function CustomFileUploader(props) {
   return (
     <div className='inline-flex centered'>
       <FileUploader accept={fileTypesString} onChange={handleUploadFile} style={{display: 'inline-flex'}}>
-        <IconButton icon={icon} style={buttonStyle} />
+        <IconButton icon={icon} onClick={() => {}} style={buttonStyle} />
       </FileUploader>
       { attachedFile }
     </div>
@@ -51,6 +52,8 @@ CustomFileUploader.propTypes = {
   attachment: PropTypes.object,
   disabled: PropTypes.bool,
 }
+
+export default CustomFileUploader
 
 const AttachmentFileNameWrapper = styled.div`
   display: inline-flex;

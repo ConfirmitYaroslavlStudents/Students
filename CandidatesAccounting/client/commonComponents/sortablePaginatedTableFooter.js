@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import IconButton from './UIComponentDecorators/iconButton'
 import FirstPageIcon from '@material-ui/icons/FirstPage'
@@ -9,60 +9,63 @@ import SelectInput from './UIComponentDecorators/selectInput'
 import RowAmountDisplay from './rowAmountDisplay'
 import styled from 'styled-components'
 
-export default function SortablePaginatedTableFooter(props) {
-  const {
-    offset,
-    rowsPerPage,
-    totalCount,
-    rowsPerPageOptions,
-    onRowsPerPageChange,
-    onFirstPageButtonClick,
-    onBackButtonClick,
-    onNextButtonClick,
-    onLastPageButtonClick
-  } = props
+class SortablePaginatedTableFooter extends Component {
+  render() {
+    const {
+      offset,
+      rowsPerPage,
+      totalCount,
+      rowsPerPageOptions,
+      onRowsPerPageChange,
+      onFirstPageButtonClick,
+      onBackButtonClick,
+      onNextButtonClick,
+      onLastPageButtonClick
+    } = this.props
 
-  return (
-    <ActionsWrapper>
-      <RowsPerPageWrapper>
-        <FooterText>Candidates per page: </FooterText>
-        <SelectInput
-          options={rowsPerPageOptions}
-          selected={rowsPerPage}
-          onChange={onRowsPerPageChange}
+    return (
+      <ActionsWrapper>
+        <RowsPerPageWrapper>
+          <FooterText>Candidates per page: </FooterText>
+          <SelectInput
+            label=''
+            options={rowsPerPageOptions}
+            selected={rowsPerPage}
+            onChange={onRowsPerPageChange}
+          />
+        </RowsPerPageWrapper>
+        <RowAmountDisplay
+          from={Math.min(offset + 1, totalCount)}
+          to={Math.min(offset + rowsPerPage, totalCount)}
+          total={totalCount}
         />
-      </RowsPerPageWrapper>
-      <RowAmountDisplay
-        from={Math.min(offset + 1, totalCount)}
-        to={Math.min(offset + rowsPerPage, totalCount)}
-        total={totalCount}
-      />
-      <IconButton
-        id='to-first-page-button'
-        icon={<FirstPageIcon />}
-        onClick={onFirstPageButtonClick}
-        disabled={offset === 0}
-      />
-      <IconButton
-        id='to-previous-page-button'
-        icon={<KeyboardArrowLeft />}
-        onClick={onBackButtonClick}
-        disabled={offset === 0}
-      />
-      <IconButton
-        id='to-next-page-button'
-        icon={<KeyboardArrowRight />}
-        onClick={onNextButtonClick}
-        disabled={offset + rowsPerPage >= totalCount}
-      />
-      <IconButton
-        id='to-last-page-button'
-        icon={<LastPageIcon />}
-        onClick={onLastPageButtonClick}
-        disabled={offset + rowsPerPage >= totalCount}
-      />
-    </ActionsWrapper>
-  )
+        <IconButton
+          id='to-first-page-button'
+          icon={<FirstPageIcon/>}
+          onClick={onFirstPageButtonClick}
+          disabled={offset === 0}
+        />
+        <IconButton
+          id='to-previous-page-button'
+          icon={<KeyboardArrowLeft/>}
+          onClick={onBackButtonClick}
+          disabled={offset === 0}
+        />
+        <IconButton
+          id='to-next-page-button'
+          icon={<KeyboardArrowRight/>}
+          onClick={onNextButtonClick}
+          disabled={offset + rowsPerPage >= totalCount}
+        />
+        <IconButton
+          id='to-last-page-button'
+          icon={<LastPageIcon/>}
+          onClick={onLastPageButtonClick}
+          disabled={offset + rowsPerPage >= totalCount}
+        />
+      </ActionsWrapper>
+    )
+  }
 }
 
 SortablePaginatedTableFooter.propTypes = {
@@ -76,6 +79,8 @@ SortablePaginatedTableFooter.propTypes = {
   onNextButtonClick: PropTypes.func.isRequired,
   onLastPageButtonClick: PropTypes.func.isRequired
 }
+
+export default SortablePaginatedTableFooter
 
 const ActionsWrapper = styled.div`
   display: flex;

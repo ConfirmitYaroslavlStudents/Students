@@ -1,4 +1,4 @@
-export default function searchCandidates(candidates, searchRequest) {
+const searchCandidates = (candidates, searchRequest) => {
   const searchWords = searchRequest.split(' ').filter(word => word.length > 0)
 
   const foundCandidates = []
@@ -19,8 +19,8 @@ export default function searchCandidates(candidates, searchRequest) {
   return foundCandidates
 }
 
-function searchByWord(candidate, searchWord) {
-  let lowerCasedSearchWord = searchWord.toLowerCase()
+const searchByWord = (candidate, searchWord) => {
+  const lowerCasedSearchWord = searchWord.toLowerCase()
   return (
     candidate.id === searchWord
     || candidate.name.toLowerCase().includes(lowerCasedSearchWord)
@@ -32,3 +32,5 @@ function searchByWord(candidate, searchWord) {
     || candidate.tags.includes(searchWord)
   )
 }
+
+export default searchCandidates

@@ -1,4 +1,4 @@
-export default function mergeTags(currentTags, newTags) {
+const mergeTags = (currentTags, newTags) => {
   newTags.forEach(tag => {
     if (!currentTags.includes(tag)) {
       currentTags.push(tag)
@@ -6,3 +6,5 @@ export default function mergeTags(currentTags, newTags) {
   })
   return currentTags
 }
+
+export default mergeTags

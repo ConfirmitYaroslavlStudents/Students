@@ -4,7 +4,7 @@ import DeleteCandidateDialog from './deleteCandidateDialog'
 import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
-export default function DeleteCandidateControl(props) {
+const DeleteCandidateControl = (props) => {
   if (props.candidateId === props.candidateIdOnDeleting) {
     return (
       <SpinnerWrapper>
@@ -26,6 +26,8 @@ DeleteCandidateControl.propTypes = {
   candidateIdOnDeleting: PropTypes.string,
   disabled: PropTypes.bool
 }
+
+export default DeleteCandidateControl
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

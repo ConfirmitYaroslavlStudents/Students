@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 
-export default function CustomDatePicker(props) {
+const CustomDatePicker = (props) => {
   return (
     <TextField
       label={props.label}
@@ -19,5 +19,7 @@ export default function CustomDatePicker(props) {
 CustomDatePicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
-  defaultValue: PropTypes.string, //yyyy-mm-dd
+  defaultValue: PropTypes.string
 }
+
+export default CustomDatePicker

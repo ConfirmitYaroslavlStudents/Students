@@ -5,28 +5,30 @@ import SignOutIcon from '@material-ui/icons/ExitToApp'
 import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
-export default function LogoutButton(props) {
+const SignOutButton = (props) => {
   if (props.authorizing) {
     return (
       <SpinnerWrapper>
         <Spinner size={30} color='inherit'/>
       </SpinnerWrapper>
     )
-  } else {
-    return (
-      <IconButton
-        icon={<SignOutIcon />}
-        color='inherit'
-        onClick={props.onClick}
-      />
-    )
   }
+
+  return (
+    <IconButton
+      icon={<SignOutIcon />}
+      color='inherit'
+      onClick={props.onClick}
+    />
+  )
 }
 
-LogoutButton.propTypes = {
+SignOutButton.propTypes = {
   authorizing: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired
 }
+
+export default SignOutButton
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

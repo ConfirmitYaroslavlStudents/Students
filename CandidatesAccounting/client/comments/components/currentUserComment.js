@@ -13,8 +13,12 @@ import {
   CommentAuthorName
 } from './styledComponents'
 
-export default function CurrentUserComment(props) {
-  const commentAttachment = props.comment.attachment ? <CommentAttachment comment={props.comment} candidate={props.candidate}/> : ''
+const CurrentUserComment = (props) => {
+  const commentAttachment =
+    props.comment.attachment ?
+      <CommentAttachment comment={props.comment} candidate={props.candidate}/>
+      :
+      null
 
   return (
     <CommentWrapper right>
@@ -26,7 +30,7 @@ export default function CurrentUserComment(props) {
           { commentAttachment }
         </CommentMountFooter>
       </CommentMount>
-      <div> </div>
+      <br />
       <CommentFooter>
         <CommentAuthorName>
         </CommentAuthorName>
@@ -42,3 +46,5 @@ CurrentUserComment.propTypes = {
   candidate: PropTypes.object.isRequired,
   deleteComment: PropTypes.func.isRequired,
 }
+
+export default CurrentUserComment

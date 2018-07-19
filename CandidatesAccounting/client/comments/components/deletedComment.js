@@ -12,7 +12,7 @@ import {
   CommentAuthorName
 } from './styledComponents'
 
-export default function DeletedComment(props) {
+const DeletedComment = (props) => {
   return (
     <CommentWrapper right>
       <CommentMount right deleted>
@@ -38,3 +38,5 @@ DeletedComment.propTypes = {
   candidate: PropTypes.object.isRequired,
   restoreComment: PropTypes.func.isRequired,
 }
+
+export default DeletedComment

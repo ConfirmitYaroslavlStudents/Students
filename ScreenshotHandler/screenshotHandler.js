@@ -5,6 +5,7 @@ import { fallenTestSaveStrategies } from './index'
 import createFile from './utilities/createFile'
 import deleteFile from './utilities/deleteFile'
 import deleteFolders from './utilities/deleteFolders'
+import Result from './result'
 
 export default class ScreenshotHandler {
   constructor(testController, options) {
@@ -20,53 +21,89 @@ export default class ScreenshotHandler {
       }
     }
 
+    this.browserName = this.t.testRun.browserConnection.browserInfo.providerName
+    this.testName = this.formatName(this.t.testRun.test.name)
+    this.testCtx = Symbol.for(this.testName)
+
     this.setScreenshotNames()
+
     this.setPaths()
+    this.getMetadata()
   }
 
   setScreenshotNames = () => {
+    this.screenshotNumber =
+      this.t.ctx[this.testCtx] && this.t.ctx[this.testCtx].screenshotNumber ?
+        this.t.ctx[this.testCtx].screenshotNumber + 1
+        :
+        1
+
+    this.t.ctx[this.testCtx] = { screenshotNumber: this.screenshotNumber }
+
     const screenshotName =
       this.options.screenshotName && this.options.screenshotName !== '' ?
-        `scr_${this.getScreenshotNumber()}_${this.options.screenshotName}`
+        `scr_${this.screenshotNumber}_${this.options.screenshotName}`
         :
-        `scr_${this.getScreenshotNumber()}`
+        `scr_${this.screenshotNumber}`
 
     this.newScreenshotName = `${screenshotName}_new.png`
     this.baseScreenshotName = `${screenshotName}_base.png`
     this.diffScreenshotName = `${screenshotName}_diff.png`
   }
 
-  getScreenshotNumber = () => {
-    const testCtx = Symbol.for(this.testName)
-
-    const screenshotNumber =
-      this.t.ctx[testCtx] && this.t.ctx[testCtx].screenshotNumber ?
-        this.t.ctx[testCtx].screenshotNumber + 1
-        :
-        1
-
-    this.t.ctx[testCtx] = { screenshotNumber }
-
-    return screenshotNumber
-  }
-
   setPaths = () => {
-    this.browserName = this.t.testRun.browserConnection.browserInfo.providerName
-    this.testName = this.formatName(this.t.testRun.test.name)
-
     this.screenshotDirectory = this.t.testRun.opts.screenshotPath
-    const fixtureFolderName = this.formatName(this.t.testRun.test.fixture.name)
-    this.testDirectory = path.join(fixtureFolderName, this.browserName, this.testName)
+    this.fixtureName = this.formatName(this.t.testRun.test.fixture.name)
+    this.testDirectory = path.join(this.fixtureName, this.browserName, this.testName)
 
     this.baseScreenshotURL = path.join(this.testDirectory, this.baseScreenshotName)
 
-    this.screenshotURL = path.join(this.testDirectory, this.newScreenshotName)
+    this.newScreenshotURL = path.join(this.testDirectory, this.newScreenshotName)
 
     this.diffScreenshotURL = path.join(this.testDirectory, this.diffScreenshotName)
 
     if (this.options.output.fallenTestSaveStrategy === fallenTestSaveStrategies.separate) {
       this.fallenTestFolder = 'fallenTests'
       this.diffScreenshotURL = path.join(this.fallenTestFolder, this.testDirectory, this.diffScreenshotName)
+    }
+
+    this.metadataURL = path.join(this.screenshotDirectory, this.options.metadataURL)
+  }
+
+  getMetadata = () => {
+    this.metadata =
+      fs.existsSync(this.metadataURL) ?
+        JSON.parse(fs.readFileSync(this.metadataURL))
+        :
+        {}
+
+    this.currentTestMetadata =
+      this.metadata[this.fixtureName]
+      && this.metadata[this.fixtureName][this.browserName]
+      && this.metadata[this.fixtureName][this.browserName][this.testName]
+      && this.metadata[this.fixtureName][this.browserName][this.testName][this.screenshotNumber] ?
+        this.metadata[this.fixtureName][this.browserName][this.testName][this.screenshotNumber]
+        :
+        null
+
+    if (!this.currentTestMetadata) {
+      this.metadata = {
+        ...this.metadata,
+        [this.fixtureName]: {
+          ...this.metadata[this.fixtureName],
+          [this.browserName]: {
+            ...this.metadata[this.fixtureName][this.browserName],
+            [this.testName]: {
+              ...this.metadata[this.fixtureName][this.browserName][this.testName],
+              [this.screenshotNumber]: {
+                passed: true,
+                baseScreenshotURL: path.join(this.screenshotDirectory, this.baseScreenshotURL)
+              }
+            }
+          }
+        }
+      }
+      this.currentTestMetadata = this.metadata[this.fixtureName][this.browserName][this.testName][this.screenshotNumber]
     }
   }
 
@@ -91,28 +128,42 @@ export default class ScreenshotHandler {
   }
 
   handleScreenshot = async (selector) => {
+    let handleScreenshotResult = { comparisonPerformed: false }
+
     const baseScreenshotExist = fs.existsSync(path.join(this.screenshotDirectory, this.baseScreenshotURL))
 
     if (baseScreenshotExist) {
-      await this.takeNewScreenshot(selector)
-      const comparisonResult = await this.compareNewScreenshotWithBaseOne()
-      return this.formatResult(comparisonResult)
+      await this.takeScreenshot(selector, this.newScreenshotURL)
+      this.currentTestMetadata.newScreenshotURL = path.join(this.screenshotDirectory, this.newScreenshotURL)
+
+      handleScreenshotResult = await this.compareNewScreenshotWithBaseOne()
+      this.currentTestMetadata.passed = handleScreenshotResult.differenceWithinNorm
     } else {
-      const creationResult = await this.takeNewBaseScreenshot(selector)
-      return this.formatResult(creationResult)
+      await this.takeScreenshot(selector, this.baseScreenshotURL)
+      this.currentTestMetadata.baseScreenshotURL = path.join(this.screenshotDirectory, this.baseScreenshotURL)
     }
+
+    return new Result(this, handleScreenshotResult)
   }
 
-  takeNewScreenshot = async (selector) => {
-    await this.t.takeElementScreenshot(selector, this.screenshotURL)
+  takeScreenshot = async (selector, screenshotURL) => {
+    await this.t.takeElementScreenshot(selector, screenshotURL)
+
     if (!this.options.output.createThumbnails) {
-      this.removeThumbnailFor(path.join(this.screenshotDirectory, this.screenshotURL))
+      const screenshotAbsPath = path.join(this.screenshotDirectory, screenshotURL)
+      const thumbnailsPath = path.join(path.dirname(screenshotAbsPath), 'thumbnails')
+      const screenshotName = path.basename(screenshotAbsPath)
+      try {
+        deleteFile(path.join(thumbnailsPath, screenshotName))
+        fs.rmdirSync(thumbnailsPath)
+      }
+      catch (e) { }
     }
   }
 
   compareNewScreenshotWithBaseOne = async () => {
     const baseScreenshot = fs.readFileSync(path.join(this.screenshotDirectory, this.baseScreenshotURL))
-    const newScreenshot = fs.readFileSync(path.join(this.screenshotDirectory, this.screenshotURL))
+    const newScreenshot = fs.readFileSync(path.join(this.screenshotDirectory, this.newScreenshotURL))
 
     const comparisonResult = await compareImages(baseScreenshot, newScreenshot, this.comparerOptions)
     comparisonResult.comparisonPerformed = true
@@ -121,20 +172,35 @@ export default class ScreenshotHandler {
     return comparisonResult
   }
 
+  updateMetadata = () => {
+    createFile(this.metadataURL, JSON.stringify(this.metadata))
+  }
+
   handleComparisonPassed = () => {
-    deleteFile(path.join(this.screenshotDirectory, this.screenshotURL))
+    deleteFile(path.join(this.screenshotDirectory, this.newScreenshotURL))
+    delete this.currentTestMetadata.newScreenshotURL
+
     deleteFile(path.join(this.screenshotDirectory, this.diffScreenshotURL))
+    delete this.currentTestMetadata.diffScreenshotURL
+
+    delete this.currentTestMetadata.misMatchPercentage
+    delete this.currentTestMetadata.maxMisMatchPercentage
 
     switch (this.options.output.fallenTestSaveStrategy) {
       case fallenTestSaveStrategies.separate:
         deleteFile(path.join(this.screenshotDirectory, this.fallenTestFolder, this.baseScreenshotURL))
-        deleteFile(path.join(this.screenshotDirectory, this.fallenTestFolder, this.screenshotURL))
+        deleteFile(path.join(this.screenshotDirectory, this.fallenTestFolder, this.newScreenshotURL))
         deleteFolders(this.screenshotDirectory, path.join(this.fallenTestFolder, this.testDirectory))
     }
   }
 
-  handleComparisonFailed = async (comparisonResult) => {
-    createFile(path.join(this.screenshotDirectory, this.diffScreenshotURL), comparisonResult.getBuffer())
+  handleComparisonFailed = (comparisonResult) => {
+    const diffScreenshotAbsPath = path.join(this.screenshotDirectory, this.diffScreenshotURL)
+    createFile(diffScreenshotAbsPath, comparisonResult.getBuffer())
+    this.currentTestMetadata.diffScreenshotURL = diffScreenshotAbsPath
+
+    this.currentTestMetadata.misMatchPercentage = Number(comparisonResult.misMatchPercentage)
+    this.currentTestMetadata.maxMisMatchPercentage = this.options.comparison.maxMisMatchPercentage
 
     switch (this.options.output.fallenTestSaveStrategy) {
       case fallenTestSaveStrategies.separate:
@@ -142,18 +208,26 @@ export default class ScreenshotHandler {
           path.join(this.screenshotDirectory, this.baseScreenshotURL),
           path.join(this.screenshotDirectory, this.fallenTestFolder, this.baseScreenshotURL))
 
-        const screenshotNewURL = path.join(this.screenshotDirectory, this.fallenTestFolder, this.screenshotURL)
-        fs.renameSync(path.join(this.screenshotDirectory, this.screenshotURL), screenshotNewURL)
-        this.screenshotURL = screenshotNewURL
+        const newScreenshotNewURL = path.join(this.fallenTestFolder, this.newScreenshotURL)
+        const newScreenshotAbsPath = path.join(this.screenshotDirectory, newScreenshotNewURL)
+        fs.renameSync(path.join(this.screenshotDirectory, this.newScreenshotURL), newScreenshotAbsPath)
+        this.newScreenshotURL = newScreenshotNewURL
+        this.currentTestMetadata.newScreenshotURL = newScreenshotAbsPath
     }
   }
 
-  takeNewBaseScreenshot = async (selector) => {
-    await this.t.takeElementScreenshot(selector, this.baseScreenshotURL)
-    if (!this.options.output.createThumbnails) {
-      this.removeThumbnailFor(path.join(this.screenshotDirectory, this.baseScreenshotURL))
+  assert = async (comparisonResult) => {
+    const assertionFailedMessage =
+      `There is a difference between screenshots (${comparisonResult.misMatchPercentage}%). `
+      + `Check ${path.join(this.screenshotDirectory, this.diffScreenshotURL)}`
+
+    try {
+      await this.t.expect(comparisonResult.differenceWithinNorm).ok(assertionFailedMessage)
     }
-    return { comparisonPerformed: false }
+    catch (e) {
+      this.updateMetadata()
+      throw e
+    }
   }
 
   logComparisonPassed = (comparisonResult) => {
@@ -175,77 +249,5 @@ export default class ScreenshotHandler {
   logNewBaseScreenshotCreated = () => {
     const message = `(${this.browserName}) new base screenshot for ${this.testName} (${this.baseScreenshotName}) is created.`
     console.log(`\x1b[34m${message}\x1b[0m`)
-  }
-
-  assert = async (comparisonResult) => {
-    const assertionFailedMessage =
-      `There is a difference between screenshots (${comparisonResult.misMatchPercentage}%). `
-      + `Check ${path.join(this.screenshotDirectory, this.diffScreenshotURL)}`
-
-    await this.t.expect(comparisonResult.differenceWithinNorm).ok(assertionFailedMessage)
-  }
-
-  formatResult = (comparisonResult) => {
-    const result = {
-      testName: this.t.testRun.test.name,
-      browserName: this.browserName,
-      comparisonPerformed: comparisonResult.comparisonPerformed,
-      baseScreenshotURL: path.join(this.screenshotDirectory, this.baseScreenshotURL),
-      maxMisMatchPercentage: this.options.comparison.maxMisMatchPercentage
-    }
-
-    if (result.comparisonPerformed) {
-      result.misMatchPercentage = Number(comparisonResult.misMatchPercentage)
-      result.isSameDimensions = comparisonResult.isSameDimensions
-      result.dimensionDifference = comparisonResult.dimensionDifference
-      result.diffBounds = comparisonResult.diffBounds
-      result.analysisTime = comparisonResult.analysisTime
-      result.comparisonPassed = comparisonResult.differenceWithinNorm
-
-      const newScreenshotURL = path.join(this.screenshotDirectory, this.screenshotURL)
-      if (fs.existsSync(newScreenshotURL)) {
-        result.newScreenshotURL = newScreenshotURL
-      }
-
-      if (!comparisonResult.differenceWithinNorm) {
-        const diffScreenshotURL = path.join(this.screenshotDirectory, this.diffScreenshotURL)
-        if (fs.existsSync(diffScreenshotURL)) {
-          result.diffScreeshotURL = diffScreenshotURL
-        }
-      }
-
-      result.getDiffScreenshotBuffer = comparisonResult.getBuffer
-
-      result.handle =
-        comparisonResult.differenceWithinNorm ?
-          () => this.handleComparisonPassed()
-          :
-          () => this.handleComparisonFailed(comparisonResult)
-
-      result.log =
-        comparisonResult.differenceWithinNorm ?
-          () => this.logComparisonPassed(comparisonResult)
-          :
-          () => this.logComparisonFailed(comparisonResult)
-
-      result.assert = () => this.assert(comparisonResult)
-    } else {
-      result.handle = () => {}
-      result.log = () => this.logNewBaseScreenshotCreated()
-      result.assert = () => {}
-    }
-
-    return result
-  }
-
-  removeThumbnailFor = (screenshotAbsPath) => {
-    const thumbnailsPath = path.join(path.dirname(screenshotAbsPath), 'thumbnails')
-    const screenshotName = path.basename(screenshotAbsPath)
-
-    try {
-      deleteFile(path.join(thumbnailsPath, screenshotName))
-      fs.rmdirSync(thumbnailsPath)
-    }
-    catch (e) { }
   }
 }

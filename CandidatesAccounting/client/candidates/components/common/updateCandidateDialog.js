@@ -42,7 +42,7 @@ class UpdateCandidateDialog extends React.Component {
     this.previousState = new Candidate(this.candidate.status, this.candidate)
 
     return (
-      <div className='inline-flex'>
+      <React.Fragment>
         <IconButton icon={<EditIcon style={iconStyle}/>} style={MediumButtonStyle} disabled={disabled} onClick={this.handleOpen}/>
         <DialogWindow
           title='Candidate edit'
@@ -59,7 +59,7 @@ class UpdateCandidateDialog extends React.Component {
               tags={tags}
             />
         </DialogWindow>
-      </div>
+      </React.Fragment>
     )
   }
 }
@@ -68,7 +68,7 @@ UpdateCandidateDialog.propTypes = {
   candidate: PropTypes.object.isRequired,
   tags: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
-  iconStyle: PropTypes.object,
+  iconStyle: PropTypes.object
 }
 
 export default connect(state => ({

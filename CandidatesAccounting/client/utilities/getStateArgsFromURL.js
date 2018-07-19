@@ -1,4 +1,4 @@
-export default function getStateArgsFromURL(url) {
+const getStateArgsFromURL = (url) => {
   const splitedURL = url.split('?')
 
   const path = splitedURL[0]
@@ -47,3 +47,5 @@ export default function getStateArgsFromURL(url) {
 
   return result
 }
+
+export default getStateArgsFromURL

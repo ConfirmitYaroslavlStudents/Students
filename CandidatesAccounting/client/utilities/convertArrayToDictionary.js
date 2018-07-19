@@ -1,4 +1,4 @@
-export default function convertArrayToDictinary(array) {
+const convertArrayToDictinary = (array) => {
   if (array instanceof Array) {
     const dictionary = {}
     array.forEach(element => {
@@ -13,3 +13,5 @@ export default function convertArrayToDictinary(array) {
     return array
   }
 }
+
+export default convertArrayToDictinary

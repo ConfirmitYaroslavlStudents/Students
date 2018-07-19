@@ -34,7 +34,7 @@ const history = createBrowserHistory()
 
 const store = createStore(reducer, username, history)
 
-function renderApp(app) {
+const renderApp = (app) => {
   ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
@@ -51,7 +51,7 @@ function renderApp(app) {
 
 renderApp(AppView)
 
-if (username !== '') {
+if (username && username !== '') {
   store.dispatch(getInitialStateFromServer())
 }
 

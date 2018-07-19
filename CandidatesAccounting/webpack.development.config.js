@@ -34,8 +34,8 @@ module.exports = {
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules\\[*lodash*|react\-dom\-factories]/,
-          name: "vendors",
-          chunks: "initial"
+          name: 'vendors',
+          chunks: 'initial'
         }
       }
     }

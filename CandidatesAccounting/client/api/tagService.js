@@ -1,6 +1,6 @@
 import sendGraphQLQuery from './graphqlClient'
 
-export function getTags() {
+export const getTags = () => {
   return sendGraphQLQuery(
     `query {
       tags

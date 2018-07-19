@@ -1,4 +1,4 @@
-export default function findDiferences(previousState, newState) {
+const findDiferences = (previousState, newState) => {
   let diferences = {}
   for (const key in previousState)
   {
@@ -22,3 +22,5 @@ export default function findDiferences(previousState, newState) {
   }
   return diferences
 }
+
+export default findDiferences

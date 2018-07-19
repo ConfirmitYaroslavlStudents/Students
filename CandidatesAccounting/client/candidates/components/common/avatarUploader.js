@@ -7,7 +7,7 @@ import LetterAvatar from '../../../commonComponents/UIComponentDecorators/letter
 import { SmallerIconStyle, SmallButtonStyle } from '../../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
-export default function AvatarUploader(props) {
+const AvatarUploader = (props) => {
   const { candidate, onAvatarUpload } = props
 
   const handleFileUpload = file => {
@@ -48,6 +48,8 @@ AvatarUploader.propTypes = {
   candidate: PropTypes.object.isRequired,
   onAvatarUpload: PropTypes.func.isRequired
 }
+
+export default AvatarUploader
 
 const UploaderWrapper = styled.div`
   display: inline-flex;

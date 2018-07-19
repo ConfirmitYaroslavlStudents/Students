@@ -36,13 +36,13 @@ const toMatchScreenshot = async (testController, selector, options) => {
     screenshotHandlerOptions.handleResult ?
       screenshotHandlerOptions.handleResult
       :
-      (result) => {
+      async (result) => {
         result.handle()
+        await result.assert()
         result.log()
-        result.assert()
       }
 
-  return screenshotHandler.handleScreenshot(selector).then(callback)
+  return screenshotHandler.handleScreenshot(selector).then(callback).then(() => { screenshotHandler.updateMetadata() })
 }
 
 const getUserGeneralOptions = (initialConfigSearchPath) => {

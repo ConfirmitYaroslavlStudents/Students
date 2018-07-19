@@ -5,7 +5,7 @@ import RestoreIcon from '@material-ui/icons/Restore'
 import { SmallerIconStyle, SmallButtonStyle } from '../../commonComponents/styleObjects'
 import styled from 'styled-components'
 
-export default function RestoreCommentButton(props) {
+const RestoreCommentButton = (props) => {
   return (
     <RestoreCommentWrapper>
       <IconButton
@@ -18,8 +18,10 @@ export default function RestoreCommentButton(props) {
 }
 
 RestoreCommentButton.propTypes = {
-  restoreComment: PropTypes.func.isRequired,
+  restoreComment: PropTypes.func.isRequired
 }
+
+export default RestoreCommentButton
 
 const RestoreCommentWrapper = styled.div`
   display: inline-flex;

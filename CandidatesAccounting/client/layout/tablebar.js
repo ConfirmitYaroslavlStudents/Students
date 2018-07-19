@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../candidates/actions'
@@ -7,54 +7,65 @@ import NavLink from '../commonComponents/linkWrapper'
 import AddCandidateDialog from '../candidates/components/common/addCandidateDialog'
 import styled from 'styled-components'
 
-function TablesBar(props) {
-  const { candidateStatus, setCandidateStatus, pageTitle } = props
+class TablesBar extends Component {
+  render() {
+    const {candidateStatus, setCandidateStatus, pageTitle} = this.props
 
-  let selected = 0;
-  switch(candidateStatus) {
-    case 'Interviewee':
-      selected = 1
-      break
-    case 'Student':
-      selected = 2
-      break
-    case 'Trainee':
-      selected = 3
-      break
+    let selected = 0
+    switch (candidateStatus) {
+      case 'Interviewee':
+        selected = 1
+        break
+      case 'Student':
+        selected = 2
+        break
+      case 'Trainee':
+        selected = 3
+        break
+    }
+
+    const handleLinkClick = status => () => {
+      setCandidateStatus({status})
+    }
+
+    const addCandidateButton =
+      pageTitle === 'Candidate Accounting' ?
+        <AddCandidateButtonWrapper>
+          <AddCandidateDialog/>
+        </AddCandidateButtonWrapper>
+        :
+        null
+
+    return (
+      <TablesBarWrapper>
+        <TabsWrapper>
+          <Tabs>
+            <Tab>
+              <NavLink className='table-link' active={selected === 0} onClick={handleLinkClick('')}>
+                All
+              </NavLink>
+            </Tab>
+            <Tab>
+              <NavLink className='table-link' active={selected === 1} onClick={handleLinkClick('Interviewee')}>
+                Interviewees
+              </NavLink>
+            </Tab>
+            <Tab>
+              <NavLink className='table-link' active={selected === 2} onClick={handleLinkClick('Student')}>
+                Students
+              </NavLink>
+            </Tab>
+            <Tab>
+              <NavLink className='table-link' active={selected === 3} onClick={handleLinkClick('Trainee')}>
+                Trainees
+              </NavLink>
+            </Tab>
+          </Tabs>
+        </TabsWrapper>
+        {addCandidateButton}
+      </TablesBarWrapper>
+    )
   }
-
-  const handleLinkClick = status => () => {
-    setCandidateStatus({ status })
-  }
-
-  const addCandidateButton =
-    pageTitle === 'Candidate Accounting' ?
-      <AddCandidateButtonWrapper>
-        <AddCandidateDialog />
-      </AddCandidateButtonWrapper>
-      : ''
-
-  return (
-    <TablesBarWrapper>
-      <TabsWrapper>
-        <Tabs>
-          <Tab>
-            <NavLink className='table-link' active={selected === 0} onClick={handleLinkClick('')}>All</NavLink>
-          </Tab>
-          <Tab>
-            <NavLink className='table-link' active={selected === 1} onClick={handleLinkClick('Interviewee')}>Interviewees</NavLink>
-          </Tab>
-          <Tab>
-            <NavLink className='table-link' active={selected === 2} onClick={handleLinkClick('Student')}>Students</NavLink>
-          </Tab>
-          <Tab>
-            <NavLink className='table-link' active={selected === 3} onClick={handleLinkClick('Trainee')}>Trainees</NavLink>
-          </Tab>
-        </Tabs>
-      </TabsWrapper>
-      { addCandidateButton }
-    </TablesBarWrapper>
-  )
 }
 
 TablesBar.propTypes = {

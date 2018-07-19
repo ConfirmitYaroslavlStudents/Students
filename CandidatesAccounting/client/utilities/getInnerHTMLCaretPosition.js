@@ -1,6 +1,6 @@
 import getInnerTextCaretPostion from './getInnerTextCaretPosition'
 
-export default function getInnerHTMLCaretPosition(DOMelement) {
+const getInnerHTMLCaretPosition = (DOMelement) => {
   const innerTextCaretPosition = getInnerTextCaretPostion(DOMelement)
   const htmlContent = DOMelement.innerHTML
   let textOffset = 0
@@ -26,3 +26,5 @@ export default function getInnerHTMLCaretPosition(DOMelement) {
 
   return htmlOffset
 }
+
+export default getInnerHTMLCaretPosition

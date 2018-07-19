@@ -4,7 +4,7 @@ import UpdateCandidateDialog from './updateCandidateDialog'
 import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
 import styled from 'styled-components'
 
-export default function UpdateCandidateControl(props) {
+const UpdateCandidateControl = (props) => {
   if (props.candidate.id === props.candidateIdOnUpdating) {
     return (
       <SpinnerWrapper>
@@ -26,6 +26,8 @@ UpdateCandidateControl.propTypes = {
   candidateIdOnUpdating: PropTypes.string,
   disabled: PropTypes.bool
 }
+
+export default UpdateCandidateControl
 
 const SpinnerWrapper = styled.div`
   display: inline-flex;

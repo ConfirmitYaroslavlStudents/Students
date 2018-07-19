@@ -1,9 +1,9 @@
-export default function getTraineeTableHeaders() {
-  return [
-    {title: 'Name', sortingField: 'name'},
-    {title: 'Actions'},
-    {title: 'Mentor', sortingField: 'mentor'},
-    {title: 'E-mail', sortingField: 'email'},
-    {title: 'Phone Number'}
-  ]
-}
+const traineeTableHeaders = [
+  {title: 'Name', sortingField: 'name'},
+  {title: 'Actions'},
+  {title: 'Mentor', sortingField: 'mentor'},
+  {title: 'E-mail', sortingField: 'email'},
+  {title: 'Phone Number'}
+]
+
+export default traineeTableHeaders

@@ -1,4 +1,4 @@
-export default function SortComments(comments) {
+const sortComments = (comments) => {
   return comments.sort((a, b) => {
     return sortByDateTime(a.date, b.date)
   })
@@ -29,3 +29,5 @@ function sortByDateTime(a, b) {
     }
   }
 }
+
+export default sortComments

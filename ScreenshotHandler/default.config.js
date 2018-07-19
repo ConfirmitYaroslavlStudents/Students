@@ -22,7 +22,9 @@ const defaultConfig = {
         blue: 0
       }
     }
-  }
+  },
+
+  metadataURL: './.metadata.json'
 }
 
 module.exports = defaultConfig

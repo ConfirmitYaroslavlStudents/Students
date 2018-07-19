@@ -72,7 +72,8 @@ class SearchForm extends Component {
           disableUnderline
           autoFocus
         />
-        : ''
+        :
+        null
 
     return (
       <div className='flex centered'>

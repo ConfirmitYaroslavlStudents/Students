@@ -4,7 +4,7 @@ import Input from '../../commonComponents/UIComponentDecorators/input'
 import { isNotEmpty, isEmail } from '../../utilities/candidateValidators'
 import styled from 'styled-components'
 
-export default class LoginForm extends Component {
+class SignInForm extends Component {
   constructor(props) {
     super(props)
     this.state = { email: '', password: '' }
@@ -29,7 +29,7 @@ export default class LoginForm extends Component {
 
   render() {
     return (
-      <LoginFormWrapper>
+      <SignInFormWrapper>
         <Input
           id='email-input'
           type='email'
@@ -41,8 +41,9 @@ export default class LoginForm extends Component {
           checkValid={isEmail}
           onChange={this.handleEmailChange}
           onKeyDown={this.handleKeyDown}
-          data-test-email-input
+          mark='data-test-email-input'
         />
+        <br />
         <br />
         <Input
           id='password-input'
@@ -53,18 +54,20 @@ export default class LoginForm extends Component {
           checkValid={isNotEmpty}
           onChange={this.handlePasswordChange}
           onKeyDown={this.handleKeyDown}
-          data-test-password-input
+          mark='data-test-password-input'
         />
-      </LoginFormWrapper>
+      </SignInFormWrapper>
     )
   }
 }
 
-LoginForm.propTypes = {
+SignInForm.propTypes = {
   account: PropTypes.object.isRequired,
   onEnterPress: PropTypes.func.isRequired
 }
 
-const LoginFormWrapper = styled.div`
+export default SignInForm
+
+const SignInFormWrapper = styled.div`
   width: 400px;
 `

@@ -2,17 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Badge from '@material-ui/core/Badge'
 
-export default function SimpleBadge(props) {
+const SimpleBadge = (props) => {
   const handleClick = event => {
     if (props.onClick && !props.disabled) {
       props.onClick(event)
     }
   }
 
+  let badgeClassName = 'badge'
+  if (props.badgeContent === 0) {
+    badgeClassName += ' hidden'
+  }
+
   return (
     <Badge
       badgeContent={props.badgeContent}
-      classes={{badge: 'badge' + (props.badgeContent === 0 ? ' hidden' : ''), colorSecondary: 'badge-accent'}}
+      classes={{ badge: badgeClassName, colorSecondary: 'badge-accent' }}
       color={props.color ? props.color : 'primary'}
       onClick={handleClick}
     >
@@ -27,3 +32,5 @@ SimpleBadge.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool
 }
+
+export default SimpleBadge

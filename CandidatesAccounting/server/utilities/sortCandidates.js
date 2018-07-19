@@ -1,4 +1,4 @@
-export default function SortCandidates(candidates, sortingField, sortingDirection) {
+const sortCandidates = (candidates, sortingField, sortingDirection) => {
   const sortResult = sortingDirection === 'desc' ? 1 : -1
   return candidates.sort((a, b) => {
     if (!a[sortingField] || a[sortingField] === null) {
@@ -20,7 +20,7 @@ export default function SortCandidates(candidates, sortingField, sortingDirectio
   })
 }
 
-function sortByAlphabet(a, b) {
+const sortByAlphabet = (a, b) => {
   if (a.toLowerCase() > b.toLowerCase()) {
     return 1
   } else {
@@ -32,7 +32,7 @@ function sortByAlphabet(a, b) {
   }
 }
 
-function sortByDate(a, b) {
+const sortByDate = (a, b) => {
   const aDate = a.split('.')
   const aResult = Number(aDate[2])*10000 + Number(aDate[1])*100 + Number(aDate[0])
 
@@ -50,7 +50,7 @@ function sortByDate(a, b) {
   }
 }
 
-function sortByDateTime(a, b) {
+const sortByDateTime = (a, b) => {
   const aSplited = a.split(' ')
   const aTime = aSplited[0].split(':')
   if (!aTime[2])
@@ -75,3 +75,5 @@ function sortByDateTime(a, b) {
     }
   }
 }
+
+export default sortCandidates

@@ -9,9 +9,10 @@ import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
 import TableFooter from '@material-ui/core/TableFooter'
 
-export default function CustomTable(props) {
+const CustomTable = (props) => {
   const headers = props.headers.map((header, index) =>
-    <TableCell key={'th' + index}>{ header }</TableCell>)
+    <TableCell key={'th' + index}>{ header }</TableCell>
+  )
 
   let rows = props.rows.map((row, index) =>
     <TableRow key={'tr' + index}>
@@ -20,7 +21,14 @@ export default function CustomTable(props) {
     </TableRow>
   )
   if (rows.size === 0 || rows.length === 0) {
-    rows = <TableRow><TableCell><EmptyTable>The table is empty</EmptyTable></TableCell></TableRow>
+    rows =
+      <TableRow>
+        <TableCell>
+          <EmptyTableMessageWrapper>
+            The table is empty
+          </EmptyTableMessageWrapper>
+        </TableCell>
+      </TableRow>
   }
 
   return (
@@ -50,10 +58,12 @@ export default function CustomTable(props) {
 CustomTable.propTypes = {
   headers: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   rows: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  footer: PropTypes.object.isRequired,
+  footer: PropTypes.object.isRequired
 }
 
-const EmptyTable = styled.div`
+export default CustomTable
+
+const EmptyTableMessageWrapper = styled.div`
   color: #aaa;
   text-align: center;
   position: absolute;

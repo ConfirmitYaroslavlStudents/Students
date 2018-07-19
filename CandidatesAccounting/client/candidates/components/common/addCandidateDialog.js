@@ -45,7 +45,7 @@ class AddCandidateDialog extends Component{
     const { authorized, tags } = this.props
 
     return (
-      <div className='inline-div'>
+      <React.Fragment>
         <IconButton icon={<AddPersonIcon />} onClick={this.handleOpen} style={MediumButtonStyle} disabled={!authorized} data-test-add-candidate-button/>
         <DialogWindow
           title='Add new candidate'
@@ -58,7 +58,7 @@ class AddCandidateDialog extends Component{
             tags={tags}
           />
         </DialogWindow>
-      </div>
+      </React.Fragment>
     )
   }
 }

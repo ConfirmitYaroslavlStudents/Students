@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton'
 import Popover from '@material-ui/core/Popover'
 
-export default class CustomPopover extends Component {
+class CustomPopover extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = { open: false, button: null }
     this.button = null
   }
@@ -19,18 +19,14 @@ export default class CustomPopover extends Component {
   }
 
   handleClose = () => {
-    this.setState({
-      open: false,
-    })
+    this.setState({ open: false })
   }
 
   render() {
     return (
       <div style={{display: 'inline-flex', zIndex: 100}}>
         <IconButton
-          ref={node => {
-            this.button = node
-          }}
+          ref={(node) => { this.button = node }}
           color={this.props.iconColor}
           onClick={this.handleClickButton}
         >
@@ -39,7 +35,7 @@ export default class CustomPopover extends Component {
         <Popover
           open={this.state.open}
           anchorReference={'anchorEl'}
-          onBackdropClick={(event) => {this.handleClose()}}
+          onBackdropClick={() => {this.handleClose()}}
           anchorEl={this.state.anchorEl}
           anchorPosition={{ top: 200, left: 400 }}
           anchorOrigin={{
@@ -61,5 +57,7 @@ export default class CustomPopover extends Component {
 CustomPopover.propTypes = {
   content: PropTypes.object,
   icon: PropTypes.object,
-  iconColor: PropTypes.string,
+  iconColor: PropTypes.string
 }
+
+export default CustomPopover

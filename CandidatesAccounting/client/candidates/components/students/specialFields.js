@@ -4,19 +4,21 @@ import TextField from '../../../commonComponents/UIComponentDecorators/textField
 import DatePicker from '../../../commonComponents/UIComponentDecorators/datePicker'
 import { toDatePickerFormat, fromDatePickerFormat } from '../../../utilities/customMoment'
 
-export default function StudentSpecialFields(props) {
-  const handleGroupNameChange = value => {
+const StudentSpecialFields = (props) => {
+  const handleGroupNameChange = (value) => {
     props.changeProperty('groupName', value)
   }
-  const handleLearningStartDateChange = value => {
+
+  const handleLearningStartDateChange = (value) => {
     props.changeProperty('startingDate', fromDatePickerFormat(value))
   }
-  const handleLearningEndDateChange = value => {
+
+  const handleLearningEndDateChange = (value) => {
     props.changeProperty('endingDate', fromDatePickerFormat(value))
   }
 
   return (
-    <div>
+    <React.Fragment>
       <TextField
         onChange={handleGroupNameChange}
         label='Group name'
@@ -33,11 +35,13 @@ export default function StudentSpecialFields(props) {
         defaultValue={toDatePickerFormat(props.student.endingDate)}
         onChange={handleLearningEndDateChange}
       />
-    </div>
+    </React.Fragment>
   )
 }
 
 StudentSpecialFields.propTypes = {
   student: PropTypes.object.isRequired,
-  changeProperty: PropTypes.func.isRequired,
+  changeProperty: PropTypes.func.isRequired
 }
+
+export default StudentSpecialFields

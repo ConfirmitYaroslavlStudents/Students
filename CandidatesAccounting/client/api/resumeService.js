@@ -1,4 +1,4 @@
-export function uploadResume(intervieweeId, resume) {
+export const uploadResume = (intervieweeId, resume) => {
   const formData = new FormData()
   formData.append('resume', resume)
 

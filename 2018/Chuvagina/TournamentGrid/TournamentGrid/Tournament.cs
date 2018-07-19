@@ -5,9 +5,10 @@ namespace TournamentGrid
 {
     class Tournament
     {
-        public int Amount { get; private set; }
-        private List<Participant> _allParticipants;
-        private Grid _tournamentGrid;
+        private List<Participant> _upperBracketParticipants;
+        private List<Participant> _lowerBracketParticipants;
+        private Grid _upperBracketGrid;
+        private Grid _lowerBracketGrid;
         private int _nearestPowerOfTwo;
         private int _numberOfCurrentPlayers;
         private bool _endOfTheGame = false;
@@ -15,10 +16,12 @@ namespace TournamentGrid
 
         public Tournament()
         {
-            _allParticipants = new List<Participant>();
-            _tournamentGrid = new Grid();
+            _upperBracketParticipants = new List<Participant>();
+            _lowerBracketParticipants = new List<Participant>();
             Amount = 0;
         }
+
+        public int Amount { get; private set; }
 
         public void SetParticipants()
         {
@@ -30,11 +33,12 @@ namespace TournamentGrid
         {
             while (!_endOfTheGame)
             {
-                _tournamentGrid.DrawTournamentGrid();
+                _upperBracketGrid.DrawTournamentGrid();
+                _lowerBracketGrid.DrawTournamentGrid();
                 Round();
             }
 
-            Console.WriteLine("The winner of the tournament is \"{0}\"", _allParticipants[_allParticipants.Count - 1].Name);
+            Console.WriteLine("The winner of the tournament is \"{0}\"", _upperBracketParticipants[_upperBracketParticipants.Count - 1].Name);
         }
 
         private void SetAmount()
@@ -61,7 +65,9 @@ namespace TournamentGrid
             _mix = new bool[Amount];
             NearestPowerOfTwo(Amount, out _nearestPowerOfTwo, out int amountOfRounds);
             _numberOfCurrentPlayers = Amount;
-            _tournamentGrid.AmountOfRounds = amountOfRounds;
+            _upperBracketGrid = new Grid(Amount);
+            _lowerBracketGrid = new Grid(Amount);
+            _upperBracketGrid.AmountOfRounds = amountOfRounds;
         }
 
         private void NearestPowerOfTwo(int inputNumber, out int nearestPowerOfTwo, out int amountOfRounds)
@@ -77,22 +83,25 @@ namespace TournamentGrid
 
         private void SetNames()
         {
-            string[] mixedParticipants = new string[Amount];
+            List<string> NonMixedParticipants = new List<string>();
             string nameOfNewParticipant;
             for (int i = 0; i < Amount; i++)
             {
-                nameOfNewParticipant = EnterNames(i,mixedParticipants);
-                int indexOfNewParticipant = Mix();
-                mixedParticipants[indexOfNewParticipant] = nameOfNewParticipant;
+                nameOfNewParticipant = EnterNames(i,NonMixedParticipants);
+                NonMixedParticipants.Add(nameOfNewParticipant);
             }
-            for (int i = 0; i < Amount; i++)
+            Random random = new Random();
+            while (NonMixedParticipants.Count>0)
             {
-                _allParticipants.Insert(i, new Participant(mixedParticipants[i]));
-                _tournamentGrid.AddInitialParticipants(mixedParticipants[i], i);
+                int indexOfParticipant = random.Next(NonMixedParticipants.Count);
+                _upperBracketParticipants.Add(new Participant( NonMixedParticipants[indexOfParticipant]));
+                _upperBracketGrid.AddInitialParticipants(NonMixedParticipants[indexOfParticipant]);
+                NonMixedParticipants.RemoveAt(indexOfParticipant);
             }
+        
         }
 
-        private string EnterNames(int indexOfParticipant, string[] mixedParticipants)
+        private string EnterNames(int indexOfParticipant, List<string>nonMixedParticipants)
         {
             string nameOfNewParticipant;
             int index;
@@ -100,10 +109,10 @@ namespace TournamentGrid
             {
                 Console.Write("Name of {0} participant: ", indexOfParticipant + 1);
                 nameOfNewParticipant = Console.ReadLine();
-                index= Array.IndexOf(mixedParticipants, nameOfNewParticipant);
+                index= nonMixedParticipants.IndexOf(nameOfNewParticipant);
                 
-                if (nameOfNewParticipant.Length > _tournamentGrid.MaxLengthOfString())
-                    Console.WriteLine("Maximum length of name is {0} ", _tournamentGrid.MaxLengthOfString());
+                if (nameOfNewParticipant.Length > _upperBracketGrid.MaxLengthOfString())
+                    Console.WriteLine("Maximum length of name is {0} ", _upperBracketGrid.MaxLengthOfString());
 
                 if (index>=0)
                     Console.WriteLine("A participant with this name already exists. Rename current participant");
@@ -111,74 +120,62 @@ namespace TournamentGrid
                 if (String.IsNullOrEmpty(nameOfNewParticipant))
                     Console.WriteLine("You've entered an empty string. Rename current participant");
 
-            } while (nameOfNewParticipant.Length > _tournamentGrid.MaxLengthOfString() || index>=0 || String.IsNullOrEmpty(nameOfNewParticipant));
+            } while (nameOfNewParticipant.Length > _upperBracketGrid.MaxLengthOfString() || index>=0 || String.IsNullOrEmpty(nameOfNewParticipant));
 
             return nameOfNewParticipant;
         }    
 
-        private int Mix()
-        {
-            int nextRandom;
-            Random randomNumber = new Random();
-            do
-            {
-                nextRandom=randomNumber.Next(Amount);
-
-            } while (_mix[nextRandom]) ;
-
-            _mix[nextRandom] = true;
-
-            return nextRandom;
-        }
- 
         private void Round()
         {
-            _tournamentGrid.IncreaseCurrentRound();
-            List<Participant> currentParicipants = CreateCurrentPlayersList();
+            _upperBracketGrid.IncreaseCurrentRound();
 
-            _numberOfCurrentPlayers = currentParicipants.Count;
+            _numberOfCurrentPlayers = _upperBracketParticipants.Count;
 
-            if (currentParicipants.Count != 1)
-                DetectWinners(currentParicipants);
+            if (_upperBracketParticipants.Count != 1)
+                DetectWinners();
             else
                 _endOfTheGame = true;
-            _tournamentGrid.IncreaseStep();
+            _upperBracketGrid.IncreaseStep();
         }
 
-        private List<Participant> CreateCurrentPlayersList()
+
+        private void DetectWinners()
         {
-            List<Participant> winnersOfPreviousRound = new List<Participant>();
-
-            foreach (Participant participant in _allParticipants)
-            {
-                if (participant != null && participant.Status)
-                {
-                    winnersOfPreviousRound.Add(participant);
-                    participant.ChangeStatus();
-                }
-            }
-
-            return winnersOfPreviousRound;
-        }
-
-        private void DetectWinners(List<Participant> roundParticipants)
-        {
-            string winner;
+            int winnerIndex;
             int indexOfGameInCurrentRound=0;
-            for (int i = 1; i < roundParticipants.Count; i += 2)
+            int roundTours = _upperBracketParticipants.Count / 2;
+
+            for (int i = 0; i < roundTours; i ++)
             {
-                winner = GetWinnersName(roundParticipants[i - 1].Name, roundParticipants[i].Name);
-                AddWinnerToNextRound(winner, indexOfGameInCurrentRound++);
+                winnerIndex = GetWinnersIndex(_upperBracketParticipants[i].Name, _upperBracketParticipants[i+1].Name);
+                Participant winner;
+                Participant loser;
+                if (winnerIndex==1)
+                {
+                    winner =_upperBracketParticipants[i];
+                    loser= _upperBracketParticipants[i+1];             
+                }
+                    
+                else
+                {
+                    winner = _upperBracketParticipants[i+1];
+                    loser = _upperBracketParticipants[i];
+                }
+                AddWinnerToNextRound(winner.Name, indexOfGameInCurrentRound++, winnerIndex);
+                _upperBracketParticipants.Remove(loser);
+                _lowerBracketParticipants.Add(loser);
+                _lowerBracketGrid.AddInitialParticipants(loser.Name);
+
             }
 
-            if (roundParticipants.Count % 2 == 1)
-            {
-                winner = roundParticipants[roundParticipants.Count - 1].Name;
-                AddWinnerToNextRound(winner, indexOfGameInCurrentRound);
+            if (_upperBracketParticipants.Count != roundTours)
+            {              
+                AddWinnerToNextRound(_upperBracketParticipants[roundTours].Name, indexOfGameInCurrentRound,2);
             }
+            
         }
         
-        private string GetWinnersName(string firstParicipantName, string secondParticipantName)
+        private int GetWinnersIndex(string firstParicipantName, string secondParticipantName)
         {
             bool firstIsWinner = false;
             bool secondIsWinner = false;
@@ -192,13 +189,15 @@ namespace TournamentGrid
 
             } while (!firstIsWinner && !secondIsWinner);
 
-            return winner;
+            if (firstIsWinner)
+                return 1;
+            else
+                return 2;
         }
 
-        private void AddWinnerToNextRound(string participantName, int indexOfGameInCurrentRound)
+        private void AddWinnerToNextRound(string participantName, int indexOfGameInCurrentRound, int index)
         {
-            _allParticipants.Add(new Participant(participantName));
-            _tournamentGrid.AddWinner( participantName, indexOfGameInCurrentRound,_numberOfCurrentPlayers);       
+            _upperBracketGrid.AddWinner( participantName, indexOfGameInCurrentRound,index);       
         }
            
     }

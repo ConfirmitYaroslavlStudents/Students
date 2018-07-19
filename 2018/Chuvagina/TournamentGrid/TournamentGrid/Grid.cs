@@ -5,15 +5,23 @@ namespace TournamentGrid
 {
     class Grid
     {
-        private List<string> ResultLines;
-        public int AmountOfRounds;
-        private int _step = 2;
-        private int _currentRound=0;
         const int maxLengthOfString = 15;
 
-        public Grid()
+        private List<ParticipantInGrid[]> ResultList = new List<ParticipantInGrid[]>();
+        private int _step = 2;
+        private int _currentRound=0;
+        private int[] _amountOfRoundPlayers;
+        public int AmountOfRounds;      
+
+        public Grid(int amountOfParticipants)
         {
-            ResultLines = new List<string>();
+            _amountOfRoundPlayers = new int[amountOfParticipants];
+            int initialAmount = amountOfParticipants;
+            for (int i=0; i<amountOfParticipants;i++)
+            {
+                _amountOfRoundPlayers[i] = initialAmount;
+                initialAmount = initialAmount / 2 + initialAmount % 2;
+            }
         }
 
         public void IncreaseStep()
@@ -31,109 +39,54 @@ namespace TournamentGrid
             _currentRound += 1;
         }
 
-        public void Add(string newParticipant)
-        {
-            ResultLines.Add(newParticipant);
-        }
-
         public void DrawTournamentGrid()
         {
             Console.WriteLine();
-            foreach (string line in ResultLines)
+            foreach (ParticipantInGrid[] Line in ResultList)
             {
-                Console.WriteLine(line);
+                foreach (ParticipantInGrid Participant in Line)
+                    if (Participant != null && Participant.IsSeen)
+                    {
+                        Console.ForegroundColor = Participant.Color;
+                        Console.Write(String.Format("{0,-16:0.0}", Participant.Name));
+                    }
+                    else Console.Write(String.Format("{0,-16:0.0}", ""));
+                Console.WriteLine();
             }
             Console.WriteLine();
+            Console.ReadLine();
         }
 
-        public void AddInitialParticipants(string nameOfNewParticipant, int indexOfNewParticipant)
+        public void AddInitialParticipants(string newParticipant)
         {
-            string participantGridName = SetString(nameOfNewParticipant, maxLengthOfString, '_');
-            if (indexOfNewParticipant % 2 == 1)
-                Add(participantGridName + "|");
-            else
-                Add(participantGridName + " ");
+            ParticipantInGrid[] ParticipantForGrid = new ParticipantInGrid[AmountOfRounds+1];
+            bool isSeen = true;
+            if (_amountOfRoundPlayers[_currentRound] % 2 == 1 && ResultList.Count == _amountOfRoundPlayers[0]-1)
+                isSeen = false;
+            ParticipantForGrid[_currentRound] = new ParticipantInGrid(newParticipant,isSeen);
+            ResultList.Add(ParticipantForGrid);
         }
 
-        public void AddWinner(string participantName, int indexOfGameInCurrentRound, int NumberOfCurrentPlayers)
+        public void AddWinner(string participantName, int indexOfGameInCurrentRound, int indexOfWinner)
         {
-            int amountOfNextRoundPlayers = NumberOfCurrentPlayers / 2 + NumberOfCurrentPlayers % 2;
-            int indexOfCurrentLine = (indexOfGameInCurrentRound + 1) * _step - 1;
-            int roundWinners = NumberOfCurrentPlayers / 2 + NumberOfCurrentPlayers % 2;
-            bool playingNextRound = (indexOfGameInCurrentRound != roundWinners - 1);
-            bool isLast = indexOfGameInCurrentRound == roundWinners - 1;
+            int indexOfNewWinner = -1 + _step * (indexOfGameInCurrentRound + 1);
+            
+            if (indexOfWinner == 1)
+                ResultList[indexOfNewWinner - _step / 2][_currentRound - 1].Color = ConsoleColor.Green;
 
-            if (_currentRound == AmountOfRounds)
-            {
-                ResultLines[ResultLines.Count-1] += participantName;
-            }
+            if (indexOfNewWinner >= ResultList.Count)
+                indexOfNewWinner=ResultList.Count-1;
 
-            else if (playingNextRound)
-                AddRowInGrid(participantName, indexOfCurrentLine, indexOfGameInCurrentRound, isLast);            
+            if (indexOfWinner == 2)
+                ResultList[indexOfNewWinner][_currentRound - 1].Color = ConsoleColor.Green;
 
-            else if (amountOfNextRoundPlayers % 2 == 0)
-                AddTheOnlyParticipant(participantName, "|");
+            bool isSeen = true;
+            if (_amountOfRoundPlayers[_currentRound] % 2 == 1 && indexOfNewWinner == ResultList.Count - 1 && indexOfGameInCurrentRound!=0)
+                isSeen = false;
 
-            else if (amountOfNextRoundPlayers % 2 == 1)
-                AddTheOnlyParticipant(participantName, " ");
+            ResultList[indexOfNewWinner][_currentRound] = new ParticipantInGrid(participantName,isSeen);
         }
 
-        private void AddRowInGrid(string participantName, int indexOfCurrentLine, int line, bool isLast)
-        {
-            string participantGridName;
-            bool isLastRound = _currentRound ==AmountOfRounds;
-
-            participantGridName = SetString(participantName, maxLengthOfString, '_');
-            ResultLines[indexOfCurrentLine] = ResultLines[indexOfCurrentLine] + participantGridName;
-            if (!isLast)
-            {
-                if (line % 2 == 0)
-                    AddStrategies(indexOfCurrentLine);
-                else
-                    ResultLines[indexOfCurrentLine] = ResultLines[indexOfCurrentLine] + "|";
-            }
-            else
-            {
-                int lastLine = ResultLines.Count - 1;
-                participantGridName = SetString(participantName, maxLengthOfString, '_');
-                ResultLines[lastLine] = ResultLines[lastLine] + "|" + participantGridName;
-            }
-            if (_currentRound == AmountOfRounds - 1 && isLast)
-            {
-                ResultLines[ResultLines.Count - 1] = ResultLines[ResultLines.Count - 1] + "|";
-            }
-        }
-
-
-        private void AddStrategies(int indexOfCurrentLine)
-        {
-             for (int i = 1; i < _step; i++)
-             {
-                  if (indexOfCurrentLine + i + 1 < ResultLines.Count)
-                  {
-                      int lengthOfNextLine = ResultLines[indexOfCurrentLine + i].Length; ;
-                      string lost = "";
-                      int amountOfLostChars = (_currentRound + 1) * (maxLengthOfString + 1) - lengthOfNextLine - 1;
-                      lost = SetString(lost, amountOfLostChars, ' ');
-                      ResultLines[indexOfCurrentLine + i] = ResultLines[indexOfCurrentLine + i] + lost + "|";
-                  }                        
-             }
-        }
-
-        private void AddTheOnlyParticipant(string participantName, string adding)
-        {
-            ResultLines[ResultLines.Count - 1] = ResultLines[ResultLines.Count - 1] + SetString(participantName, maxLengthOfString, '_') + adding;
-        }
-
-
-        private string SetString(string inputString, int lostChars, char filling)
-        {
-            for (int i = inputString.Length; i < lostChars; i++)
-            {
-                inputString += filling;
-            }
-
-            return inputString;
-        }
+        
     }
 }

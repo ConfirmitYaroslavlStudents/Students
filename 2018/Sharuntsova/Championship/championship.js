@@ -12,7 +12,6 @@ class Championship {
     }
 
     init(participants) {
-
         this.participants = participants;
     }
 
@@ -26,7 +25,6 @@ class Championship {
     }
 
     breakIntoPair() {
-
         this.pairs = [];
         const shuffled = shuffleArray(this.participants);
 

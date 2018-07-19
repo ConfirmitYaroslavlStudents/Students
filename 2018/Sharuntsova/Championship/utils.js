@@ -6,12 +6,10 @@ shuffleArray = (a) => {
     return a;
 }
 
-// Internet version of this method
  isPowerOfTwo = (number) =>{
      return number && (number & (number - 1)) === 0;
  }
 
-// My version
 // isPowerOfTwo = (number) =>{
 //     if (number>1) {
 //         if (number%2==0)

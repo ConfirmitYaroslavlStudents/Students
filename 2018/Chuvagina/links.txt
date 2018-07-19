@@ -1,2 +1,0 @@
-1. https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/delegates/
-2. https://stackoverflow.com/questions/4317479/func-vs-action-vs-predicate

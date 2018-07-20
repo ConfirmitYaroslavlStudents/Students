@@ -5,7 +5,7 @@ namespace TournamentGrid
 {
     class Grid
     {
-        const int maxLengthOfString = 15;
+       /* const int maxLengthOfString = 15;
 
         private List<ParticipantInGrid[]> ResultList = new List<ParticipantInGrid[]>();
         private int _step = 2;
@@ -86,7 +86,7 @@ namespace TournamentGrid
 
             ResultList[indexOfNewWinner][_currentRound] = new ParticipantInGrid(participantName,isSeen);
         }
-
+        */
         
     }
 }

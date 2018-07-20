@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Grid.cs" />
-    <Compile Include="ParticipantInGrid.cs" />
     <Compile Include="Tournament.cs" />
     <Compile Include="Participant.cs" />
     <Compile Include="Program.cs" />

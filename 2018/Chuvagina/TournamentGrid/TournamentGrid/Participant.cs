@@ -9,11 +9,19 @@ namespace TournamentGrid
     class Participant 
     {
         public string Name { get; private set; }
-        
+        public ConsoleColor Color = ConsoleColor.White;
+        public bool IsSeen = true;
+        public int Round;
+
         public Participant(string nameOfParticipant)
         {
             Name = nameOfParticipant;
         }
 
+        public Participant(string nameOfParticipant, int round)
+        {
+            Name = nameOfParticipant;
+            Round = round;
+        }
     }
 }

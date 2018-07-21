@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Championship
 {
     public class TournamentGrid
     {
-        public List<Meeting> Tournament;
-
-        public TournamentGrid()
-        {
-            Tournament = new List<Meeting>();
-        }
+        public List<Meeting> Tournament = new List<Meeting>();
 
         public void CreateTournamentGrid(int players)
         {
@@ -24,22 +15,22 @@ namespace Championship
 
             while (stages < players)
             {
-                var countPrevStage = Tournament.Count;
+                var countPreviousStage = Tournament.Count;
                 for (var i = 0; i < countMeetings; i++)
                 {
                     Tournament.Add(new Meeting());
-                    Tournament[i + countPrevStage].Stage = currentStage.Stage;
+                    Tournament[i + countPreviousStage].Stage = currentStage.Stage;
                 }
 
                 if (currentStage.Stage != "final")
                 {
-                    var indexmeeting = countNextMeetings;
+                    var meetingIndex = countNextMeetings;
 
                     for (var i = 0; i < countNextMeetings; i++)
                     {
-                        Tournament[indexmeeting].NextStage = Tournament[i];
-                        Tournament[indexmeeting + 1].NextStage = Tournament[i];
-                        indexmeeting += 2;
+                        Tournament[meetingIndex].NextStage = Tournament[i];
+                        Tournament[meetingIndex + 1].NextStage = Tournament[i];
+                        meetingIndex += 2;
                     }
 
                     for (var i = 0; i < countNextMeetings; i++)

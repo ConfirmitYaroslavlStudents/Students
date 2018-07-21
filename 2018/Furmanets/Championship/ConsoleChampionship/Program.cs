@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Championship;
+﻿using Championship;
 
 namespace ConsoleChampionship
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            Tournament tournament = new Tournament();
-            tournament.AddingPlayers();
-            tournament.CollectorResults();
+            var tournament = new Tournament();
+            tournament.Start();
         }
     }
 }

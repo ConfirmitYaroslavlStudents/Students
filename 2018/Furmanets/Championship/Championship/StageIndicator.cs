@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace Championship
+﻿namespace Championship
 {
     class StageIndicator
     {
         public string Stage;
         public int CountStage = 2;
+        private const string ConstFinal = "final";
 
         public StageIndicator(string beginStage)
         {
@@ -14,12 +13,12 @@ namespace Championship
 
         public StageIndicator()
         {
-            Stage = "final";
+            Stage = ConstFinal;
         }
 
         public void NextStage()
         {
-            if (Stage == "final")
+            if (Stage == ConstFinal)
             {
                 Stage = "1/2";
             }

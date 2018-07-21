@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Paint.cs" />
+    <Compile Include="Draftsman.cs" />
     <Compile Include="Meeting.cs" />
     <Compile Include="StageIndicator.cs" />
     <Compile Include="TournamentGrid.cs" />

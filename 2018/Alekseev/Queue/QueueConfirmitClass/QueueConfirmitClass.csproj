@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ArrayQueue.cs" />
     <Compile Include="ListQueue.cs" />
+    <Compile Include="MyQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

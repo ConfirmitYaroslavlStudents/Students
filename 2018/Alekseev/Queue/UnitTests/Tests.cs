@@ -5,106 +5,127 @@ namespace UnitTests
 {
     public class Tests
     {
-        ArrayQueue<int> _arrayQueue = new ArrayQueue<int>();
-        ListQueue<int> _listQueue = new ListQueue<int>();
         [Fact]
-        public void CheckContainsArrayQueue()
+        public void CheckContainsQueue()
         {
-            AddToArrayQueue(5);
-            Assert.True(_arrayQueue.Contains(1));
-        }
-
-        [Fact]
-        public void CheckContainsListQueue()
-        {
-            AddToListQueue(5);
-            Assert.True(_listQueue.Contains(1));
-        }
-
-        public void AddToArrayQueue(int count)
-        {
-            for (int i = 0; i < count; i++)
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            MyQueue<int> queueList = new ListQueue<int>();
+            for (int i = 1; i < 6; i++)
             {
-                _arrayQueue.Enqueue(i + 1);
+                queueArray.Enqueue(i);
+                queueList.Enqueue(i);
             }
-        }
 
-        public void AddToListQueue(int count)
+            var resultArray = queueArray.Contains(1);
+            var resultList = queueList.Contains(1);
+
+            Assert.True(resultArray);
+            Assert.True(resultList);
+
+        }      
+        [Fact]
+        public void CheckCountQueue()
         {
-            for (int i = 0; i < count; i++)
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            MyQueue<int> queueList = new ListQueue<int>();
+            for (int i = 1; i < 11; i++)
             {
-                _listQueue.Enqueue(i + 1);
+                queueArray.Enqueue(i);
+                queueList.Enqueue(i);
             }
+
+            var countArray = queueArray.Count();
+            var countList = queueList.Count();
+
+            Assert.Equal(10,countArray);
+            Assert.Equal(10, countList);
         }
 
         [Fact]
-        public void CheckCountArrayQueue()
+        public void CheckPeekQueue()
         {
-            AddToArrayQueue(5);
-            Assert.Equal(5,_arrayQueue.Count());
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            MyQueue<int> queueList = new ListQueue<int>();
+            for (int i = 1; i < 11; i++)
+            {
+                queueArray.Enqueue(i);
+                queueList.Enqueue(i);
+            }
+
+            var resultArray = queueArray.Peek();
+            var resultList = queueList.Peek();
+
+            Assert.Equal(1,resultArray);
+            Assert.Equal(1,resultList);
         }
 
         [Fact]
-        public void CheckCountListQueue()
+        public void CheckDequeueQueue()
         {
-            AddToListQueue(5);
-            Assert.Equal(5, _listQueue.Count());
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            MyQueue<int> queueList = new ListQueue<int>();
+            for (int i = 1; i < 11; i++)
+            {
+                queueArray.Enqueue(i);
+                queueList.Enqueue(i);
+            }
+
+            queueArray.Dequeue();
+            queueList.Dequeue();
+
+            Assert.Equal(2, queueArray.Peek());
+            Assert.Equal(2, queueList.Peek());
         }
 
         [Fact]
-        public void CheckPeekArrayQueue()
+        public void CheckClearQueue()
         {
-            AddToArrayQueue(5);
-            Assert.Equal(1,_arrayQueue.Peek());
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            MyQueue<int> queueList = new ListQueue<int>();
+            for (int i = 1; i < 11; i++)
+            {
+                queueArray.Enqueue(i);
+                queueList.Enqueue(i);
+            }
+
+            queueArray.Clear();
+            queueList.Clear();
+
+            Assert.Equal(0,queueArray.Count());
+            Assert.Equal(0,queueList.Count());
         }
 
         [Fact]
-        public void CheckPeekListQueue()
+        public void CheckOverflowArrayQueue()
         {
-            AddToListQueue(5);
-            Assert.Equal(1,_listQueue.Peek());
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            for (int i = 1; i <= 21; i++)
+            {
+                queueArray.Enqueue(i);
+            }
+
+            var resultArray = queueArray.Count();
+
+            Assert.Equal(21, resultArray);
         }
 
         [Fact]
-        public void CheckDequeueArrayQueue()
+        public void CheckOverflowArrayQueueAfterDequeue()
         {
-            AddToArrayQueue(5);
-            _arrayQueue.Dequeue();
-            Assert.Equal(2,_arrayQueue.Peek());
-        }
+            MyQueue<int> queueArray = new ArrayQueue<int>();
+            for (int i = 1; i <= 20; i++)
+            {
+                queueArray.Enqueue(i);
+            }
+            queueArray.Dequeue();
+            for (int i = 21; i <= 22; i++)
+            {
+                queueArray.Enqueue(i);
+            }
 
-        [Fact]
-        public void CheckDequeueListQueue()
-        {
-            AddToListQueue(5);
-            _listQueue.Dequeue();
-            Assert.Equal(2,_listQueue.Peek());
-        }
+            var resultArray = queueArray.Count();
 
-        [Fact]
-        public void CheckFullArrayQueue()
-        {
-            AddToArrayQueue(5);
-            for (int i = 5; i < 21; i++)
-                _arrayQueue.Enqueue(i);
-            _arrayQueue.Enqueue(22);
-            Assert.Equal(20,_arrayQueue.Count());
-        }
-
-        [Fact]
-        public void CheckClearArrayQueue()
-        {
-            AddToArrayQueue(5);
-            _arrayQueue.Clear();
-            Assert.Equal(0,_arrayQueue.Count());
-        }
-
-        [Fact]
-        public void CheckClearListQueue()
-        {
-            AddToListQueue(5);
-            _listQueue.Clear();
-            Assert.Equal(0,_listQueue.Count());
+            Assert.Equal(21, resultArray);
         }
     }
 }

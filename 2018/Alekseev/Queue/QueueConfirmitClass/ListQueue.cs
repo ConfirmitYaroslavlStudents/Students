@@ -4,46 +4,44 @@ using System.Linq;
 
 namespace QueueConfirmitClass
 {
-    public class ListQueue<T>
+    public class ListQueue<T> : MyQueue<T>
     {
-        private List<T> queue;
+        private readonly List<T> _queue;
 
         public ListQueue()
         {
-            queue = new List<T>();
+            _queue = new List<T>();
         }
-        public void Enqueue(T element)
+        public override void Enqueue(T element)
         {
-            queue.Add(element);
-        }
-
-        public T Dequeue()
-        {
-            var removed = this.Peek();
-            queue.RemoveAt(0);
-            return removed;
+            _queue.Add(element);
         }
 
-        public void Clear()
+        public override void Dequeue()
         {
-            queue.Clear();
+            _queue.RemoveAt(0);
         }
 
-        public T Peek()
+        public override void Clear()
         {
-            return queue.ElementAt(0);
+            _queue.Clear();
         }
 
-        public bool Contains(T element)
+        public override T Peek()
         {
-            if (queue.Contains(element))
+            return _queue.ElementAt(0);
+        }
+
+        public override bool Contains(T element)
+        {
+            if (_queue.Contains(element))
                 return true;
             return false;
         }
 
-        public long Count()
+        public override int Count()
         {
-            return queue.Count();
+            return _queue.Count();
         }
     }
 }

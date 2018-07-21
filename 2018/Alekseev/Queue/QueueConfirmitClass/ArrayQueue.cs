@@ -1,71 +1,84 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QueueConfirmitClass
 {
-    public class ArrayQueue<T> where T : IComparable<T>
+
+    public class ArrayQueue<T> : MyQueue<T> where T : IComparable<T>
     {
-        int MAX_SIZE = 20;
-        T[] _queue;
-        int front ;
-        int rear;
+        private int _maxSize = 20;
+        private T[] _queue;
+        private int _front;
+        private int _rear;
 
         public ArrayQueue()
         {
-            _queue = new T[MAX_SIZE];
-            front = rear = -1;
+            _queue = new T[_maxSize];
+            _front = _rear = -1;
         }
-        public void Enqueue(T element)
+        public override void Enqueue(T element)
         {
             if (IsFull())
             {
-                Console.WriteLine("Queue is full!");
-                return;
+                Resize();
             }
 
             if (IsEmpty())
             {
-                front = rear = 0;
+                _front = _rear = 0;
             }
             else
-                rear = (rear + 1) % MAX_SIZE;
+                _rear = (_rear + 1) % _maxSize;
 
-            _queue[rear] = element;
+            _queue[_rear] = element;
+        }
+
+        public void Resize()
+        {
+            T[] newArray = new T[_maxSize + 20];
+            int i = -1;
+            while (_front != _rear)
+            {
+                i++;
+                newArray[i] = _queue[_front];
+                _front = (_front + 1) % _maxSize;
+            }
+            newArray[i + 1] = _queue[_rear];
+            _queue = newArray;
+            _rear = i + 1;
+            _front = 0;
+            _maxSize = _queue.Length;
         }
 
         public bool IsFull()
         {
-            return ((rear + 1) % MAX_SIZE == front) ? true : false;
+            return ((_rear + 1) % _maxSize == _front) ? true : false;
         }
         public bool IsEmpty()
         {
-            return (front == -1 && rear == -1);
+            return (_front == -1 && _rear == -1);
         }
 
-        public void Dequeue()
+        public override void Dequeue()
         {
             if (IsEmpty())
             {
                 Console.WriteLine("Queue is empty!");
                 return;
             }
-            if (rear == front)
-                rear = front = -1;
+            if (_rear == _front)
+                _rear = _front = -1;
             else
-                front = (front + 1) % MAX_SIZE;
+                _front = (_front + 1) % _maxSize;
         }
 
-        public T Peek()
+        public override T Peek()
         {
-            if(front == -1)
+            if(_front == -1)
             {
                 Console.WriteLine("Queue is empty. Have no element to peek");
                 return default(T);
             }
-            return _queue[front];
+            return _queue[_front];
         }
 
         public void Print()
@@ -74,25 +87,25 @@ namespace QueueConfirmitClass
             Console.WriteLine("Printing queue...");
             for(int i = 0; i < count; i++)
             {
-                int index = (front + i) % MAX_SIZE;
+                int index = (_front + i) % _maxSize;
                 Console.Write("{0} ", _queue[i]);
             }
             Console.WriteLine();
         }
 
-        public void Clear()
+        public override void Clear()
         {
-            front = rear = -1;
+            _front = _rear = -1;
         }
 
-        public int Count()
+        public override int Count()
         {
-            if (rear == -1 && front == -1)
-                return (rear + MAX_SIZE - front) % MAX_SIZE;
-            return (rear + MAX_SIZE - front) % MAX_SIZE + 1;
+            if (_rear == -1 && _front == -1)
+                return (_rear + _maxSize - _front) % _maxSize;
+            return (_rear + _maxSize - _front) % _maxSize + 1;
         }
 
-        public bool Contains(T element)
+        public override bool Contains(T element)
         {
             return Array.Exists(_queue, elem => elem.CompareTo(element) == 0);
         }

@@ -10,7 +10,8 @@ namespace Tournament
     {
         static void Main(string[] args)
         {
-            var tournament = new TournamentController();
+            int numberOfPlayers = Messenger.ReadNumberOfPlayers();
+            var tournament = new TournamentController(numberOfPlayers, Messenger.ReadNames(numberOfPlayers));
             Messenger.Play(tournament);
         }
     }

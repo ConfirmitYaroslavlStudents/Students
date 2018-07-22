@@ -8,11 +8,30 @@ namespace Tournament
 {
     public class Messenger
     {
-        public static int minChars = 4;
-        public static int maxChars = 16;
+        public static int minChars = 2;
+        public static int maxChars = 8;
 
-        public static void NameInput(string[] players)
+        public static int ReadNumberOfPlayers()
         {
+            string openingMessage = "Please, input number of players.\r\nThere must be at least 2 for the tournament to start.";
+            Console.WriteLine(openingMessage);
+            Console.WriteLine();
+            int number;
+
+            while ((!int.TryParse(Console.ReadLine(), out number)) || number < 2)
+            {
+                Console.Clear();
+                Console.WriteLine(openingMessage);
+                Console.WriteLine();
+            }
+
+            Console.Clear();
+            return number;
+        }
+
+        public static string[] ReadNames(int numberOfPlayers)
+        {
+            string[] players = new string[numberOfPlayers];
             string openingMessage = String.Format("Please, input players' nicknames.\r\nThey must contain only letters or digits and be {0} - {1} characters long.\r\nAll names must be different.", minChars, maxChars);
             Console.WriteLine(openingMessage);
             Console.WriteLine();
@@ -63,6 +82,8 @@ namespace Tournament
                 }
                 Console.WriteLine();
             }
+
+            return players;
         }
 
         public static void Play(TournamentController tournament)
@@ -79,17 +100,6 @@ namespace Tournament
         {
             switch (command)
             {
-                case "restart":
-                    {
-                        tournament.Restart();
-                        break;
-                    }
-                case "reload":
-                    {
-                        Console.Clear();
-                        tournament = new TournamentController();
-                        break;
-                    }
                 case "exit":
                     {
                         Environment.Exit(0);
@@ -106,7 +116,7 @@ namespace Tournament
                                 int tour = int.Parse(words[1]);
                                 int match = int.Parse(words[2]);
                                 int winner = int.Parse(words[3]);
-                                tournament.PlayGame(tour, match, winner);
+                                tournament.PlayGame(new MatchInfo(tour - 1, match - 1, winner - 1));
                             }
                             catch (FormatException)
                             {
@@ -138,8 +148,6 @@ namespace Tournament
         {
             Console.Clear();
             Console.WriteLine("Type \"play {number of tour} {number of match} {number of winner}\" to enter match results.\r\nTours and matches are counted from 1. Number of winner is either 1 or 2.");
-            Console.WriteLine("Type \"restart\" to reset results of the tournament.\r\nIt will start over with same players and shuffling.");
-            Console.WriteLine("Type \"reload\" to reload program.\r\nIt will start over with new players and shuffling.");
             Console.WriteLine("Type \"exit\" to close the program.");
             Console.WriteLine();
 
@@ -172,42 +180,61 @@ namespace Tournament
         private static void DrawTable(TournamentController tournament)
         {
             string playerName;
+
             for (int k = 0; k < tournament.Matches.Length; k++)
             {
                 for (int i = 0; i < tournament.Matches[k].Length; i++)
                 {
+                    var currentMatch = tournament.Matches[k][i];
+
                     for (int j = 0; j < 2; j++)
                     {
-                        int playerNumber = tournament.Matches[k][i].Opponents[j];
+                        int playerNumber = currentMatch.Opponents[j];
                         playerName = "";
+
                         if (playerNumber >= 0)
                         {
                             playerName = tournament.Players[playerNumber];
                         }
-                        Console.Write(CenterName(playerName, (maxChars + 4) * (int)Math.Pow(2, k)));
+
+                        if (currentMatch.Winner == j)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
+
+                        Console.Write(CenterName(playerName, (maxChars + 2) * (int)Math.Pow(2, k)));
+                        Console.ResetColor();
                     }
+
                 }
 
                 Console.WriteLine();
+
                 for (int i = 0; i < tournament.Matches[k].Length * 2; i++)
                 {
-                    Console.Write(CenterName("|", (maxChars + 4) * (int)Math.Pow(2, k)));
+                    Console.Write(CenterName("|", (maxChars + 2) * (int)Math.Pow(2, k)));
                 }
+
                 Console.WriteLine();
 
                 for (int i = 0; i < tournament.Matches[k].Length; i++)
                 {
-                    Console.Write(CenterName("|", (maxChars + 4) * (int)Math.Pow(2, k + 1)));
+                    Console.Write(CenterName("|", (maxChars + 2) * (int)Math.Pow(2, k + 1)));
                 }
+
                 Console.WriteLine();
             }
 
             playerName = "";
-            if (tournament.Winner >= 0)
+
+            if (tournament.Champion >= 0)
             {
-                playerName = tournament.Players[tournament.Winner];
+                playerName = tournament.Players[tournament.Champion];
             }
-            Console.WriteLine(CenterName(playerName, (maxChars + 4) * (int)Math.Pow(2, tournament.Matches.Length)));
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(CenterName(playerName, (maxChars + 2) * (int)Math.Pow(2, tournament.Matches.Length)));
+            Console.ResetColor();
         }
     }
 }

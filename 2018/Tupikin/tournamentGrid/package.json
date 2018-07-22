@@ -1,13 +1,16 @@
 {
   "name": "tournamentgrid",
+  "description": "",
+  "author": "Vladislav Tupikin",
   "version": "1.0.0",
-  "description": "A small console application that helps to keep track of the leaders in the game and the next game sessions",
-  "main": "tournament.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node tournament.js",
+    "start": "node index.js",
+    "olympic": "node index.js --grid olympic",
+    "losers": "node index.js --grid losers",
+    "fifa": "node index.js --grid fifa",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Vladislav Tupikin",
   "license": "MIT",
   "devDependencies": {
     "eslint": "4.14.0",
@@ -19,6 +22,8 @@
   },
   "dependencies": {
     "clear": "^0.1.0",
+    "colors": "^1.3.0",
+    "optimist": "^0.6.1",
     "readline-sync": "^1.4.9"
   }
 }

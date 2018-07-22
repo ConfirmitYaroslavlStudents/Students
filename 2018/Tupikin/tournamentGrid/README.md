@@ -9,24 +9,50 @@ npm install
 npm start [number of players]
 ```
 **All actions are performed in the terminal. Running into the IDE does not guarantee the functionality of the application**
+# Args
+```bash
+--grid [olympic, FIFA]
+// --grid olympic - standart olympic grid
+// --grid FIFA - visualization of the grid at the World Cup 2018
+--loser // If you want a grid with losers (only when --grid olympic)
+```
 # Examples
 ```text
 npm start
-> Vlad
-> Phil
-> Dave
-> Scott
+France
+Belgium
+Croatia
+England
 ```
 ```text
 npm start 8
-> Dave
-> Steve
-> Denis
-> Michael
-> Mike
-> Vlad
-> Phil
-> Scott
+Uruguay
+France
+Brazil
+Belgium
+Russia
+Croatia
+Sweden
+England
+```
+```text
+npm start 16
+Uruguay
+Portugal
+France
+Argentina
+Brazil
+Mexico
+Belgium
+Japan
+Spain
+Russia
+Croatia
+Denmark
+Sweden
+Switzerland
+Colombia
+England
 ```
 
 # Credits

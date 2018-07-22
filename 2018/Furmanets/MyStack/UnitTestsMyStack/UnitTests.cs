@@ -9,13 +9,13 @@ namespace UnitTestsMyStack
     public class UnitTests
     {
         [TestMethod]
-        public void InitStackTest()
+        public void InitStack()
         {
             var stack = new MyStack<int>();
         }
 
         [TestMethod]
-        public void PushStackTest()
+        public void PushInStackTenElements_StackCountEquals10()
         {
             var stack = new MyStack<int>();
 
@@ -28,7 +28,7 @@ namespace UnitTestsMyStack
         }
 
         [TestMethod]
-        public void PopStackTest()
+        public void PushInStackTwentyElements_PopOneElement_CountEquals19()
         {
             var stack = new MyStack<int>();
             var rand = new Random();
@@ -46,7 +46,7 @@ namespace UnitTestsMyStack
         }
 
         [TestMethod]
-        public void PeekStackTest()
+        public void PushInStack46Elements_PeekOneElements_StackCountEquals46()
         {
             var stack = new MyStack<int>();
             var rand = new Random();
@@ -64,7 +64,7 @@ namespace UnitTestsMyStack
         }
 
         [TestMethod]
-        public void StackClearTest()
+        public void PushInStack46Elemets_StackClear_StackCountEquals0()
         {
             var stack = new MyStack<int>();
             var rand = new Random();
@@ -80,7 +80,7 @@ namespace UnitTestsMyStack
         }
 
         [TestMethod]
-        public void StackContainsTest()
+        public void PushInStack46Elemets_StackContains_ContainsReturnTrue()
         {
             var stack = new MyStack<int>();
             var rand = new Random();
@@ -102,7 +102,7 @@ namespace UnitTestsMyStack
         }
 
         [TestMethod]
-        public void TestContains()
+        public void PushInStack46Elemets_StackContains_ContainsReturnFalse()
         {
             var stack = new MyStack<int>();
 
@@ -125,21 +125,30 @@ namespace UnitTestsMyStack
         }
 
         [TestMethod]
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void PopFromEmptyStack()
+        public void PopFromEmptyStack_Exeption()
         {
             var stack = new MyStack<int>();
+            try
+            {
+                stack.Pop();
+            }
+            catch (IndexOutOfRangeException e)
+            {
+            }
 
-            stack.Pop();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        public void PeekFromEmptyStack()
+        public void PeekFromEmptyStack_Exeption()
         {
             var stack = new MyStack<int>();
-
-            stack.Peek();
+            try
+            {
+                stack.Pop();
+            }
+            catch (IndexOutOfRangeException e)
+            {
+            }
         }
     }
 }

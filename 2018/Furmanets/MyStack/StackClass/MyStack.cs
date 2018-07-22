@@ -7,10 +7,18 @@ namespace StackClass
         private int _capasity;
         private T[] _mass;
         public int Count { get; private set; }
+        private const int InitialValueCapasity = 16;
 
         public MyStack()
         {
-            _capasity = 16;
+            _capasity = InitialValueCapasity;
+            Count = 0;
+            _mass = new T[_capasity];
+        }
+
+        public MyStack(int capasity)
+        {
+            _capasity = capasity;
             Count = 0;
             _mass = new T[_capasity];
         }
@@ -26,7 +34,7 @@ namespace StackClass
             }
             catch (IndexOutOfRangeException)
             {
-                throw new IndexOutOfRangeException("Стек пуст");
+                throw new IndexOutOfRangeException("Stack Empty");
             }
             return result;
         }
@@ -41,7 +49,7 @@ namespace StackClass
             }
             catch (IndexOutOfRangeException)
             {
-                throw new IndexOutOfRangeException("Стек пуст");
+                throw new IndexOutOfRangeException("Stack Empty");
             }
             return result;
         }
@@ -50,7 +58,7 @@ namespace StackClass
         {
             if (Count >= _capasity)
             {
-                GetChangeSize();
+                ReSize();
             }
             _mass[Count] = obj;
             Count++;
@@ -63,6 +71,7 @@ namespace StackClass
             while (index > 0)
             {
                 index--;
+
                 if (_mass[index].Equals(obj))
                 {
                     return true;
@@ -74,12 +83,12 @@ namespace StackClass
 
         public void Clear()
         {
-            _capasity = 16;
+            _capasity = InitialValueCapasity;
             Count = 0;
             _mass = new T[_capasity];
         }
 
-        private void GetChangeSize()
+        private void ReSize()
         {
             _capasity *= _capasity;
             var newMass = new T[_capasity];

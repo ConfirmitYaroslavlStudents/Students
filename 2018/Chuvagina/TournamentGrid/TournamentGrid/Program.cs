@@ -11,7 +11,6 @@ namespace TournamentGrid
         static void Main(string[] args)
         {
             Tournament footballTournament = new Tournament();
-            footballTournament.SetParticipants();
             footballTournament.Play();
             Console.ReadLine();
         }

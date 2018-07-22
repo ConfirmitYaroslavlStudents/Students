@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TournamentGrid
 {
-    class Participant 
+    public class Participant 
     {
         public string Name { get; private set; }
         public ConsoleColor Color = ConsoleColor.White;

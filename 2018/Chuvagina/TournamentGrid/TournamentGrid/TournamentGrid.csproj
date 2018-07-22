@@ -42,7 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Grid.cs" />
+    <Compile Include="BracketOutput.cs" />
+    <Compile Include="DataInput.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="ParticipantForPrinting.cs" />
+    <Compile Include="Round.cs" />
     <Compile Include="Tournament.cs" />
     <Compile Include="Participant.cs" />
     <Compile Include="Program.cs" />

@@ -41,13 +41,26 @@ namespace TournamentGrid
             {
                 for (int j = 0; j < currentRound +1; j++)
                 {
-                    Console.ForegroundColor = ConsolePrint[i, j].Color;
-                    Console.Write(String.Format("{0,10}", ConsolePrint[i, j].Name + ConsolePrint[i, j].Filling));
+                    if (j != currentRound || side[currentRound] != 1 )
+                    {
+                        Console.ForegroundColor = ConsolePrint[i, j].Color;
+                        Console.Write(String.Format("{0,10}", ConsolePrint[i, j].Name + ConsolePrint[i, j].Filling));
+                    }
+                    else if (Bracket[i].Round == currentRound)
+                    {
+                        Console.ForegroundColor = ConsolePrint[i, j].Color;
+                        Console.Write(String.Format("{0,10}", ConsolePrint[i, j].Name));
+                    }
+                    else
+                        Console.Write(String.Format("{0,10}",""));
+
                 }
                    
                 Console.WriteLine();
+               
             }
-
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }

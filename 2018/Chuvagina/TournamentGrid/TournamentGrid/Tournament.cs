@@ -59,14 +59,13 @@ namespace TournamentGrid
 
         private void Rounds()
         {
-
-            for (int i=0; i<5;i++)
+            bool isLastRound = false;
+            do
             {
-                Round round = new Round(_currentRound,_upperBracketParticipants,_lowerBracketParticipants);   
-                round.PlayUpperBracketRound();
-                round.PlayLowerBracketRound();
+                Round round = new Round(_currentRound, _upperBracketParticipants, _lowerBracketParticipants);
+                isLastRound = round.PlayRound();
                 _currentRound++;
-            }
+            } while (!isLastRound);
                
              
         }

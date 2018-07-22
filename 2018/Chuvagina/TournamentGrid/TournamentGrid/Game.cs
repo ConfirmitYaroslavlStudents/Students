@@ -50,7 +50,7 @@ namespace TournamentGrid
             InsertToBracket(_lowerBracket, winnerName, firstParticipantIndex, secondParticipantIndex);
             if (isLastRound)
             {
-                _upperBracket.Add(new Participant(winnerName, _roundIndex + 1));
+                _upperBracket.Add(new Participant(winnerName, _roundIndex));
             }
         }
 

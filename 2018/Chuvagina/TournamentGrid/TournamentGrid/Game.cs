@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TournamentGrid
 {
-    public class Game
+    internal class Game
     {
         private int _roundIndex;
         private int _gameIndex;
@@ -23,51 +23,51 @@ namespace TournamentGrid
             _lowerBracket = LowerBracket;
         }
 
-        private void InsertToBracket(List<Participant> Bracket, string participant, int firstIndex, int secondIndex)
+        public string PlayUpperBracketGame(int firstParticipantIndex, int secondParticipantIndex)
         {
-            int indexOfInsert = secondIndex - (secondIndex - firstIndex) / 2;
-            Bracket.Insert(indexOfInsert, new Participant(participant, _roundIndex + 1));
-        }
-
-        public void PlayUpperBracketGame(int firstParticipantIndex, int secondParticipantIndex, int ParticipantsCount)
-        {
-            DetectWinners(_upperBracket, firstParticipantIndex, secondParticipantIndex);
-            int koef = _lowerBracket.Count / (ParticipantsCount / 2)+1;
-            int insertIndex= (_gameIndex / 2) *koef;
-            _lowerBracket.Insert(insertIndex, new Participant(_upperBracket[_loserIndex].Name, _roundIndex));
+            DetectWinner(_upperBracket, firstParticipantIndex, secondParticipantIndex);   
+            
+            string loser = _upperBracket[_loserIndex].Name;     
             string winnerName = _upperBracket[_winnerIndex].Name;
             _upperBracket[_winnerIndex].Color = ConsoleColor.Green;
+
             InsertToBracket(_upperBracket, winnerName, firstParticipantIndex, secondParticipantIndex);
 
+            return loser;
         }
 
-
-        public void PlayLowerBracketGame(int firstParticipantIndex, int secondParticipantIndex, int ParticipantsCount, bool isLastRound)
+        private void InsertToBracket(List<Participant> Bracket, string participant, int firstIndex, int secondIndex)
         {
-            DetectWinners(_lowerBracket, firstParticipantIndex, secondParticipantIndex);
+            int insertIndex = secondIndex - (secondIndex - firstIndex) / 2;
+            Bracket.Insert(insertIndex, new Participant(participant, _roundIndex + 1));
+        }
+
+        public void PlayLowerBracketGame(int firstParticipantIndex, int secondParticipantIndex)
+        {
+            DetectWinner(_lowerBracket, firstParticipantIndex, secondParticipantIndex);
+
             string winnerName = _lowerBracket[_winnerIndex].Name;
             _lowerBracket[_winnerIndex].Color = ConsoleColor.Green;
+
             InsertToBracket(_lowerBracket, winnerName, firstParticipantIndex, secondParticipantIndex);
-            if (isLastRound)
-            {
-                _upperBracket.Add(new Participant(winnerName, _roundIndex));
-            }
         }
 
-        private void DetectWinners(List<Participant> Bracket,int firstParticipantIndex, int secondParticipantIndex)
+        private void DetectWinner(List<Participant> Bracket,int firstParticipantIndex, int secondParticipantIndex)
         {
-            int winner = DataInput.InputWinner(Bracket[firstParticipantIndex].Name, Bracket[secondParticipantIndex].Name);
-            if (winner == 1)
+            string firstParticipantName = Bracket[firstParticipantIndex].Name;
+            string secondParticipantName = Bracket[secondParticipantIndex].Name;
+            string winnerName = DataInput.InputWinner(firstParticipantName, secondParticipantName);
+            if (winnerName == firstParticipantName)
             {
                 _winnerIndex = firstParticipantIndex;
                 _loserIndex = secondParticipantIndex;
             }
-
             else
             {
                 _winnerIndex = secondParticipantIndex;
                 _loserIndex = firstParticipantIndex;
             }
         }
+
     }
 }

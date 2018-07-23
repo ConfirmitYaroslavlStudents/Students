@@ -3,27 +3,27 @@ using System.Collections.Generic;
 
 namespace TournamentGrid
 {
-    public static class DataInput
+    internal static class DataInput
     {
-        public static int InputInt(string message)
+        public static int InputAmount()
         {
             int result;
             do
             {
-                Console.Write(message);
+                Console.Write("Amount of participants: ");
             } while (!int.TryParse(Console.ReadLine(), out result));
            
             return result;
         }
 
-        public static string InputNames(string message, int maxLength, List<string> existedNames)
+        public static string InputNames(int index, int maxLength, List<string> existedNames)
         {
             string result;
             bool ProblemsWithAdding;
             do
             {
                 ProblemsWithAdding = true;
-                Console.Write(message);
+                Console.Write("Name of {0} participant: ", index + 1);
                 result = Console.ReadLine();
 
                 if (result.Length > maxLength)
@@ -39,7 +39,7 @@ namespace TournamentGrid
             return result;
         }
 
-        public static int InputWinner(string firstParticipant, string secondParticipant)
+        public static string InputWinner(string firstParticipant, string secondParticipant)
         {
             string winner = "";
             bool firstIsWinner;
@@ -54,9 +54,9 @@ namespace TournamentGrid
             } while (!firstIsWinner && !secondIsWinner);
 
             if (firstIsWinner)
-                return 1;
+                return firstParticipant;
             else
-                return 2;
+                return secondParticipant;
         }
     }
 }

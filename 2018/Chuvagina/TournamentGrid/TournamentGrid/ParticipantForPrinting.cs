@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace TournamentGrid
 {
-    public class ParticipantForPrinting
+    internal class ParticipantForPrinting
     {
         public string Name;
-        public string Filling;
+        public string KindOfBracket;
         public ConsoleColor Color;
+
+
 
         public ParticipantForPrinting(ConsoleColor color)
         {
             Color = color;
+
         }
     }
 }

@@ -24,7 +24,7 @@ namespace TournamentGrid
         private void SetAmount()
         {
             int amountOfParticipants = 0;
-            amountOfParticipants = DataInput.InputInt("Amount of participants: ");
+            amountOfParticipants = DataInput.InputAmount();
             Amount = amountOfParticipants;
         }
       
@@ -35,8 +35,7 @@ namespace TournamentGrid
 
             for (int i = 0; i < Amount; i++)
             {
-                string message = String.Format("Name of {0} participant: ", i + 1);
-                nameOfNewParticipant = DataInput.InputNames(message, _maxLengthOfString, NonMixedParticipants);
+                nameOfNewParticipant = DataInput.InputNames(i,_maxLengthOfString, NonMixedParticipants);
                 NonMixedParticipants.Add(nameOfNewParticipant);
             }
 
@@ -46,6 +45,7 @@ namespace TournamentGrid
         private void RandomParticipants(List<string> NonMixedParticipants)
         {
             Random random = new Random();
+
             while (NonMixedParticipants.Count > 0)
             {
                 int indexOfParticipant = random.Next(NonMixedParticipants.Count);
@@ -60,11 +60,13 @@ namespace TournamentGrid
         private void Rounds()
         {
             bool isLastRound = false;
+
             do
             {
                 Round round = new Round(_currentRound, _upperBracketParticipants, _lowerBracketParticipants);
                 isLastRound = round.PlayRound();
                 _currentRound++;
+
             } while (!isLastRound);
                
              

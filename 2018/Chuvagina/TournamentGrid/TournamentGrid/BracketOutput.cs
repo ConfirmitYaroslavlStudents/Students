@@ -1,66 +1,108 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TournamentGrid
 {
-    static public class BracketOutput
+    static internal class BracketOutput
     {
-        static public void PrintGorizontalGrid(int currentRound, List<Participant> Bracket)
+        private const string _leftUpperCorner = "\u2500\u2510";
+        private const string _rightUpperCorner = "\u250C\u2500";
+        private const string _leftLowerCorner = "\u2500\u2518";
+        private const string _rightLowerCorner = "\u2514\u2500";
+        private const string _verticalStick = "\u2502";
+
+
+        static public void PrintHorizontalBracket(int currentRound, List<Participant> Bracket)
         {
             int[] side = new int[currentRound + 2];
+            int[] columnNamesMaxLength = new int[currentRound + 2];
             ParticipantForPrinting[,] ConsolePrint = new ParticipantForPrinting[Bracket.Count, currentRound + 1];
             for (int i = 0; i < Bracket.Count; i++)
-            {     
+            {
                 side[Bracket[i].Round]++;
-                string filling = "";
+                string kindOfBracket = "";
                 if (Bracket[i].Round <= currentRound && side[Bracket[i].Round] % 2 == 1)
-                    filling = "\u2500\u2510";
+                    kindOfBracket = _leftUpperCorner;
                 else if (Bracket[i].Round <= currentRound)
-                    filling = "\u2500\u2518";
-              
-                    for (int j = 0; j < currentRound + 1; j++)
-                    {
-                        ConsolePrint[i,j] = new ParticipantForPrinting(ConsoleColor.White);
-                        if (j == Bracket[i].Round && Bracket[i].Round <= currentRound)
-                        {
-                            ConsolePrint[i, j].Name = Bracket[i].Name;
-                            ConsolePrint[i, j].Color = Bracket[i].Color;
-                            ConsolePrint[i, j].Filling = filling;
-                        }
-                        else if (side[j] % 2 == 1)
-                        {
-                            ConsolePrint[i, j].Name = "\u2502";
-                        }
-                    }
-            }
+                    kindOfBracket = _leftLowerCorner;
 
+                for (int j = 0; j < currentRound + 1; j++)
+                {
+                    ConsolePrint[i, j] = new ParticipantForPrinting(ConsoleColor.White);
+                    if (j == Bracket[i].Round && Bracket[i].Round <= currentRound)
+                    {
+                        ConsolePrint[i, j].Name = Bracket[i].Name;
+                        ConsolePrint[i, j].Color = Bracket[i].Color;
+                        ConsolePrint[i, j].KindOfBracket = kindOfBracket;
+
+                        if (ConsolePrint[i, j].Name.Length > columnNamesMaxLength[j])
+                            columnNamesMaxLength[j] = ConsolePrint[i, j].Name.Length;
+                    }
+                    else if (side[j] % 2 == 1)
+                    {
+                        ConsolePrint[i, j].Name = _verticalStick;
+                    }
+                }
+            }
             for (int i = 0; i < Bracket.Count; i++)
             {
-                for (int j = 0; j < currentRound +1; j++)
+                for (int j = 0; j < currentRound + 1; j++)
                 {
-                    if (j != currentRound || side[currentRound] != 1 )
+                    string format = "{0," + columnNamesMaxLength[j] + "}";
+                    if (j != currentRound || side[currentRound] != 1 || Bracket[i].Round == currentRound)
                     {
-                        Console.ForegroundColor = ConsolePrint[i, j].Color;
-                        Console.Write(String.Format("{0,10}", ConsolePrint[i, j].Name + ConsolePrint[i, j].Filling));
-                    }
-                    else if (Bracket[i].Round == currentRound)
-                    {
-                        Console.ForegroundColor = ConsolePrint[i, j].Color;
-                        Console.Write(String.Format("{0,10}", ConsolePrint[i, j].Name));
+                        PrintName(ConsolePrint[i, j], format);
+                        if (side[Bracket[i].Round] != 1)
+                            PrintFilling(ConsolePrint[i, j], format);
                     }
                     else
-                        Console.Write(String.Format("{0,10}",""));
-
+                        Console.Write(String.Format(format, ""));
                 }
-                   
                 Console.WriteLine();
-               
             }
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Gray;
         }
+
+        static public void PrintBothHorizontalBrackets(int currentRound, List<Participant> upperBracket, List<Participant> lowerBracket)
+        {
+            Console.Clear();
+            Console.WriteLine("------Upper Bracket------");
+            PrintHorizontalBracket(currentRound, upperBracket);
+            Console.WriteLine("------Lower Bracket------");
+            PrintHorizontalBracket(currentRound, lowerBracket);
+        }
+
+        private static void PrintName(ParticipantForPrinting participant, string format)
+        {
+            if (participant.KindOfBracket == null)
+                Console.Write("  ");
+
+            Console.ForegroundColor = participant.Color;
+            Console.Write(String.Format(format, participant.Name));
+
+        }
+
+        private static void PrintInterestingName(ParticipantForPrinting participant, string format)
+        {         
+            Console.ForegroundColor = participant.Color;
+            Console.Write(String.Format(format, participant.Name));
+            if (participant.KindOfBracket == null)
+                Console.Write("  ");
+
+
+        }
+
+        private static void PrintFilling(ParticipantForPrinting participant, string format)
+        {
+            if (participant.KindOfBracket != null)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(participant.KindOfBracket);
+            }
+        }
+
+
+       
     }
 }

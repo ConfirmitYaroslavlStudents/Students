@@ -6,25 +6,39 @@ namespace TournamentGrid
 {
     public class Tournament
     {
+        public enum KindOfBracket
+        {
+            Vertical,
+            Horizontal,
+            PlayOff
+        }
+
         private List<Participant> _upperBracketParticipants = new List<Participant>();
         private List<Participant> _lowerBracketParticipants=new List<Participant>();
         private int _maxLengthOfString=15;
         private int _currentRound = 0;
         private int Amount = 0;
-
+        private bool _doubleEliminated ;
+        private KindOfBracket _kindOfBracket;
 
         public void Play()
         {
-                SetAmount();
-                SetNames();
-                Rounds();
+            _kindOfBracket = DataInput.ChoseBracket();
+            if (_kindOfBracket==KindOfBracket.PlayOff)
+                _doubleEliminated = false;
+            else
+                _doubleEliminated = DataInput.ChoseSystem();
+            SetAmount();
+            SetNames();
+            Rounds();
               
         }
+
 
         private void SetAmount()
         {
             int amountOfParticipants = 0;
-            amountOfParticipants = DataInput.InputAmount();
+            amountOfParticipants = DataInput.InputAmount(_kindOfBracket);
             Amount = amountOfParticipants;
         }
       
@@ -54,17 +68,18 @@ namespace TournamentGrid
             }
 
         }
-
-       
-
+      
         private void Rounds()
         {
             bool isLastRound = false;
 
             do
             {
-                Round round = new Round(_currentRound, _upperBracketParticipants, _lowerBracketParticipants);
-                isLastRound = round.PlayRound();
+                Round round = new Round(_currentRound, _upperBracketParticipants, _lowerBracketParticipants,_kindOfBracket);
+                if (_doubleEliminated)
+                    isLastRound = round.PlayDoubleEliminatedRound();
+                else
+                    isLastRound = round.PlayRound();
                 _currentRound++;
 
             } while (!isLastRound);

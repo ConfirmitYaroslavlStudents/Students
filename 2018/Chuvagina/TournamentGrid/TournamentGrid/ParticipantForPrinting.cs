@@ -17,7 +17,6 @@ namespace TournamentGrid
         public ParticipantForPrinting(ConsoleColor color)
         {
             Color = color;
-
         }
     }
 }

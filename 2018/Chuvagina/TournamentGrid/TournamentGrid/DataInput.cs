@@ -1,19 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using static TournamentGrid.Tournament;
 
 namespace TournamentGrid
 {
     internal static class DataInput
     {
-        public static int InputAmount()
+        public static int InputAmount(KindOfBracket kindOfBracket)
         {
             int result;
+            bool isAmountSet = false;
             do
             {
+                if (kindOfBracket==KindOfBracket.PlayOff)
+                    Console.WriteLine("PlayOff bracket requires power of two amount of participants.");
+
                 Console.Write("Amount of participants: ");
-            } while (!int.TryParse(Console.ReadLine(), out result));
+
+                if (kindOfBracket==KindOfBracket.PlayOff)
+                    isAmountSet = int.TryParse(Console.ReadLine(), out result) && PowerOfTwo(result);
+                else isAmountSet = int.TryParse(Console.ReadLine(), out result);
+
+            } while (!isAmountSet);
            
             return result;
+        }
+
+        public static bool PowerOfTwo(int a)
+        {
+            if (a == 2) return true;
+            else if (a % 2 == 0) return PowerOfTwo(a / 2);
+            else return false;
+        }
+
+
+        public static KindOfBracket ChoseBracket()
+        {
+            string answer = "";
+            do
+            {
+                Console.Write("Do you want to use PlayOff type of bracket? (y/n) ");
+                answer= Console.ReadLine();
+
+            } while (answer!="y" && answer!="n" );
+
+            if (answer == "y")
+                return KindOfBracket.PlayOff;
+            else
+                return KindOfBracket.Horizontal;
+        }
+
+        public static bool ChoseSystem()
+        {
+            string answer = "";
+            do
+            {
+                Console.Write("Do you want to use Double or Single Elimination system? (d/s) ");
+                answer = Console.ReadLine();
+
+            } while (answer != "d" && answer != "s");
+
+            if (answer == "d")
+                return true;
+            else
+                return false;
         }
 
         public static string InputNames(int index, int maxLength, List<string> existedNames)

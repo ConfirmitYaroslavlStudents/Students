@@ -10,11 +10,10 @@ test('Add new interviewee form. Name input test', async t => {
   await t
   .click(Selector('button[data-test-add-candidate-button]'))
 
-  await toMatchScreenshot(t, Selector('div[data-test-candidate-form]'), {screenshotName: 'emptyForm', handleResult: (result) => {
-    console.log('callback with processing:', result)
+  await toMatchScreenshot(t, Selector('div[data-test-candidate-form]'), {screenshotName: 'emptyForm', handleResult: async (result) => {
     result.handle()
+    await result.assert()
     result.log()
-    result.assert()
   }})
 
   await t

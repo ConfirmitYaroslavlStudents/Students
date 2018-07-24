@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import * as actions from '../actions'
 import NoFallenTestsPage from './noFallenTestsPage'
 import TestHeader from '../test/header'
-import SideMenu from './sideMenu'
+import SideMenu from '../sideMenu/menu'
 import TestView from '../test/view'
 import TestSelect from './testSelect'
 import TestControls from './testControls'
@@ -14,22 +14,20 @@ import AppControls from './appControls'
 class AppView extends Component {
   constructor(props) {
     super(props)
-    this.state = { currentTestIndex: 0 }
+    this.fallenTestAmount = 0
   }
 
   handleBackClick = () => {
-    let currentTestIndex = this.state.currentTestIndex
+    const currentTestIndex = this.props.currentTestIndex
     if (currentTestIndex > 0) {
-      currentTestIndex--
-      this.setState({ currentTestIndex })
+      this.props.setCurrentTestIndex({ index: currentTestIndex - 1 })
     }
   }
 
   handleNextClick = () => {
-    let currentTestIndex = this.state.currentTestIndex
-    if (currentTestIndex < Object.keys(this.props.fallenTests).length - 1) {
-      currentTestIndex++
-      this.setState({ currentTestIndex })
+    const currentTestIndex = this.props.currentTestIndex
+    if (currentTestIndex < this.fallenTestAmount - 1) {
+      this.props.setCurrentTestIndex({ index: currentTestIndex + 1 })
     }
   }
 
@@ -43,42 +41,37 @@ class AppView extends Component {
   }
 
   render() {
-    const { currentTestIndex } = this.state
-    const { fallenTests, testTotalCount, markToUpdate, unmarkToUpdate } = this.props
+    const { fallenTests, testTotalAmount, currentTestIndex } = this.props
 
-    const fallenTestsArray = Object.keys(fallenTests).map(testIndex => fallenTests[testIndex])
+    const fallenTestArray = Object.keys(fallenTests).map(testIndex => fallenTests[testIndex])
 
-    if (fallenTestsArray.length === 0) {
+    this.fallenTestAmount = fallenTestArray.length
+
+    if (this.fallenTestAmount === 0) {
       return (
-        <NoFallenTestsPage totalTestAmount={testTotalCount} />
+        <NoFallenTestsPage totalTestAmount={testTotalAmount} />
       )
     }
 
-    const currentTest = fallenTestsArray[currentTestIndex]
+    const currentTest = fallenTestArray[currentTestIndex]
 
     return (
       <React.Fragment>
         <Header>
-          <SideMenu />
+          <SideMenuButtonWrapper>
+            <SideMenu />
+          </SideMenuButtonWrapper>
           <TestHeader test={currentTest} />
         </Header>
-        <TestView
-          test={currentTest}
-          markToUpdate={markToUpdate}
-          unmarkToUpdate={unmarkToUpdate}
-          onBackClick={this.handleBackClick}
-          onNextClick={this.handleNextClick}
-          isFirst={currentTestIndex === 0}
-          isLast={currentTestIndex === fallenTestsArray.length - 1}
-        />
+        <TestView test={currentTest} />
         <Footer>
           <LeftColumn>
-            <span>Fallen tests: {fallenTestsArray.length} of {testTotalCount}</span>
+            <span>Fallen tests: {this.fallenTestAmount} of {testTotalAmount}</span>
           </LeftColumn>
           <CenterColumn>
             <TestSelect
               currentTestIndex={currentTestIndex}
-              testTotalAmount={fallenTestsArray.length}
+              fallenTestAmount={this.fallenTestAmount}
               onBackClick={this.handleBackClick}
               onNextClick={this.handleNextClick}
             />
@@ -100,14 +93,17 @@ class AppView extends Component {
 
 AppView.propTypes = {
   fallenTests: PropTypes.object.isRequired,
-  testTotalCount: PropTypes.number.isRequired,
+  testTotalAmount: PropTypes.number.isRequired,
+  currentTestIndex: PropTypes.number.isRequired,
   markToUpdate: PropTypes.func.isRequired,
-  unmarkToUpdate: PropTypes.func.isRequired
+  unmarkToUpdate: PropTypes.func.isRequired,
+  setCurrentTestIndex: PropTypes.func.isRequired
 }
 
 export default connect(state => ({
     fallenTests: state.fallenTests,
-    testTotalCount: state.testTotalCount
+    testTotalAmount: state.testTotalAmount,
+    currentTestIndex: state.currentTestIndex
   }
 ), actions)(AppView)
 
@@ -116,6 +112,13 @@ const Header = styled.div`
   background-color: #F3F3F3;
   padding: 8px;
   text-align: center;
+`
+
+const SideMenuButtonWrapper = styled.div`
+  display: inline-block;
+  position: absolute;
+  left: 4px;
+  top: 10px;
 `
 
 const Footer = styled.div`

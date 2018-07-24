@@ -3,8 +3,9 @@ import * as actions from './actions'
 
 const initialState = {
   fallenTests: {},
-  testTotalCount: 0,
-  markedToUpdateCount: 0
+  testTotalAmount: 0,
+  markedToUpdateAmount: 0,
+  currentTestIndex: 0
 }
 
 export default createReducer({}, {
@@ -26,7 +27,7 @@ export default createReducer({}, {
           markedToUpdate: true
         }
       },
-      markedToUpdateCount: state.markedToUpdateCount + 1
+      markedToUpdateAmount: state.markedToUpdateAmount + 1
     }
   },
 
@@ -40,7 +41,27 @@ export default createReducer({}, {
           markedToUpdate: false
         }
       },
-      markedToUpdateCount: state.markedToUpdateCount - 1
+      markedToUpdateAmount: state.markedToUpdateAmount - 1
+    }
+  },
+
+  [actions.setCurrentTestIndex]: (state, {payload}) => {
+    return {
+      ...state,
+      currentTestIndex: payload.index
+    }
+  },
+
+  [actions.removeUnread]: (state, {payload}) => {
+    return {
+      ...state,
+      fallenTests: {
+        ...state.fallenTests,
+        [payload.test.index]: {
+          ...state.fallenTests[payload.test.index],
+          unread: false
+        }
+      }
     }
   }
 })

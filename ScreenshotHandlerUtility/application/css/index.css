@@ -21,6 +21,8 @@ p {
 
 .expansion-details-root {
     flex-direction: column;
+    padding: 0 !important;
+    text-align: left !important;
 }
 
 .outlined-button {

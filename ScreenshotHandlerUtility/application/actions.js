@@ -9,3 +9,7 @@ export const unmarkToUpdate = createAction('UNMARKTOUPDATE')
 export const commit = createAction('COMMIT')
 
 export const close = createAction('CLOSE')
+
+export const setCurrentTestIndex = createAction('SETCURRENTTESTINDEX')
+
+export const removeUnread = createAction('REMOVEUNREAD')

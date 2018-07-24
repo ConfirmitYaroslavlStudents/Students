@@ -7,7 +7,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Typography from '@material-ui/core/Typography'
 
-class CustomExpansionPanel extends Component {
+class ItemExpansionPanel extends Component {
   constructor(props) {
     super(props)
     this.state = { expanded: props.expanded ? props.expanded : false }
@@ -32,9 +32,7 @@ class CustomExpansionPanel extends Component {
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
           >
-            <Typography>
-              {summary}
-            </Typography>
+            {summary}
           </ExpansionPanelSummary>
           <ExpansionPanelDetails classes={{root: 'expansion-details-root'}}>
             {children}
@@ -45,18 +43,16 @@ class CustomExpansionPanel extends Component {
   }
 }
 
-CustomExpansionPanel.propTypes = {
-  summary: PropTypes.string.isRequired,
+ItemExpansionPanel.propTypes = {
+  summary: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   expanded: PropTypes.bool,
   borderColor: PropTypes.string
 }
 
-export default CustomExpansionPanel
+export default ItemExpansionPanel
 
 const Wrapper = styled.div`
-  border: 1px solid #333;
-  border-radius: 5px;
-  margin: 12px;
+  border-bottom: 1px solid #999;
   cursor: pointer;
   overflow: hidden;
   

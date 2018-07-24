@@ -20,12 +20,14 @@ let fallenTestIndex = 0
 for (let i = 0; i < tests.length; i++) {
   if (!tests[i].passed) {
     tests[i].index = fallenTestIndex
+    tests[i].unread = true
+    tests[i].markedToUpdate = false
     fallenTests[fallenTestIndex] = tests[i]
     fallenTestIndex++
   }
 }
 
-const store = createStore(reducer, { fallenTests, testTotalCount: tests.length })
+const store = createStore(reducer, { fallenTests, testTotalAmount: tests.length })
 
 const theme = createMuiTheme({
   palette: createPalette({
@@ -41,7 +43,7 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
     fontSize: 16,
-    fontWeightMedium: 400
+    fontWeightMedium: 500
   }
 })
 

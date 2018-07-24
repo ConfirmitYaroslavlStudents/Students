@@ -6,11 +6,11 @@ import FlatButton from '../commonComponents/UIDecorators/flatButton'
 
 class AppControls extends Component {
   render() {
-    const { commit,  markedToUpdateCount } = this.props
+    const { commit,  markedToUpdateAmount } = this.props
 
     return (
-      <FlatButton onClick={commit} color='secondary' disabled={markedToUpdateCount <= 0}>
-        Commit{markedToUpdateCount > 0 ? ` (${markedToUpdateCount})` : ''}
+      <FlatButton onClick={commit} color='secondary' disabled={markedToUpdateAmount <= 0}>
+        Commit{markedToUpdateAmount > 0 ? ` (${markedToUpdateAmount})` : ''}
       </FlatButton>
     )
   }
@@ -18,9 +18,9 @@ class AppControls extends Component {
 
 AppControls.propTypes = {
   commit: PropTypes.func.isRequired,
-  markedToUpdateCount: PropTypes.number.isRequired
+  markedToUpdateAmount: PropTypes.number.isRequired
 }
 
 export default connect((state) => ({
-  markedToUpdateCount: state.markedToUpdateCount
+  markedToUpdateAmount: state.markedToUpdateAmount
 }), actions)(AppControls)

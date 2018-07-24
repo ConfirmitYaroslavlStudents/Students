@@ -26,8 +26,8 @@ module.exports = {
       {from: path.join(__dirname, 'index.js'), to: path.join(__dirname, 'dist', 'index.js')},
       {from: path.join(__dirname, 'package.json'), to: path.join(__dirname, 'dist', 'package.json')},
       {from: path.join(__dirname, 'web.config'), to: path.join(__dirname, 'dist', 'web.config')},
-      {from: path.join(__dirname, 'server', 'authorization.config.json'), to: path.join(__dirname, 'dist', 'server', 'authorization.config.json')},
-      {from: path.join(__dirname, 'server', 'server.config.json'), to: path.join(__dirname, 'dist', 'server', 'server.config.json')}
+      {from: path.join(__dirname, 'server', 'authorization.config.js'), to: path.join(__dirname, 'dist', 'server', 'authorization.config.js')},
+      {from: path.join(__dirname, 'server', 'server.config.js'), to: path.join(__dirname, 'dist', 'server', 'server.config.js')}
     ])
   ],
 

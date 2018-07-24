@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace TournamentGrid
 {
@@ -13,25 +12,21 @@ namespace TournamentGrid
             PlayOff
         }
 
-        private List<Participant> _upperBracketParticipants = new List<Participant>();
-        private List<Participant> _lowerBracketParticipants=new List<Participant>();
+        private readonly List<Participant> _upperBracketParticipants = new List<Participant>();
+        private readonly List<Participant> _lowerBracketParticipants=new List<Participant>();
         private int _maxLengthOfString=15;
         private int _currentRound = 0;
-        private int Amount = 0;
+        private int _amount = 0;
         private bool _doubleEliminated ;
         private KindOfBracket _kindOfBracket;
 
         public void Play()
         {
             _kindOfBracket = DataInput.ChoseBracket();
-            if (_kindOfBracket==KindOfBracket.PlayOff)
-                _doubleEliminated = false;
-            else
-                _doubleEliminated = DataInput.ChoseSystem();
+            _doubleEliminated = _kindOfBracket != KindOfBracket.PlayOff && DataInput.ChoseSystem();
             SetAmount();
             SetNames();
             Rounds();
-              
         }
 
 
@@ -39,32 +34,31 @@ namespace TournamentGrid
         {
             int amountOfParticipants = 0;
             amountOfParticipants = DataInput.InputAmount(_kindOfBracket);
-            Amount = amountOfParticipants;
+            _amount = amountOfParticipants;
         }
       
         private void SetNames()
         {
-            List<string> NonMixedParticipants = new List<string>();
-            string nameOfNewParticipant;
+            List<string> nonMixedParticipants = new List<string>();
 
-            for (int i = 0; i < Amount; i++)
+            for (int i = 0; i < _amount; i++)
             {
-                nameOfNewParticipant = DataInput.InputNames(i,_maxLengthOfString, NonMixedParticipants);
-                NonMixedParticipants.Add(nameOfNewParticipant);
+                var nameOfNewParticipant = DataInput.InputNames(i,_maxLengthOfString, nonMixedParticipants);
+                nonMixedParticipants.Add(nameOfNewParticipant);
             }
 
-            RandomParticipants(NonMixedParticipants);
+            RandomParticipants(nonMixedParticipants);
         }
    
-        private void RandomParticipants(List<string> NonMixedParticipants)
+        private void RandomParticipants(List<string> nonMixedParticipants)
         {
             Random random = new Random();
 
-            while (NonMixedParticipants.Count > 0)
+            while (nonMixedParticipants.Count > 0)
             {
-                int indexOfParticipant = random.Next(NonMixedParticipants.Count);
-                _upperBracketParticipants.Add(new Participant(NonMixedParticipants[indexOfParticipant]));
-                NonMixedParticipants.RemoveAt(indexOfParticipant);
+                int indexOfParticipant = random.Next(nonMixedParticipants.Count);
+                _upperBracketParticipants.Add(new Participant(nonMixedParticipants[indexOfParticipant]));
+                nonMixedParticipants.RemoveAt(indexOfParticipant);
             }
 
         }
@@ -76,10 +70,7 @@ namespace TournamentGrid
             do
             {
                 Round round = new Round(_currentRound, _upperBracketParticipants, _lowerBracketParticipants,_kindOfBracket);
-                if (_doubleEliminated)
-                    isLastRound = round.PlayDoubleEliminatedRound();
-                else
-                    isLastRound = round.PlayRound();
+                isLastRound = _doubleEliminated ? round.PlayDoubleEliminatedRound() : round.PlayRound();
                 _currentRound++;
 
             } while (!isLastRound);

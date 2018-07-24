@@ -9,7 +9,7 @@ namespace TournamentGrid
         public static int InputAmount(KindOfBracket kindOfBracket)
         {
             int result;
-            bool isAmountSet = false;
+            bool isAmountSet;
             do
             {
                 if (kindOfBracket==KindOfBracket.PlayOff)
@@ -29,25 +29,23 @@ namespace TournamentGrid
         public static bool PowerOfTwo(int a)
         {
             if (a == 2) return true;
-            else if (a % 2 == 0) return PowerOfTwo(a / 2);
-            else return false;
+            if (a % 2 == 0) return PowerOfTwo(a / 2);
+            return false;
         }
 
 
         public static KindOfBracket ChoseBracket()
         {
-            string answer = "";
+            var answer = "";
             do
             {
+                Console.WriteLine("In PlayOff bracket you'll not have an opportunity to use Double Elimination system.");
                 Console.Write("Do you want to use PlayOff type of bracket? (y/n) ");
-                answer= Console.ReadLine();
+                answer = Console.ReadLine();
 
             } while (answer!="y" && answer!="n" );
 
-            if (answer == "y")
-                return KindOfBracket.PlayOff;
-            else
-                return KindOfBracket.Horizontal;
+            return answer == "y" ? KindOfBracket.PlayOff : KindOfBracket.Horizontal;
         }
 
         public static bool ChoseSystem()
@@ -61,43 +59,42 @@ namespace TournamentGrid
             } while (answer != "d" && answer != "s");
 
             if (answer == "d")
-                return true;
-            else
-                return false;
+                return true;  
+            
+            return false;
         }
 
         public static string InputNames(int index, int maxLength, List<string> existedNames)
         {
             string result;
-            bool ProblemsWithAdding;
+            bool problemsWithAdding;
             do
             {
-                ProblemsWithAdding = true;
+                problemsWithAdding = true;
                 Console.Write("Name of {0} participant: ", index + 1);
                 result = Console.ReadLine();
 
-                if (result.Length > maxLength)
+                if (result != null && result.Length > maxLength)
                     Console.WriteLine("Maximum length of name is {0} ", maxLength);
                 else if (existedNames.Contains(result))
                     Console.WriteLine("A participant with this name already exists. Rename current participant");
-                else if (String.IsNullOrEmpty(result))
+                else if (string.IsNullOrEmpty(result))
                     Console.WriteLine("You've entered an empty string. Rename current participant");
-                else ProblemsWithAdding = false;
+                else problemsWithAdding = false;
 
-            } while (ProblemsWithAdding);
+            } while (problemsWithAdding);
 
             return result;
         }
 
         public static string InputWinner(string firstParticipant, string secondParticipant)
         {
-            string winner = "";
             bool firstIsWinner;
             bool secondIsWinner;
             do
             {
                 Console.Write("The winner of the game between \"{0}\" and \"{1}\" is ", firstParticipant, secondParticipant);
-                winner = Console.ReadLine();
+                var winner = Console.ReadLine();
                 firstIsWinner = winner.Equals(firstParticipant);
                 secondIsWinner = winner.Equals(secondParticipant);
 
@@ -105,8 +102,8 @@ namespace TournamentGrid
 
             if (firstIsWinner)
                 return firstParticipant;
-            else
-                return secondParticipant;
+
+            return secondParticipant;
         }
     }
 }

@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TournamentGrid
 {
     internal class Game
     {
-        private int _roundIndex;
-        private int _gameIndex;
-        private List<Participant> _upperBracket;
-        private List<Participant> _lowerBracket;
+        private readonly int _roundIndex;
+        private readonly List<Participant> _upperBracket;
+        private readonly List<Participant> _lowerBracket;
         private int _winnerIndex;
         private int _loserIndex;
 
-        public Game(int gameIndex, int roundIndex, List<Participant> Bracket, List<Participant> LowerBracket)
+        public Game(int roundIndex, List<Participant> bracket, List<Participant> lowerBracket)
         {
-            _gameIndex = gameIndex;
             _roundIndex = roundIndex;
-            _upperBracket = Bracket;
-            _lowerBracket = LowerBracket;
+            _upperBracket = bracket;
+            _lowerBracket = lowerBracket;
         }
 
         public string PlayUpperBracketGame(int firstParticipantIndex, int secondParticipantIndex)
@@ -36,10 +31,10 @@ namespace TournamentGrid
             return loser;
         }
 
-        private void InsertToBracket(List<Participant> Bracket, string participant, int firstIndex, int secondIndex)
+        private void InsertToBracket(List<Participant> bracket, string participant, int firstIndex, int secondIndex)
         {
             int insertIndex = secondIndex - (secondIndex - firstIndex) / 2;
-            Bracket.Insert(insertIndex, new Participant(participant, _roundIndex + 1));
+            bracket.Insert(insertIndex, new Participant(participant, _roundIndex + 1));
         }
 
         public void PlayLowerBracketGame(int firstParticipantIndex, int secondParticipantIndex)
@@ -52,10 +47,10 @@ namespace TournamentGrid
             InsertToBracket(_lowerBracket, winnerName, firstParticipantIndex, secondParticipantIndex);
         }
 
-        private void DetectWinner(List<Participant> Bracket,int firstParticipantIndex, int secondParticipantIndex)
+        private void DetectWinner(List<Participant> bracket,int firstParticipantIndex, int secondParticipantIndex)
         {
-            string firstParticipantName = Bracket[firstParticipantIndex].Name;
-            string secondParticipantName = Bracket[secondParticipantIndex].Name;
+            string firstParticipantName = bracket[firstParticipantIndex].Name;
+            string secondParticipantName = bracket[secondParticipantIndex].Name;
             string winnerName = DataInput.InputWinner(firstParticipantName, secondParticipantName);
             if (winnerName == firstParticipantName)
             {

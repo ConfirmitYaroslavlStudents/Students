@@ -1,28 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using static TournamentGrid.Tournament;
 
 namespace TournamentGrid
 {
-    internal class TournamentBracket
+    internal class BracketPrint
     {
-        private int _roundIndex;
-        private BracketCell[,] _resultBracket;
-        private List<Participant> _bracket;
-        private int[] _columnNamesMaxLength;
-        private KindOfBracket _kindOfBracket;
+        public enum Bracket
+        {
+            Upper,
+            Lower
+        }
 
-        public TournamentBracket(int roundIndex, List<Participant> Bracket, KindOfBracket kindOfBracket)
+        private readonly int _roundIndex;
+        private BracketCell[,] _resultBracket;
+        private readonly List<Participant> _bracket;
+        private readonly KindOfBracket _kindOfBracket;
+
+        public BracketPrint(int roundIndex, List<Participant> bracket, KindOfBracket kindOfBracket)
         {
             _roundIndex = roundIndex;
-            _bracket = Bracket;
+            _bracket = bracket;
             _kindOfBracket = kindOfBracket;
 
         }
 
-        public void PrintBracket()
+        public void Print(Bracket bracketType)
         {
-            _columnNamesMaxLength = new int[_roundIndex + 2];
+            if (bracketType == Bracket.Upper)
+            {
+                Console.Clear();
+                Console.WriteLine("-----Upper Bracket-----");
+            }
+            else
+                Console.WriteLine("-----Lower Bracket-----");
 
             if (_kindOfBracket == KindOfBracket.Horizontal)
             {
@@ -38,15 +50,16 @@ namespace TournamentGrid
 
         private void CreateHorizontal()
         {
-            HorizontalBracket horizontal = new HorizontalBracket(_bracket, _roundIndex);
+            var horizontal = new HorizontalBracketBuilding(_bracket, _roundIndex);
             _resultBracket = horizontal.GetHorizontalBracket();
         }
 
         private void CreatePlayOff()
         {
-            List<Participant> left = _bracket.GetRange(0, _bracket.Count / 2);
-            List<Participant> right = _bracket.GetRange(_bracket.Count/2+_bracket.Count%2, _bracket.Count / 2);
-            PlayOffBracket playOff = new PlayOffBracket(left, right, _roundIndex);
+            var left = _bracket.GetRange(0, _bracket.Count / 2);
+            var right = _bracket.GetRange(_bracket.Count/2+_bracket.Count%2, _bracket.Count / 2);
+
+            var playOff = new PlayOffBracketBuilding(left, right, _roundIndex);
             _resultBracket = playOff.GetPlayOffBracket();
 
             if (_bracket.Count % 2 == 1)
@@ -57,9 +70,9 @@ namespace TournamentGrid
         private void PrintHorizontalBracket()
         {
             int[] maxLength=FindMaxNameLength(_bracket.Count, (_roundIndex + 1) * 2);
+
             for (int i = 0; i < _bracket.Count; i++)
             {
-
                 for (int j = 0; j < (_roundIndex + 1) * 2; j++)
                 {
                     string format = "{0, "+maxLength[j]+"}";
@@ -67,12 +80,14 @@ namespace TournamentGrid
                 }             
                 Console.WriteLine();
             }
+
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private void PrintPlayOffBracket()
         {
             int[] maxLength = FindMaxNameLength(_bracket.Count/2, (_roundIndex + 1) * 4);
+
             for (int i = 0; i < _bracket.Count/2 ; i++)
             {
                 for (int j = 0; j < (_roundIndex + 1)*2; j++)
@@ -80,14 +95,18 @@ namespace TournamentGrid
                     string format = "{0, " + maxLength[j] + "}";
                     PrintName(_resultBracket[i, j], format);
                 }
+
                 Console.Write(" ");
+
                 for (int j = (_roundIndex + 1) * 2; j < (_roundIndex + 1) *4; j++)
                 {
                     string format = "{0, " + -maxLength[j] + "}";
                     PrintName(_resultBracket[i, j], format);
                 }
+
                 Console.WriteLine();
             }
+
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
@@ -104,7 +123,7 @@ namespace TournamentGrid
             return maxLength;
         }
 
-        private void PrintName(BracketCell participant, string format)
+        private static void PrintName(BracketCell participant, string format)
         {
             if (participant!=null)
             {

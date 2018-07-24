@@ -10,6 +10,7 @@ class TournamentState {
     this.losersSessions = this._initLosersSession();
 
     this.gameOver = false;
+    this.losersOver = false;
   }
 
   addWinner(name) {
@@ -20,19 +21,38 @@ class TournamentState {
 
         if (game.includes(name) && game.isFull() && !game.winnerExist()) {
           game.setWinner(name);
-          loser[Math.floor(j / 2)].addPlayer(game.getLoser());
           this.isLastGame(i);
+          if (i === 0)
+            loser[Math.floor(j / 2)].addPlayer(game.getLoser());
+          else if (!this.gameOver)
+            loser[j].addPlayer(game.getLoser()); // todo если это последняя игра то добавить в последнюю игру лузерсетов
+          else
+            this.losersSessions[this.losersSessions.length - 1][0].addPlayer(game.getLoser());
           if (!this.gameOver)
             this.sessions[i + 1][Math.floor(j / 2)].addPlayer(name, j);
-          // todo check losers sets
           return;
         }
       }
     }
+    this.addToLosers(name);
+  }
 
-    
-    // Сюда попадем если только не найден победитель в основной игре
-    // Поэтому ищем победителя в сетке проигравших
+  addToLosers(name) {
+    const lastGame = this.losersSessions[this.losersSessions.length - 1][0];
+    for (let i = this.losersSessions.length - 1; i >= 0; i--) {
+      for (let j = this.losersSessions[i].length - 1; j >= 0; j--) {
+        const game = this.losersSessions[i][j];
+
+        if (game.includes(name) && game.isFull() && !game.winnerExist()) {
+          game.setWinner(name);
+          if (!lastGame.isFull())
+            this.losersSessions[i + 1][Math.min(j, this.losersSessions[i + 1].length - 1)].addPlayer(name, j);
+          else
+            this.losersOver = true;
+          return;
+        }
+      }
+    }
   }
 
   isLastGame(pointer) {
@@ -64,11 +84,14 @@ class TournamentState {
 
   _initLosersSession() {
     const sessions = copy(this.sessions);
-    sessions[0] = sessions[0].slice(0, sessions[0].length / 2);
+    sessions[0] = sessions[0].slice(0, Math.floor(sessions[0].length / 2));
 
     for (let i = 0; i < sessions.length; i++)
       for (let j = 0; j < sessions[i].length; j++)
         sessions[i][j] = new Game();
+
+    if (this.names.length !== 4)
+      sessions.push([new Game()]);
 
     return sessions;
   }

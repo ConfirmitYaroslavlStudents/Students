@@ -1,31 +1,31 @@
 ﻿namespace Championship
 {
-    class StageIndicator
+    public class StageIndicator
     {
-        public string Stage;
+        public int Stage;
         public int CountStage = 2;
-        private const string ConstFinal = "final";
+        private const int BeginStage = 1;
 
-        public StageIndicator(string beginStage)
+        public StageIndicator(int beginStage)
         {
             Stage = beginStage;
         }
 
         public StageIndicator()
         {
-            Stage = ConstFinal;
+            Stage = BeginStage;
         }
 
         public void NextStage()
         {
-            if (Stage == ConstFinal)
+            if (Stage == BeginStage)
             {
-                Stage = "1/2";
+                Stage = 2;
             }
             else
             {
                 CountStage *= 2;
-                Stage = "1/" + CountStage;
+                Stage = CountStage;
             }
         }
     }

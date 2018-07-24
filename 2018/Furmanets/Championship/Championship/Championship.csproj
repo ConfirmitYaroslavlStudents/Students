@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Draftsman.cs" />
+    <Compile Include="GrafGrid.cs" />
     <Compile Include="Meeting.cs" />
+    <Compile Include="Round.cs" />
     <Compile Include="StageIndicator.cs" />
     <Compile Include="TournamentGrid.cs" />
     <Compile Include="Tournamet.cs" />

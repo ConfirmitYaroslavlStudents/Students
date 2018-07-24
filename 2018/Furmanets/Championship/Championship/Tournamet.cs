@@ -5,15 +5,16 @@ namespace Championship
 {
     public class Tournament
     {
-        public TournamentGrid Standings;
+        public TournamentGrid Grid;
         private List<string> _players;
         private int _playersCount;
+        private string _playerWinner;
 
         public void Start()
         {
             var players = Draftsman.AddPlayers();
             PlayerPlacement(players);
-            Draftsman.PaintGraf(Standings);
+            Draftsman.PaintGraf(Grid);
             CollectorResults();
         }
 
@@ -30,93 +31,85 @@ namespace Championship
                 players.Remove(currentPlayer);
             }
 
-            Standings = new TournamentGrid();
-            Standings.CreateTournamentGrid(_playersCount);
+            Grid = new TournamentGrid();
+            Grid.CreateTournamentGrid(_playersCount);
 
             var indexPlayer = 0;
+            var countFirstStageMeetings = _players.Count - Grid.Tournament[0].Meetings.Count;
 
-            foreach (var meeting in Standings.Tournament)
+            for (int i = 0; i < countFirstStageMeetings; i++)
             {
-                meeting.FirstPlayer = _players[indexPlayer];
-                indexPlayer++;
+                Grid.Tournament[0].Meetings[i].FirstPlayer = _players[indexPlayer];
+                Grid.Tournament[0].Meetings[i].SecondPlayer = _players[indexPlayer + 1];
+                indexPlayer += 2;
             }
 
-            foreach (var meeting in Standings.Tournament)
+            for (var i = Grid.Tournament[1].Meetings.Count-1; i >= countFirstStageMeetings / 2; i--)
             {
-                meeting.SecondPlayer = _players[indexPlayer];
-                indexPlayer++;
-                if (_players.Count == indexPlayer)
+                try
+                {
+                    Grid.Tournament[1].Meetings[i].SecondPlayer = _players[indexPlayer];
+                    Grid.Tournament[1].Meetings[i].FirstPlayer = _players[indexPlayer + 1];
+                    indexPlayer += 2;
+                }
+                catch (ArgumentOutOfRangeException)
                 {
                     break;
                 }
+
             }
 
-            Draftsman.PaintTournamentStage(Standings);
+            Draftsman.PaintTournamentStage(Grid.Tournament[0]);
         }
 
         private void CollectorResults()
         {
-            var nextRoundGrid = new TournamentGrid();
-            foreach (var meeting in Standings.Tournament)
+            foreach (var round in Grid.Tournament)
             {
-                ChoiseWinner(meeting, nextRoundGrid);
+                Draftsman.PaintGraf(Grid);
+                Console.ReadKey();
+                Draftsman.PaintTournamentStage(round);
+
+                foreach (var meeting in round.Meetings)
+                {
+                    ChoiceWinner(meeting);
+                }
+
+                if (Grid.Tournament.Count != 0)
+                {
+                    Draftsman.PaintTournamentRound(round);
+                }
             }
 
-            Console.Clear();
-            Draftsman.PaintTournamentRound(Standings);
-            Standings = nextRoundGrid;
-
-            if (Standings.Tournament.Count != 0)
-            {
-                Draftsman.PaintTournamentStage(Standings);
-                CollectorResults();
-            }
+            Draftsman.CongratulationWinner(_playerWinner);
         }
 
-        private void ChoiseWinner(Meeting meeting, TournamentGrid nextRoundGrid)
+        private void ChoiceWinner(Meeting meeting)
         {
-            if (meeting.SecondPlayer != null)
+            if (meeting.SecondPlayer != null&&meeting.FirstPlayer!=null)
             {
                 Draftsman.GetResultOfMatch(meeting);
 
                 if (meeting.Score[0] > meeting.Score[1])
                 {
-                    if (meeting.Stage == "final")
-                    {
-                        Draftsman.CongratulationWinner(meeting.FirstPlayer);
-                    }
-                    else
-                    {
-                        PromoteWinner(meeting, meeting.FirstPlayer, nextRoundGrid);
-                    }
+                   // meeting.FirstPlayer = "@" + meeting.FirstPlayer + "$";
+                    PromoteWinner(meeting, meeting.FirstPlayer);
                 }
                 else
                 {
-                    if (meeting.Stage == "final")
-                    {
-                        Draftsman.CongratulationWinner(meeting.SecondPlayer);
-                    }
-                    else
-                    {
-                        PromoteWinner(meeting, meeting.SecondPlayer, nextRoundGrid);
-                    }
-                }
-            }
-            else
-            {
-                if (meeting.Stage == "final")
-                {
-                    Draftsman.CongratulationWinner(meeting.SecondPlayer);
-                }
-                else
-                {
-                    PromoteWinner(meeting, meeting.FirstPlayer, nextRoundGrid);
+                   // meeting.SecondPlayer = "@" + meeting.SecondPlayer + "$";
+                    PromoteWinner(meeting, meeting.SecondPlayer);
                 }
             }
         }
 
-        private void PromoteWinner(Meeting meeting, string player, TournamentGrid nextRoundGrid)
+        private void PromoteWinner(Meeting meeting, string player)
         {
+            if (meeting.NextStage == null)
+            {
+                _playerWinner = player;
+                return;
+            }
 
             if (meeting.NextStage.FirstPlayer == null)
             {
@@ -125,7 +118,6 @@ namespace Championship
             else
             {
                 meeting.NextStage.SecondPlayer = player;
-                nextRoundGrid.Tournament.Add(meeting.NextStage);
             }
         }
     }

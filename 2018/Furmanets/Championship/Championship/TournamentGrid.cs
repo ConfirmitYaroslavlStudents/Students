@@ -4,7 +4,7 @@ namespace Championship
 {
     public class TournamentGrid
     {
-        public List<Meeting> Tournament = new List<Meeting>();
+        public List<Round> Tournament = new List<Round>();
 
         public void CreateTournamentGrid(int players)
         {
@@ -15,34 +15,38 @@ namespace Championship
 
             while (stages < players)
             {
-                var countPreviousStage = Tournament.Count;
+                Tournament.Add(new Round());
+                Tournament[Tournament.Count - 1].Stage = currentStage.Stage;
+
                 for (var i = 0; i < countMeetings; i++)
                 {
-                    Tournament.Add(new Meeting());
-                    Tournament[i + countPreviousStage].Stage = currentStage.Stage;
+                    Tournament[Tournament.Count - 1].Meetings.Add(new Meeting());
                 }
 
-                if (currentStage.Stage != "final")
+                if (Tournament.Count != 1)
                 {
-                    var meetingIndex = countNextMeetings;
+                    var meetingIndex = 0;
 
                     for (var i = 0; i < countNextMeetings; i++)
                     {
-                        Tournament[meetingIndex].NextStage = Tournament[i];
-                        Tournament[meetingIndex + 1].NextStage = Tournament[i];
+                        Tournament[Tournament.Count - 1].Meetings[meetingIndex].NextStage = 
+                            Tournament[Tournament.Count - 2].Meetings[i];
+
+                        Tournament[Tournament.Count - 1].Meetings[meetingIndex + 1].NextStage = 
+                            Tournament[Tournament.Count - 2].Meetings[i];
+
                         meetingIndex += 2;
                     }
 
-                    for (var i = 0; i < countNextMeetings; i++)
-                    {
-                        Tournament.RemoveAt(0);
-                    }
                     countNextMeetings *= 2;
                 }
+
                 countMeetings *= 2;
                 currentStage.NextStage();
                 stages *= 2;
             }
+
+            Tournament.Reverse();
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     public class Meeting
     {
-        public string Stage;
         public string FirstPlayer;
         public string SecondPlayer;
         public int[] Score;

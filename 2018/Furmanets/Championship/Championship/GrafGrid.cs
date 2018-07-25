@@ -1,36 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using ConsoleChampionship;
 
 namespace Championship
 {
-    class GrafGrid
+    public class GrafGrid
     {
         public List<string> Graf = new List<string>();
-        private int maxLengthName = 10;
+        private readonly int _maxLengthName;
 
-        public void ConstructionGraf(TournamentGrid grid)
+        public GrafGrid(int maxLengthName)
         {
+            _maxLengthName = maxLengthName;
+        }
+
+        public void ConstructionGraf(Tournament tournament)
+        {
+            var grid = tournament.Grid;
             var distanceBetweenStage = 7;
+
             for (var i = 0; i < grid.Tournament[0].Meetings.Count * 6; i++)
             {
                 Graf.Add(new string(' ', 2));
             }
+
             var previousLines = new List<int>();
-            var flag = true;
+            var isFirsRound = true;
+
             foreach (var round in grid.Tournament)
             {
-                Graf[0] += new string(' ', distanceBetweenStage) + Draftsman.GetForPrintRound(round.Stage) + new string(' ', 8);
-                if (flag)
+                Graf[0] += new string(' ', _maxLengthName - 4) + GetForPrintRound(round.Stage) + new string(' ', distanceBetweenStage);
+
+                if (isFirsRound)
                 {
                     CreateFirstRound(round.Meetings, previousLines);
-                    flag = false;
+                    isFirsRound = false;
                 }
                 else
                 {
                     previousLines = CreateOtherRounds(round, previousLines);
                 }
             }
+            Graf[previousLines[0]] += tournament.PlayerWinner;
+
+            Draftsman.CongratulationWinner(tournament.PlayerWinner);
+        }
+
+        public static string GetForPrintRound(int round)
+        {
+            if (round == 1)
+            {
+                return "final";
+            }
+
+            return "1/" + round;
         }
 
         private void CreateFirstRound(List<Meeting> meetings, List<int> previousLines)
@@ -45,36 +67,44 @@ namespace Championship
                     meetingNumber += 5;
                     continue;
                 }
-                var indentationFirstPlayer = 0;
-                var indentationSecondPlayer = 0;
-                var goalsFisrtPlayer = "";
-                var goalsSecondPlayer = "";
 
-                if (meeting.Score[0] != 0 || meeting.Score[1] != 0)
-                {
-                    goalsFisrtPlayer += " " + meeting.Score[0];
-                    goalsSecondPlayer += " " + meeting.Score[1];
-                }
-
-                if (meeting.FirstPlayer != null)
-                {
-                    indentationFirstPlayer = meeting.FirstPlayer.Length;
-                }
-
-                if (meeting.SecondPlayer != null)
-                {
-                    indentationSecondPlayer = meeting.SecondPlayer.Length;
-                }
+                IdentificationMeeting(meeting, out var nameLengthFirstPlayer, out var nameLengthSecondPlayer,
+                    out var goalsFisrtPlayer, out var goalsSecondPlayer);
 
                 Graf[meetingNumber] +=
-                    new string(' ', maxLengthName - indentationFirstPlayer) + meeting.FirstPlayer + goalsFisrtPlayer;
+                    new string(' ', _maxLengthName - nameLengthFirstPlayer) + meeting.FirstPlayer + goalsFisrtPlayer;
 
                 Graf[meetingNumber + 1] += new string(' ', Graf[meetingNumber].Length - Graf[meetingNumber + 1].Length) + "|----";
                 previousLines.Add(meetingNumber + 1);
                 Graf[meetingNumber + 2] +=
-                    new string(' ', maxLengthName - indentationSecondPlayer) + meeting.SecondPlayer + goalsSecondPlayer;
+                    new string(' ', _maxLengthName - nameLengthSecondPlayer) + meeting.SecondPlayer + goalsSecondPlayer;
 
                 meetingNumber += 5;
+            }
+        }
+
+        private void IdentificationMeeting(Meeting meeting, out int nameLengthFirstPlayer, out int nameLengthSecondPlayer,
+            out string goalsFisrtPlayer, out string goalsSecondPlayer)
+        {
+            nameLengthFirstPlayer = 0;
+            nameLengthSecondPlayer = 0;
+            goalsFisrtPlayer = "";
+            goalsSecondPlayer = "";
+
+            if (meeting.Score[0] != 0 || meeting.Score[1] != 0)
+            {
+                goalsFisrtPlayer += " " + meeting.Score[0];
+                goalsSecondPlayer += " " + meeting.Score[1];
+            }
+
+            if (meeting.FirstPlayer != null)
+            {
+                nameLengthFirstPlayer = meeting.FirstPlayer.Length;
+            }
+
+            if (meeting.SecondPlayer != null)
+            {
+                nameLengthSecondPlayer = meeting.SecondPlayer.Length;
             }
         }
 
@@ -83,27 +113,20 @@ namespace Championship
             var meetings = rounds.Meetings;
             var indexPreviousLine = 0;
             var newPreviousLines = new List<int>();
-            var nameFinish = Graf[previousLines[0]].Length + maxLengthName;
+            var nameFinish = Graf[previousLines[0]].Length + _maxLengthName;
 
             foreach (var meeting in meetings)
             {
-                var characterCountFirstPlayer = 0;
-                var characterCountSecondPlayer = 0;
-
-                if (meeting.FirstPlayer != null)
-                {
-                    characterCountFirstPlayer = meeting.FirstPlayer.Length;
-                }
-                if (meeting.SecondPlayer != null)
-                {
-                    characterCountSecondPlayer = meeting.SecondPlayer.Length;
-                }
+                IdentificationMeeting(meeting, out var nameLengthFirstPlayer, out var nameLengthSecondPlayer,
+                    out var goalsFisrtPlayer, out var goalsSecondPlayer);
 
                 Graf[previousLines[indexPreviousLine]] +=
-                    new string(' ', nameFinish - characterCountFirstPlayer - Graf[previousLines[indexPreviousLine]].Length) + meeting.FirstPlayer;
+                    new string(' ', nameFinish - nameLengthFirstPlayer - Graf[previousLines[indexPreviousLine]].Length)
+                    + meeting.FirstPlayer + goalsFisrtPlayer;
 
                 Graf[previousLines[indexPreviousLine + 1]] +=
-                    new string(' ', nameFinish - characterCountSecondPlayer - Graf[previousLines[indexPreviousLine + 1]].Length) + meeting.SecondPlayer;
+                    new string(' ', nameFinish - nameLengthSecondPlayer - Graf[previousLines[indexPreviousLine + 1]].Length)
+                    + meeting.SecondPlayer + goalsSecondPlayer;
 
                 for (int i = previousLines[indexPreviousLine] + 1; i < previousLines[indexPreviousLine + 1]; i++)
                 {

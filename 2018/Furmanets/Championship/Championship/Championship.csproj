@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleChampionship">
+      <HintPath>..\ConsoleChampionship\bin\Debug\ConsoleChampionship.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Draftsman.cs" />
     <Compile Include="GrafGrid.cs" />
     <Compile Include="Meeting.cs" />
     <Compile Include="Round.cs" />

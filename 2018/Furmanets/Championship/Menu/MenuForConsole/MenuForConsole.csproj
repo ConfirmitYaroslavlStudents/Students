@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleChampionship</RootNamespace>
-    <AssemblyName>ConsoleChampionship</AssemblyName>
+    <ProjectGuid>{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MenuForConsole</RootNamespace>
+    <AssemblyName>MenuForConsole</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MenuForConsole">
-      <HintPath>..\Menu\MenuForConsole\bin\Debug\MenuForConsole.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,15 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Draftsman.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="MenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Championship\Championship.csproj">
+    <ProjectReference Include="..\..\Championship\Championship.csproj">
       <Project>{c0acc89d-7300-480d-9849-5b386c2b9d46}</Project>
       <Name>Championship</Name>
     </ProjectReference>

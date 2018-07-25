@@ -11,15 +11,15 @@ namespace Tournament
             Vertical
         }
 
-        public const string LeftUpperCorner = "\u2500\u2510";
-        public const string RightUpperCorner = "\u250C\u2500";
-        public const string LeftLowerCorner = "\u2500\u2518";
-        public const string RightLowerCorner = "\u2514\u2500";
-        public const string VerticalStick = "\u2502";
-        public const string HorizontalStick = "\u005f";
-        public BracketCell[,] ResultBracket;
+        private const string LeftUpperCorner = "\u2500\u2510";
+        private const string RightUpperCorner = "\u250C\u2500";
+        private const string LeftLowerCorner = "\u2500\u2518";
+        private const string RightLowerCorner = "\u2514\u2500";
+        private const string VerticalStick = "\u2502";
+        private const string HorizontalStick = "\u005f";
+        protected BracketCell[,] ResultBracket;
 
-        public void RemoveLastColumn(BracketCell[,] bracket, int lastColumn, int amount)
+        protected void RemoveLastColumn(BracketCell[,] bracket, int lastColumn, int amount)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -28,7 +28,7 @@ namespace Tournament
             }
         }
 
-        private string CreateHorizontalString()
+        private string CreateHorizontalStick()
         {
             string horizontalSticks = "";
             for (int i = 0; i < OrganizedTournament.MaxLengthOfString-1; i++)
@@ -39,7 +39,7 @@ namespace Tournament
             return horizontalSticks;
         }
 
-        public void AddBrackets(int row, int amountOfColumns, BracketCell[,] resultGrid, int[] amountOfRoundParticipants, Side side)
+        private void AddBrackets(int row, int amountOfColumns, BracketCell[,] resultGrid, int[] amountOfRoundParticipants, Side side)
         {
             var upperCorner = RightUpperCorner;
             var lowerCorner = RightLowerCorner;
@@ -52,9 +52,9 @@ namespace Tournament
             }
             else if (side == Side.Vertical)
             {
-                upperCorner = VerticalStick+CreateHorizontalString();
+                upperCorner = VerticalStick+CreateHorizontalStick();
                 lowerCorner = VerticalStick;
-                stick = HorizontalStick+ CreateHorizontalString();
+                stick = HorizontalStick+ CreateHorizontalStick();
             }
 
             for (int j = 1; j < amountOfColumns; j += 2)
@@ -71,7 +71,7 @@ namespace Tournament
             }
         }
 
-        public BracketCell[,] CreateBracket(int roundIndex, Side side, List<Participant> bracket)
+        protected BracketCell[,] CreateBracket(int roundIndex, Side side, List<Participant> bracket)
         {
             int bracketAmountOfColumns = roundIndex * 2;
             int maxColumnIndex = 0;

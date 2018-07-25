@@ -6,16 +6,11 @@ A small console application that helps to keep track of the leaders in the game 
 npm install
 ```
 ```text
-npm start [number of players]
+node index.js --grid olympic --players [4, 8, 16...]
+node index.js --grid fifa --players [4, 8, 16...]
+node index.js --grid losers --players [4, 8, 16...]
 ```
 **All actions are performed in the terminal. Running into the IDE does not guarantee the functionality of the application**
-# Args
-```bash
---grid [olympic, FIFA]
-// --grid olympic - standart olympic grid
-// --grid FIFA - visualization of the grid at the World Cup 2018
---loser // If you want a grid with losers (only when --grid olympic)
-```
 # Examples
 ```text
 npm start

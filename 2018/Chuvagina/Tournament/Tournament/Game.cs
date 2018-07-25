@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TournamentGrid
+namespace Tournament
 {
     internal class Game
     {
+
         private readonly int _roundIndex;
         private readonly List<Participant> _upperBracket;
         private readonly List<Participant> _lowerBracket;
@@ -20,9 +21,9 @@ namespace TournamentGrid
 
         public string PlayUpperBracketGame(int firstParticipantIndex, int secondParticipantIndex)
         {
-            DetectWinner(_upperBracket, firstParticipantIndex, secondParticipantIndex);   
-            
-            string loser = _upperBracket[_loserIndex].Name;     
+            DetectWinner(_upperBracket, firstParticipantIndex, secondParticipantIndex);
+
+            string loser = _upperBracket[_loserIndex].Name;
             string winnerName = _upperBracket[_winnerIndex].Name;
             _upperBracket[_winnerIndex].Color = ConsoleColor.Green;
 
@@ -47,7 +48,7 @@ namespace TournamentGrid
             InsertToBracket(_lowerBracket, winnerName, firstParticipantIndex, secondParticipantIndex);
         }
 
-        private void DetectWinner(List<Participant> bracket,int firstParticipantIndex, int secondParticipantIndex)
+        private void DetectWinner(List<Participant> bracket, int firstParticipantIndex, int secondParticipantIndex)
         {
             string firstParticipantName = bracket[firstParticipantIndex].Name;
             string secondParticipantName = bracket[secondParticipantIndex].Name;

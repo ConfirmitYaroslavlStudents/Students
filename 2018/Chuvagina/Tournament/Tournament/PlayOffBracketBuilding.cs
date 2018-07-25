@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-
-namespace TournamentGrid
+namespace Tournament
 {
     internal class PlayOffBracketBuilding : BracketBuilding
     {
@@ -16,31 +14,26 @@ namespace TournamentGrid
         {
             _leftBracketList = leftBracket;
             _rightBracketList = rightBracket;
-            _roundIndex = roundIndex+1;
+            _roundIndex = roundIndex + 1;
         }
 
         public BracketCell[,] GetPlayOffBracket()
         {
             _leftBracket = CreateBracket(_roundIndex, Side.Left, _leftBracketList);
             _rightBracket = CreateBracket(_roundIndex, Side.Right, _rightBracketList);
-            ResultBracket = new BracketCell[_leftBracketList.Count,_roundIndex * 4];
+            ResultBracket = new BracketCell[_leftBracketList.Count, _roundIndex * 4];
 
-            for (int i=0; i< _leftBracketList.Count;i++)
+            for (int i = 0; i < _leftBracketList.Count; i++)
             {
-                for (int j=0;j<_roundIndex*2;j++)
+                for (int j = 0; j < _roundIndex * 2; j++)
                 {
                     ResultBracket[i, j] = _leftBracket[i, j];
 
                     if (_leftBracket[i, j] != null)
-                        ResultBracket[i, _roundIndex * 4-j-1] = _rightBracket[i,j];
+                        ResultBracket[i, _roundIndex * 4 - j - 1] = _rightBracket[i, j];
                 }
             }
             return ResultBracket;
         }
-
-
-
-      
-
     }
 }

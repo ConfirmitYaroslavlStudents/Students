@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using static TournamentGrid.Tournament;
+﻿using System.Collections.Generic;
 
-namespace TournamentGrid
+namespace Tournament
 {
     internal class Round
     {
@@ -12,29 +10,26 @@ namespace TournamentGrid
         private List<int> _upperBracketParticipantsIndexes;
         private List<int> _lowerBracketParticipantsIndexes;
         private bool _isLastRound = false;
-        private readonly KindOfBracket _kindOfBracket;
 
-        public Round(int index, List<Participant> upperBracket, List<Participant> lowerBracket,KindOfBracket kindOfBracket)
+        public Round(int index, List<Participant> upperBracket, List<Participant> lowerBracket)
         {
             _roundIndex = index;
             _upperBracket = upperBracket;
             _lowerBracket = lowerBracket;
-            _upperBracketParticipantsIndexes= FindRoundParticipants(_upperBracket);
-            _lowerBracketParticipantsIndexes = FindRoundParticipants(_lowerBracket);
-            _kindOfBracket = kindOfBracket;
-
+            _upperBracketParticipantsIndexes = FindRoundParticipants(_upperBracket);
+            _lowerBracketParticipantsIndexes = FindRoundParticipants(_lowerBracket);       
         }
 
         public bool PlayDoubleEliminatedRound()
         {
             int amountOfUpperBracketParticipants = AmountOfParticipants(_roundIndex, _upperBracket);
             int amountOfLowerBracketParticipants = AmountOfParticipants(_roundIndex, _lowerBracket);
-         
+
             if (amountOfUpperBracketParticipants == 0)
                 foreach (var participant in _upperBracket)
                     participant.Round++;
-            
-            if (amountOfLowerBracketParticipants==1 && amountOfUpperBracketParticipants < 2)
+
+            if (amountOfLowerBracketParticipants == 1 && amountOfUpperBracketParticipants < 2)
             {
                 PlayLastRound();
                 return true;
@@ -43,7 +38,7 @@ namespace TournamentGrid
             PlayUpperBracketRound(_upperBracketParticipantsIndexes);
             _lowerBracketParticipantsIndexes = FindRoundParticipants(_lowerBracket);
             PlayLowerBracketRound(_lowerBracketParticipantsIndexes);
-            
+
             return false;
         }
 
@@ -53,10 +48,10 @@ namespace TournamentGrid
 
             if (amountOfUpperBracketParticipants == 1)
             {
-                var printUpper = new BracketPrint(_roundIndex, _upperBracket, _kindOfBracket);
+                var printUpper = new BracketPrint(_roundIndex, _upperBracket);
                 printUpper.Print(BracketPrint.Bracket.Upper);
-                return true;      
-            }                    
+                return true;
+            }
 
             PlayUpperBracketRound(_upperBracketParticipantsIndexes);
             return false;
@@ -64,7 +59,7 @@ namespace TournamentGrid
         }
 
 
-            private static int AmountOfParticipants(int roundIndex, List<Participant> bracket)
+        private static int AmountOfParticipants(int roundIndex, List<Participant> bracket)
         {
             int amountOfParticipants = 0;
 
@@ -96,7 +91,7 @@ namespace TournamentGrid
         {
             HideNonPlayingParticipants(roundParticipantsIndexes, _upperBracket);
 
-            var printUpper = new BracketPrint(_roundIndex, _upperBracket, _kindOfBracket );
+            var printUpper = new BracketPrint(_roundIndex, _upperBracket);
             printUpper.Print(BracketPrint.Bracket.Upper);
             var losers = new List<string>();
 
@@ -108,36 +103,35 @@ namespace TournamentGrid
 
             if (!_isLastRound)
                 AddToLowerBracket(losers);
-        }     
+        }
 
         private void AddToLowerBracket(List<string> losers)
         {
             int lowerBracketAmountOfPlayers = _lowerBracket.Count;
 
-            for (int i = losers.Count-1; i>=0;i--)
+            for (int i = losers.Count - 1; i >= 0; i--)
             {
                 int insertIndex = i * (lowerBracketAmountOfPlayers / losers.Count);
-                _lowerBracket.Insert(insertIndex, new Participant(losers[i],_roundIndex));
+                _lowerBracket.Insert(insertIndex, new Participant(losers[i], _roundIndex));
             }
 
         }
 
-        private void PlayLowerBracketRound(List <int> roundParticipantsIndexes)
+        private void PlayLowerBracketRound(List<int> roundParticipantsIndexes)
         {
             HideNonPlayingParticipants(roundParticipantsIndexes, _lowerBracket);
 
-            var printLower = new BracketPrint(_roundIndex, _lowerBracket,_kindOfBracket);
+            var printLower = new BracketPrint(_roundIndex, _lowerBracket);
             printLower.Print(BracketPrint.Bracket.Lower);
 
             for (int i = 1; i < roundParticipantsIndexes.Count; i += 2)
             {
                 var game = new Game(_roundIndex, _upperBracket, _lowerBracket);
                 game.PlayLowerBracketGame(roundParticipantsIndexes[i - 1], roundParticipantsIndexes[i]);
-            }   
-
+            }
         }
 
-        private static void HideNonPlayingParticipants(List<int> participants, List <Participant> bracket)
+        private static void HideNonPlayingParticipants(List<int> participants, List<Participant> bracket)
         {
             int indexOfNonPlayingParticipant = participants[participants.Count - 1] - participants.Count / 2;
 
@@ -156,12 +150,11 @@ namespace TournamentGrid
             foreach (var participant in _lowerBracket)
                 participant.Round++;
 
-            var printUpper = new BracketPrint(_roundIndex+1, _upperBracket,_kindOfBracket);
+            var printUpper = new BracketPrint(_roundIndex + 1, _upperBracket);
             printUpper.Print(BracketPrint.Bracket.Upper);
 
-            var printLower = new BracketPrint(_roundIndex+1, _lowerBracket,_kindOfBracket);
+            var printLower = new BracketPrint(_roundIndex + 1, _lowerBracket);
             printLower.Print(BracketPrint.Bracket.Lower);
         }
-
     }
 }

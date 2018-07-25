@@ -1,5 +1,5 @@
 ﻿using System;
-using TournamentGrid;
+using Tournament;
 
 namespace ConsoleTournament
 {
@@ -7,10 +7,9 @@ namespace ConsoleTournament
     {
         static void Main(string[] args)
         {
-            var footballTournament = new Tournament();
+            var footballTournament = new OrganizedTournament();
             footballTournament.Play();
-            Console.ReadLine();
+            Console.ReadLine();     
         }
-
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace TournamentGrid
+namespace Tournament
 {
-    class VerticalBracketBuilding: BracketBuilding
+    internal class VerticalBracketBuilding: BracketBuilding
     {
         private readonly List<Participant> _bracketList;
         private readonly int _roundIndex;
@@ -17,9 +15,9 @@ namespace TournamentGrid
             _roundIndex = roundIndex + 1;
         }
 
-        public BracketCell[,] GetHorizontalBracket()
+        public BracketCell[,] GetVerticalBracket()
         {
-            ResultBracket = CreateBracket(_roundIndex, Side.Left, _bracketList);
+            ResultBracket = CreateBracket(_roundIndex, Side.Vertical, _bracketList);
             return ResultBracket;
         }
     }

@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using static TournamentGrid.Tournament;
 
-namespace TournamentGrid
+namespace Tournament
 {
-    internal static class DataInput
+    internal class DataInput
     {
-        public static int InputAmount(KindOfBracket kindOfBracket)
+        public static int InputAmount(OrganizedTournament.KindOfBracket kindOfBracket)
         {
             int result;
             bool isAmountSet;
             do
             {
-                if (kindOfBracket==KindOfBracket.PlayOff)
+                if (kindOfBracket == OrganizedTournament.KindOfBracket.PlayOff)
                     Console.WriteLine("PlayOff bracket requires power of two amount of participants.");
 
                 Console.Write("Amount of participants: ");
 
-                if (kindOfBracket==KindOfBracket.PlayOff)
+                if (kindOfBracket == OrganizedTournament.KindOfBracket.PlayOff)
                     isAmountSet = int.TryParse(Console.ReadLine(), out result) && PowerOfTwo(result);
                 else isAmountSet = int.TryParse(Console.ReadLine(), out result);
 
-            } while (!isAmountSet);
-           
+            } while (!isAmountSet || result < 2);
+
             return result;
         }
 
@@ -34,18 +33,23 @@ namespace TournamentGrid
         }
 
 
-        public static KindOfBracket ChoseBracket()
+        public static OrganizedTournament.KindOfBracket ChoseBracket()
         {
             var answer = "";
             do
             {
                 Console.WriteLine("In PlayOff bracket you'll not have an opportunity to use Double Elimination system.");
-                Console.Write("Do you want to use PlayOff type of bracket? (y/n) ");
+                Console.Write("Choose bracket type Horizontal, Vertical or PlayOff (h/v/p) ");
                 answer = Console.ReadLine();
 
-            } while (answer!="y" && answer!="n" );
+            } while (answer != "h" && answer != "v" && answer != "p");
 
-            return answer == "y" ? KindOfBracket.PlayOff : KindOfBracket.Horizontal;
+            if (answer == "h")
+                return OrganizedTournament.KindOfBracket.Horizontal;
+            if (answer == "v")
+                return OrganizedTournament.KindOfBracket.Vertical;
+
+            return OrganizedTournament.KindOfBracket.PlayOff;
         }
 
         public static bool ChoseSystem()
@@ -59,8 +63,8 @@ namespace TournamentGrid
             } while (answer != "d" && answer != "s");
 
             if (answer == "d")
-                return true;  
-            
+                return true;
+
             return false;
         }
 

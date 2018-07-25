@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace TournamentGrid
+namespace Tournament
 {
-    internal class Participant 
+    internal class Participant
     {
-        public string Name { get;}
+        public string Name { get; }
         public ConsoleColor Color = ConsoleColor.White;
         public int Round;
 

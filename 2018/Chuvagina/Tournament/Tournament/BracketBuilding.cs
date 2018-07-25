@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace TournamentGrid
+namespace Tournament
 {
     internal abstract class BracketBuilding
     {
         public enum Side
         {
             Left,
-            Right
+            Right,
+            Vertical
         }
 
         public const string LeftUpperCorner = "\u2500\u2510";
@@ -15,7 +16,7 @@ namespace TournamentGrid
         public const string LeftLowerCorner = "\u2500\u2518";
         public const string RightLowerCorner = "\u2514\u2500";
         public const string VerticalStick = "\u2502";
-        public const string HorizontalStick = "\u2500";
+        public const string HorizontalStick = "\u005f";
         public BracketCell[,] ResultBracket;
 
         public void RemoveLastColumn(BracketCell[,] bracket, int lastColumn, int amount)
@@ -27,18 +28,35 @@ namespace TournamentGrid
             }
         }
 
+        private string CreateHorizontalString()
+        {
+            string horizontalSticks = "";
+            for (int i = 0; i < OrganizedTournament.MaxLengthOfString-1; i++)
+            {
+                horizontalSticks += HorizontalStick;
+            }
+
+            return horizontalSticks;
+        }
+
         public void AddBrackets(int row, int amountOfColumns, BracketCell[,] resultGrid, int[] amountOfRoundParticipants, Side side)
         {
-            var upperCorner = RightUpperCorner; 
+            var upperCorner = RightUpperCorner;
             var lowerCorner = RightLowerCorner;
             var stick = VerticalStick;
 
-            if (side==Side.Left)
+            if (side == Side.Left)
             {
                 upperCorner = LeftUpperCorner;
                 lowerCorner = LeftLowerCorner;
-            }         
-            
+            }
+            else if (side == Side.Vertical)
+            {
+                upperCorner = VerticalStick+CreateHorizontalString();
+                lowerCorner = VerticalStick;
+                stick = HorizontalStick+ CreateHorizontalString();
+            }
+
             for (int j = 1; j < amountOfColumns; j += 2)
             {
                 if (resultGrid[row, j - 1] != null)
@@ -53,7 +71,7 @@ namespace TournamentGrid
             }
         }
 
-        public BracketCell[,] CreateBracket(int roundIndex,Side side, List <Participant> bracket)
+        public BracketCell[,] CreateBracket(int roundIndex, Side side, List<Participant> bracket)
         {
             int bracketAmountOfColumns = roundIndex * 2;
             int maxColumnIndex = 0;
@@ -79,6 +97,5 @@ namespace TournamentGrid
 
             return result;
         }
-        
     }
 }

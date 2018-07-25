@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace TournamentGrid
+namespace Tournament
 {
     internal class HorizontalBracketBuilding : BracketBuilding
     {
@@ -20,7 +16,7 @@ namespace TournamentGrid
 
         public BracketCell[,] GetHorizontalBracket()
         {
-            ResultBracket = CreateBracket(_roundIndex,Side.Left,_bracketList);
+            ResultBracket = CreateBracket(_roundIndex, Side.Left, _bracketList);
             return ResultBracket;
         }
 

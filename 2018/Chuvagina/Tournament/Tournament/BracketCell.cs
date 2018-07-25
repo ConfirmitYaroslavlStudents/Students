@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TournamentGrid
+namespace Tournament
 {
     internal class BracketCell
     {

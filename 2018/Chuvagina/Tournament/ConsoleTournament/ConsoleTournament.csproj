@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25E1F724-EBD6-4E92-BA83-0AF153516537}</ProjectGuid>
+    <ProjectGuid>{C6D72367-67F5-40A9-A1DF-99979D29ED58}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ConsoleTournament</RootNamespace>
     <AssemblyName>ConsoleTournament</AssemblyName>
@@ -40,9 +40,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TournamentGrid">
-      <HintPath>..\..\TournamentGrid\bin\Debug\TournamentGrid.exe</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleTournament.cs" />
@@ -50,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tournament\Tournament.csproj">
+      <Project>{9faa72ab-8871-4e91-92d9-dc85fc62964c}</Project>
+      <Name>Tournament</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

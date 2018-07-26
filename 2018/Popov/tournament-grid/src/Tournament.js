@@ -1,7 +1,6 @@
 'use strict';
 
 import Player from './Player';
-//import TournamentGridView from './TournamentGridView';
 
 import InvalidPlayersCountException from './exceptions/InvalidPlayersCountException';
 
@@ -60,7 +59,7 @@ export default class Tournament {
     this._gameOn = true;
     this._totalRounds = Math.floor(Math.log2(this.playersCount));
 
-    // this._shufflePlayers();
+    this._shufflePlayers();
     this._tournamentBracket.init(this);
     this._tournamentGridView.init(this);
   }

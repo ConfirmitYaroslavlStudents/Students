@@ -45,7 +45,6 @@ export default class SingleEliminationBracket {
   set currentMatchWinner(player) {
     if (this.currentMatch === null) {
       return;
-      // throw new InvalidParameterException(``);
     }
 
     this.currentMatch.setWinnerById(player.id);

@@ -1,9 +1,11 @@
 'use strict';
 
 import kuler from 'kuler';
+import clear from 'clear';
+
 import Match from './../Match';
 
-export default class TournamentGridView {
+export default class DefaultGridView {
   constructor() {
     this._tournament = null;
     this._rawOutputGrid = [];
@@ -20,7 +22,7 @@ export default class TournamentGridView {
   }
 
   print() {
-    console.clear();
+    clear();
     console.log(kuler('Tournament grid: \n', '#fff'));
 
     this._tournament.bracket.raw.forEach(bracket => {
@@ -43,7 +45,6 @@ export default class TournamentGridView {
       let
         currentRoundLength = bracket[roundIndex].length,
         previousRoundLength = bracket[roundIndex - 1].length;
-
       this._columnOffsetFix += currentRoundLength ===  previousRoundLength ? 1 : 0;
     }
 

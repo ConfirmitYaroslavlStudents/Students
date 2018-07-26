@@ -4,6 +4,8 @@ import kuler from 'kuler';
 import inquirer from 'inquirer';
 
 import Tournament from './src/Tournament';
+
+import FIFAGridView from './src/views/FIFAGridView';
 import DefaultGridView from './src/views/DefaultGridView';
 
 import SingleEliminationBracket from './src/brackets/SingleEliminationBracket';
@@ -56,7 +58,7 @@ async function getBracketView() {
 
   switch (bracketType) {
     case 'FIFA 2018':
-      return new DefaultGridView();
+      return new FIFAGridView();
     default:
       return new DefaultGridView();
   }

@@ -7,10 +7,11 @@ namespace StackClass
         private int _capasity;
         private T[] _mass;
         public int Count { get; private set; }
+        private const int InitialValueCapasity = 16;
 
         public MyStack()
         {
-            _capasity = 16;
+            _capasity = InitialValueCapasity;
             Count = 0;
             _mass = new T[_capasity];
         }
@@ -70,6 +71,7 @@ namespace StackClass
             while (index > 0)
             {
                 index--;
+
                 if (_mass[index].Equals(obj))
                 {
                     return true;
@@ -81,7 +83,7 @@ namespace StackClass
 
         public void Clear()
         {
-            _capasity = 16;
+            _capasity = InitialValueCapasity;
             Count = 0;
             _mass = new T[_capasity];
         }

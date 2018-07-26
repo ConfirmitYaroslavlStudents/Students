@@ -245,3 +245,4 @@ CandidatesAccounting/tests/__screenshots__/
 ScreenshotHandler/.idea/
 ScreenshotHandler/node_modules/
 /.vs
+ScreenshotHandlerUtility/node_modules/

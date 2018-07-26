@@ -1,69 +1,104 @@
 'use strict';
 
-import chalk from 'chalk';
+import kuler from 'kuler';
 import inquirer from 'inquirer';
 
 import Tournament from './src/Tournament';
+import DefaultGridView from './src/views/DefaultGridView';
 
-let tournament = new Tournament();
+import SingleEliminationBracket from './src/brackets/SingleEliminationBracket';
+import DoubleEliminationBracket from './src/brackets/DoubleEliminationBracket';
 
-inquirer
-  .prompt([
-    { type: 'input', name: 1, message: 'Enter #1 player name:'},
-    { type: 'input', name: 2, message: 'Enter #2 player name:'},
-    { type: 'input', name: 3, message: 'Enter #3 player name:'},
-    { type: 'input', name: 4, message: 'Enter #4 player name:'},
-    { type: 'input', name: 5, message: 'Enter #5 player name:'},
-    { type: 'input', name: 6, message: 'Enter #6 player name:'},
-    { type: 'input', name: 7, message: 'Enter #7 player name:'},
-    { type: 'input', name: 8, message: 'Enter #8 player name:'}
-  ])
-  .then(players => {
-    for (let id in players) {
-      tournament.addPlayer(players[id]);
-      console.log(players[id]);
-    }
-    tournament.run();
-    gameLoop();
-  });
+async function main() {
+  const
+    playersCount = await getPlayersCount(),
+    tournament = new Tournament(await getBracket(), await getBracketView());
 
-  function gameLoop() {
-    tournament.view.print();
+  const players = await getPlayers(playersCount);
 
-    if (tournament.grid.currentMatch === false) {
-      return endGame();
-    }
-
-    let
-      currentMatch = tournament.grid.currentMatch,
-      currentPair = currentMatch.players;
-
-    console.log('\n');
-
-    inquirer
-      .prompt([{
-        type: 'rawlist',
-        message: 'Who has won?',
-        name: 'winner',
-        choices: [currentPair[0].name, currentPair[1].name]
-      }])
-      .then(input => {
-        if (currentPair[0].name === input.winner) {
-          currentMatch.setWinnerById(0);
-          tournament.view.print();
-        }
-        else {
-          currentMatch.setWinnerById(1);
-          tournament.view.print();
-        }
-        gameLoop();
-      });
+  for (let id in players) {
+    tournament.addPlayer(players[id]);
   }
 
-function endGame() {
-  let winners = tournament.grid.winners;
+  tournament.init();
 
-  console.log(`\n\nFirst place: ${chalk.bold.green(winners[1].winner.name)}`);
-  console.log(`Second place: ${chalk.bold.whiteBright(winners[1].loser.name)}`);
-  console.log(`Third place: ${chalk.bold.yellow(winners[0].winner.name)}`);
+  while (!tournament.gameOver) {
+    tournament.view.print();
+
+    let winner = await getWinner(tournament.bracket.currentMatch.players);
+    tournament.bracket.currentMatchWinner = winner;
+  }
+
+  tournament.view.print();
+  console.log('First place: ' + kuler(tournament.bracket.firstPlace.name, '#ffcb6b'));
+  console.log('Second place: ' + kuler(tournament.bracket.secondPlace.name, 'white'));
 }
+
+async function getBracket() {
+  let {bracketType} = await inquirer.prompt([{
+    type: 'rawlist', message: 'Select bracket type',
+    name: 'bracketType', choices: ['Single Elimination', 'Double Elimination']
+  }]);
+
+  switch (bracketType) {
+    case 'Double Elimination':
+      return new DoubleEliminationBracket();
+    default:
+      return new SingleEliminationBracket();
+  }
+}
+
+async function getBracketView() {
+  let {bracketType} = await inquirer.prompt([{
+    type: 'rawlist', message: 'Select bracket view',
+    name: 'bracketType', choices: ['Default', 'FIFA 2018']
+  }]);
+
+  switch (bracketType) {
+    case 'FIFA 2018':
+      return new DefaultGridView();
+    default:
+      return new DefaultGridView();
+  }
+}
+
+async function getPlayersCount() {
+  let {playersCount} = await inquirer.prompt([{
+    type: 'input', message: 'Input players count',
+    name: 'playersCount', validate: function(input) {
+      if (isNaN(parseInt(input))) {
+        return 'You need to provide a number';
+      }
+      if (Math.log2(parseInt(input)) % 1 !== 0) {
+        return 'Invalid players count';
+      }
+      return true;
+    }
+  }]);
+  return parseInt(playersCount);
+}
+
+async function getPlayers(count) {
+  let questions = Array(count).fill(null);
+  questions = questions.map((question, index) => {
+    return {
+      type: 'input',
+      name: index + 1,
+      message: `Enter #${index + 1} player name:`,
+      validate: (input) => !input.length ? 'Invalid player name' : true
+    }
+  });
+  return await inquirer.prompt(questions);
+}
+
+async function getWinner(players) {
+  let {winnerName} = await inquirer.prompt([{
+    type: 'rawlist',
+    message: 'Who has won?',
+    name: 'winnerName',
+    choices: [players[0].name, players[1].name]
+  }]);
+  return players[0].name === winnerName ? players[0] :players[1];
+}
+
+main();

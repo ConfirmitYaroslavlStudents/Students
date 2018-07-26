@@ -1,25 +1,39 @@
 'use strict';
 
 import Player from './Player';
-import TournamentGrid from './TournamentGrid';
-import TournamentGridView from './TournamentGridView';
+//import TournamentGridView from './TournamentGridView';
 
 import InvalidPlayersCountException from './exceptions/InvalidPlayersCountException';
 
 export default class Tournament {
-  constructor() {
+  constructor(bracket, view) {
+    this._gameOn = false;
+
+    this._totalRounds = 0;
     this._playersList = [];
-    this._playersCount = 0;
-    this._tournamentGrid = null;
-    this._tournamentGridView = null;
+
+    this._tournamentBracket = bracket;
+    this._tournamentGridView = view;
   }
 
-  get grid() {
-    return this._tournamentGrid;
+  get gameOn() {
+    return this._gameOn;
+  }
+
+  get gameOver() {
+    return this._tournamentBracket.gameOver;
+  }
+
+  get bracket() {
+    return this._tournamentBracket;
   }
 
   get view() {
     return this._tournamentGridView;
+  }
+
+  get totalRounds() {
+    return this._totalRounds;
   }
 
   get playersList() {
@@ -27,26 +41,38 @@ export default class Tournament {
   }
 
   get playersCount() {
-    return this._playersCount;
+    return this._playersList.length;
   }
 
   addPlayer(name) {
-    let player = new Player(this._playersCount, name);
-
-    this._playersCount++;
-    this._playersList.push(player);
+    this._playersList.push(new Player(this.playersCount, name));
   }
 
   isValidPlayersCount() {
-    return Math.log2(this._playersCount) % 1 === 0;
+    return Math.log2(this.playersCount) % 1 === 0;
   }
 
-  run() {
+  init() {
     if (!this.isValidPlayersCount()) {
       throw new InvalidPlayersCountException('Invalid players count.');
     }
 
-    this._tournamentGridView = new TournamentGridView(this);
-    this._tournamentGrid = new TournamentGrid(this._playersList);
+    this._gameOn = true;
+    this._totalRounds = Math.floor(Math.log2(this.playersCount));
+
+    // this._shufflePlayers();
+    this._tournamentBracket.init(this);
+    this._tournamentGridView.init(this);
+  }
+
+  _shufflePlayers() {
+    let
+      players = this._playersList,
+      lastIndex = this._playersList.length;
+
+    while (lastIndex) {
+      let newIndex = Math.floor(Math.random() * lastIndex--);
+      [players[lastIndex], players[newIndex]] = [players[newIndex], players[lastIndex]];
+    }
   }
 }

@@ -9,3 +9,11 @@ public void Print(string message) {
 public void PrintInGreen(string message) {
   Console.WriteLine(Color.Green, message);
 }
+
+static void Main(string[] args)
+{
+    var myAction=new Action<string>(Print);
+    myAction += PrintInGreen;
+    myAction.Invoke("123");
+    Console.ReadLine();
+}

@@ -42,8 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="ConsoleTournament.cs" />
+    <Compile Include="DataInput.cs" />
+    <Compile Include="HorizontalBracket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReverseBracket.cs" />
+    <Compile Include="VerticalBracket.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

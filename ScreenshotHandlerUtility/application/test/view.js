@@ -25,7 +25,7 @@ class TestView extends Component {
       <Wrapper>
         <ScreenshotWrapper>
           <ScreenshotHeader>Base{test.markedToUpdate ? '' : <Selected>(selected)</Selected>}</ScreenshotHeader>
-          <Screenshot source={test.baseScreenshotURL} borderColor={test.markedToUpdate ? '#BDBDBD' : '#29B6F6'} />
+          <Screenshot source={test.baseScreenshotURL} borderColor={test.markedToUpdate ? '#BDBDBD' : '#7CB342'} />
         </ScreenshotWrapper>
         <ScreenshotWrapper>
           <ScreenshotHeader>Difference ({test.misMatchPercentage}%)</ScreenshotHeader>
@@ -33,7 +33,7 @@ class TestView extends Component {
         </ScreenshotWrapper>
         <ScreenshotWrapper>
           <ScreenshotHeader>Current{test.markedToUpdate ? <Selected>(selected)</Selected> : ''}</ScreenshotHeader>
-          <Screenshot source={test.newScreenshotURL} borderColor={test.markedToUpdate ? '#29B6F6' : '#BDBDBD'} />
+          <Screenshot source={test.newScreenshotURL} borderColor={test.markedToUpdate ? '#7CB342' : '#BDBDBD'} />
         </ScreenshotWrapper>
       </Wrapper>
     )

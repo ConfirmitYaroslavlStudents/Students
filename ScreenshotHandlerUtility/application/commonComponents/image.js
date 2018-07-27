@@ -19,18 +19,9 @@ class Image extends Component {
   }
 
   render() {
+    const { fullView } = this.state
     const { source, alternativeText, height, width } = this.props
 
-    const fullViewImg =
-      this.state.fullView ?
-        <FullViewWrapper onClick={this.handleClose}>
-          <FullViewImageWrapper onClick={(e) => {e.stopPropagation()}}>
-            <Tooltip title={path.join(source)} open>
-              <img src={path.join(source)} alt={alternativeText} onClick={this.handleClose} style={{ cursor: 'pointer' }} />
-            </Tooltip>
-          </FullViewImageWrapper>
-        </FullViewWrapper>
-        : null
 
     return (
       <React.Fragment>
@@ -44,7 +35,17 @@ class Image extends Component {
             onClick={this.handleOpen}
           />
         </Tooltip>
-        {fullViewImg}
+        {
+          fullView && (
+            <FullViewWrapper onClick={this.handleClose}>
+              <FullViewImageWrapper onClick={(e) => {e.stopPropagation()}}>
+                <Tooltip title={path.join(source)} open>
+                  <img src={path.join(source)} alt={alternativeText} onClick={this.handleClose} style={imageStyle} />
+                </Tooltip>
+              </FullViewImageWrapper>
+            </FullViewWrapper>
+          )
+        }
       </React.Fragment>
     )
   }
@@ -68,10 +69,16 @@ const FullViewWrapper = styled.div`
   height: 100vmin;
   width: 100%;
   z-index: 101;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.33);
 `
 
 const FullViewImageWrapper = styled.div`
   display: inline-block;
   margin: auto;
 `
+
+const imageStyle = {
+  boxShadow: '0px 10px 27px 6px rgba(0,0,0,0.33)',
+  cursor: 'pointer'
+}
+

@@ -4,8 +4,7 @@ import styled, { css } from 'styled-components'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
+import { ChevronIcon, iconModifiers } from 'confirmit-icons-material'
 
 class ItemExpansionPanel extends Component {
   constructor(props) {
@@ -30,7 +29,7 @@ class ItemExpansionPanel extends Component {
       <Wrapper onClick={this.handleChange} borderColor={borderColor}>
         <ExpansionPanel classes={{root: 'expansion-panel-root'}} expanded={expanded}>
           <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ChevronIcon size={iconModifiers.size.size15px} turn={iconModifiers.turn.clockwise} />}
           >
             {summary}
           </ExpansionPanelSummary>

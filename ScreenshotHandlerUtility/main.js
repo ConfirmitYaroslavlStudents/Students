@@ -13,7 +13,7 @@ const mainWindowOptions = {
   frame: true,
   autoHideMenuBar: true,
   webPreferences: {
-    devTools: true,
+    devTools: false,
     webSecurity: true
   }
 }
@@ -25,7 +25,7 @@ function createWindow () {
 
   global.screenshotMetadataFileURL = screenshotMetadataFileURL
 
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', () => {
     mainWindow = null

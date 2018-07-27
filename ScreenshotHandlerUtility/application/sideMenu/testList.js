@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import ItemExpansionPanel from '../commonComponents/UIDecorators/itemExpansionPanel'
 import TestItem from './testItem'
-import TestIcon from './testIcon'
+import { CheckIcon, iconModifiers } from 'confirmit-icons-material'
 
 class SideMenuTestList extends Component {
   render() {
@@ -16,12 +16,10 @@ class SideMenuTestList extends Component {
       for (let i = 0; i < testGroups.length; i++) {
         if (testGroups[i].name === test.fixtureName) {
           testGroups[i].tests.push(test)
-          if (!test.unread) {
-            testGroups[i].unread = false
+          if (!test.allUnread) {
+            testGroups[i].allUnread = false
           }
-          if (test.markedToUpdate) {
-            testGroups[i].allNotToUpdate = false
-          } else {
+          if (!test.markedToUpdate) {
             testGroups[i].allToUpdate = false
           }
           groupExists = true
@@ -32,9 +30,8 @@ class SideMenuTestList extends Component {
         testGroups.push({
           name: test.fixtureName,
           tests: [test],
-          unread: test.unread,
-          allToUpdate: test.markedToUpdate,
-          allNotToUpdate: !test.markedToUpdate
+          allUnread: test.unread,
+          allToUpdate: test.markedToUpdate
         })
       }
     })
@@ -44,13 +41,14 @@ class SideMenuTestList extends Component {
         <ItemExpansionPanel
           key={index}
           summary={
-            <SummaryWrapper bold={group.unread}>
+            <SummaryWrapper bold={group.allUnread}>
               {group.name} <TestAmount>({group.tests.length})</TestAmount>
               {
-                group.allToUpdate || group.allNotToUpdate ?
-                  <IconWrapper><TestIcon markedToUpdate={group.allToUpdate}/></IconWrapper>
-                  :
-                  null
+                group.allToUpdate && (
+                  <IconWrapper>
+                    <CheckIcon className='primary-icon' size={iconModifiers.size.size20px} />
+                  </IconWrapper>
+                )
               }
             </SummaryWrapper>
           }

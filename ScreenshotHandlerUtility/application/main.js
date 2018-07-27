@@ -1,7 +1,5 @@
 import './css/index.css'
-//import 'typeface-roboto'
 import electron from 'electron'
-import fs from 'fs'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import reducer from './reducer'
@@ -9,35 +7,32 @@ import { Provider } from 'react-redux'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import createPalette from '@material-ui/core/styles/createPalette'
+import getScreenshotMetadata from './utilities/getScreenshotMetadata'
 import AppView from './layout/appview'
 import createStore from './utilities/createStore'
 
-const screenshotMetadataFileURL = electron.remote.getGlobal('screenshotMetadataFileURL')
-const tests = JSON.parse(fs.readFileSync(screenshotMetadataFileURL))
+import {theme as ct} from 'confirmit-themes';
+ct.useTheme(ct.themeNames.material);
 
-const fallenTests = {}
-let fallenTestIndex = 0
-for (let i = 0; i < tests.length; i++) {
-  if (!tests[i].passed) {
-    tests[i].index = fallenTestIndex
-    tests[i].unread = true
-    tests[i].markedToUpdate = false
-    fallenTests[fallenTestIndex] = tests[i]
-    fallenTestIndex++
-  }
+const screenshotMetadataFileURL = electron.remote.getGlobal('screenshotMetadataFileURL')
+
+const screenshotMetadata = getScreenshotMetadata(screenshotMetadataFileURL)
+const initialState = {
+  fallenTests: screenshotMetadata.fallenTests,
+  testTotalAmount: screenshotMetadata.testTotalAmount
 }
 
-const store = createStore(reducer, { fallenTests, testTotalAmount: tests.length })
+const store = createStore(reducer, initialState)
 
 const theme = createMuiTheme({
   palette: createPalette({
     primary: {
       main: '#29B6F6',
-      contrastText: '#ffffff'
+      contrastText: '#fff'
     },
     secondary: {
-      main: '#ffffff',
-      contrastText: '#444444'
+      main: '#fff',
+      contrastText: '#333'
     },
   }),
   typography: {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
 import NoFallenTestsPage from './noFallenTestsPage'
@@ -9,7 +9,7 @@ import SideMenu from '../sideMenu/menu'
 import TestView from '../test/view'
 import TestSelect from './testSelect'
 import TestControls from './testControls'
-import AppControls from './appControls'
+import CommitConfirmDialog from './commitConfirmDialog'
 
 class AppView extends Component {
   constructor(props) {
@@ -31,27 +31,37 @@ class AppView extends Component {
     }
   }
 
-  handleUpdate = (test) => () => {
-    this.props.markToUpdate({ test })
+  handleUpdate = (test) => {
+    if (!test.markedToUpdate) {
+      this.props.markToUpdate({test})
+    }
     this.handleNextClick()
   }
 
-  handleCancel = (test) => () => {
-    this.props.unmarkToUpdate({ test })
+  handleCancel = (test) => {
+    if (test.markedToUpdate) {
+      this.props.unmarkToUpdate({test})
+    }
+    this.handleNextClick()
   }
 
   render() {
-    const { fallenTests, testTotalAmount, currentTestIndex } = this.props
+    const { fallenTests, testTotalAmount, currentTestIndex, markedToUpdateAmount, commit } = this.props
 
     const fallenTestArray = Object.keys(fallenTests).map(testIndex => fallenTests[testIndex])
 
     this.fallenTestAmount = fallenTestArray.length
 
     if (this.fallenTestAmount === 0) {
-      return (
-        <NoFallenTestsPage totalTestAmount={testTotalAmount} />
-      )
+      return <NoFallenTestsPage />
     }
+
+    const testsToUpdate = []
+    fallenTestArray.forEach(test => {
+      if (test.markedToUpdate) {
+        testsToUpdate.push(test)
+      }
+    })
 
     const currentTest = fallenTestArray[currentTestIndex]
 
@@ -65,10 +75,10 @@ class AppView extends Component {
         </Header>
         <TestView test={currentTest} />
         <Footer>
-          <LeftColumn>
-            <span>Fallen tests: {this.fallenTestAmount} of {testTotalAmount}</span>
-          </LeftColumn>
-          <CenterColumn>
+          <Column justify='flex-start'>
+            <span>Fallen screenshots: {this.fallenTestAmount} of {testTotalAmount}</span>
+          </Column>
+          <Column justify='center'>
             <TestSelect
               currentTestIndex={currentTestIndex}
               fallenTestAmount={this.fallenTestAmount}
@@ -77,13 +87,17 @@ class AppView extends Component {
             />
             <TestControls
               test={currentTest}
-              onUpdate={this.handleUpdate(currentTest)}
-              onCancel={this.handleCancel(currentTest)}
+              onUpdate={this.handleUpdate}
+              onCancel={this.handleCancel}
             />
-          </CenterColumn>
-          <RightColumn>
-            <AppControls />
-          </RightColumn>
+          </Column>
+          <Column justify='flex-end'>
+            <CommitConfirmDialog
+              commit={commit}
+              markedToUpdateAmount={markedToUpdateAmount}
+              testsToUpdate={testsToUpdate}
+            />
+          </Column>
         </Footer>
       </React.Fragment>
     )
@@ -97,13 +111,16 @@ AppView.propTypes = {
   currentTestIndex: PropTypes.number.isRequired,
   markToUpdate: PropTypes.func.isRequired,
   unmarkToUpdate: PropTypes.func.isRequired,
-  setCurrentTestIndex: PropTypes.func.isRequired
+  setCurrentTestIndex: PropTypes.func.isRequired,
+  markedToUpdateAmount: PropTypes.number.isRequired,
+  commit: PropTypes.func.isRequired
 }
 
 export default connect(state => ({
     fallenTests: state.fallenTests,
     testTotalAmount: state.testTotalAmount,
-    currentTestIndex: state.currentTestIndex
+    currentTestIndex: state.currentTestIndex,
+    markedToUpdateAmount: state.markedToUpdateAmount
   }
 ), actions)(AppView)
 
@@ -117,35 +134,30 @@ const Header = styled.div`
 const SideMenuButtonWrapper = styled.div`
   display: inline-block;
   position: absolute;
-  left: 4px;
-  top: 10px;
+  left: 7px;
+  top: 7px;
 `
 
 const Footer = styled.div`
-  background-color: #29B6F6;
+  display: flex;
+  align-items: center;
+  background-color: #7CB342;
   color: #ffffff;
   width: 100%;
   position: absolute;
   left: 0;
   bottom: 0;
   box-sizing: border-box;
+  font-weight: bold; 
   padding: 12px 24px;
 `
 
-const LeftColumn = styled.div`
-  display: inline-block;
+const Column = styled.div`
+  display: inline-flex;
   width: 33.3333%;
-  text-align: left;
-`
-
-const CenterColumn = styled.div`
-  display: inline-block;
-  width: 33.3333%;
-  text-align: center;
-`
-
-const RightColumn = styled.div`
-  display: inline-block;
-  width: 33.3333%;
-  text-align: right;
+  align-items: center;
+  
+  ${props => props.justify && css`    
+    justify-content: ${props.justify};
+	`}	
 `

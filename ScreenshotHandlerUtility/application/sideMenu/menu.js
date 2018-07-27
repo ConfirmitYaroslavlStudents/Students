@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
-import IconButton from '../commonComponents/UIDecorators/iconButton'
-import MenuIcon from '@material-ui/icons/menu'
+import { IconButton } from 'confirmit-react-components'
+import { ListViewFlatIcon, iconModifiers } from 'confirmit-icons-material'
 import Header from './header'
 import TestList from './testList'
 
@@ -33,22 +33,24 @@ class SideMenu extends Component {
 
     const fallenTestsArray = Object.keys(fallenTests).map(testIndex => fallenTests[testIndex])
 
-    const sideMenu =
-      open ?
-        <React.Fragment>
-          <SideMenuWrapper onClick={(e) => {e.stopPropagation()}}>
-            <Header onClose={this.handleClose} />
-            <TestList fallenTests={fallenTestsArray} currentTestIndex={currentTestIndex} onTestItemClick={this.handleTestItemClick} />
-          </SideMenuWrapper>
-          <SideMenuCloseArea onClick={this.handleClose} />
-        </React.Fragment>
-        :
-        null
-
     return (
       <React.Fragment>
-        <IconButton icon={<MenuIcon />} onClick={this.handleOpen} />
-        {sideMenu}
+        <IconButton onClick={this.handleOpen}>
+          <ListViewFlatIcon size={iconModifiers.size.size20px} />
+        </IconButton>
+        {
+          open && (
+            <React.Fragment>
+              <SideMenuWrapper onClick={(e) => {e.stopPropagation()}}>
+                <Header onClose={this.handleClose} />
+                <TestListWrapper>
+                  <TestList fallenTests={fallenTestsArray} currentTestIndex={currentTestIndex} onTestItemClick={this.handleTestItemClick} />
+                </TestListWrapper>
+              </SideMenuWrapper>
+              <SideMenuCloseArea onClick={this.handleClose} />
+            </React.Fragment>
+          )
+        }
       </React.Fragment>
     )
   }
@@ -71,8 +73,8 @@ const SideMenuWrapper = styled.div`
   top: 0;
   z-index: 90;
   background-color: #fff;
-  box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.2);
-  height: 100%;  
+  box-shadow: 0 0 21px 6px rgba(0, 0, 0, 0.33);
+  height: 100%;
 `
 
 const SideMenuCloseArea = styled.div`
@@ -82,5 +84,11 @@ const SideMenuCloseArea = styled.div`
   width: 100%;
   height: 100%;
   z-index: 80;
-  background-color: rgba(0, 0, 0, 0.5)
+  background-color: #000;
+  opacity: 0.12;
+`
+
+const TestListWrapper = styled.div`
+  height: calc(100% - 63px);  
+  overflow-y: auto;
 `

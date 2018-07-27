@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import IconButton from '../commonComponents/UIDecorators/iconButton'
-import ArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
+import { IconButton } from 'confirmit-react-components'
+import { ChevronIcon, iconModifiers } from 'confirmit-icons-material'
 
 class SideMenuHeader extends Component {
   render() {
@@ -10,9 +10,11 @@ class SideMenuHeader extends Component {
 
     return (
       <HeaderWrapper>
-        <Title>Fallen test list</Title>
+        <Title>Fallen screenshot list</Title>
         <CloseButtonWrapper>
-          <IconButton icon={<ArrowLeftIcon color='secondary' />} onClick={onClose} />
+          <IconButton onClick={onClose}>
+            <ChevronIcon className='contrast-icon' size={iconModifiers.size.size20px} turn={iconModifiers.turn.around} />
+          </IconButton>
         </CloseButtonWrapper>
       </HeaderWrapper>
     )
@@ -29,8 +31,8 @@ const HeaderWrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  background-color: #29B6F6;
-  height: 48px;
+  background-color: #7CB342;
+  height: 55px;
   padding: 4px;
 `
 
@@ -38,6 +40,7 @@ const Title = styled.p`
   color: #fff;
   margin: auto;
   font-size: 120%;
+  font-weight: bold; 
 `
 
 const CloseButtonWrapper = styled.div`

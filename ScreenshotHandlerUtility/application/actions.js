@@ -4,7 +4,7 @@ export const init = createAction('INIT')
 
 export const markToUpdate = createAction('MARKTOUPDATE')
 
-export const unmarkToUpdate = createAction('UNMARKTOUPDATE')
+export const markAsError = createAction('MARKASERROR')
 
 export const commit = createAction('COMMIT')
 

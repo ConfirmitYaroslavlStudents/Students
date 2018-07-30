@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import Tooltip from '../commonComponents/UIDecorators/tooltip'
-import { CheckIcon, iconModifiers } from 'confirmit-icons-material'
+import { Tooltip } from 'confirmit-react-components'
+import { CheckIcon, CloseIcon, iconModifiers } from 'confirmit-icons-material'
 
 const SideMenuTestItem = (props) => {
   const { test, onClick, highlighted } = props
@@ -13,7 +13,7 @@ const SideMenuTestItem = (props) => {
   }
 
   return (
-    <Tooltip title='Open the test view' placement='right'>
+    <Tooltip content='Open the test view' defaultPlacement='bottom'>
       <ItemWrapper onClick={handleClick} highlighted={highlighted}>
         <InfoWrapper bold={test.unread}>
           <Index>{test.index + 1}.</Index> {test.testName} №{test.number} {test.screenshotName ? ` (${test.screenshotName})` : ''} ({test.browserName})
@@ -22,6 +22,13 @@ const SideMenuTestItem = (props) => {
           test.markedToUpdate && (
             <IconWrapper>
               <CheckIcon className='primary-icon' size={iconModifiers.size.size20px} />
+            </IconWrapper>
+          )
+        }
+        {
+          test.markedAsError && (
+            <IconWrapper>
+              <CloseIcon className='error-icon' size={iconModifiers.size.size20px} />
             </IconWrapper>
           )
         }

@@ -3,7 +3,7 @@ import * as actions from './actions'
 
 const initialState = {
   fallenTests: {},
-  testTotalAmount: 0,
+  screenshotTotalAmount: 0,
   markedToUpdateAmount: 0,
   currentTestIndex: 0
 }
@@ -24,24 +24,24 @@ export default createReducer({}, {
         ...state.fallenTests,
         [payload.test.index]: {
           ...state.fallenTests[payload.test.index],
-          markedToUpdate: true
+          markedToUpdate: true,
+          markedAsError: false
         }
-      },
-      markedToUpdateAmount: state.markedToUpdateAmount + 1
+      }
     }
   },
 
-  [actions.unmarkToUpdate]: (state, {payload}) => {
+  [actions.markAsError]: (state, {payload}) => {
     return {
       ...state,
       fallenTests: {
         ...state.fallenTests,
         [payload.test.index]: {
           ...state.fallenTests[payload.test.index],
-          markedToUpdate: false
+          markedToUpdate: false,
+          markedAsError: true
         }
-      },
-      markedToUpdateAmount: state.markedToUpdateAmount - 1
+      }
     }
   },
 

@@ -6,7 +6,7 @@ import * as actions from '../actions'
 import { IconButton } from 'confirmit-react-components'
 import { ListViewFlatIcon, iconModifiers } from 'confirmit-icons-material'
 import Header from './header'
-import TestList from './testList'
+import TestListGroups from './testListGroups'
 
 class SideMenu extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class SideMenu extends Component {
               <SideMenuWrapper onClick={(e) => {e.stopPropagation()}}>
                 <Header onClose={this.handleClose} />
                 <TestListWrapper>
-                  <TestList fallenTests={fallenTestsArray} currentTestIndex={currentTestIndex} onTestItemClick={this.handleTestItemClick} />
+                  <TestListGroups tests={fallenTestsArray} currentTestIndex={currentTestIndex} onTestItemClick={this.handleTestItemClick} />
                 </TestListWrapper>
               </SideMenuWrapper>
               <SideMenuCloseArea onClick={this.handleClose} />

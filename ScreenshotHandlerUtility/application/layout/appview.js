@@ -39,14 +39,14 @@ class AppView extends Component {
   }
 
   handleCancel = (test) => {
-    if (test.markedToUpdate) {
-      this.props.unmarkToUpdate({test})
+    if (!test.markedAsError) {
+      this.props.markAsError({test})
     }
     this.handleNextClick()
   }
 
   render() {
-    const { fallenTests, testTotalAmount, currentTestIndex, markedToUpdateAmount, commit } = this.props
+    const { fallenTests, screenshotTotalAmount, currentTestIndex, markedToUpdateAmount, commit } = this.props
 
     const fallenTestArray = Object.keys(fallenTests).map(testIndex => fallenTests[testIndex])
 
@@ -76,7 +76,7 @@ class AppView extends Component {
         <TestView test={currentTest} />
         <Footer>
           <Column justify='flex-start'>
-            <span>Fallen screenshots: {this.fallenTestAmount} of {testTotalAmount}</span>
+            <span>Fallen screenshots: {this.fallenTestAmount} of {screenshotTotalAmount}</span>
           </Column>
           <Column justify='center'>
             <TestSelect
@@ -107,10 +107,10 @@ class AppView extends Component {
 
 AppView.propTypes = {
   fallenTests: PropTypes.object.isRequired,
-  testTotalAmount: PropTypes.number.isRequired,
+  screenshotTotalAmount: PropTypes.number.isRequired,
   currentTestIndex: PropTypes.number.isRequired,
   markToUpdate: PropTypes.func.isRequired,
-  unmarkToUpdate: PropTypes.func.isRequired,
+  markAsError: PropTypes.func.isRequired,
   setCurrentTestIndex: PropTypes.func.isRequired,
   markedToUpdateAmount: PropTypes.number.isRequired,
   commit: PropTypes.func.isRequired
@@ -118,7 +118,7 @@ AppView.propTypes = {
 
 export default connect(state => ({
     fallenTests: state.fallenTests,
-    testTotalAmount: state.testTotalAmount,
+    screenshotTotalAmount: state.screenshotTotalAmount,
     currentTestIndex: state.currentTestIndex,
     markedToUpdateAmount: state.markedToUpdateAmount
   }

@@ -21,7 +21,7 @@ function* watchClose() {
 
 function* commitSaga() {
   try {
-    const fallenTests = yield select(state => state.fallenTests)
+    const fallenTests = yield select(state => state.testGroup)
 
     for (const testIndex in fallenTests) {
       if (fallenTests.hasOwnProperty(testIndex)) {

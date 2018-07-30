@@ -19,7 +19,9 @@ class CommitConfirDialog extends Component {
 
   render() {
     const { open } = this.state
-    const { commit,  markedToUpdateAmount, testsToUpdate } = this.props
+    const { commit, testsToUpdate } = this.props
+
+    const markedToUpdateAmount = testsToUpdate.length
 
     return (
       <React.Fragment>
@@ -68,7 +70,6 @@ class CommitConfirDialog extends Component {
 
 CommitConfirDialog.propTypes = {
   commit: PropTypes.func.isRequired,
-  markedToUpdateAmount: PropTypes.number.isRequired,
   testsToUpdate: PropTypes.array.isRequired
 }
 

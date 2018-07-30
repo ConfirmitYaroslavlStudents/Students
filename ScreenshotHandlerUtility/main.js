@@ -1,11 +1,24 @@
-const { app, BrowserWindow } = require('electron')
+const minimist = require('minimist')
 const path = require('path')
+const { app, BrowserWindow } = require('electron')
 
-let mainWindow
+const argv = minimist(process.argv.slice(2))
+const screenshotMetadataURL =
+  argv.metadata ?
+    argv.metadata
+    :
+    argv.M ?
+      argv.M
+      :
+      null
 
-const mainWindowHTMLURL = path.join(__dirname, 'dist', 'index.html')
+if (!screenshotMetadataURL) {
+  throw 'Metadata file URL argument must be passed via --metadata or -M key.'
+}
 
-const screenshotMetadataFileURL = process.argv[3]
+const utilityWindowHTMLURL = path.join(__dirname, 'dist', 'index.html')
+
+let utilityWindow
 
 const mainWindowOptions = {
   width: 1280,
@@ -13,22 +26,24 @@ const mainWindowOptions = {
   frame: true,
   autoHideMenuBar: true,
   webPreferences: {
-    devTools: false,
+    devTools: true,
     webSecurity: true
   }
 }
 
 function createWindow () {
-  mainWindow = new BrowserWindow(mainWindowOptions)
+  utilityWindow = new BrowserWindow(mainWindowOptions)
 
-  mainWindow.loadFile(mainWindowHTMLURL)
+  utilityWindow.loadFile(utilityWindowHTMLURL)
 
-  global.screenshotMetadataFileURL = screenshotMetadataFileURL
+  global.screenshotMetadataFileURL = screenshotMetadataURL
 
-  //mainWindow.webContents.openDevTools()
+  if (mainWindowOptions.webPreferences.devTools) {
+    utilityWindow.webContents.openDevTools()
+  }
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
+  utilityWindow.on('closed', () => {
+    utilityWindow = null
   })
 }
 
@@ -41,7 +56,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (utilityWindow === null) {
     createWindow()
   }
 })

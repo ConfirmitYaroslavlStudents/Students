@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import path from 'path'
-import Tooltip from './UIDecorators/tooltip'
+import { Tooltip } from 'confirmit-react-components'
 
 class Image extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Image extends Component {
 
     return (
       <React.Fragment>
-        <Tooltip title={`Open in original size`}>
+        <Tooltip content='Open in original size' defaultPlacement='bottom'>
           <img
             src={path.join(source)}
             alt={alternativeText}

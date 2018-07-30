@@ -1,90 +1,46 @@
-﻿using ConsoleChampionship;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Championship
 {
+    [Serializable]
     public class Tournament
     {
-        public TournamentGrid Grid;
-        public List<string> Players = new List<string>();
-        private int _playersCount;
-        public string PlayerWinner;
-        public int IndexRound = 0;
+        public List<Round> TournamentRounds;
+        public int IndexOfRound;
 
-        public void PlayerPlacement(List<string> players)
+        public Tournament(List<string> players)
         {
-            var random = new Random();
-            _playersCount = players.Count;
-            Players = new List<string>();
+            TournamentRounds = TournamentGrid.CreateTournament(players);
+            IndexOfRound = 0;
+        }
 
-            for (var i = 0; i < _playersCount; i++)
+        public void CollectorResults(List<int[]> resultsMatches)
+        {
+            var round = TournamentRounds[IndexOfRound];
+
+            for (var i = 0; i < resultsMatches.Count; i++)
             {
-                var currentPlayer = players[random.Next(0, players.Count)];
-                Players.Add(currentPlayer);
-                players.Remove(currentPlayer);
+                round.Meetings[i].Score = resultsMatches[i];
+                ChooseWinner(round.Meetings[i]);
             }
+            IndexOfRound++;
+        }
 
-            Grid = new TournamentGrid();
-            Grid.CreateTournamentGrid(_playersCount);
-
-            var indexPlayer = 0;
-            var countFirstStageMeetings = Players.Count - Grid.Tournament[0].Meetings.Count;
-
-            for (int i = 0; i < countFirstStageMeetings; i++)
-            {
-                Grid.Tournament[0].Meetings[i].FirstPlayer = Players[indexPlayer];
-                Grid.Tournament[0].Meetings[i].SecondPlayer = Players[indexPlayer + 1];
-                indexPlayer += 2;
-            }
-
-            if (Grid.Tournament.Count <= 1)
-            {
+        private void ChooseWinner(Meeting meeting)
+        {
+            if (meeting.SecondPlayer == null || meeting.FirstPlayer == null)
                 return;
-            }
 
-            for (var i = Grid.Tournament[1].Meetings.Count - 1; i >= countFirstStageMeetings / 2; i--)
+            if (meeting.Score[0] > meeting.Score[1])
             {
-                try
-                {
-                    Grid.Tournament[1].Meetings[i].SecondPlayer = Players[indexPlayer];
-                    Grid.Tournament[1].Meetings[i].FirstPlayer = Players[indexPlayer + 1];
-                    indexPlayer += 2;
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    break;
-                }
+                PromoteWinner(meeting, meeting.FirstPlayer);
+                meeting.Winner = MeetingWinningIndicator.FirstPlayer;
             }
-
-        }
-
-        public void CollectorResults()
-        {
-            var round = Grid.Tournament[IndexRound];
-
-            foreach (var meeting in round.Meetings)
+            else
             {
-                meeting.Score = Draftsman.GetResultOfMatch(meeting);
-                ChoiceWinner(meeting);
-            }
-            IndexRound++;
-        }
-
-        private void ChoiceWinner(Meeting meeting)
-        {
-            if (meeting.SecondPlayer != null && meeting.FirstPlayer != null)
-            {
-                if (meeting.Score[0] > meeting.Score[1])
-                {
-                    // meeting.FirstPlayer = "@" + meeting.FirstPlayer + "$";
-                    PromoteWinner(meeting, meeting.FirstPlayer);
-                }
-                else
-                {
-                    // meeting.SecondPlayer = "@" + meeting.SecondPlayer + "$";
-                    PromoteWinner(meeting, meeting.SecondPlayer);
-                }
+                PromoteWinner(meeting, meeting.SecondPlayer);
+                meeting.Winner = MeetingWinningIndicator.SecondPlayer;
             }
         }
 
@@ -92,7 +48,6 @@ namespace Championship
         {
             if (meeting.NextStage == null)
             {
-                PlayerWinner = player;
                 return;
             }
 

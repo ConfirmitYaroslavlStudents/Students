@@ -1,39 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Championship
 {
     public class TournamentGrid
     {
-        public List<Round> Tournament = new List<Round>();
-
-        public void CreateTournamentGrid(int players)
+        public static List<Round> CreateTournament(List<string> players)
         {
-            var currentStage = new StageIndicator();
-            var stages = 1;
+            players = RandomSortPlayers(players);
+            var tournamentGrid = CreateTournamentGrid(players.Count);
+            tournamentGrid = ArrangementOfPlayersInTournamentGrid(players, tournamentGrid);
+            return tournamentGrid;
+        }
+
+        private static List<Round> CreateTournamentGrid(int playersCount)
+        {
+            var tournament = new List<Round>();
+            var stage = 1;
             var countNextMeetings = 1;
             var countMeetings = 1;
 
-            while (stages < players)
+            while (stage < playersCount)
             {
-                Tournament.Add(new Round());
-                Tournament[Tournament.Count - 1].Stage = currentStage.Stage;
+                tournament.Add(new Round());
+                tournament[tournament.Count - 1].Stage = stage;
 
                 for (var i = 0; i < countMeetings; i++)
                 {
-                    Tournament[Tournament.Count - 1].Meetings.Add(new Meeting());
+                    tournament[tournament.Count - 1].Meetings.Add(new Meeting());
                 }
 
-                if (Tournament.Count != 1)
+                if (tournament.Count != 1)
                 {
                     var meetingIndex = 0;
 
                     for (var i = 0; i < countNextMeetings; i++)
                     {
-                        Tournament[Tournament.Count - 1].Meetings[meetingIndex].NextStage = 
-                            Tournament[Tournament.Count - 2].Meetings[i];
+                        tournament[tournament.Count - 1].Meetings[meetingIndex].NextStage =
+                            tournament[tournament.Count - 2].Meetings[i];
 
-                        Tournament[Tournament.Count - 1].Meetings[meetingIndex + 1].NextStage = 
-                            Tournament[Tournament.Count - 2].Meetings[i];
+                        tournament[tournament.Count - 1].Meetings[meetingIndex + 1].NextStage =
+                            tournament[tournament.Count - 2].Meetings[i];
 
                         meetingIndex += 2;
                     }
@@ -42,11 +49,61 @@ namespace Championship
                 }
 
                 countMeetings *= 2;
-                currentStage.NextStage();
-                stages *= 2;
+                stage *= 2;
             }
 
-            Tournament.Reverse();
+            tournament.Reverse();
+            return tournament;
+        }
+
+        private static List<string> RandomSortPlayers(List<string> players)
+        {
+            var random = new Random();
+            var newPlayersList = new List<string>();
+            var playersCount = players.Count;
+
+            for (var i = 0; i < playersCount; i++)
+            {
+                var currentPlayerNumber = random.Next(0, players.Count);
+                newPlayersList.Add(players[currentPlayerNumber]);
+                players.RemoveAt(currentPlayerNumber);
+            }
+
+            return newPlayersList;
+        }
+
+        private static List<Round> ArrangementOfPlayersInTournamentGrid(List<string> players, List<Round> tournamentGrid)
+        {
+            var indexPlayer = 0;
+            var countFirstStageMeetings = players.Count - tournamentGrid[0].Meetings.Count;
+
+            for (var i = 0; i < countFirstStageMeetings; i++)
+            {
+                tournamentGrid[0].Meetings[i].FirstPlayer = players[indexPlayer];
+                tournamentGrid[0].Meetings[i].SecondPlayer = players[indexPlayer + 1];
+                indexPlayer += 2;
+            }
+
+            if (tournamentGrid.Count <= 1)
+            {
+                return tournamentGrid;
+            }
+
+            for (var i = tournamentGrid[1].Meetings.Count - 1; i >= countFirstStageMeetings / 2; i--)
+            {
+                if (indexPlayer < players.Count)
+                {
+                    tournamentGrid[1].Meetings[i].SecondPlayer = players[indexPlayer];
+
+                    if (indexPlayer + 1 < players.Count)
+                    {
+                        tournamentGrid[1].Meetings[i].FirstPlayer = players[indexPlayer + 1];
+                    }
+                }
+                indexPlayer += 2;
+
+            }
+            return tournamentGrid;
         }
     }
 }

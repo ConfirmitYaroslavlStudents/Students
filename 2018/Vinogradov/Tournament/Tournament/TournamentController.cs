@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tournament
 {
@@ -21,8 +18,16 @@ namespace Tournament
                 throw new ArgumentException("At least 2 players are required.");
             }
 
-            int extraPlayer = numberOfPlayers % 2;
             Players = new string[numberOfPlayers];
+            FillMatchGrid(numberOfPlayers);
+            Champion = -1;
+            Players = playerNames;
+            Shuffle();
+        }
+
+        private void FillMatchGrid(int numberOfPlayers)
+        {
+            int extraPlayer = numberOfPlayers % 2;
             List<int> matchesInEachTour = CountPairs(numberOfPlayers, extraPlayer);
             Matches = new Match[matchesInEachTour.Count][];
             Matches[0] = new Match[matchesInEachTour[0]];
@@ -33,12 +38,7 @@ namespace Tournament
             }
 
             _extraPlayerTour = -1;
-            bool lastPlayerNeedsPlacement = (extraPlayer == 1 && _extraPlayerTour == -1 && Matches[0].Length % 2 == 1);
-
-            if (lastPlayerNeedsPlacement)
-            {
-                _extraPlayerTour = 1;
-            }
+            FindPlaceForExtraPlayer(0, extraPlayer);
 
             for (int i = 1; i < Matches.Length; i++)
             {
@@ -49,12 +49,7 @@ namespace Tournament
                     Matches[i][j] = new Match(-1, -1);
                 }
 
-                lastPlayerNeedsPlacement = (extraPlayer == 1 && _extraPlayerTour == -1 && Matches[i].Length % 2 == 1);
-
-                if (lastPlayerNeedsPlacement)
-                {
-                    _extraPlayerTour = i + 1;
-                }
+                FindPlaceForExtraPlayer(i, extraPlayer);
             }
 
             if (extraPlayer == 1)
@@ -62,9 +57,6 @@ namespace Tournament
                 Matches[_extraPlayerTour][Matches[_extraPlayerTour].Length - 1].Opponents[1] = numberOfPlayers - 1;
             }
 
-            Champion = -1;
-            Players = playerNames;
-            Shuffle();
         }
 
         private List<int> CountPairs(int numberOfPlayers, int extra)
@@ -93,6 +85,16 @@ namespace Tournament
             }
 
             return matchesOfEachTour;
+        }
+
+        private void FindPlaceForExtraPlayer(int tour, int extraPlayer)
+        {
+            bool lastPlayerNeedsPlacement = (extraPlayer == 1 && _extraPlayerTour == -1 && Matches[tour].Length % 2 == 1);
+
+            if (lastPlayerNeedsPlacement)
+            {
+                _extraPlayerTour = tour + 1;
+            }
         }
 
         private void Shuffle()

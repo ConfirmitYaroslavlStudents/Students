@@ -12,5 +12,12 @@
             MatchNumber = match;
             Winner = winner;
         }
+
+        public MatchInfo(string tour, string match, string winner)
+        {
+            Tour = int.Parse(tour) - 1;
+            MatchNumber = int.Parse(match) - 1;
+            Winner = int.Parse(winner) - 1;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Tournament
         private Participant _leftParticipant;
         private Participant _rightParticipant;
 
-        internal Game(Participant leftParticipant, Participant rightParticipant )
+        internal Game(Participant leftParticipant, Participant rightParticipant)
         {
             _leftParticipant = leftParticipant;
             _rightParticipant = rightParticipant;
@@ -25,23 +25,24 @@ namespace Tournament
 
         internal void PlayGame(out Participant winner, out Participant loser)
         {
-            
             var side = DetectWinner(_leftParticipant, _rightParticipant);
+
             switch (side)
             {
                 case _side.Left:
-                    winner = new Participant(_leftParticipant.Name,_leftParticipant,_rightParticipant);
+                    winner = new Participant(_leftParticipant.Name, _leftParticipant, _rightParticipant);
                     loser = new Participant(_rightParticipant.Name);
                     break;
                 case _side.Right:
                     winner = new Participant(_rightParticipant.Name, _leftParticipant, _rightParticipant);
-                    loser = new Participant(_leftParticipant.Name); 
+                    loser = new Participant(_leftParticipant.Name);
                     break;
                 default:
                     winner = null;
                     loser = null;
                     break;
             }
+
             _leftParticipant.Winner = winner;
             _rightParticipant.Winner = winner;
         }
@@ -51,15 +52,15 @@ namespace Tournament
             string name = "";
             do
             {
-                Console.Write("The winner between \"{0}\" and \"{1}\" is:  ", leftParticipant.Name, rightParticipant.Name);
+                Console.Write("The winner between \"{0}\" and \"{1}\" is:  ", leftParticipant.Name,
+                    rightParticipant.Name);
                 name = Console.ReadLine();
             } while (!name.Equals(leftParticipant.Name) && !name.Equals(rightParticipant.Name));
-            
+
             if (name.Equals(leftParticipant.Name))
                 return _side.Left;
-            else
-                return _side.Right;
+
+            return _side.Right;
         }
     }
-
 }

@@ -1,11 +1,14 @@
-﻿namespace Tournament
+﻿using System;
+
+namespace Tournament
 {
+    [Serializable]
     public class Participant
     {
-        public string Name { get; internal set; }
+        public readonly string Name;
         public Participant Winner { get; internal set; }
-        public Participant Left { get; internal set; }
-        public Participant Right { get; internal set; }
+        public readonly Participant Left;
+        public readonly Participant Right;
 
         public Participant(string participantName)
         {

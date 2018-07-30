@@ -6,8 +6,6 @@ namespace ConsoleTournament
 {
     public class DataInput
     {
-
-
         public static EliminationSystem ChoseEliminationSystem()
         {
             string answer = "";
@@ -29,15 +27,13 @@ namespace ConsoleTournament
             var answer = "";
             do
             {
-                Console.Write("Choose bracket type Horizontal, Vertical or PlayOff (h/v/p) ");
+                Console.Write("Choose bracket type Horizontal or PlayOff (h/p) ");
                 answer = Console.ReadLine();
 
-            } while (answer != "h" && answer != "v" && answer != "p");
+            } while (answer != "h" && answer != "p");
 
             if (answer == "h")
                 return BracketStyle.Horizontal;
-            if (answer == "v")
-                return BracketStyle.Vertical;
 
             return BracketStyle.PlayOff;
         }
@@ -56,18 +52,36 @@ namespace ConsoleTournament
         }
 
 
-        public static List<string> InputNames(int amount)
+        public static bool IsFromSavedFile()
+        {
+            string loadSavedBracket;
+
+            do
+            {
+                Console.Write("Do you want to load saved tournament? (y/n) ");
+                loadSavedBracket = Console.ReadLine();
+
+            } while (loadSavedBracket!="y" && loadSavedBracket!="n");
+
+            return loadSavedBracket == "y";
+        }
+
+
+        public static List<string> InputNames(int amount, int maxLength)
         {
             var participants = new List<string>();
-            var name = "";
 
             for (int i=0;i<amount;i++)
             {
+                var name = "";
+
                 do
                 {
                     Console.Write("Enter {0} participant name: ",i+1);
                     name = Console.ReadLine();
-                } while (participants.Contains(name) || name.Length>8);
+
+                } while (name=="" || participants.Contains(name) || name.Length> maxLength);
+
                 participants.Add(name);
             }
 

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C6D72367-67F5-40A9-A1DF-99979D29ED58}</ProjectGuid>
+    <ProjectGuid>{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ConsoleTournament</RootNamespace>
     <AssemblyName>ConsoleTournament</AssemblyName>
@@ -42,17 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BracketPrint.cs" />
     <Compile Include="ConsoleTournament.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="DataInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tournament\Tournament.csproj">
-      <Project>{9faa72ab-8871-4e91-92d9-dc85fc62964c}</Project>
+      <Project>{04571f3f-fb9c-4e97-b952-d6b6f215781f}</Project>
       <Name>Tournament</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

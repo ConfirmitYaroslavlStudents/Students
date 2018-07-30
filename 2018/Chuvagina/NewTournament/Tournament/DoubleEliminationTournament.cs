@@ -1,53 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Tournament
 {
-    public class DoubleEliminationTournament:TournamentGrid
+    public class DoubleEliminationTournament: SingleEliminationTournament
     {
+        private List<Participant> _lowerBracketParticipants;
+
         public DoubleEliminationTournament(List<string> participants) : base(participants)
         {
             _lowerBracketParticipants = new List<Participant>();
         }
 
-        public void PlayUpperBracket()
+        public DoubleEliminationTournament() : base()
         {
-            var round = new Round(_upperBracketParticipants, _lowerBracketParticipants);
-            round.PlayUpperBracket(out _upperBracketParticipants, out _lowerBracketParticipants);
+            _lowerBracketParticipants = LoadListFromBinnary<Participant>("lowerBracket"); ;
         }
 
-        public void PlayLastRound()
+        public override void PlayRound()
         {
-            PlayUpperBracket();
-            _lowerBracketParticipants.RemoveAt(0);
-        }
+            var round = new Round(UpperBracketParticipants, _lowerBracketParticipants);
 
-        public bool PlayLowerBracket()
-        {
-            var round = new Round(_upperBracketParticipants, _lowerBracketParticipants);
-            _lowerBracketParticipants = round.PlayLowerBracket();
-            if (_upperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)
+            if (UpperBracketParticipants.Count > _lowerBracketParticipants.Count)
             {
-                _upperBracketParticipants.Add(_lowerBracketParticipants[0]);
-                _lowerBracketParticipants.RemoveAt(0);
-                return true;
-            }
-               
-            else
-                return false;
-        }
+                round.PlayUpperBracket();
+                UpperBracketParticipants = round.UpperBracketParticipants;
+                _lowerBracketParticipants = round.LowerBracketParticipants;
 
-        public List<Participant> GetUpperBracket()
-        {
-            return new List<Participant>(_upperBracketParticipants);
+                if (UpperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)
+                    _lowerBracketParticipants.RemoveAt(0);
+            }
+            else
+            {
+                _lowerBracketParticipants = round.PlayLowerBracket();
+
+                if (UpperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)
+                {
+                    UpperBracketParticipants.Add(_lowerBracketParticipants[0]);
+                    _lowerBracketParticipants.RemoveAt(0);
+                }
+            }
+
+            SaveListToBinnary("upperBracket", UpperBracketParticipants);
+            SaveListToBinnary("lowerBracket", _lowerBracketParticipants);
         }
 
         public List<Participant> GetLowerBracket()
         {
             return new List<Participant>(_lowerBracketParticipants);
         }
+
+        public override bool EndOfTheGame()
+        {
+            return base.EndOfTheGame() && _lowerBracketParticipants.Count==0;
+        }
+
     }
 }

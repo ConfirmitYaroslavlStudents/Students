@@ -9,34 +9,24 @@
       <change beforePath="$PROJECT_DIR$/../CandidatesAccounting/tests/studentTableTests.js" beforeDir="false" afterPath="$PROJECT_DIR$/../CandidatesAccounting/tests/studentTableTests.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" afterPath="$PROJECT_DIR$/.babelrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/actions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/commonComponents/image.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/css/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/layout/appview.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/layout/commitConfirmDialog.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/layout/noFallenTestsPage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/layout/testControls.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/layout/testSelect.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/reducer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/saga.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/sideMenu/header.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/sideMenu/menu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/sideMenu/testItem.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/sideMenu/testList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/sideMenu/testListGroups.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/test/header.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/test/screenshot.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/test/view.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/utilities/createReducer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/utilities/createStore.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/utilities/deleteFile.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/utilities/getFallenScreenshotMetadata.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/main/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/commonComponents/image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/css/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/layout/appview.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/layout/appview.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/layout/commitConfirmDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/layout/commitConfirmDialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/layout/noFallenTestsPage.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/saga.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/saga.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/sideMenu/testList.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/sideMenu/testList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/test/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/test/header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/test/screenshot.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/renderer/test/screenshot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/renderer/utilities/getFallenScreenshotMetadata.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.development.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.development.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.production.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.production.config.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -50,11 +40,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/main/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+            <state relative-caret-position="450">
+              <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -62,49 +52,29 @@
       <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1278">
-              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+            <state relative-caret-position="378">
+              <caret line="21" column="76" lean-forward="true" selection-start-line="21" selection-start-column="76" selection-end-line="21" selection-end-column="76" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build/main/index.js">
+      <file leaf-file-name="saga.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/saga.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+            <state relative-caret-position="486">
+              <caret line="42" column="3" lean-forward="true" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
+              <folding>
+                <element signature="e#0#71#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="webpack.development.config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webpack.development.config.js">
+      <file leaf-file-name="menu.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/menu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package-lock.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package-lock.json">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="webpack.production.config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webpack.production.config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="39" column="14" lean-forward="true" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="noFallenTestsPage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/renderer/layout/noFallenTestsPage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+            <state relative-caret-position="1656">
+              <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -112,35 +82,65 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.js">
+      <file leaf-file-name="testList.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testList.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="24" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testControls.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/renderer/layout/testControls.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+            <state relative-caret-position="324">
+              <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
               <folding>
-                <element signature="e#0#25#0" expanded="true" />
+                <element signature="e#0#40#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testSelect.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/renderer/layout/testSelect.js">
+      <file leaf-file-name="updateMetadata.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/utilities/updateMetadata.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="7" selection-start-column="7" selection-end-column="7" />
+            <state relative-caret-position="288">
+              <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
               <folding>
-                <element signature="e#0#25#0" expanded="true" />
+                <element signature="e#0#24#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="testsArePassedPage.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/layout/testsArePassedPage.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="44" lean-forward="true" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="44" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="readme.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/readme.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="13" column="46" lean-forward="true" selection-start-line="13" selection-start-column="46" selection-end-line="13" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="parseScreenshotTestMetadata.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/renderer/utilities/parseScreenshotTestMetadata.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -163,6 +163,7 @@
       <find>transi</find>
       <find>app</find>
       <find>application</find>
+      <find>fn</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -171,24 +172,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/application/layout/menu.js" />
-        <option value="$PROJECT_DIR$/application/commonComponents/UIDecorators/flatButton.js" />
-        <option value="$PROJECT_DIR$/application/test/screenshotFrame.js" />
-        <option value="$PROJECT_DIR$/application/commonComponents/UIDecorators/tooltip.js" />
-        <option value="$PROJECT_DIR$/application/test/header.js" />
-        <option value="$PROJECT_DIR$/application/layout/sliderControls.js" />
-        <option value="$PROJECT_DIR$/application/test/controls.js" />
-        <option value="$PROJECT_DIR$/application/test/screenshot.js" />
-        <option value="$PROJECT_DIR$/application/commonComponents/UIDecorators/outlineExpansionPanel.js" />
-        <option value="$PROJECT_DIR$/application/layout/sideMenu.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu/sideMenuHeader.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu/header.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu/MarkedToUpdateIcon.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu/notToUpdateIcon.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu/toUpdateIcon.js" />
-        <option value="$PROJECT_DIR$/application/sideMenu/TestIcon.js" />
-        <option value="$PROJECT_DIR$/application/commonComponents/UIDecorators/itemExpansionPanel.js" />
         <option value="$PROJECT_DIR$/application/sideMenu/testIcon.js" />
         <option value="$PROJECT_DIR$/application/layout/testSelect.js" />
         <option value="$PROJECT_DIR$/application/commonComponents/UIDecorators/iconButton.js" />
@@ -211,17 +194,35 @@
         <option value="$PROJECT_DIR$/application/commonComponents/image.js" />
         <option value="$PROJECT_DIR$/application/index.html" />
         <option value="$PROJECT_DIR$/main.js" />
-        <option value="$PROJECT_DIR$/.babelrc" />
-        <option value="$PROJECT_DIR$/app/renderer/main.js" />
         <option value="$PROJECT_DIR$/app/renderer/test/view.js" />
-        <option value="$PROJECT_DIR$/app/renderer/layout/appview.js" />
         <option value="$PROJECT_DIR$/app/renderer/layout/noFallenTestsPage.js" />
         <option value="$PROJECT_DIR$/init.js" />
+        <option value="$PROJECT_DIR$/build/main/index.js" />
         <option value="$PROJECT_DIR$/webpack.development.config.js" />
         <option value="$PROJECT_DIR$/webpack.production.config.js" />
-        <option value="$PROJECT_DIR$/build/main/index.js" />
-        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/.babelrc" />
         <option value="$PROJECT_DIR$/app/main/index.js" />
+        <option value="$PROJECT_DIR$/app/renderer/layout/header.js" />
+        <option value="$PROJECT_DIR$/app/renderer/layout/footer.js" />
+        <option value="$PROJECT_DIR$/app/renderer/layout/appview.js" />
+        <option value="$PROJECT_DIR$/app/renderer/layout/commitConfirmDialog.js" />
+        <option value="$PROJECT_DIR$/app/renderer/test/screenshot.js" />
+        <option value="$PROJECT_DIR$/app/renderer/css/index.css" />
+        <option value="$PROJECT_DIR$/app/renderer/test/header.js" />
+        <option value="$PROJECT_DIR$/app/renderer/utilities/getFallenTests.js" />
+        <option value="$PROJECT_DIR$/app/renderer/main.js" />
+        <option value="$PROJECT_DIR$/app/renderer/reducer.js" />
+        <option value="$PROJECT_DIR$/app/renderer/utilities/updateMetadata.js" />
+        <option value="$PROJECT_DIR$/app/renderer/sideMenu/testList.js" />
+        <option value="$PROJECT_DIR$/app/renderer/utilities/replaceFile.js" />
+        <option value="$PROJECT_DIR$/app/renderer/utilities/renameFile.js" />
+        <option value="$PROJECT_DIR$/app/renderer/utilities/saveFile.js" />
+        <option value="$PROJECT_DIR$/app/renderer/utilities/parseScreenshotTestMetadata.js" />
+        <option value="$PROJECT_DIR$/app/renderer/saga.js" />
+        <option value="$PROJECT_DIR$/app/renderer/layout/testsArePassedPage.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/readme.md" />
       </list>
     </option>
   </component>
@@ -249,8 +250,9 @@
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1224" />
-    <option name="width" value="703" />
+    <option name="x" value="918" />
+    <option name="y" value="3" />
+    <option name="width" value="1004" />
     <option name="height" value="1167" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -289,19 +291,23 @@
             <path>
               <item name="ScreenshotHandlerUtility" type="b2602c69:ProjectViewProjectNode" />
               <item name="ScreenshotHandlerUtility" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ScreenshotHandlerUtility" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ScreenshotHandlerUtility" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ScreenshotHandlerUtility" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ScreenshotHandlerUtility" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="renderer" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ScreenshotHandlerUtility" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ScreenshotHandlerUtility" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="renderer" type="462c0819:PsiDirectoryNode" />
+              <item name="sideMenu" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ScreenshotHandlerUtility" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ScreenshotHandlerUtility" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="renderer" type="462c0819:PsiDirectoryNode" />
+              <item name="utilities" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -318,7 +324,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="C:\Users\DmitryB\AppData\Roaming\npm\node_modules\prettier" />
-    <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
+    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -362,21 +368,22 @@
       <workItem from="1532939916040" duration="48000" />
       <workItem from="1532940582808" duration="17769000" />
       <workItem from="1533024181069" duration="11577000" />
-      <workItem from="1533037412998" duration="2187000" />
+      <workItem from="1533037412998" duration="13465000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="123926000" />
+    <option name="totallyTimeSpent" value="135204000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16197917" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25833333" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32971996" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -389,22 +396,18 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32971996" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.md" />
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/commonComponents/UIDecorators/flatButton.js" />
-    <entry file="file://$PROJECT_DIR$/application/test/controls.js" />
-    <entry file="file://$PROJECT_DIR$/application/layout/menu.js" />
-    <entry file="file://$PROJECT_DIR$/application/commonComponents/UIDecorators/expansionPanel.js" />
-    <entry file="file://$PROJECT_DIR$/application/sideMenu.js" />
-    <entry file="file://$PROJECT_DIR$/application/sideMenu/notToUpdateIcon.js" />
     <entry file="file://$PROJECT_DIR$/application/sideMenu/testIcon.js" />
     <entry file="file://$PROJECT_DIR$/application/commonComponents/UIDecorators/iconButton.js" />
     <entry file="file://$PROJECT_DIR$/application/layout/appControls.js" />
@@ -441,59 +444,59 @@
     <entry file="file://$PROJECT_DIR$/dist/builder-effective-config.yaml" />
     <entry file="file://$PROJECT_DIR$/dist/index.html" />
     <entry file="file://$PROJECT_DIR$/dist/main.js" />
+    <entry file="file://$PROJECT_DIR$/build/main.js" />
+    <entry file="file://$PROJECT_DIR$/package-lock.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/main/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="34" column="45" selection-start-line="34" selection-start-column="45" selection-end-line="34" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webpack.production.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="882">
+          <caret line="49" column="7" selection-start-line="49" selection-start-column="7" selection-end-line="49" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/webpack.development.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="649">
+          <caret line="56" column="2" selection-start-line="56" selection-start-column="2" selection-end-line="56" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="33" lean-forward="true" selection-start-column="33" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.babelrc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/saga.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/reducer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="24" lean-forward="true" selection-start-column="24" selection-end-column="24" />
+        <state relative-caret-position="216">
+          <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/renderer/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="26" lean-forward="true" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
+        <state relative-caret-position="270">
+          <caret line="15" column="7" lean-forward="true" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/renderer/actions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/createReducer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/getFallenScreenshotMetadata.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        <state relative-caret-position="252">
+          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -508,20 +511,133 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="7" selection-start-column="7" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/test/header.js">
+    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/createReducer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
+        <state relative-caret-position="126">
+          <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/appview.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="68" column="22" lean-forward="true" selection-start-line="68" selection-start-column="22" selection-end-line="68" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/commitConfirmDialog.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/footer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="26" column="1" lean-forward="true" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/header.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="21" lean-forward="true" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/testControls.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="47" column="3" lean-forward="true" selection-start-line="47" selection-start-column="3" selection-end-line="47" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/testSelect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/header.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testItem.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="666">
+          <caret line="60" column="4" selection-start-line="60" selection-start-column="4" selection-end-line="61" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testListGroups.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="45" column="118" selection-start-line="45" selection-start-column="118" selection-end-line="45" selection-end-column="118" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/common/openableImage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="12" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/renderer/test/screenshot.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="29" column="18" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="23" />
+        <state relative-caret-position="558">
+          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/css/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="936">
+          <caret line="52" column="13" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -532,10 +648,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/header.js">
+    <entry file="file://$PROJECT_DIR$/app/renderer/test/header.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="30" column="16" lean-forward="true" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+        <state relative-caret-position="360">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/reducer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -543,131 +672,98 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1656">
           <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testItem.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="60" column="4" selection-start-line="60" selection-start-column="4" selection-end-line="61" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testList.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="67" column="44" selection-start-line="67" selection-start-column="44" selection-end-line="67" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testListGroups.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="45" column="118" selection-start-line="45" selection-start-column="118" selection-end-line="45" selection-end-column="118" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/layout/commitConfirmDialog.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="12" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/css/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="54" column="11" selection-start-line="54" selection-start-column="11" selection-end-line="54" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/commonComponents/image.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="12" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/layout/appview.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="34" selection-start-line="6" selection-start-column="34" selection-end-line="6" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/layout/testSelect.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/layout/testControls.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/renderer/layout/noFallenTestsPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
+    <entry file="file://$PROJECT_DIR$/app/renderer/sideMenu/testList.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="24" selection-end-column="24" />
+        <state relative-caret-position="324">
+          <caret line="75" column="32" selection-start-line="75" selection-start-column="32" selection-end-line="75" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build/main.js" />
-    <entry file="file://$PROJECT_DIR$/package-lock.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webpack.development.config.js">
+    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/updateMetadata.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
+        <state relative-caret-position="288">
+          <caret line="16" column="11" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/webpack.production.config.js">
+    <entry file="file://$PROJECT_DIR$/app/renderer/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="39" column="14" lean-forward="true" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+        <state relative-caret-position="396">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/saveFile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1278">
-          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+        <state relative-caret-position="108">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build/main/index.js">
+    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/renameFile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+        <state relative-caret-position="144">
+          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/saga.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="42" column="3" lean-forward="true" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/utilities/parseScreenshotTestMetadata.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/renderer/layout/testsArePassedPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="44" lean-forward="true" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/main/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+        <state relative-caret-position="450">
+          <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="76" lean-forward="true" selection-start-line="21" selection-start-column="76" selection-end-line="21" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/readme.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="46" lean-forward="true" selection-start-line="13" selection-start-column="46" selection-end-line="13" selection-end-column="46" />
         </state>
       </provider>
     </entry>

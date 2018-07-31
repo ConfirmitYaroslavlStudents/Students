@@ -9,11 +9,7 @@
   ],
   "presets": [
     ["env", {
-      "loose": true,
-      "targets": {
-        "electron": "1.8"
-      },
-      "useBuiltIns": true
+      "loose": true
     }],
     "react"
   ]

@@ -44,7 +44,7 @@ class SideMenuTestList extends Component {
           <ToggleButtonWrapper>
             <IconButton onClick={this.handleToggle}>
               <ChevronIcon
-                size={iconModifiers.size.size12px}
+                size={iconModifiers.size.size10px}
                 turn={expanded ? iconModifiers.turn.counterclockwise : iconModifiers.turn.clockwise}
               />
             </IconButton>
@@ -82,7 +82,7 @@ const SummaryWrapper = styled.div`
   display: inline-flex;
   align-items: center;
   font-size: 105%;  
-  padding: 2px 8px;
+  padding: 4px 8px;
 
   ${props => props.unread && css`
     font-weight: bold;

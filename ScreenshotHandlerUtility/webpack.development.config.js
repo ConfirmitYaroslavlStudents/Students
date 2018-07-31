@@ -49,13 +49,6 @@ module.exports = {
               minimize: false
             }
           }]
-      },
-      {
-        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader',
-        options: {
-          name: 'fonts/[name].[hash:5].[ext]'
-        }
       }
     ]
   },

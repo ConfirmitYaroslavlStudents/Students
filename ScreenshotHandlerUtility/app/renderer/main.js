@@ -2,21 +2,27 @@ import './css/index.css'
 import electron from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import fs from 'fs'
 import reducer from './reducer'
 import { Provider } from 'react-redux'
 import { theme } from 'confirmit-themes'
-import getFallenScreenshotMetadata from './utilities/getFallenScreenshotMetadata'
+import parseScreenshotTestMetadata from './utilities/parseScreenshotTestMetadata'
 import AppView from './layout/appview'
 import createStore from './utilities/createStore'
 
 theme.useTheme(theme.themeNames.material)
 
-const screenshotMetadataFileURL = electron.remote.getGlobal('screenshotMetadataFileURL')
+const screenshotTestMetadataURL = electron.remote.getGlobal('screenshotTestMetadataURL')
 
-const screenshotMetadata = getFallenScreenshotMetadata(screenshotMetadataFileURL)
+const screenshotTestMetadata = JSON.parse(fs.readFileSync(screenshotTestMetadataURL))
+
+const parsedScreenshotTestMetadata = parseScreenshotTestMetadata(screenshotTestMetadata)
+
 const initialState = {
-  fallenTests: screenshotMetadata.fallenScreenshots,
-  screenshotTotalAmount: screenshotMetadata.screenshotTotalAmount
+  metadataURL: screenshotTestMetadataURL,
+  metadata: screenshotTestMetadata,
+  fallenTests: parsedScreenshotTestMetadata.fallenTests,
+  testTotalAmount: parsedScreenshotTestMetadata.testTotalAmount
 }
 
 const store = createStore(reducer, initialState)

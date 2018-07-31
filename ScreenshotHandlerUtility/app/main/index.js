@@ -24,8 +24,8 @@ const mainWindowOptions = {
   frame: true,
   autoHideMenuBar: true,
   webPreferences: {
-    devTools: isDevelopment,
-    webSecurity: false
+    devTools: isDevelopment || argv.D || argv.dev,
+    webSecurity: true
   }
 };
 
@@ -37,7 +37,7 @@ function createWindow () {
   if (screenshotMetadataURL === null) {
     throw 'Metadata file URL argument must be passed via --metadata or -M key.';
   } else {
-    global.screenshotMetadataFileURL = screenshotMetadataURL;
+    global.screenshotTestMetadataURL = screenshotMetadataURL;
   }
 
   if (mainWindowOptions.webPreferences.devTools) {

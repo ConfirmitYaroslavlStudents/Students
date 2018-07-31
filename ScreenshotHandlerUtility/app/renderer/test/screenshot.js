@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import Image from '../commonComponents/image'
+import OpenableImage from '../common/openableImage'
 
 const Screenshot = (props) => {
   const { source, borderColor } = props
@@ -9,7 +9,7 @@ const Screenshot = (props) => {
   return (
     <Wrapper>
       <FrameWrapper borderColor={borderColor}>
-        <Image source={source} alternativeText={'no screenshot'} width={'100%'} />
+        <OpenableImage source={source} alternativeText={'no screenshot'} width={'100%'} />
       </FrameWrapper>
     </Wrapper>
   )

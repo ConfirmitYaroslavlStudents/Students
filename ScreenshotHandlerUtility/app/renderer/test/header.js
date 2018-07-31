@@ -7,8 +7,8 @@ const TestHeader = (props) => {
 
   return (
     <Wrapper>
-      <Header>{test.testName} №{test.number} {test.screenshotName ? ` (${test.screenshotName})` : ''}</Header>
-      <SubHeader>{test.fixtureName} ({test.browserName})</SubHeader>
+      <Header>{test.testName} №{test.number} {test.screenshotName ? ` (${test.screenshotName})` : ''} ({test.browserName})</Header>
+      <SubHeader>{test.fixtureName}</SubHeader>
     </Wrapper>
   )
 }

@@ -18,7 +18,7 @@ namespace ConsoleTournament
         private static int _maximumRound;
         private static string _upperCorner;
         private static string _lowerCorner;
-        private static int _cursorLeft = 0;
+        private static int _cursorLeft;
         private static List<string> _line;
         private static List<ConsoleColor> _lineColor;
         private static Add _add;
@@ -44,6 +44,7 @@ namespace ConsoleTournament
         public static void PrintPlayOffBracket(List<Participant> bracket)
         {
             int consoleTop = Console.CursorTop;
+
             if (bracket.Count == 1)
             {
                 PrintHorizontalBracket(new List<Participant> { bracket[0].Left });
@@ -148,7 +149,7 @@ namespace ConsoleTournament
         {
             _line=new List<string>();
             _lineColor = new List<ConsoleColor>();
-            string text = "";
+            string text;
             var color = ConsoleColor.Gray;
 
             for (int i = 1; i < round; i++)

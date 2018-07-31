@@ -8,7 +8,7 @@ namespace ConsoleTournament
     {
         public static EliminationSystem ChoseEliminationSystem()
         {
-            string answer = "";
+            string answer;
             do
             {
                 Console.Write("Do you want to use Double or Single Elimination system? (d/s) ");
@@ -24,7 +24,8 @@ namespace ConsoleTournament
 
         public static BracketStyle ChoseBracket()
         {
-            var answer = "";
+            string answer;
+
             do
             {
                 Console.Write("Choose bracket type Horizontal or PlayOff (h/p) ");
@@ -51,6 +52,11 @@ namespace ConsoleTournament
             return result;
         }
 
+        public static string InputWinner(string message)
+        {         
+            Console.Write(message);  
+            return Console.ReadLine();
+        }
 
         public static bool IsFromSavedFile()
         {
@@ -66,14 +72,13 @@ namespace ConsoleTournament
             return loadSavedBracket == "y";
         }
 
-
         public static List<string> InputNames(int amount, int maxLength)
         {
             var participants = new List<string>();
 
             for (int i=0;i<amount;i++)
             {
-                var name = "";
+                string name;
 
                 do
                 {

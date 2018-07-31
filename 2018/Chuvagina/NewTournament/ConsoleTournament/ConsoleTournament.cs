@@ -21,74 +21,7 @@ namespace ConsoleTournament
         }
 
         public delegate void PrintBracket(List<Participant> participant);
-
-        public static void PlayDoubleElimination(bool isFromSavedFile,PrintBracket print)
-        {
-            DoubleEliminationTournament tournament;
-            if (isFromSavedFile)
-                tournament = new DoubleEliminationTournament();
-            else
-            {
-                int amount = DataInput.InputAmount();
-                var participants = DataInput.InputNames(amount, _maxNameLength);
-                tournament = new DoubleEliminationTournament(participants);
-            }
-           
-            List<Participant> nextUpperBracketRound;
-            List<Participant> nextLowerBracketRound;
-
-            while (!tournament.EndOfTheGame())
-            {
-                nextUpperBracketRound = tournament.GetBracket();
-                Console.Clear();
-                Console.WriteLine("----Upper Bracket----");
-                print(nextUpperBracketRound);
-                nextLowerBracketRound = tournament.GetLowerBracket();
-                Console.WriteLine("----Lower Bracket----");
-                print(nextLowerBracketRound);
-                tournament.PlayRound();
-            } 
-
-            nextUpperBracketRound = tournament.GetBracket();
-            Console.Clear();
-            Console.WriteLine("----Upper Bracket----");
-            print(nextUpperBracketRound);
-            Console.ReadLine();
-        }
-
-
-        public static void PlaySingleElimination(bool isFromSavedFile, PrintBracket print)
-        {
-            SingleEliminationTournament tournament;
-
-            if (isFromSavedFile)
-                tournament = new SingleEliminationTournament();
-            else
-            {
-                int amount = DataInput.InputAmount();
-                var participants = DataInput.InputNames(amount,_maxNameLength);
-                tournament = new SingleEliminationTournament(participants);
-            }
-
-            List<Participant> nextUpperBracketRound;
-
-            while (!tournament.EndOfTheGame()) 
-            {
-                nextUpperBracketRound = tournament.GetBracket();
-                Console.Clear();
-                Console.WriteLine("----Upper Bracket----");
-                print(nextUpperBracketRound);
-                tournament.PlayRound();
-            }
-
-            nextUpperBracketRound = tournament.GetBracket();
-            Console.Clear();
-            Console.WriteLine("----Upper Bracket----");
-            print(nextUpperBracketRound);
-            Console.ReadLine();
-        }
-
-
+        private static Func<string, string> _inputWinner = DataInput.InputWinner;
 
         public static void Main(string[] args)
         {
@@ -111,6 +44,71 @@ namespace ConsoleTournament
                 PlayDoubleElimination(isFromSavedFile, print);
             else
                 PlaySingleElimination(isFromSavedFile, print);      
+        }
+
+        public static void PlaySingleElimination(bool isFromSavedFile, PrintBracket print)
+        {
+            SingleEliminationTournament tournament;
+
+            if (isFromSavedFile)
+                tournament = new SingleEliminationTournament(_inputWinner);
+            else
+            {
+                int amount = DataInput.InputAmount();
+                var participants = DataInput.InputNames(amount, _maxNameLength);
+                tournament = new SingleEliminationTournament(participants, _inputWinner);
+            }
+
+            List<Participant> nextUpperBracketRound;
+
+            while (!tournament.EndOfTheGame())
+            {
+                nextUpperBracketRound = tournament.GetBracket();
+                Console.Clear();
+                Console.WriteLine("----Upper Bracket----");
+                print(nextUpperBracketRound);
+                tournament.PlayRound();
+            }
+
+            nextUpperBracketRound = tournament.GetBracket();
+            Console.Clear();
+            Console.WriteLine("----Upper Bracket----");
+            print(nextUpperBracketRound);
+            Console.ReadLine();
+        }
+
+        public static void PlayDoubleElimination(bool isFromSavedFile, PrintBracket print)
+        {
+            DoubleEliminationTournament tournament;
+            if (isFromSavedFile)
+                tournament = new DoubleEliminationTournament(_inputWinner);
+            else
+            {
+                int amount = DataInput.InputAmount();
+                var participants = DataInput.InputNames(amount, _maxNameLength);
+                tournament = new DoubleEliminationTournament(participants, _inputWinner);
+            }
+
+            List<Participant> nextUpperBracketRound;
+            List<Participant> nextLowerBracketRound;
+
+            while (!tournament.EndOfTheGame())
+            {
+                nextUpperBracketRound = tournament.GetBracket();
+                Console.Clear();
+                Console.WriteLine("----Upper Bracket----");
+                print(nextUpperBracketRound);
+                nextLowerBracketRound = tournament.GetLowerBracket();
+                Console.WriteLine("----Lower Bracket----");
+                print(nextLowerBracketRound);
+                tournament.PlayRound();
+            }
+
+            nextUpperBracketRound = tournament.GetBracket();
+            Console.Clear();
+            Console.WriteLine("----Upper Bracket----");
+            print(nextUpperBracketRound);
+            Console.ReadLine();
         }
 
     }

@@ -30,22 +30,22 @@ class CommitConfirDialog extends Component {
         </Button>
         <Modal open={open} backdrop={true} onHide={this.handleClose}>
           <Modal.Header>
-            <TitleWrapper>
+            <Title>
               {
                 markedToUpdateAmount === 1 ?
                   `A base screenshot will be updated`
                   :
                   `Base screenshots (${markedToUpdateAmount}) will be updated`
               }
-            </TitleWrapper>
+            </Title>
           </Modal.Header>
           <Modal.Body>
             <ScrollableBody>
               {
                 testsToUpdate.map((test, index) =>
-                  <TestInfoWrapper key={index}>
+                  <TestInfo key={index}>
                     {test.index + 1}. {test.testName} №{test.number} ({test.browserName}) {test.screenshotName ? ` (${test.screenshotName})` : ''}
-                  </TestInfoWrapper>
+                  </TestInfo>
                 )
               }
             </ScrollableBody>
@@ -75,7 +75,7 @@ CommitConfirDialog.propTypes = {
 
 export default CommitConfirDialog
 
-const TitleWrapper = styled.span`
+const Title= styled.span`
   font-weight: bold;
 `
 
@@ -84,7 +84,7 @@ const ScrollableBody = styled.div`
   overflow-y: auto;
 `
 
-const TestInfoWrapper = styled.div`
+const TestInfo = styled.div`
   padding: 8px 0;
 `
 

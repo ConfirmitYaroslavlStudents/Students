@@ -2,9 +2,11 @@ import createReducer from './utilities/createReducer'
 import * as actions from './actions'
 
 const initialState = {
+  metadataURL: '',
+  metadata: {},
+
   fallenTests: {},
-  screenshotTotalAmount: 0,
-  markedToUpdateAmount: 0,
+  testTotalAmount: 0,
   currentTestIndex: 0
 }
 

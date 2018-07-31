@@ -6,14 +6,14 @@ import * as actions from '../actions'
 import { CheckIcon, iconModifiers } from 'confirmit-icons-material'
 import { IconButton } from 'confirmit-react-components'
 
-class NoFallenTestsPage extends Component {
+class TestsArePassedPage extends Component {
   render() {
-    const { screenshotTotalAmount, close } = this.props
+    const { testTotalAmount, close } = this.props
 
     return (
       <Wrapper>
         <MessageWrapper>
-          <p>All screenshots ({screenshotTotalAmount}) have passed successfully!</p>
+          <p>All screenshots ({testTotalAmount}) have passed successfully!</p>
           <ButtonWrapper>
             <IconButton onClick={close}>
               <CheckIcon className='primary-icon' size={iconModifiers.size.size37px}/>
@@ -25,14 +25,14 @@ class NoFallenTestsPage extends Component {
   }
 }
 
-NoFallenTestsPage.propTypes = {
-  screenshotTotalAmount: PropTypes.number.isRequired,
+TestsArePassedPage.propTypes = {
+  testTotalAmount: PropTypes.number.isRequired,
   close: PropTypes.func.isRequired
 }
 
 export default connect(state => ({
-  screenshotTotalAmount: state.screenshotTotalAmount
-}), actions)(NoFallenTestsPage)
+  testTotalAmount: state.testTotalAmount
+}), actions)(TestsArePassedPage)
 
 const Wrapper = styled.div`
   display: flex;

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import path from 'path'
 import { Tooltip } from 'confirmit-react-components'
 
-class Image extends Component {
+class OpenableImage extends Component {
   constructor(props) {
     super(props)
     this.state = { fullView: false}
@@ -51,14 +51,14 @@ class Image extends Component {
   }
 }
 
-Image.propTypes = {
+OpenableImage.propTypes = {
   source: PropTypes.string.isRequired,
   alternativeText: PropTypes.string,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   width: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }
 
-export default Image
+export default OpenableImage
 
 const FullViewWrapper = styled.div`
   display: flex;

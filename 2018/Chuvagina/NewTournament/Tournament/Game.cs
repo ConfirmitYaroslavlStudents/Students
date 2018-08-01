@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tournament
 {
     internal class Game
     {
-        private enum _side
+        private enum Side
         {
             Left,
             Right
         }
 
-        private Participant _leftParticipant;
-        private Participant _rightParticipant;
+        private readonly Participant _leftParticipant;
+        private readonly Participant _rightParticipant;
 
         internal Game(Participant leftParticipant, Participant rightParticipant)
         {
@@ -23,17 +19,17 @@ namespace Tournament
             _rightParticipant = rightParticipant;
         }
 
-        internal void PlayGame(out Participant winner, out Participant loser)
+        internal void PlayGame(Func<string, string> inputWinner, out Participant winner, out Participant loser)
         {
-            var side = DetectWinner(_leftParticipant, _rightParticipant);
+            var side = DetectWinner(inputWinner,_leftParticipant, _rightParticipant);
 
             switch (side)
             {
-                case _side.Left:
+                case Side.Left:
                     winner = new Participant(_leftParticipant.Name, _leftParticipant, _rightParticipant);
                     loser = new Participant(_rightParticipant.Name);
                     break;
-                case _side.Right:
+                case Side.Right:
                     winner = new Participant(_rightParticipant.Name, _leftParticipant, _rightParticipant);
                     loser = new Participant(_leftParticipant.Name);
                     break;
@@ -43,24 +39,25 @@ namespace Tournament
                     break;
             }
 
-            _leftParticipant.Winner = winner;
-            _rightParticipant.Winner = winner;
+            _leftParticipant.SetWinner(winner);
+            _rightParticipant.SetWinner(winner);
         }
 
-        private _side DetectWinner(Participant leftParticipant, Participant rightParticipant)
+        private static Side DetectWinner(Func<string, string> inputWinner,Participant leftParticipant, Participant rightParticipant)
         {
-            string name = "";
+            var name = "";
+
             do
             {
-                Console.Write("The winner between \"{0}\" and \"{1}\" is:  ", leftParticipant.Name,
-                    rightParticipant.Name);
-                name = Console.ReadLine();
-            } while (!name.Equals(leftParticipant.Name) && !name.Equals(rightParticipant.Name));
+                name = inputWinner(
+                    $"The winner between \"{leftParticipant.Name}\" and \"{rightParticipant.Name}\" is:  ");
+
+            } while (name != null && (!name.Equals(leftParticipant.Name) && !name.Equals(rightParticipant.Name)));
 
             if (name.Equals(leftParticipant.Name))
-                return _side.Left;
+                return Side.Left;
 
-            return _side.Right;
+            return Side.Right;
         }
     }
 }

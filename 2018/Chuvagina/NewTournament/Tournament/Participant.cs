@@ -6,7 +6,7 @@ namespace Tournament
     public class Participant
     {
         public readonly string Name;
-        public Participant Winner { get; internal set; }
+        public Participant Winner { get; private set; }
         public readonly Participant Left;
         public readonly Participant Right;
 
@@ -24,6 +24,11 @@ namespace Tournament
             Right = right;
             Winner = null;
             Name = participantName;
+        }
+
+        public void SetWinner(Participant participant)
+        { 
+            Winner = participant;
         }
 
     }

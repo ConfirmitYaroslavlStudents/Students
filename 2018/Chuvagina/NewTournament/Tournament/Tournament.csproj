@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinarySaver.cs" />
     <Compile Include="DoubleEliminationTournament.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Participant.cs" />

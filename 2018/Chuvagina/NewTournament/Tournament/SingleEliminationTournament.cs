@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Tournament
 {
     public class SingleEliminationTournament
     {
         protected List<Participant> UpperBracketParticipants;
+        protected readonly Func<string, string> InputWinner;
 
-        public SingleEliminationTournament(List<string> participants)
+        public SingleEliminationTournament(List<string> participants, Func<string,string> inputWinner)
         {
             UpperBracketParticipants = new List<Participant>();
             Random random = new Random();
@@ -22,56 +21,39 @@ namespace Tournament
                 participants.RemoveAt(index);
             }
 
-            SaveListToBinnary("upperBracket", UpperBracketParticipants);
-            SaveListToBinnary("lowerBracket", new List<Participant>());
+            InputWinner = inputWinner;
+            BinarySaver.SaveListToBinnary("upperBracket", UpperBracketParticipants);
+            BinarySaver.SaveListToBinnary("lowerBracket", new List<Participant>());
         }
 
-        public SingleEliminationTournament()
+        public SingleEliminationTournament(Func<string, string> inputWinner)
         {
-            UpperBracketParticipants = LoadListFromBinnary<Participant>("upperBracket");
+            UpperBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>("upperBracket");
+            InputWinner = inputWinner;
         }
 
-        public virtual void PlayRound()
+        public void PlayRound()
         {
-            UpperBracketParticipants = LoadListFromBinnary<Participant>("upperBracket");
+            UpperBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>("upperBracket");
 
             Round round = new Round(UpperBracketParticipants);
-            round.PlayUpperBracket();
+            round.PlayUpperBracket(InputWinner);
             UpperBracketParticipants = round.UpperBracketParticipants;
 
-            SaveListToBinnary("upperBracket",UpperBracketParticipants);
-            SaveListToBinnary("lowerBracket", new List<Participant>());
+            BinarySaver.SaveListToBinnary("upperBracket",UpperBracketParticipants);
+            BinarySaver.SaveListToBinnary("lowerBracket", new List<Participant>());
         }
 
         public virtual bool EndOfTheGame()
         {
             if (UpperBracketParticipants.Count == 1)
                 return true;
-
             return false;
         }
 
         public List<Participant> GetBracket()
         {
             return new List<Participant>(UpperBracketParticipants);
-        }
-
-        public static void SaveListToBinnary<T>(String fileName, List<T> serializableObjects)
-        {
-            using (FileStream fs = File.Create(fileName))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(fs, serializableObjects);
-            }
-        }
-
-        public static List<T> LoadListFromBinnary<T>(String fileName)
-        {
-            using (FileStream fs = File.Open(fileName, FileMode.Open))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                return (List<T>)formatter.Deserialize(fs);
-            }
         }
 
     }

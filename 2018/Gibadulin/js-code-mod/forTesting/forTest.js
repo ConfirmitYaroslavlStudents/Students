@@ -1,17 +1,19 @@
 /*
 options:
 
-show('p1','p2');
-show.must('p1').go('p2').on(p3);
+show('p1','p2')
+show.must('p1').go('p2').on(add)
 
 */
 
 show();
 var x = 10;
-show(x, y);
-show(fr, x == 10);
+show(p1,p2);
+show(p3,p4 == 10);
 function functionName() {
-  show(fr, x == 10);
-}
-w(show(q, e));
-show(qwerty, ytrewq);
+  show(p5(),p6.pr);
+};
+w(show(p7,p8));
+show(p9longName,p10name);
+
+show(p11,p12).p;

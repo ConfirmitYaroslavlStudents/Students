@@ -32,6 +32,13 @@ export default class Match {
     return this._players;
   }
 
+  get state() {
+    return {
+      winner: this._winner ? this._winner.id : null,
+      players: this._players.map(player => player.id)
+    }
+  }
+
   setWinnerById(playerId) {
     let winner = this._players.find(player => player.id === playerId);
 

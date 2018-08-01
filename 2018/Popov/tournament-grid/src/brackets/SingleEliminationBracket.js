@@ -1,6 +1,7 @@
 'use strict';
 
 import Match from './../Match';
+import InvalidBracketsData from './../exceptions/InvalidBracketsData';
 
 export default class SingleEliminationBracket {
   constructor() {
@@ -49,14 +50,68 @@ export default class SingleEliminationBracket {
 
     this.currentMatch.setWinnerById(player.id);
     this._selectNextMatch();
+
+    this._tournament.saveCurrentSate();
   }
 
-  init(tournament) {
+  get state() {
+    return {
+      raw: this._raw.map(round =>
+        round.map(match => match ? match.state : null)
+      ),
+      currentRoundIndex: this._currentRoundIndex
+    };
+  }
+
+  init(tournament, state) {
     this._tournament = tournament;
+
+    if (state) {
+      this._loadCurrentState(state);
+      return;
+    }
 
     this._initEmptyBracket();
     this._fillFirstRound();
   }
+
+  _loadCurrentState(state) {
+    const
+      hasRawFileld = state.hasOwnProperty('raw'),
+      hasCurrentRoundIndexFileld = state.hasOwnProperty('currentRoundIndex');
+
+    if (!hasRawFileld || !hasCurrentRoundIndexFileld) {
+      throw new InvalidBracketsData('Invalid state structure!');
+    }
+
+    if (!Array.isArray(state.raw)) {
+      throw new InvalidBracketsData('Invalid raw structure!');
+    }
+
+    this._raw = this._formBracketFromData(state.raw);
+    this._currentRoundIndex = state.currentRoundIndex;
+  }
+
+  _formBracketFromData(data) {
+    return data.map(round => round.map(match => {
+      if (match === null) {
+        return match;
+      }
+
+      const winnerId = match.winner;
+
+      match = new Match(...this._tournament.playersList.filter(player =>
+        match.players.includes(player.id)
+      ));
+
+      if (winnerId !== null) {
+        match.setWinnerById(winnerId);
+      }
+
+      return match;
+    }));
+  }
+
 
   _selectNextMatch() {
     let

@@ -25,7 +25,7 @@ export default class FIFAGridView  extends DefaultGridView  {
         this._prepareCenterPart(bracket);
         this._prepareRightPart(bracket);
       }
-      else { // TODO
+      else {
         this._clearGrid((bracket[0] || [0]).length * 4 - 1);
         bracket.forEach(this._fillRoundColumn.bind(this, bracket));
       }

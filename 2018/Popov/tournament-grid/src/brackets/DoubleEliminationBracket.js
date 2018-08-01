@@ -2,6 +2,7 @@
 
 import Match from './../Match';
 import SingleEliminationBracket from './SingleEliminationBracket';
+import InvalidBracketsData from './../exceptions/InvalidBracketsData';
 
 export default class DoubleEliminationBracket extends SingleEliminationBracket {
   constructor() {
@@ -24,6 +25,51 @@ export default class DoubleEliminationBracket extends SingleEliminationBracket {
   get gameOver() {
     return this._finalBracket !== null &&
            this._finalBracket[0][0].gameOver;
+  }
+
+  get state() {
+    return Object.assign(super.state, {
+      currentWBracketPosition: this._wBracketCurrentPosition,
+      brackets: [
+        this._bracketToSimpleObject(this._wBracket),
+        this._bracketToSimpleObject(this._lBracket),
+        this._bracketToSimpleObject(this._finalBracket)
+      ]
+    });
+  }
+
+  _bracketToSimpleObject(bracket) {
+    return bracket ? bracket.map(round => round.map(match => match.state)) : null;
+  }
+
+  _loadCurrentState(state) {
+    const
+      hasBracketsFileld = state.hasOwnProperty('brackets'),
+      hasCurrentPositionFileld = state.hasOwnProperty('currentWBracketPosition');
+
+    if (!hasBracketsFileld || !hasCurrentPositionFileld) {
+      throw new InvalidBracketsData('Invalid state structure!');
+    }
+
+    const brackets = state.brackets;
+    if (!Array.isArray(brackets) || brackets.length !== 3) {
+      throw new InvalidBracketsData('Invalid brackets structure!');
+    }
+
+    super._loadCurrentState(state);
+    this._wBracketCurrentPosition = state.currentWBracketPosition;
+
+    this._wBracket = brackets[0] ? this._formBracketFromData(brackets[0]) : null;
+    this._lBracket = brackets[1] ? this._formBracketFromData(brackets[1]) : null;
+    this._finalBracket = brackets[2] ? this._formBracketFromData(brackets[2]) : null;
+
+    if (this._lBracket !== null) {
+      this._raw = this._lBracket;
+    }
+
+    if (this._finalBracket !== null) {
+      this._raw = this._finalBracket;
+    }
   }
 
   _selectNextMatch() {

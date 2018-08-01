@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Championship
 {
-    public class TournamentGrid
+    public class ConstructorTournament
     {
         public static List<Round> CreateTournament(List<string> players)
         {
@@ -72,7 +72,8 @@ namespace Championship
             return newPlayersList;
         }
 
-        private static List<Round> ArrangementOfPlayersInTournamentGrid(List<string> players, List<Round> tournamentGrid)
+        private static List<Round> ArrangementOfPlayersInTournamentGrid(List<string> players,
+            List<Round> tournamentGrid)
         {
             var indexPlayer = 0;
             var countFirstStageMeetings = players.Count - tournamentGrid[0].Meetings.Count;

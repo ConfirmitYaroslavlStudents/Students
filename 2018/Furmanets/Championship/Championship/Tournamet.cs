@@ -11,7 +11,7 @@ namespace Championship
 
         public Tournament(List<string> players)
         {
-            TournamentRounds = TournamentGrid.CreateTournament(players);
+            TournamentRounds = ConstructorTournament.CreateTournament(players);
             IndexOfRound = 0;
         }
 

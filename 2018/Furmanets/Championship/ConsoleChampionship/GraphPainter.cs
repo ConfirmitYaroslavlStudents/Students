@@ -3,78 +3,11 @@ using Championship;
 
 namespace ConsoleChampionship
 {
-    internal class GraphPainter
+    abstract class GraphPainter
     {
-        public static void PaintGraphHorisontal(Tournament tournament)
-        {
-            var previousCursorPositionTop = 3;
-            var previousCursorPositionLeft = 0;
-            var nextDistanceBeewinPalyers = 2;
-
-            foreach (var round in tournament.TournamentRounds)
-            {
-                var maxLengthName = GetMaxLengthNameInRound(round);
-
-                Console.SetCursorPosition(previousCursorPositionLeft, 0);
-                Console.WriteLine(GetForPrintRound(round.Stage));
-
-                var distanceBetweenPlayers = nextDistanceBeewinPalyers;
-                var positionCursorLeft = previousCursorPositionLeft;
-                var positionCursorTop = previousCursorPositionTop;
-                var isFirstLine = true;
-                var isSecondLine = false;
-
-                foreach (var meeting in round.Meetings)
-                {
-                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null && round.Equals(tournament.TournamentRounds[0]))
-                    {
-                        continue;
-                    }
-
-                    Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
-
-                    WriteNamePlayer(meeting, true);
-
-                    var wereDrowLine = distanceBetweenPlayers / 2;
-
-                    for (var i = 1; i < distanceBetweenPlayers; i++)
-                    {
-                        Console.SetCursorPosition(positionCursorLeft + maxLengthName, positionCursorTop + i);
-                        Console.Write("|");
-
-                        if (i == wereDrowLine)
-                        {
-                            Console.Write("-----");
-                            if (isSecondLine)
-                            {
-                                isSecondLine = false;
-                                nextDistanceBeewinPalyers = Console.CursorTop - nextDistanceBeewinPalyers;
-                            }
-
-                            if (isFirstLine)
-                            {
-                                previousCursorPositionLeft = Console.CursorLeft;
-                                previousCursorPositionTop = Console.CursorTop;
-                                isFirstLine = false;
-                                isSecondLine = true;
-                                nextDistanceBeewinPalyers = previousCursorPositionTop;
-                            }
-                        }
-
-                    }
-                    positionCursorTop += distanceBetweenPlayers;
-                    Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
-                    WriteNamePlayer(meeting, false);
-
-                    positionCursorTop += distanceBetweenPlayers;
-                }
-
-            }
-            Console.SetCursorPosition(previousCursorPositionLeft, previousCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournament);
-        }
-
-        private static void WriteNamePlayer(Meeting meeting, bool isFirst)
+        public abstract void PaintGraph(Tournament tournament);
+        
+        public virtual void WriteNamePlayer(Meeting meeting, bool isFirst)
         {
             if (isFirst)
             {
@@ -115,7 +48,7 @@ namespace ConsoleChampionship
             }
         }
 
-        private static void WriteNameWinnerInFinalRound(Tournament tournament)
+        public void WriteNameWinnerInFinalRound(Tournament tournament)
         {
             var finalRound = tournament.TournamentRounds[tournament.TournamentRounds.Count - 1];
 
@@ -134,7 +67,7 @@ namespace ConsoleChampionship
             }
         }
 
-        private static int GetMaxLengthNameInRound(Round round)
+        public int GetMaxLengthNameInRound(Round round)
         {
             var maxLengthName = 0;
 
@@ -153,7 +86,7 @@ namespace ConsoleChampionship
             return maxLengthName;
         }
 
-        private static string GetForPrintRound(int round)
+        public string GetForPrintRound(int round)
         {
             if (round == 1)
             {

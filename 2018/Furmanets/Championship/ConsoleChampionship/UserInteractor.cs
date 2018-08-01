@@ -10,11 +10,12 @@ namespace ConsoleChampionship
         {
             while (true)
             {
-                Console.WriteLine();
                 if (meeting.FirstPlayer == null && meeting.SecondPlayer == null)
                 {
                     return meeting.Score;
                 }
+
+                Console.WriteLine();
                 Console.Write("Write score: ");
                 Console.WriteLine(meeting.FirstPlayer + " vs " + meeting.SecondPlayer);
                 var resultsMatch = Console.ReadLine()?.Split(new[] { ' ', ':' }, StringSplitOptions.RemoveEmptyEntries);

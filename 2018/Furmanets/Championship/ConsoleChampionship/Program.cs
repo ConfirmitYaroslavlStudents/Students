@@ -44,7 +44,7 @@ namespace ConsoleChampionship
             var tournamentMenuList = new List<MenuItem>
             {
                 new MenuItem(EnterResults, "Enter match results"),
-                new MenuItem(PrintTournamentGrid, "Show Tournament Grid"),
+                new MenuItem(MenuGraphPrint, "Show Tournament Grid"),
             };
             var tournamentMenu = new Menu(tournamentMenuList, "Championship");
             tournamentMenu.Start();
@@ -70,13 +70,33 @@ namespace ConsoleChampionship
             FileManager.WriteTournamentInFile(_championship);
         }
 
-        static void PrintTournamentGrid()
+        static void MenuGraphPrint()
+        {
+            var menuGraph = new List<MenuItem>
+            {
+                new MenuItem(PaintVerticalGraph, "Show vertical version"),
+                new MenuItem(PaintHorisontalGraph, "Show horisontal version"),
+            };
+            var graphMenu = new Menu(menuGraph, "Championship");
+            graphMenu.Start();
+        }
+
+        static void PaintVerticalGraph()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            // GraphPaint.PaintGraphVertical(_championship);
-            GraphPainter.PaintGraphHorisontal(_championship);
+            var vertical = new VerticalGraphPainter();
+            vertical.PaintGraph(_championship);
             Console.ReadKey();
         }
+
+        static void PaintHorisontalGraph()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            var horisontal = new HorisontalGraphPainter();
+            horisontal.PaintGraph(_championship);
+            Console.ReadKey();
+        }
+
 
         private static void MenuAddPlayers()
         {

@@ -1,111 +1,70 @@
-﻿using System;
-
-namespace FootballTournament
+﻿namespace FootballTournament
 {
     public class Game
     {
-        private Player _firstPlayer;
-        private Player _secondPlayer;
-        private int _firstPlayerScore;
-        private int _secondPlayerScore;
-        private bool _isPlayed;
+        public Player FirstPlayer { get; private set; }
+        public Player SecondPlayer { get; private set; }
+        public int FirstPlayerScore { get; private set; }
+        public int SecondPlayerScore { get; private set; }
+        public Player Winner { get; private set; }
+        public Player Loser { get; private set; }
+        public bool IsPlayed { get; private set; }
 
         public Game(Player firstPlayer, Player secondPlayer)
         {
-            _firstPlayer = firstPlayer;
-            _secondPlayer = secondPlayer;
-            _isPlayed = false;
-        }
-
-        public Game(Player firstPlayer)
-        {
-            _firstPlayer = firstPlayer;
-            _isPlayed = false;
-        }
-
-        public int FirstPlayerScore
-        {
-            get { return _firstPlayerScore; }
-            set
-            {
-                if (value >= 0)
-                    _firstPlayerScore = value;
-                else
-                    throw new ArgumentException("The value can't be less than 0!");
-            }
-        }
-
-        public int SecondPlayerScore
-        {
-            get { return _secondPlayerScore; }
-            set
-            {
-                if (value >= 0)
-                    _secondPlayerScore = value;
-                else
-                    throw new ArgumentException("The value can't be less than 0!");
-            }
+            FirstPlayer = firstPlayer;
+            SecondPlayer = secondPlayer;
+            IsPlayed = false;
         }
 
         public void Play()
         {
-            if (_secondPlayer != null)
+            if (SecondPlayer != null)
             {
-                Console.Write("{0} scores: ", _firstPlayer.Name);
-                FirstPlayerScore = int.Parse(Console.ReadLine());
-                Console.Write("{0} scores: ", _secondPlayer.Name);
-                SecondPlayerScore = int.Parse(Console.ReadLine());
+                FirstPlayerScore = ConsoleWorker.EnterPlayerScore(FirstPlayer);
+                SecondPlayerScore = ConsoleWorker.EnterPlayerScore(SecondPlayer);
 
-                if (_firstPlayerScore == _secondPlayerScore)
+                if (FirstPlayerScore == SecondPlayerScore)
                 {
-                    Console.WriteLine("There is can't be a draw. Try again:");
+                    ConsoleWorker.DrawIsNotPossible();
                     Play();
                 }
                 else
                 {
-                    _isPlayed = true;
-                    Console.WriteLine(ToString());
+                    IsPlayed = true;
+                    DetectWinner();
+                    ConsoleWorker.PrintGameResult(this);
                 }
             }
+            else
+                Winner = FirstPlayer;
         }
 
-        public Player DetectWinner()
+        public void DetectWinner()
         {
-            if (_secondPlayer != null)
+            if (FirstPlayerScore > SecondPlayerScore)
             {
-                if (_firstPlayerScore > _secondPlayerScore)
-                    return _firstPlayer;
-                else
-                    return _secondPlayer;
+                Winner = FirstPlayer;
+                Loser = SecondPlayer;
             }
             else
-                return _firstPlayer;
+            {
+                Winner = SecondPlayer;
+                Loser = FirstPlayer;
+            }
         }
 
-        public Player DetectLoser()
+        public string Result()
         {
-            if (_secondPlayer != null)
+            if (SecondPlayer != null)
             {
-                if (_firstPlayerScore > _secondPlayerScore)
-                    return _secondPlayer;
+                if (IsPlayed == true)
+                    return $"{FirstPlayer.Name} {FirstPlayerScore}:{SecondPlayerScore} {SecondPlayer.Name}";
                 else
-                    return _firstPlayer;
+                    return $"{FirstPlayer.Name} -:- { SecondPlayer.Name}";
             }
             else
-                return null;
-        }
-
-        public override string ToString()
-        {
-            if (_secondPlayer != null)
-            {
-                if (_isPlayed == true)
-                    return $"{_firstPlayer.Name} {_firstPlayerScore}:{_secondPlayerScore} {_secondPlayer.Name}";
-                else
-                    return $"{_firstPlayer.Name} -:- { _secondPlayer.Name}";
-            }
-            else
-                return $"{_firstPlayer.Name}";
+                return $"{FirstPlayer.Name}";
         }
     }
 }

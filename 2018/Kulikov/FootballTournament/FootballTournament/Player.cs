@@ -4,7 +4,7 @@ namespace FootballTournament
 {
     public class Player
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public Player(string name)
         {

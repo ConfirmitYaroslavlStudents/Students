@@ -3,82 +3,84 @@ using System.Collections.Generic;
 
 namespace FootballTournament
 {
+    [Serializable]
     public class Tournament
     {
-        private List<List<Game>> _winnersGrid = new List<List<Game>>();
-        private List<List<Game>> _losersGrid = new List<List<Game>>();
+        public List<List<Game>> WinnersGrid { get; private set; }
+        public List<List<Game>> LosersGrid { get; private set; }
+        public Player Champion { get; private set; }
+        public TournamentMode TournamentMode { get; private set; }
+        public bool IsFinished { get; private set; }
+        public Game GrandFinal { get; private set; }
+
         private int _currentWinnersStage = 0;
         private int _currentLosersStage = -1;
         private int _gamesOnCurrentWinnersStage = 0;
         private int _gamesOnCurrentLosersStage = 0;
-        public bool _winnersGridIsFinished = false;
-        private string _tournamentMode;
 
-        public void Init()
+        public void Init(TournamentMode tournamentMode)
         {
-            _tournamentMode = DataInput.ChooseTournamentMode();
+            TournamentMode = tournamentMode;
+            IsFinished = false;
             StartTournament();
         }
 
         private void StartTournament()
         {
-            _winnersGrid.Add(new List<Game>());
+            WinnersGrid = new List<List<Game>>();
+            WinnersGrid.Add(new List<Game>());
+
+            if (TournamentMode == TournamentMode.DoubleElimination)
+            {
+                LosersGrid = new List<List<Game>>();
+                LosersGrid.Add(new List<Game>());
+            }
+
             var countOfPlayers = DataInput.GetCountOfPlayers();
             var players = DataInput.GetPlayersList(countOfPlayers);
 
             for (int i = 0; i < players.Count; i += 2)
             {
-                if (i == players.Count - 1)
-                    _winnersGrid[_currentWinnersStage].Add(new Game(players[i]));
-                else
-                    _winnersGrid[_currentWinnersStage].Add(new Game(players[i], players[i + 1]));
+                var firstPlayer = players[i];
+                Player secondPlayer = null;
+
+                if (i != players.Count - 1)
+                    secondPlayer = players[i + 1];
+
+                WinnersGrid[_currentWinnersStage].Add(new Game(firstPlayer, secondPlayer));
                 _gamesOnCurrentWinnersStage++;
             }
-
-            TournamentGrid.ShowSingleEliminationGrid(_winnersGrid, _tournamentMode);
-            PlayWinnersGridStage();
         }
 
-        private void PlayWinnersGridStage()
+        public void PlayNextRound()
         {
-            foreach (var game in _winnersGrid[_currentWinnersStage])
-                game.Play();
+            if (TournamentMode == TournamentMode.SingleElimination)
+                PlaySingleEliminationRound();
+            else
+                PlayDoubleEliminationRound();
+        }
 
-            if (_winnersGrid[_currentWinnersStage].Count == 1)
+        private void PlaySingleEliminationRound()
+        {
+            if (!IsFinished)
             {
-                Player checkLoser = _winnersGrid[_currentWinnersStage][0].DetectLoser();
+                foreach (var game in WinnersGrid[_currentWinnersStage])
+                    game.Play();
 
-                if (checkLoser == null)
-                    _winnersGridIsFinished = true;
-            }
-
-            if (_tournamentMode == "SE")
-            {
-                if (!_winnersGridIsFinished)
-                {
+                if (!IsWinnersGridFinished())
                     InitNewWinnersGridStage();
-                    TournamentGrid.ShowSingleEliminationGrid(_winnersGrid, _tournamentMode);
-                    PlayWinnersGridStage();
-                }
                 else
-                {
-                    TournamentGrid.ShowSingleEliminationGrid(_winnersGrid, _tournamentMode);
                     DetectChampion();
-                }
             }
             else
-            {
-                InitNewLosersGridStage();
-                TournamentGrid.ShowDoubleEliminationGrid(_winnersGrid, _losersGrid);
-                PlayLosersGridStage();
-            }
+                ConsoleWorker.PrintChampion(Champion);
         }
 
         private void InitNewWinnersGridStage()
         {
             _currentWinnersStage++;
-            FillNewStage(_winnersGrid, _currentWinnersStage);
-            _gamesOnCurrentWinnersStage = _winnersGrid[_currentWinnersStage].Count;
+            FillNewStage(WinnersGrid, _currentWinnersStage);
+            _gamesOnCurrentWinnersStage = WinnersGrid[_currentWinnersStage].Count;
         }
 
         private void FillNewStage(List<List<Game>> grid, int currentStage)
@@ -88,16 +90,50 @@ namespace FootballTournament
 
             for (int i = 0; i < grid[lastStage].Count; i += 2)
             {
-                var firstPlayer = grid[lastStage][i].DetectWinner();
+                var firstPlayer = grid[lastStage][i].Winner;
+                Player secondPlayer = null;
 
-                if (i == grid[lastStage].Count - 1)
-                    grid[currentStage].Add(new Game(firstPlayer));
-                else
-                {
-                    var secondPlayer = grid[lastStage][i + 1].DetectWinner();
-                    grid[currentStage].Add(new Game(firstPlayer, secondPlayer));
-                }
+                if (i != grid[lastStage].Count - 1)
+                    secondPlayer = grid[lastStage][i + 1].Winner;
+
+                grid[currentStage].Add(new Game(firstPlayer, secondPlayer));
             }
+        }
+
+        private bool IsWinnersGridFinished()
+        {
+            if (WinnersGrid[_currentWinnersStage].Count == 1 && WinnersGrid[_currentWinnersStage][0].IsPlayed)
+                return true;
+
+            return false;
+        }
+
+        private void PlayDoubleEliminationRound()
+        {
+            if (!IsFinished)
+            {
+                if (_currentLosersStage > _currentWinnersStage && IsLosersGridFinished())
+                    DetectChampion();
+
+                if (!IsWinnersGridFinished())
+                {
+                    foreach (var game in WinnersGrid[_currentWinnersStage])
+                        game.Play();
+                }
+
+                if (_currentLosersStage <= _currentWinnersStage || !IsLosersGridFinished())
+                {
+                    InitNewLosersGridStage();
+
+                    foreach (var game in LosersGrid[_currentLosersStage])
+                        game.Play();
+                }
+
+                if (!IsWinnersGridFinished())
+                    InitNewWinnersGridStage();
+            }
+            else
+                ConsoleWorker.PrintChampion(Champion);
         }
 
         private void InitNewLosersGridStage()
@@ -106,83 +142,60 @@ namespace FootballTournament
 
             if (_currentLosersStage > 0)
             {
-                FillNewStage(_losersGrid, _currentLosersStage);
-                _gamesOnCurrentLosersStage = _losersGrid[_currentLosersStage].Count;
+                FillNewStage(LosersGrid, _currentLosersStage);
+                _gamesOnCurrentLosersStage = LosersGrid[_currentLosersStage].Count;
             }
-            else
-                _losersGrid.Add(new List<Game>());
 
-            if (!_winnersGridIsFinished)
+            if (_currentLosersStage <= _currentWinnersStage)
+                FillLosersStageByWinnersGrid();
+        }
+
+        private void FillLosersStageByWinnersGrid()
+        {
+            for (int i = 0; i < WinnersGrid[_currentWinnersStage].Count; i += 2)
             {
-                for (int i = 0; i < _winnersGrid[_currentWinnersStage].Count; i += 2)
+                var firstPlayer = WinnersGrid[_currentWinnersStage][i].Loser;
+
+                if (firstPlayer != null)
                 {
-                    var firstPlayer = _winnersGrid[_currentWinnersStage][i].DetectLoser();
+                    Player secondPlayer = null;
 
-                    if (firstPlayer != null)
-                    {
-                        if (i == _winnersGrid[_currentWinnersStage].Count - 1)
-                            _losersGrid[_currentLosersStage].Add(new Game(firstPlayer));
-                        else
-                        {
-                            var secondPlayer = _winnersGrid[_currentWinnersStage][i + 1].DetectLoser();
-                            _losersGrid[_currentLosersStage].Add(new Game(firstPlayer, secondPlayer));
-                        }
-                    }
+                    if (i != WinnersGrid[_currentWinnersStage].Count - 1)
+                        secondPlayer = WinnersGrid[_currentWinnersStage][i + 1].Loser;
 
+                    LosersGrid[_currentLosersStage].Add(new Game(firstPlayer, secondPlayer));
                     _gamesOnCurrentLosersStage++;
                 }
             }
         }
 
-        private void PlayLosersGridStage()
+        private bool IsLosersGridFinished()
         {
-            foreach (var game in _losersGrid[_currentWinnersStage])
-                game.Play();
+            if (LosersGrid[_currentLosersStage].Count == 1 && LosersGrid[_currentLosersStage][0].IsPlayed)
+                return true;
 
-            if (!_winnersGridIsFinished)
-            {
-                InitNewWinnersGridStage();
-                TournamentGrid.ShowDoubleEliminationGrid(_winnersGrid, _losersGrid);
-                PlayWinnersGridStage();
-            }
-            else
-            {
-                InitNewLosersGridStage();
-
-                if (_gamesOnCurrentLosersStage > 1)
-                {
-
-                    TournamentGrid.ShowDoubleEliminationGrid(_winnersGrid, _losersGrid);
-                    PlayLosersGridStage();
-                }
-                else
-                {
-                    TournamentGrid.ShowDoubleEliminationGrid(_winnersGrid, _losersGrid);
-                    DetectChampion();
-                }
-            }
+            return false;
         }
 
         private void DetectChampion()
         {
-            Player champion;
-
-            if (_tournamentMode == "SE")
-                champion = _winnersGrid[_currentWinnersStage][0].DetectWinner();
+            if (TournamentMode == TournamentMode.SingleElimination)
+                Champion = WinnersGrid[_currentWinnersStage][0].Winner;
             else
             {
-                var firstPlayer = _winnersGrid[_currentWinnersStage][0].DetectWinner();
-                var secondPlayer = _losersGrid[_currentWinnersStage][0].DetectWinner();
-                var final = new Game(firstPlayer, secondPlayer);
+                var firstPlayer = WinnersGrid[_currentWinnersStage][0].Winner;
+                var secondPlayer = LosersGrid[_currentLosersStage][0].Winner;
+                GrandFinal = new Game(firstPlayer, secondPlayer);
 
-                Console.WriteLine("GRAND FINAL");
-                Console.WriteLine($"{final.ToString()}\n");
+                ConsoleWorker.PrintGrandFinal(GrandFinal);
 
-                final.Play();
-                champion = final.DetectWinner();             
+                GrandFinal.Play();
+                Champion = GrandFinal.Winner;             
             }
 
-            Console.WriteLine($"\n{champion.Name} is a champion!");
+            IsFinished = true;
+
+            ConsoleWorker.PrintChampion(Champion);
         }
     }
 }

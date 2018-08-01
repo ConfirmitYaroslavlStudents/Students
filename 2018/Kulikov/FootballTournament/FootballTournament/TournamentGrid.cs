@@ -5,108 +5,124 @@ namespace FootballTournament
 {
     public class TournamentGrid
     {
+        private static Tournament _tournament;
         private static int _gridVerticalLength;
 
-        public static void ShowSingleEliminationGrid(List<List<Game>> winnersGrid, string tournamentMode)
+        public static void ShowSingleEliminationGrid(Tournament tournament)
         {
+            _tournament = tournament;
+
             Console.Clear();
 
-            if (tournamentMode == "SE")
+            if (_tournament.TournamentMode == TournamentMode.SingleElimination)
                 Console.WriteLine("TOURNAMENT GRID:\n");
             else
                 Console.WriteLine("WINNERS GRID:\n");
 
-            DrawGrid(winnersGrid);
+            DrawGrid(_tournament.WinnersGrid, Console.CursorTop);
         }
 
-        private static void DrawGrid(List<List<Game>> grid)
+        public static void ShowDoubleEliminationGrid(Tournament tournament)
         {
-            var start_Y = Console.CursorTop;
-            DrawResults(grid, start_Y);
-            DrawVerticalLines(grid, start_Y + 1);
-            Console.SetCursorPosition(0, _gridVerticalLength + 3);
+            ShowSingleEliminationGrid(tournament);
+            Console.WriteLine("LOSERS GRID:\n");
+            DrawGrid(tournament.LosersGrid, Console.CursorTop);
+
+            if (tournament.IsFinished)
+            {
+                Console.WriteLine("\nGRAND FINAL:");
+                DrawResult(Console.CursorLeft, Console.CursorTop, tournament.GrandFinal);
+                Console.WriteLine();
+                Console.WriteLine($"\n{tournament.Champion.Name} is a champion!");
+            }
+
         }
 
-        private static void DrawResults(List<List<Game>> grid, int start_Y)
+        private static void DrawGrid(List<List<Game>> grid, int startY)
         {
             _gridVerticalLength = 0;
-            var start_X = 0;
-            var shift_Y = 2;
+            var startX = 0;
+            var shiftY = 2;
+            var lineLength = 1;
 
-            for (int i = 0; i < grid.Count; i++)
+            for (int numberOfStage = 0; numberOfStage < grid.Count; numberOfStage++)
             {
-                var stage = grid[i];
-                var shift_X = GetMaxLength(stage) + 4;
+                var stage = grid[numberOfStage];
+                var shiftX = GetMaxLength(stage) + 4;
 
-                if (i == grid.Count - 1 && stage.Count == 1)
+                for (int numberOfGame = 0; numberOfGame < stage.Count; numberOfGame++)
                 {
-                    Player checkLoser = grid[i][0].DetectLoser();
+                    var game = stage[numberOfGame];
+                    var interval = GetMaxLength(stage) - game.Result().Length;
 
-                    if (checkLoser == null)
-                        break;
-                }
+                    var x = startX + interval;
+                    var y = startY + shiftY * numberOfGame;
 
-                for (int j = 0; j < stage.Count; j++)
-                {
-                    var game = stage[j];
-                    var interval = GetMaxLength(stage) - game.ToString().Length;
+                    DrawResult(x, y, game);
 
-                    var x = start_X + interval;
-                    var y = start_Y + shift_Y * j;
+                    if (numberOfGame % 2 != 0 || numberOfGame != stage.Count - 1)
+                        DrawHorizontalLines();
 
-                    Console.SetCursorPosition(x, y);
-                    Console.Write(game.ToString());
+                    if (numberOfGame % 2 == 0 && numberOfGame != stage.Count - 1)
+                    {
+                        x = Console.CursorLeft - 1;
+                        y++;
 
-                    if (stage.Count > 1)
-                        Console.Write(" --");
+                        DrawVerticalLines(x, y, lineLength);
+                    }
 
                     if (_gridVerticalLength < y)
                         _gridVerticalLength = y;
                 }
 
-                start_X += shift_X;
-                start_Y += (int)Math.Pow(2, i);
-                shift_Y *= 2;
-            }
-        }
-
-        private static void DrawVerticalLines(List<List<Game>> grid, int start_Y)
-        {
-            var start_X = -2;
-            var shift_Y = 4;
-            var lineLength = 1;
-
-            for (int i = 0; i < grid.Count; i++)
-            {
-                var stage = grid[i];
-                var y = start_Y;
-                var shift_X = GetMaxLength(stage) + 4;
-                start_X += shift_X;
-
-                for (int j = 0; j < stage.Count / 2; j++)
-                {
-                    for (int k = 1; k <= lineLength; k++)
-                    {
-                        Console.SetCursorPosition(start_X, y);
-                        Console.Write('|');
-                        if (k != lineLength)
-                            y++;
-                    }
-
-                    y += shift_Y;
-                }
-
-                start_Y += (int)Math.Pow(2, i);
-                shift_Y += (i + 1) * 2;
+                startX += shiftX;
+                startY += (int)Math.Pow(2, numberOfStage);
+                shiftY *= 2;
                 lineLength = lineLength * 2 + 1;
             }
+
+            Console.SetCursorPosition(0, _gridVerticalLength + 3);
         }
 
-        public static void ShowDoubleEliminationGrid(List<List<Game>> winnersGrid, List<List<Game>> losersGrid)
+        private static void DrawResult(int x, int y, Game game)
         {
-            ShowSingleEliminationGrid(winnersGrid, "DE");
-            Console.WriteLine("LOSERS GRID:\n");
-            DrawGrid(losersGrid);
+            Console.SetCursorPosition(x, y);
+
+            if(!game.IsPlayed)
+                Console.Write(game.Result());
+            else
+            {
+                Console.ForegroundColor = ChangeColor(game, game.FirstPlayer);
+                Console.Write($"{game.FirstPlayer.Name} ");
+                Console.ResetColor();
+                Console.Write($"{game.FirstPlayerScore}:{game.SecondPlayerScore}");
+                Console.ForegroundColor = ChangeColor(game, game.SecondPlayer);
+                Console.Write($" {game.SecondPlayer.Name}");
+                Console.ResetColor();
+            }
+        }
+
+        private static ConsoleColor ChangeColor(Game game, Player player)
+        {
+            if (player == game.Winner)
+                return ConsoleColor.Green;
+            else
+                return ConsoleColor.Gray;
+        }
+
+        private static void DrawHorizontalLines()
+        {
+            Console.Write(" --");
+        }
+
+        private static void DrawVerticalLines(int x, int y, int lineLength)
+        {
+            for (int currentLength = 1; currentLength <= lineLength; currentLength++)
+            {
+                Console.SetCursorPosition(x, y);
+                Console.Write('|');
+                y++;
+            }
         }
 
         private static int GetMaxLength(List<Game> stage)
@@ -115,8 +131,8 @@ namespace FootballTournament
 
             for (int i = 0; i < stage.Count; i++)
             {
-                if (stage[i].ToString().Length > maxLength)
-                    maxLength = stage[i].ToString().Length;
+                if (stage[i].Result().Length > maxLength)
+                    maxLength = stage[i].Result().Length;
             }
 
             return maxLength;

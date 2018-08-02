@@ -1,4 +1,5 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,27 @@ namespace FootballTournament
         private int _secondPlayerScore;
 
         public Game() { }
+=======
+
+namespace FootballTournament
+{
+    [Serializable]
+    public class Game
+    {
+        public Player FirstPlayer { get; private set; }
+        public Player SecondPlayer { get; private set; }
+        public int FirstPlayerScore { get; private set; }
+        public int SecondPlayerScore { get; private set; }
+        public Player Winner { get; private set; }
+        public Player Loser { get; private set; }
+        public bool IsPlayed { get; private set; }
+>>>>>>> Kulikov_Tournament
 
         public Game(Player firstPlayer, Player secondPlayer)
         {
             FirstPlayer = firstPlayer;
             SecondPlayer = secondPlayer;
+<<<<<<< HEAD
         }
 
         public Player FirstPlayer { get; set; }
@@ -74,6 +91,59 @@ namespace FootballTournament
         {
             if (IsPlayed == true) return FirstPlayer.Name + ' ' + FirstPlayerScore + ':' + SecondPlayerScore + ' ' + SecondPlayer.Name;
             else return FirstPlayer.Name + ' ' + '-' + ':' + '-' + ' ' + SecondPlayer.Name;
+=======
+            IsPlayed = false;
+        }
+
+        public void Play()
+        {
+            if (SecondPlayer != null)
+            {
+                FirstPlayerScore = ConsoleWorker.EnterPlayerScore(FirstPlayer);
+                SecondPlayerScore = ConsoleWorker.EnterPlayerScore(SecondPlayer);
+
+                if (FirstPlayerScore == SecondPlayerScore)
+                {
+                    ConsoleWorker.DrawIsNotPossible();
+                    Play();
+                }
+                else
+                {
+                    IsPlayed = true;
+                    DetectWinner();
+                    ConsoleWorker.PrintGameResult(this);
+                }
+            }
+            else
+                Winner = FirstPlayer;
+        }
+
+        public void DetectWinner()
+        {
+            if (FirstPlayerScore > SecondPlayerScore)
+            {
+                Winner = FirstPlayer;
+                Loser = SecondPlayer;
+            }
+            else
+            {
+                Winner = SecondPlayer;
+                Loser = FirstPlayer;
+            }
+        }
+
+        public string Result()
+        {
+            if (SecondPlayer != null)
+            {
+                if (IsPlayed == true)
+                    return $"{FirstPlayer.Name} {FirstPlayerScore}:{SecondPlayerScore} {SecondPlayer.Name}";
+                else
+                    return $"{FirstPlayer.Name} -:- { SecondPlayer.Name}";
+            }
+            else
+                return $"{FirstPlayer.Name}";
+>>>>>>> Kulikov_Tournament
         }
     }
 }

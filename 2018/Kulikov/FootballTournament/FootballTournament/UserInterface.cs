@@ -81,7 +81,16 @@ namespace FootballTournament
 
         private void LoadTournament()
         {
+            _tournament = SaveLoadSystem.Load();
 
+            var tournamentMenuList = new List<MenuItem>
+            {
+                new MenuItem(PlayRound, " Play next round"),
+                new MenuItem(ShowGrid, " Show tournament grid"),
+            };
+
+            var tournamentMenu = new Menu(tournamentMenuList, "Playing tournament ...");
+            tournamentMenu.Start();
         }
     }
 }

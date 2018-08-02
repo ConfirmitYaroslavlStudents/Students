@@ -64,8 +64,7 @@ namespace FootballTournament
         {
             if (!IsFinished)
             {
-                foreach (var game in WinnersGrid[_currentWinnersStage])
-                    game.Play();
+                PlayGames(WinnersGrid, _currentWinnersStage);
 
                 if (!IsWinnersGridFinished())
                     InitNewWinnersGridStage();
@@ -76,11 +75,26 @@ namespace FootballTournament
                 ConsoleWorker.PrintChampion(Champion);
         }
 
+        private void PlayGames(List<List<Game>> grid, int stage)
+        {
+            foreach (var game in grid[stage])
+            {
+                if (!game.IsPlayed)
+                {
+                    game.Play();
+
+                    SaveLoadSystem.Save(this);
+                }
+            }
+        }
+
         private void InitNewWinnersGridStage()
         {
             _currentWinnersStage++;
             FillNewStage(WinnersGrid, _currentWinnersStage);
             _gamesOnCurrentWinnersStage = WinnersGrid[_currentWinnersStage].Count;
+
+            SaveLoadSystem.Save(this);
         }
 
         private void FillNewStage(List<List<Game>> grid, int currentStage)
@@ -117,16 +131,14 @@ namespace FootballTournament
 
                 if (!IsWinnersGridFinished())
                 {
-                    foreach (var game in WinnersGrid[_currentWinnersStage])
-                        game.Play();
+                    PlayGames(WinnersGrid, _currentWinnersStage);
                 }
 
                 if (_currentLosersStage <= _currentWinnersStage || !IsLosersGridFinished())
                 {
                     InitNewLosersGridStage();
 
-                    foreach (var game in LosersGrid[_currentLosersStage])
-                        game.Play();
+                    PlayGames(LosersGrid, _currentLosersStage);
                 }
 
                 if (!IsWinnersGridFinished())
@@ -148,6 +160,8 @@ namespace FootballTournament
 
             if (_currentLosersStage <= _currentWinnersStage)
                 FillLosersStageByWinnersGrid();
+
+            SaveLoadSystem.Save(this);
         }
 
         private void FillLosersStageByWinnersGrid()

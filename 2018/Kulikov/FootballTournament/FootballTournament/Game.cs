@@ -1,5 +1,8 @@
-﻿namespace FootballTournament
+﻿using System;
+
+namespace FootballTournament
 {
+    [Serializable]
     public class Game
     {
         public Player FirstPlayer { get; private set; }

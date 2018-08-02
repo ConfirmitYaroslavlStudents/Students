@@ -7,17 +7,43 @@ namespace Championship
     {
         private Menu _mainMenu;
         private TournamentGrid _tournamentGrid;
+        private DoubleGrid _doubleTournamentGrid;
         private GridType _gridType = GridType.StandardGrid;
         private bool isTeamInput = false;
+        private Action PlayTour;
+        private Action InputTeams;
+        private Action DrawGrid;
 
         public UserInterface()
         {
             var mainMenu = new List<MenuItem>
             {
-                new MenuItem(StartTournament, "Start championship"),
+                new MenuItem(InitSimpleTournament, "Start sinple championship"),
+                new MenuItem(InitDoubleTournament, "Start double championship"),
             };
             _mainMenu = new Menu(mainMenu, "Welcome");
+           
+        }
+
+        public void Start()
+        {
             _mainMenu.Start();
+        }
+
+        private void InitSimpleTournament()
+        {
+            PlayTour = PlayTours;
+            InputTeams = InputTeamss;
+            DrawGrid = DrawSimpleGrid;
+            StartTournament();
+        }
+
+        private void InitDoubleTournament()
+        {
+            PlayTour = PlayTours1;
+            InputTeams = InputTeamss1;
+            DrawGrid = DrawDoubleGrid;
+            StartTournament();
         }
 
         private void StartTournament()
@@ -36,13 +62,78 @@ namespace Championship
             TournamentMenu.Start();
         }
 
-        private void InputTeams()
+        private void InputTeamss()
         {
-            _tournamentGrid = new TournamentGrid(DataInput.InputTeams());
+             _tournamentGrid = new TournamentGrid(DataInput.InputTeams());
             isTeamInput = true;
         }
 
-        private void DrawGrid()
+        private void InputTeamss1()
+        {
+            _doubleTournamentGrid = new DoubleGrid(DataInput.InputTeams());
+            isTeamInput = true;
+        }
+
+
+        private void PlayTours()
+        {
+            if (!isTeamInput)
+            {
+                ShowWarning(Messages.NotAInputTeams);
+                return;
+            }
+
+            if (_tournamentGrid.Champion != null)
+            {
+                ShowWarning(Messages.ChampionshipIsEnd);
+                return;
+            }
+
+            for (int i = 0; i < _tournamentGrid.Tours[_tournamentGrid.CountTours].Games.Count; i++)
+            {
+                DataInput.InputGameScore(_tournamentGrid.Tours[_tournamentGrid.CountTours].Games[i]);
+            }
+            _tournamentGrid.StartNextTour();
+        }
+
+        private void PlayTours1()
+        {
+            if (!isTeamInput)
+            {
+                ShowWarning(Messages.NotAInputTeams);
+                return;
+            }
+
+            if (_doubleTournamentGrid.WinnersTour.Champion != null&&_doubleTournamentGrid.LoserTour.Champion!=null)
+            {
+                if (_doubleTournamentGrid.FinalGame == null)
+                {
+                    _doubleTournamentGrid.SetFinalGame();
+                    DataInput.InputGameScore(_doubleTournamentGrid.FinalGame);
+                }
+                else
+                {
+                    ShowWarning(Messages.ChampionshipIsEnd);
+                    return;
+                }
+            }
+
+            for (int i = 0; i < _doubleTournamentGrid.WinnersTour.Tours[_doubleTournamentGrid.WinnersTour.CountTours].Games.Count; i++)
+            {
+                DataInput.InputGameScore(_doubleTournamentGrid.WinnersTour.Tours[_doubleTournamentGrid.WinnersTour.CountTours].Games[i]);
+            }
+
+            if (_doubleTournamentGrid.LoserTour != null)
+            {
+                for (int i = 0; i < _doubleTournamentGrid.LoserTour.Tours[_doubleTournamentGrid.LoserTour.CountTours].Games.Count; i++)
+                {
+                    DataInput.InputGameScore(_doubleTournamentGrid.LoserTour.Tours[_doubleTournamentGrid.LoserTour.CountTours].Games[i]);
+                }
+            }
+            _doubleTournamentGrid.StartNextTour();
+        }
+
+        private void DrawSimpleGrid()
         {
             if (!isTeamInput)
             {
@@ -55,7 +146,7 @@ namespace Championship
             Console.ReadKey();
         }
 
-        private void PlayTour()
+        private void DrawDoubleGrid()
         {
             if (!isTeamInput)
             {
@@ -63,17 +154,15 @@ namespace Championship
                 return;
             }
 
-            if (_tournamentGrid.Champion!=null)
-            {
-                ShowWarning(Messages.ChampionshipIsEnd);
-                return;
-            }
+            GridDrawer gridDrawer = new GridDrawer(_doubleTournamentGrid.WinnersTour.Teams, 0);
+            gridDrawer.DrawGrid(_doubleTournamentGrid.WinnersTour, _gridType);
 
-            for (int i = 0; i < _tournamentGrid.Tours[_tournamentGrid.CountTours].Games.Count; i++)
+            if (_doubleTournamentGrid.LoserTour!=null)
             {
-                DataInput.InputGameScore(_tournamentGrid.Tours[_tournamentGrid.CountTours].Games[i]);
+                GridDrawer gridDrawer1 = new GridDrawer(_doubleTournamentGrid.LoserTour.Teams, gridDrawer._maxCursorTop+1);
+                gridDrawer1.DrawGrid(_doubleTournamentGrid.LoserTour, _gridType);
             }
-            _tournamentGrid.StartNextTour();
+            Console.ReadKey();
         }
 
         private void Options()

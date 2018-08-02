@@ -18,48 +18,48 @@ namespace Championship
             return number;
         }
 
-        public static Team CheckTeamName(List<Team> teams)
+        public static Team InputCorrectTeam(List<Team> teams)
         {
-            var TeamName = new Team(Console.ReadLine());
+            var team = new Team(Console.ReadLine());
 
-            while (teams.Contains(TeamName))
+            while (teams.Contains(team))
             {
                 Console.WriteLine(Messages.ImpossibleTeamName);
                 Console.Write(Messages.TryAgain);
-                TeamName = new Team(Console.ReadLine());
+                team = new Team(Console.ReadLine());
             }
 
-            return TeamName;
+            return team;
         }
 
         public static void InputGameScore(Game game)
         {
-            if (game.FirstTeam.Name == null)
+            if (game== null||game.IsPlayed||game.FirstTeam==null||game.SecondTeam==null)
                 return;
 
+            int minScoreValue = 0;
+            game.IsPlayed = true;
             Console.WriteLine(Messages.ShowOpponents(game.FirstTeam.Name, game.SecondTeam.Name));
-
             Console.Write(Messages.SetTeamScore(game.FirstTeam.Name));
-            game.FirstTeam.Score = InputIntegerNumber(0);
-
+            game.FirstTeamScore = InputIntegerNumber(minScoreValue);
             Console.Write(Messages.SetTeamScore(game.SecondTeam.Name));
-            game.SecondTeam.Score = InputIntegerNumber(0);
-
+            game.SecondTeamScore = InputIntegerNumber(minScoreValue);
             Console.WriteLine();
         }
 
         public static List<Team> InputTeams()
         {
+            int minCountTeams = 2;
             var teams = new List<Team>();
             Console.Write(Messages.InputCountTeams);
 
-            var countTeams = InputIntegerNumber(2);
+            var countTeams = InputIntegerNumber(minCountTeams);
             Console.WriteLine(Messages.InputNamesOfTeams);
 
             for (int i = 0; i < countTeams; i++)
             {
                 Console.Write(Messages.SomeIndex(i + 1));
-                teams.Add(CheckTeamName(teams));
+                teams.Add(InputCorrectTeam(teams));
             }
 
             return teams;

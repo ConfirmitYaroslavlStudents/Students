@@ -4,7 +4,10 @@
     {
         public Team FirstTeam { get; private set; }
         public Team SecondTeam { get; private set; }
-        public string Winner { get; private set; }
+        public Team Winner { get; private set; }
+        public int FirstTeamScore { get; set; }
+        public int SecondTeamScore { get; set; }
+        public bool IsPlayed = false;
 
         public Game(Team first, Team second)
         {
@@ -15,7 +18,24 @@
 
         public void SetWinner()
         {
-            Winner = FirstTeam.Score > SecondTeam.Score ? FirstTeam.Name : SecondTeam.Name;
+            if (Winner != null)
+                return;
+
+            if (SecondTeam == null)
+            {
+                Winner = FirstTeam;
+                return;
+            }
+
+            if (FirstTeamScore > SecondTeamScore)
+            {
+                Winner = FirstTeam;
+            }
+            else
+            {
+                Winner = SecondTeam;
+            }
+            
         }
     }
 }

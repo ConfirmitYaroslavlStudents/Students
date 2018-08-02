@@ -10,9 +10,10 @@ namespace Championship
         private int _shift;
         private int _rightBorder = 50;
         private int _widthOfFirstBranch = 3;
-        private int _maxCursorTop = 0;
+        public int _maxCursorTop = 0;
         private List<Team> _team = new List<Team>();
         private readonly int _minCursorTop=0;
+        private string _defoltTeamName="";
 
         public GridDrawer(List<Team> teams, int minCursorTop)
         {
@@ -24,7 +25,12 @@ namespace Championship
         public void DrawGrid(TournamentGrid grid, GridType type)
         {
             var allTeams = new List<Team>(_team);
-            _rightBorder = 2 * (_nameLength + 3 * (grid.Tours.Count - 1) + 4);
+            var oneTourLength = _nameLength + 4;
+            var countTours = grid.CountTours;
+            if (grid.Tours[grid.CountTours].Games.Count != 1)
+                countTours++;
+
+            _rightBorder = 2 * oneTourLength * countTours+1;
 
             int lastTour = grid.Tours.Count;
 
@@ -52,7 +58,7 @@ namespace Championship
                 }
             }
 
-            PrintChampion(grid.CountTours + 1, grid.Champion, type);
+            PrintChampion(grid.CountTours+1, grid.Champion, type);
             Console.CursorTop = _maxCursorTop + 1;
             _team = allTeams;
         }
@@ -61,7 +67,8 @@ namespace Championship
         {
             List<Team> answer = new List<Team>();
             _nameLength = names.Max(a => a.Name.Length);
-            _shift = _nameLength - 1;
+            _shift = _nameLength-1;
+            _defoltTeamName = _defoltTeamName.PadLeft(_nameLength);
 
             for (int i = 0; i < names.Count; i++)
             {
@@ -72,7 +79,7 @@ namespace Championship
 
                 answer.Add(names[i]);
             }
-
+            
             return answer;
         }
 
@@ -83,7 +90,7 @@ namespace Championship
 
         private void DrawBranch(bool isLeft, int i, int j, Game game)
         {
-            if (game.FirstTeam.Name == null)
+            if (game == null)
                 return;
 
             PrintUpLine(isLeft, i, j, game);
@@ -91,21 +98,21 @@ namespace Championship
             PrintDownLine(isLeft, i, j, game);
         }
 
-        private void PrintUpLine(bool isLeft, int i, int j, Game match)
+        private void PrintUpLine(bool isLeft, int i, int j, Game game)
         {
-            SetColor(match.Winner, match.FirstTeam.Name);
+            SetColor(game.Winner, game.FirstTeam);
 
             int y = GetCursorLeft(isLeft, i);
             SetCursorTop(i, j);
 
-            DrawHorizontalLine(isLeft, y, match.FirstTeam);
+            DrawHorizontalLine(isLeft, y, game.FirstTeam);
 
             DrawVerticalLine(isLeft, y, i);
         }
 
-        private void PrintMiddleLine(bool isLeft, int i, int j, Game match)
+        private void PrintMiddleLine(bool isLeft, int i, int j, Game game)
         {
-            if (match.Winner==null)
+            if (game.Winner==null)
             {
                 Console.ForegroundColor = (ConsoleColor)LineColor.StandartColor;
             }
@@ -128,30 +135,22 @@ namespace Championship
             }
         }
 
-        private void PrintDownLine(bool isLeft, int i, int j, Game match)
+        private void PrintDownLine(bool isLeft, int i, int j, Game game)
         {
-            SetColor(match.Winner, match.SecondTeam.Name);
+            SetColor(game.Winner, game.SecondTeam);
 
             int y = GetCursorLeft(isLeft, i);
 
             DrawVerticalLine(isLeft, y, i);
 
-            DrawHorizontalLine(isLeft, y, match.SecondTeam);
+            DrawHorizontalLine(isLeft, y, game.SecondTeam);
 
             _maxCursorTop = Math.Max(_maxCursorTop, Console.CursorTop);
         }
 
         private void DrawHorizontalLine(bool isLeft, int cursorLeft, Team team)
         {
-            if (_team.Contains(team))
-            {
-                PrintTeamName(isLeft, cursorLeft, team);
-            }
-            else
-            {
-                Console.CursorLeft = cursorLeft;
-                Console.WriteLine("--");
-            }
+            PrintTeamName(isLeft, cursorLeft, team);
         }
 
         private void DrawVerticalLine(bool isLeft, int cursorLeft, int i)
@@ -168,7 +167,7 @@ namespace Championship
             }
         }
 
-        private void SetColor(string winner, string team)
+        private void SetColor(Team winner, Team team)
         {
             Console.ForegroundColor = (ConsoleColor)LineColor.StandartColor;
 
@@ -187,11 +186,11 @@ namespace Championship
         {
             if (isleft)
             {
-                return _nameLength + 3 * i;
+                return (_nameLength + 4) * i+_nameLength;
             }
             else
             {
-                return _rightBorder - _nameLength - 3 * i;
+                return _rightBorder - (_nameLength+ 4) * i;
             }
         }
 
@@ -199,27 +198,37 @@ namespace Championship
         {
             if (isleft)
             {
-                Console.CursorLeft = cursorleft - _shift;
+                Console.CursorLeft = Math.Max(cursorleft - _shift,0);
+                if (team==null)
+                    Console.WriteLine($"{_defoltTeamName}--");
+                else
+
                 Console.WriteLine($"{team.Name}--");
             }
             else
             {
                 Console.CursorLeft = cursorleft;
-                Console.WriteLine($"--{team.Name}");
+                if (team == null)
+                    Console.WriteLine($"--{_defoltTeamName}");
+                else
+                    Console.WriteLine($"--{team.Name}");
             }
 
             _team.Remove(team);
         }
 
-        private void PrintChampion(int tour, string winner, GridType type)
+        private void PrintChampion(int tour, Team winner, GridType type)
         {
+            if (winner == null)
+                return;
+
             if (type == GridType.StandardGrid)
                 tour++;
 
             Console.ForegroundColor = (ConsoleColor)LineColor.WinnerColor;
             SetCursorTop(tour - 1, 0);
-            Console.CursorLeft = GetCursorLeft(true, tour);
-            Console.WriteLine(winner);
+            Console.CursorLeft = GetCursorLeft(true, tour-1)+1;
+            Console.WriteLine(winner.Name);
             Console.ForegroundColor = (ConsoleColor)LineColor.StandartColor;
         }
 
@@ -248,11 +257,5 @@ namespace Championship
     {
         StandardGrid,
         DoubleGrid
-    }
-
-    public enum LineColor
-    {
-        StandartColor=ConsoleColor.Gray,
-        WinnerColor=ConsoleColor.Green
     }
 }

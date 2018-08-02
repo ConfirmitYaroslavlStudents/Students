@@ -6,7 +6,7 @@ namespace Championship
     {
         public List<Tour> Tours = new List<Tour>();
         public int CountTours { get; private set; }
-        public string Champion { get; private set; }
+        public Team Champion { get; set; }
         public List<Team> Teams { get; private set; }
 
         public TournamentGrid(List<Team> teams)
@@ -28,7 +28,7 @@ namespace Championship
                 PlayFinalGame();
         }
 
-        private void PlayFinalGame()
+        public void PlayFinalGame()
         {
             Tours[CountTours].Games[0].SetWinner();
             Champion = Tours[CountTours].Games[0].Winner;

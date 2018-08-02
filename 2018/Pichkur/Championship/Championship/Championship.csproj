@@ -43,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataInput.cs" />
+    <Compile Include="DoubleGrid.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GridDrawer.cs" />
+    <Compile Include="LineColor.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Messages.cs" />

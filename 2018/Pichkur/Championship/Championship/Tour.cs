@@ -6,18 +6,19 @@ namespace Championship
     {
         public List<Game> Games = new List<Game>();
         public List<Team> _extraTeams = new List<Team>();
-        private int _countGames = 1;
+        protected int _countGames = 1;
+
         public Tour(List<Team> teams)
         {
             SetCountGames(teams.Count);
 
             if (_countGames == 0 || _countGames >= teams.Count / 2)
             {
-                DistributeAllCommands(teams);
+                DistributeAllTeams(teams);
             }
             else
             {
-                DistributeExtraCommands(teams);
+                DistributeExtraTeams(teams);
             }
 
             _extraTeams = teams;
@@ -29,11 +30,10 @@ namespace Championship
 
             foreach (var game in tour.Games)
             {
-                game.SetWinner();
-
-                if (game.Winner != null)
+                if (game != null)
                 {
-                    teams.Add(new Team(game.Winner));
+                    game.SetWinner();
+                   teams.Add(game.Winner);                   
                 }
                 else
                 {
@@ -45,31 +45,41 @@ namespace Championship
                 }
             }
 
-            teams.AddRange(tour._extraTeams);
+            foreach(var team in tour._extraTeams)
+            {
+                if (!teams.Contains(team))
+                    teams.Add(team);
+            }
 
             SetCountGames(teams.Count);
-            DistributeAllCommands(teams);
+            DistributeAllTeams(teams);
         }
 
-        private void DistributeAllCommands(List<Team> teams)
+        public void DistributeAllTeams(List<Team> teams)
         {
             while (teams.Count > 1)
             {
                 Games.Add(new Game(teams[0], teams[1]));
                 teams.RemoveRange(0, 2);
             }
+
+            if (teams.Count==1)
+            {
+                Games.Add(new Game(teams[0],null));
+            }
         }
-        private void DistributeExtraCommands(List<Team> teams)
+
+        public void DistributeExtraTeams(List<Team> teams)
         {
             for (int i = 0; i < _countGames; i++)
             {
                 Games.Add(new Game(teams[0], teams[1]));
-                Games.Add(new Game(new Team(), new Team()));
+                Games.Add(null);
                 teams.RemoveRange(0, 2);
             }
         }
 
-        private void SetCountGames(int countTeams)
+        public void SetCountGames(int countTeams)
         {
             int powOfTwo = 1;
 

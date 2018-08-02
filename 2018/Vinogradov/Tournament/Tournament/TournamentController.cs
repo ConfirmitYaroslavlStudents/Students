@@ -1,109 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Tournament
 {
     public class TournamentController
     {
-        private int _extraPlayerTour;
-
+        public bool DoubleElimination;
         public string[] Players;
-        public Match[][] Matches;
+        public MainGrid Main;
+        public LoserGrid Losers;
         public int Champion;
 
-        public TournamentController(int numberOfPlayers, string[] playerNames)
+        public TournamentController(int numberOfPlayers, string[] playerNames, bool isDoubleElimination)
         {
             if (numberOfPlayers < 2)
             {
                 throw new ArgumentException("At least 2 players are required.");
             }
 
-            Players = new string[numberOfPlayers];
-            FillMatchGrid(numberOfPlayers);
+            DoubleElimination = isDoubleElimination;
+            Main = new MainGrid(numberOfPlayers);
             Champion = -1;
+
+            if (DoubleElimination)
+            {
+                Losers = new LoserGrid(Main.Matches);
+            }
+
             Players = playerNames;
             Shuffle();
         }
-
-        private void FillMatchGrid(int numberOfPlayers)
-        {
-            int extraPlayer = numberOfPlayers % 2;
-            List<int> matchesInEachTour = CountPairs(numberOfPlayers, extraPlayer);
-            Matches = new Match[matchesInEachTour.Count][];
-            Matches[0] = new Match[matchesInEachTour[0]];
-
-            for (int i = 1; i < numberOfPlayers; i += 2)
-            {
-                Matches[0][i / 2] = new Match(i - 1, i);
-            }
-
-            _extraPlayerTour = -1;
-            FindPlaceForExtraPlayer(0, extraPlayer);
-
-            for (int i = 1; i < Matches.Length; i++)
-            {
-                Matches[i] = new Match[matchesInEachTour[i]];
-
-                for (int j = 0; j < Matches[i].Length; j++)
-                {
-                    Matches[i][j] = new Match(-1, -1);
-                }
-
-                FindPlaceForExtraPlayer(i, extraPlayer);
-            }
-
-            if (extraPlayer == 1)
-            {
-                Matches[_extraPlayerTour][Matches[_extraPlayerTour].Length - 1].Opponents[1] = numberOfPlayers - 1;
-            }
-
-        }
-
-        private List<int> CountPairs(int numberOfPlayers, int extra)
-        {
-            List<int> matchesOfEachTour = new List<int>();
-            numberOfPlayers -= extra;
-
-            while (extra > 0 || numberOfPlayers > 1)
-            {
-                if (numberOfPlayers % 2 == 1)
-                {
-                    if (extra == 1)
-                    {
-                        numberOfPlayers++;
-                        extra = 0;
-                    }
-                    else
-                    {
-                        numberOfPlayers--;
-                        extra = 1;
-                    }
-                }
-
-                numberOfPlayers = numberOfPlayers / 2;
-                matchesOfEachTour.Add(numberOfPlayers);
-            }
-
-            return matchesOfEachTour;
-        }
-
-        private void FindPlaceForExtraPlayer(int tour, int extraPlayer)
-        {
-            bool lastPlayerNeedsPlacement = (extraPlayer == 1 && _extraPlayerTour == -1 && Matches[tour].Length % 2 == 1);
-
-            if (lastPlayerNeedsPlacement)
-            {
-                _extraPlayerTour = tour + 1;
-            }
-        }
-
+        
         private void Shuffle()
         {
-            Random rng = new Random();
+            Random numberGenerator = new Random();
 
             for (int i = Players.Length - 1; i > 0; i--)
             {
-                int j = rng.Next(i + 1);
+                int j = numberGenerator.Next(i + 1);
 
                 if (i != j)
                 {
@@ -114,82 +47,183 @@ namespace Tournament
             }
         }
 
-        public void PlayGame(MatchInfo match)
+        public void PlayGame(MatchInfo match, bool loserGrid)
         {
-            if (MatchParametersValidation(match))
-            {
-                if (match.Tour == Matches.Length - 1)
-                {
-                    if (Champion == -1)
-                    {
-                        var currentMatch = Matches[match.Tour][match.MatchNumber];
-                        currentMatch.Winner = match.Winner;
-                        Champion = currentMatch.Opponents[currentMatch.Winner];
-                    }
+            Grid grid = Main;
 
+            if (loserGrid)
+            {
+                grid = Losers;
+            }
+
+            if (MatchParametersValidation(match, grid))
+            {
+                var currentMatch = grid.Matches[match.Tour][match.MatchNumber];
+
+                if (currentMatch.Winner == -1)
+                {
+                    if (match.Tour == grid.Matches.Length - 1)
+                    {
+                        currentMatch.Winner = match.Winner;
+                        grid.Winner = currentMatch.Opponents[currentMatch.Winner];
+
+                        if (DoubleElimination && !(loserGrid))
+                        {
+                            MoveToLosers(match);
+                        }
+                    }
                     else
-                        throw new InvalidOperationException("This match was already played.");
+                    {
+                        if (loserGrid)
+                        {
+                            MoveLoser(match);
+                        }
+                        else
+                        {
+                            MoveWinner(match);
+
+                            if (DoubleElimination)
+                            {
+                                MoveToLosers(match);
+                            }
+                        }
+                    }
                 }
                 else
-                {
-                    MovePlayer(match);
-                }
+                    throw new InvalidOperationException("This match was already played.");
             }
             else
                 throw new ArgumentException("Invalid match parameters.");
         }
 
-        private bool MatchParametersValidation(MatchInfo match)
+        private bool MatchParametersValidation(MatchInfo match, Grid grid)
         {
-            bool correctTour = (match.Tour >= 0 && match.Tour < Matches.Length);
+            bool correctTour = (match.Tour >= 0 && match.Tour < grid.Matches.Length);
             bool correctWinner = (match.Winner == 0 || match.Winner == 1);
 
             if (correctTour && correctWinner)
             {
-                bool correctMatch = (match.MatchNumber >= 0 && match.MatchNumber < Matches[match.Tour].Length);
-                return (correctMatch && Matches[match.Tour][match.MatchNumber].PlayersReady);
+                bool correctMatch = (match.MatchNumber >= 0 && match.MatchNumber < grid.Matches[match.Tour].Length);
+                return (correctMatch && grid.Matches[match.Tour][match.MatchNumber].PlayersReady);
             }
 
             return false;
         }
 
-        private void MovePlayer(MatchInfo match)
+        private void MoveLoser(MatchInfo match)
         {
-            Match currentMatch = Matches[match.Tour][match.MatchNumber];
-
-            if (currentMatch.Winner == -1)
-            {
-                currentMatch.Winner = match.Winner;
-                bool extraPlayer = (Matches[match.Tour].Length > 1 && Matches[match.Tour].Length % 2 == 1 && match.MatchNumber == Matches[match.Tour].Length - 1);
-
-                if (extraPlayer)
-                {
-                    MoveExtraPlayer(currentMatch.Opponents[currentMatch.Winner], match.Tour);
-                }
-                else
-                {
-                    Match nextMatch = Matches[match.Tour + 1][match.MatchNumber / 2];
-                    nextMatch.Opponents[match.MatchNumber % 2] = currentMatch.Opponents[currentMatch.Winner];
-                }
-            }
-            else
-                throw new InvalidOperationException("This match was already played.");
+            var currentMatch = Losers.Matches[match.Tour][match.MatchNumber];
+            currentMatch.Winner = match.Winner;
+            var nextMatch = Losers.Matches[match.Tour + 1][match.MatchNumber / 2];
+            nextMatch.Opponents[match.MatchNumber % 2] = currentMatch.Opponents[currentMatch.Winner];
         }
 
-        private void MoveExtraPlayer(int player, int tour)
+        private void MoveWinner(MatchInfo match)
         {
-            for (int i = tour + 1; i < Matches.Length; i++)
+            var currentMatch = Main.Matches[match.Tour][match.MatchNumber];
+            currentMatch.Winner = match.Winner;
+            bool extraPlayer = (Main.Matches[match.Tour].Length > 1 && Main.Matches[match.Tour].Length % 2 == 1 && match.MatchNumber == Main.Matches[match.Tour].Length - 1);
+
+            if (extraPlayer)
             {
-                if (Matches[i].Length % 2 == 1)
+                MoveWinnerExtra(currentMatch.Opponents[currentMatch.Winner], match.Tour);
+            }
+            else
+            {
+                var nextMatch = Main.Matches[match.Tour + 1][match.MatchNumber / 2];
+                nextMatch.Opponents[match.MatchNumber % 2] = currentMatch.Opponents[currentMatch.Winner];
+            }
+        }
+
+        private void MoveWinnerExtra(int player, int tour)
+        {
+            for (int i = tour + 1; i < Main.Matches.Length; i++)
+            {
+                if (Main.Matches[i].Length % 2 == 1)
                 {
-                    Matches[i + 1][Matches[i + 1].Length - 1].Opponents[1] = player;
+                    Main.Matches[i + 1][Main.Matches[i + 1].Length - 1].Opponents[1] = player;
                     break;
                 }
-                else if (i == _extraPlayerTour)
+                else if (i == Main.ExtraPlayerTour)
                 {
-                    Matches[i][Matches[i].Length - 1].Opponents[0] = player;
+                    Main.Matches[i][Main.Matches[i].Length - 1].Opponents[0] = player;
                     break;
                 }
+            }
+        }
+
+        private void MoveToLosers(MatchInfo match)
+        {
+            Match currentMatch = Main.Matches[match.Tour][match.MatchNumber];
+            int loser = currentMatch.Opponents[(match.Winner + 1) % 2];
+            int position = match.MatchNumber;
+
+            if (match.Tour > 0)
+            {
+                position += Losers.Matches[match.Tour - 1].Length;
+            }
+
+            int indexInPair = position % 2;
+            position /= 2;
+
+            if (position >= Losers.Matches[match.Tour].Length)
+            {
+                MoveToLosersExtra(loser, match.Tour);
+            }
+            else
+            {
+                Losers.Matches[match.Tour][position].Opponents[indexInPair] = loser;
+            }
+        }
+
+        private void MoveToLosersExtra(int player, int tour)
+        {
+            if (tour + 1 == Losers.Matches.Length)
+            {
+                Losers.Winner = player;
+            }
+            else
+            {
+                for (int i = tour + 1; i < Losers.Matches.Length; i++)
+                {
+                    int numberOfPlayers = Losers.Matches[i - 1].Length;
+
+                    if (i < Main.Matches.Length)
+                    {
+                        numberOfPlayers += Main.Matches[i].Length;
+                    }
+
+                    if (numberOfPlayers % 2 == 1)
+                    {
+                        Losers.Matches[i][Losers.Matches[i].Length - 1].Opponents[1] = player;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void PlayFinale(int winner)
+        {
+            if (Main.Winner == -1 || Losers.Winner == -1)
+            {
+                throw new InvalidOperationException("Players are not ready.");
+            }
+            switch (winner)
+            {
+                case 0:
+                    {
+                        Champion = Main.Winner;
+                        break;
+                    }
+                case 1:
+                    {
+                        Champion = Losers.Winner;
+                        break;
+                    }
+                default:
+                    {
+                        throw new ArgumentException("Invalid match parameters.");
+                    }
             }
         }
     }

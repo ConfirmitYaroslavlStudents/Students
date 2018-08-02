@@ -12,6 +12,7 @@ namespace FootballTournament
         public TournamentMode TournamentMode { get; private set; }
         public bool IsFinished { get; private set; }
         public Game GrandFinal { get; private set; }
+        public int CountOfPlayers { get; private set; }
 
         private int _currentWinnersStage = 0;
         private int _currentLosersStage = -1;
@@ -36,8 +37,8 @@ namespace FootballTournament
                 LosersGrid.Add(new List<Game>());
             }
 
-            var countOfPlayers = DataInput.GetCountOfPlayers();
-            var players = DataInput.GetPlayersList(countOfPlayers);
+            CountOfPlayers = DataInput.GetCountOfPlayers();
+            var players = DataInput.GetPlayersList(CountOfPlayers);
 
             for (int i = 0; i < players.Count; i += 2)
             {
@@ -50,6 +51,8 @@ namespace FootballTournament
                 WinnersGrid[_currentWinnersStage].Add(new Game(firstPlayer, secondPlayer));
                 _gamesOnCurrentWinnersStage++;
             }
+
+            SaveLoadSystem.Save(this);
         }
 
         public void PlayNextRound()

@@ -10,6 +10,7 @@ namespace FootballTournament
     {
         private Tournament _tournament;
         private TournamentMode _tournamentMode;
+        private TournamentGridType _tournamentGridType;
 
         public void Init()
         {
@@ -58,6 +59,14 @@ namespace FootballTournament
                 new MenuItem(ShowGrid, " Show tournament grid"),
             };
 
+            if (_tournamentMode == TournamentMode.SingleElimination)
+            {
+                tournamentMenuList.Add(new MenuItem(SelectOneSidedGrid, " Select one-sided type of grid"));
+                tournamentMenuList.Add(new MenuItem(SelectDoubleSidedGrid, " Select double-sided type of grid"));
+
+                _tournamentGridType = TournamentGridType.OneSided;
+            }
+
             var tournamentMenu = new Menu(tournamentMenuList, "Playing tournament ...");
             tournamentMenu.Start();
         }
@@ -72,11 +81,26 @@ namespace FootballTournament
         private void ShowGrid()
         {
             if (_tournamentMode == TournamentMode.SingleElimination)
-                TournamentGrid.ShowSingleEliminationGrid(_tournament);
+            {
+                if (_tournamentGridType == TournamentGridType.OneSided)
+                    TournamentGrid.ShowSingleEliminationGrid(_tournament);
+                else
+                    DoubleSidedTournamentGrid.Show(_tournament);
+            }
             else
                 TournamentGrid.ShowDoubleEliminationGrid(_tournament);
 
             Console.ReadKey();
+        }
+
+        private void SelectOneSidedGrid()
+        {
+            _tournamentGridType = TournamentGridType.OneSided;
+        }
+
+        private void SelectDoubleSidedGrid()
+        {
+            _tournamentGridType = TournamentGridType.DoubleSided;
         }
 
         private void LoadTournament()
@@ -88,6 +112,14 @@ namespace FootballTournament
                 new MenuItem(PlayRound, " Play next round"),
                 new MenuItem(ShowGrid, " Show tournament grid"),
             };
+
+            if (_tournamentMode == TournamentMode.SingleElimination)
+            {
+                tournamentMenuList.Add(new MenuItem(SelectOneSidedGrid, " Select one-sided type of grid"));
+                tournamentMenuList.Add(new MenuItem(SelectDoubleSidedGrid, " Select double-sided type of grid"));
+
+                _tournamentGridType = TournamentGridType.OneSided;
+            }
 
             var tournamentMenu = new Menu(tournamentMenuList, "Playing tournament ...");
             tournamentMenu.Start();

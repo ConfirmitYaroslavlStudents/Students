@@ -11,4 +11,10 @@ namespace FootballTournament
         SingleElimination,
         DoubleElimination
     }
+
+    public enum TournamentGridType
+    {
+        OneSided,
+        DoubleSided
+    }
 }

@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Championship
 {
-    public class TournamentGrid
+    [Serializable]
+    public class SingleEliminationGrid
     {
         public List<Tour> Tours = new List<Tour>();
         public int CountTours { get; private set; }
         public Team Champion { get; set; }
         public List<Team> Teams { get; private set; }
 
-        public TournamentGrid(List<Team> teams)
+        public SingleEliminationGrid(List<Team> teams)
         {
             Teams = new List<Team>(teams);
             Tours.Add(new Tour(teams));

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Championship
 {
@@ -34,7 +36,7 @@ namespace Championship
 
         public static void InputGameScore(Game game)
         {
-            if (game== null||game.IsPlayed||game.FirstTeam==null||game.SecondTeam==null)
+            if (game == null || game.IsPlayed || game.FirstTeam == null || game.SecondTeam == null)
                 return;
 
             int minScoreValue = 0;

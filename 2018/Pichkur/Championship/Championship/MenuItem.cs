@@ -2,6 +2,7 @@
 
 namespace Championship
 {
+    [Serializable]
     public class MenuItem
     {
         public MenuItem()

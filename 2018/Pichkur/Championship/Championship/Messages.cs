@@ -11,18 +11,27 @@
         public static readonly string InputNamesOfTeams = "Input teams:";
         public static readonly string SelectStandartGridType = "You choose Standart type of grid";
         public static readonly string SelectDoubleGridType = "You choose Double type of grid";
+        public static readonly string DownloadError = "Nothing to download";
+        public static readonly string TeamsInputAlready = "Championship is already start";
 
         public static string SomeIndex(int index)
         {
             return $"{index}. ";
         }
+
         public static string ShowOpponents(string firstOpponent,string secondOpponent)
         {
             return $"{firstOpponent} vs {secondOpponent}";
         }
+
         public static string SetTeamScore(string team)
         {
             return $"Enter {team} score:";
+        }
+
+        public static string ShowChampion(Team champion)
+        {
+            return $"The \"{champion.Name}\" is Champion!!";
         }
     }
 }

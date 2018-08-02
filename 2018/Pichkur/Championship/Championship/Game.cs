@@ -1,5 +1,8 @@
-﻿namespace Championship
+﻿using System;
+
+namespace Championship
 {
+    [Serializable]
     public class Game
     {
         public Team FirstTeam { get; private set; }
@@ -36,6 +39,14 @@
                 Winner = SecondTeam;
             }
             
+        }
+
+        public Team GetLoser()
+        {
+            if (Winner.Equals(FirstTeam))
+                return SecondTeam;
+            else
+                return FirstTeam;
         }
     }
 }

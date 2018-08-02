@@ -1,13 +1,11 @@
-﻿namespace Championship
+﻿using System;
+
+namespace Championship
 {
+    [Serializable]
     public class Team
     {
         public string Name { get; set; }
-
-        public Team()
-        {
-            Name = null;
-        }
 
         public Team(string name)
         {

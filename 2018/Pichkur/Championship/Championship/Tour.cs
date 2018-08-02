@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Championship
 {
+    [Serializable]
     public class Tour
     {
         public List<Game> Games = new List<Game>();

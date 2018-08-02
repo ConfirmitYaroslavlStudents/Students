@@ -8,7 +8,7 @@ namespace Championship
     {
         private int _nameLength;
         private int _shift;
-        private int _rightBorder = 50;
+        private int _rightBorder = 0;
         private int _widthOfFirstBranch = 3;
         public int _maxCursorTop = 0;
         private List<Team> _team = new List<Team>();
@@ -22,11 +22,12 @@ namespace Championship
             _minCursorTop = minCursorTop;
         }
 
-        public void DrawGrid(TournamentGrid grid, GridType type)
+        public void DrawGrid(SingleEliminationGrid grid, GridType type)
         {
             var allTeams = new List<Team>(_team);
             var oneTourLength = _nameLength + 4;
             var countTours = grid.CountTours;
+
             if (grid.Tours[grid.CountTours].Games.Count != 1)
                 countTours++;
 
@@ -63,24 +64,21 @@ namespace Championship
             _team = allTeams;
         }
 
-        private List<Team> MakeNameOneLength(List<Team> names)
+        private List<Team> MakeNameOneLength(List<Team> teams)
         {
-            List<Team> answer = new List<Team>();
-            _nameLength = names.Max(a => a.Name.Length);
+            List<Team> result = new List<Team>();
+            _nameLength = teams.Max(a => a.Name.Length);
             _shift = _nameLength-1;
             _defoltTeamName = _defoltTeamName.PadLeft(_nameLength);
 
-            for (int i = 0; i < names.Count; i++)
+            foreach (var team in teams)
             {
-                if (names[i].Name.Length < _nameLength)
-                {
-                    names[i].Name = names[i].Name.PadLeft(_nameLength);
-                }
-
-                answer.Add(names[i]);
+                string newTeamName = team.Name.PadLeft(_nameLength);
+                team.Name = newTeamName;
+                result.Add(team);
             }
             
-            return answer;
+            return result;
         }
 
         private int GetMiddleGame(int countGames)
@@ -106,7 +104,6 @@ namespace Championship
             SetCursorTop(i, j);
 
             DrawHorizontalLine(isLeft, y, game.FirstTeam);
-
             DrawVerticalLine(isLeft, y, i);
         }
 
@@ -142,7 +139,6 @@ namespace Championship
             int y = GetCursorLeft(isLeft, i);
 
             DrawVerticalLine(isLeft, y, i);
-
             DrawHorizontalLine(isLeft, y, game.SecondTeam);
 
             _maxCursorTop = Math.Max(_maxCursorTop, Console.CursorTop);
@@ -198,16 +194,17 @@ namespace Championship
         {
             if (isleft)
             {
-                Console.CursorLeft = Math.Max(cursorleft - _shift,0);
-                if (team==null)
+                Console.CursorLeft = Math.Max(cursorleft - _shift, 0);
+
+                if (team == null)
                     Console.WriteLine($"{_defoltTeamName}--");
                 else
-
-                Console.WriteLine($"{team.Name}--");
+                    Console.WriteLine($"{team.Name}--");
             }
             else
             {
                 Console.CursorLeft = cursorleft;
+
                 if (team == null)
                     Console.WriteLine($"--{_defoltTeamName}");
                 else
@@ -227,7 +224,7 @@ namespace Championship
 
             Console.ForegroundColor = (ConsoleColor)LineColor.WinnerColor;
             SetCursorTop(tour - 1, 0);
-            Console.CursorLeft = GetCursorLeft(true, tour-1)+1;
+            Console.CursorLeft = GetCursorLeft(true, tour - 1) - _nameLength + 1;
             Console.WriteLine(winner.Name);
             Console.ForegroundColor = (ConsoleColor)LineColor.StandartColor;
         }

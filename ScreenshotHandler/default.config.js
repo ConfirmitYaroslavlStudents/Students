@@ -1,6 +1,6 @@
 const defaultConfig = {
   comparison: {
-    scaleToSameSize: true,
+    scaleToSameSize: false,
     ignore: "antialiasing",
     maxMisMatchPercentage: 0
   },
@@ -11,7 +11,7 @@ const defaultConfig = {
 
     difference: {
       errorType: "movementDifferenceIntensity",
-      transparency: 0.95,
+      transparency: 1,
       largeImageThreshold: 0,
       useCrossOrigin: false,
       outputDiff: true,

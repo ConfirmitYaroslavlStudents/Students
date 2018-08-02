@@ -117,7 +117,7 @@ module.exports = options
 ### Comparison options
 ```
 comparison: {
-  scaleToSameSize, //boolean, default: true
+  scaleToSameSize, //boolean, default: false
   ignore, //string or array, default: "antialiasing"
   maxMisMatchPercentage //number, default: 0
 }
@@ -136,7 +136,7 @@ output: {
 
   difference: {
     errorType, //string, default: "movementDifferenceIntensity",
-    transparency, //number, default: 0.95,
+    transparency, //number, default: 1,
     largeImageThreshold, //number, default: 0
     useCrossOrigin, //boolean, default: false
     outputDiff, //boolean, default: true

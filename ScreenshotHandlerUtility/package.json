@@ -1,38 +1,42 @@
 {
   "name": "ScreenshotHandlerUtility",
-  "version": "0.0.1",
+  "version": "0.1.3",
   "description": "Electron application for ScreenshotHandler",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
-    "start": "electron . -m C:\\Users\\DmitryB\\Documents\\Students\\CandidatesAccounting\\tests\\__screenshots__\\.metadata.json",
-    "build": "webpack --progress --config webpack.config.js",
-    "dev": "npm run build && npm start"
+    "build": "webpack --progress --config webpack.production.config.js && electron-builder --win",
+    "start": ".\\dist\\win-unpacked\\ScreenshotHandlerUtility.exe",
+    "prod": "npm run build && npm start",
+    "dev": "webpack --progress --config webpack.development.config.js && electron ./index.js -D",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
   "author": "DmitryB",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^1.4.0",
-    "@material-ui/icons": "^1.1.0",
-    "electron": "^2.0.5",
-    "fs": "0.0.1-security",
-    "history": "^4.7.2",
+    "confirmit-global-styles-material": "file:../../confirmitPackages/confirmit-global-styles-material.tgz",
+    "confirmit-icons": "file:../../confirmitPackages/confirmit-icons.tgz",
+    "confirmit-icons-material": "file:../../confirmitPackages/confirmit-icons-material.tgz",
+    "confirmit-react-components": "file:../../confirmitPackages/confirmit-react-components.tgz",
+    "confirmit-react-utils": "file:../../confirmitPackages/confirmit-react-utils.tgz",
+    "confirmit-themes": "file:../../confirmitPackages/confirmit-themes.tgz",
+    "minimist": "^1.2.0",
     "path": "^0.12.7",
+    "popper.js": "^1.12.9",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-shallow-compare": "^15.6.2",
     "react-addons-transition-group": "^15.6.2",
+    "react-click-outside": "^3.0.1",
     "react-dom": "^16.4.1",
     "react-dom-factories": "^1.0.2",
     "react-redux": "^5.0.7",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
     "redux-actions": "^2.4.0",
     "redux-saga": "^0.16.0",
     "styled-components": "^3.3.3",
-    "typeface-roboto": "0.0.54"
+    "uncontrollable": "^6.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -40,6 +44,7 @@
     "babel-loader": "^7.1.5",
     "babel-plugin-styled-components": "^1.5.1",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -48,11 +53,27 @@
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
+    "electron": "^2.0.5",
+    "electron-builder": "^20.26.1",
     "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.11",
     "react-loader": "^2.4.5",
+    "react-transition-group": "^2.4.0",
     "style-loader": "^0.21.0",
-    "webpack": "^4.16.1",
-    "webpack-cli": "^3.0.8"
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0"
+  },
+  "build": {
+    "appId": "ScreenshotHandlerUtility.app",
+    "productName": "ScreenshotHandlerUtility",
+    "directories": {
+      "output": "./dist"
+    },
+    "files": [
+      "package.json",
+      "index.js",
+      "build/",
+      "node_modules/"
+    ],
+    "compression": "maximum"
   }
 }

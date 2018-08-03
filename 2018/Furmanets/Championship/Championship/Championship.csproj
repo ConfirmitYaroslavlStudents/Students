@@ -40,12 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Draftsman.cs" />
     <Compile Include="Meeting.cs" />
-    <Compile Include="StageIndicator.cs" />
-    <Compile Include="TournamentGrid.cs" />
+    <Compile Include="Round.cs" />
+    <Compile Include="ConstructorTournament.cs" />
     <Compile Include="Tournamet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MeetingWinner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

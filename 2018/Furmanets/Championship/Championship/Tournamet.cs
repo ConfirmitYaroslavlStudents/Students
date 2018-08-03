@@ -3,120 +3,53 @@ using System.Collections.Generic;
 
 namespace Championship
 {
+    [Serializable]
     public class Tournament
     {
-        public TournamentGrid Standings;
-        private List<string> _players;
-        private int _playersCount;
+        public List<Round> TournamentRounds;
+        public int IndexOfRound;
 
-        public void Start()
+        public Tournament(List<string> players)
         {
-            var players = Draftsman.AddPlayers();
-            PlayerPlacement(players);
-            Draftsman.PaintGraf(Standings);
-            CollectorResults();
+            TournamentRounds = ConstructorTournament.CreateTournament(players);
+            IndexOfRound = 0;
         }
 
-        private void PlayerPlacement(List<string> players)
+        public void CollectorResults(List<int[]> resultsMatches)
         {
-            var random = new Random();
-            _playersCount = players.Count;
-            _players = new List<string>();
+            var round = TournamentRounds[IndexOfRound];
 
-            for (var i = 0; i < _playersCount; i++)
+            for (var i = 0; i < resultsMatches.Count; i++)
             {
-                var currentPlayer = players[random.Next(0, players.Count)];
-                _players.Add(currentPlayer);
-                players.Remove(currentPlayer);
+                round.Meetings[i].Score = resultsMatches[i];
+                ChooseWinner(round.Meetings[i]);
             }
-
-            Standings = new TournamentGrid();
-            Standings.CreateTournamentGrid(_playersCount);
-
-            var indexPlayer = 0;
-
-            foreach (var meeting in Standings.Tournament)
-            {
-                meeting.FirstPlayer = _players[indexPlayer];
-                indexPlayer++;
-            }
-
-            foreach (var meeting in Standings.Tournament)
-            {
-                meeting.SecondPlayer = _players[indexPlayer];
-                indexPlayer++;
-                if (_players.Count == indexPlayer)
-                {
-                    break;
-                }
-            }
-
-            Draftsman.PaintTournamentStage(Standings);
+            IndexOfRound++;
         }
 
-        private void CollectorResults()
+        private void ChooseWinner(Meeting meeting)
         {
-            var nextRoundGrid = new TournamentGrid();
-            foreach (var meeting in Standings.Tournament)
+            if (meeting.SecondPlayer == null || meeting.FirstPlayer == null)
+                return;
+
+            if (meeting.Score[0] > meeting.Score[1])
             {
-                ChoiseWinner(meeting, nextRoundGrid);
-            }
-
-            Console.Clear();
-            Draftsman.PaintTournamentRound(Standings);
-            Standings = nextRoundGrid;
-
-            if (Standings.Tournament.Count != 0)
-            {
-                Draftsman.PaintTournamentStage(Standings);
-                CollectorResults();
-            }
-        }
-
-        private void ChoiseWinner(Meeting meeting, TournamentGrid nextRoundGrid)
-        {
-            if (meeting.SecondPlayer != null)
-            {
-                Draftsman.GetResultOfMatch(meeting);
-
-                if (meeting.Score[0] > meeting.Score[1])
-                {
-                    if (meeting.Stage == "final")
-                    {
-                        Draftsman.CongratulationWinner(meeting.FirstPlayer);
-                    }
-                    else
-                    {
-                        PromoteWinner(meeting, meeting.FirstPlayer, nextRoundGrid);
-                    }
-                }
-                else
-                {
-                    if (meeting.Stage == "final")
-                    {
-                        Draftsman.CongratulationWinner(meeting.SecondPlayer);
-                    }
-                    else
-                    {
-                        PromoteWinner(meeting, meeting.SecondPlayer, nextRoundGrid);
-                    }
-                }
+                PromoteWinner(meeting, meeting.FirstPlayer);
+                meeting.Winner = MeetingWinningIndicator.FirstPlayer;
             }
             else
             {
-                if (meeting.Stage == "final")
-                {
-                    Draftsman.CongratulationWinner(meeting.SecondPlayer);
-                }
-                else
-                {
-                    PromoteWinner(meeting, meeting.FirstPlayer, nextRoundGrid);
-                }
+                PromoteWinner(meeting, meeting.SecondPlayer);
+                meeting.Winner = MeetingWinningIndicator.SecondPlayer;
             }
         }
 
-        private void PromoteWinner(Meeting meeting, string player, TournamentGrid nextRoundGrid)
+        private void PromoteWinner(Meeting meeting, string player)
         {
+            if (meeting.NextStage == null)
+            {
+                return;
+            }
 
             if (meeting.NextStage.FirstPlayer == null)
             {
@@ -125,7 +58,6 @@ namespace Championship
             else
             {
                 meeting.NextStage.SecondPlayer = player;
-                nextRoundGrid.Tournament.Add(meeting.NextStage);
             }
         }
     }

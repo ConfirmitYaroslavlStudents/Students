@@ -3,7 +3,7 @@ using Championship;
 
 namespace ConsoleChampionship
 {
-    internal class HorisontalGraphPainter : GraphPainter
+    internal class OnTwoSidesGraphPainter:GraphPainter
     {
         public override void PaintGraph(Tournament tournament)
         {
@@ -25,9 +25,11 @@ namespace ConsoleChampionship
                 var isFirstLine = true;
                 var isSecondLine = false;
 
-                foreach (var meeting in round.Meetings)
+                for (var j = 0; j < round.Meetings.Count/2; j++)
                 {
-                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null && round.Equals(tournamentRounds[0]))
+                    var meeting = round.Meetings[j];
+                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null &&
+                        round.Equals(tournamentRounds[0]))
                     {
                         continue;
                     }
@@ -61,7 +63,6 @@ namespace ConsoleChampionship
                                 nextDistanceBeewinPalyers = nextCursorPositionTop;
                             }
                         }
-
                     }
                     positionCursorTop += distanceBetweenPlayers;
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
@@ -69,7 +70,6 @@ namespace ConsoleChampionship
 
                     positionCursorTop += distanceBetweenPlayers;
                 }
-
             }
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
             WriteNameWinnerInFinalRound(tournament);

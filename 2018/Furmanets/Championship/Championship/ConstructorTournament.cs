@@ -13,7 +13,7 @@ namespace Championship
             return tournamentGrid;
         }
 
-        private static List<Round> CreateTournamentGrid(int playersCount)
+        public static List<Round> CreateTournamentGrid(int playersCount)
         {
             var tournament = new List<Round>();
             var stage = 1;

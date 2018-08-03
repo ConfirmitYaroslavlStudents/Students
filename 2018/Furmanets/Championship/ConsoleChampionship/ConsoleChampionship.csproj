@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HorisontalGraphPainter.cs" />
+    <Compile Include="OnTwoSidesGraphPainter.cs" />
     <Compile Include="UserInteractor.cs" />
     <Compile Include="GraphPainter.cs" />
     <Compile Include="Program.cs" />

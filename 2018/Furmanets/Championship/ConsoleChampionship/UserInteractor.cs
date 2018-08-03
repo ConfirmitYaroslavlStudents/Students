@@ -6,7 +6,7 @@ namespace ConsoleChampionship
 {
     public class UserInteractor
     {
-        public static int[] GetResultOfMatch(Meeting meeting)
+        public static int[] GetResultOfMatchSingleElimination(Meeting meeting)
         {
             while (true)
             {

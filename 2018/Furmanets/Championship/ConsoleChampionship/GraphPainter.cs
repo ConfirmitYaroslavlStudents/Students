@@ -50,7 +50,8 @@ namespace ConsoleChampionship
 
         public void WriteNameWinnerInFinalRound(Tournament tournament)
         {
-            var finalRound = tournament.TournamentRounds[tournament.TournamentRounds.Count - 1];
+            var tournamentGrid = tournament.GetTournamentToPrint();
+            var finalRound = tournamentGrid[tournamentGrid.Count - 1];
 
             switch (finalRound.Meetings[0].Winner)
             {

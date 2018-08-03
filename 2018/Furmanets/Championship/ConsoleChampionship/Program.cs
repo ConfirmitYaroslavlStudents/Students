@@ -37,10 +37,36 @@ namespace ConsoleChampionship
                     return;
                 }
 
-                _championship = new Tournament(_players);
-                FileManager.WriteTournamentInFile(_championship);
+                var tournamentMenuList = new List<MenuItem>
+                {
+                    new MenuItem(CreateSingeEliminationTournament, "SingleElimination"),
+                    new MenuItem(CreateDoubleEliminationTournament, "DoubleElimination"),
+                };
+                var tournamentMenu = new Menu(tournamentMenuList, "Championship");
+                tournamentMenu.Start();
             }
+            else
+            {
+                MenuTournament();
+            }
+        }
 
+        private static void CreateDoubleEliminationTournament()
+        {
+            _championship = new DoubleEliminationTournament(_players);
+            FileManager.WriteTournamentInFile(_championship);
+            MenuTournament();
+        }
+
+        private static void CreateSingeEliminationTournament()
+        {
+            _championship = new SingleElimitationTournament(_players);
+            FileManager.WriteTournamentInFile(_championship);
+            MenuTournament();
+        }
+
+        static void MenuTournament()
+        {
             var tournamentMenuList = new List<MenuItem>
             {
                 new MenuItem(EnterResults, "Enter match results"),
@@ -52,7 +78,9 @@ namespace ConsoleChampionship
 
         static void EnterResults()
         {
-            if (_championship.IndexOfRound >= _championship.TournamentRounds.Count)
+            var tournament = _championship.GetTournamentToPrint();
+
+            if (_championship.GetIndexOfRound() >= tournament.Count)
             {
                 Console.WriteLine("All matches are over.");
                 Thread.Sleep(1000);
@@ -61,9 +89,9 @@ namespace ConsoleChampionship
 
             var resultsOfRound = new List<int[]>();
 
-            foreach (var meeting in _championship.TournamentRounds[_championship.IndexOfRound].Meetings)
+            foreach (var meeting in tournament[_championship.GetIndexOfRound()].Meetings)
             {
-                resultsOfRound.Add(UserInteractor.GetResultOfMatch(meeting));
+                resultsOfRound.Add(UserInteractor.GetResultOfMatchSingleElimination(meeting));
             }
 
             _championship.CollectorResults(resultsOfRound);
@@ -76,6 +104,7 @@ namespace ConsoleChampionship
             {
                 new MenuItem(PaintVerticalGraph, "Show vertical version"),
                 new MenuItem(PaintHorisontalGraph, "Show horisontal version"),
+                new MenuItem(PaintOnTwoSideGraph, "Show on two side version")
             };
             var graphMenu = new Menu(menuGraph, "Championship");
             graphMenu.Start();
@@ -97,6 +126,13 @@ namespace ConsoleChampionship
             Console.ReadKey();
         }
 
+        static void PaintOnTwoSideGraph()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            var onTwoSide = new OnTwoSidesGraphPainter();
+            onTwoSide.PaintGraph(_championship);
+            Console.ReadKey();
+        }
 
         private static void MenuAddPlayers()
         {

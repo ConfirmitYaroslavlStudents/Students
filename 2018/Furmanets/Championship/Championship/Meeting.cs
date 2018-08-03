@@ -16,5 +16,14 @@ namespace Championship
             Score = new int[2];
             Winner = MeetingWinningIndicator.MatchDidNotTakePlace;
         }
+
+        public Meeting(Meeting meeting)
+        {
+            FirstPlayer = meeting.SecondPlayer;
+            SecondPlayer = meeting.SecondPlayer;
+            Score = meeting.Score;
+            NextStage = meeting.NextStage;
+            Winner = meeting.Winner;
+        }
     }
 }

@@ -1,23 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Football_League
 {
     internal enum LeagueType
     {
-        SingleElumination,
-        DoubleElumination
+        SingleElumination = 1,
+        DoubleElumination = 2
     };
+
+    internal enum GridDrawingType
+    {
+        Vertical = 1,
+        Horizontal = 2
+    };
+    internal enum MenuChoiceType
+    {
+        StartNewLeague = 1,
+        ChooseWinners = 2,
+        DisplayResults = 3,
+        Load = 4,
+        Exit = 5
+    }
     internal class Program
     {
-        private static List<Contestant> _currentPlayersGrid1 = new List<Contestant>();
-        private static List<Contestant> _currentPlayersGrid2 = new List<Contestant>();
-        private static List<Match> _currentMatchesGrid1;
-        private static List<Match> _currentMatchesGrid2;
-        private static Scoreboard _scoreboard = new Scoreboard();
-
         private static LeagueType _leagueType;
+        private static FullGrid Grid = new FullGrid();
+
         private static void Main()
         {
             _leagueType = ConsoleWorker.ChooseLeagueType() == 1 ? LeagueType.SingleElumination : LeagueType.DoubleElumination;
@@ -27,33 +39,51 @@ namespace Football_League
                 ConsoleWorker.Menu();
                 bool successfulOperation = false;
                 while (!successfulOperation)
-                    successfulOperation = RunChoice() != 0;
+                    successfulOperation = RunChoice((MenuChoiceType)int.Parse(ConsoleWorker.MenuChoice())) != 0;
             }
-        }      
-        public static int RunChoice()
+        }
+        public static int RunChoice(MenuChoiceType choice)
         {
-            var choice = ConsoleWorker.MenuChoice();
             switch (choice)
             {
-                case "1":
-                    {
-                        CreateNewLeague();
-                        break;
-                    }
-                case "2":
+                case MenuChoiceType.StartNewLeague:
                 {
-                        if(!CheckPlayerNumber())
-                            break;
-                        ChooseWinners();
+                        CreateNewLeague();
+                        SaveCurrentSession();
                         break;
                     }
-                case "3":
+                case MenuChoiceType.ChooseWinners:
                     {
-                        _scoreboard.Print();
+                        Grid.PlayRound();
+                        SaveCurrentSession();
                         break;
                     }
-                case "4":
+                case MenuChoiceType.DisplayResults:
                     {
+                        if (ConsoleWorker.ChooseDrawingType() == 1)
+                        {
+                            VerticalDrawer verticalGrid = new VerticalDrawer();
+                            verticalGrid.MakeVerticalGrid(Grid);
+                            verticalGrid.PrintGrid();
+                        }
+                        else
+                        {
+                            HorizontalDrawer horizontalDrawer = new HorizontalDrawer();
+                            horizontalDrawer.MakeHorintalGrid(Grid);
+                            horizontalDrawer.PrintGrid();
+                        }
+                        break;
+                    }
+                case MenuChoiceType.Load:
+                    {
+                        LoadLastSave();
+                        break;
+                    }
+                case MenuChoiceType.Exit:
+                    {
+                        bool saveAsked = ConsoleWorker.SaveProcessQuestion() == 1;
+                        if (saveAsked)
+                            SaveCurrentSession();
                         Environment.Exit(0);
                         break;
                     }
@@ -69,30 +99,20 @@ namespace Football_League
 
         public static void CreateNewLeague()
         {
-            _scoreboard = new Scoreboard();
-            List<Contestant> newPlayers = new List<Contestant>();
-
-            var count = ConsoleWorker.GetNumberOfPlayers();
-            for (int i = 0; i < count; i++)
-            {
-              
-                var newPlayer = new Contestant(ConsoleWorker.GetPlayerName(),0);              
-                newPlayers.Add(newPlayer);
-            }
-
-            Randomize(ref newPlayers);
-
-            List<Contestant> newPlayersRandomized = new List<Contestant>();
-            foreach (var contestant in newPlayers)
-            {
-                var newPlayer = new Contestant(contestant.Name, _scoreboard.CurrentPlayerPosition);
-                _scoreboard.CurrentPlayerPosition += newPlayer.Name.Length + 1;
-                newPlayersRandomized.Add(newPlayer);
-            }
-
-            EndRound(newPlayersRandomized);            
+            Grid = new FullGrid();
+            Grid.SetGridTreesNumber((int)_leagueType);
+            Grid.InitialiseGrid(AddPlayersToCompetition(ConsoleWorker.GetNumberOfPlayers()));
         }
 
+        public static List<Contestant> AddPlayersToCompetition(int num)
+        {
+            var players = new List<Contestant>();
+            for (int i = 0; i < num; i++)
+                players.Add(new Contestant(ConsoleWorker.GetPlayerName()));
+
+            Randomize(ref players);
+            return players;
+        }
         public static void Randomize(ref List<Contestant> players)
         {
             Random rng = new Random();
@@ -106,122 +126,37 @@ namespace Football_League
                 players[n] = player;
             }
         }
-
-        public static void UpdateCurrentPlayers(List<Contestant> playersGrid1,List<Contestant> playersGrid2 = null)
+        public static void SaveCurrentSession()
         {
-            _currentPlayersGrid1 = new List<Contestant>();
-            _currentPlayersGrid2 = new List<Contestant>();
+            XmlSerializer formatter = new XmlSerializer(typeof(FullGrid));
 
+            var fileToOpen = _leagueType == LeagueType.SingleElumination ? "gridSingleElumination.xml" : "gridDoubleElumination.xml";
 
-            foreach (var player in playersGrid1)
+            using (FileStream fs = new FileStream(fileToOpen, FileMode.Create))
             {
-                _currentPlayersGrid1.Add(player);
+                formatter.Serialize(fs,Grid);
+                ConsoleWorker.Saved();
             }
-            if (playersGrid2 != null)
+        }
+
+        public static void LoadLastSave()
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(FullGrid));
+
+            var fileToOpen = _leagueType == LeagueType.SingleElumination ? "gridSingleElumination.xml" : "gridDoubleElumination.xml";
+
+            try
             {
-                foreach (var player in playersGrid2)
+                using (FileStream fs = new FileStream(fileToOpen, FileMode.Open))
                 {
-                    _currentPlayersGrid2.Add(player);
+                    Grid = (FullGrid)formatter.Deserialize(fs);
+                    ConsoleWorker.Loaded();
                 }
             }
-        }
-
-        public static void UpdateCurrentMatches()
-        {
-            _currentMatchesGrid1 = UpdateMatchesGrid(_currentPlayersGrid1);
-            _currentMatchesGrid2 = UpdateMatchesGrid(_currentPlayersGrid2);         
-        }
-
-        private static List<Match> UpdateMatchesGrid(List<Contestant> currentPlayersGrid)
-        {
-            List<Match> currentMatchesGrid = new List<Match>();
-            int countMatches = currentPlayersGrid.Count / 2;
-
-            for (int i = 0; i < countMatches; i++)
+            catch (FileNotFoundException)
             {
-                currentMatchesGrid.Add(new Match(currentPlayersGrid[i * 2], currentPlayersGrid[i * 2 + 1]));
-            }
-            return currentMatchesGrid;
-        }
-
-        public static void ChooseWinners()
-        {
-            if (_currentPlayersGrid1.Count == _currentPlayersGrid2.Count && _currentPlayersGrid2.Count == 1)
-            {
-                _currentMatchesGrid1.Add(new Match(_currentPlayersGrid1[0], _currentPlayersGrid2[0]));
-                _currentMatchesGrid1 = ChooseWinnerOfMatchesInGrid(_currentMatchesGrid1);
-
-                List<Contestant> winnerOfTwoGrids = new List<Contestant>
-                {
-                    _currentMatchesGrid1[0].Winner
-                };
-                EndRound(winnerOfTwoGrids, new List<Contestant>());
-                return;
-            }
-
-            _currentMatchesGrid1 = ChooseWinnerOfMatchesInGrid(_currentMatchesGrid1);
-            _currentMatchesGrid2 = ChooseWinnerOfMatchesInGrid(_currentMatchesGrid2);
-
-            List<Contestant> winners = new List<Contestant>();
-            List<Contestant> winnersInLosers = new List<Contestant>();
-
-            foreach (Match match in _currentMatchesGrid2)
-                winnersInLosers.Add(match.Winner);
-            if (_currentPlayersGrid2.Count % 2 != 0)
-                winnersInLosers.Add(_currentPlayersGrid2[_currentPlayersGrid2.Count - 1]);
-
-            foreach (Match match in _currentMatchesGrid1)
-            {
-                winners.Add(match.Winner);
-                winnersInLosers.Add(match.Loser);
-            }
-            if (_currentPlayersGrid1.Count % 2 != 0)
-                winners.Add(_currentPlayersGrid1[_currentPlayersGrid1.Count - 1]);
-
-            if (_currentMatchesGrid1.Count == 0)
-                winners = _currentPlayersGrid1;
-
-            int currentGrid2Position = 0;
-            foreach (var player in winnersInLosers)
-            {
-                player.Position = currentGrid2Position;
-                currentGrid2Position += player.Name.Length + 1;
-            }
-
-            if (_leagueType == LeagueType.SingleElumination)
-                EndRound(winners);
-            else EndRound(winners, winnersInLosers);
-        }
-        private static void EndRound(List<Contestant> winnersGrid1,List<Contestant> winnersGrid2 = null)
-        { 
-            _scoreboard.AddResults(winnersGrid1, winnersGrid2);
-            UpdateCurrentPlayers(winnersGrid1,winnersGrid2);
-            UpdateCurrentMatches();
-        }
-
-        private static List<Match> ChooseWinnerOfMatchesInGrid(List<Match> matchesInGrid)
-        {
-            foreach (var match in matchesInGrid)
-            {
-                bool firstPlayerChosen = ConsoleWorker.ChooseMatchWinner(match) == 1; 
-                match.SetWinner(firstPlayerChosen ? 1 : 2);
-            }
-            return matchesInGrid;
-        }
-        public static bool CheckPlayerNumber()
-        {
-            if (_currentPlayersGrid1.Count == 1 && _currentPlayersGrid2.Count == 0 || 
-                _currentPlayersGrid1.Count == 0 && _currentPlayersGrid2.Count == 1)
-            {
-                ConsoleWorker.OnePlayerLeft();
-                return false;
-            }
-            if (_currentPlayersGrid1.Count == 0 && _currentPlayersGrid2.Count == 0)
-            {
-                ConsoleWorker.NoPlayersLeft();
-                return false;
-            }
-            return true;
+                ConsoleWorker.FileNotFoundError();
+            }          
         }
     }
 }

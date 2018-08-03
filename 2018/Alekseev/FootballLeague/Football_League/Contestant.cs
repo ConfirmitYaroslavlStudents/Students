@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Football_League
 {
+    [Serializable]
     public class Contestant
     {
-        public int Position = 0;
-        public string Name { get; }
+        public Contestant()
+        {
+            
+        }
 
-        public Contestant(string name, int pos)
+        public string Name;
+        public Contestant(string name)
         {
             Name = name;
-            Position = pos;
         }
     }
 }

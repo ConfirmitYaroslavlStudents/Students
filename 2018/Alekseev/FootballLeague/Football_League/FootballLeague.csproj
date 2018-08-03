@@ -44,12 +44,16 @@
   <ItemGroup>
     <Compile Include="ConsoleWorker.cs" />
     <Compile Include="Contestant.cs" />
+    <Compile Include="FullGrid.cs" />
+    <Compile Include="HorizontalDrawer.cs" />
+    <Compile Include="MatchTreeGrid.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Scoreboard.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VerticalDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

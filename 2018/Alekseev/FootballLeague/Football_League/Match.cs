@@ -1,46 +1,47 @@
-﻿namespace Football_League
+﻿using System;
+
+namespace Football_League
 {
+    [Serializable]
     public class Match
     {
-        private readonly Contestant _playerOne;
-        private readonly Contestant _playerTwo;
-        public Contestant Winner;
-        public Contestant Loser;
+        public Contestant Winner, Loser;
+        public Match NextMatch, NextRoundMatch;
+        public Contestant PlayerOne, PlayerTwo;
 
+        public Match()
+        {
+            
+        }
         public Match(Contestant first = null, Contestant second = null)
         {
-            _playerOne = first;
-            _playerTwo = second;
+            PlayerOne = first;
+            PlayerTwo = second;
         }
 
-        public string PlayerOne => _playerOne.Name;
-
-        public string PlayerTwo => _playerTwo.Name;
-
-        public bool AutoWin()
+        public Contestant PickWinner()
         {
-            if (_playerTwo == null)
+            if (PlayerTwo == null && PlayerOne != null)
             {
-                Winner = _playerOne;
-                Loser = null;
-                return true;
+                Winner = PlayerOne;
+                return Winner;
             }
-            if (_playerOne == null)
+            if (ConsoleWorker.ChooseMatchWinner(this) == 1)
             {
-                Loser = null;
-                Winner = _playerTwo;
-                return true;
+                Winner = PlayerOne;
+                Loser = PlayerTwo;
             }
-            return false;
+            else
+            {
+                Winner = PlayerTwo;
+                Loser = PlayerOne;
+            }
+            return Winner;
         }
-        public void SetWinner(int number = 0)
+
+        public Contestant GetLoser()
         {
-            if (AutoWin())
-                return;
-            Winner = (number == 1) ? _playerOne : _playerTwo;
-            Loser = (number == 1) ? _playerTwo : _playerOne;
-            if(_playerTwo != null)
-                Winner.Position = (_playerOne.Position + _playerTwo.Position) / 2;
+            return Loser;
         }
     }
 }

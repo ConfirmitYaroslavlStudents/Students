@@ -51,12 +51,12 @@ namespace ConsoleTournament
             SingleEliminationTournament tournament;
 
             if (isFromSavedFile)
-                tournament = new SingleEliminationTournament(_inputWinner);
+                tournament = new SingleEliminationTournament();
             else
             {
                 int amount = DataInput.InputAmount();
                 var participants = DataInput.InputNames(amount, _maxNameLength);
-                tournament = new SingleEliminationTournament(participants, _inputWinner);
+                tournament = new SingleEliminationTournament(participants);
             }
 
             List<Participant> nextUpperBracketRound;
@@ -67,7 +67,7 @@ namespace ConsoleTournament
                 Console.Clear();
                 Console.WriteLine("----Upper Bracket----");
                 print(nextUpperBracketRound);
-                tournament.PlayRound();
+                tournament.PlayGame(_inputWinner);
             }
 
             nextUpperBracketRound = tournament.GetBracket();
@@ -81,12 +81,12 @@ namespace ConsoleTournament
         {
             DoubleEliminationTournament tournament;
             if (isFromSavedFile)
-                tournament = new DoubleEliminationTournament(_inputWinner);
+                tournament = new DoubleEliminationTournament();
             else
             {
                 int amount = DataInput.InputAmount();
                 var participants = DataInput.InputNames(amount, _maxNameLength);
-                tournament = new DoubleEliminationTournament(participants, _inputWinner);
+                tournament = new DoubleEliminationTournament(participants);
             }
 
             List<Participant> nextUpperBracketRound;
@@ -101,7 +101,7 @@ namespace ConsoleTournament
                 nextLowerBracketRound = tournament.GetLowerBracket();
                 Console.WriteLine("----Lower Bracket----");
                 print(nextLowerBracketRound);
-                tournament.PlayRound();
+                tournament.PlayGame(_inputWinner);
             }
 
             nextUpperBracketRound = tournament.GetBracket();

@@ -19,28 +19,25 @@ namespace Tournament
             _rightParticipant = rightParticipant;
         }
 
-        internal void PlayGame(Func<string, string> inputWinner, out Participant winner, out Participant loser)
+        internal void PlayGame(Func<string, string> inputWinner, out string winner, out string loser)
         {
             var side = DetectWinner(inputWinner,_leftParticipant, _rightParticipant);
 
             switch (side)
             {
                 case Side.Left:
-                    winner = new Participant(_leftParticipant.Name, _leftParticipant, _rightParticipant);
-                    loser = new Participant(_rightParticipant.Name);
+                    winner = _leftParticipant.Name;
+                    loser = _rightParticipant.Name;
                     break;
                 case Side.Right:
-                    winner = new Participant(_rightParticipant.Name, _leftParticipant, _rightParticipant);
-                    loser = new Participant(_leftParticipant.Name);
+                    winner = _rightParticipant.Name;
+                    loser = _leftParticipant.Name;
                     break;
                 default:
                     winner = null;
                     loser = null;
                     break;
             }
-
-            _leftParticipant.SetWinner(winner);
-            _rightParticipant.SetWinner(winner);
         }
 
         private static Side DetectWinner(Func<string, string> inputWinner,Participant leftParticipant, Participant rightParticipant)

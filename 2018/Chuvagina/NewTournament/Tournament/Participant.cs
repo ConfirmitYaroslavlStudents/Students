@@ -5,7 +5,7 @@ namespace Tournament
     [Serializable]
     public class Participant
     {
-        public readonly string Name;
+        public string Name { get; private set; }
         public Participant Winner { get; private set; }
         public readonly Participant Left;
         public readonly Participant Right;
@@ -31,5 +31,9 @@ namespace Tournament
             Winner = participant;
         }
 
+        public void SetName(string name)
+        {
+            Name = name;
+        }
     }
 }

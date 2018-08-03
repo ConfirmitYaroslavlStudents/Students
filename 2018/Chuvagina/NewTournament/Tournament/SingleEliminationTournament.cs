@@ -6,9 +6,14 @@ namespace Tournament
     public class SingleEliminationTournament
     {
         protected List<Participant> UpperBracketParticipants;
-        protected readonly Func<string, string> InputWinner;
+        protected List<Participant> RoundBracket= new List<Participant>();
+        protected int GameIndex;
+        private const string _upperFileName = "upperBracket";
+        protected const string LowerFileName = "lowerBracket";
+        private const string _indexFileName = "gameIndex";
+        private const string _roundFileName = "roundBracket";
 
-        public SingleEliminationTournament(List<string> participants, Func<string,string> inputWinner)
+        public SingleEliminationTournament(List<string> participants)
         {
             UpperBracketParticipants = new List<Participant>();
             Random random = new Random();
@@ -21,32 +26,60 @@ namespace Tournament
                 participants.RemoveAt(index);
             }
 
-            InputWinner = inputWinner;
-            BinarySaver.SaveListToBinnary("upperBracket", UpperBracketParticipants);
-            BinarySaver.SaveListToBinnary("lowerBracket", new List<Participant>());
+            SaveData();
         }
 
-        public SingleEliminationTournament(Func<string, string> inputWinner)
+        public SingleEliminationTournament()
         {
-            UpperBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>("upperBracket");
-            InputWinner = inputWinner;
+            UpperBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>(_upperFileName);
+            RoundBracket= BinarySaver.LoadListFromBinnary<Participant>(_roundFileName);
+            GameIndex= BinarySaver.LoadIntFromBinnary(_indexFileName);
         }
 
-        public void PlayRound()
+        public void PlayGame(Func<string, string> inputWinner)
         {
-            UpperBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>("upperBracket");
+            if (GameIndex >= RoundBracket.Count/2)
+                OrganizeRound(ref UpperBracketParticipants);
 
-            Round round = new Round(UpperBracketParticipants);
-            round.PlayUpperBracket(InputWinner);
-            UpperBracketParticipants = round.UpperBracketParticipants;
+            var leftParticipant = RoundBracket[GameIndex * 2];
+            var rightParticipant = RoundBracket[GameIndex * 2 + 1];
+            var game = new Game(leftParticipant, rightParticipant);
+            game.PlayGame(inputWinner, out string winner, out string loser);
+            UpperBracketParticipants[GameIndex].SetName(winner);
 
-            BinarySaver.SaveListToBinnary("upperBracket",UpperBracketParticipants);
-            BinarySaver.SaveListToBinnary("lowerBracket", new List<Participant>());
+            GameIndex++;
+            SaveData();
+        }
+
+        protected void OrganizeRound(ref List<Participant> bracket)
+        {
+            RoundBracket = new List<Participant>(bracket);
+            bracket = new List<Participant>();
+
+            for (int i = 0; i < RoundBracket.Count / 2; i++)
+            {
+                bracket.Add(new Participant("",RoundBracket[i * 2], RoundBracket[i * 2 + 1]));
+                RoundBracket[i * 2].SetWinner(UpperBracketParticipants[i]);
+                RoundBracket[i * 2 + 1].SetWinner(UpperBracketParticipants[i]);
+            }
+
+            if (RoundBracket.Count%2==1)
+                bracket.Add(RoundBracket[RoundBracket.Count-1]);
+
+            GameIndex = 0;
+        }
+
+        public void SaveData()
+        {
+            BinarySaver.SaveListToBinnary(_upperFileName, UpperBracketParticipants);
+            BinarySaver.SaveListToBinnary(_roundFileName, RoundBracket);
+            BinarySaver.SaveListToBinnary(LowerFileName, new List<Participant>());
+            BinarySaver.SaveIntToBinnary(_indexFileName, GameIndex);
         }
 
         public virtual bool EndOfTheGame()
         {
-            if (UpperBracketParticipants.Count == 1)
+            if (UpperBracketParticipants.Count < 2)
                 return true;
             return false;
         }

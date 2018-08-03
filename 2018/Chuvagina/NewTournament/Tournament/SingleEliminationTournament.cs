@@ -59,8 +59,8 @@ namespace Tournament
             for (int i = 0; i < RoundBracket.Count / 2; i++)
             {
                 bracket.Add(new Participant("",RoundBracket[i * 2], RoundBracket[i * 2 + 1]));
-                RoundBracket[i * 2].SetWinner(UpperBracketParticipants[i]);
-                RoundBracket[i * 2 + 1].SetWinner(UpperBracketParticipants[i]);
+                RoundBracket[i * 2].SetWinner(bracket[i]);
+                RoundBracket[i * 2 + 1].SetWinner(bracket[i]);
             }
 
             if (RoundBracket.Count%2==1)

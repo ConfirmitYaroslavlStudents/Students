@@ -136,12 +136,13 @@ namespace ConsoleTournament
 
         private static void PrintParticipant(Participant participant, int round, string filling)
         {
-            if (participant.Left != null)
+            if (participant?.Left != null)
                 PrintParticipant(participant.Left, round - 1, _upperCorner);
 
-            PrintLine(participant, round, filling);
+            if (participant!=null)
+                PrintLine(participant, round, filling);
 
-            if (participant.Right != null)
+            if (participant?.Right != null)
                 PrintParticipant(participant.Right, round - 1, _lowerCorner);
         }
 

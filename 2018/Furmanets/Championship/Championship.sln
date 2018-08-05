@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Championship", "Championship\Championship.csproj", "{C0ACC89D-7300-480D-9849-5B386C2B9D46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleChampionship", "ConsoleChampionship\ConsoleChampionship.csproj", "{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1} = {5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}
+		{C0ACC89D-7300-480D-9849-5B386C2B9D46} = {C0ACC89D-7300-480D-9849-5B386C2B9D46}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuForConsole", "Menu\MenuForConsole\MenuForConsole.csproj", "{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}"
 EndProject

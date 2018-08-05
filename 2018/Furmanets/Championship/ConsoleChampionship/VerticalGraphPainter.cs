@@ -34,10 +34,9 @@ namespace ConsoleChampionship
                 {
                     var meeting = round.Meetings[j];
 
-                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null && isFirstRound)
-                    {
-                        continue;
-                    }
+                    var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
+                                         && meeting.SecondPlayer == null
+                                         && round.Equals(tournamentRounds[0]);
 
                     if (isFirstRound)
                     {
@@ -55,16 +54,23 @@ namespace ConsoleChampionship
 
                     positionCursorLeft += distanceBetweenPlayers;
 
-                    for (var i = 0; i < distanceBetweenPlayers - 1; i++)
+                    if (!isEmptyMeetingInFirstRound)
                     {
-                        Console.Write("-");
+                        for (var i = 0; i < distanceBetweenPlayers - 1; i++)
+                        {
+                            Console.Write("-");
+                        }
                     }
 
                     var lineForNextStage = Console.CursorLeft - distanceBetweenPlayers / 2 - 1;
                     for (var i = 1; i < 5; i++)
                     {
                         Console.SetCursorPosition(lineForNextStage, positionCursorTop + i);
-                        Console.Write("|");
+
+                        if (!isEmptyMeetingInFirstRound)
+                        {
+                            Console.Write("|");
+                        }
                     }
 
                     switch (j)
@@ -118,11 +124,11 @@ namespace ConsoleChampionship
                         Console.Write(meeting.FirstPlayer);
                         break;
                     case MeetingWinningIndicator.FirstPlayer:
-                        WriteName(meeting.FirstPlayer, meeting.Score[1]);
+                        WriteName(meeting.FirstPlayer, meeting.Score[0]);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                     case MeetingWinningIndicator.SecondPlayer:
-                        WriteName(meeting.FirstPlayer, meeting.Score[1]);
+                        WriteName(meeting.FirstPlayer, meeting.Score[0]);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

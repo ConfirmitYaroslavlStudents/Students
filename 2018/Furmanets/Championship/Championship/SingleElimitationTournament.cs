@@ -4,10 +4,11 @@ using System.Collections.Generic;
 namespace Championship
 {
     [Serializable]
-    public class SingleElimitationTournament:Tournament
+    public class SingleElimitationTournament : Tournament
     {
         private readonly List<Round> _tournamentRounds;
         private int _indexOfRound;
+        private int _indexOfMatch;
 
         public SingleElimitationTournament(List<string> players)
         {
@@ -15,21 +16,28 @@ namespace Championship
             _indexOfRound = 0;
         }
 
-        public override void CollectorResults(List<int[]> resultsMatches)
+        public override void CollectorResults(int[] resultMatch)
         {
             var round = _tournamentRounds[_indexOfRound];
+            var meeting = round.Meetings[_indexOfMatch];
 
-            for (var i = 0; i < resultsMatches.Count; i++)
+            meeting.Score = resultMatch;
+            ChooseWinner(meeting);
+
+            _indexOfMatch++;
+
+            if (round.Meetings.Count == _indexOfMatch || 
+                round.Meetings[_indexOfMatch].FirstPlayer == null || 
+                round.Meetings[_indexOfMatch].SecondPlayer == null)
             {
-                round.Meetings[i].Score = resultsMatches[i];
-                ChooseWinner(round.Meetings[i]);
+                _indexOfMatch = 0;
+                _indexOfRound++;
             }
-            _indexOfRound++;
         }
 
         public override List<Round> GetTournamentToPrint()
         {
-            return _tournamentRounds;
+            return CloneTournament(_tournamentRounds);
         }
 
         public override int GetIndexOfRound()
@@ -37,10 +45,20 @@ namespace Championship
             return _indexOfRound;
         }
 
+        public override int GetIndexOfMatch()
+        {
+            return _indexOfMatch;
+        }
+
         private void ChooseWinner(Meeting meeting)
         {
             if (meeting.SecondPlayer == null || meeting.FirstPlayer == null)
                 return;
+
+            if (meeting.Score[0] == meeting.Score[1])
+            {
+                throw new Exception("The score in the match can't be equal.");
+            }
 
             if (meeting.Score[0] > meeting.Score[1])
             {

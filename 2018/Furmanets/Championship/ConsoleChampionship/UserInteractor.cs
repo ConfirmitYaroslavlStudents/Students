@@ -6,15 +6,10 @@ namespace ConsoleChampionship
 {
     public class UserInteractor
     {
-        public static int[] GetResultOfMatchSingleElimination(Meeting meeting)
+        public static int[] GetResultOfMatch(Meeting meeting)
         {
             while (true)
             {
-                if (meeting.FirstPlayer == null && meeting.SecondPlayer == null)
-                {
-                    return meeting.Score;
-                }
-
                 Console.WriteLine();
                 Console.Write("Write score: ");
                 Console.WriteLine(meeting.FirstPlayer + " vs " + meeting.SecondPlayer);

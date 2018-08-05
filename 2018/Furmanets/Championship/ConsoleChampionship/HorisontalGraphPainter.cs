@@ -27,25 +27,32 @@ namespace ConsoleChampionship
 
                 foreach (var meeting in round.Meetings)
                 {
-                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null && round.Equals(tournamentRounds[0]))
-                    {
-                        continue;
-                    }
+                    var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
+                                         && meeting.SecondPlayer == null
+                                         && round.Equals(tournamentRounds[0]);
 
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
 
                     WriteNamePlayer(meeting, true);
 
-                    var wereDrowLine = distanceBetweenPlayers / 2;
+                    var indexForDrowLine = distanceBetweenPlayers / 2;
 
                     for (var i = 1; i < distanceBetweenPlayers; i++)
                     {
                         Console.SetCursorPosition(positionCursorLeft + maxLengthName, positionCursorTop + i);
-                        Console.Write("|");
 
-                        if (i == wereDrowLine)
+                        if (!isEmptyMeetingInFirstRound)
                         {
-                            Console.Write("-----");
+                            Console.Write("|");
+                        }
+
+                        if (i == indexForDrowLine)
+                        {
+                            if (!isEmptyMeetingInFirstRound)
+                            {
+                                Console.Write("-----");
+                            }
+
                             if (isSecondLine)
                             {
                                 isSecondLine = false;

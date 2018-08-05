@@ -76,29 +76,7 @@ namespace ConsoleChampionship
             tournamentMenu.Start();
         }
 
-        static void EnterResults()
-        {
-            var tournament = _championship.GetTournamentToPrint();
-
-            if (_championship.GetIndexOfRound() >= tournament.Count)
-            {
-                Console.WriteLine("All matches are over.");
-                Thread.Sleep(1000);
-                return;
-            }
-
-            var resultsOfRound = new List<int[]>();
-
-            foreach (var meeting in tournament[_championship.GetIndexOfRound()].Meetings)
-            {
-                resultsOfRound.Add(UserInteractor.GetResultOfMatchSingleElimination(meeting));
-            }
-
-            _championship.CollectorResults(resultsOfRound);
-            FileManager.WriteTournamentInFile(_championship);
-        }
-
-        static void MenuGraphPrint()
+        private static void MenuGraphPrint()
         {
             var menuGraph = new List<MenuItem>
             {
@@ -110,15 +88,15 @@ namespace ConsoleChampionship
             graphMenu.Start();
         }
 
-        static void PaintVerticalGraph()
+        private static void PaintVerticalGraph()
         {
             Console.ForegroundColor = ConsoleColor.White;
             var vertical = new VerticalGraphPainter();
-            vertical.PaintGraph(_championship);
+            vertical.PaintGraph(Program._championship);
             Console.ReadKey();
         }
 
-        static void PaintHorisontalGraph()
+        private static void PaintHorisontalGraph()
         {
             Console.ForegroundColor = ConsoleColor.White;
             var horisontal = new HorisontalGraphPainter();
@@ -126,12 +104,29 @@ namespace ConsoleChampionship
             Console.ReadKey();
         }
 
-        static void PaintOnTwoSideGraph()
+        private static void PaintOnTwoSideGraph()
         {
             Console.ForegroundColor = ConsoleColor.White;
             var onTwoSide = new OnTwoSidesGraphPainter();
             onTwoSide.PaintGraph(_championship);
             Console.ReadKey();
+        }
+
+        static void EnterResults()
+        {
+            var tournament = _championship.GetTournamentToPrint();
+
+            if (_championship.GetIndexOfRound() >= tournament.Count)
+            {
+                Console.WriteLine("All matches are over.");
+                Thread.Sleep(1000);
+                return;
+            }
+            //Косяк с финальным раундом в дабле
+            var meeting = tournament[_championship.GetIndexOfRound()].Meetings[_championship.GetIndexOfMatch()];
+            _championship.CollectorResults(UserInteractor.GetResultOfMatch(meeting));
+
+            FileManager.WriteTournamentInFile(_championship);
         }
 
         private static void MenuAddPlayers()

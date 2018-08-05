@@ -17,13 +17,28 @@ namespace Championship
             Winner = MeetingWinningIndicator.MatchDidNotTakePlace;
         }
 
-        public Meeting(Meeting meeting)
+        public Meeting CloneMeeting()
         {
-            FirstPlayer = meeting.SecondPlayer;
-            SecondPlayer = meeting.SecondPlayer;
-            Score = meeting.Score;
-            NextStage = meeting.NextStage;
-            Winner = meeting.Winner;
+            var newCloneMeeting = new Meeting();
+            if (this.FirstPlayer != null)
+            {
+                newCloneMeeting.FirstPlayer = string.Copy(FirstPlayer);
+            }
+
+            if (SecondPlayer != null)
+            {
+                newCloneMeeting.SecondPlayer = string.Copy(SecondPlayer);
+            }
+
+            Score.CopyTo(newCloneMeeting.Score, 0);
+
+            if (NextStage != null)
+            {
+                newCloneMeeting.NextStage = NextStage.CloneMeeting();
+            }
+
+            newCloneMeeting.Winner = Winner;
+            return newCloneMeeting;
         }
     }
 }

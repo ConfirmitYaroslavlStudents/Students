@@ -116,14 +116,14 @@ namespace ConsoleChampionship
         {
             var tournament = _championship.GetTournamentToPrint();
 
-            if (_championship.GetIndexOfRound() >= tournament.Count)
+            if (_championship.IndexOfRound >= tournament.Count)
             {
                 Console.WriteLine("All matches are over.");
                 Thread.Sleep(1000);
                 return;
             }
-            //Косяк с финальным раундом в дабле
-            var meeting = tournament[_championship.GetIndexOfRound()].Meetings[_championship.GetIndexOfMatch()];
+            
+            var meeting = tournament[_championship.IndexOfRound].Meetings[_championship.IndexOfMatch];
             _championship.CollectorResults(UserInteractor.GetResultOfMatch(meeting));
 
             FileManager.WriteTournamentInFile(_championship);

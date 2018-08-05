@@ -12,7 +12,7 @@ namespace Championship
 
         public SingleElimitationTournament(List<string> players)
         {
-            _tournamentRounds = ConstructorTournament.CreateTournament(players);
+            _tournamentRounds = ConstructorTournament.CreateSingleEliminationTournament(players);
             _indexOfRound = 0;
         }
 
@@ -38,16 +38,6 @@ namespace Championship
         public override List<Round> GetTournamentToPrint()
         {
             return CloneTournament(_tournamentRounds);
-        }
-
-        public override int GetIndexOfRound()
-        {
-            return _indexOfRound;
-        }
-
-        public override int GetIndexOfMatch()
-        {
-            return _indexOfMatch;
         }
 
         private void ChooseWinner(Meeting meeting)

@@ -9,97 +9,91 @@ namespace Championship
         private readonly List<Round> _upperGrid;
         private readonly List<Round> _lowerGrid;
         private readonly Meeting _finalUpperAndLowerGrids;
-        private int _indexOfRound;
-        private int _indexOfMatch;
+        
 
         public DoubleEliminationTournament(List<string> players)
         {
-            _lowerGrid = ConstructorTournament.CreateTournamentGrid(players.Count);
-            _upperGrid = ConstructorTournament.CreateTournament(players);
-            for (var i = 0; i < _upperGrid.Count; i++)
-            {
-                _upperGrid[i].Stage *= 2;
-                _lowerGrid[i].Stage *= 2;
-            }
-            _lowerGrid.Add(new Round());
-            _lowerGrid[_lowerGrid.Count - 1].Meetings.Add(new Meeting());
-            _lowerGrid[_lowerGrid.Count - 1].Stage = 2;
+            var grids = ConstructorTournament.CreateDoubleEliminationTournament(players);
+
+            _upperGrid = grids[0];
+            _lowerGrid = grids[1];
 
             _finalUpperAndLowerGrids = new Meeting();
-            _upperGrid[_upperGrid.Count - 1].Meetings[0].NextStage = _finalUpperAndLowerGrids;
+            _upperGrid[_upperGrid.Count - 2].Meetings[0].NextStage = _finalUpperAndLowerGrids;
             _lowerGrid[_lowerGrid.Count - 1].Meetings[0].NextStage = _finalUpperAndLowerGrids;
-            _indexOfRound = 0;
-            _indexOfMatch = 0;
+
+            IndexOfRound = 0;
+            IndexOfMatch = 0;
         }
 
         public override void CollectorResults(int[] resultMatch)
         {
-            if (_indexOfRound > _upperGrid.Count + 1)
+            if (IndexOfRound > _upperGrid.Count + 1)
             {
                 throw new Exception("All matches are over");
             }
 
-            if (_indexOfRound == _upperGrid.Count)
+            if (IndexOfRound == _upperGrid.Count)
             {
-                _indexOfRound++;
+                IndexOfRound++;
                 _finalUpperAndLowerGrids.Score = resultMatch;
                 return;
             }
 
-            var roundUpper = _upperGrid[_indexOfRound];
-            var roundLower = _lowerGrid[_indexOfRound];
+            var roundUpper = _upperGrid[IndexOfRound];
+            var roundLower = _lowerGrid[IndexOfRound];
 
-            if (_indexOfMatch < roundUpper.Meetings.Count)
+            if (IndexOfMatch < roundUpper.Meetings.Count)
             {
-                roundUpper.Meetings[_indexOfMatch].Score = resultMatch;
-                ChooseWinner(roundUpper.Meetings[_indexOfMatch], true);
-                _indexOfMatch++;
+                roundUpper.Meetings[IndexOfMatch].Score = resultMatch;
+                ChooseWinner(roundUpper.Meetings[IndexOfMatch], true);
+                IndexOfMatch++;
 
-                while (roundUpper.Meetings.Count > _indexOfMatch)
+                while (roundUpper.Meetings.Count > IndexOfMatch)
                 {
 
-                    if (roundUpper.Meetings[_indexOfMatch].FirstPlayer != null &&
-                        roundUpper.Meetings[_indexOfMatch].SecondPlayer != null)
+                    if (roundUpper.Meetings[IndexOfMatch].FirstPlayer != null &&
+                        roundUpper.Meetings[IndexOfMatch].SecondPlayer != null)
                     {
                         return;
                     }
 
-                    if (roundUpper.Meetings[_indexOfMatch].FirstPlayer != null)
+                    if (roundUpper.Meetings[IndexOfMatch].FirstPlayer != null)
                     {
-                        PromotionOnePlayerInGameToNextRound(roundUpper.Meetings[_indexOfMatch]);
+                        PromotionOnePlayerInGameToNextRound(roundUpper.Meetings[IndexOfMatch]);
                     }
 
-                    _indexOfMatch++;
+                    IndexOfMatch++;
                 }
             }
             else
             {
-                var indexOfMatchCurrent = _indexOfMatch - roundLower.Meetings.Count;
+                var indexOfMatchCurrent = IndexOfMatch - roundLower.Meetings.Count;
                 roundLower.Meetings[indexOfMatchCurrent].Score = resultMatch;
                 ChooseWinner(roundLower.Meetings[indexOfMatchCurrent], false);
-                _indexOfMatch++;
+                IndexOfMatch++;
             }
 
-            while (roundLower.Meetings.Count * 2 > _indexOfMatch)
+            while (roundLower.Meetings.Count * 2 > IndexOfMatch)
             {
-                if (roundLower.Meetings[_indexOfMatch - roundLower.Meetings.Count].FirstPlayer != null &&
-                    roundLower.Meetings[_indexOfMatch - roundLower.Meetings.Count].SecondPlayer != null)
+                if (roundLower.Meetings[IndexOfMatch - roundLower.Meetings.Count].FirstPlayer != null &&
+                    roundLower.Meetings[IndexOfMatch - roundLower.Meetings.Count].SecondPlayer != null)
                 {
                     return;
                 }
 
-                if (roundLower.Meetings[_indexOfMatch - roundLower.Meetings.Count].FirstPlayer != null)
+                if (roundLower.Meetings[IndexOfMatch - roundLower.Meetings.Count].FirstPlayer != null)
                 {
-                    PromotionOnePlayerInGameToNextRound(roundLower.Meetings[_indexOfMatch - roundLower.Meetings.Count]);
+                    PromotionOnePlayerInGameToNextRound(roundLower.Meetings[IndexOfMatch - roundLower.Meetings.Count]);
                 }
 
-                _indexOfMatch++;
+                IndexOfMatch++;
             }
 
-            if (_indexOfMatch >= roundLower.Meetings.Count * 2)
+            if (IndexOfMatch >= roundLower.Meetings.Count * 2)
             {
-                _indexOfMatch = 0;
-                _indexOfRound++;
+                IndexOfMatch = 0;
+                IndexOfRound++;
             }
         }
 
@@ -126,20 +120,12 @@ namespace Championship
             return tournament;
         }
 
-        public override int GetIndexOfRound()
-        {
-            return _indexOfRound;
-        }
-
-        public override int GetIndexOfMatch()
-        {
-            return _indexOfMatch;
-        }
-
         protected void ChooseWinner(Meeting meeting, bool isUpper)
         {
             if (meeting.SecondPlayer == null || meeting.FirstPlayer == null)
-                return;
+            {
+                throw new Exception("Method ChooseWinner in DoubleElimination; Empty players;");
+            }
 
             if (meeting.Score[0] == meeting.Score[1])
             {
@@ -180,18 +166,13 @@ namespace Championship
 
         protected void PromotionLoserToNextStage(string player)
         {
-            var round = _lowerGrid[_indexOfRound];
+            var round = _lowerGrid[IndexOfRound];
 
             foreach (var meeting in round.Meetings)
             {
                 if (meeting.FirstPlayer == null)
                 {
                     meeting.FirstPlayer = player;
-                    return;
-                }
-                if (meeting.SecondPlayer == null)
-                {
-                    meeting.SecondPlayer = player;
                     return;
                 }
             }

@@ -5,7 +5,7 @@ namespace Championship
 {
     public class ConstructorTournament
     {
-        public static List<Round> CreateTournament(List<string> players)
+        public static List<Round> CreateSingleEliminationTournament(List<string> players)
         {
             players = RandomSortPlayers(players);
             var tournamentGrid = CreateTournamentGrid(players.Count);
@@ -13,7 +13,38 @@ namespace Championship
             return tournamentGrid;
         }
 
-        public static List<Round> CreateTournamentGrid(int playersCount)
+        public static List<Round>[] CreateDoubleEliminationTournament(List<string> players)
+        {
+            var grids = new List<Round>[2];
+
+            var lowerGrid = CreateTournamentGrid(players.Count*2);
+            var upperGrid = CreateSingleEliminationTournament(players);
+
+            foreach (var round in upperGrid)
+            {
+                var count = round.Meetings.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    round.Meetings.Add(new Meeting());
+                }
+            }
+
+            for (var i = 0; i < upperGrid.Count; i++)
+            {
+                upperGrid[i].Stage *= 2;
+                lowerGrid[i].Stage *= 2;
+            }
+            upperGrid.Add(new Round());
+            upperGrid[upperGrid.Count - 1].Meetings.Add(new Meeting());
+            upperGrid[upperGrid.Count - 1].Stage = 2;
+
+            grids[0] = upperGrid;
+            grids[1] = lowerGrid;
+            return grids;
+        }
+
+        private static List<Round> CreateTournamentGrid(int playersCount)
         {
             var tournament = new List<Round>();
             var stage = 1;

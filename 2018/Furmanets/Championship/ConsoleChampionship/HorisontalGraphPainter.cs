@@ -28,7 +28,7 @@ namespace ConsoleChampionship
                 foreach (var meeting in round.Meetings)
                 {
                     var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
-                                         && meeting.SecondPlayer == null
+                                                     && meeting.SecondPlayer == null
                                          && round.Equals(tournamentRounds[0]);
 
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);

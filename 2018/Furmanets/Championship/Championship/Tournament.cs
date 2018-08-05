@@ -6,10 +6,11 @@ namespace Championship
     [Serializable]
     public abstract class Tournament
     {
+        public int IndexOfRound { get; protected set; }
+        public int IndexOfMatch { get; protected set; }
+
         public abstract void CollectorResults(int[] resultMatch);
         public abstract List<Round> GetTournamentToPrint();
-        public abstract int GetIndexOfRound();
-        public abstract int GetIndexOfMatch();
 
         protected virtual void PromotionWinnerToNextStage(Meeting meeting, string player)
         {

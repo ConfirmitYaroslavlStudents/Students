@@ -1,0 +1,2 @@
+show('p1','p2')
+show.must('p1').go('p2').on(add)

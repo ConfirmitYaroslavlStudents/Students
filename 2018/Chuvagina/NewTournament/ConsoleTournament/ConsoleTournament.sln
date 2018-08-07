@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTournament", "ConsoleTournament.csproj", "{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament", "..\Tournament\Tournament.csproj", "{04571F3F-FB9C-4E97-B952-D6B6F215781F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04571F3F-FB9C-4E97-B952-D6B6F215781F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04571F3F-FB9C-4E97-B952-D6B6F215781F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04571F3F-FB9C-4E97-B952-D6B6F215781F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04571F3F-FB9C-4E97-B952-D6B6F215781F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E1A4676-CC67-45BC-8CC9-BCAD4BD70F8C}
+	EndGlobalSection
+EndGlobal

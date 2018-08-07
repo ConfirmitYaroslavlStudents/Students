@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Championship", "Championshi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleChampionship", "ConsoleChampionship\ConsoleChampionship.csproj", "{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuForConsole", "Menu\MenuForConsole\MenuForConsole.csproj", "{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

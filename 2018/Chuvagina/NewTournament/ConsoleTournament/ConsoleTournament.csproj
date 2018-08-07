@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{649C7BA4-1E73-44D3-9C89-E45D31B2B2AA}</ProjectGuid>
+    <ProjectGuid>{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleChampionship</RootNamespace>
-    <AssemblyName>ConsoleChampionship</AssemblyName>
+    <RootNamespace>ConsoleTournament</RootNamespace>
+    <AssemblyName>ConsoleTournament</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,13 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Championship, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Menu\MenuForConsole\bin\Debug\Championship.dll</HintPath>
-    </Reference>
-    <Reference Include="MenuForConsole">
-      <HintPath>..\Menu\MenuForConsole\bin\Debug\MenuForConsole.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,16 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HorisontalGraphPainter.cs" />
-    <Compile Include="UserInteractor.cs" />
-    <Compile Include="GraphPainter.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileManager.cs" />
-    <Compile Include="VerticalGraphPainter.cs" />
+    <Compile Include="BracketPrint.cs" />
+    <Compile Include="ConsoleTournament.cs" />
+    <Compile Include="DataInput.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\Tournament\Tournament.csproj">
+      <Project>{04571f3f-fb9c-4e97-b952-d6b6f215781f}</Project>
+      <Name>Tournament</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

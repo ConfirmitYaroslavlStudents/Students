@@ -38,101 +38,17 @@ namespace Football_League
                 bool isFirstRound = pointersFromLastRound.Count == 0;
                 Match currentMatch = currentRoundFirstMatch;
 
-                while (pointersFromLastRound.Count > 0 && currentMatch?.PlayerOne != null)
-                {
-                    if (currentGridLine == pointersFromLastRound[0])
-                    {
-                        if (currentPlayerNumber == 2)
-                        {
-                            result[currentGridLine] += currentMatch.PlayerOne.Name;
-                            currentPlayerNumber = 1;
-                            if (currentMatch.PlayerTwo == null)
-                                currentMatch = currentMatch.NextMatch;
-                        }
-                        else
-                        {
-                            result[currentGridLine] += currentMatch.PlayerTwo.Name;
-                            currentPlayerNumber = 2;
-                            currentMatch = currentMatch.NextMatch;
-                        }
+                currentMatch = AddPreviousRoundWinners(pointersFromLastRound, currentMatch, result, pointersInThisRound, ref currentGridLine, ref currentPlayerNumber, ref maxLineLength);
 
-                        if (result[currentGridLine].Length > maxLineLength)
-                            maxLineLength = result[currentGridLine].Length;
-                        pointersInThisRound.Add(currentGridLine);
-                        pointersFromLastRound.RemoveAt(0);
-                    }
-                    currentGridLine++;
-                }
+                int currentFixLength = maxLineLength;
 
-                while (currentMatch?.PlayerOne != null)
-                {
-                    string fixLine = "";
-                    for (int i = 0; i < maxLineLength - 1; i++)
-                        fixLine += " ";
-                    result.Add(fixLine + " ");
-                    currentGridLine++;
+                AddLosersFromNextTree(currentMatch, currentFixLength, result, currentGridLine, currentPlayerNumber, ref maxLineLength, pointersInThisRound);
 
-                    if (currentPlayerNumber == 2)
-                    {
-                        result.Add(fixLine + currentMatch.PlayerOne.Name);
-                        if (maxLineLength < currentMatch.PlayerOne.Name.Length)
-                            maxLineLength = currentMatch.PlayerOne.Name.Length;
-                        currentPlayerNumber = 1;
-                        if (currentMatch.PlayerTwo == null)
-                            currentMatch = currentMatch.NextMatch;
-                    }
-                    else
-                    {
-                        result.Add(fixLine + currentMatch.PlayerTwo.Name);
-                        if (maxLineLength < currentMatch.PlayerTwo.Name.Length)
-                            maxLineLength = currentMatch.PlayerTwo.Name.Length;
-                        currentPlayerNumber = 2;
-                        currentMatch = currentMatch.NextMatch;
-                    }
+                AlignNames(result, pointersInThisRound, maxLineLength);
 
-                    pointersInThisRound.Add(result.Count - 1);
-                    currentGridLine++;
-                }
+                AddWinners(pointersInThisRound, result, pointersFromLastRound);
 
-                int positionInThisRoundPointers = 0;
-                for (int i = 0; i < result.Count; i++)
-                {
-                    if(i == pointersInThisRound[positionInThisRoundPointers])
-                        while (result[i].Length < maxLineLength)
-                            result[i] += "-";
-                    else
-                        while (result[i].Length < maxLineLength)
-                            result[i] += " ";
-                }
-
-                while (pointersInThisRound.Count >= 2)
-                {
-                    int firstMatchPosition = pointersInThisRound[0];
-                    pointersInThisRound.RemoveAt(0);
-                    int secondMatchPosition = pointersInThisRound[0];
-                    pointersInThisRound.RemoveAt(0);
-                    int matchWinnerPosition = (firstMatchPosition + secondMatchPosition) / 2;
-
-                    result[firstMatchPosition] += "|";
-                    result[secondMatchPosition] += "|";
-
-                    for(int i = firstMatchPosition + 1; i < secondMatchPosition; i++)
-                        if (i != matchWinnerPosition)
-                            result[i] += "|";
-                        else
-                            result[i] += "--";
-
-                    pointersFromLastRound.Add(matchWinnerPosition);
-                }
-
-                if (pointersInThisRound.Count == 1)
-                {
-                    result[pointersInThisRound[0]] += "--";
-                    pointersFromLastRound.Add(pointersInThisRound[0]);
-                    pointersInThisRound.RemoveAt(0);
-                }
-
-                maxLineLength = result.Select(line => line.Length).Concat(new[] {maxLineLength}).Max();
+                maxLineLength = result.Select(line => line.Length).Concat(new[] { maxLineLength }).Max();
 
                 for (int i = 0; i < result.Count; i++)
                 {
@@ -147,6 +63,14 @@ namespace Football_League
                 currentRoundFirstMatch = currentRoundFirstMatch.NextRoundMatch;
             }
 
+            FixAllLines(result);
+
+            AllLinesCurrentPosition += currentGridFix;
+            return result;
+        }
+
+        private void FixAllLines(List<string> result)
+        {
             string fixLines = "";
             while (fixLines.Length < AllLinesCurrentPosition)
                 fixLines += " ";
@@ -154,9 +78,119 @@ namespace Football_League
             {
                 result[i] = fixLines + result[i];
             }
+        }
 
-            AllLinesCurrentPosition += currentGridFix;
-            return result;
+        private static void AddWinners(List<int> pointersInThisRound, List<string> result, List<int> pointersFromLastRound)
+        {
+            while (pointersInThisRound.Count >= 2)
+            {
+                int firstMatchPosition = pointersInThisRound[0];
+                pointersInThisRound.RemoveAt(0);
+                int secondMatchPosition = pointersInThisRound[0];
+                pointersInThisRound.RemoveAt(0);
+                int matchWinnerPosition = (firstMatchPosition + secondMatchPosition) / 2;
+
+                result[firstMatchPosition] += "|";
+                result[secondMatchPosition] += "|";
+
+                for (int i = firstMatchPosition + 1; i < secondMatchPosition; i++)
+                    if (i != matchWinnerPosition)
+                        result[i] += "|";
+                    else
+                        result[i] += "--";
+
+                pointersFromLastRound.Add(matchWinnerPosition);
+            }
+
+            if (pointersInThisRound.Count == 1)
+            {
+                result[pointersInThisRound[0]] += "--";
+                pointersFromLastRound.Add(pointersInThisRound[0]);
+                pointersInThisRound.RemoveAt(0);
+            }
+        }
+
+        private static void AlignNames(List<string> result, List<int> pointersInThisRound, int maxLineLength)
+        {
+            int positionInThisRoundPointers = 0;
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (positionInThisRoundPointers < pointersInThisRound.Count &&
+                    i == pointersInThisRound[positionInThisRoundPointers])
+                {
+                    while (result[i].Length < maxLineLength)
+                        result[i] += "-";
+                    positionInThisRoundPointers++;
+                }
+                else
+                    while (result[i].Length < maxLineLength)
+                        result[i] += " ";
+            }
+        }
+
+        private static void AddLosersFromNextTree(Match currentMatch, int currentFixLength, List<string> result, int currentGridLine,
+            int currentPlayerNumber, ref int maxLineLength, List<int> pointersInThisRound)
+        {
+            while (currentMatch?.PlayerOne != null)
+            {
+                string fixLine = "";
+                for (int i = 0; i < currentFixLength - 1; i++)
+                    fixLine += " ";
+                result.Add(fixLine + " ");
+                currentGridLine++;
+
+                if (currentPlayerNumber == 2)
+                {
+                    result.Add(fixLine + currentMatch.PlayerOne.Name);
+                    if (maxLineLength < currentMatch.PlayerOne.Name.Length)
+                        maxLineLength = currentMatch.PlayerOne.Name.Length;
+                    currentPlayerNumber = 1;
+                    if (currentMatch.PlayerTwo == null)
+                        currentMatch = currentMatch.NextMatch;
+                }
+                else
+                {
+                    result.Add(fixLine + currentMatch.PlayerTwo.Name);
+                    if (maxLineLength < currentMatch.PlayerTwo.Name.Length)
+                        maxLineLength = currentMatch.PlayerTwo.Name.Length;
+                    currentPlayerNumber = 2;
+                    currentMatch = currentMatch.NextMatch;
+                }
+
+                pointersInThisRound.Add(result.Count - 1);
+                currentGridLine++;
+            }
+        }
+
+        private static Match AddPreviousRoundWinners(List<int> pointersFromLastRound, Match currentMatch, List<string> result,
+            List<int> pointersInThisRound, ref int currentGridLine, ref int currentPlayerNumber, ref int maxLineLength)
+        {
+            while (pointersFromLastRound.Count > 0 && currentMatch?.PlayerOne != null)
+            {
+                if (currentGridLine == pointersFromLastRound[0])
+                {
+                    if (currentPlayerNumber == 2)
+                    {
+                        result[currentGridLine] += currentMatch.PlayerOne.Name;
+                        currentPlayerNumber = 1;
+                        if (currentMatch.PlayerTwo == null)
+                            currentMatch = currentMatch.NextMatch;
+                    }
+                    else
+                    {
+                        result[currentGridLine] += currentMatch.PlayerTwo.Name;
+                        currentPlayerNumber = 2;
+                        currentMatch = currentMatch.NextMatch;
+                    }
+
+                    if (result[currentGridLine].Length > maxLineLength)
+                        maxLineLength = result[currentGridLine].Length;
+                    pointersInThisRound.Add(currentGridLine);
+                    pointersFromLastRound.RemoveAt(0);
+                }
+                currentGridLine++;
+            }
+            return currentMatch;
         }
 
         public void PrintGrid()

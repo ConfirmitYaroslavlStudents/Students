@@ -73,72 +73,100 @@ namespace Football_League
         public static void PrintHorizontalGrid(List<string> horizontalGrid)
         {
             Console.Clear();
-            int currentGridPointer = 0;
+            int currentGridPointer = 1;
             for (int i = 1; i < horizontalGrid.Count; i++)
             {
-                Console.WriteLine();
-                int currentPositionInLine = 0;
                 if (horizontalGrid[i].Length == 0)
                 {
                     currentGridPointer = i + 1;
                     continue;
                 }
-                while (currentPositionInLine < horizontalGrid[i].Length)
-                {
-                    if (!Char.IsLetterOrDigit(horizontalGrid[i][currentPositionInLine]))
-                    {
-                        Console.Write(horizontalGrid[i][currentPositionInLine]);
-                        currentPositionInLine++;
-                    }
-                    else
-                    {
-                        string name = "";
-                        while (currentPositionInLine < horizontalGrid[i].Length &&
-                               Char.IsLetterOrDigit(horizontalGrid[i][currentPositionInLine]))
-                        {
-                            name += horizontalGrid[i][currentPositionInLine];
-                            currentPositionInLine++;
-                        }
-                        bool isLastName = false;
-                        for (int j = currentPositionInLine; j < horizontalGrid[i].Length; j++)
-                        {
-                            if ((horizontalGrid[i][j] == '|' || char.IsLetterOrDigit(horizontalGrid[i][j]) || horizontalGrid[i][j] == '-')
-                                && j < horizontalGrid[i].Length - 2)
-                                break;
-                            if (j == horizontalGrid[i].Length - 2)
-                            {
-                                isLastName = true;
-                                Console.Write(name);
-                                break;
-                            }
-                        }
-
-                        if (isLastName)
-                            continue;
-
-                        bool isFound = false;
-                        for (int j = currentGridPointer; j < horizontalGrid.Count; j++)
-                        {
-                            if (horizontalGrid[j] == "")
-                            {
-                                break;
-                            }
-                            if (horizontalGrid[j].Substring(currentPositionInLine + 1,
-                                horizontalGrid[j].Length - (currentPositionInLine + 1)).Contains(name))
-                            {
-                                isFound = true;
-                                break;
-                            }
-                        }
-                        Console.ForegroundColor = isFound ? ConsoleColor.Green : ConsoleColor.Red;
-
-                        Console.Write(name);
-                        Console.ResetColor();
-
-                    }
-                }
+                PrintSingleHorizontalLine(ref currentGridPointer, horizontalGrid[i], horizontalGrid);
             }
             Console.WriteLine();
+        }
+
+        public static void PrintSingleHorizontalLine(ref int currentGridPointer, string currentHorizontalGrid, List<string> horizontalGrid)
+        {
+            Console.WriteLine();
+            int currentPositionInLine = 0;
+
+            while (currentPositionInLine < currentHorizontalGrid.Length)
+            {
+                if (!Char.IsLetterOrDigit(currentHorizontalGrid[currentPositionInLine]))
+                {
+                    Console.Write(currentHorizontalGrid[currentPositionInLine]);
+                    currentPositionInLine++;
+                }
+
+                else
+                {
+                    string name = MakeName(currentHorizontalGrid, ref currentPositionInLine);
+
+                    bool isLastName = CheckIfLastNameInLine(currentHorizontalGrid, currentPositionInLine, name);
+                    if (isLastName)
+                        continue;
+
+                     PrintColoredName(currentGridPointer, currentPositionInLine, name, horizontalGrid);
+                }
+            }
+        }
+
+        private static void PrintColoredName(int currentGridPointer, int currentPositionInLine, string name, List<string> horizontalGrid)
+        {
+            bool isFound = false;
+            for (int j = currentGridPointer; j < horizontalGrid.Count; j++)
+            {
+                if (horizontalGrid[j] == "")
+                {
+                    break;
+                }
+                if (horizontalGrid[j].Substring(currentPositionInLine + 1,
+                    horizontalGrid[j].Length - (currentPositionInLine + 1)).Contains(name))
+                {
+                    isFound = true;
+                    break;
+                }
+            }
+            Console.ForegroundColor = isFound ? ConsoleColor.Green : ConsoleColor.Red;
+
+            Console.Write(name);
+            Console.ResetColor();
+        }
+
+        private static bool CheckIfLastNameInLine(string currentHorizontalGrid, int currentPositionInLine, string name)
+        {
+            bool isLastName = false;
+            for (int j = currentPositionInLine; j < currentHorizontalGrid.Length; j++)
+            {
+                if (j >= currentHorizontalGrid.Length - 2)
+                {
+                    isLastName = true;
+                    Console.Write(name);
+                    break;
+                }
+                if (char.IsLetterOrDigit(currentHorizontalGrid[j]))
+                    break;
+                if(currentHorizontalGrid[j] == '-')
+                    continue;
+                if ((currentHorizontalGrid[j] == '|')
+                    && j < currentHorizontalGrid.Length - 2)
+                    break;
+            }
+            return isLastName;
+        }
+
+        private static string MakeName(string currentHorizontalGrid, ref int currentPositionInLine)
+        {
+            string name = "";
+            while (currentPositionInLine < currentHorizontalGrid.Length &&
+                                       Char.IsLetterOrDigit(currentHorizontalGrid[currentPositionInLine]))
+            {
+                name += currentHorizontalGrid[currentPositionInLine];
+                currentPositionInLine++;
+            }
+
+            return name;
         }
 
         public static void PrintVerticalGrid(List<string> verticalGrid)
@@ -146,104 +174,130 @@ namespace Football_League
             Console.Clear();
             for (int i = 0; i < verticalGrid.Count - 2; i++)
             {
-                if (i % 3 == 0)
-                {
-                    for (int j = 0; j < verticalGrid[i].Length; j++)
-                    {
-                        if (verticalGrid[i][j] == ' ')
-                        {
-                            Console.Write(" ");
-                        }
-                        else
-                        {
-                            string firstName = "";
-                            string secondName = "";
-                            int firstNamePosition = j;
-                            while (j < verticalGrid[i].Length && verticalGrid[i][j] != ' ')
-                            {
-                                firstName += verticalGrid[i][j];
-                                j++;
-                            }
-
-                            if (j >= verticalGrid[i].Length)
-                            {
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.Write(firstName);
-                                Console.ResetColor();
-                                break;
-                            }
-                            if (i + 3 < verticalGrid.Count && verticalGrid[i + 3]
-                                    .Substring(firstNamePosition, firstName.Length).Contains(firstName))
-                            {
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.Write(firstName);
-                                Console.ResetColor();
-                                j--;
-                                continue;
-                            }
-
-                            while (j < verticalGrid[i].Length && verticalGrid[i][j] == ' ')
-                                j++;
-                            int secondNamePosition = j;
-
-                            int secondNamePositionSaver = j;
-
-                            while (j < verticalGrid[i].Length && verticalGrid[i][j] != ' ')
-                            {
-                                secondName += verticalGrid[i][j];
-                                j++;
-                            }
-
-                            if (i + 3 < verticalGrid.Count && verticalGrid[i + 3].Length <=
-                                secondNamePosition + secondName.Length - firstNamePosition)
-                                secondNamePosition = verticalGrid[i + 3].Length - secondName.Length;
-
-                            if (i + 3 < verticalGrid.Count && verticalGrid[i + 3]
-                                    .Substring(firstNamePosition,
-                                        secondNamePosition + secondName.Length - firstNamePosition)
-                                    .Contains(firstName))
-                            {
-                                Console.ForegroundColor = ConsoleColor.Green;
-                            }
-                            else
-                                Console.ForegroundColor = ConsoleColor.Red;
-
-                            secondNamePosition = secondNamePositionSaver;
-                            if (i + 3 >= verticalGrid.Count)
-                                Console.ResetColor();
-
-                            Console.Write(firstName);
-                            while (firstNamePosition + firstName.Length != secondNamePosition)
-                            {
-                                Console.Write(" ");
-                                firstNamePosition++;
-                            }
-
-                            switch (Console.ForegroundColor)
-                            {
-                                case ConsoleColor.Red:
-                                    Console.ForegroundColor = ConsoleColor.Green;
-                                    break;
-
-                                case ConsoleColor.Green:
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    break;
-                            }
-
-                            Console.Write(secondName);
-                            Console.ResetColor();
-                            j--;
-                        }
-                    }
-                    Console.WriteLine();
-                }
-                else
-                {
-                    Console.WriteLine(verticalGrid[i]);
-                }
+                PrintSingleVerticalLine(i, verticalGrid);
             }
         }
 
+        public static void PrintSingleVerticalLine(int currentLine, List<string> verticalGrid)
+        {
+            if (currentLine % 3 != 0)
+                Console.WriteLine(verticalGrid[currentLine]);
+            else
+            {
+                for (int j = 0; j < verticalGrid[currentLine].Length; j++)
+                {
+                    if (verticalGrid[currentLine][j] == ' ')
+                    {
+                        Console.Write(" ");
+                    }
+                    else
+                    {
+                        int firstNamePosition = j;
+                        string firstName = MakeFirstName(verticalGrid[currentLine], ref j);
+                        string secondName = "";
+
+                        if (j >= verticalGrid[currentLine].Length)
+                        {
+                            PrintVerticalGridAutoWinner(firstName);
+                            break;
+                        }
+
+                        if (currentLine + 3 < verticalGrid.Count && verticalGrid[currentLine + 3]
+                                .Substring(firstNamePosition, firstName.Length).Contains(firstName))
+                        {
+                            PrintVerticalGridAutoWinner(firstName);
+                            j--;
+                            continue;
+                        }
+
+                        while (j < verticalGrid[currentLine].Length && verticalGrid[currentLine][j] == ' ')
+                            j++;
+
+                        int secondNamePosition = j;
+                        int secondNamePositionSaver = j;
+
+                        secondName = MakeSecondName(verticalGrid[currentLine], ref j);
+
+                        if (currentLine + 3 < verticalGrid.Count && verticalGrid[currentLine + 3].Length <=
+                            secondNamePosition + secondName.Length - firstNamePosition)
+                            secondNamePosition = verticalGrid[currentLine + 3].Length - secondName.Length;
+
+                        PrintFirstAndSecodNames(currentLine, verticalGrid, firstNamePosition, firstName, secondName, secondNamePosition, secondNamePositionSaver);
+                        j--;
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private static void PrintFirstAndSecodNames(int currentLine, List<string> verticalGrid,  int firstNamePosition, string firstName, string secondName, int secondNamePosition, int secondNamePositionSaver)
+        {
+            if (currentLine + 3 < verticalGrid.Count && verticalGrid[currentLine + 3]
+                    .Substring(firstNamePosition,
+                        secondNamePosition + secondName.Length - firstNamePosition)
+                    .Contains(firstName))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            else
+                Console.ForegroundColor = ConsoleColor.Red;
+
+            secondNamePosition = secondNamePositionSaver;
+            if (currentLine + 3 >= verticalGrid.Count)
+                Console.ResetColor();
+
+            Console.Write(firstName);
+            while (firstNamePosition + firstName.Length != secondNamePosition)
+            {
+                Console.Write(" ");
+                firstNamePosition++;
+            }
+
+            switch (Console.ForegroundColor)
+            {
+                case ConsoleColor.Red:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+
+                case ConsoleColor.Green:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+            }
+
+            Console.Write(secondName);
+            Console.ResetColor();
+        }
+
+        private static string MakeSecondName(string line, ref int j)
+        {
+            string secondName = "";
+            while (j < line.Length && line[j] != ' ')
+            {
+                secondName += line[j];
+                j++;
+            }
+
+            return secondName;
+        }
+
+        private static string MakeFirstName(string line, ref int j)
+        {
+            string firstName = "";
+            while (j < line.Length && line[j] != ' ')
+            {
+                firstName += line[j];
+                j++;
+            }
+
+            return firstName;
+        }
+
+        private static void PrintVerticalGridAutoWinner(string firstName)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(firstName);
+            Console.ResetColor();
+        }
         public static int SaveProcessQuestion()
         {
             Console.Clear();

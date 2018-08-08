@@ -8,53 +8,43 @@ namespace Football_League
     {
         public Match StartMatch;
         public  Match CurrentRoundFirstMatch;
-        public Match CurrentMatchToDraw;
 
         public MatchTreeGrid()
         {
             StartMatch = CurrentRoundFirstMatch;
         }
         public List<Contestant> PlayRound()
-        { // check if startMatchNextRoundMatch exists ...
-            if(CurrentRoundFirstMatch == null)
+        {
+            if (CurrentRoundFirstMatch == null)
                 return new List<Contestant>();
 
-            var currentMatch = StartMatch;
-            StartMatch = currentMatch;
-            CurrentRoundFirstMatch = currentMatch;
-            while (currentMatch.NextRoundMatch != null)
-                currentMatch = currentMatch.NextRoundMatch;
-            CurrentRoundFirstMatch = currentMatch;
+            RestoreLostConnections();
 
+            Match currentMatch = CurrentRoundFirstMatch;
             var losers = new List<Contestant>();
-            //var currentMatch = CurrentRoundFirstMatch;
             var currentMatchInNextRound = new Match();
+
             while (currentMatch?.PlayerOne != null)
             {
-                var matchWinner = currentMatch.PickWinner();
-                if(currentMatch.GetLoser() != null)
-                   losers.Add(currentMatch.GetLoser());
-
-                if (currentMatchInNextRound.PlayerOne == null)
-                {
-                    currentMatchInNextRound = new Match
-                    {
-                        PlayerOne = matchWinner
-                    };
-                    currentMatch.NextRoundMatch = currentMatchInNextRound;
-                }
-
-                else if (currentMatchInNextRound.PlayerTwo == null)
-                {
-                    currentMatchInNextRound.PlayerTwo = matchWinner;
-                    currentMatch.NextRoundMatch = currentMatchInNextRound;
-                    currentMatchInNextRound.NextMatch = new Match();
-                    currentMatchInNextRound = currentMatchInNextRound.NextMatch;
-                }
-
-                currentMatch = currentMatch.NextMatch;
+                Contestant matchWinner = SetMatchWinnerAndLoser(currentMatch, losers);
+                AddWinnerToNextRound(ref currentMatch, ref currentMatchInNextRound, matchWinner);
             }
 
+            SetCurrentAndNextRoundsConnections(out currentMatch, out currentMatchInNextRound);
+
+            return losers;
+        }
+
+        private static Contestant SetMatchWinnerAndLoser(Match currentMatch, List<Contestant> losers)
+        {
+            var matchWinner = currentMatch.PickWinner();
+            if (currentMatch.GetLoser() != null)
+                losers.Add(currentMatch.GetLoser());
+            return matchWinner;
+        }
+
+        private void SetCurrentAndNextRoundsConnections(out Match currentMatch, out Match currentMatchInNextRound)
+        {
             currentMatch = CurrentRoundFirstMatch.NextMatch;
             currentMatchInNextRound = CurrentRoundFirstMatch.NextRoundMatch;
 
@@ -71,9 +61,39 @@ namespace Football_League
                     matchNumber = 1;
                 currentMatch = currentMatch.NextMatch;
             }
-
             CurrentRoundFirstMatch = CurrentRoundFirstMatch.NextRoundMatch;
-            return losers;
+        }
+
+        private static void AddWinnerToNextRound(ref Match currentMatch, ref Match currentMatchInNextRound, Contestant matchWinner)
+        {
+            if (currentMatchInNextRound.PlayerOne == null)
+            {
+                currentMatchInNextRound = new Match
+                {
+                    PlayerOne = matchWinner
+                };
+                currentMatch.NextRoundMatch = currentMatchInNextRound;
+            }
+
+            else if (currentMatchInNextRound.PlayerTwo == null)
+            {
+                currentMatchInNextRound.PlayerTwo = matchWinner;
+                currentMatch.NextRoundMatch = currentMatchInNextRound;
+                currentMatchInNextRound.NextMatch = new Match();
+                currentMatchInNextRound = currentMatchInNextRound.NextMatch;
+            }
+
+            currentMatch = currentMatch.NextMatch;
+        }
+
+        private void RestoreLostConnections()
+        {
+            var currentMatch = StartMatch;
+            StartMatch = currentMatch;
+            CurrentRoundFirstMatch = currentMatch;
+            while (currentMatch.NextRoundMatch != null)
+                currentMatch = currentMatch.NextRoundMatch;
+            CurrentRoundFirstMatch = currentMatch;
         }
 
         public void AddPlayersFromNextTree(List<Contestant> players)
@@ -81,6 +101,7 @@ namespace Football_League
             var currentMatch = CurrentRoundFirstMatch;
             while (currentMatch?.NextMatch != null)
                 currentMatch = currentMatch.NextMatch;
+
             foreach (var player in players)
             {
                 if (currentMatch?.PlayerOne != null && currentMatch.PlayerTwo != null)

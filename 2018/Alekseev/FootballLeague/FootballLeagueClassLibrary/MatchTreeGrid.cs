@@ -18,7 +18,7 @@ namespace Football_League
             if (CurrentRoundFirstMatch == null)
                 return new List<Contestant>();
 
-            RestoreLostConnections();
+            RestoreConnections();
 
             Match currentMatch = CurrentRoundFirstMatch;
             var losers = new List<Contestant>();
@@ -86,7 +86,7 @@ namespace Football_League
             currentMatch = currentMatch.NextMatch;
         }
 
-        private void RestoreLostConnections()
+        private void RestoreConnections()
         {
             var currentMatch = StartMatch;
             StartMatch = currentMatch;

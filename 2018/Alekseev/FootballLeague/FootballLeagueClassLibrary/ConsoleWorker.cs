@@ -202,7 +202,8 @@ namespace Football_League
                             break;
                         }
 
-                        if (currentLine + 3 < verticalGrid.Count && verticalGrid[currentLine + 3]
+                        if (currentLine + 3 < verticalGrid.Count && firstName.Length + firstNamePosition < verticalGrid[currentLine + 3].Length 
+                            && verticalGrid[currentLine + 3]
                                 .Substring(firstNamePosition, firstName.Length).Contains(firstName))
                         {
                             PrintVerticalGridAutoWinner(firstName);

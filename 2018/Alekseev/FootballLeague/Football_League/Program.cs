@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
-using System.IO;
+using Football_League;
 
 namespace Football_League
 {
-    internal enum LeagueType
+    public enum LeagueType
     {
         SingleElumination = 1,
         DoubleElumination = 2
-    };
-
-    internal enum GridDrawingType
-    {
-        Vertical = 1,
-        Horizontal = 2
     };
     internal enum MenuChoiceType
     {
@@ -49,13 +42,13 @@ namespace Football_League
                 case MenuChoiceType.StartNewLeague:
                 {
                         CreateNewLeague();
-                        SaveCurrentSession();
+                        SaverLoader.SaveCurrentSession(_leagueType,Grid);
                         break;
                     }
                 case MenuChoiceType.ChooseWinners:
                     {
                         Grid.PlayRound();
-                        SaveCurrentSession();
+                        SaverLoader.SaveCurrentSession(_leagueType, Grid);
                         break;
                     }
                 case MenuChoiceType.DisplayResults:
@@ -76,14 +69,14 @@ namespace Football_League
                     }
                 case MenuChoiceType.Load:
                     {
-                        LoadLastSave();
+                        Grid = SaverLoader.LoadLastSave(_leagueType);
                         break;
                     }
                 case MenuChoiceType.Exit:
                     {
                         bool saveAsked = ConsoleWorker.SaveProcessQuestion() == 1;
                         if (saveAsked)
-                            SaveCurrentSession();
+                            SaverLoader.SaveCurrentSession(_leagueType, Grid);
                         Environment.Exit(0);
                         break;
                     }
@@ -126,37 +119,6 @@ namespace Football_League
                 players[n] = player;
             }
         }
-        public static void SaveCurrentSession()
-        {
-            XmlSerializer formatter = new XmlSerializer(typeof(FullGrid));
-
-            var fileToOpen = _leagueType == LeagueType.SingleElumination ? "gridSingleElumination.xml" : "gridDoubleElumination.xml";
-
-            using (FileStream fs = new FileStream(fileToOpen, FileMode.Create))
-            {
-                formatter.Serialize(fs,Grid);
-                ConsoleWorker.Saved();
-            }
-        }
-
-        public static void LoadLastSave()
-        {
-            XmlSerializer formatter = new XmlSerializer(typeof(FullGrid));
-
-            var fileToOpen = _leagueType == LeagueType.SingleElumination ? "gridSingleElumination.xml" : "gridDoubleElumination.xml";
-
-            try
-            {
-                using (FileStream fs = new FileStream(fileToOpen, FileMode.Open))
-                {
-                    Grid = (FullGrid)formatter.Deserialize(fs);
-                    ConsoleWorker.Loaded();
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                ConsoleWorker.FileNotFoundError();
-            }          
-        }
+       
     }
 }

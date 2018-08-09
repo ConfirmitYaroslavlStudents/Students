@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballTournament", "FootballTournament\FootballTournament.csproj", "{69D892AC-37AE-4774-805F-19524E9B4931}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentLibrary", "TournamentLibrary\TournamentLibrary.csproj", "{3D8D9BB4-C9BE-4356-818F-54E672EF969F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{69D892AC-37AE-4774-805F-19524E9B4931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69D892AC-37AE-4774-805F-19524E9B4931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69D892AC-37AE-4774-805F-19524E9B4931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8D9BB4-C9BE-4356-818F-54E672EF969F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8D9BB4-C9BE-4356-818F-54E672EF969F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8D9BB4-C9BE-4356-818F-54E672EF969F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8D9BB4-C9BE-4356-818F-54E672EF969F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

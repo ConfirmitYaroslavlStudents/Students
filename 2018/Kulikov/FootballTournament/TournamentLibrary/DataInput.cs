@@ -1,29 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace FootballTournament
+namespace TournamentLibrary
 {
     public static class DataInput
     {
+        private static IViewer _viewer = Viewer.GetViewer();
+
         public static int GetCountOfPlayers()
         {
-            ConsoleWorker.StartedNewTournament(); 
+            _viewer.StartedNewTournament(); 
 
-            var countOfPlayers = ConsoleWorker.EnterCountOfPlayers();
+            var countOfPlayers = _viewer.EnterCountOfPlayers();
 
             return countOfPlayers;
         }
 
         public static List<Player> GetPlayersList(int countOfPlayers)
         {
-            ConsoleWorker.EnterPlayerNames();
+            _viewer.EnterPlayerNames();
 
             var players = new List<Player>();
             var existingNames = new HashSet<string>();
 
             for (int i = 1; i <= countOfPlayers; i++)
             {
-                var name = ConsoleWorker.EnterPlayerName(existingNames, i);
+                var name = _viewer.EnterPlayerName(existingNames, i);
                 existingNames.Add(name);
                 players.Add(new Player(name));
             }

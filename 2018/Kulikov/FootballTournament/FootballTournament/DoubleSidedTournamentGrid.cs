@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using TournamentLibrary;
 
 namespace FootballTournament
 {
-    public class DoubleSidedTournamentGrid
+    public class DoubleSidedTournamentGrid : TournamentGrid
     {
-        private static Tournament _tournament;
+        private static SingleEliminationTournament _tournament;
         private static List<List<Game>> _virtualGrid;
         private static List<List<Game>> _leftSidedGrid;
         private static List<List<Game>> _rightSidedGrid;
@@ -16,7 +17,7 @@ namespace FootballTournament
         private static int _gridVerticalLength = 0;
         private static Player _unknownPlayer = new Player("?");
 
-        public static void Show(Tournament tournament)
+        public static void Show(SingleEliminationTournament tournament)
         {
             Console.Clear();
 
@@ -38,7 +39,7 @@ namespace FootballTournament
                 Console.WriteLine("Double-sided grid available only for count of players which is degree of two!");
         }
 
-        public static bool IsDegreeOfTwo(int value)
+        private static bool IsDegreeOfTwo(int value)
         {
             return value != 0 && (value & (value - 1)) == 0;
         }
@@ -198,31 +199,6 @@ namespace FootballTournament
             Console.SetCursorPosition(0, _gridVerticalLength + 3);
         }
 
-        private static void DrawResult(int x, int y, Game game)
-        {
-            Console.SetCursorPosition(x, y);
-
-            if (!game.IsPlayed)
-                Console.Write(game.Result());
-            else
-            {
-                Console.ForegroundColor = ChangeColor(game, game.FirstPlayer);
-                Console.Write($"{game.FirstPlayer.Name} ");
-                Console.ResetColor();
-                Console.Write($"{game.FirstPlayerScore}:{game.SecondPlayerScore}");
-                Console.ForegroundColor = ChangeColor(game, game.SecondPlayer);
-                Console.Write($" {game.SecondPlayer.Name}");
-                Console.ResetColor();
-            }
-        }
-
-        private static ConsoleColor ChangeColor(Game game, Player player)
-        {
-            if (player == game.Winner)
-                return ConsoleColor.Green;
-            else
-                return ConsoleColor.Gray;
-        }
 
         private static void DrawLeftHorizontalLines()
         {
@@ -233,29 +209,6 @@ namespace FootballTournament
         {
             Console.SetCursorPosition(x, y);
             Console.Write("-- ");
-        }
-
-        private static void DrawVerticalLines(int x, int y, int lineLength)
-        {
-            for (int currentLength = 1; currentLength <= lineLength; currentLength++)
-            {
-                Console.SetCursorPosition(x, y);
-                Console.Write('|');
-                y++;
-            }
-        }
-
-        private static int GetMaxLength(List<Game> stage)
-        {
-            int maxLength = -1;
-
-            for (int i = 0; i < stage.Count; i++)
-            {
-                if (stage[i].Result().Length > maxLength)
-                    maxLength = stage[i].Result().Length;
-            }
-
-            return maxLength;
         }
     }
 }

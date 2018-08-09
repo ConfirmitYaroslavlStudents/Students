@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace FootballTournament
+namespace TournamentLibrary
 {
     public class SaveLoadSystem
     {
         private static BinaryFormatter _formatter = new BinaryFormatter();
         private static string _fileName = "tournamentProgress.dat";
 
-        public static void Save(Tournament tournament)
+        public static void Save(SingleEliminationTournament tournament)
         {
             using (FileStream fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
             {
@@ -16,13 +16,13 @@ namespace FootballTournament
             }
         }
 
-        public static Tournament Load()
+        public static SingleEliminationTournament Load()
         {
-            Tournament tournament;
+            SingleEliminationTournament tournament;
 
             using (FileStream fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
             {
-                tournament = (Tournament)_formatter.Deserialize(fileStream);
+                tournament = (SingleEliminationTournament)_formatter.Deserialize(fileStream);
             }
 
             return tournament;

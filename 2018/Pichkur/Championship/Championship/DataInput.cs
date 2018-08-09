@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System.Collections.Generic;
 
 namespace Championship
 {
-    static class DataInput
+    public static class DataInput
     {
+        private static IDataInputWorker _consoleWorker=new ConsoleWorker();
+
         public static int InputIntegerNumber(int minValue)
         {
             var number = -1;
 
-            while (!int.TryParse(Console.ReadLine(), out number) || number < minValue)
+            while (!int.TryParse(_consoleWorker.InputString(), out number) || number < minValue)
             {
-                Console.WriteLine(Messages.NotAPositiveIntegerNumber);
-                Console.Write(Messages.TryAgain);
+                _consoleWorker.WriteLineMessage(Messages.NotAPositiveIntegerNumber);
+                _consoleWorker.WriteMessage(Messages.TryAgain);
             }
 
             return number;
@@ -22,13 +21,13 @@ namespace Championship
 
         public static Team InputCorrectTeam(List<Team> teams)
         {
-            var team = new Team(Console.ReadLine());
+            var team = new Team(_consoleWorker.InputString());
 
             while (teams.Contains(team))
             {
-                Console.WriteLine(Messages.ImpossibleTeamName);
-                Console.Write(Messages.TryAgain);
-                team = new Team(Console.ReadLine());
+                _consoleWorker.WriteLineMessage(Messages.ImpossibleTeamName);
+                _consoleWorker.WriteMessage(Messages.TryAgain);
+                team = new Team(_consoleWorker.InputString());
             }
 
             return team;
@@ -41,26 +40,39 @@ namespace Championship
 
             int minScoreValue = 0;
             game.IsPlayed = true;
-            Console.WriteLine(Messages.ShowOpponents(game.FirstTeam.Name, game.SecondTeam.Name));
-            Console.Write(Messages.SetTeamScore(game.FirstTeam.Name));
+
+            _consoleWorker.WriteLineMessage(Messages.ShowOpponents(game.FirstTeam.Name, game.SecondTeam.Name));
+
+            _consoleWorker.WriteMessage(Messages.SetTeamScore(game.FirstTeam.Name));
             game.FirstTeamScore = InputIntegerNumber(minScoreValue);
-            Console.Write(Messages.SetTeamScore(game.SecondTeam.Name));
+
+            _consoleWorker.WriteMessage(Messages.SetTeamScore(game.SecondTeam.Name));
             game.SecondTeamScore = InputIntegerNumber(minScoreValue);
-            Console.WriteLine();
+
+            _consoleWorker.WriteLineMessage(null);
+            game.SetWinner();
+        }
+
+        public static void InputTourGamesScores(Tour tour)
+        {
+            foreach (var game in tour.Games)
+            {
+                InputGameScore(game);
+            }
         }
 
         public static List<Team> InputTeams()
         {
             int minCountTeams = 2;
             var teams = new List<Team>();
-            Console.Write(Messages.InputCountTeams);
-
+            _consoleWorker.WriteMessage(Messages.InputCountTeams);
             var countTeams = InputIntegerNumber(minCountTeams);
-            Console.WriteLine(Messages.InputNamesOfTeams);
+
+            _consoleWorker.WriteLineMessage(Messages.InputNamesOfTeams);
 
             for (int i = 0; i < countTeams; i++)
             {
-                Console.Write(Messages.SomeIndex(i + 1));
+                _consoleWorker.WriteMessage(Messages.SomeIndex(i + 1));
                 teams.Add(InputCorrectTeam(teams));
             }
 

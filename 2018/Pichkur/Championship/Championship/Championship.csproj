@@ -42,17 +42,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChampionshipData.cs" />
+    <Compile Include="ConsoleWorker.cs" />
     <Compile Include="DataInput.cs" />
+    <Compile Include="DoubleChampionship.cs" />
     <Compile Include="DoubleEliminationGrid.cs" />
+    <Compile Include="DoubleSideGridRenderer.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GridDrawer.cs" />
+    <Compile Include="GridRenderer.cs" />
+    <Compile Include="GridRendererType.cs" />
+    <Compile Include="GridRendererVisitor.cs" />
+    <Compile Include="IChampionship.cs" />
+    <Compile Include="IDataInputWorker.cs" />
+    <Compile Include="IGrid.cs" />
+    <Compile Include="IVisitor.cs" />
+    <Compile Include="LeftSideGridRenderer.cs" />
     <Compile Include="LineColor.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Messages.cs" />
+    <Compile Include="OneSideGridRenderer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RightSideGridRenderer.cs" />
+    <Compile Include="SaveLoadSystem.cs" />
+    <Compile Include="SingleChampionship.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Tour.cs" />
     <Compile Include="SingleEliminationGrid.cs" />

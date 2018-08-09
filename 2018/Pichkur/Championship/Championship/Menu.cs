@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Championship
 {
-    [Serializable]
     public class Menu
     {
         private readonly List<MenuItem> _menuItems;

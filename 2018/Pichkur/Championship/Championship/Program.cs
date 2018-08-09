@@ -4,8 +4,8 @@
     {
         static void Main(string[] args)
         {
-            UserInterface a = new UserInterface();
-            a.Start();
+            UserInterface UI = new UserInterface();
+            UI.Start();
         }
     }   
 }

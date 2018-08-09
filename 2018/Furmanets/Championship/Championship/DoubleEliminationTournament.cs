@@ -9,14 +9,14 @@ namespace Championship
         private readonly List<Round> _upperGrid;
         private readonly List<Round> _lowerGrid;
         private readonly Meeting _finalUpperAndLowerGrids;
-        
 
         public DoubleEliminationTournament(List<string> players)
         {
-            var grids = ConstructorTournament.CreateDoubleEliminationTournament(players);
+            var doubleConstructorTournament = new DoubleConstructorTournament();
+            var singleConstructorTournament = new SingleConstructorTournament();
 
-            _upperGrid = grids[0];
-            _lowerGrid = grids[1];
+            _lowerGrid = doubleConstructorTournament.CreateTournament(players);
+            _upperGrid = singleConstructorTournament.CreateTournament(players);
 
             _finalUpperAndLowerGrids = new Meeting();
             _upperGrid[_upperGrid.Count - 2].Meetings[0].NextStage = _finalUpperAndLowerGrids;
@@ -102,12 +102,16 @@ namespace Championship
             var tournament = CloneTournament(_upperGrid);
 
             var indexRound = 0;
-            foreach (var round in _lowerGrid)
+            for (var i = 1; i < _lowerGrid.Count; i++)
             {
-                foreach (var meeting in round.Meetings)
+                var round = _lowerGrid[i];
+
+                for (var j = 0; j < round.Meetings.Count; j++)
                 {
+                    var meeting = round.Meetings[j];
                     tournament[indexRound].Meetings.Add(meeting.CloneMeeting());
                 }
+
                 indexRound++;
             }
 
@@ -154,26 +158,23 @@ namespace Championship
 
         protected void PromotionOnePlayerInGameToNextRound(Meeting meeting)
         {
-            if (meeting.NextStage.FirstPlayer == null)
-            {
-                meeting.NextStage.FirstPlayer = meeting.FirstPlayer;
-            }
-            else
-            {
-                meeting.NextStage.SecondPlayer = meeting.FirstPlayer;
-            }
+            meeting.NextStage.SecondPlayer = meeting.FirstPlayer;
         }
 
         protected void PromotionLoserToNextStage(string player)
         {
             var round = _lowerGrid[IndexOfRound];
 
-            foreach (var meeting in round.Meetings)
+            for (var i = round.Meetings.Count - 1; i >= 0; i--)
             {
-                if (meeting.FirstPlayer == null)
+                if (i % 2 == 1)
                 {
-                    meeting.FirstPlayer = player;
-                    return;
+                    var meeting = round.Meetings[i];
+                    if (meeting.FirstPlayer == null)
+                    {
+                        meeting.FirstPlayer = player;
+                        return;
+                    }
                 }
             }
         }

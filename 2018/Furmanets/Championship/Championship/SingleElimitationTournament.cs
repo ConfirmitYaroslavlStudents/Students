@@ -7,31 +7,30 @@ namespace Championship
     public class SingleElimitationTournament : Tournament
     {
         private readonly List<Round> _tournamentRounds;
-        private int _indexOfRound;
-        private int _indexOfMatch;
 
         public SingleElimitationTournament(List<string> players)
         {
-            _tournamentRounds = ConstructorTournament.CreateSingleEliminationTournament(players);
-            _indexOfRound = 0;
+            var singleconstructor = new SingleConstructorTournament();
+            _tournamentRounds = singleconstructor.CreateTournament(players);
+            IndexOfRound = 0;
         }
 
         public override void CollectorResults(int[] resultMatch)
         {
-            var round = _tournamentRounds[_indexOfRound];
-            var meeting = round.Meetings[_indexOfMatch];
+            var round = _tournamentRounds[IndexOfRound];
+            var meeting = round.Meetings[IndexOfMatch];
 
             meeting.Score = resultMatch;
             ChooseWinner(meeting);
 
-            _indexOfMatch++;
+            IndexOfMatch++;
 
-            if (round.Meetings.Count == _indexOfMatch || 
-                round.Meetings[_indexOfMatch].FirstPlayer == null || 
-                round.Meetings[_indexOfMatch].SecondPlayer == null)
+            if (round.Meetings.Count == IndexOfMatch || 
+                round.Meetings[IndexOfMatch].FirstPlayer == null || 
+                round.Meetings[IndexOfMatch].SecondPlayer == null)
             {
-                _indexOfMatch = 0;
-                _indexOfRound++;
+                IndexOfMatch = 0;
+                IndexOfRound++;
             }
         }
 

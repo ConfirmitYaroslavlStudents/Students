@@ -3,91 +3,13 @@ using System.Collections.Generic;
 
 namespace Championship
 {
-    public class ConstructorTournament
+    public abstract class ConstructorTournament
     {
-        public static List<Round> CreateSingleEliminationTournament(List<string> players)
-        {
-            players = RandomSortPlayers(players);
-            var tournamentGrid = CreateTournamentGrid(players.Count);
-            tournamentGrid = ArrangementOfPlayersInTournamentGrid(players, tournamentGrid);
-            return tournamentGrid;
-        }
+        public abstract List<Round> CreateTournament(List<string> players);
 
-        public static List<Round>[] CreateDoubleEliminationTournament(List<string> players)
-        {
-            var grids = new List<Round>[2];
+       
 
-            var lowerGrid = CreateTournamentGrid(players.Count*2);
-            var upperGrid = CreateSingleEliminationTournament(players);
-
-            foreach (var round in upperGrid)
-            {
-                var count = round.Meetings.Count;
-
-                for (int i = 0; i < count; i++)
-                {
-                    round.Meetings.Add(new Meeting());
-                }
-            }
-
-            for (var i = 0; i < upperGrid.Count; i++)
-            {
-                upperGrid[i].Stage *= 2;
-                lowerGrid[i].Stage *= 2;
-            }
-            upperGrid.Add(new Round());
-            upperGrid[upperGrid.Count - 1].Meetings.Add(new Meeting());
-            upperGrid[upperGrid.Count - 1].Stage = 2;
-
-            grids[0] = upperGrid;
-            grids[1] = lowerGrid;
-            return grids;
-        }
-
-        private static List<Round> CreateTournamentGrid(int playersCount)
-        {
-            var tournament = new List<Round>();
-            var stage = 1;
-            var countNextMeetings = 1;
-            var countMeetings = 1;
-
-            while (stage < playersCount)
-            {
-                tournament.Add(new Round());
-                tournament[tournament.Count - 1].Stage = stage;
-
-                for (var i = 0; i < countMeetings; i++)
-                {
-                    tournament[tournament.Count - 1].Meetings.Add(new Meeting());
-                }
-
-                if (tournament.Count != 1)
-                {
-                    var meetingIndex = 0;
-
-                    for (var i = 0; i < countNextMeetings; i++)
-                    {
-                        tournament[tournament.Count - 1].Meetings[meetingIndex].NextStage =
-                            tournament[tournament.Count - 2].Meetings[i];
-
-                        tournament[tournament.Count - 1].Meetings[meetingIndex + 1].NextStage =
-                            tournament[tournament.Count - 2].Meetings[i];
-
-                        meetingIndex += 2;
-                    }
-
-                    countNextMeetings *= 2;
-                }
-
-                countMeetings *= 2;
-                stage *= 2;
-            }
-
-            tournament.Reverse();
-            return tournament;
-        }
-
-        private static List<string> RandomSortPlayers(List<string> players)
+        protected static List<string> RandomSortPlayers(List<string> players)
         {
             var random = new Random();
             var newPlayersList = new List<string>();
@@ -103,7 +25,7 @@ namespace Championship
             return newPlayersList;
         }
 
-        private static List<Round> ArrangementOfPlayersInTournamentGrid(List<string> players,
+        protected static List<Round> ArrangementOfPlayersInTournamentGrid(List<string> players,
             List<Round> tournamentGrid)
         {
             var indexPlayer = 0;

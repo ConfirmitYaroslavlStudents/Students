@@ -1,8 +1,11 @@
-﻿namespace Tournament
+﻿using System;
+
+namespace Tournament
 {
+    [Serializable]
     public abstract class Grid
     {
         public Match[][] Matches;
-        public int Winner;
+        public string Winner;
     }
 }

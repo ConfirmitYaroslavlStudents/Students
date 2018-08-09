@@ -1,11 +1,14 @@
-﻿namespace Tournament
+﻿using System;
+
+namespace Tournament
 {
+    [Serializable]
     public class Match
     {
-        public int[] Opponents = new int[2];
+        public string[] Opponents = new string[2];
         public int Winner;
 
-        public Match(int first, int second)
+        public Match(string first, string second)
         {
             Opponents[0] = first;
             Opponents[1] = second;
@@ -16,7 +19,7 @@
         {
             get
             {
-                if (Opponents[0] == -1 || Opponents[1] == -1)
+                if (Opponents[0] == string.Empty || Opponents[1] == string.Empty)
                 {
                     return false;
                 }

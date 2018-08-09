@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Tournament
 {
+    [Serializable]
     public class LoserGrid : Grid
     {
         public LoserGrid(Match[][] mainGrid)
@@ -12,7 +13,7 @@ namespace Tournament
                 throw new InvalidOperationException("Must create the main grid first.");
             }
 
-            Winner = -1;
+            Winner = string.Empty;
             var matchesInEachTour = CalculateTourSize(mainGrid);
             Matches = new Match[matchesInEachTour.Count][];
             for (int i = 0; i < Matches.Length; i++)
@@ -21,7 +22,7 @@ namespace Tournament
 
                 for (int j = 0; j < Matches[i].Length; j++)
                 {
-                    Matches[i][j] = new Match(-1, -1);
+                    Matches[i][j] = new Match(string.Empty, string.Empty);
                 }
             }
         }

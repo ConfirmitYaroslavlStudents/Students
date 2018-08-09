@@ -3,21 +3,22 @@ using System.Collections.Generic;
 
 namespace Tournament
 {
+    [Serializable]
     public class MainGrid : Grid
     {
         public int ExtraPlayerTour;
 
-        public MainGrid(int numberOfPlayers)
+        public MainGrid(string[] playerNames)
         {
-            Winner = -1;
-            int extraPlayer = numberOfPlayers % 2;
-            List<int> matchesInEachTour = CalculateTourSize(numberOfPlayers, extraPlayer);
+            Winner = string.Empty;
+            int extraPlayer = playerNames.Length % 2;
+            List<int> matchesInEachTour = CalculateTourSize(playerNames.Length, extraPlayer);
             Matches = new Match[matchesInEachTour.Count][];
             Matches[0] = new Match[matchesInEachTour[0]];
 
-            for (int i = 1; i < numberOfPlayers; i += 2)
+            for (int i = 1; i < playerNames.Length; i += 2)
             {
-                Matches[0][i / 2] = new Match(i - 1, i);
+                Matches[0][i / 2] = new Match(playerNames[i - 1], playerNames[i]);
             }
 
             ExtraPlayerTour = -1;
@@ -29,7 +30,7 @@ namespace Tournament
 
                 for (int j = 0; j < Matches[i].Length; j++)
                 {
-                    Matches[i][j] = new Match(-1, -1);
+                    Matches[i][j] = new Match(string.Empty, string.Empty);
                 }
 
                 FindPlaceForExtraPlayer(i, extraPlayer);
@@ -37,7 +38,7 @@ namespace Tournament
 
             if (extraPlayer == 1)
             {
-                Matches[ExtraPlayerTour][Matches[ExtraPlayerTour].Length - 1].Opponents[1] = numberOfPlayers - 1;
+                Matches[ExtraPlayerTour][Matches[ExtraPlayerTour].Length - 1].Opponents[1] = playerNames[playerNames.Length - 1];
             }
         }
 

@@ -1,86 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tournament
 {
-    public static class HorizontalDrawer
+    public class HorizontalDrawer : Drawer
     {
-        private const int EmptyCellCode = -2;
-
-        public static void DrawTable(TournamentController tournament)
+        public HorizontalDrawer()
         {
-            List<int>[] mainLines = GetGridLines(tournament.Main);
-            List<int>[] losersLines = null;
 
-            if (tournament.DoubleElimination)
-            {
-                losersLines = GetGridLines(tournament.Losers);
-
-                if (losersLines.Length > mainLines.Length)
-                {
-                    mainLines[(mainLines.Length / 2) - 1].Add(tournament.Main.Winner);
-                    mainLines[mainLines.Length - 1].Add(EmptyCellCode);
-                }
-
-                mainLines[mainLines.Length - 1].Add(EmptyCellCode);
-                mainLines[mainLines.Length - 1].Add(tournament.Champion);
-            }
-
-            PrintGrid(mainLines, tournament, false);
-
-            if (tournament.DoubleElimination)
-            {
-                PrintGrid(losersLines, tournament, true);
-            }
         }
 
-        private static List<int>[] GetGridLines(Grid grid)
+        public override void DrawTable(Tournament tournament)
         {
-            int tableHeight = (int)Math.Pow(2, grid.Matches.Length + 1);
-            List<int>[] lines = new List<int>[tableHeight];
+            List<string>[] mainGames = GetGridLines(tournament.Main);
+            List<string>[] losersGames = null;
 
-            for (int i = 0; i < lines.Length; i++)
+            if (tournament.DoubleElimination)
             {
-                lines[i] = new List<int>();
-            }
+                losersGames = GetGridLines(tournament.Losers);
 
-            int gapSize = 1;
-            int currentLine = 0;
-
-            for (int k = 0; k < grid.Matches.Length; k++)
-            {
-                for (int i = 0; i < grid.Matches[k].Length; i++)
+                if (losersGames[0].Count > mainGames[0].Count)
                 {
-                    for (int j = 0; j < 2; j++)
+                    for (int i = 0; i < mainGames.Length; i++)
                     {
-                        FillLines(lines, currentLine, gapSize - 1);
-                        currentLine += gapSize - 1;
-                        lines[currentLine].Add(grid.Matches[k][i].Opponents[j]);
-                        currentLine++;
-                        FillLines(lines, currentLine, gapSize);
-                        currentLine += gapSize;
+                        mainGames[i].Add(mainGames[i][mainGames[i].Count - 1]);
                     }
                 }
 
-                FillLines(lines, currentLine, tableHeight - currentLine);
-                currentLine = 0;
-                gapSize *= 2;
+                FillLines(mainGames, 0, mainGames.Length - 1);
+                mainGames[mainGames.Length - 1].Add(tournament.Champion);
+                FillLines(losersGames, 0, losersGames.Length);
             }
 
-            lines[(tableHeight / 2) - 1].Add(grid.Winner);
-            return lines;
-        }
+            PrintGrid(mainGames, tournament, false);
 
-        private static void FillLines(List<int>[] lines, int position, int gapSize)
-        {
-            for (int i = 0; i < gapSize; i++)
+            if (tournament.DoubleElimination)
             {
-                lines[position + i].Add(EmptyCellCode);
+                PrintGrid(losersGames, tournament, true);
             }
         }
 
-        private static void PrintGrid(List<int>[] lines, TournamentController tournament, bool loserGrid)
+        private void PrintGrid(List<string>[] lines, Tournament tournament, bool loserGrid)
         {
             for (int k = 0; k < lines.Length; k++)
             {
@@ -93,38 +53,11 @@ namespace Tournament
             }
         }
 
-        private static bool GreenLight(TournamentController tournament, bool loserGrid, int line, int column)
+        private void PrintCell(Tournament tournament, bool loserGrid, List<string>[] lines, int line, int column)
         {
-            Grid grid = tournament.Main;
+            string cell = lines[line][column];
 
-            if (loserGrid)
-            {
-                grid = tournament.Losers;
-            }
-
-            if (column < grid.Matches.Length)
-            {
-                int matchNumber = line / (int)Math.Pow(2, column + 2);
-                int playerInPair = (line % (int)Math.Pow(2, column + 2)) / (int)Math.Pow(2, column + 1);
-
-                if (grid.Matches[column][matchNumber].Winner == playerInPair)
-                {
-                    return true;
-                }
-            }
-            else if (!(tournament.DoubleElimination ^ grid.Winner == tournament.Champion))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private static void PrintCell(TournamentController tournament, bool loserGrid, List<int>[] lines, int line, int column)
-        {
-            int cell = lines[line][column];
-
-            if (cell != EmptyCellCode)
+            if (cell != null)
             {
                 if (column > 0)
                 {
@@ -135,19 +68,12 @@ namespace Tournament
                     Console.Write(' ');
                 }
 
-                string playerName = "";
-
-                if (cell > -1)
-                {
-                    playerName = tournament.Players[cell];
-                }
-
                 if (line == lines.Length - 1 || GreenLight(tournament, loserGrid, line, column))
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
 
-                Console.Write(CenterName(playerName, Messenger.MaxChars));
+                Console.Write(CenterName(cell, Starter.MaxChars));
                 Console.ResetColor();
                 int gridLength = tournament.Main.Matches.Length;
 
@@ -167,29 +93,8 @@ namespace Tournament
             }
             else
             {
-                Console.Write(CenterName("", (Messenger.MaxChars + 2)));
+                Console.Write(CenterName(string.Empty, (Starter.MaxChars + 2)));
             }
-        }
-
-        private static string CenterName(string name, int size)
-        {
-            StringBuilder refactored = new StringBuilder(size);
-            int firstGap = (size - name.Length) / 2;
-
-            for (int i = 0; i < firstGap; i++)
-            {
-                refactored.Append(' ');
-            }
-
-            refactored.Append(name);
-            int secondGap = size - name.Length - firstGap;
-
-            for (int i = 0; i < secondGap; i++)
-            {
-                refactored.Append(' ');
-            }
-
-            return refactored.ToString();
         }
     }
 }

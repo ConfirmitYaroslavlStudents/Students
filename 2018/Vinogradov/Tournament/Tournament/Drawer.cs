@@ -1,11 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Tournament
 {
-    public static class Drawer
+    public abstract class Drawer
     {
-        private static string CenterName(string name, int size)
+        public abstract void DrawTable(Tournament tournament);
+
+        protected bool GreenLight(Tournament tournament, bool loserGrid, int line, int column)
+        {
+            Grid grid = tournament.Main;
+
+            if (loserGrid)
+            {
+                grid = tournament.Losers;
+            }
+
+            if (column < grid.Matches.Length)
+            {
+                int matchNumber = line / (int)Math.Pow(2, column + 2);
+                int playerInPair = (line % (int)Math.Pow(2, column + 2)) / (int)Math.Pow(2, column + 1);
+
+                if (grid.Matches[column][matchNumber].Winner == playerInPair)
+                {
+                    return true;
+                }
+            }
+            else if (!(tournament.DoubleElimination ^ grid.Winner == tournament.Champion))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        protected string CenterName(string name, int size)
         {
             StringBuilder refactored = new StringBuilder(size);
             int firstGap = (size - name.Length) / 2;
@@ -26,70 +56,52 @@ namespace Tournament
             return refactored.ToString();
         }
 
-        public static void DrawVerticalTable(TournamentController tournament)
+        protected List<string>[] GetGridLines(Grid grid)
         {
-            for (int k = 0; k < tournament.Matches.Length; k++)
-            {
-                int columnSize = (int)Math.Pow(2, k);
+            int tableHeight = (int)Math.Pow(2, grid.Matches.Length + 1);
+            List<string>[] lines = new List<string>[tableHeight];
 
-                for (int i = 0; i < tournament.Matches[k].Length; i++)
+            for (int i = 0; i < lines.Length; i++)
+            {
+                lines[i] = new List<string>();
+            }
+
+            int gapSize = 1;
+            int currentLine = 0;
+
+            for (int k = 0; k < grid.Matches.Length; k++)
+            {
+                for (int i = 0; i < grid.Matches[k].Length; i++)
                 {
-                    PrintMatchHorizontal(tournament.Players, tournament.Matches[k][i], columnSize);
+                    for (int j = 0; j < 2; j++)
+                    {
+                        FillLines(lines, currentLine, gapSize - 1);
+                        currentLine += gapSize - 1;
+                        lines[currentLine].Add(grid.Matches[k][i].Opponents[j]);
+                        currentLine++;
+                        FillLines(lines, currentLine, gapSize);
+                        currentLine += gapSize;
+                    }
                 }
 
-                Console.WriteLine();
-                DrawVerticalLines(tournament.Matches[k].Length, columnSize);
+                FillLines(lines, currentLine, tableHeight - currentLine);
+                currentLine = 0;
+                gapSize *= 2;
             }
 
-            string winnerName = "";
-
-            if (tournament.Champion >= 0)
-            {
-                winnerName = tournament.Players[tournament.Champion];
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(CenterName(winnerName, (Messenger.MaxChars + 2) * (int)Math.Pow(2, tournament.Matches.Length)));
-            Console.ResetColor();
+            int halfHeight = tableHeight / 2;
+            FillLines(lines, 0, halfHeight - 1);
+            lines[halfHeight - 1].Add(grid.Winner);
+            FillLines(lines, halfHeight, tableHeight - halfHeight);
+            return lines;
         }
 
-        private static void PrintMatchHorizontal(string[] names, Match currentMatch, int columnSize)
+        protected void FillLines(List<string>[] lines, int position, int gapSize)
         {
-            for (int j = 0; j < 2; j++)
+            for (int i = 0; i < gapSize; i++)
             {
-                int playerNumber = currentMatch.Opponents[j];
-                string playerName = "";
-
-                if (playerNumber >= 0)
-                {
-                    playerName = names[playerNumber];
-                }
-
-                if (currentMatch.Winner == j)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-
-                Console.Write(CenterName(playerName, (Messenger.MaxChars + 2) * columnSize));
-                Console.ResetColor();
+                lines[position + i].Add(null);
             }
-        }
-
-        private static void DrawVerticalLines(int matchesInTour, int columnSize)
-        {
-            for (int i = 0; i < matchesInTour * 2; i++)
-            {
-                Console.Write(CenterName("|", (Messenger.MaxChars + 2) * columnSize));
-            }
-
-            Console.WriteLine();
-
-            for (int i = 0; i < matchesInTour; i++)
-            {
-                Console.Write(CenterName("|", (Messenger.MaxChars + 2) * columnSize * 2));
-            }
-
-            Console.WriteLine();
         }
     }
 }

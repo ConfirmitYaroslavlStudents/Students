@@ -1,0 +1,18 @@
+﻿<Window x:Class="TournamentUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TournamentUI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Button x:Name="EnterParticipantName" Content="Add" HorizontalAlignment="Left" Margin="437,65,0,0" VerticalAlignment="Top" Width="75" Click="EnterParticipantName_Click"/>
+        <TextBox x:Name="ParticipantName" HorizontalAlignment="Left" Height="24" Margin="240,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="175"/>
+        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="424,192,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <RadioButton x:Name="DoubleElimination" Content="Double elimination" HorizontalAlignment="Left" Margin="256,166,0,0" VerticalAlignment="Top" GroupName="EliminationSystem"/>
+        <RadioButton x:Name="SingleElimination" Content="Single elimination" HorizontalAlignment="Left" Margin="256,129,0,0" VerticalAlignment="Top" GroupName="EliminationSystem" IsChecked="True"/>
+        <Canvas x:Name="UpperBracketCanvas" HorizontalAlignment="Left" Height="257" Margin="8,30,0,0" VerticalAlignment="Top" Width="504"/>
+        <Button x:Name="PlayGame" Content="Play game" HorizontalAlignment="Left" Margin="424,264,0,0" VerticalAlignment="Top" Width="75" Click="PlayGame_Click" IsEnabled="False"/>
+    </Grid>
+</Window>

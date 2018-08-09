@@ -36,7 +36,7 @@ namespace Tournament
             GameIndex= BinarySaver.LoadIntFromBinnary(_indexFileName);
         }
 
-        public void PlayGame(Func<string, string> inputWinner)
+        public void PlayGame(Func<string, string, string> inputWinner)
         {
             if (GameIndex >= RoundBracket.Count/2)
                 OrganizeRound(ref UpperBracketParticipants);

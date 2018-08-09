@@ -21,7 +21,7 @@ namespace ConsoleTournament
         }
 
         public delegate void PrintBracket(List<Participant> participant);
-        private static Func<string, string> _inputWinner = DataInput.InputWinner;
+        private static Func<string, string, string> _inputWinner = DataInput.InputWinner;
 
         public static void Main(string[] args)
         {

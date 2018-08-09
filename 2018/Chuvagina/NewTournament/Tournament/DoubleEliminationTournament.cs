@@ -19,7 +19,7 @@ namespace Tournament
             _lowerBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>(LowerFileName);
         }
 
-        public new void PlayGame(Func<string, string> inputWinner)
+        public new void PlayGame(Func<string, string, string> inputWinner)
         {
             if (RoundBracket == null || GameIndex >= RoundBracket.Count / 2)
                 OrganizeLowerBracketRound();

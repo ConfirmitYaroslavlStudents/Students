@@ -10,7 +10,7 @@ namespace Championship
         }
         public MenuItem(Action action, string title)
         {
-            Action += action;
+            Action = action;
             Title = title;
         }
 

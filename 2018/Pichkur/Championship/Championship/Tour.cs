@@ -26,11 +26,11 @@ namespace Championship
             _extraTeams = teams;
         }
 
-        public Tour(Tour tour)
+        public Tour(Tour lastTour)
         {
             List<Team> teams = new List<Team>();
 
-            foreach (var game in tour.Games)
+            foreach (var game in lastTour.Games)
             {
                 if (game != null)
                 {
@@ -39,15 +39,15 @@ namespace Championship
                 }
                 else
                 {
-                    if (tour._extraTeams.Count > 0)
+                    if (lastTour._extraTeams.Count > 0)
                     {
-                        teams.Add(tour._extraTeams[0]);
-                        tour._extraTeams.RemoveAt(0);
+                        teams.Add(lastTour._extraTeams[0]);
+                        lastTour._extraTeams.RemoveAt(0);
                     }
                 }
             }
 
-            foreach(var team in tour._extraTeams)
+            foreach(var team in lastTour._extraTeams)
             {
                 if (!teams.Contains(team))
                     teams.Add(team);

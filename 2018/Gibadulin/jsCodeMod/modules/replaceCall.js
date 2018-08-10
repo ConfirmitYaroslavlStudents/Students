@@ -8,6 +8,11 @@ module.exports = function (fileSource, oldCallSource, newCallSource) {
   let ast                = getAst(fileSource);
   let oldCallNode        = getAst(oldCallSource).body[0];
 
+  if(oldCallNode === undefined)
+    return fileSource;
+  if (getAst(newCallSource).body[0] === undefined)
+    throw new Error("Body of newCallSource is empty");
+
   if (oldCallNode.type == 'ExpressionStatement')
     oldCallNode = oldCallNode.expression;
 
@@ -28,7 +33,8 @@ function changeChildrenNode(node, oldCallNode, newCallSource) {
     if (excludedProperties[p] === true)
       continue;
     node[p] = changeChildrenNode(node[p], oldCallNode, newCallSource);
-    node[p] = changeNode(node[p], oldCallNode, newCallSource);
+    if(p !== 'property')
+      node[p] = changeNode(node[p], oldCallNode, newCallSource);
   }
   return node;
 };
@@ -45,23 +51,21 @@ function changeNode(node, oldCallNode, newCallSource) {
     substituteArguments(newCallAst);
 
     let result = newCallAst.body[0];
-    if (result.comment !== undefined)
-      result.comments = result.comments.concat(node.comments);
-    if (result.type === 'ExpressionStatement')
-      if (node.typy === result.type)
-        return result;
-      else
-        return result.expression;
-    else
-      return result;
+    if (result.type === 'ExpressionStatement' && node.type !== result.type)
+      result = result.expression;
+
+    for(let p in excludedProperties)
+      result[p] = node[p];
+
+    return result;
   }
   return node;
 };
 
 function toSource(ast) {
   ast = escodegen.attachComments(ast, ast.comments, ast.tokens);
-  return escodegen.generate(ast, {comment: true});
-}
+  return escodegen.generate(ast, {comment: true, format: {indent: {style: '\t'}}});
+};
 
 function equalNodes(nodeA, nodeB) {
   if (typeof(nodeA) !== typeof(nodeB))
@@ -100,7 +104,7 @@ function collectArgs(argsA, argsB) {
         return false;
   }
   return true;
-}
+};
 
 function substituteArguments(ast) {
   let callExpressions = findCallExpressions(ast);
@@ -117,7 +121,7 @@ function substituteArguments(ast) {
       callExpressionArgs[i] = replacingArgument;
     }
   }
-}
+};
 
 function findCallExpressions(node) {
   let res = [];

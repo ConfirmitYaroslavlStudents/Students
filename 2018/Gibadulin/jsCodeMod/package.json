@@ -1,7 +1,15 @@
 {
   "main": "main.js",
+  "scripts": {
+    "test": "mocha tests\\**\\*.js",
+    "example": "node main.js .\\input\\source.js .\\input\\oldCall.txt .\\input\\newCall.txt",
+    "reExample": "node main.js .\\input\\source.js .\\input\\newCall.txt .\\input\\oldCall.txt "
+  },
   "dependencies": {
     "escodegen": "^1.11.0",
     "esprima": "^4.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }

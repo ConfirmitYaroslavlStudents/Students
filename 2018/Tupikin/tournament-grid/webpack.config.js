@@ -41,7 +41,7 @@ module.exports = env => {
         {
           test: [/\.js$/, /\.jsx$/],
           loader: 'babel-loader',
-          exclude: /node_modules/,
+          exclude: /node_modules/
         },
         {
           test: /\.less$/,

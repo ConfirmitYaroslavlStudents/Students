@@ -38,7 +38,7 @@ class Enter extends Component {
     const number = parseInt(count, 10);
 
     return Math.log2(number) % 1 === 0 && number !== 1;
-  }
+  };
 
   onNextClick = () => {
     // todo check the power of two

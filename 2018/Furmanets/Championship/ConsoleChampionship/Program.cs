@@ -82,7 +82,7 @@ namespace ConsoleChampionship
             {
                 new MenuItem(PaintVerticalGraph, "Show vertical version"),
                 new MenuItem(PaintHorisontalGraph, "Show horisontal version"),
-                new MenuItem(PaintOnTwoSideGraph, "Show on two side version")
+               // new MenuItem(PaintOnTwoSideGraph, "Show on two side version")
             };
             var graphMenu = new Menu(menuGraph, "Championship");
             graphMenu.Start();
@@ -122,8 +122,8 @@ namespace ConsoleChampionship
                 Thread.Sleep(1000);
                 return;
             }
-            
-            var meeting = tournament[_championship.IndexOfRound].Meetings[_championship.IndexOfMatch];
+
+            var meeting = _championship.NextMeeting();
             _championship.CollectorResults(UserInteractor.GetResultOfMatch(meeting));
 
             FileManager.WriteTournamentInFile(_championship);
@@ -133,7 +133,7 @@ namespace ConsoleChampionship
         {
             var addPlayerMenuList = new List<MenuItem>
             {
-                new MenuItem(AddPlayer, "Add player")
+                new MenuItem(AddPlayer, "Add players")
             };
 
             var addPlayerMenu = new Menu(addPlayerMenuList, "Championship");
@@ -142,16 +142,42 @@ namespace ConsoleChampionship
 
         private static void AddPlayer()
         {
-            Console.Write("Write player name: ");
-            var name = Console.ReadLine();
+            Console.Write("Write count of players: ");
+            var countPlayers = Console.ReadLine();
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(countPlayers))
             {
-                Console.WriteLine("Empty name player.");
+                Console.WriteLine("Empty count players.");
                 Thread.Sleep(1000);
+                AddPlayer();
                 return;
             }
-            _players.Add(name);
+
+            foreach (var digit in countPlayers)
+            {
+                if (!char.IsDigit(digit))
+                {
+                    Console.WriteLine("Error count players.");
+                    Thread.Sleep(1000);
+                    AddPlayer();
+                    return;
+                }
+            }
+
+            for (var i = 0; i < int.Parse(countPlayers); i++)
+            {
+                Console.Write($"Write name player number {i}: ");
+                var name = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    Console.WriteLine("Empty name players.");
+                    i--;
+                    continue;
+                }
+                _players.Add(name);
+            }
+
         }
 
         private static void ResetTournament()

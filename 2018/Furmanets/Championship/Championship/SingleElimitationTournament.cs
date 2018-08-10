@@ -39,6 +39,11 @@ namespace Championship
             return CloneTournament(_tournamentRounds);
         }
 
+        public override Meeting NextMeeting()
+        {
+            return _tournamentRounds[IndexOfRound].Meetings[IndexOfMatch];
+        }
+
         private void ChooseWinner(Meeting meeting)
         {
             if (meeting.SecondPlayer == null || meeting.FirstPlayer == null)

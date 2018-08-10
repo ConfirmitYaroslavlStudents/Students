@@ -12,7 +12,7 @@ namespace Championship
             return tournamentGrid;
         }
 
-        private static List<Round> CreateSingleEliminationTournamentGrid(int playersCount)
+        public static List<Round> CreateSingleEliminationTournamentGrid(int playersCount)
         {
             var tournament = new List<Round>();
             var stage = 1;

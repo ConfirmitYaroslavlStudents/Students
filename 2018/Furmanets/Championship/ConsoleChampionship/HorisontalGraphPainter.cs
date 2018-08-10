@@ -29,7 +29,7 @@ namespace ConsoleChampionship
                 {
                     var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
                                                      && meeting.SecondPlayer == null
-                                         && round.Equals(tournamentRounds[0]);
+                                                     && round.Equals(tournamentRounds[0]);
 
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
 

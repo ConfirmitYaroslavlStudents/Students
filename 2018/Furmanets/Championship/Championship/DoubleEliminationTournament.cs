@@ -19,7 +19,7 @@ namespace Championship
             _upperGrid = singleConstructorTournament.CreateTournament(players);
 
             _finalUpperAndLowerGrids = new Meeting();
-            _upperGrid[_upperGrid.Count - 2].Meetings[0].NextStage = _finalUpperAndLowerGrids;
+            _upperGrid[_upperGrid.Count - 1].Meetings[0].NextStage = _finalUpperAndLowerGrids;
             _lowerGrid[_lowerGrid.Count - 1].Meetings[0].NextStage = _finalUpperAndLowerGrids;
 
             IndexOfRound = 0;
@@ -68,7 +68,7 @@ namespace Championship
             }
             else
             {
-                var indexOfMatchCurrent = IndexOfMatch - roundLower.Meetings.Count;
+                var indexOfMatchCurrent = IndexOfMatch - roundUpper.Meetings.Count;
                 roundLower.Meetings[indexOfMatchCurrent].Score = resultMatch;
                 ChooseWinner(roundLower.Meetings[indexOfMatchCurrent], false);
                 IndexOfMatch++;
@@ -90,7 +90,7 @@ namespace Championship
                 IndexOfMatch++;
             }
 
-            if (IndexOfMatch >= roundLower.Meetings.Count * 2)
+            if (IndexOfMatch >= roundLower.Meetings.Count + roundUpper.Meetings.Count)
             {
                 IndexOfMatch = 0;
                 IndexOfRound++;
@@ -99,10 +99,12 @@ namespace Championship
 
         public override List<Round> GetTournamentToPrint()
         {
-            var tournament = CloneTournament(_upperGrid);
+            var tournament = new List<Round>();
+
+            tournament.AddRange(CloneTournament(_upperGrid));
 
             var indexRound = 0;
-            for (var i = 1; i < _lowerGrid.Count; i++)
+            for (var i = 0; i < _lowerGrid.Count - 1; i++)
             {
                 var round = _lowerGrid[i];
 
@@ -115,6 +117,11 @@ namespace Championship
                 indexRound++;
             }
 
+            tournament.Add(new Round());
+
+            tournament[tournament.Count - 1].Meetings.Add(_lowerGrid[_lowerGrid.Count - 1].Meetings[0]);
+
+
             var finalRound = new Round
             {
                 Stage = 1
@@ -122,6 +129,15 @@ namespace Championship
             finalRound.Meetings.Add(_finalUpperAndLowerGrids);
             tournament.Add(finalRound);
             return tournament;
+        }
+
+        public override Meeting NextMeeting()
+        {
+            if (_upperGrid[IndexOfRound].Meetings.Count > IndexOfMatch)
+            {
+                return _upperGrid[IndexOfRound].Meetings[IndexOfMatch];
+            }
+            return _lowerGrid[IndexOfRound].Meetings[IndexOfMatch - _upperGrid[IndexOfRound].Meetings.Count];
         }
 
         protected void ChooseWinner(Meeting meeting, bool isUpper)
@@ -165,17 +181,21 @@ namespace Championship
         {
             var round = _lowerGrid[IndexOfRound];
 
-            for (var i = round.Meetings.Count - 1; i >= 0; i--)
+            for (var i = 0; i < round.Meetings.Count; i++)
             {
-                if (i % 2 == 1)
+                var meeting = round.Meetings[i];
+
+                if (meeting.FirstPlayer == null)
                 {
-                    var meeting = round.Meetings[i];
-                    if (meeting.FirstPlayer == null)
-                    {
-                        meeting.FirstPlayer = player;
-                        return;
-                    }
+                    meeting.FirstPlayer = player;
+                    return;
                 }
+                if (meeting.SecondPlayer == null)
+                {
+                    meeting.SecondPlayer = player;
+                    return;
+                }
+
             }
         }
     }

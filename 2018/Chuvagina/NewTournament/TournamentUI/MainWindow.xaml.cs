@@ -11,6 +11,7 @@ namespace TournamentUI
     {
         private List<string> _participantNames=new List<string>();
         private SingleEliminationTournament _tournament;
+       
 
         public MainWindow()
         {
@@ -51,15 +52,17 @@ namespace TournamentUI
             UpperBracketCanvas.Children.Add(participant);
             rowIndex++;
 
-
             if (node.Right != null)
                 AddNode(ref rowIndex, colIndex-1, node.Right);
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _tournament = new SingleEliminationTournament(_participantNames);
+            if (SingleElimination.IsChecked == true)
+                _tournament = new SingleEliminationTournament(_participantNames);
+            else
+                _tournament = new DoubleEliminationTournament(_participantNames);
+
             PlayGame.IsEnabled = true;
             DoubleElimination.Visibility = Visibility.Hidden;
             SingleElimination.Visibility = Visibility.Hidden;
@@ -82,8 +85,15 @@ namespace TournamentUI
         {
             if (!_tournament.EndOfTheGame())
             {
-                _tournament.PlayGame(returnWinner);
-                var bracket = _tournament.GetBracket();
+                if (_tournament is DoubleEliminationTournament)
+                {
+                    DoubleEliminationTournament tmp = _tournament as DoubleEliminationTournament;
+                    tmp.PlayGame(returnWinner);
+                }
+                   else
+                    _tournament.PlayGame(returnWinner);
+
+                List<Participant> bracket = _tournament.GetBracket();
                 int i = 0;
                 UpperBracketCanvas.Children.Clear();
                 int maxDepth = 0;
@@ -93,6 +103,16 @@ namespace TournamentUI
 
                 foreach (var participant in bracket)
                     AddNode(ref i, maxDepth, participant);
+
+                if (_tournament is DoubleEliminationTournament)
+                {
+                    
+                    DoubleEliminationTournament tmp = _tournament as DoubleEliminationTournament;
+                    bracket=tmp.GetLowerBracket();
+                    foreach (var participant in bracket)
+                        AddNode(ref i, maxDepth, participant);
+                }
+
             }
             
         }

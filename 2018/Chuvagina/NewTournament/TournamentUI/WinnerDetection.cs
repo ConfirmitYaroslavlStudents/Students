@@ -7,28 +7,22 @@ namespace TournamentUI
     public partial class WinnerDetection : Form
     {
         Label message = new Label();
-        Button b1 = new Button();
-        Button b2 = new Button();
+        Button FirstPlayer = new Button();
+        Button SecondPlayer = new Button();
 
-        public WinnerDetection()
+        public WinnerDetection(string title, string body, string firstPlayer, string secondPlayer)
         {
-
-        }
-
-        public WinnerDetection(string title, string body, string button1, string button2)
-        {
-            ClientSize = new Size(490, 150);
             Text = title;
 
-            b1.Location = new Point(311, 112);
-            b1.Size = new Size(75, 23);
-            b1.Text = button1;
-            b1.BackColor = DefaultBackColor;
+            FirstPlayer.Location = new Point(70, 75);
+            FirstPlayer.Size = new Size(75, 23);
+            FirstPlayer.Text = firstPlayer;
+            FirstPlayer.BackColor = DefaultBackColor;
 
-            b2.Location = new Point(411, 112);
-            b2.Size = new Size(75, 23);
-            b2.Text = button2;
-            b2.BackColor = DefaultBackColor;
+            SecondPlayer.Location = new Point(155, 75);
+            SecondPlayer.Size = new Size(75, 23);
+            SecondPlayer.Text = secondPlayer;
+            SecondPlayer.BackColor = DefaultBackColor;
 
             message.Location = new Point(10, 10);
             message.Text = body;
@@ -36,16 +30,15 @@ namespace TournamentUI
             message.AutoSize = true;
 
             BackColor = Color.White;
-            ShowIcon = false;
 
-            Controls.Add(b1);
-            Controls.Add(b2);
+            Controls.Add(FirstPlayer);
+            Controls.Add(SecondPlayer);
             Controls.Add(message);
 
-            b1.Click += Button_Click;
-            b1.DialogResult = DialogResult.Yes;
-            b2.Click += Button_Click;
-            b2.DialogResult = DialogResult.No;
+            FirstPlayer.Click += Button_Click;
+            FirstPlayer.DialogResult = DialogResult.Yes;
+            SecondPlayer.Click += Button_Click;
+            SecondPlayer.DialogResult = DialogResult.No;
         }
 
         private void Button_Click(object sender, EventArgs e)

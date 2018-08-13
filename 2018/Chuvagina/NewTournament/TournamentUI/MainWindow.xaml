@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button x:Name="EnterParticipantName" Content="Add" HorizontalAlignment="Left" Margin="437,65,0,0" VerticalAlignment="Top" Width="75" Click="EnterParticipantName_Click"/>
+        <Button x:Name="EnterParticipantName" Content="Add" HorizontalAlignment="Left" Margin="437,65,0,0" VerticalAlignment="Top" Width="75" Click="EnterParticipantName_Click" IsDefault="True"/>
         <TextBox x:Name="ParticipantName" HorizontalAlignment="Left" Height="24" Margin="240,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="175"/>
         <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="424,192,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <RadioButton x:Name="DoubleElimination" Content="Double elimination" HorizontalAlignment="Left" Margin="256,166,0,0" VerticalAlignment="Top" GroupName="EliminationSystem"/>

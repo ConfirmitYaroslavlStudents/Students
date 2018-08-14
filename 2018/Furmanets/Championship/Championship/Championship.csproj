@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DoubleEliminationTournament.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="Meeting.cs" />
     <Compile Include="Round.cs" />
     <Compile Include="DoubleConstructorGrid.cs" />

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleChampionship", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuForConsole", "Menu\MenuForConsole\MenuForConsole.csproj", "{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentWpfForms", "TournamentsWpfForms\TournamentWpfForms.csproj", "{FA51F121-ED08-4C72-960A-77865311FDF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DDBCC99-1AAF-4897-A50A-4AD9113F29F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA51F121-ED08-4C72-960A-77865311FDF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA51F121-ED08-4C72-960A-77865311FDF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA51F121-ED08-4C72-960A-77865311FDF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA51F121-ED08-4C72-960A-77865311FDF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

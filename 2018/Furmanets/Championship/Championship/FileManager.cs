@@ -4,7 +4,7 @@ using Championship;
 
 namespace ConsoleChampionship
 {
-    internal class FileManager
+    public class FileManager
     {
         private const string _nameFile = "tournament";
 

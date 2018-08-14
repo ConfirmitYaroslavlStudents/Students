@@ -129,6 +129,7 @@ namespace ConsoleChampionship
 
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
             WriteNameWinnerInFinalRound(tournamentRounds);
+
             if (_upperGridWinnerTop == 0)
             {
                 _upperGridWinnerTop = Console.CursorTop;

@@ -54,7 +54,6 @@
     <Compile Include="GraphPainter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileManager.cs" />
     <Compile Include="VerticalGraphPainter.cs" />
   </ItemGroup>
   <ItemGroup>

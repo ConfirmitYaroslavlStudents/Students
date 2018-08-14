@@ -3,7 +3,7 @@ using Championship;
 
 namespace ConsoleChampionship
 {
-    internal class HorisontalGraphPainter : GraphPainter
+    internal class OnTwoSidesGraphPainter:GraphPainter
     {
         public override void PaintGraph(Tournament tournament)
         {
@@ -25,34 +25,29 @@ namespace ConsoleChampionship
                 var isFirstLine = true;
                 var isSecondLine = false;
 
-                foreach (var meeting in round.Meetings)
+                for (var j = 0; j < round.Meetings.Count/2; j++)
                 {
-                    var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
-                                                     && meeting.SecondPlayer == null
-                                                     && round.Equals(tournamentRounds[0]);
+                    var meeting = round.Meetings[j];
+                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null &&
+                        round.Equals(tournamentRounds[0]))
+                    {
+                        continue;
+                    }
 
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
 
                     WriteNamePlayer(meeting, true);
 
-                    var indexForDrowLine = distanceBetweenPlayers / 2;
+                    var wereDrowLine = distanceBetweenPlayers / 2;
 
                     for (var i = 1; i < distanceBetweenPlayers; i++)
                     {
                         Console.SetCursorPosition(positionCursorLeft + maxLengthName, positionCursorTop + i);
+                        Console.Write("|");
 
-                        if (!isEmptyMeetingInFirstRound)
+                        if (i == wereDrowLine)
                         {
-                            Console.Write("|");
-                        }
-
-                        if (i == indexForDrowLine)
-                        {
-                            if (!isEmptyMeetingInFirstRound)
-                            {
-                                Console.Write("-----");
-                            }
-
+                            Console.Write("-----");
                             if (isSecondLine)
                             {
                                 isSecondLine = false;
@@ -68,7 +63,6 @@ namespace ConsoleChampionship
                                 nextDistanceBeewinPalyers = nextCursorPositionTop;
                             }
                         }
-
                     }
                     positionCursorTop += distanceBetweenPlayers;
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
@@ -76,7 +70,6 @@ namespace ConsoleChampionship
 
                     positionCursorTop += distanceBetweenPlayers;
                 }
-
             }
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
             WriteNameWinnerInFinalRound(tournament);

@@ -6,7 +6,7 @@ namespace ConsoleChampionship
 {
     internal class FileManager
     {
-        private const string _nameFile = "tournament.txt";
+        private const string _nameFile = "tournament";
 
         public static void WriteTournamentInFile(Tournament tournament)
         {

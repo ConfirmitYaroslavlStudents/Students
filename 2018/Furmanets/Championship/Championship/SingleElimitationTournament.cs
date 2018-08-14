@@ -6,7 +6,7 @@ namespace Championship
     [Serializable]
     public class SingleElimitationTournament : Tournament
     {
-        private readonly List<Round> _tournamentRounds;
+        protected readonly List<Round> _tournamentRounds;
 
         public SingleElimitationTournament(List<string> players)
         {
@@ -41,7 +41,7 @@ namespace Championship
 
         public override Meeting NextMeeting()
         {
-            return _tournamentRounds[IndexOfRound].Meetings[IndexOfMatch];
+            return _tournamentRounds.Count <= IndexOfRound ? null : _tournamentRounds[IndexOfRound].Meetings[IndexOfMatch];
         }
 
         private void ChooseWinner(Meeting meeting)

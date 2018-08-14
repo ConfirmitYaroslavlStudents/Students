@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Championship
 {
-    public class DoubleConstructorTournament : ConstructorTournament
+    public class DoubleConstructorGrid
     {
-        public override List<Round> CreateTournament(List<string> players)
+        public List<Round> CreateTournamentGrid(int countPlayers)
         {
             var tournamentGrid = new List<Round>();
             var stage = 1;
+            var stageRound = 0;
             var countMeetings = 1;
             var countNextMeeting = 1;
             var upCountMeetings = true;
 
-            while (stage < players.Count / 2)
+            while (stage < countPlayers / 2)
             {
-                var round = new Round { Stage = stage };
+                var round = new Round { Stage = stageRound };
+                stageRound++;
 
                 for (var i = 0; i < countMeetings; i++)
                 {

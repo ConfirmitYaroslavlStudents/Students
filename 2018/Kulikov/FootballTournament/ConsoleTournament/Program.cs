@@ -1,4 +1,5 @@
 namespace ConsoleTournament
+
 {
     class Program
     {

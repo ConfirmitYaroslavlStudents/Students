@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace TournamentLibrary
 {
     [Serializable]
-    public class DoubleEliminationTournament : SingleEliminationTournament
+    public class DoubleEliminationTournament : Tournament
     {
         public List<List<Game>> LosersGrid { get; private set; }
         public Game GrandFinal { get; private set; }

@@ -24,7 +24,14 @@ namespace TournamentLibrary
 
             for (int i = 1; i <= countOfPlayers; i++)
             {
-                var name = _viewer.EnterPlayerName(existingNames, i);
+                var name = _viewer.EnterPlayerName(i);
+
+                while (existingNames.Contains(name) || name == " ")
+                {
+                    _viewer.NameAlreadyExists();
+                    name = _viewer.EnterPlayerName(i);
+                }
+
                 existingNames.Add(name);
                 players.Add(new Player(name));
             }

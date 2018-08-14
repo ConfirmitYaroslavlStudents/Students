@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{69D892AC-37AE-4774-805F-19524E9B4931}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FootballTournament</RootNamespace>
-    <AssemblyName>FootballTournament</AssemblyName>
+    <RootNamespace>ConsoleTournament</RootNamespace>
+    <AssemblyName>ConsoleTournament</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,18 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoubleSidedTournamentGrid.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="MenuItem.cs" />
+    <Compile Include="DoubleSidedTournamentGridDrawer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TournamentGrid.cs" />
+    <Compile Include="TournamentGridDrawer.cs" />
     <Compile Include="UserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConsoleMenu\ConsoleMenu.csproj">
+      <Project>{b30aef64-b9b2-405f-9cdb-f7378fa25e9a}</Project>
+      <Name>ConsoleMenu</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TournamentLibrary\TournamentLibrary.csproj">
       <Project>{3d8d9bb4-c9be-4356-818f-54e672ef969f}</Project>
       <Name>TournamentLibrary</Name>

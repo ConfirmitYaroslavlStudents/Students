@@ -8,7 +8,7 @@ namespace TournamentLibrary
         private static BinaryFormatter _formatter = new BinaryFormatter();
         private static string _fileName = "tournamentProgress.dat";
 
-        public static void Save(SingleEliminationTournament tournament)
+        public static void Save(Tournament tournament)
         {
             using (FileStream fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
             {
@@ -16,13 +16,13 @@ namespace TournamentLibrary
             }
         }
 
-        public static SingleEliminationTournament Load()
+        public static Tournament Load()
         {
-            SingleEliminationTournament tournament;
+            Tournament tournament;
 
             using (FileStream fileStream = new FileStream(_fileName, FileMode.OpenOrCreate))
             {
-                tournament = (SingleEliminationTournament)_formatter.Deserialize(fileStream);
+                tournament = (Tournament)_formatter.Deserialize(fileStream);
             }
 
             return tournament;

@@ -1,4 +1,4 @@
-﻿namespace FootballTournament
+namespace ConsoleTournament
 {
     class Program
     {

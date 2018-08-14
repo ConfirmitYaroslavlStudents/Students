@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace TournamentLibrary
 {
@@ -30,20 +29,18 @@ namespace TournamentLibrary
             Console.WriteLine("\nEnter names of players:");
         }
 
-        public string EnterPlayerName(HashSet<string> existingNames, int index)
+        public string EnterPlayerName(int index)
         {
             Console.Write($"{index}. ");
 
             var name = Console.ReadLine();
 
-            while (existingNames.Contains(name) || name == " ")
-            {
-                Console.WriteLine("Player with this name already exists. Try again: ");
-                Console.Write($"{index}. ");
-                name = Console.ReadLine();
-            }
-
             return name;
+        }
+
+        public void NameAlreadyExists()
+        {
+            Console.WriteLine("Player with this name already exists. Try again: ");
         }
 
         public int EnterPlayerScore(Player player)

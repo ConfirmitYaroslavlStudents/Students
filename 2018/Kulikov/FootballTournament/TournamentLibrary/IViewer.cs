@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TournamentLibrary
+﻿namespace TournamentLibrary
 {
     public interface IViewer
     {
@@ -10,7 +8,9 @@ namespace TournamentLibrary
 
         void EnterPlayerNames();
 
-        string EnterPlayerName(HashSet<string> existingNames, int index);
+        string EnterPlayerName(int index);
+
+        void NameAlreadyExists();
 
         int EnterPlayerScore(Player player);
 

@@ -111,7 +111,7 @@ namespace ConsoleChampionship
             }
 
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournament);
+            WriteNameWinnerInFinalRound(tournamentRounds);
         }
 
         public override void WriteNamePlayer(Meeting meeting, bool isFirst)

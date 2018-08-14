@@ -1,16 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
 using Championship;
 
 namespace ConsoleChampionship
 {
     internal class HorisontalGraphPainter : GraphPainter
     {
+        private int _upperGridWinnerLeft;
+        private int _upperGridWinnerTop;
+        private int _lowerGridWinnerLeft;
+        private int _lowerGridWinnerTop;
         public override void PaintGraph(Tournament tournament)
         {
             var nextCursorPositionTop = 3;
+            var tournamentRounds = tournament.GetTournamentToPrint();
+            var positionDownCoursor = 0;
+
+            positionDownCoursor = PrintTournirGrid(tournamentRounds, nextCursorPositionTop);
+
+            nextCursorPositionTop = positionDownCoursor;
+
+            if (tournament is DoubleEliminationTournament doubleTournament)
+            {
+                var lowerRounds = doubleTournament.GetLowerGrid();
+                PrintTournirGrid(lowerRounds, nextCursorPositionTop);
+                PaintGrandFinal(doubleTournament.FinalUpperAndLowerGrids);
+            }
+
+        }
+
+        private void PaintGrandFinal(Meeting finalUpperAndLowerGrids)
+        {
+            var indexForWriteLine = (_lowerGridWinnerTop - _upperGridWinnerTop) / 2;
+
+            Console.SetCursorPosition(_upperGridWinnerLeft, _upperGridWinnerTop);
+            while (_upperGridWinnerLeft != _lowerGridWinnerLeft)
+            {
+                Console.Write("-");
+                _upperGridWinnerLeft++;
+            }
+            for (int i = _upperGridWinnerTop; i < _lowerGridWinnerTop-1; i++)
+            {
+                Console.SetCursorPosition(_upperGridWinnerLeft, i + 1);
+                Console.Write("|");
+
+                if (_upperGridWinnerTop + indexForWriteLine == i)
+                {
+                    Console.Write("-----");
+                    if (finalUpperAndLowerGrids.Winner == MeetingWinningIndicator.FirstPlayer)
+                    {
+                        WriteNamePlayer(finalUpperAndLowerGrids, true);
+                    }
+
+                    if (finalUpperAndLowerGrids.Winner == MeetingWinningIndicator.SecondPlayer)
+                    {
+                        WriteNamePlayer(finalUpperAndLowerGrids, false);
+                    }
+                }
+            }
+        }
+
+        private int PrintTournirGrid(List<Round> tournamentRounds, int cursorPositionTop)
+        {
             var nextCursorPositionLeft = 0;
             var nextDistanceBeewinPalyers = 2;
-            var tournamentRounds = tournament.GetTournamentToPrint();
+            var nextCursorPositionTop = cursorPositionTop;
 
             foreach (var round in tournamentRounds)
             {
@@ -22,14 +76,13 @@ namespace ConsoleChampionship
                 var distanceBetweenPlayers = nextDistanceBeewinPalyers;
                 var positionCursorLeft = nextCursorPositionLeft;
                 var positionCursorTop = nextCursorPositionTop;
-                var isFirstLine = true;
-                var isSecondLine = false;
 
-                foreach (var meeting in round.Meetings)
+                for (var i = 0; i < round.Meetings.Count; i++)
                 {
+                    var meeting = round.Meetings[i];
                     var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
                                                      && meeting.SecondPlayer == null
-                                                     && round.Equals(tournamentRounds[0]);
+                                                     && round.Equals(tournamentRounds[0]) && cursorPositionTop == 0;
 
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
 
@@ -37,49 +90,57 @@ namespace ConsoleChampionship
 
                     var indexForDrowLine = distanceBetweenPlayers / 2;
 
-                    for (var i = 1; i < distanceBetweenPlayers; i++)
+                    for (var j = 1; j < distanceBetweenPlayers; j++)
                     {
-                        Console.SetCursorPosition(positionCursorLeft + maxLengthName, positionCursorTop + i);
+                        Console.SetCursorPosition(positionCursorLeft + maxLengthName, positionCursorTop + j);
 
                         if (!isEmptyMeetingInFirstRound)
                         {
                             Console.Write("|");
                         }
 
-                        if (i == indexForDrowLine)
+                        if (j == indexForDrowLine)
                         {
                             if (!isEmptyMeetingInFirstRound)
                             {
                                 Console.Write("-----");
                             }
 
-                            if (isSecondLine)
-                            {
-                                isSecondLine = false;
-                                nextDistanceBeewinPalyers = Console.CursorTop - nextDistanceBeewinPalyers;
-                            }
-
-                            if (isFirstLine)
+                            if (i == 0)
                             {
                                 nextCursorPositionLeft = Console.CursorLeft;
                                 nextCursorPositionTop = Console.CursorTop;
-                                isFirstLine = false;
-                                isSecondLine = true;
-                                nextDistanceBeewinPalyers = nextCursorPositionTop;
+                                nextDistanceBeewinPalyers *= 2;
                             }
                         }
-
                     }
+
                     positionCursorTop += distanceBetweenPlayers;
                     Console.SetCursorPosition(positionCursorLeft, positionCursorTop);
                     WriteNamePlayer(meeting, false);
 
                     positionCursorTop += distanceBetweenPlayers;
+                    if (i == 0)
+                    {
+                        cursorPositionTop = Console.CursorTop + 10;
+                    }
                 }
-
             }
+
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournament);
+            WriteNamePlayer();
+            if (_upperGridWinnerTop == 0)
+            {
+                _upperGridWinnerTop = Console.CursorTop;
+                _upperGridWinnerLeft = Console.CursorLeft;
+            }
+            else
+            {
+                _lowerGridWinnerLeft = Console.CursorLeft;
+                _lowerGridWinnerTop = Console.CursorTop;
+            }
+
+            return cursorPositionTop;
         }
     }
 }

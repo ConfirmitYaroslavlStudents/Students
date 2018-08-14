@@ -72,7 +72,7 @@ namespace ConsoleChampionship
                 }
             }
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournament);
+            WriteNameWinnerInFinalRound(tournamentRounds);
         }
     }
 }

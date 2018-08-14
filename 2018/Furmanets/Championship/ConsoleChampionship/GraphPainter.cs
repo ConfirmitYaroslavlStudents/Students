@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Championship;
 
 namespace ConsoleChampionship
@@ -48,18 +49,17 @@ namespace ConsoleChampionship
             }
         }
 
-        public void WriteNameWinnerInFinalRound(Tournament tournament)
+        public void WriteNameWinnerInFinalRound(List<Round> tournamentRounds)
         {
-            var tournamentGrid = tournament.GetTournamentToPrint();
-            var finalRound = tournamentGrid[tournamentGrid.Count - 1];
+            var finalRound = tournamentRounds[tournamentRounds.Count - 1];
 
             switch (finalRound.Meetings[0].Winner)
             {
                 case MeetingWinningIndicator.FirstPlayer:
-                    Console.WriteLine(finalRound.Meetings[0].FirstPlayer);
+                    Console.Write(finalRound.Meetings[0].FirstPlayer);
                     break;
                 case MeetingWinningIndicator.SecondPlayer:
-                    Console.WriteLine(finalRound.Meetings[0].SecondPlayer);
+                    Console.Write(finalRound.Meetings[0].SecondPlayer);
                     break;
                 case MeetingWinningIndicator.MatchDidNotTakePlace:
                     break;
@@ -95,6 +95,11 @@ namespace ConsoleChampionship
             }
 
             return "1/" + round;
+        }
+
+        public string PrintLosersRound(int round)
+        {
+            return "L.Round " + round;
         }
     }
 }

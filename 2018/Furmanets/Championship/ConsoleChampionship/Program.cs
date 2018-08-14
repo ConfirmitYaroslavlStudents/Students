@@ -114,9 +114,8 @@ namespace ConsoleChampionship
 
         static void EnterResults()
         {
-            var tournament = _championship.GetTournamentToPrint();
 
-            if (_championship.IndexOfRound >= tournament.Count)
+            if (_championship.NextMeeting() == null)
             {
                 Console.WriteLine("All matches are over.");
                 Thread.Sleep(1000);

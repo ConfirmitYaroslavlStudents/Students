@@ -1,4 +1,6 @@
 const defaultConfig = {
+  screenshotName: "",
+
   comparison: {
     scaleToSameSize: false,
     ignore: "antialiasing",

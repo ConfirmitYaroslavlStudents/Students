@@ -47,7 +47,10 @@ namespace Football_League
                     }
                 case MenuChoiceType.ChooseWinners:
                     {
-                        Grid.PlayRound();
+                        List<int>[] choices = UserWinnerChoices();
+                        Grid.PlayRound(choices);
+                        if (Grid.IsFinished)
+                            ConsoleWorker.OnePlayerLeft();
                         SaverLoader.SaveCurrentSession(_leagueType, Grid);
                         break;
                     }
@@ -57,13 +60,13 @@ namespace Football_League
                         {
                             VerticalDrawer verticalGrid = new VerticalDrawer();
                             verticalGrid.MakeVerticalGrid(Grid);
-                            verticalGrid.PrintGrid();
+                            ConsoleWorker.PrintVerticalGrid(verticalGrid.VerticalGrid);
                         }
                         else
                         {
                             HorizontalDrawer horizontalDrawer = new HorizontalDrawer();
                             horizontalDrawer.MakeHorintalGrid(Grid);
-                            horizontalDrawer.PrintGrid();
+                            ConsoleWorker.PrintHorizontalGrid(horizontalDrawer.HorizontalGrid);
                         }
                         break;
                     }
@@ -90,6 +93,23 @@ namespace Football_League
             return 1;
         }
 
+        private static List<int>[] UserWinnerChoices()
+        {
+            List<int>[] choices = new List<int>[Grid.Grid.Count];
+            for (int i = 0; i < Grid.Grid.Count; i++)
+            {
+                choices[i] = new List<int>();
+                var currentMatch = Grid.Grid[i].CurrentRoundFirstMatch;
+                while (currentMatch?.PlayerOne != null)
+                {
+                    choices[i].Add(ConsoleWorker.ChooseMatchWinner(currentMatch));
+                    currentMatch = currentMatch.NextMatch;
+                }
+            }
+
+            return choices;
+        }
+
         public static void CreateNewLeague()
         {
             Grid = new FullGrid();
@@ -100,20 +120,26 @@ namespace Football_League
         public static List<Contestant> AddPlayersToCompetition(int num)
         {
             var players = new List<Contestant>();
-            for (int i = 0; i < num; i++)
+            var playersCountAtStart = players.Count;
+
+            for (
+                int i = playersCountAtStart; i < num; i++)
+            {
                 players.Add(new Contestant(ConsoleWorker.GetPlayerName()));
+                SaverLoader.SaveCurrentInputPlayers(players);
+            }
 
             Randomize(ref players);
             return players;
         }
         public static void Randomize(ref List<Contestant> players)
         {
-            Random rng = new Random();
+            Random randomGenerator = new Random();
             int n = players.Count();
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
+                int k = randomGenerator.Next(n + 1);
                 Contestant player = players[k];
                 players[k] = players[n];
                 players[n] = player;

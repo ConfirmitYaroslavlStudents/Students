@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleWorker.cs" />
     <Compile Include="Contestant.cs" />
     <Compile Include="FullGrid.cs" />
     <Compile Include="HorizontalDrawer.cs" />

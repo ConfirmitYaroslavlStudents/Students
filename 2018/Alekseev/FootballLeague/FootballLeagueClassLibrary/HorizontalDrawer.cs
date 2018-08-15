@@ -5,7 +5,7 @@ namespace Football_League
 {
     public class HorizontalDrawer
     {
-        private readonly List<string> _horizontalGrid = new List<string>();
+        public readonly List<string> HorizontalGrid = new List<string>();
 
         public int AllLinesCurrentPosition;
         public void MakeHorintalGrid(FullGrid grid)
@@ -13,11 +13,11 @@ namespace Football_League
             foreach (MatchTreeGrid gridTree in grid.Grid)
             {
                 var result = MakeGridTree(gridTree);
-                if (_horizontalGrid.Count != 0)
-                    _horizontalGrid.Add("");
+                if (HorizontalGrid.Count != 0)
+                    HorizontalGrid.Add("");
                 foreach (var str in result)
                 {
-                    _horizontalGrid.Add(str);
+                    HorizontalGrid.Add(str);
                 }
             }
         }
@@ -49,27 +49,38 @@ namespace Football_League
                 AddWinners(pointersInThisRound, result, pointersFromLastRound);
 
                 maxLineLength = result.Select(line => line.Length).Concat(new[] { maxLineLength }).Max();
+                AlignLinesToMaxLength(result, maxLineLength);
 
-                for (int i = 0; i < result.Count; i++)
-                {
-                    if (result[i].Length < maxLineLength)
-                        result[i] += " ";
-                }
-
-                if (isFirstRound)
-                {
-                    currentGridFix = maxLineLength;
-                }
+                currentGridFix = FirstRoundGridFixValue(currentGridFix, maxLineLength, isFirstRound);
                 currentRoundFirstMatch = currentRoundFirstMatch.NextRoundMatch;
             }
 
-            FixAllLines(result);
+            AddSpacesForNewTree(result);
 
             AllLinesCurrentPosition += currentGridFix;
             return result;
         }
 
-        private void FixAllLines(List<string> result)
+        private static void AlignLinesToMaxLength(List<string> result, int maxLineLength)
+        {
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (result[i].Length < maxLineLength)
+                    result[i] += " ";
+            }
+        }
+
+        private static int FirstRoundGridFixValue(int currentGridFix, int maxLineLength, bool isFirstRound)
+        {
+            if (isFirstRound)
+            {
+                currentGridFix = maxLineLength;
+            }
+
+            return currentGridFix;
+        }
+
+        private void AddSpacesForNewTree(List<string> result)
         {
             string fixLines = "";
             while (fixLines.Length < AllLinesCurrentPosition)
@@ -138,24 +149,24 @@ namespace Football_League
                     fixLine += " ";
                 result.Add(fixLine + " ");
                 currentGridLine++;
+                int nameLength;
 
+                result.Add(fixLine);
                 if (currentPlayerNumber == 2)
                 {
-                    result.Add(fixLine + currentMatch.PlayerOne.Name);
-                    if (maxLineLength < currentMatch.PlayerOne.Name.Length)
-                        maxLineLength = currentMatch.PlayerOne.Name.Length;
-                    currentPlayerNumber = 1;
+                    AddPlayerToLine(result, currentMatch.PlayerOne.Name, result.Count - 1, ref currentPlayerNumber);
+                    nameLength = currentMatch.PlayerOne.Name.Length;
                     if (currentMatch.PlayerTwo == null)
                         currentMatch = currentMatch.NextMatch;
                 }
                 else
                 {
-                    result.Add(fixLine + currentMatch.PlayerTwo.Name);
-                    if (maxLineLength < currentMatch.PlayerTwo.Name.Length)
-                        maxLineLength = currentMatch.PlayerTwo.Name.Length;
-                    currentPlayerNumber = 2;
+                    AddPlayerToLine(result,currentMatch.PlayerTwo.Name,result.Count-1,ref currentPlayerNumber);
+                    nameLength = currentMatch.PlayerTwo.Name.Length;                
                     currentMatch = currentMatch.NextMatch;
                 }
+                if (maxLineLength < nameLength)
+                    maxLineLength = nameLength;
 
                 pointersInThisRound.Add(result.Count - 1);
                 currentGridLine++;
@@ -171,15 +182,13 @@ namespace Football_League
                 {
                     if (currentPlayerNumber == 2)
                     {
-                        result[currentGridLine] += currentMatch.PlayerOne.Name;
-                        currentPlayerNumber = 1;
+                        AddPlayerToLine(result, currentMatch.PlayerOne.Name, currentGridLine, ref currentPlayerNumber);                       
                         if (currentMatch.PlayerTwo == null)
                             currentMatch = currentMatch.NextMatch;
                     }
                     else
                     {
-                        result[currentGridLine] += currentMatch.PlayerTwo.Name;
-                        currentPlayerNumber = 2;
+                        AddPlayerToLine(result, currentMatch.PlayerTwo.Name, currentGridLine, ref currentPlayerNumber);
                         currentMatch = currentMatch.NextMatch;
                     }
 
@@ -193,9 +202,10 @@ namespace Football_League
             return currentMatch;
         }
 
-        public void PrintGrid()
+        private static void AddPlayerToLine(List<string> result, string name, int currentGridLine, ref int currentPlayerNumber)
         {
-            ConsoleWorker.PrintHorizontalGrid(_horizontalGrid);
-        }
+            result[currentGridLine] += name;
+            currentPlayerNumber = currentPlayerNumber == 1 ? 2 : 1;
+        }        
     }
 }

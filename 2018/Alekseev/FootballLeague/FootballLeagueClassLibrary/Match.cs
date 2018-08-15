@@ -19,26 +19,22 @@ namespace Football_League
             PlayerTwo = second;
         }
 
-        public Contestant PickWinner()
+        public void SetWinnerAndLoser(int userChoice)
         {
             if (PlayerTwo == null && PlayerOne != null)
             {
                 Winner = PlayerOne;
-                return Winner;
+                return;
             }
-            if (ConsoleWorker.ChooseMatchWinner(this) == 1)
-            {
-                Winner = PlayerOne;
-                Loser = PlayerTwo;
-            }
-            else
-            {
-                Winner = PlayerTwo;
-                Loser = PlayerOne;
-            }
-            return Winner;
+
+            Winner = userChoice == 1 ? PlayerOne : PlayerTwo;
+            Loser = userChoice == 1 ? PlayerTwo : PlayerOne;
         }
 
+        public Contestant GetWinner()
+        {
+            return Winner;
+        }
         public Contestant GetLoser()
         {
             return Loser;

@@ -13,34 +13,46 @@ namespace Football_League
         {
             StartMatch = CurrentRoundFirstMatch;
         }
-        public List<Contestant> PlayRound()
+        public void PlayRound(List<int> userChoices)
         {
             if (CurrentRoundFirstMatch == null)
-                return new List<Contestant>();
+                return;
 
             RestoreConnections();
 
             Match currentMatch = CurrentRoundFirstMatch;
-            var losers = new List<Contestant>();
             var currentMatchInNextRound = new Match();
+            int choicePointer = 0;
 
             while (currentMatch?.PlayerOne != null)
             {
-                Contestant matchWinner = SetMatchWinnerAndLoser(currentMatch, losers);
+                SetMatchWinnerAndLoser(currentMatch,userChoices[choicePointer]);
+                choicePointer++;
+
+                Contestant matchWinner = currentMatch.GetWinner();
                 AddWinnerToNextRound(ref currentMatch, ref currentMatchInNextRound, matchWinner);
             }
 
             SetCurrentAndNextRoundsConnections(out currentMatch, out currentMatchInNextRound);
+        }
+
+        public List<Contestant> GetRoundLosers(Match startingMatch)
+        {
+            var currentMatch = startingMatch;
+            List<Contestant> losers = new List<Contestant>();
+            while (currentMatch != null)
+            {
+                if(currentMatch.GetLoser() != null)
+                    losers.Add(currentMatch.Loser);
+                currentMatch = currentMatch.NextMatch;
+            }
 
             return losers;
         }
 
-        private static Contestant SetMatchWinnerAndLoser(Match currentMatch, List<Contestant> losers)
+        private static void SetMatchWinnerAndLoser(Match currentMatch, int choice)
         {
-            var matchWinner = currentMatch.PickWinner();
-            if (currentMatch.GetLoser() != null)
-                losers.Add(currentMatch.GetLoser());
-            return matchWinner;
+            currentMatch.SetWinnerAndLoser(choice);
         }
 
         private void SetCurrentAndNextRoundsConnections(out Match currentMatch, out Match currentMatchInNextRound)

@@ -5,7 +5,7 @@ namespace Football_League
 {
     public class VerticalDrawer
     {
-        private readonly List<string> _verticalGrid = new List<string>();
+        public readonly List<string> VerticalGrid = new List<string>();
 
         public void MakeVerticalGrid(FullGrid grid)
         {
@@ -14,10 +14,10 @@ namespace Football_League
                 var result = MakeGridTree(grid.Grid[i]);
                 for (int j = 0; j < result.Count; j++)
                 {
-                    if (_verticalGrid.Count <= j + i * 3)
-                        _verticalGrid.Add(result[j]);
+                    if (VerticalGrid.Count <= j + i * 3)
+                        VerticalGrid.Add(result[j]);
                     else
-                        _verticalGrid[j + i * 3] += result[j];
+                        VerticalGrid[j + i * 3] += result[j];
                 }
             }
         }
@@ -186,11 +186,6 @@ namespace Football_League
             }
             if (matchToDraw.PlayerOne != null)
                 names += matchToDraw.PlayerOne.Name + " ";
-        }
-
-        public void PrintGrid()
-        {
-            ConsoleWorker.PrintVerticalGrid(_verticalGrid);
         }
     }
 }

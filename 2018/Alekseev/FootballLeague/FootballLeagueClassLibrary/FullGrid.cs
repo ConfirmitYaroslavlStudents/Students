@@ -19,7 +19,7 @@ namespace Football_League
                 Grid.Add(new MatchTreeGrid());
             }
         }
-        public void PlayRound()
+        public void PlayRound(List<int>[] choices)
         {
             if (!IsFinished)
             {
@@ -28,36 +28,10 @@ namespace Football_League
 
                 for (int i = Grid.Count - 1; i >= 0; i--)
                 {
-                    var losers = Grid[i].PlayRound();
-                    if (losers.Count != 0 && i < Grid.Count - 1)
-                    {
-                        onePlayerLeftInTournament = false;
-                        Grid[i + 1].AddPlayersFromNextTree(losers);
-                        continue;
-                    }
+                    var currentRoundMatch = Grid[i].CurrentRoundFirstMatch;
+                    Grid[i].PlayRound(choices[i]);
 
-                    if (Grid[i].CurrentRoundFirstMatch != null && losers.Count == 0)
-                    {
-                        if (singlePlayerLeftFirst != -1)
-                        {
-                            onePlayerLeftInTournament = false;
-                            int singlePlayerLeftSecond = i;
-                            Match winnersMatch = new Match(Grid[singlePlayerLeftFirst].CurrentRoundFirstMatch.PlayerOne,
-                                Grid[singlePlayerLeftSecond].CurrentRoundFirstMatch.PlayerOne);
-
-                            if (winnersMatch.PickWinner() == winnersMatch.PlayerOne)
-                                Grid[singlePlayerLeftSecond].CurrentRoundFirstMatch = null;
-                            else
-                                Grid[singlePlayerLeftFirst].CurrentRoundFirstMatch = null;
-                            singlePlayerLeftFirst = -1;
-                        }
-                        else
-                        {
-                            singlePlayerLeftFirst = i;
-                        }
-                    }
-                    else if (losers.Count > 0)
-                        onePlayerLeftInTournament = false;
+                    GridChangesAccordingToNumberOfLosers(i, currentRoundMatch, ref onePlayerLeftInTournament,ref singlePlayerLeftFirst);
                 }
 
                 if (onePlayerLeftInTournament)
@@ -65,10 +39,44 @@ namespace Football_League
             }
         }
 
+        private void GridChangesAccordingToNumberOfLosers(int currentTreePointer,Match currentRoundMatch, ref bool onePlayerLeftInTournament,ref int singlePlayerLeftFirst)
+        {
+            var losers = Grid[currentTreePointer].GetRoundLosers(currentRoundMatch);
+            if (losers.Count != 0 && currentTreePointer < Grid.Count - 1)
+            {
+                onePlayerLeftInTournament = false;
+                Grid[currentTreePointer + 1].AddPlayersFromNextTree(losers);
+                return;
+            }
+
+            if (Grid[currentTreePointer].CurrentRoundFirstMatch != null && losers.Count == 0)
+            {
+                if (singlePlayerLeftFirst != -1)
+                {
+                    onePlayerLeftInTournament = false;
+                    int singlePlayerLeftSecond = currentTreePointer;
+                    Match winnersMatch = new Match(Grid[singlePlayerLeftFirst].CurrentRoundFirstMatch.PlayerOne,
+                        Grid[singlePlayerLeftSecond].CurrentRoundFirstMatch.PlayerOne);
+
+                    if (winnersMatch.GetWinner() == winnersMatch.PlayerOne)
+                        Grid[singlePlayerLeftSecond].CurrentRoundFirstMatch = null;
+                    else
+                        Grid[singlePlayerLeftFirst].CurrentRoundFirstMatch = null;
+                    singlePlayerLeftFirst = -1;
+                }
+                else
+                {
+                    singlePlayerLeftFirst = currentTreePointer;
+                }
+            }
+            else if (losers.Count > 0)
+                onePlayerLeftInTournament = false;
+        }
+
+        //fix ConsoleWorker here - only console version works!
         public void EndTournament()
         {
             IsFinished = true;
-            ConsoleWorker.OnePlayerLeft();
         }
         public void InitialiseGrid(List<Contestant> players)
         {

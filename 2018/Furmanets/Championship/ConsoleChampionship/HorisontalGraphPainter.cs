@@ -10,21 +10,20 @@ namespace ConsoleChampionship
         private int _upperGridWinnerTop;
         private int _lowerGridWinnerLeft;
         private int _lowerGridWinnerTop;
+
         public override void PaintGraph(Tournament tournament)
         {
             var nextCursorPositionTop = 3;
             var tournamentRounds = tournament.GetTournamentToPrint();
-            var positionDownCoursor = 0;
 
-            positionDownCoursor = PrintTournirGrid(tournamentRounds, nextCursorPositionTop);
+            var positionDownNextGrid = PrintTournirGrid(tournamentRounds[0], nextCursorPositionTop);
 
-            nextCursorPositionTop = positionDownCoursor;
-
-            if (tournament is DoubleEliminationTournament doubleTournament)
+            if (tournamentRounds.Length == 3)
             {
-                var lowerRounds = doubleTournament.GetLowerGrid();
+                nextCursorPositionTop = positionDownNextGrid;
+                var lowerRounds = tournamentRounds[1];
                 PrintTournirGrid(lowerRounds, nextCursorPositionTop);
-                PaintGrandFinal(doubleTournament.FinalUpperAndLowerGrids);
+                PaintGrandFinal(tournamentRounds[2][0].Meetings[0]);
             }
 
         }
@@ -32,9 +31,12 @@ namespace ConsoleChampionship
         private void PaintGrandFinal(Meeting finalUpperAndLowerGrids)
         {
             var indexForWriteLine = (_lowerGridWinnerTop - _upperGridWinnerTop) / 2;
+            Console.SetCursorPosition(_lowerGridWinnerLeft, 0);
+            Console.Write("Grand Final");
 
             Console.SetCursorPosition(_upperGridWinnerLeft, _upperGridWinnerTop);
-            while (_upperGridWinnerLeft != _lowerGridWinnerLeft)
+
+            while (_upperGridWinnerLeft < _lowerGridWinnerLeft)
             {
                 Console.Write("-");
                 _upperGridWinnerLeft++;
@@ -70,8 +72,11 @@ namespace ConsoleChampionship
             {
                 var maxLengthName = GetMaxLengthNameInRound(round);
 
-                Console.SetCursorPosition(nextCursorPositionLeft, 0);
-                Console.WriteLine(GetForPrintRound(round.Stage));
+                if (tournamentRounds[0].Meetings.Count != tournamentRounds[1].Meetings.Count)
+                {
+                    Console.SetCursorPosition(nextCursorPositionLeft, 0);
+                    Console.WriteLine(GetForPrintRound(round.Stage));
+                }
 
                 var distanceBetweenPlayers = nextDistanceBeewinPalyers;
                 var positionCursorLeft = nextCursorPositionLeft;

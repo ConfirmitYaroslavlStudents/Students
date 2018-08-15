@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using Championship;
 using ConsoleChampionship;
 
 namespace TournamentsWpfForms
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    public partial class MainMenuWindow : Window
+    public partial class MainMenuWindow
     {
         private Tournament _tournament;
 
@@ -24,12 +15,22 @@ namespace TournamentsWpfForms
 
         private void ClickStart(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (_tournament == null)
+            {
+                var window = new WindowAddPlayers();
+                window.Show();
+                Close();
+            }
+            else
+            {
+                var window = new TournamentPlayWindow(_tournament);
+                window.Show();
+                Close();
+            }
         }
 
         private void Click_AddPlayers(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
         }
 
         private void Click_Load(object sender, RoutedEventArgs e)
@@ -48,7 +49,7 @@ namespace TournamentsWpfForms
 
         private void Click_Exit(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

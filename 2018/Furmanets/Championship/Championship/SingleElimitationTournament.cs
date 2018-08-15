@@ -6,7 +6,7 @@ namespace Championship
     [Serializable]
     public class SingleElimitationTournament : Tournament
     {
-        protected readonly List<Round> _tournamentRounds;
+        private readonly List<Round> _tournamentRounds;
 
         public SingleElimitationTournament(List<string> players)
         {
@@ -34,9 +34,9 @@ namespace Championship
             }
         }
 
-        public override List<Round> GetTournamentToPrint()
+        public override List<Round>[] GetTournamentToPrint()
         {
-            return CloneTournament(_tournamentRounds);
+            return new []{CloneTournament(_tournamentRounds)};
         }
 
         public override Meeting NextMeeting()

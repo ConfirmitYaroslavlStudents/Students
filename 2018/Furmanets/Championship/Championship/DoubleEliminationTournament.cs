@@ -11,7 +11,7 @@ namespace Championship
         private int _indexLowerRounds;
         private int _indexLowerMeetings;
         private bool _nextMatchIsUpper = true;
-        public Meeting FinalUpperAndLowerGrids { get; private set; }
+        private Meeting _finalUpperAndLowerGrids;
 
 
         public DoubleEliminationTournament(List<string> players)
@@ -22,9 +22,9 @@ namespace Championship
             _lowerGrid = doubleConstructorTournament.CreateTournamentGrid(players.Count);
             _upperGrid = singleConstructorTournament.CreateTournament(players);
 
-            FinalUpperAndLowerGrids = new Meeting();
-            _upperGrid[_upperGrid.Count - 1].Meetings[0].NextStage = FinalUpperAndLowerGrids;
-            _lowerGrid[_lowerGrid.Count - 1].Meetings[0].NextStage = FinalUpperAndLowerGrids;
+            _finalUpperAndLowerGrids = new Meeting();
+            _upperGrid[_upperGrid.Count - 1].Meetings[0].NextStage = _finalUpperAndLowerGrids;
+            _lowerGrid[_lowerGrid.Count - 1].Meetings[0].NextStage = _finalUpperAndLowerGrids;
 
             IndexOfRound = 0;
             IndexOfMatch = 0;
@@ -38,6 +38,7 @@ namespace Championship
 
             currentMeeting.Score = resultMatch;
             ChooseWinner(currentMeeting, _nextMatchIsUpper);
+
             if (_nextMatchIsUpper)
             {
                 IndexOfMatch++;
@@ -52,7 +53,7 @@ namespace Championship
             {
                 _indexLowerMeetings++;
 
-                if (currentMeeting.Equals(FinalUpperAndLowerGrids))
+                if (currentMeeting.Equals(_finalUpperAndLowerGrids))
                 {
                     IndexOfRound++;
                     return;
@@ -71,14 +72,18 @@ namespace Championship
             }
         }
 
-        public override List<Round> GetTournamentToPrint()
+        public override List<Round>[] GetTournamentToPrint()
         {
-            return CloneTournament(_upperGrid);
-        }
+            var tournaments = new List<Round>[3];
+            tournaments[0] = CloneTournament(_upperGrid);
+            tournaments[1] = CloneTournament(_lowerGrid);
 
-        public List<Round> GetLowerGrid()
-        {
-            return CloneTournament(_lowerGrid);
+            var grandFinalRound = new Round();
+            grandFinalRound.Meetings.Add(_finalUpperAndLowerGrids);
+
+            tournaments[2] = new List<Round> { grandFinalRound };
+
+            return tournaments;
         }
 
         public override Meeting NextMeeting()
@@ -90,7 +95,7 @@ namespace Championship
 
             if (IndexOfRound == _upperGrid.Count)
             {
-                return FinalUpperAndLowerGrids;
+                return _finalUpperAndLowerGrids;
             }
 
             if (_nextMatchIsUpper)
@@ -125,6 +130,7 @@ namespace Championship
             else
             {
                 PromotionWinnerToNextStage(meeting, meeting.SecondPlayer);
+
                 if (isUpper)
                 {
                     PromotionLoserToNextStage(meeting.FirstPlayer);

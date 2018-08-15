@@ -13,13 +13,13 @@ namespace ConsoleChampionship
             var isFirstRound = true;
             var tournamentRounds = tournament.GetTournamentToPrint();
 
-            var horisontalSizeWindow = GetMaxLengthNameInRound(tournamentRounds[0]);
-            horisontalSizeWindow *= tournamentRounds[0].Meetings.Count * nextDistanceBeetwinPalyers;
+            var horisontalSizeWindow = GetMaxLengthNameInRound(tournamentRounds[0][0]);
+            horisontalSizeWindow *= tournamentRounds[0][0].Meetings.Count * nextDistanceBeetwinPalyers;
             horisontalSizeWindow += nextCursorPositionLeft * 2;
 
             Console.SetWindowSize(horisontalSizeWindow, 30);
 
-            foreach (var round in tournamentRounds)
+            foreach (var round in tournamentRounds[0])
             {
                 var maxLengthNameInRound = GetMaxLengthNameInRound(round);
 
@@ -96,7 +96,7 @@ namespace ConsoleChampionship
                 isFirstRound = false;
             }
 
-            var lastMeeting = tournamentRounds[tournamentRounds.Count - 1].Meetings[0];
+            var lastMeeting = tournamentRounds[0][tournamentRounds[0].Count - 1].Meetings[0];
 
             switch (lastMeeting.Winner)
             {
@@ -111,7 +111,7 @@ namespace ConsoleChampionship
             }
 
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournamentRounds);
+            WriteNameWinnerInFinalRound(tournamentRounds[0]);
         }
 
         public override void WriteNamePlayer(Meeting meeting, bool isFirst)

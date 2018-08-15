@@ -12,7 +12,8 @@ namespace ConsoleChampionship
             var nextDistanceBeewinPalyers = 2;
             var tournamentRounds = tournament.GetTournamentToPrint();
 
-            foreach (var round in tournamentRounds)
+
+            foreach (var round in tournamentRounds[0])
             {
                 var maxLengthName = GetMaxLengthNameInRound(round);
 
@@ -72,7 +73,7 @@ namespace ConsoleChampionship
                 }
             }
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournamentRounds);
+            WriteNameWinnerInFinalRound(tournamentRounds[0]);
         }
     }
 }

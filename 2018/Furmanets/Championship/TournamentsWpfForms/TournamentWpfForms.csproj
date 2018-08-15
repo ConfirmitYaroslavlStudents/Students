@@ -59,8 +59,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="WindowForAddPlayers.xaml.cs">
-      <DependentUpon>WindowForAddPlayers.xaml</DependentUpon>
+    <Compile Include="TournamentPlayWindow.xaml.cs">
+      <DependentUpon>TournamentPlayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowAddPlayers.xaml.cs">
+      <DependentUpon>WindowAddPlayers.xaml</DependentUpon>
     </Compile>
     <Page Include="MainMenuWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -70,7 +73,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WindowForAddPlayers.xaml">
+    <Page Include="TournamentPlayWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowAddPlayers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

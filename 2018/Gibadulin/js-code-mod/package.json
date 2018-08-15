@@ -1,0 +1,7 @@
+{
+  "name": "js-code-mod",
+  "description": "jscodeshift -t js-code-mod\\transforms\\change-call-function-style.js <filesPath> <optionsPath>",
+  "dependencies": {
+    "jscodeshift": "^0.5.1"
+  }
+}

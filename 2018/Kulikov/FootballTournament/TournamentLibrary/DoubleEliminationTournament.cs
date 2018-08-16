@@ -12,6 +12,11 @@ namespace TournamentLibrary
         private int _currentLosersStage = -1;
         private int _gamesOnCurrentLosersStage = 0;
 
+        public DoubleEliminationTournament(IPrinter printer)
+        {
+            _printer = printer;
+        }
+
         public override void StartTournament()
         {
             base.StartTournament();
@@ -45,7 +50,7 @@ namespace TournamentLibrary
                     InitNewWinnersGridStage();
             }
             else
-                _viewer.PrintChampion(Champion);
+                _printer.PrintChampion(Champion);
         }    
 
         private void InitNewLosersGridStage()
@@ -89,14 +94,14 @@ namespace TournamentLibrary
             var secondPlayer = LosersGrid[_currentLosersStage][0].Winner;
             GrandFinal = new Game(firstPlayer, secondPlayer);
 
-            _viewer.PrintGrandFinal(GrandFinal);
+            _printer.PrintGrandFinal(GrandFinal);
 
-            GrandFinal.Play();
+            PlayGame(GrandFinal);
             Champion = GrandFinal.Winner;
 
             IsFinished = true;
 
-            _viewer.PrintChampion(Champion);
+            _printer.PrintChampion(Champion);
         }
     }
 }

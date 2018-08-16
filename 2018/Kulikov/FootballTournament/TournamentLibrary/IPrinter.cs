@@ -1,6 +1,6 @@
 ﻿namespace TournamentLibrary
 {
-    public interface IViewer
+    public interface IPrinter
     {
         void StartedNewTournament();
 

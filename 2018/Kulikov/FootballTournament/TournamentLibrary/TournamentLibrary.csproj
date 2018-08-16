@@ -40,18 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleWorker.cs" />
     <Compile Include="DataInput.cs" />
     <Compile Include="DoubleEliminationTournament.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="IViewer.cs" />
+    <Compile Include="IPrinter.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveLoadSystem.cs" />
     <Compile Include="SingleEliminationTournament.cs" />
     <Compile Include="Tournament.cs" />
     <Compile Include="TournamentOptions.cs" />
-    <Compile Include="Viewer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

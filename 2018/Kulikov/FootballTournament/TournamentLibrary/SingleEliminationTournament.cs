@@ -6,6 +6,11 @@ namespace TournamentLibrary
     [Serializable]
     public class SingleEliminationTournament : Tournament
     {
+        public SingleEliminationTournament(IPrinter printer)
+        {
+            _printer = printer;
+        }
+
         public override void PlayNextRound()
         {
             if (!IsFinished)
@@ -18,7 +23,7 @@ namespace TournamentLibrary
                     DetectChampion();
             }
             else
-                _viewer.PrintChampion(Champion);
+                _printer.PrintChampion(Champion);
         }
 
         protected override void DetectChampion()
@@ -26,7 +31,7 @@ namespace TournamentLibrary
             Champion = WinnersGrid[_currentWinnersStage][0].Winner;
             IsFinished = true;
 
-            _viewer.PrintChampion(Champion);
+            _printer.PrintChampion(Champion);
         }
     }
 }

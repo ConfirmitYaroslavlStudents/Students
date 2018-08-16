@@ -1,0 +1,31 @@
+﻿<Window x:Class="WPFTournament.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFTournament"
+        mc:Ignorable="d"
+        Title="WPF Tournament" Height="720" Width="1280" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid HorizontalAlignment="Left" Height="720" Margin="0,0,-6,-29" VerticalAlignment="Top" Width="1280">
+        <Menu Height="25" Margin="0,0,0,695">
+            <MenuItem Name="MI_Start" Header="Start" Height="25" Width="40" Click="MI_Start_Click"/>
+            <MenuItem Name="MI_Load" Header="Load" Height="25" Width="40"/>
+            <MenuItem Name="MI_Exit" Header="Exit" Height="25" Width="40" Click="MI_Exit_Click"/>
+        </Menu>
+        <ListBox HorizontalAlignment="Left" Height="615" Margin="986,56,0,0" VerticalAlignment="Top" Width="270"/>
+        <Border BorderBrush="Black" BorderThickness="0.2" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="1280"/>
+        <Label Content="Results" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="986,25,0,0" VerticalAlignment="Top" Width="270"/>
+        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="615" Margin="285,56,0,0" Stroke="Black" VerticalAlignment="Top" Width="696"/>
+        <Label Content="Tournament Grid" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="285,25,0,0" VerticalAlignment="Top" Width="696"/>
+        <Label Content="Tournament Menu" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Width="270"/>
+        <StackPanel Name="SP_StartTournament" HorizontalAlignment="Left" Height="615" Margin="10,56,0,0" VerticalAlignment="Top" Visibility="Visible" Width="270">
+            <GroupBox Name="GB_SelectMode" Header="Select tournament mode:" Height="70">
+                <StackPanel HorizontalAlignment="Left" Height="80" Margin="10,10,-2,-12" VerticalAlignment="Top" Width="250">
+                    <RadioButton Name="RB_SingleElimination" Content="Single Elimination"/>
+                    <RadioButton Name="RB_DoubleElimination" Content="Double Elimination"/>
+                </StackPanel>
+            </GroupBox>
+            <Button Name="Btn_Next" Content="Next" Click="Btn_Next_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

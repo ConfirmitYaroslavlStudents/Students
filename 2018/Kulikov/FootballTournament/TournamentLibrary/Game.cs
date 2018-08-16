@@ -13,9 +13,6 @@ namespace TournamentLibrary
         public Player Loser { get; private set; }
         public bool IsPlayed { get; private set; }
 
-        [NonSerialized]
-        private static IViewer _viewer = Viewer.GetViewer();
-
         public Game(Player firstPlayer, Player secondPlayer)
         {
             FirstPlayer = firstPlayer;
@@ -23,27 +20,18 @@ namespace TournamentLibrary
             IsPlayed = false;
         }
 
-        public void Play()
+        public void Play(int firstPlayerScore, int secondPlayerScore)
         {
-            if (SecondPlayer != null)
-            {
-                FirstPlayerScore = _viewer.EnterPlayerScore(FirstPlayer);
-                SecondPlayerScore = _viewer.EnterPlayerScore(SecondPlayer);
+            FirstPlayerScore = firstPlayerScore;
+            SecondPlayerScore = secondPlayerScore;
+            IsPlayed = true;
+            DetectWinner();
+        }
 
-                if (FirstPlayerScore == SecondPlayerScore)
-                {
-                    _viewer.DrawIsNotPossible();
-                    Play();
-                }
-                else
-                {
-                    IsPlayed = true;
-                    DetectWinner();
-                    _viewer.PrintGameResult(this);
-                }
-            }
-            else
-                Winner = FirstPlayer;
+        public void Play(int firstPlayerScore)
+        {
+            FirstPlayerScore = firstPlayerScore;
+            Winner = FirstPlayer;
         }
 
         public void DetectWinner()

@@ -10,6 +10,7 @@ namespace ConsoleTournament
         private TournamentGridType _tournamentGridType;
         private TournamentGridDrawer _tournamentGridDrawer = new TournamentGridDrawer();
         private DoubleSidedTournamentGridDrawer _doubleSidedGridDrawer = new DoubleSidedTournamentGridDrawer();
+        private ConsolePrinter _printer = new ConsolePrinter();
 
         public void Init()
         {
@@ -37,13 +38,13 @@ namespace ConsoleTournament
 
         private void SelectSingleElimination()
         {
-            _tournament = new SingleEliminationTournament();
+            _tournament = new SingleEliminationTournament(_printer);
             InputData();
         }
 
         private void SelectDoubleElimination()
         {
-            _tournament = new DoubleEliminationTournament();
+            _tournament = new DoubleEliminationTournament(_printer);
             InputData();
         }
 

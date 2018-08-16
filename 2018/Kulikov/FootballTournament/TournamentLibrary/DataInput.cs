@@ -2,34 +2,39 @@
 
 namespace TournamentLibrary
 {
-    public static class DataInput
+    public class DataInput
     {
-        private static IViewer _viewer = Viewer.GetViewer();
+        private IPrinter _printer;
 
-        public static int GetCountOfPlayers()
+        public DataInput(IPrinter printer)
         {
-            _viewer.StartedNewTournament(); 
+            _printer = printer;
+        }
 
-            var countOfPlayers = _viewer.EnterCountOfPlayers();
+        public int GetCountOfPlayers()
+        {
+            _printer.StartedNewTournament(); 
+
+            var countOfPlayers = _printer.EnterCountOfPlayers();
 
             return countOfPlayers;
         }
 
-        public static List<Player> GetPlayersList(int countOfPlayers)
+        public List<Player> GetPlayersList(int countOfPlayers)
         {
-            _viewer.EnterPlayerNames();
+            _printer.EnterPlayerNames();
 
             var players = new List<Player>();
             var existingNames = new HashSet<string>();
 
             for (int i = 1; i <= countOfPlayers; i++)
             {
-                var name = _viewer.EnterPlayerName(i);
+                var name = _printer.EnterPlayerName(i);
 
                 while (existingNames.Contains(name) || name == " ")
                 {
-                    _viewer.NameAlreadyExists();
-                    name = _viewer.EnterPlayerName(i);
+                    _printer.NameAlreadyExists();
+                    name = _printer.EnterPlayerName(i);
                 }
 
                 existingNames.Add(name);

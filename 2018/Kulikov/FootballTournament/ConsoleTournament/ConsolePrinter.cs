@@ -1,8 +1,9 @@
 ﻿using System;
+using TournamentLibrary;
 
-namespace TournamentLibrary
+namespace ConsoleTournament
 {
-    public class ConsoleWorker : IViewer
+    public class ConsolePrinter : IPrinter
     {
         public void StartedNewTournament()
         {

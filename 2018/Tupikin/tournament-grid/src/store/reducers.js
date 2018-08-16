@@ -6,27 +6,20 @@ const isLoading = handleActions({
   HIDE_LOADING: () => false
 }, false);
 
-const playerInitState = {
+const dataInitState = {
   names: [],
-  count: 0
 };
 
-const players = handleActions({
-  ADD_NAME: (state, { payload: { name } }) => {
-    const { names } = state;
-    names.push(name);
-  },
+const data = handleActions({
+  ADD_NAME_SUCCESS: (state, { payload: { names } }) =>
+    Object.assign({}, state, { names }),
 
-  DELETE_NAME: (state, { payload: { name } }) => {
-    const { names } = state;
-    if (names.includes(name)) {
-      names.splice(names.indexOf(name), 1);
-    }
-  }
-}, playerInitState);
+  DELETE_NAME_SUCCESS: (state, { payload: { names } }) =>
+    Object.assign({}, state, { names }),
+}, dataInitState);
 
 export default combineReducers({
-  players,
+  data,
   app: combineReducers({
     isLoading
   })

@@ -9,5 +9,8 @@ export const loadingActions = createActions({
 
 export const namesActions = createActions({
   ADD_NAME: identity,
-  DELETE_NAME: identity
+  ADD_NAME_SUCCESS: identity,
+
+  DELETE_NAME: identity,
+  DELETE_NAME_SUCCESS: identity
 });

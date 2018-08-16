@@ -1,4 +1,6 @@
-import { loadingActions } from './actions';
+
+import store from 'store/store';
+import { loadingActions, namesActions } from './actions';
 import { put, takeLatest } from 'redux-saga/effects';
 
 function loaderWrapper(func) {
@@ -9,6 +11,21 @@ function loaderWrapper(func) {
   };
 }
 
+const namesSagas = {
+  * ADD_NAME(data) {
+    const names = store.getState().data.names;
+    const update = [...names, data.payload];
+    yield put(namesActions.addNameSuccess({ names: update }));
+  },
+
+  * DELETE_NAME(data) {
+    const names = store.getState().data.names;
+    const update = [...names.splice(names.indexOf(data.payload), 1)];
+    console.log(update);
+    yield put(namesActions.deleteNameSuccess({ names: update }));
+  }
+};
+
 function* takeLatestGenerator(sagas) {
   for (const [actionType, saga] of Object.entries(sagas)) {
     yield takeLatest(actionType, loaderWrapper(saga));
@@ -16,5 +33,5 @@ function* takeLatestGenerator(sagas) {
 }
 
 export default function* () {
-  yield takeLatestGenerator(null);
+  yield takeLatestGenerator(namesSagas);
 }

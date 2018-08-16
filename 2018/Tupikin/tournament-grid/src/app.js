@@ -1,14 +1,8 @@
-import BufferChecker from 'components/bufferChecker/bufferChecker';
 import { connect } from 'react-redux';
-import Enter from 'components/enter/enter';
 import PropTypes from 'prop-types';
+import Router from './router/router';
 import { Component, Fragment } from 'react';
 import { Dimmer, Loader } from 'semantic-ui-react';
-import {
-  Route,
-  HashRouter as Router,
-  Switch
-} from 'react-router-dom';
 
 class App extends Component {
   render() {
@@ -16,18 +10,10 @@ class App extends Component {
 
     return (
       <Fragment>
-        <Router>
-          <Fragment>
-            <Dimmer active={isLoading} inverted>
-              <Loader>Loading</Loader>
-            </Dimmer>
-            <Switch>
-              <Route exact path='/' component={BufferChecker}/>
-              <Route path='/enter' component={Enter}/>
-              <Route path='/grid' component={null}/>
-            </Switch>
-          </Fragment>
-        </Router>
+        <Dimmer active={isLoading} inverted>
+          <Loader>Loading</Loader>
+        </Dimmer>
+        <Router/>
       </Fragment>
     );
   }
@@ -41,7 +27,7 @@ function mapStateToProps(state) {
 }
 
 App.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool.isRequired
 };
 
 export default connect(mapStateToProps)(App);

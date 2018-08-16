@@ -1,6 +1,6 @@
 ﻿namespace Championship
 {
-    static class Messages
+    public static class Messages
     {
         public static readonly string NotAPositiveIntegerNumber = "You should enter a positive integer number";
         public static readonly string ImpossibleTeamName = "This name is already used";

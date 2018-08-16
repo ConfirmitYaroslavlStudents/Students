@@ -4,7 +4,7 @@
     {
         public GridRendererType GridType = GridRendererType.StandardGrid;
 
-        public void VisitDoubleChampionship(DoubleChampionship doubleChampionship)
+        public void Visit(DoubleChampionshipManager doubleChampionship)
         {
             var winnersTour = (doubleChampionship.Grid as DoubleEliminationGrid).WinnersTour;
             var losersTour = (doubleChampionship.Grid as DoubleEliminationGrid).LosersTour;
@@ -33,7 +33,7 @@
             }
         }
 
-        public void VisitSingleChampionship(SingleChampionship singleChampionship)
+        public void Visit(SingleChampionshipManager singleChampionship)
         {
             if (GridType == GridRendererType.StandardGrid)
             {

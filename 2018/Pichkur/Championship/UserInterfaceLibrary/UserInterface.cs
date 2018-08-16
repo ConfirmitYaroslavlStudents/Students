@@ -8,6 +8,7 @@ namespace Championship
         private Menu _mainMenu;
         private IChampionship _championship;
         private GridRendererVisitor _gridRenderer = new GridRendererVisitor();
+        private DataInput dataInput = new DataInput(new ConsoleWorker());
 
         public UserInterface()
         {
@@ -28,13 +29,13 @@ namespace Championship
 
         private void InitSingleTournament()
         {
-            _championship = new SingleChampionship();
+            _championship = new SingleChampionshipManager(dataInput);
             StartTournament();
         }
 
         private void InitDoubleTournament()
         {
-            _championship = new DoubleChampionship();
+            _championship = new DoubleChampionshipManager(dataInput);
             StartTournament();
         }
 

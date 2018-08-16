@@ -29,7 +29,7 @@ namespace Championship
                 }
                 catch
                 {
-                    throw new Exception(Messages.LoadError);
+                    throw new Exception();
                 }
             }
             return championship;

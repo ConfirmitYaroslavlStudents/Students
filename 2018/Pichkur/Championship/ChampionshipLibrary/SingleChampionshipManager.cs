@@ -3,20 +3,23 @@
 namespace Championship
 {
     [Serializable]
-    public class SingleChampionship : IChampionship
+    public class SingleChampionshipManager : IChampionship
     {
         public bool IsTeamInput { get; set; }
         public IGrid Grid { get; set; }
         public Team Champion { get; set; }
+        [NonSerialized]
+        public DataInput dataInput;
 
-        public SingleChampionship()
+        public SingleChampionshipManager(DataInput dataInput)
         {
             IsTeamInput = false;
+            this.dataInput = dataInput;
         }
 
         public void InputTeams()
         {
-            Grid = new SingleEliminationGrid(DataInput.InputTeams());
+            Grid = new SingleEliminationGrid(dataInput.InputTeams());
             IsTeamInput = true;
             SaveLoadSystem.Save(this);
         }
@@ -26,7 +29,7 @@ namespace Championship
             var indexOfLastTour = (Grid as SingleEliminationGrid).CountTours;
             var lastTour = (Grid as SingleEliminationGrid).Tours[indexOfLastTour];
 
-            DataInput.InputTourGamesScores(lastTour);
+            dataInput.InputTourGamesScores(lastTour);
             Grid.StartNextTour();
             Champion = (Grid as SingleEliminationGrid).Champion;
             SaveLoadSystem.Save(this);
@@ -34,7 +37,7 @@ namespace Championship
 
         public void Accept(IVisitor visitor)
         {
-            visitor.VisitSingleChampionship(this);
+            visitor.Visit(this);
         }
 
     }

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ExpansionPanel from '../../commonComponents/UIComponentDecorators/expansionPanel'
+import ExpansionPanel from '../../components/decorators/expansionPanel'
 
 const CommentText = (props) => {
   const { text } = props

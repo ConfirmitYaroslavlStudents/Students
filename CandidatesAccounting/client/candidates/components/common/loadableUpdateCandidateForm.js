@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Loadable from 'react-loadable'
 import styled from 'styled-components'
-import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
+import Spinner from '../../../components/decorators/spinner'
 
 const LoadableCandidateInfoForm = Loadable({
   loader: () => import('./updateCandidateForm'),

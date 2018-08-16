@@ -7,6 +7,6 @@ export const isNotEmpty = (name) => {
 }
 
 export const isEmail = (email) => {
-  const validEmail = /.+@.+\..+/i;
+  const validEmail = /.+@.+\..+/i
   return (email && validEmail.test(email))
 }

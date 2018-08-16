@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { SELECTORS } from '../../../rootReducer'
-import { MediumButtonStyle } from '../../../commonComponents/styleObjects'
-import DialogWindow from '../../../commonComponents/UIComponentDecorators/dialogWindow'
+import { MediumButtonStyle } from '../../../components/styleObjects'
+import DialogWindow from '../../../components/decorators/dialogWindow'
 import LoadableCandidateUpdateForm from './loadableUpdateCandidateForm'
 import { checkCandidateValidation } from '../../../utilities/candidateValidators'
 import Candidate from '../../../utilities/candidate'
 import SaveIcon from '@material-ui/icons/Save'
 import EditIcon from '@material-ui/icons/Edit'
 import CloseIcon from '@material-ui/icons/Close'
-import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
+import IconButton from '../../../components/decorators/iconButton'
 
 class UpdateCandidateDialog extends React.Component {
   constructor(props) {

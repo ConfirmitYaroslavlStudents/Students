@@ -5,6 +5,8 @@ const template = (props) => {
 
   const config = { username }
 
+  //todo: https://www.styled-components.com/docs/advanced#server-side-rendering
+
   return `
     <!doctype html>
     <html lang="ru" class="html">
@@ -13,9 +15,9 @@ const template = (props) => {
             <meta name="theme-color" content="#3F51B5">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Candidate Accounting</title>
-            <link rel="manifest" href="/manifest.json">
-            <link rel="icon" href ="/favicon.ico" type= "image/x-icon" >
-            <link rel="shortcut icon" href ="/favicon.ico" type="image/x-icon" >
+            <link rel="manifest" href="/server/manifest.json">
+            <link rel="icon" href ="/server/favicon.ico" type= "image/x-icon" >
+            <link rel="shortcut icon" href ="/server/favicon.ico" type="image/x-icon" >
         </head>
         <body style="background-color: #CCC;">
             <div id="root">

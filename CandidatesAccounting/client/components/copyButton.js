@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconButton from './UIComponentDecorators/iconButton'
-import CopyIcon from '@material-ui/icons/ContentCopy'
+import IconButton from './decorators/iconButton'
+import CopyIcon from '@material-ui/icons/FileCopy'
 import { SmallButtonStyle, SmallestIconStyle} from './styleObjects'
 
 const EmailWrapper = (props) => {

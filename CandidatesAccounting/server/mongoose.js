@@ -8,7 +8,7 @@ const connectionURL = serverConfig.databaseConnectionURL
 mongoose.Promise = Promise
 
 export const connect = () => {
-  return mongoose.connect(connectionURL)
+  return mongoose.connect(connectionURL, { useNewUrlParser: true })
 }
 
 AccountSchema.plugin(passportLocalMongoose)

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import IconButton from './UIComponentDecorators/iconButton'
+import IconButton from './decorators/iconButton'
 import FileUploader from 'react-input-files'
 
 const CustomFileUploader = (props) => {

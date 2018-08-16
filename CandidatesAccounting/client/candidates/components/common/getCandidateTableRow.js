@@ -1,10 +1,10 @@
 import React from 'react'
 import CandidateControls from './controls'
 import TagList from '../../../tags/components/list'
-import EmailWrapper from '../../../commonComponents/emailWrapper'
-import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
-import CandidateNameLink from '../../../commonComponents/candidateNameLink'
-import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
+import EmailWrapper from '../../../components/emailWrapper'
+import PhoneNumberWrapper from '../../../components/phoneNumberWrapper'
+import CandidateNameLink from '../../../components/candidateNameLink'
+import NicknameWrapper from '../../../components/nicknameWrapper'
 import styled from 'styled-components'
 
 const getCandidateTableCells = (candidate) => {

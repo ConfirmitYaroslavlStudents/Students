@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import EmailWrapper from '../../../commonComponents/emailWrapper'
-import PhoneNumberWrapper from '../../../commonComponents/phoneNumberWrapper'
-import FileDownloader from '../../../commonComponents/fileDownloader'
+import EmailWrapper from '../../../components/emailWrapper'
+import PhoneNumberWrapper from '../../../components/phoneNumberWrapper'
+import FileDownloader from '../../../components/fileDownloader'
 import UpdateCandidateDialog from './updateCandidateDialog'
 import TagList from '../../../tags/components/list'
-import NicknameWrapper from '../../../commonComponents/nicknameWrapper'
+import NicknameWrapper from '../../../components/nicknameWrapper'
 import styled from 'styled-components'
-import { SmallerIconStyle } from '../../../commonComponents/styleObjects'
+import { SmallerIconStyle } from '../../../components/styleObjects'
 
 function CandidateCard(props) {
   const { candidate, tags, authorized } = props

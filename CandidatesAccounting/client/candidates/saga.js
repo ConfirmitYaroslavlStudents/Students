@@ -8,6 +8,7 @@ import Comment from '../utilities/comment'
 import findCandidateStateDifference from '../utilities/findCandidateStateDifference'
 import createCandidateUpdateMessage from '../utilities/createCandidateUpdateMessage'
 import createInterviewScheduledMessage from '../utilities/createInterviewScheduledMessage'
+import { SELECTORS } from '../rootReducer'
 
 const creator = ({ history }) => {
   function* candidatesSaga() {
@@ -73,21 +74,25 @@ const creator = ({ history }) => {
 
   function* getCandidatesSaga() {
     try {
-      const candidateState = yield select(state => state.candidates)
-      const searchRequest = yield select(state => state.application.searchRequest)
+      const candidatesPerPage = yield select(state => SELECTORS.CANDIDATES.CANDIDATESPERPAGE(state))
+      const offset = yield select(state => SELECTORS.CANDIDATES.OFFSET(state))
+      const candidateStatus = yield select(state => SELECTORS.CANDIDATES.CANDIDATESTATUS(state))
+      const sortingField = yield select(state => SELECTORS.CANDIDATES.SORTINGFIELD(state))
+      const sortingDirection = yield select(state => SELECTORS.CANDIDATES.SORTINGDIRECTION(state))
+      const searchRequest = yield select(state => SELECTORS.APPLICATION.SEARCHREQUEST(state))
       const serverResponse = yield call(
         getCandidates,
-        candidateState.candidatesPerPage,
-        candidateState.offset,
-        candidateState.candidateStatus,
-        candidateState.sortingField,
-        candidateState.sortingDirection,
+        candidatesPerPage,
+        offset,
+        candidateStatus,
+        sortingField,
+        sortingDirection,
         searchRequest)
       yield call(history.replace, '/'
-        + (candidateState.candidateStatus === '' ? '' : candidateState.candidateStatus.toLowerCase() + 's')
-        + '?take=' + candidateState.candidatesPerPage
-        + (candidateState.offset === 0 ? '' : '&skip=' + candidateState.offset)
-        + (candidateState.sortingField === '' ? '' : '&sort=' + candidateState.sortingField + '&sortDir=' + candidateState.sortingDirection)
+        + (candidateStatus === '' ? '' : candidateStatus.toLowerCase() + 's')
+        + '?take=' + candidatesPerPage
+        + (offset === 0 ? '' : '&skip=' + offset)
+        + (sortingField === '' ? '' : '&sort=' + sortingField + '&sortDir=' + sortingDirection)
         + (searchRequest === '' ? '' : '&q=' + encodeURIComponent(searchRequest)))
       yield put(actions.getCandidatesSuccess({
         candidates: serverResponse.candidates,
@@ -132,8 +137,8 @@ const creator = ({ history }) => {
   function* updateCandidateSaga(action) {
     try {
       const { candidate, previousState } = action.payload
-      const candidateStatus = yield select(state => state.candidates.candidateStatus)
-      const pageTitle = yield select(state => state.application.pageTitle)
+      const candidateStatus = yield select(state => SELECTORS.CANDIDATES.CANDIDATESTATUS(state))
+      const pageTitle = yield select(state => SELECTORS.APPLICATION.PAGETITLE)
 
       const resumeFile = candidate.resumeFile
       delete candidate.resumeFile
@@ -198,7 +203,7 @@ const creator = ({ history }) => {
   function* setCandidateStatusSaga(action) {
     try {
       const { status } = action.payload
-      const previousStatus = yield select(state => state.candidates.candidateStatus)
+      const previousStatus = yield select(state => SELECTORS.CANDIDATES.CANDIDATESTATUS(state))
       yield put(applicationActions.enableFetching())
       if (status === previousStatus) {
         yield put(applicationActions.resetSearchRequest())

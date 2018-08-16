@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AddPersonIcon from '@material-ui/icons/PersonAdd'
 import CloseIcon from '@material-ui/icons/Close'
-import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
+import IconButton from '../../../components/decorators/iconButton'
 
 const AddCandidateDialogActions = (props) => {
   return (

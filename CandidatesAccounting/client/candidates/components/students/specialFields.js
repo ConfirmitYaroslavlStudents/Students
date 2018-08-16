@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextField from '../../../commonComponents/UIComponentDecorators/textField'
-import DatePicker from '../../../commonComponents/UIComponentDecorators/datePicker'
+import TextField from '../../../components/decorators/textField'
+import DatePicker from '../../../components/decorators/datePicker'
 import { toDatePickerFormat, fromDatePickerFormat } from '../../../utilities/customMoment'
 
 const StudentSpecialFields = (props) => {

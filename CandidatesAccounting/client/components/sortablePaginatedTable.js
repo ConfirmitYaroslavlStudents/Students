@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Table from './UIComponentDecorators/table'
-import TableSortLabel from './UIComponentDecorators/tableSortLabel'
+import Table from './decorators/table'
+import TableSortLabel from './decorators/tableSortLabel'
 import SortablePaginatedTableFooter from './sortablePaginatedTableFooter'
 
 class SortablePaginatedTable extends Component {

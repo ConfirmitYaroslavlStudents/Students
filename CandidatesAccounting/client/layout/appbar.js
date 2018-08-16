@@ -5,9 +5,9 @@ import { SELECTORS } from '../rootReducer'
 import Logo from '@material-ui/icons/AccountCircle'
 import SearchForm from './searchForm'
 import UserControls from '../authorization/components/userControls'
-import NicknameWrapper from '../commonComponents/nicknameWrapper'
-import LetterAvatar from '../commonComponents/UIComponentDecorators/letterAvatar'
-import ImageAvatar from '../commonComponents/UIComponentDecorators/imageAvatar'
+import NicknameWrapper from '../components/nicknameWrapper'
+import LetterAvatar from '../components/decorators/letterAvatar'
+import ImageAvatar from '../components/decorators/imageAvatar'
 import styled from 'styled-components'
 
 class Appbar extends Component {

@@ -1,15 +1,19 @@
 ﻿using System;
 
-namespace Tournament
+namespace TournamentLibrary
 {
-    public static class Starter
+    public class ConsoleStarter : Starter
     {
-        public const int MinChars = 2;
-        public const int MaxChars = 8;
 
-        public static Tournament TryLoadTournament()
+        public ConsoleStarter()
         {
-            string openingMessage = "Do you want to try to load a saved game? Type \"yes\" or \"no\".";
+        }
+
+        public override Tournament TryLoadTournament()
+        {
+            const string doLoad = "yes";
+            const string dontLoad = "no";
+            string openingMessage = string.Format("Do you want to try to load a saved game? It's stored in the Type \"{0}\" or \"{1}\".", doLoad, dontLoad);
             Console.WriteLine(openingMessage);
             Console.WriteLine();
 
@@ -19,19 +23,19 @@ namespace Tournament
 
                 switch (input)
                 {
-                    case "yes":
+                    case doLoad:
                         {
                             Console.Clear();
                             var tournament = SaveController.Load();
 
                             if (tournament == null)
                             {
-                                Console.WriteLine("Could not load the tournament");
+                                Console.WriteLine("Unable to load the tournament");
                             }
 
                             return tournament;
                         }
-                    case "no":
+                    case dontLoad:
                         {
                             Console.Clear();
                             return null;
@@ -47,9 +51,11 @@ namespace Tournament
             }
         }
 
-        public static bool ReadDoubleEliminationFlag()
+        public override bool ReadDoubleEliminationFlag()
         {
-            string openingMessage = "Please, input game type.\r\nInput \"single\" or \"double\" for single or double elimination respectively.";
+            const string singleType = "single";
+            const string doubleType = "double";
+            string openingMessage = string.Format("Please, input game type.\r\nInput \"{0}\" or \"{1}\" for single or double elimination respectively.", singleType, doubleType);
             Console.WriteLine(openingMessage);
             Console.WriteLine();
 
@@ -59,12 +65,12 @@ namespace Tournament
 
                 switch (input)
                 {
-                    case "single":
+                    case singleType:
                         {
                             Console.Clear();
                             return false;
                         }
-                    case "double":
+                    case doubleType:
                         {
                             Console.Clear();
                             return true;
@@ -80,7 +86,7 @@ namespace Tournament
             }
         }
 
-        public static int ReadNumberOfPlayers()
+        public override int ReadNumberOfPlayers()
         {
             string openingMessage = "Please, input number of players.\r\nThere must be at least 2 for the tournament to start.";
             Console.WriteLine(openingMessage);
@@ -98,7 +104,7 @@ namespace Tournament
             return number;
         }
 
-        public static string[] ReadNames(int numberOfPlayers)
+        public override string[] ReadNames(int numberOfPlayers)
         {
             string[] players = new string[numberOfPlayers];
             string openingMessage = String.Format("Please, input players' nicknames.\r\nThey must contain only letters or digits and be {0} - {1} characters long.\r\nAll names must be different.", MinChars, MaxChars);
@@ -132,32 +138,6 @@ namespace Tournament
             }
 
             return players;
-        }
-
-        private static bool NameValidation(string newName, string[] names, int validNames)
-        {
-            if (newName.Length < MinChars && newName.Length > MaxChars)
-            {
-                return false;
-            }
-
-            foreach (char symbol in newName)
-            {
-                if (!char.IsLetterOrDigit(symbol))
-                {
-                    return false;
-                }
-            }
-
-            for (int i = 0; i < validNames; i++)
-            {
-                if (names[i] == newName)
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
     }
 }

@@ -1,21 +1,21 @@
 ﻿using System;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     [Serializable]
-    public class MatchCoords
+    public class PlayerCoords
     {
         public readonly bool IsLoserGrid;
         public readonly int Tour;
         public readonly int MatchNumber;
-        public readonly int Player;
+        public readonly int IndexInPair;
 
-        public MatchCoords(bool loserGrid, int tour, int match, int player)
+        public PlayerCoords(bool loserGrid, int tour, int match, int playerIndex)
         {
             IsLoserGrid = loserGrid;
             Tour = tour;
             MatchNumber = match;
-            Player = player;
+            IndexInPair = playerIndex;
         }
     }
 }

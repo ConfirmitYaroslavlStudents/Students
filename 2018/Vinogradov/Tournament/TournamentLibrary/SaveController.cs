@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     public static class SaveController
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     [Serializable]
     public class LoserGrid : Grid
@@ -14,7 +14,7 @@ namespace Tournament
             }
 
             Winner = string.Empty;
-            var matchesInEachTour = CalculateTourSize(mainGrid);
+            var matchesInEachTour = CalculateTourSizes(mainGrid);
             Matches = new Match[matchesInEachTour.Count][];
             for (int i = 0; i < Matches.Length; i++)
             {
@@ -27,7 +27,7 @@ namespace Tournament
             }
         }
 
-        private List<int> CalculateTourSize(Match[][] mainGrid)
+        private List<int> CalculateTourSizes(Match[][] mainGrid)
         {
             var matchesInEachTour = new List<int>();
             int playersInTour = mainGrid[0].Length;

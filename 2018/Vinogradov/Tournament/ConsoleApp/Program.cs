@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     class Program
     {
@@ -10,15 +10,17 @@ namespace Tournament
         private const string _horizontalCommand = "horizontal";
         private const string _exitCommand = "exit";
 
+
         static void Main(string[] args)
         {
-            var tournament = Starter.TryLoadTournament();
+            Starter starter = new ConsoleStarter();
+            var tournament = starter.TryLoadTournament();
 
             if (tournament == null)
             {
-                bool isDoubleElimination = Starter.ReadDoubleEliminationFlag();
-                int numberOfPlayers = Starter.ReadNumberOfPlayers();
-                string[] playerNames = Starter.ReadNames(numberOfPlayers);
+                bool isDoubleElimination = starter.ReadDoubleEliminationFlag();
+                int numberOfPlayers = starter.ReadNumberOfPlayers();
+                string[] playerNames = starter.ReadNames(numberOfPlayers);
                 tournament = new Tournament(playerNames, isDoubleElimination);
                 SaveController.Save(tournament);
             }
@@ -72,23 +74,7 @@ namespace Tournament
                         {
                             if (words.Length > 1)
                             {
-                                if (tournament.PlayersCoords.ContainsKey(words[1]))
-                                {
-                                    try
-                                    {
-                                        tournament.PlayGame(words[1]);
-                                    }
-                                    catch (InvalidOperationException e)
-                                    {
-                                        Console.WriteLine(e.Message);
-                                        Console.ReadKey();
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine(warning);
-                                    Console.ReadKey();
-                                }
+                                ParseGame(tournament, words[1], warning);
                             }
                             else
                             {
@@ -120,6 +106,27 @@ namespace Tournament
                             break;
                         }
                 }
+            }
+        }
+
+        private static void ParseGame(Tournament tournament, string name, string warning)
+        {
+            if (tournament.PlayersCoords.ContainsKey(name))
+            {
+                try
+                {
+                    tournament.PlayGame(name);
+                }
+                catch (InvalidOperationException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                }
+            }
+            else
+            {
+                Console.WriteLine(warning);
+                Console.ReadKey();
             }
         }
     }

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     [Serializable]
     public class Tournament
     {
-        private MatchCoords _mainWinnerCoords = new MatchCoords(false, -1, -1, -1);
-        private MatchCoords _losersWinnerCoords = new MatchCoords(true, -1, -1, -1);
+        private PlayerCoords _mainWinnerCoords = new PlayerCoords(false, -1, -1, -1);
+        private PlayerCoords _losersWinnerCoords = new PlayerCoords(true, -1, -1, -1);
 
         public bool DoubleElimination;
-        public Dictionary<string, MatchCoords> PlayersCoords;
+        public Dictionary<string, PlayerCoords> PlayersCoords;
         public MainGrid Main;
         public LoserGrid Losers;
         public string Champion;
@@ -24,7 +24,7 @@ namespace Tournament
 
             playerNames = Shuffle(playerNames);
             DoubleElimination = isDoubleElimination;
-            PlayersCoords = new Dictionary<string, MatchCoords>();
+            PlayersCoords = new Dictionary<string, PlayerCoords>();
             Main = new MainGrid(playerNames);
             Champion = string.Empty;
 
@@ -35,12 +35,12 @@ namespace Tournament
 
             for (int i = 0; i < playerNames.Length; i++)
             {
-                PlayersCoords.Add(playerNames[i], new MatchCoords(false, 0, i / 2, i % 2));
+                PlayersCoords.Add(playerNames[i], new PlayerCoords(false, 0, i / 2, i % 2));
             }
 
-            if (Main.ExtraPlayerTour != -1)
+            if (Main.TourForExtraPlayer != -1)
             {
-                PlayersCoords[playerNames[playerNames.Length - 1]] = new MatchCoords(false, Main.ExtraPlayerTour, Main.Matches[Main.ExtraPlayerTour].Length - 1, 1);
+                PlayersCoords[playerNames[playerNames.Length - 1]] = new PlayerCoords(false, Main.TourForExtraPlayer, Main.Matches[Main.TourForExtraPlayer].Length - 1, 1);
             }
         }
         
@@ -92,11 +92,11 @@ namespace Tournament
                     throw new InvalidOperationException("Players are not ready.");
                 }
 
-                string loser = currentMatch.Opponents[(match.Player + 1) % 2];
+                string loser = currentMatch.Opponents[(match.IndexInPair + 1) % 2];
 
                 if (match.Tour == grid.Matches.Length - 1)
                 {
-                    currentMatch.Winner = match.Player;
+                    currentMatch.Winner = match.IndexInPair;
                     grid.Winner = winner;
                     PlayersCoords[winner] = _mainWinnerCoords;
 
@@ -138,17 +138,17 @@ namespace Tournament
             }
         }
 
-        private void MoveLoser(string player, MatchCoords match)
+        private void MoveLoser(string player, PlayerCoords match)
         {
             var currentMatch = Losers.Matches[match.Tour][match.MatchNumber];
-            currentMatch.Winner = match.Player;
-            SetValues(player, new MatchCoords(true, match.Tour + 1, match.MatchNumber / 2, match.MatchNumber % 2));
+            currentMatch.Winner = match.IndexInPair;
+            SetValues(player, new PlayerCoords(true, match.Tour + 1, match.MatchNumber / 2, match.MatchNumber % 2));
         }
 
-        private void MoveWinner(string player, MatchCoords match)
+        private void MoveWinner(string player, PlayerCoords match)
         {
             var currentMatch = Main.Matches[match.Tour][match.MatchNumber];
-            currentMatch.Winner = match.Player;
+            currentMatch.Winner = match.IndexInPair;
             bool extraPlayer = (Main.Matches[match.Tour].Length > 1 && Main.Matches[match.Tour].Length % 2 == 1 && match.MatchNumber == Main.Matches[match.Tour].Length - 1);
 
             if (extraPlayer)
@@ -157,7 +157,7 @@ namespace Tournament
             }
             else
             {
-                SetValues(player, new MatchCoords(false, match.Tour + 1, match.MatchNumber / 2, match.MatchNumber % 2));
+                SetValues(player, new PlayerCoords(false, match.Tour + 1, match.MatchNumber / 2, match.MatchNumber % 2));
             }
         }
 
@@ -167,12 +167,12 @@ namespace Tournament
             {
                 if (Main.Matches[i].Length % 2 == 1)
                 {
-                    SetValues(player, new MatchCoords(false, i + 1, Main.Matches[i + 1].Length - 1, 1));
+                    SetValues(player, new PlayerCoords(false, i + 1, Main.Matches[i + 1].Length - 1, 1));
                     break;
                 }
-                else if (i == Main.ExtraPlayerTour)
+                else if (i == Main.TourForExtraPlayer)
                 {
-                    SetValues(player, new MatchCoords(false, i, Main.Matches[i].Length - 1, 0));
+                    SetValues(player, new PlayerCoords(false, i, Main.Matches[i].Length - 1, 0));
                     break;
                 }
             }
@@ -197,7 +197,7 @@ namespace Tournament
             }
             else
             {
-                SetValues(loser, new MatchCoords(true, match.Tour, position, indexInPair));
+                SetValues(loser, new PlayerCoords(true, match.Tour, position, indexInPair));
             }
         }
 
@@ -220,14 +220,14 @@ namespace Tournament
 
                     if (numberOfPlayers % 2 == 1)
                     {
-                        SetValues(player, new MatchCoords(true, i, Losers.Matches[i].Length - 1, 1));
+                        SetValues(player, new PlayerCoords(true, i, Losers.Matches[i].Length - 1, 1));
                         break;
                     }
                 }
             }
         }
 
-        private void SetValues(string player, MatchCoords match)
+        private void SetValues(string player, PlayerCoords match)
         {
             Grid grid = Main;
 
@@ -236,11 +236,11 @@ namespace Tournament
                 grid = Losers;
             }
 
-            grid.Matches[match.Tour][match.MatchNumber].Opponents[match.Player] = player;
+            grid.Matches[match.Tour][match.MatchNumber].Opponents[match.IndexInPair] = player;
             PlayersCoords[player] = match;
         }
 
-        private void PlayFinale(MatchCoords winner)
+        private void PlayFinale(PlayerCoords winner)
         {
             if (Main.Winner == string.Empty || Losers.Winner == string.Empty)
             {

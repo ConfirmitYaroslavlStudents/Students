@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     public abstract class Drawer
     {
@@ -35,25 +35,25 @@ namespace Tournament
             return false;
         }
 
-        protected string CenterName(string name, int size)
+        protected string AlignName(string name, int size)
         {
-            StringBuilder refactored = new StringBuilder(size);
+            StringBuilder builder = new StringBuilder(size);
             int firstGap = (size - name.Length) / 2;
 
             for (int i = 0; i < firstGap; i++)
             {
-                refactored.Append(' ');
+                builder.Append(' ');
             }
 
-            refactored.Append(name);
+            builder.Append(name);
             int secondGap = size - name.Length - firstGap;
 
             for (int i = 0; i < secondGap; i++)
             {
-                refactored.Append(' ');
+                builder.Append(' ');
             }
 
-            return refactored.ToString();
+            return builder.ToString();
         }
 
         protected List<string>[] GetGridLines(Grid grid)

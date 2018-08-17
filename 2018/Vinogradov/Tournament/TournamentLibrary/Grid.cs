@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     [Serializable]
     public abstract class Grid

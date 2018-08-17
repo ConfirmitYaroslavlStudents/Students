@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     public class VerticalDrawer : Drawer
     {
@@ -66,13 +66,13 @@ namespace Tournament
             }
         }
 
-        private void PrintCell(Tournament tournament, bool loserGrid, List<string>[] lines, int line, int column)
+        private void PrintCell(Tournament tournament, bool isLoserGrid, List<string>[] lines, int line, int column)
         {
             string cell = lines[line][column];
 
             if (cell != null)
             {
-                if (line == lines.Length - 1 || GreenLight(tournament, loserGrid, line, column))
+                if (line == lines.Length - 1 || GreenLight(tournament, isLoserGrid, line, column))
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }

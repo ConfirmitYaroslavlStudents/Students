@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tournament
+namespace TournamentLibrary
 {
     public class HorizontalDrawer : Drawer
     {
@@ -40,20 +40,20 @@ namespace Tournament
             }
         }
 
-        private void PrintGrid(List<string>[] lines, Tournament tournament, bool loserGrid)
+        private void PrintGrid(List<string>[] lines, Tournament tournament, bool isLoserGrid)
         {
             for (int k = 0; k < lines.Length; k++)
             {
                 for (int i = 0; i < lines[k].Count; i++)
                 {
-                    PrintCell(tournament, loserGrid, lines, k, i);
+                    PrintCell(tournament, isLoserGrid, lines, k, i);
                 }
 
                 Console.WriteLine();
             }
         }
 
-        private void PrintCell(Tournament tournament, bool loserGrid, List<string>[] lines, int line, int column)
+        private void PrintCell(Tournament tournament, bool isLoserGrid, List<string>[] lines, int line, int column)
         {
             string cell = lines[line][column];
 
@@ -68,7 +68,7 @@ namespace Tournament
                     Console.Write(' ');
                 }
 
-                if (line == lines.Length - 1 || GreenLight(tournament, loserGrid, line, column))
+                if (line == lines.Length - 1 || GreenLight(tournament, isLoserGrid, line, column))
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
@@ -77,7 +77,7 @@ namespace Tournament
                 Console.ResetColor();
                 int gridLength = tournament.Main.Matches.Length;
 
-                if (loserGrid)
+                if (isLoserGrid)
                 {
                     gridLength = tournament.Losers.Matches.Length;
                 }

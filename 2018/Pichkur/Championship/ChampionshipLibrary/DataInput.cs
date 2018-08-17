@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Championship
+namespace ChampionshipLibrary
 {
     public class DataInput
     {

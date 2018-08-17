@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ChampionshipLibrary;
 
-namespace Championship
+namespace GridRendererLibrary
 {
     public abstract class GridRenderer
     {

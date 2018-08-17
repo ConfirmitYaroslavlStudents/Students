@@ -1,4 +1,4 @@
-﻿namespace Championship
+﻿namespace GridRendererLibrary
 {
     public enum GridRendererType
     {

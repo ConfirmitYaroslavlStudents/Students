@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ChampionshipLibrary;
 
-namespace Championship
+namespace GridRendererLibrary
 {
     public class DoubleSideGridRenderer
     {

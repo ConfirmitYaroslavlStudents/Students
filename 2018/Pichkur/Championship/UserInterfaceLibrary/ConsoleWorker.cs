@@ -1,6 +1,7 @@
 ﻿using System;
+using ChampionshipLibrary;
 
-namespace Championship
+namespace UserInterfaceLibrary
 {
     public class ConsoleWorker : IDataInputWorker
     {

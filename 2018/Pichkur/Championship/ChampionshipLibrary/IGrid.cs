@@ -1,4 +1,4 @@
-﻿namespace Championship
+﻿namespace ChampionshipLibrary
 {
     public interface IGrid
     {

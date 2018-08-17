@@ -49,12 +49,14 @@
     <Compile Include="IGrid.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="Messages.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveLoadSystem.cs" />
     <Compile Include="SingleChampionshipManager.cs" />
     <Compile Include="SingleEliminationGrid.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Tour.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

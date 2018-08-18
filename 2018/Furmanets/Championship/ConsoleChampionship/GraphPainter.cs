@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Championship;
 
 namespace ConsoleChampionship
@@ -13,15 +14,15 @@ namespace ConsoleChampionship
             {
                 switch (meeting.Winner)
                 {
-                    case MeetingWinningIndicator.MatchDidNotTakePlace:
+                    case MeetingWinner.MatchDidNotTakePlace:
                         Console.Write(meeting.FirstPlayer);
                         break;
-                    case MeetingWinningIndicator.FirstPlayer:
+                    case MeetingWinner.FirstPlayer:
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(meeting.FirstPlayer + " " + meeting.Score[0]);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
-                    case MeetingWinningIndicator.SecondPlayer:
+                    case MeetingWinner.SecondPlayer:
                         Console.Write(meeting.FirstPlayer + " " + meeting.Score[0]);
                         break;
                     default:
@@ -32,15 +33,15 @@ namespace ConsoleChampionship
 
             switch (meeting.Winner)
             {
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     Console.Write(meeting.SecondPlayer);
                     break;
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(meeting.SecondPlayer + " " + meeting.Score[1]);
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     Console.Write(meeting.SecondPlayer + " " + meeting.Score[1]);
                     break;
                 default:
@@ -48,19 +49,19 @@ namespace ConsoleChampionship
             }
         }
 
-        public void WriteNameWinnerInFinalRound(Tournament tournament)
+        public void WriteNameWinnerInFinalRound(List<Round> tournamentRounds)
         {
-            var finalRound = tournament.TournamentRounds[tournament.TournamentRounds.Count - 1];
+            var finalRound = tournamentRounds[tournamentRounds.Count - 1];
 
             switch (finalRound.Meetings[0].Winner)
             {
-                case MeetingWinningIndicator.FirstPlayer:
-                    Console.WriteLine(finalRound.Meetings[0].FirstPlayer);
+                case MeetingWinner.FirstPlayer:
+                    Console.Write(finalRound.Meetings[0].FirstPlayer);
                     break;
-                case MeetingWinningIndicator.SecondPlayer:
-                    Console.WriteLine(finalRound.Meetings[0].SecondPlayer);
+                case MeetingWinner.SecondPlayer:
+                    Console.Write(finalRound.Meetings[0].SecondPlayer);
                     break;
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -94,6 +95,11 @@ namespace ConsoleChampionship
             }
 
             return "1/" + round;
+        }
+
+        public string PrintLosersRound(int round)
+        {
+            return "L.Round " + round;
         }
     }
 }

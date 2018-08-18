@@ -11,14 +11,15 @@ namespace ConsoleChampionship
             var nextCursorPositionLeft = 10;
             var nextDistanceBeetwinPalyers = 3;
             var isFirstRound = true;
+            var tournamentRounds = tournament.GetTournamentToPrint();
 
-            var horisontalSizeWindow = GetMaxLengthNameInRound(tournament.TournamentRounds[0]);
-            horisontalSizeWindow *= tournament.TournamentRounds[0].Meetings.Count * nextDistanceBeetwinPalyers;
-            horisontalSizeWindow += nextCursorPositionLeft*2;
+            var horisontalSizeWindow = GetMaxLengthNameInRound(tournamentRounds[0][0]);
+            horisontalSizeWindow *= tournamentRounds[0][0].Meetings.Count * nextDistanceBeetwinPalyers;
+            horisontalSizeWindow += nextCursorPositionLeft * 2;
 
             Console.SetWindowSize(horisontalSizeWindow, 30);
 
-            foreach (var round in tournament.TournamentRounds)
+            foreach (var round in tournamentRounds[0])
             {
                 var maxLengthNameInRound = GetMaxLengthNameInRound(round);
 
@@ -33,10 +34,9 @@ namespace ConsoleChampionship
                 {
                     var meeting = round.Meetings[j];
 
-                    if (meeting.FirstPlayer == null && meeting.SecondPlayer == null && isFirstRound)
-                    {
-                        continue;
-                    }
+                    var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
+                                         && meeting.SecondPlayer == null
+                                         && round.Equals(tournamentRounds[0]);
 
                     if (isFirstRound)
                     {
@@ -54,16 +54,23 @@ namespace ConsoleChampionship
 
                     positionCursorLeft += distanceBetweenPlayers;
 
-                    for (var i = 0; i < distanceBetweenPlayers-1; i++)
+                    if (!isEmptyMeetingInFirstRound)
                     {
-                        Console.Write("-");
+                        for (var i = 0; i < distanceBetweenPlayers - 1; i++)
+                        {
+                            Console.Write("-");
+                        }
                     }
 
                     var lineForNextStage = Console.CursorLeft - distanceBetweenPlayers / 2 - 1;
                     for (var i = 1; i < 5; i++)
                     {
                         Console.SetCursorPosition(lineForNextStage, positionCursorTop + i);
-                        Console.Write("|");
+
+                        if (!isEmptyMeetingInFirstRound)
+                        {
+                            Console.Write("|");
+                        }
                     }
 
                     switch (j)
@@ -89,22 +96,22 @@ namespace ConsoleChampionship
                 isFirstRound = false;
             }
 
-            var lastMeeting = tournament.TournamentRounds[tournament.TournamentRounds.Count - 1].Meetings[0];
+            var lastMeeting = tournamentRounds[0][tournamentRounds[0].Count - 1].Meetings[0];
 
             switch (lastMeeting.Winner)
             {
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     nextCursorPositionLeft -= lastMeeting.SecondPlayer.Length / 2 - 1;
                     break;
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     nextCursorPositionLeft -= lastMeeting.FirstPlayer.Length / 2 - 1;
                     break;
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     break;
             }
 
             Console.SetCursorPosition(nextCursorPositionLeft, nextCursorPositionTop);
-            WriteNameWinnerInFinalRound(tournament);
+            WriteNameWinnerInFinalRound(tournamentRounds[0]);
         }
 
         public override void WriteNamePlayer(Meeting meeting, bool isFirst)
@@ -113,15 +120,15 @@ namespace ConsoleChampionship
             {
                 switch (meeting.Winner)
                 {
-                    case MeetingWinningIndicator.MatchDidNotTakePlace:
+                    case MeetingWinner.MatchDidNotTakePlace:
                         Console.Write(meeting.FirstPlayer);
                         break;
-                    case MeetingWinningIndicator.FirstPlayer:
-                        WriteName(meeting.FirstPlayer, meeting.Score[1]);
+                    case MeetingWinner.FirstPlayer:
+                        WriteName(meeting.FirstPlayer, meeting.Score[0]);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
-                    case MeetingWinningIndicator.SecondPlayer:
-                        WriteName(meeting.FirstPlayer, meeting.Score[1]);
+                    case MeetingWinner.SecondPlayer:
+                        WriteName(meeting.FirstPlayer, meeting.Score[0]);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -131,15 +138,15 @@ namespace ConsoleChampionship
 
             switch (meeting.Winner)
             {
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     Console.Write(meeting.SecondPlayer);
                     break;
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     Console.ForegroundColor = ConsoleColor.Green;
                     WriteName(meeting.SecondPlayer, meeting.Score[1]);
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     WriteName(meeting.SecondPlayer, meeting.Score[1]);
                     break;
                 default:
@@ -151,9 +158,10 @@ namespace ConsoleChampionship
         private void WriteName(string name, int score)
         {
             Console.Write(name);
-            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop + 1);
+            Console.CursorLeft--;
+            Console.CursorTop++;
             Console.Write(score);
-            Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
+            Console.CursorTop--;
         }
     }
 }

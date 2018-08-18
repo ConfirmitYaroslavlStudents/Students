@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Championship
 {
-    public class ConstructorTournament
+    class SingleConstructorTournament
     {
-        public static List<Round> CreateTournament(List<string> players)
+        public List<Round> CreateTournament(List<string> players)
         {
             players = RandomSortPlayers(players);
-            var tournamentGrid = CreateTournamentGrid(players.Count);
+            var tournamentGrid = CreateSingleEliminationTournamentGrid(players.Count);
             tournamentGrid = ArrangementOfPlayersInTournamentGrid(players, tournamentGrid);
             return tournamentGrid;
         }
 
-        private static List<Round> CreateTournamentGrid(int playersCount)
+        private static List<Round> CreateSingleEliminationTournamentGrid(int playersCount)
         {
             var tournament = new List<Round>();
             var stage = 1;

@@ -10,11 +10,10 @@ namespace ConsoleChampionship
     {
         private static Tournament _championship;
         private static readonly List<string> _players = new List<string>();
+        private static readonly IFileManager _fileManager = new BinaryFileManager();
 
         static void Main()
         {
-            _championship = FileManager.DownloadTournamentFromFile();
-
             var mainMenu = new List<MenuItem>
             {
                 new MenuItem(Start, "Start"),
@@ -22,6 +21,7 @@ namespace ConsoleChampionship
                 new MenuItem(ResetTournament, "Reset tournament"),
             };
 
+            _championship = _fileManager.ReadFromFile();
             var mnMenu = new Menu(mainMenu, "Championship");
             mnMenu.Start();
         }
@@ -37,10 +37,36 @@ namespace ConsoleChampionship
                     return;
                 }
 
-                _championship = new Tournament(_players);
-                FileManager.WriteTournamentInFile(_championship);
+                var tournamentMenuList = new List<MenuItem>
+                {
+                    new MenuItem(CreateSingeEliminationTournament, "SingleElimination"),
+                    new MenuItem(CreateDoubleEliminationTournament, "DoubleElimination"),
+                };
+                var tournamentMenu = new Menu(tournamentMenuList, "Championship");
+                tournamentMenu.Start();
             }
+            else
+            {
+                MenuTournament();
+            }
+        }
 
+        private static void CreateDoubleEliminationTournament()
+        {
+            _championship = new DoubleEliminationTournament(_players);
+            _fileManager.WriteToFile(_championship);
+            MenuTournament();
+        }
+
+        private static void CreateSingeEliminationTournament()
+        {
+            _championship = new SingleElimitationTournament(_players);
+            _fileManager.WriteToFile(_championship);
+            MenuTournament();
+        }
+
+        static void MenuTournament()
+        {
             var tournamentMenuList = new List<MenuItem>
             {
                 new MenuItem(EnterResults, "Enter match results"),
@@ -50,46 +76,27 @@ namespace ConsoleChampionship
             tournamentMenu.Start();
         }
 
-        static void EnterResults()
-        {
-            if (_championship.IndexOfRound >= _championship.TournamentRounds.Count)
-            {
-                Console.WriteLine("All matches are over.");
-                Thread.Sleep(1000);
-                return;
-            }
-
-            var resultsOfRound = new List<int[]>();
-
-            foreach (var meeting in _championship.TournamentRounds[_championship.IndexOfRound].Meetings)
-            {
-                resultsOfRound.Add(UserInteractor.GetResultOfMatch(meeting));
-            }
-
-            _championship.CollectorResults(resultsOfRound);
-            FileManager.WriteTournamentInFile(_championship);
-        }
-
-        static void MenuGraphPrint()
+        private static void MenuGraphPrint()
         {
             var menuGraph = new List<MenuItem>
             {
                 new MenuItem(PaintVerticalGraph, "Show vertical version"),
                 new MenuItem(PaintHorisontalGraph, "Show horisontal version"),
+               // new MenuItem(PaintOnTwoSideGraph, "Show on two side version")
             };
             var graphMenu = new Menu(menuGraph, "Championship");
             graphMenu.Start();
         }
 
-        static void PaintVerticalGraph()
+        private static void PaintVerticalGraph()
         {
             Console.ForegroundColor = ConsoleColor.White;
             var vertical = new VerticalGraphPainter();
-            vertical.PaintGraph(_championship);
+            vertical.PaintGraph(Program._championship);
             Console.ReadKey();
         }
 
-        static void PaintHorisontalGraph()
+        private static void PaintHorisontalGraph()
         {
             Console.ForegroundColor = ConsoleColor.White;
             var horisontal = new HorisontalGraphPainter();
@@ -97,12 +104,35 @@ namespace ConsoleChampionship
             Console.ReadKey();
         }
 
+        private static void PaintOnTwoSideGraph()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            var onTwoSide = new OnTwoSidesGraphPainter();
+            onTwoSide.PaintGraph(_championship);
+            Console.ReadKey();
+        }
+
+        static void EnterResults()
+        {
+
+            if (_championship.GetNextMeeting() == null)
+            {
+                Console.WriteLine("All matches are over.");
+                Thread.Sleep(1000);
+                return;
+            }
+
+            var meeting = _championship.GetNextMeeting();
+            _championship.CollectResults(UserInteractor.GetResultOfMatch(meeting));
+
+            _fileManager.WriteToFile(_championship);
+        }
 
         private static void MenuAddPlayers()
         {
             var addPlayerMenuList = new List<MenuItem>
             {
-                new MenuItem(AddPlayer, "Add player")
+                new MenuItem(AddPlayer, "Add players")
             };
 
             var addPlayerMenu = new Menu(addPlayerMenuList, "Championship");
@@ -111,22 +141,48 @@ namespace ConsoleChampionship
 
         private static void AddPlayer()
         {
-            Console.Write("Write player name: ");
-            var name = Console.ReadLine();
+            Console.Write("Write count of players: ");
+            var countPlayers = Console.ReadLine();
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(countPlayers))
             {
-                Console.WriteLine("Empty name player.");
+                Console.WriteLine("Empty count players.");
                 Thread.Sleep(1000);
+                AddPlayer();
                 return;
             }
-            _players.Add(name);
+
+            foreach (var digit in countPlayers)
+            {
+                if (!char.IsDigit(digit))
+                {
+                    Console.WriteLine("Error count players.");
+                    Thread.Sleep(1000);
+                    AddPlayer();
+                    return;
+                }
+            }
+
+            for (var i = 0; i < int.Parse(countPlayers); i++)
+            {
+                Console.Write($"Write name player number {i}: ");
+                var name = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    Console.WriteLine("Empty name players.");
+                    i--;
+                    continue;
+                }
+                _players.Add(name);
+            }
+
         }
 
         private static void ResetTournament()
         {
             _championship = null;
-            FileManager.RemoveFile();
+            _fileManager.DeleteFile();
         }
     }
 }

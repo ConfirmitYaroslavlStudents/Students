@@ -1,6 +1,6 @@
 ﻿namespace Championship
 {
-    public enum MeetingWinningIndicator
+    public enum MeetingWinner
     {
         MatchDidNotTakePlace,
         FirstPlayer,

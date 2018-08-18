@@ -1,0 +1,21 @@
+﻿<Window x:Class="TournamentsWpfForms.TournamentPlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TournamentsWpfForms"
+        mc:Ignorable="d"
+        Title="TournamentPlayWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="23,30,0,0" VerticalAlignment="Top"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="137,30,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.319,-0.098"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="66,33,0,0" TextWrapping="Wrap" Text="--" VerticalAlignment="Top" Width="24"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="108,33,0,0" TextWrapping="Wrap" Text="--" VerticalAlignment="Top" Width="24"/>
+        <Label Content=":" HorizontalAlignment="Left" Margin="90,31,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.469,0.587"/>
+        <Button Content="Enter result" HorizontalAlignment="Left" Margin="23,62,0,0" VerticalAlignment="Top" Width="152"/>
+    </Grid>
+</Window>

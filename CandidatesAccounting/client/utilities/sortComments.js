@@ -4,7 +4,7 @@ const sortComments = (comments) => {
   })
 }
 
-function sortByDateTime(a, b) {
+const sortByDateTime = (a, b) => {
   const aSplited = a.split(' ')
   const aTime = aSplited[0].split(':')
   if (!aTime[2])

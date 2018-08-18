@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DateTimePicker from '../../../commonComponents/UIComponentDecorators/dateTimePicker'
+import DateTimePicker from '../../../components/decorators/dateTimePicker'
 import styled from 'styled-components'
 import ResumeUploader from './resumeUploader'
 import { toDateTimePickerFormat, fromDateTimePickerFormat } from '../../../utilities/customMoment'

@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DeleteAllIcon from '@material-ui/icons/DeleteSweep'
 import NoticeIcon from '@material-ui/icons/Markunread'
-import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
+import IconButton from '../../components/decorators/iconButton'
 import NotificationBlock from './notificationBlock'
-import { MediumSmallButtonStyle } from '../../commonComponents/styleObjects'
+import { MediumSmallButtonStyle } from '../../components/styleObjects'
 import styled from 'styled-components'
 
 export default function NotificationCenter(props) {

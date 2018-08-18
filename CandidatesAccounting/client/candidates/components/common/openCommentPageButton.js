@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { MediumButtonStyle } from '../../../commonComponents/styleObjects'
-import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
+import { MediumButtonStyle } from '../../../components/styleObjects'
+import IconButton from '../../../components/decorators/iconButton'
 import CommentIcon from '@material-ui/icons/ViewList'
-import Badge from '../../../commonComponents/UIComponentDecorators/badge'
-import NavLink from '../../../commonComponents/linkWrapper'
+import Badge from '../../../components/decorators/badge'
+import NavLink from '../../../components/linkWrapper'
 
 const OpenCommentPageButton = (props) => {
   return (

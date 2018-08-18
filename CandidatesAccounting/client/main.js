@@ -13,8 +13,10 @@ import createPalette from '@material-ui/core/styles/createPalette'
 import indigo from '@material-ui/core/colors/indigo'
 import deepOrange from '@material-ui/core/colors/deepOrange'
 import AppView from './layout/appview'
-import createStore from './utilities/createStore'
-import { getInitialStateFromServer } from './applicationActions'
+import { getInitialStateFromServer, init } from './applicationActions'
+// todo
+import { sagaMiddleware, sagaRun, createStore  } from './utilities/createStore'
+import { applyMiddleware } from 'redux'
 
 const username = window['APP_CONFIG'].username
 
@@ -32,14 +34,16 @@ const theme = createMuiTheme({
 
 const history = createBrowserHistory()
 
-const store = createStore(reducer, username, history)
+const store = createStore(reducer, history)
+
+store.dispatch(init({ username }))
 
 const renderApp = (app) => {
   ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <Router history={history}>
-          <Route path='/' component={app}/>
+          <Route path='/' component={app} />
         </Router>
       </Provider>
     </MuiThemeProvider>,
@@ -60,4 +64,21 @@ if (module.hot) {
     const nextApp = require('./layout/appview').default
     renderApp(nextApp)
   })
+
+  module.hot.accept('./rootReducer', () => {
+    const nextReducer = require('./rootReducer').default
+    store.replaceReducer(nextReducer)
+  })
+
+  /*
+  module.hot.accept('./rootSaga', () => {
+    const newRootSaga = require('./rootSaga').default
+    sagaRun.cancel()
+    sagaRun.done.then(() => {
+      sagaRun = sagaMiddleware.run(function* replaceSaga() {
+        yield newRootSaga({ history })
+      })
+    })
+  })
+  */
 }

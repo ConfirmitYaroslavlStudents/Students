@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
+import IconButton from '../../components/decorators/iconButton'
 import SignOutIcon from '@material-ui/icons/ExitToApp'
-import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
+import Spinner from '../../components/decorators/spinner'
 import styled from 'styled-components'
 
 const SignOutButton = (props) => {

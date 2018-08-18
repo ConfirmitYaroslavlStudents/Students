@@ -1,1 +1,1 @@
-show.must('p1').go('p2').on(add)
+show.must('p1').go('p2').on(add);

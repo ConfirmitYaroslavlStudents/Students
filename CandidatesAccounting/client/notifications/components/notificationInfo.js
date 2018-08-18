@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DeleteIcon from '@material-ui/icons/Cancel'
 import { formatDateTime } from '../../utilities/customMoment'
-import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
-import { SmallerIconStyle, SmallButtonStyle } from '../../commonComponents/styleObjects'
+import IconButton from '../../components/decorators/iconButton'
+import { SmallerIconStyle, SmallButtonStyle } from '../../components/styleObjects'
 import styled from 'styled-components'
 
 const NotificationInfo = (props) => {

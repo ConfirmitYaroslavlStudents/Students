@@ -5,12 +5,12 @@ import * as actions from '../../actions'
 import { SELECTORS } from '../../../rootReducer'
 import { checkCandidateValidation } from '../../../utilities/candidateValidators'
 import Candidate from '../../../utilities/candidate'
-import DialogWindow from '../../../commonComponents/UIComponentDecorators/dialogWindow'
+import DialogWindow from '../../../components/decorators/dialogWindow'
 import LoadableCandidateUpdateForm from './loadableUpdateCandidateForm'
 import AddCandidateDialogActions from './addCandidateDialogActions'
 import AddPersonIcon from '@material-ui/icons/PersonAdd'
-import IconButton from '../../../commonComponents/UIComponentDecorators/iconButton'
-import {MediumButtonStyle} from '../../../commonComponents/styleObjects'
+import IconButton from '../../../components/decorators/iconButton'
+import {MediumButtonStyle} from '../../../components/styleObjects'
 
 class AddCandidateDialog extends Component{
   constructor(props) {

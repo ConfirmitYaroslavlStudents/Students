@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import UploadIcon from '@material-ui/icons/FileUpload'
-import FileUploader from '../../../commonComponents/fileUploader'
-import ImageAvatar from '../../../commonComponents/UIComponentDecorators/imageAvatar'
-import LetterAvatar from '../../../commonComponents/UIComponentDecorators/letterAvatar'
-import { SmallerIconStyle, SmallButtonStyle } from '../../../commonComponents/styleObjects'
+import UploadIcon from '@material-ui/icons/CloudUpload'
+import FileUploader from '../../../components/fileUploader'
+import ImageAvatar from '../../../components/decorators/imageAvatar'
+import LetterAvatar from '../../../components/decorators/letterAvatar'
+import { SmallerIconStyle, SmallButtonStyle } from '../../../components/styleObjects'
 import styled from 'styled-components'
 
 const AvatarUploader = (props) => {

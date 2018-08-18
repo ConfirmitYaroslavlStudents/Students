@@ -12,12 +12,12 @@ import LoadableAddCommentPanel from './loadableAddCommentPanel'
 import sortComments from '../../utilities/sortComments'
 import getRandomColor from '../../utilities/getRandomColor'
 import Grid from '@material-ui/core/Grid'
-import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
+import Spinner from '../../components/decorators/spinner'
 import CandidateCard from '../../candidates/components/common/card'
 import styled from 'styled-components'
-import IconButton from '../../commonComponents/UIComponentDecorators/iconButton'
+import IconButton from '../../components/decorators/iconButton'
 import ArrowDownIcon from '@material-ui/icons/ArrowDownward'
-import { BigButtonStyle, MediumIconStyle } from '../../commonComponents/styleObjects'
+import { BigButtonStyle, MediumIconStyle } from '../../components/styleObjects'
 
 class CommentsPage extends Component {
   constructor(props) {

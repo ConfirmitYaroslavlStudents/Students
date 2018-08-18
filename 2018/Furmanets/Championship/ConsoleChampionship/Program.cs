@@ -10,11 +10,10 @@ namespace ConsoleChampionship
     {
         private static Tournament _championship;
         private static readonly List<string> _players = new List<string>();
+        private static readonly IFileManager _fileManager = new BinaryFileManager();
 
         static void Main()
         {
-            _championship = FileManager.DownloadTournamentFromFile();
-
             var mainMenu = new List<MenuItem>
             {
                 new MenuItem(Start, "Start"),
@@ -22,6 +21,7 @@ namespace ConsoleChampionship
                 new MenuItem(ResetTournament, "Reset tournament"),
             };
 
+            _championship = _fileManager.ReadFromFile();
             var mnMenu = new Menu(mainMenu, "Championship");
             mnMenu.Start();
         }
@@ -54,14 +54,14 @@ namespace ConsoleChampionship
         private static void CreateDoubleEliminationTournament()
         {
             _championship = new DoubleEliminationTournament(_players);
-            FileManager.WriteTournamentInFile(_championship);
+            _fileManager.WriteToFile(_championship);
             MenuTournament();
         }
 
         private static void CreateSingeEliminationTournament()
         {
             _championship = new SingleElimitationTournament(_players);
-            FileManager.WriteTournamentInFile(_championship);
+            _fileManager.WriteToFile(_championship);
             MenuTournament();
         }
 
@@ -115,17 +115,17 @@ namespace ConsoleChampionship
         static void EnterResults()
         {
 
-            if (_championship.NextMeeting() == null)
+            if (_championship.GetNextMeeting() == null)
             {
                 Console.WriteLine("All matches are over.");
                 Thread.Sleep(1000);
                 return;
             }
 
-            var meeting = _championship.NextMeeting();
-            _championship.CollectorResults(UserInteractor.GetResultOfMatch(meeting));
+            var meeting = _championship.GetNextMeeting();
+            _championship.CollectResults(UserInteractor.GetResultOfMatch(meeting));
 
-            FileManager.WriteTournamentInFile(_championship);
+            _fileManager.WriteToFile(_championship);
         }
 
         private static void MenuAddPlayers()
@@ -182,7 +182,7 @@ namespace ConsoleChampionship
         private static void ResetTournament()
         {
             _championship = null;
-            FileManager.RemoveFile();
+            _fileManager.DeleteFile();
         }
     }
 }

@@ -1,16 +1,17 @@
 ﻿using System.Windows;
 using Championship;
-using ConsoleChampionship;
 
 namespace TournamentsWpfForms
 {
     public partial class MainMenuWindow
     {
         private Tournament _tournament;
+        private IFileManager _fileManager;
 
         public MainMenuWindow()
         {
             InitializeComponent();
+            _fileManager = new BinaryFileManager();
         }
 
         private void ClickStart(object sender, RoutedEventArgs e)
@@ -35,7 +36,7 @@ namespace TournamentsWpfForms
 
         private void Click_Load(object sender, RoutedEventArgs e)
         {
-            _tournament = FileManager.DownloadTournamentFromFile();
+            _tournament = _fileManager.ReadFromFile();
 
             if (_tournament != null)
             {

@@ -15,7 +15,7 @@ namespace Championship
             IndexOfRound = 0;
         }
 
-        public override void CollectorResults(int[] resultMatch)
+        public override void CollectResults(int[] resultMatch)
         {
             var round = _tournamentRounds[IndexOfRound];
             var meeting = round.Meetings[IndexOfMatch];
@@ -39,7 +39,7 @@ namespace Championship
             return new []{CloneTournament(_tournamentRounds)};
         }
 
-        public override Meeting NextMeeting()
+        public override Meeting GetNextMeeting()
         {
             return _tournamentRounds.Count <= IndexOfRound ? null : _tournamentRounds[IndexOfRound].Meetings[IndexOfMatch];
         }
@@ -57,12 +57,12 @@ namespace Championship
             if (meeting.Score[0] > meeting.Score[1])
             {
                 PromotionWinnerToNextStage(meeting, meeting.FirstPlayer);
-                meeting.Winner = MeetingWinningIndicator.FirstPlayer;
+                meeting.Winner = MeetingWinner.FirstPlayer;
             }
             else
             {
                 PromotionWinnerToNextStage(meeting, meeting.SecondPlayer);
-                meeting.Winner = MeetingWinningIndicator.SecondPlayer;
+                meeting.Winner = MeetingWinner.SecondPlayer;
             }
         }
     }

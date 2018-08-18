@@ -49,12 +49,12 @@ namespace ConsoleChampionship
                 if (_upperGridWinnerTop + indexForWriteLine == i)
                 {
                     Console.Write("-----");
-                    if (finalUpperAndLowerGrids.Winner == MeetingWinningIndicator.FirstPlayer)
+                    if (finalUpperAndLowerGrids.Winner == MeetingWinner.FirstPlayer)
                     {
                         WriteNamePlayer(finalUpperAndLowerGrids, true);
                     }
 
-                    if (finalUpperAndLowerGrids.Winner == MeetingWinningIndicator.SecondPlayer)
+                    if (finalUpperAndLowerGrids.Winner == MeetingWinner.SecondPlayer)
                     {
                         WriteNamePlayer(finalUpperAndLowerGrids, false);
                     }

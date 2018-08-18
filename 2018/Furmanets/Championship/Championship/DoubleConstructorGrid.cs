@@ -2,7 +2,7 @@
 
 namespace Championship
 {
-    public class DoubleConstructorGrid
+    public class DoubleGridConstructor
     {
         public List<Round> CreateTournamentGrid(int countPlayers)
         {

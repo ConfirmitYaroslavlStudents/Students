@@ -1,14 +1,13 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Championship;
 
-namespace ConsoleChampionship
+namespace Championship
 {
-    public class FileManager
+    public class BinaryFileManager : IFileManager
     {
         private const string _nameFile = "tournament";
 
-        public static void WriteTournamentInFile(Tournament tournament)
+        public void WriteToFile(Tournament tournament)
         {
             var binaryFormatter = new BinaryFormatter();
             using (var file = new FileStream(_nameFile, FileMode.Create))
@@ -17,7 +16,7 @@ namespace ConsoleChampionship
             }
         }
 
-        public static Tournament DownloadTournamentFromFile()
+        public Tournament ReadFromFile()
         {
             if (!File.Exists(_nameFile))
             {
@@ -33,7 +32,7 @@ namespace ConsoleChampionship
             return tournament;
         }
 
-        public static void RemoveFile()
+        public void DeleteFile()
         {
             if (File.Exists(_nameFile))
             {

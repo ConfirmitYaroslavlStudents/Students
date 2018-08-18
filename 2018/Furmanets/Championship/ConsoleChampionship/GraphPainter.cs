@@ -14,15 +14,15 @@ namespace ConsoleChampionship
             {
                 switch (meeting.Winner)
                 {
-                    case MeetingWinningIndicator.MatchDidNotTakePlace:
+                    case MeetingWinner.MatchDidNotTakePlace:
                         Console.Write(meeting.FirstPlayer);
                         break;
-                    case MeetingWinningIndicator.FirstPlayer:
+                    case MeetingWinner.FirstPlayer:
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(meeting.FirstPlayer + " " + meeting.Score[0]);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
-                    case MeetingWinningIndicator.SecondPlayer:
+                    case MeetingWinner.SecondPlayer:
                         Console.Write(meeting.FirstPlayer + " " + meeting.Score[0]);
                         break;
                     default:
@@ -33,15 +33,15 @@ namespace ConsoleChampionship
 
             switch (meeting.Winner)
             {
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     Console.Write(meeting.SecondPlayer);
                     break;
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write(meeting.SecondPlayer + " " + meeting.Score[1]);
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     Console.Write(meeting.SecondPlayer + " " + meeting.Score[1]);
                     break;
                 default:
@@ -55,13 +55,13 @@ namespace ConsoleChampionship
 
             switch (finalRound.Meetings[0].Winner)
             {
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     Console.Write(finalRound.Meetings[0].FirstPlayer);
                     break;
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     Console.Write(finalRound.Meetings[0].SecondPlayer);
                     break;
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

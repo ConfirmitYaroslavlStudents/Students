@@ -9,9 +9,9 @@ namespace Championship
         protected int IndexOfRound;
         protected int IndexOfMatch;
 
-        public abstract void CollectorResults(int[] resultMatch);
+        public abstract void CollectResults(int[] resultMatch);
         public abstract List<Round>[] GetTournamentToPrint();
-        public abstract Meeting NextMeeting();
+        public abstract Meeting GetNextMeeting();
 
         protected virtual void PromotionWinnerToNextStage(Meeting meeting, string player)
         {

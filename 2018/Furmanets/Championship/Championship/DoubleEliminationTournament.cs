@@ -11,12 +11,12 @@ namespace Championship
         private int _indexLowerRounds;
         private int _indexLowerMeetings;
         private bool _nextMatchIsUpper = true;
-        private Meeting _finalUpperAndLowerGrids;
+        private readonly Meeting _finalUpperAndLowerGrids;
 
 
         public DoubleEliminationTournament(List<string> players)
         {
-            var doubleConstructorTournament = new DoubleConstructorGrid();
+            var doubleConstructorTournament = new DoubleGridConstructor();
             var singleConstructorTournament = new SingleConstructorTournament();
 
             _lowerGrid = doubleConstructorTournament.CreateTournamentGrid(players.Count);
@@ -32,9 +32,9 @@ namespace Championship
             _indexLowerMeetings = 0;
         }
 
-        public override void CollectorResults(int[] resultMatch)
+        public override void CollectResults(int[] resultMatch)
         {
-            var currentMeeting = NextMeeting();
+            var currentMeeting = GetNextMeeting();
 
             currentMeeting.Score = resultMatch;
             ChooseWinner(currentMeeting, _nextMatchIsUpper);
@@ -86,7 +86,7 @@ namespace Championship
             return tournaments;
         }
 
-        public override Meeting NextMeeting()
+        public override Meeting GetNextMeeting()
         {
             if (IndexOfRound > _upperGrid.Count + 1)
             {
@@ -125,7 +125,7 @@ namespace Championship
                 {
                     PromotionLoserToNextStage(meeting.SecondPlayer);
                 }
-                meeting.Winner = MeetingWinningIndicator.FirstPlayer;
+                meeting.Winner = MeetingWinner.FirstPlayer;
             }
             else
             {
@@ -135,7 +135,7 @@ namespace Championship
                 {
                     PromotionLoserToNextStage(meeting.FirstPlayer);
                 }
-                meeting.Winner = MeetingWinningIndicator.SecondPlayer;
+                meeting.Winner = MeetingWinner.SecondPlayer;
             }
         }
 

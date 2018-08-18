@@ -9,12 +9,12 @@ namespace Championship
         public string SecondPlayer;
         public int[] Score;
         public Meeting NextStage;
-        public MeetingWinningIndicator Winner;
+        public MeetingWinner Winner;
 
         public Meeting()
         {
             Score = new int[2];
-            Winner = MeetingWinningIndicator.MatchDidNotTakePlace;
+            Winner = MeetingWinner.MatchDidNotTakePlace;
         }
 
         public Meeting CloneMeeting()

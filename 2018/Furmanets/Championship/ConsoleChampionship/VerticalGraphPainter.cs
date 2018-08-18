@@ -100,13 +100,13 @@ namespace ConsoleChampionship
 
             switch (lastMeeting.Winner)
             {
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     nextCursorPositionLeft -= lastMeeting.SecondPlayer.Length / 2 - 1;
                     break;
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     nextCursorPositionLeft -= lastMeeting.FirstPlayer.Length / 2 - 1;
                     break;
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     break;
             }
 
@@ -120,14 +120,14 @@ namespace ConsoleChampionship
             {
                 switch (meeting.Winner)
                 {
-                    case MeetingWinningIndicator.MatchDidNotTakePlace:
+                    case MeetingWinner.MatchDidNotTakePlace:
                         Console.Write(meeting.FirstPlayer);
                         break;
-                    case MeetingWinningIndicator.FirstPlayer:
+                    case MeetingWinner.FirstPlayer:
                         WriteName(meeting.FirstPlayer, meeting.Score[0]);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
-                    case MeetingWinningIndicator.SecondPlayer:
+                    case MeetingWinner.SecondPlayer:
                         WriteName(meeting.FirstPlayer, meeting.Score[0]);
                         break;
                     default:
@@ -138,15 +138,15 @@ namespace ConsoleChampionship
 
             switch (meeting.Winner)
             {
-                case MeetingWinningIndicator.MatchDidNotTakePlace:
+                case MeetingWinner.MatchDidNotTakePlace:
                     Console.Write(meeting.SecondPlayer);
                     break;
-                case MeetingWinningIndicator.SecondPlayer:
+                case MeetingWinner.SecondPlayer:
                     Console.ForegroundColor = ConsoleColor.Green;
                     WriteName(meeting.SecondPlayer, meeting.Score[1]);
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case MeetingWinningIndicator.FirstPlayer:
+                case MeetingWinner.FirstPlayer:
                     WriteName(meeting.SecondPlayer, meeting.Score[1]);
                     break;
                 default:

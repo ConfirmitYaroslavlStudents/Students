@@ -24,10 +24,19 @@ export const fallenTestSaveStrategies = {
 }
 
 const toMatchScreenshot = async (testController, selector, options) => {
+  const userOptions =
+    typeof options === 'object' ?
+      options
+      :
+      typeof options === 'string' ?
+        { screenshotName: options }
+        :
+        {}
+
   const screenshotHandlerOptions = {
     ...defaultOptions,
     ...getUserGeneralOptions(testController.testRun.test.testFile.filename),
-    ...options
+    ...userOptions
   }
 
   const screenshotHandler = new ScreenshotHandler(testController, screenshotHandlerOptions)

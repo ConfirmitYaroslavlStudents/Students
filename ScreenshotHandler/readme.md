@@ -7,6 +7,7 @@ Usage
 ```
 await toMatchScreenshot(testController, selector[, options])
 ```
+The third argument can be an object or a string. In the latter case, it will be recognized as screenshot name.
 
 ### With callback (only takes and compares screenshots, processing of the result depends on user)
 ```
@@ -57,7 +58,7 @@ test('Simple test', async t => {
   await t
   .click(Selector('button[test-button]'))
 
-  await toMatchScreenshot(t, Selector('div[test-form]'), { screenshotName: 'testFormAfterButtonClick' })
+  await toMatchScreenshot(t, Selector('div[test-form]'), 'testFormAfterButtonClick')
 })
 ```
 
@@ -92,6 +93,8 @@ Configuration file is a js file:
 
 ```
 const options = {
+    screenshotName: ...,
+
   comparison: {
     ...
   },
@@ -113,6 +116,12 @@ const options = {
 
 module.exports = options
 ```
+
+### Screenshot name
+```
+screenshotName //string, default: ""
+```
+The name for the specific screenshot. If undefined, null or empty then default name will be set.
 
 ### Comparison options
 ```

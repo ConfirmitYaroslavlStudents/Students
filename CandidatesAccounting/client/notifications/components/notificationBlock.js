@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import NavLink from '../../commonComponents/linkWrapper'
+import NavLink from '../../components/linkWrapper'
 import NotificationInfo from './notificationInfo'
 import NotificaitonContent from './notificationContent'
 import styled, { css } from 'styled-components'

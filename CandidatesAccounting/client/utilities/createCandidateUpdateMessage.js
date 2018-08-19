@@ -2,17 +2,19 @@ const createCandidateUpdateMessage = (differences) => {
   let message = '<p>' + 'Candidate has been updated:' + '</p>'
   for (const property in differences)
   {
-    const previousState = differences[property].previousState
-    const newState = differences[property].newState
-    if (!previousState) {
-      message += '<p>' + '+ ' + getPropertyFullName(property) + ': ' +  newState + '</p>'
-      continue
+    if (differences.hasOwnProperty(property)) {
+      const previousState = differences[property].previousState
+      const newState = differences[property].newState
+      if (!previousState) {
+        message += `<p>+ ${getPropertyFullName(property)}: ${newState}</p>`
+        continue
+      }
+      if (!newState) {
+        message += `<p>- ${getPropertyFullName(property)}: ${previousState}</p>`
+        continue
+      }
+      message += `<p>${getPropertyFullName(property)}: ${differences[property].previousState} -> ${differences[property].newState}</p>`
     }
-    if (!newState) {
-      message += '<p>' + '- ' + getPropertyFullName(property) + ': ' +  previousState + '</p>'
-      continue
-    }
-    message += '<p>' + getPropertyFullName(property) + ': ' +  differences[property].previousState + ' -> ' + differences[property].newState + '</p>'
   }
   return message
 }

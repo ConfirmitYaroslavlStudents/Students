@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import * as actions from '../applicationActions'
 import { SELECTORS } from '../rootReducer'
 import SearchIcon from '@material-ui/icons/search'
-import Input from '../commonComponents/UIComponentDecorators/input'
-import IconButton from '../commonComponents/UIComponentDecorators/iconButton'
+import Input from '../components/decorators/input'
+import IconButton from '../components/decorators/iconButton'
 
 class SearchForm extends Component {
   constructor(props) {

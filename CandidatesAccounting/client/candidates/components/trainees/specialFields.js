@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextField from '../../../commonComponents/UIComponentDecorators/textField'
+import TextField from '../../../components/decorators/textField'
 
 const TraineeSpecialFields = (props) => {
   const handleMentorChange = (value) => {

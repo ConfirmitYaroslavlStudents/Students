@@ -32,9 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Championship, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Menu\MenuForConsole\bin\Debug\Championship.dll</HintPath>
+    <Reference Include="Championship">
+      <HintPath>..\Championship\bin\Debug\Championship.dll</HintPath>
     </Reference>
     <Reference Include="MenuForConsole">
       <HintPath>..\Menu\MenuForConsole\bin\Debug\MenuForConsole.dll</HintPath>
@@ -50,15 +49,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HorisontalGraphPainter.cs" />
+    <Compile Include="OnTwoSidesGraphPainter.cs" />
     <Compile Include="UserInteractor.cs" />
     <Compile Include="GraphPainter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileManager.cs" />
     <Compile Include="VerticalGraphPainter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\Championship\bin\Debug\Championship.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

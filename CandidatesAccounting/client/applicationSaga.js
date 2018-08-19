@@ -6,6 +6,7 @@ import * as notificationsActions from './notifications/actions'
 import * as tagsActions from './tags/actions'
 import getStateArgsFromURL from './utilities/getStateArgsFromURL'
 import getCandidateIdFromURL from './utilities/getCandidateIdFromURL'
+import { SELECTORS } from './rootReducer'
 
 const creator = ({ history }) => {
   function* applicationSaga() {
@@ -45,8 +46,8 @@ const creator = ({ history }) => {
 
   function* getInitialStateFromServerSaga() {
     try {
-      const username = yield select(state => state.authorization.username)
-      const candidateStatus = yield select(state => state.candidates.candidateStatus)
+      const username = yield select(state => SELECTORS.AUTHORIZATION.USERNAME(state))
+      const candidateStatus = yield select(state => SELECTORS.CANDIDATES.CANDIDATESTATUS(state))
       const candidateId = getCandidateIdFromURL(history.location.pathname)
 
       if (candidateId) {

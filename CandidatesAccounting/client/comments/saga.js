@@ -3,6 +3,7 @@ import * as actions from './actions'
 import * as applicationActions from '../applicationActions'
 import { addComment, deleteComment, addCommentAttachment, getCommentAttachmentArrayBuffer } from '../api/commentService.js'
 import { getCandidate } from '../api/candidateService.js'
+import { SELECTORS } from '../rootReducer'
 
 const creator = ({ history }) => {
   function* commentsSaga() {
@@ -80,7 +81,7 @@ const creator = ({ history }) => {
       const {candidateId, comment } = action.payload
       comment.id = yield call(addComment, candidateId, comment)
 
-      let commentAttachment = yield select(state => state.comments.lastDeletedCommentAttachment)
+      let commentAttachment = yield select(state => SELECTORS.COMMENTS.LASTDELETEDCOMMENTATTACHMENT(state))
       if (commentAttachment) {
         yield call(addCommentAttachment, candidateId, comment.id, commentAttachment)
       }

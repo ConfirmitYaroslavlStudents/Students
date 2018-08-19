@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import DeleteCandidateDialog from './deleteCandidateDialog'
-import Spinner from '../../../commonComponents/UIComponentDecorators/spinner'
+import Spinner from '../../../components/decorators/spinner'
 import styled from 'styled-components'
 
 const DeleteCandidateControl = (props) => {

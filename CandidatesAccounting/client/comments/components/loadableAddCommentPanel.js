@@ -1,6 +1,6 @@
 import React from 'react'
 import Loadable from 'react-loadable'
-import Spinner from '../../commonComponents/UIComponentDecorators/spinner'
+import Spinner from '../../components/decorators/spinner'
 import styled from 'styled-components'
 
 const LoadableAddCommentPanel = Loadable({

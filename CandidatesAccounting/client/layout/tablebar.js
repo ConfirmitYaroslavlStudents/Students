@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as actions from '../candidates/actions'
 import { SELECTORS } from '../rootReducer'
-import NavLink from '../commonComponents/linkWrapper'
+import NavLink from '../components/linkWrapper'
 import AddCandidateDialog from '../candidates/components/common/addCandidateDialog'
 import styled from 'styled-components'
 

@@ -3,6 +3,7 @@ import * as actions from './actions'
 import * as applicationActions from '../applicationActions'
 import { subscribe, unsubscribe } from '../api/subscribeService'
 import { noticeNotification, deleteNotification, getNotifications } from '../api/notificationService'
+import { SELECTORS } from '../rootReducer'
 
 export default function* notificationsSaga() {
   yield all([
@@ -48,7 +49,7 @@ function* getNotificationsSaga(action) {
 function* subscribeSaga(action) {
   try {
     const {candidateId} = action.payload
-    const username = yield select(state => state.authorization.username)
+    const username = yield select(state => SELECTORS.AUTHORIZATION.USERNAME(state))
     yield call(subscribe, candidateId, username)
     yield put(actions.subscribeSuccess({ candidateId, username }))
   }
@@ -60,7 +61,7 @@ function* subscribeSaga(action) {
 function* unsubscribeSaga(action) {
   try {
     const {candidateId} = action.payload
-    const username = yield select(state => state.authorization.username)
+    const username = yield select(state => SELECTORS.AUTHORIZATION.USERNAME(state))
     yield call(unsubscribe, candidateId, username)
     yield put(actions.unsubscribeSuccess({ candidateId, username }))
   }

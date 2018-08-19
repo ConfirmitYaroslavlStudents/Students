@@ -42,9 +42,11 @@ const app = express()
 app.set('port', port)
 app.set('view endine', 'ejs')
 
+// todo два процесса
+
 if (developmentMode) {
-  const config = require('../webpack.development.config')
-  const compiler = webpack(require('../webpack.development.config'))
+  const config = require('../webpack/development.config')
+  const compiler = webpack(require('../webpack/development.config'))
   app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
     hot: true,

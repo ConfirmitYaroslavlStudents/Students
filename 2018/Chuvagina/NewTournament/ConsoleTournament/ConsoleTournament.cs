@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Tournament;
 
 namespace ConsoleTournament
@@ -26,7 +27,18 @@ namespace ConsoleTournament
         public static void Main(string[] args)
         {
             bool isFromSavedFile = DataInput.IsFromSavedFile();
-            var eliminationSystem = DataInput.ChoseEliminationSystem();
+            EliminationSystem eliminationSystem = EliminationSystem.Single;
+
+            if (isFromSavedFile)
+            {
+                if (File.Exists(BinarySaver.NameOfSinlgeEliminationFile))
+                    eliminationSystem = EliminationSystem.Single;
+                else if (File.Exists(BinarySaver.NameOfDoubleEliminationFile))
+                    eliminationSystem = EliminationSystem.Double;
+            }
+            else
+                eliminationSystem = DataInput.ChoseEliminationSystem();
+
             var bracketStyle = DataInput.ChoseBracket();
             PrintBracket print = null;
 
@@ -51,7 +63,7 @@ namespace ConsoleTournament
             SingleEliminationTournament tournament;
 
             if (isFromSavedFile)
-                tournament = new SingleEliminationTournament();
+                tournament = BinarySaver.LoadSingleFromBinnary();
             else
             {
                 int amount = DataInput.InputAmount();
@@ -81,7 +93,7 @@ namespace ConsoleTournament
         {
             DoubleEliminationTournament tournament;
             if (isFromSavedFile)
-                tournament = new DoubleEliminationTournament();
+                tournament = BinarySaver.LoadDoubleFromBinnary();
             else
             {
                 int amount = DataInput.InputAmount();

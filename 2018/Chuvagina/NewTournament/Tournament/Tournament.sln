@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament", "Tournament.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentUI", "..\TournamentUI\TournamentUI.csproj", "{AFD0B24E-4EE0-40EC-82AD-C213841CD946}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTournament", "..\ConsoleTournament\ConsoleTournament.csproj", "{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AFD0B24E-4EE0-40EC-82AD-C213841CD946}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFD0B24E-4EE0-40EC-82AD-C213841CD946}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFD0B24E-4EE0-40EC-82AD-C213841CD946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBAAA057-0A3F-461B-BEA0-F2C8EBDA8D23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

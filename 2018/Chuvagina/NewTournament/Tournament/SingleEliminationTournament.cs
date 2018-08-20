@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Tournament
 {
+    [Serializable]
     public class SingleEliminationTournament
     {
         protected List<Participant> UpperBracketParticipants;
@@ -26,14 +27,7 @@ namespace Tournament
                 participants.RemoveAt(index);
             }
 
-            SaveData();
-        }
-
-        public SingleEliminationTournament()
-        {
-            UpperBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>(_upperFileName);
-            RoundBracket= BinarySaver.LoadListFromBinnary<Participant>(_roundFileName);
-            GameIndex= BinarySaver.LoadIntFromBinnary(_indexFileName);
+            BinarySaver.SaveSingleToBinnary(this);
         }
 
         public void PlayGame(Func<string, string, string> inputWinner)
@@ -48,7 +42,7 @@ namespace Tournament
             UpperBracketParticipants[GameIndex].SetName(winner);
 
             GameIndex++;
-            SaveData();
+            BinarySaver.SaveSingleToBinnary(this);
         }
 
         protected void OrganizeRound(ref List<Participant> bracket)
@@ -67,14 +61,6 @@ namespace Tournament
                 bracket.Add(RoundBracket[RoundBracket.Count-1]);
 
             GameIndex = 0;
-        }
-
-        public void SaveData()
-        {
-            BinarySaver.SaveListToBinnary(_upperFileName, UpperBracketParticipants);
-            BinarySaver.SaveListToBinnary(_roundFileName, RoundBracket);
-            BinarySaver.SaveListToBinnary(LowerFileName, new List<Participant>());
-            BinarySaver.SaveIntToBinnary(_indexFileName, GameIndex);
         }
 
         public virtual bool EndOfTheGame()

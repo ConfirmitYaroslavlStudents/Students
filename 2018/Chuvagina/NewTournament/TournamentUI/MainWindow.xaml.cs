@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Tournament;
@@ -19,10 +18,11 @@ namespace TournamentUI
         }
 
         public string returnWinner(string first, string second)
-        {    
+        {
+           
             WinnerDetection detection = new WinnerDetection("Winner detection", "Chose winner",first,second);
             var result = detection.ShowDialog();
-            if (result==System.Windows.Forms.DialogResult.Yes)
+            if (result==true)
                 return first;
 
             return second;

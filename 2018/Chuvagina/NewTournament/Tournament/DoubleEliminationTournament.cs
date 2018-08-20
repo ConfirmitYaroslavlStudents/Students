@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Tournament
 {
+    [Serializable]
     public class DoubleEliminationTournament: SingleEliminationTournament
     {
         private List<Participant> _lowerBracketParticipants;
@@ -12,11 +13,6 @@ namespace Tournament
         public DoubleEliminationTournament(List<string> participants) : base(participants)
         {
             _lowerBracketParticipants = new List<Participant>();
-        }
-
-        public DoubleEliminationTournament() : base()
-        {
-            _lowerBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>(LowerFileName);
         }
 
         public new void PlayGame(Func<string, string, string> inputWinner)
@@ -43,7 +39,7 @@ namespace Tournament
                 _lowerBracketParticipants[GameIndex].SetName(winner);
 
             GameIndex++;
-            SaveData();
+            BinarySaver.SaveDoubleToBinnary(this);
         }
 
         private void OrganizeLowerBracketRound()
@@ -76,12 +72,6 @@ namespace Tournament
         public override bool EndOfTheGame()
         {
             return base.EndOfTheGame() && _lowerBracketParticipants.Count==0;
-        }
-
-        public new void SaveData()
-        {
-            base.SaveData();
-            BinarySaver.SaveListToBinnary(LowerFileName, _lowerBracketParticipants);
         }
 
     }

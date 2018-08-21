@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TournamentUI"
         mc:Ignorable="d"
-        Title="WinnerDetection" Height="300" Width="300">
+        Title="WinnerDetection" Height="300" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid x:Name="WinnerDetectionGrid" Margin="62,49,66,56">
         <Grid.ColumnDefinitions>
            

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FootballTournament
+namespace ConsoleTournament
 {
     class Program
     {

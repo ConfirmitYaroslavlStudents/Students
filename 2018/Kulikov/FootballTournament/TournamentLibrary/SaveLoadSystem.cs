@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace FootballTournament
+namespace TournamentLibrary
 {
-    public class SaveLoadSystem
+    public static class SaveLoadSystem
     {
         private static BinaryFormatter _formatter = new BinaryFormatter();
         private static string _fileName = "tournamentProgress.dat";

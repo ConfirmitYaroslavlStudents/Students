@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FootballTournament
+namespace TournamentLibrary
 {
     [Serializable]
     public class Game
@@ -20,27 +20,18 @@ namespace FootballTournament
             IsPlayed = false;
         }
 
-        public void Play()
+        public void Play(int firstPlayerScore, int secondPlayerScore)
         {
-            if (SecondPlayer != null)
-            {
-                FirstPlayerScore = ConsoleWorker.EnterPlayerScore(FirstPlayer);
-                SecondPlayerScore = ConsoleWorker.EnterPlayerScore(SecondPlayer);
+            FirstPlayerScore = firstPlayerScore;
+            SecondPlayerScore = secondPlayerScore;
+            IsPlayed = true;
+            DetectWinner();
+        }
 
-                if (FirstPlayerScore == SecondPlayerScore)
-                {
-                    ConsoleWorker.DrawIsNotPossible();
-                    Play();
-                }
-                else
-                {
-                    IsPlayed = true;
-                    DetectWinner();
-                    ConsoleWorker.PrintGameResult(this);
-                }
-            }
-            else
-                Winner = FirstPlayer;
+        public void Play(int firstPlayerScore)
+        {
+            FirstPlayerScore = firstPlayerScore;
+            Winner = FirstPlayer;
         }
 
         public void DetectWinner()

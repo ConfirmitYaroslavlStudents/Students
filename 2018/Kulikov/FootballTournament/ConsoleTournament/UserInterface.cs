@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TournamentLibrary;
 
-namespace FootballTournament
+namespace ConsoleTournament
 {
     public class UserInterface
     {
         private Tournament _tournament;
-        private TournamentMode _tournamentMode;
         private TournamentGridType _tournamentGridType;
+        private TournamentGridDrawer _tournamentGridDrawer = new TournamentGridDrawer();
+        private DoubleSidedTournamentGridDrawer _doubleSidedGridDrawer = new DoubleSidedTournamentGridDrawer();
+        private ConsolePrinter _printer = new ConsolePrinter();
 
         public void Init()
         {
@@ -38,20 +38,19 @@ namespace FootballTournament
 
         private void SelectSingleElimination()
         {
-            _tournamentMode = TournamentMode.SingleElimination;
+            _tournament = new SingleEliminationTournament(_printer);
             InputData();
         }
 
         private void SelectDoubleElimination()
         {
-            _tournamentMode = TournamentMode.DoubleElimination;
+            _tournament = new DoubleEliminationTournament(_printer);
             InputData();
         }
 
         private void InputData()
         {
-            _tournament = new Tournament();
-            _tournament.Init(_tournamentMode);
+            _tournament.StartTournament();
 
             var tournamentMenuList = new List<MenuItem>
             {
@@ -59,11 +58,10 @@ namespace FootballTournament
                 new MenuItem(ShowGrid, " Show tournament grid"),
             };
 
-            if (_tournamentMode == TournamentMode.SingleElimination)
+            if (_tournament is SingleEliminationTournament)
             {
                 tournamentMenuList.Add(new MenuItem(SelectOneSidedGrid, " Select one-sided type of grid"));
                 tournamentMenuList.Add(new MenuItem(SelectDoubleSidedGrid, " Select double-sided type of grid"));
-
                 _tournamentGridType = TournamentGridType.OneSided;
             }
 
@@ -80,15 +78,15 @@ namespace FootballTournament
 
         private void ShowGrid()
         {
-            if (_tournamentMode == TournamentMode.SingleElimination)
+            if (_tournament is SingleEliminationTournament)
             {
                 if (_tournamentGridType == TournamentGridType.OneSided)
-                    TournamentGrid.ShowSingleEliminationGrid(_tournament);
+                    _tournamentGridDrawer.ShowSingleEliminationGrid(_tournament);
                 else
-                    DoubleSidedTournamentGrid.Show(_tournament);
+                    _doubleSidedGridDrawer.Show(_tournament as SingleEliminationTournament);
             }
             else
-                TournamentGrid.ShowDoubleEliminationGrid(_tournament);
+                _tournamentGridDrawer.ShowDoubleEliminationGrid(_tournament as DoubleEliminationTournament);
 
             Console.ReadKey();
         }
@@ -113,11 +111,10 @@ namespace FootballTournament
                 new MenuItem(ShowGrid, " Show tournament grid"),
             };
 
-            if (_tournamentMode == TournamentMode.SingleElimination)
+            if (_tournament is SingleEliminationTournament)
             {
                 tournamentMenuList.Add(new MenuItem(SelectOneSidedGrid, " Select one-sided type of grid"));
                 tournamentMenuList.Add(new MenuItem(SelectDoubleSidedGrid, " Select double-sided type of grid"));
-
                 _tournamentGridType = TournamentGridType.OneSided;
             }
 

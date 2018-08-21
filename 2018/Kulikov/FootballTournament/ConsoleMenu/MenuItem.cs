@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FootballTournament
+namespace ConsoleTournament
 {
     public class MenuItem
     {

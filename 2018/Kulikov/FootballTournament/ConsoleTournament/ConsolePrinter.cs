@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TournamentLibrary;
 
-namespace FootballTournament
+namespace ConsoleTournament
 {
-    public static class ConsoleWorker
+    public class ConsolePrinter : IPrinter
     {
-        public static void StartedNewTournament()
+        public void StartedNewTournament()
         {
             Console.WriteLine("New tournament started!\n");
         }
 
-        public static int EnterCountOfPlayers()
-        { 
+        public int EnterCountOfPlayers()
+        {
             Console.Write("Enter count of players: ");
 
             var count = -1;
@@ -28,28 +25,26 @@ namespace FootballTournament
             return count;
         }
 
-        public static void EnterPlayerNames()
+        public void EnterPlayerNames()
         {
             Console.WriteLine("\nEnter names of players:");
         }
 
-        public static string EnterPlayerName(HashSet<string> existingNames, int index)
+        public string EnterPlayerName(int index)
         {
             Console.Write($"{index}. ");
 
             var name = Console.ReadLine();
 
-            while (existingNames.Contains(name) || name == " ")
-            {
-                Console.WriteLine("Player with this name already exists. Try again: ");
-                Console.Write($"{index}. ");
-                name = Console.ReadLine();
-            }
-
             return name;
         }
 
-        public static int EnterPlayerScore(Player player)
+        public void NameAlreadyExists()
+        {
+            Console.WriteLine("Player with this name already exists. Try again: ");
+        }
+
+        public int EnterPlayerScore(Player player)
         {
             Console.Write($"{player.Name} scores: ");
 
@@ -64,23 +59,23 @@ namespace FootballTournament
             return score;
         }
 
-        public static void DrawIsNotPossible()
+        public void DrawIsNotPossible()
         {
             Console.WriteLine("There is can't be a draw. Try again:");
         }
 
-        public static void PrintGameResult(Game game)
+        public void PrintGameResult(Game game)
         {
             Console.WriteLine($"\n{game.Result()}\n");
         }
 
-        public static void PrintGrandFinal(Game final)
+        public void PrintGrandFinal(Game final)
         {
             Console.WriteLine("GRAND FINAL");
             PrintGameResult(final);
         }
 
-        public static void PrintChampion(Player champion)
+        public void PrintChampion(Player champion)
         {
             Console.WriteLine($"Tournament is finished. {champion.Name} is a champion!");
         }

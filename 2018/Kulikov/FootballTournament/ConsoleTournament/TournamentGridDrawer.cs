@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using TournamentLibrary;
 
-namespace FootballTournament
+namespace ConsoleTournament
 {
-    public class TournamentGrid
+    public class TournamentGridDrawer
     {
-        private static Tournament _tournament;
-        private static int _gridVerticalLength;
+        private Tournament _tournament;
+        private int _gridVerticalLength;
 
-        public static void ShowSingleEliminationGrid(Tournament tournament)
+        public void ShowSingleEliminationGrid(Tournament tournament)
         {
             _tournament = tournament;
 
             Console.Clear();
 
-            if (_tournament.TournamentMode == TournamentMode.SingleElimination)
-                Console.WriteLine("TOURNAMENT GRID:\n");
-            else
+            if (_tournament is DoubleEliminationTournament)
                 Console.WriteLine("WINNERS GRID:\n");
+            else
+                Console.WriteLine("TOURNAMENT GRID:\n");
 
             DrawGrid(_tournament.WinnersGrid, Console.CursorTop);
         }
 
-        public static void ShowDoubleEliminationGrid(Tournament tournament)
+        public void ShowDoubleEliminationGrid(DoubleEliminationTournament tournament)
         {
             ShowSingleEliminationGrid(tournament);
             Console.WriteLine("LOSERS GRID:\n");
@@ -35,10 +36,9 @@ namespace FootballTournament
                 Console.WriteLine();
                 Console.WriteLine($"\n{tournament.Champion.Name} is a champion!");
             }
-
         }
 
-        private static void DrawGrid(List<List<Game>> grid, int startY)
+        private void DrawGrid(List<List<Game>> grid, int startY)
         {
             _gridVerticalLength = 0;
             var startX = 0;
@@ -84,7 +84,7 @@ namespace FootballTournament
             Console.SetCursorPosition(0, _gridVerticalLength + 3);
         }
 
-        private static void DrawResult(int x, int y, Game game)
+        protected void DrawResult(int x, int y, Game game)
         {
             Console.SetCursorPosition(x, y);
 
@@ -102,7 +102,7 @@ namespace FootballTournament
             }
         }
 
-        private static ConsoleColor ChangeColor(Game game, Player player)
+        protected ConsoleColor ChangeColor(Game game, Player player)
         {
             if (player == game.Winner)
                 return ConsoleColor.Green;
@@ -110,12 +110,12 @@ namespace FootballTournament
                 return ConsoleColor.Gray;
         }
 
-        private static void DrawHorizontalLines()
+        private void DrawHorizontalLines()
         {
             Console.Write(" --");
         }
 
-        private static void DrawVerticalLines(int x, int y, int lineLength)
+        protected void DrawVerticalLines(int x, int y, int lineLength)
         {
             for (int currentLength = 1; currentLength <= lineLength; currentLength++)
             {
@@ -125,7 +125,7 @@ namespace FootballTournament
             }
         }
 
-        private static int GetMaxLength(List<Game> stage)
+        protected int GetMaxLength(List<Game> stage)
         {
             int maxLength = -1;
 

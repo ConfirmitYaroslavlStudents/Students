@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FootballTournament
+namespace ConsoleTournament
 {
     public class Menu
     {

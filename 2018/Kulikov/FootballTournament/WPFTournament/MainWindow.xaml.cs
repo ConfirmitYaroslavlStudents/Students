@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TournamentLibrary;
 
 namespace WPFTournament
@@ -19,11 +7,14 @@ namespace WPFTournament
     public partial class MainWindow : Window
     {
         private Tournament _tournament;
-        private WPFPrinter _printer = new WPFPrinter();
+        private WPFManager _printer;
+        private TournamentData _tournamentData = new TournamentData();
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _printer = new WPFManager(this, _tournamentData);
         }
 
         private void MI_Exit_Click(object sender, RoutedEventArgs e)
@@ -31,24 +22,73 @@ namespace WPFTournament
             Close();
         }
 
+        private void MI_Load_Click(object sender, RoutedEventArgs e)
+        {
+            _tournament = SaveLoadSystem.Load();
+        }
+
         private void MI_Start_Click(object sender, RoutedEventArgs e)
         {
             SP_StartTournament.Visibility = Visibility.Visible;
-            GB_SelectMode.Visibility = Visibility.Visible;
+
+            _printer.StartedNewTournament();
         }
 
-        private void Btn_Next_Click(object sender, RoutedEventArgs e)
+        private void Btn_StartSingleElimination_Click(object sender, RoutedEventArgs e)
         {
-            if (RB_SingleElimination.IsChecked == true)
+            StartTournament();
+
+            _tournament = new SingleEliminationTournament(_printer);
+        }
+
+        private void Btn_StartDoubleElimination_Click(object sender, RoutedEventArgs e)
+        {
+            StartTournament();
+
+            _tournament = new DoubleEliminationTournament(_printer);
+        }
+
+        private void StartTournament()
+        {
+            SP_SelectMode.Visibility = Visibility.Collapsed;
+            SP_EnterCountOfPlayers.Visibility = Visibility.Visible;
+
+            _printer.EnterCountOfPlayers();
+        }
+
+        private void Btn_NextEnterCountOfPlayers_Click(object sender, RoutedEventArgs e)
+        {
+            var count = -1;
+
+            if (int.TryParse(TB_CountOfPlayers.Text, out count) && count > 0)
             {
-                _tournament = new SingleEliminationTournament(_printer);
-                GB_SelectMode.Visibility = Visibility.Collapsed;
+                SP_EnterCountOfPlayers.Visibility = Visibility.Collapsed;
+                SP_AddPlayers.Visibility = Visibility.Visible;
+
+                _tournamentData.GetCountOfPlayers(int.Parse(TB_CountOfPlayers.Text));
+                _printer.EnterPlayerNames();
             }
+        }
+
+        private void Btn_AddPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            var name = TB_PlayerName.Text;
+
+            if (!_tournamentData.IsPlayerExists(name))
+                _tournamentData.AddPlayer(name);
             else
-                if (RB_DoubleElimination.IsChecked == true)
+                _printer.NameAlreadyExists();
+
+            TB_PlayerName.Clear();
+
+            if (_tournamentData.IsAdditionOver())
             {
-                _tournament = new DoubleEliminationTournament(_printer);
-                GB_SelectMode.Visibility = Visibility.Collapsed;
+                SP_AddPlayers.Visibility = Visibility.Collapsed;
+                Grid_PlayGame.Visibility = Visibility.Visible;
+
+                _tournament.StartTournament();
+
+                Label_Status.Content = "Playing tournament...";
             }
         }
     }

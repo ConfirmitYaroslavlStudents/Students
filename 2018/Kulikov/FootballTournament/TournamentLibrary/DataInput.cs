@@ -4,18 +4,19 @@ namespace TournamentLibrary
 {
     public class DataInput
     {
-        private IPrinter _printer;
+        private IDataManager _printer;
 
-        public DataInput(IPrinter printer)
+        public DataInput(IDataManager printer)
         {
             _printer = printer;
         }
 
         public int GetCountOfPlayers()
         {
-            _printer.StartedNewTournament(); 
+            _printer.StartedNewTournament();
+            _printer.EnterCountOfPlayers();
 
-            var countOfPlayers = _printer.EnterCountOfPlayers();
+            var countOfPlayers = _printer.GetCountOfPlayers();
 
             return countOfPlayers;
         }
@@ -29,12 +30,13 @@ namespace TournamentLibrary
 
             for (int i = 1; i <= countOfPlayers; i++)
             {
-                var name = _printer.EnterPlayerName(i);
+                _printer.EnterPlayerName(i);
+                var name = _printer.GetPlayerName();
 
                 while (existingNames.Contains(name) || name == " ")
                 {
                     _printer.NameAlreadyExists();
-                    name = _printer.EnterPlayerName(i);
+                    name = _printer.GetPlayerName();
                 }
 
                 existingNames.Add(name);

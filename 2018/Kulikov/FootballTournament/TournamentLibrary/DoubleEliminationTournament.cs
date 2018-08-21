@@ -12,7 +12,7 @@ namespace TournamentLibrary
         private int _currentLosersStage = -1;
         private int _gamesOnCurrentLosersStage = 0;
 
-        public DoubleEliminationTournament(IPrinter printer)
+        public DoubleEliminationTournament(IDataManager printer)
         {
             _printer = printer;
         }

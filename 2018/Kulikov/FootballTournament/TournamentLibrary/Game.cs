@@ -28,9 +28,8 @@ namespace TournamentLibrary
             DetectWinner();
         }
 
-        public void Play(int firstPlayerScore)
+        public void Play()
         {
-            FirstPlayerScore = firstPlayerScore;
             Winner = FirstPlayer;
         }
 

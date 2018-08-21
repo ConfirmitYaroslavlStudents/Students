@@ -15,11 +15,11 @@ namespace TournamentLibrary
         protected int _gamesOnCurrentWinnersStage = 0;
 
         [NonSerialized]
-        protected IPrinter _printer;
+        protected IDataManager _printer;
 
         protected Tournament() { }
 
-        public Tournament(IPrinter printer)
+        public Tournament(IDataManager printer)
         {
             _printer = printer;
         }
@@ -30,7 +30,6 @@ namespace TournamentLibrary
         {
             WinnersGrid = new List<List<Game>>();
             WinnersGrid.Add(new List<Game>());
-
 
             DataInput dataInput = new DataInput(_printer);
             CountOfPlayers = dataInput.GetCountOfPlayers();
@@ -63,24 +62,31 @@ namespace TournamentLibrary
         {
             if (!game.IsPlayed)
             {
-                var firstPlayerScore = _printer.EnterPlayerScore(game.FirstPlayer);
-
                 if (game.SecondPlayer != null)
                 {
-                    var secondPlayerScore = _printer.EnterPlayerScore(game.SecondPlayer);
+                    _printer.EnterPlayerScore(game.FirstPlayer);
+                    var firstPlayerScore = _printer.GetPlayerScore();
+
+                    _printer.EnterPlayerScore(game.SecondPlayer);
+                    var secondPlayerScore = _printer.GetPlayerScore();
 
                     while (firstPlayerScore == secondPlayerScore)
                     {
                         _printer.DrawIsNotPossible();
-                        secondPlayerScore = _printer.EnterPlayerScore(game.SecondPlayer);
+
+                        _printer.EnterPlayerScore(game.FirstPlayer);
+                        firstPlayerScore = _printer.GetPlayerScore();
+
+                        _printer.EnterPlayerScore(game.SecondPlayer);
+                        secondPlayerScore = _printer.GetPlayerScore();
                     }
 
                     game.Play(firstPlayerScore, secondPlayerScore);
+
+                    _printer.PrintGameResult(game);
                 }
                 else
-                    game.Play(firstPlayerScore);
-
-                _printer.PrintGameResult(game);
+                    game.Play();
 
                 SaveLoadSystem.Save(this);
             }

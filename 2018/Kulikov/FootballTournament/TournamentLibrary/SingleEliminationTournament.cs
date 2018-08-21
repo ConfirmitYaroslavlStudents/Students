@@ -6,7 +6,7 @@ namespace TournamentLibrary
     [Serializable]
     public class SingleEliminationTournament : Tournament
     {
-        public SingleEliminationTournament(IPrinter printer)
+        public SingleEliminationTournament(IDataManager printer)
         {
             _printer = printer;
         }

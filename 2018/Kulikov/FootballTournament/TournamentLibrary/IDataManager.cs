@@ -1,18 +1,24 @@
 ﻿namespace TournamentLibrary
 {
-    public interface IPrinter
+    public interface IDataManager
     {
         void StartedNewTournament();
 
-        int EnterCountOfPlayers();
+        void EnterCountOfPlayers();
+
+        int GetCountOfPlayers();
 
         void EnterPlayerNames();
 
-        string EnterPlayerName(int index);
+        void EnterPlayerName(int index);
+
+        string GetPlayerName();
 
         void NameAlreadyExists();
 
-        int EnterPlayerScore(Player player);
+        void EnterPlayerScore(Player player);
+
+        int GetPlayerScore();
 
         void DrawIsNotPossible();
 

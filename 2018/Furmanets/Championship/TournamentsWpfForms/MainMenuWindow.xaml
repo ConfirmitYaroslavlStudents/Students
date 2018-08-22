@@ -3,21 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TournamentsWpfForms"
         mc:Ignorable="d"
-        Title="Championship" Height="400
-        " Width="300" ResizeMode="NoResize">
+        Title="Championship" Height="400" Width="300"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize" HorizontalAlignment="Center" VerticalAlignment="Center">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Content="Start" Click="ClickStart" ></Button>
-        <Button Grid.Row="1" Content="Add players" Click="Click_AddPlayers"></Button>
-        <Button Grid.Row="2" Content="Load Tornament from file" Click="Click_Load"></Button>
-        <Button Grid.Row="3" Content="Exit" Click="Click_Exit"></Button>
-
+        <Button Name="StartButton"  Grid.Row="0" Content="Start" Click="ClickStart"></Button>
+        <Button Name="LoadFromeFileButton" Grid.Row="1" Content="Load Tornament from file" Click="Click_Load"></Button>
+        <Button Name="Exit" Grid.Row="2" Content="Exit" Click="Click_Exit"></Button>
     </Grid>
 </Window>

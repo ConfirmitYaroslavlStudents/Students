@@ -59,6 +59,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Drawers\HorisontalDrawer.cs" />
+    <Compile Include="Drawers\IDrawer.cs" />
     <Compile Include="TournamentPlayWindow.xaml.cs">
       <DependentUpon>TournamentPlayWindow.xaml</DependentUpon>
     </Compile>

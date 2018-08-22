@@ -11,6 +11,7 @@ namespace TournamentsWpfForms
         public MainMenuWindow()
         {
             InitializeComponent();
+            StartButton.Focus();
             _fileManager = new BinaryFileManager();
         }
 
@@ -18,20 +19,16 @@ namespace TournamentsWpfForms
         {
             if (_tournament == null)
             {
-                var window = new WindowAddPlayers();
+                var window = new WindowAddPlayers(_fileManager);
                 window.Show();
                 Close();
             }
             else
             {
-                var window = new TournamentPlayWindow(_tournament);
+                var window = new TournamentPlayWindow(_tournament, _fileManager);
                 window.Show();
                 Close();
             }
-        }
-
-        private void Click_AddPlayers(object sender, RoutedEventArgs e)
-        {
         }
 
         private void Click_Load(object sender, RoutedEventArgs e)
@@ -42,7 +39,7 @@ namespace TournamentsWpfForms
             {
                 MessageBox.Show("Tournament loaded successfully");
             }
-            else
+            else 
             {
                 MessageBox.Show("File is empty");
             }

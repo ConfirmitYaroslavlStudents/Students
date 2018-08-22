@@ -16,10 +16,12 @@ namespace TournamentUI
 
             Title = title;
 
+            FirstPlayer.Width = 70;
             FirstPlayer.Content = firstPlayer;
             FirstPlayer.VerticalAlignment = VerticalAlignment.Bottom;
             FirstPlayer.HorizontalAlignment = HorizontalAlignment.Left;
 
+            SecondPlayer.Width = 70;
             SecondPlayer.Content = secondPlayer;
             SecondPlayer.VerticalAlignment = VerticalAlignment.Bottom;
             SecondPlayer.HorizontalAlignment = HorizontalAlignment.Right;

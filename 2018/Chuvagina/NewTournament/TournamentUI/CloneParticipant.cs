@@ -4,14 +4,14 @@ namespace TournamentUI
 {
     static class CloneParticipant
     {
-        public static UiParticipant Clone(Participant participant)
+        internal static UiParticipant Clone(Participant participant)
         {
             var newRoot = new UiParticipant(participant.Name, null);
-            DeepToTree(newRoot, participant.Left, participant.Right);
+            AddChildren(newRoot, participant.Left, participant.Right);
             return newRoot;
         }
 
-        public static void DeepToTree(UiParticipant newParticipant, Participant left, Participant right)
+        private static void AddChildren(UiParticipant newParticipant, Participant left, Participant right)
         {
             UiParticipant leftRoot = null;
             UiParticipant rightRoot = null;
@@ -25,8 +25,8 @@ namespace TournamentUI
 
             if (left != null && right != null)
             {
-                DeepToTree(leftRoot, left.Left, left.Right);
-                DeepToTree(rightRoot, right.Left, right.Right);
+                AddChildren(leftRoot, left.Left, left.Right);
+                AddChildren(rightRoot, right.Left, right.Right);
             }
         }
 

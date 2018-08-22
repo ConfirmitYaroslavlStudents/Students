@@ -36,17 +36,6 @@ namespace TournamentUI
             ParticipantName.Clear();
         }
 
-        private void AddNode(ref int rowIndex, int colIndex, UiParticipant node, Canvas canvas)
-        {
-            if (node.Left != null)
-                AddNode(ref rowIndex, colIndex - 1, node.Left, canvas);
-
-            BracketDrawing.AddParticipantToCanvas(rowIndex, colIndex, node, canvas);
-            rowIndex++;
-
-            if (node.Right != null)
-                AddNode(ref rowIndex, colIndex - 1, node.Right, canvas);
-        }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
@@ -80,47 +69,45 @@ namespace TournamentUI
             return MaxDepth(participant.Right) + 1;
         }
 
-        private void Tournament_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Tournament_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Space) return;
 
             if (_tournament.EndOfTheGame()) return;
 
-            if (_tournament is DoubleEliminationTournament tmp1)
-                tmp1.PlayGame(ReturnWinner);
+            if (_tournament is DoubleEliminationTournament doubleEliminationTournament)
+            {
+                doubleEliminationTournament.PlayGame(ReturnWinner);
+                List<Participant> bracket = _tournament.GetBracket();
+                DrawBracket(UpperBracketCanvas, bracket);
+                bracket = doubleEliminationTournament.GetLowerBracket();
+                DrawBracket(LowerBracketCanvas, bracket);
+            }
             else
+            {
                 _tournament.PlayGame(ReturnWinner);
+                List<Participant> bracket = _tournament.GetBracket();
+                DrawBracket(UpperBracketCanvas, bracket);
+            }
+        }
 
-            List<Participant> bracket = _tournament.GetBracket();
-            int i = 0;
-            UpperBracketCanvas.Children.Clear();
+        private void DrawBracket(Canvas canvas, List<Participant> bracket)
+        {
+            canvas.Children.Clear();
+
             int maxDepth = 0;
 
             foreach (var participant in bracket)
                 if (MaxDepth(participant) > maxDepth)
                     maxDepth = MaxDepth(participant);
 
+            int i = 0;
+
             foreach (var participant in bracket)
             {
-                UiParticipant newParticipant = null;
-                newParticipant = CloneParticipant.Clone(participant);
-                AddNode(ref i, maxDepth, newParticipant, UpperBracketCanvas);
+                var newParticipant = CloneParticipant.Clone(participant);
+                BracketDrawing.AddLinkToCanvas(ref i, maxDepth, newParticipant, canvas);
             }
-
-            i = 0;
-            LowerBracketCanvas.Children.Clear();
-            if (!(_tournament is DoubleEliminationTournament tmp)) return;
-            {
-                bracket = tmp.GetLowerBracket();
-                foreach (var participant in bracket)
-                {
-                    UiParticipant newParticipant = null;
-                    newParticipant = CloneParticipant.Clone(participant);
-                    AddNode(ref i, maxDepth, newParticipant, LowerBracketCanvas);
-                }
-
-            }
-
         }
     }
 }

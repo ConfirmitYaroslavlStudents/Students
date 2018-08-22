@@ -33,7 +33,7 @@
                   VerticalAlignment="Top" Width="160">
         </ListView>
         <TextBlock x:Name="Instructions" HorizontalAlignment="Left" TextWrapping="Wrap"
-                   Text="Press &quot;Space&quot; to play the game" VerticalAlignment="Top" Width="166"
+                   Text="Press &quot;Space&quot; to play the game" VerticalAlignment="Top" Width="512"
                    Margin="21,5,0,0" Visibility="Hidden" />
     </Grid>
 </Window>

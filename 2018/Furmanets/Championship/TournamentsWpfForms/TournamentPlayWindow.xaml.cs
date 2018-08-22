@@ -66,6 +66,9 @@ namespace TournamentsWpfForms
                 return;
             }
 
+            FirstPlayerScore.Text = "";
+            SecondPlayerScore.Text = "";
+
             _tournament.CollectResults(results);
             SetCurrentMeeting(_tournament.GetNextMeeting());
             _fileManager.WriteToFile(_tournament);

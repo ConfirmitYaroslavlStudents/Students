@@ -8,7 +8,7 @@ namespace TournamentsWpfForms
 {
     public partial class TournamentPlayWindow
     {
-        private Tournament _tournament;
+        private readonly Tournament _tournament;
         public Canvas PlaceForDrawind { get; }
         private readonly IFileManager _fileManager;
         private readonly IDrawer _drawer;
@@ -42,7 +42,7 @@ namespace TournamentsWpfForms
 
             if (currentMeeting == null)
             {
-                MessageBox.Show("All matches played.");
+                MessageBox.Show("All matches was played.");
                 return;
             }
 
@@ -59,6 +59,12 @@ namespace TournamentsWpfForms
             }
 
             var results = new[] { int.Parse(FirstPlayerScore.Text), int.Parse(SecondPlayerScore.Text) };
+
+            if (results[0] == results[1])
+            {
+                MessageBox.Show("Error! The account in the playoffs can not be equal.");
+                return;
+            }
 
             _tournament.CollectResults(results);
             SetCurrentMeeting(_tournament.GetNextMeeting());
@@ -82,7 +88,7 @@ namespace TournamentsWpfForms
         {
             var menuAddPlayers = new WindowAddPlayers(_fileManager);
             menuAddPlayers.Show();
-            this.Close();
+            Close();
         }
     }
 }

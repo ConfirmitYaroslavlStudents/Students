@@ -1,6 +1,5 @@
-
 import store from 'store/store';
-import { loadingActions, namesActions } from './actions';
+import { gridActions, loadingActions, namesActions } from './actions';
 import { put, takeLatest } from 'redux-saga/effects';
 
 function loaderWrapper(func) {
@@ -13,16 +12,21 @@ function loaderWrapper(func) {
 
 const namesSagas = {
   * ADD_NAME(data) {
-    const names = store.getState().data.names;
-    const update = [...names, data.payload];
-    yield put(namesActions.addNameSuccess({ names: update }));
+    const names = [...store.getState().data.names, data.payload];
+    yield put(namesActions.addNameSuccess({ names }));
   },
 
   * DELETE_NAME(data) {
-    const names = store.getState().data.names;
-    const update = [...names.splice(names.indexOf(data.payload), 1)];
-    console.log(update);
-    yield put(namesActions.deleteNameSuccess({ names: update }));
+    const names = [...store.getState().data.names];
+    names.splice(names.indexOf(data.payload), 1);
+    yield put(namesActions.deleteNameSuccess({ names }));
+  }
+};
+
+const gridSagas = {
+  * ADD_GRID_TYPE(data) {
+    const type = data.payload;
+    yield put(gridActions.addGridTypeSuccess({ type }));
   }
 };
 
@@ -33,5 +37,6 @@ function* takeLatestGenerator(sagas) {
 }
 
 export default function* () {
-  yield takeLatestGenerator(namesSagas);
+  yield* takeLatestGenerator(gridSagas);
+  yield* takeLatestGenerator(namesSagas);
 }

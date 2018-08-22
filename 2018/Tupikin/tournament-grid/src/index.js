@@ -4,6 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import store from './store/store';
 import 'semantic-ui-less/semantic.less';
+import 'treantjs/Treant.css';
 import 'styling/app.less';
 
 render(

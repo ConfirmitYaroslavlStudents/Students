@@ -45,6 +45,11 @@ module.exports = env => {
           exclude: /node_modules/
         },
         {
+          test: [/\.js$/, /\.jsx$/],
+          loader: 'babel-loader',
+          include: '/node_modules/treantjs/'
+        },
+        {
           test: /\.less$/,
           use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
         },

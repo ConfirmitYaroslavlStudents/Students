@@ -1,5 +1,4 @@
 .ui.segment {
   margin: 0 auto;
   max-width: 40vw;
-  overflow: hidden;
 }

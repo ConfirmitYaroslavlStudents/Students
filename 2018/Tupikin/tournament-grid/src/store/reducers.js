@@ -8,6 +8,7 @@ const isLoading = handleActions({
 
 const dataInitState = {
   names: [],
+  gridType: undefined
 };
 
 const data = handleActions({
@@ -16,6 +17,9 @@ const data = handleActions({
 
   DELETE_NAME_SUCCESS: (state, { payload: { names } }) =>
     Object.assign({}, state, { names }),
+
+  ADD_GRID_TYPE_SUCCESS: (state, { payload: { type } }) =>
+    Object.assign({}, state, { type })
 }, dataInitState);
 
 export default combineReducers({

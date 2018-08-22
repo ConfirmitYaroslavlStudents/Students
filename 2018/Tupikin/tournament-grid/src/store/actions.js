@@ -14,3 +14,9 @@ export const namesActions = createActions({
   DELETE_NAME: identity,
   DELETE_NAME_SUCCESS: identity
 });
+
+export const gridActions = createActions({
+  ADD_GRID_TYPE: identity,
+  ADD_GRID_TYPE_SUCCESS: identity
+});
+

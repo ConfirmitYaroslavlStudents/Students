@@ -41,6 +41,7 @@ class CountFragment extends PureComponent {
               onClick={nextStep}
               circular
               inverted
+              color={'orange'}
               disabled={!isValidField}
               name='right arrow'
               link={isValidField}

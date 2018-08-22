@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import CountFragment from './fragments/countFragment/countFragment';
+import GridTypeFragment from 'pages/enter/fragments/gridTypeFragment/gridTypeFragment';
 import { isPowerOfTwo } from 'utils';
 import { logo } from './constants/constants';
 import NamesFragment from './fragments/namesFragment/namesFragment';
@@ -11,7 +12,8 @@ class Enter extends Component {
 
     this.steps = [
       this.countFragment,
-      this.namesFragment
+      this.namesFragment,
+      this.gridTypeFragment
     ];
 
     this.state = {
@@ -65,9 +67,16 @@ class Enter extends Component {
     return (
       <NamesFragment
         count={count}
+        nextStep={this.nextStep}
       />
     );
   };
+
+  gridTypeFragment = () => {
+    return (
+      <GridTypeFragment/>
+    );
+  }
 
   render() {
     const { stepId } = this.state;

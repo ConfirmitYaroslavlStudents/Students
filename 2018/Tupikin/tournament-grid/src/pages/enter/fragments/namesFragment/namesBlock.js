@@ -1,8 +1,13 @@
+import { colors } from '../../constants/constants';
 import { connect } from 'react-redux';
 import { namesActions } from 'store/actions';
 import PropTypes from 'prop-types';
-import { Divider, Icon, Label, Message } from 'semantic-ui-react';
+import { Container, Divider, Icon, Label, Message } from 'semantic-ui-react';
 import { Fragment, PureComponent } from 'react';
+
+const randomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
 
 class NamesBlock extends PureComponent {
   message = () => (
@@ -16,13 +21,20 @@ class NamesBlock extends PureComponent {
     </div>
   );
 
+  randomColor = () => {
+    return colors[randomInt(0, colors.length)];
+  };
+
   onClick = (name) => {
     this.props.deleteName(name);
   };
 
   namesMapper = (name) => {
     return (
-      <Label key={name}>
+      <Label
+        key={name}
+        color={this.randomColor()}
+      >
         {name}
         <Icon
           name='delete'
@@ -42,10 +54,12 @@ class NamesBlock extends PureComponent {
           names.length === 0 &&
           this.message()
         }
-        {
-          names.length > 0 &&
-            names.map(this.namesMapper)
-        }
+        <Container className={'center'}>
+          {
+            names.length > 0 &&
+          names.map(this.namesMapper)
+          }
+        </Container>
       </Fragment>
     );
   }

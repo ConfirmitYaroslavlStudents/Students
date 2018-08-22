@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import DataLoader from 'components/dataLoader/dataLoader';
 import Enter from 'pages/enter/enter';
+import Grids from 'pages/grids/grids';
+import Olympic from 'pages/grids/olympic/olympic';
 import {
   HashRouter,
   Route,
@@ -14,7 +16,8 @@ class Router extends Component {
         <Switch>
           <Route exact path='/' component={DataLoader}/>
           <Route path='/enter' component={Enter}/>
-          <Route path='/grid' component={null}/>
+          <Route path='/grids' component={Grids}/>
+          <Route path='/grid/olympic' component={Olympic}/>
         </Switch>
       </HashRouter>
     );

@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import { namesActions } from 'store/actions';
 import NamesBlock from './namesBlock';
 import PropTypes from 'prop-types';
+import { Button, Container, Divider, Icon, Input } from 'semantic-ui-react';
 import { Component, Fragment } from 'react';
-import { Divider, Icon, Input } from 'semantic-ui-react';
 
 class NamesFragment extends Component {
   constructor(props) {
@@ -31,28 +31,45 @@ class NamesFragment extends Component {
   };
 
   render() {
+    const { names, count, nextStep } = this.props;
     const { currentName, isValidField } = this.state;
 
     return (
       <Fragment>
         <Divider horizontal>Please enter players names</Divider>
-        <Input
-          name='currentName'
-          placeholder='Player name'
-          onChange={this.handleChange}
-          error={!isValidField}
-          value={currentName || ''}
-          icon={
-            <Icon
-              onClick={this.addName}
-              circular
-              inverted
-              disabled={!isValidField}
-              name='add'
-              link={Boolean(isValidField && currentName)}
+        {
+          names.length < parseInt(count, 10) &&
+          <Input
+            name='currentName'
+            placeholder='Player name'
+            onChange={this.handleChange}
+            error={!isValidField}
+            value={currentName || ''}
+            icon={
+              <Icon
+                onClick={this.addName}
+                circular
+                inverted
+                disabled={!isValidField}
+                name='add'
+                color={'orange'}
+                link={Boolean(isValidField && currentName)}
+              />
+            }
+          />
+        }
+        <Container className={'center'}>
+          {
+            names.length === parseInt(count, 10) &&
+            <Button
+              content='Next step'
+              color={'orange'}
+              icon='right arrow'
+              labelPosition='right'
+              onClick={nextStep}
             />
           }
-        />
+        </Container>
         <NamesBlock/>
       </Fragment>
     );
@@ -76,7 +93,8 @@ NamesFragment.propTypes = {
   count: PropTypes.string.isRequired,
   names: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 
-  addName: PropTypes.func.isRequired
+  addName: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NamesFragment);

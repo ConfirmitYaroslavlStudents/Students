@@ -12,34 +12,49 @@
             <MenuItem Name="MI_Load" Header="Load" Height="25" Width="40" Click="MI_Load_Click"/>
             <MenuItem Name="MI_Exit" Header="Exit" Height="25" Width="40" Click="MI_Exit_Click"/>
         </Menu>
-        <ListBox HorizontalAlignment="Left" Height="615" Margin="986,56,0,0" VerticalAlignment="Top" Width="270"/>
+        <ListBox Name="LB_Results"  HorizontalAlignment="Left" Height="615" Margin="986,56,0,0" VerticalAlignment="Top" Width="270"/>
         <Border BorderBrush="Black" BorderThickness="0.2" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="1280"/>
         <Label Content="Results" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="986,25,0,0" VerticalAlignment="Top" Width="270"/>
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="615" Margin="285,56,0,0" Stroke="Black" VerticalAlignment="Top" Width="696"/>
-        <Label Content="Tournament Grid" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="285,25,0,0" VerticalAlignment="Top" Width="696"/>
-        <Label Content="Tournament Menu" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Width="270"/>
-        <StackPanel Name="SP_StartTournament" HorizontalAlignment="Left" Height="615" Margin="10,56,0,0" VerticalAlignment="Top" Visibility="Visible" Width="270">
-            <Label Name="Label_Status" Content=""/>
-            <StackPanel Name="SP_SelectMode" Height="77" Visibility="Visible">
-                <Button Name="Btn_StartSingleElimination" Content="Single Elimination" Click="Btn_StartSingleElimination_Click"/>
+        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="615" Margin="170,56,0,0" Stroke="Black" VerticalAlignment="Top" Width="811"/>
+        <Label Content="Tournament Grid" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="170,25,0,0" VerticalAlignment="Top" Width="811"/>
+        <Label Content="Tournament Menu" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Width="155"/>
+        <StackPanel Name="SP_StartTournament" HorizontalAlignment="Left" Height="353" Margin="10,56,0,0" VerticalAlignment="Top" Visibility="Collapsed" Width="155">
+            <TextBox x:Name="Rtb_Info" HorizontalAlignment="Left" Height="136" IsReadOnly="True" Margin="0,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Auto" Width="155" TextChanged="Rtb_Info_TextChanged"/>
+            <Label Content=""/>
+            <StackPanel x:Name="SP_SelectMode" Height="77" Visibility="Collapsed">
+                <Button x:Name="Btn_StartSingleElimination" Content="Single Elimination" Click="Btn_StartSingleElimination_Click"/>
                 <Label Content=""/>
-                <Button Name="Btn_StartDoubleElimination" Content="Double Elimination" Click="Btn_StartDoubleElimination_Click"/>
+                <Button x:Name="Btn_StartDoubleElimination" Content="Double Elimination" Click="Btn_StartDoubleElimination_Click"/>
             </StackPanel>
-            <StackPanel Name="SP_EnterCountOfPlayers" Visibility="Collapsed" Height="100" >
-                <TextBox Name="TB_CountOfPlayers" Height="23" TextWrapping="Wrap" Text=""/>
+            <StackPanel x:Name="SP_EnterCountOfPlayers" Visibility="Collapsed" Height="100" >
+                <TextBox x:Name="TB_CountOfPlayers" Height="23" TextWrapping="Wrap" Text=""/>
                 <Label Content=""/>
-                <Button Name="Btn_NextEnterCountOfPlayers" Content="Next" Click="Btn_NextEnterCountOfPlayers_Click"/>
+                <Button x:Name="Btn_NextEnterCountOfPlayers" Content="Next" Click="Btn_NextEnterCountOfPlayers_Click"/>
             </StackPanel>
-            <StackPanel Name="SP_AddPlayers" Height="100" Visibility="Collapsed">
-                <TextBox Name="TB_PlayerName" Height="23" TextWrapping="Wrap" Text=""/>
+            <StackPanel x:Name="SP_AddPlayers" Height="100" Visibility="Collapsed">
+                <TextBox x:Name="TB_PlayerName" Height="23" TextWrapping="Wrap" Text=""/>
                 <Label Content=""/>
-                <Button Name="Btn_AddPlayer" Content="Add player" Click="Btn_AddPlayer_Click"/>
+                <Button x:Name="Btn_AddPlayer" Content="Add player" Click="Btn_AddPlayer_Click"/>
             </StackPanel>
-            <Grid Name="Grid_PlayGame" Height="75" Visibility="Visible">
-                <Label Content="Player scores:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" HorizontalContentAlignment="Right"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="149,41,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="31"/>
-                <Button Content="OK" HorizontalAlignment="Left" Margin="185,41,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
-            </Grid>
         </StackPanel>
+        <ListBox Name="LB_Players" HorizontalAlignment="Left" Height="212" Margin="10,459,0,0" VerticalAlignment="Top" Width="155"/>
+        <Label Content="Players" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="15,428,0,0" VerticalAlignment="Top" Width="155"/>
+        <Grid Name="Grid_GameMenu" HorizontalAlignment="Left" Height="181" Margin="10,242,0,0" VerticalAlignment="Top" Width="155" Visibility="Collapsed">
+            <Label Content="Game Menu" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="135" HorizontalContentAlignment="Center"/>
+            <Button Name="Btn_PlayNextRound" Content="Play next round" Click="Btn_PlayNextRound_Click" Margin="10,41,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135"/>
+            <Grid Name="Grid_PlayGame" HorizontalAlignment="Left" Height="101" Margin="0,66,0,0" VerticalAlignment="Top" Visibility="Collapsed" Width="155">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16*"/>
+                    <ColumnDefinition Width="15*"/>
+                </Grid.ColumnDefinitions>
+                <Label Name="Label_FirstPlayerScore" Content="Barcelona scores " HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="10,10,0,0" VerticalAlignment="Top" Width="118" Grid.ColumnSpan="2"/>
+                <Label Name="Label_SecondPlayerScore" Content="Barcelona scores " HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="10,41,0,0" VerticalAlignment="Top" Width="118" Grid.ColumnSpan="2"/>
+                <TextBox Name="TB_FirstPlayerScore" Height="23" Margin="43,13,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1"/>
+                <TextBox Name="TB_SecondPlayerScore" Height="23" Margin="43,44,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.Column="1"/>
+                <Button x:Name="Btn_PlayGame" Content="Play" Click="Btn_PlayGame_Click" Margin="10,73,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135" Grid.ColumnSpan="2"/>
+            </Grid>
+            <Label Name="Label_Draw" Content="Draw is not possible!" HorizontalAlignment="Left" Margin="10,43,0,0" Visibility="Collapsed" VerticalAlignment="Top"/>
+            <Border BorderBrush="Black" BorderThickness="0.4" HorizontalAlignment="Left" Height="181" VerticalAlignment="Top" Width="155"/>
+        </Grid>
     </Grid>
 </Window>

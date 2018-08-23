@@ -24,6 +24,11 @@ namespace TournamentLibrary
             _printer = printer;
         }
 
+        public void SetPrinter(IDataManager printer)
+        {
+            _printer = printer;
+        }
+
         public abstract void PlayNextRound();
 
         public virtual void StartTournament()

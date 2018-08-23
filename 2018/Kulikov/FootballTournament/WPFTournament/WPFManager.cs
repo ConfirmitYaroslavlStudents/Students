@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using TournamentLibrary;
 
 namespace WPFTournament
@@ -7,40 +9,53 @@ namespace WPFTournament
     {
         private MainWindow _mainWindow;
         private TournamentData _tournamentData;
-        private Label _statusBar;
+        private TextBox _info;
         private int _indexOfPlayer;
+        private int _indexOfGame;
+        private int _numberOfPlayer;
 
         public WPFManager(MainWindow mainWindow, TournamentData tournamentData)
         {
             _mainWindow = mainWindow;
-            _statusBar = _mainWindow.Label_Status;
+            _info = _mainWindow.Rtb_Info;
             _tournamentData = tournamentData;
             _indexOfPlayer = 0;
+            _indexOfGame = 0;
+            _numberOfPlayer = 0;
         }
 
         public void DrawIsNotPossible()
         {
-            _statusBar.Content = "Draw is not possible! Try again:";
+            _mainWindow.Label_Draw.Visibility = Visibility.Visible;
         }
 
         public void EnterCountOfPlayers()
         {
-            _statusBar.Content = "Enter count of players:";
+            _info.AppendText("\nEnter count of players");
         }
 
         public void EnterPlayerName(int index)
         {
-            _statusBar.Content = $"Enter name of {index} player:";
+            _info.AppendText($"\nEnter name of {index} player");
         }
 
         public void EnterPlayerNames()
         {
-            _statusBar.Content = "Enter names of players:";
+            _info.AppendText("\nEnter names of players");
         }
 
         public void EnterPlayerScore(Player player)
         {
-            _statusBar.Content = $"{player.Name} scores:";
+            if (_indexOfPlayer == 0)
+            {
+                _mainWindow.Label_FirstPlayerScore.Content = $"{player.Name} scores ";
+                _indexOfPlayer++;
+            }
+            else
+            {
+                _mainWindow.Label_SecondPlayerScore.Content = $"{player.Name} scores ";
+                _indexOfPlayer = 0;
+            }
         }
 
         public int GetCountOfPlayers()
@@ -51,39 +66,65 @@ namespace WPFTournament
         public string GetPlayerName()
         {
             var name = _tournamentData.Players[_indexOfPlayer].Name;
-            _indexOfPlayer++;
+
+            if (_indexOfPlayer == _tournamentData.CountOfPlayers - 1)
+                _indexOfPlayer = 0;
+            else
+                _indexOfPlayer++;
 
             return name;
         }
 
         public int GetPlayerScore()
         {
-            throw new System.NotImplementedException();
+            var game = _tournamentData.GamesToPlay[_indexOfGame];
+            int value;
+
+            if (_numberOfPlayer == 0)
+            {
+                value = game.FirstPlayerScore;
+                _numberOfPlayer = 1;
+            }
+            else
+            {
+                value = game.SecondPlayerScore;
+                _numberOfPlayer = 0;
+                _indexOfGame++;
+            }
+
+            if(_indexOfGame == _tournamentData.GamesToPlay.Count)
+            {
+                _numberOfPlayer = 0;
+                _indexOfGame = 0;
+            }
+
+            return value;
         }
 
         public void NameAlreadyExists()
         {
-            _statusBar.Content = "Player with this name already exists! Try again:";
+            _info.AppendText("\nPlayer with this name already exists! Try again!");
         }
 
         public void PrintChampion(Player champion)
         {
-            throw new System.NotImplementedException();
+            _mainWindow.LB_Results.Items.Add($"Tournament is finished. {champion.Name} is a champion!");
         }
 
         public void PrintGameResult(Game game)
         {
-            throw new System.NotImplementedException();
+            _mainWindow.LB_Results.Items.Add(game.Result());
         }
 
         public void PrintGrandFinal(Game final)
         {
-            throw new System.NotImplementedException();
+            _mainWindow.LB_Results.Items.Add("GRAND FINAL");
+            PrintGameResult(final);
         }
 
         public void StartedNewTournament()
         {
-            _statusBar.Content = "Select tournament mode:";
+            _info.AppendText("Select tournament mode");
         }
     }
 }

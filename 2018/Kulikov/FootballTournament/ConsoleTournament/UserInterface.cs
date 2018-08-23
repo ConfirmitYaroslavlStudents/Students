@@ -103,7 +103,7 @@ namespace ConsoleTournament
 
         private void LoadTournament()
         {
-            _tournament = SaveLoadSystem.Load();
+            _tournament = SaveLoadSystem.Load(_printer);
 
             var tournamentMenuList = new List<MenuItem>
             {

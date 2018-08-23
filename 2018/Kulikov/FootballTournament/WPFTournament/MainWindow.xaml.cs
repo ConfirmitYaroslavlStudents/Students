@@ -29,6 +29,7 @@ namespace WPFTournament
             Grid_GameMenu.Visibility = Visibility.Visible;
             SP_StartTournament.Visibility = Visibility.Collapsed;
             LB_Players.Items.Clear();
+            LB_Results.Items.Clear();
 
             var firstStage = _tournament.WinnersGrid[0];
 
@@ -51,6 +52,7 @@ namespace WPFTournament
             LB_Players.Items.Clear();
             TB_CountOfPlayers.Clear();
             TB_PlayerName.Clear();
+            LB_Results.Items.Clear();
 
             _tournamentData = new TournamentData();
             _tournament = null;
@@ -163,7 +165,7 @@ namespace WPFTournament
             {
                 _tournamentData.SetGameScore(firstPlayerScore, secondPlayerScore);
 
-                if (_tournamentData.PlayedOnCurrentStage < _tournamentData.GamesToPlay.Count)
+                if (!_tournamentData.IsStagePlayed())
                 {
                     var game = _tournamentData.GamesToPlay[_tournamentData.PlayedOnCurrentStage];
                     var firstPlayer = game.FirstPlayer;

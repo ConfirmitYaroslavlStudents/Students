@@ -13,6 +13,8 @@ namespace WPFTournament
 
         private HashSet<string> _existingNames;
         private int _currentPlayerForAddition;
+        private Tournament _tournament;
+        private int _gamesNeedToPlay;
 
         public TournamentData()
         {
@@ -53,11 +55,15 @@ namespace WPFTournament
 
         public void GetGamesToPlay(Tournament tournament)
         {
+            _tournament = tournament;
             GamesToPlay.Clear();
             var lastStage = tournament.WinnersGrid.Count - 1;
 
             foreach (var game in tournament.WinnersGrid[lastStage])
-                GamesToPlay.Add(new Game(game.FirstPlayer, game.SecondPlayer));
+            {
+                if(game.SecondPlayer!=null)
+                    GamesToPlay.Add(new Game(game.FirstPlayer, game.SecondPlayer));
+            }
 
             if (tournament is DoubleEliminationTournament)
             {
@@ -65,16 +71,52 @@ namespace WPFTournament
                 lastStage = doubleEliminationTournament.LosersGrid.Count - 1;
 
                 foreach (var game in doubleEliminationTournament.LosersGrid[lastStage])
-                    GamesToPlay.Add(new Game(game.FirstPlayer, game.SecondPlayer));
+                {
+                    if (GamesToPlay[GamesToPlay.Count - 1].SecondPlayer == null)
+                        GamesToPlay[GamesToPlay.Count - 1] = new Game(GamesToPlay[GamesToPlay.Count - 1].FirstPlayer, game.Winner);
+                    else
+                        GamesToPlay.Add(new Game(game.Winner, null));
+                }
+
+                if (GamesToPlay[GamesToPlay.Count - 1].SecondPlayer == null)
+                    GamesToPlay.Remove(GamesToPlay[GamesToPlay.Count - 1]);
             }
 
             PlayedOnCurrentStage = 0;
+            _gamesNeedToPlay = GamesToPlay.Count;
         }
 
         public void SetGameScore(int firstPlayerScore, int secondPlayerScore)
         {
             GamesToPlay[PlayedOnCurrentStage].Play(firstPlayerScore, secondPlayerScore);
+
+            if (_tournament is DoubleEliminationTournament && GamesToPlay.Count > 1 && PlayedOnCurrentStage < _gamesNeedToPlay)
+            {
+                var lastGame = GamesToPlay[GamesToPlay.Count - 1];
+
+                if (lastGame.SecondPlayer == null)
+                    GamesToPlay[GamesToPlay.Count - 1] = new Game(lastGame.FirstPlayer, GamesToPlay[PlayedOnCurrentStage].Loser);
+                else
+                {
+                    if (PlayedOnCurrentStage == _gamesNeedToPlay - 1 && PlayedOnCurrentStage % 2 == 0)
+                    {
+                        PlayedOnCurrentStage++;
+                        return;
+                    }
+                    else
+                        GamesToPlay.Add(new Game(GamesToPlay[PlayedOnCurrentStage].Loser, null));
+                }
+            }
+
             PlayedOnCurrentStage++;
+        }
+
+        public bool IsStagePlayed()
+        {
+            if (PlayedOnCurrentStage >= GamesToPlay.Count)
+                return true;
+            else
+                return false;
         }
     }
 }

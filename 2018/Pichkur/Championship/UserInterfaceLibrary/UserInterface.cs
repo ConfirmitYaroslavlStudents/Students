@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ChampionshipLibrary;
+using GridRendererLibrary;
+using MenuLibrary;
 
-namespace Championship
+namespace UserInterfaceLibrary
 {
     public class UserInterface
     {

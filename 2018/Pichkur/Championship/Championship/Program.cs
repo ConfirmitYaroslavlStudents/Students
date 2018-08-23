@@ -1,4 +1,6 @@
-﻿namespace Championship
+﻿using UserInterfaceLibrary;
+
+namespace Championship
 {
     class Program
     {

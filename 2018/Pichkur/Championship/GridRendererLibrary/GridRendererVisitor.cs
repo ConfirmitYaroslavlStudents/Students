@@ -1,4 +1,6 @@
-﻿namespace Championship
+﻿using ChampionshipLibrary;
+
+namespace GridRendererLibrary
 {
     public class GridRendererVisitor : IVisitor
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Championship
+namespace MenuLibrary
 {
     public class Menu
     {

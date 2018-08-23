@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Championship
+namespace ChampionshipLibrary
 {
     [Serializable]
     public class Game

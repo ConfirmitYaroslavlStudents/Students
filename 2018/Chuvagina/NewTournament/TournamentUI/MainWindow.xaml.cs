@@ -15,10 +15,10 @@ namespace TournamentUI
             InitializeComponent();
         }
 
-        public string ReturnWinner(string first, string second)
+        public Participant ReturnWinner(Participant first, Participant second)
         {
            
-            var detection = new WinnerDetection("Winner detection", "Chose winner",first,second);
+            var detection = new WinnerDetection("Winner detection", "Chose winner",first.Name,second.Name);
             var result = detection.ShowDialog();
             if (result==true)
                 return first;
@@ -77,16 +77,23 @@ namespace TournamentUI
 
             if (_tournament is DoubleEliminationTournament doubleEliminationTournament)
             {
-                doubleEliminationTournament.PlayGame(ReturnWinner);
+                doubleEliminationTournament.GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant);
+                var winner = ReturnWinner(leftParticipant, rightParticipant);
+                doubleEliminationTournament.PlayGame(winner);
                 List<Participant> bracket = _tournament.GetBracket();
+
                 DrawBracket(UpperBracketCanvas, bracket);
+
                 bracket = doubleEliminationTournament.GetLowerBracket();
                 DrawBracket(LowerBracketCanvas, bracket);
             }
             else
             {
-                _tournament.PlayGame(ReturnWinner);
+                _tournament.GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant);
+                var winner = ReturnWinner(leftParticipant, rightParticipant);
+                _tournament.PlayGame(winner);
                 List<Participant> bracket = _tournament.GetBracket();
+
                 DrawBracket(UpperBracketCanvas, bracket);
             }
         }

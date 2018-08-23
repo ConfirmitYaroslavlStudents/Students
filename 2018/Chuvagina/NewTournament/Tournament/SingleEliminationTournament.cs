@@ -9,10 +9,13 @@ namespace Tournament
         protected List<Participant> UpperBracketParticipants;
         protected List<Participant> RoundBracket= new List<Participant>();
         protected int GameIndex;
+        protected Participant LeftParticipant;
+        protected Participant RightParticipant;
         private const string _upperFileName = "upperBracket";
         protected const string LowerFileName = "lowerBracket";
         private const string _indexFileName = "gameIndex";
         private const string _roundFileName = "roundBracket";
+        
 
         public SingleEliminationTournament(List<string> participants)
         {
@@ -30,20 +33,22 @@ namespace Tournament
             BinarySaver.SaveSingleToBinnary(this);
         }
 
-        public void PlayGame(Func<string, string, string> inputWinner)
+        public void GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant)
         {
             if (GameIndex >= RoundBracket.Count/2)
                 OrganizeRound(ref UpperBracketParticipants);
 
-            var leftParticipant = RoundBracket[GameIndex * 2];
-            var rightParticipant = RoundBracket[GameIndex * 2 + 1];
-            var game = new Game(leftParticipant, rightParticipant);
-            game.PlayGame(inputWinner, out string winner, out string loser);
-            UpperBracketParticipants[GameIndex].SetName(winner);
+            LeftParticipant = leftParticipant =RoundBracket[GameIndex * 2];
+            RightParticipant = rightParticipant = RoundBracket[GameIndex * 2 + 1];
+        }
 
+        public void PlayGame(Participant winner)
+        {
+            UpperBracketParticipants[GameIndex].SetName(winner.Name);
             GameIndex++;
             BinarySaver.SaveSingleToBinnary(this);
         }
+
 
         protected void OrganizeRound(ref List<Participant> bracket)
         {

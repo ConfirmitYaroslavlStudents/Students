@@ -44,7 +44,6 @@
     <Compile Include="DoubleEliminationTournament.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Participant.cs" />
-    <Compile Include="Round.cs" />
     <Compile Include="SingleEliminationTournament.cs" />
   </ItemGroup>
   <ItemGroup>

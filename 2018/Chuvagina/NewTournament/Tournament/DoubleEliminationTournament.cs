@@ -3,46 +3,65 @@ using System.Collections.Generic;
 
 namespace Tournament
 {
+    [Serializable]
     public class DoubleEliminationTournament: SingleEliminationTournament
     {
         private List<Participant> _lowerBracketParticipants;
+        private bool _isPlayingUpperBracket;
+        private bool _isPlayingLastRound;
 
-        public DoubleEliminationTournament(List<string> participants, Func<string, string> inputWinner) : base(participants,inputWinner)
+        public DoubleEliminationTournament(List<string> participants) : base(participants)
         {
             _lowerBracketParticipants = new List<Participant>();
         }
 
-        public DoubleEliminationTournament(Func<string, string> inputWinner) : base(inputWinner)
+        public new void PlayGame(Func<string, string, string> inputWinner)
         {
-            _lowerBracketParticipants = BinarySaver.LoadListFromBinnary<Participant>("lowerBracket");
+            if (RoundBracket == null || GameIndex >= RoundBracket.Count / 2)
+                OrganizeLowerBracketRound();
+
+            var leftParticipant = RoundBracket[GameIndex * 2];
+            var rightParticipant = RoundBracket[GameIndex * 2 + 1];
+            var game = new Game(leftParticipant, rightParticipant);
+            game.PlayGame(inputWinner, out string winner, out string loser);
+
+            if (_isPlayingLastRound)
+                UpperBracketParticipants[GameIndex].SetName(winner);           
+            else if (_isPlayingUpperBracket)
+            {
+                UpperBracketParticipants[GameIndex].SetName(winner);
+                if (_lowerBracketParticipants?.Count < GameIndex * 2)
+                    _lowerBracketParticipants?.Insert(GameIndex, new Participant(loser));
+                else
+                    _lowerBracketParticipants?.Insert(GameIndex * 2, new Participant(loser));
+            }
+            else          
+                _lowerBracketParticipants[GameIndex].SetName(winner);
+
+            GameIndex++;
+            BinarySaver.SaveDoubleToBinnary(this);
         }
 
-        public new void PlayRound()
+        private void OrganizeLowerBracketRound()
         {
-            var round = new Round(UpperBracketParticipants, _lowerBracketParticipants);
+            _isPlayingLastRound = false;
+            if (UpperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)
+            {
+                UpperBracketParticipants.Add(_lowerBracketParticipants[0]);
+                _lowerBracketParticipants.RemoveAt(0);
+                _isPlayingLastRound = true;
+            }
 
             if (UpperBracketParticipants.Count > _lowerBracketParticipants.Count)
             {
-                round.PlayUpperBracket(InputWinner);
-                UpperBracketParticipants = round.UpperBracketParticipants;
-                _lowerBracketParticipants = round.LowerBracketParticipants;
-
-                if (UpperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)
-                    _lowerBracketParticipants.RemoveAt(0);
+                OrganizeRound(ref UpperBracketParticipants);
+                _isPlayingUpperBracket = true;
             }
             else
             {
-                _lowerBracketParticipants = round.PlayLowerBracket(InputWinner);
-
-                if (UpperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)
-                {
-                    UpperBracketParticipants.Add(_lowerBracketParticipants[0]);
-                    _lowerBracketParticipants.RemoveAt(0);
-                }
+                OrganizeRound(ref _lowerBracketParticipants);
+                _isPlayingUpperBracket = false;
             }
-
-            BinarySaver.SaveListToBinnary("upperBracket", UpperBracketParticipants);
-            BinarySaver.SaveListToBinnary("lowerBracket", _lowerBracketParticipants);
         }
 
         public List<Participant> GetLowerBracket()

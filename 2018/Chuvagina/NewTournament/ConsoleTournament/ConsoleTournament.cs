@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Tournament;
 
 namespace ConsoleTournament
@@ -21,12 +22,23 @@ namespace ConsoleTournament
         }
 
         public delegate void PrintBracket(List<Participant> participant);
-        private static Func<string, string> _inputWinner = DataInput.InputWinner;
+        private static Func<string, string, string> _inputWinner = DataInput.InputWinner;
 
         public static void Main(string[] args)
         {
             bool isFromSavedFile = DataInput.IsFromSavedFile();
-            var eliminationSystem = DataInput.ChoseEliminationSystem();
+            EliminationSystem eliminationSystem = EliminationSystem.Single;
+
+            if (isFromSavedFile)
+            {
+                if (File.Exists(BinarySaver.NameOfSinlgeEliminationFile))
+                    eliminationSystem = EliminationSystem.Single;
+                else if (File.Exists(BinarySaver.NameOfDoubleEliminationFile))
+                    eliminationSystem = EliminationSystem.Double;
+            }
+            else
+                eliminationSystem = DataInput.ChoseEliminationSystem();
+
             var bracketStyle = DataInput.ChoseBracket();
             PrintBracket print = null;
 
@@ -51,12 +63,12 @@ namespace ConsoleTournament
             SingleEliminationTournament tournament;
 
             if (isFromSavedFile)
-                tournament = new SingleEliminationTournament(_inputWinner);
+                tournament = BinarySaver.LoadSingleFromBinnary();
             else
             {
                 int amount = DataInput.InputAmount();
                 var participants = DataInput.InputNames(amount, _maxNameLength);
-                tournament = new SingleEliminationTournament(participants, _inputWinner);
+                tournament = new SingleEliminationTournament(participants);
             }
 
             List<Participant> nextUpperBracketRound;
@@ -67,7 +79,7 @@ namespace ConsoleTournament
                 Console.Clear();
                 Console.WriteLine("----Upper Bracket----");
                 print(nextUpperBracketRound);
-                tournament.PlayRound();
+                tournament.PlayGame(_inputWinner);
             }
 
             nextUpperBracketRound = tournament.GetBracket();
@@ -81,12 +93,12 @@ namespace ConsoleTournament
         {
             DoubleEliminationTournament tournament;
             if (isFromSavedFile)
-                tournament = new DoubleEliminationTournament(_inputWinner);
+                tournament = BinarySaver.LoadDoubleFromBinnary();
             else
             {
                 int amount = DataInput.InputAmount();
                 var participants = DataInput.InputNames(amount, _maxNameLength);
-                tournament = new DoubleEliminationTournament(participants, _inputWinner);
+                tournament = new DoubleEliminationTournament(participants);
             }
 
             List<Participant> nextUpperBracketRound;
@@ -101,7 +113,7 @@ namespace ConsoleTournament
                 nextLowerBracketRound = tournament.GetLowerBracket();
                 Console.WriteLine("----Lower Bracket----");
                 print(nextLowerBracketRound);
-                tournament.PlayRound();
+                tournament.PlayGame(_inputWinner);
             }
 
             nextUpperBracketRound = tournament.GetBracket();

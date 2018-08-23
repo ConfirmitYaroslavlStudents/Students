@@ -52,9 +52,9 @@ namespace ConsoleTournament
             return result;
         }
 
-        public static string InputWinner(string message)
+        public static string InputWinner(string first, string second)
         {         
-            Console.Write(message);  
+            Console.Write($"The winner between \"{first}\" and \"{second}\" is: ");  
             return Console.ReadLine();
         }
 

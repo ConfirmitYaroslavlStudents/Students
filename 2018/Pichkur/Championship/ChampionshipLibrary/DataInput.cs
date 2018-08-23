@@ -24,15 +24,15 @@ namespace Championship
             return number;
         }
 
-        public Team InputCorrectTeam(List<Team> teams)
+        public Team InputTeam(List<Team> teams)
         {
-            var team = new Team(_dataReader.InputString());
+            var team = new Team(_dataReader.InputTeamName());
 
             while (teams.Contains(team))
             {
                 _dataReader.WriteLineMessage(Messages.ImpossibleTeamName);
                 _dataReader.WriteMessage(Messages.TryAgain);
-                team = new Team(_dataReader.InputString());
+                team = new Team(_dataReader.InputTeamName());
             }
 
             return team;
@@ -78,7 +78,7 @@ namespace Championship
             for (int i = 0; i < countTeams; i++)
             {
                 _dataReader.WriteMessage(Messages.SomeIndex(i + 1));
-                teams.Add(InputCorrectTeam(teams));
+                teams.Add(InputTeam(teams));
             }
 
             return teams;

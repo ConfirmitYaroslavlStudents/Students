@@ -9,6 +9,16 @@ namespace Championship
             return Console.ReadLine();
         }
 
+        public string InputTeamName()
+        {
+            return Console.ReadLine();
+        }
+
+        public string InputTeamScore()
+        {
+            return Console.ReadLine();
+        }
+
         public void WriteLineMessage(string message)
         {
             Console.WriteLine(message);

@@ -3,19 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TournamentsWpfForms"
         mc:Ignorable="d"
-        Title="TournamentPlayWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Title="TournamentPlayWindow" Height="600" Width="1300" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="16*" ></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="23,30,0,0" VerticalAlignment="Top"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="137,30,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.319,-0.098"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="66,33,0,0" TextWrapping="Wrap" Text="--" VerticalAlignment="Top" Width="24"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="108,33,0,0" TextWrapping="Wrap" Text="--" VerticalAlignment="Top" Width="24"/>
-        <Label Content=":" HorizontalAlignment="Left" Margin="90,31,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.469,0.587"/>
-        <Button Content="Enter result" HorizontalAlignment="Left" Margin="23,62,0,0" VerticalAlignment="Top" Width="152"/>
+        <Label Name ="FirstPlayerLabel"  Content="---" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="10,30,0,0" VerticalAlignment="Top" Height="26" Width="51"/>
+        <Label Grid.Column="0" Name ="SecondPlayerLabel" Content="---" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="137,30,0,0" VerticalAlignment="Top" Height="26" Width="57"/>
+        <TextBox Grid.Column="0" Name="FirstPlayerScore" HorizontalAlignment="Left" Height="23" Margin="66,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="24"/>
+        <TextBox Grid.Column="0" Name="SecondPlayerScore" HorizontalAlignment="Left" Height="23" Margin="108,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="24"/>
+        <Label Grid.Column="0" Content=":" HorizontalAlignment="Left" Margin="93,31,0,0" VerticalAlignment="Top" Height="26" Width="13"/>
+        <Button Grid.Column="0" Content="Enter result" HorizontalAlignment="Left" Margin="23,62,0,0" VerticalAlignment="Top" Width="152" Click="TakeResults" Height="20"/>
+        <Canvas Name ="CanvasForPrintTournamentGrid" Margin="0,-1,0,1" Grid.Column="1"/>
+        <Button Grid.Column="0" Name="NewTornamentButton" Content="New tournament" HorizontalAlignment="Left" Margin="23,480,0,0" VerticalAlignment="Top" Width="152" Height="20" Visibility ="Hidden" Click="NewTornamentButton_OnClick"/>
     </Grid>
 </Window>

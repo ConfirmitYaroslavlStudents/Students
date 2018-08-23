@@ -1,19 +1,13 @@
-﻿namespace TournamentLibrary
+﻿using System.Collections.Generic;
+
+namespace TournamentLibrary
 {
-    public abstract class Starter
+    public static class NameValidator
     {
         public const int MinChars = 2;
         public const int MaxChars = 8;
-
-        public abstract Tournament TryLoadTournament();
-
-        public abstract bool ReadDoubleEliminationFlag();
-
-        public abstract int ReadNumberOfPlayers();
-
-        public abstract string[] ReadNames(int numberOfPlayers);
-
-        protected bool NameValidation(string newName, string[] names, int validNames)
+        
+        public static bool Validate(string newName, List<string> names)
         {
             if (newName.Length < MinChars || newName.Length > MaxChars)
             {
@@ -28,9 +22,9 @@
                 }
             }
 
-            for (int i = 0; i < validNames; i++)
+            foreach (var name in names)
             {
-                if (names[i] == newName)
+                if (name == newName)
                 {
                     return false;
                 }

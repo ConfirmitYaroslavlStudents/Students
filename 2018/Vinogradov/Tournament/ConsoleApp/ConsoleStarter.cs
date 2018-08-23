@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TournamentLibrary
 {
-    public class ConsoleStarter : Starter
+    public class ConsoleStarter
     {
 
         public ConsoleStarter()
         {
         }
 
-        public override Tournament TryLoadTournament()
+        public Tournament TryLoadTournament()
         {
             const string doLoad = "yes";
             const string dontLoad = "no";
@@ -51,7 +52,7 @@ namespace TournamentLibrary
             }
         }
 
-        public override bool ReadDoubleEliminationFlag()
+        public bool ReadDoubleEliminationFlag()
         {
             const string singleType = "single";
             const string doubleType = "double";
@@ -86,7 +87,7 @@ namespace TournamentLibrary
             }
         }
 
-        public override int ReadNumberOfPlayers()
+        public int ReadNumberOfPlayers()
         {
             string openingMessage = "Please, input number of players.\r\nThere must be at least 2 for the tournament to start.";
             Console.WriteLine(openingMessage);
@@ -104,40 +105,38 @@ namespace TournamentLibrary
             return number;
         }
 
-        public override string[] ReadNames(int numberOfPlayers)
+        public string[] ReadNames(int numberOfPlayers)
         {
-            string[] players = new string[numberOfPlayers];
-            string openingMessage = String.Format("Please, input players' nicknames.\r\nThey must contain only letters or digits and be {0} - {1} characters long.\r\nAll names must be different.", MinChars, MaxChars);
+            List<string> names = new List<string>();
+            string openingMessage = String.Format("Please, input players' nicknames.\r\nThey must contain only letters or digits and be {0} - {1} characters long.\r\nAll names must be different.", NameValidator.MinChars, NameValidator.MaxChars);
             Console.WriteLine(openingMessage);
             Console.WriteLine();
-            int validNames = 0;
 
-            while (validNames < players.Length)
+            while (names.Count < numberOfPlayers)
             {
                 string newName = Console.ReadLine();
 
-                if (NameValidation(newName, players, validNames))
+                if (NameValidator.Validate(newName, names))
                 {
-                    players[validNames] = newName;
-                    validNames++;
+                    names.Add(newName);
                 }
 
                 Console.Clear();
                 Console.WriteLine(openingMessage);
 
-                if (validNames > 0)
+                if (names.Count > 0)
                 {
                     Console.WriteLine("Current players:");
 
-                    for (int i = 0; i < validNames; i++)
+                    foreach (var name in names)
                     {
-                        Console.WriteLine("\t{0}", players[i]);
+                        Console.WriteLine("\t{0}", name);
                     }
                 }
                 Console.WriteLine();
             }
 
-            return players;
+            return names.ToArray();
         }
     }
 }

@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleStarter.cs" />
-    <Compile Include="Drawer.cs" />
     <Compile Include="HorizontalDrawer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,6 +6,6 @@ namespace TournamentLibrary
     public abstract class Grid
     {
         public Match[][] Matches;
-        public string Winner;
+        public Player Winner;
     }
 }

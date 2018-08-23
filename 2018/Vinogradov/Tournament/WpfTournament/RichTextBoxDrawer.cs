@@ -1,13 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Documents;
+using TournamentLibrary;
 
-namespace TournamentLibrary
+namespace WpfTournament
 {
-    public class HorizontalDrawer : Drawer
+    class RichTextBoxDrawer : Drawer
     {
-        public HorizontalDrawer()
-        {
+        private RichTextBox _box;
+        private const string _newLine = "\r\n";
+        private const string _mainColor = "Black";
+        private const string _highlightColor = "Green";
 
+        public RichTextBoxDrawer(RichTextBox box)
+        {
+            _box = box;
+        }
+
+        private void AppendTextWithColor(string text, string color)
+        {
+            BrushConverter bc = new BrushConverter();
+            TextRange tr = new TextRange(_box.Document.ContentEnd, _box.Document.ContentEnd);
+            tr.Text = text;
+            tr.ApplyPropertyValue(TextElement.ForegroundProperty, bc.ConvertFromString(color));
         }
 
         public override void DrawTable(Tournament tournament)
@@ -56,7 +72,7 @@ namespace TournamentLibrary
                     PrintCell(tournament, isLoserGrid, lines, k, i);
                 }
 
-                Console.WriteLine();
+                AppendTextWithColor(_newLine, _mainColor);
             }
         }
 
@@ -68,20 +84,21 @@ namespace TournamentLibrary
             {
                 if (column > 0)
                 {
-                    Console.Write('—');
+                    AppendTextWithColor("-", _mainColor);
                 }
                 else
                 {
-                    Console.Write(' ');
+                    AppendTextWithColor(" ", _mainColor);
                 }
+
+                string color = _mainColor;
 
                 if (line == lines.Length - 1 || GreenLight(tournament, isLoserGrid, line, column))
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    color = _highlightColor;
                 }
 
-                Console.Write(AlignName(cell, NameValidator.MaxChars));
-                Console.ResetColor();
+                AppendTextWithColor(AlignName(cell, NameValidator.MaxChars), color);
                 int gridLength = tournament.Main.Matches.Length;
 
                 if (isLoserGrid)
@@ -91,16 +108,16 @@ namespace TournamentLibrary
 
                 if (column < gridLength)
                 {
-                    Console.Write('—');
+                    AppendTextWithColor("-", _mainColor);
                 }
                 else
                 {
-                    Console.Write(' ');
+                    AppendTextWithColor(" ", _mainColor);
                 }
             }
             else
             {
-                Console.Write(AlignName(string.Empty, (NameValidator.MaxChars + 2)));
+                AppendTextWithColor(AlignName(string.Empty, (NameValidator.MaxChars + 2)), _mainColor);
             }
         }
     }

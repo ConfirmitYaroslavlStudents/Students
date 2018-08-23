@@ -10,7 +10,7 @@ namespace TournamentLibrary
 
         public MainGrid(string[] playerNames)
         {
-            Winner = string.Empty;
+            Winner = null;
             int extraPlayerExists = playerNames.Length % 2;
             List<int> matchesInEachTour = CalculateTourSizes(playerNames.Length, extraPlayerExists);
             Matches = new Match[matchesInEachTour.Count][];
@@ -18,7 +18,9 @@ namespace TournamentLibrary
 
             for (int i = 1; i < playerNames.Length; i += 2)
             {
-                Matches[0][i / 2] = new Match(playerNames[i - 1], playerNames[i]);
+                var playerOne = new Player(playerNames[i - 1], new PlayerCoords(false, 0, i / 2, 0));
+                var playerTwo = new Player(playerNames[i], new PlayerCoords(false, 0, i / 2, 1));
+                Matches[0][i / 2] = new Match(playerOne, playerTwo);
             }
 
             TourForExtraPlayer = -1;
@@ -30,7 +32,7 @@ namespace TournamentLibrary
 
                 for (int j = 0; j < Matches[i].Length; j++)
                 {
-                    Matches[i][j] = new Match(string.Empty, string.Empty);
+                    Matches[i][j] = new Match(null, null);
                 }
 
                 FindPlaceForExtraPlayer(i, extraPlayerExists);
@@ -38,8 +40,9 @@ namespace TournamentLibrary
 
             if (extraPlayerExists == 1)
             {
+                var extraPlayer = new Player(playerNames[playerNames.Length - 1], new PlayerCoords(false, TourForExtraPlayer, Matches[TourForExtraPlayer].Length - 1, 1));
                 var matchForExtraPlayer = Matches[TourForExtraPlayer][Matches[TourForExtraPlayer].Length - 1];
-                matchForExtraPlayer.Opponents[1] = playerNames[playerNames.Length - 1];
+                matchForExtraPlayer.Opponents[1] = extraPlayer;
             }
         }
 

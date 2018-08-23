@@ -22,7 +22,7 @@ namespace TournamentLibrary
                 int matchNumber = line / (int)Math.Pow(2, column + 2);
                 int playerInPair = (line % (int)Math.Pow(2, column + 2)) / (int)Math.Pow(2, column + 1);
 
-                if (grid.Matches[column][matchNumber].Winner == playerInPair)
+                if (grid.Matches[column][matchNumber].WinnerIndex == playerInPair)
                 {
                     return true;
                 }
@@ -66,6 +66,7 @@ namespace TournamentLibrary
                 lines[i] = new List<string>();
             }
 
+            string name;
             int gapSize = 1;
             int currentLine = 0;
 
@@ -77,7 +78,15 @@ namespace TournamentLibrary
                     {
                         FillLines(lines, currentLine, gapSize - 1);
                         currentLine += gapSize - 1;
-                        lines[currentLine].Add(grid.Matches[k][i].Opponents[j]);
+                        name = string.Empty;
+                        var player = grid.Matches[k][i].Opponents[j];
+
+                        if (player != null)
+                        {
+                            name = player.Name;
+                        }
+
+                        lines[currentLine].Add(name);
                         currentLine++;
                         FillLines(lines, currentLine, gapSize);
                         currentLine += gapSize;
@@ -91,7 +100,14 @@ namespace TournamentLibrary
 
             int halfHeight = tableHeight / 2;
             FillLines(lines, 0, halfHeight - 1);
-            lines[halfHeight - 1].Add(grid.Winner);
+            name = string.Empty;
+
+            if (grid.Winner != null)
+            {
+                name = grid.Winner.Name;
+            }
+
+            lines[halfHeight - 1].Add(name);
             FillLines(lines, halfHeight, tableHeight - halfHeight);
             return lines;
         }

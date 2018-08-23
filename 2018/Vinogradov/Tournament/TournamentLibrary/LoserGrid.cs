@@ -13,7 +13,7 @@ namespace TournamentLibrary
                 throw new InvalidOperationException("Must create the main grid first.");
             }
 
-            Winner = string.Empty;
+            Winner = null;
             var matchesInEachTour = CalculateTourSizes(mainGrid);
             Matches = new Match[matchesInEachTour.Count][];
             for (int i = 0; i < Matches.Length; i++)
@@ -22,7 +22,7 @@ namespace TournamentLibrary
 
                 for (int j = 0; j < Matches[i].Length; j++)
                 {
-                    Matches[i][j] = new Match(string.Empty, string.Empty);
+                    Matches[i][j] = new Match(null, null);
                 }
             }
         }

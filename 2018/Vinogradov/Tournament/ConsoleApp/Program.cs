@@ -13,7 +13,7 @@ namespace TournamentLibrary
 
         static void Main(string[] args)
         {
-            Starter starter = new ConsoleStarter();
+            var starter = new ConsoleStarter();
             var tournament = starter.TryLoadTournament();
 
             if (tournament == null)
@@ -111,7 +111,7 @@ namespace TournamentLibrary
 
         private static void ParseGame(Tournament tournament, string name, string warning)
         {
-            if (tournament.PlayersCoords.ContainsKey(name))
+            if (tournament.Players.ContainsKey(name))
             {
                 try
                 {

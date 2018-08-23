@@ -28,7 +28,14 @@ namespace TournamentLibrary
                 }
 
                 FillLines(mainGames, 0, mainGames.Length - 1);
-                mainGames[mainGames.Length - 1].Add(tournament.Champion);
+                string name = string.Empty;
+
+                if (tournament.Champion != null)
+                {
+                    name = tournament.Champion.Name;
+                }
+
+                mainGames[mainGames.Length - 1].Add(name);
                 FillLines(losersGames, 0, losersGames.Length);
             }
 
@@ -77,12 +84,12 @@ namespace TournamentLibrary
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
 
-                Console.Write(CenterName(cell, Starter.MaxChars));
+                Console.Write(AlignName(cell, NameValidator.MaxChars));
                 Console.ResetColor();
             }
             else
             {
-                Console.Write(CenterName(string.Empty, Starter.MaxChars));
+                Console.Write(AlignName(string.Empty, NameValidator.MaxChars));
             }
         }
 
@@ -94,11 +101,11 @@ namespace TournamentLibrary
 
                 if (cell != null)
                 {
-                    Console.Write(CenterName("|", Starter.MaxChars));
+                    Console.Write(AlignName("|", NameValidator.MaxChars));
                 }
                 else
                 {
-                    Console.Write(CenterName(string.Empty, Starter.MaxChars));
+                    Console.Write(AlignName(string.Empty, NameValidator.MaxChars));
                 }
             }
 
@@ -110,11 +117,11 @@ namespace TournamentLibrary
 
                     if (cell != null)
                     {
-                        Console.Write(CenterName("|", Starter.MaxChars));
+                        Console.Write(AlignName("|", NameValidator.MaxChars));
                     }
                     else
                     {
-                        Console.Write(CenterName(string.Empty, Starter.MaxChars));
+                        Console.Write(AlignName(string.Empty, NameValidator.MaxChars));
                     }
                 }
             }

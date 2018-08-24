@@ -1,4 +1,5 @@
 ﻿using System;
+using static Tournament.SingleEliminationTournament;
 
 namespace Tournament
 {
@@ -31,9 +32,13 @@ namespace Tournament
             Winner = participant;
         }
 
-        internal void SetName(string name)
+        internal void SetName(Side side)
         {
-            Name = name;
+            if (side==Side.Left)
+                Name = Left.Name;
+            if (side == Side.Right)
+                Name = Right.Name;
+
         }
     }
 }

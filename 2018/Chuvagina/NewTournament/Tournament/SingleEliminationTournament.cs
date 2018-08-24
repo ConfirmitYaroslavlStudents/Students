@@ -6,11 +6,15 @@ namespace Tournament
     [Serializable]
     public class SingleEliminationTournament
     {
+        public enum Side
+        {
+            Left,
+            Right
+        }
+
         protected List<Participant> UpperBracketParticipants;
         protected List<Participant> RoundBracket= new List<Participant>();
-        protected int GameIndex;
-        protected Participant LeftParticipant;
-        protected Participant RightParticipant;        
+        protected int GameIndex; 
 
         public SingleEliminationTournament(List<string> participants)
         {
@@ -28,18 +32,19 @@ namespace Tournament
             BinarySaver.SaveSingleToBinnary(this);
         }
 
-        public void GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant)
+        public Participant GetPlayingParticipants()
         {
             if (GameIndex >= RoundBracket.Count/2)
                 OrganizeRound(ref UpperBracketParticipants);
 
-            LeftParticipant = leftParticipant =RoundBracket[GameIndex * 2];
-            RightParticipant = rightParticipant = RoundBracket[GameIndex * 2 + 1];
+            Participant meeting = UpperBracketParticipants[GameIndex];
+
+            return meeting;
         }
 
-        public void PlayGame(Participant winner)
+        public void PlayGame(Side side)
         {
-            UpperBracketParticipants[GameIndex].SetName(winner.Name);
+            UpperBracketParticipants[GameIndex].SetName(side);
             GameIndex++;
             BinarySaver.SaveSingleToBinnary(this);
         }

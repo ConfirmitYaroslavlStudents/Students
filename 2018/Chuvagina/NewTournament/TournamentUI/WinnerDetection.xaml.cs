@@ -13,19 +13,33 @@ namespace TournamentUI
             InitializeComponent();
             Title = title;
 
+            var firstBlock = new TextBlock()
+            {
+                Text = firstPlayer,
+                TextWrapping = TextWrapping.Wrap
+            };
+
             var FirstPlayer = new Button()
             {
                 Width = 70,
-                Content = firstPlayer,
+                Height = 40,
+                Content = firstBlock,
                 VerticalAlignment = VerticalAlignment.Bottom,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 ToolTip = firstPlayer
             };
 
+            var secondBlock = new TextBlock()
+            {
+                Text = secondPlayer,
+                TextWrapping = TextWrapping.Wrap
+            }; 
+
             var SecondPlayer = new Button()
             {
                 Width = 70,
-                Content = secondPlayer,
+                Height = 40,
+                Content = secondBlock,
                 VerticalAlignment = VerticalAlignment.Bottom,
                 HorizontalAlignment = HorizontalAlignment.Right,
                 ToolTip = secondPlayer

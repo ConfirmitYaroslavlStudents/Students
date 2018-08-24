@@ -15,35 +15,41 @@ namespace Tournament
             _lowerBracketParticipants = new List<Participant>();
         }
 
-        public new void GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant)
+        public new Participant GetPlayingParticipants()
         {
             if (RoundBracket == null || GameIndex >= RoundBracket.Count / 2)
                 OrganizeRound();
 
-            LeftParticipant = leftParticipant = RoundBracket[GameIndex * 2];
-            RightParticipant = rightParticipant = RoundBracket[GameIndex * 2 + 1];
+            Participant meeting = null;
+
+            if (_isPlayingUpperBracket)
+                meeting = UpperBracketParticipants[GameIndex];
+            else
+                meeting = _lowerBracketParticipants[GameIndex];
+
+            return meeting;
         }
 
-        public new void PlayGame(Participant winner)
+        public new void PlayGame(Side side)
         {
-            Participant loser;
-            if (winner == LeftParticipant)
-                loser = RightParticipant;
+            string loser = null;
+            if (side==Side.Left)
+                loser = UpperBracketParticipants[GameIndex].Right.Name;
             else
-                loser = LeftParticipant;
+                loser = UpperBracketParticipants[GameIndex].Left.Name;
 
             if (_isPlayingLastRound)
-                UpperBracketParticipants[GameIndex].SetName(winner.Name);           
+                UpperBracketParticipants[GameIndex].SetName(side);
             else if (_isPlayingUpperBracket)
             {
-                UpperBracketParticipants[GameIndex].SetName(winner.Name);
+                UpperBracketParticipants[GameIndex].SetName(side);
                 if (_lowerBracketParticipants?.Count < GameIndex * 2)
-                    _lowerBracketParticipants?.Insert(GameIndex, new Participant(loser.Name));
+                    _lowerBracketParticipants?.Insert(GameIndex, new Participant(loser));
                 else
-                    _lowerBracketParticipants?.Insert(GameIndex * 2, new Participant(loser.Name));
+                    _lowerBracketParticipants?.Insert(GameIndex * 2, new Participant(loser));
             }
             else          
-                _lowerBracketParticipants[GameIndex].SetName(winner.Name);
+                _lowerBracketParticipants[GameIndex].SetName(side);
 
             GameIndex++;
             BinarySaver.SaveDoubleToBinnary(this);

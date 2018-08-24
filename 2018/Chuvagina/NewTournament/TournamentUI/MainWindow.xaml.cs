@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Tournament;
+using static Tournament.SingleEliminationTournament;
 
 namespace TournamentUI
 {
@@ -15,15 +16,15 @@ namespace TournamentUI
             InitializeComponent();
         }
 
-        public Participant ReturnWinner(Participant first, Participant second)
+        public Side ReturnWinner(Participant meeting)
         {
            
-            var detection = new WinnerDetection("Winner detection", "Chose winner",first.Name,second.Name);
+            var detection = new WinnerDetection("Winner detection", "Chose winner", meeting.Left.Name, meeting.Right.Name);
             var result = detection.ShowDialog();
             if (result==true)
-                return first;
+                return Side.Left;
 
-            return second;
+            return Side.Right;
         }
 
         private void EnterParticipantName_Click(object sender, RoutedEventArgs e)
@@ -81,11 +82,11 @@ namespace TournamentUI
 
             if (_tournament is DoubleEliminationTournament doubleEliminationTournament)
             {
-                doubleEliminationTournament.GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant);
-                var winner = ReturnWinner(leftParticipant, rightParticipant);
-                doubleEliminationTournament.PlayGame(winner);
-                List<Participant> bracket = _tournament.GetBracket();
+                var meeting = doubleEliminationTournament.GetPlayingParticipants();
+                var side = ReturnWinner(meeting);
+                doubleEliminationTournament.PlayGame(side);
 
+                List<Participant> bracket = _tournament.GetBracket();
                 DrawBracket(UpperBracketCanvas, bracket);
 
                 bracket = doubleEliminationTournament.GetLowerBracket();
@@ -93,9 +94,9 @@ namespace TournamentUI
             }
             else
             {
-                _tournament.GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant);
-                var winner = ReturnWinner(leftParticipant, rightParticipant);
-                _tournament.PlayGame(winner);
+                var meeting = _tournament.GetPlayingParticipants();
+                var side = ReturnWinner(meeting);
+                _tournament.PlayGame(side);
                 List<Participant> bracket = _tournament.GetBracket();
 
                 DrawBracket(UpperBracketCanvas, bracket);
@@ -116,7 +117,7 @@ namespace TournamentUI
 
             foreach (var participant in bracket)
             {
-                var newParticipant = CloneParticipant.Clone(participant);
+                var newParticipant = ConvertParticipant.ToUiParticipant(participant);
                 BracketDrawing.AddLinkToCanvas(ref i, maxDepth, newParticipant, canvas);
             }
 

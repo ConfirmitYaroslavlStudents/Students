@@ -78,9 +78,9 @@ namespace ConsoleTournament
                 Console.Clear();
                 Console.WriteLine("----Upper Bracket----");
                 print(nextUpperBracketRound);
-                tournament.GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant);
-                var winner = DataInput.InputWinner(leftParticipant, rightParticipant);
-                tournament.PlayGame(winner);
+                var meeting = tournament.GetPlayingParticipants();
+                var side = DataInput.InputWinner(meeting);
+                tournament.PlayGame(side);
             }
 
             nextUpperBracketRound = tournament.GetBracket();
@@ -114,9 +114,9 @@ namespace ConsoleTournament
                 nextLowerBracketRound = tournament.GetLowerBracket();
                 Console.WriteLine("----Lower Bracket----");
                 print(nextLowerBracketRound);
-                tournament.GetPlayingParticipants(out Participant leftParticipant, out Participant rightParticipant);
-                var winner = DataInput.InputWinner(leftParticipant, rightParticipant);
-                tournament.PlayGame(winner);
+                var meeting = tournament.GetPlayingParticipants();
+                var side = DataInput.InputWinner(meeting);
+                tournament.PlayGame(side);
             }
 
             nextUpperBracketRound = tournament.GetBracket();

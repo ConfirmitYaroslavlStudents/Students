@@ -10,6 +10,7 @@ namespace TournamentUI
         private const int _rowDistance= 30;
         private const int _columnDistance = 80;
         private const int _heightOfText = 10;
+        private const int _cornerRadius = 5;
         private static SolidColorBrush _bracketColor = Brushes.RoyalBlue;
 
         public static void AddLinkToCanvas(ref int rowIndex, int colIndex, UiParticipant node, Canvas canvas)
@@ -40,7 +41,6 @@ namespace TournamentUI
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 FontSize=_heightOfText,
-                ToolTip=fullNameToolTip
             };
 
             var border = new Border()
@@ -48,11 +48,12 @@ namespace TournamentUI
                 Width = _columnDistance,
                 MinHeight = _rowDistance/2,
                 MaxHeight = _rowDistance,
-                CornerRadius = new CornerRadius(10,10,10,10),
+                CornerRadius = new CornerRadius(_cornerRadius),
                 Background = Brushes.White,
                 BorderBrush = _bracketColor,
-                BorderThickness = new Thickness(1)
-        };
+                BorderThickness = new Thickness(1),
+                ToolTip = fullNameToolTip
+            };
             border.Child = participant;
 
             if (node.Winner?.Name == node.Name)
@@ -77,7 +78,7 @@ namespace TournamentUI
                 {
                     Y1 = node.HorizontalAlignment * _rowDistance,
                     X1 = node.VerticalAlignment * _columnDistance,
-                    Y2 = node.Left.HorizontalAlignment * _rowDistance + 10,
+                    Y2 = node.Left.HorizontalAlignment * _rowDistance + _cornerRadius,
                     X2 = node.VerticalAlignment * _columnDistance,
                     Stroke = _bracketColor
                 };
@@ -90,7 +91,7 @@ namespace TournamentUI
 
                 var line = new Line
                 {
-                    Y1 = node.HorizontalAlignment * _rowDistance + 10,
+                    Y1 = node.HorizontalAlignment * _rowDistance + _cornerRadius,
                     X1 = node.Winner.VerticalAlignment * _columnDistance,
                     Y2 = node.Winner.HorizontalAlignment * _rowDistance,
                     X2 = node.Winner.VerticalAlignment * _columnDistance,

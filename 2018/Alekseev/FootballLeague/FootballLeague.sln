@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballLeague", "Football_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballLeagueClassLibrary", "FootballLeagueClassLibrary\FootballLeagueClassLibrary.csproj", "{C9639C7B-C87B-4592-9E71-04A6A04525A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballTournamentWPF", "FootballTournamentWPF\FootballTournamentWPF.csproj", "{1CF8B17F-6938-4110-9F62-C10DE152E8B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C9639C7B-C87B-4592-9E71-04A6A04525A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9639C7B-C87B-4592-9E71-04A6A04525A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9639C7B-C87B-4592-9E71-04A6A04525A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF8B17F-6938-4110-9F62-C10DE152E8B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF8B17F-6938-4110-9F62-C10DE152E8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF8B17F-6938-4110-9F62-C10DE152E8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF8B17F-6938-4110-9F62-C10DE152E8B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

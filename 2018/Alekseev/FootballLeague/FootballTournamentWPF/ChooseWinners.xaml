@@ -1,0 +1,14 @@
+﻿<Window x:Class="FootballTournamentWPF.ChooseWinners"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FootballTournamentWPF"
+        mc:Ignorable="d"
+        Title="ChooseWinners" Height="441.775" Width="496.867">
+    <Grid Margin="0,0,43,66">
+        <Label x:Name="MatchWinnerLabel" Content="Set match winner" HorizontalAlignment="Left" Margin="185,78,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="FirstPlayerButton" Content="" HorizontalAlignment="Left" Margin="126,131,0,0" VerticalAlignment="Top" Width="218" RenderTransformOrigin="1.16,0.77"/>
+        <Button x:Name="SecondPlayerButton" Content="" HorizontalAlignment="Left" Margin="126,190,0,0" VerticalAlignment="Top" Width="218"/>
+    </Grid>
+</Window>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace TournamentLibrary
 {
@@ -129,6 +130,17 @@ namespace TournamentLibrary
                 return true;
 
             return false;
+        }
+
+        public void ResponseData(Foo foo)
+        {
+            switch (foo.RequestedData)
+            {
+                case RequestedData.PlayersCount:
+                    CountOfPlayers = int.Parse(foo.Message);
+                    _printer.RequestData(new Foo(){RequestedData = RequestedData.PlayerName});
+                    break;
+            }
         }
     }
 }

@@ -93,6 +93,11 @@ namespace WPFTournament
                 SP_AddPlayers.Visibility = Visibility.Visible;
 
                 _tournamentData.GetCountOfPlayers(int.Parse(TB_CountOfPlayers.Text));
+                _tournament.ResponseData(new Foo()
+                {
+                    Message = TB_CountOfPlayers.Text,
+                    RequestedData = RequestedData.PlayersCount
+                });
                 _printer.EnterPlayerNames();
                 _printer.EnterPlayerName(_tournamentData.IndexOfCurrentPlayer);
             }

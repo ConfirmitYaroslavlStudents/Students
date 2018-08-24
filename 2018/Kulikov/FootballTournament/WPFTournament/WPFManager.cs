@@ -13,6 +13,8 @@ namespace WPFTournament
         private int _indexOfPlayer;
         private int _indexOfGame;
         private int _numberOfPlayer;
+        private Foo _requestedData;
+
 
         public WPFManager(MainWindow mainWindow, TournamentData tournamentData)
         {
@@ -92,7 +94,7 @@ namespace WPFTournament
                 _indexOfGame++;
             }
 
-            if(_indexOfGame == _tournamentData.GamesToPlay.Count)
+            if (_indexOfGame == _tournamentData.GamesToPlay.Count)
             {
                 _numberOfPlayer = 0;
                 _indexOfGame = 0;
@@ -109,6 +111,13 @@ namespace WPFTournament
         public void PrintChampion(Player champion)
         {
             _mainWindow.LB_Results.Items.Add($"Tournament is finished. {champion.Name} is a champion!");
+        }
+
+        public void RequestData(Foo foo)
+        {
+            _requestedData = foo;
+
+            _info.AppendText(foo.Message);
         }
 
         public void PrintGameResult(Game game)

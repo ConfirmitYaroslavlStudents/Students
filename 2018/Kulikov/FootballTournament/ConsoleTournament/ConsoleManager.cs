@@ -85,5 +85,10 @@ namespace ConsoleTournament
         {
             Console.WriteLine($"Tournament is finished. {champion.Name} is a champion!");
         }
+
+        public void RequestData(Foo foo)
+        {
+            
+        }
     }
 }

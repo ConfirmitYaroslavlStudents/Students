@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = env => {
   const ENV = process.env.NODE_ENV || 'development';
-  const PORT = (env && env.port) || 8080;
+  const PORT = (env && env.port) || 9090;
 
   const config = {
     devServer: {

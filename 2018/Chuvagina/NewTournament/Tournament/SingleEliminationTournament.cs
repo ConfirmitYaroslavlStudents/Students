@@ -10,12 +10,7 @@ namespace Tournament
         protected List<Participant> RoundBracket= new List<Participant>();
         protected int GameIndex;
         protected Participant LeftParticipant;
-        protected Participant RightParticipant;
-        private const string _upperFileName = "upperBracket";
-        protected const string LowerFileName = "lowerBracket";
-        private const string _indexFileName = "gameIndex";
-        private const string _roundFileName = "roundBracket";
-        
+        protected Participant RightParticipant;        
 
         public SingleEliminationTournament(List<string> participants)
         {

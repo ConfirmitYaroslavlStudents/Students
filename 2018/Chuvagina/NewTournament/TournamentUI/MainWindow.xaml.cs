@@ -57,6 +57,10 @@ namespace TournamentUI
             Brackets.Visibility = Visibility.Visible;
             Instructions.Visibility = Visibility.Visible;
             Tournament.KeyUp += Tournament_KeyUp;
+
+            List<Participant> bracket = _tournament.GetBracket();
+            DrawBracket(UpperBracketCanvas, bracket);
+
         }
 
         private static int MaxDepth(Participant participant)
@@ -115,6 +119,8 @@ namespace TournamentUI
                 var newParticipant = CloneParticipant.Clone(participant);
                 BracketDrawing.AddLinkToCanvas(ref i, maxDepth, newParticipant, canvas);
             }
+
         }
+
     }
 }

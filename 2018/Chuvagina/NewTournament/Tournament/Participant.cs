@@ -10,7 +10,7 @@ namespace Tournament
         public readonly Participant Left;
         public readonly Participant Right;
 
-        public Participant(string participantName)
+        internal Participant(string participantName)
         {
             Left = null;
             Right = null;
@@ -18,7 +18,7 @@ namespace Tournament
             Name = participantName;
         }
 
-        public Participant(string participantName, Participant left, Participant right)
+        internal Participant(string participantName, Participant left, Participant right)
         {
             Left = left;
             Right = right;
@@ -26,12 +26,12 @@ namespace Tournament
             Name = participantName;
         }
 
-        public void SetWinner(Participant participant)
+        internal void SetWinner(Participant participant)
         { 
             Winner = participant;
         }
 
-        public void SetName(string name)
+        internal void SetName(string name)
         {
             Name = name;
         }

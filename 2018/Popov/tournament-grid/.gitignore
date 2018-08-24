@@ -23,3 +23,5 @@ typings/
 .yarn-integrity
 .env
 package-lock.json
+
+state.json

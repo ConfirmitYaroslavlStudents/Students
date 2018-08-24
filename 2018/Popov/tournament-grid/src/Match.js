@@ -1,6 +1,6 @@
 'use strict';
 
-import style from 'ansi-styles';
+import kuler from 'kuler';
 import Player from './Player';
 
 import InvalidParameterException from './exceptions/InvalidParameterException';
@@ -11,43 +11,42 @@ export default class Match {
       throw new InvalidParameterException(`Invalid players count: ${players.length}.`);
     }
 
-    this._loser = null;
     this._winner = null;
+    this._losers = [null];
     this._players = players;
   }
 
   get loser() {
-    return this._loser;
+    return this._losers[0];
   }
 
   get winner() {
     return this._winner;
   }
 
+  get gameOver() {
+    return this._winner !== null;
+  }
+
   get players() {
     return this._players;
   }
 
-  setWinnerById(id) {
-    if (id >= this._players.length) {
+  get state() {
+    return {
+      winner: this._winner ? this._winner.id : null,
+      players: this._players.map(player => player.id)
+    }
+  }
+
+  setWinnerById(playerId) {
+    let winner = this._players.find(player => player.id === playerId);
+
+    if (winner === undefined) {
       throw new InvalidParameterException(`Invalid player id.`);
     }
 
-    this._winner = this._players[id];
-    this._loser = this._players[1 - id];
-  }
-
-  toString(lengthAdjust) {
-    lengthAdjust = this._players.reduce((length, player) => {
-      return player.name.length > length ? player.name.length : length;
-    }, lengthAdjust);
-
-    let
-      boxTextLine = `+ ` + '-'.repeat(lengthAdjust) + ` +`,
-      firstPlayerName = this._players[0].name.padEnd(lengthAdjust, ` `),
-      secondPlayerName = this._players[1].name.padEnd(lengthAdjust, ` `);
-
-    return `${boxTextLine}\n| ${firstPlayerName} |\n` +
-           `${boxTextLine}\n| ${secondPlayerName} |\n${boxTextLine}`;
+    this._winner = winner;
+    this._losers = this._players.filter(player => player.id !== playerId);
   }
 }

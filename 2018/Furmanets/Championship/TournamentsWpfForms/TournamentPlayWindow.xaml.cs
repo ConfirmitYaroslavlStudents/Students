@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using Championship;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Championship;
 using TournamentsWpfForms.Drawers;
 using TournamentsWpfForms.Drawers.HorisontalDrawers;
 
@@ -11,19 +11,16 @@ namespace TournamentsWpfForms
     {
         private readonly Tournament _tournament;
         public Canvas PlaceForDrawind { get; }
-        private readonly IFileManager _fileManager;
-        private readonly IDrawer _drawer;
+        //private readonly IDrawer _drawer;
 
-        public TournamentPlayWindow(Tournament tournament, IFileManager fileManager)
+        public TournamentPlayWindow(Tournament tournament)
         {
             InitializeComponent();
             _tournament = tournament;
-            _fileManager = fileManager;
-            _drawer = new HorisontalDrawer();
             PlaceForDrawind = new Canvas();
             SetCurrentMeeting(_tournament.GetNextMeeting());
-            
-            if (tournament is DoubleEliminationTournament)
+
+            if (tournament.GetTournamentToPrint().Length == 3)
             {
                 ButtonLowerGrid.Visibility = Visibility.Visible;
                 ButtonUpperGrid.Visibility = Visibility.Visible;
@@ -79,24 +76,24 @@ namespace TournamentsWpfForms
 
             _tournament.CollectResults(results);
             SetCurrentMeeting(_tournament.GetNextMeeting());
-            _fileManager.WriteToFile(_tournament);
 
             PrintUpperGrid(sender, e);
         }
 
         private void NewTornamentButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var menuAddPlayers = new WindowAddPlayers(_fileManager);
+            var menuAddPlayers = new WindowAddPlayers();
             menuAddPlayers.Show();
             Close();
         }
 
         private void PrintUpperGrid(object sender, RoutedEventArgs e)
         {
+            var drawer = new HorisontalDrawer();
             var rounds = _tournament.GetTournamentToPrint();
-            _drawer.GetListOfTournamentItems(rounds[0]);
+            drawer.GetListOfTournamentItems(rounds[0]);
 
-            var listOfItems = _drawer.GetListOfTournamentItems(rounds[0]);
+            var listOfItems = drawer.GetListOfTournamentItems(rounds[0]);
 
             CanvasForPrintTournamentGrid.Children.Clear();
 
@@ -104,13 +101,24 @@ namespace TournamentsWpfForms
             {
                 CanvasForPrintTournamentGrid.Children.Add(item);
             }
+
+            if (rounds.Length == 3)
+            {
+              var  drawer2 = new HorisontalLowerGridPainter();
+              listOfItems =  drawer2.GetListOfLowreGridItems(rounds[2], 400);
+
+                foreach (var item in listOfItems)
+                {
+                    CanvasForPrintTournamentGrid.Children.Add(item);
+                }
+            }
         }
 
         private void PrintLowerGrid(object sender, RoutedEventArgs e)
         {
             var rounds = _tournament.GetTournamentToPrint();
-            var _drawerLower = new HorisontalLowerGridPainter();
-            var listOfItems = _drawerLower.GetListOfLowreGridItems(rounds[1], 0);
+            var drawerLower = new HorisontalLowerGridPainter();
+            var listOfItems = drawerLower.GetListOfLowreGridItems(rounds[1], 0);
 
             CanvasForPrintTournamentGrid.Children.Clear();
 

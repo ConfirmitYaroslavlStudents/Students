@@ -38,38 +38,7 @@ namespace Championship
 
             currentMeeting.Score = resultMatch;
             ChooseWinner(currentMeeting, _nextMatchIsUpper);
-
-            if (_nextMatchIsUpper)
-            {
-                IndexOfMatch++;
-                if (_upperGrid[IndexOfRound].Meetings.Count <= IndexOfMatch)
-                {
-                    _nextMatchIsUpper = !_nextMatchIsUpper;
-                    IndexOfMatch = 0;
-                    IndexOfRound++;
-                }
-            }
-            else
-            {
-                _indexLowerMeetings++;
-
-                if (currentMeeting.Equals(_finalUpperAndLowerGrids))
-                {
-                    _indexLowerRounds++;
-                    return;
-                }
-
-                if (_lowerGrid[_indexLowerRounds].Meetings.Count <= _indexLowerMeetings)
-                {
-                    if (_indexLowerRounds % 2 == 0)
-                    {
-                        _nextMatchIsUpper = !_nextMatchIsUpper;
-                    }
-
-                    _indexLowerMeetings = 0;
-                    _indexLowerRounds++;
-                }
-            }
+            SetNextMeeting();
         }
 
         public override List<Round>[] GetTournamentToPrint()
@@ -104,6 +73,59 @@ namespace Championship
             }
 
             return _lowerGrid[_indexLowerRounds].Meetings[_indexLowerMeetings];
+        }
+
+        private void SetNextMeeting()
+        {
+            var currentMeeting = GetNextMeeting();
+
+            if (_nextMatchIsUpper)
+            {
+                IndexOfMatch++;
+
+                if (_upperGrid[IndexOfRound].Meetings.Count <= IndexOfMatch)
+                {
+                    _nextMatchIsUpper = !_nextMatchIsUpper;
+                    IndexOfMatch = 0;
+                    IndexOfRound++;
+                }
+            }
+            else
+            {
+                _indexLowerMeetings++;
+
+                if (currentMeeting.Equals(_finalUpperAndLowerGrids))
+                {
+                    _indexLowerRounds++;
+                    IndexOfRound++;
+                    return;
+                }
+
+                if (_lowerGrid[_indexLowerRounds].Meetings.Count <= _indexLowerMeetings)
+                {
+                    if (_indexLowerRounds % 2 == 0)
+                    {
+                        _nextMatchIsUpper = !_nextMatchIsUpper;
+                    }
+
+                    _indexLowerMeetings = 0;
+                    _indexLowerRounds++;
+                }
+            }
+
+            currentMeeting = GetNextMeeting();
+
+            if (currentMeeting == new Meeting())
+            {
+                SetNextMeeting();
+                return;
+            }
+
+            if (currentMeeting.FirstPlayer == null || currentMeeting.SecondPlayer == null)
+            {
+                PromotionOnePlayerInMeetingToNextStage(currentMeeting);
+                SetNextMeeting();
+            }
         }
 
         private void ChooseWinner(Meeting meeting, bool isUpper)
@@ -163,10 +185,31 @@ namespace Championship
             IndexOfRound--;
         }
 
-        private void PromotionOnePlayerInMeetingToNextStage(string player)
+        private void PromotionOnePlayerInMeetingToNextStage(Meeting meeting)
         {
-            //var round = _lowerGrid[]
-        }
+            if (meeting.FirstPlayer != null && meeting.SecondPlayer == null)
+            {
+                if (meeting.NextStage.FirstPlayer == null)
+                {
+                    meeting.NextStage.FirstPlayer = meeting.FirstPlayer;
+                }
+                else
+                {
+                    meeting.NextStage.SecondPlayer = meeting.FirstPlayer;
+                }
+            }
 
+            if (meeting.FirstPlayer == null && meeting.SecondPlayer != null)
+            {
+                if (meeting.NextStage.FirstPlayer == null)
+                {
+                    meeting.NextStage.FirstPlayer = meeting.SecondPlayer;
+                }
+                else
+                {
+                    meeting.NextStage.SecondPlayer = meeting.SecondPlayer;
+                }
+            }
+        }
     }
 }

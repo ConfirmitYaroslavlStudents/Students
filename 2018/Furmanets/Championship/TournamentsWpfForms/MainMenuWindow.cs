@@ -19,13 +19,13 @@ namespace TournamentsWpfForms
         {
             if (_tournament == null)
             {
-                var window = new WindowAddPlayers(_fileManager);
+                var window = new WindowAddPlayers();
                 window.Show();
                 Close();
             }
             else
             {
-                var window = new TournamentPlayWindow(_tournament, _fileManager);
+                var window = new TournamentPlayWindow(_tournament);
                 window.Show();
                 Close();
             }
@@ -38,6 +38,7 @@ namespace TournamentsWpfForms
             if (_tournament != null)
             {
                 MessageBox.Show("Tournament loaded successfully");
+                _tournament = new FileManagerDecorator(_tournament, _fileManager); 
             }
             else
             {

@@ -8,13 +8,11 @@ namespace TournamentsWpfForms
     public partial class WindowAddPlayers
     {
         List<string> _players = new List<string>();
-        private IFileManager _fileManager;
 
-        public WindowAddPlayers(IFileManager fileManager)
+        public WindowAddPlayers()
         {
             InitializeComponent();
             PlayerNameBox.Focus();
-            _fileManager = fileManager;
         }
 
         private void ClickBack(object sender, RoutedEventArgs e)
@@ -43,20 +41,18 @@ namespace TournamentsWpfForms
         private void StartDouble_Click(object sender, RoutedEventArgs e)
         {
             var tournament = new DoubleEliminationTournament(_players);
-            _fileManager.WriteToFile(tournament);
             OpenWindowTournament(tournament);
         }
 
         private void StarSingle_Click(object sender, RoutedEventArgs e)
         {
             var tournament = new SingleElimitationTournament(_players);
-            _fileManager.WriteToFile(tournament);
             OpenWindowTournament(tournament);
         }
 
         private void OpenWindowTournament(Tournament tournament)
         {
-            var window = new TournamentPlayWindow(tournament, _fileManager);
+            var window = new TournamentPlayWindow(tournament);
             window.Show();
             Close();
         }

@@ -46,5 +46,34 @@ namespace Championship
 
             return newCloneTournament;
         }
+
     }
+
+    public class FileManagerDecorator:Tournament
+    {
+        private Tournament _tournament;
+        private IFileManager fileManager;
+
+        public FileManagerDecorator(Tournament tournament, IFileManager manager)
+        {
+            _tournament = tournament;
+            fileManager = manager;
+        }
+
+        public override void CollectResults(int[] resultMatch)
+        {
+            _tournament.CollectResults(resultMatch);
+            fileManager.WriteToFile(_tournament);
+        }
+
+        public override List<Round>[] GetTournamentToPrint()
+        {
+            return _tournament.GetTournamentToPrint();
+        }
+
+        public override Meeting GetNextMeeting()
+        {
+            return _tournament.GetNextMeeting();
+        }
+    } 
 }

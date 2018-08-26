@@ -13,7 +13,7 @@ namespace Championship
             var countNextMeeting = 1;
             var upCountMeetings = true;
 
-            while (stage < countPlayers / 2)
+            while (stage <= countPlayers / 2)
             {
                 var round = new Round { Stage = stageRound };
                 stageRound++;

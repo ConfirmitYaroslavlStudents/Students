@@ -55,7 +55,7 @@ namespace Championship
 
                 if (currentMeeting.Equals(_finalUpperAndLowerGrids))
                 {
-                    IndexOfRound++;
+                    _indexLowerRounds++;
                     return;
                 }
 
@@ -88,12 +88,12 @@ namespace Championship
 
         public override Meeting GetNextMeeting()
         {
-            if (IndexOfRound > _upperGrid.Count + 1)
+            if (_indexLowerRounds > _lowerGrid.Count)
             {
-                throw new Exception("All matches are over");
+                return null;
             }
 
-            if (IndexOfRound == _upperGrid.Count)
+            if (_indexLowerRounds == _lowerGrid.Count)
             {
                 return _finalUpperAndLowerGrids;
             }
@@ -106,7 +106,7 @@ namespace Championship
             return _lowerGrid[_indexLowerRounds].Meetings[_indexLowerMeetings];
         }
 
-        protected void ChooseWinner(Meeting meeting, bool isUpper)
+        private void ChooseWinner(Meeting meeting, bool isUpper)
         {
             if (meeting.SecondPlayer == null || meeting.FirstPlayer == null)
             {
@@ -139,9 +139,9 @@ namespace Championship
             }
         }
 
-        protected void PromotionLoserToNextStage(string player)
+        private void PromotionLoserToNextStage(string player)
         {
-            var round = _lowerGrid[IndexOfRound];
+            var round = _lowerGrid[_indexLowerRounds];
 
             foreach (var meeting in round.Meetings)
             {
@@ -162,5 +162,11 @@ namespace Championship
             PromotionLoserToNextStage(player);
             IndexOfRound--;
         }
+
+        private void PromotionOnePlayerInMeetingToNextStage(string player)
+        {
+            //var round = _lowerGrid[]
+        }
+
     }
 }

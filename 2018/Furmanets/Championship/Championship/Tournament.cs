@@ -29,7 +29,6 @@ namespace Championship
                 meeting.NextStage.SecondPlayer = player;
             }
         }
-
         protected virtual List<Round> CloneTournament(List<Round> rounds)
         {
             List<Round> newCloneTournament = new List<Round>();

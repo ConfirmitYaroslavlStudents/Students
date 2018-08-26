@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Championship;
 using TournamentsWpfForms.Drawers;
+using TournamentsWpfForms.Drawers.HorisontalDrawers;
 
 namespace TournamentsWpfForms
 {
@@ -21,7 +22,14 @@ namespace TournamentsWpfForms
             _drawer = new HorisontalDrawer();
             PlaceForDrawind = new Canvas();
             SetCurrentMeeting(_tournament.GetNextMeeting());
-            TournamentPrint();
+            
+            if (tournament is DoubleEliminationTournament)
+            {
+                ButtonLowerGrid.Visibility = Visibility.Visible;
+                ButtonUpperGrid.Visibility = Visibility.Visible;
+            }
+
+            PrintUpperGrid(new object(), new RoutedEventArgs());
         }
 
         private void SetCurrentMeeting(Meeting meeting)
@@ -72,12 +80,23 @@ namespace TournamentsWpfForms
             _tournament.CollectResults(results);
             SetCurrentMeeting(_tournament.GetNextMeeting());
             _fileManager.WriteToFile(_tournament);
-            TournamentPrint();
+
+            PrintUpperGrid(sender, e);
         }
 
-        private void TournamentPrint()
+        private void NewTornamentButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var listOfItems = _drawer.GetListOfTournamentitems(_tournament);
+            var menuAddPlayers = new WindowAddPlayers(_fileManager);
+            menuAddPlayers.Show();
+            Close();
+        }
+
+        private void PrintUpperGrid(object sender, RoutedEventArgs e)
+        {
+            var rounds = _tournament.GetTournamentToPrint();
+            _drawer.GetListOfTournamentItems(rounds[0]);
+
+            var listOfItems = _drawer.GetListOfTournamentItems(rounds[0]);
 
             CanvasForPrintTournamentGrid.Children.Clear();
 
@@ -87,11 +106,18 @@ namespace TournamentsWpfForms
             }
         }
 
-        private void NewTornamentButton_OnClick(object sender, RoutedEventArgs e)
+        private void PrintLowerGrid(object sender, RoutedEventArgs e)
         {
-            var menuAddPlayers = new WindowAddPlayers(_fileManager);
-            menuAddPlayers.Show();
-            Close();
+            var rounds = _tournament.GetTournamentToPrint();
+            var _drawerLower = new HorisontalLowerGridPainter();
+            var listOfItems = _drawerLower.GetListOfLowreGridItems(rounds[1], 0);
+
+            CanvasForPrintTournamentGrid.Children.Clear();
+
+            foreach (var item in listOfItems)
+            {
+                CanvasForPrintTournamentGrid.Children.Add(item);
+            }
         }
     }
 }

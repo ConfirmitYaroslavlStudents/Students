@@ -17,7 +17,12 @@
         <TextBox Grid.Column="0" Name="SecondPlayerScore" HorizontalAlignment="Left" Height="23" Margin="108,33,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="24"/>
         <Label Grid.Column="0" Content=":" HorizontalAlignment="Left" Margin="93,31,0,0" VerticalAlignment="Top" Height="26" Width="13"/>
         <Button Grid.Column="0" Content="Enter result" HorizontalAlignment="Left" Margin="23,62,0,0" VerticalAlignment="Top" Width="152" Click="TakeResults" Height="20"/>
-        <Canvas Name ="CanvasForPrintTournamentGrid" Margin="0,-1,0,1" Grid.Column="1"/>
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Canvas Height="1500" Width="1500" Name ="CanvasForPrintTournamentGrid">
+            </Canvas>
+        </ScrollViewer>
         <Button Grid.Column="0" Name="NewTornamentButton" Content="New tournament" HorizontalAlignment="Left" Margin="23,480,0,0" VerticalAlignment="Top" Width="152" Height="20" Visibility ="Hidden" Click="NewTornamentButton_OnClick"/>
+        <Button Grid.Column="0" Name="ButtonUpperGrid" Content="Upper grid" Visibility="Hidden" HorizontalAlignment="Left" Margin="23,131,0,0" VerticalAlignment="Top" Width="152" Height="20" Click="PrintUpperGrid"/>
+        <Button Grid.Column="0" Name="ButtonLowerGrid" Content="Lower grid" Visibility="Hidden" HorizontalAlignment="Left" Margin="23,154,0,0" VerticalAlignment="Top" Width="152" Height="20" Click="PrintLowerGrid"/>
     </Grid>
 </Window>

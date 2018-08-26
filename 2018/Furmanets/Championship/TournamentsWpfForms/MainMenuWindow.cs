@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Championship;
+﻿using Championship;
+using System.Windows;
 
 namespace TournamentsWpfForms
 {
@@ -39,7 +39,7 @@ namespace TournamentsWpfForms
             {
                 MessageBox.Show("Tournament loaded successfully");
             }
-            else 
+            else
             {
                 MessageBox.Show("File is empty");
             }

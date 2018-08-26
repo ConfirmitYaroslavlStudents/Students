@@ -69,7 +69,14 @@ namespace Championship
                 }
             }
             tournamentGrid.Reverse();
+            stage = 1;
 
+            foreach (var round in tournamentGrid)
+            {
+                round.Stage = stage;
+                stage++;
+            }
+                
             return tournamentGrid;
         }
     }

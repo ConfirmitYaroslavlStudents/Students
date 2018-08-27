@@ -7,16 +7,16 @@
         mc:Ignorable="d"
         Title="Tournament" Height="348.011" Width="540.909" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="EnterParticipantName" Content="Add" HorizontalAlignment="Left" Margin="209,38,0,0"
+        <Button x:Name="EnterParticipantName" Content="Add" HorizontalAlignment="Left" Margin="209,75,0,0"
                 VerticalAlignment="Top" Width="75" Click="EnterParticipantName_Click" IsDefault="True" />
-        <TextBox x:Name="ParticipantName" HorizontalAlignment="Left" Height="20" Margin="21,38,0,0" TextWrapping="Wrap"
+        <TextBox x:Name="ParticipantName" HorizontalAlignment="Left" Height="20" Margin="21,75,0,0" TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="159" />
-        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="209,144,0,0" VerticalAlignment="Top"
+        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="209,243,0,0" VerticalAlignment="Top"
                 Width="75" Click="Start_Click" />
         <RadioButton x:Name="DoubleElimination" Content="Double elimination" HorizontalAlignment="Left"
-                     Margin="21,116,0,0" VerticalAlignment="Top" GroupName="EliminationSystem" />
+                     Margin="21,153,0,0" VerticalAlignment="Top" GroupName="EliminationSystem" />
         <RadioButton x:Name="SingleElimination" Content="Single elimination" HorizontalAlignment="Left"
-                     Margin="21,79,0,0" VerticalAlignment="Top" GroupName="EliminationSystem" IsChecked="True" />
+                     Margin="21,116,0,0" VerticalAlignment="Top" GroupName="EliminationSystem" IsChecked="True" />
         <TabControl x:Name="Brackets" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,30,-1469,-1713"
                     Visibility="Hidden" Width="2000" Height="2000" ScrollViewer.HorizontalScrollBarVisibility="Visible">
             <TabItem Header="UpperBracket">
@@ -35,5 +35,6 @@
         <TextBlock x:Name="Instructions" HorizontalAlignment="Left" TextWrapping="Wrap"
                    Text="Press &quot;Space&quot; to play the game" VerticalAlignment="Top" Width="512"
                    Margin="21,5,0,0" Visibility="Hidden" />
+        <Button x:Name="Loading" Content="Load last tournament" HorizontalAlignment="Left" Margin="21,30,0,0" VerticalAlignment="Top" Width="263" Click="Loading_Click"/>
     </Grid>
 </Window>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Football_League
+namespace FootballLeagueClassLibrary.Structure
 {
     [Serializable]
     public class FullGrid
@@ -72,8 +72,6 @@ namespace Football_League
             else if (losers.Count > 0)
                 onePlayerLeftInTournament = false;
         }
-
-        //fix ConsoleWorker here - only console version works!
         public void EndTournament()
         {
             IsFinished = true;

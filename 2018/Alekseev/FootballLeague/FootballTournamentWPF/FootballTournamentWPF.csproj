@@ -53,11 +53,25 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="ChooseWinners.xaml">
+    <Compile Include="Drawer Windows\HelperFunctions.cs" />
+    <Compile Include="Drawer Windows\HorizontalDisplayWindow.xaml.cs">
+      <DependentUpon>HorizontalDisplayWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Notification Screens\OnePlayerLeftWindow.xaml.cs">
+      <DependentUpon>OnePlayerLeftWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Drawer Windows\VerticalDisplayWindow.xaml.cs">
+      <DependentUpon>VerticalDisplayWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Changes grid\ChooseWinnersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LeagueCreation.xaml">
+    <Page Include="Changes grid\CreateLeagueWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawer Windows\HorizontalDisplayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -69,24 +83,32 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ChooseWinners.xaml.cs">
-      <DependentUpon>ChooseWinners.xaml</DependentUpon>
+    <Compile Include="Changes grid\ChooseWinnersWindow.xaml.cs">
+      <DependentUpon>ChooseWinnersWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LeagueCreation.xaml.cs">
-      <DependentUpon>LeagueCreation.xaml</DependentUpon>
+    <Compile Include="Changes grid\CreateLeagueWindow.xaml.cs">
+      <DependentUpon>CreateLeagueWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PrintGrid.xaml">
+    <Page Include="Notification Screens\OnePlayerLeftWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Notification Screens\PlayerAddedPopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Drawer Windows\VerticalDisplayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrintGrid.xaml.cs">
-      <DependentUpon>PrintGrid.xaml</DependentUpon>
+    <Compile Include="Notification Screens\PlayerAddedPopupWindow.xaml.cs">
+      <DependentUpon>PlayerAddedPopupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -111,12 +133,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FootballLeagueClassLibrary\FootballLeagueClassLibrary.csproj">
       <Project>{c9639c7b-c87b-4592-9e71-04a6a04525a4}</Project>
       <Name>FootballLeagueClassLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Football_League\FootballLeague.csproj">
+      <Project>{74a3abdb-9aee-4790-844c-b7decc84d1f4}</Project>
+      <Name>FootballLeague</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

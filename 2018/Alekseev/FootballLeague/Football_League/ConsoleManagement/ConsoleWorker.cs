@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using FootballLeagueClassLibrary.Structure;
 
-namespace Football_League
+namespace Football_League.ConsoleManagement
 {
     public static partial class ConsoleWorker
     {
@@ -104,11 +104,11 @@ namespace Football_League
 
                 else
                 {
-                    string name = MakeName(currentHorizontalGrid, currentPositionInLine);
+                    string name = ConsoleWorker.MakeName(currentHorizontalGrid, currentPositionInLine);
                     currentPositionInLine += name.Length;
 
-                    bool isLastName = CheckIfLastNameInLine(currentHorizontalGrid, currentPositionInLine);
-                    PrintColoredName(currentTreeStartIndex, currentPositionInLine, name, horizontalGrid,isLastName, currentHorizontalGrid);
+                    bool isLastName = ConsoleWorker.CheckIfLastNameInLine(currentHorizontalGrid, currentPositionInLine);
+                    ConsoleWorker.PrintColoredName(currentTreeStartIndex, currentPositionInLine, name, horizontalGrid,isLastName, currentHorizontalGrid);
                 }
             }
         }
@@ -135,14 +135,14 @@ namespace Football_League
                     else
                     {
                         int firstNamePosition = j;
-                        string firstName = MakeName(verticalGrid[currentLineIndex], j);
+                        string firstName = ConsoleWorker.MakeName(verticalGrid[currentLineIndex], j);
                         j += firstName.Length;
 
                         bool onlyOnePlayerToPrint = CheckIfOnlyOnePlayerToPrint(j, currentLineIndex, verticalGrid, firstName, firstNamePosition);
                         if (onlyOnePlayerToPrint)
                         {
                             j--;
-                            PrintVerticalGridAutoWinner(firstName, verticalGrid,currentLineIndex);
+                            ConsoleWorker.PrintVerticalGridAutoWinner(firstName, verticalGrid,currentLineIndex);
                             continue;
                         }
                         
@@ -180,14 +180,14 @@ namespace Football_League
             int secondNamePosition = j;
             int secondNamePositionSaver = j;
 
-            string secondName = MakeName(verticalGrid[currentLineIndex], j);
+            string secondName = ConsoleWorker.MakeName(verticalGrid[currentLineIndex], j);
             j += secondName.Length;
 
             if (currentLineIndex + 3 < verticalGrid.Count && verticalGrid[currentLineIndex + 3].Length <=
                 secondNamePosition + secondName.Length - firstNamePosition)
                 secondNamePosition = verticalGrid[currentLineIndex + 3].Length - secondName.Length;
 
-            PrintFirstAndSecondNames(currentLineIndex, verticalGrid, firstNamePosition, firstName, secondName, secondNamePosition, secondNamePositionSaver);
+            ConsoleWorker.PrintFirstAndSecondNames(currentLineIndex, verticalGrid, firstNamePosition, firstName, secondName, secondNamePosition, secondNamePositionSaver);
             j--;
         }
         public static int SaveProcessQuestion()

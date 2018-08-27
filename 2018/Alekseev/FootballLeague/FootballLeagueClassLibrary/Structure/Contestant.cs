@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Football_League
+namespace FootballLeagueClassLibrary.Structure
 {
     [Serializable]
     public class Contestant

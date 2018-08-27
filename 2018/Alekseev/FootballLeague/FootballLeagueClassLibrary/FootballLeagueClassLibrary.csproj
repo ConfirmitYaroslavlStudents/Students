@@ -40,13 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contestant.cs" />
-    <Compile Include="FullGrid.cs" />
-    <Compile Include="HorizontalDrawer.cs" />
-    <Compile Include="Match.cs" />
-    <Compile Include="MatchTreeGrid.cs" />
+    <Compile Include="Structure\Contestant.cs" />
+    <Compile Include="Structure\FullGrid.cs" />
+    <Compile Include="Drawers\HorizontalDrawer.cs" />
+    <Compile Include="Structure\Match.cs" />
+    <Compile Include="Structure\MatchTreeGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VerticalDrawer.cs" />
+    <Compile Include="FileSystem Savers and Loaders\SaverLoader.cs" />
+    <Compile Include="Drawers\VerticalDrawer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

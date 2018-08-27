@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FootballLeagueClassLibrary.Drawers;
+using FootballLeagueClassLibrary.FileSystem_Savers_and_Loaders;
+using FootballLeagueClassLibrary.Structure;
 using Football_League;
 
 namespace Football_League
@@ -25,14 +28,14 @@ namespace Football_League
 
         private static void Main()
         {
-            _leagueType = ConsoleWorker.ChooseLeagueType() == 1 ? LeagueType.SingleElumination : LeagueType.DoubleElumination;
+            _leagueType = ConsoleManagement.ConsoleWorker.ChooseLeagueType() == 1 ? LeagueType.SingleElumination : LeagueType.DoubleElumination;
 
             while (true)
             {
-                ConsoleWorker.Menu();
+                ConsoleManagement.ConsoleWorker.Menu();
                 bool successfulOperation = false;
                 while (!successfulOperation)
-                    successfulOperation = RunChoice((MenuChoiceType)int.Parse(ConsoleWorker.MenuChoice())) != 0;
+                    successfulOperation = RunChoice((MenuChoiceType)int.Parse(ConsoleManagement.ConsoleWorker.MenuChoice())) != 0;
             }
         }
         public static int RunChoice(MenuChoiceType choice)
@@ -42,7 +45,7 @@ namespace Football_League
                 case MenuChoiceType.StartNewLeague:
                 {
                         CreateNewLeague();
-                        SaverLoader.SaveCurrentSession(_leagueType,Grid);
+                        SaverLoader.SaveCurrentSession((int)_leagueType,Grid);
                         break;
                     }
                 case MenuChoiceType.ChooseWinners:
@@ -50,43 +53,43 @@ namespace Football_League
                         List<int>[] choices = UserWinnerChoices();
                         Grid.PlayRound(choices);
                         if (Grid.IsFinished)
-                            ConsoleWorker.OnePlayerLeft();
-                        SaverLoader.SaveCurrentSession(_leagueType, Grid);
+                            ConsoleManagement.ConsoleWorker.OnePlayerLeft();
+                        SaverLoader.SaveCurrentSession((int)_leagueType, Grid);
                         break;
                     }
                 case MenuChoiceType.DisplayResults:
                     {
-                        if (ConsoleWorker.ChooseDrawingType() == 1)
+                        if (ConsoleManagement.ConsoleWorker.ChooseDrawingType() == 1)
                         {
                             VerticalDrawer verticalGrid = new VerticalDrawer();
                             verticalGrid.MakeVerticalGrid(Grid);
-                            ConsoleWorker.PrintVerticalGrid(verticalGrid.VerticalGrid);
+                            ConsoleManagement.ConsoleWorker.PrintVerticalGrid(verticalGrid.VerticalGrid);
                         }
                         else
                         {
                             HorizontalDrawer horizontalDrawer = new HorizontalDrawer();
                             horizontalDrawer.MakeHorintalGrid(Grid);
-                            ConsoleWorker.PrintHorizontalGrid(horizontalDrawer.HorizontalGrid);
+                            ConsoleManagement.ConsoleWorker.PrintHorizontalGrid(horizontalDrawer.HorizontalGrid);
                         }
                         break;
                     }
                 case MenuChoiceType.Load:
                     {
-                        Grid = SaverLoader.LoadLastSave(_leagueType);
+                        Grid = SaverLoader.LoadLastSave((int)_leagueType);
                         break;
                     }
                 case MenuChoiceType.Exit:
                     {
-                        bool saveAsked = ConsoleWorker.SaveProcessQuestion() == 1;
+                        bool saveAsked = ConsoleManagement.ConsoleWorker.SaveProcessQuestion() == 1;
                         if (saveAsked)
-                            SaverLoader.SaveCurrentSession(_leagueType, Grid);
+                            SaverLoader.SaveCurrentSession((int)_leagueType, Grid);
                         Environment.Exit(0);
                         break;
                     }
                 default:
                     {
-                        ConsoleWorker.IncorrectMenuChoice();
-                        ConsoleWorker.Menu();
+                        ConsoleManagement.ConsoleWorker.IncorrectMenuChoice();
+                        ConsoleManagement.ConsoleWorker.Menu();
                         return 0;
                     }
             }
@@ -102,7 +105,7 @@ namespace Football_League
                 var currentMatch = Grid.Grid[i].CurrentRoundFirstMatch;
                 while (currentMatch?.PlayerOne != null)
                 {
-                    choices[i].Add(ConsoleWorker.ChooseMatchWinner(currentMatch));
+                    choices[i].Add(ConsoleManagement.ConsoleWorker.ChooseMatchWinner(currentMatch));
                     currentMatch = currentMatch.NextMatch;
                 }
             }
@@ -114,7 +117,7 @@ namespace Football_League
         {
             Grid = new FullGrid();
             Grid.SetGridTreesNumber((int)_leagueType);
-            Grid.InitialiseGrid(AddPlayersToCompetition(ConsoleWorker.GetNumberOfPlayers()));
+            Grid.InitialiseGrid(AddPlayersToCompetition(ConsoleManagement.ConsoleWorker.GetNumberOfPlayers()));
         }
 
         public static List<Contestant> AddPlayersToCompetition(int num)
@@ -125,7 +128,7 @@ namespace Football_League
             for (
                 int i = playersCountAtStart; i < num; i++)
             {
-                players.Add(new Contestant(ConsoleWorker.GetPlayerName()));
+                players.Add(new Contestant(ConsoleManagement.ConsoleWorker.GetPlayerName()));
                 SaverLoader.SaveCurrentInputPlayers(players);
             }
 

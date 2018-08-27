@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using FootballLeagueClassLibrary.Structure;
 
-namespace Football_League
+namespace FootballLeagueClassLibrary.Drawers
 {
     public class VerticalDrawer
     {

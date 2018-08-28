@@ -1,14 +1,23 @@
+import { Component } from 'react';
 import { connect } from 'react-redux';
+import { createModel } from 'pages/grids/olympic/createModel';
+import { GojsDiagram } from 'react-gojs';
+import { makeModel } from 'pages/grids/olympic/makeModel';
+import { modelChange } from 'pages/grids/olympic/modelChange';
 import PropTypes from 'prop-types';
-import { Component, Fragment } from 'react';
-import 'treantjs/Treant.css';
-import 'treantjs/Treant';
-import 'treantjs/examples/tennis-draw/example7.css';
 
 class Olympic extends Component {
   render() {
+    const { names } = this.props;
+
     return (
-      <Fragment/>
+      <GojsDiagram
+        diagramId='tournament'
+        model={makeModel(names)}
+        createDiagram={createModel}
+        className='tournament'
+        onModelChange={e => modelChange(e)}
+      />
     );
   }
 }

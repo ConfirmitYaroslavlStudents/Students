@@ -10,7 +10,7 @@ namespace ConsoleTournament
         private TournamentGridType _tournamentGridType;
         private TournamentGridDrawer _tournamentGridDrawer = new TournamentGridDrawer();
         private DoubleSidedTournamentGridDrawer _doubleSidedGridDrawer = new DoubleSidedTournamentGridDrawer();
-        private ConsolePrinter _printer = new ConsolePrinter();
+        private ConsoleManager _printer = new ConsoleManager();
 
         public void Init()
         {
@@ -103,7 +103,7 @@ namespace ConsoleTournament
 
         private void LoadTournament()
         {
-            _tournament = SaveLoadSystem.Load();
+            _tournament = SaveLoadSystem.Load(_printer);
 
             var tournamentMenuList = new List<MenuItem>
             {

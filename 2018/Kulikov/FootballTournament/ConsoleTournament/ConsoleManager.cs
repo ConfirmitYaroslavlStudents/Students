@@ -3,17 +3,20 @@ using TournamentLibrary;
 
 namespace ConsoleTournament
 {
-    public class ConsolePrinter : IPrinter
+    public class ConsoleManager : IDataManager
     {
         public void StartedNewTournament()
         {
             Console.WriteLine("New tournament started!\n");
         }
 
-        public int EnterCountOfPlayers()
+        public void EnterCountOfPlayers()
         {
             Console.Write("Enter count of players: ");
+        }
 
+        public int GetCountOfPlayers()
+        {
             var count = -1;
 
             while (!int.TryParse(Console.ReadLine(), out count) || count <= 0)
@@ -30,10 +33,13 @@ namespace ConsoleTournament
             Console.WriteLine("\nEnter names of players:");
         }
 
-        public string EnterPlayerName(int index)
+        public void EnterPlayerName(int index)
         {
             Console.Write($"{index}. ");
+        }
 
+        public string GetPlayerName()
+        {         
             var name = Console.ReadLine();
 
             return name;
@@ -44,17 +50,17 @@ namespace ConsoleTournament
             Console.WriteLine("Player with this name already exists. Try again: ");
         }
 
-        public int EnterPlayerScore(Player player)
+        public void EnterPlayerScore(Player player)
         {
             Console.Write($"{player.Name} scores: ");
+        }
 
+        public int GetPlayerScore()
+        {
             var score = -1;
 
             while (!int.TryParse(Console.ReadLine(), out score) || score < 0)
-            {
                 Console.WriteLine("Incorrect data! Try again: ");
-                Console.Write($"{player.Name} scores: ");
-            }
 
             return score;
         }
@@ -78,6 +84,11 @@ namespace ConsoleTournament
         public void PrintChampion(Player champion)
         {
             Console.WriteLine($"Tournament is finished. {champion.Name} is a champion!");
+        }
+
+        public void RequestData(Foo foo)
+        {
+            
         }
     }
 }

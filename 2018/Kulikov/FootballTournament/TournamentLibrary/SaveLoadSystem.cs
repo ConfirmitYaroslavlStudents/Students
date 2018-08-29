@@ -16,7 +16,7 @@ namespace TournamentLibrary
             }
         }
 
-        public static Tournament Load()
+        public static Tournament Load(IDataManager printer)
         {
             Tournament tournament;
 
@@ -24,6 +24,8 @@ namespace TournamentLibrary
             {
                 tournament = (Tournament)_formatter.Deserialize(fileStream);
             }
+
+            tournament.SetPrinter(printer);
 
             return tournament;
         }

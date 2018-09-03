@@ -14,9 +14,8 @@ import indigo from '@material-ui/core/colors/indigo'
 import deepOrange from '@material-ui/core/colors/deepOrange'
 import AppView from './layout/appview'
 import { getInitialStateFromServer, init } from './applicationActions'
-// todo
-import { sagaMiddleware, sagaRun, createStore  } from './utilities/createStore'
-import { applyMiddleware } from 'redux'
+import { createStore, sagaMiddleware } from './utilities/createStore'
+import rootSaga from './rootSaga'
 
 const username = window['APP_CONFIG'].username
 
@@ -34,7 +33,11 @@ const theme = createMuiTheme({
 
 const history = createBrowserHistory()
 
-const store = createStore(reducer, history)
+const store = createStore(reducer)
+
+let sagaRun = sagaMiddleware.run(function* () {
+  yield rootSaga({ history })
+})
 
 store.dispatch(init({ username }))
 
@@ -50,8 +53,6 @@ const renderApp = (app) => {
     document.getElementById('root')
   )
 }
-
-/*________________________________________________________________________*/
 
 renderApp(AppView)
 
@@ -70,7 +71,6 @@ if (module.hot) {
     store.replaceReducer(nextReducer)
   })
 
-  /*
   module.hot.accept('./rootSaga', () => {
     const newRootSaga = require('./rootSaga').default
     sagaRun.cancel()
@@ -80,5 +80,4 @@ if (module.hot) {
       })
     })
   })
-  */
 }

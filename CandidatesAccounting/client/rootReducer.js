@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import application, {SELECTORS as APPLICATION} from './applicationReducer'
-import authorization, {SELECTORS as AUTHORIZATION} from './authorization/reducer'
-import candidates, {SELECTORS as CANDIDATES} from './candidates/reducer'
-import comments, {SELECTORS as COMMENTS} from './comments/reducer'
-import notifications, {SELECTORS as NOTIFICATIONS} from './notifications/reducer'
-import tags, {SELECTORS as TAGS} from './tags/reducer'
+import application, { SELECTORS as APPLICATION } from './applicationReducer'
+import authorization, { SELECTORS as AUTHORIZATION } from './authorization/reducer'
+import candidates, { SELECTORS as CANDIDATES } from './candidates/reducer'
+import comments, { SELECTORS as COMMENTS } from './comments/reducer'
+import notifications, { SELECTORS as NOTIFICATIONS } from './notifications/reducer'
+import tags, { SELECTORS as TAGS } from './tags/reducer'
 import bindSelectors from './utilities/bindSelectors'
 
 export default combineReducers({

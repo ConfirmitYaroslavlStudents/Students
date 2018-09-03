@@ -1,22 +1,14 @@
 import React from 'react'
 import { createStore as reduxCreateStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
-import rootSaga from '../rootSaga'
 
 let sagaMiddleware
-let sagaRun
 
-const createStore = (reducer, history) => {
+const createStore = (reducer) => {
   sagaMiddleware = createSagaMiddleware()
-
-  const store = reduxCreateStore(reducer, composeWithDevTools(applyMiddleware(sagaMiddleware)))
-
-  sagaRun = sagaMiddleware.run(function* () {
-    yield rootSaga({ history })
-  })
-
-  return store
+  const middlewares = composeWithDevTools(applyMiddleware(sagaMiddleware))
+  return reduxCreateStore(reducer, middlewares)
 }
 
-export { sagaMiddleware, sagaRun, createStore }
+export { createStore, sagaMiddleware }

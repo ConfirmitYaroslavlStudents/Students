@@ -11,11 +11,18 @@ Usage
 3. Database will be automatically connected when CandidateAccounting server starts.
 
 ### NPM Scripts
+
 `npm run build` - builds server and client applications into `dist` folder.
 
 `npm run prod` - starts `npm run build` script and then starts CandidateAccounting server in `production mode` from `dist` folder.
 
 `npm run dev` - starts CandidateAccounting server in `development mode`.
+
+`npm run start:client` - builds client in development mode and starts dev server.
+
+`npm run start:server` - builds and starts server in development mode.
+
+`npm run tests` - runs all testcaffe tests from `tests` folder.
 
 Configuration
 -----------------------------------
@@ -24,7 +31,11 @@ Location: `_{project directory}_/server/server.config.js`
 ```
 const serverConfig = {
   port: 3000,
-  databaseConnectionURL: "mongodb://localhost:27017/CandidateAccounting"
+  databaseConnectionURL: "mongodb://localhost:27017/CandidateAccounting",
+  authorization: {
+      allowedLogins: [],
+      sessionSecret: 'secret'
+    }
 }
 
 module.exports = serverConfig
@@ -33,16 +44,6 @@ module.exports = serverConfig
 
 `databaseConnectionURL` _(string, default: "mongodb://localhost:27017/CandidateAccounting")_ - MongoDB connection URL.
 
-### Authorization configuration file
-Location: `_{project directory}_/server/authorization.config.js`
-```
-const authorizationConfig = {
-  allowedLogins: [],
-  sessionSecret: 'secret'
-}
-
-module.exports = authorizationConfig
-```
 `allowedLogins` _(array, default: empty)_ - login list for users allowed to register and login. If empty, all users are allowed to register and login.
 
 `sessionSecret` _(string, default: "secret")_ - secret session key used for authorization system.

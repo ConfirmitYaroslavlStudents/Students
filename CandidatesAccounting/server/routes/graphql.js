@@ -1,6 +1,7 @@
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
-import { root, schema } from '../graphQL'
+import graphqlSchema from '../graphql/schema'
+import graphqlRoot from '../graphql/root'
 
 const router = express.Router()
 
@@ -13,8 +14,8 @@ router.route('/graphql')
   }
 })
 .all(graphqlHTTP({
-  schema: schema,
-  rootValue: root,
+  schema: graphqlSchema,
+  rootValue: graphqlRoot,
   graphiql: false
 }))
 

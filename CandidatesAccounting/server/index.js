@@ -6,7 +6,6 @@ import fileUpload from 'express-fileupload'
 import cookieParser from 'cookie-parser'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
-import authorizationConfig from './authorization.config'
 import serverConfig from './server.config'
 import { connect } from './mongoose'
 import { Account } from './mongoose/api/account'
@@ -44,7 +43,7 @@ if (developmentMode) {
 }
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
-app.use(expressSession({ secret: authorizationConfig.sessionSecret, resave: false, saveUninitialized: false }))
+app.use(expressSession({ secret: serverConfig.authorization.sessionSecret, resave: false, saveUninitialized: false }))
 app.use(bodyParser.json())
 app.use(fileUpload())
 app.use(cookieParser())

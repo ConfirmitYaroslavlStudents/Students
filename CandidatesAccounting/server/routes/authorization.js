@@ -1,5 +1,5 @@
 import express from 'express'
-import authorizationConfig from '../authorization.config'
+import serverConfig from '../server.config'
 import { Account } from '../mongoose/api/account'
 import passport from 'passport'
 
@@ -15,7 +15,7 @@ router.route('/login')
   res.json({ username })
 })
 .post((req, res) => {
-  const allowedLogins = authorizationConfig.allowedLogins
+  const allowedLogins = serverConfig.authorization.allowedLogins
   if (allowedLogins && allowedLogins.length > 0 && !allowedLogins.includes(req.body.username)) {
     return res.status(403).end()
   }

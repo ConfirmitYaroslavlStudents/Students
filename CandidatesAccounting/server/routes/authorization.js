@@ -1,6 +1,6 @@
 import express from 'express'
 import authorizationConfig from '../authorization.config'
-import { Account } from '../mongoose'
+import { Account } from '../mongoose/api/account'
 import passport from 'passport'
 
 const router = express.Router()

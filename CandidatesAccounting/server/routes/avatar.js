@@ -1,5 +1,6 @@
 import express from 'express'
-import { getAvatar, addAvatar, maxAllowedAttachmentLength } from '../mongoose'
+import { maxAllowedAttachmentLength } from '../mongoose'
+import { getAvatar, addAvatar } from '../mongoose/api/avatar'
 
 const router = express.Router()
 

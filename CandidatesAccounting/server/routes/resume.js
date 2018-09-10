@@ -1,5 +1,6 @@
 import express from 'express'
-import { getResume, addResume, maxAllowedAttachmentLength } from '../mongoose'
+import { maxAllowedAttachmentLength } from '../mongoose'
+import { getResume, addResume } from '../mongoose/api/resume'
 
 const router = express.Router()
 

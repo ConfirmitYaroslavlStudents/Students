@@ -4,18 +4,20 @@ import sortCandidates from './utilities/sortCandidates'
 import {
   getCandidates,
   getCandidateById,
-  getAllTags,
-  getNotifications,
   addCandidate,
   updateCandidate,
   deleteCandidate,
   addComment,
   deleteComment,
   subscribe,
-  unsubscribe,
+  unsubscribe
+} from './mongoose/api/candidate'
+import {
+  getNotifications,
   noticeNotification,
   deleteNotification
-} from './mongoose'
+} from './mongoose/api/account'
+import { getTags } from './mongoose/api/tag'
 
 export const schema = buildSchema(`    
   input CandidateInput {
@@ -144,7 +146,7 @@ export const root = {
   },
 
   tags: () => {
-    return getAllTags()
+    return getTags()
   },
 
   notifications: ({username}) => {

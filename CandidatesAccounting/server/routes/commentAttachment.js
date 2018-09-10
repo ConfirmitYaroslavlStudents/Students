@@ -1,5 +1,6 @@
 import express from 'express'
-import { getAttachment, addAttachment, maxAllowedAttachmentLength } from '../mongoose'
+import { maxAllowedAttachmentLength } from '../mongoose'
+import { getAttachment, addAttachment } from '../mongoose/api/commentAttachment'
 
 const router = express.Router()
 

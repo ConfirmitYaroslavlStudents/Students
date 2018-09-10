@@ -3,7 +3,9 @@
     "transform-react-jsx",
     "transform-object-rest-spread",
     "react-hot-loader/babel",
-    "babel-plugin-styled-components",
+    ["babel-plugin-styled-components", {
+      "ssr": true
+    }],
     "syntax-dynamic-import",
     "transform-class-properties"
   ],

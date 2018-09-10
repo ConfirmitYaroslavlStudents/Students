@@ -4,9 +4,11 @@
   "version": "0.1.1",
   "main": "webpack.development.config.js",
   "scripts": {
-    "build": "createDistDirectory.bat & webpack --progress --config .\\webpack\\production.config.js & babel .\\server\\index.js > .\\dist\\server\\index.js && babel .\\server\\graphQL.js > .\\dist\\server\\graphQL.js && babel .\\server\\mongoose.js > .\\dist/server\\mongoose.js && babel .\\server\\schemas.js > .\\dist\\server\\schemas.js && babel .\\server\\template.js > .\\dist\\server\\template.js && babel .\\server\\utilities\\searchCandidates.js > .\\dist\\server\\utilities\\searchCandidates.js && babel .\\server\\utilities\\sortCandidates.js > .\\dist\\server\\utilities\\sortCandidates.js",
+    "build": "webpack --progress --config .\\webpack\\production.config.js & babel .\\server --out-dir .\\dist\\server",
     "prod": "npm run build && babel-node .\\dist\\index.js --mode production",
     "dev": "nodemon --exec \"babel-node .\\server\\index.js --mode development\" -w .\\server",
+    "start:client": "webpack --progress --config .\\webpack\\development.config.js --watch --hot",
+    "start:server": "nodemon --exec \"babel-node .\\server\\index.js --mode development\" -w .\\server",
     "tests": "testcafe --screenshots .\\tests\\__screenshots__\\ chrome .\\tests\\*Tests.js & npm run utility",
     "utility": "..\\ScreenshotHandlerUtility\\dist\\win-unpacked\\ScreenshotHandlerUtility.exe -M C:\\Users\\DmitryB\\Documents\\Students\\CandidatesAccounting\\tests\\__screenshots__\\.metadata.json"
   },

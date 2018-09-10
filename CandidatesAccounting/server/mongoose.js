@@ -119,7 +119,7 @@ export const getAvatar = (candidateId) => {
 }
 
 export const addAvatar = (candidateId, avatarFile) => {
-  return updateCandidate(candidateId, { avatar: avatarFile, hasAvatar: true })
+  return updateCandidate(candidateId, { avatar: avatarFile.data, hasAvatar: true })
 }
 
 
@@ -212,3 +212,5 @@ const updateTags = (probablyNewTags) => {
       }
     })
 }
+
+export const maxAllowedAttachmentLength = 16 * 1024 * 1024 // 16MB

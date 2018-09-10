@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const __root = path.join(__dirname, '..');
 
@@ -17,9 +16,9 @@ module.exports = {
   },
 
   output: {
+    filename: path.join('assets', '[name].js'),
     path: path.join(__root, 'dist', 'public'),
-    publicPath: '/',
-    filename: path.join('assets', '[name].js')
+    publicPath: '/'
   },
 
   plugins: [

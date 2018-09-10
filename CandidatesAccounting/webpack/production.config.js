@@ -15,16 +15,16 @@ module.exports = {
   },
 
   output: {
+    filename: path.join('assets', '[name].js'),
     path: path.join(__root, 'dist', 'public'),
-    publicPath: '/',
-    filename: path.join('assets', '[name].js')
+    publicPath: '/'
   },
 
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new CopyWebpackPlugin([
-      {from: path.join(__root, 'server', 'favicon.ico'), to: path.join(__root, 'dist', 'public', 'favicon.ico')},
-      {from: path.join(__root, 'server', 'manifest.json'), to: path.join(__root, 'dist', 'public', 'manifest.json')},
+      {from: path.join(__root, 'public', 'assets', 'favicon.ico'), to: path.join(__root, 'dist', 'public', 'assets', 'favicon.ico')},
+      {from: path.join(__root, 'public', 'assets', 'manifest.json'), to: path.join(__root, 'dist', 'public', 'assets', 'manifest.json')},
       {from: path.join(__root, 'index.js'), to: path.join(__root, 'dist', 'index.js')},
       {from: path.join(__root, 'package.json'), to: path.join(__root, 'dist', 'package.json')},
       {from: path.join(__root, 'web.config'), to: path.join(__root, 'dist', 'web.config')},

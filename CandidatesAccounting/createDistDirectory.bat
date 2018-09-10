@@ -1,6 +1,0 @@
-md ".\dist"
-md ".\dist\server"
-md ".\dist/server\utilities"
-md ".\dist\public"
-md ".\dist\public\assets"
-md ".\dist\public\fonts"

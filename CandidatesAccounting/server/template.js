@@ -22,13 +22,13 @@ const template = (props) => {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Candidate Accounting</title>
         <link rel="manifest" href="${path.join(assetsRoot, 'manifest.json')}">
-        <link rel="icon" href="${path.join(assetsRoot, 'favicon.ico')}" type= "image/x-icon" >
-        <link rel="shortcut icon" href="${path.join(assetsRoot, 'favicon.ico')}" type="image/x-icon" >
+        <link rel="icon" href="${path.join(assetsRoot, 'favicon.ico')}" type= "image/x-icon">
+        <link rel="shortcut icon" href="${path.join(assetsRoot, 'favicon.ico')}" type="image/x-icon">
         ${styles}
       </head>
       <body>
         <div id="root">
-            ${pagePlaceholder}  
+          ${pagePlaceholder}  
         </div>                      
         <script type="text/javascript">
           window['APP_CONFIG'] = ${JSON.stringify(config)}

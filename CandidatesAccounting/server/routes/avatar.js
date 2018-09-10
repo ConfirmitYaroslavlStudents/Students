@@ -1,17 +1,12 @@
 import express from 'express'
+import authenticationCheckMiddleware from '../middlewares/authenticationCheck'
 import { maxAllowedAttachmentLength } from '../mongoose'
 import { getAvatar, addAvatar } from '../mongoose/api/avatar'
 
 const router = express.Router()
 
 router.route('/:candidateStatus/:candidateId/avatar')
-.all((req, res, next) => {
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    return res.status(401).end()
-  }
-})
+.all(authenticationCheckMiddleware)
 .get((req, res) => {
   return getAvatar(req.params.candidateId).then((result, error) => {
     if (error) {

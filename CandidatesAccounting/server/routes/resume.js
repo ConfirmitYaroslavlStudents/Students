@@ -1,17 +1,12 @@
 import express from 'express'
+import authenticationCheckMiddleware from '../middlewares/authenticationCheck'
 import { maxAllowedAttachmentLength } from '../mongoose'
 import { getResume, addResume } from '../mongoose/api/resume'
 
 const router = express.Router()
 
 router.route('/interviewees/:intervieweeId/resume')
-.all((req, res, next) => {
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    return res.status(401).end()
-  }
-})
+.all(authenticationCheckMiddleware)
 .get((req, res) => {
   return getResume(req.params.intervieweeId).then((result, error) => {
     if (error) {

@@ -19,7 +19,6 @@ import commentAttachmentRouter from './routes/commentAttachment'
 import graphqlRouter from './routes/graphql'
 import template from './template'
 
-//todo: remove
 const developmentMode = process.argv[3] === 'development'
 
 console.log(developmentMode ? 'Starting with development mode...' : 'Starting with production mode...')
@@ -28,8 +27,6 @@ const app = express()
 
 app.set('port', serverConfig.port)
 app.set('view endine', 'ejs')
-
-// todo два процесса
 
 if (developmentMode) {
   const config = require('../webpack/development.config')
@@ -55,10 +52,11 @@ passport.serializeUser(Account.serializeUser())
 passport.deserializeUser(Account.deserializeUser())
 
 app.use(authorizationRouter)
-app.use(avatarRouter)
+app.use('/login', avatarRouter)
 app.use(resumeRouter)
 app.use(commentAttachmentRouter)
 app.use(graphqlRouter)
+
 
 app.get('/*', (req, res) => {
   res.send(template({
@@ -71,7 +69,4 @@ connect()
 
 app.listen(app.get('port'), () => {
   console.log('Express server is listening on port', app.get('port'))
-  if (developmentMode) {
-    console.log('Waiting for webpack...')
-  }
 })

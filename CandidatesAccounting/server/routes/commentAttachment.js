@@ -1,17 +1,12 @@
 import express from 'express'
+import authenticationCheckMiddleware from '../middlewares/authenticationCheck'
 import { maxAllowedAttachmentLength } from '../mongoose'
 import { getAttachment, addAttachment } from '../mongoose/api/commentAttachment'
 
 const router = express.Router()
 
 router.route('/:candidateStatus(interviewees|students|trainees)/:candidateId/comments/:commentId/attachment')
-.all((req, res, next) => {
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    return res.status(401).end()
-  }
-})
+.all(authenticationCheckMiddleware)
 .get((req, res) => {
   return getAttachment(req.params.candidateId, req.params.commentId,).then((result, error) => {
     if (error) {

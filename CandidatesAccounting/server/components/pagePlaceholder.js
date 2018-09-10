@@ -41,7 +41,7 @@ const ContentPlaceholder = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ccc;
-  font-size: 180%;
+  font-size: 185%;
   font-weight: bold;
   color: #888;
   font-family: sans-serif;

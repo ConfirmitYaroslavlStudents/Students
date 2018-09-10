@@ -5,7 +5,6 @@ const __root = path.join(__dirname, '..');
 
 module.exports = {
   mode: 'development',
-  watch: true,
 
   entry: {
     main: [
@@ -63,7 +62,6 @@ module.exports = {
 
   devServer: {
     contentBase: path.join(__root, 'dist', 'public'),
-    hot: true,
-    port: 3000,
+    port: 3000
   }
 };

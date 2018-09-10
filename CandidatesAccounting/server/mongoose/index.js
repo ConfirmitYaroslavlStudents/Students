@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { AccountSchema } from './schemas'
 import passportLocalMongoose from 'passport-local-mongoose'
-import serverConfig from '../server.config.js'
+import serverConfig from '../development.server.config.js'
 
 mongoose.Promise = Promise
 

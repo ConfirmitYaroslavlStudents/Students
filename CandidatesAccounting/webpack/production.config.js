@@ -28,7 +28,7 @@ module.exports = {
       {from: path.join(__root, 'index.js'), to: path.join(__root, 'dist', 'index.js')},
       {from: path.join(__root, 'package.json'), to: path.join(__root, 'dist', 'package.json')},
       {from: path.join(__root, 'web.config'), to: path.join(__root, 'dist', 'web.config')},
-      {from: path.join(__root, 'server', 'server.config.js'), to: path.join(__root, 'dist', 'server', 'server.config.js')}
+      {from: path.join(__root, 'server', 'production.server.config.js'), to: path.join(__root, 'dist', 'server', 'production.server.config.js')}
     ])
   ],
 

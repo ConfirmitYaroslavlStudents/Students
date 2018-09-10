@@ -1,5 +1,5 @@
 import express from 'express'
-import serverConfig from '../server.config'
+import serverConfig from '../development.server.config'
 import { Account } from '../mongoose/api/account'
 import passport from 'passport'
 

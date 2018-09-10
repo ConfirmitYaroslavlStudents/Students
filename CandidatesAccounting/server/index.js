@@ -1,12 +1,9 @@
 import express from 'express'
-import webpack from 'webpack'
+import minimist from 'minimist'
 import path from 'path'
 import bodyParser from 'body-parser'
 import fileUpload from 'express-fileupload'
 import cookieParser from 'cookie-parser'
-import webpackDevMiddleware from 'webpack-dev-middleware'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import serverConfig from './server.config'
 import { connect } from './mongoose'
 import { Account } from './mongoose/api/account'
 import expressSession  from 'express-session'
@@ -19,25 +16,25 @@ import commentAttachmentRouter from './routes/commentAttachment'
 import graphqlRouter from './routes/graphql'
 import template from './template'
 
-const developmentMode = process.argv[3] === 'development'
+const argv = minimist(process.argv.slice(2))
+const productionMode = argv.mode === 'production'
 
-console.log(developmentMode ? 'Starting with development mode...' : 'Starting with production mode...')
+const serverConfig =
+  productionMode ?
+    require('./production.server.config')
+    :
+    require('./development.server.config')
+
+console.log(
+  productionMode ?
+    'CandidateAccounting server is starting with production mode...'
+    :
+    'CandidateAccounting server is starting with development mode...')
 
 const app = express()
 
 app.set('port', serverConfig.port)
 app.set('view endine', 'ejs')
-
-if (developmentMode) {
-  const config = require('../webpack/development.config')
-  const compiler = webpack(require('../webpack/development.config'))
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath,
-    hot: true,
-    stats: { colors: true }
-  }))
-  app.use(webpackHotMiddleware(compiler))
-}
 
 app.use(express.static(path.join(__dirname, '..', 'public')))
 app.use(expressSession({ secret: serverConfig.authorization.sessionSecret, resave: false, saveUninitialized: false }))
@@ -57,10 +54,9 @@ app.use(resumeRouter)
 app.use(commentAttachmentRouter)
 app.use(graphqlRouter)
 
-
 app.get('/*', (req, res) => {
   res.send(template({
-    assetsRoot: path.join('/', 'assets'),
+    assetsRoot: serverConfig.assetsRoot,
     username: req.isAuthenticated() ? req.user.username : ''
   }))
 })
@@ -68,5 +64,5 @@ app.get('/*', (req, res) => {
 connect()
 
 app.listen(app.get('port'), () => {
-  console.log('Express server is listening on port', app.get('port'))
+  console.log('CandidateAccounting server is listening on port', app.get('port'))
 })

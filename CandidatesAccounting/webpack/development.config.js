@@ -61,7 +61,7 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.join(__root, 'dist', 'public'),
-    port: 3000
+    contentBase: path.join(__root, 'public', 'assets'),
+    port: 3001
   }
 };

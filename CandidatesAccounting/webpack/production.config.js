@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const __root = path.join(__dirname, '..');
+const root = path.join(__dirname, '..');
 
 module.exports = {
   mode: 'production',
@@ -10,25 +10,25 @@ module.exports = {
   entry: {
     main: [
       'babel-polyfill',
-      path.join(__root, 'client', 'main.js')
+      path.join(root, 'client', 'main.js')
     ],
   },
 
   output: {
-    filename: path.join('assets', '[name].js'),
-    path: path.join(__root, 'dist', 'public'),
-    publicPath: '/'
+    filename: '[name].js',
+    path: path.join(root, 'dist', 'public', 'assets'),
+    publicPath: '/assets/'
   },
 
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new CopyWebpackPlugin([
-      {from: path.join(__root, 'public', 'assets', 'favicon.ico'), to: path.join(__root, 'dist', 'public', 'assets', 'favicon.ico')},
-      {from: path.join(__root, 'public', 'assets', 'manifest.json'), to: path.join(__root, 'dist', 'public', 'assets', 'manifest.json')},
-      {from: path.join(__root, 'index.js'), to: path.join(__root, 'dist', 'index.js')},
-      {from: path.join(__root, 'package.json'), to: path.join(__root, 'dist', 'package.json')},
-      {from: path.join(__root, 'web.config'), to: path.join(__root, 'dist', 'web.config')},
-      {from: path.join(__root, 'server', 'production.server.config.js'), to: path.join(__root, 'dist', 'server', 'production.server.config.js')}
+      {from: path.join(root, 'public', 'assets', 'favicon.ico'), to: path.join(root, 'dist', 'public', 'assets', 'favicon.ico')},
+      {from: path.join(root, 'public', 'assets', 'manifest.json'), to: path.join(root, 'dist', 'public', 'assets', 'manifest.json')},
+      {from: path.join(root, 'index.js'), to: path.join(root, 'dist', 'index.js')},
+      {from: path.join(root, 'package.json'), to: path.join(root, 'dist', 'package.json')},
+      {from: path.join(root, 'web.config'), to: path.join(root, 'dist', 'web.config')},
+      {from: path.join(root, 'server', 'production.server.config.js'), to: path.join(root, 'dist', 'server', 'production.server.config.js')}
     ])
   ],
 
@@ -49,15 +49,13 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        include: path.join(__root, 'client'),
+        include: path.join(root, 'client'),
         loader: ['babel-loader']
       },
       {
         test: /\.css$/,
         use: [
-          {
-            loader: 'style-loader'
-          },
+          { loader: 'style-loader' },
           {
             loader: 'css-loader',
             options: {

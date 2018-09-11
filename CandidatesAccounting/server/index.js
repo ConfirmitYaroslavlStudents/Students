@@ -1,6 +1,6 @@
 import express from 'express'
-import minimist from 'minimist'
 import path from 'path'
+import minimist from 'minimist'
 import bodyParser from 'body-parser'
 import fileUpload from 'express-fileupload'
 import cookieParser from 'cookie-parser'

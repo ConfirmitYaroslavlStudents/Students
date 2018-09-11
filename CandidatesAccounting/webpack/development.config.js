@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const serverConfig = require('../server/development.server.config');
 
-const __root = path.join(__dirname, '..');
+const root = path.join(__dirname, '..');
 
 module.exports = {
   mode: 'development',
@@ -9,25 +10,24 @@ module.exports = {
   entry: {
     main: [
       'babel-polyfill',
-      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-      path.join(__root, 'client', 'main.js')
+      path.join(root, 'client', 'main.js')
     ],
   },
 
   output: {
-    filename: path.join('assets', '[name].js'),
-    path: path.join(__root, 'dist', 'public'),
-    publicPath: '/'
+    filename: '[name].js',
+    path: path.join(root, 'dist', 'public', 'assets'),
+    publicPath: serverConfig.assetsRoot
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.IgnorePlugin(/^\.\/locale?!\\ru.js$/, /moment$/)
+    new webpack.IgnorePlugin(/^\.\/locale?!\\ru.js$/, /moment$/),
+    new webpack.HotModuleReplacementPlugin()
   ],
 
   optimization: {
     minimize: false,
+    noEmitOnErrors: true,
     splitChunks: {
       cacheGroups: {
         vendors: {
@@ -43,7 +43,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        include: path.join(__root, 'client'),
+        include: path.join(root, 'client'),
         loader: ['babel-loader']
       },
       {
@@ -61,7 +61,10 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.join(__root, 'public', 'assets'),
-    port: 3001
+    contentBase: path.join(root, 'public', 'assets'),
+    publicPath: '/',
+    port: 3001,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    watchContentBase: true
   }
 };

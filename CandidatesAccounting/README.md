@@ -16,20 +16,23 @@ Usage
 
 `npm run prod` - starts `npm run build` script and then starts CandidateAccounting server in `production mode` from `dist` folder.
 
-`npm run dev` - starts CandidateAccounting server in `development mode`.
-
 `npm run start:client` - builds client in development mode and starts dev server.
 
 `npm run start:server` - builds and starts server in development mode.
 
-`npm run tests` - runs all testcaffe tests from `tests` folder.
-
 Configuration
 -----------------------------------
 ### Server configuration file
-Location: `_{project directory}_/server/server.config.js`
+There are two server configuration files: `development` and `production`.
+
+Location:
+`_{project directory}_/server/development.server.config.js`
+`_{project directory}_/server/production.server.config.js`
+
+Example:
 ```
 const serverConfig = {
+  assetsRoot: '/assets/',
   port: 3000,
   databaseConnectionURL: "mongodb://localhost:27017/CandidateAccounting",
   authorization: {
@@ -40,6 +43,8 @@ const serverConfig = {
 
 module.exports = serverConfig
 ```
+`assetsRoot`: absolute or relative path to assets (webpack output and static files).
+
 `port` _(number, default: 3000)_ - server port number.
 
 `databaseConnectionURL` _(string, default: "mongodb://localhost:27017/CandidateAccounting")_ - MongoDB connection URL.

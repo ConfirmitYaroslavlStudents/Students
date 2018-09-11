@@ -6,8 +6,7 @@
   "scripts": {
     "build": "webpack --progress --config .\\webpack\\production.config.js & babel .\\server --out-dir .\\dist\\server",
     "prod": "npm run build && babel-node .\\dist\\index.js --mode production",
-    "dev": "nodemon --exec \"babel-node .\\server\\index.js --mode development\" -w .\\server",
-    "start:client": "webpack --progress --config .\\webpack\\development.config.js --watch --hot",
+    "start:client": "webpack-dev-server --progress --config .\\webpack\\development.config.js --watch --hotOnly",
     "start:server": "nodemon --exec \"babel-node .\\server\\index.js --mode development\" -w .\\server",
     "tests": "testcafe --screenshots .\\tests\\__screenshots__\\ chrome .\\tests\\*Tests.js & npm run utility",
     "utility": "..\\ScreenshotHandlerUtility\\dist\\win-unpacked\\ScreenshotHandlerUtility.exe -M C:\\Users\\DmitryB\\Documents\\Students\\CandidatesAccounting\\tests\\__screenshots__\\.metadata.json"

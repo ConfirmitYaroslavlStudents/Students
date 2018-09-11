@@ -3,16 +3,12 @@
     "transform-react-jsx",
     "transform-object-rest-spread",
     "react-hot-loader/babel",
-    ["babel-plugin-styled-components", {
-      "ssr": true
-    }],
+    ["babel-plugin-styled-components", { "ssr": true }],
     "syntax-dynamic-import",
     "transform-class-properties"
   ],
   "presets": [
-    ["env", {
-      "loose": true
-    }],
-    "react"
+    ["@babel/preset-env", { "loose": true }],
+    "@babel/preset-react"
   ]
 }

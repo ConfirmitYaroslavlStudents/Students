@@ -68,6 +68,7 @@ const root = {
 
   deleteCandidate: ({ candidateId }) => {
     return deleteCandidate(candidateId)
+    .then(result => !!result)
   },
 
   addComment: ({ candidateId, comment }) => {

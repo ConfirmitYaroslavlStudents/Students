@@ -5,10 +5,11 @@
     "react-hot-loader/babel",
     ["babel-plugin-styled-components", { "ssr": true }],
     "@babel/plugin-syntax-dynamic-import",
-    "transform-class-properties"
+    "@babel/plugin-proposal-class-properties"
   ],
   "presets": [
-    ["@babel/preset-env", { "loose": true }],
-    "@babel/preset-react"
+    ["@babel/env", { "loose": true }],
+    "@babel/react",
+    "@babel/flow"
   ]
 }

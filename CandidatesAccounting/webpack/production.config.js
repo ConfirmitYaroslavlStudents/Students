@@ -12,7 +12,7 @@ module.exports = {
     main: [
       '@babel/polyfill',
       path.join(root, 'client', 'main.js')
-    ],
+    ]
   },
 
   output: {
@@ -34,7 +34,7 @@ module.exports = {
   ],
 
   optimization: {
-    minimize: true,
+    minimize: false,
     noEmitOnErrors: true,
     splitChunks: {
       cacheGroups: {
@@ -56,13 +56,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: { hmr: false }
-          },
-          { loader: 'css-loader' }
-        ]
+        loader: ['style-loader', 'css-loader']
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,

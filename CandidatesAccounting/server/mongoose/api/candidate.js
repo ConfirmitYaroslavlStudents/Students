@@ -18,7 +18,7 @@ export const addCandidate = (newCandidate) => {
   return Candidate.create(newCandidate)
   .then(candidate => {
     updateTags(candidate.tags)
-    return candidate._id
+    return candidate._id.toString()
   })
 }
 
@@ -57,8 +57,7 @@ export const addComment = (candidateId, comment) => {
         addNotification(candidate, subscriber, comment)
       }
     })
-    console.log(id)
-    return id //TODO: fix null return
+    return id.toString()
   })
 }
 

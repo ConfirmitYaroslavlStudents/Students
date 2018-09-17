@@ -1,7 +1,7 @@
 {
   "name": "candidate-accounting",
   "sideEffects": false,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "\\webpack\\production.config.js",
   "scripts": {
     "build": "webpack --progress --config .\\webpack\\production.config.js --env.production & babel .\\server --out-dir .\\dist\\server",
@@ -70,7 +70,6 @@
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "electron": "^2.0.7",
-    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^2.0.0",
     "nodemon": "^1.18.4",
     "react-hot-loader": "^4.3.8",

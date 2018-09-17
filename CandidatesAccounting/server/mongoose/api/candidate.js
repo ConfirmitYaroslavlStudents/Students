@@ -57,7 +57,8 @@ export const addComment = (candidateId, comment) => {
         addNotification(candidate, subscriber, comment)
       }
     })
-    return id
+    console.log(id)
+    return id //TODO: fix null return
   })
 }
 
@@ -69,13 +70,13 @@ export const updateComment = (candidateId, commentId, comment) => {
 }
 
 export const deleteComment = (candidateId, commentId) => {
-  return Candidate.findByIdAndUpdate(candidateId, {$pull: {comments: {_id: commentId}}}).exec()
+  return Candidate.updateOne({ _id: candidateId }, {$pull: {comments: {_id: commentId}}}).exec()
 }
 
 export const subscribe = (candidateId, email) => {
-  return Candidate.findByIdAndUpdate(candidateId, {$push: {subscribers: email}}).exec()
+  return Candidate.updateOne({ _id: candidateId }, {$push: {subscribers: email}}).exec()
 }
 
 export const unsubscribe = (candidateId, email) => {
-  return Candidate.findByIdAndUpdate(candidateId, {$pull: {subscribers: email}}).exec()
+  return Candidate.updateOne({ _id: candidateId }, {$pull: {subscribers: email}}).exec()
 }

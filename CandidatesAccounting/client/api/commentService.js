@@ -11,6 +11,7 @@ export const addComment = (candidateId, comment) => {
     { candidateId, comment }
   )
   .then(data => {
+    console.log(data) //TODO: fix null return
     if (!data.addComment) {
       throw 'Server error'
     }

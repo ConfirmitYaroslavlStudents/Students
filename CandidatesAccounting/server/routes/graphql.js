@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.route('/graphql')
 .all(authenticationCheckMiddleware)
-.all(graphqlHTTP({
+.post(graphqlHTTP({
   schema: graphqlSchema,
   rootValue: graphqlRoot,
   graphiql: false

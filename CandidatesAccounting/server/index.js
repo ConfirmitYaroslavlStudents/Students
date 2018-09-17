@@ -49,7 +49,7 @@ passport.serializeUser(Account.serializeUser())
 passport.deserializeUser(Account.deserializeUser())
 
 app.use(authorizationRouter)
-app.use('/login', avatarRouter)
+app.use(avatarRouter)
 app.use(resumeRouter)
 app.use(commentAttachmentRouter)
 app.use(graphqlRouter)

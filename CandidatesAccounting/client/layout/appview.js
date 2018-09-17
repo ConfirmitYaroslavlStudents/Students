@@ -51,7 +51,7 @@ class AppView extends Component {
     const tableSwitch =
       authorized && !initializing ?
         <Switch>
-          <Route exact path='/(interviewees|students|trainees)/(\w+)/comments' render={() =>
+          <Route exact path='/(interviewees|students|trainees)/:candidateId/comments' render={() =>
             <CommentPage candidate={candidates[currentCandidateId]} />
           }
           />
@@ -67,7 +67,7 @@ class AppView extends Component {
           <Route exact path='/*' render={props =>
             <CandidatesTable type='Candidate' {...props} />}
           />
-          <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found'/>}/>
+          <Route path='' render={() => <ErrorPage errorCode={404} errorMessage='Page not found' />} />
         </Switch>
         :
         <ApplicationStatusWrapper>

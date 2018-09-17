@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const serverConfig = require('../server/production.server.config');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const root = path.join(__dirname, '..');
@@ -9,7 +10,7 @@ module.exports = {
 
   entry: {
     main: [
-      'babel-polyfill',
+      '@babel/polyfill',
       path.join(root, 'client', 'main.js')
     ],
   },
@@ -17,7 +18,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.join(root, 'dist', 'public', 'assets'),
-    publicPath: '/assets/'
+    publicPath: serverConfig.assetsRoot
   },
 
   plugins: [
@@ -34,6 +35,7 @@ module.exports = {
 
   optimization: {
     minimize: true,
+    noEmitOnErrors: true,
     splitChunks: {
       cacheGroups: {
         vendors: {
@@ -50,18 +52,17 @@ module.exports = {
       {
         test: /\.js$/,
         include: path.join(root, 'client'),
-        loader: ['babel-loader']
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,
         use: [
-          { loader: 'style-loader' },
           {
-            loader: 'css-loader',
-            options: {
-              minimize: true
-            }
-          }]
+            loader: 'style-loader',
+            options: { hmr: false }
+          },
+          { loader: 'css-loader' }
+        ]
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,

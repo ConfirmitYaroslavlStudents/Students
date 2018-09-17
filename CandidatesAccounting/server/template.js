@@ -8,7 +8,6 @@ const template = (props) => {
 
   const config = { username }
 
-
   const sheet = new ServerStyleSheet()
   const pagePlaceholder = ReactDOMServer.renderToString(sheet.collectStyles(<PagePlaceholder />))
   const styles = sheet.getStyleTags()

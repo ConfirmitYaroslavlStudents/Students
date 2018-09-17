@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import CopyButton from './copyButton'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 class PhoneNumberWrapper extends Component {
   constructor(props) {
@@ -49,7 +49,7 @@ const Wrapper = styled.div`
   padding: 4px;
   padding-right: 30px;
   
-  ${props => props.withButton && css`
+  ${props => props.withButton &&`
     padding-right: 4px;
 	`}
 `

@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom'
 import reducer from './rootReducer'
 import { Provider } from 'react-redux'
 import Router from 'react-router/Router'
-import Route from 'react-router/Route'
 import createBrowserHistory from 'history/createBrowserHistory'
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
@@ -46,7 +45,7 @@ const renderApp = (app) => {
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <Router history={history}>
-          <Route path='/' component={app} />
+          {app}
         </Router>
       </Provider>
     </MuiThemeProvider>,
@@ -54,7 +53,7 @@ const renderApp = (app) => {
   )
 }
 
-renderApp(AppView)
+renderApp(<AppView />)
 
 if (username && username !== '') {
   store.dispatch(getInitialStateFromServer())

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import NavLink from '../../components/linkWrapper'
 import NotificationInfo from './notificationInfo'
 import NotificaitonContent from './notificationContent'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const NotificationBlock = (props) => {
   const { notification, noticeNotification, deleteNotification, openCommentPage } = props
@@ -55,7 +55,7 @@ const NotificationWrapper = styled.div`
   background-color: #fefefe;
   cursor: pointer;
   
-  ${props => props.recent && css`  
+  ${props => props.recent &&`  
     border-left: 5px solid #42A5F5;
     background-color: #fff;
 	`}	
@@ -64,7 +64,7 @@ const NotificationWrapper = styled.div`
     border-left: 5px solid #aaa;    
     background-color: #fff;    
     
-    ${props => props.recent && css`    
+    ${props => props.recent &&`    
       border-left: 5px solid #64B5F6;
     `}	
   }

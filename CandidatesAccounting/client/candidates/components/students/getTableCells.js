@@ -6,7 +6,7 @@ import EmailWrapper from '../../../components/emailWrapper'
 import PhoneNumberWrapper from '../../../components/phoneNumberWrapper'
 import CandidateNameLink from '../../../components/candidateNameLink'
 import NicknameWrapper from '../../../components/nicknameWrapper'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const getStudentTableCells = (candidate) => {
   return [
@@ -34,7 +34,7 @@ const CandidateNameWrapper = styled.div`
 const Date = styled.div`
   white-space: nowrap;
   
-  ${props => props.highlighted && css`
+  ${props => props.highlighted &&`
     color: #ff4081;
     font-weight: bold;
 	`}

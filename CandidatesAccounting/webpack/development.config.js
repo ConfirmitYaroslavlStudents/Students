@@ -9,7 +9,7 @@ module.exports = {
 
   entry: {
     main: [
-      'babel-polyfill',
+      '@babel/polyfill',
       path.join(root, 'client', 'main.js')
     ],
   },
@@ -44,7 +44,7 @@ module.exports = {
       {
         test: /\.js$/,
         include: path.join(root, 'client'),
-        loader: ['babel-loader']
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,

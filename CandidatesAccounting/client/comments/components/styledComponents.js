@@ -1,10 +1,10 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 export const CommentWrapper = styled.div`  
   margin-bottom: 7px;
   padding: 10px 15px 0 15px; 
   
-  ${props => props.right && css`
+  ${props => props.right &&`
     text-align: right;
 	`}
 `
@@ -21,7 +21,7 @@ export const CommentMount = styled.div`
   border-left: 5px solid #999;
   border-color: ${props => props.markerColor};
 	
-	${props => props.right && css`
+	${props => props.right &&`
     border-left: none;
     border-right: 5px solid #999;
     border-color: #3949AB;
@@ -29,12 +29,12 @@ export const CommentMount = styled.div`
     margin-bottom: 0;
 	`}
 	
-	${props => props.deleted && css`
+	${props => props.deleted &&`
     background: #fafafa;
     border-color: #f44336;
 	`}
 	
-	${props => props.isSystem && css`
+	${props => props.isSystem &&`
 	  flex-direction: row;
 	  color: #905600;
     background-color: #FFF3E0;
@@ -61,7 +61,7 @@ export const CommentMountFooter = styled.div`
   display: block;
   margin: 0;
   
-  ${props => props.right && css`
+  ${props => props.right &&`
     margin: 0 8px 0 auto;
 	`}
 `

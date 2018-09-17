@@ -1,7 +1,7 @@
+import 'react-select/dist/react-select.css'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import 'react-select/dist/react-select.css'
 
 const TagSelect = (props) => {
   const options = props.options.map(tag => ({label: tag, value: tag}))

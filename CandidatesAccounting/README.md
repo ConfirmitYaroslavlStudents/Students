@@ -3,7 +3,7 @@ CandidateAccounting
 Usage
 -----------------------------------
 ### Setting up MongoDB
-1. Create database `CandidateAccounting` _(configurable)_;
+1. Create database `CandidateAccounting`;
 2. Create three collections in the database:
     * `accounts`;
     * `candidates`;
@@ -16,7 +16,7 @@ Usage
 
 `npm run prod` - starts `npm run build` script and then starts CandidateAccounting server in `production mode` from `dist` folder.
 
-`npm run start:client` - builds client in development mode and starts dev server.
+`npm run start:client` - builds client in development mode and starts webpack dev server.
 
 `npm run start:server` - builds and starts server in development mode.
 
@@ -26,8 +26,9 @@ Configuration
 There are two server configuration files: `development` and `production`.
 
 Location:
-`_{project directory}_/server/development.server.config.js`
-`_{project directory}_/server/production.server.config.js`
+development: `_{project directory}_/server/development.server.config.js`
+
+production: `_{project directory}_/server/production.server.config.js`
 
 Example:
 ```
@@ -49,6 +50,6 @@ module.exports = serverConfig
 
 `databaseConnectionURL` _(string, default: "mongodb://localhost:27017/CandidateAccounting")_ - MongoDB connection URL.
 
-`allowedLogins` _(array, default: empty)_ - login list for users allowed to register and login. If empty, all users are allowed to register and login.
+`allowedLogins` _(array, default: empty)_ - login list for users allowed to sign up and sign in. If null or empty, all users are allowed to sign up and sign in.
 
-`sessionSecret` _(string, default: "secret")_ - secret session key used for authorization system.
+`sessionSecret` _(string, default: "secret")_ - secret session key used for authorization.

@@ -7,7 +7,11 @@ let sagaMiddleware
 
 const createStore = (reducer) => {
   sagaMiddleware = createSagaMiddleware()
-  const middlewares = composeWithDevTools(applyMiddleware(sagaMiddleware))
+  const middlewares =
+    module.hot ?
+      composeWithDevTools(applyMiddleware(sagaMiddleware))
+      :
+      applyMiddleware(sagaMiddleware)
   return reduxCreateStore(reducer, middlewares)
 }
 

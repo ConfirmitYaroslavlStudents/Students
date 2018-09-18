@@ -20,13 +20,28 @@ module.exports = {
     publicPath: serverConfig.assetsRoot
   },
 
-  plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale?!\\ru.js$/, /moment$/),
-    new webpack.HotModuleReplacementPlugin()
-  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        include: path.join(root, 'client'),
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.css$/,
+        loaders: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader',
+        options: {
+          name: 'fonts/[name].[ext]'
+        }
+      }
+    ]
+  },
 
   optimization: {
-    minimize: false,
     noEmitOnErrors: true,
     splitChunks: {
       cacheGroups: {
@@ -39,32 +54,16 @@ module.exports = {
     }
   },
 
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        include: path.join(root, 'client'),
-        loader: 'babel-loader'
-      },
-      {
-        test: /\.css$/,
-        loader: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader',
-        options: {
-          name: 'fonts/[name].[ext]'
-        }
-      }
-    ]
-  },
-
   devServer: {
     contentBase: path.join(root, 'public', 'assets'),
     publicPath: '/',
     port: 3001,
     headers: { 'Access-Control-Allow-Origin': '*' },
     watchContentBase: true
-  }
+  },
+
+  plugins: [
+    new webpack.IgnorePlugin(/^\.\/locale?!\\ru.js$/, /moment$/),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };

@@ -1,7 +1,4 @@
-//MAIN-HERE
-
 import './css/index.css'
-import './css/test.css'
 import 'typeface-roboto'
 import React from 'react'
 import ReactDOM from 'react-dom'

@@ -233,17 +233,13 @@ pip-log.txt
 !/2015/Bolshakov/MP3_tager/MP3_tager/bin/Debug/*.dll
 
 #############
-## Dmitry Banokin CandidatesAccounting
+## Dmitry Banokin
 #############
 CandidatesAccounting/node_modules
 CandidatesAccounting/.idea
-CandidatesAccounting/.vs
 CandidatesAccounting/dist
-*.pdf
-*stats*.json
-CandidatesAccounting/tests/__screenshots__/
-ScreenshotHandler/.idea/
-ScreenshotHandler/node_modules/
-/.vs
-ScreenshotHandlerUtility/node_modules/
-ScreenshotHandlerUtility/.idea/
+CandidatesAccounting/tests
+ScreenshotHandler/.idea
+ScreenshotHandler/node_modules
+ScreenshotHandlerUtility/node_modules
+ScreenshotHandlerUtility/.idea

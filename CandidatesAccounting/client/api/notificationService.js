@@ -22,7 +22,7 @@ export const getNotifications = (username) => {
     }`,
     { username }
   )
-  .then((data) => {
+  .then(data => {
     if (!data) {
       throw 'Connection error'
     }

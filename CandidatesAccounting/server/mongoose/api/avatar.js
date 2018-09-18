@@ -4,7 +4,7 @@ export const getAvatar = (candidateId) => {
   return getCandidateById(candidateId)
   .then(candidate => {
     return {
-      avatarFile: candidate.avatar
+      avatarFile: candidate ? candidate.avatar : null
     }
   })
 }

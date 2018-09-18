@@ -119,11 +119,11 @@ const creator = ({ history }) => {
       const candidateId = yield call(addCandidate, candidate)
 
       if (resumeFile) {
-        yield put(actions.uploadResume({intervieweeId: candidateId, resume: resumeFile}))
+        yield call(uploadResume, candidateId, resumeFile)
       }
 
       if (avatarFile) {
-        yield put(actions.uploadAvatar({candidateStatus: candidate.status, candidateId: candidateId, avatar: avatarFile}))
+        yield call(uploadAvatar, candidate.status, candidateId, avatarFile)
       }
 
       yield put(actions.addCandidateSuccess({ candidate }))
@@ -138,7 +138,7 @@ const creator = ({ history }) => {
     try {
       const { candidate, previousState } = action.payload
       const candidateStatus = yield select(state => SELECTORS.CANDIDATES.CANDIDATESTATUS(state))
-      const pageTitle = yield select(state => SELECTORS.APPLICATION.PAGETITLE)
+      const pageTitle = yield select(state => SELECTORS.APPLICATION.PAGETITLE(state))
 
       const resumeFile = candidate.resumeFile
       delete candidate.resumeFile

@@ -1,7 +1,14 @@
 import express from 'express'
-import serverConfig from '../development.server.config'
 import { Account } from '../mongoose/api/account'
 import passport from 'passport'
+import minimist from 'minimist'
+
+const argv = minimist(process.argv.slice(2))
+const serverConfig =
+  argv.mode === 'production' ?
+    require('../production.server.config')
+    :
+    require('../development.server.config')
 
 const router = express.Router()
 
@@ -29,12 +36,12 @@ router.route('/login')
         res.json({ username: req.user.username })
       })
     } else {
-      Account.register(new Account({ username: req.user.username }), req.body.password, (error) => {
+      Account.register(new Account({ username: req.body.username }), req.body.password, (error) => {
         if (error) {
           return res.status(500).end()
         }
         passport.authenticate('local')(req, res, () => {
-          res.json({ username: req.user.username })
+          res.json({ username: req.body.username })
         })
       })
     }

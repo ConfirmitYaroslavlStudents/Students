@@ -1,6 +1,6 @@
 {
   "name": "candidate-accounting",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "\\webpack\\production.config.js",
   "scripts": {
     "build": "webpack --progress --config .\\webpack\\production.config.js & babel .\\server --out-dir .\\dist\\server",

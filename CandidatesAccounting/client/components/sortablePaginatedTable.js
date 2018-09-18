@@ -28,11 +28,11 @@ class SortablePaginatedTable extends Component {
   }
 
   handleBackButtonClick = () => {
-    this.handlePageChange(Math.max(offset - this.props.rowsPerPage, 0))
+    this.handlePageChange(Math.max(this.props.offset - this.props.rowsPerPage, 0))
   }
 
   handleNextButtonClick = () => {
-    this.handlePageChange(Math.min(offset + this.props.rowsPerPage, this.props.totalCount))
+    this.handlePageChange(Math.min(this.props.offset + this.props.rowsPerPage, this.props.totalCount))
   }
 
   handleLastPageButtonClick = () => {

@@ -39,11 +39,6 @@ const reducer = handleActions(
       }
     },
 
-    [authorization.loginSuccess]: (state, {payload}) => ({
-      ...state,
-      notifications: payload.notifications
-    }),
-
     [authorization.loginFailure]: (state) => ({
       ...state,
       notifications: {}

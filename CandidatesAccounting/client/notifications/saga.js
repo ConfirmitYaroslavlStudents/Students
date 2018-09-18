@@ -38,11 +38,11 @@ function* watchUnsubscribe() {
 function* getNotificationsSaga(action) {
   try {
     const { username } = action.payload
-    const downloadedNotifications = yield call(getNotifications, username)
-    yield put(actions.getNotificationsSuccess({ notifications: downloadedNotifications }))
+    const notifications = yield call(getNotifications, username)
+    yield put(actions.getNotificationsSuccess({ notifications }))
   }
   catch (error) {
-    yield put(applicationActions.setErrorMessage({message: error + '. Get actions error.'}))
+    yield put(applicationActions.setErrorMessage({message: error + '. Get notifications error.'}))
   }
 }
 

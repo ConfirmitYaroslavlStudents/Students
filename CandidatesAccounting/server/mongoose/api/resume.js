@@ -4,8 +4,8 @@ export const getResume = (candidateId) => {
   return getCandidateById(candidateId)
   .then(interviewee => {
     return {
-      resumeName: interviewee.resume,
-      resumeFile: interviewee.resumeFile
+      resumeName: interviewee ? interviewee.resume : null,
+      resumeFile: interviewee ? interviewee.resumeFile : null
     }
   })
 }

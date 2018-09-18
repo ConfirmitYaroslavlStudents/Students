@@ -11,7 +11,7 @@ export const getCandidates = (candidateStatus) => {
 }
 
 export const getCandidateById = (candidateId) => {
-  return Candidate.findById(mongoose.Types.ObjectId(candidateId)).exec()
+  return Candidate.findOne({ _id: candidateId }).exec()
 }
 
 export const addCandidate = (newCandidate) => {
@@ -29,7 +29,7 @@ export const updateCandidate = (candidateId, candidateNewState) => {
   }
   delete candidateNewState.comments
   delete candidateNewState.id
-  return Candidate.updateOne({_id: candidateId}, {
+  return Candidate.updateOne({ _id: candidateId }, {
     '$set': {
       ...candidateNewState
     },

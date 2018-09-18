@@ -31,7 +31,7 @@ const creator = ({ history }) => {
 
   function* initSaga(action) {
     try {
-      const {username} = action.payload
+      const { username } = action.payload
       const stateArgs = getStateArgsFromURL(history.location.pathname + history.location.search)
       const initialState = {
         ...stateArgs,

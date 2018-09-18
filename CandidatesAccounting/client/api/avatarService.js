@@ -2,7 +2,7 @@ export const uploadAvatar = (candidateStatus, candidateId, avatar) => {
   const formData = new FormData()
   formData.append('avatar', avatar)
 
-  return fetch('/' + candidateStatus + '/' + candidateId + '/avatar', {
+  return fetch('/' + candidateStatus.toLowerCase() + 's/' + candidateId + '/avatar', {
     method: 'POST',
     credentials: 'include',
     body: formData

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyStack", "MyStack\MyStack.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{F3B4B682-7082-48F4-A573-18F17B80F5AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{F3B4B682-7082-48F4-A573-18F17B80F5AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyStack", "MyStack\MyStack.csproj", "{BD0632E3-9F65-47C0-A8AD-836DBC8647B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,10 @@ Global
 		{F3B4B682-7082-48F4-A573-18F17B80F5AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3B4B682-7082-48F4-A573-18F17B80F5AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3B4B682-7082-48F4-A573-18F17B80F5AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD0632E3-9F65-47C0-A8AD-836DBC8647B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD0632E3-9F65-47C0-A8AD-836DBC8647B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD0632E3-9F65-47C0-A8AD-836DBC8647B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD0632E3-9F65-47C0-A8AD-836DBC8647B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,6 +11,7 @@
     <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -59,6 +60,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MyStack\MyStack.csproj">
       <Project>{8cc70413-6ec9-4382-9658-501c6aed5432}</Project>
+      <Project>{bd0632e3-9f65-47c0-a8ad-836dbc8647b5}</Project>
       <Name>MyStack</Name>
     </ProjectReference>
   </ItemGroup>

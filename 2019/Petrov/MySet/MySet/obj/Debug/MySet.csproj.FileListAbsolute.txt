@@ -1,0 +1,7 @@
+C:\Users\Ivan\source\repos\MySet\MySet\bin\Debug\MySet.exe.config
+C:\Users\Ivan\source\repos\MySet\MySet\bin\Debug\MySet.exe
+C:\Users\Ivan\source\repos\MySet\MySet\bin\Debug\MySet.pdb
+C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.csprojAssemblyReference.cache
+C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.csproj.CoreCompileInputs.cache
+C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.exe
+C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.pdb

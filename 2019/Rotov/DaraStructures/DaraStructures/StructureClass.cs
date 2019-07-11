@@ -69,7 +69,7 @@ namespace DaraStructures
             var result = RecursiveRemove(Root, key);
         }
 
-        public Node<T> RecursiveRemove(Node<T> current, int key)
+        private Node<T> RecursiveRemove(Node<T> current, int key)
         {
             if (current is null) return current;
             if (key < current.Key)

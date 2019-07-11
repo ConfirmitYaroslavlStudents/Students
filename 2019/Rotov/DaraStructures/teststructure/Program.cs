@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DaraStructures;
+﻿using DaraStructures;
 
 namespace teststructure
 {
@@ -11,7 +6,7 @@ namespace teststructure
     {
         static void Main(string[] args)
         {
-            BinarySearchTree<int> tree = new BinarySearchTree<int>();
+            var tree = new BinarySearchTree<int>();
             tree.Insert(new Node<int>(8, 1));
             tree.Insert(new Node<int>(3, 1));
             tree.Insert(new Node<int>(10, 1));

@@ -1,13 +1,17 @@
-﻿using System;
-
-namespace DaraStructures
+﻿namespace DaraStructures
 {
+    // TODO: unit tests
+    // TODO: int key -> generalize
+    // TODO: remove unused code
+    // TODO: alignment
+    // TODO: is null
+    // TODO: implement IEnumerable
     public class Node<T>
     {
         public int Key { get; set; }
         public T Value { get; set; }
 
-        public Node<T> Left { get; set; } 
+        public Node<T> Left { get; set; }
 
         public Node<T> Right { get; set; }
 
@@ -17,6 +21,7 @@ namespace DaraStructures
             Value = value;
         }
     }
+
     public class BinarySearchTree<T>
     {
         public Node<T> Root { get; set; }
@@ -28,14 +33,16 @@ namespace DaraStructures
             Insert(node);
         }
 
-
         private Node<T> RecursiveDiving(Node<T> node, int key)
         {
-            if (node.Key == key) return node;
+            if (node.Key == key)
+                return node;
             else if (key < node.Key)
             {
-                if (node.Left is null) return node;
-                else return RecursiveDiving(node.Left, key);
+                if (node.Left is null)
+                    return node;
+                else
+                    return RecursiveDiving(node.Left, key);
             }
             else
             {
@@ -46,7 +53,11 @@ namespace DaraStructures
 
         public void Insert(Node<T> node)
         {
-            if (Root is null) { Root = node; Count++; }
+            if (Root == null)
+            {
+                Root = node;
+                Count++;
+            }
             else
             {
                 Node<T> current = RecursiveDiving(Root, node.Key);
@@ -75,10 +86,12 @@ namespace DaraStructures
             if (key < current.Key)
             {
                 current.Left = RecursiveRemove(current.Left, key);
-            } else if (key > current.Key)
+            }
+            else if (key > current.Key)
             {
                 current.Right = RecursiveRemove(current.Right, key);
-            } else if (current.Left != null && current.Right != null)
+            }
+            else if (current.Left != null && current.Right != null)
             {
                 Node<T> find = FindMinimumNode(current.Right);
                 current.Key = find.Key;

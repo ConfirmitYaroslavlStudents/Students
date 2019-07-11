@@ -1,28 +1,35 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MySet
 {
+    // TODO: ClassLibrary project
+    // TODO: PrintXXXOrder = implementation details
+    // TODO: public count
+    // TODO: implement IEnumerable<T>
+    // TODO: improve incapsulation
+    // TODO: improve naming in code
+    // TODO: remove all unused code
+    // TODO: union + intersection return new set
+    // TODO: unit tests
     class Program
     {
-        internal class Node<T>
-        {
-            public T data { get; set; }
-            public Node<T> leftChild { get; set; }
-            public Node<T> rightChild { get; set; }
-            public Node<T> parent { get; set; }
-            public Node(T _data)
-            {
-                data = _data;
-            }
-        }
+        
         class Set<T> where T : IComparable<T>
         {
-            public Node<T> root;
+            internal class Node<V>
+            {
+                public V Data { get; set; }
+                public Node<V> LeftChild { get; set; }
+                public Node<V> RightChild { get; set; }
+                public Node<V> Parent { get; set; }
+                public Node(V data)
+                {
+                    Data = data;
+                }
+            }
+
+            private Node<T> root;
             int count;
             public Set()
             {
@@ -34,17 +41,16 @@ namespace MySet
             {
                 return Enumerator;
             }
-            public int CompareTo(object obj) => throw new NotImplementedException();
-            public Node<T> Find(T Data)
+            public Node<T> Find(T data)
             {
-                Node<T> node = root;
+                var node = root;
                 while (node != null)
                 {
-                    if (node.data.Equals(Data))
+                    if (node.Data.Equals(data))
                     {
                         return node;
                     }
-                    node = Data.CompareTo(node.data) >= 0 ? node.rightChild : node.leftChild;
+                    node = data.CompareTo(node.Data) >= 0 ? node.RightChild : node.LeftChild;
                 }
                 return null;
             }
@@ -62,37 +68,37 @@ namespace MySet
                     return true;
                 }
                 Node<T> current = root;
-                if (newNode.parent == null)
+                if (newNode.Parent == null)
                 {
-                    newNode.parent = root;
+                    newNode.Parent = root;
                 }
                 while (true)
                 {
-                    if (newNode.data.CompareTo(current.data) <= 0)
+                    if (newNode.Data.CompareTo(current.Data) <= 0)
                     {
-                        if (current.leftChild == null)
+                        if (current.LeftChild == null)
                         {
-                            newNode.parent = current;
-                            current.leftChild = newNode;
+                            newNode.Parent = current;
+                            current.LeftChild = newNode;
                             count++;
                             return true;
                         }
-                        current = current.leftChild;
+                        current = current.LeftChild;
                     }
                     else
                     {
-                        if (current.rightChild == null)
+                        if (current.RightChild == null)
                         {
-                            newNode.parent = current;
-                            current.rightChild = newNode;
+                            newNode.Parent = current;
+                            current.RightChild = newNode;
                             count++;
                             return true;
                         }
-                        current = current.rightChild;
+                        current = current.RightChild;
                     }
                 }
             }
-            public bool Remove(Node<T> removeNode)
+            private bool Remove(Node<T> removeNode)
             {
                 if (root == null || removeNode == null)
                 {
@@ -106,12 +112,12 @@ namespace MySet
                     return true;
                 }
 
-                if (removeNode.leftChild == null && removeNode.rightChild == null)
+                if (removeNode.LeftChild == null && removeNode.RightChild == null)
                 {
                     NodeHaveNoChildren(removeNode);
                     count--;
                 }
-                else if (removeNode.leftChild == null || removeNode.rightChild == null)
+                else if (removeNode.LeftChild == null || removeNode.RightChild == null)
                 {
                     NodeHaveOneChild(removeNode);
                     count--;
@@ -131,65 +137,65 @@ namespace MySet
             }
             public void NodeHaveNoChildren(Node<T> removeNode)
             {
-                if (removeNode.parent.leftChild == removeNode)
-                    removeNode.parent.leftChild = null;
-                if (removeNode.parent.rightChild == removeNode)
-                    removeNode.parent.rightChild = null;
-                removeNode.parent = null;
+                if (removeNode.Parent.LeftChild == removeNode)
+                    removeNode.Parent.LeftChild = null;
+                if (removeNode.Parent.RightChild == removeNode)
+                    removeNode.Parent.RightChild = null;
+                removeNode.Parent = null;
             }
 
             public void NodeHaveOneChild(Node<T> removeNode)
             {
-                if (removeNode.leftChild == null)
+                if (removeNode.LeftChild == null)
                 {
-                    if (removeNode.parent.leftChild == removeNode)
-                        removeNode.parent.leftChild = removeNode.rightChild;
+                    if (removeNode.Parent.LeftChild == removeNode)
+                        removeNode.Parent.LeftChild = removeNode.RightChild;
                     else
-                        removeNode.parent.rightChild = removeNode.rightChild;
-                    removeNode.rightChild.parent = removeNode.parent;
+                        removeNode.Parent.RightChild = removeNode.RightChild;
+                    removeNode.RightChild.Parent = removeNode.Parent;
                 }
                 else
                 {
-                    if (removeNode.parent.leftChild == removeNode)
-                        removeNode.parent.leftChild = removeNode.leftChild;
+                    if (removeNode.Parent.LeftChild == removeNode)
+                        removeNode.Parent.LeftChild = removeNode.LeftChild;
                     else
-                        removeNode.parent.rightChild = removeNode.leftChild;
-                    removeNode.leftChild.parent = removeNode.parent;
+                        removeNode.Parent.RightChild = removeNode.LeftChild;
+                    removeNode.LeftChild.Parent = removeNode.Parent;
                 }
             }
 
             public void NodeHaveTwoChildren(Node<T> removeNode)
             {
-                Node<T> minNode = minimumUnderTheTree(removeNode.rightChild);
-                    removeNode.data = minNode.data;
+                Node<T> minNode = minimumUnderTheTree(removeNode.RightChild);
+                    removeNode.Data = minNode.Data;
                     Remove(minNode);
             }
-            Node<T> nextNode(Node<T> _Node)
+            Node<T> NextNode(Node<T> _Node)
             {
-                if (_Node.rightChild != null)
-                    return minimumUnderTheTree(_Node.rightChild);
-                Node<T> tmpNode = _Node.parent;
-                while (tmpNode != null && _Node == tmpNode.rightChild)
+                if (_Node.RightChild != null)
+                    return minimumUnderTheTree(_Node.RightChild);
+                Node<T> tmpNode = _Node.Parent;
+                while (tmpNode != null && _Node == tmpNode.RightChild)
                 {
                     _Node = tmpNode;
-                    tmpNode = tmpNode.parent;
+                    tmpNode = tmpNode.Parent;
                 }
                 return tmpNode;
             }
             Node<T> minimumUnderTheTree(Node<T> _Node)
             {
-                if (_Node.leftChild == null)
+                if (_Node.LeftChild == null)
                     return _Node;
-                return minimumUnderTheTree(_Node.leftChild);
+                return minimumUnderTheTree(_Node.LeftChild);
             }
-            public void Unite(Set<T> _Set)
+            public void Unite(Set<T> set)
             {
-                if(_Set != null)
+                if (set == null)
+                    return;
+
+                foreach (T i in set)
                 {
-                    foreach (T i in _Set)
-                    {
-                        Add(i);
-                    }
+                    Add(i);
                 }
             }
             public void Intersection(Set<T> _Set)
@@ -213,49 +219,54 @@ namespace MySet
             {
                 if(_Node!=null)
                 {
-                    PrintInOrder(_Node.leftChild);
-                    Console.WriteLine(_Node.data);
-                    PrintInOrder(_Node.rightChild);
+                    PrintInOrder(_Node.LeftChild);
+                    Console.WriteLine(_Node.Data);
+                    PrintInOrder(_Node.RightChild);
                 }
             }
             public void PrintPreOrder(Node<T> _Node)
             {
                 if (_Node != null)
                 {
-                    Console.WriteLine(_Node.data);
-                    PrintInOrder(_Node.leftChild);
-                    PrintInOrder(_Node.rightChild);
+                    Console.WriteLine(_Node.Data);
+                    PrintInOrder(_Node.LeftChild);
+                    PrintInOrder(_Node.RightChild);
                 }
             }
             public void PrintPostOrder(Node<T> _Node)
             {
                 if (_Node != null)
                 {
-                    PrintInOrder(_Node.leftChild);
-                    PrintInOrder(_Node.rightChild);
-                    Console.WriteLine(_Node.data);
+                    PrintInOrder(_Node.LeftChild);
+                    PrintInOrder(_Node.RightChild);
+                    Console.WriteLine(_Node.Data);
                 }
             }
         }
         
         static void Main(string[] args)
         {
-            Set<int> A = new Set<int>();
-            A.Add(3);
-            A.Add(2);
-            A.Add(1);
-            A.Add(4);
-            A.Add(5);
-            A.PrintInOrder(A.root);
-            Console.WriteLine();
-            A.PrintPostOrder(A.root);
-            Console.WriteLine();
-            A.PrintPreOrder(A.root);
-            A.Remove(3);
-            Console.WriteLine();
-            A.PrintPreOrder(A.root);
-            A.Clear();
-            A.PrintInOrder(A.root);
+            Set<int> a = new Set<int>();
+            a.Add(3);
+            a.Add(2);
+            a.Add(1);
+            a.Add(4);
+            a.Add(5);
+            foreach(var x in a)
+            {
+                Console.WriteLine(x);
+            }
+            Console.ReadLine();
+            //a.PrintInOrder(a.root);
+            //Console.WriteLine();
+            //a.PrintPostOrder(a.root);
+            //Console.WriteLine();
+            //a.PrintPreOrder(a.root);
+            a.Remove(3);
+            //Console.WriteLine();
+            //a.PrintPreOrder(a.root);
+            //a.Clear();
+            //a.PrintInOrder(a.root);
         }
     }
 }

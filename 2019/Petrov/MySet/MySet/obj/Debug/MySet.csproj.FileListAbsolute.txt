@@ -5,3 +5,10 @@ C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.csprojAssemblyReference.c
 C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.csproj.CoreCompileInputs.cache
 C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.exe
 C:\Users\Ivan\source\repos\MySet\MySet\obj\Debug\MySet.pdb
+C:\dev\Students\2019\Petrov\MySet\MySet\bin\Debug\MySet.exe.config
+C:\dev\Students\2019\Petrov\MySet\MySet\bin\Debug\MySet.exe
+C:\dev\Students\2019\Petrov\MySet\MySet\bin\Debug\MySet.pdb
+C:\dev\Students\2019\Petrov\MySet\MySet\obj\Debug\MySet.csprojAssemblyReference.cache
+C:\dev\Students\2019\Petrov\MySet\MySet\obj\Debug\MySet.csproj.CoreCompileInputs.cache
+C:\dev\Students\2019\Petrov\MySet\MySet\obj\Debug\MySet.exe
+C:\dev\Students\2019\Petrov\MySet\MySet\obj\Debug\MySet.pdb

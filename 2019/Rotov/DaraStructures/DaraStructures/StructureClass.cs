@@ -94,7 +94,7 @@ namespace DaraStructures
             return current;
         }
 
-        public Node<T> FindMinimumNode(Node<T> current)
+        private Node<T> FindMinimumNode(Node<T> current)
         {
             while (current.Left != null) current = current.Left;
             return current;

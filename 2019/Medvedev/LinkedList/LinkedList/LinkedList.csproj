@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataStructuresLib\DataStructuresLib.csproj">
-      <Project>{a084600f-204d-4f0f-9c19-5f5a4d9a8fc1}</Project>
+      <Project>{01452198-253b-43d8-bef9-49ef7d3f36ea}</Project>
       <Name>DataStructuresLib</Name>
     </ProjectReference>
   </ItemGroup>

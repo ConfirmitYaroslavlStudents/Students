@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LinkedList
+namespace DataStructures
 {
     public partial class LinkedList<T> : System.Collections.Generic.IEnumerable<T>
     {
@@ -27,11 +27,16 @@ namespace LinkedList
             return list is null || list._head is null;
         }
 
+        private bool BelongsToList(Node<T> node)
+        {
+            return node != null && ReferenceEquals(node.ParentList, this);
+        }
+
         public void AddAfter(Node<T> node, T value)
         {
             if (node is null)
                 throw new ArgumentNullException("Node must not be null");
-            if (!Node<T>.BelongsToList(node, this))
+            if (!BelongsToList(node))
                 throw new ArgumentException("Node must belong to this LinkedList");
             
             if (node == _tail)
@@ -49,7 +54,7 @@ namespace LinkedList
         {
             if (node is null)
                 throw new ArgumentNullException("Node must not be null");
-            if (!Node<T>.BelongsToList(node, this))
+            if (!BelongsToList(node))
                 throw new ArgumentException("Node must belong to this LinkedList");
             
             if (node == _head)

@@ -183,12 +183,14 @@ namespace LinkedList
 
         public System.Collections.Generic.IEnumerator<T> GetEnumerator()
         {
-            return new LinkedListEnumerator<T>(this);
+            for (var node = _head; node != null; node = node.NextNode)
+                yield return node.Value;
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return new LinkedListEnumerator<T>(this);
+            for (var node = _head; node != null; node = node.NextNode)
+                yield return node.Value;
         }
     }
 }

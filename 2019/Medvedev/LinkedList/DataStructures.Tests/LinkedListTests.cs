@@ -134,6 +134,26 @@ namespace DataStructuresTests
         }
 
         [Fact]
+        public void AddAfterNull_ArgumentNullException()
+        {
+            var list = new LinkedList<int>();
+
+            Action action = () => list.AddAfter(null, 1);
+
+            Assert.Throws<ArgumentNullException>(action);
+        }
+
+        [Fact]
+        public void AddBeforeNull_ArgumentNullException()
+        {
+            var list = new LinkedList<int>();
+
+            Action action = () => list.AddBefore(null, 1);
+
+            Assert.Throws<ArgumentNullException>(action);
+        }
+
+        [Fact]
         public void ContainsExistingItem_True()
         {
             LinkedList<int> list = new LinkedList<int>(new int[] { 1, 2, 4 });

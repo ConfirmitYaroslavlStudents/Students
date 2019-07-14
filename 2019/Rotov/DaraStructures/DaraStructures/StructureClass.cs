@@ -1,58 +1,47 @@
-﻿namespace DaraStructures
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+
+namespace DaraStructures
 {
     // TODO: unit tests
-    // TODO: int key -> generalize
-    // TODO: remove unused code
-    // TODO: alignment
-    // TODO: is null
+    // DONE TODO: int key -> generalize
+    // DONE TODO: remove unused code
+    // DONE TODO: alignment
+    // DONE TODO: is null 
     // TODO: implement IEnumerable
-    public class Node<T>
+
+
+    public class Node<U,T> where U:IComparable
     {
-        public int Key { get; set; }
+        public U Key { get; set; }
         public T Value { get; set; }
 
-        public Node<T> Left { get; set; }
+        public Node<U, T> Left { get; set; }
 
-        public Node<T> Right { get; set; }
+        public Node<U, T> Right { get; set; }
 
-        public Node(int key, T value)
+        public Node(U key, T value)
         {
             Key = key;
             Value = value;
         }
     }
 
-    public class BinarySearchTree<T>
+    public class BinarySearchTree<U, T> : IEnumerable<Node<U, T>>
+        where U : IComparable
     {
-        public Node<T> Root { get; set; }
+        public Node<U, T> Root { get; private set; }
         public int Count { get; private set; }
 
-        public BinarySearchTree() { }
-        public BinarySearchTree(Node<T> node)
+        public BinarySearchTree(U key, T value)
         {
-            Insert(node);
+            Insert(key, value);
         }
 
-        private Node<T> RecursiveDiving(Node<T> node, int key)
+        public void Insert(U key, T value)
         {
-            if (node.Key == key)
-                return node;
-            else if (key < node.Key)
-            {
-                if (node.Left is null)
-                    return node;
-                else
-                    return RecursiveDiving(node.Left, key);
-            }
-            else
-            {
-                if (node.Right is null) return node;
-                else return RecursiveDiving(node.Right, key);
-            }
-        }
-
-        public void Insert(Node<T> node)
-        {
+            Node<U, T> node = new Node<U, T>(key, value);
             if (Root == null)
             {
                 Root = node;
@@ -60,57 +49,114 @@
             }
             else
             {
-                Node<T> current = RecursiveDiving(Root, node.Key);
-                if (current.Key == node.Key) current.Value = node.Value;
-                else if (node.Key < current.Key) { current.Left = node; Count++; }
-                else { current.Right = node; Count++; }
+                Node<U, T> current = RecursiveDiving(Root, node.Key);
+                if (current.Key.CompareTo(node.Key) == 0)
+                    current.Value = node.Value;
+                else if (node.Key.CompareTo(current.Key) < 0)
+                {
+                    current.Left = node;
+                    Count++;
+                }
+                else
+                {
+                    current.Right = node;
+                    Count++;
+                }
             }
         }
 
-        public Node<T> Find(int key)
+        public Node<U, T> Find(U key)
         {
-            if (Count == 0) return null;
-            Node<T> current = RecursiveDiving(Root, key);
-            if (current.Key == key) return current;
-            else return null;
+            if (Count == 0)
+                return null;
+            Node<U, T> current = RecursiveDiving(Root, key);
+            if (current.Key.CompareTo(key) == 0)
+                return current;
+            else
+                return null;
         }
 
-        public void Remove(int key)
+        private Node<U, T> RecursiveDiving(Node<U, T> node, U key)
         {
-            var result = RecursiveRemove(Root, key);
+            if (node.Key.CompareTo(key) == 0)
+                return node;
+            else if (key.CompareTo(node.Key) < 0)
+            {
+                if (node.Left == null)
+                    return node;
+                else
+                    return RecursiveDiving(node.Left, key);
+            }
+            else
+            {
+                if (node.Right == null)
+                    return node;
+                else
+                    return RecursiveDiving(node.Right, key);
+            }
         }
 
-        private Node<T> RecursiveRemove(Node<T> current, int key)
+        public void Remove(U key)
         {
-            if (current is null) return current;
-            if (key < current.Key)
+            RecursiveRemove(Root, key);
+        }
+
+        private Node<U, T> RecursiveRemove(Node<U, T> current, U key)
+        {
+            if (current == null)
+                return current;
+            if (key.CompareTo(current.Key) < 0)
             {
                 current.Left = RecursiveRemove(current.Left, key);
             }
-            else if (key > current.Key)
+            else if (key.CompareTo(current.Key) > 0)
             {
                 current.Right = RecursiveRemove(current.Right, key);
             }
             else if (current.Left != null && current.Right != null)
             {
-                Node<T> find = FindMinimumNode(current.Right);
+                Node<U, T> find = FindMinimumNode(current.Right);
                 current.Key = find.Key;
                 current.Value = find.Value;
                 current.Right = RecursiveRemove(current.Right, current.Key);
             }
             else
             {
-                if (current.Left != null) current = current.Left;
-                else current = current.Right;
+                if (current.Left != null)
+                    current = current.Left;
+                else
+                    current = current.Right;
                 Count--;
             }
             return current;
         }
 
-        private Node<T> FindMinimumNode(Node<T> current)
+        private Node<U, T> FindMinimumNode(Node<U, T> current)
         {
-            while (current.Left != null) current = current.Left;
+            while (current.Left != null)
+                current = current.Left;
             return current;
+        }
+
+        public IEnumerator<Node<U, T>> GetEnumerator()
+        {
+            return NLR(Root).GetEnumerator();
+        }
+
+        public IEnumerable<Node<U, T>> NLR(Node<U, T> current)
+        {
+            if (current == null)
+                yield break;
+            yield return current;
+            foreach (var item in NLR(current.Left))
+                yield return item;
+            foreach (var item in NLR(current.Right))
+                yield return item;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }

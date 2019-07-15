@@ -2,7 +2,7 @@
 
 namespace DataStructures
 {
-    public partial class LinkedList<T> : System.Collections.Generic.IEnumerable<T>
+    public class LinkedList<T> : System.Collections.Generic.IEnumerable<T>
     {
         private Node<T> _head;
         private Node<T> _tail;

@@ -3,25 +3,25 @@ using System.Collections.Generic;
 
 namespace TreeLCRS
 {
-    public class Tree<T> 
+    public class Tree<T>
     {
-        Node<T> root;
+        private Node<T> root;
         public int Count { get; private set; }
         public Tree()
         {
-            this.root = null;
+            root = null;
             Count = 0;
         }
         public Tree(T data)
         {
-            this.root = new Node<T>(data);
+            root = new Node<T>(data);
             Count = 1;
         }
         /// <summary>
         /// Is used to set the root of the tree
         /// </summary>
         /// <param name="data">Should be unique</param>
-        public void Insert(T data)
+        public void SetRoot(T data)
         {
             if (root != null)
             {
@@ -36,40 +36,49 @@ namespace TreeLCRS
         /// <param name="data">Unique value for new node</param>
         public void Insert(T data, T parentData)
         {
+            if(IsEmpty())
+            {
+                SetRoot(data);
+                return;
+            }
             if (Contains(data))
             {
-                throw new ArgumentException("Tree already contains an elemnt with given data");
+                throw new ArgumentException("Tree already contains an elemnt with given data", "data");
             }
+
             Node<T> parent = Find(parentData);
             if (parent == null)
             {
-                throw new ArgumentException("Tree doesn't contain an element with given parent's data");
+                throw new ArgumentException("Tree doesn't contain an element with given parent's data", "parentData");
             }
+
             Insert(data, parent);
             Count++;
         }
 
-        void Insert(T data, Node<T> parent)
+        private void Insert(T data, Node<T> parent)
         {
-
             if (parent.Child == null)
             {
                 parent.Child = new Node<T>(data);
                 return;
             }
+
             parent = parent.Child;
+
             while (parent.Next != null)
             {
                 parent = parent.Next;
             }
+
             parent.Next = new Node<T>(data);
         }
         public bool Contains(T data)
         {
-            return Find(data) == null ? false : true;
+            return Find(data) != null;
         }
 
-        Node<T> Find(T data)
+        private Node<T> Find(T data)
         {
             Stack<Node<T>> visitNext = new Stack<Node<T>>();
             Node<T> node = root;
@@ -95,18 +104,18 @@ namespace TreeLCRS
             return null;
         }
 
-        public void Traverse()
+        public void Traverse(Action<T> processNodeData)
         {
-            Traverse(root);
+            Traverse(root, processNodeData);
         }
-        void Traverse(Node<T> root)
+        private void Traverse(Node<T> root, Action<T> processNodeData)
         {
             while (root != null)
             {
-                Console.Write("{0} ", root.Data);
+                processNodeData(root.Data);
                 if (root.Child != null)
                 {
-                    Traverse(root.Child);
+                    Traverse(root.Child, processNodeData);
                 }
                 root = root.Next;
             }

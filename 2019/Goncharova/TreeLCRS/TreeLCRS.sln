@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeLCRS", "TreeLCRS\TreeLC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeTests", "TreeTests\TreeTests.csproj", "{860B7E80-7150-4CB8-924B-82D0C9903291}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeLCRS.Tests", "TreeLCRS.Tests\TreeLCRS.Tests.csproj", "{A397D49D-A449-4074-A8B3-89BAC904B060}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{860B7E80-7150-4CB8-924B-82D0C9903291}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860B7E80-7150-4CB8-924B-82D0C9903291}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860B7E80-7150-4CB8-924B-82D0C9903291}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A397D49D-A449-4074-A8B3-89BAC904B060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A397D49D-A449-4074-A8B3-89BAC904B060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A397D49D-A449-4074-A8B3-89BAC904B060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A397D49D-A449-4074-A8B3-89BAC904B060}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

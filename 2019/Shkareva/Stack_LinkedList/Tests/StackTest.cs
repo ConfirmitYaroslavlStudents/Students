@@ -1,67 +1,70 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyStack;
-
+﻿using Xunit;
+using Stack_LinkedList;
+using Assert = Xunit.Assert;
 
 namespace Tests
 {
-    [TestClass]
-    public class StackTests
+    public class StackTest
     {
-        [TestMethod]
+        [Fact]
         public void PushElement()
         {
             var stack = new Stack<int>();
+
             stack.Push(1);
-            Assert.AreEqual(1, stack.Pop());
+
+            Assert.Equal(1, stack.Pop());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [Fact]
         public void PopEmptyStack()
         {
             var stack = new Stack<int>();
-            stack.Pop();
+
+            Assert.Throws<StackException>(() => stack.Pop());
         }
 
-        [TestMethod]
+        [Fact]
         public void Peek()
         {
             var stack = new Stack<string>();
+
             stack.Push("one");
-            Assert.AreEqual("one", stack.Peek());
-            Assert.AreEqual(1, stack.Count);
+
+            Assert.Equal("one", stack.Peek());
+            Assert.Equal(1, stack.Count);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [Fact]
         public void PeekEmptyStack()
         {
             var stack = new Stack<int>();
-            stack.Peek();
+
+            Assert.Throws<StackException>(() => stack.Peek());
         }
 
-        [TestMethod]
+        [Fact]
         public void PushPop()
         {
             var stack = new Stack<int>();
+
             stack.Push(1);
-            Assert.AreEqual(1, stack.Pop());
-            Assert.AreEqual(0, stack.Count);
+
+            Assert.Equal(1, stack.Pop());
+            Assert.Equal(0, stack.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void PushTenElements()
         {
             var stack = new Stack<int>();
 
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 stack.Push(i);
             }
 
-            Assert.AreEqual(10, stack.Count);
+            Assert.Equal(10, stack.Count);
         }
-
     }
 }

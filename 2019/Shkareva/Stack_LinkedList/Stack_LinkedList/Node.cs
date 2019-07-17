@@ -1,6 +1,6 @@
-﻿namespace MyStack
+﻿namespace Stack_LinkedList
 {
-    class Node<T>
+    internal class Node<T>
     {
         public T Value;
         public Node<T> Previous;

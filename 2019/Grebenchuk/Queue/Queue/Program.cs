@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QueueClass
+namespace Queue
 {
     class Program
     {
         static void Main(string[] args)
         {
-            UsualQueue<int> queue1 = new UsualQueue<int>();
+            Queue<int> queue1 = new Queue<int>();
             Console.WriteLine(queue1.Count);
 
             //Console.WriteLine(queue1.Dequeue());

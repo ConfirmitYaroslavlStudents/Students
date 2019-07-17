@@ -4,38 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QueueClass
+namespace Queue
 {
-    class UsualQueue <T>
+    public class Queue <T>
     {
-        const int N = 5;
+        const int DefaultCapacity = 5;
         T[] queue;
         int begin;
         int end;
-        int count;
+        public int Count { get; private set; }
 
-        public UsualQueue()
+        public Queue()
         {
-            queue = new T[N];
+            queue = new T[DefaultCapacity];
             begin = 0;
             end = 0;
         }
 
-        public UsualQueue(int k)
+        public Queue(int capacity)
         {
-            queue = new T[k];
+            queue = new T[capacity];
             begin = 0;
             end = 0;
         }
-
-        public int Count
-        {
-            get
-            {
-                return count;
-            }
-        }
-
+        
         int Size
         {
             get
@@ -50,13 +42,13 @@ namespace QueueClass
             else return false;
         }
 
-        public void Enqueue(T elem)
+        public void Enqueue(T item)
         {
-            queue[end] = elem;
+            queue[end] = item;
             int tail = (end + 1) % this.Size;
             if (tail == begin) Increase();
             else end = tail;
-            count++;
+            Count++;
         }
 
         public T Dequeue()
@@ -66,7 +58,7 @@ namespace QueueClass
             {
                 int m = begin;
                 begin = (begin + 1) % Size;
-                count--;
+                Count--;
                 return queue[m];
             }
         }
@@ -80,23 +72,17 @@ namespace QueueClass
         public void Clear()
         {
             Array.Clear(queue, 0, Size);
-            queue = new T[N];
+            queue = new T[DefaultCapacity];
             begin = 0;
             end = 0;
-            count = 0;
+            Count = 0;
         }
 
         void Increase()
         {
             T[] mas = new T[Size * 2];
-            int m = begin;
-            int i = 0;
-            while(m!=end)
-            {
-                mas[i] = queue[m];
-                m = (m + 1) % Size;
-                i++;
-            }
+            Array.Copy(queue, begin, mas, 0, queue.Length - begin);
+            Array.Copy(queue, 0, mas, queue.Length - begin, begin);
             begin = 0;
             end = Count;
             queue = mas;

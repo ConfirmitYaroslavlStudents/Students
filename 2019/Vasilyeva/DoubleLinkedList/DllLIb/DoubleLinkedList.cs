@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DllLIb
 {
     public class DoubleLinkedList<T> : IEnumerable<T>
-    { 
+    {
         private Node<T> _head;
         private Node<T> _tail;
         public int Count { get; private set; }

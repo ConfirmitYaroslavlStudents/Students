@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DaraStructures\DaraStructures.csproj">
+    <ProjectReference Include="..\DaraStructures\DataStructures.csproj">
       <Project>{a9cc39a9-c9a6-4c1e-a032-54ec83ba25fa}</Project>
-      <Name>DaraStructures</Name>
+      <Name>DataStructures</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

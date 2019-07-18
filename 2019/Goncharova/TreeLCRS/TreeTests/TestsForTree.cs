@@ -11,7 +11,7 @@ namespace TreeTests
         public void InsertInEmptyTree()
         {
             Tree<int> tree = new Tree<int>();
-            tree.Insert(8);
+            tree.SetRoot(8);
             Assert.AreEqual(true, tree.Contains(8));
         }
         [TestMethod]
@@ -46,7 +46,7 @@ namespace TreeTests
         public void InsertRootInNonEmptyTree()
         {
             Tree<int> tree = new Tree<int>(10);
-            tree.Insert(5);
+            tree.SetRoot(5);
         }
     }
 }

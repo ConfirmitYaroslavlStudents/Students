@@ -1,6 +1,7 @@
 ﻿using System;
+using DataStructures;
 
-namespace LinkedList
+namespace RunNamespace
 {
     class Program
     {

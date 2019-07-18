@@ -2,18 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace DllLIb
+namespace DoubleLinkedListLib
 {
-    class Node<T>
-    {
-        public T Value { get; set; }
-        public Node<T> Previous { get; set; }
-        public Node<T> Next { get; set; }
-        public Node(T value)
-        {
-            Value = value;
-        }
-    }
     public class DoubleLinkedList<T> : IEnumerable<T>
     {
         private Node<T> _head;
@@ -26,6 +16,7 @@ namespace DllLIb
         public void AddLast(T value)
         {
             var node = new Node<T>(value);
+
             if (_head == null)
             {
                 _head = node;
@@ -33,17 +24,19 @@ namespace DllLIb
                 Count = 1;
                 return;
             }
+
             _tail.Next = node;
             node.Previous = _tail;
             _tail = node;
             Count++;
         }
-        private void removeAfter(Node<T> previous, Node<T> current)
+        private void RemoveAfter(Node<T> previous, Node<T> current)
         {
             if (previous != null)
             {
                 previous.Next = current.Next;
                 previous.Previous = current.Previous;
+
                 if (current.Next == null)
                 {
                     _tail = previous;
@@ -61,12 +54,12 @@ namespace DllLIb
         }
         public void DeleteFirst()
         {
-            removeAfter(null, _head);
+            RemoveAfter(null, _head);
             Count--;
         }
         public void DeleteLast()
         {
-            removeAfter(_tail.Previous, _tail);
+            RemoveAfter(_tail.Previous, _tail);
             Count--;
         }
         public void RemoveAt(int index)
@@ -75,24 +68,28 @@ namespace DllLIb
             {
                 throw new IndexOutOfRangeException();
             }
+
             Node<T> current  = _head;
             Node<T> previous = null;
+
             for (int ind = 0; ind < index; ind++)
             {
                 previous = current;
                 current = current.Next;
             }
-            removeAfter(previous, current);
+
+            RemoveAfter(previous, current);
             Count--;
         }
         public void Remove(T value)
         {
             Node<T> previous = null;
+
             for (var current = _head; current != null; current = current.Next)
             {
                 if (current.Value.Equals(value))
                 {
-                    removeAfter(previous, current);
+                    RemoveAfter(previous, current);
                     Count--;
                     break;
                 }
@@ -105,6 +102,7 @@ namespace DllLIb
         public void AddFirst(T value)
         {
             var node = new Node<T>(value);
+
             if (_head == null)
             {
                 _head = node;
@@ -112,6 +110,7 @@ namespace DllLIb
                 Count = 1;
                 return;
             }
+
             _head.Previous = node;
             node.Next = _head;
             _head = node;
@@ -119,18 +118,32 @@ namespace DllLIb
         }
         public void Insert(int index, T value)
         {
-            if (index < 0 || index > Count)
+            if (index < 0 || index > Count+1)
             {
                 throw new IndexOutOfRangeException();
             }
+
+            if(index == 0)
+            {
+                AddFirst(value);
+                return;
+            }
+            if(index==Count+1)
+            {
+                AddLast(value);
+                return;
+            }
+
             Node<T> node = new Node<T>(value);
             Node<T> current = _head;
             Node<T> previous = null;
+
             for (int ind = 0; ind < index; ind++)
             {
                 previous = current;
                 current = current.Next;
             }
+
             if (previous != null && current != null)
             {
                 previous.Next = node;
@@ -138,14 +151,8 @@ namespace DllLIb
                 node.Previous = previous;
                 node.Next = current;
             }
-            else if(previous == null)
-            {
-                AddFirst(value);
-            }
-            else
-            {
-                AddLast(value);
-            }
+
+            Count++;
         }
         public IEnumerator<T> GetEnumerator()
         {

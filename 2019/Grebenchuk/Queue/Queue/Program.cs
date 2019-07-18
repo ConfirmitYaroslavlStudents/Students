@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Queue
 {
+    // TODO: class library
+    // TODO: Usings cleanup
     class Program
     {
         static void Main(string[] args)

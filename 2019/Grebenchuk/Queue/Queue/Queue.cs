@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Queue
 {
+    // TODO: remove THIS
+    // TODO: Explicit access modifiers
     public class Queue <T>
     {
         const int DefaultCapacity = 5;
@@ -38,29 +40,29 @@ namespace Queue
 
         public bool IsEmpty()
         {
-            if (this.Count == 0) return true;
-            else return false;
+            return Count == 0;
         }
 
         public void Enqueue(T item)
         {
             queue[end] = item;
             int tail = (end + 1) % this.Size;
-            if (tail == begin) Increase();
-            else end = tail;
+            if (tail == begin)
+                Increase();
+            else
+                end = tail;
             Count++;
         }
 
         public T Dequeue()
         {
-            if (IsEmpty()) throw new ArgumentOutOfRangeException("The queue is empty");
-            else
-            {
-                int m = begin;
-                begin = (begin + 1) % Size;
-                Count--;
-                return queue[m];
-            }
+            if (IsEmpty())
+                throw new ArgumentOutOfRangeException("The queue is empty");
+
+            int m = begin;
+            begin = (begin + 1) % Size;
+            Count--;
+            return queue[m];
         }
 
         public T Peek()

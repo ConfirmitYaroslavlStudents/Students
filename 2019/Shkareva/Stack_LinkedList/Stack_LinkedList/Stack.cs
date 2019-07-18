@@ -1,5 +1,6 @@
 ﻿namespace Stack_LinkedList
 {
+    // TODO: Merge two projects
     public class Stack<T>
     {
         private Node<T> head;

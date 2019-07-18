@@ -1,5 +1,7 @@
 ﻿namespace Stack_based_on_array
 {
+    // TODO: Add default constructor
+    // TODO: support overflow
     public class Stack<T>
     {
         private T[] values;

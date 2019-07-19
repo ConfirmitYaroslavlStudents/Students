@@ -38,8 +38,7 @@ namespace TreeLCRS
         {
             if(IsEmpty())
             {
-                SetRoot(data);
-                return;
+                throw new InvalidOperationException("Tree is empty. Set the root first.");
             }
             if (Contains(data))
             {

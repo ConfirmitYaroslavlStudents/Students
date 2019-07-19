@@ -37,13 +37,21 @@ namespace TreeLCRS.Tests
         }
 
         [Fact]
-        public void Insert_EmptyTree_ShouldSetNewRoot()
+        public void Insert_EmptyTree_ShouldFail()
         {
             Tree<int> tree = new Tree<int>();
+            Assert.Throws<InvalidOperationException>(() => tree.Insert(5, 7));
+            Assert.True(tree.IsEmpty());
+        }
 
-            tree.Insert(5, 5);
+        [Fact]
+        public void Count_SuccessfulInsert_ShouldIncrease()
+        {
+            Tree<int> tree = new Tree<int>(10);
+            tree.Insert(5, 10);
 
-            Assert.True(tree.Contains(5));
+            int expected = 2;
+            Assert.Equal(expected, tree.Count);
         }
 
         [Fact]

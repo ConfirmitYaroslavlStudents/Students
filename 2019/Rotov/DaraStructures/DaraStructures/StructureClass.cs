@@ -4,12 +4,12 @@ using System.Collections;
 
 namespace DaraStructures
 {
-    // TODO: unit tests
+    // DONE TODO: unit tests
     // DONE TODO: int key -> generalize
     // DONE TODO: remove unused code
     // DONE TODO: alignment
     // DONE TODO: is null 
-    // TODO: implement IEnumerable
+    // DONE TODO: implement IEnumerable
 
 
     public class Node<U,T> where U:IComparable

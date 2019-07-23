@@ -39,13 +39,14 @@ namespace FaultToleranceLib.Tests
 
             int count = 1;
             Action action = () => {
-                int z = count / d;
-                count++;
-
-                int y = 1 / z;
+                if (count < d)
+                {
+                    count++;
+                    throw new ArithmeticException();
+                }
             };
 
-            faultTolerance.Try(typeof(DivideByZeroException), action, 3);
+            faultTolerance.Try(typeof(ArithmeticException), action, 3);
         }
 
         [Theory]
@@ -58,15 +59,16 @@ namespace FaultToleranceLib.Tests
 
             int count = 1;
             Action action = () => {
-                int z = count / d;
-                count++;
-
-                int y = 1 / z;
+                if (count < d)
+                {
+                    count++;
+                    throw new ArithmeticException();
+                }
             };
 
             Action fallback = () => fallbackHadRun = true;
 
-            faultTolerance.TryFallback(typeof(DivideByZeroException), action, 3, fallback);
+            faultTolerance.TryFallback(typeof(ArithmeticException), action, 3, fallback);
 
             Assert.False(fallbackHadRun);
         }

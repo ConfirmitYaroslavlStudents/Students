@@ -194,8 +194,7 @@ namespace DataStructures
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            for (var node = _head; node != null; node = node.NextNode)
-                yield return node.Value;
+            return GetEnumerator();
         }
     }
 }

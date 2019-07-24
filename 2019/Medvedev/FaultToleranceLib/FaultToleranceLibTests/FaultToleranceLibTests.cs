@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace FaultToleranceLib.Tests
@@ -10,7 +11,42 @@ namespace FaultToleranceLib.Tests
         {
             Action action = () => throw new NotImplementedException();
 
-            Assert.Throws<NotImplementedException>(() => FaultTolerance.Try(typeof(NotImplementedException), action, 2));
+            Assert.Throws<NotImplementedException>(() => FaultTolerance.Try<NotImplementedException>(action, 2));
+        }
+
+        [Fact]
+        public void Try_Succeed_NoExceptionThrown()
+        {
+            int count = 1;
+            Action action = () =>
+            {
+                if (count < 3)
+                {
+                    count++;
+                    throw new ArithmeticException();
+                }
+            };
+
+            FaultTolerance.Try<ArithmeticException>(action, 3);
+        }
+
+        [Fact]
+        public void TryCountTimes_ActionRunsCountTimes()
+        {
+            int actual = 0;
+
+            Action action = () =>
+            {
+                actual++;
+                if (actual < 3)
+                    throw new NotImplementedException();
+            };
+
+            int expected = 3;
+
+            FaultTolerance.Try<NotImplementedException>(action, 3);
+
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -21,38 +57,20 @@ namespace FaultToleranceLib.Tests
             Action action = () => throw new NotImplementedException();
             Action fallback = () => fallbackHadRun = true;
 
-            FaultTolerance.TryFallback(typeof(NotImplementedException), action, 2, fallback);
+            FaultTolerance.TryFallback<NotImplementedException>(action, 2, fallback);
 
             Assert.True(fallbackHadRun);
         }
 
-        [Theory]
-        [InlineData(3)]
-        [InlineData(4)]
-        public void Try_Succeed_NoExceptionThrown(int d)
-        {
-            int count = 1;
-            Action action = () => {
-                if (count < d)
-                {
-                    count++;
-                    throw new ArithmeticException();
-                }
-            };
-
-            FaultTolerance.Try(typeof(ArithmeticException), action, 3);
-        }
-
-        [Theory]
-        [InlineData(3)]
-        [InlineData(4)]
-        public void TryFallback_Succed_NoFallbackRun(int d)
+        [Fact]
+        public void TryFallback_Succed_NoFallbackRun()
         {
             bool fallbackHadRun = false;
 
             int count = 1;
-            Action action = () => {
-                if (count < d)
+            Action action = () =>
+            {
+                if (count < 3)
                 {
                     count++;
                     throw new ArithmeticException();
@@ -61,9 +79,150 @@ namespace FaultToleranceLib.Tests
 
             Action fallback = () => fallbackHadRun = true;
 
-            FaultTolerance.TryFallback(typeof(ArithmeticException), action, 3, fallback);
+            FaultTolerance.TryFallback<ArithmeticException>(action, 3, fallback);
 
             Assert.False(fallbackHadRun);
+        }
+
+        [Fact]
+        public void TryFallback_Failed_NoFallbackRun_ThrowsException()
+        {
+            bool fallbackHadRun = false;
+
+            int count = 1;
+            Action action = () =>
+            {
+                if (count < 3)
+                {
+                    count++;
+                    throw new ArithmeticException();
+                }
+                else
+                    throw new ArgumentException();
+            };
+            Action fallback = () => fallbackHadRun = true;
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.TryFallback<ArithmeticException>(action, 3, fallback));
+
+            Assert.False(fallbackHadRun);
+        }
+
+        [Fact]
+        public void TryMultipleExceptions_Succeed_NoExceptionThrown()
+        {
+            int count = 0;
+            Action action = () =>
+            {
+                count++;
+                if (count == 1)
+                    throw new NotImplementedException();
+                else if (count == 2)
+                    throw new ArithmeticException();
+            };
+
+            var exceptions = new List<Type> { typeof(NotImplementedException), typeof(ArithmeticException) };
+
+            FaultTolerance.Try(exceptions, action, 3);
+        }
+
+        [Fact]
+        public void TryMultipleExceptions_Failed_ThrowsException()
+        {
+            int count = 0;
+            Action action = () =>
+            {
+                count++;
+                if (count == 1)
+                    throw new NotImplementedException();
+                else if (count == 2)
+                    throw new ArithmeticException();
+                else
+                    throw new ArgumentException();
+            };
+
+            var exceptions = new List<Type> { typeof(NotImplementedException), typeof(ArithmeticException), typeof(ArgumentException) };
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.Try(exceptions, action, 3));
+        }
+
+        [Fact]
+        public void TryFallbackMultipleExceptions_Succeed_NoFallbackRun()
+        {
+            int count = 0;
+            Action action = () =>
+            {
+                count++;
+                if (count == 1)
+                    throw new NotImplementedException();
+                else if (count == 2)
+                    throw new ArithmeticException();
+            };
+
+            bool notImplementedExceptionFallbackHadRun = false;
+            bool arithmeticExceptionFallbackHadRun = false;
+
+            var exceptions = new Dictionary<Type, Action>();
+            exceptions.Add(typeof(NotImplementedException), () => notImplementedExceptionFallbackHadRun = true);
+            exceptions.Add(typeof(ArithmeticException), () => arithmeticExceptionFallbackHadRun = true);
+
+            FaultTolerance.TryFallback(exceptions, action, 3);
+
+            Assert.False(notImplementedExceptionFallbackHadRun);
+            Assert.False(arithmeticExceptionFallbackHadRun);
+        }
+
+        [Fact]
+        public void TryFallbackMultipleExceptions_Failed_NoFallbackRun_ThrowsException()
+        {
+            int count = 0;
+            Action action = () =>
+            {
+                count++;
+                if (count == 1)
+                    throw new NotImplementedException();
+                else if (count == 2)
+                    throw new ArithmeticException();
+                else
+                    throw new ArgumentException();
+            };
+
+            bool notImplementedExceptionFallbackHadRun = false;
+            bool arithmeticExceptionFallbackHadRun = false;
+
+            var exceptions = new Dictionary<Type, Action>();
+            exceptions.Add(typeof(NotImplementedException), () => notImplementedExceptionFallbackHadRun = true);
+            exceptions.Add(typeof(ArithmeticException), () => arithmeticExceptionFallbackHadRun = true);
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.TryFallback(exceptions, action, 3));
+
+            Assert.False(notImplementedExceptionFallbackHadRun);
+            Assert.False(arithmeticExceptionFallbackHadRun);
+        }
+
+        [Fact]
+        public void TryFallbackMultipleExceptions_Failed_RunRelevantFallback()
+        {
+            int count = 0;
+            Action action = () =>
+            {
+                count++;
+                if (count == 1)
+                    throw new NotImplementedException();
+                else if (count == 2)
+                    throw new ArithmeticException();
+            };
+
+            bool notImplementedExceptionFallbackHadRun = false;
+            bool arithmeticExceptionFallbackHadRun = false;
+
+            var exceptions = new Dictionary<Type, Action>();
+            exceptions.Add(typeof(NotImplementedException), () => notImplementedExceptionFallbackHadRun = true);
+            exceptions.Add(typeof(ArithmeticException), () => arithmeticExceptionFallbackHadRun = true);
+
+            FaultTolerance.TryFallback(exceptions, action, 2);
+
+            Assert.False(notImplementedExceptionFallbackHadRun);
+            Assert.True(arithmeticExceptionFallbackHadRun);
         }
     }
 }

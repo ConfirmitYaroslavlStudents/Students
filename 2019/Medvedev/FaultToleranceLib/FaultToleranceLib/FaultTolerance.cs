@@ -1,12 +1,57 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FaultToleranceLib
 {
     public static class FaultTolerance
     {
         // DONE: Probably static methods?
-        // TODO: Probably multiple exception support?
-        private static void DoAction(Type exceptionType, Action action, int count)
+        // DONE: Probably multiple exception support?
+        // TODO: Tests for multiple exception methods
+
+        public static void Try<E>(Action action, int count) where E : Exception
+        {
+            Try(new List<Type> { typeof(E) }, action, count);
+        }
+
+        public static void Try(List<Type> exceptions, Action action, int count)
+        {
+            try
+            {
+                DoAction(exceptions, action, count);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static void TryFallback<E>(Action action, int count, Action fallback) where E : Exception
+        {
+            var dict = new Dictionary<Type, Action>();
+            dict.Add(typeof(E), fallback);
+            TryFallback(dict, action, count);
+        }
+
+        public static void TryFallback(Dictionary<Type, Action> exceptionFallbacks, Action action, int count)
+        {
+            try
+            {
+                DoAction(new List<Type>(exceptionFallbacks.Keys), action, count);
+            }
+            catch (Exception ex)
+            {
+                if (exceptionFallbacks.ContainsKey(ex.GetType()))
+                {
+                    Action fallback = exceptionFallbacks[ex.GetType()];
+                    fallback();
+                }
+                else
+                    throw;
+            }
+        }
+
+        private static void DoAction(List<Type> exceptions, Action action, int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -16,51 +61,13 @@ namespace FaultToleranceLib
                 }
                 catch (Exception ex)
                 {
-                    if (ex.GetType() == exceptionType && i < count - 1)
+                    if (exceptions.Contains(ex.GetType()) && i < count - 1)
                         continue;
                     else
                         throw ex;
                 }
                 break;
             }
-        }
-
-        public static void Try(Type exceptionType, Action action, int count)
-        {
-            try
-            {
-                DoAction(exceptionType, action, count);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            
-        }
-
-        public static void Try<E>(Action action, int count) where E : Exception
-        {
-            Try(typeof(E), action, count);
-        }
-
-        public static void TryFallback(Type exceptionType, Action action, int count, Action fallback)
-        {
-            try
-            {
-                DoAction(exceptionType, action, count);
-            }
-            catch (Exception ex)
-            {
-                if (ex.GetType() == exceptionType)
-                    fallback();
-                else
-                    throw;
-            }
-        }
-
-        public static void TryFallback<E>(Action action, int count, Action fallback) where E : Exception
-        {
-            TryFallback(typeof(E), action, count, fallback);
         }
     }
 }

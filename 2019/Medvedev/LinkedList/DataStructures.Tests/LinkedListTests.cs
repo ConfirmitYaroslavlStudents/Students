@@ -282,5 +282,19 @@ namespace DataStructuresTests
 
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void IsNullOrEmpty_ForEmptyList_True()
+        {
+            var list = new LinkedList<int>();
+            Assert.True(LinkedList<int>.IsNullOrEmpty(list));
+        }
+
+        [Fact]
+        public void IsNullOrEmpty_ForNull_True()
+        {
+            LinkedList<int> list = null;
+            Assert.True(LinkedList<int>.IsNullOrEmpty(list));
+        }
     }
 }

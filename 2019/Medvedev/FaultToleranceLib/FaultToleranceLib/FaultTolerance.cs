@@ -2,11 +2,11 @@
 
 namespace FaultToleranceLib
 {
-    public class FaultTolerance
+    public static class FaultTolerance
     {
-        // TODO: Probably static methods?
+        // DONE: Probably static methods?
         // TODO: Probably multiple exception support?
-        private void DoAction(Type exceptionType, Action action, int count)
+        private static void DoAction(Type exceptionType, Action action, int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -25,7 +25,7 @@ namespace FaultToleranceLib
             }
         }
 
-        public void Try(Type exceptionType, Action action, int count)
+        public static void Try(Type exceptionType, Action action, int count)
         {
             try
             {
@@ -38,7 +38,12 @@ namespace FaultToleranceLib
             
         }
 
-        public void TryFallback(Type exceptionType, Action action, int count, Action fallback)
+        public static void Try<E>(Action action, int count) where E : Exception
+        {
+            Try(typeof(E), action, count);
+        }
+
+        public static void TryFallback(Type exceptionType, Action action, int count, Action fallback)
         {
             try
             {
@@ -51,6 +56,11 @@ namespace FaultToleranceLib
                 else
                     throw;
             }
+        }
+
+        public static void TryFallback<E>(Action action, int count, Action fallback) where E : Exception
+        {
+            TryFallback(typeof(E), action, count, fallback);
         }
     }
 }

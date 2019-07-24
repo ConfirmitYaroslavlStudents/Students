@@ -10,9 +10,7 @@ namespace FaultToleranceLib.Tests
         {
             Action action = () => throw new NotImplementedException();
 
-            FaultTolerance faultTolerance = new FaultTolerance();
-
-            Assert.Throws<NotImplementedException>(() => faultTolerance.Try(typeof(NotImplementedException), action, 2));
+            Assert.Throws<NotImplementedException>(() => FaultTolerance.Try(typeof(NotImplementedException), action, 2));
         }
 
         [Fact]
@@ -23,9 +21,7 @@ namespace FaultToleranceLib.Tests
             Action action = () => throw new NotImplementedException();
             Action fallback = () => fallbackHadRun = true;
 
-            FaultTolerance faultTolerance = new FaultTolerance();
-
-            faultTolerance.TryFallback(typeof(NotImplementedException), action, 2, fallback);
+            FaultTolerance.TryFallback(typeof(NotImplementedException), action, 2, fallback);
 
             Assert.True(fallbackHadRun);
         }
@@ -35,8 +31,6 @@ namespace FaultToleranceLib.Tests
         [InlineData(4)]
         public void Try_Succeed_NoExceptionThrown(int d)
         {
-            FaultTolerance faultTolerance = new FaultTolerance();
-
             int count = 1;
             Action action = () => {
                 if (count < d)
@@ -46,7 +40,7 @@ namespace FaultToleranceLib.Tests
                 }
             };
 
-            faultTolerance.Try(typeof(ArithmeticException), action, 3);
+            FaultTolerance.Try(typeof(ArithmeticException), action, 3);
         }
 
         [Theory]
@@ -54,7 +48,6 @@ namespace FaultToleranceLib.Tests
         [InlineData(4)]
         public void TryFallback_Succed_NoFallbackRun(int d)
         {
-            FaultTolerance faultTolerance = new FaultTolerance();
             bool fallbackHadRun = false;
 
             int count = 1;
@@ -68,7 +61,7 @@ namespace FaultToleranceLib.Tests
 
             Action fallback = () => fallbackHadRun = true;
 
-            faultTolerance.TryFallback(typeof(ArithmeticException), action, 3, fallback);
+            FaultTolerance.TryFallback(typeof(ArithmeticException), action, 3, fallback);
 
             Assert.False(fallbackHadRun);
         }

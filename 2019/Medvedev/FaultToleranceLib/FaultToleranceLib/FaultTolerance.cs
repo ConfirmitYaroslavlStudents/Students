@@ -7,7 +7,7 @@ namespace FaultToleranceLib
     {
         // DONE: Probably static methods?
         // DONE: Probably multiple exception support?
-        // TODO: Tests for multiple exception methods
+        // DONE: Tests for multiple exception methods
 
         public static void Try<E>(Action action, int count) where E : Exception
         {

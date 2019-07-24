@@ -7,11 +7,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B814247-4507-40C3-A6C8-97D4EA88316A}</ProjectGuid>
+    <ProjectGuid>{143DCE0A-9C87-4CD1-9D49-7E1E0F923FBB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tests</RootNamespace>
-    <AssemblyName>Tests</AssemblyName>
+    <RootNamespace>FaultToleranceTests</RootNamespace>
+    <AssemblyName>FaultToleranceTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -63,7 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StackTest.cs" />
+    <Compile Include="FaultToleranceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,9 +73,9 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Stack_LinkedList\Stack_LinkedList.csproj">
-      <Project>{d5751c67-ba65-439e-b70b-d3cd30571749}</Project>
-      <Name>Stack_LinkedList</Name>
+    <ProjectReference Include="..\FaultTolerance\FaultTolerance.csproj">
+      <Project>{2abb6d23-e507-47d6-b761-7fb3e95f70ab}</Project>
+      <Name>FaultTolerance</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

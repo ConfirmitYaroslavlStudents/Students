@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Queue
 {
-    // TODO: remove THIS
-    // TODO: Explicit access modifiers
-    public class Queue <T>
+    public class Queue<T>
+
     {
-        const int DefaultCapacity = 5;
-        T[] queue;
-        int begin;
-        int end;
+        private const int DefaultCapacity = 5;
+        private T[] queue;
+        private int begin;
+        private int end;
         public int Count { get; private set; }
 
         public Queue()
@@ -29,8 +25,8 @@ namespace Queue
             begin = 0;
             end = 0;
         }
-        
-        int Size
+
+        private int Size
         {
             get
             {
@@ -46,28 +42,27 @@ namespace Queue
         public void Enqueue(T item)
         {
             queue[end] = item;
-            int tail = (end + 1) % this.Size;
-            if (tail == begin)
-                Increase();
-            else
-                end = tail;
+            int tail = (end + 1) % Size;
+            if (tail == begin) Increase();
+            else end = tail;
             Count++;
         }
 
         public T Dequeue()
         {
-            if (IsEmpty())
-                throw new ArgumentOutOfRangeException("The queue is empty");
-
-            int m = begin;
-            begin = (begin + 1) % Size;
-            Count--;
-            return queue[m];
+            if (IsEmpty()) throw new InvalidOperationException("The queue is empty");
+            else
+            {
+                int m = begin;
+                begin = (begin + 1) % Size;
+                Count--;
+                return queue[m];
+            }
         }
 
         public T Peek()
         {
-            if (IsEmpty()) throw new ArgumentOutOfRangeException("The queue is empty");
+            if (IsEmpty()) throw new InvalidOperationException("The queue is empty");
             else return queue[begin];
         }
 
@@ -80,7 +75,7 @@ namespace Queue
             Count = 0;
         }
 
-        void Increase()
+        private void Increase()
         {
             T[] mas = new T[Size * 2];
             Array.Copy(queue, begin, mas, 0, queue.Length - begin);
@@ -89,5 +84,6 @@ namespace Queue
             end = Count;
             queue = mas;
         }
+
     }
 }

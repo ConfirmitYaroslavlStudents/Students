@@ -1,43 +1,44 @@
-﻿using System;
-using Queue;
+using System;
 using Xunit;
+using Queue;
 
-namespace UnitTestQueue
+namespace XUnitTestQueue
 {
-    // TODO: Fix tests naming
-    // TODO: Follow code style
-    // TODO: Fix exception type
     public class UnitTestQueue
+
     {
         [Fact]
         public void ItemEnqueue()
         {
-            //Arrange
             var queue = new Queue<int>();
-            //Act
+
             queue.Enqueue(0);
             queue.Enqueue(1);
-            //Assert
+
             Assert.Equal(0, queue.Peek());
         }
         [Fact]
         public void PeekEmptyQueue()
         {
             var queue = new Queue<int>();
-            Assert.Throws<ArgumentOutOfRangeException>(()=>queue.Peek());
+
+            Assert.Throws<InvalidOperationException>(() => queue.Peek());
         }
         [Fact]
         public void DequeueEmptyQueue()
         {
             var queue = new Queue<int>();
-            Assert.Throws<ArgumentOutOfRangeException>(() => queue.Dequeue());
+
+            Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
         }
         [Fact]
         public void ItemPeek()
         {
             var queue = new Queue<int>();
+
             queue.Enqueue(0);
             queue.Enqueue(1);
+
             Assert.Equal(0, queue.Peek());
             Assert.Equal(2, queue.Count);
         }
@@ -45,26 +46,32 @@ namespace UnitTestQueue
         public void ItemDequeue()
         {
             var queue = new Queue<int>();
+
             queue.Enqueue(0);
             queue.Enqueue(1);
+
             Assert.Equal(0, queue.Dequeue());
             Assert.Equal(1, queue.Count);
         }
         [Fact]
-        public void Count_AddThreeItems()
+        public void CountThreeItems()
         {
             var queue = new Queue<int>();
+
             queue.Enqueue(0);
             queue.Enqueue(1);
             queue.Enqueue(2);
+
             Assert.Equal(3, queue.Count);
         }
         [Fact]
-        public void Increase_Add100Items()
+        public void IncreaseArray()
         {
             var queue = new Queue<int>();
-            for (int i=0;i<100;i++)
+
+            for (int i = 0; i < 100; i++)
                 queue.Enqueue(i);
+
             Assert.Equal(100, queue.Count);
             Assert.Equal(0, queue.Peek());
         }

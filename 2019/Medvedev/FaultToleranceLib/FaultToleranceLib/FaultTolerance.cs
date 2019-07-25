@@ -12,11 +12,19 @@ namespace FaultToleranceLib
 
         public static void Try<E>(Action action, int count) where E : Exception
         {
+            if (count <= 0)
+                throw new ArgumentException("Count must be positive");
+
             Try(new List<Type> { typeof(E) }, action, count);
         }
 
         public static void Try(List<Type> exceptions, Action action, int count)
         {
+            if (!CheckTypes(exceptions))
+                throw new ArgumentException("All types in exceptions must be derived from Exception");
+            if (count <= 0)
+                throw new ArgumentException("Count must be positive");
+
             try
             {
                 DoAction(exceptions, action, count);
@@ -29,6 +37,9 @@ namespace FaultToleranceLib
 
         public static void TryFallback<E>(Action action, int count, Action fallback) where E : Exception
         {
+            if (count <= 0)
+                throw new ArgumentException("Count must be positive");
+
             var dict = new Dictionary<Type, Action>();
             dict.Add(typeof(E), fallback);
             TryFallback(dict, action, count);
@@ -36,6 +47,11 @@ namespace FaultToleranceLib
 
         public static void TryFallback(Dictionary<Type, Action> exceptionFallbacks, Action action, int count)
         {
+            if (!CheckTypes(exceptionFallbacks.Keys))
+                throw new ArgumentException("All keys in exceptionFallbacks must be derived from Exception");
+            if (count <= 0)
+                throw new ArgumentException("Count must be positive");
+
             try
             {
                 DoAction(new List<Type>(exceptionFallbacks.Keys), action, count);
@@ -69,6 +85,14 @@ namespace FaultToleranceLib
                 }
                 break;
             }
+        }
+
+        private static bool CheckTypes(IEnumerable<Type> types)
+        {
+            foreach (var type in types)
+                if (!type.IsSubclassOf(typeof(Exception)))
+                    return false;
+            return true;
         }
     }
 }

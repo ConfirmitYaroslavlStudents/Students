@@ -224,5 +224,46 @@ namespace FaultToleranceLib.Tests
             Assert.False(notImplementedExceptionFallbackHadRun);
             Assert.True(arithmeticExceptionFallbackHadRun);
         }
+
+        [Fact]
+        public void Try_NonPositiveCount_ThrowsArgumentException()
+        {
+            Action action = () =>{ };
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.Try<Exception>(action, -1));
+        }
+
+        [Fact]
+        public void Try_NotAllTypesDerivedFromException_ThrowsArgumentException()
+        {
+            Action action = () => { };
+
+            var exceptions = new List<Type> { typeof(int), typeof(Exception) };
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.Try(exceptions, action, -1));
+        }
+
+        [Fact]
+        public void TryFallback_NonPositiveCount_ThrowsArgumentException()
+        {
+            Action action = () => { };
+            Action fallback = () => { };
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.TryFallback<Exception>(action, -1, fallback));
+        }
+
+        [Fact]
+        public void TryFallback_NotAllTypesDerivedFromException_ThrowsArgumentException()
+        {
+            Action action = () => { };
+            Action fallback = () => { };
+
+            var exceptionFallbacks = new Dictionary<Type, Action>();
+
+            exceptionFallbacks.Add(typeof(int), fallback);
+            exceptionFallbacks.Add(typeof(string), fallback);
+
+            Assert.Throws<ArgumentException>(() => FaultTolerance.TryFallback(exceptionFallbacks, action, -1));
+        }
     }
 }

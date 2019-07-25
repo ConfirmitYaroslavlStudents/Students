@@ -1,16 +1,18 @@
-﻿namespace Stack_based_on_array
+﻿using System;
+
+namespace Stack_based_on_array
 {
     // TODO: Add default constructor
     // TODO: support overflow
-    public class Stack<T>
+    public class StackOnArray<T>
     {
         private T[] values;
         private int capacity;
         public int Count { get; private set; }
 
-        public Stack(int Capacity)
+        public StackOnArray()
         {
-            capacity = Capacity;
+            capacity = 10;
             values = new T[capacity];
             Count = 0;
         }
@@ -19,7 +21,8 @@
         {
             if (Count == capacity)
             {
-                throw new StackException("Stack is overflow");
+                Array.Resize(ref values, capacity * 2);
+                capacity *= 2;
             }
             values[Count] = element;
             Count++;

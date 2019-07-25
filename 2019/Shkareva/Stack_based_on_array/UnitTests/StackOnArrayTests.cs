@@ -1,15 +1,17 @@
-﻿using Xunit;
-using Stack_LinkedList;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
+using Stack_based_on_array;
 using Assert = Xunit.Assert;
 
-namespace Tests
+namespace StackTests
 {
-    public class StackTest
+    public class StackOnArrayTests
     {
         [Fact]
         public void PushElement()
         {
-            var stack = new Stack<int>();
+            var stack = new StackOnArray<int>();
 
             stack.Push(1);
 
@@ -19,15 +21,15 @@ namespace Tests
         [Fact]
         public void PopEmptyStack()
         {
-            var stack = new Stack<int>();
+            var stack = new StackOnArray<int>();
 
-            Assert.Throws<StackException>(() => stack.Pop());
+            Assert.Throws<StackException>(() => stack.Pop());            
         }
 
         [Fact]
         public void Peek()
         {
-            var stack = new Stack<string>();
+            var stack = new StackOnArray<string>();
 
             stack.Push("one");
 
@@ -38,7 +40,7 @@ namespace Tests
         [Fact]
         public void PeekEmptyStack()
         {
-            var stack = new Stack<int>();
+            var stack = new StackOnArray<int>();
 
             Assert.Throws<StackException>(() => stack.Peek());
         }
@@ -46,7 +48,7 @@ namespace Tests
         [Fact]
         public void PushPop()
         {
-            var stack = new Stack<int>();
+            var stack = new StackOnArray<int>();
 
             stack.Push(1);
 
@@ -57,7 +59,7 @@ namespace Tests
         [Fact]
         public void PushTenElements()
         {
-            var stack = new Stack<int>();
+            var stack = new StackOnArray<int>();
 
             for (int i = 0; i < 10; i++)
             {

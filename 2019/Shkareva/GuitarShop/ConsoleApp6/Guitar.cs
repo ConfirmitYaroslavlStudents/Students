@@ -16,7 +16,7 @@ namespace ConsoleApp6
         }
 
         public string ID { get; set; }
-        public string Price { get; set; }
+        public int Price { get; set; }
         public string Model { get; set; }
         public string Builder { get; set; }
         public string Type { get; set; }

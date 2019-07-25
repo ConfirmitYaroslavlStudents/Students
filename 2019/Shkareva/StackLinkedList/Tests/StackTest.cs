@@ -1,46 +1,33 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xunit;
-using Stack_based_on_array;
+﻿using Xunit;
+using StackLinkedList;
 using Assert = Xunit.Assert;
 
-namespace UnitTests
+namespace Tests
 {
-    public class UnitTests
+    public class StackTest
     {
-        [Fact]
+        [Fact]     
         public void PushElement()
         {
-            var stack = new Stack<int>(10);
+            StackOnList<int> stack = new StackOnList<int>();
 
             stack.Push(1);
 
-            Assert.Equal(1, stack.Pop());
-        }
-
-        [Fact]
-        public void StackOverflow()
-        {
-            var stack = new Stack<int>(1);
-
-            stack.Push(1);
-
-            Assert.Throws<StackException>(()=> stack.Push(2));
             Assert.Equal(1, stack.Pop());
         }
 
         [Fact]
         public void PopEmptyStack()
         {
-            var stack = new Stack<int>(10);
+            var stack = new StackOnList<int>();
 
-            Assert.Throws<StackException>(() => stack.Pop());            
+            Assert.Throws<StackException>(() => stack.Pop());
         }
 
         [Fact]
         public void Peek()
         {
-            var stack = new Stack<string>(10);
+            var stack = new StackOnList<string>();
 
             stack.Push("one");
 
@@ -49,10 +36,9 @@ namespace UnitTests
         }
 
         [Fact]
-        [ExpectedException(typeof(Exception))]
         public void PeekEmptyStack()
         {
-            var stack = new Stack<int>(10);
+            var stack = new StackOnList<int>();
 
             Assert.Throws<StackException>(() => stack.Peek());
         }
@@ -60,7 +46,7 @@ namespace UnitTests
         [Fact]
         public void PushPop()
         {
-            var stack = new Stack<int>(10);
+            var stack = new StackOnList<int>();
 
             stack.Push(1);
 
@@ -71,7 +57,7 @@ namespace UnitTests
         [Fact]
         public void PushTenElements()
         {
-            var stack = new Stack<int>(10);
+            var stack = new StackOnList<int>();
 
             for (int i = 0; i < 10; i++)
             {

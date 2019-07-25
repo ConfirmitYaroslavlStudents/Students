@@ -13,8 +13,6 @@ namespace ConsoleApp6
     {
         static void Main()
         {
-            List<Guitar> guitars = ReadData();
-
             while (true)
             {
                 Console.Write("Enter command:");

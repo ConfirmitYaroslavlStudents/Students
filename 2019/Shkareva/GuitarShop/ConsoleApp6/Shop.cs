@@ -11,6 +11,7 @@ namespace ConsoleApp6
         public List<Guitar> Search(string searchCondition)
         {
             var suitableGuitars = new List<Guitar>();
+
             foreach (Guitar guitar in allInstruments)
             {
                 if (guitar.Contains(searchCondition))
@@ -21,20 +22,36 @@ namespace ConsoleApp6
             return suitableGuitars;
         }
 
-        public void AddFromFile()
+        public void AddGuitarsFromFile()
         {
             var lines = File.ReadAllLines("guitars.txt");
 
-            foreach (var line in lines)
+            for(int i=1; i<lines.length;i++)
             {
-                allInstruments.Add(MakeGuitar(line));
+                allInstruments.Add(MakeGuitar(lines[i]));
             }
+        }
+
+        public void Add(Guitar guitar)
+        {
+            allInstruments.Add(guitar);
         }
 
         private Guitar MakeGuitar(string line)
         {
             var parts = line.Split(' ');
             return new Guitar(parts[0], parts[1], parts[2], parts[3], parts[4]);
+        }
+
+       public void DeleteGuitar(string ID)
+        {
+            foreach( Guitar guitar in allInstruments)
+            {
+                if (guitar.ID == ID)
+                {
+                    allInstruments.Remove(guitar);
+                }
+            }
         }
 
     }

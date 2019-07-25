@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stack_LinkedList
+namespace StackLinkedList
 {
     public class StackException: Exception
     {

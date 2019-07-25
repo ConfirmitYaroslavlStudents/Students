@@ -1,7 +1,6 @@
-﻿namespace Stack_LinkedList
+﻿namespace StackLinkedList
 {
-    // TODO: Merge two projects
-    public class Stack<T>
+    public class StackOnList<T>
     {
         private Node<T> head;
         public int Count { get; private set; }

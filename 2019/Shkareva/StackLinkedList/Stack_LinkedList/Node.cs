@@ -1,4 +1,4 @@
-﻿namespace Stack_LinkedList
+﻿namespace StackLinkedList
 {
     internal class Node<T>
     {

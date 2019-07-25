@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stack_LinkedList", "Stack_LinkedList\Stack_LinkedList.csproj", "{D5751C67-BA65-439E-B70B-D3CD30571749}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackLinkedList", "Stack_LinkedList\StackLinkedList.csproj", "{D5751C67-BA65-439E-B70B-D3CD30571749}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{2B814247-4507-40C3-A6C8-97D4EA88316A}"
 EndProject

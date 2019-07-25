@@ -41,12 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FallbackPolicy.cs" />
-    <Compile Include="Policy.cs" />
-    <Compile Include="PolicyExceptions.cs" />
-    <Compile Include="PolicyModel.cs" />
+    <Compile Include="Fallback\FallbackStrategy.cs" />
+    <Compile Include="Fallback\FallbackProcessor.cs" />
+    <Compile Include="Plain\PlainStrategy.cs" />
+    <Compile Include="Plain\PlainProcessor.cs" />
+    <Compile Include="Strategy.cs" />
+    <Compile Include="StrategyExceptions.cs" />
+    <Compile Include="StrategyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RetryPolicy.cs" />
+    <Compile Include="Retry\RetryStrategy.cs" />
+    <Compile Include="Retry\RetryProcessor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

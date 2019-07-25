@@ -5,6 +5,7 @@ namespace FaultTolerance.Fallback
 {
     public class FallbackStrategy : Strategy
     {
+        private Action fallbackAction;
         public FallbackStrategy(Exception exception, Action fallbackAction) : base(exception)
         {
             FallbackAction = fallbackAction;
@@ -16,10 +17,10 @@ namespace FaultTolerance.Fallback
 
         private Action FallbackAction
         {
-            get => FallbackAction;
+            get => fallbackAction;
             set
             {
-                FallbackAction = value ?? throw new ArgumentNullException("Fallback action can't be null");
+                fallbackAction = value ?? throw new ArgumentNullException("Fallback action can't be null");
             }
         }
 
@@ -40,6 +41,7 @@ namespace FaultTolerance.Fallback
 
     internal class FallbackPolicy<TResult> : Policy<TResult>
     {
+        private Func<TResult> fallbackAction;
         public FallbackPolicy(Exception exception, Func<TResult> fallbackAction) : base(exception)
         {
             FallbackAction = fallbackAction;
@@ -51,10 +53,10 @@ namespace FaultTolerance.Fallback
 
         private Func<TResult> FallbackAction
         {
-            get => FallbackAction;
+            get => fallbackAction;
             set
             {
-                FallbackAction = value ?? throw new ArgumentNullException("Fallback action can't be null");
+                fallbackAction = value ?? throw new ArgumentNullException("Fallback action can't be null");
             }
         }
 

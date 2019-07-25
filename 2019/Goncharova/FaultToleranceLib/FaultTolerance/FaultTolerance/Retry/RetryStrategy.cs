@@ -5,6 +5,8 @@ namespace FaultTolerance.Retry
 {
     public class RetryStrategy : Strategy
     {
+        private int permittedRetryCount;
+
         public RetryStrategy(Exception exception, int retryCount) : base(exception)
         {
             PermittedRetryCount = retryCount;
@@ -17,16 +19,16 @@ namespace FaultTolerance.Retry
 
         private int PermittedRetryCount
         {
-            get => PermittedRetryCount;
+            get => permittedRetryCount;
             set
             {
                 if (value < 0)
                 {
-                    throw new ArgumentException("RetryCount should be non negative");
+                    throw new ArgumentOutOfRangeException("RetryCount should be non negative");
                 }
                 else
                 {
-                    PermittedRetryCount = value;
+                    permittedRetryCount = value;
                 }
             }
         }
@@ -36,6 +38,7 @@ namespace FaultTolerance.Retry
 
     internal class RetryPolicy<TResult> : Policy<TResult>
     {
+        private int permittedRetryCount;
         public RetryPolicy(Exception exception, int retryCount) : base(exception)
         {
             PermittedRetryCount = retryCount;
@@ -48,7 +51,7 @@ namespace FaultTolerance.Retry
 
         private int PermittedRetryCount
         {
-            get => PermittedRetryCount;
+            get => permittedRetryCount;
             set
             {
                 if (value < 0)
@@ -57,7 +60,7 @@ namespace FaultTolerance.Retry
                 }
                 else
                 {
-                    PermittedRetryCount = value;
+                    permittedRetryCount = value;
                 }
             }
         }

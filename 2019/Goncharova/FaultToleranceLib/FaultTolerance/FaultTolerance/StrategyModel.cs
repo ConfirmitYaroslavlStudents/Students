@@ -23,7 +23,7 @@ namespace FaultTolerance
             }
             ExceptionsHandled.AddMany(exceptions);
         }
-        internal StrategyExceptions ExceptionsHandled { get; }
+        internal StrategyExceptions ExceptionsHandled { get; } = new StrategyExceptions();
 
     }
 }

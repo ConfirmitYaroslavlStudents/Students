@@ -11,7 +11,7 @@ namespace FaultTolerance.Retry
         {
             Exception firstCatched = null;
 
-            for (int retryCount = 0; retryCount < permittedRetryCount; retryCount++)
+            for (int retryCount = 0; retryCount <= permittedRetryCount; retryCount++)
             {
                 try
                 {
@@ -27,7 +27,6 @@ namespace FaultTolerance.Retry
                     }
                 }
             }
-
             throw firstCatched;
         }
     }

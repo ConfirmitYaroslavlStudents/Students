@@ -8,11 +8,8 @@ namespace DoubleLinkedListLib
     {
         private Node<T> _head;
         private Node<T> _tail;
-        public int Count { get; private set; }
-        public DoubleLinkedList()
-        {
-            Count = 0;
-        }
+        public int Count { get; private set; } = 0;
+        public DoubleLinkedList() { }
         public void AddLast(T value)
         {
             var node = new Node<T>(value);
@@ -21,25 +18,28 @@ namespace DoubleLinkedListLib
             {
                 _head = node;
                 _tail = node;
+
                 Count = 1;
+
                 return;
             }
 
             _tail.Next = node;
             node.Previous = _tail;
             _tail = node;
+
             Count++;
         }
-        private void RemoveAfter(Node<T> previous, Node<T> current)
+        private void RemoveNode(Node<T> node)
         {
-            if (previous != null)
+            if (node.Previous != null)
             {
-                previous.Next = current.Next;
-                previous.Previous = current.Previous;
+                node.Previous.Next = node.Next;
+                node.Previous.Previous = node.Previous;
 
-                if (current.Next == null)
+                if (node.Next == null)
                 {
-                    _tail = previous;
+                    _tail = node.Previous;
                 }
             }
             else
@@ -51,16 +51,16 @@ namespace DoubleLinkedListLib
                     _tail = null;
                 }
             }
+
+            Count--;
         }
         public void DeleteFirst()
         {
-            RemoveAfter(null, _head);
-            Count--;
+            RemoveNode(_head);
         }
         public void DeleteLast()
         {
-            RemoveAfter(_tail.Previous, _tail);
-            Count--;
+            RemoveNode(_tail);
         }
         public void RemoveAt(int index)
         {
@@ -69,33 +69,23 @@ namespace DoubleLinkedListLib
                 throw new IndexOutOfRangeException();
             }
 
-            Node<T> current  = _head;
-            Node<T> previous = null;
+            Node<T> current = _head;
 
             for (int ind = 0; ind < index; ind++)
             {
-                previous = current;
                 current = current.Next;
             }
 
-            RemoveAfter(previous, current);
-            Count--;
+            RemoveNode(current);
         }
         public void Remove(T value)
         {
-            Node<T> previous = null;
-
             for (var current = _head; current != null; current = current.Next)
             {
                 if (current.Value.Equals(value))
                 {
-                    RemoveAfter(previous, current);
-                    Count--;
+                    RemoveNode(current);
                     break;
-                }
-                else
-                {
-                    previous = current;
                 }
             }
         }
@@ -107,48 +97,52 @@ namespace DoubleLinkedListLib
             {
                 _head = node;
                 _tail = node;
+
                 Count = 1;
+
                 return;
             }
 
             _head.Previous = node;
             node.Next = _head;
             _head = node;
+
             Count++;
         }
         public void Insert(int index, T value)
         {
-            if (index < 0 || index > Count+1)
+            if (index < 0 || index > Count + 1)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            if(index == 0)
+            if (index == 0)
             {
                 AddFirst(value);
+
                 return;
             }
-            if(index==Count+1)
+
+            if (index == Count + 1)
             {
                 AddLast(value);
+
                 return;
             }
 
             Node<T> node = new Node<T>(value);
             Node<T> current = _head;
-            Node<T> previous = null;
 
             for (int ind = 0; ind < index; ind++)
             {
-                previous = current;
                 current = current.Next;
             }
 
-            if (previous != null && current != null)
+            if (current.Previous != null && current != null)
             {
-                previous.Next = node;
+                current.Previous.Next = node;
                 current.Previous = node;
-                node.Previous = previous;
+                node.Previous = current.Previous;
                 node.Next = current;
             }
 
@@ -164,10 +158,7 @@ namespace DoubleLinkedListLib
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            for (var current = _head; current != null; current = current.Next)
-            {
-                yield return current.Value;
-            }
+            return GetEnumerator();
         }
     }
 }

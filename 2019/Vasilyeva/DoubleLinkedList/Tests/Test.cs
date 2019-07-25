@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DoubleLinkedListLib;
 using Xunit;
-using DoubleLinkedListLib;
-
 
 namespace Tests
 {
     public class Test
     {
         [Fact]
-        public void InitStracrture()
+        public void InitStructure()
         {
             DoubleLinkedList<int> dll = new DoubleLinkedList<int>();
 
             Assert.Equal(0, dll.Count);
         }
         [Theory]
-        [InlineData(new[] { 3,2,1 })]
-        [InlineData(new[] { 3})]
+        [InlineData(new[] { 3, 2, 1 })]
+        [InlineData(new[] { 3 })]
         public void AddLast_Equal_SimpleArray(int[] array)
         {
             DoubleLinkedList<int> dll = new DoubleLinkedList<int>();
 
-            foreach(var value in array)
+            foreach (var value in array)
             {
                 dll.AddLast(value);
             }
 
             int i = 0;
-            foreach(var item in dll)
+            foreach (var item in dll)
             {
                 Assert.Equal(array[i], item);
                 i++;
@@ -41,7 +35,7 @@ namespace Tests
         }
         [Theory]
         [InlineData(new[] { 3, 2, 1 })]
-        [InlineData(new[] { 3,2 })]
+        [InlineData(new[] { 3, 2 })]
         public void AddFirst_Equal_SimpleArray(int[] array)
         {
             DoubleLinkedList<int> dll = new DoubleLinkedList<int>();
@@ -51,7 +45,7 @@ namespace Tests
                 dll.AddFirst(value);
             }
 
-            int i = array.Length-1;
+            int i = array.Length - 1;
             foreach (var item in dll)
             {
                 Assert.Equal(array[i], item);
@@ -62,9 +56,9 @@ namespace Tests
         }
         [Theory]
         [InlineData(new[] { 3, 2, 1 }, 0, 4, new[] { 3, 2, 1, 0 })]
-        [InlineData(new[] { 3, 2, 1 }, 0, 1, new[] { 3,0, 2,1 })]
-        [InlineData(new int[0],1,0, new[] { 1 })]
-        public void InsertNewItemIn_Equal_NewDll(int[] array, int value, int index, int[] expected)
+        [InlineData(new[] { 3, 2, 1 }, 0, 1, new[] { 3, 0, 2, 1 })]
+        [InlineData(new int[0], 1, 0, new[] { 1 })]
+        public void InsertNewItemIn_Equal_NewList(int[] array, int value, int index, int[] expected)
         {
             DoubleLinkedList<int> dll = new DoubleLinkedList<int>();
             if (array != null)
@@ -73,7 +67,7 @@ namespace Tests
                     dll.AddLast(val);
                 }
 
-            dll.Insert(index,value);
+            dll.Insert(index, value);
 
             int i = 0;
             foreach (var item in dll)
@@ -82,7 +76,7 @@ namespace Tests
                 i++;
             }
 
-            Assert.Equal(array.Length+1, dll.Count);
+            Assert.Equal(array.Length + 1, dll.Count);
         }
 
         [Fact]
@@ -113,7 +107,7 @@ namespace Tests
 
             dll.DeleteFirst();
 
-            int[] expected = new int[] { 2,3 };
+            int[] expected = new int[] { 2, 3 };
             int i = 0;
             foreach (var item in dll)
             {
@@ -125,7 +119,7 @@ namespace Tests
         [InlineData(new[] { 3, 2, 1 }, 2, new[] { 3, 2 })]
         [InlineData(new[] { 3, 2, 1 }, 1, new[] { 3, 1 })]
         [InlineData(new[] { 3, 2, 1 }, 0, new[] { 2, 1 })]
-        public void RemoveAtElement_Equal_NewDll(int[] array, int index, int[] expected)
+        public void RemoveAtElement_Equal_NewList(int[] array, int index, int[] expected)
         {
             DoubleLinkedList<int> dll = new DoubleLinkedList<int>();
             if (array != null)
@@ -148,8 +142,8 @@ namespace Tests
         [Theory]
         [InlineData(new[] { 3, 2, 1 }, 2, new[] { 3, 1 })]
         [InlineData(new[] { 3, 2, 1 }, 1, new[] { 3, 2 })]
-        [InlineData(new[] { 3, 2, 1 }, 0, new[] { 3,2,1 })]
-        public void RemoveElement_Equal_NewDll(int[] array, int value, int[] expected)
+        [InlineData(new[] { 3, 2, 1 }, 0, new[] { 3, 2, 1 })]
+        public void RemoveElement_Equal_NewList(int[] array, int value, int[] expected)
         {
             DoubleLinkedList<int> dll = new DoubleLinkedList<int>();
             if (array != null)

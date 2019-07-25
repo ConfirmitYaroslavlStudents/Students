@@ -2,6 +2,10 @@
 
 namespace FaultTolerance
 {
+    //TODO no need in spare function for retry
+    //TODO support multiple exceptions per case
+    //TODO support combinations of retry and fallback
+    //TODO timeout method
     public static class ToleranceLibrary
     {
 

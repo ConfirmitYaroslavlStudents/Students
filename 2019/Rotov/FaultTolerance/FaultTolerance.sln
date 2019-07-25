@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultTolerance", "FaultTolerance\FaultTolerance.csproj", "{8436E46F-E747-420B-8FBD-C0EDA2E51862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{8C307F13-CC76-4E48-8425-D197A913D9BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultToleranceTest", "FaultToleranceTest\FaultToleranceTest.csproj", "{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{8436E46F-E747-420B-8FBD-C0EDA2E51862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8436E46F-E747-420B-8FBD-C0EDA2E51862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8436E46F-E747-420B-8FBD-C0EDA2E51862}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C307F13-CC76-4E48-8425-D197A913D9BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C307F13-CC76-4E48-8425-D197A913D9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C307F13-CC76-4E48-8425-D197A913D9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C307F13-CC76-4E48-8425-D197A913D9BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

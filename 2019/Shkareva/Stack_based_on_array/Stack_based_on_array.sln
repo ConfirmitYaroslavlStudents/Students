@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stack_based_on_array", "Stack_based_on_array\Stack_based_on_array.csproj", "{4EE275D2-82B1-4B90-B33B-D3E8031CB79C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{200D9D7F-FB13-46B0-8618-948B3E30A90C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackTests", "UnitTests\StackTests.csproj", "{200D9D7F-FB13-46B0-8618-948B3E30A90C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

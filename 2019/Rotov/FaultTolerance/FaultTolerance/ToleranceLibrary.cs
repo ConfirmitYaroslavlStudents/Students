@@ -5,75 +5,78 @@ namespace FaultTolerance
     public static class ToleranceLibrary
     {
 
-        public static void Retry<T>(Action method, Action spare, int count) where T: Exception
+        public static void Retry<Except>(Action method, Action spare, int count)
+            where Except : Exception
         {
-            if (count == 0)
+            if (count == 1)
             {
-                FallBack<T>(method, spare);
+                FallBack<Except>(method, spare);
                 return;
             }
             try
             {
                 method();
             }
-            catch(T)
+            catch (Except)
             {
-                Retry<T>(method, spare,  count - 1);
+                Retry<Except>(method, spare, count - 1);
             }
         }
 
-
-        public static Return Retry<Exception, Return>(Func<Return> method, Func<Return> spare, int count) where Exception : System.Exception
+        public static Return Retry<Except, Return, Param>(Func<Param, Return> method, Func<Param, Return> spare, Param param , int count)
+            where Except : Exception
         {
-            if (count == 0)
+            if (count == 1)
             {
-                return FallBack<Exception, Return>(method, spare);
+                return FallBack<Except, Return, Param>(method, spare, param);
             }
-            try
-            {
-                return method();
-            }
-            catch (Exception)
-            {
-                Retry<Exception, Return>(method, spare, count - 1);
-            }
-            return method();
-        }
-
-
-        public static R FallBack<E, R>(Func<R> main, Func<R> spare) where E : Exception
-        {
-            try
-            {
-                return main();
-            }
-            catch (E)
+            else
             {
                 try
                 {
-                    return spare();
+                    return method(param);
                 }
-                catch (E)
+                catch (Except)
+                {
+                    return Retry<Except, Return, Param>(method, spare, param, count - 1);
+                }
+            }
+        }
+
+        public static Return FallBack<Except, Return, Param>(Func<Param, Return> main, Func<Param, Return> spare, Param param)
+            where Except : Exception
+        {
+            try
+            {
+                return main(param);
+            }
+            catch (Except)
+            {
+                try
+                {
+                    return spare(param);
+                }
+                catch (Except)
                 {
                     throw;
                 }
             }
         }
 
-
-        public static void FallBack<E>(Action main, Action spare) where E: Exception
+        public static void FallBack<Except>(Action main, Action spare)
+            where Except : Exception
         {
             try
             {
                 main();
             }
-            catch (E)
+            catch (Except)
             {
                 try
                 {
                     spare();
                 }
-                catch (E)
+                catch (Except)
                 {
                     throw;
                 }

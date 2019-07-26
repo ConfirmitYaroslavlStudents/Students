@@ -50,7 +50,7 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            Assert.True(actual < upperBound);
+            Assert.True(actual <= upperBound);
         }
 
         [Fact]

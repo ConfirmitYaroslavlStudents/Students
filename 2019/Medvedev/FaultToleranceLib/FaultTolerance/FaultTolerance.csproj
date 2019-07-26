@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="ActionRunner.cs" />
     <Compile Include="ActionRunnerParameters.cs" />
-    <Compile Include="FaultTolerance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

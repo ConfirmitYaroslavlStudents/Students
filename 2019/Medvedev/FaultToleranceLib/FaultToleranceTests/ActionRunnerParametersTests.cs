@@ -2,7 +2,7 @@
 using System.IO;
 using Xunit;
 
-namespace FaultToleranceLib.Tests
+namespace FaultTolerance.Tests
 {
     public class ActionRunnerParametersTests
     {

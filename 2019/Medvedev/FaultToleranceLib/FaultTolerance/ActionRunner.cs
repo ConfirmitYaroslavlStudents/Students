@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FaultToleranceLib
+namespace FaultTolerance
 {
     public class ActionRunner
     {

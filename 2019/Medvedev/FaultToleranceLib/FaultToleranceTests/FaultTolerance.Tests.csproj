@@ -59,7 +59,6 @@
   <ItemGroup>
     <Compile Include="ActionRunnerParametersTests.cs" />
     <Compile Include="ActionRunnerTests.cs" />
-    <Compile Include="FaultToleranceLibTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,9 +68,9 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FaultToleranceLib\FaultToleranceLib.csproj">
+    <ProjectReference Include="..\FaultTolerance\FaultTolerance.csproj">
       <Project>{52ce1b61-0025-484d-b33f-22906a4a2a19}</Project>
-      <Name>FaultToleranceLib</Name>
+      <Name>FaultTolerance</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

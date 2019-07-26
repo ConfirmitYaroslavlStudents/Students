@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FaultToleranceLib
+namespace FaultTolerance
 {
     public class ActionRunnerParameters
     {

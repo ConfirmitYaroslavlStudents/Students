@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using GuitarShopLogic;
 
 namespace GuitarShopUI
 {
@@ -13,12 +13,19 @@ namespace GuitarShopUI
     {
         static void Main()
         {
-            List<Guitar> guitars = ReadData();
+            DataBase guitars = new DataBase();
 
-            while (true)
+            AskForInput(guitars);
+        }
+
+        private static void AskForInput(DataBase guitars)
+        {
+            bool stop = false;
+
+            do
             {
                 Console.Write("Enter command:");
-                var command = Console.ReadLine();
+                var command = Console.ReadLine().ToLower();
                 switch (command)
                 {
                     case "s":
@@ -27,71 +34,36 @@ namespace GuitarShopUI
                     case "a":
                         Add(guitars);
                         break;
+                    case "e":
+                        stop = true;
+                        break;
                 }
             }
+            while (!stop);
         }
 
-        private static void Add(List<Guitar> guitars)
+        private static void Add(DataBase items)
         {
             Console.Write("Enter guitar spec (ID Price Model Builder Type):");
             var line = Console.ReadLine();
-            guitars.Add(MakeGuitar(line));
-            File.AppendAllText("guitars.txt", Environment.NewLine + line);
+
+            items.Add(line);
         }
 
-        private static Guitar MakeGuitar(string line)
-        {
-            var parts = line.Split(' ');
-            return new Guitar(parts[0], parts[1], parts[2], parts[3], parts[4]);
-        }
-
-        private static void Search(List<Guitar> guitars)
+        private static void Search(DataBase items)
         {
             Console.WriteLine("Enter search term:");
-
             var term = Console.ReadLine();
 
-            foreach (var guitar in guitars)
-            {
-                if (guitar.Contains(term))
-                    Console.WriteLine("Mathc found: {0}", guitar.ID);
-            }
-        }
+            List<string> idMatched = items.Search(term);
 
-        private static List<Guitar> ReadData()
-        {
-            var lines = File.ReadAllLines("guitars.txt");
-            var guitars = new List<Guitar>();
-
-            foreach (var line in lines)
+            foreach (var id in idMatched)
             {
-                guitars.Add(MakeGuitar(line));
+                Console.WriteLine("Mathc found: {0}", id);
             }
 
-            return guitars;
         }
     }
 
-    public class Guitar
-    {
-        public Guitar(string id, string name, string model, string builder, string type)
-        {
-            ID = id;
-            Price = name;
-            Model = model;
-            Builder = builder;
-            Type = type;
-        }
-
-        public string ID { get; set; }
-        public string Price { get; set; }
-        public string Model { get; set; }
-        public string Builder { get; set; }
-        public string Type { get; set; }
-
-        public bool Contains(string term)
-        {
-            return Builder.Contains(term) || Model.Contains(term) || Type.Contains(term);
-        }
-    }
+    
 }

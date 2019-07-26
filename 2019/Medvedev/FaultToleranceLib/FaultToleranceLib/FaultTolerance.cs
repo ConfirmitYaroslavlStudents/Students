@@ -20,7 +20,7 @@ namespace FaultToleranceLib
 
         public static void Try(List<Type> exceptions, Action action, int count)
         {
-            if (!CheckTypes(exceptions))
+            if (!IsDerivedFromException(exceptions))
                 throw new ArgumentException("All types in exceptions must be derived from Exception");
             if (count <= 0)
                 throw new ArgumentException("Count must be positive");
@@ -47,7 +47,7 @@ namespace FaultToleranceLib
 
         public static void TryFallback(Dictionary<Type, Action> exceptionFallbacks, Action action, int count)
         {
-            if (!CheckTypes(exceptionFallbacks.Keys))
+            if (!IsDerivedFromException(exceptionFallbacks.Keys))
                 throw new ArgumentException("All keys in exceptionFallbacks must be derived from Exception");
             if (count <= 0)
                 throw new ArgumentException("Count must be positive");
@@ -87,7 +87,7 @@ namespace FaultToleranceLib
             }
         }
 
-        private static bool CheckTypes(IEnumerable<Type> types)
+        private static bool IsDerivedFromException(IEnumerable<Type> types)
         {
             foreach (var type in types)
                 if (!type.IsSubclassOf(typeof(Exception)))

@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionRunner.cs" />
+    <Compile Include="ActionRunnerParameters.cs" />
     <Compile Include="FaultTolerance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

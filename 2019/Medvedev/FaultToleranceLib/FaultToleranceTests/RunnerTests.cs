@@ -6,7 +6,7 @@ namespace FaultTolerance.Tests
     public class RunnerTests
     {
         [Fact]
-        public void Run_runsAction()
+        public void Run_RunsAction()
         {
             bool hadRun = false;
             Action action = () => hadRun = true;

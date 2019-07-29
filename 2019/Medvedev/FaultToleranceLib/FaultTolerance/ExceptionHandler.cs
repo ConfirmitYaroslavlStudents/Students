@@ -6,9 +6,9 @@ namespace FaultTolerance
     {
         public ExceptionHandlerParameters Parameters { get; }
 
-        public ExceptionHandler(ExceptionHandlerParameters param)
+        public ExceptionHandler(ExceptionHandlerParameters parameters)
         {
-            Parameters = param;
+            Parameters = parameters;
         }
 
         public void Try(IRunner runner, Action action)

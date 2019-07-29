@@ -7,7 +7,7 @@ namespace FaultTolerance.Tests
     public class TimeoutRunnerTests
     {
         [Fact]
-        public void Run_runsAction()
+        public void Run_RunsAction()
         {
             bool hadRun = false;
             Action action = () => hadRun = true;

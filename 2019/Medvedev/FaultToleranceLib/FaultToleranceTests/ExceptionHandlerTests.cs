@@ -10,12 +10,12 @@ namespace FaultTolerance.Tests
         [Fact]
         public void Try_Succeed_NoFallbackRun()
         {
-            var param = new ExceptionHandlerParameters(3);
+            var parameters = new ExceptionHandlerParameters(3);
 
             bool ioExceptionFallbackRun = false;
             bool arithmeticExceptionFallbackRun = false;
 
-            param
+            parameters
                 .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
                 .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; });
 
@@ -29,7 +29,7 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(param);
+            var handler = new ExceptionHandler(parameters);
             handler.Try(new Runner(), action);
 
             Assert.False(ioExceptionFallbackRun);
@@ -40,8 +40,8 @@ namespace FaultTolerance.Tests
         public void Try_CountTimes_Succeed_ActionRuns_LessOrEqualsTo_CountTimes()
         {
             int upperBound = 10;
-            var param = new ExceptionHandlerParameters(upperBound);
-            param.Handle<ArithmeticException>();
+            var parameters = new ExceptionHandlerParameters(upperBound);
+            parameters.Handle<ArithmeticException>();
 
             int actual = 0;
             Action action = () =>
@@ -51,7 +51,7 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(param);
+            var handler = new ExceptionHandler(parameters);
             handler.Try(new Runner(), action);
 
             Assert.True(actual <= upperBound);
@@ -62,8 +62,8 @@ namespace FaultTolerance.Tests
         {
             int upperBound = 10;
             int expected = upperBound;
-            var param = new ExceptionHandlerParameters(upperBound);
-            param.Handle<ArithmeticException>();
+            var parameters = new ExceptionHandlerParameters(upperBound);
+            parameters.Handle<ArithmeticException>();
 
             int actual = 0;
             Action action = () =>
@@ -72,7 +72,7 @@ namespace FaultTolerance.Tests
                 throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(param);
+            var handler = new ExceptionHandler(parameters);
             handler.Try(new Runner(), action);
 
             Assert.Equal(expected, actual);
@@ -81,12 +81,12 @@ namespace FaultTolerance.Tests
         [Fact]
         public void Try_Failed_RunRelevantFallback()
         {
-            var param = new ExceptionHandlerParameters(2);
+            var parameters = new ExceptionHandlerParameters(2);
 
             bool ioExceptionFallbackRun = false;
             bool arithmeticExceptionFallbackRun = false;
 
-            param
+            parameters
                 .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
                 .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; });
 
@@ -100,7 +100,7 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(param);
+            var handler = new ExceptionHandler(parameters);
             handler.Try(new Runner(), action);
 
             Assert.False(ioExceptionFallbackRun);
@@ -113,12 +113,12 @@ namespace FaultTolerance.Tests
             bool hadRun = false;
             bool hadRunArithmeticEx = false;
 
-            var param = new ExceptionHandlerParameters(2);
-            param
+            var parameters = new ExceptionHandlerParameters(2);
+            parameters
                 .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
                 .HandleFailedRun(() => hadRun = true);
 
-            var handler = new ExceptionHandler(param);
+            var handler = new ExceptionHandler(parameters);
             handler.Try(new TimeoutRunner(10), () => Thread.Sleep(100));
 
             Assert.True(hadRun);
@@ -131,12 +131,12 @@ namespace FaultTolerance.Tests
             bool hadRun = false;
             bool hadRunArithmeticEx = false;
 
-            var param = new ExceptionHandlerParameters(2);
-            param
+            var parameters = new ExceptionHandlerParameters(2);
+            parameters
                 .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
                 .HandleFailedRun(() => hadRun = true);
 
-            var handler = new ExceptionHandler(param);
+            var handler = new ExceptionHandler(parameters);
             handler.Try(new TimeoutRunner(10), () => { });
 
             Assert.False(hadRun);

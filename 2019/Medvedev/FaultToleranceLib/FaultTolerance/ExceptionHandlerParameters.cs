@@ -3,20 +3,8 @@ using System.Collections.Generic;
 
 namespace FaultTolerance
 {
-    public class ActionRunnerParameters
+    public class ExceptionHandlerParameters
     {
-        internal int Timeout
-        {
-            get => _timeout;
-            private set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("Timeout must be positive");
-
-                _timeout = value;
-            }
-        }
-
         internal int NumberOfTries
         {
             get => _numberOfTries;
@@ -28,42 +16,38 @@ namespace FaultTolerance
                 _numberOfTries = value;
             }
         }
-        internal bool WithTimeout { get;  }
 
         internal Dictionary<Type, Action> Fallbacks { get; } = new Dictionary<Type, Action>();
 
-        private int _timeout;
         private int _numberOfTries;
 
-        public ActionRunnerParameters(int numberOfTries) 
+        public ExceptionHandlerParameters(int numberOfTries)
         {
             NumberOfTries = numberOfTries;
         }
 
-        public ActionRunnerParameters(int numberOfTries, int timeout) 
-            : this(numberOfTries)
-        {
-            Timeout = timeout;
-            WithTimeout = true;
-        }
-
-        public ActionRunnerParameters Handle<TException>(Action fallback)
+        public ExceptionHandlerParameters Handle<TException>(Action fallback)
             where TException : Exception
         {
             if (Fallbacks.ContainsKey(typeof(TException)))
-                throw new ArgumentException("Fallback for exception is already exists");
+                throw new ArgumentException("Fallback for this case is already exists");
 
             Fallbacks.Add(typeof(TException), fallback);
 
             return this;
         }
 
-        public ActionRunnerParameters Handle<TException>()
+        public ExceptionHandlerParameters Handle<TException>()
             where TException : Exception
         {
             Handle<TException>(() => { });
 
             return this;
+        }
+
+        public ExceptionHandlerParameters HandleFailedRun(Action fallback)
+        {
+            return Handle<RunFailedException>(fallback);
         }
     }
 }

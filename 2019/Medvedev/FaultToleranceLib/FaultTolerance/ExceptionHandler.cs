@@ -2,20 +2,20 @@
 
 namespace FaultTolerance
 {
-    public class ActionRunner
+    public class ExceptionHandler
     {
-        public ActionRunnerParameters Parameters { get; }
+        public ExceptionHandlerParameters Parameters { get; }
 
-        public ActionRunner(ActionRunnerParameters param)
+        public ExceptionHandler(ExceptionHandlerParameters param)
         {
             Parameters = param;
         }
 
-        public void Try(Action action)
+        public void Try(IRunner runner, Action action)
         {
             try
             {
-                DoAction(action);
+                DoAction(runner, action);
             }
             catch (Exception ex)
             {
@@ -25,13 +25,17 @@ namespace FaultTolerance
                     throw;
             }
         }
-        private void DoAction(Action action)
+
+        private void DoAction(IRunner runner, Action action)
         {
             for (int i = 0; i < Parameters.NumberOfTries; i++)
             {
                 try
                 {
-                    Run(action);
+                    bool succeedRun = runner.Run(action);
+
+                    if (!succeedRun)
+                        throw new RunFailedException();
                 }
                 catch (Exception ex)
                 {
@@ -39,16 +43,9 @@ namespace FaultTolerance
                         continue;
                     throw;
                 }
+
                 break;
             }
-        }
-
-        private void Run(Action action)
-        {
-            if (Parameters.WithTimeout)
-                throw new NotImplementedException("I have to read how to work with threads");
-
-            action();
         }
     }
 }

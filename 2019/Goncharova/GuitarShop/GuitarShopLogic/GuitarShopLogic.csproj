@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Creator.cs" />
     <Compile Include="DataBase.cs" />
-    <Compile Include="DataBaseItem.cs" />
+    <Compile Include="GuitarCreator.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="Guitar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

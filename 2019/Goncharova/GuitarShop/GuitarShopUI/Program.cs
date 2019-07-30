@@ -14,7 +14,7 @@ namespace GuitarShopUI
     {
         private static void Main()
         {
-            DataBase guitars = new DataBase();
+            DataBase guitars = new DataBase("guitars.txt");
 
             AskForInput(guitars);
         }

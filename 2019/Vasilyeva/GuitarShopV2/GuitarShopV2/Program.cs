@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace GuitarShopV2
 {
@@ -23,10 +21,23 @@ namespace GuitarShopV2
                 switch (command)
                 {
                     case "s":
-                        guitars.Search();
+                        Console.WriteLine("Enter search term:");
+                        var term = Console.ReadLine();
+
+                        var searching = guitars.Search(term);
+                        foreach (var item in searching)
+                            Console.WriteLine(item.ID);
+
                         break;
                     case "a":
-                        guitars.Add();
+                        Console.Write("Enter guitar spec (ID Price Model Builder Type):");
+                        var line = Console.ReadLine();
+                        guitars.Add(line);
+                        break;
+                    case "r":
+                        Console.WriteLine("Enter remove term:");
+                        var removeterm = Console.ReadLine();
+                        guitars.Remove(removeterm);
                         break;
                 }
             }

@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace GuitarShopV2
 {
     public class Stock
     {
-        private List<Instrument> item = new List<Instrument>();
+        private List<Instrument> items = new List<Instrument>();
 
         public void ReadData()
         {
             var lines = File.ReadAllLines("guitars.txt");
-            var guitars = new List<Guitar>();
 
             foreach (var line in lines)
             {
-                item.Add(MakeGuitar(line));
+                items.Add(MakeGuitar(line));
             }
         }
         private Guitar MakeGuitar(string line)
@@ -24,26 +22,39 @@ namespace GuitarShopV2
             var parts = line.Split(' ');
             return new Guitar(parts[0], parts[1], parts[2], parts[3], parts[4]);
         }
-        public void Add()
+        public void Add(string propetry)
         {
-            Console.Write("Enter guitar spec (ID Price Model Builder Type):");
-            var line = Console.ReadLine();
-            item.Add(MakeGuitar(line));
-            File.AppendAllText("guitars.txt", Environment.NewLine + line);
+            items.Add(MakeGuitar(propetry));
+            File.AppendAllText("guitars.txt", Environment.NewLine + propetry);
         }
 
-        public void Search()
+        public IEnumerable<Instrument> Search(string term)
         {
-            Console.WriteLine("Enter search term:");
+            return items.FindAll(x => x.Contains(term));
+        }
 
-            var term = Console.ReadLine();
+        public bool Remove(string term)
+        {
+            var instrumentIndex = items.FindIndex(x => x.Contains(term));
 
-            foreach (var guitar in item)
+            if (instrumentIndex != -1)
             {
-                if (guitar.Contains(term))
-                    Console.WriteLine("Mathc found: {0}", guitar.ID);
-            }
-        }
+                string[] lines = File.ReadAllLines("guitars.txt");
 
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (i != instrumentIndex)
+                    {
+                        File.AppendAllText("guitars.txt", Environment.NewLine + lines[i]);
+                    }
+                }
+
+                items.RemoveAt(instrumentIndex);
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }

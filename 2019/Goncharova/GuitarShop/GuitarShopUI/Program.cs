@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using GuitarShopLogic;
+using System;
+using System.Collections.Generic;
 
 namespace GuitarShopUI
 {
@@ -9,9 +10,9 @@ namespace GuitarShopUI
     // 3. Guitar constructor has huge param list
     // 4. SRP heavily violated
     // 5. 
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             DataBase guitars = new DataBase();
 
@@ -65,5 +66,5 @@ namespace GuitarShopUI
         }
     }
 
-    
+
 }

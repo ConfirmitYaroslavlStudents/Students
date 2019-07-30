@@ -6,15 +6,16 @@ namespace GuitarShopLogic
 {
     public class DataBase
     {
-        private List<Guitar> Guitars = new List<Guitar>();
+        private List<Product> items = new List<Product>();
 
         public DataBase()
         {
             var lines = File.ReadAllLines("guitars.txt");
+            var creator = new GuitarCreator();
 
             foreach (var line in lines)
             {
-                Guitars.Add(new Guitar(line));
+                items.Add(creator.CreateProduct(line));
             }
 
         }
@@ -22,18 +23,20 @@ namespace GuitarShopLogic
         public void Add(string line)
         {
             File.AppendAllText("guitars.txt", Environment.NewLine + line);
-            Guitars.Add(new Guitar(line));
+
+            var creator = new GuitarCreator();
+            items.Add(creator.CreateProduct(line));
         }
 
         public List<string> Search(string term)
         {
             List<string> output = new List<string>();
 
-            foreach (var guitar in Guitars)
+            foreach (var item in items)
             {
-                if (guitar.Contains(term))
+                if (item.ContainsTerm(term))
                 {
-                    output.Add(guitar.ID);
+                    output.Add(item.ID);
                 }
             }
 

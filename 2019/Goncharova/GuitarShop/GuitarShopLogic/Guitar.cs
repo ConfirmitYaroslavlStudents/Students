@@ -1,25 +1,19 @@
 ﻿namespace GuitarShopLogic
 {
-    internal class Guitar : DataBaseItem
+    internal class Guitar : Product
     {
-        public Guitar(string line) : base(line)
+        public Guitar(string id, string price, string model, string builder, string type) : base(id, price)
         {
-            var parts = line.Split(' ');
-
-            ID = parts[0];
-            Price = parts[1];
-            Model = parts[2];
-            Builder = parts[3];
-            Type = parts[4];
+            Model = model;
+            Builder = builder;
+            Type = type;
         }
 
-        public string ID { get; set; }
-        public string Price { get; set; }
         public string Model { get; set; }
         public string Builder { get; set; }
         public string Type { get; set; }
 
-        internal override bool Contains(string term)
+        internal override bool ContainsTerm(string term)
         {
             return Builder.Contains(term) || Model.Contains(term) || Type.Contains(term);
         }

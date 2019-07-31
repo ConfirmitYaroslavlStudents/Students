@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SyncTool.Wrappers
 {
-    public class FileInfoWrapper : IFileSystemElement
+    public class FileInfoWrapper : IFileSystemElementWrapper
     {
         public FileInfo File { get; }
 
@@ -12,10 +12,10 @@ namespace SyncTool.Wrappers
             File = file;
         }
 
-        public int CompareTo(IFileSystemElement obj)
+        public int CompareTo(IFileSystemElementWrapper obj)
         {
             if (obj is null)
-                return 1;
+                return -1;
             if (!(obj is FileInfoWrapper))
                 throw new ArgumentException();
 
@@ -25,30 +25,44 @@ namespace SyncTool.Wrappers
             {
                 using (FileStream fsOther = other.File.OpenRead())
                 {
-                    if (!CompareFiles(fs, fsOther))
-                        return -1;
-
-                    if (fs.CanRead && !fsOther.CanRead)
-                        return -1;
-                    if (!fs.CanRead && fsOther.CanRead)
-                        return 1;
-                    return 0;
+                    return CompareFiles(fs, fsOther);
                 }
             }
         }
 
-        private static bool CompareFiles(FileStream fs, FileStream fsOther)
+        public override int GetHashCode()
         {
-            while (fs.CanRead && fsOther.CanRead)
+            return File.FullName.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+            if (!(obj is FileInfoWrapper))
+                return false;
+
+            var other = (FileInfoWrapper) obj;
+            return File.FullName == other.File.FullName;
+        }
+
+        private static int CompareFiles(FileStream fs, FileStream fsOther)
+        {
+            while (true)
             {
                 int a = fs.ReadByte();
                 int b = fsOther.ReadByte();
 
-                if (a != b)
-                    return false;
-            }
+                if (a == -1 && b != -1)
+                    return 1;
+                if (a != -1 && b == -1)
+                    return -1;
+                if (a == -1 && b == -1)
+                    return 0;
 
-            return true;
+                if (a != b)
+                    return 1;
+            }
         }
 
         public void Delete()

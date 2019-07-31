@@ -45,9 +45,12 @@
   <ItemGroup>
     <Compile Include="Conflict.cs" />
     <Compile Include="ConflictSeeker.cs" />
+    <Compile Include="DirectoryInfoExtension.cs" />
+    <Compile Include="ConflictsCollector.cs" />
+    <Compile Include="Resolver.cs" />
     <Compile Include="Wrappers\DirectoryInfoWrapper.cs" />
     <Compile Include="Wrappers\FileInfoWrapper.cs" />
-    <Compile Include="Wrappers\IFileSystemElement.cs" />
+    <Compile Include="Wrappers\IFileSystemElementWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

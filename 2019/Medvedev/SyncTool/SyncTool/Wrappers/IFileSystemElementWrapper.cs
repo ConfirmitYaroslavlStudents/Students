@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SyncTool.Wrappers
 {
-    public interface IFileSystemElement : IComparable<IFileSystemElement>
+    public interface IFileSystemElementWrapper : IComparable<IFileSystemElementWrapper>
     {
         void Delete();
         void MoveTo(string destination);

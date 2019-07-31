@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SyncTool.Wrappers;
@@ -18,20 +19,26 @@ namespace SyncTool
 
         public List<Conflict> GetConflicts()
         {
-            var leftJoin = (
-                from x in MasterDirectory.EnumerateFiles()
-                join y in SlaveDirectory.EnumerateFiles() on x.Name equals y.Name into temp
+            var left = (
+                from x in MasterDirectory.GetContainment()
+                join y in SlaveDirectory.GetContainment()
+                    on new {Name = x.Name(), Type = x.GetType()} equals new {Name = y.Name(), Type = y.GetType()} into
+                    temp
                 from z in temp.DefaultIfEmpty()
-                select new Conflict(new FileInfoWrapper(x), z == null ? null : new FileInfoWrapper(z))).ToList();
+                where x.CompareTo(z) != 0
+                select new Conflict(x, z)).ToList();
 
-            var rightJoin = (
-                from x in SlaveDirectory.EnumerateFiles()
-                join y in MasterDirectory.EnumerateFiles() on x.Name equals y.Name into temp
+            var right = (
+                from x in SlaveDirectory.GetContainment()
+                join y in MasterDirectory.GetContainment()
+                    on new { Name = x.Name(), Type = x.GetType() } equals new { Name = y.Name(), Type = y.GetType() } into
+                    temp
                 from z in temp.DefaultIfEmpty()
-                select new Conflict(z == null ? null : new FileInfoWrapper(z), new FileInfoWrapper(x))).ToList();
+                where x.CompareTo(z) != 0
+                select new Conflict(z, x)
+                ).ToList();
 
-
-            return leftJoin.Union(rightJoin).ToList();
+            return left.Union(right).ToHashSet().ToList();
         }
     }
 }

@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncTool", "SyncTool\SyncTool.csproj", "{A0536CDE-EB8D-4B19-8448-63892B934C48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncToolTests", "SyncToolTests\SyncToolTests.csproj", "{CC385B71-1753-43EC-BFD3-8B777ABA8001}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2FB19C60-CED3-4BC3-A861-A39AC11D7ABA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{A0536CDE-EB8D-4B19-8448-63892B934C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0536CDE-EB8D-4B19-8448-63892B934C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0536CDE-EB8D-4B19-8448-63892B934C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CC385B71-1753-43EC-BFD3-8B777ABA8001} = {2FB19C60-CED3-4BC3-A861-A39AC11D7ABA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B951DA41-FA6D-4597-BD5B-B4A7B12F41EA}

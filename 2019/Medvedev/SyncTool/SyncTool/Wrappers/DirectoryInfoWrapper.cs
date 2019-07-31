@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SyncTool.Wrappers
 {
-    public class DirectoryInfoWrapper : IFileSystemElement
+    public class DirectoryInfoWrapper : IFileSystemElementWrapper
     {
         private DirectoryInfo CurrentDirectory { get; }
 
@@ -12,7 +14,7 @@ namespace SyncTool.Wrappers
             CurrentDirectory = currentDirectory;
         }
 
-        public int CompareTo(IFileSystemElement obj)
+        public int CompareTo(IFileSystemElementWrapper obj)
         {
             if (obj is null)
                 return 1;
@@ -22,6 +24,11 @@ namespace SyncTool.Wrappers
             var other = (DirectoryInfoWrapper) obj;
 
             return CurrentDirectory.LastWriteTime.CompareTo(other.CurrentDirectory.LastWriteTime);
+        }
+
+        public override int GetHashCode()
+        {
+            return CurrentDirectory.FullName.GetHashCode();
         }
 
         public void Delete()
@@ -50,6 +57,18 @@ namespace SyncTool.Wrappers
         public string Name()
         {
             return CurrentDirectory.Name;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+            if (!(obj is DirectoryInfoWrapper))
+                return false;
+
+            var other = (DirectoryInfoWrapper)obj;
+            return CurrentDirectory.FullName == other.CurrentDirectory.FullName;
         }
     }
 }

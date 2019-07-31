@@ -1,28 +1,56 @@
-﻿using System.IO;
-using SyncTool.Wrappers;
+﻿using SyncTool.Wrappers;
 
 namespace SyncTool
 {
     public class Conflict
     {
-        public IFileSystemElement Source { get; }
-        public IFileSystemElement Destination { get; }
+        public IFileSystemElementWrapper Source { get; }
+        public IFileSystemElementWrapper Destination { get; }
 
-        public Conflict(IFileSystemElement first, IFileSystemElement second)
+        public Conflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
         {
-            var comparision = first.CompareTo(second);
-
-            if (comparision < 0)
+            if (first is null)
             {
-                Source = first;
+                Source = null;
                 Destination = second;
             }
-
-            if (comparision > 0)
+            else
             {
-                Source = second;
-                Destination = first;
+                var comparision = first.CompareTo(second);
+
+                if (comparision < 0)
+                {
+                    Source = first;
+                    Destination = second;
+                }
+
+                if (comparision > 0)
+                {
+                    Source = second;
+                    Destination = first;
+                }
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+            if (!(obj is Conflict))
+                return false;
+
+            var other = (Conflict) obj;
+
+            return Source.Equals(other.Source) && Destination.Equals(other.Destination);
+        }
+
+        public override int GetHashCode()
+        {
+            if (Source is null)
+                return Destination.GetHashCode();
+            if (Destination is null)
+                return Source.GetHashCode();
+            return Source.GetHashCode() ^ Destination.GetHashCode();
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 
 namespace SyncTool
 {
@@ -9,12 +6,18 @@ namespace SyncTool
     {
         static void Main(string[] args)
         {
-            DirectoryInfo dir = new DirectoryInfo(@"D:\dir2");
+            var master = new DirectoryInfo(args[0]);
+            var slave = new DirectoryInfo(args[1]);
 
-            foreach (var d in dir.EnumerateDirectories())
-            {
-                Console.WriteLine(d.Name);
-            }
+            var collector = new ConflictsCollector(master, slave);
+
+            var resolverOption = ResolverOptions.None;
+            if (args.Length == 3 && args[2] == "--nodelete")
+                resolverOption = ResolverOptions.NoDelete;
+
+            var resolver = new Resolver(master, slave, resolverOption);
+
+            resolver.ResolveConflicts(collector.GetConflicts());
         }
     }
 }

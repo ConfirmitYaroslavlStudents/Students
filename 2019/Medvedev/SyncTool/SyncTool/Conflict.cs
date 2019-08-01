@@ -4,10 +4,10 @@ namespace SyncTool
 {
     public class Conflict
     {
-        public IFileSystemElementWrapper Source { get; }
-        public IFileSystemElementWrapper Destination { get; }
+        public IFileSystemElementInfoWrapper Source { get; }
+        public IFileSystemElementInfoWrapper Destination { get; }
 
-        public Conflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
+        public Conflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second)
         {
             if (first is null)
             {

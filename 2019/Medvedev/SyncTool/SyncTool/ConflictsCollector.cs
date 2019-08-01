@@ -22,11 +22,10 @@ namespace SyncTool
 
         private List<Conflict> DFS(DirectoryInfo master, DirectoryInfo slave)
         {
-            var children = (
+            var children =
                 from x in master.EnumerateDirectories()
                 join y in slave.EnumerateDirectories() on x.Name equals y.Name
-                select new {Master = x, Slave = y}
-                );
+                select new {Master = x, Slave = y};
 
             var seeker = new ConflictSeeker(master, slave);
             var conflicts = seeker.GetConflicts();

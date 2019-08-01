@@ -48,9 +48,10 @@
     <Compile Include="DirectoryInfoExtension.cs" />
     <Compile Include="ConflictsCollector.cs" />
     <Compile Include="Resolver.cs" />
-    <Compile Include="Wrappers\DirectoryInfoWrapper.cs" />
-    <Compile Include="Wrappers\FileInfoWrapper.cs" />
-    <Compile Include="Wrappers\IFileSystemElementWrapper.cs" />
+    <Compile Include="ResolverOptions.cs" />
+    <Compile Include="Wrappers\DirectoryInfoInfoWrapper.cs" />
+    <Compile Include="Wrappers\FileInfoInfoWrapper.cs" />
+    <Compile Include="Wrappers\IFileSystemElementInfoWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

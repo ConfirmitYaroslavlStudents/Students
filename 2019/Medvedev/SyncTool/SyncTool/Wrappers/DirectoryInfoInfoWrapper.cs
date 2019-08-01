@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace SyncTool.Wrappers
 {
-    public class DirectoryInfoWrapper : IFileSystemElementWrapper
+    public class DirectoryInfoInfoWrapper : IFileSystemElementInfoWrapper
     {
         private DirectoryInfo CurrentDirectory { get; }
 
-        public DirectoryInfoWrapper(DirectoryInfo currentDirectory)
+        public DirectoryInfoInfoWrapper(DirectoryInfo currentDirectory)
         {
             CurrentDirectory = currentDirectory;
         }
 
-        public int CompareTo(IFileSystemElementWrapper obj)
+        public int CompareTo(IFileSystemElementInfoWrapper obj)
         {
             if (obj is null)
                 return -1;
-            if (!(obj is DirectoryInfoWrapper))
+            if (!(obj is DirectoryInfoInfoWrapper))
                 throw new ArgumentException();
 
-            var other = (DirectoryInfoWrapper) obj;
+            var other = (DirectoryInfoInfoWrapper) obj;
 
-            return String.Compare(CurrentDirectory.Name, other.CurrentDirectory.Name, StringComparison.Ordinal);
+            return string.Compare(CurrentDirectory.Name, other.CurrentDirectory.Name, StringComparison.Ordinal);
         }
 
         public override int GetHashCode()
@@ -36,22 +34,17 @@ namespace SyncTool.Wrappers
             CurrentDirectory.Delete(true);
         }
 
-        public void MoveTo(string destination)
-        {
-            CurrentDirectory.MoveTo(destination);
-        }
-
         public void CopyTo(string destination)
         {
-            string path = Path.Combine(destination, CurrentDirectory.Name);
-            if (Directory.Exists(destination + CurrentDirectory.Name))
+            var path = Path.Combine(destination, CurrentDirectory.Name);
+            if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
             foreach (var file in CurrentDirectory.EnumerateFiles())
-                file.CopyTo(path);
+                file.CopyTo(Path.Combine(path, file.Name));
 
             foreach (var dir in CurrentDirectory.EnumerateDirectories())
-                new DirectoryInfoWrapper(dir).CopyTo(path);
+                new DirectoryInfoInfoWrapper(dir).CopyTo(path);
         }
 
         public string Name()
@@ -59,15 +52,19 @@ namespace SyncTool.Wrappers
             return CurrentDirectory.Name;
         }
 
+        public string GetPath()
+        {
+            return CurrentDirectory.Parent.FullName;
+        }
 
         public override bool Equals(object obj)
         {
             if (obj is null)
                 return false;
-            if (!(obj is DirectoryInfoWrapper))
+            if (!(obj is DirectoryInfoInfoWrapper))
                 return false;
 
-            var other = (DirectoryInfoWrapper)obj;
+            var other = (DirectoryInfoInfoWrapper) obj;
             return CurrentDirectory.FullName == other.CurrentDirectory.FullName;
         }
     }

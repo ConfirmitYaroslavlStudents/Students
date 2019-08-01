@@ -7,13 +7,13 @@ namespace SyncTool
 {
     public static class DirectoryInfoExtension
     {
-        public static HashSet<IFileSystemElementWrapper> GetContainment(this DirectoryInfo dir)
+        public static HashSet<IFileSystemElementInfoWrapper> GetContainment(this DirectoryInfo dir)
         {
             return (
                 from x in dir.EnumerateFiles()
-                select (IFileSystemElementWrapper)new FileInfoWrapper(x)).Union(
+                select (IFileSystemElementInfoWrapper) new FileInfoInfoWrapper(x)).Union(
                 from y in dir.EnumerateDirectories()
-                select (IFileSystemElementWrapper)new DirectoryInfoWrapper(y)
+                select (IFileSystemElementInfoWrapper) new DirectoryInfoInfoWrapper(y)
             ).ToHashSet();
         }
     }

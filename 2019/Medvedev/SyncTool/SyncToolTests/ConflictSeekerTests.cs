@@ -17,11 +17,11 @@ namespace SyncTool.Tests
 
             var seeker = new ConflictSeeker(master, slave);
 
-            Assert.True(seeker.GetConflicts().Count == 0);
+            Assert.Empty(seeker.GetConflicts());
         }
 
         [Fact]
-        public void GetConflicts_ConflictWithSlave_ReturnsNonEmptyList()
+        public void GetConflicts_SlaveFileConflictsWithMaster_ReturnsNonEmptyList()
         {
             var master = Directory.CreateDirectory("master");
             var slave = Directory.CreateDirectory("slave");
@@ -33,11 +33,11 @@ namespace SyncTool.Tests
 
             var seeker = new ConflictSeeker(master, slave);
 
-            Assert.True(seeker.GetConflicts().Count > 0);
+            Assert.NotEmpty(seeker.GetConflicts());
         }
 
         [Fact]
-        public void GetConflicts_ConflictSlaveWithMaster_ExactlyOne_Slave_Master_Conflict()
+        public void GetConflicts_SlaveFileConflictsWithMaster_ExactlyOne_Slave_Master_Conflict()
         {
             var master = Directory.CreateDirectory("master");
             var slave = Directory.CreateDirectory("slave");
@@ -52,7 +52,7 @@ namespace SyncTool.Tests
         }
 
         [Fact]
-        public void GetConflicts_ConflictSlaveWithMaster_Returns_Slave_Master_Conflict()
+        public void GetConflicts_SlaveFileConflictsWithMaster_Returns_Slave_Master_Conflict()
         {
             var master = Directory.CreateDirectory("master");
             var slave = Directory.CreateDirectory("slave");
@@ -73,7 +73,7 @@ namespace SyncTool.Tests
         }
 
         [Fact]
-        public void GetConflicts_ConflictMasterWithSlave_ExactlyOne_Master_Slave_Conflict()
+        public void GetConflicts_MasterFileConflictsWithSlave_ExactlyOne_Master_Slave_Conflict()
         {
             var master = Directory.CreateDirectory("master");
             var slave = Directory.CreateDirectory("slave");
@@ -89,7 +89,7 @@ namespace SyncTool.Tests
         }
 
         [Fact]
-        public void GetConflicts_ConflictMasterWithSlave_Returns_Master_Slave_Conflict()
+        public void GetConflicts_MasterFileConflictsWithSlave_Returns_Master_Slave_Conflict()
         {
             var master = Directory.CreateDirectory("master");
             var slave = Directory.CreateDirectory("slave");
@@ -151,6 +151,152 @@ namespace SyncTool.Tests
 
             Assert.NotNull(destination);
             Assert.Null(source);
+        }
+
+        [Fact]
+        public void GetConflicts_MasterSubDirectoriesNoConflictsWithSlave_ReturnsEmptyList()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"master/a");
+            Directory.CreateDirectory(@"master/b");
+
+            Directory.CreateDirectory(@"slave/a");
+            Directory.CreateDirectory(@"slave/b");
+
+            var seeker = new ConflictSeeker(master, slave);
+
+            Assert.Empty(seeker.GetConflicts());
+        }
+
+        [Fact]
+        public void GetConflicts_MasterSubDirectoriesConflictsWithSlave_ReturnsNonEmptyList()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"master/a");
+            Directory.CreateDirectory(@"master/b");
+
+            var seeker = new ConflictSeeker(master, slave);
+
+            Assert.NotEmpty(seeker.GetConflicts());
+        }
+
+        [Fact]
+        public void GetConflicts_SlaveSubDirectoriesConflictsWithMaster_ReturnsNonEmptyList()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"slave/a");
+            Directory.CreateDirectory(@"slave/b");
+
+            var seeker = new ConflictSeeker(master, slave);
+
+            Assert.NotEmpty(seeker.GetConflicts());
+        }
+
+        [Fact]
+        public void GetConflicts_MasterSubDirectoriesConflictsWithSlave_OneConflict_ReturnsOneConflict()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"master/a");
+            Directory.CreateDirectory(@"master/b");
+
+            Directory.CreateDirectory(@"slave/a");
+
+            var seeker = new ConflictSeeker(master, slave);
+            var conflicts = seeker.GetConflicts();
+            Assert.Single(conflicts);
+        }
+
+        [Fact]
+        public void GetConflicts_SlaveSubDirectoriesConflictsWithMaster_OneConflict_ReturnsOneConflict()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"slave/a");
+            Directory.CreateDirectory(@"slave/b");
+
+            Directory.CreateDirectory(@"master/a");
+
+            var seeker = new ConflictSeeker(master, slave);
+            var conflicts = seeker.GetConflicts();
+            Assert.Single(conflicts);
+        }
+
+        [Fact]
+        public void GetConflicts_MasterSubDirectoriesConflictsWithSlave_OneConflict_Returns_NotNull_Null()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"master/a");
+            Directory.CreateDirectory(@"master/b");
+
+            Directory.CreateDirectory(@"slave/a");
+
+            var seeker = new ConflictSeeker(master, slave);
+            var conflicts = seeker.GetConflicts();
+            Assert.NotNull(conflicts[0].Source);
+            Assert.Null(conflicts[0].Destination);
+        }
+
+        [Fact]
+        public void GetConflicts_SlaveSubDirectoriesConflictsWithMaster_OneConflict_Returns_Null_NotNull()
+        {
+            if (Directory.Exists("master"))
+                Directory.Delete("master", true);
+            if (Directory.Exists("slave"))
+                Directory.Delete("slave", true);
+
+            var master = Directory.CreateDirectory("master");
+            var slave = Directory.CreateDirectory("slave");
+
+            Directory.CreateDirectory(@"slave/a");
+            Directory.CreateDirectory(@"slave/b");
+
+            Directory.CreateDirectory(@"master/a");
+
+            var seeker = new ConflictSeeker(master, slave);
+            var conflicts = seeker.GetConflicts();
+            Assert.Null(conflicts[0].Source);
+            Assert.NotNull(conflicts[0].Destination);
         }
     }
 }

@@ -17,13 +17,13 @@ namespace SyncTool.Wrappers
         public int CompareTo(IFileSystemElementWrapper obj)
         {
             if (obj is null)
-                return 1;
+                return -1;
             if (!(obj is DirectoryInfoWrapper))
                 throw new ArgumentException();
 
             var other = (DirectoryInfoWrapper) obj;
 
-            return CurrentDirectory.LastWriteTime.CompareTo(other.CurrentDirectory.LastWriteTime);
+            return String.Compare(CurrentDirectory.Name, other.CurrentDirectory.Name, StringComparison.Ordinal);
         }
 
         public override int GetHashCode()

@@ -13,6 +13,10 @@ namespace FolderSynchronizer
         public Folder(string address)
         {
             Path = address;
+            shortFilesNames = new List<string>();
+            FilesPaths = new List<string>();
+            internalFolders = new List<Folder>();
+            internalFoldersPaths = new List<string>();
         }
 
         public Folder() { }

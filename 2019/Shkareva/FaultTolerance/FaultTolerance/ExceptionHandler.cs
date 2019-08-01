@@ -5,6 +5,7 @@ namespace FaultTolerance
 {
     public static class ExceptionHandler
     {
+        private static Dictionary<Type, Action> otherWaysDictionary;
         public static void Retry<TException>(int effortCount, Action action) where TException: Exception
         {
             try
@@ -22,17 +23,27 @@ namespace FaultTolerance
             }
         }
         
-        public static void Fallback<TException>(Action action, Action secondAction) where TException : Exception
+        public static void Fallback(Action action)
         {
             try
             {
                 action.Invoke();
             }
-            catch (TException)
+            catch (Exception e)
             {
-                secondAction.Invoke();
+                otherWaysDictionary[e.GetType()].Invoke();
             }
             
+        }
+
+        public static void AddOtherWay<TException>(Action action) where TException: Exception
+        {
+            otherWaysDictionary[typeof(TException)] = action;
+        }
+
+        public static void DeleteOtherWay<TException>() where TException : Exception
+        {
+            otherWaysDictionary.Remove(typeof(TException));
         }
 
     }

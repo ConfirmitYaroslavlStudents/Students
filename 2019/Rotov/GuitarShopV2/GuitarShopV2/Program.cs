@@ -7,10 +7,6 @@ using System.IO;
 
 namespace ConsoleApp6
 {
-    // 1. User reflecion for search \ Use dictionary
-    // 2. Big nesting
-    // 3. Guitar constructor has huge param list
-    // 4. SRP heavily violated
     class Program
     {
         static void Main()

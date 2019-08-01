@@ -91,41 +91,10 @@ namespace SyncLib
                 {
                     if (!delete)
                     {
-                        DeleteAllIn(source + path);
+                        (new FolderWrapper(source + path)).Delete();
                         continue;
                     }
                     Directory.CreateDirectory(dir);
-                }
-
-            }
-        }
-
-        private void DeleteAllIn(string path)
-        {
-            Stack<string> dirStack = new Stack<string>();
-
-            dirStack.Push(path);
-
-            while (dirStack.Count != 0)
-            {
-                string current = dirStack.Peek();
-
-                string[] dirs = Directory.GetDirectories(current);
-
-                foreach (var dir in dirs)
-                {
-                    dirStack.Push(dir);
-                }
-
-                var files = Directory.GetFiles(current);
-
-                foreach (var file in files)
-                    File.Delete(file);
-
-                if (dirs.Length == 0)
-                {
-                    dirStack.Pop();
-                    Directory.Delete(current);
                 }
             }
         }
@@ -133,9 +102,9 @@ namespace SyncLib
         private void UpdateFile(string path)
         {
             var masterFileWrapper = new FileWrapper(masterDirectory + path);
-            var slaveFileWrapper = new FileWrapper( slaveDirectory + path);
+            var slaveFileWrapper = new FileWrapper(slaveDirectory + path);
 
-            if (masterFileWrapper.Equals(slaveFileWrapper))
+            if (!masterFileWrapper.Equals(slaveFileWrapper))
             {
                 FileWrapper.Replace(masterFileWrapper, slaveFileWrapper);
             }

@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileInfoEqualityComparer.cs" />
+    <Compile Include="FileHandler.cs" />
+    <Compile Include="FolderHandler.cs" />
+    <Compile Include="WrapperForFile.cs" />
     <Compile Include="Merge.cs" />
+    <Compile Include="WrapperForFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

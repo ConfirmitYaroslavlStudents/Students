@@ -11,7 +11,9 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            var worker = new Merge(args[0], args[1]);
+            var a = @"";
+            var b = @"";
+            var worker = new Merge(a, b);
             worker.Working();
         }
     }

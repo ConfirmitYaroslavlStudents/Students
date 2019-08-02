@@ -1,27 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
-namespace SyncTool.Wrappers
+namespace Sync.Wrappers
 {
     public class DirectoryInfoInfoWrapper : IFileSystemElementInfoWrapper
     {
-        private DirectoryInfo CurrentDirectory { get; }
+        public DirectoryInfo CurrentDirectory { get; }
 
         public DirectoryInfoInfoWrapper(DirectoryInfo currentDirectory)
         {
             CurrentDirectory = currentDirectory;
-        }
-
-        public int CompareTo(IFileSystemElementInfoWrapper obj)
-        {
-            if (obj is null)
-                return -1;
-            if (!(obj is DirectoryInfoInfoWrapper))
-                throw new ArgumentException();
-
-            var other = (DirectoryInfoInfoWrapper) obj;
-
-            return string.Compare(CurrentDirectory.Name, other.CurrentDirectory.Name, StringComparison.Ordinal);
         }
 
         public override int GetHashCode()
@@ -47,15 +34,12 @@ namespace SyncTool.Wrappers
                 new DirectoryInfoInfoWrapper(dir).CopyTo(path);
         }
 
-        public string Name()
-        {
-            return CurrentDirectory.Name;
-        }
+        public string Name => CurrentDirectory.Name;
 
-        public string GetPath()
-        {
-            return CurrentDirectory.Parent.FullName;
-        }
+        public string ParentDirectory => CurrentDirectory.Parent.FullName;
+
+        public string ElementType => Type;
+        public static string Type => "Directory";
 
         public override bool Equals(object obj)
         {

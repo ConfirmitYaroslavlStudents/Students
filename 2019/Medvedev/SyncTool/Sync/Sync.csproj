@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A0536CDE-EB8D-4B19-8448-63892B934C48}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>SyncTool</RootNamespace>
-    <AssemblyName>SyncTool</AssemblyName>
+    <ProjectGuid>{14E3945D-99AF-434E-866F-7B272F47CF46}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sync</RootNamespace>
+    <AssemblyName>Sync</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,17 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Comparers\DefaultDirectoryComparer.cs" />
+    <Compile Include="Comparers\DefaultFileComparer.cs" />
+    <Compile Include="Comparers\DefaultFileSystemElementsComparer.cs" />
+    <Compile Include="Conflict.cs" />
+    <Compile Include="ConflictDetectionPolicies\DefaultConflictDetectionPolicy.cs" />
+    <Compile Include="ConflictDetectionPolicies\IConflictDetectionPolicy.cs" />
+    <Compile Include="ConflictsCollector.cs" />
+    <Compile Include="ConflictSeeker.cs" />
+    <Compile Include="DirectoryInfoExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sync\Sync.csproj">
-      <Project>{14e3945d-99af-434e-866f-7b272f47cf46}</Project>
-      <Name>Sync</Name>
-    </ProjectReference>
+    <Compile Include="Resolver.cs" />
+    <Compile Include="ResolverOptions.cs" />
+    <Compile Include="Wrappers\DirectoryInfoInfoWrapper.cs" />
+    <Compile Include="Wrappers\FileInfoInfoWrapper.cs" />
+    <Compile Include="Wrappers\IFileSystemElementInfoWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,35 +1,16 @@
-﻿using SyncTool.Wrappers;
+﻿using Sync.Wrappers;
 
-namespace SyncTool
+namespace Sync
 {
     public class Conflict
     {
         public IFileSystemElementInfoWrapper Source { get; }
         public IFileSystemElementInfoWrapper Destination { get; }
 
-        public Conflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second)
+        public Conflict(IFileSystemElementInfoWrapper source, IFileSystemElementInfoWrapper destination)
         {
-            if (first is null)
-            {
-                Source = null;
-                Destination = second;
-            }
-            else
-            {
-                var comparision = first.CompareTo(second);
-
-                if (comparision < 0)
-                {
-                    Source = first;
-                    Destination = second;
-                }
-
-                if (comparision > 0)
-                {
-                    Source = second;
-                    Destination = first;
-                }
-            }
+            Source = source;
+            Destination = destination;
         }
 
         public override bool Equals(object obj)

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SyncTool.Wrappers;
+using Sync.Wrappers;
 
-namespace SyncTool
+namespace Sync
 {
     public static class DirectoryInfoExtension
     {

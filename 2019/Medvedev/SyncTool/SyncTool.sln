@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncToolTests", "SyncToolTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2FB19C60-CED3-4BC3-A861-A39AC11D7ABA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sync", "Sync\Sync.csproj", "{14E3945D-99AF-434E-866F-7B272F47CF46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC385B71-1753-43EC-BFD3-8B777ABA8001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E3945D-99AF-434E-866F-7B272F47CF46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E3945D-99AF-434E-866F-7B272F47CF46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E3945D-99AF-434E-866F-7B272F47CF46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E3945D-99AF-434E-866F-7B272F47CF46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

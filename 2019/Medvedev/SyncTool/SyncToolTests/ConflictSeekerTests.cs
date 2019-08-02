@@ -1,8 +1,9 @@
 ﻿using System.IO;
-using SyncTool.Wrappers;
+using Sync.Comparers;
+using Sync.Wrappers;
 using Xunit;
 
-namespace SyncTool.Tests
+namespace Sync.Tests
 {
     public class ConflictSeekerTests
     {
@@ -17,9 +18,10 @@ namespace SyncTool.Tests
             File.Create(@"master\a.txt").Close();
             File.Create(@"slave\a.txt").Close();
 
-            var seeker = new ConflictSeeker(master, slave);
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
-            Assert.Empty(seeker.GetConflicts());
+            Assert.Empty(seeker.GetConflicts(master, slave));
         }
 
         [Fact]
@@ -35,9 +37,11 @@ namespace SyncTool.Tests
             file.WriteByte(1);
             file.Close();
 
-            var seeker = new ConflictSeeker(master, slave);
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
-            Assert.NotEmpty(seeker.GetConflicts());
+
+            Assert.NotEmpty(seeker.GetConflicts(master, slave));
         }
 
         [Fact]
@@ -53,8 +57,9 @@ namespace SyncTool.Tests
             file.WriteByte(1);
             file.Close();
 
-            var seeker = new ConflictSeeker(master, slave);
-            Assert.Single(seeker.GetConflicts());
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            Assert.Single(seeker.GetConflicts(master, slave));
         }
 
 
@@ -71,8 +76,9 @@ namespace SyncTool.Tests
             file.WriteByte(1);
             file.Close();
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflict = seeker.GetConflicts()[0];
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflict = seeker.GetConflicts(master, slave)[0];
 
             var source = (FileInfoInfoWrapper) conflict.Source;
             var destination = (FileInfoInfoWrapper) conflict.Destination;
@@ -94,8 +100,9 @@ namespace SyncTool.Tests
             file.WriteByte(1);
             file.Close();
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflicts = seeker.GetConflicts(master, slave);
             Assert.Single(conflicts);
         }
 
@@ -112,8 +119,9 @@ namespace SyncTool.Tests
             file.WriteByte(1);
             file.Close();
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflict = seeker.GetConflicts()[0];
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflict = seeker.GetConflicts(master, slave)[0];
 
             var source = (FileInfoInfoWrapper) conflict.Source;
             var destination = (FileInfoInfoWrapper) conflict.Destination;
@@ -135,8 +143,9 @@ namespace SyncTool.Tests
 
             File.Create(@"master\a.txt").Close();
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflicts = seeker.GetConflicts(master, slave);
             var conflict = conflicts[0];
 
             var source = (FileInfoInfoWrapper) conflict.Source;
@@ -159,8 +168,9 @@ namespace SyncTool.Tests
 
             File.Create(@"slave\a.txt").Close();
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflicts = seeker.GetConflicts(master, slave);
             var conflict = conflicts[0];
 
             var source = (FileInfoInfoWrapper) conflict.Source;
@@ -184,9 +194,10 @@ namespace SyncTool.Tests
             Directory.CreateDirectory(@"slave/a");
             Directory.CreateDirectory(@"slave/b");
 
-            var seeker = new ConflictSeeker(master, slave);
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
-            Assert.Empty(seeker.GetConflicts());
+            Assert.Empty(seeker.GetConflicts(master, slave));
         }
 
         [Fact]
@@ -200,9 +211,10 @@ namespace SyncTool.Tests
             Directory.CreateDirectory(@"master/a");
             Directory.CreateDirectory(@"master/b");
 
-            var seeker = new ConflictSeeker(master, slave);
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
-            Assert.NotEmpty(seeker.GetConflicts());
+            Assert.NotEmpty(seeker.GetConflicts(master, slave));
         }
 
         [Fact]
@@ -216,9 +228,10 @@ namespace SyncTool.Tests
             Directory.CreateDirectory(@"slave/a");
             Directory.CreateDirectory(@"slave/b");
 
-            var seeker = new ConflictSeeker(master, slave);
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
-            Assert.NotEmpty(seeker.GetConflicts());
+            Assert.NotEmpty(seeker.GetConflicts(master, slave));
         }
 
         [Fact]
@@ -234,8 +247,9 @@ namespace SyncTool.Tests
 
             Directory.CreateDirectory(@"slave/a");
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflicts = seeker.GetConflicts(master, slave);
             Assert.Single(conflicts);
         }
 
@@ -252,8 +266,9 @@ namespace SyncTool.Tests
 
             Directory.CreateDirectory(@"master/a");
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflicts = seeker.GetConflicts(master, slave);
             Assert.Single(conflicts);
         }
 
@@ -270,8 +285,10 @@ namespace SyncTool.Tests
 
             Directory.CreateDirectory(@"slave/a");
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+
+            var conflicts = seeker.GetConflicts(master, slave);
             Assert.NotNull(conflicts[0].Source);
             Assert.Null(conflicts[0].Destination);
         }
@@ -289,8 +306,9 @@ namespace SyncTool.Tests
 
             Directory.CreateDirectory(@"master/a");
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var seeker =
+                new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var conflicts = seeker.GetConflicts(master, slave);
             Assert.Null(conflicts[0].Source);
             Assert.NotNull(conflicts[0].Destination);
         }

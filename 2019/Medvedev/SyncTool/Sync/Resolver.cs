@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace SyncTool
+namespace Sync
 {
     public class Resolver
     {
@@ -38,7 +38,7 @@ namespace SyncTool
         private void ResolveViaUpdate(Conflict conflict)
         {
             conflict.Destination.Delete();
-            conflict.Source.CopyTo(conflict.Destination.GetPath());
+            conflict.Source.CopyTo(conflict.Destination.ParentDirectory);
         }
 
         private bool ExistsCopyResolution(Conflict conflict)
@@ -48,7 +48,7 @@ namespace SyncTool
 
         private void ResolveViaCopy(Conflict conflict)
         {
-            var path = conflict.Source.GetPath().Replace(MasterDirectory.FullName, SlaveDirectory.FullName);
+            var path = conflict.Source.ParentDirectory.Replace(MasterDirectory.FullName, SlaveDirectory.FullName);
             conflict.Source.CopyTo(path);
         }
 

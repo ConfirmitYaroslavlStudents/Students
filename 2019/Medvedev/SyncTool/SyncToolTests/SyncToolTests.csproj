@@ -68,9 +68,9 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SyncTool\SyncTool.csproj">
-      <Project>{a0536cde-eb8d-4b19-8448-63892b934c48}</Project>
-      <Name>SyncTool</Name>
+    <ProjectReference Include="..\Sync\Sync.csproj">
+      <Project>{14e3945d-99af-434e-866f-7b272f47cf46}</Project>
+      <Name>Sync</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,8 @@
 ﻿using System.IO;
+using Sync.Comparers;
 using Xunit;
 
-namespace SyncTool.Tests
+namespace Sync.Tests
 {
     public class ConflictCollectorTests
     {
@@ -22,7 +23,7 @@ namespace SyncTool.Tests
             File.Create(@"slave\1").Close();
             File.Create(@"slave\a\2").Close();
 
-            var collector = new ConflictsCollector(master, slave);
+            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
             var conflicts = collector.GetConflicts();
 
@@ -45,7 +46,7 @@ namespace SyncTool.Tests
 
             File.Create(@"slave\1").Close();
 
-            var collector = new ConflictsCollector(master, slave);
+            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
             var conflicts = collector.GetConflicts();
 
@@ -68,7 +69,7 @@ namespace SyncTool.Tests
 
             File.Create(@"slave\1").Close();
 
-            var collector = new ConflictsCollector(master, slave);
+            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
             var conflicts = collector.GetConflicts();
 
@@ -91,7 +92,7 @@ namespace SyncTool.Tests
 
             File.Create(@"slave\1").Close();
 
-            var collector = new ConflictsCollector(master, slave);
+            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
             var conflicts = collector.GetConflicts();
 
@@ -115,7 +116,7 @@ namespace SyncTool.Tests
             File.Create(@"slave\a\2").Close();
             File.Create(@"slave\1").Close();
 
-            var collector = new ConflictsCollector(master, slave);
+            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
             var conflicts = collector.GetConflicts();
 

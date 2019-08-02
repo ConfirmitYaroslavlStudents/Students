@@ -2,17 +2,20 @@
 using System.IO;
 using System.Linq;
 
-namespace SyncTool
+namespace Sync
 {
     public class ConflictsCollector
     {
         public DirectoryInfo MasterDirectory { get; }
         public DirectoryInfo SlaveDirectory { get; }
 
-        public ConflictsCollector(DirectoryInfo master, DirectoryInfo slave)
+        private readonly ConflictSeeker _conflictSeeker;
+
+        public ConflictsCollector(DirectoryInfo master, DirectoryInfo slave, IConflictDetectionPolicy policy)
         {
             MasterDirectory = master;
             SlaveDirectory = slave;
+            _conflictSeeker = new ConflictSeeker(policy);
         }
 
         public List<Conflict> GetConflicts()
@@ -27,8 +30,7 @@ namespace SyncTool
                 join y in slave.EnumerateDirectories() on x.Name equals y.Name
                 select new {Master = x, Slave = y};
 
-            var seeker = new ConflictSeeker(master, slave);
-            var conflicts = seeker.GetConflicts();
+            var conflicts = _conflictSeeker.GetConflicts(master, slave);
 
             foreach (var child in children)
                 conflicts.AddRange(DFS(child.Master, child.Slave));

@@ -1,4 +1,4 @@
-﻿namespace SyncTool
+﻿namespace Sync
 {
     public enum ResolverOptions
     {

@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using Sync;
+using Sync.Comparers;
 
 namespace SyncTool
 {
@@ -9,7 +11,7 @@ namespace SyncTool
             var master = new DirectoryInfo(args[0]);
             var slave = new DirectoryInfo(args[1]);
 
-            var collector = new ConflictsCollector(master, slave);
+            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
             var resolverOption = ResolverOptions.None;
             if (args.Length == 3 && args[2] == "--nodelete")

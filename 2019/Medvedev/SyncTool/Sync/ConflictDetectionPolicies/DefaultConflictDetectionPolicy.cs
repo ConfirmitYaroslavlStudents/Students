@@ -6,14 +6,14 @@ namespace Sync
 {
     public class DefaultConflictDetectionPolicy : IConflictDetectionPolicy
     {
-        private IComparer<IFileSystemElementInfoWrapper> Comparer { get; }
+        private IComparer<IFileSystemElementWrapper> Comparer { get; }
 
-        public DefaultConflictDetectionPolicy(IComparer<IFileSystemElementInfoWrapper> comparer)
+        public DefaultConflictDetectionPolicy(IComparer<IFileSystemElementWrapper> comparer)
         {
             Comparer = comparer;
         }
 
-        public Conflict GetConflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second)
+        public Conflict GetConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
         {
             if (first == null || second == null)
                 return new Conflict(first, second);
@@ -30,7 +30,7 @@ namespace Sync
             return null;
         }
 
-        public bool MakesConflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second)
+        public bool MakesConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
         {
             if (first == null || second == null)
                 return true;

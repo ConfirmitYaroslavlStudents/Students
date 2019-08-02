@@ -53,9 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="ResolverOptions.cs" />
-    <Compile Include="Wrappers\DirectoryInfoWrapper.cs" />
-    <Compile Include="Wrappers\FileInfoInfoWrapper.cs" />
-    <Compile Include="Wrappers\IFileSystemElementInfoWrapper.cs" />
+    <Compile Include="Wrappers\DirectoryWrapper.cs" />
+    <Compile Include="Wrappers\FileWrapper.cs" />
+    <Compile Include="Wrappers\IFileSystemElementWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

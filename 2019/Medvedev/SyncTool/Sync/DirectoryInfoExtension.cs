@@ -7,13 +7,13 @@ namespace Sync
 {
     public static class DirectoryInfoExtension
     {
-        public static HashSet<IFileSystemElementInfoWrapper> GetContainment(this DirectoryInfo dir)
+        public static HashSet<IFileSystemElementWrapper> GetContainment(this DirectoryInfo dir)
         {
             return (
                 from x in dir.EnumerateFiles()
-                select (IFileSystemElementInfoWrapper) new FileInfoWrapper(x)).Union(
+                select (IFileSystemElementWrapper) new FileWrapper(x)).Union(
                 from y in dir.EnumerateDirectories()
-                select (IFileSystemElementInfoWrapper) new DirectoryInfoWrapper(y)
+                select (IFileSystemElementWrapper) new DirectoryWrapper(y)
             ).ToHashSet();
         }
     }

@@ -4,10 +4,10 @@ namespace Sync
 {
     public class Conflict
     {
-        public IFileSystemElementInfoWrapper Source { get; }
-        public IFileSystemElementInfoWrapper Destination { get; }
+        public IFileSystemElementWrapper Source { get; }
+        public IFileSystemElementWrapper Destination { get; }
 
-        public Conflict(IFileSystemElementInfoWrapper source, IFileSystemElementInfoWrapper destination)
+        public Conflict(IFileSystemElementWrapper source, IFileSystemElementWrapper destination)
         {
             Source = source;
             Destination = destination;

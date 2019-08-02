@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using Sync.Wrappers;
 
 namespace Sync
 {
@@ -13,12 +13,12 @@ namespace Sync
             ConflictDetectionPolicy = policy;
         }
 
-        public List<Conflict> GetConflicts(DirectoryInfo masterDirectory, DirectoryInfo slaveDirectory)
+        public List<Conflict> GetConflicts(DirectoryWrapper masterDirectory, DirectoryWrapper slaveDirectory)
         {
             var left = (
-                from x in masterDirectory.GetContainment()
-                join y in slaveDirectory.GetContainment()
-                    on new {x.Name, Attribute = x.ElementType} equals new {y.Name, Attribute = y.ElementType} into
+                from x in masterDirectory.EnumerateContainment()
+                join y in slaveDirectory.EnumerateContainment()
+                    on new {x.Name, Type = x.ElementType} equals new {y.Name, Type = y.ElementType} into
                     temp
                 from z in temp.DefaultIfEmpty()
                 where ConflictDetectionPolicy.MakesConflict(x, z)
@@ -26,8 +26,8 @@ namespace Sync
             ).ToList();
 
             var right = (
-                from x in slaveDirectory.GetContainment()
-                join y in masterDirectory.GetContainment()
+                from x in slaveDirectory.EnumerateContainment()
+                join y in masterDirectory.EnumerateContainment()
                     on new {x.Name, Attribute = x.ElementType} equals new {y.Name, Attribute = y.ElementType} into
                     temp
                 from z in temp.DefaultIfEmpty()

@@ -4,7 +4,7 @@ namespace Sync
 {
     public interface IConflictDetectionPolicy
     {
-        Conflict GetConflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second);
-        bool MakesConflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second);
+        Conflict GetConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second);
+        bool MakesConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second);
     }
 }

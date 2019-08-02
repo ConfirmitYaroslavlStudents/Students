@@ -4,9 +4,9 @@ using Sync.Wrappers;
 
 namespace Sync.Comparers
 {
-    public class DefaultDirectoryComparer : IComparer<DirectoryInfoInfoWrapper>
+    public class DefaultDirectoryComparer : IComparer<DirectoryInfoWrapper>
     {
-        public int Compare(DirectoryInfoInfoWrapper x, DirectoryInfoInfoWrapper y)
+        public int Compare(DirectoryInfoWrapper x, DirectoryInfoWrapper y)
         {
             if (y is null)
                 return -1;

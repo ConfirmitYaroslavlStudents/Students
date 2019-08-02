@@ -13,7 +13,7 @@ namespace Sync
                 from x in dir.EnumerateFiles()
                 select (IFileSystemElementInfoWrapper) new FileInfoInfoWrapper(x)).Union(
                 from y in dir.EnumerateDirectories()
-                select (IFileSystemElementInfoWrapper) new DirectoryInfoInfoWrapper(y)
+                select (IFileSystemElementInfoWrapper) new DirectoryInfoWrapper(y)
             ).ToHashSet();
         }
     }

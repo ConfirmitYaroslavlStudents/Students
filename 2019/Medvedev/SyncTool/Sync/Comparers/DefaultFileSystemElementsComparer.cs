@@ -7,7 +7,7 @@ namespace Sync.Comparers
     public class DefaultFileSystemElementsComparer : IComparer<IFileSystemElementInfoWrapper>
     {
         private readonly IComparer<FileInfoInfoWrapper> _fileComparer;
-        private readonly IComparer<DirectoryInfoInfoWrapper> _directoryComparer;
+        private readonly IComparer<DirectoryInfoWrapper> _directoryComparer;
 
         public DefaultFileSystemElementsComparer()
         {
@@ -22,7 +22,7 @@ namespace Sync.Comparers
 
             if (x is FileInfoInfoWrapper firstFile && y is FileInfoInfoWrapper secondFile)
                 return _fileComparer.Compare(firstFile, secondFile);
-            if (x is DirectoryInfoInfoWrapper firstDirectory && y is DirectoryInfoInfoWrapper secondDirectory)
+            if (x is DirectoryInfoWrapper firstDirectory && y is DirectoryInfoWrapper secondDirectory)
                 return _directoryComparer.Compare(firstDirectory, secondDirectory);
             return 0;
         }

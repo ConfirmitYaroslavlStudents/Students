@@ -2,11 +2,11 @@
 
 namespace Sync.Wrappers
 {
-    public class DirectoryInfoInfoWrapper : IFileSystemElementInfoWrapper
+    public class DirectoryInfoWrapper : IFileSystemElementInfoWrapper
     {
         public DirectoryInfo CurrentDirectory { get; }
 
-        public DirectoryInfoInfoWrapper(DirectoryInfo currentDirectory)
+        public DirectoryInfoWrapper(DirectoryInfo currentDirectory)
         {
             CurrentDirectory = currentDirectory;
         }
@@ -31,7 +31,7 @@ namespace Sync.Wrappers
                 file.CopyTo(Path.Combine(path, file.Name));
 
             foreach (var dir in CurrentDirectory.EnumerateDirectories())
-                new DirectoryInfoInfoWrapper(dir).CopyTo(path);
+                new DirectoryInfoWrapper(dir).CopyTo(path);
         }
 
         public string Name => CurrentDirectory.Name;
@@ -45,10 +45,10 @@ namespace Sync.Wrappers
         {
             if (obj is null)
                 return false;
-            if (!(obj is DirectoryInfoInfoWrapper))
+            if (!(obj is DirectoryInfoWrapper))
                 return false;
 
-            var other = (DirectoryInfoInfoWrapper) obj;
+            var other = (DirectoryInfoWrapper) obj;
             return CurrentDirectory.FullName == other.CurrentDirectory.FullName;
         }
     }

@@ -53,7 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="ResolverOptions.cs" />
-    <Compile Include="Wrappers\DirectoryInfoInfoWrapper.cs" />
+    <Compile Include="Wrappers\DirectoryInfoWrapper.cs" />
     <Compile Include="Wrappers\FileInfoInfoWrapper.cs" />
     <Compile Include="Wrappers\IFileSystemElementInfoWrapper.cs" />
   </ItemGroup>

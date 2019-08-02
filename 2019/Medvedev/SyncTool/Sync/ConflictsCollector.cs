@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using Sync.Wrappers;
 
 namespace Sync
 {
     public class ConflictsCollector
     {
-        public DirectoryInfo MasterDirectory { get; }
-        public DirectoryInfo SlaveDirectory { get; }
+        public DirectoryWrapper MasterDirectory { get; }
+        public DirectoryWrapper SlaveDirectory { get; }
 
         private readonly ConflictSeeker _conflictSeeker;
 
-        public ConflictsCollector(DirectoryInfo master, DirectoryInfo slave, IConflictDetectionPolicy policy)
+        public ConflictsCollector(DirectoryWrapper master, DirectoryWrapper slave, IConflictDetectionPolicy policy)
         {
             MasterDirectory = master;
             SlaveDirectory = slave;
@@ -23,7 +23,7 @@ namespace Sync
             return DFS(MasterDirectory, SlaveDirectory);
         }
 
-        private List<Conflict> DFS(DirectoryInfo master, DirectoryInfo slave)
+        private List<Conflict> DFS(DirectoryWrapper master, DirectoryWrapper slave)
         {
             var children =
                 from x in master.EnumerateDirectories()

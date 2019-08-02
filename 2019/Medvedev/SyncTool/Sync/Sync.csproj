@@ -54,6 +54,7 @@
     <Compile Include="Resolver.cs" />
     <Compile Include="ResolverOptions.cs" />
     <Compile Include="Wrappers\DirectoryWrapper.cs" />
+    <Compile Include="Wrappers\FileAttributes.cs" />
     <Compile Include="Wrappers\FileWrapper.cs" />
     <Compile Include="Wrappers\IFileSystemElementWrapper.cs" />
   </ItemGroup>

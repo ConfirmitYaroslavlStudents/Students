@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Sync.Wrappers;
 
 namespace Sync.Comparers

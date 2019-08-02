@@ -1,33 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using Sync.Resolutions;
+using Sync.Wrappers;
 
 namespace Sync
 {
     public class Resolver
     {
-        public DirectoryInfo MasterDirectory { get; }
-        public DirectoryInfo SlaveDirectory { get; }
+        public DirectoryWrapper MasterDirectory { get; }
+        public DirectoryWrapper SlaveDirectory { get; }
 
         public ResolverOptions Option { get; }
 
-        public Resolver(DirectoryInfo master, DirectoryInfo slave, ResolverOptions option = ResolverOptions.None)
+        public Resolver(DirectoryWrapper master, DirectoryWrapper slave, ResolverOptions option = ResolverOptions.None)
         {
             MasterDirectory = master;
             SlaveDirectory = slave;
             Option = option;
         }
 
-        public void ResolveConflicts(List<Conflict> conflicts)
+        public List<IResolution> GetConflictsResolutions(List<Conflict> conflicts)
         {
+            var resolutions = new List<IResolution>();
             foreach (var conflict in conflicts)
             {
                 if (ExistsUpdateResolution(conflict))
-                    ResolveViaUpdate(conflict);
+                    resolutions.Add(MakeUpdateResolution(conflict));
                 if (ExistsDeleteResolution(conflict) && Option != ResolverOptions.NoDelete)
-                    ResolveViaDelete(conflict);
+                    resolutions.Add(MakeDeleteResolution(conflict));
                 if (ExistsCopyResolution(conflict))
-                    ResolveViaCopy(conflict);
+                    resolutions.Add(MakeCopyResolution(conflict));
             }
+
+            return resolutions;
         }
 
         private bool ExistsUpdateResolution(Conflict conflict)
@@ -35,10 +39,9 @@ namespace Sync
             return conflict.Source != null && conflict.Destination != null;
         }
 
-        private void ResolveViaUpdate(Conflict conflict)
+        private IResolution MakeUpdateResolution(Conflict conflict)
         {
-            conflict.Destination.Delete();
-            conflict.Source.CopyTo(conflict.Destination.ParentDirectory);
+            return new UpdateResolution(conflict.Source, conflict.Destination);
         }
 
         private bool ExistsCopyResolution(Conflict conflict)
@@ -46,10 +49,11 @@ namespace Sync
             return conflict.Source != null && conflict.Destination == null;
         }
 
-        private void ResolveViaCopy(Conflict conflict)
+        private IResolution MakeCopyResolution(Conflict conflict)
         {
-            var path = conflict.Source.ParentDirectory.Replace(MasterDirectory.FullName, SlaveDirectory.FullName);
-            conflict.Source.CopyTo(path);
+            var path = conflict.Source.FullName.Replace(MasterDirectory.FullName, SlaveDirectory.FullName);
+
+            return new CopyResolution(conflict.Source, path);
         }
 
         private bool ExistsDeleteResolution(Conflict conflict)
@@ -57,9 +61,9 @@ namespace Sync
             return conflict.Source == null && conflict.Destination != null;
         }
 
-        private void ResolveViaDelete(Conflict conflict)
+        private IResolution MakeDeleteResolution(Conflict conflict)
         {
-            conflict.Destination.Delete();
+            return new DeleteResolution(conflict.Destination);
         }
     }
 }

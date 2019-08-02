@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Sync.Comparers;
+using Sync.ConflictDetectionPolicies;
 using Sync.Wrappers;
 using Xunit;
 

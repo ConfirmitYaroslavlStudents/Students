@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sync.Wrappers;
 
-namespace Sync
+namespace Sync.ConflictDetectionPolicies
 {
     public class DefaultConflictDetectionPolicy : IConflictDetectionPolicy
     {

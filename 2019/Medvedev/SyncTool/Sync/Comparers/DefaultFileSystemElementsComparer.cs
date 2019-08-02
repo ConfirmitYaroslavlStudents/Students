@@ -17,7 +17,7 @@ namespace Sync.Comparers
 
         public int Compare(IFileSystemElementWrapper x, IFileSystemElementWrapper y)
         {
-            if (x.GetType() != y.GetType())
+            if (x?.GetType() != y?.GetType())
                 throw new ArgumentException("Parameters must have same attribute");
 
             if (x is FileWrapper firstFile && y is FileWrapper secondFile)

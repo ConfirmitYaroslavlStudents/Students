@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Sync;
 using Sync.Comparers;
+using Sync.ConflictDetectionPolicies;
 
 namespace SyncTool
 {
@@ -19,7 +20,7 @@ namespace SyncTool
 
             var resolver = new Resolver(master, slave, resolverOption);
 
-            resolver.ResolveConflicts(collector.GetConflicts());
+            resolver.GetConflictsResolutions(collector.GetConflicts());
         }
     }
 }

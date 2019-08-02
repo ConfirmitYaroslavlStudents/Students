@@ -11,7 +11,7 @@ namespace Sync
         {
             return (
                 from x in dir.EnumerateFiles()
-                select (IFileSystemElementInfoWrapper) new FileInfoInfoWrapper(x)).Union(
+                select (IFileSystemElementInfoWrapper) new FileInfoWrapper(x)).Union(
                 from y in dir.EnumerateDirectories()
                 select (IFileSystemElementInfoWrapper) new DirectoryInfoWrapper(y)
             ).ToHashSet();

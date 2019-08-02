@@ -80,8 +80,8 @@ namespace Sync.Tests
                 new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
             var conflict = seeker.GetConflicts(master, slave)[0];
 
-            var source = (FileInfoInfoWrapper) conflict.Source;
-            var destination = (FileInfoInfoWrapper) conflict.Destination;
+            var source = (FileInfoWrapper) conflict.Source;
+            var destination = (FileInfoWrapper) conflict.Destination;
 
             Assert.Contains("slave", source.File.FullName);
             Assert.Contains("master", destination.File.FullName);
@@ -123,8 +123,8 @@ namespace Sync.Tests
                 new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
             var conflict = seeker.GetConflicts(master, slave)[0];
 
-            var source = (FileInfoInfoWrapper) conflict.Source;
-            var destination = (FileInfoInfoWrapper) conflict.Destination;
+            var source = (FileInfoWrapper) conflict.Source;
+            var destination = (FileInfoWrapper) conflict.Destination;
 
             Assert.Contains("master", source.File.FullName);
             Assert.Contains("slave", destination.File.FullName);
@@ -148,8 +148,8 @@ namespace Sync.Tests
             var conflicts = seeker.GetConflicts(master, slave);
             var conflict = conflicts[0];
 
-            var source = (FileInfoInfoWrapper) conflict.Source;
-            var destination = (FileInfoInfoWrapper) conflict.Destination;
+            var source = (FileInfoWrapper) conflict.Source;
+            var destination = (FileInfoWrapper) conflict.Destination;
 
             Assert.Null(destination);
             Assert.NotNull(source);
@@ -173,8 +173,8 @@ namespace Sync.Tests
             var conflicts = seeker.GetConflicts(master, slave);
             var conflict = conflicts[0];
 
-            var source = (FileInfoInfoWrapper) conflict.Source;
-            var destination = (FileInfoInfoWrapper) conflict.Destination;
+            var source = (FileInfoWrapper) conflict.Source;
+            var destination = (FileInfoWrapper) conflict.Destination;
 
             Assert.NotNull(destination);
             Assert.Null(source);

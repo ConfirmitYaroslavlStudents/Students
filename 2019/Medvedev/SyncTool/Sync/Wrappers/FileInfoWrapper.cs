@@ -2,11 +2,11 @@
 
 namespace Sync.Wrappers
 {
-    public class FileInfoInfoWrapper : IFileSystemElementInfoWrapper
+    public class FileInfoWrapper : IFileSystemElementInfoWrapper
     {
         public FileInfo File { get; }
 
-        public FileInfoInfoWrapper(FileInfo file)
+        public FileInfoWrapper(FileInfo file)
         {
             File = file;
         }
@@ -20,10 +20,10 @@ namespace Sync.Wrappers
         {
             if (obj is null)
                 return false;
-            if (!(obj is FileInfoInfoWrapper))
+            if (!(obj is FileInfoWrapper))
                 return false;
 
-            var other = (FileInfoInfoWrapper) obj;
+            var other = (FileInfoWrapper) obj;
             return File.FullName == other.File.FullName;
         }
 

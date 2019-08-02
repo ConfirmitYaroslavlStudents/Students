@@ -4,9 +4,9 @@ using Sync.Wrappers;
 
 namespace Sync.Comparers
 {
-    public class DefaultFileComparer : IComparer<FileInfoInfoWrapper>
+    public class DefaultFileComparer : IComparer<FileInfoWrapper>
     {
-        public int Compare(FileInfoInfoWrapper x, FileInfoInfoWrapper y)
+        public int Compare(FileInfoWrapper x, FileInfoWrapper y)
         {
             if (x is null)
                 return -1;

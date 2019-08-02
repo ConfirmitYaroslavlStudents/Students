@@ -6,29 +6,27 @@ namespace MasterSlaveSync
     {
         private DirectoryInfo slave;
         private DirectoryInfo master;
+        private FileSystemWatcher watcher = new FileSystemWatcher();
+
         public MasterWatcher(DirectoryInfo master, DirectoryInfo slave)
         {
             this.slave = slave;
             this.master = master;
+
+            watcher.Path = master.FullName;
         }
 
         public void WatchDirectory()
         {
-            using (FileSystemWatcher watcher = new FileSystemWatcher())
-            {
-                watcher.Path = master.FullName;
-
-                watcher.NotifyFilter = NotifyFilters.LastWrite
+            watcher.NotifyFilter = NotifyFilters.LastWrite
                                      | NotifyFilters.FileName;
 
-                watcher.Changed += OnChanged;
-                watcher.Created += OnCreated;
-                watcher.Deleted += OnDeleted;
-                watcher.Renamed += OnRenamed;
+            watcher.Changed += OnChanged;
+            watcher.Created += OnCreated;
+            watcher.Deleted += OnDeleted;
+            watcher.Renamed += OnRenamed;
 
-                watcher.EnableRaisingEvents = true;
-                while (true) ;
-            }
+            watcher.EnableRaisingEvents = true;
 
         }
 
@@ -37,6 +35,7 @@ namespace MasterSlaveSync
             SyncEngine.ResolveConflict(
                 new Conflict(new FileInfo(e.FullPath),
                 WatcherHelpers.GetFileWithTheSameName(slave.FullName, e.Name)));
+
         }
 
         private void OnCreated(object source, FileSystemEventArgs e)

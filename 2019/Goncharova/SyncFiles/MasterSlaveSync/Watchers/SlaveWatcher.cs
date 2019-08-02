@@ -6,37 +6,34 @@ namespace MasterSlaveSync
     {
         private DirectoryInfo master;
         private DirectoryInfo slave;
+        private FileSystemWatcher watcher = new FileSystemWatcher();
 
         public SlaveWatcher(DirectoryInfo master, DirectoryInfo slave)
         {
             this.master = master;
             this.slave = slave;
+
+            watcher.Path = slave.FullName;
         }
 
         public void WatchDirectory()
         {
-            using (FileSystemWatcher watcher = new FileSystemWatcher())
-            {
-                watcher.Path = slave.FullName;
-
-                watcher.NotifyFilter = NotifyFilters.LastWrite
+            watcher.NotifyFilter = NotifyFilters.LastWrite
                                      | NotifyFilters.FileName;
 
-                watcher.Changed += OnChanged;
-                watcher.Created += OnCreated;
-                watcher.Deleted += OnDeleted;
-                watcher.Renamed += OnRenamed;
+            watcher.Changed += OnChanged;
+            watcher.Created += OnCreated;
+            watcher.Deleted += OnDeleted;
+            watcher.Renamed += OnRenamed;
 
-                watcher.EnableRaisingEvents = true;
-                while (true) ;
-            }
+            watcher.EnableRaisingEvents = true;
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)
         {
             SyncEngine.ResolveConflict(
-                new Conflict(new FileInfo(e.FullPath),
-                WatcherHelpers.GetFileWithTheSameName(master.FullName, e.Name)));
+                new Conflict(WatcherHelpers.GetFileWithTheSameName(master.FullName, e.Name), 
+                new FileInfo(e.FullPath)));
         }
 
         private void OnCreated(object source, FileSystemEventArgs e)
@@ -49,7 +46,11 @@ namespace MasterSlaveSync
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
-            WatcherHelpers.CopyFile(master.FullName, slave.FullName, e.Name);
+            if(File.Exists(Path.Combine(master.FullName, e.Name)))
+            {
+                WatcherHelpers.CopyFile(master.FullName, slave.FullName, e.Name);
+            }
+
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)

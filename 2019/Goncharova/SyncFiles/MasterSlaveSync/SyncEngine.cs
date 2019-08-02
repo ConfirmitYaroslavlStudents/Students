@@ -40,8 +40,8 @@ namespace MasterSlaveSync
 
         internal static IEnumerable<Conflict> GetConflictPairs(DirectoryInfo master, DirectoryInfo slave)
         {
-            return from mFile in master.GetFiles()
-                   join sFile in slave.GetFiles() on mFile.Name equals sFile.Name
+            return from mFile in master.EnumerateFiles()
+                   join sFile in slave.EnumerateFiles() on mFile.Name equals sFile.Name
                    select (new Conflict(mFile, sFile));
         }
 

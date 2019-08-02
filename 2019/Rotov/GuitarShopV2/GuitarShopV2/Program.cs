@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.IO;
-using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
 
@@ -11,17 +8,17 @@ namespace ConsoleApp6
     {
         static void Main()
         {
-            GuitarCollection market = new GuitarCollection();
-            while (true)
+            GuitarCollection market = new GuitarCollection("guitars.txt");
+            while(true)
             {
                 Console.Write("Enter command:");
                 var command = Console.ReadLine();
-                switch (command)
+                switch(command)
                 {
                     case "s":
                         Console.WriteLine("Enter search term:");
                         var term = Console.ReadLine();
-                        foreach (var item in market.Search(term))
+                        foreach(var item in market.Search(term))
                             Console.WriteLine(item);
                         break;
                     case "a":
@@ -33,7 +30,7 @@ namespace ConsoleApp6
                         Console.WriteLine("Ented ID");
                         var id = Console.ReadLine();
                         bool flag = market.Remove(id);
-                        if (flag)
+                        if(flag)
                             Console.WriteLine("Guitar removed");
                         break;
                 }
@@ -41,9 +38,9 @@ namespace ConsoleApp6
         }
     }
 
-    class Guitar
+    public class Guitar
     {
-        public Guitar(string id, string name, string model, string builder, string type)
+        public Guitar(string id , string name , string model , string builder , string type)
         {
             ID = id;
             Price = name;
@@ -67,31 +64,37 @@ namespace ConsoleApp6
         {
             return string.Format($"{ID},{Price},{Model},{Builder},{Type}");
         }
+
+        public static Guitar CreateGuitarFromString(string guitar)
+        {
+            string[] fields = guitar.Split(new char[] { ',' } , StringSplitOptions.RemoveEmptyEntries);
+            return new Guitar(fields[0] , fields[1] , fields[2] , fields[3] , fields[4]);
+        }
     }
 
     public class GuitarCollection
     {
-        string DataBase = "guitars.txt";
+        FileInteracting file;
         List<Guitar> Collections;
-        public GuitarCollection()
+        public GuitarCollection(string source)
         {
-            Collections = new List<Guitar>();
-            ReadData();
+            file = new FileInteracting(source);
+            Collections = file.Initialize();
         }
 
         public void Add(string guitar)
         {
             var current = CreateGuitarFromString(guitar);
             Collections.Add(current);
-            File.AppendAllText(DataBase, Environment.NewLine + current.ToString());
+            file.AddToFile(current);
         }
 
         public List<string> Search(string term)
         {
             List<string> result = new List<string>();
-            foreach (var guitar in Collections)
+            foreach(var guitar in Collections)
             {
-                if (guitar.Contains(term))
+                if(guitar.Contains(term))
                     result.Add(guitar.ID);
             }
             return result;
@@ -99,17 +102,8 @@ namespace ConsoleApp6
 
         private Guitar CreateGuitarFromString(string guitar)
         {
-            string[] fields = guitar.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            return new Guitar(fields[0], fields[1], fields[2], fields[3], fields[4]);
-        }
-
-        private void ReadData()
-        {
-            var lines = File.ReadAllLines(DataBase);
-            for(int i = 1; i < lines.Length; i++)
-            {
-                Collections.Add(CreateGuitarFromString(lines[i]));
-            }
+            string[] fields = guitar.Split(new char[] { ',' } , StringSplitOptions.RemoveEmptyEntries);
+            return new Guitar(fields[0] , fields[1] , fields[2] , fields[3] , fields[4]);
         }
 
         public bool Remove(string id)
@@ -117,22 +111,51 @@ namespace ConsoleApp6
             int rmindex = -1;
             for(int i = 1; i < Collections.Count; i++)
             {
-                if (id == Collections[i].ID)
+                if(id == Collections[i].ID)
                     rmindex = i;
             }
-            if (rmindex == -1)
+            if(rmindex == -1)
                 return false;
             else
             {
                 Collections.RemoveAt(rmindex);
-                string[] rows = File.ReadAllLines(DataBase);
-                StreamWriter sw = new StreamWriter(DataBase);
-                for (int i = 0; i < rows.Length; i++)
-                    if (i != rmindex + 1)
-                        sw.WriteLine(rows[i]);
-                sw.Close();
+                file.RemoveFromFile(rmindex);
                 return true;
             }
+        }
+    }
+
+    public class FileInteracting
+    {
+        public string Path { get; set; }
+
+        public FileInteracting(string path)
+        {
+            Path = path;
+        }
+
+        public void AddToFile(Guitar guitar)
+        {
+            File.AppendAllText(Path , Environment.NewLine + guitar.ToString());
+        }
+
+        public void RemoveFromFile(int rmindex)
+        {
+            string[] rows = File.ReadAllLines(Path);
+            StreamWriter sw = new StreamWriter(Path);
+            for(int i = 0; i < rows.Length; i++)
+                if(i != rmindex + 1)
+                    sw.WriteLine(rows[i]);
+            sw.Close();
+        }
+
+        public List<Guitar> Initialize()
+        {
+            List<Guitar> result = new List<Guitar>();
+            var lines = File.ReadAllLines(Path);
+            for(int i = 1; i < lines.Length; i++)
+                result.Add(Guitar.CreateGuitarFromString(lines[i]));
+            return result;
         }
     }
 }

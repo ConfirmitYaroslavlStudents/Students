@@ -1,0 +1,3 @@
+﻿ID,Price,Model,Builder,Type
+1,500,Stratocastor,Fender,Acoustic
+2,1000,Stratocatstor,Fender,Electric

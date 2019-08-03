@@ -3,9 +3,9 @@ using Sync.Loggers;
 using Sync.Providers;
 using Sync.Resolutions;
 
-namespace Sync.Commiters
+namespace Sync
 {
-    public class DefaultCommiter : ICommiter
+    public class DefaultCommiter 
     {
         private Logger _logger;
         private IProvider _provider;

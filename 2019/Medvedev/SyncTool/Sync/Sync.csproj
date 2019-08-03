@@ -41,8 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commiters\ICommiter.cs" />
-    <Compile Include="Commiters\DefaultCommiter.cs" />
+    <Compile Include="DefaultCommiter.cs" />
     <Compile Include="Comparers\DefaultDirectoryComparer.cs" />
     <Compile Include="Comparers\DefaultFileComparer.cs" />
     <Compile Include="Comparers\DefaultFileSystemElementsComparer.cs" />
@@ -51,7 +50,6 @@
     <Compile Include="ConflictDetectionPolicies\IConflictDetectionPolicy.cs" />
     <Compile Include="ConflictsCollector.cs" />
     <Compile Include="ConflictSeeker.cs" />
-    <Compile Include="DirectoryInfoExtension.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
     <Compile Include="Loggers\LoggerOption.cs" />
     <Compile Include="Providers\IProvider.cs" />

@@ -17,7 +17,10 @@ namespace Sync.Wrappers
             _files = new HashSet<FileWrapper>();
 
             FullName = fullName;
-            Name = Path.GetDirectoryName(fullName);
+            if (parent != null)
+                Name = Path.GetFileName(fullName);
+            else
+                Name = fullName;
 
             ParentDirectory = parent;
         }

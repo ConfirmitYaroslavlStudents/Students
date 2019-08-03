@@ -8,15 +8,15 @@ namespace Sync.Comparers
         public int Compare(FileWrapper x, FileWrapper y)
         {
             if (x is null)
-                return -1;
-            if (y is null)
                 return 1;
+            if (y is null)
+                return -1;
 
             if (x.Attributes.Size < y.Attributes.Size)
-                return -1;
-            if (x.Attributes.Size > y.Attributes.Size)
                 return 1;
-            return x.Attributes.LastWriteTime.CompareTo(y.Attributes.LastWriteTime);
+            if (x.Attributes.Size > y.Attributes.Size)
+                return -1;
+            return -x.Attributes.LastWriteTime.CompareTo(y.Attributes.LastWriteTime);
         }
     }
 }

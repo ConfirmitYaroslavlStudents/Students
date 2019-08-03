@@ -1,6 +1,7 @@
-﻿using System.IO;
+﻿using System;
 using Sync.Comparers;
 using Sync.ConflictDetectionPolicies;
+using Sync.Wrappers;
 using Xunit;
 
 namespace Sync.Tests
@@ -10,19 +11,13 @@ namespace Sync.Tests
         [Fact]
         public void GetConflicts_NoConflicts_ReturnsEmptyList()
         {
-            DeleteDirectories();
+            var master = new DirectoryWrapper("master");
+            master.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            master.CreateDirectory("a").CreateFile("2", new FileAttributes(1, DateTime.MinValue));
 
-            var master = Directory.CreateDirectory("master");
-            var slave = Directory.CreateDirectory("slave");
-
-            Directory.CreateDirectory(@"master\a");
-            Directory.CreateDirectory(@"slave\a");
-
-            File.Create(@"master\1").Close();
-            File.Create(@"master\a\2").Close();
-
-            File.Create(@"slave\1").Close();
-            File.Create(@"slave\a\2").Close();
+            var slave = new DirectoryWrapper("slave");
+            slave.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            slave.CreateDirectory("a").CreateFile("2", new FileAttributes(1, DateTime.MinValue));
 
             var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
@@ -34,18 +29,12 @@ namespace Sync.Tests
         [Fact]
         public void GetConflicts_MasterConflictsWithSlave_ReturnsNonEmptyList()
         {
-            DeleteDirectories();
+            var master = new DirectoryWrapper("master");
+            master.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            master.CreateDirectory("a").CreateFile("2", new FileAttributes(1, DateTime.MinValue));
 
-            var master = Directory.CreateDirectory("master");
-            var slave = Directory.CreateDirectory("slave");
-
-            Directory.CreateDirectory(@"master\a");
-            Directory.CreateDirectory(@"slave\a");
-
-            File.Create(@"master\1").Close();
-            File.Create(@"master\a\2").Close();
-
-            File.Create(@"slave\1").Close();
+            var slave = new DirectoryWrapper("slave");
+            slave.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
 
             var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
@@ -57,18 +46,12 @@ namespace Sync.Tests
         [Fact]
         public void GetConflicts_OneMasterFileConflictsWithSlave_ReturnsOneConflict()
         {
-            DeleteDirectories();
+            var master = new DirectoryWrapper("master");
+            master.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            master.CreateDirectory("a").CreateFile("2", new FileAttributes(1, DateTime.MinValue));
 
-            var master = Directory.CreateDirectory("master");
-            var slave = Directory.CreateDirectory("slave");
-
-            Directory.CreateDirectory(@"master\a");
-            Directory.CreateDirectory(@"slave\a");
-
-            File.Create(@"master\1").Close();
-            File.Create(@"master\a\2").Close();
-
-            File.Create(@"slave\1").Close();
+            var slave = new DirectoryWrapper("slave");
+            slave.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
 
             var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
@@ -80,18 +63,13 @@ namespace Sync.Tests
         [Fact]
         public void GetConflicts_OneMasterFileConflictsWithSlave_Returns_NotNull_Null()
         {
-            DeleteDirectories();
+            var master = new DirectoryWrapper("master");
+            master.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            master.CreateDirectory("a").CreateFile("2", new FileAttributes(1, DateTime.MinValue));
 
-            var master = Directory.CreateDirectory("master");
-            var slave = Directory.CreateDirectory("slave");
-
-            Directory.CreateDirectory(@"master\a");
-            Directory.CreateDirectory(@"slave\a");
-
-            File.Create(@"master\1").Close();
-            File.Create(@"master\a\2").Close();
-
-            File.Create(@"slave\1").Close();
+            var slave = new DirectoryWrapper("slave");
+            slave.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            slave.CreateDirectory("a");
 
             var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
@@ -104,18 +82,13 @@ namespace Sync.Tests
         [Fact]
         public void GetConflicts_OneSlaveFileConflictsWithMaster_Returns_Null_NotNull()
         {
-            DeleteDirectories();
+            var master = new DirectoryWrapper("master");
+            master.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            master.CreateDirectory("a");
 
-            var master = Directory.CreateDirectory("master");
-            var slave = Directory.CreateDirectory("slave");
-
-            Directory.CreateDirectory(@"master\a");
-            Directory.CreateDirectory(@"slave\a");
-
-            File.Create(@"master\1").Close();
-
-            File.Create(@"slave\a\2").Close();
-            File.Create(@"slave\1").Close();
+            var slave = new DirectoryWrapper("slave");
+            slave.CreateFile("1", new FileAttributes(1, DateTime.MinValue));
+            slave.CreateDirectory("a").CreateFile("2", new FileAttributes(1, DateTime.MinValue));
 
             var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
 
@@ -123,14 +96,6 @@ namespace Sync.Tests
 
             Assert.Null(conflicts[0].Source);
             Assert.NotNull(conflicts[0].Destination);
-        }
-
-        private static void DeleteDirectories()
-        {
-            if (Directory.Exists("master"))
-                Directory.Delete("master", true);
-            if (Directory.Exists("slave"))
-                Directory.Delete("slave", true);
         }
     }
 }

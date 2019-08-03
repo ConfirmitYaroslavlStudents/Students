@@ -13,6 +13,13 @@ namespace Sync.Wrappers
 
         public DirectoryWrapper(string fullName, DirectoryWrapper parent = null)
         {
+            if (parent != null && 
+                string.Compare(
+                    Path.GetDirectoryName(fullName), 
+                    parent.FullName, 
+                    StringComparison.InvariantCultureIgnoreCase) != 0)
+                throw new ArgumentException("Path to directory does not math parent directory full name");
+
             _subDirectories = new HashSet<DirectoryWrapper>();
             _files = new HashSet<FileWrapper>();
 

@@ -25,6 +25,12 @@ namespace Sync.Wrappers
 
         public FileWrapper(string fullName, FileAttributes attributes, DirectoryWrapper parentDirectory)
         {
+            if (string.Compare(
+                    Path.GetDirectoryName(fullName), 
+                    parentDirectory.FullName, 
+                    StringComparison.InvariantCultureIgnoreCase) != 0)
+                throw new ArgumentException("Path to file does not math parent directory");
+
             Name = Path.GetFileName(fullName);
             FullName = fullName;
 

@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ConflictCollectorTests.cs" />
     <Compile Include="ConflictSeekerTests.cs" />
+    <Compile Include="DirectoryWrapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

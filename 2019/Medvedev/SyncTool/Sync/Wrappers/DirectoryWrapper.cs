@@ -22,22 +22,24 @@ namespace Sync.Wrappers
             ParentDirectory = parent;
         }
 
-        public void CreateDirectory(string name)
+        public DirectoryWrapper CreateDirectory(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Name must not be null or empty");
 
             var subDirectory = new DirectoryWrapper(Path.Combine(FullName, name), this);
             _subDirectories.Add(subDirectory);
+            return subDirectory;
         }
 
-        public void CreateFile(string name, FileAttributes attributes)
+        public FileWrapper CreateFile(string name, FileAttributes attributes)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("File name must not be null or empty");
 
             var file = new FileWrapper(Path.Combine(FullName, name), attributes, this);
             _files.Add(file);
+            return file;
         }
 
         public IEnumerable<DirectoryWrapper> EnumerateDirectories()

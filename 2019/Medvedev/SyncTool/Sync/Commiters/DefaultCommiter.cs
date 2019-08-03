@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using Sync.Loaders;
 using Sync.Loggers;
+using Sync.Providers;
 using Sync.Resolutions;
 
 namespace Sync.Commiters
 {
     public class DefaultCommiter : ICommiter
     {
-        private ILogger _logger;
+        private Logger _logger;
         private IProvider _provider;
 
-        public DefaultCommiter(IProvider provider, ILogger logger)
+        public DefaultCommiter(IProvider provider, Logger logger)
         {
             _provider = provider;
             _logger = logger;

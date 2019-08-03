@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Sync.Wrappers;
 
-namespace Sync.Loaders
+namespace Sync.Providers
 {
     public class LocalDiskProvider : IProvider
     {

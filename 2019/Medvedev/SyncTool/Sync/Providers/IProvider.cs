@@ -1,7 +1,6 @@
-﻿using Microsoft.SqlServer.Server;
-using Sync.Wrappers;
+﻿using Sync.Wrappers;
 
-namespace Sync.Loaders
+namespace Sync.Providers
 {
     public interface IProvider
     {

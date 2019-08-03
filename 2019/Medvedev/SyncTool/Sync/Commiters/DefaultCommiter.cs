@@ -5,12 +5,12 @@ using Sync.Resolutions;
 
 namespace Sync.Commiters
 {
-    public class LocalDiskCommiter : ICommiter
+    public class DefaultCommiter : ICommiter
     {
         private ILogger _logger;
         private IProvider _provider;
 
-        public LocalDiskCommiter(IProvider provider, ILogger logger)
+        public DefaultCommiter(IProvider provider, ILogger logger)
         {
             _provider = provider;
             _logger = logger;

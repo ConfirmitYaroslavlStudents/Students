@@ -8,6 +8,8 @@ namespace Sync.Comparers
     {
         public int Compare(DirectoryWrapper x, DirectoryWrapper y)
         {
+            if (x is null && y is null)
+                return 0;
             if (y is null)
                 return -1;
             if (x is null)

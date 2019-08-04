@@ -10,17 +10,9 @@ namespace Sync
     {
         private Logger _logger;
         private IProvider _provider;
-        protected Dictionary<Type, Action<IResolution>> _resolutionCommits;
 
         public DefaultCommiter(IProvider provider, Logger logger)
         {
-            _resolutionCommits = new Dictionary<Type, Action<IResolution>>
-            {
-                {typeof(UpdateResolution), CommitUpdateResolution},
-                {typeof(CopyResolution), CommitCopyResolution},
-                {typeof(DeleteResolution), CommitDeleteResolution}
-            };
-
             _provider = provider;
             _logger = logger;
         }
@@ -28,30 +20,34 @@ namespace Sync
         public void Commit(IEnumerable<IResolution> resolutions)
         {
             foreach (var resolution in resolutions)
-                _resolutionCommits[resolution.GetType()].Invoke(resolution);
+                CommitResolution(resolution);
         }
 
-        private void CommitUpdateResolution(IResolution r)
+        protected virtual void CommitResolution(IResolution resolution)
         {
-            var resolution = (UpdateResolution)r;
+            if (resolution is UpdateResolution ur)
+                CommitUpdateResolution(ur);
+            if (resolution is CopyResolution cp)
+                CommitCopyResolution(cp);
+            if (resolution is DeleteResolution dr)
+                CommitDeleteResolution(dr);
+        }
 
+        private void CommitUpdateResolution(UpdateResolution resolution)
+        {
             _provider.Delete(resolution.Destination);
             _provider.CopyTo(resolution.Source, resolution.Destination.FullName);
             _logger.Log(resolution);
         }
 
-        private void CommitCopyResolution(IResolution r)
+        private void CommitCopyResolution(CopyResolution resolution)
         {
-            var resolution = (CopyResolution)r;
-
             _provider.CopyTo(resolution.Source, resolution.Destination);
             _logger.Log(resolution);
         }
 
-        private void CommitDeleteResolution(IResolution r)
+        private void CommitDeleteResolution(DeleteResolution resolution)
         {
-            var resolution = (DeleteResolution)r;
-
             _provider.Delete(resolution.Source);
             _logger.Log(resolution);
         }

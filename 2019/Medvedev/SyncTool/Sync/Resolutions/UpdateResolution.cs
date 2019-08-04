@@ -12,5 +12,22 @@ namespace Sync.Resolutions
             Source = src;
             Destination = dst;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+            if (!(obj is UpdateResolution))
+                return false;
+
+            var other = (UpdateResolution)obj;
+
+            return Equals(Source, other.Source) && Equals(Destination, other.Destination);
+        }
+
+        public override int GetHashCode()
+        {
+            return Source.GetHashCode() ^ Destination.GetHashCode();
+        }
     }
 }

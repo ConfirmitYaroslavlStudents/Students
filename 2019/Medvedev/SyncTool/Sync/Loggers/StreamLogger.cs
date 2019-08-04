@@ -1,13 +1,16 @@
-﻿using System;
+﻿using System.IO;
 using Sync.Resolutions;
 
 namespace Sync.Loggers
 {
-    public class ConsoleLogger : Logger
+    public class StreamLogger : Logger
     {
-        public ConsoleLogger(LoggerOption option) 
+        private TextWriter _writer;
+
+        public StreamLogger(TextWriter writer, LoggerOption option) 
             : base(option)
         {
+            _writer = writer;
         }
 
         public override void Log(IResolution resolution)
@@ -23,7 +26,7 @@ namespace Sync.Loggers
             if (resolution is DeleteResolution dr)
                 log = DeleteLog(dr);
 
-            Console.WriteLine(log);
+            _writer.WriteLine(log);
         }
     }
 }

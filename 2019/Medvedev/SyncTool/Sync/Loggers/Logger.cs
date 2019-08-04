@@ -6,7 +6,7 @@ namespace Sync.Loggers
     {
         public LoggerOption Option { get; }
 
-        public Logger(LoggerOption option)
+        protected Logger(LoggerOption option)
         {
             Option = option;
         }

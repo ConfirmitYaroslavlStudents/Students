@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sync.Comparers;
 using Sync.ConflictDetectionPolicies;
 using Sync.Wrappers;
@@ -265,6 +267,33 @@ namespace Sync.Tests
             var conflicts = seeker.GetConflicts(master, slave);
             Assert.Null(conflicts[0].Source);
             Assert.NotNull(conflicts[0].Destination);
+        }
+
+        [Fact]
+        public void GetConflicts_MultipleConflicts()
+        {
+            var master = new DirectoryWrapper("master");
+            var slave = new DirectoryWrapper("slave");
+
+            var masterFileA = master.CreateFile("a", new FileAttributes(1, DateTime.MinValue));
+            var masterDirB = master.CreateDirectory("b");
+            masterDirB.CreateFile("c", new FileAttributes(1, DateTime.MaxValue));
+
+            var slaveFileA = slave.CreateFile("a", new FileAttributes(2, DateTime.MaxValue));
+            var slaveFileB = slave.CreateFile("b", new FileAttributes(3, DateTime.MaxValue));
+
+            var expected = new HashSet<Conflict>
+            {
+                new Conflict(slaveFileA, masterFileA),
+                new Conflict(masterDirB, null),
+                new Conflict(null, slaveFileB)
+            };
+
+            var seeker = new ConflictSeeker(new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+
+            var actual = seeker.GetConflicts(master, slave).ToHashSet();
+
+            Assert.Equal(expected, actual);
         }
     }
 }

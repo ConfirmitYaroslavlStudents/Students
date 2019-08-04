@@ -22,7 +22,7 @@ namespace Sync
 
             var other = (Conflict) obj;
 
-            return Source.Equals(other.Source) && Destination.Equals(other.Destination);
+            return Equals(Source, other.Source) && Equals(Destination, other.Destination);
         }
 
         public override int GetHashCode()

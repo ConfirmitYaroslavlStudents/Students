@@ -7,93 +7,81 @@ namespace MySetLibTests
     public class MySetTests
     {
         [TestMethod]
-        public void FindIfContain()
+        public void Find_SearchSetInNonEptyList_FindElement()
         {
             Set<int> actualSet = new Set<int>();
-            int expected = 1;
 
             actualSet.Add(1);
-            Set<int>.Node<int> actual = actualSet.Find(1);
-
-            Assert.AreEqual(actual.Data, expected);
+            
+            Assert.AreEqual(true, actualSet.Contains(1));
         }
 
         [TestMethod]
-        public void FindIfCountIsZero()
+        public void Find_SearchElementInSetList_FindNothing()
         {
             Set<int> actualSet = new Set<int>();
-            Set<int>.Node<int> expected = null;
 
-            Set<int>.Node<int> actual = actualSet.Find(1);
-
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(false, actualSet.Contains(1));
         }
 
         [TestMethod]
-        public void AddIncreaseCount()
+        public void Add_AddElementToEmptySet_IncreaseCountToOne()
         {
             Set<int> actualSet = new Set<int>();
-            int expected = 1;
 
             actualSet.Add(1);
 
-            Assert.AreEqual(actualSet.count, expected);
+            Assert.AreEqual(1, actualSet.count);
         }
 
         [TestMethod]
-        public void AddIfSetAlreadyContatinData()
+        public void Add_AddElementToSetIfElementAlreadyExist_CountIsStillOne()
         {
             Set<int> actualSet = new Set<int>();
             actualSet.Add(1);
-            int expected = 1;
 
             actualSet.Add(1);
 
-            Assert.AreEqual(actualSet.count, expected);
+            Assert.AreEqual(1, actualSet.count);
         }
 
         [TestMethod]
-        public void Add()
+        public void Add_AddElementsToEmptySet_CountIsTwo()
         {
             Set<int> actualSet = new Set<int>();
-            int expected = 2;
 
             actualSet.Add(1);
             actualSet.Add(2);
 
-            Assert.AreEqual(actualSet.Find(2).Data, expected);
+            Assert.AreEqual(2, actualSet.count);
         }
 
         [TestMethod]
-        public void RemoveIfSetdontContain()
+        public void Remove_SetdontContainSuchElement_CountIsStillTwo()
         {
             Set<int> actualSet = new Set<int>();
-            bool expected = false;
+
             actualSet.Add(1);
             actualSet.Add(2);
 
-            bool actual = actualSet.Remove(3);
-
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(false, actualSet.Remove(3));
         }
 
         [TestMethod]
-        public void RemoveFirst()
+        public void Remove_SetHasOneElement_CountIsZero()
         {
             Set<int> actualSet = new Set<int>();
-            bool expected = true;
             actualSet.Add(1);
 
-            bool actual = actualSet.Remove(1);
+            actualSet.Remove(1);
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(0, actualSet.count);
         }
 
         [TestMethod]
-        public void RemoveDecreaseCount()
+        public void Remove_SetHasSixElements_DecreaseCountToFive()
         {
             Set<int> actualSet = new Set<int>();
-            int expected = 5;
 
             actualSet.Add(3);
             actualSet.Add(4);
@@ -103,16 +91,14 @@ namespace MySetLibTests
             actualSet.Add(6);
             actualSet.Remove(3);
 
-            Assert.AreEqual(actualSet.count, expected);
+            Assert.AreEqual(5, actualSet.count);
         }
 
         [TestMethod]
-        public void Union()
+        public void Union_TwoSetsWithSimilarElements_CountIsFive()
         {
-            Set<int> actual = new Set<int>();
             Set<int> a = new Set<int>();
             Set<int> b = new Set<int>();
-            int expected = 6;
 
             a.Add(3);
             a.Add(4);
@@ -120,20 +106,15 @@ namespace MySetLibTests
             b.Add(2);
             b.Add(5);
             b.Add(6);
-            actual = a.Union(b);
 
-            Assert.AreEqual(actual.count, expected);
+            Assert.AreEqual(6, a.Union(b).count);
         }
 
         [TestMethod]
-        public void Intersection()
+        public void Intersection_TwoSetsWithTwoSimilarElements_CountIsTwo()
         {
-            Set<int> actual = new Set<int>();
             Set<int> a = new Set<int>();
             Set<int> b = new Set<int>();
-            Set<int> expected = new Set<int>();
-            expected.Add(3);
-            expected.Add(2);
 
             a.Add(1);
             a.Add(2);
@@ -142,9 +123,8 @@ namespace MySetLibTests
             b.Add(2);
             b.Add(3);
             b.Add(6);
-            actual = a.Intersection(b);
-
-            Assert.AreEqual(actual.count, expected.count);
+            
+            Assert.AreEqual(2, a.Intersection(b).count);
         }
     }
 }

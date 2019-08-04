@@ -17,17 +17,17 @@ namespace MySetLib
                 Data = data;
             }
         }
-        private Node<T> root;
+        private Node<T> _root;
         public int count;
         public Set()
         {
-            root = null;
+            _root = null;
             count = 0;
         }
 
-        public Node<T> Find(T data)
+        private Node<T> Find(T data)
         {
-            var node = root;
+            var node = _root;
             while (node != null)
             {
                 if (node.Data.Equals(data))
@@ -39,6 +39,13 @@ namespace MySetLib
             return null;
         }
 
+        public bool Contains(T Data)
+        {
+            if (Find(Data) != null)
+                return true;
+            return false;
+        }
+
         public bool Add(T data)
         {
             if (Find(data) != null)
@@ -46,14 +53,14 @@ namespace MySetLib
                 return false;
             }
             Node<T> newNode = new Node<T>(data);
-            if (root == null)
+            if (_root == null)
             {
-                root = newNode;
+                _root = newNode;
                 count++;
                 return true;
             }
-            Node<T> current = root;
-            newNode.Parent = root;
+            Node<T> current = _root;
+            newNode.Parent = _root;
             while (true)
             {
                 if (newNode.Data.CompareTo(current.Data) <= 0)
@@ -84,14 +91,14 @@ namespace MySetLib
         public bool Remove(T data)
         {
             Node<T> removeNode = Find(data);
-            if (root == null || removeNode == null)
+            if (_root == null || removeNode == null)
             {
                 return false;
             }
 
             if (count == 1)
             {
-                root = null;
+                _root = null;
                 count--;
                 return true;
             }
@@ -189,30 +196,35 @@ namespace MySetLib
         }
         public void Clear()
         {
-            root = null;
+            _root = null;
             count = 0;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            tmp.Clear();
-            TraverseTreePreOrder(this.root);
+            List<T> tmp = GetListOfNodes();
             return tmp.GetEnumerator();
         }
 
-        List<T> tmp = new List<T>();
-        private void TraverseTreePreOrder(Node<T> node)
+        private void TraverseTreePreOrder(Node<T> node,List<T> list)
         {
             if (node == null)
                 return;
-            tmp.Add(node.Data);
-            TraverseTreePreOrder(node.LeftChild);
-            TraverseTreePreOrder(node.RightChild);
+            list.Add(node.Data);
+            TraverseTreePreOrder(node.LeftChild,list);
+            TraverseTreePreOrder(node.RightChild,list);
+        }
+
+        private List<T> GetListOfNodes()
+        {
+            List<T> tmp = new List<T>();
+            TraverseTreePreOrder(this._root,tmp);
+            return tmp;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
     }
 }

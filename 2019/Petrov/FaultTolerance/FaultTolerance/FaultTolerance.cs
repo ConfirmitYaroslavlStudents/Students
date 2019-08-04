@@ -12,10 +12,10 @@ namespace FaultToleranceLib
                 {
                     action();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     if (count == 1)
-                        throw ex;
+                        throw;
                 }
                 count--;
             }
@@ -27,11 +27,15 @@ namespace FaultToleranceLib
             {
                 action();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 fallBack();
-                Console.WriteLine(ex.GetType() + " Plan B in development");
             }
+        }
+
+        public void Retry(Func<> action, int count)
+        {
+
         }
     }
 }

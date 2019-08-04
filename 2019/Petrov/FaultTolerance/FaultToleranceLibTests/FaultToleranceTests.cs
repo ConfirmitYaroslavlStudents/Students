@@ -9,67 +9,41 @@ namespace FaultToleranceLibTests
     public class FaultToleranceTests
     {
         [TestMethod]
-        public void Try_Square_true()
+        public void Try_FlagIsFalse_ReturnFlagIsTrue()
         {
-            Random rand = new Random();
-            int actual = rand.Next(100);
-            int expected = actual * actual;
-            Action action = () =>
-            {
-                actual *= actual;
-            };
+            bool flag = false;
+            Action action = () => flag = true;
             FaultTolerance faultTolerance = new FaultTolerance();
 
             faultTolerance.Try(action, 1);
 
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(true, flag);
         }
 
         [TestMethod]
-        public void Try_Fallback_true()
+        public void Fallback_FlagIsFalse_ReturnflagIsTrue()
         {
-            int IsFallback = 0;
+            bool flag = false;
 
             Action action = () => throw new ContextMarshalException();
-            Action fallback = () => IsFallback = 1;
+            Action fallback = () => flag = true;
             FaultTolerance faultTolerance = new FaultTolerance();
             faultTolerance.Fallback(action, fallback);
 
-            Assert.AreEqual(1,IsFallback);
+            Assert.AreEqual(true,flag);
         }
 
         [TestMethod]
-        public void Try_SquareFallback_false()
-        {
-            Random rand = new Random();
-            int actual = rand.Next(100);
-            int expected = actual * actual;
-
-            int IsFallback = 0;
-            Action fallBack = () => IsFallback = 1;
-
-            Action action = () =>
-            {
-                actual *= actual;
-            };
-            FaultTolerance faultTolerance = new FaultTolerance();
-
-            faultTolerance.Fallback(action, fallBack);
-            Assert.AreEqual(0, IsFallback);
-        }
-
-        [TestMethod]
-        public void Try_indexOutOfRangeEx_true()
+        public void Try_ActionThrowsException_true()
         {
             Action action = () => throw new IndexOutOfRangeException();
-
             FaultTolerance faultTolerance = new FaultTolerance();
 
             Assert.ThrowsException<IndexOutOfRangeException>(() => faultTolerance.Try(action, 2));
         }
 
         [TestMethod]
-        public void Try_StringEquals_false()
+        public void Try_StringsAreEqual_false()
         {
             StringBuilder actual = new StringBuilder();
             StringBuilder expected = new StringBuilder("Hello Somebody");

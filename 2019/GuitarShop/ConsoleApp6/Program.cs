@@ -4,16 +4,11 @@ using System.IO;
 
 namespace ConsoleApp6
 {
-    // 1. User reflecion for search \ Use dictionary
-    // 2. Big nesting
-    // 3. Guitar constructor has huge param list
-    // 4. SRP heavily violated
-    // 5. 
     class Program
     {
         static void Main()
         {
-            List<Guitar> guitars = ReadData();
+            List<Item> item = ReadData();
 
             while (true)
             {
@@ -21,77 +16,77 @@ namespace ConsoleApp6
                 var command = Console.ReadLine();
                 switch (command)
                 {
-                    case "s":
-                        Search(guitars);
+                    case "search":
+                        Search(item);
                         break;
-                    case "a":
-                        Add(guitars);
+                    case "add":
+                        Add(item);
                         break;
+                    case "exit":
+                        return;
                 }
             }
         }
 
-        private static void Add(List<Guitar> guitars)
+        private static void Add(List<Item> item)
         {
-            Console.Write("Enter guitar spec (ID Price Model Builder Type):");
+            Console.Write("Enter item specification (ItemType, ID, Price, Model, Builder, GuitarType ):");
             var line = Console.ReadLine();
-            guitars.Add(MakeGuitar(line));
-            File.AppendAllText("guitars.txt", Environment.NewLine + line);
+            item.Add(new Item(line));
+            File.AppendAllText("item.txt", Environment.NewLine + line);
         }
 
-        private static Guitar MakeGuitar(string line)
-        {
-            var parts = line.Split(' ');
-            return new Guitar(parts[0], parts[1], parts[2], parts[3], parts[4]);
-        }
-
-        private static void Search(List<Guitar> guitars)
+        private static void Search(List<Item> item)
         {
             Console.WriteLine("Enter search term:");
 
             var term = Console.ReadLine();
 
-            foreach (var guitar in guitars)
+            foreach (var guitar in item)
             {
                 if (guitar.Contains(term))
                     Console.WriteLine("Mathc found: {0}", guitar.ID);
             }
         }
 
-        private static List<Guitar> ReadData()
+        private static List<Item> ReadData()
         {
             var lines = File.ReadAllLines("guitars.txt");
-            var guitars = new List<Guitar>();
+            var item = new List<Item>();
 
             foreach (var line in lines)
             {
-                guitars.Add(MakeGuitar(line));
+                item.Add(new Item(line));
             }
 
-            return guitars;
+            return item;
         }
     }
 
-    public class Guitar
+    public class Item
     {
-        public Guitar(string id, string name, string model, string builder, string type)
+        public Item(string line)
         {
-            ID = id;
-            Price = name;
-            Model = model;
-            Builder = builder;
-            Type = type;
+            var parts = line.Split(' ');
+            ID = parts[0];
+            Price = parts[1];
+            Model = parts[2];
+            Builder = parts[3];
+            GuitarType = parts[4];
+            ItemType = parts[5];
+
         }
 
         public string ID { get; set; }
         public string Price { get; set; }
         public string Model{ get; set; }
         public string Builder { get; set; }
-        public string Type{ get; set; }
+        public string GuitarType{ get; set; }
+        public string ItemType { get; set; }
 
         public bool Contains(string term)
         {
-            return Builder.Contains(term) || Model.Contains(term) || Type.Contains(term);
+            return Builder.Contains(term) || Model.Contains(term) || GuitarType.Contains(term);
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultTolerance", "FaultTolerance\FaultTolerance.csproj", "{8436E46F-E747-420B-8FBD-C0EDA2E51862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultToleranceTest", "FaultToleranceTest\FaultToleranceTest.csproj", "{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaultToleranceTests", "FaultToleranceTests\FaultToleranceTests.csproj", "{CB156F4A-3C2A-4D73-975D-F9D1A2CA34D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{8436E46F-E747-420B-8FBD-C0EDA2E51862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8436E46F-E747-420B-8FBD-C0EDA2E51862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8436E46F-E747-420B-8FBD-C0EDA2E51862}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8762166-CABB-49C0-ADC9-47FFEADF5FBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB156F4A-3C2A-4D73-975D-F9D1A2CA34D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB156F4A-3C2A-4D73-975D-F9D1A2CA34D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB156F4A-3C2A-4D73-975D-F9D1A2CA34D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB156F4A-3C2A-4D73-975D-F9D1A2CA34D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

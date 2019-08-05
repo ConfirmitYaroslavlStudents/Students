@@ -15,7 +15,7 @@ namespace Sync.Tests
             var dir2 = new DirectoryWrapper("MaStEr");
             var file2 = dir2.CreateFile("A", new FileAttributes(2, DateTime.MinValue));
 
-            Assert.True(dir1.Equals(dir2));
+            Assert.True(file1.Equals(file2));
         }
     }
 }

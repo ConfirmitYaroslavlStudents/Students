@@ -5,12 +5,11 @@ namespace FaultTolerance.Retry
     internal static class RetryProcessor
     {
         internal static TResult Execute<TResult>(
-            Func<TResult> action, 
-            StrategyExceptions exceptions, 
+            Func<TResult> action,
+            StrategyExceptions exceptions,
             int permittedRetryCount)
         {
-            Exception firstCatched = null;
-
+            Exception lastException = null;
             for (int retryCount = 0; retryCount <= permittedRetryCount; retryCount++)
             {
                 try
@@ -19,15 +18,14 @@ namespace FaultTolerance.Retry
                 }
                 catch (Exception ex)
                 {
-                    firstCatched = firstCatched ?? ex;
-
-                    if (!exceptions.Contains(ex))
+                    lastException = ex;
+                    if (!exceptions.Contains(ex.GetType()))
                     {
                         throw;
                     }
                 }
             }
-            throw firstCatched;
+            throw lastException;
         }
     }
 }

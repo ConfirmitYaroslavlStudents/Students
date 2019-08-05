@@ -1,4 +1,5 @@
-﻿using FaultTolerance.Fallback;
+﻿using FaultTolerance;
+using FaultTolerance.Fallback;
 using FaultTolerance.Retry;
 using System;
 using Xunit;
@@ -10,13 +11,13 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_RetriesFail_ShouldBeRun()
         {
-            var retryStrategy = new RetryStrategy(new InvalidCastException(), 3);
+            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
             var helper = new Helper(new InvalidCastException(), 3 + 1);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = new FallbackStrategy(new InvalidCastException(), fallbackAction);
+            var fallbackStrategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
             fallbackStrategy.Execute(
                 () => { retryStrategy.Execute(
                 () => helper.ThrowException());
@@ -28,13 +29,13 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_RetriesDoesNotFail_ShouldNotBeRun()
         {
-            var retryStrategy = new RetryStrategy(new InvalidCastException(), 3);
+            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
             var helper = new Helper(new InvalidCastException(), 1);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = new FallbackStrategy(new InvalidCastException(), fallbackAction);
+            var fallbackStrategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
             fallbackStrategy.Execute(
                 () => { retryStrategy.Execute(
                 () => helper.ThrowException());
@@ -46,12 +47,12 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_RetryDoesNotHandleExceptionButFallbackDoes_ShouldBeRun()
         {
-            var retryStrategy = new RetryStrategy(new InvalidCastException(), 3);
-            
+            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
+
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = new FallbackStrategy(new DivideByZeroException(), fallbackAction);
+            var fallbackStrategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
             fallbackStrategy.Execute(
                 () => {
                     retryStrategy.Execute(
@@ -64,11 +65,11 @@ namespace FaultToleranceTests
         [Fact]
         public void RetryAndFallback_BothDoNotHandleException_ShouldThrow()
         {
-            var retryStrategy = new RetryStrategy(new InvalidCastException(), 3);
+            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
 
             void fallbackAction() { }
 
-            var fallbackStrategy = new FallbackStrategy(new DivideByZeroException(), fallbackAction);
+            var fallbackStrategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
             void fallbackAfterRetry() => fallbackStrategy.Execute(
                 () =>
                 {
@@ -82,12 +83,12 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_FallbackHandlesException_ShouldBeRun()
         {
-            var retryStrategy = new RetryStrategy(new InvalidCastException(), 3);
+            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = new FallbackStrategy(new DivideByZeroException(), fallbackAction);
+            var fallbackStrategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
             retryStrategy.Execute(
                 () => {
                     fallbackStrategy.Execute(

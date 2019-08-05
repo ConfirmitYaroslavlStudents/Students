@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace FaultTolerance
 {
-    public abstract class Strategy : StrategyModel
+    public abstract class Strategy
     {
-        internal Strategy(Exception exception) : base(exception) { }
-        internal Strategy(List<Exception> exceptions) : base(exceptions) { }
+        public static StrategyBuilder Handle<T>() where T : Exception
+        {
+            return new StrategyBuilder(typeof(T));
+        }
 
         public virtual void Execute(Action action)
         {
@@ -15,12 +16,5 @@ namespace FaultTolerance
         public abstract T Execute<T>(Func<T> action);
 
     }
-    public abstract class Policy<TResult> : StrategyModel
-    {
-        internal Policy(Exception exception) : base(exception) { }
-        internal Policy(List<Exception> exceptions) : base(exceptions) { }
-
-        public abstract TResult Execute(Func<TResult> action);
-
-    }
+    
 }

@@ -12,7 +12,7 @@ namespace FaultTolerance
                 throw new ArgumentNullException(nameof(exception));
             }
 
-            ExceptionsHandled.Add(exception);
+            ConfiguredExceptions.Add(exception);
         }
 
         internal StrategyModel(List<Exception> exceptions)
@@ -21,9 +21,9 @@ namespace FaultTolerance
             {
                 throw new ArgumentNullException(nameof(exceptions));
             }
-            ExceptionsHandled.AddMany(exceptions);
+            ConfiguredExceptions.Add(exceptions);
         }
-        internal StrategyExceptions ExceptionsHandled { get; } = new StrategyExceptions();
+        internal StrategyExceptions ConfiguredExceptions { get; } = new StrategyExceptions();
 
     }
 }

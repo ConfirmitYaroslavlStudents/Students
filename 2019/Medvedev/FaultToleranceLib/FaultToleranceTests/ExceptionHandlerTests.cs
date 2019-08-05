@@ -8,16 +8,10 @@ namespace FaultTolerance.Tests
     public class ExceptionHandlerTests
     {
         [Fact]
-        public void Try_Succeed_NoFallbackRun()
+        public void Run_Succeed_NoFallbackRun()
         {
-            var parameters = new ExceptionHandlerParameters(3);
-
             bool ioExceptionFallbackRun = false;
             bool arithmeticExceptionFallbackRun = false;
-
-            parameters
-                .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
-                .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; });
 
             int count = 0;
             Action action = () =>
@@ -29,19 +23,20 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(parameters);
-            handler.Try(new Runner(), action);
+            var handler = new ExceptionHandler();
+            handler
+                .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
+                .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; })
+                .Run(action, 3);
 
             Assert.False(ioExceptionFallbackRun);
             Assert.False(arithmeticExceptionFallbackRun);
         }
 
         [Fact]
-        public void Try_CountTimes_Succeed_ActionRuns_LessOrEqualsTo_CountTimes()
+        public void Run_CountTimes_Succeed_ActionRuns_LessOrEqualsTo_CountTimes()
         {
             int upperBound = 10;
-            var parameters = new ExceptionHandlerParameters(upperBound);
-            parameters.Handle<ArithmeticException>();
 
             int actual = 0;
             Action action = () =>
@@ -51,19 +46,17 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(parameters);
-            handler.Try(new Runner(), action);
+            var handler = new ExceptionHandler();
+            handler.Handle<ArithmeticException>().Run(action, upperBound);
 
             Assert.True(actual <= upperBound);
         }
 
         [Fact]
-        public void Try_CountTimes_Failed_ActionRuns_CountTimes()
+        public void Run_CountTimes_Failed_ActionRuns_CountTimes()
         {
             int upperBound = 10;
             int expected = upperBound;
-            var parameters = new ExceptionHandlerParameters(upperBound);
-            parameters.Handle<ArithmeticException>();
 
             int actual = 0;
             Action action = () =>
@@ -72,23 +65,18 @@ namespace FaultTolerance.Tests
                 throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(parameters);
-            handler.Try(new Runner(), action);
+            var handler = new ExceptionHandler();
+            handler.Handle<ArithmeticException>().Run(action, upperBound);
 
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void Try_Failed_RunRelevantFallback()
+        public void Run_Failed_RunRelevantFallback()
         {
-            var parameters = new ExceptionHandlerParameters(2);
-
             bool ioExceptionFallbackRun = false;
             bool arithmeticExceptionFallbackRun = false;
 
-            parameters
-                .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
-                .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; });
 
             int count = 0;
             Action action = () =>
@@ -100,47 +88,62 @@ namespace FaultTolerance.Tests
                     throw new ArithmeticException();
             };
 
-            var handler = new ExceptionHandler(parameters);
-            handler.Try(new Runner(), action);
+
+            var handler = new ExceptionHandler();
+
+            handler
+                .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
+                .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; })
+                .Run(action, 2);
 
             Assert.False(ioExceptionFallbackRun);
             Assert.True(arithmeticExceptionFallbackRun);
         }
 
         [Fact]
-        public void Try_RunnerFailed_RunsAppropriateFallback()
+        public void Run_RunnerFailed_RunsAppropriateFallback()
         {
             bool hadRun = false;
             bool hadRunArithmeticEx = false;
 
-            var parameters = new ExceptionHandlerParameters(2);
-            parameters
+            var handler = new ExceptionHandler();
+            handler
                 .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
-                .HandleFailedRun(() => hadRun = true);
-
-            var handler = new ExceptionHandler(parameters);
-            handler.Try(new TimeoutRunner(10), () => Thread.Sleep(100));
+                .HandleFailedRun(() => hadRun = true)
+                .WithTimeout(10)
+                .Run(() => Thread.Sleep(100), 2);
 
             Assert.True(hadRun);
             Assert.False(hadRunArithmeticEx);
         }
 
         [Fact]
-        public void Try_RunnerSucceed_DoNotRunAnyFallback()
+        public void Run_RunnerSucceed_DoNotRunAnyFallback()
         {
             bool hadRun = false;
             bool hadRunArithmeticEx = false;
 
-            var parameters = new ExceptionHandlerParameters(2);
-            parameters
-                .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
-                .HandleFailedRun(() => hadRun = true);
+            var handler = new ExceptionHandler();
 
-            var handler = new ExceptionHandler(parameters);
-            handler.Try(new TimeoutRunner(10), () => { });
+            handler
+                .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
+                .HandleFailedRun(() => hadRun = true)
+                .WithTimeout(10)
+                .Run(() => { }, 2);
 
             Assert.False(hadRun);
             Assert.False(hadRunArithmeticEx);
+        }
+
+        [Fact]
+        public void MultipleRun()
+        {
+            var handler = new ExceptionHandler();
+            handler
+                .WithTimeout(10)
+                .Run(() => Thread.Sleep(5), 2)
+                .WithTimeout(-1)
+                .Run(() => Thread.Sleep(9), 2);
         }
     }
 }

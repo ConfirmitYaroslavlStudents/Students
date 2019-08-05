@@ -138,12 +138,16 @@ namespace FaultTolerance.Tests
         [Fact]
         public void MultipleRun()
         {
+            bool failedRun = false;
             var handler = new ExceptionHandler();
             handler
                 .WithTimeout(10)
-                .Run(() => Thread.Sleep(5), 2)
+                .HandleFailedRun(() => failedRun = true)
+                .Run(() => Thread.Sleep(50), 2)
                 .WithTimeout(-1)
-                .Run(() => Thread.Sleep(9), 2);
+                .Run(() => Thread.Sleep(100), 2);
+
+            Assert.True(failedRun);
         }
     }
 }

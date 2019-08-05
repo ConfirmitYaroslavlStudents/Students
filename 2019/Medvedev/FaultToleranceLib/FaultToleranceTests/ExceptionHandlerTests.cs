@@ -149,5 +149,27 @@ namespace FaultTolerance.Tests
 
             Assert.True(failedRun);
         }
+
+        [Fact]
+        public void MultipleRun_StressTest()
+        {
+            bool failedRun = false;
+            var handler = new ExceptionHandler();
+            handler
+                .WithTimeout(10)
+                .HandleFailedRun(() => failedRun = true)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2)
+                .Run(() => Thread.Sleep(9), 2);
+
+            Assert.False(failedRun);
+        }
     }
 }

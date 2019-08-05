@@ -44,6 +44,7 @@
     <Compile Include="Fallback\FallbackBuilder.cs" />
     <Compile Include="Fallback\FallbackStrategy.cs" />
     <Compile Include="Fallback\FallbackProcessor.cs" />
+    <Compile Include="Plain\PlainBuilder.cs" />
     <Compile Include="Plain\PlainStrategy.cs" />
     <Compile Include="Plain\PlainProcessor.cs" />
     <Compile Include="Retry\RetryBuilder.cs" />

@@ -2,7 +2,7 @@
 
 namespace FaultTolerance
 {
-    public abstract class Strategy
+    public abstract partial class Strategy
     {
         public static StrategyBuilder Handle<T>() where T : Exception
         {
@@ -13,6 +13,7 @@ namespace FaultTolerance
         {
             Execute<object>(() => { action(); return null; });
         }
+
         public abstract T Execute<T>(Func<T> action);
 
     }

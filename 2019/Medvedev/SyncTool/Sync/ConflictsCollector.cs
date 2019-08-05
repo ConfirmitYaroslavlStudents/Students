@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sync.ConflictDetectionPolicies;
 using Sync.Wrappers;
 
 namespace Sync
 {
     public class ConflictsCollector
     {
-        public DirectoryWrapper MasterDirectory { get; }
-        public DirectoryWrapper SlaveDirectory { get; }
-
         private readonly ConflictSeeker _conflictSeeker;
 
         public ConflictsCollector(DirectoryWrapper master, DirectoryWrapper slave, IConflictDetectionPolicy policy)
@@ -17,6 +15,9 @@ namespace Sync
             SlaveDirectory = slave;
             _conflictSeeker = new ConflictSeeker(policy);
         }
+
+        public DirectoryWrapper MasterDirectory { get; }
+        public DirectoryWrapper SlaveDirectory { get; }
 
         public List<Conflict> GetConflicts()
         {

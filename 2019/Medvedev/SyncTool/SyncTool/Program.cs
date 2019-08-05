@@ -1,14 +1,78 @@
-﻿using System.IO;
+﻿using System;
+using NDesk.Options;
 using Sync;
 using Sync.Comparers;
 using Sync.ConflictDetectionPolicies;
+using Sync.Loggers;
+using Sync.Providers;
 
 namespace SyncTool
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static Parameters _parameters;
+
+        private static void Main(string[] args)
         {
+            _parameters = new Parameters();
+            var options = SetupOptions();
+            options.Parse(args);
+
+            var provider = new LocalDiskProvider();
+            var master = provider.LoadDirectory(_parameters.PathToMaster);
+            var slave = provider.LoadDirectory(_parameters.PathToSlave);
+
+            var conflicts = new ConflictsCollector(
+                    master,
+                    slave,
+                    new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()))
+                .GetConflicts();
+
+            var resolutions = new Resolver(master, slave, _parameters.ResolverOption)
+                .GetConflictsResolutions(conflicts);
+
+            var commiter = new DefaultCommiter(provider, new StreamLogger(Console.Out, _parameters.LoggerOption));
+
+            commiter.Commit(resolutions);
+        }
+
+        private static OptionSet SetupOptions()
+        {
+            var optionSet = new OptionSet
+            {
+                {"m|master=", "path to master directory", path => _parameters.PathToMaster = path},
+                {"s|slave=", "path to slave directory", path => _parameters.PathToSlave = path},
+                {
+                    "no-delete", "slave files that have no match in master will not delete", x =>
+                    {
+                        if (x != null)
+                            _parameters.ResolverOption = ResolverOptions.NoDelete;
+                    }
+                },
+                {
+                    "silent", "no log output", x =>
+                    {
+                        if (x != null)
+                            _parameters.LoggerOption = LoggerOption.Silent;
+                    }
+                },
+                {
+                    "summary", "short log output", x =>
+                    {
+                        if (x != null)
+                            _parameters.LoggerOption = LoggerOption.Summary;
+                    }
+                },
+                {
+                    "verbose", "full log output", x =>
+                    {
+                        if (x != null)
+                            _parameters.LoggerOption = LoggerOption.Verbose;
+                    }
+                }
+            };
+
+            return optionSet;
         }
     }
 }

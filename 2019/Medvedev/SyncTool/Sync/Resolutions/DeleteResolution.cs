@@ -18,7 +18,7 @@ namespace Sync.Resolutions
             if (!(obj is DeleteResolution))
                 return false;
 
-            var other = (DeleteResolution)obj;
+            var other = (DeleteResolution) obj;
 
             return Equals(Source, other.Source);
         }

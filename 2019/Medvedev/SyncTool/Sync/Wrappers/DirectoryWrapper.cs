@@ -6,17 +6,16 @@ namespace Sync.Wrappers
 {
     public class DirectoryWrapper : IFileSystemElementWrapper
     {
-        public string Name { get; }
-        public DirectoryWrapper ParentDirectory { get; }
-        public string ElementType => Type;
-        public string FullName { get; }
+        private readonly HashSet<FileWrapper> _files;
+
+        private readonly HashSet<DirectoryWrapper> _subDirectories;
 
         public DirectoryWrapper(string fullName, DirectoryWrapper parent = null)
         {
-            if (parent != null && 
+            if (parent != null &&
                 string.Compare(
-                    Path.GetDirectoryName(fullName), 
-                    parent.FullName, 
+                    Path.GetDirectoryName(fullName),
+                    parent.FullName,
                     StringComparison.InvariantCultureIgnoreCase) != 0)
                 throw new ArgumentException("Path to directory does not math parent directory full name");
 
@@ -31,6 +30,12 @@ namespace Sync.Wrappers
 
             ParentDirectory = parent;
         }
+
+        public static string Type => "Directory";
+        public string Name { get; }
+        public DirectoryWrapper ParentDirectory { get; }
+        public string ElementType => Type;
+        public string FullName { get; }
 
         public DirectoryWrapper CreateDirectory(string name)
         {
@@ -91,9 +96,5 @@ namespace Sync.Wrappers
         {
             return FullName;
         }
-
-        private HashSet<DirectoryWrapper> _subDirectories;
-        private HashSet<FileWrapper> _files;
-        public static string Type => "Directory";
     }
 }

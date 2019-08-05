@@ -6,17 +6,16 @@ namespace Sync
 {
     public class Resolver
     {
-        public DirectoryWrapper MasterDirectory { get; }
-        public DirectoryWrapper SlaveDirectory { get; }
-
-        public ResolverOptions Option { get; }
-
         public Resolver(DirectoryWrapper master, DirectoryWrapper slave, ResolverOptions option = ResolverOptions.None)
         {
             MasterDirectory = master;
             SlaveDirectory = slave;
             Option = option;
         }
+
+        public DirectoryWrapper MasterDirectory { get; }
+        public DirectoryWrapper SlaveDirectory { get; }
+        public ResolverOptions Option { get; }
 
         public List<IResolution> GetConflictsResolutions(List<Conflict> conflicts)
         {

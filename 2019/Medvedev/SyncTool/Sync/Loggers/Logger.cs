@@ -4,12 +4,12 @@ namespace Sync.Loggers
 {
     public abstract class Logger
     {
-        public LoggerOption Option { get; }
-
         protected Logger(LoggerOption option)
         {
             Option = option;
         }
+
+        public LoggerOption Option { get; }
 
         public abstract void Log(IResolution resolution);
 

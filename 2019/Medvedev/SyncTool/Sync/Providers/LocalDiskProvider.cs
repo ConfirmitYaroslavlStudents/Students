@@ -1,20 +1,14 @@
 ﻿using System.IO;
 using Sync.Wrappers;
+using FileAttributes = Sync.Wrappers.FileAttributes;
 
 namespace Sync.Providers
 {
     public class LocalDiskProvider : IProvider
     {
-        private string PathToDirectory { get; }
-
-        public LocalDiskProvider(string path)
+        public DirectoryWrapper LoadDirectory(string pathToDirectory)
         {
-            PathToDirectory = path;
-        }
-
-        public DirectoryWrapper LoadDirectory()
-        {
-            return DFS(new DirectoryWrapper(PathToDirectory));
+            return DFS(new DirectoryWrapper(pathToDirectory));
         }
 
         public void Delete(IFileSystemElementWrapper element)
@@ -49,7 +43,7 @@ namespace Sync.Providers
         {
             foreach (var dirPath in Directory.EnumerateDirectories(currentDirectory.FullName))
             {
-                var dir = currentDirectory.CreateDirectory(dirPath);
+                var dir = currentDirectory.CreateDirectory(Path.GetFileName(dirPath));
                 DFS(dir);
             }
 
@@ -57,7 +51,7 @@ namespace Sync.Providers
             {
                 var info = new FileInfo(filePath);
 
-                var attributes = new Sync.Wrappers.FileAttributes(info.Length, info.LastWriteTime);
+                var attributes = new FileAttributes(info.Length, info.LastWriteTime);
                 currentDirectory.CreateFile(Path.GetFileName(filePath), attributes);
             }
 

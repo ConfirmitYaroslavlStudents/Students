@@ -4,7 +4,7 @@ namespace Sync.Providers
 {
     public interface IProvider
     {
-        DirectoryWrapper LoadDirectory();
+        DirectoryWrapper LoadDirectory(string pathToDirectory);
         void Delete(IFileSystemElementWrapper element);
         void CopyTo(IFileSystemElementWrapper element, string path);
     }

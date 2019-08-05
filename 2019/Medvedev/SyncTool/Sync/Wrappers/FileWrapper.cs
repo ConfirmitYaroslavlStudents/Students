@@ -5,9 +5,27 @@ namespace Sync.Wrappers
 {
     public class FileWrapper : IFileSystemElementWrapper
     {
-        public string Name { get; }
+        private DirectoryWrapper _parentDirectory;
+
+        public FileWrapper(string fullName, FileAttributes attributes, DirectoryWrapper parentDirectory)
+        {
+            if (string.Compare(
+                    Path.GetDirectoryName(fullName),
+                    parentDirectory.FullName,
+                    StringComparison.InvariantCultureIgnoreCase) != 0)
+                throw new ArgumentException("Path to file does not math parent directory");
+
+            Name = Path.GetFileName(fullName);
+            FullName = fullName;
+
+            ParentDirectory = parentDirectory;
+
+            Attributes = attributes;
+        }
 
         public FileAttributes Attributes { get; }
+        public static string Type => "File";
+        public string Name { get; }
 
         public DirectoryWrapper ParentDirectory
         {
@@ -22,22 +40,6 @@ namespace Sync.Wrappers
 
         public string ElementType => Type;
         public string FullName { get; }
-
-        public FileWrapper(string fullName, FileAttributes attributes, DirectoryWrapper parentDirectory)
-        {
-            if (string.Compare(
-                    Path.GetDirectoryName(fullName), 
-                    parentDirectory.FullName, 
-                    StringComparison.InvariantCultureIgnoreCase) != 0)
-                throw new ArgumentException("Path to file does not math parent directory");
-
-            Name = Path.GetFileName(fullName);
-            FullName = fullName;
-
-            ParentDirectory = parentDirectory;
-
-            Attributes = attributes;
-        }
 
         public override bool Equals(object obj)
         {
@@ -57,8 +59,5 @@ namespace Sync.Wrappers
         {
             return FullName;
         }
-
-        private DirectoryWrapper _parentDirectory;
-        public static string Type => "File";
     }
 }

@@ -2,6 +2,8 @@
 {
     public enum LoggerOption
     {
-        Silent, Verbose, Summary
+        Silent,
+        Verbose,
+        Summary
     }
 }

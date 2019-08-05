@@ -5,9 +5,9 @@ namespace Sync.Loggers
 {
     public class StreamLogger : Logger
     {
-        private TextWriter _writer;
+        private readonly TextWriter _writer;
 
-        public StreamLogger(TextWriter writer, LoggerOption option) 
+        public StreamLogger(TextWriter writer, LoggerOption option)
             : base(option)
         {
             _writer = writer;
@@ -18,7 +18,7 @@ namespace Sync.Loggers
             if (Option == LoggerOption.Silent)
                 return;
 
-            string log = "";
+            var log = "";
             if (resolution is UpdateResolution ur)
                 log = UpdateLog(ur);
             if (resolution is CopyResolution cr)

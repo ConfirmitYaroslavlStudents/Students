@@ -4,14 +4,14 @@ namespace Sync
 {
     public class Conflict
     {
-        public IFileSystemElementWrapper Source { get; }
-        public IFileSystemElementWrapper Destination { get; }
-
         public Conflict(IFileSystemElementWrapper source, IFileSystemElementWrapper destination)
         {
             Source = source;
             Destination = destination;
         }
+
+        public IFileSystemElementWrapper Source { get; }
+        public IFileSystemElementWrapper Destination { get; }
 
         public override bool Equals(object obj)
         {

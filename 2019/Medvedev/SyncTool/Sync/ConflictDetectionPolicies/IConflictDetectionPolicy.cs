@@ -1,6 +1,6 @@
 ﻿using Sync.Wrappers;
 
-namespace Sync
+namespace Sync.ConflictDetectionPolicies
 {
     public interface IConflictDetectionPolicy
     {

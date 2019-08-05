@@ -6,12 +6,12 @@ namespace Sync.ConflictDetectionPolicies
 {
     public class DefaultConflictDetectionPolicy : IConflictDetectionPolicy
     {
-        private IComparer<IFileSystemElementWrapper> Comparer { get; }
-
         public DefaultConflictDetectionPolicy(IComparer<IFileSystemElementWrapper> comparer)
         {
             Comparer = comparer;
         }
+
+        private IComparer<IFileSystemElementWrapper> Comparer { get; }
 
         public Conflict GetConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
         {

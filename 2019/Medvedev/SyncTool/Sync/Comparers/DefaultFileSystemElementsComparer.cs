@@ -6,8 +6,8 @@ namespace Sync.Comparers
 {
     public class DefaultFileSystemElementsComparer : IComparer<IFileSystemElementWrapper>
     {
-        private readonly IComparer<FileWrapper> _fileComparer;
         private readonly IComparer<DirectoryWrapper> _directoryComparer;
+        private readonly IComparer<FileWrapper> _fileComparer;
 
         public DefaultFileSystemElementsComparer()
         {

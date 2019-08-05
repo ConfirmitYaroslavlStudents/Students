@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sync.Loggers;
 using Sync.Providers;
 using Sync.Resolutions;
 
 namespace Sync
 {
-    public class DefaultCommiter 
+    public class DefaultCommiter
     {
-        private Logger _logger;
-        private IProvider _provider;
+        private readonly Logger _logger;
+        private readonly IProvider _provider;
 
         public DefaultCommiter(IProvider provider, Logger logger)
         {

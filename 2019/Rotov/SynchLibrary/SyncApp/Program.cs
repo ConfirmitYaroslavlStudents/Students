@@ -11,10 +11,10 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            var a = @"";
-            var b = @"";
-            var worker = new Merge(a, b);
-            worker.Working();
+            var a = @"C:\Users\PISYA\Desktop\master\";
+            var b = @"C:\Users\PISYA\Desktop\slave\";
+            var worker = new Sync(a, b);
+            worker.Synchronization();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace FaultTolerance
     public static class ToleranceLibrary
     {
 
-        public static void Retry<Except>(Action method, int count, int ms)
+        public static void Retry<Except>(Action method, int count, int timeout)
             where Except : Exception
         {
             if (count == 0)
@@ -19,26 +19,15 @@ namespace FaultTolerance
             }
             try
             {
-                var task = Task.Factory.StartNew(method);
-                try
-                {
-                    task.Wait(ms);
-                    if (!task.IsCompleted)
-                        Console.WriteLine(1);
-                    throw new TimeoutException();
-                }
-                catch (AggregateException ex)
-                {
-                    throw ex.InnerException;
-                }
+                ActionTimeOut(method, timeout);
             }
             catch (Exception ex) when (ex is Except || ex is TimeoutException)
             {
-                Retry<Except>(method, count - 1, ms);
+                Retry<Except>(method, count - 1, timeout);
             }
         }
 
-        public static Return Retry<Except, Return, Param>(Func<Param, Return> method, Param param, int count, int ms)
+        public static Return Retry<Except, Return, Param>(Func<Param, Return> method, Param param, int count, int timeout)
             where Except : Exception
         {
             if (count == 0)
@@ -49,45 +38,21 @@ namespace FaultTolerance
             {
                 try
                 {
-                    try
-                    {
-                        Task<Return> task = new Task<Return>(() => method(param));
-                        task.Start();
-                        task.Wait(ms);
-                        if (!task.IsCompleted)
-                            throw new TimeoutException();
-                        return task.Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    return FunkTimeOut(method, param, timeout);
                 }
                 catch (Exception ex) when (ex is Except || ex is TimeoutException)
                 {
-                    return Retry<Except, Return, Param>(method, param, count - 1, ms);
+                    return Retry<Except, Return, Param>(method, param, count - 1, timeout);
                 }
             }
         }
 
-        public static Return FallBack<Except, Return, Param>(Func<Param, Return> main, Func<Param, Return> spare, Param param, int ms)
+        public static Return FallBack<Except, Return, Param>(Func<Param, Return> main, Func<Param, Return> spare, Param param, int timeout)
             where Except : Exception
         {
             try
             {
-                try
-                {
-                    Task<Return> task = new Task<Return>(() => main(param));
-                    task.Start();
-                    task.Wait(ms);
-                    if (!task.IsCompleted)
-                        throw new TimeoutException();
-                    return task.Result;
-                }
-                catch (AggregateException ex)
-                {
-                    throw ex.InnerException;
-                }
+                return FunkTimeOut(main, param, timeout);
             }
             catch (Exception ex) when (ex is Except || ex is TimeoutException)
             {
@@ -100,24 +65,49 @@ namespace FaultTolerance
         {
             try
             {
-                var task = Task.Factory.StartNew(main);
-                try
-                {
-                    task.Wait(timeout);
-                    if (!task.IsCompleted)
-                    {
-                        throw new TimeoutException();
-                    }
-                }
-                catch (AggregateException ex)
-                {
-                    throw ex.InnerException;
-                }
+                ActionTimeOut(main, timeout);
             }
             catch (Exception ex) when (ex is Except || ex is TimeoutException)
             {
                 spare();
             }
+        }
+
+        private static void ActionTimeOut(Action action, int timeout)
+        {
+            var task = Task.Factory.StartNew(action);
+            try
+            {
+                task.Wait(timeout);
+                if (!task.IsCompleted)
+                {
+                    throw new TimeoutException();
+                }
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var except in ex.InnerExceptions)
+                    throw except;
+            }
+        }
+
+        private static Return FunkTimeOut<Param, Return>(Func<Param, Return> main, Param param, int timeout)
+        {
+            Task<Return> task = new Task<Return>(() => main(param));
+            task.Start();
+            try
+            {
+                task.Wait(timeout);
+                if (!task.IsCompleted)
+                    throw new TimeoutException();
+                return task.Result;
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var except in ex.InnerExceptions)
+                    throw except;
+            }
+            return task.Result;
         }
     }
 }

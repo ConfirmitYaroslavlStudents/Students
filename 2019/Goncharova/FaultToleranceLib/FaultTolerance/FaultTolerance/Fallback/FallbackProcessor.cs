@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance.Fallback
 {
     internal static class FallbackProcessor
     {
         internal static TResult Execute<TResult>(
-            Func<TResult> action,
+            Func<CancellationToken, TResult> action,
             StrategyExceptions exceptions,
             Func<TResult> fallbackAction)
         {
             try
             {
-                return action();
+                return action(CancellationToken.None);
             }
             catch (Exception ex)
             {

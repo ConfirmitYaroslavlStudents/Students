@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance.Plain
 {
@@ -6,9 +7,7 @@ namespace FaultTolerance.Plain
     {
         public PlainStrategy() { }
 
-        public override T Execute<T>(Func<T> action)
-        {
-            return PlainProcessor.Execute<T>(action);
-        }
+        public override void Execute(Action<CancellationToken> action) => 
+            PlainProcessor.Execute<object>((ct) => { action(ct); return null; });
     }
 }

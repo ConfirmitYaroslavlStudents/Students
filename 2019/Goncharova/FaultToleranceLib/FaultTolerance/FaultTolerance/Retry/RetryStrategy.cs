@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance.Retry
 {
@@ -29,8 +30,11 @@ namespace FaultTolerance.Retry
             }
         }
 
-        public override T Execute<T>(Func<T> action)
-            => RetryProcessor.Execute<T>(action, configuredExceptions, PermittedRetryCount);
+        public override void Execute(Action<CancellationToken> action)
+            => RetryProcessor.Execute<object>(
+                (ct) => { action(ct); return null; },
+                configuredExceptions, 
+                PermittedRetryCount);
     }
 
 }

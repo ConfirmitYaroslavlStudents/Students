@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance.Fallback
 {
@@ -22,18 +23,10 @@ namespace FaultTolerance.Fallback
             }
         }
 
-        public override void Execute(Action action)
-        {
-            FallbackProcessor.Execute<object>(
-                () => { action(); return null; },
+        public override void Execute(Action<CancellationToken> action) 
+            => FallbackProcessor.Execute<object>(
+                (ct) => { action(ct); return null; },
                 configuredExceptions,
-                () => { FallbackAction(); return null; }
-                );
-        }
-
-        public override T Execute<T>(Func<T> action)
-        {
-            throw new InvalidOperationException("Using func methods currently is not supported");
-        }
+                () => { FallbackAction(); return null; });
     }
 }

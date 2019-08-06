@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance
 {
@@ -9,12 +10,12 @@ namespace FaultTolerance
             return new StrategyBuilder(typeof(T));
         }
 
-        public virtual void Execute(Action action)
-        {
-            Execute<object>(() => { action(); return null; });
-        }
+        public abstract void Execute(Action<CancellationToken> action);
 
-        public abstract T Execute<T>(Func<T> action);
+        public void Execute(Action action)
+        {
+            Execute((ct) => { action(); });
+        }
 
     }
     

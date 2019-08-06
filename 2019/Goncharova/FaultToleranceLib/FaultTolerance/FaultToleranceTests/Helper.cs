@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultToleranceTests
 {
@@ -22,6 +23,11 @@ namespace FaultToleranceTests
                 throw Exception;
             }
         }
+
+        public static Action<TimeSpan, CancellationToken> Sleep = (timeSpan, cancellationToken) =>
+        {
+            if (cancellationToken.WaitHandle.WaitOne(timeSpan)) cancellationToken.ThrowIfCancellationRequested();
+        };
 
     }
 }

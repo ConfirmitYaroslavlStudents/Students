@@ -96,16 +96,5 @@ namespace FaultToleranceTests
             Assert.Throws<DivideByZeroException>(() => strategy.Execute(action));
         }
 
-        [Fact]
-        public void Action_IsFunc_ShouldThrow()
-        {
-            void fallbackAction() { }
-
-            var strategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
-            int action() { return 5; }
-
-            Assert.Throws<InvalidOperationException>(() => strategy.Execute(action));
-        }
-
     }
 }

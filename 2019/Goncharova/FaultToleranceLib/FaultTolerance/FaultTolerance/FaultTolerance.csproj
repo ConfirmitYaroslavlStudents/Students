@@ -54,6 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Retry\RetryStrategy.cs" />
     <Compile Include="Retry\RetryProcessor.cs" />
+    <Compile Include="Timeout\TimeoutBuilder.cs" />
+    <Compile Include="Timeout\TimeoutProcessor.cs" />
+    <Compile Include="Timeout\TimeoutStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

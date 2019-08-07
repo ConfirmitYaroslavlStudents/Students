@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FolderSynchronizer
+namespace FolderSynchronizerLib
 {
     public class SyncException: Exception
     {

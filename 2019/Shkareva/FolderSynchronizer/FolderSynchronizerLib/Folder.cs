@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace FolderSynchronizer
+namespace FolderSynchronizerLib
 {
     [DataContract]
     public class Folder

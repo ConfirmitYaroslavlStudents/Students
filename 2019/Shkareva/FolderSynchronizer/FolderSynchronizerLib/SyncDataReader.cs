@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace FolderSynchronizer
+namespace FolderSynchronizerLib
 {
     public static class SyncDataReader
     {
@@ -12,72 +12,25 @@ namespace FolderSynchronizer
         private static Folder _newMaster;
         private static Folder _newSlave;
 
-        public static SyncData Load(string[] args)
+        public static SyncData Load(InputData input)
         {
-            if (args.Length < 2)
-            {
-                throw new SyncException("invalid format command");
-            }
-
             var syncData = new SyncData();
-            const string noDelete = "--no-delete";
-            const string logLevel = "-loglevel";
-
-            _newMaster = new FolderWorker().LoadFolder(args[0]);
-            _newSlave = new FolderWorker().LoadFolder(args[1]);
-            _oldMaster = new FolderWorker().LoadSerializedFolder(args[0]);
-            _oldSlave = new FolderWorker().LoadSerializedFolder(args[1]);
+            _newMaster = new FolderWorker().LoadFolder(input.MasterPath);
+            _newSlave = new FolderWorker().LoadFolder(input.SlavePath);
+            _oldMaster = new FolderWorker().LoadSerializedFolder(input.MasterPath);
+            _oldSlave = new FolderWorker().LoadSerializedFolder(input.SlavePath);
 
             syncData.FilesToDelete = FindFileToDelete();
             var filesToAdd = FindFilesToAdd();
             var filesToUpdate = FindFilesToUpdate();
             syncData.FilesToCopy = filesToAdd.Union(filesToUpdate).ToDictionary(x => x.Key, x => x.Value);
             syncData = RemoveCollision(syncData);
-            var flagList = new List<string>();
-            int count = 2;
-
-            while (count < args.Length)
-            {
-                flagList.Add(args[count]);
-                count++;
-            }
-
-            if (flagList.Contains(noDelete))
-            {
-                syncData.NoDeleteFlag = true;
-            }
-
-            if (flagList.Contains(logLevel))
-            {
-                syncData.LogFlag = GetLogFlag(flagList, logLevel);
-            }
+            syncData.LogFlag = input.LogFlag;
+            syncData.NoDeleteFlag = input.NoDeleteFlag;
 
             return syncData;
-        }
-
-        private static string GetLogFlag(List<string> flagList, string logLevel)
-        {
-            List<string> validLogFlags = new List<string>() { "verbose", "summary", "silent" };
-            string logFlag = "";
-
-            try
-            {
-                logFlag = flagList[flagList.IndexOf(logLevel) + 1];
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new Exception("Do not specify the type of logging");
-            }
-
-            if (!validLogFlags.Contains(logFlag))
-            {
-                throw new Exception("Invalid type of logging");
-            }
-
-            return logFlag;
-        }
-
-
+        }      
+        
         private static List<string> FindFileToDelete()
         {
             var filesToDelete = new List<string>();

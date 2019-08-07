@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 
-namespace FolderSynchronizer
+namespace FolderSynchronizerLib
 {
     public class FolderWorker
     {

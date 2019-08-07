@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 
-namespace FolderSynchronizer
+namespace FolderSynchronizerLib
 {
     static class Synchronizer
     {
@@ -24,8 +24,7 @@ namespace FolderSynchronizer
                 if (File.Exists(path))
                 {
                     File.Delete(path);
-                }
-                
+                }                
             }
         }
 

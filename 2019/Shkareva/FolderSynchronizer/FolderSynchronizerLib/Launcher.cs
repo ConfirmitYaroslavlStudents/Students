@@ -1,4 +1,4 @@
-﻿namespace FolderSynchronizer
+﻿namespace FolderSynchronizerLib
 {
     public class Launcher
     {

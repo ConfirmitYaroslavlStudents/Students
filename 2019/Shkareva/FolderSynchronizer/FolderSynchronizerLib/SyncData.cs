@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FolderSynchronizer
+namespace FolderSynchronizerLib
 {
     public class SyncData
     {

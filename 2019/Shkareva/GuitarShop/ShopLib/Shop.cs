@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace GuitarShop
+namespace ShopLib
 {
     public static class Shop
     {
@@ -37,7 +37,7 @@ namespace GuitarShop
 
         public static void AddFromFile(string fileName)
         {
-            var lines = File.ReadAllLines(fileName);
+            var lines = new FileWorker().ReadFile(fileName);
 
             for(int i=1;i<lines.Length;i++)
             {

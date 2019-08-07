@@ -1,4 +1,4 @@
-﻿namespace GuitarShop
+﻿namespace ShopLib
 {
     public class Guitar
     {

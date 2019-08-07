@@ -36,7 +36,7 @@ namespace FaultTolerance
             where TException : Exception
         {
             if (Fallbacks.ContainsKey(typeof(TException)))
-                throw new ArgumentException("Fallback for this case is already exists");
+                throw new ArgumentException("Fallback for such case is already exists");
 
             Fallbacks.Add(typeof(TException), fallback);
         }

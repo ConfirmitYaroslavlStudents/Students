@@ -10,7 +10,7 @@ namespace FaultTolerance
             get => _timeout;
             set
             {
-                if (value <= 0 && value != -1)
+                if (value <= 0)
                     throw new ArgumentException("Timeout must be positive");
                 _timeout = value;
             }

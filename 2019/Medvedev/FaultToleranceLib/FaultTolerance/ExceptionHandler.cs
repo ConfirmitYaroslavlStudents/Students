@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace FaultTolerance
 {
@@ -63,7 +64,12 @@ namespace FaultTolerance
 
         private void DoAction(Action action, int count)
         {
-            var runner = new TimeoutRunner(_parameters.Timeout);
+            IRunner runner = null;
+            if (_parameters.Timeout != -1)
+                runner = new TimeoutRunner(_parameters.Timeout);
+            else
+                runner = new Runner();
+
             for (int i = 0; i < count; i++)
             {
                 try
@@ -76,7 +82,7 @@ namespace FaultTolerance
                 {
                     if (_parameters.Fallbacks.ContainsKey(ex.GetType()) && i < count - 1)
                         continue;
-                    throw ;
+                    throw;
                 }
 
                 break;

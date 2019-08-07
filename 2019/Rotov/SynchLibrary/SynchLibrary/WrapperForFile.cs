@@ -16,7 +16,10 @@ namespace SynchLibrary
 
         public void SetRelativePath(FileInfo file, string root)
         {
-            RelativePath = file.FullName.Replace(root, "");
+            var current = file.FullName.Replace(root, "");
+            if (current[0] == '\\')
+                current = current.TrimStart('\\');
+            RelativePath = current;
         }
 
         public override bool Equals(object file)

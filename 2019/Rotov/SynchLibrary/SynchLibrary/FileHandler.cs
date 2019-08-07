@@ -8,14 +8,16 @@ namespace SynchLibrary
     {
         string MasterPath { get; set; }
         string SlavePath { get; set; }
+        bool CanRemove { get; set; }
 
         Logger _logger;
 
-        public FileHandler(string master, string slave, TypesOfLogging type)
+        public FileHandler(Sync owner)
         {
-            MasterPath = master;
-            SlavePath = slave;
-            _logger = new Logger(type);
+            MasterPath = owner.MasterPath;
+            SlavePath = owner.SlavePath;
+            _logger = new Logger(owner.Type);
+            CanRemove = owner.CanRemove;
         }
 
         public void MigrateForFiles()
@@ -31,7 +33,10 @@ namespace SynchLibrary
             var masterWithoutSlave = listMaster.Except(listSlave);
             var slaveWithoutMaster = listSlave.Except(listMaster);
             MoveIntersectionFiles(intersection);
-            SwapFiles(masterWithoutSlave, slaveWithoutMaster);
+            if (CanRemove)
+                RemoveDisapperedFiles(slaveWithoutMaster);
+            else
+                SwapFiles(masterWithoutSlave, slaveWithoutMaster);
             _logger.PrintLogs();
         }
 
@@ -39,10 +44,41 @@ namespace SynchLibrary
         {
             foreach (var file in files)
             {
-                var old = Path.Combine(MasterPath, string.Join(@"\", file.RelativePath));
+                var old = Path.Combine(MasterPath, file.RelativePath);
                 var fresh = Path.Combine(SlavePath, string.Join(@"\", file.RelativePath));
-                File.Copy(old, fresh, true);
-                _logger.AddReplace();
+                if (FilesChanged(old, fresh))
+                {
+                    File.Copy(old, fresh, true);
+                    _logger.AddReplace(file.RelativePath, SlavePath);
+                }
+            }
+        }
+
+        private bool FilesChanged(string file1, string file2)
+        {
+            FileInfo first = new FileInfo(file1);
+            FileInfo second = new FileInfo(file2);
+            if (first.Length != second.Length)
+                return true;
+            else
+            {
+                var firstSize = File.ReadAllBytes(first.FullName);
+                var secondSize = File.ReadAllBytes(second.FullName);
+                for (int i = 0; i < firstSize.Length; i++)
+                {
+                    if (firstSize[i] != secondSize[i])
+                        return true;
+                }
+                return false;
+            }
+        }
+
+        public void RemoveDisapperedFiles(IEnumerable<FileWrapper> files)
+        {
+            foreach (var file in files)
+            {
+                File.Delete(Path.Combine(SlavePath, file.RelativePath));
+                _logger.AddRemove(file.RelativePath, SlavePath);
             }
         }
 
@@ -52,13 +88,13 @@ namespace SynchLibrary
             {
                 CreateAllDirsForFile(file.RelativePath, SlavePath);
                 File.Copy(Path.Combine(MasterPath, file.RelativePath), Path.Combine(SlavePath, file.RelativePath));
-                _logger.AddCopy();
+                _logger.AddCopy(file.RelativePath, MasterPath, SlavePath);
             }
             foreach (var file in slave)
             {
                 CreateAllDirsForFile(file.RelativePath, MasterPath);
                 File.Copy(Path.Combine(SlavePath, file.RelativePath), Path.Combine(MasterPath, file.RelativePath));
-                _logger.AddCopy();
+                _logger.AddCopy(file.RelativePath, SlavePath, MasterPath);
             }
         }
 

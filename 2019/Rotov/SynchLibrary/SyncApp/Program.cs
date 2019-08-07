@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SynchLibrary;
+using System.IO;
 
 namespace SyncApp
 {
@@ -11,10 +12,10 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            var a = @"C:\Users\PISYA\Desktop\master\";
-            var b = @"C:\Users\PISYA\Desktop\slave\";
-            var worker = new Sync(a, b);
-            worker.Synchronization();
+            var master = @".\master";
+            var slave = @".\slave";
+            var synchronization = new Sync(master, slave, false, 2);
+            synchronization.Synchronization();
         }
     }
 }

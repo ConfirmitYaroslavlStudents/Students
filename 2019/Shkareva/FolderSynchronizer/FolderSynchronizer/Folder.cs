@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace FolderSynchronizer
 {
-    class Folder
+    [DataContract]
+    public class Folder
     {
+        [DataMember]
         public string Path;
-        public List<string> shortFilesNames;
-        public List<string> FilesPaths;
-        public List<Folder> internalFolders;
-        public List<string> internalFoldersPaths;
-
+        
+        [DataMember]
+        public List<string> FilesPathList;
+       
         public Folder(string address)
         {
-            Path = address;
-            shortFilesNames = new List<string>();
-            FilesPaths = new List<string>();
-            internalFolders = new List<Folder>();
-            internalFoldersPaths = new List<string>();
+            Path = address;            
+            FilesPathList = new List<string>();
         }
 
         public Folder() { }

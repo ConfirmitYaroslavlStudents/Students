@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace FaultTolerance.Tests
@@ -76,7 +77,6 @@ namespace FaultTolerance.Tests
         {
             bool ioExceptionFallbackRun = false;
             bool arithmeticExceptionFallbackRun = false;
-
 
             int count = 0;
             Action action = () =>
@@ -156,7 +156,7 @@ namespace FaultTolerance.Tests
             bool failedRun = false;
             var handler = new ExceptionHandler();
             handler
-                .WithTimeout(10)
+                .WithTimeout(20)
                 .HandleFailedRun(() => failedRun = true)
                 .Run(() => Thread.Sleep(9), 2)
                 .Run(() => Thread.Sleep(9), 2)
@@ -170,6 +170,48 @@ namespace FaultTolerance.Tests
                 .Run(() => Thread.Sleep(9), 2);
 
             Assert.False(failedRun);
+        }
+
+        [Fact]
+        public void Deadlock_SucceedRun()
+        {
+            var thread = Thread.CurrentThread;
+            Action action = () =>
+            {
+                thread.Join();
+            };
+
+            bool runHadFailed = false;
+
+            var handler = new ExceptionHandler();
+
+            handler.WithTimeout(1000).HandleFailedRun(() => runHadFailed = true).Run(action, 1);
+            Assert.True(runHadFailed);
+        }
+
+        [Fact]
+        public void Deadlock2_SucceedRun()
+        {
+            var thread = Thread.CurrentThread;
+
+            Action action2 = () =>
+            {
+                thread.Join();
+            };
+
+            Action action1 = () =>
+            {
+                var task = new Task(action2);
+                task.Start();
+                task.Wait();
+            };
+
+            bool runHadFailed = false;
+
+            var handler = new ExceptionHandler();
+
+            handler.WithTimeout(1000).HandleFailedRun(() => runHadFailed = true).Run(action1, 1);
+            Assert.True(runHadFailed);
         }
     }
 }

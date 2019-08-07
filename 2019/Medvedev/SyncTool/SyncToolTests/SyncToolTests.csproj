@@ -62,6 +62,7 @@
     <Compile Include="DefaultConflictDetectionPolicyTests.cs" />
     <Compile Include="DefaultFileComparerTests.cs" />
     <Compile Include="DefaultDirectoryComparerTests.cs" />
+    <Compile Include="DefaultResolvingPolicyTests.cs" />
     <Compile Include="DirectoryWrapperTests.cs" />
     <Compile Include="FileWrapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

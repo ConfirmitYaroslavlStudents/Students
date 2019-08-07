@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.IO;
-using System;
+﻿using System.IO;
 using System.Collections.Generic;
 
 namespace FolderSynchronizer

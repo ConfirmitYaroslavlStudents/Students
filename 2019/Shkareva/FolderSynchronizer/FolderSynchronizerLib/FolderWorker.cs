@@ -39,9 +39,9 @@ namespace FolderSynchronizer
 
             while (countPath < internalFoldersPaths.Count)
             {
-                var _path = internalFoldersPaths[countPath];
-                filesPathList.AddRange(Directory.GetFiles(_path));
-                internalFoldersPaths.AddRange(Directory.GetDirectories(_path));
+                var pathInternalFolder = internalFoldersPaths[countPath];
+                filesPathList.AddRange(Directory.GetFiles(pathInternalFolder));
+                internalFoldersPaths.AddRange(Directory.GetDirectories(pathInternalFolder));
                 countPath++;
             }
 

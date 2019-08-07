@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderSynchronizer", "Folde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{33F58B26-6DC9-4C44-9671-CC63F4C1167E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderSynchronizerLib", "FolderSynchronizerLib\FolderSynchronizerLib.csproj", "{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

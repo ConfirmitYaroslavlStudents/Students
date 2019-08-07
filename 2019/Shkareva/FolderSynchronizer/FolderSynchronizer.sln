@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderSynchronizer", "FolderSynchronizer\FolderSynchronizer.csproj", "{5B765BF7-51F8-4E53-BA20-D197DD79FC64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{33F58B26-6DC9-4C44-9671-CC63F4C1167E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderSynchronizerLib", "FolderSynchronizerLib\FolderSynchronizerLib.csproj", "{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{5B765BF7-51F8-4E53-BA20-D197DD79FC64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B765BF7-51F8-4E53-BA20-D197DD79FC64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B765BF7-51F8-4E53-BA20-D197DD79FC64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33F58B26-6DC9-4C44-9671-CC63F4C1167E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

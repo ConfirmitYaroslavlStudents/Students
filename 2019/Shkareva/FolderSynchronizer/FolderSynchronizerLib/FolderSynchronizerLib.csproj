@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5B765BF7-51F8-4E53-BA20-D197DD79FC64}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>FolderSynchronizer</RootNamespace>
-    <AssemblyName>FolderSynchronizer</AssemblyName>
+    <ProjectGuid>{D436EE73-71B7-4E66-B43E-CBFC8F127AEB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FolderSynchronizerLib</RootNamespace>
+    <AssemblyName>FolderSynchronizerLib</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,17 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Folder.cs" />
+    <Compile Include="FolderWorker.cs" />
+    <Compile Include="InputData.cs" />
+    <Compile Include="InputDataReader.cs" />
+    <Compile Include="Launcher.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyncData.cs" />
+    <Compile Include="SyncDataReader.cs" />
+    <Compile Include="SyncException.cs" />
+    <Compile Include="Synchronizer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FolderSynchronizerLib\FolderSynchronizerLib.csproj">
-      <Project>{d436ee73-71b7-4e66-b43e-cbfc8f127aeb}</Project>
-      <Name>FolderSynchronizerLib</Name>
-    </ProjectReference>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

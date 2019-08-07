@@ -5,6 +5,7 @@ using Sync.Comparers;
 using Sync.ConflictDetectionPolicies;
 using Sync.Loggers;
 using Sync.Providers;
+using Sync.ResolvingPolicies;
 
 namespace SyncTool
 {
@@ -28,7 +29,14 @@ namespace SyncTool
                     new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()))
                 .GetConflicts();
 
-            var resolutions = new Resolver(master, slave, _parameters.ResolverOption)
+            IResolvingPolicy resolvingPolicy = null;
+
+            if (_parameters.ResolverOption == ResolverOptions.NoDelete)
+                resolvingPolicy = new NoDeleteResolvingPolicy(master, slave);
+            else
+                resolvingPolicy = new DefaultResolvingPolicy(master, slave);
+
+            var resolutions = new Resolver(resolvingPolicy)
                 .GetConflictsResolutions(conflicts);
 
             var commiter = new DefaultCommiter(provider, new StreamLogger(Console.Out, _parameters.LoggerOption));

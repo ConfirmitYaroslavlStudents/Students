@@ -3,20 +3,34 @@ using Sync.Wrappers;
 
 namespace Sync.ResolvingPolicies
 {
-    public class DefaultResolvingPolicy : IResolvingPolicy
+    public class DefaultResolvingPolicy : NoDeleteResolvingPolicy
     {
-        public DirectoryWrapper Master { get; }
-        public DirectoryWrapper Slave { get; }
-
-        public DefaultResolvingPolicy(DirectoryWrapper master, DirectoryWrapper slave)
+        public DefaultResolvingPolicy(DirectoryWrapper master, DirectoryWrapper slave) 
+            : base(master, slave)
         {
-            Master = master;
-            Slave = slave;
         }
 
-        public IResolution Resolve(Conflict conflict)
+        public override IResolution Resolve(Conflict conflict)
         {
-            throw new System.NotImplementedException();
+            var resolution = base.Resolve(conflict);
+
+            if (resolution != null)
+                return resolution;
+
+            if (ExistsDeleteResolution(conflict))
+                return MakeDeleteResolution(conflict);
+
+            return null;
+        }
+
+        private bool ExistsDeleteResolution(Conflict conflict)
+        {
+            return conflict.Source == null && conflict.Destination != null;
+        }
+
+        private IResolution MakeDeleteResolution(Conflict conflict)
+        {
+            return new DeleteResolution(conflict.Destination);
         }
     }
 }

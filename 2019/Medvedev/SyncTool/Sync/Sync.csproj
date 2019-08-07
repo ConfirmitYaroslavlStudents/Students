@@ -64,6 +64,7 @@
     <Compile Include="ResolverOptions.cs" />
     <Compile Include="ResolvingPolicies\DefaultResolvingPolicy.cs" />
     <Compile Include="ResolvingPolicies\IResolvingPolicy.cs" />
+    <Compile Include="ResolvingPolicies\NoDeleteResolvingPolicy.cs" />
     <Compile Include="Wrappers\DirectoryWrapper.cs" />
     <Compile Include="Wrappers\FileAttributes.cs" />
     <Compile Include="Wrappers\FileWrapper.cs" />

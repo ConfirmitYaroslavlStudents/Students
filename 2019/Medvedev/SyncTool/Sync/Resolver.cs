@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Sync.Resolutions;
 using Sync.ResolvingPolicies;
-using Sync.Wrappers;
 
 namespace Sync
 {
     public class Resolver
     {
         private IResolvingPolicy _resolvingPolicy;
+
         public Resolver(IResolvingPolicy policy)
         {
             _resolvingPolicy = policy;

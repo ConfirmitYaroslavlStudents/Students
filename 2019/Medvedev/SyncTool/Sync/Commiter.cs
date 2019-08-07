@@ -5,12 +5,12 @@ using Sync.Resolutions;
 
 namespace Sync
 {
-    public class DefaultCommiter
+    public class Commiter
     {
         private readonly Logger _logger;
         private readonly IProvider _provider;
 
-        public DefaultCommiter(IProvider provider, Logger logger = null)
+        public Commiter(IProvider provider, Logger logger = null)
         {
             _provider = provider;
             _logger = logger;

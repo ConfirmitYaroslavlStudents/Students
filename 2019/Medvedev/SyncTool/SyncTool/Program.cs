@@ -39,7 +39,7 @@ namespace SyncTool
             var resolutions = new Resolver(resolvingPolicy)
                 .GetConflictsResolutions(conflicts);
 
-            var commiter = new DefaultCommiter(provider, new StreamLogger(Console.Out, _parameters.LoggerOption));
+            var commiter = new Commiter(provider, new StreamLogger(Console.Out, _parameters.LoggerOption));
 
             commiter.Commit(resolutions);
         }

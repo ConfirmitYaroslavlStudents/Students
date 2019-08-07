@@ -24,12 +24,12 @@ namespace Sync
 
         protected virtual void CommitResolution(IResolution resolution)
         {
-            if (resolution is UpdateResolution ur)
-                CommitUpdateResolution(ur);
-            if (resolution is CopyResolution cp)
-                CommitCopyResolution(cp);
-            if (resolution is DeleteResolution dr)
-                CommitDeleteResolution(dr);
+            if (resolution is UpdateResolution updateResolution)
+                CommitUpdateResolution(updateResolution);
+            if (resolution is CopyResolution copyResolution)
+                CommitCopyResolution(copyResolution);
+            if (resolution is DeleteResolution deleteResolution)
+                CommitDeleteResolution(deleteResolution);
         }
 
         private void CommitUpdateResolution(UpdateResolution resolution)

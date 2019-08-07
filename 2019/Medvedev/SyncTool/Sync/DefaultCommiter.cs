@@ -10,7 +10,7 @@ namespace Sync
         private readonly Logger _logger;
         private readonly IProvider _provider;
 
-        public DefaultCommiter(IProvider provider, Logger logger)
+        public DefaultCommiter(IProvider provider, Logger logger = null)
         {
             _provider = provider;
             _logger = logger;
@@ -36,19 +36,24 @@ namespace Sync
         {
             _provider.Delete(resolution.Destination);
             _provider.CopyTo(resolution.Source, resolution.Destination.FullName);
-            _logger.Log(resolution);
+            Log(resolution);
         }
 
         private void CommitCopyResolution(CopyResolution resolution)
         {
             _provider.CopyTo(resolution.Source, resolution.Destination);
-            _logger.Log(resolution);
+            Log(resolution);
         }
 
         private void CommitDeleteResolution(DeleteResolution resolution)
         {
             _provider.Delete(resolution.Source);
-            _logger.Log(resolution);
+            Log(resolution);
+        }
+
+        private void Log(IResolution resolution)
+        {
+            _logger?.Log(resolution);
         }
     }
 }

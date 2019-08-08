@@ -1,4 +1,6 @@
-﻿namespace FolderSynchronizer
+﻿using FolderSynchronizerLib;
+
+namespace FolderSynchronizer
 {
     class Program
     {

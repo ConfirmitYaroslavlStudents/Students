@@ -8,7 +8,7 @@ namespace Synchronization
 {
     public class Synchronization
     {
-        private string logLevel = "summary";
+        private string logLevel = "verbose";
         private bool nodelete = true;
         Dictionary<string, string> deleted;
         Dictionary<string, string> copied;
@@ -21,8 +21,8 @@ namespace Synchronization
 
         public Synchronization(string Master, string Slave)
         {
-            DirectoryInfo _master = new DirectoryInfo(Master);
-            DirectoryInfo _slave = new DirectoryInfo(Slave);
+            _master = new DirectoryInfo(Master);
+            _slave = new DirectoryInfo(Slave);
 
             deleted = new Dictionary<string, string>();
             copied = new Dictionary<string, string>();
@@ -131,17 +131,20 @@ namespace Synchronization
                 if (!filesSlave.ContainsKey(c))
                 {
                     File.Copy(filesMaster[c].FullName, Path.Combine(slave.FullName, c));
+                    copied.Add(filesMaster[c].FullName, slave.FullName);
                 }
                 else
                 {
                     if (filesMaster[c].LastWriteTimeUtc < filesSlave[c].LastWriteTimeUtc)
                     {
-                        filesMaster[c].Replace(filesSlave[c].FullName, null, true);
+                        filesMaster[c].Delete();
+                        filesSlave[c].CopyTo(filesMaster[c].FullName);
                         updated.Add(filesMaster[c].FullName, filesSlave[c].FullName);
                     }
-                    else
+                    else if(filesMaster[c].LastWriteTimeUtc > filesSlave[c].LastWriteTimeUtc)
                     {
-                        filesSlave[c].Replace(filesMaster[c].FullName, null, true);
+                        filesSlave[c].Delete();
+                        filesMaster[c].CopyTo(filesMaster[c].FullName);
                         updated.Add(filesSlave[c].FullName, filesMaster[c].FullName);
                     }
 
@@ -158,6 +161,11 @@ namespace Synchronization
                         deleted.Add(filesSlave[c].FullName, filesSlave[c].DirectoryName);
                         filesSlave[c].Delete();
                     }
+                }
+                else
+                {
+                    File.Copy(filesSlave[c].FullName, Path.Combine(master.FullName, c));
+                    copied.Add(filesSlave[c].FullName, master.FullName);
                 }
             }
         }

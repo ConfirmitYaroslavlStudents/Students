@@ -3,6 +3,9 @@ using System.IO;
 
 namespace FolderSync
 {
+    // TODO: pass configuration via args
+    // TODO: create class-library project
+    // TODO: think about app architecture: testablility, scaleability
     class Program
     {
         static void Main(string[] args)

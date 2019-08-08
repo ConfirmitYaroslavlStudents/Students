@@ -55,6 +55,7 @@ namespace FolderSync
                 }
             }
         }
+
         private int Contains(FileInfo file, DirectoryInfo directory)
         {
             foreach (var i in directory.GetFiles())

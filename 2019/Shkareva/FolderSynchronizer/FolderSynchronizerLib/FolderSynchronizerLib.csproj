@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Folder.cs" />
+    <Compile Include="FolderSet.cs" />
     <Compile Include="FolderWorker.cs" />
     <Compile Include="InputData.cs" />
     <Compile Include="InputDataReader.cs" />

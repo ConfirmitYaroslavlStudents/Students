@@ -13,8 +13,6 @@ namespace FolderSynchronizerLib
         {
             FilesToCopy = new Dictionary<string, string>();
             FilesToDelete = new List<string>();
-            NoDeleteFlag = false;
-            LogFlag = "summary";
         }
     }
 }

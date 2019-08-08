@@ -12,21 +12,21 @@ namespace FolderSynchronizerLib
         private static Folder _newMaster;
         private static Folder _newSlave;
 
-        public static SyncData Load(InputData input)
+        public static SyncData Load(FolderSet folderSet)
         {
             var syncData = new SyncData();
-            _newMaster = new FolderWorker().LoadFolder(input.MasterPath);
-            _newSlave = new FolderWorker().LoadFolder(input.SlavePath);
-            _oldMaster = new FolderWorker().LoadSerializedFolder(input.MasterPath);
-            _oldSlave = new FolderWorker().LoadSerializedFolder(input.SlavePath);
+            _newMaster = folderSet.NewMaster;
+            _newSlave = folderSet.NewSlave;
+            _oldMaster = folderSet.OldMaster;
+            _oldSlave = folderSet.OldSlave;
 
             syncData.FilesToDelete = FindFileToDelete();
             var filesToAdd = FindFilesToAdd();
             var filesToUpdate = FindFilesToUpdate();
             syncData.FilesToCopy = filesToAdd.Union(filesToUpdate).ToDictionary(x => x.Key, x => x.Value);
             syncData = RemoveCollision(syncData);
-            syncData.LogFlag = input.LogFlag;
-            syncData.NoDeleteFlag = input.NoDeleteFlag;
+            syncData.LogFlag = folderSet.Loglevel;
+            syncData.NoDeleteFlag = folderSet.NoDeleteFlag;
 
             return syncData;
         }      

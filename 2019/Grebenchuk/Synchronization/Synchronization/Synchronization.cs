@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Synchronization
 {
+    // TODO: enum is preferable than strings
+    // TODO: extract separate entity to work with file system (or FTP)
+
     public class Synchronization
     {
         private string logLevel = "verbose";

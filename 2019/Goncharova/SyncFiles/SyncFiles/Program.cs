@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using MasterSlaveSync;
 
 namespace SyncFiles
@@ -9,9 +8,9 @@ namespace SyncFiles
         static void Main(string[] args)
         {
             Console.WriteLine("Enter master directory path");
-            DirectoryInfo master = new DirectoryInfo(Console.ReadLine());
+            string masterPath = @"C:\Users\Anna\Documents\Master"; //Console.ReadLine();
             Console.WriteLine("Enter slave directory path");
-            DirectoryInfo slave = new DirectoryInfo(Console.ReadLine());
+            string slavePath = @"C:\Users\Anna\Documents\Slave";//Console.ReadLine();
 
             Console.WriteLine("Enable no-delete: ndt, Disable no-delete: ndf");
             Console.WriteLine("Start watching: start, Stop watching: stop");
@@ -31,8 +30,8 @@ namespace SyncFiles
                         break;
                     case "start":
                         Console.WriteLine("Sync started..");
-                        Synchronizer synchronizer = new Synchronizer(master, slave);
-                        synchronizer.Run();
+                        Synchronizer sync = new Synchronizer(masterPath, slavePath);
+                        var res = sync.CollectConflicts();
                         break;
                 }
             }

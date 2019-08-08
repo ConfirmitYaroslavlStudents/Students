@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using MasterSlaveSync.Conflict;
+using System.Collections.Generic;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
@@ -6,25 +8,26 @@ namespace MasterSlaveSync
     {
         public static bool NoDelete { get; set; } = false;
 
-        private DirectoryInfo master;
-        private DirectoryInfo slave;
+        private IDirectoryInfo master;
+        private IDirectoryInfo slave;
 
-        public Synchronizer(DirectoryInfo master, DirectoryInfo slave)
+        private IFileSystem _fileSystem;
+
+        public Synchronizer(string masterPath, string slavePath) :
+            this(masterPath, slavePath, new FileSystem()) { }
+
+        public Synchronizer(string masterPath, string slavePath, IFileSystem fileSystem)
         {
-            this.master = master;
-            this.slave = slave;
+            _fileSystem = fileSystem;
+
+            master = _fileSystem.DirectoryInfo.FromDirectoryName(masterPath);
+            slave = _fileSystem.DirectoryInfo.FromDirectoryName(slavePath);
         }
 
-        public void Run()
+        public List<IConflict> CollectConflicts()
         {
-            SyncEngine.SyncNoConflict(master, slave);
-            SyncEngine.SyncConflict(master, slave);
-
-            var masterWatcher = new MasterWatcher(master, slave);
-            var slaveWatcher = new SlaveWatcher(master, slave);
-
-            masterWatcher.WatchDirectory();
-            slaveWatcher.WatchDirectory();
+            var collector = new ConflictsCollector();
+            return collector.CollectConflicts(master, slave);
         }
 
     }

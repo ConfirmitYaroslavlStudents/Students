@@ -4,7 +4,7 @@ using System.IO;
 
 namespace FolderSynchronizerLib
 {
-    class InputDataReader
+    public class InputDataReader
     {
         string _noDelete;
         string _loglevel;
@@ -89,6 +89,7 @@ namespace FolderSynchronizerLib
                 {
                     throw new SyncException("Invalid word: "+ word);
                 }
+                count++;
             }
 
             return isMasterPathRight && isSlavePathRight;

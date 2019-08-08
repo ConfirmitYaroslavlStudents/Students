@@ -1,6 +1,6 @@
 ﻿namespace ShopLib
 {
-    public class Guitar
+    public class Guitar: Instrument
     {
         public Guitar(string id, string name, string model, string builder, string type)
         {

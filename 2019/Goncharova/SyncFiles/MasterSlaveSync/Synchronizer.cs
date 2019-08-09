@@ -6,7 +6,7 @@ namespace MasterSlaveSync
 {
     public class Synchronizer
     {
-        public static bool NoDelete { get; set; } = false;
+        public SyncOptions SyncOptions { get; private set; } = new SyncOptions();
 
         private IDirectoryInfo master;
         private IDirectoryInfo slave;
@@ -28,6 +28,12 @@ namespace MasterSlaveSync
         {
             var collector = new ConflictsCollector();
             return collector.CollectConflicts(master, slave);
+        }
+
+        public void SyncDirectories(List<IConflict> conflicts)
+        {
+            var syncProcessor = new SyncProcessor(SyncOptions);
+            syncProcessor.Synchronize(conflicts);
         }
 
     }

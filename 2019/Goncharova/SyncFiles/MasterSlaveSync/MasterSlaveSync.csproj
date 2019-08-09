@@ -48,14 +48,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConflictsCollector.cs" />
+    <Compile Include="Processors\DefaultCreateDirectoryProcessor.cs" />
+    <Compile Include="Processors\DefaultCreateFileProcessor.cs" />
+    <Compile Include="Processors\DefaultDeleteDirectoryProcessor.cs" />
+    <Compile Include="Processors\DefaultUpdateFileProcessor.cs" />
+    <Compile Include="Processors\NoDeleteDirectoryProcessor.cs" />
+    <Compile Include="Processors\NoDeleteFileProcessor.cs" />
+    <Compile Include="Processors\DefaultDeleteFileProcessor.cs" />
+    <Compile Include="Processors\ICreateDirectoryProcessor.cs" />
+    <Compile Include="Processors\ICreateFileProcessor.cs" />
+    <Compile Include="Processors\IDeleteDirectoryProcessor.cs" />
+    <Compile Include="Processors\IDeleteFileProcessor.cs" />
+    <Compile Include="Processors\IUpdateFileProcessor.cs" />
+    <Compile Include="SyncOptions.cs" />
+    <Compile Include="SyncProcessor.cs" />
     <Compile Include="Conflicts\DirectoryConflict.cs" />
     <Compile Include="Conflicts\IConflict.cs" />
     <Compile Include="Conflicts\FileConflict.cs" />
     <Compile Include="ConflictsRetriever.cs" />
-    <Compile Include="DefaultFileComparer.cs" />
+    <Compile Include="Processors\DefaultFileComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronizer.cs" />
-    <Compile Include="Watchers\WatcherHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

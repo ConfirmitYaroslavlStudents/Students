@@ -33,13 +33,6 @@ namespace FaultTolerance
             }
         }
 
-        internal ExceptionHandlerParameters(ExceptionHandlerParameters p)
-        {
-            Timeout = p.Timeout;
-            CountOfRepeats = p.CountOfRepeats;
-            Fallbacks = new Dictionary<Type, Action>(p.Fallbacks);
-        }
-
         internal ExceptionHandlerParameters()
         {
             Fallbacks = new Dictionary<Type, Action>();

@@ -28,7 +28,8 @@ namespace FaultTolerance.Tests
             handler
                 .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
                 .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; })
-                .Run(action, 3);
+                .Repeat(3)
+                .Run(action);
 
             Assert.False(ioExceptionFallbackRun);
             Assert.False(arithmeticExceptionFallbackRun);
@@ -48,7 +49,7 @@ namespace FaultTolerance.Tests
             };
 
             var handler = new ExceptionHandler();
-            handler.Handle<ArithmeticException>().Run(action, upperBound);
+            handler.Handle<ArithmeticException>().Repeat(upperBound).Run(action);
 
             Assert.True(actual <= upperBound);
         }
@@ -67,7 +68,7 @@ namespace FaultTolerance.Tests
             };
 
             var handler = new ExceptionHandler();
-            handler.Handle<ArithmeticException>().Run(action, upperBound);
+            handler.Handle<ArithmeticException>().Repeat(upperBound).Run(action);
 
             Assert.Equal(expected, actual);
         }
@@ -94,7 +95,8 @@ namespace FaultTolerance.Tests
             handler
                 .Handle<IOException>(() => { ioExceptionFallbackRun = true; })
                 .Handle<ArithmeticException>(() => { arithmeticExceptionFallbackRun = true; })
-                .Run(action, 2);
+                .Repeat(2)
+                .Run(action);
 
             Assert.False(ioExceptionFallbackRun);
             Assert.True(arithmeticExceptionFallbackRun);
@@ -111,7 +113,8 @@ namespace FaultTolerance.Tests
                 .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
                 .HandleFailedRun(() => hadRun = true)
                 .WithTimeout(10)
-                .Run(() => Thread.Sleep(100), 2);
+                .Repeat(2)
+                .Run(() => Thread.Sleep(100));
 
             Assert.True(hadRun);
             Assert.False(hadRunArithmeticEx);
@@ -129,7 +132,8 @@ namespace FaultTolerance.Tests
                 .Handle<ArithmeticException>(() => hadRunArithmeticEx = true)
                 .HandleFailedRun(() => hadRun = true)
                 .WithTimeout(10)
-                .Run(() => { }, 2);
+                .Repeat(2)
+                .Run(() => { });
 
             Assert.False(hadRun);
             Assert.False(hadRunArithmeticEx);
@@ -143,9 +147,10 @@ namespace FaultTolerance.Tests
             handler
                 .WithTimeout(10)
                 .HandleFailedRun(() => failedRun = true)
-                .Run(() => Thread.Sleep(50), 2)
+                .Repeat(2)
+                .Run(() => Thread.Sleep(50))
                 .WithTimeout(-1)
-                .Run(() => Thread.Sleep(100), 2);
+                .Run(() => Thread.Sleep(100));
 
             Assert.True(failedRun);
         }
@@ -158,16 +163,17 @@ namespace FaultTolerance.Tests
             handler
                 .WithTimeout(20)
                 .HandleFailedRun(() => failedRun = true)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2)
-                .Run(() => Thread.Sleep(9), 2);
+                .Repeat(2)
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9))
+                .Run(() => Thread.Sleep(9));
 
             Assert.False(failedRun);
         }
@@ -185,7 +191,7 @@ namespace FaultTolerance.Tests
 
             var handler = new ExceptionHandler();
 
-            handler.WithTimeout(1000).HandleFailedRun(() => runHadFailed = true).Run(action, 1);
+            handler.WithTimeout(1000).HandleFailedRun(() => runHadFailed = true).Run(action);
             Assert.True(runHadFailed);
         }
 
@@ -210,7 +216,7 @@ namespace FaultTolerance.Tests
 
             var handler = new ExceptionHandler();
 
-            handler.WithTimeout(1000).HandleFailedRun(() => runHadFailed = true).Run(action1, 1);
+            handler.WithTimeout(1000).HandleFailedRun(() => runHadFailed = true).Run(action1);
             Assert.True(runHadFailed);
         }
     }

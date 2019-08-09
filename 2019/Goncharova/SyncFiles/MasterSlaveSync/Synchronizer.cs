@@ -1,4 +1,5 @@
 ﻿using MasterSlaveSync.Conflict;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
@@ -24,6 +25,11 @@ namespace MasterSlaveSync
             slave = _fileSystem.DirectoryInfo.FromDirectoryName(slavePath);
         }
 
+        public Action<string> LogListener { get; set; }
+        public LogLevels LogLevel { get; set; } = LogLevels.Silent;
+
+        
+
         public List<IConflict> CollectConflicts()
         {
             var collector = new ConflictsCollector();
@@ -32,8 +38,8 @@ namespace MasterSlaveSync
 
         public void SyncDirectories(List<IConflict> conflicts)
         {
-            var syncProcessor = new SyncProcessor(SyncOptions);
-            syncProcessor.Synchronize(conflicts);
+            var syncProcessor = new SyncProcessor(SyncOptions, master.FullName, slave.FullName, LogLevel, LogListener);
+            syncProcessor.ResolveConflicts(conflicts);
         }
 
     }

@@ -2,8 +2,8 @@
 
 namespace MasterSlaveSync
 {
-    internal interface ICreateFileProcessor
+    internal interface ICopyFileProcessor
     {
-        void Execute(IFileInfo masterFile, string masterPath, string slavePath);
+        bool Execute(IFileInfo masterFile, string masterPath, string slavePath);
     }
 }

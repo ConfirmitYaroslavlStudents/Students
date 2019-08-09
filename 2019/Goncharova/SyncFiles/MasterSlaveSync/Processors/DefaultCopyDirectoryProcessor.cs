@@ -3,19 +3,21 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal class DefaultCreateDirectoryProcessor : ICreateDirectoryProcessor
+    internal class DefaultCopyDirectoryProcessor : ICopyDirectoryProcessor
     {
         private IFileSystem _fileSystem;
-        public DefaultCreateDirectoryProcessor()
+        public DefaultCopyDirectoryProcessor()
         {
             _fileSystem = new FileSystem();
         }
-        public void Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath)
+        public bool Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath)
         {
             string smth = masterDirectory.FullName.Substring(masterPath.Length);
             IDirectoryInfo target = _fileSystem.Directory.CreateDirectory(Path.Combine(slavePath, smth));
 
             CopyAll(masterDirectory, target);
+
+            return true;
         }
 
         private static void CopyAll(IDirectoryInfo source, IDirectoryInfo target)

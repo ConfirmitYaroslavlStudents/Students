@@ -1,31 +1,61 @@
 ﻿using MasterSlaveSync.Conflict;
+using System;
 using System.Collections.Generic;
 
 namespace MasterSlaveSync
 {
     public class SyncProcessor
     {
+        #region privates
         private readonly string masterPath;
         private readonly string slavePath;
 
         private IDeleteFileProcessor deleteFileProcessor = new DefaultDeleteFileProcessor();
-        private ICreateFileProcessor createFileProcessor = new DefaultCreateFileProcessor();
+        private ICopyFileProcessor copyFileProcessor = new DefaultCopyFileProcessor();
         private IUpdateFileProcessor updateFileProcessor = new DefaultUpdateFileProcessor();
 
         private IDeleteDirectoryProcessor deleteDirectoryProcessor = new DefaultDeleteDirectoryProcessor();
-        private ICreateDirectoryProcessor createDirectoryProcessor = new DefaultCreateDirectoryProcessor();
+        private ICopyDirectoryProcessor copyDirectoryProcessor = new DefaultCopyDirectoryProcessor();
 
-        public SyncProcessor(SyncOptions syncOptions)
+        private ILogger logger;
+        private Action<string> logListener;
+
+        #endregion
+
+        public SyncProcessor(SyncOptions syncOptions, string masterPath, string slavePath, 
+            LogLevels level, Action<string> logListener)
         {
+            this.masterPath = masterPath;
+            this.slavePath = slavePath;
+
             if(syncOptions.NoDelete == true)
             {
                 deleteFileProcessor = new NoDeleteFileProcessor();
                 deleteDirectoryProcessor = new NoDeleteDirectoryProcessor();
             }
 
+            SetLogLevel(level);
+            this.logListener = logListener;
+
         }
 
-        public void Synchronize(List<IConflict> conflicts)
+        public void SetLogLevel(LogLevels level)
+        {
+            switch (level)
+            {
+                case (LogLevels.Silent):
+                    logger = new SilentLogger();
+                    break;
+                case (LogLevels.Summary):
+                    logger = new SummaryLogger();
+                    break;
+                case (LogLevels.Verbose):
+                    logger = new VerboseLogger();
+                    break;
+            }
+        }
+
+        public void ResolveConflicts(List<IConflict> conflicts)
         {
             foreach(var conflict in conflicts)
             {
@@ -35,30 +65,73 @@ namespace MasterSlaveSync
 
                     if(fileConflict.MasterFile == null)
                     {
-                        deleteFileProcessor.Execute(fileConflict.SlaveFile);
+                        ResolveByDeletion(fileConflict);
                     }
                     else if (fileConflict.SlaveFile == null)
                     {
-                        createFileProcessor.Execute(fileConflict.MasterFile, masterPath, slavePath);
+                        ResolveByCopy(fileConflict);
                     }
                     else
                     {
-                        updateFileProcessor.Execute(fileConflict);
+                        ResolveByUpdate(fileConflict);
                     }
                 }
+
                 if (conflict.GetType() == typeof(DirectoryConflict))
                 {
                     DirectoryConflict directoryConflict = (DirectoryConflict)conflict;
 
                     if (directoryConflict.MasterDirectory == null)
                     {
-                        deleteDirectoryProcessor.Execute(directoryConflict.SlaveDirectory);
+                        ResolveByDeletion(directoryConflict);
                     }
                     else
                     {
-                        createDirectoryProcessor.Execute(directoryConflict.MasterDirectory, masterPath, slavePath);
+                        ResolveByCopy(directoryConflict);
+
                     }
                 }
+            }
+        }
+
+        private void ResolveByCopy(DirectoryConflict directoryConflict)
+        {
+            if (copyDirectoryProcessor.Execute(directoryConflict.MasterDirectory,
+                masterPath, slavePath))
+            {
+                logListener(logger.LogDirectoryCopy(directoryConflict.MasterDirectory));
+            }
+        }
+
+        private void ResolveByDeletion(DirectoryConflict directoryConflict)
+        {
+            if (deleteDirectoryProcessor.Execute(directoryConflict.SlaveDirectory))
+            {
+                logListener(logger.LogDirectoryDeletion(directoryConflict.SlaveDirectory));
+            }
+        }
+
+        private void ResolveByUpdate(FileConflict fileConflict)
+        {
+            if (updateFileProcessor.Execute(fileConflict))
+            {
+                logListener(logger.LogFileUpdate(fileConflict));
+            }
+        }
+
+        private void ResolveByCopy(FileConflict fileConflict)
+        {
+            if (copyFileProcessor.Execute(fileConflict.MasterFile, masterPath, slavePath))
+            {
+                logListener(logger.LogFileCopy(fileConflict.MasterFile));
+            }
+        }
+
+        private void ResolveByDeletion(FileConflict fileConflict)
+        {
+            if (deleteFileProcessor.Execute(fileConflict.SlaveFile))
+            {
+                logListener(logger.LogFileDeletion(fileConflict.SlaveFile));
             }
         }
     }

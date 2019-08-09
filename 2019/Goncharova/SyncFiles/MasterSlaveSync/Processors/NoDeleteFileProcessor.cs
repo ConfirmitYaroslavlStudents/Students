@@ -4,9 +4,9 @@ namespace MasterSlaveSync
 {
     class NoDeleteFileProcessor : IDeleteFileProcessor
     {
-        public void Execute(IFileInfo slaveFile)
+        public bool Execute(IFileInfo slaveFile)
         {
-
+            return false;
         }
     }
 }

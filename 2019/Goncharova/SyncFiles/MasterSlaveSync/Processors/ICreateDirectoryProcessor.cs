@@ -2,8 +2,8 @@
 
 namespace MasterSlaveSync
 {
-    internal interface ICreateDirectoryProcessor
+    internal interface ICopyDirectoryProcessor
     {
-        void Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath);
+        bool Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath);
     }
 }

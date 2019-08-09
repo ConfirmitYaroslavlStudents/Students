@@ -4,8 +4,9 @@ namespace MasterSlaveSync
 {
     internal class NoDeleteDirectoryProcessor : IDeleteDirectoryProcessor
     {
-        public void Execute(IDirectoryInfo slaveDirectory)
+        public bool Execute(IDirectoryInfo slaveDirectory)
         {
+            return false;
         }
     }
 }

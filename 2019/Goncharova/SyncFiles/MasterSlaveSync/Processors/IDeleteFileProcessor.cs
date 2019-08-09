@@ -4,6 +4,6 @@ namespace MasterSlaveSync
 {
     internal interface IDeleteFileProcessor
     {
-        void Execute(IFileInfo slaveFile);
+        bool Execute(IFileInfo slaveFile);
     }
 }

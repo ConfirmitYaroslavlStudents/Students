@@ -4,6 +4,6 @@ namespace MasterSlaveSync
 {
     internal interface IUpdateFileProcessor
     {
-        void Execute(FileConflict fileConflict);
+        bool Execute(FileConflict fileConflict);
     }
 }

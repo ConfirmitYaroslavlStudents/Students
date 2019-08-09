@@ -4,9 +4,11 @@ namespace MasterSlaveSync
 {
     internal class DefaultDeleteFileProcessor : IDeleteFileProcessor
     {
-        public void Execute(IFileInfo slaveFile)
+        public bool Execute(IFileInfo slaveFile)
         {
             slaveFile.Delete();
+
+            return true;
         }
     }
 }

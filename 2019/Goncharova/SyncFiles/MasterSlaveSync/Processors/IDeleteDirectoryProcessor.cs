@@ -4,6 +4,6 @@ namespace MasterSlaveSync
 {
     internal interface IDeleteDirectoryProcessor
     {
-        void Execute(IDirectoryInfo slaveDirectory);
+        bool Execute(IDirectoryInfo slaveDirectory);
     }
 }

@@ -4,9 +4,11 @@ namespace MasterSlaveSync
 {
     internal class DefaultDeleteDirectoryProcessor : IDeleteDirectoryProcessor
     {
-        public void Execute(IDirectoryInfo slaveDirectory)
+        public bool Execute(IDirectoryInfo slaveDirectory)
         {
             slaveDirectory.Delete();
+
+            return true;
         }
     }
 }

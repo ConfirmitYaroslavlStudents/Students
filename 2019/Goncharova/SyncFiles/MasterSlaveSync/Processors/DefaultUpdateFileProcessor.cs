@@ -2,11 +2,13 @@
 
 namespace MasterSlaveSync
 {
-    class DefaultUpdateFileProcessor : IUpdateFileProcessor
+    internal class DefaultUpdateFileProcessor : IUpdateFileProcessor
     {
-        public void Execute(FileConflict fileConflict)
+        public bool Execute(FileConflict fileConflict)
         {
             fileConflict.MasterFile.CopyTo(fileConflict.SlaveFile.FullName, true);
+
+            return true;
         }
     }
 }

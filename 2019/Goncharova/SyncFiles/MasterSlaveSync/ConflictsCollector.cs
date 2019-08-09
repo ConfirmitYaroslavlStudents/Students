@@ -19,11 +19,14 @@ namespace MasterSlaveSync
         public ConflictsCollector(ConflictsRetriever conflictsRetriever)
             : this(conflictsRetriever, new FileSystem()) { }
 
+        public ConflictsCollector(IFileSystem fileSystem)
+            : this(new ConflictsRetriever(), fileSystem) { }
+
         public ConflictsCollector()
             : this(new ConflictsRetriever(), new FileSystem()) { }
 
 
-        internal List<IConflict> CollectConflicts(IDirectoryInfo master, IDirectoryInfo slave)
+        public List<IConflict> CollectConflicts(IDirectoryInfo master, IDirectoryInfo slave)
         {
             var inBoth = from m in master.EnumerateDirectories()
                          join s in slave.EnumerateDirectories() 

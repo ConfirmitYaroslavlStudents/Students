@@ -36,23 +36,18 @@ namespace Sync
         {
             _provider.Delete(resolution.Destination);
             _provider.CopyTo(resolution.Source, resolution.Destination.FullName);
-            Log(resolution);
+            _logger?.Log(resolution);
         }
 
         private void CommitCopyResolution(CopyResolution resolution)
         {
             _provider.CopyTo(resolution.Source, resolution.Destination);
-            Log(resolution);
+            _logger?.Log(resolution);
         }
 
         private void CommitDeleteResolution(DeleteResolution resolution)
         {
             _provider.Delete(resolution.Source);
-            Log(resolution);
-        }
-
-        private void Log(IResolution resolution)
-        {
             _logger?.Log(resolution);
         }
     }

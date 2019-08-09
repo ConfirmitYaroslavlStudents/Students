@@ -16,27 +16,37 @@ namespace Sync
 
         public List<Conflict> GetConflicts(DirectoryWrapper masterDirectory, DirectoryWrapper slaveDirectory)
         {
-            var left = (
-                from x in masterDirectory.EnumerateContainment()
-                join y in slaveDirectory.EnumerateContainment()
-                    on new {x.Name, Type = x.ElementType} equals new {y.Name, Type = y.ElementType} into
-                    temp
-                from z in temp.DefaultIfEmpty()
-                where ConflictDetectionPolicy.MakesConflict(x, z)
-                select ConflictDetectionPolicy.GetConflict(x, z)
-            ).ToList();
+            var left = LeftJoin(masterDirectory.EnumerateDirectories(), slaveDirectory.EnumerateDirectories())
+                .Union(LeftJoin(masterDirectory.EnumerateFiles(), slaveDirectory.EnumerateFiles()));
 
-            var right = (
-                from x in slaveDirectory.EnumerateContainment()
-                join y in masterDirectory.EnumerateContainment()
-                    on new {x.Name, Attribute = x.ElementType} equals new {y.Name, Attribute = y.ElementType} into
+            var right = RightJoin(masterDirectory.EnumerateDirectories(), slaveDirectory.EnumerateDirectories())
+                .Union(RightJoin(masterDirectory.EnumerateFiles(), slaveDirectory.EnumerateFiles()));
+
+            return left.Union(right).ToHashSet().ToList();
+        }
+
+        private IEnumerable<Conflict> RightJoin(IEnumerable<IFileSystemElementWrapper> left,
+            IEnumerable<IFileSystemElementWrapper> right)
+        {
+            return from x in right
+                join y in left
+                    on x.Name equals y.Name into
                     temp
                 from z in temp.DefaultIfEmpty()
                 where ConflictDetectionPolicy.MakesConflict(z, x)
-                select ConflictDetectionPolicy.GetConflict(z, x)
-            ).ToList();
+                select ConflictDetectionPolicy.GetConflict(z, x);
+        }
 
-            return left.Union(right).ToHashSet().ToList();
+        private IEnumerable<Conflict> LeftJoin(IEnumerable<IFileSystemElementWrapper> left,
+            IEnumerable<IFileSystemElementWrapper> right)
+        {
+            return from x in left
+                join y in right
+                    on x.Name equals y.Name into
+                    temp
+                from z in temp.DefaultIfEmpty()
+                where ConflictDetectionPolicy.MakesConflict(x, z)
+                select ConflictDetectionPolicy.GetConflict(x, z);
         }
     }
 }

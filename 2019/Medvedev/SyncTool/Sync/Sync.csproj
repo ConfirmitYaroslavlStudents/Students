@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultCommiter.cs" />
+    <Compile Include="Commiter.cs" />
     <Compile Include="Comparers\DefaultDirectoryComparer.cs" />
     <Compile Include="Comparers\DefaultFileComparer.cs" />
     <Compile Include="Comparers\DefaultFileSystemElementsComparer.cs" />

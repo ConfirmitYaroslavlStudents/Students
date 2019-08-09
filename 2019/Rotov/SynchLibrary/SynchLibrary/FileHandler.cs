@@ -10,13 +10,13 @@ namespace SynchLibrary
         string SlavePath { get; set; }
         bool CanRemove { get; set; }
 
-        Logger _logger;
+        ILogger _logger;
 
         public FileHandler(Sync owner)
         {
             MasterPath = owner.MasterPath;
             SlavePath = owner.SlavePath;
-            _logger = new Logger(owner.Type);
+            _logger = LoggerFactory.Create("summary");
             CanRemove = owner.CanRemove;
         }
 
@@ -37,7 +37,7 @@ namespace SynchLibrary
                 RemoveDisapperedFiles(slaveWithoutMaster);
             else
                 SwapFiles(masterWithoutSlave, slaveWithoutMaster);
-            _logger.PrintLogs();
+            LoggerForConsole.PrintLog(_logger.GetLogs());
         }
 
         private void MoveIntersectionFiles(IEnumerable<FileWrapper> files)

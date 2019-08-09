@@ -42,7 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileHandler.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="LoggerFactory.cs" />
+    <Compile Include="LoggerForConsole.cs" />
+    <Compile Include="SummaryLogger.cs" />
+    <Compile Include="TypesOfLogging.cs" />
+    <Compile Include="VerboseLogger.cs" />
     <Compile Include="WrapperForFile.cs" />
     <Compile Include="Sync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

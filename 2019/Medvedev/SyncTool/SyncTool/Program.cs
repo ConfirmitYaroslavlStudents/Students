@@ -3,6 +3,7 @@ using NDesk.Options;
 using Sync;
 using Sync.Comparers;
 using Sync.ConflictDetectionPolicies;
+using Sync.Interactors;
 using Sync.Loggers;
 using Sync.Providers;
 using Sync.ResolvingPolicies;
@@ -39,7 +40,7 @@ namespace SyncTool
             var resolutions = new Resolver(resolvingPolicy)
                 .GetConflictsResolutions(conflicts);
 
-            var commiter = new Commiter(provider, new StreamLogger(Console.Out, _parameters.LoggerOption));
+            var commiter = new Commiter(new LocalDiskInteractor(), new StreamLogger(Console.Out, _parameters.LoggerOption));
 
             commiter.Commit(resolutions);
         }

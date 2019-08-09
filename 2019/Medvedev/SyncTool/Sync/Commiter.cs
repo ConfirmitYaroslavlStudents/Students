@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sync.Interactors;
 using Sync.Loggers;
 using Sync.Providers;
 using Sync.Resolutions;
@@ -8,11 +9,11 @@ namespace Sync
     public class Commiter
     {
         private readonly Logger _logger;
-        private readonly IProvider _provider;
+        private readonly IInteractor _interactor;
 
-        public Commiter(IProvider provider, Logger logger = null)
+        public Commiter(IInteractor interactor, Logger logger = null)
         {
-            _provider = provider;
+            _interactor = interactor;
             _logger = logger;
         }
 
@@ -34,20 +35,20 @@ namespace Sync
 
         private void CommitUpdateResolution(UpdateResolution resolution)
         {
-            _provider.Delete(resolution.Destination);
-            _provider.CopyTo(resolution.Source, resolution.Destination.FullName);
+            _interactor.Delete(resolution.Destination);
+            _interactor.CopyTo(resolution.Source, resolution.Destination.FullName);
             _logger?.Log(resolution);
         }
 
         private void CommitCopyResolution(CopyResolution resolution)
         {
-            _provider.CopyTo(resolution.Source, resolution.Destination);
+            _interactor.CopyTo(resolution.Source, resolution.Destination);
             _logger?.Log(resolution);
         }
 
         private void CommitDeleteResolution(DeleteResolution resolution)
         {
-            _provider.Delete(resolution.Source);
+            _interactor.Delete(resolution.Source);
             _logger?.Log(resolution);
         }
     }

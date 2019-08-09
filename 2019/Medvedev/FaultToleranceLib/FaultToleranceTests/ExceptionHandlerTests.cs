@@ -140,7 +140,7 @@ namespace FaultTolerance.Tests
         }
 
         [Fact]
-        public void MultipleRun()
+        public void MultipleRun_DifferentTimeouts()
         {
             bool failedRun = false;
             var handler = new ExceptionHandler();
@@ -153,6 +153,37 @@ namespace FaultTolerance.Tests
                 .Run(() => Thread.Sleep(100));
 
             Assert.True(failedRun);
+        }
+
+        [Fact]
+        public void MultipleRun_DifferentCountOfRepeats()
+        {
+            int actual1 = 0;
+            int expected1 = 2;
+            int actual2 = 0;
+            int expected2 = 3;
+
+            Action action1 = () =>
+            {
+                actual1++;
+                throw new Exception();
+            };
+            Action action2 = () =>
+            {
+                actual2++;
+                throw new Exception();
+            };
+
+            var hanler = new ExceptionHandler();
+            hanler
+                .Handle<Exception>()
+                .Repeat(expected1)
+                .Run(action1)
+                .Repeat(expected2)
+                .Run(action2);
+
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected2, actual2);
         }
 
         [Fact]

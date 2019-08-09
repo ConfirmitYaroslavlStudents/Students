@@ -21,7 +21,7 @@ namespace Sync.Tests
 
             var policy = new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer());
 
-            Assert.False(policy.MakesConflict(first, second));
+            Assert.False(policy.ConflictExists(first, second));
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Sync.Tests
 
             var policy = new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer());
 
-            Assert.True(policy.MakesConflict(first, second));
+            Assert.True(policy.ConflictExists(first, second));
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Sync.Tests
 
             var policy = new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer());
 
-            Assert.Throws<ArgumentException>(() => policy.MakesConflict(first, second));
+            Assert.Throws<ArgumentException>(() => policy.ConflictExists(first, second));
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace Sync.Tests
 
             var policy = new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer());
 
-            Assert.True(policy.MakesConflict(null, second));
+            Assert.True(policy.ConflictExists(null, second));
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace Sync.Tests
 
             var policy = new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer());
 
-            Assert.True(policy.MakesConflict(first, null));
+            Assert.True(policy.ConflictExists(first, null));
         }
 
         [Fact]

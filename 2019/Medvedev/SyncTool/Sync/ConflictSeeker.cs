@@ -33,7 +33,7 @@ namespace Sync
                     on x.Name equals y.Name into
                     temp
                 from z in temp.DefaultIfEmpty()
-                where ConflictDetectionPolicy.MakesConflict(z, x)
+                where ConflictDetectionPolicy.ConflictExists(z, x)
                 select ConflictDetectionPolicy.GetConflict(z, x);
         }
 
@@ -45,7 +45,7 @@ namespace Sync
                     on x.Name equals y.Name into
                     temp
                 from z in temp.DefaultIfEmpty()
-                where ConflictDetectionPolicy.MakesConflict(x, z)
+                where ConflictDetectionPolicy.ConflictExists(x, z)
                 select ConflictDetectionPolicy.GetConflict(x, z);
         }
     }

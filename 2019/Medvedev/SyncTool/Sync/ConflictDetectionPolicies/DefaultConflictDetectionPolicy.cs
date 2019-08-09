@@ -19,7 +19,7 @@ namespace Sync.ConflictDetectionPolicies
                 return new Conflict(first, second);
 
             if (first.ElementType != second.ElementType)
-                throw new ArgumentException("Attributes of first and second elements  are not equal");
+                throw new ArgumentException("Types of first and second elements are not equal");
 
             var comparision = Comparer.Compare(first, second);
 
@@ -30,7 +30,7 @@ namespace Sync.ConflictDetectionPolicies
             return null;
         }
 
-        public bool MakesConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
+        public bool ConflictExists(IFileSystemElementWrapper first, IFileSystemElementWrapper second)
         {
             if (first == null || second == null)
                 return true;

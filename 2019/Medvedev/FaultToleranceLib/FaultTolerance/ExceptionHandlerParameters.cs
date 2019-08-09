@@ -6,7 +6,20 @@ namespace FaultTolerance
     internal class ExceptionHandlerParameters
     {
         private int _timeout;
+        private int _countOfRepeats;
         internal Dictionary<Type, Action> Fallbacks { get; }
+
+        internal int CountOfRepeats
+        {
+            get => _countOfRepeats;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("Count of repeats must be positive");
+
+                _countOfRepeats = value;
+            }
+        }
 
         internal int Timeout
         {
@@ -22,7 +35,8 @@ namespace FaultTolerance
 
         internal ExceptionHandlerParameters(ExceptionHandlerParameters p)
         {
-            Timeout = p._timeout;
+            Timeout = p.Timeout;
+            CountOfRepeats = p.CountOfRepeats;
             Fallbacks = new Dictionary<Type, Action>(p.Fallbacks);
         }
 
@@ -30,6 +44,7 @@ namespace FaultTolerance
         {
             Fallbacks = new Dictionary<Type, Action>();
             Timeout = -1;
+            CountOfRepeats = 1;
         }
 
         internal void Handle<TException>(Action fallback)

@@ -7,11 +7,6 @@ namespace FaultTolerance
     {
         private ExceptionHandlerParameters _parameters;
 
-        private ExceptionHandler(ExceptionHandler e)
-        {
-            _parameters = new ExceptionHandlerParameters(e._parameters);
-        }
-
         public ExceptionHandler()
         {
             _parameters = new ExceptionHandlerParameters();
@@ -20,10 +15,9 @@ namespace FaultTolerance
         public ExceptionHandler Handle<TException>(Action fallback) 
             where TException : Exception
         {
-            var handler = new ExceptionHandler(this);
-            handler._parameters.Handle<TException>(fallback);
+            _parameters.Handle<TException>(fallback);
 
-            return handler;
+            return this;
         }
 
         public ExceptionHandler Handle<TException>()
@@ -39,18 +33,16 @@ namespace FaultTolerance
 
         public ExceptionHandler WithTimeout(int timeout)
         {
-            var handler = new ExceptionHandler(this);
-            handler._parameters.Timeout = timeout;
+            _parameters.Timeout = timeout;
 
-            return handler;
+            return this;
         }
 
         public ExceptionHandler Repeat(int count)
         {
-            var handler = new ExceptionHandler(this);
-            handler._parameters.CountOfRepeats = count;
+            _parameters.CountOfRepeats = count;
 
-            return handler;
+            return this;
         }
 
         public ExceptionHandler Run(Action action)

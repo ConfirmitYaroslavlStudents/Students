@@ -50,6 +50,8 @@
     <Compile Include="ConflictDetectionPolicies\IConflictDetectionPolicy.cs" />
     <Compile Include="ConflictsCollector.cs" />
     <Compile Include="ConflictSeeker.cs" />
+    <Compile Include="Interactors\IInteractor.cs" />
+    <Compile Include="Interactors\LocalDiskInteractor.cs" />
     <Compile Include="Loggers\StreamLogger.cs" />
     <Compile Include="Loggers\LoggerOption.cs" />
     <Compile Include="Providers\IProvider.cs" />

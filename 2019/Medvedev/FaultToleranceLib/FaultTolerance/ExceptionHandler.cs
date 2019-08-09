@@ -45,11 +45,19 @@ namespace FaultTolerance
             return handler;
         }
 
-        public ExceptionHandler Run(Action action, int count)
+        public ExceptionHandler Repeat(int count)
+        {
+            var handler = new ExceptionHandler(this);
+            handler._parameters.CountOfRepeats = count;
+
+            return handler;
+        }
+
+        public ExceptionHandler Run(Action action)
         {
             try
             {
-                DoAction(action, count);
+                DoAction(action, _parameters.CountOfRepeats);
             }
             catch (Exception ex)
             {

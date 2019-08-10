@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SynchLibrary;
-using System.IO;
+﻿using SynchLibrary;
 
 namespace SyncApp
 {
@@ -14,8 +8,10 @@ namespace SyncApp
         {
             var master = @".\master";
             var slave = @".\slave";
-            var synchronization = new Sync(master, slave, false, 2);
-            synchronization.Synchronization();
+            ISynchronizer sync = SynchronizerFactory.Create("true");
+            ILogger logger = LoggerFactory.Create("verbose");
+            var result = sync.Synchronize(master , slave , logger);
+            LoggerForConsole.PrintLog(result.GetLogs());
         }
     }
 }

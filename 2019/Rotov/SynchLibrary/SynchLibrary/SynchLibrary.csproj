@@ -41,16 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileHandler.cs" />
+    <Compile Include="FileSystemHandler.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="ISynchronizer.cs" />
     <Compile Include="LoggerFactory.cs" />
     <Compile Include="LoggerForConsole.cs" />
+    <Compile Include="NoRemoveSynchronizer.cs" />
+    <Compile Include="RemoveSynchronizer.cs" />
     <Compile Include="SummaryLogger.cs" />
+    <Compile Include="SynchronizerFactory.cs" />
     <Compile Include="TypesOfLogging.cs" />
     <Compile Include="VerboseLogger.cs" />
     <Compile Include="WrapperForFile.cs" />
-    <Compile Include="Sync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

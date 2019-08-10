@@ -9,7 +9,7 @@ namespace SyncApp
             var master = @".\master";
             var slave = @".\slave";
             ISynchronizer sync = SynchronizerFactory.Create("true");
-            ILogger logger = LoggerFactory.Create("verbose");
+            ILogger logger = LoggerFactory.Create(2);
             var result = sync.Synchronize(master , slave , logger);
             LoggerForConsole.PrintLog(result.GetLogs());
         }

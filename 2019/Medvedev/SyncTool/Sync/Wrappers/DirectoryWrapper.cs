@@ -47,6 +47,15 @@ namespace Sync.Wrappers
             return subDirectory;
         }
 
+        public DirectoryWrapper GetDirectoryByName(string name)
+        {
+            foreach (var directory in _subDirectories)
+                if (directory.Name == name)
+                    return directory;
+
+            return null;
+        }
+
         public FileWrapper CreateFile(string name, FileAttributes attributes)
         {
             if (string.IsNullOrEmpty(name))
@@ -55,6 +64,15 @@ namespace Sync.Wrappers
             var file = new FileWrapper(Path.Combine(FullName, name), attributes, this);
             _files.Add(file);
             return file;
+        }
+
+        public FileWrapper GetFileByName(string name)
+        {
+            foreach (var file in _files)
+                if (file.Name == name)
+                    return file;
+
+            return null;
         }
 
         public IEnumerable<DirectoryWrapper> EnumerateDirectories()

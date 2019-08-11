@@ -5,15 +5,21 @@ namespace SynchLibrary
 {
     public class FileSystemHandler
     {
-        string MasterPath { get; set; }
-        string SlavePath { get; set; }
+        public string MasterPath { get; set; }
+        public string SlavePath { get; set; }
         public ILogger _logger { get; private set; }
+
+        public List<FileWrapper> MasterList { get; private set; }
+
+        public List<FileWrapper> SlaveList { get; private set; }
 
         public FileSystemHandler(string master , string slave , ILogger logger)
         {
             MasterPath = master;
             SlavePath = slave;
             _logger = logger;
+            MasterList = GetListOfFiles(MasterPath);
+            SlaveList = GetListOfFiles(SlavePath);
         }
 
         public List<FileWrapper> GetListOfFiles(string path)
@@ -33,8 +39,8 @@ namespace SynchLibrary
                 if(FilesChanged(old , fresh))
                 {
                     File.Copy(old , fresh , true);
+                    _logger.AddReplace(file.RelativePath , SlavePath);
                 }
-                _logger.AddReplace(file.RelativePath , SlavePath);
             }
         }
 

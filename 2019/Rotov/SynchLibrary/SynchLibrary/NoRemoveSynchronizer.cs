@@ -2,18 +2,12 @@
 
 namespace SynchLibrary
 {
-    public class NoRemoveSynchronizer : ISynchronizer
+    public class NoRemoveSynchronizer : BaseSynchronizer
     {
-        public ILogger Synchronize(string master , string slave , ILogger logger)
+        public override ILogger Synchronize(FileSystemHandler handler)
         {
-            FileSystemHandler handler = new FileSystemHandler(master , slave , logger);
-            var listMaster = handler.GetListOfFiles(master);
-            var listSlave = handler.GetListOfFiles(slave);
-            var intersection = listMaster.Intersect(listSlave);
-            var masterWithoutSlave = listMaster.Except(listSlave);
-            var slaveWithoutMaster = listSlave.Except(listMaster);
-            handler.MoveIntersectionFiles(intersection);
-            handler.SwapFiles(masterWithoutSlave , slaveWithoutMaster);
+            handler.MoveIntersectionFiles(Intersection);
+            handler.SwapFiles(MasterWithoutSlave , SlaveWithoutMaster);
             return handler._logger;
         }
     }

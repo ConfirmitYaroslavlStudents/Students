@@ -4,7 +4,7 @@ namespace SynchLibrary
 {
     public static class SynchronizerFactory
     {
-        public static ISynchronizer Create(string canRemove)
+        public static BaseSynchronizer Create(string canRemove)
         {
             switch(canRemove)
             {

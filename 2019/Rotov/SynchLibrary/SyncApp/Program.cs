@@ -1,4 +1,5 @@
 ﻿using SynchLibrary;
+using System;
 
 namespace SyncApp
 {
@@ -6,12 +7,14 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            var master = @".\master";
-            var slave = @".\slave";
-            ISynchronizer sync = SynchronizerFactory.Create("true");
+            var master = @"C:\Users\Владислав\Desktop\master";
+            var slave = @"C:\Users\Владислав\Desktop\slave";
+            BaseSynchronizer sync = SynchronizerFactory.Create("false");
             ILogger logger = LoggerFactory.Create(2);
-            var result = sync.Synchronize(master , slave , logger);
-            LoggerForConsole.PrintLog(result.GetLogs());
+            FileSystemHandler handler = new FileSystemHandler(master , slave , logger);
+            sync.SetUpBaseCollections(handler.MasterList , handler.SlaveList);
+            var resultLogger = sync.Synchronize(handler);
+            LoggerForConsole.PrintLog(resultLogger.GetLogs());
         }
     }
 }

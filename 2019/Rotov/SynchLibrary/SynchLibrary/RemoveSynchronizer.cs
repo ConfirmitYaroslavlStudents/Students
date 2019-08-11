@@ -1,19 +1,11 @@
-﻿using System.Linq;
-
-namespace SynchLibrary
+﻿namespace SynchLibrary
 {
-    public class RemoveSynchronizer : ISynchronizer
+    public class RemoveSynchronizer : BaseSynchronizer
     {
-        public ILogger Synchronize(string master , string slave , ILogger logger)
+        public override ILogger Synchronize(FileSystemHandler handler)
         {
-            FileSystemHandler handler = new FileSystemHandler(master , slave , logger);
-            var listMaster = handler.GetListOfFiles(master);
-            var listSlave = handler.GetListOfFiles(slave);
-            var intersection = listMaster.Intersect(listSlave);
-            var masterWithoutSlave = listMaster.Except(listSlave);
-            var slaveWithoutMaster = listSlave.Except(listMaster);
-            handler.MoveIntersectionFiles(intersection);
-            handler.RemoveDisapperedFiles(slaveWithoutMaster);
+            handler.MoveIntersectionFiles(Intersection);
+            handler.RemoveDisapperedFiles(SlaveWithoutMaster);
             return handler._logger;
         }
     }

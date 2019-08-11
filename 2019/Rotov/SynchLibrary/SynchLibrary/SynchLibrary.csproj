@@ -41,17 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseSynchronizer.cs" />
     <Compile Include="FileSystemHandler.cs" />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="ISynchronizer.cs" />
-    <Compile Include="LoggerFactory.cs" />
-    <Compile Include="LoggerForConsole.cs" />
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\LoggerFactory.cs" />
+    <Compile Include="Logger\LoggerForConsole.cs" />
     <Compile Include="NoRemoveSynchronizer.cs" />
     <Compile Include="RemoveSynchronizer.cs" />
-    <Compile Include="SilentLogger.cs" />
-    <Compile Include="SummaryLogger.cs" />
+    <Compile Include="Logger\SilentLogger.cs" />
+    <Compile Include="Logger\SummaryLogger.cs" />
     <Compile Include="SynchronizerFactory.cs" />
-    <Compile Include="VerboseLogger.cs" />
+    <Compile Include="Logger\VerboseLogger.cs" />
     <Compile Include="WrapperForFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

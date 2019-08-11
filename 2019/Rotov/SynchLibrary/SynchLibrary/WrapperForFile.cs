@@ -11,6 +11,11 @@ namespace SynchLibrary
             SetRelativePath(file , root);
         }
 
+        public FileWrapper(string relativaPath)
+        {
+            RelativePath = relativaPath;
+        }
+
         public void SetRelativePath(FileInfo file , string root)
         {
             var current = file.FullName.Replace(root , "");

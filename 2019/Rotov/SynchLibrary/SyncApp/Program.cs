@@ -7,10 +7,12 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            var master = @"C:\Users\Владислав\Desktop\master";
-            var slave = @"C:\Users\Владислав\Desktop\slave";
-            BaseSynchronizer sync = SynchronizerFactory.Create("false");
-            ILogger logger = LoggerFactory.Create(2);
+            var master = args[0];
+            var slave = args[1];
+            var canRemove = args[2];
+            int loggerMode = Convert.ToInt32(args[3]);
+            BaseSynchronizer sync = SynchronizerFactory.Create(canRemove);
+            ILogger logger = LoggerFactory.Create(loggerMode);
             FileSystemHandler handler = new FileSystemHandler(master , slave , logger);
             sync.SetUpBaseCollections(handler.MasterList , handler.SlaveList);
             var resultLogger = sync.Synchronize(handler);

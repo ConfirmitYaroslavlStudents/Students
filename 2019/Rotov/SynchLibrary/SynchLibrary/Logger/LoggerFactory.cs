@@ -7,14 +7,12 @@ namespace SynchLibrary
         {
             switch(type)
             {
-                case 0:
-                    return new SilentLogger();
                 case 1:
                     return new SummaryLogger();
                 case 2:
                     return new VerboseLogger();
             }
-            throw new FormatException("Incorrect logger key");
+            return new SilentLogger();
         }
     }
 }

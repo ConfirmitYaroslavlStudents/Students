@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynchLibrary", "SynchLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncApp", "SyncApp\SyncApp.csproj", "{4591C5BF-AF8C-45B9-ADDB-99BB987A8D61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynchLibrary.Tests", "SynchLibrary.Tests\SynchLibrary.Tests.csproj", "{38E0EE7A-D817-47E1-B5FA-26086CE0BCB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4591C5BF-AF8C-45B9-ADDB-99BB987A8D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4591C5BF-AF8C-45B9-ADDB-99BB987A8D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4591C5BF-AF8C-45B9-ADDB-99BB987A8D61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38E0EE7A-D817-47E1-B5FA-26086CE0BCB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38E0EE7A-D817-47E1-B5FA-26086CE0BCB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38E0EE7A-D817-47E1-B5FA-26086CE0BCB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38E0EE7A-D817-47E1-B5FA-26086CE0BCB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

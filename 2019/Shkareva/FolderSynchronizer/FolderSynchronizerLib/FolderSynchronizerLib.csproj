@@ -42,21 +42,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Folder.cs" />
-    <Compile Include="FolderSet.cs" />
-    <Compile Include="FolderWorker.cs" />
-    <Compile Include="InputData.cs" />
-    <Compile Include="InputDataReader.cs" />
+    <Compile Include="Checker\FolderPathChecker.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="Folder\Folder.cs" />
+    <Compile Include="Folder\FolderSet.cs" />
+    <Compile Include="Folder\FolderWorker.cs" />
+    <Compile Include="Checker\IChecker.cs" />
+    <Compile Include="Input\InputData.cs" />
+    <Compile Include="Input\InputDataReader.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyncData.cs" />
-    <Compile Include="SyncDataReader.cs" />
+    <Compile Include="SyncData\SyncData.cs" />
+    <Compile Include="SyncData\SyncDataReader.cs" />
     <Compile Include="SyncException.cs" />
     <Compile Include="Synchronizer.cs" />
+    <Compile Include="Checker\TestFolderPathChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

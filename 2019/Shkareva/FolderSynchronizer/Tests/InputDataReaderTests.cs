@@ -1,8 +1,5 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 using FolderSynchronizerLib;
-using System.Collections.Generic;
-using System.Collections;
 
 namespace Tests
 {
@@ -25,6 +22,8 @@ namespace Tests
         [InlineData("C:\\", "D:\\", "-loglevel", "medium", "--no-delete")]
         [InlineData("WC:\\", "WD:\\")]
         [InlineData("C:\\", "D:\\", "loglevel", "verbose")]
+        [InlineData("C:\\", "D:\\",  "-loglevel", "--no-delete", "silent")]
+
         public void CreateInputInvalidArgs(params string[] args)
         {
             Assert.Throws<SyncException>(() => {var input = new InputDataReader().Read(args); });

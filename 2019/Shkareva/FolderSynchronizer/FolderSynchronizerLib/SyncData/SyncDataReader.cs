@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace FolderSynchronizerLib
 {
@@ -20,9 +20,8 @@ namespace FolderSynchronizerLib
             _oldSlave = folderSet.OldSlave;
 
             syncData.FilesToDelete = FindFileToDelete();
-            var filesToAdd = FindFilesToAdd();
-            var filesToUpdate = FindFilesToUpdate();
-            syncData.FilesToCopy = filesToAdd.Union(filesToUpdate).ToDictionary(x => x.Key, x => x.Value);
+            syncData.FilesToCopy = FindFilesToAdd();
+            syncData.FilesToUpdate = FindFilesToUpdate();
             syncData = RemoveCollision(syncData);
             syncData.LogFlag = folderSet.Loglevel;
             syncData.NoDeleteFlag = folderSet.NoDeleteFlag;
@@ -34,21 +33,24 @@ namespace FolderSynchronizerLib
         {
             var filesToDelete = new List<string>();
 
-            filesToDelete.AddRange(GetFilesToDelete(_oldMaster, _newMaster, _newSlave.Path));
-            filesToDelete.AddRange(GetFilesToDelete(_oldSlave, _newSlave, _newMaster.Path));
+            filesToDelete.AddRange(GetFilesToDelete(_oldMaster, _newMaster, _newSlave));
+            filesToDelete.AddRange(GetFilesToDelete(_oldSlave, _newSlave, _newMaster));
 
             return filesToDelete;
         }
 
-        private static List<string> GetFilesToDelete(Folder oldFolder, Folder newFolder, string otherPath)
+        private static List<string> GetFilesToDelete(Folder oldFolder, Folder newFolder, Folder otherFolder)
         {
             var deleteFiles = new List<string>();
 
-            foreach (string _oldPath in oldFolder.FilesPathList)
+            foreach (Item oldItem in oldFolder.FilesList)
             {
-                if (!newFolder.FilesPathList.Contains(_oldPath))
+                string path = Path.Combine(otherFolder.Path, GetSubPath(oldItem.Path, oldFolder.Path));
+                var file = GetItemByPath(otherFolder, path);
+                var newFile = GetItemByPath(newFolder, oldItem.Path);
+
+                if (newFile==null && file!=null)
                 {
-                    string path = Path.Combine(otherPath, GetSubPath(_oldPath, oldFolder.Path));
                     deleteFiles.Add(path);
                 }
             }
@@ -65,23 +67,36 @@ namespace FolderSynchronizerLib
         {
             var updateDictionary = new Dictionary<string, string>();
 
-            foreach (string masterPath in _newMaster.FilesPathList)
+            foreach (Item masterItem in _newMaster.FilesList)
             {
-                var slavePath = Path.Combine(_newSlave.Path, GetSubPath(masterPath, _newMaster.Path));
+                var slavePath = Path.Combine(_newSlave.Path, GetSubPath(masterItem.Path, _newMaster.Path));
+                Item slaveItem = GetItemByPath(_newSlave, slavePath);
 
-                if (!File.Exists(slavePath))
+                if (slaveItem==null)
                 {
                     continue;
                 }
 
-                bool haveDifferentContent = !File.ReadAllBytes(masterPath).SequenceEqual(File.ReadAllBytes(slavePath));
+                bool haveDifferentContent = (slaveItem.Hash != masterItem.Hash);
 
                 if (haveDifferentContent)
                 {
-                    updateDictionary.Add(masterPath, slavePath);
+                    updateDictionary.Add(masterItem.Path, slavePath);
                 }
             }
             return updateDictionary;
+        }
+
+        private static Item GetItemByPath(Folder folder,string path)
+        {
+            foreach(Item file in folder.FilesList)
+            {
+                if (file.Path == path)
+                {
+                    return file;
+                }
+            }
+            return null;
         }
 
         private static Dictionary<string, string> FindFilesToAdd()
@@ -123,13 +138,14 @@ namespace FolderSynchronizerLib
         {
             var newFilesList = new List<string>();
 
-            foreach (string firstPath in firstFolder.FilesPathList)
+            foreach (Item firstItem in firstFolder.FilesList)
             {
-                var secondPath = Path.Combine(secondFolder.Path, GetSubPath(firstPath, firstFolder.Path));
+                var secondFilePath = Path.Combine(secondFolder.Path, GetSubPath(firstItem.Path, firstFolder.Path));
+                var secondItem = GetItemByPath(secondFolder, secondFilePath);
 
-                if (!File.Exists(secondPath))
+                if (secondItem==null)
                 {
-                    newFilesList.Add(firstPath);
+                    newFilesList.Add(firstItem.Path);
                 }
             }
 

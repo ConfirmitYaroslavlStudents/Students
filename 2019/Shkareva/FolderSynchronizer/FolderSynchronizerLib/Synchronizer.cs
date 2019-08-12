@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace FolderSynchronizerLib
 {
-    static class Synchronizer
+    public class SyncProcessor
     {
-        public static void Synchronize(SyncData syncData)
+        public void Synchronize(SyncData syncData)
         {
-            AddFiles(syncData.FilesToCopy);
+            CopyFiles(syncData.FilesToCopy);
+            CopyFiles(syncData.FilesToUpdate);
 
             if (syncData.NoDeleteFlag)
             {
@@ -17,20 +18,17 @@ namespace FolderSynchronizerLib
             DeleteFiles(syncData.FilesToDelete);
         }
 
-        private static void DeleteFiles(List<string> filesToDelete)
+        private void DeleteFiles(List<string> filesToDelete)
         {
             foreach(string path in filesToDelete)
             {
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }                
+                File.Delete(path);          
             }
         }
 
-        private static void AddFiles(Dictionary<string, string> filesToAdd)
+        private void CopyFiles(Dictionary<string, string> filesToCopy)
         {
-            foreach(KeyValuePair<string, string> addPair in filesToAdd)
+            foreach(KeyValuePair<string, string> addPair in filesToCopy)
             {
                 File.Copy(addPair.Key, addPair.Value, true);
             }

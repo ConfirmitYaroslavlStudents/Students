@@ -31,10 +31,9 @@ namespace FaultTolerance.Retry
         }
 
         public override void Execute(Action<CancellationToken> action)
-            => RetryProcessor.Execute<object>(
-                (ct) => { action(ct); return null; },
-                configuredExceptions, 
-                PermittedRetryCount);
+            => RetryProcessor.Execute(_ => action(_),
+                                      configuredExceptions,
+                                      PermittedRetryCount);
     }
 
 }

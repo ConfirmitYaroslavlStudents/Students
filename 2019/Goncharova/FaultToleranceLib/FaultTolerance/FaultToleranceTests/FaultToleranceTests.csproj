@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FallbackTests.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="TestHelper.cs" />
     <Compile Include="MultipleStrategiesTests.cs" />
     <Compile Include="PlainTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

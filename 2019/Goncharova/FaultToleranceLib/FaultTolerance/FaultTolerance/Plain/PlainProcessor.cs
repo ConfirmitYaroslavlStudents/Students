@@ -5,11 +5,11 @@ namespace FaultTolerance.Plain
 {
     internal static class PlainProcessor
     {
-        internal static TResult Execute<TResult>(Func<CancellationToken, TResult> action)
+        internal static void Execute(Action<CancellationToken> action)
         {
             try
             {
-                return action(CancellationToken.None);
+                action(CancellationToken.None);
             }
             catch (Exception)
             {

@@ -7,7 +7,7 @@ namespace FaultTolerance.Plain
     {
         public PlainStrategy() { }
 
-        public override void Execute(Action<CancellationToken> action) => 
-            PlainProcessor.Execute<object>((ct) => { action(ct); return null; });
+        public override void Execute(Action<CancellationToken> action) =>
+            PlainProcessor.Execute(_ => action(_));
     }
 }

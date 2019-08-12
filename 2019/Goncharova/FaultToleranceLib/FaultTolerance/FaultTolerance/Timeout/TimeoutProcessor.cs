@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace FaultTolerance.Timeout
 {
     internal class TimeoutProcessor
     {
-        internal static TResult Execute<TResult>(
-            Func<CancellationToken, TResult> action,
+        internal static void Execute(
+            Action<CancellationToken> action,
             int timeoutInMilliseconds)
         {
             using (var tokenSource = new CancellationTokenSource())
@@ -18,11 +17,11 @@ namespace FaultTolerance.Timeout
                 {
                     tokenSource.CancelAfter(timeoutInMilliseconds);
 
-                    return action(cancelationToken);
+                    action(cancelationToken);
                 }
                 catch (Exception)
                 {
-                    if(cancelationToken.IsCancellationRequested)
+                    if (cancelationToken.IsCancellationRequested)
                     {
                         throw new TimeoutException();
                     }

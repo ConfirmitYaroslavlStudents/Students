@@ -30,7 +30,7 @@ namespace FaultToleranceTests
             {
                 strategy.Execute(ct =>
                 {
-                    Helper.Sleep(TimeSpan.FromMilliseconds(timeout * 2), ct);
+                    TestHelper.Sleep(TimeSpan.FromMilliseconds(timeout * 2), ct);
                 });
             }
             Assert.Throws<TimeoutException>(act);
@@ -44,7 +44,7 @@ namespace FaultToleranceTests
 
             strategy.Execute(ct =>
                 {
-                    Helper.Sleep(TimeSpan.FromMilliseconds(timeout), ct);
+                    TestHelper.Sleep(TimeSpan.FromMilliseconds(timeout), ct);
                 });
         }
 
@@ -53,8 +53,11 @@ namespace FaultToleranceTests
         {
             var strategy = Strategy.Timeout(100);
 
-            Assert.Throws<NotImplementedException>(
-                () => { strategy.Execute(() => { throw new NotImplementedException(); }); });
+            Assert.Throws<NotImplementedException>(() =>
+                strategy.Execute(() =>
+                {
+                    throw new NotImplementedException();
+                }));
         }
 
 

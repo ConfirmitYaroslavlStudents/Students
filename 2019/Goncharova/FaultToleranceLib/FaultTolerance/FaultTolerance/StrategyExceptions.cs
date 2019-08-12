@@ -15,10 +15,7 @@ namespace FaultTolerance
             }
         }
 
-        internal bool Contains(Type exception)
-        {
-            return exceptionsHandled.Contains(exception);
-        }
+        internal bool Contains(Type exception) => exceptionsHandled.Contains(exception);
 
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FaultTolerance
 {
-    public partial class StrategyBuilder
+    public class StrategyBuilder
     {
         internal StrategyExceptions configuredExceptions;
 

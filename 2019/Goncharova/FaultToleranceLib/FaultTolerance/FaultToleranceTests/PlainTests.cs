@@ -23,5 +23,6 @@ namespace FaultToleranceTests
 
             strategy.Execute(() => { });
         }
+
     }
 }

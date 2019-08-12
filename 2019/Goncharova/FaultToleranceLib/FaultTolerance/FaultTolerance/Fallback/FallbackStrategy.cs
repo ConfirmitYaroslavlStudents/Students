@@ -23,10 +23,9 @@ namespace FaultTolerance.Fallback
             }
         }
 
-        public override void Execute(Action<CancellationToken> action) 
-            => FallbackProcessor.Execute<object>(
-                (ct) => { action(ct); return null; },
-                configuredExceptions,
-                () => { FallbackAction(); return null; });
+        public override void Execute(Action<CancellationToken> action)
+            => FallbackProcessor.Execute(_ => action(_), 
+                                         configuredExceptions, 
+                                         () => FallbackAction());
     }
 }

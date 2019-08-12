@@ -1,9 +1,11 @@
-﻿using System;
+﻿using FaultTolerance.Plain;
+using FaultTolerance.Timeout;
+using System;
 using System.Threading;
 
 namespace FaultTolerance
 {
-    public abstract partial class Strategy
+    public abstract class Strategy
     {
         public static StrategyBuilder Handle<T>() where T : Exception
         {
@@ -14,9 +16,13 @@ namespace FaultTolerance
 
         public void Execute(Action action)
         {
-            Execute((ct) => { action(); });
+            Execute(_ => action());
         }
+        public static PlainStrategy Plain() => new PlainStrategy();
+
+        public static TimeoutStrategy Timeout(int timeoutInMilliseconds)
+            => new TimeoutStrategy(timeoutInMilliseconds);
 
     }
-    
+
 }

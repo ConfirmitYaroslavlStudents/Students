@@ -5,7 +5,7 @@ namespace FaultTolerance.Timeout
 {
     public class TimeoutStrategy : Strategy
     {
-        int timeoutInMilliseconds;
+        private int timeoutInMilliseconds;
 
         public TimeoutStrategy(int timeoutInMilliseconds)
         {
@@ -30,10 +30,7 @@ namespace FaultTolerance.Timeout
         }
 
         public override void Execute(Action<CancellationToken> action)
-        {
-            TimeoutProcessor.Execute<object>(
-                (ct) => { action(ct); return null; },
-                TimeoutInMilliseconds);
-        }
+            => TimeoutProcessor.Execute(_ => action(_),
+                                        TimeoutInMilliseconds);
     }
 }

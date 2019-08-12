@@ -11,17 +11,18 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_RetriesFail_ShouldBeRun()
         {
-            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
-            var helper = new Helper(new InvalidCastException(), 3 + 1);
+            int count = 3;
+            var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(count);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
-            fallbackStrategy.Execute(
-                () => { retryStrategy.Execute(
-                () => helper.ThrowException());
-                });
+            var fallbackStrategy = Strategy
+                .Handle<InvalidCastException>()
+                .Fallback(fallbackAction);
+
+            fallbackStrategy.Execute(() =>
+                retryStrategy.ExecuteActionThrows<InvalidCastException>(count + 1));
 
             Assert.True(fallbackActionIsRun);
         }
@@ -30,16 +31,16 @@ namespace FaultToleranceTests
         public void FallbackAction_RetriesDoesNotFail_ShouldNotBeRun()
         {
             var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
-            var helper = new Helper(new InvalidCastException(), 1);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var fallbackStrategy = Strategy
+                .Handle<InvalidCastException>()
+                .Fallback(fallbackAction);
+
             fallbackStrategy.Execute(
-                () => { retryStrategy.Execute(
-                () => helper.ThrowException());
-                });
+                () => retryStrategy.ExecuteActionThrows<InvalidCastException>(count: 1));
 
             Assert.False(fallbackActionIsRun);
         }
@@ -52,12 +53,15 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
-            fallbackStrategy.Execute(
-                () => {
-                    retryStrategy.Execute(
-            () => { throw new DivideByZeroException(); });
-                });
+            var fallbackStrategy = Strategy
+                .Handle<DivideByZeroException>()
+                .Fallback(fallbackAction);
+
+            fallbackStrategy.Execute(() =>
+                retryStrategy.Execute(() =>
+                {
+                    throw new DivideByZeroException();
+                }));
 
             Assert.True(fallbackActionIsRun);
         }
@@ -68,14 +72,15 @@ namespace FaultToleranceTests
             var retryStrategy = Strategy.Handle<InvalidCastException>().Retry(3);
 
             void fallbackAction() { }
+            var fallbackStrategy = Strategy
+                .Handle<DivideByZeroException>()
+                .Fallback(fallbackAction);
 
-            var fallbackStrategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
-            void fallbackAfterRetry() => fallbackStrategy.Execute(
-                () =>
-                {
-                    retryStrategy.Execute(
-            () => { throw new IndexOutOfRangeException(); });
-                });
+            void fallbackAfterRetry() => fallbackStrategy.Execute(() =>
+                    retryStrategy.Execute(() =>
+                    {
+                        throw new IndexOutOfRangeException();
+                    }));
 
             Assert.Throws<IndexOutOfRangeException>(fallbackAfterRetry);
         }
@@ -88,12 +93,15 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackStrategy = Strategy.Handle<DivideByZeroException>().Fallback(fallbackAction);
-            retryStrategy.Execute(
-                () => {
-                    fallbackStrategy.Execute(
-            () => { throw new DivideByZeroException(); });
-                });
+            var fallbackStrategy = Strategy
+                .Handle<DivideByZeroException>()
+                .Fallback(fallbackAction);
+
+            retryStrategy.Execute(() =>
+                    fallbackStrategy.Execute(() =>
+                    {
+                        throw new DivideByZeroException();
+                    }));
 
             Assert.True(fallbackActionIsRun);
         }

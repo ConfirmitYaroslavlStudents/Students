@@ -5,17 +5,21 @@ namespace FaultTolerance.Retry
 {
     internal static class RetryProcessor
     {
-        internal static TResult Execute<TResult>(
-            Func<CancellationToken, TResult> action,
+        internal static void Execute(
+            Action<CancellationToken> action,
             StrategyExceptions exceptions,
             int permittedRetryCount)
         {
-            Exception finalException = null;
-            for (int retryCount = 0; retryCount <= permittedRetryCount; retryCount++)
+            Exception finalException;
+            int maxTryCount = permittedRetryCount + 1;
+
+            do
             {
+                maxTryCount--;
                 try
                 {
-                    return action(CancellationToken.None);
+                    action(CancellationToken.None);
+                    return;
                 }
                 catch (Exception ex)
                 {
@@ -26,6 +30,8 @@ namespace FaultTolerance.Retry
                     }
                 }
             }
+            while (maxTryCount > 0);
+
             throw finalException;
         }
     }

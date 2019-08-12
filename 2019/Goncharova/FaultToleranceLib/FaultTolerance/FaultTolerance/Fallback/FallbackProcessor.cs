@@ -5,14 +5,15 @@ namespace FaultTolerance.Fallback
 {
     internal static class FallbackProcessor
     {
-        internal static TResult Execute<TResult>(
-            Func<CancellationToken, TResult> action,
+        internal static void Execute(
+            Action<CancellationToken> action,
             StrategyExceptions exceptions,
-            Func<TResult> fallbackAction)
+            Action fallbackAction)
         {
             try
             {
-                return action(CancellationToken.None);
+                action(CancellationToken.None);
+                return;
             }
             catch (Exception ex)
             {
@@ -22,7 +23,7 @@ namespace FaultTolerance.Fallback
                 }
             }
 
-            return fallbackAction();
+            fallbackAction();
         }
     }
 }

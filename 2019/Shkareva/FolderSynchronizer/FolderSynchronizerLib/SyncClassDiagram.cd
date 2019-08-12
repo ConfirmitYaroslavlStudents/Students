@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="FolderSynchronizerLib.FolderPathChecker" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Checker\FolderPathChecker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FolderSynchronizerLib.TestFolderPathChecker" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Checker\TestFolderPathChecker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FolderSynchronizerLib.Folder" Collapsed="true">
+    <Position X="1.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Folder\Folder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.FolderSet" Collapsed="true">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAABAAAAQAAAAAAAAAAAABAAIAACAAAAAAA=</HashCode>
+      <FileName>Folder\FolderSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.FolderWorker" Collapsed="true">
+    <Position X="7" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAgAACAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Folder\FolderWorker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.InputData" Collapsed="true">
+    <Position X="1.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAARAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Input\InputData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.InputDataReader" Collapsed="true">
+    <Position X="3.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAIAAAAAAAAAAAAIAAgAEAAAAAAAAgAAAAAgAA=</HashCode>
+      <FileName>Input\InputDataReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.SyncData" Collapsed="true">
+    <Position X="3.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAADAAAAAAQAAEAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>SyncData\SyncData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.SyncDataReader" Collapsed="true">
+    <Position X="5.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAEgAAAAEAAAAAAAQRIAEAAAACAgAAAAAAAAABACAA=</HashCode>
+      <FileName>SyncData\SyncDataReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.SyncProcessor" Collapsed="true">
+    <Position X="7" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAJAAEAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>SyncProc\SyncProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.SyncProcManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SyncProc\SyncProcManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FolderSynchronizerLib.TestSyncProcManager" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>SyncProc\TestSyncProcManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FolderSynchronizerLib.Launcher" Collapsed="true">
+    <Position X="7" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Launcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.Item" Collapsed="true">
+    <Position X="5.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FolderSynchronizerLib.Log" Collapsed="true">
+    <Position X="1.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAQAAAAAAAAAAAAAAAAAAAAAAAAAQAAAEAAA=</HashCode>
+      <FileName>Log.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="FolderSynchronizerLib.IChecker" Collapsed="true">
+    <Position X="1.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Checker\IChecker.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="FolderSynchronizerLib.ISyncProcManager" Collapsed="true">
+    <Position X="3.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SyncProc\ISyncProcManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

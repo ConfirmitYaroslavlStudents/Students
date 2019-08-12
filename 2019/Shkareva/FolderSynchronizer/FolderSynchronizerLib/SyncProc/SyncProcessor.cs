@@ -1,10 +1,16 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FolderSynchronizerLib
 {
     public class SyncProcessor
     {
+        ISyncProcManager syncProcManager;
+
+        public SyncProcessor()
+        {
+            syncProcManager = new SyncProcManager();
+        }
+
         public void Synchronize(SyncData syncData)
         {
             CopyFiles(syncData.FilesToCopy);
@@ -20,18 +26,12 @@ namespace FolderSynchronizerLib
 
         private void DeleteFiles(List<string> filesToDelete)
         {
-            foreach(string path in filesToDelete)
-            {
-                File.Delete(path);          
-            }
+            syncProcManager.Delete(filesToDelete);
         }
 
         private void CopyFiles(Dictionary<string, string> filesToCopy)
         {
-            foreach(KeyValuePair<string, string> addPair in filesToCopy)
-            {
-                File.Copy(addPair.Key, addPair.Value, true);
-            }
+            syncProcManager.Copy(filesToCopy);
         }
     }
 }

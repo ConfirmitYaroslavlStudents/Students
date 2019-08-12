@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker\FolderPathChecker.cs" />
+    <Compile Include="SyncProc\ISyncProcManager.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Folder\Folder.cs" />
     <Compile Include="Folder\FolderSet.cs" />
@@ -56,12 +57,16 @@
     <Compile Include="SyncData\SyncData.cs" />
     <Compile Include="SyncData\SyncDataReader.cs" />
     <Compile Include="SyncException.cs" />
-    <Compile Include="Synchronizer.cs" />
+    <Compile Include="SyncProc\SyncProcessor.cs" />
     <Compile Include="Checker\TestFolderPathChecker.cs" />
+    <Compile Include="SyncProc\SyncProcManager.cs" />
+    <Compile Include="SyncProc\TestSyncProcManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="SyncClassDiagram.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -41,8 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\Builder.cs" />
+    <Compile Include="Extensions\Fallback\FallbackBuilder.cs" />
+    <Compile Include="Extensions\Fallback\FallbackRunner.cs" />
+    <Compile Include="Extensions\IToleranceBuilder.cs" />
+    <Compile Include="Extensions\Logger\LoggerDecorator.cs" />
+    <Compile Include="Extensions\Retry\RetryBuilder.cs" />
+    <Compile Include="Extensions\Retry\RetryRunner.cs" />
+    <Compile Include="Extensions\ToleranceBuilder.cs" />
+    <Compile Include="Extensions\Wrap\WrapBuilder.cs" />
+    <Compile Include="Extensions\Wrap\WrapRunner.cs" />
     <Compile Include="Fault.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

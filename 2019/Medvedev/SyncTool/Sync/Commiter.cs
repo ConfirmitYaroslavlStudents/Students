@@ -25,31 +25,7 @@ namespace Sync
 
         protected virtual void CommitResolution(IResolution resolution)
         {
-            if (resolution is UpdateResolution updateResolution)
-                CommitUpdateResolution(updateResolution);
-            if (resolution is CopyResolution copyResolution)
-                CommitCopyResolution(copyResolution);
-            if (resolution is DeleteResolution deleteResolution)
-                CommitDeleteResolution(deleteResolution);
-        }
-
-        private void CommitUpdateResolution(UpdateResolution resolution)
-        {
-            _interactor.Delete(resolution.Destination);
-            _interactor.CopyTo(resolution.Source, resolution.Destination.FullName);
-            _logger?.Log(resolution);
-        }
-
-        private void CommitCopyResolution(CopyResolution resolution)
-        {
-            _interactor.CopyTo(resolution.Source, resolution.Destination);
-            _logger?.Log(resolution);
-        }
-
-        private void CommitDeleteResolution(DeleteResolution resolution)
-        {
-            _interactor.Delete(resolution.Source);
-            _logger?.Log(resolution);
+            resolution.Commit(_interactor);
         }
     }
 }

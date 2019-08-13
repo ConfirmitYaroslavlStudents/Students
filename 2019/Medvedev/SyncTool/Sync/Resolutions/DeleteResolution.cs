@@ -1,4 +1,5 @@
-﻿using Sync.Wrappers;
+﻿using Sync.Interactors;
+using Sync.Wrappers;
 
 namespace Sync.Resolutions
 {
@@ -26,6 +27,11 @@ namespace Sync.Resolutions
         public override int GetHashCode()
         {
             return Source.GetHashCode();
+        }
+
+        public void Commit(IInteractor interactor)
+        {
+            interactor.Delete(Source);
         }
     }
 }

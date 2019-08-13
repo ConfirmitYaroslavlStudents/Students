@@ -26,6 +26,7 @@ namespace Sync
         protected virtual void CommitResolution(IResolution resolution)
         {
             resolution.Commit(_interactor);
+            _logger?.Log(resolution);
         }
     }
 }

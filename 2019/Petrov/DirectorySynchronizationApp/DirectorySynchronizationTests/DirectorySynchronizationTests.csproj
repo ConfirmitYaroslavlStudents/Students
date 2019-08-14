@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{06B2D802-2F39-42E8-B7CF-C4D34C933600}</ProjectGuid>
+    <ProjectGuid>{0763BD86-B09F-449E-8D33-2F8045CDD8D9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FolderSyncTests</RootNamespace>
-    <AssemblyName>FolderSyncTests</AssemblyName>
+    <RootNamespace>DirectorySynchronizationTests</RootNamespace>
+    <AssemblyName>DirectorySynchronizationTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,16 +49,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FolderSyncTest.cs" />
+    <Compile Include="SynchronizationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FolderSync\FolderSync.csproj">
-      <Project>{d25a704e-6fc0-4054-bce8-61e895ad21ef}</Project>
-      <Name>FolderSync</Name>
+    <ProjectReference Include="..\DirectorySynchronizationLib\DirectorySynchronizationLib.csproj">
+      <Project>{03f3811c-31c4-416a-ac59-756cbf5f519f}</Project>
+      <Name>DirectorySynchronizationLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

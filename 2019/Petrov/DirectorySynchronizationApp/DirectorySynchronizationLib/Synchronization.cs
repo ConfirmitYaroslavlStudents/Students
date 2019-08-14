@@ -1,25 +1,24 @@
 ﻿using System.IO;
-
-namespace FolderSync
+namespace DirectorySynchronizationApp
 {
-    class Synch
+    public class Synch
     {
         private DirectoryInfo _masterDirectory;
         private DirectoryInfo _slaveDirectory;
-        private bool _noDelete;
+        private Enums.Flags _flags;
         public Logger log;
 
-        public Synch(DirectoryInfo masterDirectory, DirectoryInfo slaveDirectory, bool noDelete)
+        public Synch(DirectoryInfo masterDirectory, DirectoryInfo slaveDirectory, Enums.Flags flags)
         {
             _masterDirectory = masterDirectory;
             _slaveDirectory = slaveDirectory;
-            _noDelete = noDelete;
+            _flags = flags;
             log = new Logger();
         }
 
         public void Synchronization()
         {
-            if (_noDelete)
+            if (_flags.HasFlag(Enums.Flags.NoDelete))
             {
                 NoDeleteSynchronization(_masterDirectory, _slaveDirectory);
                 NoDeleteSynchronization(_slaveDirectory, _masterDirectory);
@@ -55,7 +54,6 @@ namespace FolderSync
                 }
             }
         }
-
         private int Contains(FileInfo file, DirectoryInfo directory)
         {
             foreach (var i in directory.GetFiles())

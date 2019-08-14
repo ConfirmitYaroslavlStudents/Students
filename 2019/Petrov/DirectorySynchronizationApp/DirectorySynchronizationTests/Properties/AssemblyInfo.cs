@@ -2,18 +2,18 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("FolderSyncTests")]
+[assembly: AssemblyTitle("DirectorySynchronizationTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FolderSyncTests")]
+[assembly: AssemblyProduct("DirectorySynchronizationTests")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
-[assembly: Guid("06b2d802-2f39-42e8-b7cf-c4d34c933600")]
+[assembly: Guid("0763bd86-b09f-449e-8d33-2f8045cdd8d9")]
 
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]

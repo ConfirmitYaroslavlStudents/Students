@@ -1,6 +1,6 @@
-﻿using FaultTolerance.Retry;
+﻿using FaultTolerance;
+using FaultTolerance.Retry;
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace FaultToleranceTests
@@ -10,103 +10,96 @@ namespace FaultToleranceTests
         [Fact]
         public void Count_LessThanZero_ShouldTrow()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(
-                () => new RetryStrategy(new DivideByZeroException(), -1));
-        }
-
-        [Fact]
-        public void ExceptionParam_IsNull_ShouldTrow()
-        {
-            Assert.Throws<ArgumentNullException>(
-                () => new RetryStrategy(exception: null, 3));
-        }
-
-        [Fact]
-        public void ExceptionsListParam_IsNull_ShouldTrow()
-        {
-            Assert.Throws<ArgumentNullException>(
-                () => new RetryStrategy(exceptions: null, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => 
+                Strategy.Handle<DivideByZeroException>().Retry(-1));
         }
 
         [Fact]
         public void Retry_HandledExceptionThrownPermittedRetryCountTimes_ShouldNotTrow()
         {
-            var strategy = new RetryStrategy(new InvalidCastException(), 3);
-            var helper = new Helper(new InvalidCastException(), 3);
+            int count = 3;
+            var strategy = Strategy.Handle<InvalidCastException>().Retry(count);
 
-            strategy.Execute(() => helper.ThrowException());
+            strategy.ExecuteActionThrows<InvalidCastException>(count);
         }
 
         [Fact]
         public void Retry_HandledExceptionThrownMoreThanPermittedRetryCountTimes_ShouldTrow()
         {
-            var strategy = new RetryStrategy(new InvalidCastException(), 3);
-            var helper = new Helper(new InvalidCastException(), 3 + 1);
+            int count = 3;
+            var strategy = Strategy.Handle<InvalidCastException>().Retry(count);
 
-            Assert.Throws<InvalidCastException>(() => strategy.Execute(() => helper.ThrowException()));
+            Assert.Throws<InvalidCastException>(() => 
+                strategy.ExecuteActionThrows<InvalidCastException>(count + 1));
         }
 
         [Fact]
         public void Retry_HandledExceptionThrownLessThanPermittedRetryCountTimes_ShouldNotTrow()
         {
-            var strategy = new RetryStrategy(new InvalidCastException(), 3);
-            var helper = new Helper(new InvalidCastException(), 3 - 1);
+            int count = 3;
+            var strategy = Strategy.Handle<InvalidCastException>().Retry(count);
 
-            strategy.Execute(() => helper.ThrowException());
+            strategy.ExecuteActionThrows<InvalidCastException>(count - 1);
         }
         [Fact]
         public void Retry_OneOfTheHandledExceptionsThrownPermittedRetryCountTimes_ShouldNotTrow()
         {
-            List<Exception> exceptions = new List<Exception>() {
-                new InvalidCastException(), new InvalidOperationException() };
-            var strategy = new RetryStrategy(exceptions, 3);
-            var helper = new Helper(new InvalidCastException(), 3);
+            int count = 3;
+            var strategy = Strategy
+                .Handle<InvalidCastException>()
+                .Handle<InvalidOperationException>()
+                .Retry(count);
 
-            strategy.Execute(() => helper.ThrowException());
+            strategy.ExecuteActionThrows<InvalidCastException>(count);
         }
 
         [Fact]
         public void Retry_OneOfTheHandledExceptionsThrownMoreThanPermittedRetryCountTimes_ShouldTrow()
         {
-            List<Exception> exceptions = new List<Exception>() {
-                new InvalidCastException(), new InvalidOperationException() };
-            var strategy = new RetryStrategy(exceptions, 3);
-            var helper = new Helper(new InvalidCastException(), 3 + 1);
+            int count = 3;
+            var strategy = Strategy
+                .Handle<InvalidCastException>()
+                .Handle<InvalidOperationException>()
+                .Retry(count);
 
-            Assert.Throws<InvalidCastException>(() => strategy.Execute(() => helper.ThrowException()));
+            Assert.Throws<InvalidCastException>(() => 
+                strategy.ExecuteActionThrows<InvalidCastException>(count + 1));
         }
 
         [Fact]
         public void Retry_OneOfTheHandledExceptionsThrownLessThanPermittedRetryCountTimes_ShouldNotTrow()
         {
-            List<Exception> exceptions = new List<Exception>() {
-                new InvalidCastException(), new InvalidOperationException() };
-            var strategy = new RetryStrategy(exceptions, 3);
-            var helper = new Helper(new InvalidCastException(), 3 - 1);
+            int count = 3;
+            var strategy = Strategy
+                .Handle<InvalidCastException>()
+                .Handle<InvalidOperationException>()
+                .Retry(count);
 
-            strategy.Execute(() => helper.ThrowException());
+            strategy.ExecuteActionThrows<InvalidCastException>(count - 1);
         }
 
         [Fact]
         public void Retry_NotHandledException_ShouldTrow()
         {
-            var strategy = new RetryStrategy(new InvalidCastException(), 3);
+            var strategy = Strategy.Handle<InvalidCastException>().Retry(3);
 
-            Assert.Throws<DivideByZeroException>(
-                () => strategy.Execute(
-                    () => { throw new DivideByZeroException(); }));
+            Assert.Throws<DivideByZeroException>(() =>
+                strategy.Execute(() =>
+                {
+                    throw new DivideByZeroException();
+                }));
         }
 
         [Fact]
         public void Retry_NotHandledExceptionsList_ShouldTrow()
         {
-            List<Exception> exceptions = new List<Exception>() {
-                new InvalidCastException(), new InvalidOperationException() };
-            var strategy = new RetryStrategy(exceptions, 3);
+            var strategy = Strategy.Handle<InvalidCastException>().Handle<InvalidOperationException>().Retry(3);
 
-            Assert.Throws<DivideByZeroException>(
-                () => strategy.Execute(
-                    () => { throw new DivideByZeroException(); }));
+            Assert.Throws<DivideByZeroException>(() =>
+                strategy.Execute(() =>
+                {
+                    throw new DivideByZeroException();
+                }));
         }
     }
 }

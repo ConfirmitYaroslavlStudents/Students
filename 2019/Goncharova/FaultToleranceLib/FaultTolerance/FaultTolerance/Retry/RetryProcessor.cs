@@ -1,33 +1,38 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance.Retry
 {
     internal static class RetryProcessor
     {
-        internal static TResult Execute<TResult>(
-            Func<TResult> action, 
-            StrategyExceptions exceptions, 
+        internal static void Execute(
+            Action<CancellationToken> action,
+            StrategyExceptions exceptions,
             int permittedRetryCount)
         {
-            Exception firstCatched = null;
+            Exception finalException;
+            int maxTryCount = permittedRetryCount + 1;
 
-            for (int retryCount = 0; retryCount <= permittedRetryCount; retryCount++)
+            do
             {
+                maxTryCount--;
                 try
                 {
-                    return action();
+                    action(CancellationToken.None);
+                    return;
                 }
                 catch (Exception ex)
                 {
-                    firstCatched = firstCatched ?? ex;
-
-                    if (!exceptions.Contains(ex))
+                    finalException = ex;
+                    if (!exceptions.Contains(ex.GetType()))
                     {
                         throw;
                     }
                 }
             }
-            throw firstCatched;
+            while (maxTryCount > 0);
+
+            throw finalException;
         }
     }
 }

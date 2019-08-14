@@ -41,16 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fallback\FallbackBuilder.cs" />
     <Compile Include="Fallback\FallbackStrategy.cs" />
     <Compile Include="Fallback\FallbackProcessor.cs" />
     <Compile Include="Plain\PlainStrategy.cs" />
     <Compile Include="Plain\PlainProcessor.cs" />
+    <Compile Include="Retry\RetryBuilder.cs" />
     <Compile Include="Strategy.cs" />
+    <Compile Include="StrategyBuilder.cs" />
     <Compile Include="StrategyExceptions.cs" />
-    <Compile Include="StrategyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Retry\RetryStrategy.cs" />
     <Compile Include="Retry\RetryProcessor.cs" />
+    <Compile Include="Timeout\TimeoutProcessor.cs" />
+    <Compile Include="Timeout\TimeoutStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading;
 
 namespace FaultTolerance.Plain
 {
     public class PlainStrategy : Strategy
     {
-        public PlainStrategy(Exception exception) : base(exception)
-        {
-        }
+        public PlainStrategy() { }
 
-        public PlainStrategy(List<Exception> exceptions) : base(exceptions)
-        {
-        }
-
-        public override T Execute<T>(Func<T> action)
-        {
-            return PlainProcessor.Execute<T>(action);
-        }
+        public override void Execute(Action<CancellationToken> action) =>
+            PlainProcessor.Execute(_ => action(_));
     }
 }

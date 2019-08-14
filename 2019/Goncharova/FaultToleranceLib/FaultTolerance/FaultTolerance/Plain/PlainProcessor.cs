@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Threading;
 
 namespace FaultTolerance.Plain
 {
     internal static class PlainProcessor
     {
-        internal static TResult Execute<TResult>(Func<TResult> action)
+        internal static void Execute(Action<CancellationToken> action)
         {
             try
             {
-                return action();
+                action(CancellationToken.None);
             }
             catch (Exception)
             {

@@ -3,30 +3,19 @@ using System.Collections.Generic;
 
 namespace FaultTolerance
 {
-    public class StrategyExceptions
+    internal class StrategyExceptions
     {
         private readonly List<Type> exceptionsHandled = new List<Type>();
 
-        internal void Add(Exception exception)
+        internal void Add(Type exception)
         {
             if (!Contains(exception))
             {
-                exceptionsHandled.Add(exception.GetType());
+                exceptionsHandled.Add(exception);
             }
         }
 
-        internal void AddMany(List<Exception> exceptions)
-        {
-            foreach (var ex in exceptions)
-            {
-                Add(ex);
-            }
-        }
-
-        internal bool Contains(Exception exception)
-        {
-            return exceptionsHandled.Contains(exception.GetType());
-        }
+        internal bool Contains(Type exception) => exceptionsHandled.Contains(exception);
 
     }
 }

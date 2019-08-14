@@ -1,26 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FaultTolerance.Plain;
+using FaultTolerance.Timeout;
+using System;
+using System.Threading;
 
 namespace FaultTolerance
 {
-    public abstract class Strategy : StrategyModel
+    public abstract class Strategy
     {
-        internal Strategy(Exception exception) : base(exception) { }
-        internal Strategy(List<Exception> exceptions) : base(exceptions) { }
-
-        public virtual void Execute(Action action)
+        public static StrategyBuilder Handle<T>() where T : Exception
         {
-            Execute<object>(() => { action(); return null; });
+            return new StrategyBuilder(typeof(T));
         }
-        public abstract T Execute<T>(Func<T> action);
+
+        public abstract void Execute(Action<CancellationToken> action);
+
+        public void Execute(Action action)
+        {
+            Execute(_ => action());
+        }
+        public static PlainStrategy Plain() => new PlainStrategy();
+
+        public static TimeoutStrategy Timeout(int timeoutInMilliseconds)
+            => new TimeoutStrategy(timeoutInMilliseconds);
 
     }
-    public abstract class Policy<TResult> : StrategyModel
-    {
-        internal Policy(Exception exception) : base(exception) { }
-        internal Policy(List<Exception> exceptions) : base(exceptions) { }
 
-        public abstract TResult Execute(Func<TResult> action);
-
-    }
 }

@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading;
 
 namespace FaultTolerance.Fallback
 {
     public class FallbackStrategy : Strategy
     {
         private Action fallbackAction;
-        public FallbackStrategy(Exception exception, Action fallbackAction) : base(exception)
+        private readonly StrategyExceptions configuredExceptions;
+
+        public FallbackStrategy(StrategyBuilder strategyBuilder, Action fallbackAction)
         {
-            FallbackAction = fallbackAction;
-        }
-        public FallbackStrategy(List<Exception> exceptions, Action fallbackAction) : base(exceptions)
-        {
+            configuredExceptions = strategyBuilder.configuredExceptions;
             FallbackAction = fallbackAction;
         }
 
@@ -24,46 +23,9 @@ namespace FaultTolerance.Fallback
             }
         }
 
-        public override void Execute(Action action)
-        {
-            FallbackProcessor.Execute<object>(
-                () => { action(); return null; },
-                ExceptionsHandled,
-                () => { FallbackAction(); return null; }
-                );
-        }
-
-        public override T Execute<T>(Func<T> action)
-        {
-            throw new InvalidOperationException("Use generic version of the policy to call generic method");
-        }
-    }
-
-    internal class FallbackPolicy<TResult> : Policy<TResult>
-    {
-        private Func<TResult> fallbackAction;
-        public FallbackPolicy(Exception exception, Func<TResult> fallbackAction) : base(exception)
-        {
-            FallbackAction = fallbackAction;
-        }
-        public FallbackPolicy(List<Exception> exceptions, Func<TResult> fallbackAction) : base(exceptions)
-        {
-            FallbackAction = fallbackAction;
-        }
-
-        private Func<TResult> FallbackAction
-        {
-            get => fallbackAction;
-            set
-            {
-                fallbackAction = value ?? throw new ArgumentNullException("Fallback action can't be null");
-            }
-        }
-
-        public override TResult Execute(Func<TResult> action)
-        {
-            return FallbackProcessor.Execute<TResult>(action, ExceptionsHandled, FallbackAction);
-        }
-
+        public override void Execute(Action<CancellationToken> action)
+            => FallbackProcessor.Execute(_ => action(_), 
+                                         configuredExceptions, 
+                                         () => FallbackAction());
     }
 }

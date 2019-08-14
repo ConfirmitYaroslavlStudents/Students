@@ -16,5 +16,17 @@ namespace FolderSynchronizerLib
             FilesToUpdate = new Dictionary<string, string>();
             FilesToDelete = new List<string>();
         }
+
+        public SyncData
+           (Dictionary<string,string> copy,
+            Dictionary<string,string> update,
+            List<string> delete)
+        {
+            FilesToCopy = copy;
+            FilesToUpdate = update;
+            FilesToDelete = delete;
+            LogFlag = "summary";
+            NoDeleteFlag = false;
+        }
     }
 }

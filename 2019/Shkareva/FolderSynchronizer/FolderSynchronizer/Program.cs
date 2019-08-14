@@ -6,7 +6,7 @@ namespace FolderSynchronizer
     {
         static void Main(string[] args)
         {
-            var input = new InputDataReader().Read(args);
+            var input = new InputDataReader(new FolderPathChecker()).Read(args);
             new Launcher().Synchronize(input);           
         }       
     }

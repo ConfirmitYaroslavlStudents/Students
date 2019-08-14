@@ -13,20 +13,20 @@ namespace Tests
         [InlineData("C:\\", "D:\\","-loglevel", "verbose")]
         public void CreateInputValidArgs(params string[] args)
         {
-            var input = new InputDataReader().Read(args);
+            var input = new InputDataReader(new TestFolderPathChecker()).Read(args);
         }
 
         [Theory]
-        [InlineData("C:\\", "QW:\\", "--no-delete", "-loglevel", "silent")]
+        [InlineData("apple", "|tree:\\", "--no-delete", "-loglevel", "silent")]
         [InlineData("C:\\", "D:\\", "--nodelete")]
         [InlineData("C:\\", "D:\\", "-loglevel", "medium", "--no-delete")]
-        [InlineData("WC:\\", "WD:\\")]
+        [InlineData("W<C:\\", "WD>:\\")]
         [InlineData("C:\\", "D:\\", "loglevel", "verbose")]
         [InlineData("C:\\", "D:\\",  "-loglevel", "--no-delete", "silent")]
 
         public void CreateInputInvalidArgs(params string[] args)
         {
-            Assert.Throws<SyncException>(() => {var input = new InputDataReader().Read(args); });
+            Assert.Throws<SyncException>(() => {var input = new InputDataReader(new TestFolderPathChecker()).Read(args); });
         }
 
     }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 
 namespace FolderSynchronizerLib
 {
@@ -6,7 +6,17 @@ namespace FolderSynchronizerLib
     {
         public bool IsValid(string path)
         {
-            throw new NotImplementedException();
+            var invalidChars = Path.GetInvalidPathChars();
+
+            foreach(char c in invalidChars)
+            {
+                if (path.Contains(c.ToString()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

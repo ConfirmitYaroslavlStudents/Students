@@ -8,14 +8,14 @@ namespace FolderSynchronizerLib
         readonly string _noDelete;
         readonly string _loglevel;
         readonly List<string> _validLogFlags;
-        public IChecker PathChecker;
+        private readonly IChecker _pathChecker;
 
-        public InputDataReader()
+        public InputDataReader(IChecker checker)
         {
             _validLogFlags = new List<string>() { "verbose", "summary", "silent" };
             _noDelete = "--no-delete";
             _loglevel = "-loglevel";
-            PathChecker = new FolderPathChecker();
+            _pathChecker = checker;
         }
 
         public InputData Read(string[] args)
@@ -79,8 +79,8 @@ namespace FolderSynchronizerLib
                 throw new SyncException("Invalid format command");
             }
 
-            bool isMasterPathRight = PathChecker.IsValid(args[0]);
-            bool isSlavePathRight = PathChecker.IsValid(args[1]);
+            bool isMasterPathRight = _pathChecker.IsValid(args[0]);
+            bool isSlavePathRight = _pathChecker.IsValid(args[1]);
            
             int count = 2;
             while (count < args.Length)

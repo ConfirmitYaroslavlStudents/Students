@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncFiles", "SyncFiles\Sync
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterSlaveSync", "MasterSlaveSync\MasterSlaveSync.csproj", "{71F0A641-02DB-4286-B01F-C901D11CFA9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterSlaveSyncTests", "MasterSlaveSyncTests\MasterSlaveSyncTests.csproj", "{57B526A8-6351-4421-BB1A-864B6169BE9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{71F0A641-02DB-4286-B01F-C901D11CFA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71F0A641-02DB-4286-B01F-C901D11CFA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71F0A641-02DB-4286-B01F-C901D11CFA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B526A8-6351-4421-BB1A-864B6169BE9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B526A8-6351-4421-BB1A-864B6169BE9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B526A8-6351-4421-BB1A-864B6169BE9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B526A8-6351-4421-BB1A-864B6169BE9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

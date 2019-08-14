@@ -1,30 +1,45 @@
-﻿using System.IO;
+﻿using MasterSlaveSync.Conflict;
+using System;
+using System.Collections.Generic;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     public class Synchronizer
     {
-        public static bool NoDelete { get; set; } = false;
+        public SyncOptions SyncOptions { get; private set; } = new SyncOptions();
 
-        private DirectoryInfo master;
-        private DirectoryInfo slave;
+        private IDirectoryInfo master;
+        private IDirectoryInfo slave;
 
-        public Synchronizer(DirectoryInfo master, DirectoryInfo slave)
+        private IFileSystem _fileSystem;
+
+        public Synchronizer(string masterPath, string slavePath) :
+            this(masterPath, slavePath, new FileSystem()) { }
+
+        public Synchronizer(string masterPath, string slavePath, IFileSystem fileSystem)
         {
-            this.master = master;
-            this.slave = slave;
+            _fileSystem = fileSystem;
+
+            master = _fileSystem.DirectoryInfo.FromDirectoryName(masterPath);
+            slave = _fileSystem.DirectoryInfo.FromDirectoryName(slavePath);
         }
 
-        public void Run()
+        public Action<string> LogListener { get; set; }
+        public LogLevels LogLevel { get; set; } = LogLevels.Silent;
+
+        
+
+        public List<IConflict> CollectConflicts()
         {
-            SyncEngine.SyncNoConflict(master, slave);
-            SyncEngine.SyncConflict(master, slave);
+            var collector = new ConflictsCollector();
+            return collector.CollectConflicts(master, slave);
+        }
 
-            var masterWatcher = new MasterWatcher(master, slave);
-            var slaveWatcher = new SlaveWatcher(master, slave);
-
-            masterWatcher.WatchDirectory();
-            slaveWatcher.WatchDirectory();
+        public void SyncDirectories(List<IConflict> conflicts)
+        {
+            var syncProcessor = new SyncProcessor(SyncOptions, master.FullName, slave.FullName, LogLevel, LogListener);
+            syncProcessor.ResolveConflicts(conflicts);
         }
 
     }

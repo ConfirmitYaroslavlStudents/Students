@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using MasterSlaveSync;
 
 namespace SyncFiles
@@ -9,14 +8,15 @@ namespace SyncFiles
         static void Main(string[] args)
         {
             Console.WriteLine("Enter master directory path");
-            DirectoryInfo master = new DirectoryInfo(Console.ReadLine());
+            string masterPath = @"C:\Users\Anna\Documents\Master"; //Console.ReadLine();
             Console.WriteLine("Enter slave directory path");
-            DirectoryInfo slave = new DirectoryInfo(Console.ReadLine());
+            string slavePath = @"C:\Users\Anna\Documents\Slave";//Console.ReadLine();
 
             Console.WriteLine("Enable no-delete: ndt, Disable no-delete: ndf");
-            Console.WriteLine("Start watching: start, Stop watching: stop");
+            Console.WriteLine("Start synchronization: start");
 
             string input;
+            Synchronizer sync = new Synchronizer(masterPath, slavePath);
             do
             {
                 input = Console.ReadLine().ToLower();
@@ -24,39 +24,23 @@ namespace SyncFiles
                 switch (input)
                 {
                     case "ndt":
-                        Synchronizer.NoDelete = true;
+                        sync.SyncOptions.NoDelete = true;
                         break;
                     case "ndf":
-                        Synchronizer.NoDelete = false;
+                        sync.SyncOptions.NoDelete = false;
                         break;
                     case "start":
                         Console.WriteLine("Sync started..");
-                        Synchronizer synchronizer = new Synchronizer(master, slave);
-                        synchronizer.Run();
+                        var res = sync.CollectConflicts();
+                        sync.LogListener = Console.WriteLine;
+                        sync.LogLevel = LogLevels.Verbose;
+                        sync.SyncDirectories(res);
                         break;
                 }
             }
             while (input != "start");
 
-            bool stop = false;
-
-            do
-            {
-                switch (Console.ReadLine().ToLower())
-                {
-                    case "ndt":
-                        Synchronizer.NoDelete = true;
-                        break;
-                    case "ndf":
-                        Synchronizer.NoDelete = false;
-                        break;
-                    case "stop":
-                        stop = true;
-                        break;
-                }
-
-            }
-            while (!stop);
+            Console.ReadKey();
 
         }
     }

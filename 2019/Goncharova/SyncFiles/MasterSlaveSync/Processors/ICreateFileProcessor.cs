@@ -1,9 +1,11 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     internal interface ICopyFileProcessor
     {
-        bool Execute(IFileInfo masterFile, string masterPath, string slavePath);
+        event EventHandler<ResolverEventArgs> FileCopied;
+        void Execute(IFileInfo masterFile, string masterPath, string slavePath);
     }
 }

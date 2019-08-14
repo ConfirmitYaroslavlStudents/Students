@@ -1,38 +1,50 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     internal class DefaultCopyDirectoryProcessor : ICopyDirectoryProcessor
     {
-        private IFileSystem _fileSystem;
+        private IFileSystem fileSystem;
         public DefaultCopyDirectoryProcessor()
         {
-            _fileSystem = new FileSystem();
+            fileSystem = new FileSystem();
         }
-        public bool Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath)
+
+        public event EventHandler<ResolverEventArgs> DirectoryCopied;
+
+        public void Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath)
         {
-            string smth = masterDirectory.FullName.Substring(masterPath.Length);
-            IDirectoryInfo target = _fileSystem.Directory.CreateDirectory(Path.Combine(slavePath, smth));
+            string directoryPath = masterDirectory.FullName.Substring(masterPath.Length);
+            IDirectoryInfo target = fileSystem.Directory.CreateDirectory(Path.Combine(slavePath, directoryPath));
 
             CopyAll(masterDirectory, target);
 
-            return true;
+            var args = new ResolverEventArgs
+            {
+                ElementPath = masterDirectory.FullName
+            };
+            OnDirectoryCopied(args);
+        }
+        protected virtual void OnDirectoryCopied(ResolverEventArgs e)
+        {
+            DirectoryCopied?.Invoke(this, e);
         }
 
-        private static void CopyAll(IDirectoryInfo source, IDirectoryInfo target)
+        private void CopyAll(IDirectoryInfo source, IDirectoryInfo target)
         {
-            Directory.CreateDirectory(target.FullName);
+            fileSystem.Directory.CreateDirectory(target.FullName);
 
-            foreach (var fi in source.GetFiles())
+            foreach (var file in source.GetFiles())
             {
-                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+                file.CopyTo(Path.Combine(target.FullName, file.Name), true);
             }
 
-            foreach (var diSourceSubDir in source.GetDirectories())
+            foreach (var sourceSubDirectory in source.GetDirectories())
             {
-                var nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
-                CopyAll(diSourceSubDir, nextTargetSubDir);
+                var nextTargetSubDirectory = target.CreateSubdirectory(sourceSubDirectory.Name);
+                CopyAll(sourceSubDirectory, nextTargetSubDirectory);
             }
         }
 

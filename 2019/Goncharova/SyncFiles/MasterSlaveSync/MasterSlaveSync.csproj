@@ -48,8 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConflictsCollector.cs" />
+    <Compile Include="Conflicts\ConflictsCollection.cs" />
     <Compile Include="Loggers\ILogger.cs" />
-    <Compile Include="Loggers\LogLevels.cs" />
+    <Compile Include="Loggers\LogLevel.cs" />
     <Compile Include="Processors\DefaultCopyDirectoryProcessor.cs" />
     <Compile Include="Processors\DefaultCopyFileProcessor.cs" />
     <Compile Include="Processors\DefaultDeleteDirectoryProcessor.cs" />
@@ -64,10 +65,10 @@
     <Compile Include="Processors\IUpdateFileProcessor.cs" />
     <Compile Include="Loggers\SilentLogger.cs" />
     <Compile Include="Loggers\SummaryLogger.cs" />
-    <Compile Include="SyncOptions.cs" />
-    <Compile Include="SyncProcessor.cs" />
+    <Compile Include="Resolver.cs" />
+    <Compile Include="ResolverEventArgs.cs" />
+    <Compile Include="SynchronizerBuilder.cs" />
     <Compile Include="Conflicts\DirectoryConflict.cs" />
-    <Compile Include="Conflicts\IConflict.cs" />
     <Compile Include="Conflicts\FileConflict.cs" />
     <Compile Include="ConflictsRetriever.cs" />
     <Compile Include="DefaultFileComparer.cs" />

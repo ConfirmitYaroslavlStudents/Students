@@ -1,8 +1,8 @@
 ﻿using System.IO.Abstractions;
 
-namespace MasterSlaveSync.Conflict
+namespace MasterSlaveSync.Conflicts
 {
-    public class DirectoryConflict : IConflict
+    public class DirectoryConflict
     {
         public DirectoryConflict(IDirectoryInfo masterDirectory, IDirectoryInfo slaveDirectory)
         {

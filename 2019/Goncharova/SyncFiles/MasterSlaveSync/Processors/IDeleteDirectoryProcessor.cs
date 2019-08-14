@@ -1,9 +1,11 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     internal interface IDeleteDirectoryProcessor
     {
-        bool Execute(IDirectoryInfo slaveDirectory);
+        event EventHandler<ResolverEventArgs> DirectoryDeleted;
+        void Execute(IDirectoryInfo slaveDirectory);
     }
 }

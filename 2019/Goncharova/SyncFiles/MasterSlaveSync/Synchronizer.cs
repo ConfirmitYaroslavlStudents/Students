@@ -1,46 +1,44 @@
-﻿using MasterSlaveSync.Conflict;
-using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     public class Synchronizer
     {
-        public SyncOptions SyncOptions { get; private set; } = new SyncOptions();
-
-        private IDirectoryInfo master;
-        private IDirectoryInfo slave;
-
-        private IFileSystem _fileSystem;
-
-        public Synchronizer(string masterPath, string slavePath) :
-            this(masterPath, slavePath, new FileSystem()) { }
+        private readonly IDirectoryInfo master;
+        private readonly IDirectoryInfo slave;
 
         public Synchronizer(string masterPath, string slavePath, IFileSystem fileSystem)
         {
-            _fileSystem = fileSystem;
+            FileSystem = fileSystem;
 
-            master = _fileSystem.DirectoryInfo.FromDirectoryName(masterPath);
-            slave = _fileSystem.DirectoryInfo.FromDirectoryName(slavePath);
+            master = FileSystem.DirectoryInfo.FromDirectoryName(masterPath);
+            slave = FileSystem.DirectoryInfo.FromDirectoryName(slavePath);
+
+            Resolver = new Resolver(masterPath, slavePath);
         }
 
-        public Action<string> LogListener { get; set; }
-        public LogLevels LogLevel { get; set; } = LogLevels.Silent;
+        public Synchronizer(string masterPath, string slavePath)
+            : this(masterPath, slavePath, new FileSystem()) { }
 
-        
+        internal IFileSystem FileSystem { get; set; }
 
-        public List<IConflict> CollectConflicts()
+        internal Resolver Resolver { get; private set; }
+        internal ILogger Logger { get; set; }
+
+        public static SynchronizerBuilder Sync(string masterPath, string slavePath)
+        {
+            return new SynchronizerBuilder(masterPath, slavePath);
+        }
+        public static SynchronizerBuilder SyncWithMock(string masterPath, string slavePath, IFileSystem mockFileSystem)
+        {
+            return new SynchronizerBuilder(masterPath, slavePath, mockFileSystem);
+        }
+
+        public void Run()
         {
             var collector = new ConflictsCollector();
-            return collector.CollectConflicts(master, slave);
-        }
 
-        public void SyncDirectories(List<IConflict> conflicts)
-        {
-            var syncProcessor = new SyncProcessor(SyncOptions, master.FullName, slave.FullName, LogLevel, LogListener);
-            syncProcessor.ResolveConflicts(conflicts);
+            Resolver.ResolveConflicts(collector.CollectConflicts(master, slave));
         }
-
     }
 }

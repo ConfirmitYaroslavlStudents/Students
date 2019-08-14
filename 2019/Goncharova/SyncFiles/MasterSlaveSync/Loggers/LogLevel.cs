@@ -1,6 +1,6 @@
 ﻿namespace MasterSlaveSync
 {
-    public enum LogLevels
+    public enum LogLevel
     {
         Silent,
         Summary,

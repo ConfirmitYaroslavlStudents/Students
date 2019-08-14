@@ -1,38 +1,38 @@
 ﻿using System;
-using System.IO.Abstractions;
-using MasterSlaveSync.Conflict;
 
 namespace MasterSlaveSync
 {
     internal class SilentLogger : ILogger
     {
-        public SilentLogger()
+        public Action<string> LogListener { get; private set; }
+        public SilentLogger(Action<string> logListener)
         {
+            LogListener = logListener;
         }
 
-        public string LogDirectoryCopy(IDirectoryInfo masterDirectory)
+        public void LogDirectoryCopy(object sender, ResolverEventArgs e)
         {
-            return String.Empty;
+            LogListener(String.Empty);
         }
 
-        public string LogDirectoryDeletion(IDirectoryInfo slaveDirectory)
+        public void LogDirectoryDeletion(object sender, ResolverEventArgs e)
         {
-            return String.Empty;
+            LogListener(String.Empty);
         }
 
-        public string LogFileCopy(IFileInfo masterFile)
+        public void LogFileCopy(object sender, ResolverEventArgs e)
         {
-            return String.Empty;
+            LogListener(String.Empty);
         }
 
-        public string LogFileDeletion(IFileInfo slaveFile)
+        public void LogFileDeletion(object sender, ResolverEventArgs e)
         {
-            return String.Empty;
+            LogListener(String.Empty);
         }
 
-        public string LogFileUpdate(FileConflict fileConflict)
+        public void LogFileUpdate(object sender, ResolverEventArgs e)
         {
-            return String.Empty;
+            LogListener(String.Empty);
         }
     }
 }

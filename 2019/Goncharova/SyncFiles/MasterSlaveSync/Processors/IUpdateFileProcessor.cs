@@ -1,9 +1,11 @@
-﻿using MasterSlaveSync.Conflict;
+﻿using MasterSlaveSync.Conflicts;
+using System;
 
 namespace MasterSlaveSync
 {
     internal interface IUpdateFileProcessor
     {
-        bool Execute(FileConflict fileConflict);
+        event EventHandler<ResolverEventArgs> FileUpdated;
+        void Execute(FileConflict fileConflict);
     }
 }

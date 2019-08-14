@@ -1,14 +1,24 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     internal class DefaultDeleteFileProcessor : IDeleteFileProcessor
     {
-        public bool Execute(IFileInfo slaveFile)
+        public event EventHandler<ResolverEventArgs> FileDeleted;
+        public void Execute(IFileInfo slaveFile)
         {
             slaveFile.Delete();
 
-            return true;
+            var args = new ResolverEventArgs
+            {
+                ElementPath = slaveFile.FullName
+            };
+            OnFileDeleted(args);
+        }
+        protected virtual void OnFileDeleted(ResolverEventArgs e)
+        {
+            FileDeleted?.Invoke(this, e);
         }
     }
 }

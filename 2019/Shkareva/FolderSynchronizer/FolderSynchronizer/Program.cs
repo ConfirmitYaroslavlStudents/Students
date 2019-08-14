@@ -6,7 +6,8 @@ namespace FolderSynchronizer
     {
         static void Main(string[] args)
         {
-            new Launcher().Synchronize(args);           
+            var input = new InputDataReader().Read(args);
+            new Launcher().Synchronize(input);           
         }       
     }
 }

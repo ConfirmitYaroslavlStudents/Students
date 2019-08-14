@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace FolderSynchronizerLib
 {
     public class InputDataReader
     {
-        string _noDelete;
-        string _loglevel;
-        List<string> _validLogFlags;
+        readonly string _noDelete;
+        readonly string _loglevel;
+        readonly List<string> _validLogFlags;
+        public IChecker PathChecker;
 
         public InputDataReader()
         {
             _validLogFlags = new List<string>() { "verbose", "summary", "silent" };
             _noDelete = "--no-delete";
             _loglevel = "-loglevel";
+            PathChecker = new FolderPathChecker();
         }
 
         public InputData Read(string[] args)
@@ -78,8 +79,8 @@ namespace FolderSynchronizerLib
                 throw new SyncException("Invalid format command");
             }
 
-            bool isMasterPathRight = Directory.Exists(args[0]);
-            bool isSlavePathRight = Directory.Exists(args[1]);
+            bool isMasterPathRight = PathChecker.IsValid(args[0]);
+            bool isSlavePathRight = PathChecker.IsValid(args[1]);
            
             int count = 2;
             while (count < args.Length)

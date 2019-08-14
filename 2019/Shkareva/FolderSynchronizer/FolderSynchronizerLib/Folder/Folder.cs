@@ -10,12 +10,12 @@ namespace FolderSynchronizerLib
         public string Path;
         
         [DataMember]
-        public List<string> FilesPathList;
+        public List<Item> FilesList;
        
         public Folder(string address)
         {
             Path = address;            
-            FilesPathList = new List<string>();
+            FilesList = new List<Item>();
         }
 
         public Folder() { }

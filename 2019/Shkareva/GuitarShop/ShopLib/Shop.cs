@@ -1,30 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 
 namespace ShopLib
 {
     public static class Shop
     {
-        static List<Guitar> guitars = new List<Guitar>();
-
-        public static void AddFromConsole(string fileName, string guitarsData)
-        {
-            guitars.Add(MakeGuitar(guitarsData));
-            File.AppendAllText(fileName, Environment.NewLine + guitarsData);
-        }
-
-        private static Guitar MakeGuitar(string line)
-        {
-            var parts = line.Split(' ');
-            return new Guitar(parts[0], parts[1], parts[2], parts[3], parts[4]);
-        }
+        static List<Guitar> _guitars = new List<Guitar>();
+        static ILoader Loader = new AddFromFile();
 
         public static List<string> Search(string term)
         {
             var IdSuitablGuitars = new List<string>();
 
-            foreach (var guitar in guitars)
+            foreach (var guitar in _guitars)
             {
                 if (guitar.Contains(term))
                 {
@@ -35,15 +22,9 @@ namespace ShopLib
             return IdSuitablGuitars;
         }
 
-        public static void AddFromFile(string fileName)
+        public static void AddSomeGuitars(string data)
         {
-            var lines = new FileWorker().ReadFile(fileName);
-
-            for(int i=1;i<lines.Length;i++)
-            {
-                guitars.Add(MakeGuitar(lines[i]));
-            }
-
-        }
+           _guitars.AddRange(Loader.Add(data));
+        }        
     }
 }

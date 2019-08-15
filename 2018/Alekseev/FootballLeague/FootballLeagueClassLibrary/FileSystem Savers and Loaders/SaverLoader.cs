@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using FootballLeagueClassLibrary.Structure;
 
-namespace Football_League
+namespace FootballLeagueClassLibrary.FileSystem_Savers_and_Loaders
 {
     public class SaverLoader
     {
@@ -15,7 +16,6 @@ namespace Football_League
             using (FileStream fs = new FileStream(fileToOpen, FileMode.Create))
             {
                 formatter.Serialize(fs,players);
-                ConsoleWorker.Saved();
             }
         }
 
@@ -31,48 +31,39 @@ namespace Football_League
                 using (FileStream fs = new FileStream(fileToOpen, FileMode.Open))
                 {
                     List<Contestant> players = (List<Contestant>)formatter.Deserialize(fs);
-                    ConsoleWorker.Loaded();
                     return players;
                 }
             }
-            catch (FileNotFoundException)
-            {
-                ConsoleWorker.FileNotFoundError();
-            }
+            catch (FileNotFoundException) { }
             return null;
         }
-        public static void SaveCurrentSession(LeagueType leagueType, FullGrid grid)
+        public static void SaveCurrentSession(int leagueType, FullGrid grid)
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            var fileToOpen = leagueType == LeagueType.SingleElumination ? "gridSingleElumination.dat" : "gridDoubleElumination.dat";
+            var fileToOpen = leagueType == 1 ? "gridSingleElumination.dat" : "gridDoubleElumination.dat";
 
             using (FileStream fs = new FileStream(fileToOpen, FileMode.Create))
             {
                 formatter.Serialize(fs, grid);
-                ConsoleWorker.Saved();
             }
         }
 
-        public static FullGrid LoadLastSave(LeagueType leagueType)
+        public static FullGrid LoadLastSave(int leagueType)
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            var fileToOpen = leagueType == LeagueType.SingleElumination ? "gridSingleElumination.dat" : "gridDoubleElumination.dat";
+            var fileToOpen = leagueType == 1 ? "gridSingleElumination.dat" : "gridDoubleElumination.dat";
 
             try
             {
                 using (FileStream fs = new FileStream(fileToOpen, FileMode.Open))
                 {
                     FullGrid grid = (FullGrid)formatter.Deserialize(fs);
-                    ConsoleWorker.Loaded();
                     return grid;
                 }
             }
-            catch (FileNotFoundException)
-            {
-                ConsoleWorker.FileNotFoundError();
-            }
+            catch (FileNotFoundException) { }
             return null;
         }
     }

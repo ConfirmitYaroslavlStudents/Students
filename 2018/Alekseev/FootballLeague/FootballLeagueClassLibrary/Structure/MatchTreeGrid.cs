@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Football_League
+namespace FootballLeagueClassLibrary.Structure
 {
     [Serializable]
     public class MatchTreeGrid

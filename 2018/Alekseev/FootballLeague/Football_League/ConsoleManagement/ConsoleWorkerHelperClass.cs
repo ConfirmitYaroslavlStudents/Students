@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Football_League
+namespace Football_League.ConsoleManagement
 {
     public static partial class ConsoleWorker
     {
-        private static string MakeName(string line, int j)
+        public static string MakeName(string line, int j)
         {
             string name = "";
             while (j < line.Length && char.IsLetterOrDigit(line[j]))
@@ -49,7 +49,7 @@ namespace Football_League
             Console.Write(name);
             Console.ResetColor();
         }
-        private static bool CheckIfLastNameInLine(string currentHorizontalGrid, int currentPositionInLine)
+        public static bool CheckIfLastNameInLine(string currentHorizontalGrid, int currentPositionInLine)
         {
             bool isLastName = false;
             for (int j = currentPositionInLine; j < currentHorizontalGrid.Length; j++)

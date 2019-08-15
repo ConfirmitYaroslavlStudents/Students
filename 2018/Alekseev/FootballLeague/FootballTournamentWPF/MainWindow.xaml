@@ -1,0 +1,22 @@
+﻿<Window x:Class="FootballTournamentWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FootballTournamentWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="471.525" Width="957.661">
+    <Grid>
+        <Label x:Name="MaxLosesNumberLabel" Content="Type max number of loses" HorizontalAlignment="Left" Margin="314,13,0,0" VerticalAlignment="Top" Height="40" Width="230" FontSize="16"/>
+        <Button x:Name="MaxLosesNumberButton" Content="Enter" HorizontalAlignment="Left" Margin="518,73,0,0" VerticalAlignment="Top" Width="116" Click="MaxLosesNumberButton_Click" Height="25" FontSize="16"/>
+        <TextBox x:Name="MaxLosesNumberTextBox" HorizontalAlignment="Left" Height="27" Margin="314,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="186" FontSize="16"/>
+        <Button x:Name="CreateTournamentButton" Content="Create Tournament" HorizontalAlignment="Left" VerticalAlignment="Top" Width="168" Margin="320,167,0,0" Click="CreateTournamentButton_Click" Visibility="Visible" Height="40" FontSize="16"/>
+        <Label x:Name="MenuLabel" Content="Menu" HorizontalAlignment="Center" Margin="372,125,362,0" VerticalAlignment="Top" Height="37" Width="216" Visibility="Visible" FontSize="16" RenderTransformOrigin="0.551,0.514"/>
+        <Button x:Name="ChooseWinnersButton" Content="Choose winners" HorizontalAlignment="Left" VerticalAlignment="Top" Width="168" Margin="320,214,0,0" Click="ChooseWinnersButton_Click" Visibility="Visible" Height="40" FontSize="16"/>
+        <Button x:Name="LoadButton" Content="Load" HorizontalAlignment="Left" VerticalAlignment="Top" Width="168" Margin="320,339,0,0" Click="LoadButton_Click" Visibility="Visible" Height="40" FontSize="16"/>
+        <Button x:Name="ExitButton" Content="Exit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="168" Margin="320,387,0,0" Click="ExitButton_Click" Visibility="Visible" Height="44" FontSize="16"/>
+        <Button x:Name="HorizontalDisplayButton" Content="Print Horizontally" HorizontalAlignment="Left" VerticalAlignment="Top" Width="168" Margin="320,299,0,0" Click="HorizontalDisplayButton_Click" Visibility="Visible" Height="35" FontSize="16"/>
+        <Button x:Name="VerticalDisplayButton" Content="Print Vertically" HorizontalAlignment="Left" VerticalAlignment="Top" Width="168" Margin="320,258,0,0" Click="VerticalDisplayButton_Click" Visibility="Visible" Height="36" FontSize="16"/>
+
+    </Grid>
+</Window>

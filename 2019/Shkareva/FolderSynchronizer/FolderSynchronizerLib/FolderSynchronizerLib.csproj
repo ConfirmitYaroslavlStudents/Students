@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Checker\FolderPathChecker.cs" />
     <Compile Include="SyncProc\ISyncProcManager.cs" />
-    <Compile Include="Item.cs" />
+    <Compile Include="FileDescriptor.cs" />
     <Compile Include="Folder\Folder.cs" />
     <Compile Include="Folder\FolderSet.cs" />
     <Compile Include="Folder\FolderWorker.cs" />

@@ -10,15 +10,11 @@ namespace Tests
 
         [Theory]
         [ClassData(typeof(FolderSetSyncData))]
-        public void CreateInputValidArgs(FolderSet set, SyncData data)
+        public void CreateInputValidArgs(FolderSet set, SyncData expected)
         {
             var syncData = SyncDataReader.Load(set);
 
-            Assert.Equal(data.FilesToCopy, syncData.FilesToCopy);
-            Assert.Equal(data.FilesToDelete, syncData.FilesToDelete);
-            Assert.Equal(data.FilesToUpdate, syncData.FilesToUpdate);
-            Assert.Equal(data.LogFlag, syncData.LogFlag);
-            Assert.Equal(data.NoDeleteFlag, syncData.NoDeleteFlag);
+            Assert.Equal(expected, syncData);
         }
 
     }

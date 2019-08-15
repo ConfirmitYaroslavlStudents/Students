@@ -41,8 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileWrapper.cs" />
-    <Compile Include="FolderWrapper.cs" />
+    <Compile Include="Seeker\DefaultConflictSeeker.cs" />
+    <Compile Include="DirectoryChecker.cs" />
+    <Compile Include="Conflicts\DifferentContentConflict.cs" />
+    <Compile Include="EnumLog.cs" />
+    <Compile Include="Conflicts\ExistDirectoryConflict.cs" />
+    <Compile Include="Conflicts\ExistFileConflict.cs" />
+    <Compile Include="FileChecker.cs" />
+    <Compile Include="Conflicts\IConflict.cs" />
+    <Compile Include="InfoLog.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Seeker\BaseSeeker.cs" />
+    <Compile Include="Conflicts\NoExistDirectoryConflict.cs" />
+    <Compile Include="Conflicts\NoExistFileConflict.cs" />
+    <Compile Include="Seeker\RemoveConflictSeeker.cs" />
     <Compile Include="Synchronization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

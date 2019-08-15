@@ -6,7 +6,24 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            Synchronization synchronization = new Synchronization(@"C:\Users\stalk\Desktop\vs\Synchronization\SyncLib\bin\Debug\master", @"C:\Users\stalk\Desktop\vs\Synchronization\SyncLib\bin\Debug\slave");
+            Synchronization synchronization = new Synchronization(args[0], args[1]);
+            try
+            {
+                synchronization.SetNoDeleteOption(args[2] == "noDelete");
+
+                switch (args[3])
+                {
+                    case "summary":
+                        synchronization.SetLogOption(EnumLog.Summary);
+                        break;
+                    case "verbose":
+                        synchronization.SetLogOption(EnumLog.Verbose);
+                        break;
+                }
+            }
+            catch
+            { }
+
             synchronization.Synchronaze();
         }
     }

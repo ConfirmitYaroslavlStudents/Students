@@ -5,36 +5,32 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Championship;
 
-namespace TournamentsWpfForms.Drawers
+namespace TournamentsWpfForms.Drawers.HorisontalDrawers
 {
     internal class HorisontalDrawer : IDrawer
     {
-        private List<UIElement> _listOfItems;
+        protected List<UIElement> ListOfItems;
 
-        public List<UIElement> GetListOfTournamentitems(Tournament tournament)
+        public List<UIElement> GetListOfTournamentItems(List<Round> tournamentRounds)
         {
-            _listOfItems = new List<UIElement>();
-            var tournamentRounds = tournament.GetTournamentToPrint();
+            ListOfItems = new List<UIElement>();
             var nextCursorPositionLeft = 0;
-            var nextDistanceBeewinPalyers = 60;
+            var nextDistanceBeewinPalyers = 40;
             var nextCursorPositionTop = 50;
-            var middleRectangleVertical = 15;
-            var minimalWidthCloud = 50;
+            const int middleRectangleVertical = 15;
+            const int minimalWidthCloud = 50;
 
-            foreach (var round in tournamentRounds[0])
+            foreach (var round in tournamentRounds)
             {
                 var maxWidthCloud = GetMaxLengthNameInRound(round) * 10 + minimalWidthCloud;
                 var middleRectangHorisontal = maxWidthCloud / 2;
 
-                if (tournamentRounds[0][0].Meetings.Count != tournamentRounds[0][1].Meetings.Count)
+                var stage = new Label
                 {
-                    var stage = new Label
-                    {
-                        Margin = new Thickness(nextCursorPositionLeft, 0, 0, 0),
-                        Content = GetStageToPrint(round.Stage)
-                    };
-                    _listOfItems.Add(stage);
-                }
+                    Margin = new Thickness(nextCursorPositionLeft, 0, 0, 0),
+                    Content = GetStageToPrintSingleGrid(round.Stage)
+                };
+                ListOfItems.Add(stage);
 
                 var distanceBetweenPlayers = nextDistanceBeewinPalyers;
                 var positionCursorLeft = nextCursorPositionLeft;
@@ -43,9 +39,10 @@ namespace TournamentsWpfForms.Drawers
                 for (var i = 0; i < round.Meetings.Count; i++)
                 {
                     var meeting = round.Meetings[i];
+
                     var isEmptyMeetingInFirstRound = meeting.FirstPlayer == null
                                                      && meeting.SecondPlayer == null
-                                                     && round.Equals(tournamentRounds[0][0]);
+                                                     && round.Equals(tournamentRounds[0]);
 
                     var indexForDrowLine = (distanceBetweenPlayers / 2) + middleRectangleVertical;
 
@@ -61,7 +58,7 @@ namespace TournamentsWpfForms.Drawers
                             X2 = positionCursorLeft + maxWidthCloud,
                             Y2 = positionCursorTop + distanceBetweenPlayers + middleRectangleVertical
                         };
-                        _listOfItems.Add(lineVertical);
+                        ListOfItems.Add(lineVertical);
 
                         var lineHorisontal = new Line
                         {
@@ -71,7 +68,7 @@ namespace TournamentsWpfForms.Drawers
                             X2 = positionCursorLeft + maxWidthCloud + middleRectangHorisontal,
                             Y2 = positionCursorTop + indexForDrowLine
                         };
-                        _listOfItems.Add(lineHorisontal);
+                        ListOfItems.Add(lineHorisontal);
 
                         if (i == 0)
                         {
@@ -88,15 +85,13 @@ namespace TournamentsWpfForms.Drawers
                 }
             }
 
-            var finishMeeting = tournamentRounds[0][tournamentRounds[0].Count - 1].Meetings[0];
+            var finalMeeting = tournamentRounds[tournamentRounds.Count - 1].Meetings[0];
 
-            PrintNamePlayer(nextCursorPositionLeft, nextCursorPositionTop, finishMeeting,
-                finishMeeting.Winner == MeetingWinner.FirstPlayer, 3);
-
-            return _listOfItems;
+            PrintNameWinner(nextCursorPositionLeft, nextCursorPositionTop, finalMeeting);
+            return ListOfItems;
         }
 
-        public int GetMaxLengthNameInRound(Round round)
+        protected int GetMaxLengthNameInRound(Round round)
         {
             var maxLengthName = 0;
 
@@ -115,16 +110,63 @@ namespace TournamentsWpfForms.Drawers
             return maxLengthName;
         }
 
-        private void PrintNamePlayer(int x, int y, Meeting meeting, bool isFirstPlayer, int maxWidthCloud)
+        protected void PrintNameWinner(int x, int y, Meeting meeting)
+        {
+            var minWidthCloud = 50;
+            var namePlayer = "";
+
+            var cloud = new Rectangle
+            {
+                RadiusX = 10,
+                RadiusY = 10,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = minWidthCloud,
+                Height = 30,
+                Margin = new Thickness(x, y, 0, 0)
+            };
+
+            switch (meeting.Winner)
+            {
+                case MeetingWinner.FirstPlayer:
+                    cloud.Width += meeting.FirstPlayer.Length;
+                    namePlayer = meeting.FirstPlayer;
+                    cloud.Stroke = Brushes.Aqua;
+                    cloud.Fill = Brushes.GreenYellow;
+                    break;
+                case MeetingWinner.SecondPlayer:
+                    cloud.Width += meeting.SecondPlayer.Length;
+                    namePlayer = meeting.SecondPlayer;
+                    cloud.Stroke = Brushes.Aqua;
+                    cloud.Fill = Brushes.GreenYellow;
+                    break;
+                case MeetingWinner.MatchDidNotTakePlace:
+                    cloud.Stroke = Brushes.Aqua;
+                    cloud.Fill = Brushes.Gray;
+                    break;
+            }
+
+            var labelName = new Label
+            {
+                Content = namePlayer,
+                Margin = new Thickness(x + 5, y + 2, 0, 0)
+            };
+
+            ListOfItems.Add(cloud);
+            ListOfItems.Add(labelName);
+        }
+
+        protected void PrintNamePlayer(int x, int y, Meeting meeting, bool isFirstPlayer, int maxWidthCloud)
         {
             var cloud = new Rectangle
             {
                 RadiusX = 10,
                 RadiusY = 10,
-                VerticalAlignment = VerticalAlignment.Top,
+                VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Width = maxWidthCloud,
-                Height = 30
+                Height = 30,
+                Margin = new Thickness(x, y, 0, 0)
             };
 
             switch (meeting.Winner)
@@ -147,25 +189,17 @@ namespace TournamentsWpfForms.Drawers
                     break;
             }
 
-            if (meeting.FirstPlayer!= null && meeting.SecondPlayer == null)
-            {
-                cloud.Stroke = Brushes.Aqua;
-                cloud.Fill = Brushes.GreenYellow;
-            }
-
-            cloud.Margin = new Thickness(x, y, 0, 0);
-
             var labelName = new Label
             {
                 Content = isFirstPlayer ? meeting.FirstPlayer : meeting.SecondPlayer,
                 Margin = new Thickness(x + 5, y + 2, 0, 0)
             };
 
-            _listOfItems.Add(cloud);
-            _listOfItems.Add(labelName);
+            ListOfItems.Add(cloud);
+            ListOfItems.Add(labelName);
         }
 
-        private string GetStageToPrint(int stage)
+        private string GetStageToPrintSingleGrid(int stage)
         {
             if (stage == 1)
             {

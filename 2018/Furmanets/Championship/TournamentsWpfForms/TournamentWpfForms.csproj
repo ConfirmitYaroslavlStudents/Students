@@ -50,16 +50,19 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Drawers\HorisontalDrawer.cs" />
+    <Compile Include="Drawers\HorisontalDrawers\HorisontalDrawer.cs" />
+    <Compile Include="Drawers\HorisontalDrawers\HorisontalLowerGridPainter.cs" />
     <Compile Include="Drawers\IDrawer.cs" />
     <Compile Include="TournamentPlayWindow.xaml.cs">
       <DependentUpon>TournamentPlayWindow.xaml</DependentUpon>

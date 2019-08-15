@@ -6,6 +6,6 @@ namespace TournamentsWpfForms.Drawers
 {
     interface IDrawer
     {
-        List<UIElement> GetListOfTournamentitems(Tournament tournament);
+        List<UIElement> GetListOfTournamentItems(List<Round> tournamentRounds);
     }
 }

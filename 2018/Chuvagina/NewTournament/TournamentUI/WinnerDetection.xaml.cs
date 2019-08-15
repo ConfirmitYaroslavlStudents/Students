@@ -6,30 +6,51 @@ namespace TournamentUI
 {
     public partial class WinnerDetection : Window
     {
-        Label Message = new Label();
-        Button FirstPlayer = new Button();
-        Button SecondPlayer = new Button();
+        private bool _resultIsSet = false;
 
         public WinnerDetection(string title, string body, string firstPlayer, string secondPlayer)
         {
             InitializeComponent();
-
             Title = title;
 
-            FirstPlayer.Width = 70;
-            FirstPlayer.Content = firstPlayer;
-            FirstPlayer.VerticalAlignment = VerticalAlignment.Bottom;
-            FirstPlayer.HorizontalAlignment = HorizontalAlignment.Left;
+            var firstBlock = new TextBlock()
+            {
+                Text = firstPlayer,
+                TextWrapping = TextWrapping.Wrap
+            };
 
-            SecondPlayer.Width = 70;
-            SecondPlayer.Content = secondPlayer;
-            SecondPlayer.VerticalAlignment = VerticalAlignment.Bottom;
-            SecondPlayer.HorizontalAlignment = HorizontalAlignment.Right;
-            
+            var FirstPlayer = new Button()
+            {
+                Width = 70,
+                Height = 40,
+                Content = firstBlock,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                ToolTip = firstPlayer
+            };
 
-            Message.Content = body;
-            Message.VerticalAlignment = VerticalAlignment.Top;
-            Message.HorizontalAlignment = HorizontalAlignment.Center;
+            var secondBlock = new TextBlock()
+            {
+                Text = secondPlayer,
+                TextWrapping = TextWrapping.Wrap
+            }; 
+
+            var SecondPlayer = new Button()
+            {
+                Width = 70,
+                Height = 40,
+                Content = secondBlock,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                ToolTip = secondPlayer
+            };
+
+            var Message = new TextBlock()
+            {
+                Text = body,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
 
             WinnerDetectionGrid.Children.Add(FirstPlayer);
             WinnerDetectionGrid.Children.Add(SecondPlayer);
@@ -41,14 +62,25 @@ namespace TournamentUI
 
         private void FirstPlayer_Click(object sender, EventArgs e)
         {
+            _resultIsSet = true;
             DialogResult = true;
             Close();            
         }
 
         private void SecondPlayer_Click(object sender, EventArgs e)
         {
+            _resultIsSet = true;
             DialogResult = false;
             Close();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            if (!_resultIsSet)
+            {
+                e.Cancel = true;
+            }
         }
 
     }

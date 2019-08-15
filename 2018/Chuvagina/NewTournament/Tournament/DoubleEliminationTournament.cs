@@ -15,34 +15,47 @@ namespace Tournament
             _lowerBracketParticipants = new List<Participant>();
         }
 
-        public new void PlayGame(Func<string, string, string> inputWinner)
+        public new Participant GetPlayingParticipants()
         {
             if (RoundBracket == null || GameIndex >= RoundBracket.Count / 2)
-                OrganizeLowerBracketRound();
+                OrganizeRound();
 
-            var leftParticipant = RoundBracket[GameIndex * 2];
-            var rightParticipant = RoundBracket[GameIndex * 2 + 1];
-            var game = new Game(leftParticipant, rightParticipant);
-            game.PlayGame(inputWinner, out string winner, out string loser);
+            Participant meeting = null;
+
+            if (_isPlayingUpperBracket)
+                meeting = UpperBracketParticipants[GameIndex];
+            else
+                meeting = _lowerBracketParticipants[GameIndex];
+
+            return meeting;
+        }
+
+        public new void PlayGame(Side side)
+        {
+            string loser = null;
+            if (side==Side.Left)
+                loser = UpperBracketParticipants[GameIndex].Right.Name;
+            else
+                loser = UpperBracketParticipants[GameIndex].Left.Name;
 
             if (_isPlayingLastRound)
-                UpperBracketParticipants[GameIndex].SetName(winner);           
+                UpperBracketParticipants[GameIndex].SetName(side);
             else if (_isPlayingUpperBracket)
             {
-                UpperBracketParticipants[GameIndex].SetName(winner);
+                UpperBracketParticipants[GameIndex].SetName(side);
                 if (_lowerBracketParticipants?.Count < GameIndex * 2)
                     _lowerBracketParticipants?.Insert(GameIndex, new Participant(loser));
                 else
                     _lowerBracketParticipants?.Insert(GameIndex * 2, new Participant(loser));
             }
             else          
-                _lowerBracketParticipants[GameIndex].SetName(winner);
+                _lowerBracketParticipants[GameIndex].SetName(side);
 
             GameIndex++;
             BinarySaver.SaveDoubleToBinnary(this);
         }
 
-        private void OrganizeLowerBracketRound()
+        private void OrganizeRound()
         {
             _isPlayingLastRound = false;
             if (UpperBracketParticipants.Count == 1 && _lowerBracketParticipants.Count == 1)

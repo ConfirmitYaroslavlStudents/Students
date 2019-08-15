@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Tournament;
+using static Tournament.SingleEliminationTournament;
 
 namespace TournamentUI
 {
@@ -15,15 +16,15 @@ namespace TournamentUI
             InitializeComponent();
         }
 
-        public string ReturnWinner(string first, string second)
+        public Side ReturnWinner(Participant meeting)
         {
            
-            var detection = new WinnerDetection("Winner detection", "Chose winner",first,second);
+            var detection = new WinnerDetection("Winner detection", "Chose winner", meeting.Left.Name, meeting.Right.Name);
             var result = detection.ShowDialog();
             if (result==true)
-                return first;
+                return Side.Left;
 
-            return second;
+            return Side.Right;
         }
 
         private void EnterParticipantName_Click(object sender, RoutedEventArgs e)
@@ -39,75 +40,101 @@ namespace TournamentUI
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            var participantsList= new List<string>();
+            var participantsList = new List<string>();
             foreach (var item in PartisipantsList.Items)
                 participantsList.Add(item.ToString());
 
             if (SingleElimination.IsChecked == true)
-                _tournament = new SingleEliminationTournament(participantsList);
-            else
-                _tournament = new DoubleEliminationTournament(participantsList);
 
+            {
+                _tournament = new SingleEliminationTournament(participantsList);
+                Tournament.KeyUp += SingleEliminationTournament_KeyUp;
+            }
+            else
+            {
+                _tournament = new DoubleEliminationTournament(participantsList);
+                Tournament.KeyUp += DoubleEliminationTournament_KeyUp;
+            }
+
+            HideElements();
+
+            List<Participant> bracket = _tournament.GetBracket();
+            BracketDrawing.DrawSingleElimination(_tournament, UpperBracketCanvas);
+        }
+
+        private void HideElements()
+        {
             DoubleElimination.Visibility = Visibility.Hidden;
             SingleElimination.Visibility = Visibility.Hidden;
             ParticipantName.Visibility = Visibility.Hidden;
             EnterParticipantName.Visibility = Visibility.Hidden;
             Start.Visibility = Visibility.Hidden;
             PartisipantsList.Visibility = Visibility.Hidden;
+            Loading.Visibility = Visibility.Hidden;
             Brackets.Visibility = Visibility.Visible;
             Instructions.Visibility = Visibility.Visible;
-            Tournament.KeyUp += Tournament_KeyUp;
+
         }
 
-        private static int MaxDepth(Participant participant)
+
+        private void DoubleEliminationTournament_KeyUp(object sender, KeyEventArgs e)
         {
-            if (participant == null) return 0;
+            if (e.Key != Key.Space) return;
 
-            if (MaxDepth(participant.Left) > MaxDepth(participant.Right))
-                return MaxDepth(participant.Left) + 1;
+            var doubleEliminationTournament = _tournament as DoubleEliminationTournament;
+            if (_tournament.EndOfTheGame()) return;
 
-            return MaxDepth(participant.Right) + 1;
+            var meeting = doubleEliminationTournament.GetPlayingParticipants();
+            var side = ReturnWinner(meeting);
+            doubleEliminationTournament.PlayGame(side);
+
+            BracketDrawing.DrawDoubleElimination(doubleEliminationTournament, UpperBracketCanvas, LowerBracketCanvas);
         }
 
-        private void Tournament_KeyUp(object sender, KeyEventArgs e)
+        private void SingleEliminationTournament_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Space) return;
 
             if (_tournament.EndOfTheGame()) return;
 
-            if (_tournament is DoubleEliminationTournament doubleEliminationTournament)
-            {
-                doubleEliminationTournament.PlayGame(ReturnWinner);
-                List<Participant> bracket = _tournament.GetBracket();
-                DrawBracket(UpperBracketCanvas, bracket);
-                bracket = doubleEliminationTournament.GetLowerBracket();
-                DrawBracket(LowerBracketCanvas, bracket);
-            }
-            else
-            {
-                _tournament.PlayGame(ReturnWinner);
-                List<Participant> bracket = _tournament.GetBracket();
-                DrawBracket(UpperBracketCanvas, bracket);
-            }
+            var meeting = _tournament.GetPlayingParticipants();
+            var side = ReturnWinner(meeting);
+            _tournament.PlayGame(side);
+
+            BracketDrawing.DrawSingleElimination(_tournament, UpperBracketCanvas);
+            
         }
 
-        private void DrawBracket(Canvas canvas, List<Participant> bracket)
+        
+
+        private void Loading_Click(object sender, RoutedEventArgs e)
         {
-            canvas.Children.Clear();
+             _tournament = BinarySaver.LoadSingleFromBinnary();
 
-            int maxDepth = 0;
-
-            foreach (var participant in bracket)
-                if (MaxDepth(participant) > maxDepth)
-                    maxDepth = MaxDepth(participant);
-
-            int i = 0;
-
-            foreach (var participant in bracket)
+            if (_tournament != null)
             {
-                var newParticipant = CloneParticipant.Clone(participant);
-                BracketDrawing.AddLinkToCanvas(ref i, maxDepth, newParticipant, canvas);
+                BracketDrawing.DrawSingleElimination(_tournament, UpperBracketCanvas);
+                Tournament.KeyUp += SingleEliminationTournament_KeyUp;
+
+                HideElements();
+                return;
             }
+          
+
+            _tournament = BinarySaver.LoadDoubleFromBinnary();
+
+            if (_tournament != null)
+            {
+                var doubleElimination = _tournament as DoubleEliminationTournament;
+                BracketDrawing.DrawDoubleElimination(doubleElimination, UpperBracketCanvas, LowerBracketCanvas);
+                Tournament.KeyUp += DoubleEliminationTournament_KeyUp;
+
+                HideElements();
+                return;
+            }
+
+            MessageBox.Show("There is no saved tournament");
+            return;
         }
     }
 }

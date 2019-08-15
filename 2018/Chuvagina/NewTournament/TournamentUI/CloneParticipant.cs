@@ -2,9 +2,9 @@
 
 namespace TournamentUI
 {
-    static class CloneParticipant
+    static class ConvertParticipant
     {
-        internal static UiParticipant Clone(Participant participant)
+        internal static UiParticipant ToUiParticipant(Participant participant)
         {
             var newRoot = new UiParticipant(participant.Name, null);
             AddChildren(newRoot, participant.Left, participant.Right);

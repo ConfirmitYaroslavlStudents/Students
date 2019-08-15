@@ -6,13 +6,15 @@ namespace Tournament
     [Serializable]
     public class SingleEliminationTournament
     {
+        public enum Side
+        {
+            Left,
+            Right
+        }
+
         protected List<Participant> UpperBracketParticipants;
         protected List<Participant> RoundBracket= new List<Participant>();
-        protected int GameIndex;
-        private const string _upperFileName = "upperBracket";
-        protected const string LowerFileName = "lowerBracket";
-        private const string _indexFileName = "gameIndex";
-        private const string _roundFileName = "roundBracket";
+        protected int GameIndex; 
 
         public SingleEliminationTournament(List<string> participants)
         {
@@ -30,20 +32,23 @@ namespace Tournament
             BinarySaver.SaveSingleToBinnary(this);
         }
 
-        public void PlayGame(Func<string, string, string> inputWinner)
+        public Participant GetPlayingParticipants()
         {
             if (GameIndex >= RoundBracket.Count/2)
                 OrganizeRound(ref UpperBracketParticipants);
 
-            var leftParticipant = RoundBracket[GameIndex * 2];
-            var rightParticipant = RoundBracket[GameIndex * 2 + 1];
-            var game = new Game(leftParticipant, rightParticipant);
-            game.PlayGame(inputWinner, out string winner, out string loser);
-            UpperBracketParticipants[GameIndex].SetName(winner);
+            Participant meeting = UpperBracketParticipants[GameIndex];
 
+            return meeting;
+        }
+
+        public void PlayGame(Side side)
+        {
+            UpperBracketParticipants[GameIndex].SetName(side);
             GameIndex++;
             BinarySaver.SaveSingleToBinnary(this);
         }
+
 
         protected void OrganizeRound(ref List<Participant> bracket)
         {

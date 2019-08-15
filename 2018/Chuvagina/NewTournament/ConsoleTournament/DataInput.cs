@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tournament;
 using static ConsoleTournament.ConsoleTournament;
+using static Tournament.SingleEliminationTournament;
 
 namespace ConsoleTournament
 {
@@ -52,10 +54,15 @@ namespace ConsoleTournament
             return result;
         }
 
-        public static string InputWinner(string first, string second)
+        public static Side InputWinner(Participant meeting)
         {         
-            Console.Write($"The winner between \"{first}\" and \"{second}\" is: ");  
-            return Console.ReadLine();
+            Console.Write($"The winner between \"{meeting.Left.Name}\" and \"{meeting.Right.Name}\" is: ");  
+            string result = Console.ReadLine();
+            if (result.Equals(meeting.Left.Name))
+                return Side.Left;
+            else if (result.Equals(meeting.Right.Name))
+                return Side.Right;
+            else return (InputWinner(meeting));
         }
 
         public static bool IsFromSavedFile()

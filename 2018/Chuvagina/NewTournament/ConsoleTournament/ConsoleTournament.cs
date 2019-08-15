@@ -22,7 +22,6 @@ namespace ConsoleTournament
         }
 
         public delegate void PrintBracket(List<Participant> participant);
-        private static Func<string, string, string> _inputWinner = DataInput.InputWinner;
 
         public static void Main(string[] args)
         {
@@ -79,7 +78,9 @@ namespace ConsoleTournament
                 Console.Clear();
                 Console.WriteLine("----Upper Bracket----");
                 print(nextUpperBracketRound);
-                tournament.PlayGame(_inputWinner);
+                var meeting = tournament.GetPlayingParticipants();
+                var side = DataInput.InputWinner(meeting);
+                tournament.PlayGame(side);
             }
 
             nextUpperBracketRound = tournament.GetBracket();
@@ -113,7 +114,9 @@ namespace ConsoleTournament
                 nextLowerBracketRound = tournament.GetLowerBracket();
                 Console.WriteLine("----Lower Bracket----");
                 print(nextLowerBracketRound);
-                tournament.PlayGame(_inputWinner);
+                var meeting = tournament.GetPlayingParticipants();
+                var side = DataInput.InputWinner(meeting);
+                tournament.PlayGame(side);
             }
 
             nextUpperBracketRound = tournament.GetBracket();

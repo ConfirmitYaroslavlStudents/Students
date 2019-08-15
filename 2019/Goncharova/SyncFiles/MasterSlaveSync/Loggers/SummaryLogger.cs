@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MasterSlaveSync
 {
-    internal class SummaryLogger : ILogger
+    public class SummaryLogger : ILogger
     {
         public SummaryLogger(Action<string> logListener)
         {
@@ -36,7 +36,7 @@ namespace MasterSlaveSync
         {
             var fileName = Path.GetFileName(e.ElementPath);
 
-            LogListener($"Copied \"{fileName}\" file");
+            LogListener($"Deleted \"{fileName}\" file");
         }
 
         public void LogFileUpdate(object sender, ResolverEventArgs e)

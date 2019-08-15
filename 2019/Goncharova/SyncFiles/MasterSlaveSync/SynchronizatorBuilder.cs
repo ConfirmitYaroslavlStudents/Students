@@ -3,20 +3,20 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    public class SynchronizerBuilder
+    public class SynchronizatorBuilder
     {
-        private Synchronizer synchronizer;
+        private readonly Synchronizator synchronizer;
 
-        public SynchronizerBuilder(string masterPath, string slavePath)
+        public SynchronizatorBuilder(string masterPath, string slavePath)
         {
-            synchronizer = new Synchronizer(masterPath, slavePath);
+            synchronizer = new Synchronizator(masterPath, slavePath);
         }
-        public SynchronizerBuilder(string masterPath, string slavePath, IFileSystem fileSystem)
+        public SynchronizatorBuilder(string masterPath, string slavePath, IFileSystem fileSystem)
         {
-            synchronizer = new Synchronizer(masterPath, slavePath, fileSystem);
+            synchronizer = new Synchronizator(masterPath, slavePath, fileSystem);
         }
 
-        public SynchronizerBuilder NoDelete()
+        public SynchronizatorBuilder NoDelete()
         {
             synchronizer.Resolver.DeleteFileProcessor = new NoDeleteFileProcessor();
             synchronizer.Resolver.DeleteDirectoryProcessor = new NoDeleteDirectoryProcessor();
@@ -24,7 +24,7 @@ namespace MasterSlaveSync
             return this;
         }
 
-        public SynchronizerBuilder LogSummary(Action<string> logListener)
+        public SynchronizatorBuilder LogSummary(Action<string> logListener)
         {
             synchronizer.Logger = new SummaryLogger(logListener);
             SetLogEvents();
@@ -32,7 +32,7 @@ namespace MasterSlaveSync
             return this;
         }
 
-        public SynchronizerBuilder LogVerbose(Action<string> logListener)
+        public SynchronizatorBuilder LogVerbose(Action<string> logListener)
         {
             synchronizer.Logger = new VerboseLogger(logListener);
             SetLogEvents();

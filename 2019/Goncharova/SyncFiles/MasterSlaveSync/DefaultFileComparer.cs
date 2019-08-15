@@ -8,7 +8,7 @@ namespace MasterSlaveSync
         public bool Equals(IFileInfo x, IFileInfo y)
         {
             if ((x.Name == y.Name) &&
-                (x.Attributes == y.Attributes) && 
+                (x.Length == y.Length) &&
                 (x.LastWriteTime == y.LastWriteTime))
             {
                 return true;

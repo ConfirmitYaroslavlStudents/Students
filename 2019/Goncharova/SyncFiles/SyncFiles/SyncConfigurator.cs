@@ -19,9 +19,9 @@ namespace Sync
         public string Slave { get; private set; }
         public string ErrorMessage { get; private set; } = String.Empty;
 
-        public SynchronizerBuilder GetSynchronizer()
+        public SynchronizatorBuilder GetSynchronizer()
         {
-            var synchronizer = new SynchronizerBuilder(Master, Slave);
+            var synchronizer = new SynchronizatorBuilder(Master, Slave);
 
             foreach (var option in options)
             {

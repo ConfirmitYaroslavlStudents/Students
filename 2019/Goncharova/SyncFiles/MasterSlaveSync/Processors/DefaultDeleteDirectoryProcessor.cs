@@ -6,6 +6,7 @@ namespace MasterSlaveSync
     internal class DefaultDeleteDirectoryProcessor : IDeleteDirectoryProcessor
     {
         public event EventHandler<ResolverEventArgs> DirectoryDeleted;
+
         public void Execute(IDirectoryInfo slaveDirectory)
         {
             slaveDirectory.Delete();

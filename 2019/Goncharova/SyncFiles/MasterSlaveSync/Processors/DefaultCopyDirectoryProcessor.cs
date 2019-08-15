@@ -6,19 +6,10 @@ namespace MasterSlaveSync
 {
     internal class DefaultCopyDirectoryProcessor : ICopyDirectoryProcessor
     {
-        private IFileSystem fileSystem;
-        public DefaultCopyDirectoryProcessor()
-        {
-            fileSystem = new FileSystem();
-        }
-
         public event EventHandler<ResolverEventArgs> DirectoryCopied;
 
-        public void Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath)
+        public void Execute(IDirectoryInfo masterDirectory, IDirectoryInfo target)
         {
-            string directoryPath = masterDirectory.FullName.Substring(masterPath.Length);
-            IDirectoryInfo target = fileSystem.Directory.CreateDirectory(Path.Combine(slavePath, directoryPath));
-
             CopyAll(masterDirectory, target);
 
             var args = new ResolverEventArgs
@@ -34,7 +25,7 @@ namespace MasterSlaveSync
 
         private void CopyAll(IDirectoryInfo source, IDirectoryInfo target)
         {
-            fileSystem.Directory.CreateDirectory(target.FullName);
+            target.CreateSubdirectory(target.FullName);
 
             foreach (var file in source.GetFiles())
             {

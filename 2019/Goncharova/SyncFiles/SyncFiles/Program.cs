@@ -11,7 +11,7 @@ namespace Sync
             var arguments = new SyncConfigurator(args);
             var synchronizer = arguments.GetSynchronizer();
 
-            if(arguments.ErrorMessage == String.Empty)
+            if (arguments.ErrorMessage == String.Empty)
             {
                 Console.WriteLine("Started synchronization...");
                 synchronizer.Run();

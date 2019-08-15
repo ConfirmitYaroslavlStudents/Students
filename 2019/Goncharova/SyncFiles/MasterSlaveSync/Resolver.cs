@@ -1,13 +1,15 @@
 ﻿using MasterSlaveSync.Conflicts;
+using System.IO;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal class Resolver
+    public class Resolver
     {
-        private string masterPath;
-        private string slavePath;
+        private readonly string masterPath;
+        private readonly string slavePath;
 
-        internal Resolver(string master, string slave)
+        public Resolver(string master, string slave)
         {
             masterPath = master;
             slavePath = slave;
@@ -21,15 +23,15 @@ namespace MasterSlaveSync
 
         public void ResolveConflicts(ConflictsCollection conflicts)
         {
-            foreach (var fileConflict in conflicts.fileConflicts)
+            foreach (var fileConflict in conflicts.FileConflicts)
             {
                 if (fileConflict.MasterFile == null)
                 {
-                    ResolveByDeletion(fileConflict);
+                    ResolveByDeletion(fileConflict.SlaveFile);
                 }
                 else if (fileConflict.SlaveFile == null)
                 {
-                    ResolveByCopy(fileConflict);
+                    ResolveByCopy(fileConflict.MasterFile);
                 }
                 else
                 {
@@ -37,28 +39,32 @@ namespace MasterSlaveSync
                 }
             }
 
-            foreach (var directoryConflict in conflicts.directoryConflicts)
+            foreach (var directoryConflict in conflicts.DirectoryConflicts)
             {
                 if (directoryConflict.MasterDirectory == null)
                 {
-                    ResolveByDeletion(directoryConflict);
+                    ResolveByDeletion(directoryConflict.SlaveDirectory);
                 }
                 else
                 {
-                    ResolveByCopy(directoryConflict);
+                    ResolveByCopy(directoryConflict.MasterDirectory);
                 }
             }
         }
 
-        private void ResolveByCopy(DirectoryConflict directoryConflict)
+        private void ResolveByCopy(IDirectoryInfo masterDirectory)
         {
-            CopyDirectoryProcessor.Execute(directoryConflict.MasterDirectory,
-                masterPath, slavePath);
+            string directoryPath = masterDirectory.FullName.Substring(masterPath.Length);
+
+            IDirectoryInfo target = masterDirectory.FileSystem
+                .Directory.CreateDirectory(slavePath + "//" + directoryPath);
+
+            CopyDirectoryProcessor.Execute(masterDirectory, target);
         }
 
-        private void ResolveByDeletion(DirectoryConflict directoryConflict)
+        private void ResolveByDeletion(IDirectoryInfo slaveDirectory)
         {
-            DeleteDirectoryProcessor.Execute(directoryConflict.SlaveDirectory);
+            DeleteDirectoryProcessor.Execute(slaveDirectory);
         }
 
         private void ResolveByUpdate(FileConflict fileConflict)
@@ -66,14 +72,14 @@ namespace MasterSlaveSync
             UpdateFileProcessor.Execute(fileConflict);
         }
 
-        private void ResolveByCopy(FileConflict fileConflict)
+        private void ResolveByCopy(IFileInfo masterFile)
         {
-            CopyFileProcessor.Execute(fileConflict.MasterFile, masterPath, slavePath);
+            CopyFileProcessor.Execute(masterFile, masterPath, slavePath);
         }
 
-        private void ResolveByDeletion(FileConflict fileConflict)
+        private void ResolveByDeletion(IFileInfo slaveFile)
         {
-            DeleteFileProcessor.Execute(fileConflict.SlaveFile);
+            DeleteFileProcessor.Execute(slaveFile);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using MasterSlaveSync.Conflicts;
+﻿using MasterSlaveSync.Conflicts;
+using System;
 
 namespace MasterSlaveSync
 {

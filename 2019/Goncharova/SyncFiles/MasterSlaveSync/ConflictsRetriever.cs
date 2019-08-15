@@ -7,8 +7,7 @@ namespace MasterSlaveSync
 {
     public class ConflictsRetriever
     {
-        public ConflictsRetriever()
-            : this(new DefaultFileComparer()) { }
+        public ConflictsRetriever() : this(new DefaultFileComparer()) { }
         public ConflictsRetriever(IEqualityComparer<IFileInfo> fileContentComparer)
         {
             FileContentComparer = fileContentComparer;
@@ -18,8 +17,8 @@ namespace MasterSlaveSync
         public ConflictsCollection GetConflicts(IDirectoryInfo master, IDirectoryInfo slave)
         {
             var result = new ConflictsCollection();
-            result.fileConflicts.AddRange(GetFileConflicts(master, slave));
-            result.directoryConflicts.AddRange(GetDirectoryConflicts(master, slave));
+            result.FileConflicts.AddRange(GetFileConflicts(master, slave));
+            result.DirectoryConflicts.AddRange(GetDirectoryConflicts(master, slave));
 
             return result;
         }
@@ -40,9 +39,9 @@ namespace MasterSlaveSync
                                         where f == null
                                         select new FileConflict(m, null);
             var inBothMasterAndSlave = from m in masterFiles
-                         join s in slaveFiles on m.Name equals s.Name 
-                         where !FileContentComparer.Equals(m, s)
-                         select new FileConflict(m, s);
+                                       join s in slaveFiles on m.Name equals s.Name
+                                       where !FileContentComparer.Equals(m, s)
+                                       select new FileConflict(m, s);
 
             return inSlaveButNotInMaster.Concat(inMasterButNotInSlave).Concat(inBothMasterAndSlave);
 
@@ -67,6 +66,6 @@ namespace MasterSlaveSync
 
             return inSlaveButNotInMaster.Concat(inMasterButNotInSlave);
         }
-           
+
     }
 }

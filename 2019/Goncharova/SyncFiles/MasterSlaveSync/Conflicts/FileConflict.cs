@@ -9,18 +9,19 @@ namespace MasterSlaveSync.Conflicts
             this.MasterFile = masterFile;
             this.SlaveFile = slaveFile;
         }
-
         public IFileInfo MasterFile { get; set; }
         public IFileInfo SlaveFile { get; set; }
+
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || GetType() != obj.GetType() 
+                || (MasterFile == null && SlaveFile == null))
             {
                 return false;
             }
 
             FileConflict conflict = (FileConflict)obj;
-            
+
             if (MasterFile == null)
             {
                 return conflict.MasterFile == null && (SlaveFile.FullName == conflict.SlaveFile.FullName);
@@ -30,7 +31,7 @@ namespace MasterSlaveSync.Conflicts
                 return conflict.SlaveFile == null && (MasterFile.FullName == conflict.MasterFile.FullName);
             }
 
-            return (SlaveFile.FullName == conflict.SlaveFile.FullName) 
+            return (SlaveFile.FullName == conflict.SlaveFile.FullName)
                 && (MasterFile.FullName == conflict.MasterFile.FullName);
         }
 

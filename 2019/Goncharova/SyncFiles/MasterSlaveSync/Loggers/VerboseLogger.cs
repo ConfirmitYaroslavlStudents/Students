@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MasterSlaveSync
 {
-    internal class VerboseLogger : ILogger
+    public class VerboseLogger : ILogger
     {
         public VerboseLogger(Action<string> logListener)
         {

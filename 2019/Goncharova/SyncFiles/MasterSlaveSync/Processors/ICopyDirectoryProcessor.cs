@@ -6,6 +6,7 @@ namespace MasterSlaveSync
     internal interface ICopyDirectoryProcessor
     {
         event EventHandler<ResolverEventArgs> DirectoryCopied;
-        void Execute(IDirectoryInfo masterDirectory, string masterPath, string slavePath);
+
+        void Execute(IDirectoryInfo masterDirectory, IDirectoryInfo target);
     }
 }

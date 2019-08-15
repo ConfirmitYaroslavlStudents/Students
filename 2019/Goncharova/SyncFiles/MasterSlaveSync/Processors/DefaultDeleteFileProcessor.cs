@@ -6,6 +6,7 @@ namespace MasterSlaveSync
     internal class DefaultDeleteFileProcessor : IDeleteFileProcessor
     {
         public event EventHandler<ResolverEventArgs> FileDeleted;
+
         public void Execute(IFileInfo slaveFile)
         {
             slaveFile.Delete();

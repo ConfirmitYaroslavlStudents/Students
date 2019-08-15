@@ -4,15 +4,24 @@ namespace MasterSlaveSync.Conflicts
 {
     public class ConflictsCollection
     {
-        public List<FileConflict> fileConflicts { get; } = new List<FileConflict>();
-        public List<DirectoryConflict> directoryConflicts { get; } = new List<DirectoryConflict>();
-
-        public ConflictsCollection Concat(ConflictsCollection second)
+        public ConflictsCollection() { }
+        public ConflictsCollection(List<FileConflict> fileConflicts)
         {
-            fileConflicts.AddRange(second.fileConflicts);
-            directoryConflicts.AddRange(second.directoryConflicts);
+            FileConflicts = fileConflicts;
+        }
+        public ConflictsCollection(List<DirectoryConflict> directoryConflicts)
+        {
+            DirectoryConflicts = directoryConflicts;
+        }
+
+        internal ConflictsCollection Concat(ConflictsCollection second)
+        {
+            FileConflicts.AddRange(second.FileConflicts);
+            DirectoryConflicts.AddRange(second.DirectoryConflicts);
 
             return this;
         }
+        public List<FileConflict> FileConflicts { get; } = new List<FileConflict>();
+        public List<DirectoryConflict> DirectoryConflicts { get; } = new List<DirectoryConflict>();
     }
 }

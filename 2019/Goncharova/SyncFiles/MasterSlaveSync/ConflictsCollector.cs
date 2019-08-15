@@ -6,24 +6,7 @@ namespace MasterSlaveSync
 {
     public class ConflictsCollector
     {
-        private IFileSystem _fileSystem;
-        private ConflictsRetriever conflictsRetriever;
-
-        public ConflictsCollector(ConflictsRetriever conflictsRetriever, IFileSystem fileSystem)
-        {
-            this.conflictsRetriever = conflictsRetriever;
-            _fileSystem = fileSystem;
-        }
-
-        public ConflictsCollector(ConflictsRetriever conflictsRetriever)
-            : this(conflictsRetriever, new FileSystem()) { }
-
-        public ConflictsCollector(IFileSystem fileSystem)
-            : this(new ConflictsRetriever(), fileSystem) { }
-
-        public ConflictsCollector()
-            : this(new ConflictsRetriever(), new FileSystem()) { }
-
+        private readonly ConflictsRetriever conflictsRetriever = new ConflictsRetriever();
 
         public ConflictsCollection CollectConflicts(IDirectoryInfo master, IDirectoryInfo slave)
         {

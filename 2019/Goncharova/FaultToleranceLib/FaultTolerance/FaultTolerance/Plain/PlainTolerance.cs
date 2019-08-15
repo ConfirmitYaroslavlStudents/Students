@@ -3,9 +3,9 @@ using System.Threading;
 
 namespace FaultTolerance.Plain
 {
-    public class PlainStrategy : Strategy
+    public class PlainTolerance : Tolerance
     {
-        public PlainStrategy() { }
+        public PlainTolerance() { }
 
         public override void Execute(Action<CancellationToken> action) =>
             PlainProcessor.Execute(_ => action(_));

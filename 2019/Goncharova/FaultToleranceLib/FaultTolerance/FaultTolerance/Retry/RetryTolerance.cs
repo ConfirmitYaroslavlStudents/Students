@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace FaultTolerance.Retry
 {
-    public class RetryStrategy : Strategy
+    public class RetryTolerance : Tolerance
     {
         private int permittedRetryCount;
-        private readonly StrategyExceptions configuredExceptions;
+        private readonly ToleranceExceptions configuredExceptions;
 
-        public RetryStrategy(StrategyBuilder strategyBuilder, int retryCount)
+        public RetryTolerance(ToleranceBuilder ToleranceBuilder, int retryCount)
         {
-            configuredExceptions = strategyBuilder.configuredExceptions;
+            configuredExceptions = ToleranceBuilder.configuredExceptions;
             PermittedRetryCount = retryCount;
         }
 

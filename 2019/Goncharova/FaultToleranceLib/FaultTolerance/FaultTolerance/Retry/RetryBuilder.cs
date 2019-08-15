@@ -2,7 +2,7 @@
 {
     public static class RetryBuilder
     {
-        public static RetryStrategy Retry(this StrategyBuilder strategyBuilder, int retryCount)
-            => new RetryStrategy(strategyBuilder, retryCount);
+        public static RetryTolerance Retry(this ToleranceBuilder ToleranceBuilder, int retryCount)
+            => new RetryTolerance(ToleranceBuilder, retryCount);
     }
 }

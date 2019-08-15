@@ -6,11 +6,11 @@ namespace FaultToleranceTests
 {
     public static class TestHelper
     {
-        public static void ExecuteActionThrows<TException>(this Strategy strategy, int count) where TException : Exception, new()
+        public static void ExecuteActionThrows<TException>(this Tolerance Tolerance, int count) where TException : Exception, new()
         {
             int thrownCount = 0;
 
-            strategy.Execute(() =>
+            Tolerance.Execute(() =>
             {
                 if (thrownCount < count)
                 {

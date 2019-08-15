@@ -12,7 +12,7 @@ namespace FaultToleranceTests
         public void FallbackAction_IsNull_ShouldThrow()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Strategy.Handle<InvalidCastException>().Fallback(null));
+                () => Tolerance.Handle<InvalidCastException>().Fallback(null));
         }
 
         [Fact]
@@ -21,8 +21,8 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var strategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
-            strategy.Execute(() => { });
+            var Tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
+            Tolerance.Execute(() => { });
 
             Assert.False(fallbackActionIsRun);
         }
@@ -33,8 +33,8 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var strategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
-            strategy.Execute(() => { throw new InvalidCastException(); });
+            var Tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
+            Tolerance.Execute(() => { throw new InvalidCastException(); });
 
             Assert.True(fallbackActionIsRun);
         }
@@ -45,11 +45,11 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var strategy = Strategy
+            var Tolerance = Tolerance
                 .Handle<InvalidCastException>()
                 .Handle<DivideByZeroException>()
                 .Fallback(fallbackAction);
-            strategy.Execute(() => { throw new InvalidCastException(); });
+            Tolerance.Execute(() => { throw new InvalidCastException(); });
 
             Assert.True(fallbackActionIsRun);
         }
@@ -60,10 +60,10 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var strategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var Tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
             void action() { throw new DivideByZeroException(); }
 
-            Assert.Throws<DivideByZeroException>(() => strategy.Execute(action));
+            Assert.Throws<DivideByZeroException>(() => Tolerance.Execute(action));
             Assert.False(fallbackActionIsRun);
         }
 
@@ -75,13 +75,13 @@ namespace FaultToleranceTests
             List<Exception> exceptions = new List<Exception>() {
                 new InvalidCastException(), new InvalidOperationException() };
 
-            var strategy = Strategy
+            var Tolerance = Tolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Fallback(fallbackAction);
             void action() { throw new DivideByZeroException(); }
 
-            Assert.Throws<DivideByZeroException>(() => strategy.Execute(action));
+            Assert.Throws<DivideByZeroException>(() => Tolerance.Execute(action));
             Assert.False(fallbackActionIsRun);
         }
 
@@ -90,10 +90,10 @@ namespace FaultToleranceTests
         {
             void fallbackAction() { throw new DivideByZeroException(); }
 
-            var strategy = Strategy.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var Tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
             void action() { throw new InvalidCastException(); }
 
-            Assert.Throws<DivideByZeroException>(() => strategy.Execute(action));
+            Assert.Throws<DivideByZeroException>(() => Tolerance.Execute(action));
         }
 
     }

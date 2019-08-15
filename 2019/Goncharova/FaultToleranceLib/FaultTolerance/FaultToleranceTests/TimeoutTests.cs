@@ -10,25 +10,25 @@ namespace FaultToleranceTests
         public void TimeoutInMilliseconds_LessThanZero_ShouldTrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(paramName: "timeoutInMilliseconds",
-                () => Strategy.Timeout(-1));
+                () => Tolerance.Timeout(-1));
         }
 
         [Fact]
         public void TimeoutInMilliseconds_EqualsZero_ShouldTrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(paramName: "timeoutInMilliseconds",
-                () => Strategy.Timeout(0));
+                () => Tolerance.Timeout(0));
         }
 
         [Fact]
         public void Timeout_ProvidedTimeoutIsNotEnough_ShouldTrow()
         {
             int timeout = 100;
-            var strategy = Strategy.Timeout(timeout);
+            var Tolerance = Tolerance.Timeout(timeout);
 
             void act()
             {
-                strategy.Execute(ct =>
+                Tolerance.Execute(ct =>
                 {
                     TestHelper.Sleep(TimeSpan.FromMilliseconds(timeout * 2), ct);
                 });
@@ -40,9 +40,9 @@ namespace FaultToleranceTests
         public void Timeout_ProvidedTimeoutIsEnough_ShouldNotTrow()
         {
             int timeout = 100;
-            var strategy = Strategy.Timeout(timeout * 2);
+            var Tolerance = Tolerance.Timeout(timeout * 2);
 
-            strategy.Execute(ct =>
+            Tolerance.Execute(ct =>
                 {
                     TestHelper.Sleep(TimeSpan.FromMilliseconds(timeout), ct);
                 });
@@ -51,10 +51,10 @@ namespace FaultToleranceTests
         [Fact]
         public void Timeout_ActionTrowsException_ShouldTrow()
         {
-            var strategy = Strategy.Timeout(100);
+            var Tolerance = Tolerance.Timeout(100);
 
             Assert.Throws<NotImplementedException>(() =>
-                strategy.Execute(() =>
+                Tolerance.Execute(() =>
                 {
                     throw new NotImplementedException();
                 }));

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace FaultTolerance
 {
-    internal class StrategyExceptions
+    internal class ToleranceExceptions
     {
         private List<Func<Exception, bool>> knownExceptionPredicates;
 

@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FaultTolerance
 {
     internal class StrategyExceptions
     {
-        private readonly List<Type> exceptionsHandled = new List<Type>();
+        private List<Func<Exception, bool>> knownExceptionPredicates;
 
-        internal void Add(Type exception)
+        internal void Add(Func<Exception, bool> exceptionPredicate)
         {
-            if (!Contains(exception))
-            {
-                exceptionsHandled.Add(exception);
-            }
+            knownExceptionPredicates = knownExceptionPredicates ?? new List<Func<Exception, bool>>();
+
+            knownExceptionPredicates.Add(exceptionPredicate);
         }
 
-        internal bool Contains(Type exception) => exceptionsHandled.Contains(exception);
+        internal bool Contains(Exception exception)
+        {
+            var knownException = knownExceptionPredicates.FirstOrDefault(x => x(exception));
+
+            return knownException != null;
+        }
 
     }
 }

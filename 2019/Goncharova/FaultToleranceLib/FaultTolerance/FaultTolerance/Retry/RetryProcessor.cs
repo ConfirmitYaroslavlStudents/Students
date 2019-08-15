@@ -24,7 +24,7 @@ namespace FaultTolerance.Retry
                 catch (Exception ex)
                 {
                     finalException = ex;
-                    if (!exceptions.Contains(ex.GetType()))
+                    if (!exceptions.Contains(ex))
                     {
                         throw;
                     }

@@ -7,9 +7,9 @@ namespace FaultTolerance
 {
     public abstract class Strategy
     {
-        public static StrategyBuilder Handle<T>() where T : Exception
+        public static StrategyBuilder Handle<TException>() where TException : Exception
         {
-            return new StrategyBuilder(typeof(T));
+            return new StrategyBuilder(exception => exception is TException);
         }
 
         public abstract void Execute(Action<CancellationToken> action);

@@ -6,15 +6,16 @@ namespace FaultTolerance
     {
         internal StrategyExceptions configuredExceptions;
 
-        public StrategyBuilder(Type exception)
+        public StrategyBuilder(Func<Exception, bool> exceptionPredicate)
         {
             configuredExceptions = new StrategyExceptions();
-            configuredExceptions.Add(exception);
+
+            configuredExceptions.Add(exceptionPredicate);
         }
 
-        public StrategyBuilder Handle<T>() where T : Exception
+        public StrategyBuilder Handle<TException>() where TException : Exception
         {
-            configuredExceptions.Add(typeof(T));
+            configuredExceptions.Add((ex) => ex is TException);
 
             return this;
         }

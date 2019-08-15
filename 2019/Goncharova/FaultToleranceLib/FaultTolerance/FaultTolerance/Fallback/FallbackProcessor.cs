@@ -17,7 +17,7 @@ namespace FaultTolerance.Fallback
             }
             catch (Exception ex)
             {
-                if (!exceptions.Contains(ex.GetType()))
+                if (!exceptions.Contains(ex))
                 {
                     throw;
                 }

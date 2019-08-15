@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Championship
+namespace ChampionshipLibrary
 {
     [Serializable]
-    public class SingleEliminationGrid
+    public class SingleEliminationGrid : IGrid
     {
         public List<Tour> Tours = new List<Tour>();
         public int CountTours { get; private set; }
@@ -27,10 +27,10 @@ namespace Championship
                 CountTours++;
             }
             else
-                PlayFinalGame();
+                SetChampion();
         }
 
-        public void PlayFinalGame()
+        public void SetChampion()
         {
             Tours[CountTours].Games[0].SetWinner();
             Champion = Tours[CountTours].Games[0].Winner;

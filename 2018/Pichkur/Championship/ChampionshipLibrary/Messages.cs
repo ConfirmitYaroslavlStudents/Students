@@ -1,6 +1,6 @@
-﻿namespace Championship
+﻿namespace ChampionshipLibrary
 {
-    static class Messages
+    public static class Messages
     {
         public static readonly string NotAPositiveIntegerNumber = "You should enter a positive integer number";
         public static readonly string ImpossibleTeamName = "This name is already used";
@@ -11,7 +11,7 @@
         public static readonly string InputNamesOfTeams = "Input teams:";
         public static readonly string SelectStandartGridType = "You choose Standart type of grid";
         public static readonly string SelectDoubleGridType = "You choose Double type of grid";
-        public static readonly string DownloadError = "Nothing to download";
+        public static readonly string LoadError = "Nothing to load";
         public static readonly string TeamsInputAlready = "Championship is already start";
 
         public static string SomeIndex(int index)

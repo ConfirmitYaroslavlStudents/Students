@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Championship
+namespace MenuLibrary
 {
-    [Serializable]
     public class Menu
     {
         private readonly List<MenuItem> _menuItems;

@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{002DBF40-0A92-4A8D-ADC7-13747D640094}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Championship</RootNamespace>
-    <AssemblyName>Championship</AssemblyName>
+    <ProjectGuid>{42142C15-AC99-4ABD-92A1-4DC4D7B2F1AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ConsoleUserInterfaceLibrary</RootNamespace>
+    <AssemblyName>ConsoleUserInterfaceLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -21,9 +20,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,19 +41,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConsoleWorker.cs" />
+    <Compile Include="UserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UserInterfaceLibrary\ConsoleUserInterfaceLibrary.csproj">
-      <Project>{42142c15-ac99-4abd-92a1-4dc4d7b2f1ab}</Project>
-      <Name>ConsoleUserInterfaceLibrary</Name>
+    <ProjectReference Include="..\ChampionshipLibrary\ChampionshipLibrary.csproj">
+      <Project>{e9362089-da0c-4b7d-9371-46ae71b90e30}</Project>
+      <Name>ChampionshipLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GridRendererLibrary\GridRendererLibrary.csproj">
+      <Project>{52cc1c7c-627d-4523-a7f0-268925b9624c}</Project>
+      <Name>GridRendererLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MenuLibrary\MenuLibrary.csproj">
+      <Project>{76ab6dcc-945f-48e6-83de-b533838596f9}</Project>
+      <Name>MenuLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

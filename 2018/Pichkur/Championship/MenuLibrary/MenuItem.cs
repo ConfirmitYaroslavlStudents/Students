@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace Championship
+namespace MenuLibrary
 {
-    [Serializable]
     public class MenuItem
     {
         public MenuItem()
@@ -11,7 +10,7 @@ namespace Championship
         }
         public MenuItem(Action action, string title)
         {
-            Action += action;
+            Action = action;
             Title = title;
         }
 

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Championship
+namespace ChampionshipLibrary
 {
     [Serializable]
-    class DoubleEliminationGrid
+    public class DoubleEliminationGrid : IGrid
     {
         public SingleEliminationGrid WinnersTour;
         public SingleEliminationGrid LosersTour;
         public Game FinalGame = null;
+        public Team Champion { get; set; }
 
         public DoubleEliminationGrid(List<Team> teams)
         {
@@ -54,7 +55,7 @@ namespace Championship
                     {
                         Team loserTeam = game.GetLoser();
 
-                        if (loserTeam!=null)
+                        if (loserTeam != null)
                             teams.Add(loserTeam);
                     }
                 }
@@ -63,10 +64,19 @@ namespace Championship
             return teams;
         }
 
-        public void SetFinalGame()
+        private void SetFinalGame()
         {
-            if (WinnersTour.Champion != null && LosersTour.Champion != null)
+            if (FinalGame != null)
+                SetChampion();
+            else
+                if (WinnersTour.Champion != null && LosersTour.Champion != null)
                 FinalGame = new Game(WinnersTour.Champion, LosersTour.Champion);
+        }
+
+        public void SetChampion()
+        {
+            if (FinalGame != null)
+                Champion = FinalGame.Winner;
         }
     }
 }

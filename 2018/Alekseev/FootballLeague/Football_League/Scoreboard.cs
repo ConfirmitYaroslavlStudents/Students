@@ -2,11 +2,23 @@
 
 namespace Football_League
 {
+    public enum ScoreboardType
+    {
+        Vertical,
+        Horizontal
+    }
     class Scoreboard
     {
         private readonly List<string> _matchResultsDisplayGrid1 = new List<string>();
         private readonly List<string> _matchResultsDisplayGrid2 = new List<string>();
+        private ScoreboardType _type;
+
         public int CurrentPlayerPosition = 0;
+
+        public void SetScoreboardType(int num)
+        {
+            _type = num == 1 ? ScoreboardType.Vertical : ScoreboardType.Horizontal;
+        }
         public void AddResults(List<Contestant> winnersGrid1, List<Contestant> winnersGrid2 = null)
         {
             AddResultsGrid(winnersGrid1,_matchResultsDisplayGrid1);
@@ -77,7 +89,7 @@ namespace Football_League
 
         public void Print()
         {
-            ConsoleWorker.PrintScoreboard(_matchResultsDisplayGrid1,_matchResultsDisplayGrid2);          
+            ConsoleWorker.PrintScoreboard(_matchResultsDisplayGrid1,_matchResultsDisplayGrid2, _type);          
         }
     }
 }

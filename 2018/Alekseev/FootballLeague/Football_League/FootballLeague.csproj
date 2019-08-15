@@ -43,13 +43,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleWorker.cs" />
-    <Compile Include="Contestant.cs" />
-    <Compile Include="Match.cs" />
+    <Compile Include="ConsoleWorkerHelperClass.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Scoreboard.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaverLoader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FootballLeagueClassLibrary\FootballLeagueClassLibrary.csproj">
+      <Project>{c9639c7b-c87b-4592-9e71-04a6a04525a4}</Project>
+      <Name>FootballLeagueClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

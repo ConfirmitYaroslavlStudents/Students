@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace FaultTolerance.Fallback
 {
-    public class FallbackStrategy : Strategy
+    public class FallbackTolerance : Tolerance
     {
         private Action fallbackAction;
-        private readonly StrategyExceptions configuredExceptions;
+        private readonly ToleranceExceptions configuredExceptions;
 
-        public FallbackStrategy(StrategyBuilder strategyBuilder, Action fallbackAction)
+        public FallbackTolerance(ToleranceBuilder ToleranceBuilder, Action fallbackAction)
         {
-            configuredExceptions = strategyBuilder.configuredExceptions;
+            configuredExceptions = ToleranceBuilder.configuredExceptions;
             FallbackAction = fallbackAction;
         }
 

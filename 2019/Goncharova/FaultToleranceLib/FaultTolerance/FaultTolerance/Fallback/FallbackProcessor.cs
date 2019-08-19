@@ -7,7 +7,7 @@ namespace FaultTolerance.Fallback
     {
         internal static void Execute(
             Action<CancellationToken> action,
-            StrategyExceptions exceptions,
+            ToleranceExceptions exceptions,
             Action fallbackAction)
         {
             try
@@ -17,7 +17,7 @@ namespace FaultTolerance.Fallback
             }
             catch (Exception ex)
             {
-                if (!exceptions.Contains(ex.GetType()))
+                if (!exceptions.Contains(ex))
                 {
                     throw;
                 }

@@ -7,7 +7,7 @@ namespace FaultTolerance.Retry
     {
         internal static void Execute(
             Action<CancellationToken> action,
-            StrategyExceptions exceptions,
+            ToleranceExceptions exceptions,
             int permittedRetryCount)
         {
             Exception finalException;
@@ -24,7 +24,7 @@ namespace FaultTolerance.Retry
                 catch (Exception ex)
                 {
                     finalException = ex;
-                    if (!exceptions.Contains(ex.GetType()))
+                    if (!exceptions.Contains(ex))
                     {
                         throw;
                     }

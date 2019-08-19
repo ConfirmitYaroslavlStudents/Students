@@ -3,11 +3,11 @@ using System.Threading;
 
 namespace FaultTolerance.Timeout
 {
-    public class TimeoutStrategy : Strategy
+    public class TimeoutTolerance : Tolerance
     {
         private int timeoutInMilliseconds;
 
-        public TimeoutStrategy(int timeoutInMilliseconds)
+        public TimeoutTolerance(int timeoutInMilliseconds)
         {
             TimeoutInMilliseconds = timeoutInMilliseconds;
         }

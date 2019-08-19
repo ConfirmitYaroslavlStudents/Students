@@ -11,14 +11,14 @@ namespace FaultToleranceTests
         public void Count_LessThanZero_ShouldThrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                Tolerance.Handle<DivideByZeroException>().Retry(-1));
+                BuildTolerance.Handle<DivideByZeroException>().Retry(-1));
         }
 
         [Fact]
         public void Retry_HandledExceptionThrownPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Retry(count);
 
             tolerance.ExecuteActionThrows<InvalidCastException>(count);
         }
@@ -27,7 +27,7 @@ namespace FaultToleranceTests
         public void Retry_HandledExceptionThrownMoreThanPermittedRetryCountTimes_ShouldThrow()
         {
             int count = 3;
-            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Retry(count);
 
             Assert.Throws<InvalidCastException>(() => 
                 tolerance.ExecuteActionThrows<InvalidCastException>(count + 1));
@@ -37,7 +37,7 @@ namespace FaultToleranceTests
         public void Retry_HandledExceptionThrownLessThanPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Retry(count);
 
             tolerance.ExecuteActionThrows<InvalidCastException>(count - 1);
         }
@@ -45,7 +45,7 @@ namespace FaultToleranceTests
         public void Retry_OneOfTheHandledExceptionsThrownPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var tolerance = Tolerance
+            var tolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Retry(count);
@@ -57,7 +57,7 @@ namespace FaultToleranceTests
         public void Retry_OneOfTheHandledExceptionsThrownMoreThanPermittedRetryCountTimes_ShouldThrow()
         {
             int count = 3;
-            var tolerance = Tolerance
+            var tolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Retry(count);
@@ -70,7 +70,7 @@ namespace FaultToleranceTests
         public void Retry_OneOfTheHandledExceptionsThrownLessThanPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var tolerance = Tolerance
+            var tolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Retry(count);
@@ -81,7 +81,7 @@ namespace FaultToleranceTests
         [Fact]
         public void Retry_NotHandledException_ShouldThrow()
         {
-            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Retry(3);
 
             Assert.Throws<DivideByZeroException>(() =>
                 tolerance.Execute(() =>
@@ -93,7 +93,7 @@ namespace FaultToleranceTests
         [Fact]
         public void Retry_NotHandledExceptionsList_ShouldThrow()
         {
-            var tolerance = Tolerance.Handle<InvalidCastException>().Handle<InvalidOperationException>().Retry(3);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Handle<InvalidOperationException>().Retry(3);
 
             Assert.Throws<DivideByZeroException>(() =>
                 tolerance.Execute(() =>

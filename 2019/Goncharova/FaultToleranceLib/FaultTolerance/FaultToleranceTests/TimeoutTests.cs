@@ -10,21 +10,21 @@ namespace FaultToleranceTests
         public void TimeoutInMilliseconds_LessThanZero_ShouldTrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(paramName: "timeoutInMilliseconds",
-                () => Tolerance.Timeout(-1));
+                () => BuildTolerance.Timeout(-1));
         }
 
         [Fact]
         public void TimeoutInMilliseconds_EqualsZero_ShouldTrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(paramName: "timeoutInMilliseconds",
-                () => Tolerance.Timeout(0));
+                () => BuildTolerance.Timeout(0));
         }
 
         [Fact]
         public void Timeout_ProvidedTimeoutIsNotEnough_ShouldTrow()
         {
             int timeout = 100;
-            var tolerance = Tolerance.Timeout(timeout);
+            var tolerance = BuildTolerance.Timeout(timeout);
 
             void act()
             {
@@ -40,7 +40,7 @@ namespace FaultToleranceTests
         public void Timeout_ProvidedTimeoutIsEnough_ShouldNotTrow()
         {
             int timeout = 100;
-            var tolerance = Tolerance.Timeout(timeout * 2);
+            var tolerance = BuildTolerance.Timeout(timeout * 2);
 
             tolerance.Execute(ct =>
                 {
@@ -51,7 +51,7 @@ namespace FaultToleranceTests
         [Fact]
         public void Timeout_ActionTrowsException_ShouldTrow()
         {
-            var tolerance = Tolerance.Timeout(100);
+            var tolerance = BuildTolerance.Timeout(100);
 
             Assert.Throws<NotImplementedException>(() =>
                 tolerance.Execute(() =>

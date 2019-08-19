@@ -12,7 +12,7 @@ namespace FaultToleranceTests
         public void FallbackAction_IsNull_ShouldThrow()
         {
             Assert.Throws<ArgumentNullException>(
-                () => Tolerance.Handle<InvalidCastException>().Fallback(null));
+                () => BuildTolerance.Handle<InvalidCastException>().Fallback(null));
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
             tolerance.Execute(() => { });
 
             Assert.False(fallbackActionIsRun);
@@ -33,7 +33,7 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
             tolerance.Execute(() => { throw new InvalidCastException(); });
 
             Assert.True(fallbackActionIsRun);
@@ -45,7 +45,7 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var tolerance = Tolerance
+            var tolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Handle<DivideByZeroException>()
                 .Fallback(fallbackAction);
@@ -60,7 +60,7 @@ namespace FaultToleranceTests
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
             void action() { throw new DivideByZeroException(); }
 
             Assert.Throws<DivideByZeroException>(() => tolerance.Execute(action));
@@ -75,7 +75,7 @@ namespace FaultToleranceTests
             List<Exception> exceptions = new List<Exception>() {
                 new InvalidCastException(), new InvalidOperationException() };
 
-            var tolerance = Tolerance
+            var tolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Fallback(fallbackAction);
@@ -90,7 +90,7 @@ namespace FaultToleranceTests
         {
             void fallbackAction() { throw new DivideByZeroException(); }
 
-            var tolerance = Tolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
+            var tolerance = BuildTolerance.Handle<InvalidCastException>().Fallback(fallbackAction);
             void action() { throw new InvalidCastException(); }
 
             Assert.Throws<DivideByZeroException>(() => tolerance.Execute(action));

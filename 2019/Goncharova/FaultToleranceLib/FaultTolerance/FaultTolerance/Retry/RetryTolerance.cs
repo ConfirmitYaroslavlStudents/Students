@@ -8,9 +8,9 @@ namespace FaultTolerance.Retry
         private readonly int permittedRetryCount;
         private readonly ToleranceExceptions configuredExceptions;
 
-        public RetryTolerance(ToleranceBuilder ToleranceBuilder, int retryCount)
+        internal RetryTolerance(ToleranceExceptions exceptions, int retryCount)
         {
-            configuredExceptions = ToleranceBuilder.configuredExceptions;
+            configuredExceptions = exceptions;
             if (retryCount < 0)
             {
                 throw new ArgumentOutOfRangeException($"{nameof(retryCount)} should be non negative");

@@ -3,6 +3,6 @@
     public static class RetryBuilder
     {
         public static RetryTolerance Retry(this ToleranceBuilder ToleranceBuilder, int retryCount)
-            => new RetryTolerance(ToleranceBuilder, retryCount);
+            => new RetryTolerance(ToleranceBuilder.configuredExceptions, retryCount);
     }
 }

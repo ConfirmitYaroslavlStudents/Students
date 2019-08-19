@@ -9,7 +9,7 @@ namespace FaultToleranceTests
         [Fact]
         public void Plain_ActionThrowsException_ShouldThrow()
         {
-            var tolerance = Tolerance.Plain();
+            var tolerance = BuildTolerance.Plain();
 
             void action() => tolerance.Execute(() => throw new NotImplementedException());
 
@@ -19,7 +19,7 @@ namespace FaultToleranceTests
         [Fact]
         public void Plain_ActionDoesNotThrowException_ShouldNotThrow()
         {
-            var tolerance = Tolerance.Plain();
+            var tolerance = BuildTolerance.Plain();
 
             tolerance.Execute(() => { });
         }

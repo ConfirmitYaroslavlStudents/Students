@@ -12,12 +12,12 @@ namespace FaultToleranceTests
         public void FallbackAction_RetriesFail_ShouldBeRun()
         {
             int count = 3;
-            var retryTolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var retryTolerance = BuildTolerance.Handle<InvalidCastException>().Retry(count);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackTolerance = Tolerance
+            var fallbackTolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Fallback(fallbackAction);
 
@@ -30,12 +30,12 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_RetriesDoesNotFail_ShouldNotBeRun()
         {
-            var retryTolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
+            var retryTolerance = BuildTolerance.Handle<InvalidCastException>().Retry(3);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackTolerance = Tolerance
+            var fallbackTolerance = BuildTolerance
                 .Handle<InvalidCastException>()
                 .Fallback(fallbackAction);
 
@@ -48,12 +48,12 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_RetryDoesNotHandleExceptionButFallbackDoes_ShouldBeRun()
         {
-            var retryTolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
+            var retryTolerance = BuildTolerance.Handle<InvalidCastException>().Retry(3);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackTolerance = Tolerance
+            var fallbackTolerance = BuildTolerance
                 .Handle<DivideByZeroException>()
                 .Fallback(fallbackAction);
 
@@ -69,10 +69,10 @@ namespace FaultToleranceTests
         [Fact]
         public void RetryAndFallback_BothDoNotHandleException_ShouldThrow()
         {
-            var retryTolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
+            var retryTolerance = BuildTolerance.Handle<InvalidCastException>().Retry(3);
 
             void fallbackAction() { }
-            var fallbackTolerance = Tolerance
+            var fallbackTolerance = BuildTolerance
                 .Handle<DivideByZeroException>()
                 .Fallback(fallbackAction);
 
@@ -88,12 +88,12 @@ namespace FaultToleranceTests
         [Fact]
         public void FallbackAction_FallbackHandlesException_ShouldBeRun()
         {
-            var retryTolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
+            var retryTolerance = BuildTolerance.Handle<InvalidCastException>().Retry(3);
 
             bool fallbackActionIsRun = false;
             void fallbackAction() { fallbackActionIsRun = true; }
 
-            var fallbackTolerance = Tolerance
+            var fallbackTolerance = BuildTolerance
                 .Handle<DivideByZeroException>()
                 .Fallback(fallbackAction);
 

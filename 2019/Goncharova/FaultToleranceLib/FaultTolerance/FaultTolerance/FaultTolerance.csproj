@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildTolerance.cs" />
     <Compile Include="Fallback\FallbackBuilder.cs" />
     <Compile Include="Fallback\FallbackTolerance.cs" />
     <Compile Include="Fallback\FallbackProcessor.cs" />

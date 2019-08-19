@@ -8,9 +8,9 @@ namespace FaultTolerance.Fallback
         private readonly Action fallbackAction;
         private readonly ToleranceExceptions configuredExceptions;
 
-        public FallbackTolerance(ToleranceBuilder ToleranceBuilder, Action fallback)
+        internal FallbackTolerance(ToleranceExceptions exceptions, Action fallback)
         {
-            configuredExceptions = ToleranceBuilder.configuredExceptions;
+            configuredExceptions = exceptions;
             fallbackAction = fallback ?? throw new ArgumentNullException(nameof(fallback));
         }
 

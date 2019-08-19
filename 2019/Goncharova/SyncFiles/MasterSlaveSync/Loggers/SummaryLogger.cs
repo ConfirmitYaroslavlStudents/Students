@@ -1,33 +1,49 @@
-﻿using System.IO.Abstractions;
-using MasterSlaveSync.Conflict;
+﻿using System;
+using System.IO;
 
 namespace MasterSlaveSync
 {
-    internal class SummaryLogger : ILogger
+    public class SummaryLogger : ILogger
     {
-        public string LogDirectoryCopy(IDirectoryInfo masterDirectory)
+        public SummaryLogger(Action<string> logListener)
         {
-            return $"Copied {masterDirectory.Name} directory";
+            LogListener = logListener;
+        }
+        public Action<string> LogListener { get; private set; }
+
+        public void LogDirectoryCopy(object sender, ResolverEventArgs e)
+        {
+            var directoryPath = Path.GetDirectoryName(e.ElementPath);
+
+            LogListener($"Copied \"{e.ElementPath.Substring(directoryPath.Length + 1)}\" directory");
         }
 
-        public string LogDirectoryDeletion(IDirectoryInfo slaveDirectory)
+        public void LogDirectoryDeletion(object sender, ResolverEventArgs e)
         {
-            return $"Deleted {slaveDirectory.Name} directory";
+            var directoryPath = Path.GetDirectoryName(e.ElementPath);
+
+            LogListener($"Deleted \"{e.ElementPath.Substring(directoryPath.Length + 1)}\" directory");
         }
 
-        public string LogFileCopy(IFileInfo masterFile)
+        public void LogFileCopy(object sender, ResolverEventArgs e)
         {
-            return $"Copied {masterFile.Name} file";
+            var fileName = Path.GetFileName(e.ElementPath);
+
+            LogListener($"Copied \"{fileName}\" file");
         }
 
-        public string LogFileDeletion(IFileInfo slaveFile)
+        public void LogFileDeletion(object sender, ResolverEventArgs e)
         {
-            return $"Deleted {slaveFile.Name} file";
+            var fileName = Path.GetFileName(e.ElementPath);
+
+            LogListener($"Deleted \"{fileName}\" file");
         }
 
-        public string LogFileUpdate(FileConflict fileConflict)
+        public void LogFileUpdate(object sender, ResolverEventArgs e)
         {
-            return $"Updated {fileConflict.SlaveFile.Name} file";
+            var fileName = Path.GetFileName(e.ElementPath);
+
+            LogListener($"Updated \"{fileName}\" file");
         }
     }
 }

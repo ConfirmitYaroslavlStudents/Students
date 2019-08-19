@@ -1,35 +1,54 @@
-﻿using MasterSlaveSync.Conflict;
-using System.IO.Abstractions;
+﻿using System;
+using System.IO;
 
 namespace MasterSlaveSync
 {
-    internal class VerboseLogger : ILogger
+    public class VerboseLogger : ILogger
     {
-        public string LogDirectoryCopy(IDirectoryInfo masterDirectory)
+        public VerboseLogger(Action<string> logListener)
         {
-            return $"Copied {masterDirectory.Name} directory from " +
-                $"{masterDirectory.FullName.Substring(masterDirectory.FullName.Length - masterDirectory.Name.Length)}";
+            LogListener = logListener;
         }
 
-        public string LogDirectoryDeletion(IDirectoryInfo slaveDirectory)
+        public Action<string> LogListener { get; private set; }
+
+        public void LogDirectoryCopy(object sender, ResolverEventArgs e)
         {
-            return $"Deleted {slaveDirectory.Name} directory from " +
-                $"{slaveDirectory.FullName.Substring(slaveDirectory.FullName.Length - slaveDirectory.Name.Length)}";
+            string directoryPath = Path.GetDirectoryName(e.ElementPath);
+
+            LogListener($"Copied \"{e.ElementPath.Substring(directoryPath.Length + 1)}\" directory " +
+                $"from {directoryPath}");
         }
 
-        public string LogFileCopy(IFileInfo masterFile)
+        public void LogDirectoryDeletion(object sender, ResolverEventArgs e)
         {
-            return $"Copied {masterFile.Name} file from " + $"{masterFile.DirectoryName}";
+            string directoryPath = Path.GetDirectoryName(e.ElementPath);
+
+            LogListener($"Deleted \"{e.ElementPath.Substring(directoryPath.Length + 1)}\" directory " +
+                $"from {directoryPath}");
         }
 
-        public string LogFileDeletion(IFileInfo slaveFile)
+        public void LogFileCopy(object sender, ResolverEventArgs e)
         {
-            return $"Deleted {slaveFile.Name} file from " + $"{slaveFile.DirectoryName}";
+            var fileName = Path.GetFileName(e.ElementPath);
+
+            LogListener($"Copied \"{fileName}\" file " +
+                $"from {Path.GetDirectoryName(e.ElementPath)}");
         }
 
-        public string LogFileUpdate(FileConflict fileConflict)
+        public void LogFileDeletion(object sender, ResolverEventArgs e)
         {
-            return $"Updated {fileConflict.SlaveFile.Name} file";
+            var fileName = Path.GetFileName(e.ElementPath);
+
+            LogListener($"Deleted \"{fileName}\" file " +
+                $"from {Path.GetDirectoryName(e.ElementPath)}");
+        }
+
+        public void LogFileUpdate(object sender, ResolverEventArgs e)
+        {
+            var fileName = Path.GetFileName(e.ElementPath);
+
+            LogListener($"Updated \"{fileName}\" file");
         }
     }
 }

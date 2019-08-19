@@ -1,5 +1,4 @@
-﻿using MasterSlaveSync.Conflict;
-using System.Collections.Generic;
+﻿using MasterSlaveSync.Conflicts;
 using System.IO.Abstractions;
 using System.Linq;
 
@@ -7,40 +6,23 @@ namespace MasterSlaveSync
 {
     public class ConflictsCollector
     {
-        private IFileSystem _fileSystem;
-        private ConflictsRetriever conflictsRetriever;
+        private readonly ConflictsRetriever conflictsRetriever = new ConflictsRetriever();
 
-        public ConflictsCollector(ConflictsRetriever conflictsRetriever, IFileSystem fileSystem)
+        public ConflictsCollection CollectConflicts(IDirectoryInfo master, IDirectoryInfo slave)
         {
-            this.conflictsRetriever = conflictsRetriever;
-            _fileSystem = fileSystem;
-        }
-
-        public ConflictsCollector(ConflictsRetriever conflictsRetriever)
-            : this(conflictsRetriever, new FileSystem()) { }
-
-        public ConflictsCollector(IFileSystem fileSystem)
-            : this(new ConflictsRetriever(), fileSystem) { }
-
-        public ConflictsCollector()
-            : this(new ConflictsRetriever(), new FileSystem()) { }
-
-
-        public List<IConflict> CollectConflicts(IDirectoryInfo master, IDirectoryInfo slave)
-        {
-            var inBoth = from m in master.EnumerateDirectories()
-                         join s in slave.EnumerateDirectories() 
-                         on m.Name equals s.Name
-                         select new {Master = m, Slave = s };
+            var directoryElementsInBothMasterAndSlave = from m in master.EnumerateDirectories()
+                                                        join s in slave.EnumerateDirectories()
+                                                        on m.Name equals s.Name
+                                                        select new { Master = m, Slave = s };
 
             var result = conflictsRetriever.GetConflicts(master, slave);
 
-            foreach (var directoriesPair in inBoth)
+            foreach (var directoriesPair in directoryElementsInBothMasterAndSlave)
             {
                 result = result.Concat(CollectConflicts(directoriesPair.Master, directoriesPair.Slave));
             }
 
-            return result.ToList();
+            return result;
 
         }
 

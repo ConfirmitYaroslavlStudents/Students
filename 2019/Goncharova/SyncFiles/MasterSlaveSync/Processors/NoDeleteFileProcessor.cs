@@ -1,12 +1,13 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    class NoDeleteFileProcessor : IDeleteFileProcessor
+    internal class NoDeleteFileProcessor : IDeleteFileProcessor
     {
-        public bool Execute(IFileInfo slaveFile)
+        public event EventHandler<ResolverEventArgs> FileDeleted;
+        public void Execute(IFileInfo slaveFile)
         {
-            return false;
         }
     }
 }

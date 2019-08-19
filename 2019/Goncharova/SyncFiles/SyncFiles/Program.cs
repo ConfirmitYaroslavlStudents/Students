@@ -1,47 +1,33 @@
 ﻿using System;
-using MasterSlaveSync;
 
-namespace SyncFiles
+namespace Sync
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Enter master directory path");
-            string masterPath = @"C:\Users\Anna\Documents\Master"; //Console.ReadLine();
-            Console.WriteLine("Enter slave directory path");
-            string slavePath = @"C:\Users\Anna\Documents\Slave";//Console.ReadLine();
+            PrintUsage();
 
-            Console.WriteLine("Enable no-delete: ndt, Disable no-delete: ndf");
-            Console.WriteLine("Start synchronization: start");
+            var arguments = new SyncConfigurator(args);
+            var synchronizer = arguments.GetSynchronizer();
 
-            string input;
-            Synchronizer sync = new Synchronizer(masterPath, slavePath);
-            do
+            if (arguments.ErrorMessage == String.Empty)
             {
-                input = Console.ReadLine().ToLower();
-
-                switch (input)
-                {
-                    case "ndt":
-                        sync.SyncOptions.NoDelete = true;
-                        break;
-                    case "ndf":
-                        sync.SyncOptions.NoDelete = false;
-                        break;
-                    case "start":
-                        Console.WriteLine("Sync started..");
-                        var res = sync.CollectConflicts();
-                        sync.LogListener = Console.WriteLine;
-                        sync.LogLevel = LogLevels.Verbose;
-                        sync.SyncDirectories(res);
-                        break;
-                }
+                Console.WriteLine("Started synchronization...");
+                synchronizer.Run();
             }
-            while (input != "start");
+            else
+            {
+                Console.WriteLine(arguments.ErrorMessage);
+                PrintUsage();
+            }
 
             Console.ReadKey();
+        }
 
+        private static void PrintUsage()
+        {
+            Console.WriteLine(@"Usage: Sync.exe <source> <destination> [-nodelete] [-logsummary] [-logverbose]");
         }
     }
 }

@@ -1,14 +1,11 @@
-﻿using System.IO.Abstractions;
-using MasterSlaveSync.Conflict;
-
-namespace MasterSlaveSync
+﻿namespace MasterSlaveSync
 {
     internal interface ILogger
     {
-        string LogFileDeletion(IFileInfo slaveFile);
-        string LogFileCopy(IFileInfo masterFile);
-        string LogFileUpdate(FileConflict fileConflict);
-        string LogDirectoryDeletion(IDirectoryInfo slaveDirectory);
-        string LogDirectoryCopy(IDirectoryInfo masterDirectory);
+        void LogFileDeletion(object sender, ResolverEventArgs e);
+        void LogFileCopy(object sender, ResolverEventArgs e);
+        void LogFileUpdate(object sender, ResolverEventArgs e);
+        void LogDirectoryDeletion(object sender, ResolverEventArgs e);
+        void LogDirectoryCopy(object sender, ResolverEventArgs e);
     }
 }

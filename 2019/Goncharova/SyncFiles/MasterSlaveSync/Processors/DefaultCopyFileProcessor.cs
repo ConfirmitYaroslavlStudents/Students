@@ -1,17 +1,29 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     internal class DefaultCopyFileProcessor : ICopyFileProcessor
     {
-        public bool Execute(IFileInfo masterFile, string masterPath, string slavePath)
+        public event EventHandler<ResolverEventArgs> FileCopied;
+
+        public void Execute(IFileInfo masterFile, string masterPath, string slavePath)
         {
             string filePath = masterFile.FullName.Substring(masterPath.Length);
             string destPath = slavePath + "\\" + filePath;
 
             masterFile.CopyTo(destPath);
 
-            return true;
+            var args = new ResolverEventArgs
+            {
+                ElementPath = masterFile.FullName
+            };
+            OnFileCopied(args);
+
+        }
+        protected virtual void OnFileCopied(ResolverEventArgs e)
+        {
+            FileCopied?.Invoke(this, e);
         }
     }
 }

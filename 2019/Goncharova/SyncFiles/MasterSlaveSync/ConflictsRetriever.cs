@@ -1,4 +1,4 @@
-﻿using MasterSlaveSync.Conflict;
+﻿using MasterSlaveSync.Conflicts;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
@@ -7,29 +7,23 @@ namespace MasterSlaveSync
 {
     public class ConflictsRetriever
     {
-        private readonly IFileSystem _fileSystem;
-
-        public ConflictsRetriever()
-            : this(new DefaultFileComparer(), new FileSystem()) { }
-
-        public ConflictsRetriever(IEqualityComparer<IFileInfo> fileContainmentComparer)
-            : this(fileContainmentComparer, new FileSystem()) { }
-
-        public ConflictsRetriever(IFileSystem fileSystem)
-            : this(new DefaultFileComparer(), fileSystem) { }
-
-        public ConflictsRetriever(IEqualityComparer<IFileInfo> fileContainmentComparer, IFileSystem fileSystem)
+        public ConflictsRetriever() : this(new DefaultFileComparer()) { }
+        public ConflictsRetriever(IEqualityComparer<IFileInfo> fileContentComparer)
         {
-            _fileSystem = fileSystem;
-            FileContainmentComparer = fileContainmentComparer;
+            FileContentComparer = fileContentComparer;
+        }
+        public IEqualityComparer<IFileInfo> FileContentComparer { get; private set; }
+
+        public ConflictsCollection GetConflicts(IDirectoryInfo master, IDirectoryInfo slave)
+        {
+            var result = new ConflictsCollection();
+            result.FileConflicts.AddRange(GetFileConflicts(master, slave));
+            result.DirectoryConflicts.AddRange(GetDirectoryConflicts(master, slave));
+
+            return result;
         }
 
-        public IEqualityComparer<IFileInfo> FileContainmentComparer { get; private set; }
-
-        public IEnumerable<IConflict> GetConflicts(IDirectoryInfo master, IDirectoryInfo slave) 
-            => GetFileConflicts(master, slave).Concat(GetDirectoryConflicts(master, slave));
-
-        private IEnumerable<IConflict> GetFileConflicts(IDirectoryInfo master, IDirectoryInfo slave)
+        private IEnumerable<FileConflict> GetFileConflicts(IDirectoryInfo master, IDirectoryInfo slave)
         {
             var masterFiles = master.GetFiles();
             var slaveFiles = slave.GetFiles();
@@ -44,16 +38,16 @@ namespace MasterSlaveSync
                                         from f in t.DefaultIfEmpty()
                                         where f == null
                                         select new FileConflict(m, null);
-            var inBoth = from m in masterFiles
-                         join s in slaveFiles on m.Name equals s.Name 
-                         where !FileContainmentComparer.Equals(m, s)
-                         select new FileConflict(m, s);
+            var inBothMasterAndSlave = from m in masterFiles
+                                       join s in slaveFiles on m.Name equals s.Name
+                                       where !FileContentComparer.Equals(m, s)
+                                       select new FileConflict(m, s);
 
-            return inSlaveButNotInMaster.Concat(inMasterButNotInSlave).Concat(inBoth);
+            return inSlaveButNotInMaster.Concat(inMasterButNotInSlave).Concat(inBothMasterAndSlave);
 
         }
 
-        private IEnumerable<IConflict> GetDirectoryConflicts(IDirectoryInfo master, IDirectoryInfo slave)
+        private IEnumerable<DirectoryConflict> GetDirectoryConflicts(IDirectoryInfo master, IDirectoryInfo slave)
         {
             var masterDirectories = master.GetDirectories();
             var slaveDirectories = slave.GetDirectories();
@@ -72,6 +66,6 @@ namespace MasterSlaveSync
 
             return inSlaveButNotInMaster.Concat(inMasterButNotInSlave);
         }
-           
+
     }
 }

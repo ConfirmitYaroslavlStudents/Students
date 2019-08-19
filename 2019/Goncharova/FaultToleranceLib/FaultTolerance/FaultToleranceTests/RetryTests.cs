@@ -8,95 +8,95 @@ namespace FaultToleranceTests
     public class RetryTests
     {
         [Fact]
-        public void Count_LessThanZero_ShouldTrow()
+        public void Count_LessThanZero_ShouldThrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
                 Tolerance.Handle<DivideByZeroException>().Retry(-1));
         }
 
         [Fact]
-        public void Retry_HandledExceptionThrownPermittedRetryCountTimes_ShouldNotTrow()
+        public void Retry_HandledExceptionThrownPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var Tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
 
-            Tolerance.ExecuteActionThrows<InvalidCastException>(count);
+            tolerance.ExecuteActionThrows<InvalidCastException>(count);
         }
 
         [Fact]
-        public void Retry_HandledExceptionThrownMoreThanPermittedRetryCountTimes_ShouldTrow()
+        public void Retry_HandledExceptionThrownMoreThanPermittedRetryCountTimes_ShouldThrow()
         {
             int count = 3;
-            var Tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
 
             Assert.Throws<InvalidCastException>(() => 
-                Tolerance.ExecuteActionThrows<InvalidCastException>(count + 1));
+                tolerance.ExecuteActionThrows<InvalidCastException>(count + 1));
         }
 
         [Fact]
-        public void Retry_HandledExceptionThrownLessThanPermittedRetryCountTimes_ShouldNotTrow()
+        public void Retry_HandledExceptionThrownLessThanPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var Tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
+            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(count);
 
-            Tolerance.ExecuteActionThrows<InvalidCastException>(count - 1);
+            tolerance.ExecuteActionThrows<InvalidCastException>(count - 1);
         }
         [Fact]
-        public void Retry_OneOfTheHandledExceptionsThrownPermittedRetryCountTimes_ShouldNotTrow()
+        public void Retry_OneOfTheHandledExceptionsThrownPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var Tolerance = Tolerance
+            var tolerance = Tolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Retry(count);
 
-            Tolerance.ExecuteActionThrows<InvalidCastException>(count);
+            tolerance.ExecuteActionThrows<InvalidCastException>(count);
         }
 
         [Fact]
-        public void Retry_OneOfTheHandledExceptionsThrownMoreThanPermittedRetryCountTimes_ShouldTrow()
+        public void Retry_OneOfTheHandledExceptionsThrownMoreThanPermittedRetryCountTimes_ShouldThrow()
         {
             int count = 3;
-            var Tolerance = Tolerance
+            var tolerance = Tolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Retry(count);
 
             Assert.Throws<InvalidCastException>(() => 
-                Tolerance.ExecuteActionThrows<InvalidCastException>(count + 1));
+                tolerance.ExecuteActionThrows<InvalidCastException>(count + 1));
         }
 
         [Fact]
-        public void Retry_OneOfTheHandledExceptionsThrownLessThanPermittedRetryCountTimes_ShouldNotTrow()
+        public void Retry_OneOfTheHandledExceptionsThrownLessThanPermittedRetryCountTimes_ShouldNotThrow()
         {
             int count = 3;
-            var Tolerance = Tolerance
+            var tolerance = Tolerance
                 .Handle<InvalidCastException>()
                 .Handle<InvalidOperationException>()
                 .Retry(count);
 
-            Tolerance.ExecuteActionThrows<InvalidCastException>(count - 1);
+            tolerance.ExecuteActionThrows<InvalidCastException>(count - 1);
         }
 
         [Fact]
-        public void Retry_NotHandledException_ShouldTrow()
+        public void Retry_NotHandledException_ShouldThrow()
         {
-            var Tolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
+            var tolerance = Tolerance.Handle<InvalidCastException>().Retry(3);
 
             Assert.Throws<DivideByZeroException>(() =>
-                Tolerance.Execute(() =>
+                tolerance.Execute(() =>
                 {
                     throw new DivideByZeroException();
                 }));
         }
 
         [Fact]
-        public void Retry_NotHandledExceptionsList_ShouldTrow()
+        public void Retry_NotHandledExceptionsList_ShouldThrow()
         {
-            var Tolerance = Tolerance.Handle<InvalidCastException>().Handle<InvalidOperationException>().Retry(3);
+            var tolerance = Tolerance.Handle<InvalidCastException>().Handle<InvalidOperationException>().Retry(3);
 
             Assert.Throws<DivideByZeroException>(() =>
-                Tolerance.Execute(() =>
+                tolerance.Execute(() =>
                 {
                     throw new DivideByZeroException();
                 }));

@@ -24,11 +24,11 @@ namespace FaultToleranceTests
         public void Timeout_ProvidedTimeoutIsNotEnough_ShouldTrow()
         {
             int timeout = 100;
-            var Tolerance = Tolerance.Timeout(timeout);
+            var tolerance = Tolerance.Timeout(timeout);
 
             void act()
             {
-                Tolerance.Execute(ct =>
+                tolerance.Execute(ct =>
                 {
                     TestHelper.Sleep(TimeSpan.FromMilliseconds(timeout * 2), ct);
                 });
@@ -40,9 +40,9 @@ namespace FaultToleranceTests
         public void Timeout_ProvidedTimeoutIsEnough_ShouldNotTrow()
         {
             int timeout = 100;
-            var Tolerance = Tolerance.Timeout(timeout * 2);
+            var tolerance = Tolerance.Timeout(timeout * 2);
 
-            Tolerance.Execute(ct =>
+            tolerance.Execute(ct =>
                 {
                     TestHelper.Sleep(TimeSpan.FromMilliseconds(timeout), ct);
                 });
@@ -51,10 +51,10 @@ namespace FaultToleranceTests
         [Fact]
         public void Timeout_ActionTrowsException_ShouldTrow()
         {
-            var Tolerance = Tolerance.Timeout(100);
+            var tolerance = Tolerance.Timeout(100);
 
             Assert.Throws<NotImplementedException>(() =>
-                Tolerance.Execute(() =>
+                tolerance.Execute(() =>
                 {
                     throw new NotImplementedException();
                 }));

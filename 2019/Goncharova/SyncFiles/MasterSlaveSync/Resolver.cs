@@ -25,11 +25,11 @@ namespace MasterSlaveSync
         {
             foreach (var fileConflict in conflicts.FileConflicts)
             {
-                if (fileConflict.MasterFile == null)
+                if (CanBeResolvedByDeletion(fileConflict))
                 {
                     ResolveByDeletion(fileConflict.SlaveFile);
                 }
-                else if (fileConflict.SlaveFile == null)
+                else if (CanBeResolvedByCopying(fileConflict))
                 {
                     ResolveByCopy(fileConflict.MasterFile);
                 }
@@ -41,7 +41,7 @@ namespace MasterSlaveSync
 
             foreach (var directoryConflict in conflicts.DirectoryConflicts)
             {
-                if (directoryConflict.MasterDirectory == null)
+                if (CanBeResolvedByDeletion(directoryConflict))
                 {
                     ResolveByDeletion(directoryConflict.SlaveDirectory);
                 }
@@ -50,6 +50,21 @@ namespace MasterSlaveSync
                     ResolveByCopy(directoryConflict.MasterDirectory);
                 }
             }
+        }
+
+        private static bool CanBeResolvedByDeletion(DirectoryConflict directoryConflict)
+        {
+            return directoryConflict.MasterDirectory == null;
+        }
+
+        private static bool CanBeResolvedByCopying(FileConflict fileConflict)
+        {
+            return fileConflict.SlaveFile == null;
+        }
+
+        private static bool CanBeResolvedByDeletion(FileConflict fileConflict)
+        {
+            return fileConflict.MasterFile == null;
         }
 
         private void ResolveByCopy(IDirectoryInfo masterDirectory)

@@ -24,14 +24,9 @@ namespace MasterSlaveSync
         internal Resolver Resolver { get; private set; }
         internal ILogger Logger { get; set; }
 
-
-        public static SynchronizatorBuilder Sync(string masterPath, string slavePath)
+        public static SynchronizatorBuilder Sync(string masterPath, string slavePath, IFileSystem fileSystem)
         {
-            return new SynchronizatorBuilder(masterPath, slavePath);
-        }
-        public static SynchronizatorBuilder SyncWithMock(string masterPath, string slavePath, IFileSystem mockFileSystem)
-        {
-            return new SynchronizatorBuilder(masterPath, slavePath, mockFileSystem);
+            return new SynchronizatorBuilder(masterPath, slavePath, fileSystem);
         }
 
         public void Run()

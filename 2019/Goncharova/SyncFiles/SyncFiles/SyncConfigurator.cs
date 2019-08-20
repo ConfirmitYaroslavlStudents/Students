@@ -22,6 +22,7 @@ namespace Sync
         public SynchronizatorBuilder GetSynchronizer()
         {
             var synchronizer = new SynchronizatorBuilder(Master, Slave);
+            synchronizer.LogSummary(Console.WriteLine);
 
             foreach (var option in options)
             {

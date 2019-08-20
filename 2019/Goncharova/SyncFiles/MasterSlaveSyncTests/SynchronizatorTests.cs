@@ -1,5 +1,4 @@
 ﻿using MasterSlaveSync;
-using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
@@ -15,7 +14,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\master");
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .NoDelete()
                 .Run();
 
@@ -30,7 +29,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\master");
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .Run();
 
             Assert.False(mockFileSystem.FileExists(@"c:\slave\a.txt"));
@@ -44,7 +43,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\master");
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .NoDelete()
                 .Run();
 
@@ -59,7 +58,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\master");
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .Run();
 
             Assert.False(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
@@ -73,7 +72,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\slave");
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .Run();
 
             Assert.True(mockFileSystem.FileExists(@"c:\slave\a.txt"));
@@ -87,7 +86,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\slave");
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .Run();
 
             Assert.True(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
@@ -101,7 +100,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\slave\a.txt", new MockFileData("12"));
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .Run();
 
             Assert.Equal("1", mockFileSystem.File.ReadAllText(@"c:\slave\a.txt"));
@@ -116,7 +115,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\slave\a.txt", new MockFileData("2"));
 
             Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .Run();
 
             Assert.Equal("2", mockFileSystem.File.ReadAllText(@"c:\slave\a.txt"));
@@ -133,7 +132,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .Run();
             }
@@ -153,7 +152,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .Run();
             }
@@ -173,7 +172,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogSummary(logFile.Write)
                 .Run();
             }
@@ -193,7 +192,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .Run();
             }
@@ -213,7 +212,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogSummary(logFile.Write)
                 .Run();
             }
@@ -233,7 +232,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .Run();
             }
@@ -253,7 +252,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .NoDelete()
                 .LogSummary(logFile.Write)
                 .Run();
@@ -274,7 +273,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .NoDelete()
                 .Run();
@@ -295,7 +294,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogSummary(logFile.Write)
                 .Run();
             }
@@ -315,7 +314,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .Run();
             }
@@ -335,7 +334,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogSummary(logFile.Write)
                 .Run();
             }
@@ -355,7 +354,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .Run();
             }
@@ -375,7 +374,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .NoDelete()
                 .LogSummary(logFile.Write)
                 .Run();
@@ -396,7 +395,7 @@ namespace MasterSlaveSyncTests
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
                 Synchronizator
-                .SyncWithMock(@"c:\master", @"c:\slave", mockFileSystem)
+                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
                 .LogVerbose(logFile.Write)
                 .NoDelete()
                 .Run();

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SynchLibrary
+namespace GeneralizeSynchLibrary
 {
     public class FileWrapper
     {

@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{62A0AB70-1099-4D50-A812-9287B18E3EBF}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SynchLibrary</RootNamespace>
-    <AssemblyName>SynchLibrary</AssemblyName>
+    <ProjectGuid>{DE690A81-97CC-463E-88AF-40516176369D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GeneralizeSyncApp</RootNamespace>
+    <AssemblyName>GeneralizeSyncApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,20 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseSynchronizer.cs" />
-    <Compile Include="FileSystemHandler.cs" />
-    <Compile Include="Logger\ILogger.cs" />
-    <Compile Include="Logger\LoggerFactory.cs" />
-    <Compile Include="Logger\LoggerForConsole.cs" />
-    <Compile Include="NoRemoveSynchronizer.cs" />
-    <Compile Include="RemoveSynchronizer.cs" />
-    <Compile Include="Logger\SilentLogger.cs" />
-    <Compile Include="Logger\SummaryLogger.cs" />
-    <Compile Include="SynchronizerFactory.cs" />
-    <Compile Include="Logger\VerboseLogger.cs" />
-    <Compile Include="WrapperForFile.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GeneralizeSynchLibrary\GeneralizeSynchLibrary.csproj">
+      <Project>{b6bf498a-d166-4763-bf58-4af6845de7e2}</Project>
+      <Name>GeneralizeSynchLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

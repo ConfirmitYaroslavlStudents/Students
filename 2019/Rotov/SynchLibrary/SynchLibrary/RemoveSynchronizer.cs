@@ -1,4 +1,4 @@
-﻿namespace SynchLibrary
+﻿namespace GeneralizeSynchLibrary
 {
     public class RemoveSynchronizer : BaseSynchronizer
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 
-namespace SynchLibrary.Tests
+namespace GeneralizeSynchLibrary.Tests
 {
     public class MyTestsForSync
     {
@@ -50,5 +50,6 @@ namespace SynchLibrary.Tests
             sync.SetUpBaseCollections(master , slave);
             Assert.Single(sync.SlaveWithoutMaster);
         }
+
     }
 }

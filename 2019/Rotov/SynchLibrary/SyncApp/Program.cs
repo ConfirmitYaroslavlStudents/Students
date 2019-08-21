@@ -1,4 +1,4 @@
-﻿using SynchLibrary;
+﻿using GeneralizeSynchLibrary;
 using System;
 
 namespace SyncApp

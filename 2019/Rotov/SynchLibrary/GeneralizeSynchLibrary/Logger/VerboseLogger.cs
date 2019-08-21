@@ -16,12 +16,7 @@ namespace GeneralizeSynchLibrary
 
         public void AddRemove(params string[] payload)
         {
-            _output.Add($"{payload[0]} removed form {payload[1]}");
-        }
-
-        public void AddCopy(params string[] payload)
-        {
-            _output.Add($"{payload[0]} copied from {payload[1]} to {payload[2]}");
+            _output.Add($"{payload[0]} removed");
         }
     }
 }

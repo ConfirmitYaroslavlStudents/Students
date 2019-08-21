@@ -5,13 +5,9 @@ namespace GeneralizeSynchLibrary
     {
         int _numOfReplace = 0;
         int _numOfRemove = 0;
-        int _numOfCopy = 0;
-
         public List<string> GetLogs()
         {
             var result = new List<string>();
-            if(_numOfCopy != 0)
-                result.Add($"{_numOfCopy} were Copied");
             if(_numOfReplace != 0)
                 result.Add($"{_numOfReplace} were Replaced");
             if(_numOfRemove != 0)
@@ -27,11 +23,6 @@ namespace GeneralizeSynchLibrary
         public void AddRemove(params string[] payloads)
         {
             _numOfRemove++;
-        }
-
-        public void AddCopy(params string[] payloads)
-        {
-            _numOfCopy++;
         }
     }
 }

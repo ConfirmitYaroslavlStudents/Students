@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SynchLibrary
+namespace GeneralizeSynchLibrary
 {
     public static class SynchronizerFactory
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace SynchLibrary
+namespace GeneralizeSynchLibrary
 {
     public class NoRemoveSynchronizer : BaseSynchronizer
     {

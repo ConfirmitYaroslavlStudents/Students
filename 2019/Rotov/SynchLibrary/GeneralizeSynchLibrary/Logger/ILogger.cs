@@ -8,7 +8,5 @@ namespace GeneralizeSynchLibrary
         void AddReplace(params string[] payload);
 
         void AddRemove(params string[] payload);
-
-        void AddCopy(params string[] payload);
     }
 }

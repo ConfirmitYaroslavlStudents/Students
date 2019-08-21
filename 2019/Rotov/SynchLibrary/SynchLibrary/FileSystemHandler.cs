@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace SynchLibrary
+namespace GeneralizeSynchLibrary
 {
     public class FileSystemHandler
     {

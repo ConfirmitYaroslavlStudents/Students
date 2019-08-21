@@ -3,13 +3,13 @@ namespace GeneralizeSynchLibrary
 {
     public static class LoggerFactory
     {
-        public static ILogger Create(int type)
+        public static ILogger Create(LoggerConstant mode)
         {
-            switch(type)
+            switch(mode)
             {
-                case 1:
+                case LoggerConstant.Summary:
                     return new SummaryLogger();
-                case 2:
+                case LoggerConstant.Verbose:
                     return new VerboseLogger();
             }
             return new SilentLogger();

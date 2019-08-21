@@ -14,7 +14,7 @@ namespace Sync
         private IInteractor _fileSystemInteractor;
 
         private string _masterPath;
-        private Dictionary<string, ResolverOptions> _slaves;
+        private Dictionary<string, ResolverOptions> _slaves = new Dictionary<string, ResolverOptions>();
 
         private IConflictDetectionPolicy _conflictDetectionPolicy;
 

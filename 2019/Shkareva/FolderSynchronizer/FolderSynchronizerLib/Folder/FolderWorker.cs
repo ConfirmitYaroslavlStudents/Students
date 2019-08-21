@@ -33,7 +33,7 @@ namespace FolderSynchronizerLib
             }
 
             var filesPathList = new List<string>();
-            var filesList = new List<Item>();
+            var filesList = new List<FileDescriptor>();
             filesPathList.AddRange(Directory.GetFiles(path));
             var internalFoldersPaths = Directory.GetDirectories(path).ToList();
             int countPath = 0;
@@ -49,13 +49,18 @@ namespace FolderSynchronizerLib
             foreach(string filePath in filesPathList)
             {
                 FileInfo file = new FileInfo(filePath);
-                filesList.Add(new Item(filePath, file.GetHashCode()));
+                filesList.Add(new FileDescriptor(GetSubPath(filePath,path), file.GetHashCode()));
             }
 
             var folder = new Folder(path);
             folder.FilesList = filesList;
             
             return folder;
+        }
+
+        private static string GetSubPath(string longPath, string firstPartPath)
+        {
+            return longPath.Substring(firstPartPath.Length);
         }
 
         public void SerializeFolder(string path)

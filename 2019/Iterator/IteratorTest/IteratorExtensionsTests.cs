@@ -61,5 +61,20 @@ namespace IteratorTest
 
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void FilterAndMapComposition2()
+        {
+            //                                           1  2  0  1  2  0  1
+            var iterator = new ArrayIterator<int>(new[] {1, 2, 3, 4, 5, 6, 7}).Filter(x => x % 3 == 0).Map(x => x % 2);
+
+            var expected = new List<int> { 1, 0 };
+            var actual = new List<int>();
+
+            while (iterator.MoveNext())
+                actual.Add(iterator.Current);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }

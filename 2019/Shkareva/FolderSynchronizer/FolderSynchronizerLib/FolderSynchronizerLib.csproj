@@ -43,7 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker\FolderPathChecker.cs" />
-    <Compile Include="SyncProc\ISyncProcManager.cs" />
+    <Compile Include="Folder\FolderPair.cs" />
+    <Compile Include="SyncData\ISyncDataReaderStrategy.cs" />
+    <Compile Include="SyncData\SyncDataReaderNoDeleteStrategy.cs" />
+    <Compile Include="SyncData\SyncDataReaderStrategy.cs" />
+    <Compile Include="SyncProc\ISyncProcessorManager.cs" />
     <Compile Include="FileDescriptor.cs" />
     <Compile Include="Folder\Folder.cs" />
     <Compile Include="Folder\FolderSet.cs" />
@@ -59,8 +63,8 @@
     <Compile Include="SyncException.cs" />
     <Compile Include="SyncProc\SyncProcessor.cs" />
     <Compile Include="Checker\TestFolderPathChecker.cs" />
-    <Compile Include="SyncProc\SyncProcManager.cs" />
-    <Compile Include="SyncProc\TestSyncProcManager.cs" />
+    <Compile Include="SyncProc\SyncProcessorManager.cs" />
+    <Compile Include="SyncProc\TestSyncProcessorManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

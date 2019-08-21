@@ -4,34 +4,44 @@ namespace FolderSynchronizerLib
 {
     public class SyncProcessor
     {
-        private readonly ISyncProcManager _syncProcManager;
+        private readonly ISyncProcessorManager _syncProcManager;
 
-        public SyncProcessor(ISyncProcManager syncProcManager)
+        public SyncProcessor(ISyncProcessorManager syncProcManager)
         {
             _syncProcManager = syncProcManager;
         }
 
-        public void Synchronize(SyncData syncData)
+        public void Synchronize(SyncData syncData, List<string> folderPaths)
         {
-            CopyFiles(syncData.FilesToCopy);
-            CopyFiles(syncData.FilesToUpdate);
-
-            if (syncData.NoDeleteFlag)
+            foreach (var path in folderPaths)
             {
-                return;
+                CopyFiles(syncData.FilesToCopy, path);
             }
 
-            DeleteFiles(syncData.FilesToDelete);
+            foreach (var path in folderPaths)
+            {
+                UpdateFiles(syncData.FilesToUpdate, path);
+            }
+            
+            foreach (var path in folderPaths)
+            {
+                DeleteFiles(syncData.FilesToDelete, path);
+            }
         }
 
-        private void DeleteFiles(List<string> filesToDelete)
+        private void UpdateFiles(Dictionary<string, string> filesToUpdate, string path)
         {
-            _syncProcManager.Delete(filesToDelete);
+            _syncProcManager.Update(filesToUpdate, path);
         }
 
-        private void CopyFiles(Dictionary<string, string> filesToCopy)
+        private void DeleteFiles(Dictionary<string, string> filesToDelete, string path)
         {
-            _syncProcManager.Copy(filesToCopy);
+            _syncProcManager.Delete(filesToDelete, path);
+        }
+
+        private void CopyFiles(Dictionary<string, string> filesToCopy, string path)
+        {
+            _syncProcManager.Copy(filesToCopy, path);
         }
     }
 }

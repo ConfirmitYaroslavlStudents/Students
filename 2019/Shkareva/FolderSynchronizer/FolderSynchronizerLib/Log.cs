@@ -7,6 +7,12 @@ namespace FolderSynchronizerLib
 {
     public class Log
     {
+        private string Loglevel;
+
+        public Log(string level)
+        {
+            Loglevel = level;
+        }
         private string FormLog(SyncData syncData)
         {
             string log = "";

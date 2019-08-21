@@ -7,37 +7,34 @@ namespace FolderSynchronizerLib
     {
         public Dictionary<string, string> FilesToCopy;
         public Dictionary<string, string> FilesToUpdate;
-        public List<string> FilesToDelete;
+        public Dictionary<string, string> FilesToDelete;
         public string LogFlag;
-        public bool NoDeleteFlag;
 
         public SyncData()
         {
             FilesToCopy = new Dictionary<string, string>();
             FilesToUpdate = new Dictionary<string, string>();
-            FilesToDelete = new List<string>();
+            FilesToDelete = new Dictionary<string, string>();
         }
 
         public SyncData
-           (Dictionary<string,string> copy,
-            Dictionary<string,string> update,
-            List<string> delete)
+           (Dictionary<string,string> filesToCopy,
+            Dictionary<string,string> filesToUpdate,
+            Dictionary<string, string> filesToDelete)
         {
-            FilesToCopy = copy;
-            FilesToUpdate = update;
-            FilesToDelete = delete;
+            FilesToCopy = filesToCopy;
+            FilesToUpdate = filesToUpdate;
+            FilesToDelete = filesToDelete;
             LogFlag = "summary";
-            NoDeleteFlag = false;
         }
 
         public bool Equals(SyncData other)
         {
-            bool flag = (NoDeleteFlag == other.NoDeleteFlag);
             bool level = (LogFlag == other.LogFlag);
             bool toCopy = CompareDictionary(other.FilesToCopy, FilesToCopy);
             bool toUpdate = CompareDictionary(other.FilesToUpdate, FilesToUpdate);
-            bool toDelete = new HashSet<string>(FilesToDelete).SetEquals(other.FilesToDelete);
-            return flag && level && toCopy && toUpdate && toDelete;
+            bool toDelete = CompareDictionary(other.FilesToDelete, FilesToDelete);
+            return level && toCopy && toUpdate && toDelete;
         }
 
         private bool CompareDictionary(Dictionary<string, string> aDictionary, Dictionary<string,string> bDictionary)

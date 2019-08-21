@@ -19,23 +19,30 @@ namespace Sync
         public string Slave { get; private set; }
         public string ErrorMessage { get; private set; } = String.Empty;
 
-        public SynchronizatorBuilder GetSynchronizer()
+        public Synchronizator GetSynchronizator()
         {
-            var synchronizer = new SynchronizatorBuilder(Master, Slave);
-            synchronizer.LogSummary(Console.WriteLine);
+            return new Synchronizator(Master, Slave, GetSyncOptions());
+        }
+
+        private SyncOptions GetSyncOptions()
+        {
+            var syncOptions = new SyncOptions();
 
             foreach (var option in options)
             {
                 switch (option)
                 {
                     case "nodelete":
-                        synchronizer.NoDelete();
+                        syncOptions.NoDeleteOn();
                         break;
                     case "logsummary":
-                        synchronizer.LogSummary(Console.WriteLine);
+                        syncOptions.LogSummary(Console.WriteLine);
                         break;
                     case "logverbose":
-                        synchronizer.LogVerbose(Console.WriteLine);
+                        syncOptions.LogVerbose(Console.WriteLine);
+                        break;
+                    case "logsilent":
+                        syncOptions.LogSilent();
                         break;
                     default:
                         ErrorMessage = "Unknown option";
@@ -43,7 +50,7 @@ namespace Sync
                 }
             }
 
-            return synchronizer;
+            return syncOptions;
         }
 
         private void ParseArgs()

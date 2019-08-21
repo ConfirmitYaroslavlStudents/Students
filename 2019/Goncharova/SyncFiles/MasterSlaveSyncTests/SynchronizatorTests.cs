@@ -13,10 +13,10 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\slave\a.txt", new MockFileData("1"));
             mockFileSystem.AddDirectory(@"c:\master");
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .NoDelete()
-                .Run();
+            var options = new SyncOptions().NoDeleteOn();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.True(mockFileSystem.FileExists(@"c:\slave\a.txt"));
         }
@@ -28,9 +28,9 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\slave\a.txt", new MockFileData("1"));
             mockFileSystem.AddDirectory(@"c:\master");
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .Run();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.False(mockFileSystem.FileExists(@"c:\slave\a.txt"));
         }
@@ -42,10 +42,10 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\slave\sub");
             mockFileSystem.AddDirectory(@"c:\master");
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .NoDelete()
-                .Run();
+            var options = new SyncOptions().NoDeleteOn();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.True(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
         }
@@ -57,9 +57,9 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\slave\sub");
             mockFileSystem.AddDirectory(@"c:\master");
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .Run();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.False(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
         }
@@ -71,9 +71,9 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\master\a.txt", new MockFileData("1"));
             mockFileSystem.AddDirectory(@"c:\slave");
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .Run();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.True(mockFileSystem.FileExists(@"c:\slave\a.txt"));
         }
@@ -85,9 +85,9 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\master\sub");
             mockFileSystem.AddDirectory(@"c:\slave");
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .Run();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.True(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
         }
@@ -99,9 +99,9 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\master\a.txt", new MockFileData("1"));
             mockFileSystem.AddFile(@"c:\slave\a.txt", new MockFileData("12"));
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .Run();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.Equal("1", mockFileSystem.File.ReadAllText(@"c:\slave\a.txt"));
             Assert.Equal("1", mockFileSystem.File.ReadAllText(@"c:\master\a.txt"));
@@ -114,9 +114,9 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddFile(@"c:\master\a.txt", new MockFileData("1"));
             mockFileSystem.AddFile(@"c:\slave\a.txt", new MockFileData("2"));
 
-            Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .Run();
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            synchronizator.Run();
 
             Assert.Equal("2", mockFileSystem.File.ReadAllText(@"c:\slave\a.txt"));
             Assert.Equal("1", mockFileSystem.File.ReadAllText(@"c:\master\a.txt"));
@@ -131,10 +131,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Updated \"a.txt\" file";
@@ -151,10 +151,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Updated \"a.txt\" file";
@@ -171,10 +171,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogSummary(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Copied \"sub\" directory";
@@ -191,10 +191,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Copied \"sub\" directory from c:\\master";
@@ -211,10 +211,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogSummary(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Deleted \"sub\" directory";
@@ -231,10 +231,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Deleted \"sub\" directory from c:\\slave";
@@ -251,11 +251,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .NoDelete()
-                .LogSummary(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write).NoDeleteOn();
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "";
@@ -272,11 +271,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .NoDelete()
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write).NoDeleteOn();
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "";
@@ -293,10 +291,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogSummary(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Copied \"a.txt\" file";
@@ -313,10 +311,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Copied \"a.txt\" file from c:\\master";
@@ -333,10 +331,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogSummary(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Deleted \"a.txt\" file";
@@ -353,10 +351,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write);
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "Deleted \"a.txt\" file from c:\\slave";
@@ -373,11 +371,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .NoDelete()
-                .LogSummary(logFile.Write)
-                .Run();
+                var options = new SyncOptions().LogSummary(logFile.Write).NoDeleteOn();
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "";
@@ -394,11 +391,10 @@ namespace MasterSlaveSyncTests
 
             using (var logFile = mockFileSystem.File.CreateText(@"c:\log.txt"))
             {
-                Synchronizator
-                .Sync(@"c:\master", @"c:\slave", mockFileSystem)
-                .LogVerbose(logFile.Write)
-                .NoDelete()
-                .Run();
+                var options = new SyncOptions().LogVerbose(logFile.Write).NoDeleteOn();
+                var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", options, mockFileSystem);
+
+                synchronizator.Run();
             }
 
             var expected = "";

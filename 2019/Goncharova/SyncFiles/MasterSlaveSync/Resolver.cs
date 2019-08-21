@@ -1,10 +1,9 @@
 ﻿using MasterSlaveSync.Conflicts;
-using System.IO;
 using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    public class Resolver
+    public class Resolver : IResolver
     {
         private readonly string masterPath;
         private readonly string slavePath;
@@ -15,11 +14,12 @@ namespace MasterSlaveSync
             slavePath = slave;
         }
 
-        internal IDeleteFileProcessor DeleteFileProcessor { get; set; } = new DefaultDeleteFileProcessor();
-        internal ICopyFileProcessor CopyFileProcessor { get; set; } = new DefaultCopyFileProcessor();
-        internal IUpdateFileProcessor UpdateFileProcessor { get; set; } = new DefaultUpdateFileProcessor();
-        internal IDeleteDirectoryProcessor DeleteDirectoryProcessor { get; set; } = new DefaultDeleteDirectoryProcessor();
-        internal ICopyDirectoryProcessor CopyDirectoryProcessor { get; set; } = new DefaultCopyDirectoryProcessor();
+        public IDeleteFileProcessor DeleteFileProcessor { get; set; } = new DefaultDeleteFileProcessor();
+        public ICopyFileProcessor CopyFileProcessor { get; set; } = new DefaultCopyFileProcessor();
+        public IUpdateFileProcessor UpdateFileProcessor { get; set; } = new DefaultUpdateFileProcessor();
+        public IDeleteDirectoryProcessor DeleteDirectoryProcessor { get; set; } = new DefaultDeleteDirectoryProcessor();
+        public ICopyDirectoryProcessor CopyDirectoryProcessor { get; set; } = new DefaultCopyDirectoryProcessor();
+
 
         public void ResolveConflicts(ConflictsCollection conflicts)
         {

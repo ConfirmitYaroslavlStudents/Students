@@ -3,7 +3,7 @@ using System;
 
 namespace MasterSlaveSync
 {
-    internal interface IUpdateFileProcessor
+    public interface IUpdateFileProcessor
     {
         event EventHandler<ResolverEventArgs> FileUpdated;
         void Execute(FileConflict fileConflict);

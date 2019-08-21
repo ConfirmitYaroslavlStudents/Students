@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal class DefaultCopyDirectoryProcessor : ICopyDirectoryProcessor
+    public class DefaultCopyDirectoryProcessor : ICopyDirectoryProcessor
     {
         public event EventHandler<ResolverEventArgs> DirectoryCopied;
 

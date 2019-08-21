@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal interface IDeleteDirectoryProcessor
+    public interface IDeleteDirectoryProcessor
     {
         event EventHandler<ResolverEventArgs> DirectoryDeleted;
         void Execute(IDirectoryInfo slaveDirectory);

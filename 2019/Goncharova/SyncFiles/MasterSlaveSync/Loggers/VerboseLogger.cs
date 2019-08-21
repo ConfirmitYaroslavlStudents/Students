@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MasterSlaveSync
+namespace MasterSlaveSync.Loggers
 {
     public class VerboseLogger : ILogger
     {

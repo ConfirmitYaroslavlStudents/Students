@@ -1,7 +1,11 @@
-﻿namespace MasterSlaveSync
+﻿using System;
+
+namespace MasterSlaveSync.Loggers
 {
-    internal interface ILogger
+    public interface ILogger
     {
+        Action<string> LogListener { get; }
+
         void LogFileDeletion(object sender, ResolverEventArgs e);
         void LogFileCopy(object sender, ResolverEventArgs e);
         void LogFileUpdate(object sender, ResolverEventArgs e);

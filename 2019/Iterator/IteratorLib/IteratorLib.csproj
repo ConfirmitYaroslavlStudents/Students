@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Iterator.cs" />
+    <Compile Include="ArrayIterator.cs" />
+    <Compile Include="FilterDecoratedIterator.cs" />
+    <Compile Include="IIteratorExtensions.cs" />
+    <Compile Include="MapDecoratedIterator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

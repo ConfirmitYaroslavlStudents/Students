@@ -1,45 +1,86 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace FaultTolerance
 {
     public class ExceptionHandler
     {
-        public ExceptionHandlerParameters Parameters { get; }
+        private ExceptionHandlerParameters _parameters;
 
-        public ExceptionHandler(ExceptionHandlerParameters parameters)
+        public ExceptionHandler()
         {
-            Parameters = parameters;
+            _parameters = new ExceptionHandlerParameters();
         }
 
-        public void Try(IRunner runner, Action action)
+        public ExceptionHandler Handle<TException>(Action fallback) 
+            where TException : Exception
+        {
+            _parameters.Handle<TException>(fallback);
+
+            return this;
+        }
+
+        public ExceptionHandler Handle<TException>()
+            where TException : Exception
+        {
+            return Handle<TException>(() => { });
+        }
+
+        public ExceptionHandler HandleFailedRun(Action fallback)
+        {
+            return Handle<RunFailedException>(fallback);
+        }
+
+        public ExceptionHandler WithTimeout(int timeout)
+        {
+            _parameters.Timeout = timeout;
+
+            return this;
+        }
+
+        public ExceptionHandler Repeat(int count)
+        {
+            _parameters.CountOfRepeats = count;
+
+            return this;
+        }
+
+        public ExceptionHandler Run(Action action)
         {
             try
             {
-                DoAction(runner, action);
+                DoAction(action, _parameters.CountOfRepeats);
             }
             catch (Exception ex)
             {
-                if (Parameters.Fallbacks.ContainsKey(ex.GetType()))
-                    Parameters.Fallbacks[ex.GetType()].Invoke();
+                if (_parameters.Fallbacks.ContainsKey(ex.GetType()))
+                    _parameters.Fallbacks[ex.GetType()].Invoke();
                 else
                     throw;
             }
+
+            return this;
         }
 
-        private void DoAction(IRunner runner, Action action)
+        private void DoAction(Action action, int count)
         {
-            for (int i = 0; i < Parameters.NumberOfTries; i++)
+            IRunner runner = null;
+            if (_parameters.Timeout != -1)
+                runner = new TimeoutRunner(_parameters.Timeout);
+            else
+                runner = new Runner();
+
+            for (int i = 0; i < count; i++)
             {
                 try
                 {
-                    bool succeedRun = runner.Run(action);
-
-                    if (!succeedRun)
+                    var succeed = runner.Run(action);
+                    if (!succeed)
                         throw new RunFailedException();
                 }
                 catch (Exception ex)
                 {
-                    if (Parameters.Fallbacks.ContainsKey(ex.GetType()) && i < Parameters.NumberOfTries - 1)
+                    if (_parameters.Fallbacks.ContainsKey(ex.GetType()) && i < count - 1)
                         continue;
                     throw;
                 }

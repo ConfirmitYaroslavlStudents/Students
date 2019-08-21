@@ -1,11 +1,11 @@
 ﻿namespace FolderSynchronizerLib
 {
-    public class Item
+    public class FileDescriptor
     {
         public string Path;
         public int Hash;
 
-        public Item(string filePath, int hash)
+        public FileDescriptor(string filePath, int hash)
         {
             Path = filePath;
             Hash = hash;

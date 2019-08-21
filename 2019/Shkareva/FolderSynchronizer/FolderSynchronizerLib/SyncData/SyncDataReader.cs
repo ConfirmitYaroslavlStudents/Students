@@ -43,10 +43,10 @@ namespace FolderSynchronizerLib
         {
             var deleteFiles = new List<string>();
 
-            foreach (Item oldItem in oldFolder.FilesList)
+            foreach (FileDescriptor oldItem in oldFolder.FilesList)
             {
-                string path = Path.Combine(otherFolder.Path, GetSubPath(oldItem.Path, oldFolder.Path));
-                var file = GetItemByPath(otherFolder, path);
+                string path = Path.Combine(otherFolder.Path, oldItem.Path);
+                var file = GetItemByPath(otherFolder, oldItem.Path);
                 var newFile = GetItemByPath(newFolder, oldItem.Path);
 
                 if (newFile==null && file!=null)
@@ -58,19 +58,15 @@ namespace FolderSynchronizerLib
             return deleteFiles;
         }
 
-        private static string GetSubPath(string longPath, string firstPartPath)
-        {
-            return longPath.Substring(firstPartPath.Length + 1);
-        }
+        
 
         private static Dictionary<string, string> FindFilesToUpdate()
         {
             var updateDictionary = new Dictionary<string, string>();
 
-            foreach (Item masterItem in _newMaster.FilesList)
+            foreach (FileDescriptor masterItem in _newMaster.FilesList)
             {
-                var slavePath = Path.Combine(_newSlave.Path, GetSubPath(masterItem.Path, _newMaster.Path));
-                Item slaveItem = GetItemByPath(_newSlave, slavePath);
+                FileDescriptor slaveItem = GetItemByPath(_newSlave, masterItem.Path);
 
                 if (slaveItem==null)
                 {
@@ -81,15 +77,17 @@ namespace FolderSynchronizerLib
 
                 if (haveDifferentContent)
                 {
-                    updateDictionary.Add(masterItem.Path, slavePath);
+                    var slavePath = Path.Combine(_newSlave.Path, masterItem.Path);
+                    var masterPath = Path.Combine(_newMaster.Path, masterItem.Path);
+                    updateDictionary.Add(masterPath, slavePath);
                 }
             }
             return updateDictionary;
         }
 
-        private static Item GetItemByPath(Folder folder,string path)
+        private static FileDescriptor GetItemByPath(Folder folder,string path)
         {
-            foreach(Item file in folder.FilesList)
+            foreach(FileDescriptor file in folder.FilesList)
             {
                 if (file.Path == path)
                 {
@@ -102,23 +100,21 @@ namespace FolderSynchronizerLib
         private static Dictionary<string, string> FindFilesToAdd()
         {
             var filesToAdd = new Dictionary<string, string>();
-            var masterAddFiles = GetNewFiles(_newMaster, _newSlave);
-
-            foreach (string path in masterAddFiles)
-            {
-                var slavePath = Path.Combine(_newSlave.Path, GetSubPath(path, _newMaster.Path));
-                filesToAdd.Add(path, slavePath);
-            }
-
-            var slaveAddFiles = GetNewFiles(_newSlave, _newMaster);
-
-            foreach (string path in slaveAddFiles)
-            {
-                var masterPath = Path.Combine(_newMaster.Path, GetSubPath(path, _newSlave.Path));
-                filesToAdd.Add(path, masterPath);
-            }
-
+            AddPairToFilesToAdd(filesToAdd, _newMaster, _newSlave);
+            AddPairToFilesToAdd(filesToAdd, _newSlave, _newMaster);
             return filesToAdd;
+        }
+
+        private static void AddPairToFilesToAdd(Dictionary<string, string> filesToAdd, Folder first, Folder second)
+        {
+            var firstAddFiles = GetNewFiles(first, second);
+
+            foreach (string path in firstAddFiles)
+            {
+                var firstPath = Path.Combine(first.Path, path);
+                var secondPath = Path.Combine(second.Path, path);
+                filesToAdd.Add(firstPath, secondPath);
+            }
         }
 
         private static SyncData RemoveCollision(SyncData syncData)
@@ -138,10 +134,10 @@ namespace FolderSynchronizerLib
         {
             var newFilesList = new List<string>();
 
-            foreach (Item firstItem in firstFolder.FilesList)
+            foreach (FileDescriptor firstItem in firstFolder.FilesList)
             {
-                var secondFilePath = Path.Combine(secondFolder.Path, GetSubPath(firstItem.Path, firstFolder.Path));
-                var secondItem = GetItemByPath(secondFolder, secondFilePath);
+                var secondFilePath = Path.Combine(secondFolder.Path, firstItem.Path);
+                var secondItem = GetItemByPath(secondFolder, firstItem.Path);
 
                 if (secondItem==null)
                 {

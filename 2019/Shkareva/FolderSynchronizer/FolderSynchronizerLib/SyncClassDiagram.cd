@@ -47,7 +47,7 @@
   <Class Name="FolderSynchronizerLib.InputDataReader" Collapsed="true">
     <Position X="3.5" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAAIAAAAAAAAAAAAIAAgAEAAAAAAAAgAAAAAgAA=</HashCode>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAIAAgAEAAAAAAAAgAQAAAgAA=</HashCode>
       <FileName>Input\InputDataReader.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -68,7 +68,7 @@
   <Class Name="FolderSynchronizerLib.SyncProcessor" Collapsed="true">
     <Position X="7" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAJAAEAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAEAAAAAAAAAIAAAEAAAAAA=</HashCode>
       <FileName>SyncProc\SyncProcessor.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -95,7 +95,7 @@
       <FileName>Launcher.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FolderSynchronizerLib.Item" Collapsed="true">
+  <Class Name="FolderSynchronizerLib.FileDescriptor" Collapsed="true">
     <Position X="5.25" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAIAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>

@@ -5,10 +5,10 @@ namespace FolderSynchronizerLib
 {
     public class TestSyncProcManager : ISyncProcManager
     {
-        List<Item> _masterFiles;
-        List<Item> _slaveFiles;
+        List<FileDescriptor> _masterFiles;
+        List<FileDescriptor> _slaveFiles;
 
-        public TestSyncProcManager(List<Item> master, List<Item> slave)
+        public TestSyncProcManager(List<FileDescriptor> master, List<FileDescriptor> slave)
         {
             _masterFiles = master;
             _slaveFiles = slave;
@@ -18,19 +18,19 @@ namespace FolderSynchronizerLib
         {
            foreach(KeyValuePair<string,string> itemPair in filesToCopy)
             {
-                Item itemKeyM = GetItemByPath(_masterFiles, itemPair.Key);
-                Item itemKeyS = GetItemByPath(_slaveFiles, itemPair.Key);
-                Item itemValueM = GetItemByPath(_masterFiles, itemPair.Value);
-                Item itemValueS = GetItemByPath(_slaveFiles, itemPair.Value);
+                FileDescriptor itemKeyM = GetItemByPath(_masterFiles, itemPair.Key);
+                FileDescriptor itemKeyS = GetItemByPath(_slaveFiles, itemPair.Key);
+                FileDescriptor itemValueM = GetItemByPath(_masterFiles, itemPair.Value);
+                FileDescriptor itemValueS = GetItemByPath(_slaveFiles, itemPair.Value);
 
                 if (itemKeyM != null && itemValueS==null)
                 {
-                    _slaveFiles.Add(new Item(itemPair.Value, itemKeyM.Hash));
+                    _slaveFiles.Add(new FileDescriptor(itemPair.Value, itemKeyM.Hash));
                 }
 
                 if (itemKeyS != null && itemValueM==null)
                 {
-                    _masterFiles.Add(new Item(itemPair.Value, itemKeyS.Hash));
+                    _masterFiles.Add(new FileDescriptor(itemPair.Value, itemKeyS.Hash));
                 }
 
                 if (itemKeyM != null && itemValueS != null)
@@ -40,9 +40,9 @@ namespace FolderSynchronizerLib
             }
         }
 
-        private Item GetItemByPath(List<Item> files, string path)
+        private FileDescriptor GetItemByPath(List<FileDescriptor> files, string path)
         {
-            foreach (Item file in files)
+            foreach (FileDescriptor file in files)
             {
                 if (file.Path == path)
                 {

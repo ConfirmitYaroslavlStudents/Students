@@ -4,11 +4,11 @@ namespace FolderSynchronizerLib
 {
     public class SyncProcessor
     {
-        ISyncProcManager syncProcManager;
+        private readonly ISyncProcManager _syncProcManager;
 
-        public SyncProcessor()
+        public SyncProcessor(ISyncProcManager syncProcManager)
         {
-            syncProcManager = new SyncProcManager();
+            _syncProcManager = syncProcManager;
         }
 
         public void Synchronize(SyncData syncData)
@@ -26,12 +26,12 @@ namespace FolderSynchronizerLib
 
         private void DeleteFiles(List<string> filesToDelete)
         {
-            syncProcManager.Delete(filesToDelete);
+            _syncProcManager.Delete(filesToDelete);
         }
 
         private void CopyFiles(Dictionary<string, string> filesToCopy)
         {
-            syncProcManager.Copy(filesToCopy);
+            _syncProcManager.Copy(filesToCopy);
         }
     }
 }

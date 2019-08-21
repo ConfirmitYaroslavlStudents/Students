@@ -16,12 +16,21 @@ namespace Sync
         }
 
         public string Master { get; private set; }
-        public string Slave { get; private set; }
+        public List<string> Slaves { get; private set; } = new List<string>();
         public string ErrorMessage { get; private set; } = String.Empty;
 
         public Synchronizator GetSynchronizator()
         {
-            return new Synchronizator(Master, Slave, GetSyncOptions());
+            var options = GetSyncOptions();
+
+            var synchronizator = new Synchronizator(Master, Slaves[0], options);
+
+            for (int i = 1; i < Slaves.Count; i++)
+            {
+                synchronizator.AddSlave(Slaves[i]);
+            }
+
+            return synchronizator;
         }
 
         private SyncOptions GetSyncOptions()
@@ -56,11 +65,17 @@ namespace Sync
         private void ParseArgs()
         {
             Master = args[1];
-            Slave = args[2];
 
-            for (int i = 3; i < args.Length; i++)
+            for (int i = 2; i < args.Length; i++)
             {
-                options.Add(args[i].Substring(1).ToLower());
+                if(args[i].StartsWith("-"))
+                {
+                    options.Add(args[i].Substring(1).ToLower());
+                }
+                else
+                {
+                    Slaves.Add(args[i]);
+                }
             }
         }
     }

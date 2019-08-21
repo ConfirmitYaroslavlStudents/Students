@@ -10,6 +10,6 @@ namespace MasterSlaveSync
         IDeleteDirectoryProcessor DeleteDirectoryProcessor { get; set; }
         ICopyDirectoryProcessor CopyDirectoryProcessor { get; set; }
 
-        void ResolveConflicts(ConflictsCollection conflictsCollection);
+        void ResolveConflicts(ConflictsCollection conflictsCollection, string masterPath, string slavePath);
     }
 }

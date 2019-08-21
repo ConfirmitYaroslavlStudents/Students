@@ -197,7 +197,7 @@ namespace MasterSlaveSyncTests
                 synchronizator.Run();
             }
 
-            var expected = "Copied \"sub\" directory from c:\\master";
+            var expected = "Copied \"sub\" directory to c:\\slave";
 
             Assert.Equal(expected, mockFileSystem.File.ReadAllText(@"c:\log.txt"));
         }
@@ -317,7 +317,7 @@ namespace MasterSlaveSyncTests
                 synchronizator.Run();
             }
 
-            var expected = "Copied \"a.txt\" file from c:\\master";
+            var expected = "Copied \"a.txt\" file to c:\\slave";
 
             Assert.Equal(expected, mockFileSystem.File.ReadAllText(@"c:\log.txt"));
         }

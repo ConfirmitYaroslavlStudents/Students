@@ -5,15 +5,6 @@ namespace MasterSlaveSync
 {
     public class Resolver : IResolver
     {
-        private readonly string masterPath;
-        private readonly string slavePath;
-
-        public Resolver(string master, string slave)
-        {
-            masterPath = master;
-            slavePath = slave;
-        }
-
         public IDeleteFileProcessor DeleteFileProcessor { get; set; } = new DefaultDeleteFileProcessor();
         public ICopyFileProcessor CopyFileProcessor { get; set; } = new DefaultCopyFileProcessor();
         public IUpdateFileProcessor UpdateFileProcessor { get; set; } = new DefaultUpdateFileProcessor();
@@ -21,7 +12,7 @@ namespace MasterSlaveSync
         public ICopyDirectoryProcessor CopyDirectoryProcessor { get; set; } = new DefaultCopyDirectoryProcessor();
 
 
-        public void ResolveConflicts(ConflictsCollection conflicts)
+        public void ResolveConflicts(ConflictsCollection conflicts, string masterPath, string slavePath)
         {
             foreach (var fileConflict in conflicts.FileConflicts)
             {
@@ -31,7 +22,7 @@ namespace MasterSlaveSync
                 }
                 else if (CanBeResolvedByCopying(fileConflict))
                 {
-                    ResolveByCopy(fileConflict.MasterFile);
+                    ResolveByCopy(fileConflict.MasterFile, masterPath, slavePath);
                 }
                 else
                 {
@@ -47,7 +38,7 @@ namespace MasterSlaveSync
                 }
                 else
                 {
-                    ResolveByCopy(directoryConflict.MasterDirectory);
+                    ResolveByCopy(directoryConflict.MasterDirectory, masterPath, slavePath);
                 }
             }
         }
@@ -67,7 +58,7 @@ namespace MasterSlaveSync
             return fileConflict.MasterFile == null;
         }
 
-        private void ResolveByCopy(IDirectoryInfo masterDirectory)
+        private void ResolveByCopy(IDirectoryInfo masterDirectory, string masterPath, string slavePath)
         {
             string directoryPath = masterDirectory.FullName.Substring(masterPath.Length);
 
@@ -87,7 +78,7 @@ namespace MasterSlaveSync
             UpdateFileProcessor.Execute(fileConflict);
         }
 
-        private void ResolveByCopy(IFileInfo masterFile)
+        private void ResolveByCopy(IFileInfo masterFile, string masterPath, string slavePath)
         {
             CopyFileProcessor.Execute(masterFile, masterPath, slavePath);
         }

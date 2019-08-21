@@ -17,7 +17,7 @@ namespace MasterSlaveSync.Loggers
             string directoryPath = Path.GetDirectoryName(e.ElementPath);
 
             LogListener($"Copied \"{e.ElementPath.Substring(directoryPath.Length + 1)}\" directory " +
-                $"from {directoryPath}");
+                $"to {directoryPath}");
         }
 
         public void LogDirectoryDeletion(object sender, ResolverEventArgs e)
@@ -33,7 +33,7 @@ namespace MasterSlaveSync.Loggers
             var fileName = Path.GetFileName(e.ElementPath);
 
             LogListener($"Copied \"{fileName}\" file " +
-                $"from {Path.GetDirectoryName(e.ElementPath)}");
+                $"to {Path.GetDirectoryName(e.ElementPath)}");
         }
 
         public void LogFileDeletion(object sender, ResolverEventArgs e)

@@ -14,7 +14,7 @@ namespace MasterSlaveSync
 
             var args = new ResolverEventArgs
             {
-                ElementPath = masterDirectory.FullName
+                ElementPath = target.FullName
             };
             OnDirectoryCopied(args);
         }
@@ -25,7 +25,7 @@ namespace MasterSlaveSync
 
         private void CopyAll(IDirectoryInfo source, IDirectoryInfo target)
         {
-            target.CreateSubdirectory(target.FullName);
+            target.CreateSubdirectory(source.Name);
 
             foreach (var file in source.GetFiles())
             {

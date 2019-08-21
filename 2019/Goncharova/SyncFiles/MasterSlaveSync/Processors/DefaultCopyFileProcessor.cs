@@ -16,7 +16,7 @@ namespace MasterSlaveSync
 
             var args = new ResolverEventArgs
             {
-                ElementPath = masterFile.FullName
+                ElementPath = destPath
             };
             OnFileCopied(args);
 

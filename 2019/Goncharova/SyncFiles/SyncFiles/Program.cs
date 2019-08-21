@@ -9,11 +9,10 @@ namespace Sync
             PrintUsage();
 
             var arguments = new SyncConfigurator(args);
-            var synchronizator = arguments.GetSynchronizator();
-
+            
             if (arguments.ErrorMessage == String.Empty)
             {
-                Console.WriteLine("Started synchronization...");
+                var synchronizator = arguments.GetSynchronizator();
                 synchronizator.Run();
             }
             else

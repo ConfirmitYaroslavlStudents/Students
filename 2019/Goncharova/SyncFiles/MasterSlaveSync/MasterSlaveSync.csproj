@@ -47,9 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConflictsCollector.cs" />
+    <Compile Include="Conflicts\ConflictsCollector.cs" />
     <Compile Include="Conflicts\ConflictsCollection.cs" />
-    <Compile Include="IResolver.cs" />
+    <Compile Include="Resolvers\IResolver.cs" />
     <Compile Include="Loggers\ILogger.cs" />
     <Compile Include="Loggers\SilentLogger.cs" />
     <Compile Include="Processors\DefaultCopyDirectoryProcessor.cs" />
@@ -65,12 +65,12 @@
     <Compile Include="Processors\IDeleteFileProcessor.cs" />
     <Compile Include="Processors\IUpdateFileProcessor.cs" />
     <Compile Include="Loggers\SummaryLogger.cs" />
-    <Compile Include="Resolver.cs" />
-    <Compile Include="ResolverEventArgs.cs" />
+    <Compile Include="Resolvers\Resolver.cs" />
+    <Compile Include="Resolvers\ResolverEventArgs.cs" />
     <Compile Include="Conflicts\DirectoryConflict.cs" />
     <Compile Include="Conflicts\FileConflict.cs" />
-    <Compile Include="ConflictsRetriever.cs" />
-    <Compile Include="DefaultFileComparer.cs" />
+    <Compile Include="Conflicts\ConflictsRetriever.cs" />
+    <Compile Include="Conflicts\DefaultFileComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronizator.cs" />
     <Compile Include="Loggers\VerboseLogger.cs" />

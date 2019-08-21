@@ -1,10 +1,10 @@
 ﻿using Sync.Wrappers;
 
-namespace Sync
+namespace Sync.ConflictDetectionPolicies
 {
     public interface IConflictDetectionPolicy
     {
-        Conflict GetConflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second);
-        bool MakesConflict(IFileSystemElementInfoWrapper first, IFileSystemElementInfoWrapper second);
+        Conflict GetConflict(IFileSystemElementWrapper first, IFileSystemElementWrapper second);
+        bool ConflictExists(IFileSystemElementWrapper first, IFileSystemElementWrapper second);
     }
 }

@@ -59,7 +59,15 @@
   <ItemGroup>
     <Compile Include="ConflictCollectorTests.cs" />
     <Compile Include="ConflictSeekerTests.cs" />
+    <Compile Include="DefaultConflictDetectionPolicyTests.cs" />
+    <Compile Include="DefaultFileComparerTests.cs" />
+    <Compile Include="DefaultDirectoryComparerTests.cs" />
+    <Compile Include="DefaultResolvingPolicyTests.cs" />
+    <Compile Include="DirectoryWrapperTests.cs" />
+    <Compile Include="FileWrapperTests.cs" />
+    <Compile Include="NoDleteResolvingPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

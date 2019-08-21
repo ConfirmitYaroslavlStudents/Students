@@ -4,10 +4,10 @@ using Sync.Wrappers;
 
 namespace Sync.Comparers
 {
-    public class DefaultFileSystemElementsComparer : IComparer<IFileSystemElementInfoWrapper>
+    public class DefaultFileSystemElementsComparer : IComparer<IFileSystemElementWrapper>
     {
-        private readonly IComparer<FileInfoWrapper> _fileComparer;
-        private readonly IComparer<DirectoryInfoWrapper> _directoryComparer;
+        private readonly IComparer<DirectoryWrapper> _directoryComparer;
+        private readonly IComparer<FileWrapper> _fileComparer;
 
         public DefaultFileSystemElementsComparer()
         {
@@ -15,14 +15,21 @@ namespace Sync.Comparers
             _directoryComparer = new DefaultDirectoryComparer();
         }
 
-        public int Compare(IFileSystemElementInfoWrapper x, IFileSystemElementInfoWrapper y)
+        public int Compare(IFileSystemElementWrapper x, IFileSystemElementWrapper y)
         {
-            if (x.GetType() != y.GetType())
-                throw new ArgumentException("Parameters must have same attribute");
+            if (x is null && y is null)
+                return 0;
+            if (x is null)
+                return 1;
+            if (y is null)
+                return -1;
 
-            if (x is FileInfoWrapper firstFile && y is FileInfoWrapper secondFile)
+            if (x.ElementType != y.ElementType)
+                throw new ArgumentException("Parameters must have same type");
+
+            if (x is FileWrapper firstFile && y is FileWrapper secondFile)
                 return _fileComparer.Compare(firstFile, secondFile);
-            if (x is DirectoryInfoWrapper firstDirectory && y is DirectoryInfoWrapper secondDirectory)
+            if (x is DirectoryWrapper firstDirectory && y is DirectoryWrapper secondDirectory)
                 return _directoryComparer.Compare(firstDirectory, secondDirectory);
             return 0;
         }

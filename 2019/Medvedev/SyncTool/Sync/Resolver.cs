@@ -1,65 +1,30 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using Sync.Resolutions;
+using Sync.ResolvingPolicies;
 
 namespace Sync
 {
     public class Resolver
     {
-        public DirectoryInfo MasterDirectory { get; }
-        public DirectoryInfo SlaveDirectory { get; }
+        private IResolvingPolicy _resolvingPolicy;
 
-        public ResolverOptions Option { get; }
-
-        public Resolver(DirectoryInfo master, DirectoryInfo slave, ResolverOptions option = ResolverOptions.None)
+        public Resolver(IResolvingPolicy policy)
         {
-            MasterDirectory = master;
-            SlaveDirectory = slave;
-            Option = option;
+            _resolvingPolicy = policy;
         }
 
-        public void ResolveConflicts(List<Conflict> conflicts)
+        public List<IResolution> GetConflictsResolutions(List<Conflict> conflicts)
         {
+            var resolutions = new List<IResolution>();
             foreach (var conflict in conflicts)
             {
-                if (ExistsUpdateResolution(conflict))
-                    ResolveViaUpdate(conflict);
-                if (ExistsDeleteResolution(conflict) && Option != ResolverOptions.NoDelete)
-                    ResolveViaDelete(conflict);
-                if (ExistsCopyResolution(conflict))
-                    ResolveViaCopy(conflict);
+                var resolution = _resolvingPolicy.Resolve(conflict);
+
+                if (resolution != null)
+                    resolutions.Add(resolution);
             }
-        }
 
-        private bool ExistsUpdateResolution(Conflict conflict)
-        {
-            return conflict.Source != null && conflict.Destination != null;
-        }
-
-        private void ResolveViaUpdate(Conflict conflict)
-        {
-            conflict.Destination.Delete();
-            conflict.Source.CopyTo(conflict.Destination.ParentDirectory);
-        }
-
-        private bool ExistsCopyResolution(Conflict conflict)
-        {
-            return conflict.Source != null && conflict.Destination == null;
-        }
-
-        private void ResolveViaCopy(Conflict conflict)
-        {
-            var path = conflict.Source.ParentDirectory.Replace(MasterDirectory.FullName, SlaveDirectory.FullName);
-            conflict.Source.CopyTo(path);
-        }
-
-        private bool ExistsDeleteResolution(Conflict conflict)
-        {
-            return conflict.Source == null && conflict.Destination != null;
-        }
-
-        private void ResolveViaDelete(Conflict conflict)
-        {
-            conflict.Destination.Delete();
+            return resolutions;
         }
     }
 }

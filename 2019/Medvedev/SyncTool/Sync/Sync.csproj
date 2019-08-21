@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commiter.cs" />
     <Compile Include="Comparers\DefaultDirectoryComparer.cs" />
     <Compile Include="Comparers\DefaultFileComparer.cs" />
     <Compile Include="Comparers\DefaultFileSystemElementsComparer.cs" />
@@ -49,13 +50,27 @@
     <Compile Include="ConflictDetectionPolicies\IConflictDetectionPolicy.cs" />
     <Compile Include="ConflictsCollector.cs" />
     <Compile Include="ConflictSeeker.cs" />
-    <Compile Include="DirectoryInfoExtension.cs" />
+    <Compile Include="Interactors\IInteractor.cs" />
+    <Compile Include="Interactors\LocalDiskInteractor.cs" />
+    <Compile Include="Loggers\StreamLogger.cs" />
+    <Compile Include="Loggers\LoggerOption.cs" />
+    <Compile Include="Providers\IProvider.cs" />
+    <Compile Include="Providers\LocalDiskProvider.cs" />
+    <Compile Include="Loggers\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolutions\CopyResolution.cs" />
+    <Compile Include="Resolutions\DeleteResolution.cs" />
+    <Compile Include="Resolutions\IResolution.cs" />
+    <Compile Include="Resolutions\UpdateResolution.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="ResolverOptions.cs" />
-    <Compile Include="Wrappers\DirectoryInfoWrapper.cs" />
-    <Compile Include="Wrappers\FileInfoInfoWrapper.cs" />
-    <Compile Include="Wrappers\IFileSystemElementInfoWrapper.cs" />
+    <Compile Include="ResolvingPolicies\DefaultResolvingPolicy.cs" />
+    <Compile Include="ResolvingPolicies\IResolvingPolicy.cs" />
+    <Compile Include="ResolvingPolicies\NoDeleteResolvingPolicy.cs" />
+    <Compile Include="Wrappers\DirectoryWrapper.cs" />
+    <Compile Include="Wrappers\FileAttributes.cs" />
+    <Compile Include="Wrappers\FileWrapper.cs" />
+    <Compile Include="Wrappers\IFileSystemElementWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

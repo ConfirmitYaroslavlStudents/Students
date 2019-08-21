@@ -4,14 +4,14 @@ namespace Sync
 {
     public class Conflict
     {
-        public IFileSystemElementInfoWrapper Source { get; }
-        public IFileSystemElementInfoWrapper Destination { get; }
-
-        public Conflict(IFileSystemElementInfoWrapper source, IFileSystemElementInfoWrapper destination)
+        public Conflict(IFileSystemElementWrapper source, IFileSystemElementWrapper destination)
         {
             Source = source;
             Destination = destination;
         }
+
+        public IFileSystemElementWrapper Source { get; }
+        public IFileSystemElementWrapper Destination { get; }
 
         public override bool Equals(object obj)
         {
@@ -22,7 +22,7 @@ namespace Sync
 
             var other = (Conflict) obj;
 
-            return Source.Equals(other.Source) && Destination.Equals(other.Destination);
+            return Equals(Source, other.Source) && Equals(Destination, other.Destination);
         }
 
         public override int GetHashCode()

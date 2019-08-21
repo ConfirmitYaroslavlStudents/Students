@@ -1,41 +1,52 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using Sync.ConflictDetectionPolicies;
+using Sync.Wrappers;
 
 namespace Sync
 {
     public class ConflictSeeker
     {
-        private IConflictDetectionPolicy ConflictDetectionPolicy { get; }
-
         public ConflictSeeker(IConflictDetectionPolicy policy)
         {
             ConflictDetectionPolicy = policy;
         }
 
-        public List<Conflict> GetConflicts(DirectoryInfo masterDirectory, DirectoryInfo slaveDirectory)
-        {
-            var left = (
-                from x in masterDirectory.GetContainment()
-                join y in slaveDirectory.GetContainment()
-                    on new {x.Name, Attribute = x.ElementType} equals new {y.Name, Attribute = y.ElementType} into
-                    temp
-                from z in temp.DefaultIfEmpty()
-                where ConflictDetectionPolicy.MakesConflict(x, z)
-                select ConflictDetectionPolicy.GetConflict(x, z)
-            ).ToList();
+        private IConflictDetectionPolicy ConflictDetectionPolicy { get; }
 
-            var right = (
-                from x in slaveDirectory.GetContainment()
-                join y in masterDirectory.GetContainment()
-                    on new {x.Name, Attribute = x.ElementType} equals new {y.Name, Attribute = y.ElementType} into
-                    temp
-                from z in temp.DefaultIfEmpty()
-                where ConflictDetectionPolicy.MakesConflict(z, x)
-                select ConflictDetectionPolicy.GetConflict(z, x)
-            ).ToList();
+        public List<Conflict> GetConflicts(DirectoryWrapper masterDirectory, DirectoryWrapper slaveDirectory)
+        {
+            var left = LeftJoin(masterDirectory.EnumerateDirectories(), slaveDirectory.EnumerateDirectories())
+                .Union(LeftJoin(masterDirectory.EnumerateFiles(), slaveDirectory.EnumerateFiles()));
+
+            var right = RightJoin(masterDirectory.EnumerateDirectories(), slaveDirectory.EnumerateDirectories())
+                .Union(RightJoin(masterDirectory.EnumerateFiles(), slaveDirectory.EnumerateFiles()));
 
             return left.Union(right).ToHashSet().ToList();
+        }
+
+        private IEnumerable<Conflict> RightJoin(IEnumerable<IFileSystemElementWrapper> left,
+            IEnumerable<IFileSystemElementWrapper> right)
+        {
+            return from x in right
+                join y in left
+                    on x.Name equals y.Name into
+                    temp
+                from z in temp.DefaultIfEmpty()
+                where ConflictDetectionPolicy.ConflictExists(z, x)
+                select ConflictDetectionPolicy.GetConflict(z, x);
+        }
+
+        private IEnumerable<Conflict> LeftJoin(IEnumerable<IFileSystemElementWrapper> left,
+            IEnumerable<IFileSystemElementWrapper> right)
+        {
+            return from x in left
+                join y in right
+                    on x.Name equals y.Name into
+                    temp
+                from z in temp.DefaultIfEmpty()
+                where ConflictDetectionPolicy.ConflictExists(x, z)
+                select ConflictDetectionPolicy.GetConflict(x, z);
         }
     }
 }

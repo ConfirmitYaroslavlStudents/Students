@@ -1,25 +1,87 @@
-﻿using System.IO;
+﻿using System;
+using NDesk.Options;
 using Sync;
 using Sync.Comparers;
+using Sync.ConflictDetectionPolicies;
+using Sync.Interactors;
+using Sync.Loggers;
+using Sync.Providers;
+using Sync.ResolvingPolicies;
 
 namespace SyncTool
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static Parameters _parameters;
+
+        private static void Main(string[] args)
         {
-            var master = new DirectoryInfo(args[0]);
-            var slave = new DirectoryInfo(args[1]);
+            _parameters = new Parameters();
+            var options = SetupOptions();
+            options.Parse(args);
 
-            var collector = new ConflictsCollector(master, slave, new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()));
+            var provider = new LocalDiskProvider();
+            var master = provider.LoadDirectory(_parameters.PathToMaster);
+            var slave = provider.LoadDirectory(_parameters.PathToSlave);
 
-            var resolverOption = ResolverOptions.None;
-            if (args.Length == 3 && args[2] == "--nodelete")
-                resolverOption = ResolverOptions.NoDelete;
+            var conflicts = new ConflictsCollector(
+                    master,
+                    slave,
+                    new DefaultConflictDetectionPolicy(new DefaultFileSystemElementsComparer()))
+                .GetConflicts();
 
-            var resolver = new Resolver(master, slave, resolverOption);
+            IResolvingPolicy resolvingPolicy = null;
 
-            resolver.ResolveConflicts(collector.GetConflicts());
+            if (_parameters.ResolverOption == ResolverOptions.NoDelete)
+                resolvingPolicy = new NoDeleteResolvingPolicy(master, slave);
+            else
+                resolvingPolicy = new DefaultResolvingPolicy(master, slave);
+
+            var resolutions = new Resolver(resolvingPolicy)
+                .GetConflictsResolutions(conflicts);
+
+            var commiter = new Commiter(new LocalDiskInteractor(), new StreamLogger(Console.Out, _parameters.LoggerOption));
+
+            commiter.Commit(resolutions);
+        }
+
+        private static OptionSet SetupOptions()
+        {
+            var optionSet = new OptionSet
+            {
+                {"m|master=", "path to master directory", path => _parameters.PathToMaster = path},
+                {"s|slave=", "path to slave directory", path => _parameters.PathToSlave = path},
+                {
+                    "no-delete", "slave files that have no match in master will not delete", x =>
+                    {
+                        if (x != null)
+                            _parameters.ResolverOption = ResolverOptions.NoDelete;
+                    }
+                },
+                {
+                    "silent", "no log output", x =>
+                    {
+                        if (x != null)
+                            _parameters.LoggerOption = LoggerOption.Silent;
+                    }
+                },
+                {
+                    "summary", "short log output", x =>
+                    {
+                        if (x != null)
+                            _parameters.LoggerOption = LoggerOption.Summary;
+                    }
+                },
+                {
+                    "verbose", "full log output", x =>
+                    {
+                        if (x != null)
+                            _parameters.LoggerOption = LoggerOption.Verbose;
+                    }
+                }
+            };
+
+            return optionSet;
         }
     }
 }

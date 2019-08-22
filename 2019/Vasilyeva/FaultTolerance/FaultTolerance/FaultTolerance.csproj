@@ -41,8 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FaultTolerance.cs" />
+    <Compile Include="Fallback\Fallback.cs" />
+    <Compile Include="Common\FaultTolerance.cs" />
+    <Compile Include="Common\IToleranceBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retry\Retry.cs" />
+    <Compile Include="TimeOut\TimeOut.cs" />
+    <Compile Include="Common\Wrap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

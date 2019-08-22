@@ -1,11 +1,55 @@
 ﻿using MasterSlaveSync;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
+using System;
+using System.Collections.Generic;
 
 namespace MasterSlaveSyncTests
 {
     public class SynchronizatorTests
     {
+        [Fact]
+        public void Constructor_MasterDirectoryDoesNotExist_Throws()
+        {
+            var mockFileSystem = new MockFileSystem();
+            mockFileSystem.AddDirectory(@"c:\slave");
+
+            Assert.Throws<ArgumentException>(() => 
+            _ = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem));
+            Assert.False(mockFileSystem.Directory.Exists(@"c:\master"));
+        }
+
+        [Fact]
+        public void AddSlave_SlaveDirectoryDoesNotExist_CreatesSlave()
+        {
+            var mockFileSystem = new MockFileSystem();
+            mockFileSystem.AddDirectory(@"c:\master");
+
+            _ = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem);
+
+            Assert.True(mockFileSystem.Directory.Exists(@"c:\slave"));
+        }
+
+        [Fact]
+        public void AddSlave_MasterDirectoryContainsSlave_Throws()
+        {
+            var mockFileSystem = new MockFileSystem();
+            mockFileSystem.AddDirectory(@"c:\master\slave");
+
+            Assert.Throws<ArgumentException>(() =>
+            _ = new Synchronizator(@"c:\master", @"c:\master\slave", new SyncOptions(), mockFileSystem));
+        }
+
+        [Fact]
+        public void AddSlave_SlaveDirectoryContainsMaster_Throws()
+        {
+            var mockFileSystem = new MockFileSystem();
+            mockFileSystem.AddDirectory(@"c:\slave\master");
+
+            Assert.Throws<ArgumentException>(() =>
+            _ = new Synchronizator(@"c:\slave\master", @"c:\slave", new SyncOptions(), mockFileSystem));
+        }
+
         [Fact]
         public void Run_FileInSlaveButNotInMaster_NoDeleteOn_FileNotDeleted()
         {
@@ -400,6 +444,43 @@ namespace MasterSlaveSyncTests
             var expected = "";
 
             Assert.Equal(expected, mockFileSystem.File.ReadAllText(@"c:\log.txt"));
+        }
+
+        [Fact]
+        public void AddSlave_MultipleSlaves_Success()
+        {
+            var mockFileSystem = new MockFileSystem();
+            mockFileSystem.AddDirectory(@"c:\master");
+            mockFileSystem.AddDirectory(@"c:\slave");
+            mockFileSystem.AddDirectory(@"c:\slave2");
+            mockFileSystem.AddDirectory(@"c:\slave3");
+
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave",
+                new SyncOptions(), mockFileSystem);
+            synchronizator.AddSlave(@"c:\slave2");
+            synchronizator.AddSlave(@"c:\slave3");
+
+            var expected = new List<string>() { @"c:\slave", @"c:\slave2", @"c:\slave3" };
+
+            Assert.Equal(expected, synchronizator.SlavePaths);
+        }
+
+        [Fact]
+        public void TwoSlaves_FileInMasterButNotInSlaves_CopiesFileToBothSlaves()
+        {
+            var mockFileSystem = new MockFileSystem();
+            mockFileSystem.AddFile(@"c:\master\a.txt", new MockFileData("1"));
+            mockFileSystem.AddDirectory(@"c:\slave");
+            mockFileSystem.AddDirectory(@"c:\slave2");
+
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", 
+                new SyncOptions(), mockFileSystem);
+            synchronizator.AddSlave(@"c:\slave2");
+
+            synchronizator.Run();
+
+            Assert.True(mockFileSystem.FileExists(@"c:\slave\a.txt"));
+            Assert.True(mockFileSystem.FileExists(@"c:\slave2\a.txt"));
         }
     }
 }

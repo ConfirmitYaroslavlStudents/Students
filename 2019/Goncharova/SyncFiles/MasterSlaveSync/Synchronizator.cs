@@ -1,22 +1,21 @@
 ﻿using MasterSlaveSync.Loggers;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System;
 
 namespace MasterSlaveSync
 {
     public class Synchronizator
     {
-        private readonly IDirectoryInfo master;
-        private readonly List<IDirectoryInfo> slaves;
-
         public Synchronizator(string masterPath, string slavePath, SyncOptions options, IFileSystem fileSystem)
         {
             FileSystem = fileSystem;
 
+            if (!DirectoryValidator.MasterExists(masterPath, FileSystem))
+            {
+                throw new ArgumentException("Master directory does not exist");
+            }
             MasterPath = masterPath;
-            master = FileSystem.DirectoryInfo.FromDirectoryName(masterPath);
-
-            slaves = new List<IDirectoryInfo>();
             AddSlave(slavePath);
 
             ConfigureResolver(options);
@@ -35,10 +34,13 @@ namespace MasterSlaveSync
         public void Run()
         {
             var collector = new ConflictsCollector();
+            IDirectoryInfo master = FileSystem.DirectoryInfo.FromDirectoryName(MasterPath);
 
-            foreach (var slave in slaves)
+            foreach (var slavePath in SlavePaths)
             {
-                Resolver.ResolveConflicts(collector.CollectConflicts(master, slave), MasterPath, slave.FullName);
+                IDirectoryInfo slave = FileSystem.DirectoryInfo.FromDirectoryName(slavePath);
+
+                Resolver.ResolveConflicts(collector.CollectConflicts(master, slave), MasterPath, slavePath);
             }
 
         }
@@ -46,7 +48,12 @@ namespace MasterSlaveSync
         public void AddSlave(string slavePath)
         {
             SlavePaths.Add(slavePath);
-            slaves.Add(FileSystem.DirectoryInfo.FromDirectoryName(slavePath));
+            if(!DirectoryValidator.DirectoriesDoNotContainEachOther(MasterPath, slavePath, FileSystem))
+            {
+                throw new ArgumentException("Directories should not contain each other");
+            }
+
+            FileSystem.Directory.CreateDirectory(slavePath);
         }
 
         private void ConfigureResolver(SyncOptions options)

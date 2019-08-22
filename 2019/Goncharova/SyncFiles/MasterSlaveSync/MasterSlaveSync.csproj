@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Conflicts\ConflictsCollector.cs" />
     <Compile Include="Conflicts\ConflictsCollection.cs" />
+    <Compile Include="DirectoryValidator.cs" />
     <Compile Include="Resolvers\IResolver.cs" />
     <Compile Include="Loggers\ILogger.cs" />
     <Compile Include="Loggers\SilentLogger.cs" />

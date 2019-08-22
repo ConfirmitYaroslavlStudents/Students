@@ -23,7 +23,6 @@ namespace FolderSynchronizerLib
             syncData.FilesToDelete = _deleteDictionary;
             syncData.FilesToCopy = _addDictionary;
             syncData.FilesToUpdate = _updateDictionary;
-            syncData.LogFlag = folderSet.Loglevel;
 
             syncData = RemoveCollision(syncData);
                        

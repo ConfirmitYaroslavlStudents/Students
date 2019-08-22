@@ -8,7 +8,7 @@ namespace FolderSynchronizerLib
         public Dictionary<string, string> FilesToCopy;
         public Dictionary<string, string> FilesToUpdate;
         public Dictionary<string, string> FilesToDelete;
-        public string LogFlag;
+        public ILog Log;
 
         public SyncData()
         {
@@ -25,16 +25,14 @@ namespace FolderSynchronizerLib
             FilesToCopy = filesToCopy;
             FilesToUpdate = filesToUpdate;
             FilesToDelete = filesToDelete;
-            LogFlag = "summary";
         }
 
         public bool Equals(SyncData other)
         {
-            bool level = (LogFlag == other.LogFlag);
-            bool toCopy = CompareDictionary(other.FilesToCopy, FilesToCopy);
-            bool toUpdate = CompareDictionary(other.FilesToUpdate, FilesToUpdate);
-            bool toDelete = CompareDictionary(other.FilesToDelete, FilesToDelete);
-            return level && toCopy && toUpdate && toDelete;
+            bool filesToCopy = CompareDictionary(other.FilesToCopy, FilesToCopy);
+            bool filesToUpdate = CompareDictionary(other.FilesToUpdate, FilesToUpdate);
+            bool filesToDelete = CompareDictionary(other.FilesToDelete, FilesToDelete);
+            return filesToCopy && filesToUpdate && filesToDelete;
         }
 
         private bool CompareDictionary(Dictionary<string, string> aDictionary, Dictionary<string,string> bDictionary)

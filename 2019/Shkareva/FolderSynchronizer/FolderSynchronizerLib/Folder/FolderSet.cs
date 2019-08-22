@@ -6,7 +6,7 @@ namespace FolderSynchronizerLib
     {
         public readonly List<FolderPair> FolderList;
         public readonly bool NoDeleteFlag;
-        public readonly string Loglevel;
+        public readonly LogLevels Loglevel;
 
         public FolderSet(InputData input)
         {
@@ -20,8 +20,8 @@ namespace FolderSynchronizerLib
                 FolderList.Add(folderPair);
             }
                         
-            NoDeleteFlag = input.NoDeleteFlag;
-            Loglevel = input.LogFlag;
+            NoDeleteFlag = input.NoDeleteFlag;            
+            Loglevel = input.LogLevel;
         }
 
         public FolderSet() { }

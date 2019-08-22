@@ -1,7 +1,7 @@
-﻿using System;
+﻿using FolderSynchronizerLib;
 using System.Collections.Generic;
 
-namespace FolderSynchronizerLib
+namespace Tests
 {
     public class TestSyncProcessorManager : ISyncProcessorManager
     {
@@ -14,7 +14,7 @@ namespace FolderSynchronizerLib
             _slaveFiles = slave;
         }
         
-        public void Copy(Dictionary<string, string> filesToCopy, string path)
+        public void Copy(Dictionary<string, string> filesToCopy, string path, ILog log)
         {
            
         }
@@ -31,12 +31,12 @@ namespace FolderSynchronizerLib
             return null;
         }
 
-        public void Delete(Dictionary<string,string> filesToDelete, string path)
+        public void Delete(Dictionary<string,string> filesToDelete, string path, ILog log)
         {
             
         }
 
-        public void Update(Dictionary<string, string> fileToUpdate, string path)
+        public void Update(Dictionary<string, string> fileToUpdate, string path, ILog log)
         {
         }
     }

@@ -50,13 +50,13 @@ namespace FolderSynchronizerLib
 
             if (flagList.Contains(_loglevel))
             {
-                input.LogFlag = GetLogFlag(flagList);
+                input.LogLevel = GetLogFlag(flagList);
             }
 
             return input;
         }
 
-        private string GetLogFlag(List<string> flagList)
+        private LogLevels GetLogFlag(List<string> flagList)
         {
             string logFlag = "";
 
@@ -74,7 +74,17 @@ namespace FolderSynchronizerLib
                 throw new SyncException("Invalid type of logging");
             }
 
-            return logFlag;
+            if (logFlag == "silent")
+            {
+                return LogLevels.silent;
+            }
+
+            if (logFlag == "verbose")
+            {
+                return LogLevels.verbose;
+            }
+
+            return LogLevels.summary;
         }
 
         public bool IsInputValid(string[] args)

@@ -63,10 +63,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FolderSet.cs" />
     <Compile Include="InputDataReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncDataReaderTest.cs" />
+    <Compile Include="TestSyncProcessorManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -6,13 +6,13 @@ namespace FolderSynchronizerLib
     {
         public List<string> FoldersPaths;
         public bool NoDeleteFlag;
-        public string LogFlag;
+        public LogLevels LogLevel;
 
         public InputData()
         {
             FoldersPaths = new List<string>();
             NoDeleteFlag = false;
-            LogFlag = "summary";
+            LogLevel = LogLevels.summary;
         }
     }
 }

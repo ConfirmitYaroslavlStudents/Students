@@ -15,33 +15,18 @@ namespace FolderSynchronizerLib
         {
             foreach (var path in folderPaths)
             {
-                CopyFiles(syncData.FilesToCopy, path);
+                _syncProcManager.Copy(syncData.FilesToCopy, path,syncData.Log);
             }
 
             foreach (var path in folderPaths)
             {
-                UpdateFiles(syncData.FilesToUpdate, path);
+                _syncProcManager.Update(syncData.FilesToCopy, path, syncData.Log);
             }
-            
+
             foreach (var path in folderPaths)
             {
-                DeleteFiles(syncData.FilesToDelete, path);
+                _syncProcManager.Delete(syncData.FilesToDelete, path, syncData.Log);
             }
-        }
-
-        private void UpdateFiles(Dictionary<string, string> filesToUpdate, string path)
-        {
-            _syncProcManager.Update(filesToUpdate, path);
-        }
-
-        private void DeleteFiles(Dictionary<string, string> filesToDelete, string path)
-        {
-            _syncProcManager.Delete(filesToDelete, path);
-        }
-
-        private void CopyFiles(Dictionary<string, string> filesToCopy, string path)
-        {
-            _syncProcManager.Copy(filesToCopy, path);
-        }
+        }        
     }
 }

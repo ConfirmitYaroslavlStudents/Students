@@ -16,7 +16,6 @@ namespace GeneralizeSynchLibrary
             {
                 var current = enumerator.Where(x => x.Priority == i);
                 var intersection = enumerator.Where(x => x.Priority > i);
-                var needed = enumerator.Where(x => x.Priority != i);
                 var replace = from file in intersection
                               from anotherFile in current
                               where file.Equals(anotherFile)

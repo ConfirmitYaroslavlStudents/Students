@@ -6,25 +6,42 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
-            Synchronization synchronization = new Synchronization(args[0], args[1]);
-            try
-            {
-                synchronization.SetNoDeleteOption(args[2] == "noDelete");
+            MultipleSync sync = new MultipleSync(args[0]);
 
-                switch (args[3])
+            int i = 1;
+
+            while (i < args.Length - 1)
+            {
+                if (args[i + 1] == "--no-delete")
                 {
-                    case "summary":
-                        synchronization.SetLogOption(EnumLog.Summary);
-                        break;
-                    case "verbose":
-                        synchronization.SetLogOption(EnumLog.Verbose);
-                        break;
+                    sync.SetSlave(args[i], true);
+                    i += 2;
+                }
+                else
+                {
+                    sync.SetSlave(args[i]);
+                    i++;
                 }
             }
-            catch
-            { }
+            if (i == args.Length - 1)
+                switch (args[i])
+                {
+                    case "silent":
+                        sync.SetLoggerType(EnumLog.Silent);
+                        break;
+                    case "verbose":
+                        sync.SetLoggerType(EnumLog.Verbose);
+                        break;
+                    case "summary":
+                        sync.SetLoggerType(EnumLog.Summary);
+                        break;
+                    default:
+                        sync.SetSlave(args[i]);
+                        break;
+                }
 
-            synchronization.Synchronaze();
+            sync.Synchronize();
+
         }
     }
 }

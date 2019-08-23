@@ -2,35 +2,35 @@
 {
     public class Synchronization
     {
-        public Synchronization(string masterPath, string slavePath, bool noDelete = true, EnumLog enumLog = EnumLog.Silent)
+        public Synchronization(string masterPath, string slavePath, bool noDelete = false, EnumLog enumLog = EnumLog.Silent)
         {
             master = masterPath;
             slave = slavePath;
             noDeleteOption = noDelete;
-            logger = enumLog;
+            loggerType = enumLog;
         }
 
         private readonly string master;
         private readonly string slave;
-        private EnumLog logger;
+        private EnumLog loggerType;
         private bool noDeleteOption;
 
-        private BaseSeeker seeker;
+        private BaseSeeker conflictSeeker;
 
-        public void Synchronaze()
+        public void Synchronize()
         {
             if (noDeleteOption)
             {
-                seeker = new DefaultConflictSeeker(master, slave);
+                conflictSeeker = new DefaultConflictSeeker(master, slave);
             }
             else
             {
-                seeker = new RemoveConflictSeeker(master, slave);
+                conflictSeeker = new RemoveConflictSeeker(master, slave);
             }
 
-            seeker.GetMasterConflict().ForEach(x => new Log(x.Resolve(), logger).Create());
+            conflictSeeker.GetMasterConflict().ForEach(x => new Log(x.Resolve(), loggerType).Create());
 
-            seeker.GetSlaveConflicts().ForEach(x => new Log(x.Resolve(), logger).Create());
+            conflictSeeker.GetSlaveConflicts().ForEach(x => new Log(x.Resolve(), loggerType).Create());
 
         }
 
@@ -43,7 +43,7 @@
 
         public Synchronization SetLogOption(EnumLog option)
         {
-            logger = option;
+            loggerType = option;
 
             return this;
         }

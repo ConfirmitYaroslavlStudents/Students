@@ -4,7 +4,6 @@ using Sync.Interactors;
 using Sync.Loggers;
 using Sync.Providers;
 using Sync.ResolvingPolicies;
-using Sync.Wrappers;
 
 namespace Sync
 {
@@ -58,9 +57,18 @@ namespace Sync
 
         public void Synchronize()
         {
+            SyncMasterWithSlaves();
+            SyncSlavesWithMaster();
+        }
+
+        private void SyncSlavesWithMaster()
+        {
             foreach (var kvp in _slaves)
                 Synchronize(_masterPath, kvp.Key, kvp.Value);
+        }
 
+        private void SyncMasterWithSlaves()
+        {
             foreach (var kvp in _slaves)
                 Synchronize(_masterPath, kvp.Key, kvp.Value);
         }

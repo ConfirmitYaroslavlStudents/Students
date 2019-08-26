@@ -7,7 +7,7 @@ namespace GeneralizeSynchLibrary
     {
 
         public RemoveSynchronizer() { }
-        public SynchReport Synchronize(FileWrapperCollection collection)
+        public SynchResult Synchronize(FileWrapperCollection collection)
         {
             List<FileWrapper> removeList = new List<FileWrapper>();
             List<Tuple<FileWrapper, FileWrapper>> replaceList = new List<Tuple<FileWrapper, FileWrapper>>();
@@ -24,7 +24,7 @@ namespace GeneralizeSynchLibrary
                 removeList.AddRange(remove);
                 replaceList.AddRange(replace);
             }
-            return new SynchReport(removeList, replaceList);
+            return new SynchResult(removeList, replaceList, null);
         }
     }
 }

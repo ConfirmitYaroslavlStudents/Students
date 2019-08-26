@@ -46,7 +46,7 @@
     <Compile Include="FileWrapper.cs" />
     <Compile Include="FileWrapperCollection.cs" />
     <Compile Include="ISynchronizer.cs" />
-    <Compile Include="LoggerConstant.cs" />
+    <Compile Include="Logger\LoggerConstant.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Logger\LoggerFactory.cs" />
     <Compile Include="Logger\LoggerForConsole.cs" />
@@ -56,7 +56,7 @@
     <Compile Include="NoRemoveSynchronizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveSynchronizer.cs" />
-    <Compile Include="SynchReport.cs" />
+    <Compile Include="SynchResult.cs" />
     <Compile Include="SynchronizerFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

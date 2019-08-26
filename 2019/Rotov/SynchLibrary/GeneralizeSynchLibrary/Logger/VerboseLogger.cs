@@ -18,5 +18,10 @@ namespace GeneralizeSynchLibrary
         {
             _output.Add($"{payload[0]} removed");
         }
+
+        public void AddCopy(params string[] payload)
+        {
+            _output.Add($"{payload[0]} copy to {payload[1]}");
+        }
     }
 }

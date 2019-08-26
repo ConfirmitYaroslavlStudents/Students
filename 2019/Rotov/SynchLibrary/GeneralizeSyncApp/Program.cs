@@ -11,7 +11,7 @@ namespace GeneralizeSyncApp
             var logger = LoggerFactory.Create(parsedArgs.Mode);
             var collection = new FileWrapperCollection(parsedArgs.FileNames);
             var report = synch.Synchronize(collection);
-            var logResult = report.ApplyReport(logger);
+            var logResult = report.ApplyResult(logger);
             LoggerForConsole.PrintLog(logResult.GetLogs());
         }
     }

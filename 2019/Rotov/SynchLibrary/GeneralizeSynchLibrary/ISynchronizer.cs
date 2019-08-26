@@ -2,6 +2,6 @@
 {
     public interface ISynchronizer
     {
-        SynchReport Synchronize(FileWrapperCollection collection);
+        SynchResult Synchronize(FileWrapperCollection collection);
     }
 }

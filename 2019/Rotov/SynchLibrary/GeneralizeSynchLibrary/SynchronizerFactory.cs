@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GeneralizeSynchLibrary
+﻿namespace GeneralizeSynchLibrary
 {
     public static class SynchronizerFactory
     {
         public static ISynchronizer Create(bool noRemove)
         {
-            switch(noRemove)
+            switch (noRemove)
             {
                 case true:
                     return new NoRemoveSynchronizer();

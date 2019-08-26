@@ -4,6 +4,11 @@ namespace GeneralizeSynchLibrary
 {
     public class SilentLogger : ILogger
     {
+        public void AddCopy(params string[] payload)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AddRemove(params string[] payload)
         {
             return;

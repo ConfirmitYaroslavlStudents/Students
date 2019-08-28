@@ -2,22 +2,19 @@
 
 namespace SyncLib
 {
-    internal class DifferentContentConflict : IConflict
+    public class DifferentContentConflict : IConflict
     {
-        private string source;
-        private string target;
+        public string source;
+        public string target;
 
         public DifferentContentConflict(string source, string target)
         {
             this.source = source;
             this.target = target;
         }
-
-        public InfoLog Resolve()
+        public void Accept(IVisitor visitor)
         {
-            File.Copy(source, target, true);
-
-            return new InfoLog("update", target, source);
+            visitor.Visit(this);
         }
     }
 }

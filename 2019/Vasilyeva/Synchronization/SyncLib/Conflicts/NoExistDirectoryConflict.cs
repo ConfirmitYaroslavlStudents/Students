@@ -2,20 +2,18 @@
 
 namespace SyncLib
 {
-    internal class NoExistDirectoryConflict : IConflict
+    public class NoExistDirectoryConflict : IConflict
     {
-        private string path;
+        public string path;
 
         public NoExistDirectoryConflict(string path)
         {
             this.path = path;
         }
 
-        public InfoLog Resolve()
+        public void Accept(IVisitor visitor)
         {
-            Directory.CreateDirectory(path);
-
-            return new InfoLog("copy", new DirectoryInfo(path));
+            visitor.Visit(this);
         }
     }
 }

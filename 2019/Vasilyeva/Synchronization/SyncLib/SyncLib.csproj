@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IVisitor.cs" />
+    <Compile Include="Loggers\SummaryLoggerVisitor.cs" />
     <Compile Include="MultipleSync.cs" />
     <Compile Include="Seeker\DefaultConflictSeeker.cs" />
     <Compile Include="DirectoryChecker.cs" />

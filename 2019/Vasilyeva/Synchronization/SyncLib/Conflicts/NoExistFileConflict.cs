@@ -2,10 +2,10 @@
 
 namespace SyncLib
 {
-    internal class NoExistFileConflict : IConflict
+    public class NoExistFileConflict : IConflict
     {
-        private string source;
-        private string target;
+        public string source;
+        public string target;
 
         public NoExistFileConflict(string source, string target)
         {
@@ -13,11 +13,9 @@ namespace SyncLib
             this.target = target;
         }
 
-        public InfoLog Resolve()
+        public void Accept(IVisitor visitor)
         {
-            File.Copy(source, target);
-
-            return new InfoLog("copy", source, target);
+            visitor.Visit(this);
         }
     }
 }

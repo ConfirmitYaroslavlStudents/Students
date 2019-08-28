@@ -2,6 +2,6 @@
 {
     public interface IConflict
     {
-        InfoLog Resolve();
+        void Accept(IVisitor visitor);
     }
 }

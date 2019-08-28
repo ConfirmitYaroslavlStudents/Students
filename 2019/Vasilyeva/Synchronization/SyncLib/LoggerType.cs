@@ -1,6 +1,6 @@
 ﻿namespace SyncLib
 {
-    public enum EnumLog
+    public enum LoggerType
     {
         Silent,
         Summary,

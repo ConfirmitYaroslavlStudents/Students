@@ -1,37 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace SyncLib.Loggers
 {
-    public class SummaryLoggerVisitor : IVisitor
+    public class SummaryLoggerVisitor : ILogger
     {
-        public int DeletedCount = 
-        public void Visit(DifferentContentConflict conflict)
+        public SummaryLoggerVisitor(TextWriter writer)
         {
-            throw new NotImplementedException();
+            Writer = writer;
         }
+        public int DeletedCount { get; private set; } = 0;
+        public int CopiedCount { get; private set; } = 0;
+        public int UpdatedCount { get; private set; } = 0;
 
-        public void Visit(ExistDirectoryConflict conflict)
-        {
-            throw new NotImplementedException();
-        }
+        public TextWriter Writer { get; }
 
-        public void Visit(ExistFileConflict conflict)
-        {
-            throw new NotImplementedException();
-        }
+        public void Visit(DifferentContentConflict conflict) => UpdatedCount++;
 
-        public void Visit(NoExistDirectoryConflict conflict)
-        {
-            throw new NotImplementedException();
-        }
+        public void Visit(ExistDirectoryConflict conflict) => DeletedCount++;
 
-        public void Visit(NoExistFileConflict conflict)
+        public void Visit(ExistFileConflict conflict) => DeletedCount++;
+
+        public void Visit(NoExistDirectoryConflict conflict) => CopiedCount++;
+        public void Visit(NoExistFileConflict conflict) => CopiedCount++;
+
+        public void Log()
         {
-            throw new NotImplementedException();
+            writer.WriteLine( $"Was copied {CopiedCount}" + Environment.NewLine +
+                $"Was deleted {DeletedCount}" + Environment.NewLine +
+                $"Was updated {UpdatedCount}");
         }
     }
 }

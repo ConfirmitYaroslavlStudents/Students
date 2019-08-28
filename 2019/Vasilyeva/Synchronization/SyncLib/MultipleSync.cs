@@ -6,7 +6,7 @@ namespace SyncLib
     {
         private string master;
         private Dictionary<string, bool> slaves = new Dictionary<string, bool>();
-        private EnumLog loggerType = EnumLog.Summary;
+        private LoggerType loggerType = LoggerType.Summary;
         public MultipleSync(string master)
         {
             this.master = master;
@@ -23,7 +23,7 @@ namespace SyncLib
             return this;
         }
 
-        public MultipleSync SetLoggerType(EnumLog logType)
+        public MultipleSync SetLoggerType(LoggerType logType)
         {
             loggerType = logType;
 

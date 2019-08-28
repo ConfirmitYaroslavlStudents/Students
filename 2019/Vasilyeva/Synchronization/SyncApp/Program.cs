@@ -27,13 +27,13 @@ namespace SyncApp
                 switch (args[i])
                 {
                     case "silent":
-                        sync.SetLoggerType(EnumLog.Silent);
+                        sync.SetLoggerType(LoggerType.Silent);
                         break;
                     case "verbose":
-                        sync.SetLoggerType(EnumLog.Verbose);
+                        sync.SetLoggerType(LoggerType.Verbose);
                         break;
                     case "summary":
-                        sync.SetLoggerType(EnumLog.Summary);
+                        sync.SetLoggerType(LoggerType.Summary);
                         break;
                     default:
                         sync.SetSlave(args[i]);

@@ -1,51 +1,40 @@
-﻿namespace SyncLib
+﻿using SyncLib.Loggers;
+using SyncLib.Seeker;
+using System.IO;
+
+namespace SyncLib
 {
     public class Synchronization
     {
-        public Synchronization(string masterPath, string slavePath, bool noDelete = false, EnumLog enumLog = EnumLog.Silent)
+        public Synchronization(string masterPath, string slavePath, TextWriter writer, bool noDelete = false, LoggerType enumLog = LoggerType.Summary)
         {
             master = masterPath;
             slave = slavePath;
             noDeleteOption = noDelete;
-            loggerType = enumLog;
+            logger = LoggerFactory.GetLogger(enumLog, writer);
+            conflictSeeker = ConflictSeekerFactory.GetConflictSeeker(noDeleteOption, master, slave);
         }
 
         private readonly string master;
         private readonly string slave;
-        private EnumLog loggerType;
-        private bool noDeleteOption;
+        private readonly bool noDeleteOption;
 
         private BaseSeeker conflictSeeker;
+        private readonly ILogger logger;
 
         public void Synchronize()
         {
-            if (noDeleteOption)
-            {
-                conflictSeeker = new DefaultConflictSeeker(master, slave);
-            }
-            else
-            {
-                conflictSeeker = new RemoveConflictSeeker(master, slave);
-            }
+            conflictSeeker.GetMasterConflict().ForEach(x => {
+                x.Accept(new ResolverVisitor());
+                x.Accept(logger);
+                });
 
-            conflictSeeker.GetMasterConflict().ForEach(x => new Log(x.Resolve(), loggerType).Create());
+            conflictSeeker.GetSlaveConflicts().ForEach(x => {
+                x.Accept(new ResolverVisitor());
+                x.Accept(logger);
+            });
 
-            conflictSeeker.GetSlaveConflicts().ForEach(x => new Log(x.Resolve(), loggerType).Create());
-
-        }
-
-        public Synchronization SetNoDeleteOption(bool option)
-        {
-            noDeleteOption = option;
-
-            return this;
-        }
-
-        public Synchronization SetLogOption(EnumLog option)
-        {
-            loggerType = option;
-
-            return this;
+            logger.Log();
         }
     }
 }

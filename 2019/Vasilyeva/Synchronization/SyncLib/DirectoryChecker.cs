@@ -4,15 +4,15 @@ namespace SyncLib
 {
     public class DirectoryChecker
     {
-        private readonly string target;
+        private readonly string mainPath;
 
-        public DirectoryChecker(string target)
+        public DirectoryChecker(string path)
         {
-            this.target = target;
+            mainPath = path;
         }
-        public int GetTypeConflict(string shortCut)
+        public int GetTypeConflict(string relativePath)
         {
-            if (Directory.Exists(target + shortCut)) return 1;
+            if (Directory.Exists(mainPath + relativePath)) return 1;
 
             return 2;
         }

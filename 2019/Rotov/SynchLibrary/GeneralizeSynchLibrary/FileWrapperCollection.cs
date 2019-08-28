@@ -22,8 +22,15 @@ namespace GeneralizeSynchLibrary
 
         public FileWrapperCollection(List<FileWrapper> list)
         {
+            int maxPriority = -1;
+            _collection = new List<FileWrapper>();
             foreach (var item in list)
+            {
+                if (item.Priority > maxPriority)
+                    maxPriority = item.Priority;
                 _collection.Add(item);
+            }
+            Count = ++maxPriority;
         }
 
         public void Initialize(List<string> input)

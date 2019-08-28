@@ -61,16 +61,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SynchLibrary\SynchLibrary.csproj">
-      <Project>{62a0ab70-1099-4d50-a812-9287b18e3ebf}</Project>
-      <Name>SynchLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GeneralizeSynchLibrary\GeneralizeSynchLibrary.csproj">
+      <Project>{b6bf498a-d166-4763-bf58-4af6845de7e2}</Project>
+      <Name>GeneralizeSynchLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

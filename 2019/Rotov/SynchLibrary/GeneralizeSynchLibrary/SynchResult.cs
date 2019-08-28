@@ -5,9 +5,9 @@ namespace GeneralizeSynchLibrary
 {
     public class SynchResult
     {
-        List<FileWrapper> RemoveList;
-        List<Tuple<FileWrapper, FileWrapper>> ReplaceList;
-        List<Tuple<FileWrapper, string>> CopyList;
+        List<FileWrapper> RemoveList = new List<FileWrapper>();
+        List<Tuple<FileWrapper, FileWrapper>> ReplaceList = new List<Tuple<FileWrapper, FileWrapper>>();
+        List<Tuple<FileWrapper, string>> CopyList = new List<Tuple<FileWrapper, string>>();
         FileHandler _fileHandler = new FileHandler();
 
         public SynchResult(List<FileWrapper> removeList, List<Tuple<FileWrapper, FileWrapper>> replaceList, List<Tuple<FileWrapper, string>> copyList)

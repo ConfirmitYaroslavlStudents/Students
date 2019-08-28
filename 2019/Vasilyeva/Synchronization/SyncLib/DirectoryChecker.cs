@@ -1,5 +1,4 @@
-﻿using SyncLib.Conflicts;
-using System.IO;
+﻿using System.IO;
 
 namespace SyncLib
 {

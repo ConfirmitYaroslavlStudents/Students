@@ -1,10 +1,10 @@
-﻿namespace SyncLib.Conflicts
+﻿namespace SyncLib
 {
     public enum FileConflictType
     {
         DifferentContent,
-        ExistConflict,
         NoExistConflict,
+        NoConflict
     }
     public enum DirectoryConflictType
     {

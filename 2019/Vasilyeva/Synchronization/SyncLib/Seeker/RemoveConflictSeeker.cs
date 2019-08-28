@@ -1,11 +1,10 @@
-﻿using SyncLib.Conflicts;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace SyncLib
 {
-    class RemoveConflictSeeker : BaseSeeker
+    public class RemoveConflictSeeker : BaseSeeker
     {
         public RemoveConflictSeeker(string masterPath, string slavePath) : base(masterPath, slavePath)
         { }
@@ -23,7 +22,9 @@ namespace SyncLib
             {
                 string current = storage.Pop();
 
-                if (directoryChecker.GetTypeConflict(current.Replace(slavePath, "")) == DirectoryConflictType.ExistConflict)
+                var relative = current.Replace(slavePath, "");
+
+                if (relative.Length != 0 && directoryChecker.GetTypeConflict(relative) == DirectoryConflictType.NoExistConflict)
                 {
                     conflicts.Add(new ExistDirectoryConflict(current));
                     continue;
@@ -33,7 +34,7 @@ namespace SyncLib
 
                 foreach (var file in files)
                 {
-                    if (fileChecker.GetTypeConflict(file) == FileConflictType.ExistConflict)
+                    if (fileChecker.GetTypeConflict(file) == FileConflictType.NoExistConflict)
                         conflicts.Add(new ExistFileConflict(slavePath + file));
                 }
 

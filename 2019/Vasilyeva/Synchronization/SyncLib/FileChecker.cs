@@ -1,5 +1,4 @@
-﻿using SyncLib.Conflicts;
-using System.IO;
+﻿using System.IO;
 
 namespace SyncLib
 {
@@ -21,7 +20,7 @@ namespace SyncLib
             if (new FileInfo(source + shortCut).Length != new FileInfo(target + shortCut).Length)
                 return FileConflictType.DifferentContent;
 
-            return FileConflictType.ExistConflict;
+            return FileConflictType.NoConflict;
         }
     }
 }

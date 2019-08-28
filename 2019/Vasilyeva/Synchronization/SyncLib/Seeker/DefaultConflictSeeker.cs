@@ -1,10 +1,6 @@
-﻿using SyncLib.Conflicts;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SyncLib
 {
@@ -19,8 +15,6 @@ namespace SyncLib
             DirectoryChecker directoryChecker = new DirectoryChecker(masterPath);
 
             List<IConflict> conflicts = new List<IConflict>();
-
-            Stack<string> storage = new Stack<string>();
 
             storage.Push(slavePath);
 

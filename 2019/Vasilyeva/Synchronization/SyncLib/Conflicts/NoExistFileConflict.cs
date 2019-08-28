@@ -1,16 +1,14 @@
-﻿using System.IO;
-
-namespace SyncLib
+﻿namespace SyncLib
 {
     public class NoExistFileConflict : IConflict
     {
-        public string source;
-        public string target;
+        public string SourcePath;
+        public string DestinationPath;
 
-        public NoExistFileConflict(string source, string target)
+        public NoExistFileConflict(string source, string dectination)
         {
-            this.source = source;
-            this.target = target;
+            SourcePath = source;
+            DestinationPath = dectination;
         }
 
         public void Accept(IVisitor visitor)

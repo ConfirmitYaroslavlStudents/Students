@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SyncLib.Conflicts;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -16,15 +17,13 @@ namespace SyncLib
 
             List<IConflict> conflicts = new List<IConflict>();
 
-            Stack<string> storage = new Stack<string>();
-
             storage.Push(slavePath);
 
             while (storage.Count != 0)
             {
                 string current = storage.Pop();
 
-                if (directoryChecker.GetTypeConflict(current.Replace(slavePath, "")) == 2)
+                if (directoryChecker.GetTypeConflict(current.Replace(slavePath, "")) == DirectoryConflictType.ExistConflict)
                 {
                     conflicts.Add(new ExistDirectoryConflict(current));
                     continue;
@@ -34,14 +33,11 @@ namespace SyncLib
 
                 foreach (var file in files)
                 {
-                    if (fileChecker.GetTypeConflict(file) == 1)
+                    if (fileChecker.GetTypeConflict(file) == FileConflictType.ExistConflict)
                         conflicts.Add(new ExistFileConflict(slavePath + file));
                 }
 
-                var directories = Directory.GetDirectories(current).ToList();
-
-                foreach (var dir in directories)
-                    storage.Push(dir);
+                AddNewDirectories(current);
             }
 
             return conflicts;

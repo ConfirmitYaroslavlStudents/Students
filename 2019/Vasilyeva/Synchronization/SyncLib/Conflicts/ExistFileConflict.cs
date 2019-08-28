@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace SyncLib
+﻿namespace SyncLib
 {
     public  class ExistFileConflict : IConflict
     {
@@ -8,7 +6,7 @@ namespace SyncLib
 
         public ExistFileConflict(string path)
         {
-            this.FilePath = path;
+            FilePath = path;
         }
 
         public void Accept(IVisitor visitor)

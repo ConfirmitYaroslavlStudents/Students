@@ -7,12 +7,12 @@ namespace SyncLib
     {
         public void Visit(DifferentContentConflict conflict)
         {
-            File.Copy(conflict.source, conflict.target, true);
+            File.Copy(conflict.SourcePath, conflict.DestinationPath, true);
         }
 
         public void Visit(ExistDirectoryConflict conflict)
         {
-            Directory.Delete(conflict.path, true);
+            Directory.Delete(conflict.DirectoryPath, true);
         }
 
         public void Visit(ExistFileConflict conflict)
@@ -22,12 +22,12 @@ namespace SyncLib
 
         public void Visit(NoExistDirectoryConflict conflict)
         {
-            Directory.CreateDirectory(conflict.path);
+            Directory.CreateDirectory(conflict.DirectoryPath);
         }
 
         public void Visit(NoExistFileConflict conflict)
         {
-            File.Copy(conflict.source, conflict.target);
+            File.Copy(conflict.SourcePath, conflict.DestinationPath);
         }
     }
 }

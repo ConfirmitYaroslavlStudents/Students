@@ -17,6 +17,6 @@ namespace SyncLib.Loggers
 
         public void Visit(NoExistDirectoryConflict conflict) { }
 
-        public void Visit(NoExistFileConflict conflict) { };
+        public void Visit(NoExistFileConflict conflict) { }
     }
 }

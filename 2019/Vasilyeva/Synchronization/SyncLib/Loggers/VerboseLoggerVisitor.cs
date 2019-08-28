@@ -12,7 +12,7 @@ namespace SyncLib.Loggers
 
         public TextWriter Writer { get; }
 
-        private List<string> logs = new List<string>();
+        private readonly List<string> logs = new List<string>();
 
         public void Log()
         {
@@ -21,12 +21,12 @@ namespace SyncLib.Loggers
 
         public void Visit(DifferentContentConflict conflict)
         {
-            logs.Add($"File {conflict.target} was changed to {conflict.source}");
+            logs.Add($"File {conflict.DestinationPath} was changed to {conflict.SourcePath}");
         }
 
         public void Visit(ExistDirectoryConflict conflict)
         {
-            logs.Add($"Directory {conflict.path} was deleted");
+            logs.Add($"Directory {conflict.DirectoryPath} was deleted");
         }
 
         public void Visit(ExistFileConflict conflict)
@@ -36,12 +36,12 @@ namespace SyncLib.Loggers
 
         public void Visit(NoExistDirectoryConflict conflict)
         {
-            logs.Add($"Directory {conflict.path} was created");
+            logs.Add($"Directory {conflict.DirectoryPath} was created");
         }
 
         public void Visit(NoExistFileConflict conflict)
         {
-            logs.Add($"File {conflict.target} was copied from {conflict.source}");
+            logs.Add($"File {conflict.DestinationPath} was copied from {conflict.SourcePath}");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SyncLib;
+using System;
 
 namespace SyncApp
 {
@@ -6,6 +7,7 @@ namespace SyncApp
     {
         static void Main(string[] args)
         {
+
             MultipleSync sync = new MultipleSync(args[0]);
 
             int i = 1;
@@ -27,13 +29,13 @@ namespace SyncApp
                 switch (args[i])
                 {
                     case "silent":
-                        sync.SetLoggerType(LoggerType.Silent);
+                        sync.SetLoggerType(LoggerType.Silent, Console.Out);
                         break;
                     case "verbose":
-                        sync.SetLoggerType(LoggerType.Verbose);
+                        sync.SetLoggerType(LoggerType.Verbose, Console.Out);
                         break;
                     case "summary":
-                        sync.SetLoggerType(LoggerType.Summary);
+                        sync.SetLoggerType(LoggerType.Summary, Console.Out);
                         break;
                     default:
                         sync.SetSlave(args[i]);

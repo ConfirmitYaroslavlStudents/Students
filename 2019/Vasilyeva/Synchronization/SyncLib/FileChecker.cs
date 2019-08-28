@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using SyncLib.Conflicts;
+using System.IO;
 
 namespace SyncLib
 {
@@ -12,15 +13,15 @@ namespace SyncLib
             source = master;
             target = slave;
         }
-        public int GetTypeConflict(string shortCut)
+        public FileConflictType GetTypeConflict(string shortCut)
         {
             if (!File.Exists(target + shortCut))
-                return 1;
+                return FileConflictType.NoExistConflict;
 
             if (new FileInfo(source + shortCut).Length != new FileInfo(target + shortCut).Length)
-                return 2;
+                return FileConflictType.DifferentContent;
 
-            return 3;
+            return FileConflictType.ExistConflict;
         }
     }
 }

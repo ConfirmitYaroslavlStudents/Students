@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace SyncLib
 {
@@ -6,6 +7,7 @@ namespace SyncLib
     {
         private string master;
         private Dictionary<string, bool> slaves = new Dictionary<string, bool>();
+        private TextWriter writer;
         private LoggerType loggerType = LoggerType.Summary;
         public MultipleSync(string master)
         {
@@ -23,19 +25,35 @@ namespace SyncLib
             return this;
         }
 
-        public MultipleSync SetLoggerType(LoggerType logType)
+        public MultipleSync SetLoggerType(LoggerType logType, TextWriter writer)
         {
+            this.writer = writer;
+
             loggerType = logType;
 
             return this;
         }
         public void Synchronize()
         {
-            foreach (var slave in slaves)
-                new Synchronization(master, slave.Key, slave.Value, loggerType).Synchronaze();
+            SenchronizeMasterWithSlaves();
 
+            SynchronizeSlavesWithMaster();
+        }
+
+        private void SynchronizeSlavesWithMaster()
+        {
             foreach (var slave in slaves)
-                new Synchronization(master, slave.Key, slave.Value, loggerType).Synchronaze();
+            {
+                new Synchronization(master, slave.Key, writer, slave.Value, loggerType).Synchronize();
+            }
+        }
+
+        private void SenchronizeMasterWithSlaves()
+        {
+            foreach (var slave in slaves)
+            {
+                new Synchronization(master, slave.Key, writer, slave.Value, loggerType).Synchronize();
+            }
         }
     }
 }

@@ -1,16 +1,14 @@
-﻿using System.IO;
-
-namespace SyncLib
+﻿namespace SyncLib
 {
     public class DifferentContentConflict : IConflict
     {
-        public string source;
-        public string target;
+        public string SourcePath;
+        public string DestinationPath;
 
-        public DifferentContentConflict(string source, string target)
+        public DifferentContentConflict(string source, string destination)
         {
-            this.source = source;
-            this.target = target;
+            SourcePath = source;
+            DestinationPath = destination;
         }
         public void Accept(IVisitor visitor)
         {

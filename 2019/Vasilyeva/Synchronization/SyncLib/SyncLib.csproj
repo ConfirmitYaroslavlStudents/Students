@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Conflicts\ConflictType.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="Loggers\ILogger.cs" />
     <Compile Include="Loggers\LoggerFactory.cs" />

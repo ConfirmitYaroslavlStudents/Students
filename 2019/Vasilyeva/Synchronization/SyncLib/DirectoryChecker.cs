@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using SyncLib.Conflicts;
+using System.IO;
 
 namespace SyncLib
 {
@@ -10,11 +11,11 @@ namespace SyncLib
         {
             mainPath = path;
         }
-        public int GetTypeConflict(string relativePath)
+        public DirectoryConflictType GetTypeConflict(string relativePath)
         {
-            if (Directory.Exists(mainPath + relativePath)) return 1;
+            if (Directory.Exists(mainPath + relativePath)) return DirectoryConflictType.ExistConflict;
 
-            return 2;
+            return DirectoryConflictType.NoExistConflict;
         }
     }
 }

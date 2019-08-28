@@ -1,14 +1,12 @@
-﻿using System.IO;
-
-namespace SyncLib
+﻿namespace SyncLib
 {
     public class NoExistDirectoryConflict : IConflict
     {
-        public string path;
+        public string DirectoryPath;
 
         public NoExistDirectoryConflict(string path)
         {
-            this.path = path;
+            DirectoryPath = path;
         }
 
         public void Accept(IVisitor visitor)

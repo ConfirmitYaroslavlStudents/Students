@@ -26,7 +26,7 @@ namespace SyncLib.Loggers
 
         public void Log()
         {
-            writer.WriteLine( $"Was copied {CopiedCount}" + Environment.NewLine +
+            Writer.WriteLine( $"Was copied {CopiedCount}" + Environment.NewLine +
                 $"Was deleted {DeletedCount}" + Environment.NewLine +
                 $"Was updated {UpdatedCount}");
         }

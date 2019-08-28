@@ -1,4 +1,5 @@
 ﻿using Sync.Interactors;
+using Sync.Visitors;
 using Sync.Wrappers;
 
 namespace Sync.Resolutions
@@ -35,6 +36,11 @@ namespace Sync.Resolutions
         {
             interactor.Delete(Destination);
             interactor.CopyTo(Source, Destination.FullName);
+        }
+
+        public void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

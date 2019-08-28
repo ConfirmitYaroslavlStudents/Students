@@ -52,11 +52,8 @@
     <Compile Include="ConflictSeeker.cs" />
     <Compile Include="Interactors\IInteractor.cs" />
     <Compile Include="Interactors\LocalDiskInteractor.cs" />
-    <Compile Include="Loggers\StreamLogger.cs" />
-    <Compile Include="Loggers\LoggerOption.cs" />
     <Compile Include="Providers\IProvider.cs" />
     <Compile Include="Providers\LocalDiskProvider.cs" />
-    <Compile Include="Loggers\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolutions\CopyResolution.cs" />
     <Compile Include="Resolutions\DeleteResolution.cs" />
@@ -68,10 +65,16 @@
     <Compile Include="ResolvingPolicies\IResolvingPolicy.cs" />
     <Compile Include="ResolvingPolicies\NoDeleteResolvingPolicy.cs" />
     <Compile Include="SynchronizerBuilder.cs" />
+    <Compile Include="Visitors\IVisitor.cs" />
+    <Compile Include="Visitors\ILoggerVisitor.cs" />
+    <Compile Include="Visitors\SilentLoggerVisitor.cs" />
+    <Compile Include="Visitors\SummaryLoggerVisitor.cs" />
+    <Compile Include="Visitors\VerboseLoggerVisitor.cs" />
     <Compile Include="Wrappers\DirectoryWrapper.cs" />
     <Compile Include="Wrappers\FileAttributes.cs" />
     <Compile Include="Wrappers\FileWrapper.cs" />
     <Compile Include="Wrappers\IFileSystemElementWrapper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

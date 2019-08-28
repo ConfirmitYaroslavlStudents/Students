@@ -1,12 +1,10 @@
-﻿using System;
-using NDesk.Options;
+﻿using NDesk.Options;
 using Sync;
 using Sync.Comparers;
 using Sync.ConflictDetectionPolicies;
 using Sync.Interactors;
-using Sync.Loggers;
 using Sync.Providers;
-using Sync.ResolvingPolicies;
+using Sync.Visitors;
 
 namespace SyncTool
 {
@@ -41,21 +39,21 @@ namespace SyncTool
                     "silent", "no log output", x =>
                     {
                         if (x != null)
-                            _synchronizerBuilder.SetLogger(new StreamLogger(Console.Out, LoggerOption.Silent));
+                            _synchronizerBuilder.SetLogger(new SilentLoggerVisitor());
                     }
                 },
                 {
                     "summary", "short log output", x =>
                     {
                         if (x != null)
-                            _synchronizerBuilder.SetLogger(new StreamLogger(Console.Out, LoggerOption.Summary));
+                            _synchronizerBuilder.SetLogger(new SummaryLoggerVisitor());
                     }
                 },
                 {
                     "verbose", "full log output", x =>
                     {
                         if (x != null)
-                            _synchronizerBuilder.SetLogger(new StreamLogger(Console.Out, LoggerOption.Verbose));
+                            _synchronizerBuilder.SetLogger(new VerboseLoggerVisitor());
                     }
                 }
             };

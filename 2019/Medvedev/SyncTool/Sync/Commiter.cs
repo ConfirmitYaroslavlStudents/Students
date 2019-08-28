@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using Sync.Interactors;
-using Sync.Loggers;
-using Sync.Providers;
 using Sync.Resolutions;
+using Sync.Visitors;
 
 namespace Sync
 {
     public class Commiter
     {
-        private readonly Logger _logger;
+        private readonly IVisitor _visitor;
         private readonly IInteractor _interactor;
 
-        public Commiter(IInteractor interactor, Logger logger = null)
+        public Commiter(IInteractor interactor, IVisitor visitor = null)
         {
             _interactor = interactor;
-            _logger = logger;
+            _visitor = visitor;
         }
 
         public void Commit(IEnumerable<IResolution> resolutions)
@@ -26,7 +25,7 @@ namespace Sync
         protected virtual void CommitResolution(IResolution resolution)
         {
             resolution.Commit(_interactor);
-            _logger?.Log(resolution);
+            resolution.Accept(_visitor);
         }
     }
 }

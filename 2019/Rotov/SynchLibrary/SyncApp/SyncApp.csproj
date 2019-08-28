@@ -49,11 +49,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SynchLibrary\SynchLibrary.csproj">
-      <Project>{62a0ab70-1099-4d50-a812-9287b18e3ebf}</Project>
-      <Name>SynchLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,16 +1,18 @@
-﻿namespace FolderSynchronizerLib
+﻿using System.Collections.Generic;
+
+namespace FolderSynchronizerLib
 {
     public class InputData
     {
-        public string MasterPath;
-        public string SlavePath;
+        public List<string> FoldersPaths;
         public bool NoDeleteFlag;
-        public string LogFlag;
+        public LogLevels LogLevel;
 
         public InputData()
         {
+            FoldersPaths = new List<string>();
             NoDeleteFlag = false;
-            LogFlag = "summary";
+            LogLevel = LogLevels.summary;
         }
     }
 }

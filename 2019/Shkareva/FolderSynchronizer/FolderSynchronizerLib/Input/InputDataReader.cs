@@ -27,10 +27,15 @@ namespace FolderSynchronizerLib
                 throw new SyncException("Input is invalid");
             }
 
-            input.MasterPath = args[0];
-            input.SlavePath = args[1];
+            int count = 0;
+
+            while (_pathChecker.IsValid(args[count]))
+            {
+                input.FoldersPaths.Add(args[count]);
+                count++;
+            }
+
             var flagList = new List<string>();
-            int count = 2;
 
             while (count < args.Length)
             {
@@ -45,13 +50,13 @@ namespace FolderSynchronizerLib
 
             if (flagList.Contains(_loglevel))
             {
-                input.LogFlag = GetLogFlag(flagList);
+                input.LogLevel = GetLogFlag(flagList);
             }
 
             return input;
         }
 
-        private string GetLogFlag(List<string> flagList)
+        private LogLevels GetLogFlag(List<string> flagList)
         {
             string logFlag = "";
 
@@ -69,7 +74,17 @@ namespace FolderSynchronizerLib
                 throw new SyncException("Invalid type of logging");
             }
 
-            return logFlag;
+            if (logFlag == "silent")
+            {
+                return LogLevels.silent;
+            }
+
+            if (logFlag == "verbose")
+            {
+                return LogLevels.verbose;
+            }
+
+            return LogLevels.summary;
         }
 
         public bool IsInputValid(string[] args)
@@ -79,10 +94,13 @@ namespace FolderSynchronizerLib
                 throw new SyncException("Invalid format command");
             }
 
-            bool isMasterPathRight = _pathChecker.IsValid(args[0]);
-            bool isSlavePathRight = _pathChecker.IsValid(args[1]);
-           
-            int count = 2;
+            int count = 0;
+
+            while (_pathChecker.IsValid(args[count]))
+            {
+                count++;
+            }
+
             while (count < args.Length)
             {
                 string word = args[count];
@@ -93,7 +111,7 @@ namespace FolderSynchronizerLib
                 count++;
             }
 
-            return isMasterPathRight && isSlavePathRight;
+            return true;
         }
     }
 }

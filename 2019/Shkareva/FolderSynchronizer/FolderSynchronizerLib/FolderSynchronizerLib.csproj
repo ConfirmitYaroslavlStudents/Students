@@ -43,7 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker\FolderPathChecker.cs" />
-    <Compile Include="SyncProc\ISyncProcManager.cs" />
+    <Compile Include="Folder\FolderPair.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="Log\ILog.cs" />
+    <Compile Include="Log\SilentLog.cs" />
+    <Compile Include="Log\SummaryLog.cs" />
+    <Compile Include="Log\VerboseLog.cs" />
+    <Compile Include="SyncData\ISyncDataReaderStrategy.cs" />
+    <Compile Include="SyncData\SyncDataReaderNoDeleteStrategy.cs" />
+    <Compile Include="SyncData\SyncDataReaderStrategy.cs" />
+    <Compile Include="SyncProc\ISyncProcessorManager.cs" />
     <Compile Include="FileDescriptor.cs" />
     <Compile Include="Folder\Folder.cs" />
     <Compile Include="Folder\FolderSet.cs" />
@@ -52,15 +61,13 @@
     <Compile Include="Input\InputData.cs" />
     <Compile Include="Input\InputDataReader.cs" />
     <Compile Include="Launcher.cs" />
-    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncData\SyncData.cs" />
     <Compile Include="SyncData\SyncDataReader.cs" />
     <Compile Include="SyncException.cs" />
     <Compile Include="SyncProc\SyncProcessor.cs" />
     <Compile Include="Checker\TestFolderPathChecker.cs" />
-    <Compile Include="SyncProc\SyncProcManager.cs" />
-    <Compile Include="SyncProc\TestSyncProcManager.cs" />
+    <Compile Include="SyncProc\SyncProcessorManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

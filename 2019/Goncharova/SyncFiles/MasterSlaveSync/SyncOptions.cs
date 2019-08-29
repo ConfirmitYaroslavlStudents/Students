@@ -6,7 +6,7 @@ namespace MasterSlaveSync
     public class SyncOptions
     {
         internal bool NoDelete { get; private set; } = false;
-        internal ILogger Logger { get; private set; } = new SummaryLogger(Console.WriteLine);
+        internal IMessageCreator Logger { get; private set; } = new SummaryMessageCreator(Console.WriteLine);
 
         public SyncOptions NoDeleteOn()
         {
@@ -22,13 +22,13 @@ namespace MasterSlaveSync
 
         public SyncOptions LogSummary(Action<string> logListener)
         {
-            Logger = new SummaryLogger(logListener);
+            Logger = new SummaryMessageCreator(logListener);
             return this;
         }
 
         public SyncOptions LogVerbose(Action<string> logListener)
         {
-            Logger = new VerboseLogger(logListener);
+            Logger = new VerboseMessageCreator(logListener);
             return this;
         }
 

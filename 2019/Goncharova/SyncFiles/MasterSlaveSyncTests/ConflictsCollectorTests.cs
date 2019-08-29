@@ -82,7 +82,7 @@ namespace MasterSlaveSyncTests
                 mockFileSystem.DirectoryInfo.FromDirectoryName(@"c:\slave")
                 );
 
-            var expected = new FileConflict(mockFileSystem.FileInfo.FromFileName(@"c:\master\a.txt"), 
+            var expected = new FileConflict(mockFileSystem.FileInfo.FromFileName(@"c:\master\a.txt"),
                 mockFileSystem.FileInfo.FromFileName(@"c:\slave\a.txt"));
 
             Assert.Single(actual.FileConflicts);

@@ -15,7 +15,7 @@ namespace MasterSlaveSync.Conflicts
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType() 
+            if (obj == null || GetType() != obj.GetType()
                 || (MasterDirectory == null && SlaveDirectory == null))
             {
                 return false;
@@ -25,12 +25,12 @@ namespace MasterSlaveSync.Conflicts
 
             if (MasterDirectory == null)
             {
-                return conflict.MasterDirectory == null 
+                return conflict.MasterDirectory == null
                     && (SlaveDirectory.FullName == conflict.SlaveDirectory.FullName);
             }
             if (SlaveDirectory == null)
             {
-                return conflict.SlaveDirectory == null 
+                return conflict.SlaveDirectory == null
                     && (MasterDirectory.FullName == conflict.MasterDirectory.FullName);
             }
 

@@ -1,7 +1,7 @@
 ﻿using MasterSlaveSync.Loggers;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using System;
 
 namespace MasterSlaveSync
 {
@@ -29,7 +29,7 @@ namespace MasterSlaveSync
         public List<string> SlavePaths { get; } = new List<string>();
         internal IFileSystem FileSystem { get; }
         internal IResolver Resolver { get; private set; }
-        internal ILogger Logger { get; private set; }
+        internal IMessageCreator Logger { get; private set; }
 
         public void Run()
         {
@@ -48,7 +48,7 @@ namespace MasterSlaveSync
         public void AddSlave(string slavePath)
         {
             SlavePaths.Add(slavePath);
-            if(!DirectoryValidator.DirectoriesDoNotContainEachOther(MasterPath, slavePath, FileSystem))
+            if (!DirectoryValidator.DirectoriesDoNotContainEachOther(MasterPath, slavePath, FileSystem))
             {
                 throw new ArgumentException("Directories should not contain each other");
             }

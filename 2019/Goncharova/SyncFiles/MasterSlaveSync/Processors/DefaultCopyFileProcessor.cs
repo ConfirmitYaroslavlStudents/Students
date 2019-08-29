@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Logging;
+using MasterSlaveSync.Loggers;
 using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
     public class DefaultCopyFileProcessor : ICopyFileProcessor
     {
-        public event EventHandler<ResolverEventArgs> FileCopied;
+        private readonly Logger logger = LogManager.Logger;
 
         public void Execute(IFileInfo masterFile, string masterPath, string slavePath)
         {
@@ -18,12 +19,8 @@ namespace MasterSlaveSync
             {
                 ElementPath = destPath
             };
-            OnFileCopied(args);
 
-        }
-        protected virtual void OnFileCopied(ResolverEventArgs e)
-        {
-            FileCopied?.Invoke(this, e);
+            logger.Summary(SummaryMessageCreator.FileCopied(args));
         }
     }
 }

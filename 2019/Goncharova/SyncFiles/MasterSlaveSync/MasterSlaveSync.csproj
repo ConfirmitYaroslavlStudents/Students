@@ -51,8 +51,7 @@
     <Compile Include="Conflicts\ConflictsCollection.cs" />
     <Compile Include="DirectoryValidator.cs" />
     <Compile Include="Resolvers\IResolver.cs" />
-    <Compile Include="Loggers\ILogger.cs" />
-    <Compile Include="Loggers\SilentLogger.cs" />
+    <Compile Include="MessageCreators\IMessageCreator.cs" />
     <Compile Include="Processors\DefaultCopyDirectoryProcessor.cs" />
     <Compile Include="Processors\DefaultCopyFileProcessor.cs" />
     <Compile Include="Processors\DefaultDeleteDirectoryProcessor.cs" />
@@ -65,7 +64,7 @@
     <Compile Include="Processors\IDeleteDirectoryProcessor.cs" />
     <Compile Include="Processors\IDeleteFileProcessor.cs" />
     <Compile Include="Processors\IUpdateFileProcessor.cs" />
-    <Compile Include="Loggers\SummaryLogger.cs" />
+    <Compile Include="MessageCreators\SummaryMessageCreator.cs" />
     <Compile Include="Resolvers\Resolver.cs" />
     <Compile Include="Resolvers\ResolverEventArgs.cs" />
     <Compile Include="Conflicts\DirectoryConflict.cs" />
@@ -74,12 +73,17 @@
     <Compile Include="Conflicts\DefaultFileComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronizator.cs" />
-    <Compile Include="Loggers\VerboseLogger.cs" />
+    <Compile Include="MessageCreators\VerboseMessageCreator.cs" />
     <Compile Include="SyncOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{e392d991-5831-4649-9060-51e1c089d830}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

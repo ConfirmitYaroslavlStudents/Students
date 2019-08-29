@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logging;
+using MasterSlaveSync.Loggers;
 using System.IO;
 using System.IO.Abstractions;
 
@@ -6,7 +7,7 @@ namespace MasterSlaveSync
 {
     public class DefaultCopyDirectoryProcessor : ICopyDirectoryProcessor
     {
-        public event EventHandler<ResolverEventArgs> DirectoryCopied;
+        private readonly Logger logger = LogManager.Logger;
 
         public void Execute(IDirectoryInfo masterDirectory, IDirectoryInfo target)
         {
@@ -16,11 +17,9 @@ namespace MasterSlaveSync
             {
                 ElementPath = target.FullName
             };
-            OnDirectoryCopied(args);
-        }
-        protected virtual void OnDirectoryCopied(ResolverEventArgs e)
-        {
-            DirectoryCopied?.Invoke(this, e);
+
+            logger.Summary(SummaryMessageCreator.DirectoryDeleted(args));
+            logger.Verbose(VerboseMessageCreator.DirectoryDeleted(args));
         }
 
         private void CopyAll(IDirectoryInfo source, IDirectoryInfo target)

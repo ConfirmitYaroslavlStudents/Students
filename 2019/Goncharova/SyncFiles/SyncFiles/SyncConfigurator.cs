@@ -68,7 +68,7 @@ namespace Sync
 
             for (int i = 2; i < args.Length; i++)
             {
-                if(args[i].StartsWith("-"))
+                if (args[i].StartsWith("-"))
                 {
                     options.Add(args[i].Substring(1).ToLower());
                 }

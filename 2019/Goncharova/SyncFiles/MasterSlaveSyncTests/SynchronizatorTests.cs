@@ -1,8 +1,8 @@
 ﻿using MasterSlaveSync;
-using System.IO.Abstractions.TestingHelpers;
-using Xunit;
 using System;
 using System.Collections.Generic;
+using System.IO.Abstractions.TestingHelpers;
+using Xunit;
 
 namespace MasterSlaveSyncTests
 {
@@ -14,7 +14,7 @@ namespace MasterSlaveSyncTests
             var mockFileSystem = new MockFileSystem();
             mockFileSystem.AddDirectory(@"c:\slave");
 
-            Assert.Throws<ArgumentException>(() => 
+            Assert.Throws<ArgumentException>(() =>
             _ = new Synchronizator(@"c:\master", @"c:\slave", new SyncOptions(), mockFileSystem));
             Assert.False(mockFileSystem.Directory.Exists(@"c:\master"));
         }
@@ -473,7 +473,7 @@ namespace MasterSlaveSyncTests
             mockFileSystem.AddDirectory(@"c:\slave");
             mockFileSystem.AddDirectory(@"c:\slave2");
 
-            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave", 
+            var synchronizator = new Synchronizator(@"c:\master", @"c:\slave",
                 new SyncOptions(), mockFileSystem);
             synchronizator.AddSlave(@"c:\slave2");
 

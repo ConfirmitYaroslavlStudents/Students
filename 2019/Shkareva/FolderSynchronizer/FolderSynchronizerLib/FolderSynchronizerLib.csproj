@@ -46,12 +46,13 @@
     <Compile Include="Folder\FolderPair.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="Log\ILog.cs" />
+    <Compile Include="Log\LogCreator.cs" />
     <Compile Include="Log\SilentLog.cs" />
     <Compile Include="Log\SummaryLog.cs" />
     <Compile Include="Log\VerboseLog.cs" />
     <Compile Include="SyncData\ISyncDataReaderStrategy.cs" />
     <Compile Include="SyncData\SyncDataReaderNoDeleteStrategy.cs" />
-    <Compile Include="SyncData\SyncDataReaderStrategy.cs" />
+    <Compile Include="SyncData\SyncDataReaderDeleteStrategy.cs" />
     <Compile Include="SyncProc\ISyncProcessorManager.cs" />
     <Compile Include="FileDescriptor.cs" />
     <Compile Include="Folder\Folder.cs" />

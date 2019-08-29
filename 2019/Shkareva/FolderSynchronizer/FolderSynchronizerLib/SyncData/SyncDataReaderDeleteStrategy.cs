@@ -2,7 +2,7 @@
 
 namespace FolderSynchronizerLib
 {
-    public class SyncDataReaderStrategy : ISyncDataReaderStrategy
+    public class SyncDataReaderDeleteStrategy : ISyncDataReaderStrategy
     {
         private static Dictionary<string, string> _addDictionary = new Dictionary<string, string>();
         private static Dictionary<string, string> _updateDictionary = new Dictionary<string, string>();
@@ -10,26 +10,19 @@ namespace FolderSynchronizerLib
 
         public SyncData MakeSyncData(FolderSet folderSet)
         {
-            var syncData = new SyncData();
-
-
             foreach (var folderPair in folderSet.FolderList)
             {
-                FindNewFiles(folderPair);
-                FindUpdateFiles(folderPair);
-                FindDeleteFiles(folderPair);
+                _addDictionary = FindNewFiles(folderPair, _addDictionary);
+                _updateDictionary = FindUpdateFiles(folderPair, _updateDictionary);
+                _deleteDictionary = FindDeleteFiles(folderPair, _deleteDictionary);
             }
 
-            syncData.FilesToDelete = _deleteDictionary;
-            syncData.FilesToCopy = _addDictionary;
-            syncData.FilesToUpdate = _updateDictionary;
-
-            syncData = RemoveCollision(syncData);
+            _updateDictionary = RemoveCollision(_deleteDictionary, _updateDictionary);
                        
-            return syncData;
+            return new SyncData(_addDictionary, _updateDictionary, _deleteDictionary);
         }
 
-        private static void FindDeleteFiles(FolderPair folderPair)
+        private Dictionary<string, string> FindDeleteFiles(FolderPair folderPair, Dictionary<string, string> deleteDictionary)
         {
             var newFolder = folderPair.New;
             var oldFolder = folderPair.Old;
@@ -38,14 +31,16 @@ namespace FolderSynchronizerLib
             {
                 var newFile = GetItemByPath(newFolder, oldFile.Path);
 
-                if (newFile == null && !_deleteDictionary.ContainsKey(oldFile.Path))
+                if (newFile == null && !deleteDictionary.ContainsKey(oldFile.Path))
                 {
-                    _deleteDictionary.Add(oldFile.Path, oldFolder.Path);
+                    deleteDictionary.Add(oldFile.Path, oldFolder.Path);
                 }
             }
+
+            return deleteDictionary;
         }
 
-        private static void FindNewFiles(FolderPair folderPair)
+        private Dictionary<string, string> FindNewFiles(FolderPair folderPair, Dictionary<string, string> addDictionary)
         {
             var newFolder = folderPair.New;
             var oldFolder = folderPair.Old;
@@ -54,14 +49,16 @@ namespace FolderSynchronizerLib
             {
                 var oldFile = GetItemByPath(oldFolder, newFile.Path);
 
-                if (oldFile == null && !_addDictionary.ContainsKey(newFile.Path))
+                if (oldFile == null && !addDictionary.ContainsKey(newFile.Path))
                 {
-                    _addDictionary.Add(newFile.Path, newFolder.Path);
+                    addDictionary.Add(newFile.Path, newFolder.Path);
                 }
             }
+
+            return addDictionary;
         }
 
-        private static void FindUpdateFiles(FolderPair folderPair)
+        private Dictionary<string, string> FindUpdateFiles(FolderPair folderPair, Dictionary<string, string> updateDictionary)
         {
             var newFolder = folderPair.New;
             var oldFolder = folderPair.Old;
@@ -77,14 +74,16 @@ namespace FolderSynchronizerLib
 
                 bool haveDifferentContent = (newFile.Hash != oldFile.Hash);
 
-                if (haveDifferentContent && !_updateDictionary.ContainsKey(newFile.Path) && !_deleteDictionary.ContainsKey(newFile.Path))
+                if (haveDifferentContent && !updateDictionary.ContainsKey(newFile.Path) && !_deleteDictionary.ContainsKey(newFile.Path))
                 {
-                    _updateDictionary.Add(newFile.Path, newFolder.Path);
+                    updateDictionary.Add(newFile.Path, newFolder.Path);
                 }
             }
+
+            return updateDictionary;
         }
 
-        private static FileDescriptor GetItemByPath(Folder folder, string path)
+        private FileDescriptor GetItemByPath(Folder folder, string path)
         {
             foreach (FileDescriptor file in folder.FilesList)
             {
@@ -96,17 +95,17 @@ namespace FolderSynchronizerLib
             return null;
         }
 
-        private static SyncData RemoveCollision(SyncData syncData)
+        private Dictionary<string, string> RemoveCollision(Dictionary<string,string> filesToDelete, Dictionary<string, string> filesToUpdate)
         {
-            foreach (var path in syncData.FilesToDelete.Keys)
+            foreach (var path in filesToDelete.Keys)
             {
-                if (syncData.FilesToUpdate.ContainsKey(path))
+                if (filesToUpdate.ContainsKey(path))
                 {
-                    syncData.FilesToUpdate.Remove(path);
+                    filesToUpdate.Remove(path);
                 }
             }
 
-            return syncData;
+            return filesToUpdate;
         }
     }
 }

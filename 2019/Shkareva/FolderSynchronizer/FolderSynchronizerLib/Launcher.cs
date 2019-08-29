@@ -5,8 +5,10 @@
         public void Synchronize(InputData input)
         {
             var folderSet = new FolderSet(input);
+            
             var syncData = new SyncDataReader().Load(folderSet);
-            new SyncProcessor(new SyncProcessorManager()).Synchronize(syncData, input.FoldersPaths);
+            var log = new LogCreator().Create(folderSet.Loglevel);
+            new SyncProcessor().Synchronize(syncData, input.FoldersPaths, log);
 
             foreach(var path in input.FoldersPaths)
             {

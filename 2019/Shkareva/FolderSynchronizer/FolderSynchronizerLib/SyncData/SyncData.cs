@@ -5,17 +5,9 @@ namespace FolderSynchronizerLib
 {
     public class SyncData : IEquatable<SyncData>
     {
-        public Dictionary<string, string> FilesToCopy;
-        public Dictionary<string, string> FilesToUpdate;
-        public Dictionary<string, string> FilesToDelete;
-        public ILog Log;
-
-        public SyncData()
-        {
-            FilesToCopy = new Dictionary<string, string>();
-            FilesToUpdate = new Dictionary<string, string>();
-            FilesToDelete = new Dictionary<string, string>();
-        }
+        public readonly Dictionary<string, string> FilesToCopy;
+        public readonly Dictionary<string, string> FilesToUpdate;
+        public readonly Dictionary<string, string> FilesToDelete;       
 
         public SyncData
            (Dictionary<string,string> filesToCopy,

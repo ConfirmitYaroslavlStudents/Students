@@ -14,9 +14,7 @@ namespace FolderSynchronizerLib
 
             foreach (var path in input.FoldersPaths)
             {
-                var folderPair = new FolderPair();
-                folderPair.New = folderWorker.LoadFolder(path);
-                folderPair.Old = folderWorker.LoadSerializedFolder(path);
+                var folderPair = new FolderPair(folderWorker.LoadSerializedFolder(path), folderWorker.LoadFolder(path));
                 FolderList.Add(folderPair);
             }
                         

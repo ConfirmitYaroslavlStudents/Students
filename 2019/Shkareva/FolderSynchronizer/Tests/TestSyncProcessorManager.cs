@@ -5,13 +5,11 @@ namespace Tests
 {
     public class TestSyncProcessorManager : ISyncProcessorManager
     {
-        List<FileDescriptor> _masterFiles;
-        List<FileDescriptor> _slaveFiles;
+        List<Folder> _folders;
 
-        public TestSyncProcessorManager(List<FileDescriptor> master, List<FileDescriptor> slave)
+        public TestSyncProcessorManager(List<Folder> folders)
         {
-            _masterFiles = master;
-            _slaveFiles = slave;
+            _folders = folders;   
         }
         
         public void Copy(Dictionary<string, string> filesToCopy, string path, ILog log)

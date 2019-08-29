@@ -4,28 +4,28 @@ namespace FolderSynchronizerLib
 {
     public class SyncProcessor
     {
-        private readonly ISyncProcessorManager _syncProcManager;
+        public ISyncProcessorManager _syncProcManager;
 
-        public SyncProcessor(ISyncProcessorManager syncProcManager)
+        public SyncProcessor()
         {
-            _syncProcManager = syncProcManager;
+            _syncProcManager = new SyncProcessorManager();
         }
 
-        public void Synchronize(SyncData syncData, List<string> folderPaths)
+        public void Synchronize(SyncData syncData, List<string> folderPaths, ILog log)
         {
             foreach (var path in folderPaths)
             {
-                _syncProcManager.Copy(syncData.FilesToCopy, path,syncData.Log);
+                _syncProcManager.Copy(syncData.FilesToCopy, path, log);
             }
 
             foreach (var path in folderPaths)
             {
-                _syncProcManager.Update(syncData.FilesToCopy, path, syncData.Log);
+                _syncProcManager.Update(syncData.FilesToCopy, path, log);
             }
 
             foreach (var path in folderPaths)
             {
-                _syncProcManager.Delete(syncData.FilesToDelete, path, syncData.Log);
+                _syncProcManager.Delete(syncData.FilesToDelete, path, log);
             }
         }        
     }

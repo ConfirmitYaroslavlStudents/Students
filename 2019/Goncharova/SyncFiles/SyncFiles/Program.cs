@@ -9,12 +9,11 @@ namespace Sync
             PrintUsage();
 
             var arguments = new SyncConfigurator(args);
-            var synchronizer = arguments.GetSynchronizer();
-
+            
             if (arguments.ErrorMessage == String.Empty)
             {
-                Console.WriteLine("Started synchronization...");
-                synchronizer.Run();
+                var synchronizator = arguments.GetSynchronizator();
+                synchronizator.Run();
             }
             else
             {
@@ -27,7 +26,10 @@ namespace Sync
 
         private static void PrintUsage()
         {
-            Console.WriteLine(@"Usage: Sync.exe <source> <destination> [-nodelete] [-logsummary] [-logverbose]");
+            string message = @"Usage: Sync.exe <master> <slave> .. <slave>" + Environment.NewLine + 
+                @"[-nodelete] [-logsilent] [-logsummary] [-logverbose]";
+
+            Console.WriteLine(message);
         }
     }
 }

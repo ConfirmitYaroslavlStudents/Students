@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal class DefaultDeleteFileProcessor : IDeleteFileProcessor
+    public class DefaultDeleteFileProcessor : IDeleteFileProcessor
     {
         public event EventHandler<ResolverEventArgs> FileDeleted;
 

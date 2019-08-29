@@ -3,7 +3,7 @@ using System;
 
 namespace MasterSlaveSync
 {
-    internal class DefaultUpdateFileProcessor : IUpdateFileProcessor
+    public class DefaultUpdateFileProcessor : IUpdateFileProcessor
     {
         public event EventHandler<ResolverEventArgs> FileUpdated;
 

@@ -1,11 +1,7 @@
 ﻿using MasterSlaveSync;
 using MasterSlaveSync.Conflicts;
-using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MasterSlaveSyncTests
@@ -24,8 +20,8 @@ namespace MasterSlaveSyncTests
                 new FileConflict(null, mockFileSystem.FileInfo.FromFileName(@"c:\slave\a.txt"))
             };
 
-            var resolver = new Resolver(@"c:\master", @"c:\slave");
-            resolver.ResolveConflicts(new ConflictsCollection(fileConflicts));
+            var resolver = new Resolver();
+            resolver.ResolveConflicts(new ConflictsCollection(fileConflicts), @"c:\master", @"c:\slave");
 
             Assert.False(mockFileSystem.FileExists(@"c:\slave\a.txt"));
         }
@@ -42,8 +38,8 @@ namespace MasterSlaveSyncTests
                 new FileConflict(mockFileSystem.FileInfo.FromFileName(@"c:\master\a.txt"), null)
             };
 
-            var resolver = new Resolver(@"c:\master", @"c:\slave");
-            resolver.ResolveConflicts(new ConflictsCollection(fileConflicts));
+            var resolver = new Resolver();
+            resolver.ResolveConflicts(new ConflictsCollection(fileConflicts), @"c:\master", @"c:\slave");
 
             Assert.True(mockFileSystem.FileExists(@"c:\slave\a.txt"));
         }
@@ -63,8 +59,8 @@ namespace MasterSlaveSyncTests
                 mockFileSystem.FileInfo.FromFileName(@"c:\slave\a.txt"))
             };
 
-            var resolver = new Resolver(@"c:\master", @"c:\slave");
-            resolver.ResolveConflicts(new ConflictsCollection(fileConflicts));
+            var resolver = new Resolver();
+            resolver.ResolveConflicts(new ConflictsCollection(fileConflicts), @"c:\master", @"c:\slave");
 
             Assert.Equal(expected, mockFileSystem.File.ReadAllText(@"c:\slave\a.txt"));
             Assert.Equal(expected, mockFileSystem.File.ReadAllText(@"c:\master\a.txt"));
@@ -82,8 +78,8 @@ namespace MasterSlaveSyncTests
                 new DirectoryConflict(null, mockFileSystem.DirectoryInfo.FromDirectoryName(@"c:\slave\sub"))
             };
 
-            var resolver = new Resolver(@"c:\master", @"c:\slave");
-            resolver.ResolveConflicts(new ConflictsCollection(directoryConflicts));
+            var resolver = new Resolver();
+            resolver.ResolveConflicts(new ConflictsCollection(directoryConflicts), @"c:\master", @"c:\slave");
 
             Assert.False(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
         }
@@ -100,8 +96,8 @@ namespace MasterSlaveSyncTests
                 new DirectoryConflict(mockFileSystem.DirectoryInfo.FromDirectoryName(@"c:\master\sub"), null)
             };
 
-            var resolver = new Resolver(@"c:\master", @"c:\slave");
-            resolver.ResolveConflicts(new ConflictsCollection(directoryConflicts));
+            var resolver = new Resolver();
+            resolver.ResolveConflicts(new ConflictsCollection(directoryConflicts), @"c:\master", @"c:\slave");
 
             Assert.True(mockFileSystem.Directory.Exists(@"c:\slave\sub"));
             Assert.True(mockFileSystem.FileExists(@"c:\slave\sub\a.txt"));

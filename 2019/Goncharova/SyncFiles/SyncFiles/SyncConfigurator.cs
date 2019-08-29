@@ -16,25 +16,42 @@ namespace Sync
         }
 
         public string Master { get; private set; }
-        public string Slave { get; private set; }
+        public List<string> Slaves { get; private set; } = new List<string>();
         public string ErrorMessage { get; private set; } = String.Empty;
 
-        public SynchronizatorBuilder GetSynchronizer()
+        public Synchronizator GetSynchronizator()
         {
-            var synchronizer = new SynchronizatorBuilder(Master, Slave);
+            var options = GetSyncOptions();
+
+            var synchronizator = new Synchronizator(Master, Slaves[0], options);
+
+            for (int i = 1; i < Slaves.Count; i++)
+            {
+                synchronizator.AddSlave(Slaves[i]);
+            }
+
+            return synchronizator;
+        }
+
+        private SyncOptions GetSyncOptions()
+        {
+            var syncOptions = new SyncOptions();
 
             foreach (var option in options)
             {
                 switch (option)
                 {
                     case "nodelete":
-                        synchronizer.NoDelete();
+                        syncOptions.NoDeleteOn();
                         break;
                     case "logsummary":
-                        synchronizer.LogSummary(Console.WriteLine);
+                        syncOptions.LogSummary(Console.WriteLine);
                         break;
                     case "logverbose":
-                        synchronizer.LogVerbose(Console.WriteLine);
+                        syncOptions.LogVerbose(Console.WriteLine);
+                        break;
+                    case "logsilent":
+                        syncOptions.LogSilent();
                         break;
                     default:
                         ErrorMessage = "Unknown option";
@@ -42,17 +59,23 @@ namespace Sync
                 }
             }
 
-            return synchronizer;
+            return syncOptions;
         }
 
         private void ParseArgs()
         {
             Master = args[1];
-            Slave = args[2];
 
-            for (int i = 3; i < args.Length; i++)
+            for (int i = 2; i < args.Length; i++)
             {
-                options.Add(args[i].Substring(1).ToLower());
+                if(args[i].StartsWith("-"))
+                {
+                    options.Add(args[i].Substring(1).ToLower());
+                }
+                else
+                {
+                    Slaves.Add(args[i]);
+                }
             }
         }
     }

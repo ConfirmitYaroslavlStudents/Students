@@ -1,44 +1,84 @@
-﻿using System.IO.Abstractions;
+﻿using MasterSlaveSync.Loggers;
+using System.Collections.Generic;
+using System.IO.Abstractions;
+using System;
 
 namespace MasterSlaveSync
 {
     public class Synchronizator
     {
-        private readonly IDirectoryInfo master;
-        private readonly IDirectoryInfo slave;
-
-        public Synchronizator(string masterPath, string slavePath, IFileSystem fileSystem)
+        public Synchronizator(string masterPath, string slavePath, SyncOptions options, IFileSystem fileSystem)
         {
             FileSystem = fileSystem;
 
-            master = FileSystem.DirectoryInfo.FromDirectoryName(masterPath);
-            slave = FileSystem.DirectoryInfo.FromDirectoryName(slavePath);
+            if (!DirectoryValidator.MasterExists(masterPath, FileSystem))
+            {
+                throw new ArgumentException("Master directory does not exist");
+            }
+            MasterPath = masterPath;
+            AddSlave(slavePath);
 
-            Resolver = new Resolver(masterPath, slavePath);
+            ConfigureResolver(options);
+            ConfigureLogger(options);
         }
 
-        public Synchronizator(string masterPath, string slavePath)
-            : this(masterPath, slavePath, new FileSystem()) { }
+        public Synchronizator(string masterPath, string slavePath, SyncOptions options)
+            : this(masterPath, slavePath, options, new FileSystem()) { }
 
-        internal IFileSystem FileSystem { get; set; }
-        internal Resolver Resolver { get; private set; }
-        internal ILogger Logger { get; set; }
-
-
-        public static SynchronizatorBuilder Sync(string masterPath, string slavePath)
-        {
-            return new SynchronizatorBuilder(masterPath, slavePath);
-        }
-        public static SynchronizatorBuilder SyncWithMock(string masterPath, string slavePath, IFileSystem mockFileSystem)
-        {
-            return new SynchronizatorBuilder(masterPath, slavePath, mockFileSystem);
-        }
+        public string MasterPath { get; }
+        public List<string> SlavePaths { get; } = new List<string>();
+        internal IFileSystem FileSystem { get; }
+        internal IResolver Resolver { get; private set; }
+        internal ILogger Logger { get; private set; }
 
         public void Run()
         {
             var collector = new ConflictsCollector();
+            IDirectoryInfo master = FileSystem.DirectoryInfo.FromDirectoryName(MasterPath);
 
-            Resolver.ResolveConflicts(collector.CollectConflicts(master, slave));
+            foreach (var slavePath in SlavePaths)
+            {
+                IDirectoryInfo slave = FileSystem.DirectoryInfo.FromDirectoryName(slavePath);
+
+                Resolver.ResolveConflicts(collector.CollectConflicts(master, slave), MasterPath, slavePath);
+            }
+
+        }
+
+        public void AddSlave(string slavePath)
+        {
+            SlavePaths.Add(slavePath);
+            if(!DirectoryValidator.DirectoriesDoNotContainEachOther(MasterPath, slavePath, FileSystem))
+            {
+                throw new ArgumentException("Directories should not contain each other");
+            }
+
+            FileSystem.Directory.CreateDirectory(slavePath);
+        }
+
+        private void ConfigureResolver(SyncOptions options)
+        {
+            Resolver = new Resolver();
+
+            if (options.NoDelete)
+            {
+                Resolver.DeleteFileProcessor = new NoDeleteFileProcessor();
+                Resolver.DeleteDirectoryProcessor = new NoDeleteDirectoryProcessor();
+            }
+        }
+        private void ConfigureLogger(SyncOptions options)
+        {
+            Logger = options.Logger;
+            SetLogEvents();
+        }
+
+        private void SetLogEvents()
+        {
+            Resolver.DeleteFileProcessor.FileDeleted += Logger.LogFileDeletion;
+            Resolver.CopyFileProcessor.FileCopied += Logger.LogFileCopy;
+            Resolver.UpdateFileProcessor.FileUpdated += Logger.LogFileUpdate;
+            Resolver.DeleteDirectoryProcessor.DirectoryDeleted += Logger.LogDirectoryDeletion;
+            Resolver.CopyDirectoryProcessor.DirectoryCopied += Logger.LogDirectoryCopy;
         }
     }
 }

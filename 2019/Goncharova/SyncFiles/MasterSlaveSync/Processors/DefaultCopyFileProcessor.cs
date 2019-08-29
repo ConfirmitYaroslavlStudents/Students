@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal class DefaultCopyFileProcessor : ICopyFileProcessor
+    public class DefaultCopyFileProcessor : ICopyFileProcessor
     {
         public event EventHandler<ResolverEventArgs> FileCopied;
 
@@ -16,7 +16,7 @@ namespace MasterSlaveSync
 
             var args = new ResolverEventArgs
             {
-                ElementPath = masterFile.FullName
+                ElementPath = destPath
             };
             OnFileCopied(args);
 

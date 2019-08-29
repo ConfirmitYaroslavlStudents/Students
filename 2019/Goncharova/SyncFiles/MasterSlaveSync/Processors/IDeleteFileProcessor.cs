@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 
 namespace MasterSlaveSync
 {
-    internal interface IDeleteFileProcessor
+    public interface IDeleteFileProcessor
     {
         event EventHandler<ResolverEventArgs> FileDeleted;
         void Execute(IFileInfo slaveFile);

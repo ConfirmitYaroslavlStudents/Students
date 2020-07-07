@@ -1,0 +1,15 @@
+{
+  "name": "stack",
+  "version": "1.0.0",
+  "description": "Стек - это упорядоченная коллекция элементов, которые следуют принципу Last In First Out (LIFO). Добавление и удаление элементов происходит в одном и том же конце, т. е. вверху. Самые новые элементы находятся вверху, а самые старые - внизу.",
+  "main": "stack.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Andrey Kuznetsov",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
+}

@@ -1,6 +1,6 @@
 using System;
 
-namespace MVCTest.Models
+namespace BillSplitter.Models
 {
     public class ErrorViewModel
     {

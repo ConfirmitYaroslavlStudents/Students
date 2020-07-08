@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MVCTest.Models;
+using BillSplitter.Models;
 
-namespace MVCTest.Controllers
+namespace BillSplitter.Controllers
 {
     public class HomeController : Controller
     {

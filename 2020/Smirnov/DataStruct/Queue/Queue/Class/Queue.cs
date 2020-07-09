@@ -22,7 +22,7 @@ namespace Queue
         }
         private bool IsFull()
         {
-            return _queue.Length == Count;
+            return _queue.Length == _tail + 1;
         }
         private void Resize()
         {

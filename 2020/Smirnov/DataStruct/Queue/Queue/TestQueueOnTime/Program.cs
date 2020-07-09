@@ -19,7 +19,7 @@ namespace Queue
                 MyQueue.Enqueue(i);
             MyQueue.Contains(3);
             MyQueue.Peek();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100000; i++)
                 MyQueue.Dequeue();
 
             startTime.Stop();

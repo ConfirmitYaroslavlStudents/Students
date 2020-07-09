@@ -1,30 +1,38 @@
 class StackArray {
     constructor() {
-        this.items = [];
+        this._storage = [];
     }
 
-    push = element => {     
-        this.items.push(element);  
+    push = (...elements) => {     
+        [...elements].forEach((el) => {
+            this._storage.push(el);
+        })
+        return [...elements] 
     }
 
     pop = () => {     
-        return this.items.pop();   
+        return this._storage.pop();   
     }     
 
     peek = () => {     
-        return this.items[this.items.length - 1];   
+        return this._storage[this._storage.length - 1];   
     }
 
     isEmpty = () => {     
-        return this.items.length === 0;   
+        return this._storage.length === 0;   
     }
 
     clear = () => {     
-        this.items.length = 0;   
+        this._storage = [];   
+        return 'clear';
     }
 
     size = () => {     
-        return this.items.length;   
+        return this._storage.length;   
+    }
+
+    toArray = () => {
+        return this._storage;
     }
 }
 

@@ -1,31 +1,60 @@
-class Stack {
-    constructor() {
-        this.items = [];
+const Stack = (function () {
+    let _size = 0;
+    let _storage = {};
+
+    return {
+        push: function(...data) {
+            [...data].forEach((el) => {
+                let size = ++_size;
+                _storage[size] = el;
+            })
+            return [...data]
+        },
+
+        pop: function() {
+            let size = _size,
+                deletedData;
+         
+            if (size) {
+                deletedData = _storage[size];
+         
+                delete _storage[size];
+                _size--;
+         
+                return deletedData;
+            } else {
+                return false; // Stack is Empty
+            }
+        },
+
+        peek: function() {
+            let size = _size;
+         
+            if (size) {
+                return _storage[size];
+            } else {
+                return false; // Stack is Empty
+            }
+        },
+
+        size: function() {
+            return _size;
+        },
+
+        isEmpty: function() {
+            return _size === 0;
+        },
+
+        clear: function() {
+            _size = 0;
+            _storage = {};
+            return 'clear';
+        },
+
+        toArray: function() {
+            return Object.values(_storage)
+        }
     }
+})();
 
-    push = element => {     
-        this.items.push(element);  
-    }
-
-    pop = () => {     
-        return this.items.pop();   
-    }     
-
-    peek = () => {     
-        return this.items[this.items.length - 1];   
-    }
-
-    isEmpty = () => {     
-        return this.items.length === 0;   
-    }
-
-    clear = () => {     
-        this.items.length = 0;   
-    }
-
-    size = () => {     
-        return this.items.length;   
-    }
-}
-
-module.exports = Stack;
+module.exports = Stack

@@ -15,9 +15,12 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        public string Welcome(string name, int id)
+        public IActionResult Welcome(string name, int num)
         {
-            return HtmlEncoder.Default.Encode($"Hello {name}, ID = {id}");
+            ViewData["Message"] = "Hello " + name;
+            ViewData["Num"] = num;
+
+            return View();
         }
     }
 }

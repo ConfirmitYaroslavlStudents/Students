@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BillSplitter.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BillSplitter.Controllers
 {
@@ -33,5 +34,21 @@ namespace BillSplitter.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+        [HttpPost]
+        public void AddNewBill([FromBody] Position[] positions)
+        {
+            ViewData["positions"] = positions;
+            //Нужно теперь сделать новый Bill с этими позициями и запихать его в базу данных 
+        }
+
+        //Home/NewBill
+        [HttpGet]
+        public async Task<IActionResult> NewBill()
+        {
+            return View();
+        }
+
     }
 }

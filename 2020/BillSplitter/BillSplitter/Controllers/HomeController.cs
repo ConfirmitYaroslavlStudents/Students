@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using BillSplitter.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using BillSplitter.Data;
+using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace BillSplitter.Controllers
 {
@@ -59,6 +62,17 @@ namespace BillSplitter.Controllers
             _context.SaveChanges();
 
             return $"Home/SelectPositions/{bill.Id}";
+        }
+
+        public string GetPositions(int? id)
+        {
+            // пример того, как надо работать с данными в EF
+            // заменить на то, что нужно
+            _context.Bill.Load();
+            _context.Position.Load();
+
+            var bills = _context.Bill.FirstOrDefault(x => x.Id == id);
+            return bills.Positions.Count().ToString();
         }
 
         //Home/NewBill

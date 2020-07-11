@@ -13,7 +13,13 @@ namespace BillSplitter.Data
         {
 
         }
+        public BillContext() : base()
+        {
+
+        }
 
         public DbSet<Bill> Bill { get; set; }
+        public DbSet<Position> Position { get; set; }
+        public DbSet<Customer> Customer { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace BillSplitter.Controllers
             _context.Add(bill);
             _context.SaveChanges();
 
-            return $"Home/SelectPositions/{_context.Bill.Count()}";
+            return $"Home/SelectPositions/{bill.Id}";
         }
 
         //Home/NewBill

@@ -1,0 +1,60 @@
+﻿@model List<BillSplitter.Models.Position>
+
+<table class="table" id = "jtable">
+    <thead>
+        <tr>
+            <th>
+                Select
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <input type="checkbox" name="check" value="@Html.DisplayFor(modelItem => item.Id)"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<label>
+    Name
+    <input type="text" id="NewName">
+</label>
+<button onclick="PutPositions()">Done</button>
+<script type="text/javascript">
+    function PutPositions()
+    {
+        const checkboxes = document.querySelectorAll(`input[name="check"]:checked`);
+        var name = document.getElementById("NewName").value;
+
+        let values = [];
+        checkboxes.forEach((checkbox) => {
+            values.push({
+                "PositionId": Number(checkbox.value), "CustomerName": name
+            });
+        });
+
+        var json = JSON.stringify(values);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/Home/DoneSelect");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(json);
+    }
+</script>

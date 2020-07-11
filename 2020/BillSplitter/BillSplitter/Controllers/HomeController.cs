@@ -82,5 +82,26 @@ namespace BillSplitter.Controllers
             return View();
         }
 
+        //Home/SelectPositions/1
+        [HttpGet]
+        public async Task<IActionResult> SelectPositions(int? id)
+        {
+            _context.Bill.Load();
+            _context.Position.Load(); //возмножно не нужно
+
+            var bill = _context.Bill.FirstOrDefault(e => e.Id == id);
+
+            if (bill == null)
+                return Error();
+
+            return View(bill.Positions);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DoneSelect([FromBody] ReservedPosition[] selected)
+        {
+            selected.Count();
+    
+            return View("Index");
+        }
     }
 }

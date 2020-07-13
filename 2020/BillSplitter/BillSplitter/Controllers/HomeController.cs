@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BillSplitter.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using BillSplitter.Data;
-using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -94,7 +90,7 @@ namespace BillSplitter.Controllers
             _context.Position.Load();
 
             for (int i = 0; i < selected.Length; i++)
-                _context.Position.FirstOrDefault(x => x.Id == selected[i]).AddCustomer(customer);
+                customer.Positions.Add(_context.Position.FirstOrDefault(x => x.Id == selected[i]));
 
             _context.SaveChanges();
 

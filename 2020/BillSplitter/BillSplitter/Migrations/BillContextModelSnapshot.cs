@@ -41,12 +41,7 @@ namespace BillSplitter.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PositionId");
 
                     b.ToTable("Customer");
                 });
@@ -61,6 +56,9 @@ namespace BillSplitter.Migrations
                     b.Property<int?>("BillId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -71,14 +69,9 @@ namespace BillSplitter.Migrations
 
                     b.HasIndex("BillId");
 
-                    b.ToTable("Position");
-                });
+                    b.HasIndex("CustomerId");
 
-            modelBuilder.Entity("BillSplitter.Models.Customer", b =>
-                {
-                    b.HasOne("BillSplitter.Models.Position", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("PositionId");
+                    b.ToTable("Position");
                 });
 
             modelBuilder.Entity("BillSplitter.Models.Position", b =>
@@ -86,6 +79,10 @@ namespace BillSplitter.Migrations
                     b.HasOne("BillSplitter.Models.Bill", null)
                         .WithMany("Positions")
                         .HasForeignKey("BillId");
+
+                    b.HasOne("BillSplitter.Models.Customer", null)
+                        .WithMany("Positions")
+                        .HasForeignKey("CustomerId");
                 });
 #pragma warning restore 612, 618
         }

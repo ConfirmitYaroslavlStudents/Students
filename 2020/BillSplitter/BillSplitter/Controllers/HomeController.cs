@@ -87,7 +87,7 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        public Task<IActionResult> DoneSelect(int[] selected, string customerName)
+        public IActionResult DoneSelect(int[] selected, string customerName)
         {
 
             var customer = new Customer { Name = customerName };
@@ -106,7 +106,7 @@ namespace BillSplitter.Controllers
             return View("Index");
         }
 
-        private void stopToCheck()
+        private void StopToCheck()
         {
             _context.Position.Load();
             var p = _context.Position.FirstOrDefault(x => x.Id == 1);

@@ -96,12 +96,34 @@ namespace BillSplitter.Controllers
 
             return View(bill.Positions);
         }
+
         [HttpPost]
-        public async Task<IActionResult> DoneSelect([FromBody] ReservedPosition[] selected)
+        public async Task<IActionResult> DoneSelect(int[] selected, string customerName)
         {
-            selected.Count();
-    
+
+            var customer = new Customer { Name = customerName };
+
+            _context.Add(customer);
+            _context.Position.Load();
+
+            for (int i = 0; i < selected.Length; i++)
+            {
+                _context.Position.FirstOrDefault(x => x.Id == selected[i]).AddCustomer(customer);
+            }
+
+            _context.SaveChanges();
+
+            stopToCheck();
             return View("Index");
+        }
+
+        private void stopToCheck()
+        {
+            _context.Position.Load();
+            var p = _context.Position.FirstOrDefault(x => x.Id == 1);
+            var p1 = _context.Position.FirstOrDefault(x => x.Id == 3);
+
+            var k = p1.Id;
         }
     }
 }

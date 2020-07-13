@@ -1,0 +1,28 @@
+﻿@model List<BillSplitter.Models.Position>
+
+<h1>Here is your Bill</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var position in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => position.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => position.Price)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    Your sum is @ViewData["Sum"]
+</p>

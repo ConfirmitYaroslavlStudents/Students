@@ -85,17 +85,31 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult DoneSelect(int[] selected, string customerName)
         {
-            var customer = new Customer { Name = customerName };
+            var customer = new Customer { Name = customerName, Positions = new List<Position>() };
 
             _context.Position.Load();
 
             for (int i = 0; i < selected.Length; i++)
                 customer.Positions.Add(_context.Position.FirstOrDefault(x => x.Id == selected[i]));
 
+            _context.Customer.Add(customer);
             _context.SaveChanges();
 
             //StopToCheck();
-            return View("Index");
+            return RedirectToAction(nameof(CustomerBill), new { id = customer.Id });
+        }
+
+        [HttpGet]
+        public IActionResult CustomerBill(int? id)
+        {
+            _context.Customer.Load();
+            _context.Position.Load();
+            var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
+
+            var sum = customer.Positions.Select(x => x.Price).Sum();
+
+            ViewData["Sum"] = sum;
+            return View(customer.Positions);
         }
 
         private void StopToCheck()

@@ -53,13 +53,21 @@
 
     function PostPositions()
     {
-        
-
+       
         var json = JSON.stringify(Positions);
+     
+        (async () => {
+            const rawResponse = await fetch('/Home/AddNewBill', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: json
+            });
+            const content = await rawResponse.json();
+            window.location.href = content; 
+        })();
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/Home/AddNewBill");
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(json);
     }
 </script>

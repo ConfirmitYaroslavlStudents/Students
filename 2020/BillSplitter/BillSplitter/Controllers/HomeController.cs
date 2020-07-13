@@ -49,7 +49,7 @@ namespace BillSplitter.Controllers
             _context.Add(bill);
             _context.SaveChanges();
 
-            return $"Home/SelectPositions/{bill.Id}";
+            return $"SelectPositions/{bill.Id}";
         }
 
         //Home/NewBill

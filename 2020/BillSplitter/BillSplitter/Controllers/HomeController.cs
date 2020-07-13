@@ -89,20 +89,16 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult DoneSelect(int[] selected, string customerName)
         {
-
             var customer = new Customer { Name = customerName };
 
-            _context.Add(customer);
             _context.Position.Load();
 
             for (int i = 0; i < selected.Length; i++)
-            {
                 _context.Position.FirstOrDefault(x => x.Id == selected[i]).AddCustomer(customer);
-            }
 
             _context.SaveChanges();
 
-            stopToCheck();
+            //StopToCheck();
             return View("Index");
         }
 

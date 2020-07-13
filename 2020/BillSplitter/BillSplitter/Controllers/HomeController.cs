@@ -64,27 +64,16 @@ namespace BillSplitter.Controllers
             return $"Home/SelectPositions/{bill.Id}";
         }
 
-        public string GetPositions(int? id)
-        {
-            // пример того, как надо работать с данными в EF
-            // заменить на то, что нужно
-            _context.Bill.Load();
-            _context.Position.Load();
-
-            var bills = _context.Bill.FirstOrDefault(x => x.Id == id);
-            return bills.Positions.Count().ToString();
-        }
-
         //Home/NewBill
         [HttpGet]
-        public Task<IActionResult> NewBill()
+        public IActionResult NewBill()
         {
             return View();
         }
 
         //Home/SelectPositions/1
         [HttpGet]
-        public Task<IActionResult> SelectPositions(int? id)
+        public IActionResult SelectPositions(int? id)
         {
             _context.Bill.Load();
             _context.Position.Load(); //возмножно не нужно

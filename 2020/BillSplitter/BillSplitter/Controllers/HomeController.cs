@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using BillSplitter.Models;
 using BillSplitter.Data;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +11,7 @@ namespace BillSplitter.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly BillContext _context;
-
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
 
         public HomeController(BillContext context)
         {
@@ -46,7 +39,6 @@ namespace BillSplitter.Controllers
         public string AddNewBill([FromBody] Position[] positions)
         {
             ViewData["positions"] = positions;
-            //Нужно теперь сделать новый Bill с этими позициями и запихать его в базу данных 
 
             var positionsList = new List<Position>(positions);
 
@@ -95,7 +87,6 @@ namespace BillSplitter.Controllers
             _context.Customer.Add(customer);
             _context.SaveChanges();
 
-            //StopToCheck();
             return RedirectToAction(nameof(CustomerBill), new { id = customer.Id });
         }
 
@@ -110,15 +101,6 @@ namespace BillSplitter.Controllers
 
             ViewData["Sum"] = sum;
             return View(customer.Positions);
-        }
-
-        private void StopToCheck()
-        {
-            _context.Position.Load();
-            var p = _context.Position.FirstOrDefault(x => x.Id == 1);
-            var p1 = _context.Position.FirstOrDefault(x => x.Id == 3);
-
-            var k = p1.Id;
         }
     }
 }

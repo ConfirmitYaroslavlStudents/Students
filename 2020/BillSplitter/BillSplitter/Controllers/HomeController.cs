@@ -77,14 +77,14 @@ namespace BillSplitter.Controllers
 
         //Home/NewBill
         [HttpGet]
-        public async Task<IActionResult> NewBill()
+        public Task<IActionResult> NewBill()
         {
             return View();
         }
 
         //Home/SelectPositions/1
         [HttpGet]
-        public async Task<IActionResult> SelectPositions(int? id)
+        public Task<IActionResult> SelectPositions(int? id)
         {
             _context.Bill.Load();
             _context.Position.Load(); //возмножно не нужно
@@ -98,7 +98,7 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DoneSelect(int[] selected, string customerName)
+        public Task<IActionResult> DoneSelect(int[] selected, string customerName)
         {
 
             var customer = new Customer { Name = customerName };

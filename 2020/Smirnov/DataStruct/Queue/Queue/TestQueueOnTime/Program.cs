@@ -18,7 +18,6 @@ namespace Queue
             for (int i = 0; i < 100000; i++)
                 MyQueue.Enqueue(i);
             MyQueue.Contains(3);
-            MyQueue.Peek();
             for (int i = 0; i < 100000; i++)
                 MyQueue.Dequeue();
 
@@ -30,7 +29,7 @@ namespace Queue
                 resultTime.Seconds,
                 resultTime.Milliseconds);
 
-            Console.WriteLine("Время работы моей Очереди {0}", elapsedTime);
+            Console.WriteLine("Time Work My Queue {0}", elapsedTime);
 
 
 
@@ -52,7 +51,7 @@ namespace Queue
                 resultTime.Seconds,
                 resultTime.Milliseconds);
 
-            Console.WriteLine("Время работы очереди майкрософт {0}", elapsedTime);
+            Console.WriteLine("Time Work Microsoft Queue {0}", elapsedTime);
 
         }
     }

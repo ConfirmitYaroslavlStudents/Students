@@ -8,7 +8,7 @@ namespace Queue
         private T[] _queue;
         private int _tail;
         private int _head;
-        public int Count { get; set; }
+        public int Count { get; private set; }
         public Queue()
         {
             Count = 0;
@@ -22,17 +22,33 @@ namespace Queue
         }
         private bool IsFull()
         {
-            return _queue.Length == _tail + 1;
+            return _queue.Length == Count;
         }
         private void Resize()
         {
-            Array.Resize(ref _queue, _queue.Length * 2);
+            var NewArray = new T[_queue.Length*2];
+            if (_head < _tail)
+            {
+                Array.Copy(_queue, _head, NewArray, 0, _queue.Length);
+            }
+            else
+            {
+                Array.Copy(_queue, _head, NewArray, 0, _queue.Length - _head);
+                Array.Copy(_queue, 0, NewArray, _queue.Length - _head, _tail);
+            }
+            _head = 0;
+            _tail = Count - 1;
+            _queue = NewArray;
         }
         public void Enqueue(T item)
         {
             if(IsFull())
             {
                 Resize();
+            }
+            if (_tail == _queue.Length - 1)
+            {
+                _tail = -1;
             }
             if (IsEmpty())
             {
@@ -46,7 +62,11 @@ namespace Queue
         {
             if(IsEmpty())
             {
-                throw new Exception("Очередь пуста.");
+                throw new Exception("Queue is Empty");
+            }
+            if (_head == _queue.Length -1)
+            {
+                _head = 0;
             }
             Count--;
             T item = _queue[_head++];
@@ -61,7 +81,7 @@ namespace Queue
         {
             if (IsEmpty())
             {
-                throw new Exception("Очередь пуста.");
+                throw new Exception("Queue is Empty");
             }
             return _queue[_head];
         }
@@ -84,8 +104,8 @@ namespace Queue
         public IEnumerator GetEnumerator()
         {
             if (this.IsEmpty())
-                throw new Exception("Очередь пуста.");
-            for (int i = _tail; i <= _head; i++)
+                throw new Exception("Queue is Empty");
+            for (int i = _head; i <= _tail; i++)
                 yield return _queue[i];
         }
     }

@@ -81,10 +81,15 @@ namespace BillSplitter.Controllers
 
             _context.Position.Load();
 
-            for (int i = 0; i < selected.Length; i++)
-                customer.Positions.Add(_context.Position.FirstOrDefault(x => x.Id == selected[i]));
-
             _context.Customer.Add(customer);
+            _context.SaveChanges();
+
+            for (int i = 0; i < selected.Length; i++)
+            {
+                var order = new Order { CustomerId = customer.Id, PositionId = selected[i] };
+                _context.Orders.Add(order);
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction(nameof(CustomerBill), new { id = customer.Id });
@@ -95,9 +100,19 @@ namespace BillSplitter.Controllers
         {
             _context.Customer.Load();
             _context.Position.Load();
+            _context.Orders.Load();
+
             var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
 
-            var sum = customer.Positions.Select(x => x.Price).Sum();
+            var sum = 0m;
+            foreach (var order in customer.Orders)
+            {
+                var posId = order.PositionId;
+                var position = _context.Position.FirstOrDefault(x => x.Id == posId);
+
+                var customerPrice = position.Price / position.Orders.Count;
+                sum += customerPrice;
+            }
 
             ViewData["Sum"] = sum;
             return View(customer.Positions);

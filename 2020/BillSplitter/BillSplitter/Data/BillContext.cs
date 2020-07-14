@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BillSplitter.Models;
+﻿using BillSplitter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillSplitter.Data
@@ -21,5 +17,6 @@ namespace BillSplitter.Data
         public DbSet<Bill> Bill { get; set; }
         public DbSet<Position> Position { get; set; }
         public DbSet<Customer> Customer { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

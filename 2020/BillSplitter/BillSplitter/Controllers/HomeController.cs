@@ -77,7 +77,7 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult DoneSelect(int[] selected, string customerName)
         {
-            var customer = new Customer { Name = customerName, Positions = new List<Position>() };
+            var customer = new Customer { Name = customerName };
 
             _context.Position.Load();
 
@@ -103,6 +103,7 @@ namespace BillSplitter.Controllers
             _context.Orders.Load();
 
             var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
+            var positions = new List<Position>();
 
             var sum = 0m;
             foreach (var order in customer.Orders)
@@ -111,11 +112,13 @@ namespace BillSplitter.Controllers
                 var position = _context.Position.FirstOrDefault(x => x.Id == posId);
 
                 var customerPrice = position.Price / position.Orders.Count;
+                positions.Add(new Position { Name = position.Name, Price =  customerPrice});
+
                 sum += customerPrice;
             }
 
             ViewData["Sum"] = sum;
-            return View(customer.Positions);
+            return View(positions);
         }
     }
 }

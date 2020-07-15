@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{242E8983-202C-42A3-A8A6-EB94DF7556B0}</ProjectGuid>
+    <ProjectGuid>{E7DE3DD6-F489-4FE6-A00D-664E66DA9F31}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Linked_List</RootNamespace>
-    <AssemblyName>Linked_List</AssemblyName>
+    <RootNamespace>CircularQueue</RootNamespace>
+    <AssemblyName>CircularQueue</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,8 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LinkedList.cs" />
-    <Compile Include="Node.cs" />
+    <Compile Include="CircularQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

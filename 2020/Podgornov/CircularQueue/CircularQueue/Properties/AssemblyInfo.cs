@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("Linked_List")]
+[assembly: AssemblyTitle("CircularQueue")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Linked_List")]
+[assembly: AssemblyProduct("CircularQueue")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("242e8983-202c-42a3-a8a6-eb94df7556b0")]
+[assembly: Guid("e7de3dd6-f489-4fe6-a00d-664e66da9f31")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //

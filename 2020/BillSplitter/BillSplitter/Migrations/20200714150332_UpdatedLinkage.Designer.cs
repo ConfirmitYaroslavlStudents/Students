@@ -4,14 +4,16 @@ using BillSplitter.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BillSplitter.Migrations
 {
     [DbContext(typeof(BillContext))]
-    partial class BillContextModelSnapshot : ModelSnapshot
+    [Migration("20200714150332_UpdatedLinkage")]
+    partial class UpdatedLinkage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,6 +80,9 @@ namespace BillSplitter.Migrations
                     b.Property<int?>("BillId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -87,6 +92,8 @@ namespace BillSplitter.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Position");
                 });
@@ -111,6 +118,10 @@ namespace BillSplitter.Migrations
                     b.HasOne("BillSplitter.Models.Bill", null)
                         .WithMany("Positions")
                         .HasForeignKey("BillId");
+
+                    b.HasOne("BillSplitter.Models.Customer", null)
+                        .WithMany("Positions")
+                        .HasForeignKey("CustomerId");
                 });
 #pragma warning restore 612, 618
         }

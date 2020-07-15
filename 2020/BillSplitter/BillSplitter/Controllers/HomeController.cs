@@ -77,14 +77,19 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult DoneSelect(int[] selected, string customerName)
         {
-            var customer = new Customer { Name = customerName, Positions = new List<Position>() };
+            var customer = new Customer { Name = customerName };
 
             _context.Position.Load();
 
-            for (int i = 0; i < selected.Length; i++)
-                customer.Positions.Add(_context.Position.FirstOrDefault(x => x.Id == selected[i]));
-
             _context.Customer.Add(customer);
+            _context.SaveChanges();
+
+            for (int i = 0; i < selected.Length; i++)
+            {
+                var order = new Order { CustomerId = customer.Id, PositionId = selected[i] };
+                _context.Orders.Add(order);
+            }
+
             _context.SaveChanges();
 
             return RedirectToAction(nameof(CustomerBill), new { id = customer.Id });
@@ -95,12 +100,25 @@ namespace BillSplitter.Controllers
         {
             _context.Customer.Load();
             _context.Position.Load();
-            var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
+            _context.Orders.Load();
 
-            var sum = customer.Positions.Select(x => x.Price).Sum();
+            var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
+            var positions = new List<Position>();
+
+            var sum = 0m;
+            foreach (var order in customer.Orders)
+            {
+                var posId = order.PositionId;
+                var position = _context.Position.FirstOrDefault(x => x.Id == posId);
+
+                var customerPrice = position.Price / position.Orders.Count;
+                positions.Add(new Position { Name = position.Name, Price =  customerPrice});
+
+                sum += customerPrice;
+            }
 
             ViewData["Sum"] = sum;
-            return View(customer.Positions);
+            return View(positions);
         }
     }
 }

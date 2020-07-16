@@ -38,7 +38,6 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public string AddNewBill([FromBody] Position[] positions)
         {
-            ViewData["positions"] = positions;
 
             var positionsList = new List<Position>(positions);
 

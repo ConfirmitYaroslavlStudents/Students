@@ -1,11 +1,14 @@
 ﻿@model List<BillSplitter.Models.Position>
 
 <form method="post" action="/Home/DoneSelect">
-    <table class="table">
+    <table class="table" id="positionTable">
         <thead>
             <tr>
                 <th>
                     Select
+                </th>
+                <th>
+                    Quantity
                 </th>
                 <th>
                     Name
@@ -13,21 +16,25 @@
                 <th>
                     Price
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @for (int i = 0; i < Model.Count; i++) 
             {
                 <tr>
                     <td>
-                        <input type="checkbox" name="selected" value="@item.Id" />
+                        <input type="checkbox" name="selected" value="@Model[i].Id", id="check" onclick="changeQuantityState(@(i + 1))"/>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                        <input type="number" name="numerator" value="0" disabled id="num"/>
+                        /
+                        <input type="number" name="denomenator" value="1" disabled id="denom"/>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Price)
+                        @Html.DisplayFor(modelItem => modelItem[i].Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].Price)
                     </td>
                 </tr>
             }
@@ -39,3 +46,23 @@
     </label>
     <input type="submit"></input>
 </form>
+<script>
+    function changeQuantityState(rowNumber) {
+        var row = document.getElementById("positionTable").rows[rowNumber];
+
+        console.log(row.cells.length);
+
+        var checkbox = row.cells[0].children[0];
+        console.log(checkbox.checked);
+
+        var inputCell = row.cells[1];
+
+        var num = inputCell.children[0];
+
+        var denom = inputCell.children[1];
+        console.log(denom);
+
+        num.disabled = !checkbox.checked;
+        denom.disabled = !checkbox.checked;
+    }
+</script>

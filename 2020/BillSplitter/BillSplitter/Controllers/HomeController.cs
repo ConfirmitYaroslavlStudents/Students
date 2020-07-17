@@ -72,8 +72,8 @@ namespace BillSplitter.Controllers
             return View(bill.Positions);
         }
 
-        [HttpPost]
-        public IActionResult DoneSelect(int[] selected, string customerName)
+        [HttpPost] // /Home/SelectPositions/5
+        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator, string customerName)
         {
             var customer = new Customer { Name = customerName };
 
@@ -84,8 +84,17 @@ namespace BillSplitter.Controllers
 
             for (int i = 0; i < selected.Length; i++)
             {
-                var order = new Order { CustomerId = customer.Id, PositionId = selected[i] };
-                _context.Orders.Add(order);
+                if (1.0*numerator[i] / denomenator[i] > double.Epsilon)
+                {
+                    var order = new Order
+                    {
+                        CustomerId = customer.Id,
+                        PositionId = selected[i],
+                        Quantity = 1.0 * numerator[i] / denomenator[i]
+                    };
+
+                    _context.Orders.Add(order);
+                }
             }
 
             _context.SaveChanges();

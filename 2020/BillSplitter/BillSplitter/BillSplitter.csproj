@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\BillsController.cs" />
+    <Compile Remove="Migrations\20200717120734_UpdatePositionQuantityType.cs" />
+    <Compile Remove="Migrations\20200717120734_UpdatePositionQuantityType.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

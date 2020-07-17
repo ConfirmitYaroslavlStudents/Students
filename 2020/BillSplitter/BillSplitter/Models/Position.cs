@@ -8,5 +8,6 @@ namespace BillSplitter.Models
         public decimal Price { get; set; }
         public string Name { get; set; }
         public List<Order> Orders { get; set; }
+        public int Quantity { get; set; }
     }
 }

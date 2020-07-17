@@ -118,7 +118,7 @@ namespace BillSplitter.Controllers
                 var posId = order.PositionId;
                 var position = _context.Position.FirstOrDefault(x => x.Id == posId);
 
-                var customerPrice = position.Price / position.Orders.Count;
+                var customerPrice = position.Price * (decimal)order.Quantity;
                 positions.Add(new Position { Name = position.Name, Price =  customerPrice});
 
                 sum += customerPrice;

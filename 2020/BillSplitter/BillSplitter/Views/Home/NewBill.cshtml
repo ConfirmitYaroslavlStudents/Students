@@ -4,12 +4,11 @@
 
 
 <table id="PositionsTable" class="table" width="600" border="1">
-
     <tr>
         <th> Name</th>
         <th> Price</th>
+        <th> Quantity</th>
     </tr>
-   
 </table>
 <br>
 <br>
@@ -20,6 +19,9 @@
 <label> Price
     <input type="number" id="NewPrice">
 </label>
+<label> Quantity
+    <input type="number" id="NewQuantity" value="1" />
+</label>
 
 <button onclick="addRow()">Add Position</button>
 <br>
@@ -28,14 +30,16 @@
     var Positions = []
     function addRow()
     {
-    // Get a reference to the table
+        // Get a reference to the table
         var tableRef = document.getElementById("PositionsTable");
 
         // Insert a row in the table at row index 0
        
         var Price = document.getElementById("NewPrice").value;
         var Name = document.getElementById("NewName").value;
-        if (Price == "" || Name == "") {
+        var Quantity = document.getElementById("NewQuantity").value
+
+        if (Price == "" || Name == "" || Quantity == "") {
             alert("empty Price or Name");
         }
         else
@@ -43,17 +47,22 @@
             var newRow = tableRef.insertRow(-1);
             var cell1 = newRow.insertCell(0);
             var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+
             document.getElementById("NewPrice").value = "";
             document.getElementById("NewName").value = "";
+            document.getElementById("NewQuantity").value = "1";
+
             cell1.innerHTML = Name;
             cell2.innerHTML = Price;
-            Positions.push({ "Name": Name, "Price": parseInt(Price) });
+            cell3.innerHTML = Quantity;
+
+            Positions.push({ "Name": Name, "Price": parseInt(Price), "Quantity": parseInt(Quantity) });
         }
     }
 
     function PostPositions()
     {
-       
         var json = JSON.stringify(Positions);
      
         (async () => {
@@ -68,6 +77,5 @@
             const content = await rawResponse.json();
             window.location.href = content; 
         })();
-
     }
 </script>

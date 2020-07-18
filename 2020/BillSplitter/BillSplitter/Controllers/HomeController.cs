@@ -76,7 +76,7 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult DoneSelect(int[] selected, string customerName)
         {
-            var customer = new Customer { Name = customerName };
+            var customer = new Customer {};
 
             _context.Position.Load();
 

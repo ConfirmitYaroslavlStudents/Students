@@ -243,3 +243,6 @@ ScreenshotHandler/.idea
 ScreenshotHandler/node_modules
 ScreenshotHandlerUtility/node_modules
 ScreenshotHandlerUtility/.idea
+/2020/BillSplitter/BillSplitter/Migrations
+/2020/BillSplitter/BillSplitter/Migrations
+/2020/BillSplitter/BillSplitter/Migrations/20200713171040_InitialCreate.cs

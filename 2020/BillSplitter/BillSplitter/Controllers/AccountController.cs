@@ -20,35 +20,41 @@ namespace BillSplitter.Controllers
             db = context;
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewBag.returnUrl = returnUrl;
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 User user = await db.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
                 if (user != null)
                 {
-                    await Authenticate(model.Name); // аутентификация
+                    await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    if (returnUrl != null)
+                        return Redirect(returnUrl);
+                    else
+                        return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Invalid UserName");
+
+                ModelState.AddModelError("Name", "No Such User");
             }
             return View(model);
         }
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl)
         {
+            ViewBag.returnUrl = returnUrl;
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -56,39 +62,69 @@ namespace BillSplitter.Controllers
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    db.Users.Add(new User { Name = model.Name});
+                    User new_user = new User { Name = model.Name };
+                    db.Users.Add(new_user);
                     await db.SaveChangesAsync();
 
-                    await Authenticate(model.Name); // аутентификация
+                    await Authenticate(new_user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    if (returnUrl != null)
+                        return Redirect(returnUrl);
+                    else
+                        return RedirectToAction("Index", "Home");
                 }
                 else
-                    ModelState.AddModelError("", "UserName is already used");
+                    ModelState.AddModelError("Name", "UserName is already used");
             }
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim("UserId","123")
+                new Claim("Id",user.Id.ToString()),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name)
             };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-            var a =  HttpContext.User.Claims.ToList();
-            int b = 0;
-        }
 
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                //AllowRefresh = <bool>,
+                // Refreshing the authentication session should be allowed.
+
+                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                // The time at which the authentication ticket expires. A 
+                // value set here overrides the ExpireTimeSpan option of 
+                // CookieAuthenticationOptions set with AddCookie.
+
+                //IsPersistent = true,
+                // Whether the authentication session is persisted across 
+                // multiple requests. When used with cookies, controls
+                // whether the cookie's lifetime is absolute (matching the
+                // lifetime of the authentication ticket) or session-based.
+
+                //IssuedUtc = <DateTimeOffset>,
+                // The time at which the authentication ticket was issued.
+
+                //RedirectUri = <string>
+                // The full path or absolute URI to be used as an http 
+                // redirect response value.
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+        }
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("", "Home");
         }
     }
 }

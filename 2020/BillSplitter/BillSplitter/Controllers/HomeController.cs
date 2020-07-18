@@ -6,6 +6,8 @@ using BillSplitter.Models;
 using BillSplitter.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace BillSplitter.Controllers
 {
@@ -34,7 +36,7 @@ namespace BillSplitter.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
+        [Authorize]
         [HttpPost]
         public string AddNewBill([FromBody] Position[] positions)
         {
@@ -51,7 +53,9 @@ namespace BillSplitter.Controllers
             return $"SelectPositions/{bill.Id}";
         }
 
+        
         //Home/NewBill
+        [Authorize]
         [HttpGet]
         public IActionResult NewBill()
         {
@@ -59,8 +63,9 @@ namespace BillSplitter.Controllers
         }
 
         //Home/SelectPositions/1
+        [Authorize]
         [HttpGet]
-        public IActionResult SelectPositions(int? id)
+        public IActionResult SelectPositions(int? id)//bill_id
         {
             _context.Bill.Load();
             _context.Position.Load(); //возмножно не нужно
@@ -69,14 +74,21 @@ namespace BillSplitter.Controllers
 
             if (bill == null)
                 return Error();
-
+            HttpContext.Session.SetInt32("CurrentBillId", (int)id);
+            int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
             return View(bill.Positions);
         }
 
+        [Authorize]
         [HttpPost]
-        public IActionResult DoneSelect(int[] selected, string customerName)
+        public IActionResult DoneSelect(int[] selected)
         {
-            var customer = new Customer {};
+           
+            int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
+            var customer = new Customer {
+                BillId = BillId,
+                UserId = GetCurrentUserId()
+            };
 
             _context.Position.Load();
 
@@ -91,17 +103,18 @@ namespace BillSplitter.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(CustomerBill), new { id = customer.Id });
+            return RedirectToAction(nameof(CustomerBill), new { id = BillId });
         }
 
+        [Authorize]
         [HttpGet]
-        public IActionResult CustomerBill(int? id)
+        public IActionResult CustomerBill(int? id)//bill_id
         {
             _context.Customer.Load();
             _context.Position.Load();
             _context.Orders.Load();
 
-            var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
+            var customer = _context.Customer.FirstOrDefault(x => x.BillId == id && x.UserId == GetCurrentUserId());
             var positions = new List<Position>();
 
             var sum = 0m;
@@ -118,6 +131,11 @@ namespace BillSplitter.Controllers
 
             ViewData["Sum"] = sum;
             return View(positions);
+        }
+
+        public int GetCurrentUserId()
+        {
+            return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
         }
     }
 }

@@ -38,7 +38,7 @@
 
                 @if (Context.User.Identities.Any(i => i.IsAuthenticated))
                 {
-                    <li>Welcome @Context.User.Identity.Name</li>
+                    <p>User: @Context.User.Identity.Name</p>
                 }
 
             </div>

@@ -14,10 +14,10 @@ namespace BillSplitter.Controllers
 {
     public class AccountController : Controller
     {
-        private BillContext db;
+        private readonly BillContext _context;
         public AccountController(BillContext context)
         {
-            db = context;
+            _context = context;
         }
         [HttpGet]
         public IActionResult Login(string returnUrl)
@@ -31,10 +31,10 @@ namespace BillSplitter.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
                 if (user != null)
                 {
-                    await Authenticate(user); // аутентификация
+                    await Authenticate(user);
 
                     if (returnUrl != null)
                         return Redirect(returnUrl);
@@ -58,15 +58,14 @@ namespace BillSplitter.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
                 if (user == null)
                 {
-                    // добавляем пользователя в бд
                     User new_user = new User { Name = model.Name };
-                    db.Users.Add(new_user);
-                    await db.SaveChangesAsync();
+                    _context.Users.Add(new_user);
+                    await _context.SaveChangesAsync();
 
-                    await Authenticate(new_user); // аутентификация
+                    await Authenticate(new_user); 
 
                     if (returnUrl != null)
                         return Redirect(returnUrl);
@@ -81,7 +80,7 @@ namespace BillSplitter.Controllers
 
         private async Task Authenticate(User user)
         {
-            // создаем один claim
+
             var claims = new List<Claim>
             {
                 new Claim("Id",user.Id.ToString()),
@@ -91,40 +90,15 @@ namespace BillSplitter.Controllers
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var authProperties = new AuthenticationProperties
-            {
-                //AllowRefresh = <bool>,
-                // Refreshing the authentication session should be allowed.
-
-                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                // The time at which the authentication ticket expires. A 
-                // value set here overrides the ExpireTimeSpan option of 
-                // CookieAuthenticationOptions set with AddCookie.
-
-                //IsPersistent = true,
-                // Whether the authentication session is persisted across 
-                // multiple requests. When used with cookies, controls
-                // whether the cookie's lifetime is absolute (matching the
-                // lifetime of the authentication ticket) or session-based.
-
-                //IssuedUtc = <DateTimeOffset>,
-                // The time at which the authentication ticket was issued.
-
-                //RedirectUri = <string>
-                // The full path or absolute URI to be used as an http 
-                // redirect response value.
-            };
-
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+                new ClaimsPrincipal(claimsIdentity));
         }
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("", "Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

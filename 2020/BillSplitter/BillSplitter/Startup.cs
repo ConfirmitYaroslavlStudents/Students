@@ -39,9 +39,9 @@ namespace BillSplitter
             services.AddDbContext<BillContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
-            // установка конфигурации подключения
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
+                .AddCookie(options => 
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
@@ -66,8 +66,8 @@ namespace BillSplitter
 
             app.UseRouting();
 
-            app.UseAuthentication();    // аутентификация
-            app.UseAuthorization();     // авторизация
+            app.UseAuthentication();   
+            app.UseAuthorization();     
 
             app.UseSession();
 

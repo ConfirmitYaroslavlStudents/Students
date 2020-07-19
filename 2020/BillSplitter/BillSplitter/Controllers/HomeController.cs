@@ -75,7 +75,6 @@ namespace BillSplitter.Controllers
             if (bill == null)
                 return Error();
             HttpContext.Session.SetInt32("CurrentBillId", (int)id);
-            int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
             return View(bill.Positions);
         }
 
@@ -133,7 +132,7 @@ namespace BillSplitter.Controllers
             return View(positions);
         }
 
-        public int GetCurrentUserId()
+        public int GetCurrentUserId()//Возможно нужно перенести в другой класс и вызывать оттуда 
         {
             return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
         }

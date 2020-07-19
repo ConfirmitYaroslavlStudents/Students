@@ -33,15 +33,5 @@ namespace BillSplitter.Controllers.Calculator
 
             return new Tuple<List<Position>, decimal>(positions, sum);
         }
-
-        public IEnumerable<Position> CalculatePositions(BillContext context, int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double CalculateSum(BillContext context, int customerId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

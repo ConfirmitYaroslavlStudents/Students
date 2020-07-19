@@ -114,20 +114,18 @@ namespace BillSplitter.Controllers
             return View(result.Item1);
         }
         [HttpGet]
-        public IActionResult SummaryBill(int? billId)
+        public IActionResult SummaryBill(int? id)
         {
-            if (billId == null)
-                return Error();
-
-            var currentCustomers = new CustomerFinder().Find(_context, (int)billId);
+            
+            var currentCustomers = new CustomerFinder().Find(_context, (int)id);
 
             var calculator = new CustomerCalculator();
 
-            var viewData = new List<Tuple<string, decimal, int>>();
+            var viewData = new List<SummaryCustomerInfo>();
 
             foreach(var customer in currentCustomers)
             {
-                viewData.Add(new Tuple<string, decimal, int>(customer.Name, calculator.Calculate(_context, customer.Id).Item2, customer.Id));
+                viewData.Add(new SummaryCustomerInfo { Customer = customer, Sum = calculator.Calculate(_context, customer.Id).Item2});
             }
 
             return View(viewData);

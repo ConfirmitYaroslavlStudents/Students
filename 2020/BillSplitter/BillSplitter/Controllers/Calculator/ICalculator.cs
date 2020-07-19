@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BillSplitter.Controllers.Finder
+namespace BillSplitter.Controllers.Calculator
 {
-    public interface IFinder
+    public interface ICalculator
     {
-        IEnumerable<Customer> Find(BillContext context, int billId);
+        Tuple<List<Position>, decimal> Calculate(BillContext context, int customerId);
     }
 }

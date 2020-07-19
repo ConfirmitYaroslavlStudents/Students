@@ -62,6 +62,11 @@
         var denom = inputCell.children[1];
         console.log(denom);
 
+        if (!checkbox.checked) {
+            num.value = 0;
+            denom.value = 1;
+        }
+
         num.disabled = !checkbox.checked;
         denom.disabled = !checkbox.checked;
     }

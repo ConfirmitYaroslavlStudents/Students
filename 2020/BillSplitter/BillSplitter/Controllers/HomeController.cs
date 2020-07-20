@@ -116,19 +116,27 @@ namespace BillSplitter.Controllers
         [HttpGet]
         public IActionResult SummaryBill(int? id)
         {
-            
             var currentCustomers = new CustomerFinder().Find(_context, (int)id);
 
             var calculator = new CustomerCalculator();
 
             var viewData = new List<SummaryCustomerInfo>();
 
+            _context.Customer.Load();
+
             foreach(var customer in currentCustomers)
             {
-                viewData.Add(new SummaryCustomerInfo { Customer = customer, Sum = calculator.Calculate(_context, customer.Id).Item2});
+                viewData.Add(new SummaryCustomerInfo { Customer = _context.Customer.Find(customer), Sum = calculator.Calculate(_context, customer).Item2});
             }
 
             return View(viewData);
+        }
+        [HttpGet]
+        public IActionResult GetSummaryBill(int? id)
+        {
+            var billId = new BillFinder().Find(_context, (int)id).First();
+
+            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
         }
     }
 }

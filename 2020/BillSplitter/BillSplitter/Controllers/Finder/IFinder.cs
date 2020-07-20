@@ -9,6 +9,6 @@ namespace BillSplitter.Controllers.Finder
 {
     public interface IFinder
     {
-        IEnumerable<Customer> Find(BillContext context, int billId);
+        IEnumerable<int> Find(BillContext context, int id);
     }
 }

@@ -10,7 +10,7 @@ namespace BillSplitter.Controllers.Finder
 {
     public class CustomerFinder : IFinder
     {
-        public IEnumerable<Customer> Find(BillContext context, int billId)
+        public IEnumerable<int> Find(BillContext context, int billId)
         {
             context.Bill.Load();
             context.Customer.Load();
@@ -23,7 +23,7 @@ namespace BillSplitter.Controllers.Finder
                                where bill.Positions.FirstOrDefault(x => x.Id == o.PositionId) != null
                                select o.CustomerId).Distinct();
 
-            return customersId.Select(x => context.Customer.FirstOrDefault(y => y.Id == x)).ToList();
+            return customersId;
         }
     }
 }

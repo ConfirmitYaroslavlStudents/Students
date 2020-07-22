@@ -1,19 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Views\Bills\**" />
-    <Content Remove="Views\Bills\**" />
-    <EmbeddedResource Remove="Views\Bills\**" />
-    <None Remove="Views\Bills\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Controllers\BillsController.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />

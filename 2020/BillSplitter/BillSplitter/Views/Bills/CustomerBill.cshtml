@@ -29,6 +29,6 @@
 <p>
     Your sum is @ViewData["Sum"]
 </p>
-<button onclick="location.href='@Url.Action("GetSummaryBill", "Home", new { id = ViewContext.RouteData.Values["id"] })'">
+<button onclick="location.href='@Url.Action("GetSummaryBill", "Bills", new { id = ViewContext.RouteData.Values["id"] })'">
     Go to Summary
 </button>

@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BillSplitter.Data;
 using BillSplitter.Models;
+using BillSplitter.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System;
+using BillSplitter.Controllers.Finder;
+using BillSplitter.Controllers.Calculator;
 
 namespace BillSplitter.Controllers
 {
@@ -19,135 +23,136 @@ namespace BillSplitter.Controllers
             _context = context;
         }
 
-        // GET: Bills
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Bill.ToListAsync());
-        }
-
-        // GET: Bills/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var bill = await _context.Bill
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-
-            return View(bill);
-        }
-
-        // GET: Bills/Create
-        public IActionResult Create()
+        public IActionResult Index()
         {
             return View();
         }
 
-        // POST: Bills/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Bill bill)
+        public string AddNewBill([FromBody] Position[] positions)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(bill);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bill);
+            var positionsList = new List<Position>(positions);
+
+            var bill = new Bill {
+                Positions = positionsList
+            };
+
+            _context.Add(bill);
+            _context.SaveChanges();
+
+            return $"SelectPositions/{bill.Id}";
         }
 
-        // GET: Bills/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        
+   
+        [Authorize]
+        [HttpGet]
+        public IActionResult NewBill()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return View();
+        }
 
-            var bill = await _context.Bill.FindAsync(id);
+      
+        [Authorize]
+        [HttpGet]
+        public IActionResult SelectPositions(int id)
+        {
+            _context.Bill.Load();
+            _context.Position.Load(); 
+
+            var bill = _context.Bill.FirstOrDefault(e => e.Id == id);
+
             if (bill == null)
-            {
-                return NotFound();
-            }
-            return View(bill);
+                return Error();
+            HttpContext.Session.SetInt32("CurrentBillId", (int)id);
+            return View(bill.Positions);
         }
 
-        // POST: Bills/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Bill bill)
+        [Authorize]
+        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator, string customerName)
         {
-            if (id != bill.Id)
-            {
-                return NotFound();
-            }
+           
+            int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
+            var customer = new Customer {
+                BillId = BillId,
+                UserId = GetCurrentUserId(),
+                Name = HttpContext.User.Identity.Name
+            };
 
-            if (ModelState.IsValid)
+            _context.Position.Load();
+
+            _context.Customer.Add(customer);
+            _context.SaveChanges();
+
+            for (int i = 0; i < selected.Length; i++)
             {
-                try
+                if (1.0 * numerator[i] / denomenator[i] > double.Epsilon)
                 {
-                    _context.Update(bill);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BillExists(bill.Id))
+                    var order = new Order
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        CustomerId = customer.Id,
+                        PositionId = selected[i],
+                        Quantity = 1.0 * numerator[i] / denomenator[i]
+                    };
+
+                    _context.Orders.Add(order);
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(bill);
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(CustomerBill), new { id = BillId });
         }
 
-        // GET: Bills/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize]
+        public IActionResult CustomerBill(int? id)
         {
-            if (id == null)
+            var result = new CustomerCalculator().Calculate(_context, (int)id);
+            var customer = _context.Customer.FirstOrDefault(x => x.BillId == id && x.UserId == GetCurrentUserId());
+
+            ViewData["Sum"] = result.Item2;
+            return View(result.Item1);
+        }
+
+  
+        public IActionResult SummaryBill(int? id)
+        {
+            var currentCustomers = new CustomerFinder().Find(_context, (int)id);
+
+            var calculator = new CustomerCalculator();
+
+            var viewData = new List<SummaryCustomerInfo>();
+
+            _context.Customer.Load();
+
+            foreach(var customer in currentCustomers)
             {
-                return NotFound();
+                viewData.Add(new SummaryCustomerInfo { Customer = _context.Customer.Find(customer), Sum = calculator.Calculate(_context, customer).Item2});
             }
 
-            var bill = await _context.Bill
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-
-            return View(bill);
+            return View(viewData);
         }
-
-        // POST: Bills/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+            
+        
+        [HttpGet]
+        public IActionResult GetSummaryBill(int? id)
         {
-            var bill = await _context.Bill.FindAsync(id);
-            _context.Bill.Remove(bill);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var billId = new BillFinder().Find(_context, (int)id).First();
+
+            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
         }
-
-        private bool BillExists(int id)
+        
+         public int GetCurrentUserId()//Возможно нужно перенести в другой класс и вызывать оттуда 
         {
-            return _context.Bill.Any(e => e.Id == id);
+            return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
         }
     }
 }

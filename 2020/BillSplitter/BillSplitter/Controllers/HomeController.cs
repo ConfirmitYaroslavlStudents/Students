@@ -83,12 +83,12 @@ namespace BillSplitter.Controllers
 [Authorize]
         public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator, string customerName)
         {
-         var customer = new Customer { Name = customerName };
            
             int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
             var customer = new Customer {
                 BillId = BillId,
-                UserId = GetCurrentUserId()
+                UserId = GetCurrentUserId(),
+                Name = HttpContext.User.Identity.Name
             };
 
             _context.Position.Load();
@@ -144,8 +144,7 @@ namespace BillSplitter.Controllers
 
             return View(viewData);
         }
-            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
-        }
+            
         
         [HttpGet]
         public IActionResult GetSummaryBill(int? id)

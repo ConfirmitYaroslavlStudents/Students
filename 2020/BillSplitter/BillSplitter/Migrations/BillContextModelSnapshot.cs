@@ -41,6 +41,9 @@ namespace BillSplitter.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 

@@ -5,5 +5,6 @@
         public int PositionId { get; set; }
         public int CustomerId { get; set; }
         public int Id { get; set; }
+        public double Quantity { get; set; }
     }
 }

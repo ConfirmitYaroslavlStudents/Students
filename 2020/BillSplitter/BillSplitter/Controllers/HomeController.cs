@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using System;using BillSplitter.Controllers.Finder;
+using BillSplitter.Controllers.Calculator;
+using System;
 
 namespace BillSplitter.Controllers
 {
@@ -40,7 +43,6 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public string AddNewBill([FromBody] Position[] positions)
         {
-
             var positionsList = new List<Position>(positions);
 
             var bill = new Bill {
@@ -78,10 +80,10 @@ namespace BillSplitter.Controllers
             return View(bill.Positions);
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult DoneSelect(int[] selected)
+[Authorize]
+        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator, string customerName)
         {
+         var customer = new Customer { Name = customerName };
            
             int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
             var customer = new Customer {
@@ -96,8 +98,17 @@ namespace BillSplitter.Controllers
 
             for (int i = 0; i < selected.Length; i++)
             {
-                var order = new Order { CustomerId = customer.Id, PositionId = selected[i] };
-                _context.Orders.Add(order);
+                if (1.0 * numerator[i] / denomenator[i] > double.Epsilon)
+                {
+                    var order = new Order
+                    {
+                        CustomerId = customer.Id,
+                        PositionId = selected[i],
+                        Quantity = 1.0 * numerator[i] / denomenator[i]
+                    };
+
+                    _context.Orders.Add(order);
+                }
             }
 
             _context.SaveChanges();
@@ -109,30 +120,42 @@ namespace BillSplitter.Controllers
         [HttpGet]
         public IActionResult CustomerBill(int? id)//bill_id
         {
-            _context.Customer.Load();
-            _context.Position.Load();
-            _context.Orders.Load();
-
+            var result = new CustomerCalculator().Calculate(_context, (int)id);
             var customer = _context.Customer.FirstOrDefault(x => x.BillId == id && x.UserId == GetCurrentUserId());
-            var positions = new List<Position>();
 
-            var sum = 0m;
-            foreach (var order in customer.Orders)
+            ViewData["Sum"] = result.Item2;
+            return View(result.Item1);
+        }
+        [HttpGet]
+        public IActionResult SummaryBill(int? id)
+        {
+            var currentCustomers = new CustomerFinder().Find(_context, (int)id);
+
+            var calculator = new CustomerCalculator();
+
+            var viewData = new List<SummaryCustomerInfo>();
+
+            _context.Customer.Load();
+
+            foreach(var customer in currentCustomers)
             {
-                var posId = order.PositionId;
-                var position = _context.Position.FirstOrDefault(x => x.Id == posId);
-
-                var customerPrice = position.Price / position.Orders.Count;
-                positions.Add(new Position { Name = position.Name, Price =  customerPrice});
-
-                sum += customerPrice;
+                viewData.Add(new SummaryCustomerInfo { Customer = _context.Customer.Find(customer), Sum = calculator.Calculate(_context, customer).Item2});
             }
 
-            ViewData["Sum"] = sum;
-            return View(positions);
+            return View(viewData);
         }
+            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
+        }
+        
+        [HttpGet]
+        public IActionResult GetSummaryBill(int? id)
+        {
+            var billId = new BillFinder().Find(_context, (int)id).First();
 
-        public int GetCurrentUserId()//Возможно нужно перенести в другой класс и вызывать оттуда 
+            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
+        }
+        
+         public int GetCurrentUserId()//Возможно нужно перенести в другой класс и вызывать оттуда 
         {
             return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
         }

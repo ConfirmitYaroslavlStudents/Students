@@ -6,6 +6,9 @@ using BillSplitter.Models;
 using BillSplitter.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using BillSplitter.Controllers.Finder;
+using BillSplitter.Controllers.Calculator;
+using System;
 
 namespace BillSplitter.Controllers
 {
@@ -84,7 +87,7 @@ namespace BillSplitter.Controllers
 
             for (int i = 0; i < selected.Length; i++)
             {
-                if (1.0*numerator[i] / denomenator[i] > double.Epsilon)
+                if (1.0 * numerator[i] / denomenator[i] > double.Epsilon)
                 {
                     var order = new Order
                     {
@@ -105,27 +108,35 @@ namespace BillSplitter.Controllers
         [HttpGet]
         public IActionResult CustomerBill(int? id)
         {
+            var result = new CustomerCalculator().Calculate(_context, (int)id);
+
+            ViewData["Sum"] = result.Item2;
+            return View(result.Item1);
+        }
+        [HttpGet]
+        public IActionResult SummaryBill(int? id)
+        {
+            var currentCustomers = new CustomerFinder().Find(_context, (int)id);
+
+            var calculator = new CustomerCalculator();
+
+            var viewData = new List<SummaryCustomerInfo>();
+
             _context.Customer.Load();
-            _context.Position.Load();
-            _context.Orders.Load();
 
-            var customer = _context.Customer.FirstOrDefault(x => x.Id == id);
-            var positions = new List<Position>();
-
-            var sum = 0m;
-            foreach (var order in customer.Orders)
+            foreach(var customer in currentCustomers)
             {
-                var posId = order.PositionId;
-                var position = _context.Position.FirstOrDefault(x => x.Id == posId);
-
-                var customerPrice = position.Price * (decimal)order.Quantity;
-                positions.Add(new Position { Name = position.Name, Price =  customerPrice});
-
-                sum += customerPrice;
+                viewData.Add(new SummaryCustomerInfo { Customer = _context.Customer.Find(customer), Sum = calculator.Calculate(_context, customer).Item2});
             }
 
-            ViewData["Sum"] = sum;
-            return View(positions);
+            return View(viewData);
+        }
+        [HttpGet]
+        public IActionResult GetSummaryBill(int? id)
+        {
+            var billId = new BillFinder().Find(_context, (int)id).First();
+
+            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
         }
     }
 }

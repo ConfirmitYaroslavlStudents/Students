@@ -26,9 +26,9 @@
                         <input type="checkbox" name="selected" value="@Model[i].Id", id="check" onclick="changeQuantityState(@(i + 1))"/>
                     </td>
                     <td>
-                        <input type="number" name="numerator" value="0" disabled id="num"/>
+                        <input type="number" name="numerator" value="0" min="1" step="1" id="num"/>
                         /
-                        <input type="number" name="denomenator" value="1" disabled id="denom"/>
+                        <input type="number" name="denomenator" value="1" min="1" step="1" disabled id="denom" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => modelItem[i].Name)

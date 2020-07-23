@@ -36,18 +36,15 @@
 <br>
 <button onclick="document.getElementById('NewBillForm').submit();">Make New Bill</button>
 <script type="text/javascript">
-
     function addRow() {
-    
         var tableRef = document.getElementById("PositionsTable");
 
-        var Price = document.getElementById("NewPrice").value;
-        var Name = document.getElementById("NewName").value.trim();
-        var Quantity = document.getElementById("NewQuantity").value;
+        var price = document.getElementById("NewPrice").value;
+        var name = document.getElementById("NewName").value.trim();
+        var quantity = document.getElementById("NewQuantity").value;
 
-        if (Price == "" || Name == "" || Quantity == "") {
-            alert("empty Price, Name or Quantity");
-        }
+        if (price == "" || name == "" || quantity == "")
+            alert("empty Price, Name or Quantity"); // remove alert
         else {
             var newRow = tableRef.insertRow(-1);
             var cell1 = newRow.insertCell(0);
@@ -58,12 +55,9 @@
             document.getElementById("NewName").value = "";
             document.getElementById("NewQuantity").value = "1";
 
-            cell1.innerHTML = "<input  type=\"text\" name=\"name\" value=\"" + Name + "\" />";
-            cell2.innerHTML = "<input  type=\"number\" min=\"0\" name=\"price\" value=\"" + Price + "\" />";
-            cell3.innerHTML = "<input  type=\"number\" min=\"1\"  name=\"quantity\" value=\"" + Quantity + "\" />";
-
+            cell1.innerHTML = "<input  type=\"text\" name=\"name\" value=\"" + name + "\" />";
+            cell2.innerHTML = "<input  type=\"number\" min=\"0\" name=\"price\" value=\"" + price + "\" />";
+            cell3.innerHTML = "<input  type=\"number\" min=\"1\"  name=\"quantity\" value=\"" + quantity + "\" />";
         }
     }
-
-   
 </script>

@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
 using BillSplitter.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using BillSplitter.Controllers.Finder;
@@ -59,9 +58,6 @@ namespace BillSplitter.Controllers
         [HttpGet]
         public IActionResult SelectPositions(int billId)
         {
-            _context.Bill.Load();
-            _context.Position.Load(); 
-
             var bill = _context.Bill.FirstOrDefault(e => e.Id == billId);
 
             if (bill == null)
@@ -80,8 +76,6 @@ namespace BillSplitter.Controllers
                 UserId = GetCurrentUserId(),
                 Name = HttpContext.User.Identity.Name
             };
-
-            _context.Position.Load();
 
             _context.Customer.Add(customer);
             _context.SaveChanges();
@@ -129,8 +123,6 @@ namespace BillSplitter.Controllers
             var calculator = new CustomerCalculator();
 
             var customerInfos = new List<SummaryCustomerInfo>();
-
-            _context.Customer.Load();
 
             foreach(var customer in currentCustomers)
             {

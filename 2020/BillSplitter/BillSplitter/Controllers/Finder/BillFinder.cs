@@ -9,11 +9,6 @@ namespace BillSplitter.Controllers.Finder
     {
         public IEnumerable<int> Find(BillContext context, int customerId)
         {
-            context.Bill.Load();
-            context.Position.Load();
-            context.Orders.Load();
-            context.Customer.Load();
-
             var customer = context.Customer.Find(customerId);
             var order = customer.Orders.First();
             var position = context.Position.Find(order.PositionId);

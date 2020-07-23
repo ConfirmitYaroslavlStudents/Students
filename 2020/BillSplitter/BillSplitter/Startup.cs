@@ -33,7 +33,9 @@ namespace BillSplitter
 
             services.AddControllersWithViews();
             services.AddDbContext<BillContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("BillContext")));
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

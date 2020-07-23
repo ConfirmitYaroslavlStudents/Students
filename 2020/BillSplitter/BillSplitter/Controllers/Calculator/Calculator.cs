@@ -1,6 +1,5 @@
 ﻿using BillSplitter.Data;
 using BillSplitter.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +10,6 @@ namespace BillSplitter.Controllers.Calculator
     {
         public Tuple<List<Position>, decimal> Calculate(BillContext context, int customerId)
         {
-            context.Customer.Load();
-            context.Position.Load();
-            context.Orders.Load();
-
             var customer = context.Customer.FirstOrDefault(x => x.Id == customerId);
             var positions = new List<Position>();
 

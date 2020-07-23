@@ -6,18 +6,20 @@ using BillSplitter.Models;
 using BillSplitter.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using BillSplitter.Controllers.Finder;
-using BillSplitter.Controllers.Calculator;
 
 namespace BillSplitter.Controllers
 {
     public class BillsController : Controller
     {
-        private readonly BillContext _context;
+        private readonly BillsDbHelper _billHelper;
+        private readonly CustomerDbHelper _customerDbHelper;
+        private readonly OrdersDbHelper _ordersDbHelper;
 
         public BillsController(BillContext context)
         {
-            _context = context;
+            _billHelper = new BillsDbHelper(context);
+            _customerDbHelper = new CustomerDbHelper(context);
+            _ordersDbHelper = new OrdersDbHelper(context);
         }
 
         public IActionResult Index()
@@ -44,6 +46,7 @@ namespace BillSplitter.Controllers
         {
             //validate
             
+            // learn how to bind in array
             var positionsList = new List<Position>();
             for (int i = 0; i < name.Length; i++)
                 positionsList.Add(new Position { Name = name[i], Price = price[i], Quantity = quantity[i] });
@@ -52,8 +55,7 @@ namespace BillSplitter.Controllers
                 Positions = positionsList
             };
 
-            _context.Add(bill);
-            _context.SaveChanges();
+            _billHelper.AddBill(bill);
 
             return RedirectToAction(nameof(SelectPositions), new { billId = bill.Id });
         }
@@ -63,17 +65,18 @@ namespace BillSplitter.Controllers
         [Route("Bills/SelectPositions/{billId}")]
         public IActionResult SelectPositions(int billId)
         {
-            var bill = _context.Bill.FirstOrDefault(e => e.Id == billId);
+            if (_billHelper.DbContains(billId))
+            {
+                HttpContext.Session.SetInt32("CurrentBillId", billId);
 
-            if (bill == null)
-                return Error();
-            HttpContext.Session.SetInt32("CurrentBillId", (int)billId);
-            return View(bill.Positions);
+                return View(_billHelper.GetPositionsById(billId));
+            }
+            return Error();
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator, string customerName)
+        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator)
         {
             int billId = (int)HttpContext.Session.GetInt32("CurrentBillId"); // Remove to make stateless
             var customer = new Customer {
@@ -82,25 +85,9 @@ namespace BillSplitter.Controllers
                 Name = HttpContext.User.Identity.Name
             };
 
-            _context.Customer.Add(customer);
-            _context.SaveChanges();
+            _customerDbHelper.AddCustomer(customer);
 
-            for (int i = 0; i < selected.Length; i++)
-            {
-                if (1.0 * numerator[i] / denomenator[i] > double.Epsilon)
-                {
-                    var order = new Order
-                    {
-                        CustomerId = customer.Id,
-                        PositionId = selected[i],
-                        Quantity = 1.0 * numerator[i] / denomenator[i]
-                    };
-
-                    _context.Orders.Add(order);
-                }
-            }
-
-            _context.SaveChanges();
+            _ordersDbHelper.AddOrders(customer, selected, numerator, denomenator);
 
             return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
         }
@@ -110,24 +97,21 @@ namespace BillSplitter.Controllers
         [Route("Bills/CustomerBill/{customerId}")]
         public IActionResult CustomerBill(int customerId)
         {
-            var result = new CustomerCalculator().Calculate(_context, (int)customerId);
+            var result = new CustomerBillBuilder().Build(_customerDbHelper.GetCustomerById(customerId));
 
-            // Unused code
-            var customer = _context.Customer.FirstOrDefault(x => x.BillId == customerId && x.UserId == GetCurrentUserId());
-
-            ViewData["Sum"] = result.Item2;
+            ViewData["Sum"] = result.Sum(x => x.Price);
             ViewData["customerId"] = customerId;
-            return View(result.Item1);
+            return View(result);
         }
 
-        // Authorize?
+        [Authorize]
         [HttpGet]
         [Route("Bills/SummaryBill/{billId}")]
         public IActionResult SummaryBill(int billId)
         {
-            var currentCustomers = new CustomerFinder().Find(_context, (int)billId);
+            var currentCustomers = _billHelper.GetCustomersById(billId);
 
-            var calculator = new CustomerCalculator();
+            var builder = new CustomerBillBuilder();
 
             var customerInfos = new List<SummaryCustomerInfo>();
 
@@ -135,22 +119,22 @@ namespace BillSplitter.Controllers
             {
                 customerInfos.Add(new SummaryCustomerInfo
                 {
-                    Customer = _context.Customer.Find(customer), 
-                    Sum = calculator.Calculate(_context, customer).Item2
+                    Customer = customer, 
+                    Sum = builder.Build(customer).Sum(x => x.Price)
                 });
             }
 
             return View(customerInfos);
         }
 
-        // Authorize?
+        [Authorize]
         [HttpGet]
         [Route("Bills/GetSummaryBill/{customerId}")]
         public IActionResult GetSummaryBill(int customerId)
         {
-            var customerBillId = new BillFinder().Find(_context, (int)customerId).First();
+            var customerBillId = _customerDbHelper.GetCustomerById(customerId).BillId;
 
-            return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId }); ;
+            return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId });
         }
         
          public int GetCurrentUserId()
@@ -158,4 +142,5 @@ namespace BillSplitter.Controllers
             return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
          }
     }
+
 }

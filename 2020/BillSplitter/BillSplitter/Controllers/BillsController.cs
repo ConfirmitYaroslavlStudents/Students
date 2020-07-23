@@ -51,11 +51,12 @@ namespace BillSplitter.Controllers
             _context.Add(bill);
             _context.SaveChanges();
 
-            return $"SelectPositions?billId={bill.Id}";
+            return $"SelectPositions/{bill.Id}";
         }
       
         [Authorize]
         [HttpGet]
+        [Route("Bills/SelectPositions/{billId}")]
         public IActionResult SelectPositions(int billId)
         {
             var bill = _context.Bill.FirstOrDefault(e => e.Id == billId);
@@ -102,7 +103,8 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult CustomerBill(int? customerId)
+        [Route("Bills/CustomerBill/{customerId}")]
+        public IActionResult CustomerBill(int customerId)
         {
             var result = new CustomerCalculator().Calculate(_context, (int)customerId);
 
@@ -116,7 +118,8 @@ namespace BillSplitter.Controllers
 
         // Authorize?
         [HttpGet]
-        public IActionResult SummaryBill(int? billId)
+        [Route("Bills/SummaryBill/{billId}")]
+        public IActionResult SummaryBill(int billId)
         {
             var currentCustomers = new CustomerFinder().Find(_context, (int)billId);
 
@@ -138,7 +141,8 @@ namespace BillSplitter.Controllers
 
         // Authorize?
         [HttpGet]
-        public IActionResult GetSummaryBill(int? customerId)
+        [Route("Bills/GetSummaryBill/{customerId}")]
+        public IActionResult GetSummaryBill(int customerId)
         {
             var customerBillId = new BillFinder().Find(_context, (int)customerId).First();
 

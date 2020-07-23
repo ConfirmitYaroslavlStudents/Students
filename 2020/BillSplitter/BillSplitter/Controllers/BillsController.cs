@@ -40,9 +40,13 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpPost]
-        public string AddNewBill([FromBody] Position[] positions)
+        public IActionResult NewBill(string[] name, decimal[] price, int[] quantity)
         {
-            var positionsList = new List<Position>(positions);
+            //validate
+            
+            var positionsList = new List<Position>();
+            for (int i = 0; i < name.Length; i++)
+                positionsList.Add(new Position { Name = name[i], Price = price[i], Quantity = quantity[i] });
 
             var bill = new Bill {
                 Positions = positionsList
@@ -51,7 +55,7 @@ namespace BillSplitter.Controllers
             _context.Add(bill);
             _context.SaveChanges();
 
-            return $"SelectPositions/{bill.Id}";
+            return RedirectToAction(nameof(SelectPositions), new { billId = bill.Id });
         }
       
         [Authorize]

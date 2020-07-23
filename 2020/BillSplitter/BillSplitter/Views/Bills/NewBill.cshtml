@@ -3,47 +3,52 @@
 }
 
 
-<table id="PositionsTable" class="table" width="600" border="1">
-    <tr>
-        <th> Name</th>
-        <th> Price</th>
-        <th> Quantity</th>
-    </tr>
-</table>
-<br>
-<br>
-<label> Name
-    <input type="text" id="NewName">
-</label>
+<form id="NewBillForm" action="/Bills/NewBill" method="post">
+    <table id="PositionsTable" class="table" width="600" border="1">
+        <tr>
+            <th> Name</th>
+            <th> Price</th>
+            <th> Quantity</th>
+        </tr>
+    </table>
 
-<label> Price
-    <input type="number" id="NewPrice">
-</label>
-<label> Quantity
-    <input type="number" id="NewQuantity" value="1" />
-</label>
+    <br>
+    <br>
+    <label>
+        Name
+        <input type="text" id="NewName">
+    </label>
+
+    <label>
+        Price
+        <input type="number" min="0" id="NewPrice">
+    </label>
+    <label>
+        Quantity
+        <input  type="number" min="1" id="NewQuantity" value="1" />
+    </label>
+</form>
+
+
 
 <button onclick="addRow()">Add Position</button>
 <br>
-<button onclick="PostPositions()">Make New Bill</button>
+<br>
+<button onclick="document.getElementById('NewBillForm').submit();">Make New Bill</button>
 <script type="text/javascript">
-    var Positions = []
-    function addRow()
-    {
-        // Get a reference to the table
+
+    function addRow() {
+    
         var tableRef = document.getElementById("PositionsTable");
 
-        // Insert a row in the table at row index 0
-       
         var Price = document.getElementById("NewPrice").value;
-        var Name = document.getElementById("NewName").value;
-        var Quantity = document.getElementById("NewQuantity").value
+        var Name = document.getElementById("NewName").value.trim();
+        var Quantity = document.getElementById("NewQuantity").value;
 
         if (Price == "" || Name == "" || Quantity == "") {
-            alert("empty Price or Name");
+            alert("empty Price, Name or Quantity");
         }
-        else
-        {
+        else {
             var newRow = tableRef.insertRow(-1);
             var cell1 = newRow.insertCell(0);
             var cell2 = newRow.insertCell(1);
@@ -53,29 +58,12 @@
             document.getElementById("NewName").value = "";
             document.getElementById("NewQuantity").value = "1";
 
-            cell1.innerHTML = Name;
-            cell2.innerHTML = Price;
-            cell3.innerHTML = Quantity;
+            cell1.innerHTML = "<input  type=\"text\" name=\"name\" value=\"" + Name + "\" />";
+            cell2.innerHTML = "<input  type=\"number\" min=\"0\" name=\"price\" value=\"" + Price + "\" />";
+            cell3.innerHTML = "<input  type=\"number\" min=\"1\"  name=\"quantity\" value=\"" + Quantity + "\" />";
 
-            Positions.push({ "Name": Name, "Price": parseInt(Price), "Quantity": parseInt(Quantity) });
         }
     }
 
-    function PostPositions()
-    {
-        var json = JSON.stringify(Positions);
-     
-        (async () => {
-            const rawResponse = await fetch('/Bills/AddNewBill', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: json
-            });
-            const content = await rawResponse.json();
-            window.location.href = content; 
-        })();
-    }
+   
 </script>

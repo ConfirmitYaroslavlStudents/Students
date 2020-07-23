@@ -46,6 +46,7 @@
     <Compile Include="Classes\Admin.cs" />
     <Compile Include="Classes\Discipline.cs" />
     <Compile Include="Classes\Person.cs" />
+    <Compile Include="Classes\Requirement.cs" />
     <Compile Include="Classes\Skill.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Program.cs" />

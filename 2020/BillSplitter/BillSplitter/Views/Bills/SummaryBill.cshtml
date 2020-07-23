@@ -22,7 +22,7 @@
                     @Html.DisplayFor(x => item.Sum)
                 </td>
                 <td>
-                    <a asp-action="CustomerBill" asp-route-id="@item.Customer.Id">Details</a>
+                    <a asp-action="CustomerBill" asp-route-customerId="@item.Customer.Id">Details</a>
                 </td>
             </tr>
         }

@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
 using BillSplitter.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using System;
 using BillSplitter.Controllers.Finder;
 using BillSplitter.Controllers.Calculator;
 
@@ -27,12 +25,18 @@ namespace BillSplitter.Controllers
         {
             return View();
         }
-
        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult NewBill()
+        {
+            return View();
         }
 
         [Authorize]
@@ -48,41 +52,31 @@ namespace BillSplitter.Controllers
             _context.Add(bill);
             _context.SaveChanges();
 
-            return $"SelectPositions/{bill.Id}";
+            return $"SelectPositions?billId={bill.Id}";
         }
-
-        
-   
-        [Authorize]
-        [HttpGet]
-        public IActionResult NewBill()
-        {
-            return View();
-        }
-
       
         [Authorize]
         [HttpGet]
-        public IActionResult SelectPositions(int id)
+        public IActionResult SelectPositions(int billId)
         {
             _context.Bill.Load();
             _context.Position.Load(); 
 
-            var bill = _context.Bill.FirstOrDefault(e => e.Id == id);
+            var bill = _context.Bill.FirstOrDefault(e => e.Id == billId);
 
             if (bill == null)
                 return Error();
-            HttpContext.Session.SetInt32("CurrentBillId", (int)id);
+            HttpContext.Session.SetInt32("CurrentBillId", (int)billId);
             return View(bill.Positions);
         }
 
         [Authorize]
+        [HttpPost]
         public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator, string customerName)
         {
-           
-            int BillId = (int)HttpContext.Session.GetInt32("CurrentBillId");
+            int billId = (int)HttpContext.Session.GetInt32("CurrentBillId"); // Remove to make stateless
             var customer = new Customer {
-                BillId = BillId,
+                BillId = billId,
                 UserId = GetCurrentUserId(),
                 Name = HttpContext.User.Identity.Name
             };
@@ -109,50 +103,59 @@ namespace BillSplitter.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(CustomerBill), new { id = BillId });
+            return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
         }
 
         [Authorize]
-        public IActionResult CustomerBill(int? id)
+        [HttpGet]
+        public IActionResult CustomerBill(int? customerId)
         {
-            var result = new CustomerCalculator().Calculate(_context, (int)id);
-            var customer = _context.Customer.FirstOrDefault(x => x.BillId == id && x.UserId == GetCurrentUserId());
+            var result = new CustomerCalculator().Calculate(_context, (int)customerId);
+
+            // Unused code
+            var customer = _context.Customer.FirstOrDefault(x => x.BillId == customerId && x.UserId == GetCurrentUserId());
 
             ViewData["Sum"] = result.Item2;
+            ViewData["customerId"] = customerId;
             return View(result.Item1);
         }
 
-  
-        public IActionResult SummaryBill(int? id)
+        // Authorize?
+        [HttpGet]
+        public IActionResult SummaryBill(int? billId)
         {
-            var currentCustomers = new CustomerFinder().Find(_context, (int)id);
+            var currentCustomers = new CustomerFinder().Find(_context, (int)billId);
 
             var calculator = new CustomerCalculator();
 
-            var viewData = new List<SummaryCustomerInfo>();
+            var customerInfos = new List<SummaryCustomerInfo>();
 
             _context.Customer.Load();
 
             foreach(var customer in currentCustomers)
             {
-                viewData.Add(new SummaryCustomerInfo { Customer = _context.Customer.Find(customer), Sum = calculator.Calculate(_context, customer).Item2});
+                customerInfos.Add(new SummaryCustomerInfo
+                {
+                    Customer = _context.Customer.Find(customer), 
+                    Sum = calculator.Calculate(_context, customer).Item2
+                });
             }
 
-            return View(viewData);
+            return View(customerInfos);
         }
-            
-        
-        [HttpGet]
-        public IActionResult GetSummaryBill(int? id)
-        {
-            var billId = new BillFinder().Find(_context, (int)id).First();
 
-            return RedirectToAction(nameof(SummaryBill), new { id = billId }); ;
+        // Authorize?
+        [HttpGet]
+        public IActionResult GetSummaryBill(int? customerId)
+        {
+            var customerBillId = new BillFinder().Find(_context, (int)customerId).First();
+
+            return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId }); ;
         }
         
-         public int GetCurrentUserId()//Возможно нужно перенести в другой класс и вызывать оттуда 
-        {
+         public int GetCurrentUserId()
+         {
             return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
-        }
+         }
     }
 }

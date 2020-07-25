@@ -15,12 +15,14 @@ namespace BillSplitter.Controllers
         private readonly BillsDbHelper _billHelper;
         private readonly CustomerDbHelper _customerDbHelper;
         private readonly OrdersDbHelper _ordersDbHelper;
+        private readonly PositionsAccessor _positionsAccessor;
 
         public BillsController(BillContext context)
         {
             _billHelper = new BillsDbHelper(context);
             _customerDbHelper = new CustomerDbHelper(context);
             _ordersDbHelper = new OrdersDbHelper(context);
+            _positionsAccessor = new PositionsAccessor(context);
         }
 
         public IActionResult Index()
@@ -35,15 +37,23 @@ namespace BillSplitter.Controllers
         }
 
         [Authorize]
+        [HttpGet] // HttpGet, but creates bill, idk how to sent post or put request via link.
+        [Route("Bills/InitEmptyBill")]
+        public IActionResult InitEmptyBill()
+        {
+            var bill = new Bill();
+            _billHelper.AddBill(bill);
+            return RedirectToAction(nameof(BillPositions), new { billId = bill.Id });
+        }
+
+        [Authorize]
         [HttpGet]
-        [Route("Bills/NewBill/{billId?}")]
-        public IActionResult NewBill(int? billId)
+        [Route("Bills/BillPositions/{billId}")]
+        public IActionResult BillPositions(int billId)
         {
             ViewData["billId"] = billId;
-            var positions = new List<InteractionLevelPosition>();
-            if (billId != null)
-                positions = _billHelper.GetPositionsById((int)billId)
-                    .Select(pos => pos.GetInteractionLevelPosition())
+            var positions = _billHelper.GetPositionsById(billId)
+                    .Select(pos => pos.ToInteractionLevelPosition())
                     .ToList();
 
             return View(positions);
@@ -51,19 +61,12 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/AddBillPosition/{billId?}")]
-        public IActionResult AddBillPosition(int? billId, InteractionLevelPosition position)
+        [Route("Bills/AddBillPosition/{billId}")]
+        public IActionResult AddBillPosition(int billId, InteractionLevelPosition position)
         {
-            var bill = new Bill();
-            if (billId != null)
-                bill = _billHelper.GetBillById((int)billId);
-            else
-                _billHelper.AddBill(bill);
+            _positionsAccessor.AddPosition(position.ToPosition(billId));
 
-            bill.Positions.Add(position.GetPosition());
-            _billHelper.UpdateBills();
-
-            return RedirectToAction(nameof(NewBill), new {billId = bill.Id});
+            return RedirectToAction(nameof(BillPositions), new { billId = billId});
         }
       
         [Authorize]
@@ -76,7 +79,7 @@ namespace BillSplitter.Controllers
                 HttpContext.Session.SetInt32("CurrentBillId", billId);
 
                 var positions = _billHelper.GetPositionsById(billId)
-                    .Select(pos => pos.GetInteractionLevelPosition())
+                    .Select(pos => pos.ToInteractionLevelPosition())
                     .ToList();
 
                 return View(positions);
@@ -97,7 +100,7 @@ namespace BillSplitter.Controllers
 
             _customerDbHelper.AddCustomer(customer);
 
-            _ordersDbHelper.AddOrders(customer, positions);
+            _ordersDbHelper.AddOrders(customer, positions.Where(pos => pos.Selected).ToList());
 
             return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
         }

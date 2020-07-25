@@ -9,13 +9,14 @@
         public int QuantityDenomenator { get; set; } = 1;
         public bool Selected { get; set; } = false;
 
-        public Position GetPosition()
+        public Position ToPosition(int? billId = null)
         {
             return new Position
             {
                 Name = Name,
                 Price = Price,
-                Quantity = QuantityNumerator
+                Quantity = QuantityNumerator,
+                BillId = billId
             };
         }
     }

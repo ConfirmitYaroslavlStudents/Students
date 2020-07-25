@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BillSplitter.Models;
 using BillSplitter.Models.InteractionLevel;
 
@@ -21,20 +22,15 @@ namespace BillSplitter.Data
 
         public void AddOrders(Customer customer, List<InteractionLevelPosition> positions)
         {
-            foreach (var pos in positions)
-            {
-                if (pos.Selected && 1.0 * pos.QuantityNumerator / pos.QuantityDenomenator > double.Epsilon)
+            _context.AddRange(positions
+                .Select(pos => new Order
                 {
-                    var order = new Order
-                    {
-                        CustomerId = customer.Id,
-                        PositionId = pos.Id,
-                        Quantity = 1.0 * pos.QuantityNumerator / pos.QuantityDenomenator
-                    };
-
-                    AddOrder(order);
-                }
-            }
+                    CustomerId = customer.Id,
+                    PositionId = pos.Id,
+                    Quantity = 1.0 * pos.QuantityNumerator / pos.QuantityDenomenator
+                })
+                .Where(order => order.Quantity > double.Epsilon)); // part of validation, maybe move to validator
+            _context.SaveChanges();
         }
     }
 }

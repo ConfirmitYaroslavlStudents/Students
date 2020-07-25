@@ -36,29 +36,34 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult NewBill()
+        [Route("Bills/NewBill/{billId?}")]
+        public IActionResult NewBill(int? billId)
         {
-            return View();
+            ViewData["billId"] = billId;
+            var positions = new List<InteractionLevelPosition>();
+            if (billId != null)
+                positions = _billHelper.GetPositionsById((int)billId)
+                    .Select(pos => pos.GetInteractionLevelPosition())
+                    .ToList();
+
+            return View(positions);
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult NewBill(string[] name, decimal[] price, int[] quantity)
+        [Route("Bills/AddBillPosition/{billId?}")]
+        public IActionResult AddBillPosition(int? billId, InteractionLevelPosition position)
         {
-            //validate
-            
-            // learn how to bind in array
-            var positionsList = new List<Position>();
-            for (int i = 0; i < name.Length; i++)
-                positionsList.Add(new Position { Name = name[i], Price = price[i], Quantity = quantity[i] });
+            var bill = new Bill();
+            if (billId != null)
+                bill = _billHelper.GetBillById((int)billId);
+            else
+                _billHelper.AddBill(bill);
 
-            var bill = new Bill {
-                Positions = positionsList
-            };
+            bill.Positions.Add(position.GetPosition());
+            _billHelper.UpdateBills();
 
-            _billHelper.AddBill(bill);
-
-            return RedirectToAction(nameof(SelectPositions), new { billId = bill.Id });
+            return RedirectToAction(nameof(NewBill), new {billId = bill.Id});
         }
       
         [Authorize]
@@ -147,5 +152,4 @@ namespace BillSplitter.Controllers
             return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
          }
     }
-
 }

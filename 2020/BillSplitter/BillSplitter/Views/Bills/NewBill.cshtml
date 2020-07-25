@@ -1,63 +1,41 @@
-﻿@{
+﻿@using BillSplitter.Models.InteractionLevel
+@model List<BillSplitter.Models.InteractionLevel.InteractionLevelPosition>
+@{
     ViewData["Title"] = "New Bill";
 }
 
 
 <form id="NewBillForm" action="/Bills/NewBill" method="post">
-    <table id="PositionsTable" class="table" width="600" border="1">
+    <table id="PositionsTable" class="table" >
+        <thead>
         <tr>
-            <th> Name</th>
-            <th> Price</th>
-            <th> Quantity</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
         </tr>
+        </thead>
+        <tbody>
+            @foreach (var position in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => position.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => position.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => position.QuantityNumerator)
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
-
-    <br>
-    <br>
-    <label>
-        Name
-        <input type="text" id="NewName">
-    </label>
-
-    <label>
-        Price
-        <input type="number" min="0" id="NewPrice">
-    </label>
-    <label>
-        Quantity
-        <input  type="number" min="1" id="NewQuantity" value="1" />
-    </label>
 </form>
-
-
-
-<button onclick="addRow()">Add Position</button>
-<br>
-<br>
-<button onclick="document.getElementById('NewBillForm').submit();">Make New Bill</button>
-<script type="text/javascript">
-    function addRow() {
-        var tableRef = document.getElementById("PositionsTable");
-
-        var price = document.getElementById("NewPrice").value;
-        var name = document.getElementById("NewName").value.trim();
-        var quantity = document.getElementById("NewQuantity").value;
-
-        if (price == "" || name == "" || quantity == "")
-            alert("empty Price, Name or Quantity"); // remove alert
-        else {
-            var newRow = tableRef.insertRow(-1);
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-
-            document.getElementById("NewPrice").value = "";
-            document.getElementById("NewName").value = "";
-            document.getElementById("NewQuantity").value = "1";
-
-            cell1.innerHTML = "<input  type=\"text\" name=\"name\" value=\"" + name + "\" />";
-            cell2.innerHTML = "<input  type=\"number\" min=\"0\" name=\"price\" value=\"" + price + "\" />";
-            cell3.innerHTML = "<input  type=\"number\" min=\"1\"  name=\"quantity\" value=\"" + quantity + "\" />";
-        }
-    }
-</script>
+@Html.Partial("AddPositionPartial", new InteractionLevelPosition(), ViewData)
+<button onclick="location.href='@Url.Action("SelectPositions", "Bills", new
+                                {
+                                    billId = ViewData["billId"]
+                                })'">
+    Go to selection
+</button>

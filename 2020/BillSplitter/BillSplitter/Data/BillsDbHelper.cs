@@ -36,6 +36,11 @@ namespace BillSplitter.Data
             return _context.Bill.FirstOrDefault(x => x.Id == billId)?.Customers;
         }
 
+        public void UpdateBills()
+        {
+            _context.SaveChanges();
+        }
+
         public bool DbContains(int billId)
         {
             return _context.Bill.FirstOrDefault(x => x.Id == billId) != null;

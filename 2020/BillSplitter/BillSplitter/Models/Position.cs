@@ -9,7 +9,7 @@ namespace BillSplitter.Models
         public decimal Price { get; set; }
         public string Name { get; set; }
         public virtual List<Order> Orders { get; set; }
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public InteractionLevelPosition GetInteractionLevelPosition()
         {
@@ -17,7 +17,8 @@ namespace BillSplitter.Models
             {
                 Id = Id,
                 Name = Name,
-                Price = Price
+                Price = Price,
+                QuantityNumerator = Quantity
             };
         }
     }

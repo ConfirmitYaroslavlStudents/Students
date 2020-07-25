@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
 {
-    public class BillsDbHelper
+    public class BillsDbAccessor
     {
         private BillContext _context;
 
-        public BillsDbHelper(BillContext context)
+        public BillsDbAccessor(BillContext context)
         {
             _context = context;
         }
@@ -26,11 +27,13 @@ namespace BillSplitter.Data
             return bill;
         }
 
+        [Obsolete]
         public List<Position> GetPositionsById(int billId)
         {
             return _context.Bill.FirstOrDefault(x => x.Id == billId)?.Positions;
         }
 
+        [Obsolete]
         public List<Customer> GetCustomersById(int billId)
         {
             return _context.Bill.FirstOrDefault(x => x.Id == billId)?.Customers;

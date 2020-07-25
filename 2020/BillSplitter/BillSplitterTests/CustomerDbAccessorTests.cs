@@ -9,7 +9,7 @@ namespace BillSplitterTests
     public class CustomerDbAccessorTests
     {
         [Fact]
-        public void AddCustomer_AddNewCustomerInDB()
+        public void AddCustomer_AddNewCustomerInDb()
         {
             using var db = InMemoryContextBuilder.Build();
             var accessor = new CustomerDbAccessor(db);

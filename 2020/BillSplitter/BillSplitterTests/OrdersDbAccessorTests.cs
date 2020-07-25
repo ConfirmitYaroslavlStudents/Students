@@ -9,7 +9,7 @@ namespace BillSplitterTests
     public class OrdersDbAccessorTests
     {
         [Fact]
-        public void AddOrder_AddNewOrdernDB()
+        public void AddOrder_AddNewOrderInDb()
         {
             using var db = InMemoryContextBuilder.Build();
             var accessor = new OrdersDbAccessor(db);

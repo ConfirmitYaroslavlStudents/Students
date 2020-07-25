@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
 using BillSplitter.Data;
+using BillSplitter.Models.InteractionLevel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
@@ -69,14 +70,18 @@ namespace BillSplitter.Controllers
             {
                 HttpContext.Session.SetInt32("CurrentBillId", billId);
 
-                return View(_billHelper.GetPositionsById(billId));
+                var positions = _billHelper.GetPositionsById(billId)
+                    .Select(pos => pos.GetInteractionLevelPosition())
+                    .ToList();
+
+                return View(positions);
             }
             return Error();
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator)
+        public IActionResult DoneSelect(List<InteractionLevelPosition> positions)
         {
             int billId = (int)HttpContext.Session.GetInt32("CurrentBillId"); // Remove to make stateless
             var customer = new Customer {
@@ -87,7 +92,7 @@ namespace BillSplitter.Controllers
 
             _customerDbHelper.AddCustomer(customer);
 
-            _ordersDbHelper.AddOrders(customer, selected, numerator, denomenator);
+            _ordersDbHelper.AddOrders(customer, positions);
 
             return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
         }

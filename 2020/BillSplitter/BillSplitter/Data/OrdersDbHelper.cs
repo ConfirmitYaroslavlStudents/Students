@@ -1,4 +1,6 @@
-﻿using BillSplitter.Models;
+﻿using System.Collections.Generic;
+using BillSplitter.Models;
+using BillSplitter.Models.InteractionLevel;
 
 namespace BillSplitter.Data
 {
@@ -17,17 +19,17 @@ namespace BillSplitter.Data
             _context.SaveChanges();
         }
 
-        public void AddOrders(Customer customer, int[] selected, int[] numerator, int[] denomenator)
+        public void AddOrders(Customer customer, List<InteractionLevelPosition> positions)
         {
-            for (int i = 0; i < selected.Length; i++)
+            foreach (var pos in positions)
             {
-                if (1.0 * numerator[i] / denomenator[i] > double.Epsilon)
+                if (pos.Selected && 1.0 * pos.QuantityNumerator / pos.QuantityDenomenator > double.Epsilon)
                 {
                     var order = new Order
                     {
                         CustomerId = customer.Id,
-                        PositionId = selected[i],
-                        Quantity = 1.0 * numerator[i] / denomenator[i]
+                        PositionId = pos.Id,
+                        Quantity = 1.0 * pos.QuantityNumerator / pos.QuantityDenomenator
                     };
 
                     AddOrder(order);

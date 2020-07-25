@@ -72,7 +72,13 @@ namespace BillSplitterTests
 
                 };
 
-            Assert.Equal(expected, new CustomerBillBuilder().Build(customer));
+            var actual = new CustomerBillBuilder().Build(customer);
+
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.Equal(expected[i].Name, actual[i].Name);
+                Assert.Equal(expected[i].Price, actual[i].Price);
+            }
 
         }
     }

@@ -16,7 +16,7 @@ namespace BillSplitter.Data
 
         public void AddBill(Bill bill)
         {
-            _context.Add(bill);
+            _context.Bill.Add(bill);
             _context.SaveChanges();
         }
 

@@ -47,5 +47,16 @@ namespace BillSplitterTests
 
             Assert.Equal(expected, actual);
         }
+        [Fact]
+        public void GetCustomerById_ReturnsNull()
+        {
+            using var db = InMemoryContextBuilder.Build();
+            var accessor = new CustomerDbAccessor(db);
+
+            Customer expected = null;
+            var actual = accessor.GetCustomerById(1);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }

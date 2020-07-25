@@ -51,7 +51,20 @@ namespace BillSplitterTests
         }
 
         [Fact]
-        public void DbContains_DbContainsBill_ReturnsTrue()
+        public void GetBillById_ReturnsNull()
+        {
+            using var db = InMemoryContextBuilder.Build();
+
+            var accessor = new BillsDbAccessor(db);
+
+            Bill expected = null;
+            var actual = accessor.GetBillById(1);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DbContains_ReturnsTrue()
         {
             using var db = InMemoryContextBuilder.Build();
 
@@ -65,6 +78,22 @@ namespace BillSplitterTests
             accessor.AddBill(bill);
 
             Assert.True(accessor.DbContains(1));
+        }
+        [Fact]
+        public void DbContains_ReturnsFalse()
+        {
+            using var db = InMemoryContextBuilder.Build();
+
+            var accessor = new BillsDbAccessor(db);
+
+            var bill1 = new Bill()
+            {
+                Id = 1
+            };
+
+            accessor.AddBill(bill1);
+
+            Assert.False(accessor.DbContains(2));
         }
     }
 }

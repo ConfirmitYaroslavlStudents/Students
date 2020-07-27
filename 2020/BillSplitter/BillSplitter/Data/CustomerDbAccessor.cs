@@ -3,18 +3,18 @@ using BillSplitter.Models;
 
 namespace BillSplitter.Data
 {
-    public class CustomerDbHelper
+    public class CustomerDbAccessor
     {
         private BillContext _context;
 
-        public CustomerDbHelper(BillContext context)
+        public CustomerDbAccessor(BillContext context)
         {
             _context = context;
         }
 
         public void AddCustomer(Customer customer)
         {
-            _context.Add(customer);
+            _context.Customer.Add(customer);
             _context.SaveChanges();
         }
 

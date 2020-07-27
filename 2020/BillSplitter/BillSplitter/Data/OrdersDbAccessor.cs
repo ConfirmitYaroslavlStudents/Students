@@ -2,11 +2,11 @@
 
 namespace BillSplitter.Data
 {
-    public class OrdersDbHelper
+    public class OrdersDbAccessor
     {
         private BillContext _context;
         
-        public OrdersDbHelper(BillContext context)
+        public OrdersDbAccessor(BillContext context)
         {
             _context = context;
         }
@@ -16,7 +16,7 @@ namespace BillSplitter.Data
             _context.Orders.Add(order);
             _context.SaveChanges();
         }
-
+        
         public void AddOrders(Customer customer, int[] selected, int[] numerator, int[] denomenator)
         {
             for (int i = 0; i < selected.Length; i++)

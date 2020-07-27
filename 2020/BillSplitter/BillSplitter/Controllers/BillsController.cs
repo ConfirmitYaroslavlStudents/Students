@@ -12,16 +12,16 @@ namespace BillSplitter.Controllers
 {
     public class BillsController : Controller
     {
-        private readonly BillsDbHelper _billHelper;
-        private readonly CustomerDbHelper _customerDbHelper;
-        private readonly OrdersDbHelper _ordersDbHelper;
+        private readonly BillsDbAccessor _billHelper;
+        private readonly CustomerDbAccessor _customerDbHelper;
+        private readonly OrdersDbAccessor _ordersDbHelper;
         private readonly PositionsAccessor _positionsAccessor;
 
         public BillsController(BillContext context)
         {
-            _billHelper = new BillsDbHelper(context);
-            _customerDbHelper = new CustomerDbHelper(context);
-            _ordersDbHelper = new OrdersDbHelper(context);
+            _billHelper = new BillsDbAccessor(context);
+            _customerDbHelper = new CustomerDbAccessor(context);
+            _ordersDbHelper = new OrdersDbAccessor(context);
             _positionsAccessor = new PositionsAccessor(context);
         }
 

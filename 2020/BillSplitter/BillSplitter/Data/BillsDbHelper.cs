@@ -4,11 +4,11 @@ using BillSplitter.Models;
 
 namespace BillSplitter.Data
 {
-    public class BillsDbHelper
+    public class BillsDbAccessor
     {
         private BillContext _context;
 
-        public BillsDbHelper(BillContext context)
+        public BillsDbAccessor(BillContext context)
         {
             _context = context;
         }

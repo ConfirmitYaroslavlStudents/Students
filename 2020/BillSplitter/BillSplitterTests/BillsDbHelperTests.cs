@@ -12,7 +12,7 @@ namespace BillSplitterTests
         public void AddBill_AddsNewBill()
         {
             using var db = InMemoryContextBuilder.Build();
-            var helper = new BillsDbHelper(db);
+            var helper = new BillsDbAccessor(db);
 
             var bill = new Bill()
             {
@@ -28,7 +28,7 @@ namespace BillSplitterTests
         public void GetBillById_ReturnsRightBill()
         {
             using var db = InMemoryContextBuilder.Build();
-            var helper = new BillsDbHelper(db);
+            var helper = new BillsDbAccessor(db);
 
             var bill1 = new Bill()
             {
@@ -52,7 +52,7 @@ namespace BillSplitterTests
         public void GetPositionsById_ReturnsPositionList()
         {
             using var db = InMemoryContextBuilder.Build();
-            var helper = new BillsDbHelper(db);
+            var helper = new BillsDbAccessor(db);
 
             var expected = new List<Position>()
             {
@@ -78,7 +78,7 @@ namespace BillSplitterTests
         public void GetCustomersById_ReturnsListOfCustomers()
         {
             using var db = InMemoryContextBuilder.Build();
-            var helper = new BillsDbHelper(db);
+            var helper = new BillsDbAccessor(db);
 
             var expected = new List<Customer>()
             {
@@ -104,7 +104,7 @@ namespace BillSplitterTests
         public void DbContains_DbContainsBill_ReturnsTrue()
         {
             using var db = InMemoryContextBuilder.Build();
-            var helper = new BillsDbHelper(db);
+            var helper = new BillsDbAccessor(db);
 
             var bill = new Bill()
             {

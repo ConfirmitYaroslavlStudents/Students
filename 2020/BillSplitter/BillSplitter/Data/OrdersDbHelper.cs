@@ -5,11 +5,11 @@ using BillSplitter.Models.InteractionLevel;
 
 namespace BillSplitter.Data
 {
-    public class OrdersDbHelper
+    public class OrdersDbAccessor
     {
         private BillContext _context;
         
-        public OrdersDbHelper(BillContext context)
+        public OrdersDbAccessor(BillContext context)
         {
             _context = context;
         }

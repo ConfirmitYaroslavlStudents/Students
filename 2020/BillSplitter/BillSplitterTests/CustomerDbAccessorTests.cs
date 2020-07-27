@@ -12,7 +12,7 @@ namespace BillSplitterTests
         public void AddCustomer_AddNewCustomerInDb()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new CustomerDbAccessor(db);
+            var accessor = new CustomersDbAccessor(db);
 
             var customer = new Customer()
             {
@@ -28,7 +28,7 @@ namespace BillSplitterTests
         public void GetCustomerById_ReturnsRightCustomer()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new CustomerDbAccessor(db);
+            var accessor = new CustomersDbAccessor(db);
 
             var customer1 = new Customer()
             {
@@ -51,7 +51,7 @@ namespace BillSplitterTests
         public void GetCustomerById_ReturnsNull()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new CustomerDbAccessor(db);
+            var accessor = new CustomersDbAccessor(db);
 
             Customer expected = null;
             var actual = accessor.GetCustomerById(1);

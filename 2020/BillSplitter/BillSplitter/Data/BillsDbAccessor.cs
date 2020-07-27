@@ -26,24 +26,7 @@ namespace BillSplitter.Data
 
             return bill;
         }
-
-        [Obsolete]
-        public List<Position> GetPositionsById(int billId)
-        {
-            return _context.Bill.FirstOrDefault(x => x.Id == billId)?.Positions;
-        }
-
-        [Obsolete]
-        public List<Customer> GetCustomersById(int billId)
-        {
-            return _context.Bill.FirstOrDefault(x => x.Id == billId)?.Customers;
-        }
-
-        public void UpdateBills()
-        {
-            _context.SaveChanges();
-        }
-
+    
         public bool DbContains(int billId)
         {
             return _context.Bill.FirstOrDefault(x => x.Id == billId) != null;

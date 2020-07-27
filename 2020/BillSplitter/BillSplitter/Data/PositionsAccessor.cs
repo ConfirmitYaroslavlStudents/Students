@@ -4,11 +4,11 @@ using BillSplitter.Models;
 
 namespace BillSplitter.Data
 {
-    public class PositionsAccessor
+    public class PositionsDbAccessor
     {
         private BillContext _context;
 
-        public PositionsAccessor(BillContext context)
+        public PositionsDbAccessor(BillContext context)
         {
             _context = context;
         }
@@ -19,9 +19,5 @@ namespace BillSplitter.Data
             _context.SaveChanges();
         }
 
-        public Position GetPositionById(int id)
-        {
-            return _context.Position.FirstOrDefault(pos => pos.Id == id);
-        }
     }
 }

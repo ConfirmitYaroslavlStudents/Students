@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
 using BillSplitter.Data;
+using BillSplitter.Models.InteractionLevel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
@@ -14,12 +15,14 @@ namespace BillSplitter.Controllers
         private readonly BillsDbHelper _billHelper;
         private readonly CustomerDbHelper _customerDbHelper;
         private readonly OrdersDbHelper _ordersDbHelper;
+        private readonly PositionsAccessor _positionsAccessor;
 
         public BillsController(BillContext context)
         {
             _billHelper = new BillsDbHelper(context);
             _customerDbHelper = new CustomerDbHelper(context);
             _ordersDbHelper = new OrdersDbHelper(context);
+            _positionsAccessor = new PositionsAccessor(context);
         }
 
         public IActionResult Index()
@@ -34,30 +37,36 @@ namespace BillSplitter.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        public IActionResult NewBill()
+        [HttpGet] // HttpGet, but creates bill, idk how to sent post or put request via link.
+        [Route("Bills/InitEmptyBill")]
+        public IActionResult InitEmptyBill()
         {
-            return View();
+            var bill = new Bill();
+            _billHelper.AddBill(bill);
+            return RedirectToAction(nameof(BillPositions), new { billId = bill.Id });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/BillPositions/{billId}")]
+        public IActionResult BillPositions(int billId)
+        {
+            ViewData["billId"] = billId;
+            var positions = _billHelper.GetPositionsById(billId)
+                    .Select(pos => pos.ToInteractionLevelPosition())
+                    .ToList();
+
+            return View(positions);
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult NewBill(string[] name, decimal[] price, int[] quantity)
+        [Route("Bills/AddBillPosition/{billId}")]
+        public IActionResult AddBillPosition(int billId, InteractionLevelPosition position)
         {
-            //validate
-            
-            // learn how to bind in array
-            var positionsList = new List<Position>();
-            for (int i = 0; i < name.Length; i++)
-                positionsList.Add(new Position { Name = name[i], Price = price[i], Quantity = quantity[i] });
+            _positionsAccessor.AddPosition(position.ToPosition(billId));
 
-            var bill = new Bill {
-                Positions = positionsList
-            };
-
-            _billHelper.AddBill(bill);
-
-            return RedirectToAction(nameof(SelectPositions), new { billId = bill.Id });
+            return RedirectToAction(nameof(BillPositions), new { billId = billId});
         }
       
         [Authorize]
@@ -69,14 +78,18 @@ namespace BillSplitter.Controllers
             {
                 HttpContext.Session.SetInt32("CurrentBillId", billId);
 
-                return View(_billHelper.GetPositionsById(billId));
+                var positions = _billHelper.GetPositionsById(billId)
+                    .Select(pos => pos.ToInteractionLevelPosition())
+                    .ToList();
+
+                return View(positions);
             }
             return Error();
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult DoneSelect(int[] selected, int[] numerator, int[] denomenator)
+        public IActionResult DoneSelect(List<InteractionLevelPosition> positions)
         {
             int billId = (int)HttpContext.Session.GetInt32("CurrentBillId"); // Remove to make stateless
             var customer = new Customer {
@@ -87,7 +100,7 @@ namespace BillSplitter.Controllers
 
             _customerDbHelper.AddCustomer(customer);
 
-            _ordersDbHelper.AddOrders(customer, selected, numerator, denomenator);
+            _ordersDbHelper.AddOrders(customer, positions.Where(pos => pos.Selected).ToList());
 
             return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
         }
@@ -142,5 +155,4 @@ namespace BillSplitter.Controllers
             return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
          }
     }
-
 }

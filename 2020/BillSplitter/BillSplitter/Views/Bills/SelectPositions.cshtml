@@ -1,4 +1,4 @@
-﻿@model List<BillSplitter.Models.Position>
+﻿@model List<BillSplitter.Models.InteractionLevel.InteractionLevelPosition>
 
 <form method="post" action="/Bills/DoneSelect">
     <table class="table" id="positionTable">
@@ -23,12 +23,27 @@
             {
                 <tr>
                     <td>
-                        <input type="checkbox" name="selected" value="@Model[i].Id", id="check" onclick="changeQuantityState(@(i + 1))"/>
+                        @Html.CheckBoxFor(modelItem => modelItem[i].Selected, new
+                        {
+                            @onclick = $"changeQuantityState({i + 1})"
+                        })
                     </td>
                     <td>
-                        <input type="number" name="numerator" value="0" min="1" step="1" disabled id="num"/>
+                        @Html.TextBoxFor(modelItem => modelItem[i].QuantityNumerator, new
+                        {
+                            value = 0,
+                            min = 0,
+                            step = 1,
+                            disabled = true
+                        })
                         /
-                        <input type="number" name="denomenator" value="1" min="1" step="1" disabled id="denom" />
+                        @Html.TextBoxFor(modelItem => modelItem[i].QuantityDenomenator, new
+                        {
+                            value = 1,
+                            min = 1,
+                            step = 1,
+                            disabled = true
+                        })
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => modelItem[i].Name)
@@ -36,12 +51,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => modelItem[i].Price)
                     </td>
+                    <td>
+                        @Html.HiddenFor(modelItem => modelItem[i].Id)
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
    
-    <input type="submit"></input>
+    <input type="submit" />
 </form>
 <script>
     function changeQuantityState(rowNumber) {

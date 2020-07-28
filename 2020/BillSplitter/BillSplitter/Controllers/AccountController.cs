@@ -6,16 +6,15 @@ using BillSplitter.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BillSplitter.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly BillContext _context;
+        private readonly UsersDbAccessor _usersAccessor;
         public AccountController(BillContext context)
         {
-            _context = context;
+            _usersAccessor = new UsersDbAccessor(context);
         }
         [HttpGet]
         public IActionResult Login(string returnUrl)
@@ -29,7 +28,7 @@ namespace BillSplitter.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+                User user = _usersAccessor.GetUserByName(model.Name);
                 if (user != null)
                 {
                     await Authenticate(user);
@@ -39,8 +38,8 @@ namespace BillSplitter.Controllers
                     else
                         return RedirectToAction("Index", "Bills");
                 }
-
-                ModelState.AddModelError("Name", "No Such User");
+                else
+                    ModelState.AddModelError("Name", "No Such User");
             }
             return View(model);
         }
@@ -57,12 +56,11 @@ namespace BillSplitter.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Name == model.Name);
+                User user = _usersAccessor.GetUserByName(model.Name);
                 if (user == null)
                 {
                     User new_user = new User { Name = model.Name };
-                    _context.Users.Add(new_user);
-                    await _context.SaveChangesAsync();
+                    _usersAccessor.AddUser(new_user);
 
                     await Authenticate(new_user); 
 

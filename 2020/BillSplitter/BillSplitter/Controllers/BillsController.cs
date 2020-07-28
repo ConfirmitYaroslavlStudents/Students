@@ -76,7 +76,7 @@ namespace BillSplitter.Controllers
         {
             if (_billAccessor.DbContains(billId))
             {
-                HttpContext.Session.SetInt32("CurrentBillId", billId);
+                ViewData["billId"] = billId;
 
                 var positions = _billAccessor.GetBillById(billId).Positions
                     .Select(pos => pos.ToInteractionLevelPosition())
@@ -89,9 +89,8 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult DoneSelect(List<InteractionLevelPosition> positions)
+        public IActionResult DoneSelect(int billId, List<InteractionLevelPosition> positions)
         {
-            int billId = (int)HttpContext.Session.GetInt32("CurrentBillId"); // Remove to make stateless
             var customer = new Customer {
                 BillId = billId,
                 UserId = GetCurrentUserId(),

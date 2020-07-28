@@ -1,6 +1,6 @@
 ﻿@model List<BillSplitter.Models.InteractionLevel.InteractionLevelPosition>
 
-<form method="post" action="/Bills/DoneSelect">
+<form asp-action="DoneSelect",  asp-route-billId = "@ViewData["billId"]">
     <table class="table" id="positionTable">
         <thead>
             <tr>

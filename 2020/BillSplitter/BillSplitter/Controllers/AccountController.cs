@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
@@ -25,8 +23,8 @@ namespace BillSplitter.Controllers
             ViewBag.returnUrl = returnUrl;
             return View();
         }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -39,21 +37,22 @@ namespace BillSplitter.Controllers
                     if (returnUrl != null)
                         return Redirect(returnUrl);
                     else
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Bills");
                 }
 
                 ModelState.AddModelError("Name", "No Such User");
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Register(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;
             return View();
         }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -70,7 +69,7 @@ namespace BillSplitter.Controllers
                     if (returnUrl != null)
                         return Redirect(returnUrl);
                     else
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Bills");
                 }
                 else
                     ModelState.AddModelError("Name", "UserName is already used");
@@ -98,7 +97,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Bills");
         }
     }
 }

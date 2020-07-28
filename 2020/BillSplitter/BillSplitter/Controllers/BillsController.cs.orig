@@ -12,17 +12,17 @@ namespace BillSplitter.Controllers
 {
     public class BillsController : Controller
     {
-        private readonly BillsDbAccessor _billAccessor;
-        private readonly CustomersDbAccessor _customerDbAccessor;
-        private readonly OrdersDbAccessor _ordersDbAccessor;
-        private readonly PositionsDbAccessor _positionsAccessor;
+        private readonly BillsDbAccessor _billHelper;
+        private readonly CustomerDbAccessor _customerDbHelper;
+        private readonly OrdersDbAccessor _ordersDbHelper;
+        private readonly PositionsAccessor _positionsAccessor;
 
         public BillsController(BillContext context)
         {
-            _billAccessor = new BillsDbAccessor(context);
-            _customerDbAccessor = new CustomersDbAccessor(context);
-            _ordersDbAccessor = new OrdersDbAccessor(context);
-            _positionsAccessor = new PositionsDbAccessor(context);
+            _billHelper = new BillsDbAccessor(context);
+            _customerDbHelper = new CustomerDbAccessor(context);
+            _ordersDbHelper = new OrdersDbAccessor(context);
+            _positionsAccessor = new PositionsAccessor(context);
         }
 
         public IActionResult Index()
@@ -42,7 +42,7 @@ namespace BillSplitter.Controllers
         public IActionResult InitEmptyBill()
         {
             var bill = new Bill();
-            _billAccessor.AddBill(bill);
+            _billHelper.AddBill(bill);
             return RedirectToAction(nameof(BillPositions), new { billId = bill.Id });
         }
 
@@ -52,7 +52,7 @@ namespace BillSplitter.Controllers
         public IActionResult BillPositions(int billId)
         {
             ViewData["billId"] = billId;
-            var positions = _billAccessor.GetBillById(billId).Positions
+            var positions = _billHelper.GetPositionsById(billId)
                     .Select(pos => pos.ToInteractionLevelPosition())
                     .ToList();
 
@@ -74,11 +74,11 @@ namespace BillSplitter.Controllers
         [Route("Bills/SelectPositions/{billId}")]
         public IActionResult SelectPositions(int billId)
         {
-            if (_billAccessor.DbContains(billId))
+            if (_billHelper.DbContains(billId))
             {
                 HttpContext.Session.SetInt32("CurrentBillId", billId);
 
-                var positions = _billAccessor.GetBillById(billId).Positions
+                var positions = _billHelper.GetPositionsById(billId)
                     .Select(pos => pos.ToInteractionLevelPosition())
                     .ToList();
 
@@ -98,9 +98,9 @@ namespace BillSplitter.Controllers
                 Name = HttpContext.User.Identity.Name
             };
 
-            _customerDbAccessor.AddCustomer(customer);
+            _customerDbHelper.AddCustomer(customer);
 
-            _ordersDbAccessor.AddOrders(customer, positions.Where(pos => pos.Selected).ToList());
+            _ordersDbHelper.AddOrders(customer, positions.Where(pos => pos.Selected).ToList());
 
             return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
         }
@@ -110,7 +110,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/CustomerBill/{customerId}")]
         public IActionResult CustomerBill(int customerId)
         {
-            var result = new CustomerBillBuilder().Build(_customerDbAccessor.GetCustomerById(customerId));
+            var result = new CustomerBillBuilder().Build(_customerDbHelper.GetCustomerById(customerId));
 
             ViewData["Sum"] = result.Sum(x => x.Price);
             ViewData["customerId"] = customerId;
@@ -122,7 +122,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/SummaryBill/{billId}")]
         public IActionResult SummaryBill(int billId)
         {
-            var currentCustomers = _billAccessor.GetBillById(billId).Customers;
+            var currentCustomers = _billHelper.GetCustomersById(billId);
 
             var builder = new CustomerBillBuilder();
 
@@ -145,7 +145,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/GetSummaryBill/{customerId}")]
         public IActionResult GetSummaryBill(int customerId)
         {
-            var customerBillId = _customerDbAccessor.GetCustomerById(customerId).BillId;
+            var customerBillId = _customerDbHelper.GetCustomerById(customerId).BillId;
 
             return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId });
         }

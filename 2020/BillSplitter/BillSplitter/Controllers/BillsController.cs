@@ -6,7 +6,7 @@ using BillSplitter.Models;
 using BillSplitter.Data;
 using BillSplitter.Models.InteractionLevel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using BillSplitter.Validators;
 
 namespace BillSplitter.Controllers
 {
@@ -51,10 +51,13 @@ namespace BillSplitter.Controllers
         [Route("Bills/BillPositions/{billId}")]
         public IActionResult BillPositions(int billId)
         {
+            if (!_billAccessor.DbContains(billId))
+                return Error();
+
             ViewData["billId"] = billId;
             var positions = _billAccessor.GetBillById(billId).Positions
-                    .Select(pos => pos.ToInteractionLevelPosition())
-                    .ToList();
+                .Select(pos => pos.ToInteractionLevelPosition())
+                .ToList();
 
             return View(positions);
         }
@@ -64,9 +67,18 @@ namespace BillSplitter.Controllers
         [Route("Bills/AddBillPosition/{billId}")]
         public IActionResult AddBillPosition(int billId, InteractionLevelPosition position)
         {
+            var validator = new Validator<InteractionLevelPosition>()
+                .AddValidation(x => x.Price > 0)
+                .AddValidation(x => !string.IsNullOrEmpty(x.Name.Trim()))
+                .AddValidation(x => x.QuantityDenomenator == 1)
+                .AddValidation(x => x.QuantityNumerator > 0);
+
+            if (!validator.Validate(position))
+                return Error();
+
             _positionsAccessor.AddPosition(position.ToPosition(billId));
 
-            return RedirectToAction(nameof(BillPositions), new { billId = billId});
+            return RedirectToAction(nameof(BillPositions), new {billId = billId});
         }
       
         [Authorize]
@@ -74,34 +86,47 @@ namespace BillSplitter.Controllers
         [Route("Bills/SelectPositions/{billId}")]
         public IActionResult SelectPositions(int billId)
         {
-            if (_billAccessor.DbContains(billId))
-            {
-                ViewData["billId"] = billId;
+            if (!_billAccessor.DbContains(billId))
+                return Error();
+            ViewData["billId"] = billId;
 
-                var positions = _billAccessor.GetBillById(billId).Positions
-                    .Select(pos => pos.ToInteractionLevelPosition())
-                    .ToList();
+            var positions = _billAccessor.GetBillById(billId).Positions
+                .Select(pos => pos.ToInteractionLevelPosition())
+                .ToList();
 
-                return View(positions);
-            }
-            return Error();
+            return View(positions);
         }
 
         [Authorize]
         [HttpPost]
         public IActionResult DoneSelect(int billId, List<InteractionLevelPosition> positions)
         {
+            if (!_billAccessor.DbContains(billId))
+                return Error();
+
             var customer = new Customer {
                 BillId = billId,
                 UserId = GetCurrentUserId(),
                 Name = HttpContext.User.Identity.Name
             };
 
-            _customerDbAccessor.AddCustomer(customer);
+            var selectedPositions = positions.Where(pos => pos.Selected).ToList();
 
-            _ordersDbAccessor.AddOrders(customer, positions.Where(pos => pos.Selected).ToList());
+            var validator = new Validator<InteractionLevelPosition>()
+                .AddValidation(x => _positionsAccessor.DbContains(x.Id))
+                .AddValidation(x => x.QuantityDenomenator > 0)
+                .AddValidation(x => x.QuantityNumerator > 0);
 
-            return RedirectToAction(nameof(CustomerBill), new { customerId = customer.Id });
+            if (selectedPositions.All(validator.Validate))
+            {
+                _customerDbAccessor.AddCustomer(customer);
+
+                _ordersDbAccessor.AddOrders(customer, selectedPositions);
+
+                return RedirectToAction(nameof(CustomerBill), new {customerId = customer.Id});
+            }
+
+            return Error();
         }
 
         [Authorize]
@@ -109,7 +134,11 @@ namespace BillSplitter.Controllers
         [Route("Bills/CustomerBill/{customerId}")]
         public IActionResult CustomerBill(int customerId)
         {
-            var result = new CustomerBillBuilder().Build(_customerDbAccessor.GetCustomerById(customerId));
+            if (!_customerDbAccessor.DbContains(customerId))
+                return Error();
+
+            var result = new CustomerBillBuilder()
+                .Build(_customerDbAccessor.GetCustomerById(customerId));
 
             ViewData["Sum"] = result.Sum(x => x.Price);
             ViewData["customerId"] = customerId;
@@ -121,6 +150,9 @@ namespace BillSplitter.Controllers
         [Route("Bills/SummaryBill/{billId}")]
         public IActionResult SummaryBill(int billId)
         {
+            if (!_billAccessor.DbContains(billId))
+                return Error();
+
             var currentCustomers = _billAccessor.GetBillById(billId).Customers;
 
             var builder = new CustomerBillBuilder();
@@ -144,6 +176,9 @@ namespace BillSplitter.Controllers
         [Route("Bills/GetSummaryBill/{customerId}")]
         public IActionResult GetSummaryBill(int customerId)
         {
+            if (!_customerDbAccessor.DbContains(customerId))
+                return Error();
+
             var customerBillId = _customerDbAccessor.GetCustomerById(customerId).BillId;
 
             return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId });

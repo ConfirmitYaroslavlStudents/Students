@@ -22,5 +22,10 @@ namespace BillSplitter.Data
         {
             return _context.Customer.FirstOrDefault(x => x.Id == customerId);
         }
+
+        public bool DbContains(int customerId)
+        {
+            return GetCustomerById(customerId) != null;
+        }
     }
 }

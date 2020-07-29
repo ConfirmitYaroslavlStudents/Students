@@ -75,7 +75,6 @@ namespace BillSplitterTests
                 Assert.Equal(expected[i].Name, actual[i].Name);
                 Assert.Equal(expected[i].Price, actual[i].Price);
             }
-
         }
     }
 }

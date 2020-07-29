@@ -57,10 +57,9 @@ namespace BillSplitterTests
 
             var accessor = new BillsDbAccessor(db);
 
-            Bill expected = null;
             var actual = accessor.GetBillById(1);
 
-            Assert.Equal(expected, actual);
+            Assert.Null(actual);
         }
 
         [Fact]

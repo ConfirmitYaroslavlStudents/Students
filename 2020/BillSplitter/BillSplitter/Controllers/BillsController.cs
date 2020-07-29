@@ -12,17 +12,41 @@ namespace BillSplitter.Controllers
 {
     public class BillsController : Controller
     {
-        private readonly BillsDbAccessor _billAccessor;
-        private readonly CustomersDbAccessor _customerDbAccessor;
-        private readonly OrdersDbAccessor _ordersDbAccessor;
-        private readonly PositionsDbAccessor _positionsAccessor;
+        private BillsDbAccessor _billDbAccessor;
+        private CustomersDbAccessor _customerDbAccessor;
+        private OrdersDbAccessor _ordersDbAccessor;
+        private PositionsDbAccessor _positionsDbAccessor;
+
+        private IValidator<InteractionLevelPosition> _addBillPositionValidator;
+        private IValidator<InteractionLevelPosition> _doneSelectValidator;
 
         public BillsController(BillContext context)
         {
-            _billAccessor = new BillsDbAccessor(context);
+            InitializeAccessors(context);
+
+            InitializeValidators();
+        }
+
+        private void InitializeAccessors(BillContext context)
+        {
+            _billDbAccessor = new BillsDbAccessor(context);
             _customerDbAccessor = new CustomersDbAccessor(context);
             _ordersDbAccessor = new OrdersDbAccessor(context);
-            _positionsAccessor = new PositionsDbAccessor(context);
+            _positionsDbAccessor = new PositionsDbAccessor(context);
+        }
+
+        private void InitializeValidators()
+        {
+            _addBillPositionValidator = new Validator<InteractionLevelPosition>()
+                .AddValidation(x => x.Price > 0)
+                .AddValidation(x => !string.IsNullOrEmpty(x.Name.Trim()))
+                .AddValidation(x => x.QuantityDenomenator == 1)
+                .AddValidation(x => x.QuantityNumerator > 0);
+
+            _doneSelectValidator = new Validator<InteractionLevelPosition>()
+                .AddValidation(x => _positionsDbAccessor.DbContains(x.Id))
+                .AddValidation(x => x.QuantityDenomenator > 0)
+                .AddValidation(x => x.QuantityNumerator > 0);
         }
 
         public IActionResult Index()
@@ -42,7 +66,7 @@ namespace BillSplitter.Controllers
         public IActionResult InitEmptyBill()
         {
             var bill = new Bill();
-            _billAccessor.AddBill(bill);
+            _billDbAccessor.AddBill(bill);
             return RedirectToAction(nameof(BillPositions), new { billId = bill.Id });
         }
 
@@ -51,11 +75,11 @@ namespace BillSplitter.Controllers
         [Route("Bills/BillPositions/{billId}")]
         public IActionResult BillPositions(int billId)
         {
-            if (!_billAccessor.DbContains(billId))
+            if (!_billDbAccessor.DbContains(billId))
                 return Error();
 
             ViewData["billId"] = billId;
-            var positions = _billAccessor.GetBillById(billId).Positions
+            var positions = _billDbAccessor.GetBillById(billId).Positions
                 .Select(pos => pos.ToInteractionLevelPosition())
                 .ToList();
 
@@ -67,16 +91,10 @@ namespace BillSplitter.Controllers
         [Route("Bills/AddBillPosition/{billId}")]
         public IActionResult AddBillPosition(int billId, InteractionLevelPosition position)
         {
-            var validator = new Validator<InteractionLevelPosition>()
-                .AddValidation(x => x.Price > 0)
-                .AddValidation(x => !string.IsNullOrEmpty(x.Name.Trim()))
-                .AddValidation(x => x.QuantityDenomenator == 1)
-                .AddValidation(x => x.QuantityNumerator > 0);
-
-            if (!validator.Validate(position))
+            if (!_addBillPositionValidator.Validate(position))
                 return Error();
 
-            _positionsAccessor.AddPosition(position.ToPosition(billId));
+            _positionsDbAccessor.AddPosition(position.ToPosition(billId));
 
             return RedirectToAction(nameof(BillPositions), new {billId = billId});
         }
@@ -86,11 +104,11 @@ namespace BillSplitter.Controllers
         [Route("Bills/SelectPositions/{billId}")]
         public IActionResult SelectPositions(int billId)
         {
-            if (!_billAccessor.DbContains(billId))
+            if (!_billDbAccessor.DbContains(billId))
                 return Error();
             ViewData["billId"] = billId;
 
-            var positions = _billAccessor.GetBillById(billId).Positions
+            var positions = _billDbAccessor.GetBillById(billId).Positions
                 .Select(pos => pos.ToInteractionLevelPosition())
                 .ToList();
 
@@ -101,7 +119,7 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult DoneSelect(int billId, List<InteractionLevelPosition> positions)
         {
-            if (!_billAccessor.DbContains(billId))
+            if (!_billDbAccessor.DbContains(billId))
                 return Error();
 
             var customer = new Customer {
@@ -112,12 +130,7 @@ namespace BillSplitter.Controllers
 
             var selectedPositions = positions.Where(pos => pos.Selected).ToList();
 
-            var validator = new Validator<InteractionLevelPosition>()
-                .AddValidation(x => _positionsAccessor.DbContains(x.Id))
-                .AddValidation(x => x.QuantityDenomenator > 0)
-                .AddValidation(x => x.QuantityNumerator > 0);
-
-            if (selectedPositions.All(validator.Validate))
+            if (selectedPositions.All(_doneSelectValidator.Validate))
             {
                 _customerDbAccessor.AddCustomer(customer);
 
@@ -150,10 +163,10 @@ namespace BillSplitter.Controllers
         [Route("Bills/SummaryBill/{billId}")]
         public IActionResult SummaryBill(int billId)
         {
-            if (!_billAccessor.DbContains(billId))
+            if (!_billDbAccessor.DbContains(billId))
                 return Error();
 
-            var currentCustomers = _billAccessor.GetBillById(billId).Customers;
+            var currentCustomers = _billDbAccessor.GetBillById(billId).Customers;
 
             var builder = new CustomerBillBuilder();
 

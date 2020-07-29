@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
@@ -19,5 +18,14 @@ namespace BillSplitter.Data
             _context.SaveChanges();
         }
 
+        public Position GetPositionById(int positionId)
+        {
+            return _context.Position.FirstOrDefault(x => x.Id == positionId);
+        }
+
+        public bool DbContains(int positionId)
+        {
+            return GetPositionById(positionId) != null;
+        }
     }
 }

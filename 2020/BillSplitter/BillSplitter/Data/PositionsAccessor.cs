@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data

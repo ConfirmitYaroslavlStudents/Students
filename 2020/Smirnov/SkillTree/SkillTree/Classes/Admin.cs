@@ -3,44 +3,47 @@ using System.Collections.Generic;
 
 namespace SkillTree.Classes
 {
-    [Serializable]
-    class Admin: Person
+    public class Admin: Person
     {
         public Admin(string name) : base(name)
         {
             
         }
 
-        public bool CreateNewDiscipline(string name, ref List<Discipline> Discipline) // первый вариант
+        public bool CreateNewDiscipline(string name, List<Discipline> disciplines)
         {
             var NewDiscipline = new Discipline(name);
-            if (!Discipline.Contains(NewDiscipline))
+            if (!disciplines.Contains(NewDiscipline))
             {
-                Discipline.Add(NewDiscipline);
+                disciplines.Add(NewDiscipline);
                 return true;
             }
             return false;
         }
-        public bool CreateNewDiscipline(string name, List<Skill> skils, ref List<Discipline> Discipline) // второй вариант
+        public bool AddScillForDiscipline(string name, Skill skill, List<Discipline> disciplines)
         {
-            var NewDiscipline = new Discipline(name, skils);
-            if (!Discipline.Contains(NewDiscipline))
+            foreach (var discipline in disciplines)
             {
-                Discipline.Add(NewDiscipline);
-                return true;
-            }
-            return false;
-        }
-        public bool AddScillForDiscipline(string name, Skill skill, ref List<Discipline> Discipline)
-        {
-            int i = 0;
-
-            for (i = 0; Discipline[i].Name != name; i++) ;
-            if (i == Discipline.Count)
-                return false;
-            Discipline[i].AddSkill(skill);
+                if (discipline.Name == name)
+                {
+                    discipline.AddSkill(skill);
+                    return true;
+                }
+            }          
             return true;
 
+        }
+        public bool AddRequirementForSkill(string name, string firstSkill, string secondSkill, List<Discipline> disciplines)
+        {
+            foreach (var discipline in disciplines)
+            {
+                if (discipline.Name == name)
+                {
+                    discipline.AddRequirement(firstSkill, secondSkill);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

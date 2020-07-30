@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTree", "SkillTree\SkillTree.csproj", "{2F960766-8CF1-4586-A457-513DB5045FCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTree.Test", "SkillTree.Test\SkillTree.Test.csproj", "{BB6BF220-235E-46C6-BCBD-0998557699A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2F960766-8CF1-4586-A457-513DB5045FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F960766-8CF1-4586-A457-513DB5045FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F960766-8CF1-4586-A457-513DB5045FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB6BF220-235E-46C6-BCBD-0998557699A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB6BF220-235E-46C6-BCBD-0998557699A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB6BF220-235E-46C6-BCBD-0998557699A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB6BF220-235E-46C6-BCBD-0998557699A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

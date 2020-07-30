@@ -6,35 +6,64 @@ namespace SkillTree.Classes
     [Serializable]
     public class User: Person
     {
-        private List<Skill> _availableSkills;
+        public List<Skill> LearnedSkills { get; set; }
+        public List<Discipline> LearnedDisciplines { get; set; }
 
         public User() { }
         public User(string name) : base (name)
         {
-            _availableSkills = new List<Skill>();
+            LearnedSkills = new List<Skill>();
+            LearnedDisciplines = new List<Discipline>();
         }
-        public bool LearnNewSkill(Skill skill)
+
+        public void LearnNewSkill(Skill skill)
         {
-            if (!_availableSkills.Contains(skill))
+            if (LearnedSkills.Contains(skill))
             {
-                _availableSkills.Add(skill);
-                return true;
+                throw new InvalidOperationException("Skill has already been learned");
             }
-            return false;
+            if (skill.Requirements.Count == 0)
+            {
+                LearnedSkills.Add(skill);
+                return;
+            }
+            foreach (var requirement in skill.Requirements)
+            {
+                if (!LearnedSkills.Contains(requirement.ConnectedVertex))
+                {
+                    throw new InvalidOperationException("Not all requirements are met");
+                }
+            }
+            LearnedSkills.Add(skill);
+        }
+        public void LearnNewDiscipline(Discipline discipline)
+        {
+            if (LearnedDisciplines.Contains(discipline))
+            {
+                throw new InvalidOperationException("Discipline has already been learned");
+            }
+            foreach(var skill in discipline.Skills)
+            {
+                if(!LearnedSkills.Contains(skill))
+                {
+                    throw new InvalidOperationException("Not all skills are learned");
+                }
+            }
+            LearnedDisciplines.Add(discipline);
         }
         public string ReturnAllInformationAboutSkills()
         {
             string toString = "";
-            foreach (var c in _availableSkills)
+            foreach (var c in LearnedSkills)
             {
                 toString += c.ToString();
             }
             return toString;
         }
-        public string ReturnNameAllSkills()
+        public string ReturnNameAllLearnedSkills()
         {
             string toString = "";
-            foreach (var c in _availableSkills)
+            foreach (var c in LearnedSkills)
             {
                 if (toString == "")
                 {
@@ -47,6 +76,23 @@ namespace SkillTree.Classes
             }
             return toString;
         }
+        public string ReturnNameAllLearnedDisciplines()
+        {
+            string toString = "";
+            foreach (var c in LearnedDisciplines)
+            {
+                if (toString == "")
+                {
+                    toString = c.Name;
+                }
+                else
+                {
+                    toString = toString + " " + c.Name;
+                }
+            }
+            return toString;
+        }
+
 
     }
 }

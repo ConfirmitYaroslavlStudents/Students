@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
@@ -26,6 +27,12 @@ namespace BillSplitter.Data
         public bool DbContains(int positionId)
         {
             return GetPositionById(positionId) != null;
+        }
+
+        public void DeleteById(int positionId)
+        {
+            _context.Position.Remove(GetPositionById(positionId));
+            _context.SaveChanges();
         }
     }
 }

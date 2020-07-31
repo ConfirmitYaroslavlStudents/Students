@@ -1,0 +1,88 @@
+﻿@model List<BillSplitter.Models.InteractionLevel.InteractionLevelPosition>
+
+<form asp-action="DoneSelect",  asp-route-billId = "@ViewData["billId"]">
+    <table class="table" id="positionTable">
+        <thead>
+            <tr>
+                <th>
+                    Select
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++) 
+            {
+                <tr>
+                    <td>
+                        @Html.CheckBoxFor(modelItem => modelItem[i].Selected, new
+                        {
+                            @onclick = $"changeQuantityState({i + 1})"
+                        })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(modelItem => modelItem[i].QuantityNumerator, new
+                        {
+                            value = 0,
+                            min = 0,
+                            step = 1,
+                            disabled = true
+                        })
+                        /
+                        @Html.TextBoxFor(modelItem => modelItem[i].QuantityDenomenator, new
+                        {
+                            value = 1,
+                            min = 1,
+                            step = 1,
+                            disabled = true
+                        })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].Price)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(modelItem => modelItem[i].Id)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+   
+    <input type="submit" />
+</form>
+<script>
+    function changeQuantityState(rowNumber) {
+        var row = document.getElementById("positionTable").rows[rowNumber];
+
+        console.log(row.cells.length);
+
+        var checkbox = row.cells[0].children[0];
+        console.log(checkbox.checked);
+
+        var inputCell = row.cells[1];
+
+        var num = inputCell.children[0];
+
+        var denom = inputCell.children[1];
+        console.log(denom);
+
+        if (!checkbox.checked) {
+            num.value = 0;
+            denom.value = 1;
+        }
+
+        num.disabled = !checkbox.checked;
+        denom.disabled = !checkbox.checked;
+    }
+</script>

@@ -1,153 +1,205 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BillSplitter.Data;
 using BillSplitter.Models;
+using BillSplitter.Data;
+using BillSplitter.Models.InteractionLevel;
+using Microsoft.AspNetCore.Authorization;
+using BillSplitter.Validators;
 
 namespace BillSplitter.Controllers
 {
     public class BillsController : Controller
     {
-        private readonly BillContext _context;
+        private BillsDbAccessor _billDbAccessor;
+        private CustomersDbAccessor _customerDbAccessor;
+        private OrdersDbAccessor _ordersDbAccessor;
+        private PositionsDbAccessor _positionsDbAccessor;
+
+        private IValidator<InteractionLevelPosition> _addBillPositionValidator;
+        private IValidator<InteractionLevelPosition> _doneSelectValidator;
 
         public BillsController(BillContext context)
         {
-            _context = context;
+            InitializeAccessors(context);
+
+            InitializeValidators();
         }
 
-        // GET: Bills
-        public async Task<IActionResult> Index()
+        private void InitializeAccessors(BillContext context)
         {
-            return View(await _context.Bill.ToListAsync());
+            _billDbAccessor = new BillsDbAccessor(context);
+            _customerDbAccessor = new CustomersDbAccessor(context);
+            _ordersDbAccessor = new OrdersDbAccessor(context);
+            _positionsDbAccessor = new PositionsDbAccessor(context);
         }
 
-        // GET: Bills/Details/5
-        public async Task<IActionResult> Details(int? id)
+        private void InitializeValidators()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            _addBillPositionValidator = new Validator<InteractionLevelPosition>()
+                .AddValidation(x => x.Price > 0)
+                .AddValidation(x => !string.IsNullOrEmpty(x.Name.Trim()))
+                .AddValidation(x => x.QuantityDenomenator == 1)
+                .AddValidation(x => x.QuantityNumerator > 0);
 
-            var bill = await _context.Bill
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-
-            return View(bill);
+            _doneSelectValidator = new Validator<InteractionLevelPosition>()
+                .AddValidation(x => _positionsDbAccessor.DbContains(x.Id))
+                .AddValidation(x => x.QuantityDenomenator > 0)
+                .AddValidation(x => x.QuantityNumerator > 0);
         }
 
-        // GET: Bills/Create
-        public IActionResult Create()
+        public IActionResult Index()
         {
             return View();
         }
+       
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
 
-        // POST: Bills/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
+        [HttpGet] // HttpGet, but creates bill, idk how to sent post or put request via link.
+        [Route("Bills/InitEmptyBill")]
+        public IActionResult InitEmptyBill()
+        {
+            var bill = new Bill();
+            _billDbAccessor.AddBill(bill);
+            return RedirectToAction(nameof(BillPositions), new { billId = bill.Id });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/BillPositions/{billId}")]
+        public IActionResult BillPositions(int billId)
+        {
+            if (!_billDbAccessor.DbContains(billId))
+                return Error();
+
+            ViewData["billId"] = billId;
+            var positions = _billDbAccessor.GetBillById(billId).Positions
+                .Select(pos => pos.ToInteractionLevelPosition())
+                .ToList();
+
+            return View(positions);
+        }
+
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Bill bill)
+        [Route("Bills/AddBillPosition/{billId}")]
+        public IActionResult AddBillPosition(int billId, InteractionLevelPosition position)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(bill);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bill);
+            if (!_addBillPositionValidator.Validate(position))
+                return Error();
+
+            _positionsDbAccessor.AddPosition(position.ToPosition(billId));
+
+            return RedirectToAction(nameof(BillPositions), new {billId = billId});
+        }
+      
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/SelectPositions/{billId}")]
+        public IActionResult SelectPositions(int billId)
+        {
+            if (!_billDbAccessor.DbContains(billId))
+                return Error();
+            ViewData["billId"] = billId;
+
+            var positions = _billDbAccessor.GetBillById(billId).Positions
+                .Select(pos => pos.ToInteractionLevelPosition())
+                .ToList();
+
+            return View(positions);
         }
 
-        // GET: Bills/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var bill = await _context.Bill.FindAsync(id);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-            return View(bill);
-        }
-
-        // POST: Bills/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Bill bill)
+        public IActionResult DoneSelect(int billId, List<InteractionLevelPosition> positions)
         {
-            if (id != bill.Id)
+            if (!_billDbAccessor.DbContains(billId))
+                return Error();
+
+            var customer = new Customer {
+                BillId = billId,
+                UserId = GetCurrentUserId(),
+                Name = HttpContext.User.Identity.Name
+            };
+
+            var selectedPositions = positions.Where(pos => pos.Selected).ToList();
+
+            if (selectedPositions.All(_doneSelectValidator.Validate))
             {
-                return NotFound();
+                _customerDbAccessor.AddCustomer(customer);
+
+                _ordersDbAccessor.AddOrders(customer, selectedPositions);
+
+                return RedirectToAction(nameof(CustomerBill), new {customerId = customer.Id});
             }
 
-            if (ModelState.IsValid)
+            return Error();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/CustomerBill/{customerId}")]
+        public IActionResult CustomerBill(int customerId)
+        {
+            if (!_customerDbAccessor.DbContains(customerId))
+                return Error();
+
+            var result = new CustomerBillBuilder()
+                .Build(_customerDbAccessor.GetCustomerById(customerId));
+
+            ViewData["Sum"] = result.Sum(x => x.Price);
+            ViewData["customerId"] = customerId;
+            return View(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/SummaryBill/{billId}")]
+        public IActionResult SummaryBill(int billId)
+        {
+            if (!_billDbAccessor.DbContains(billId))
+                return Error();
+
+            var currentCustomers = _billDbAccessor.GetBillById(billId).Customers;
+
+            var builder = new CustomerBillBuilder();
+
+            var customerInfos = new List<SummaryCustomerInfo>();
+
+            foreach(var customer in currentCustomers)
             {
-                try
+                customerInfos.Add(new SummaryCustomerInfo
                 {
-                    _context.Update(bill);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BillExists(bill.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(bill);
-        }
-
-        // GET: Bills/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                    Customer = customer, 
+                    Sum = builder.Build(customer).Sum(x => x.Price)
+                });
             }
 
-            var bill = await _context.Bill
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bill == null)
-            {
-                return NotFound();
-            }
-
-            return View(bill);
+            return View(customerInfos);
         }
 
-        // POST: Bills/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/GetSummaryBill/{customerId}")]
+        public IActionResult GetSummaryBill(int customerId)
         {
-            var bill = await _context.Bill.FindAsync(id);
-            _context.Bill.Remove(bill);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (!_customerDbAccessor.DbContains(customerId))
+                return Error();
 
-        private bool BillExists(int id)
-        {
-            return _context.Bill.Any(e => e.Id == id);
+            var customerBillId = _customerDbAccessor.GetCustomerById(customerId).BillId;
+
+            return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId });
         }
+        
+         public int GetCurrentUserId()
+         {
+            return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
+         }
     }
 }

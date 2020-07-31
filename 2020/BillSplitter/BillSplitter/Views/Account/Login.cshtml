@@ -1,0 +1,24 @@
+﻿@model BillSplitter.Models.LoginModel
+
+
+<a asp-action="Register" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl>Register</a>
+
+
+@using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
+{
+    <form asp-action="Login" asp-controller="Account">
+        <div class="validation" asp-validation-summary="ModelOnly" />
+        <div>
+            <div class="form-group">
+                <label asp-for="Name">Enter Name</label>
+                <input type="text" asp-for="Name" />
+                <span asp-validation-for="Name"> </span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="LogIn" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    </form>
+
+}
+

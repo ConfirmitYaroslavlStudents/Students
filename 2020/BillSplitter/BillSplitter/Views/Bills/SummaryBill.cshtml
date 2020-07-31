@@ -1,0 +1,30 @@
+﻿@model List<BillSplitter.Models.SummaryCustomerInfo>
+<script>
+    setTimeout(function(){ location.reload(); }, 5000);
+</script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Sum</th>
+            <th>    </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => item.Customer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.Sum)
+                </td>
+                <td>
+                    <a asp-action="CustomerBill" asp-route-customerId="@item.Customer.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

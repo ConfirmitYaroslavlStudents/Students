@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
@@ -23,9 +25,17 @@ namespace BillSplitter.Data
             return _context.Customer.FirstOrDefault(x => x.Id == customerId);
         }
 
+        public void DeleteById(int customerId)
+        {
+            _context.Customer.Remove(GetCustomerById(customerId));
+            _context.SaveChanges();
+        }
+
+      
         public bool DbContains(int customerId)
         {
             return GetCustomerById(customerId) != null;
         }
+
     }
 }

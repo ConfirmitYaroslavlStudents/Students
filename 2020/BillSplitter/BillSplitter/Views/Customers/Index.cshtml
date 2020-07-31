@@ -1,0 +1,24 @@
+﻿@model List<BillSplitter.Models.Customer>
+@{
+    ViewData["Title"] = "Customers";
+}
+<h1>Customers for this bill</h1>
+<table class="table">
+    
+    @foreach (Customer customer in Model)
+    {
+        <tr>
+            <td width="200">
+                @customer.Name
+            </td>
+            <td>
+                <form method="post" asp-action="Delete" asp-controller="Customers" asp-route-billId="@customer.BillId" asp-route-customerId="@customer.Id">
+                    <input type="submit" value="Delete" />
+                </form>
+            </td>
+
+        </tr>
+           
+    }
+  
+</table>

@@ -1,0 +1,20 @@
+﻿@model Bill
+
+<p>This bill has</p>
+<ul>
+    <li>
+        @Model.Positions.Count position(s)
+    </li>
+    <li>
+        @Model.Customers.Count customer(s)
+    </li>
+</ul>
+
+<ul>
+    <li>
+        <a asp-controller="Customers" asp-action="Index" asp-route-billId="@Model.Id">Manage customers</a> 
+    </li>
+    <li>
+        Manage content <!-- TODO manage content link -->
+    </li>
+</ul>

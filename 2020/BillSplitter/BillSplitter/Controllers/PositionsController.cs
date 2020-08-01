@@ -1,12 +1,8 @@
 ﻿using BillSplitter.Data;
-using BillSplitter.Models;
 using BillSplitter.Models.InteractionLevel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BillSplitter.Controllers
 {
@@ -15,12 +11,14 @@ namespace BillSplitter.Controllers
         private BillsDbAccessor _billDbAccessor;
         private PositionsDbAccessor _positionsDbAccessor;
         private UsersDbAccessor _usersDbAccessor;
+        private UserIdVisitor _userIdVisitor;
 
-        public PositionsController(BillContext context)
+        public PositionsController(BillContext context, UserIdVisitor userIdVisitor)
         {
             _billDbAccessor = new BillsDbAccessor(context);
             _positionsDbAccessor = new PositionsDbAccessor(context);
             _usersDbAccessor = new UsersDbAccessor(context);
+            _userIdVisitor = userIdVisitor;
         }
 
         [Authorize]

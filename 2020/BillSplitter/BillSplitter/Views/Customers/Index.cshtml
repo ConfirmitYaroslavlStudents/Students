@@ -22,11 +22,10 @@
                 @customer.Name
             </td>
             <td>
-                <form method="post" asp-action="Delete" asp-controller="Customers" asp-route-billId="@customer.BillId" asp-route-customerId="@customer.Id">
+                <form asp-action="Delete" asp-route-billId="@customer.BillId" asp-route-customerId="@customer.Id">
                     <input type="submit" value="Delete" />
                 </form>
             </td>
-
         </tr>
     }
     </tbody>

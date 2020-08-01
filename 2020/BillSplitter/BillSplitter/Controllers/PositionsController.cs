@@ -23,7 +23,7 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Bill/{billId}/Positions")]
+        [Route("Bill/Manage/{billId}/Positions")]
         public IActionResult Index(int billId)
         {
             if (!_billDbAccessor.DbContains(billId))
@@ -31,7 +31,7 @@ namespace BillSplitter.Controllers
 
             var positions = _billDbAccessor.GetBillById(billId).Positions;
 
-            return View(positions); //на самом деле тут надо передавать кое-что другое, ну ладно
+            return View(positions); 
         }
 
         [Authorize]
@@ -44,7 +44,7 @@ namespace BillSplitter.Controllers
 
             _positionsDbAccessor.AddPosition(position.ToPosition(billId));
 
-            return RedirectToAction("Manage","Bill", new { billId });
+            return RedirectToAction("Manage","Bill", new { billId }); //...
         }
 
         [Authorize]
@@ -56,6 +56,20 @@ namespace BillSplitter.Controllers
                 throw new Exception();
 
             _positionsDbAccessor.DeleteById(positionId);
+
+            return RedirectToAction(nameof(Index), new { billId });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("Bill/Manage/{billId}/Positions/{positionId}")]
+        public IActionResult Update(int billId, int positionId, InteractionLevelPosition position)
+        {
+            if (!_billDbAccessor.DbContains(billId))
+                throw new Exception();
+
+            _positionsDbAccessor.DeleteById(positionId);
+            _positionsDbAccessor.AddPosition(position.ToPosition(billId));
 
             return RedirectToAction(nameof(Index), new { billId });
         }

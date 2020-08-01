@@ -1,0 +1,25 @@
+﻿@model List<Bill>
+
+<p> Your own bills </p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var bill in Model)
+    {
+        <tr>
+            <td>@bill.Name</td>
+            <td>
+                Manage |
+                Delete |
+                Edit choice
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

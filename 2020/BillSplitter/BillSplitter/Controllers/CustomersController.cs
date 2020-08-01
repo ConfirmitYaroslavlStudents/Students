@@ -43,7 +43,6 @@ namespace BillSplitter.Controllers
             
             var customer = new Customer
             {
-                BillId = billId,
                 UserId = GetCurrentUserId(),
                 Name = HttpContext.User.Identity.Name
             };

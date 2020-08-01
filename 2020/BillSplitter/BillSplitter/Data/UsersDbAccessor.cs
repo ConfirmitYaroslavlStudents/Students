@@ -17,6 +17,11 @@ namespace BillSplitter.Data
             return _context.Users.FirstOrDefault(u => u.Name == name);
         }
 
+        public User GetUserById(int userId)
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == userId);
+        }
+
         public void AddUser(User user)
         {
             _context.Users.Add(user);

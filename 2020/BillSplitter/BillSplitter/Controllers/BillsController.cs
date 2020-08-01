@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using BillSplitter.Validators;
 
 namespace BillSplitter.Controllers
 {
+    [Obsolete]
     public class BillsController : Controller
     {
         private BillsDbAccessor _billDbAccessor;

@@ -11,10 +11,12 @@ namespace BillSplitter.Controllers
     {
         private readonly CustomersDbAccessor _customersDbAccessor;
         private readonly UsersDbAccessor _usersDbAccessor;
+        private readonly BillsDbAccessor _billsDbAccessor;
         public CustomersController(BillContext context)
         {
             _customersDbAccessor = new CustomersDbAccessor(context);
             _usersDbAccessor = new UsersDbAccessor(context);
+            _billsDbAccessor = new BillsDbAccessor(context);
         }
 
         [Authorize]
@@ -22,8 +24,8 @@ namespace BillSplitter.Controllers
         [Route("/Home/{userId}/Bill/{billId}/Manage/Customers")]
         public IActionResult Index(int userId, int billId)
         {
-            var bill = GetUsersBill(userId, billId);
-            if (bill == null)
+            var bill = _billsDbAccessor.GetBillById(billId);
+            if (bill.UserId != userId)
                 throw new NotImplementedException("Case is not implemented yet");
 
             var customers = bill.Customers;
@@ -36,12 +38,12 @@ namespace BillSplitter.Controllers
         [Route("/Home/{userId}/Bill/{billId}/Customers")] // What route must be for this action?
         public void Post(int userId, int billId)
         {
-            var bill = GetUsersBill(userId, billId);
-            if (bill == null)
+            if (!_billsDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
 
             var customer = new Customer
             {
+                BillId = billId,
                 UserId = userId,
                 Name = _usersDbAccessor.GetUserById(userId).Name
             };
@@ -54,16 +56,13 @@ namespace BillSplitter.Controllers
         [Route("/Home/{userId}/Bill/{billId}/Manage/Customers/{customerId}/Delete")]
         public IActionResult Delete(int userId, int billId, int customerId) // TODO Maybe delete confirmation?
         {
-            var bill = GetUsersBill(userId, billId);
-            if (bill == null)
+            var bill = _billsDbAccessor.GetBillById(billId);
+            if (bill.UserId != userId)
                 throw new NotImplementedException("Case is not implemented yet");
 
             _customersDbAccessor.DeleteById(customerId);
 
             return RedirectToAction(nameof(Index), new { billId = billId });
         }
-
-        private Bill GetUsersBill(int userId, int billId) 
-            => _usersDbAccessor.GetUserById(userId).Bills.FirstOrDefault(b => b.Id == billId);
     }
 }

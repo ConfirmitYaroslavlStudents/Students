@@ -14,17 +14,19 @@ namespace BillSplitter.Controllers
     {
         private BillsDbAccessor _billDbAccessor;
         private PositionsDbAccessor _positionsDbAccessor;
+        private UsersDbAccessor _usersDbAccessor;
 
         public PositionsController(BillContext context)
         {
             _billDbAccessor = new BillsDbAccessor(context);
             _positionsDbAccessor = new PositionsDbAccessor(context);
+            _usersDbAccessor = new UsersDbAccessor(context);
         }
 
         [Authorize]
         [HttpGet]
-        [Route("Bill/Manage/{billId}/Positions")]
-        public IActionResult Index(int billId)
+        [Route("/Home/{userId}/Bill/Manage/{billId}/Positions")]
+        public IActionResult Index(int userId, int billId)
         {
             if (!_billDbAccessor.DbContains(billId))
                 throw new Exception();

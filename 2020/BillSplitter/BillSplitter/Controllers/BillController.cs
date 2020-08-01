@@ -54,11 +54,9 @@ namespace BillSplitter.Controllers
         [Route("Home/{userId}/Bill/{billId}/Manage")]
         public IActionResult Manage(int userId, int billId)
         {
-            var bill = _usersDbAccessor.GetUserById(userId)
-                .Bills
-                .FirstOrDefault(b => b.Id == billId);
+            var bill = _billDbAccessor.GetBillById(billId);
 
-            if (bill == null)
+            if (bill.UserId != userId)
                 throw new NotImplementedException("Case is not implemented yet");
 
             return View(bill);
@@ -69,11 +67,9 @@ namespace BillSplitter.Controllers
         [Route("Home/{userId}/Bill/{billId}/Delete")] // TODO Replace later with pop-up notification
         public IActionResult ConfirmDelete(int userId, int billId)
         {
-            var bill = _usersDbAccessor.GetUserById(userId)
-                .Bills
-                .FirstOrDefault(b => b.Id == billId);
+            var bill = _billDbAccessor.GetBillById(billId);
 
-            if (bill == null)
+            if (bill.UserId != userId)
                 throw new NotImplementedException("Case is not implemented yet");
 
             return View(bill);
@@ -84,9 +80,9 @@ namespace BillSplitter.Controllers
         [Route("Home/{userId}/Bill/{billId}/Delete")]
         public IActionResult Delete(int userId, int billId)
         {
-            var bill = _usersDbAccessor.GetUserById(userId).Bills.FirstOrDefault(b => b.Id == billId);
+            var bill = _billDbAccessor.GetBillById(billId);
 
-            if (bill == null)
+            if (bill.UserId != userId)
                 throw new NotImplementedException("Case is not implemented yet");
 
             _billDbAccessor.DeleteById(billId);

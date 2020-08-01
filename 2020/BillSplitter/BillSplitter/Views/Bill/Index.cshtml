@@ -2,6 +2,8 @@
 
 <p> Your own bills </p>
 
+<a asp-action="Create" asp-route-userId="@ViewData["userId"]">Create empty bill</a>
+
 <table>
     <thead>
     <tr>
@@ -15,8 +17,8 @@
         <tr>
             <td>@bill.Name</td>
             <td>
-                Manage |
-                Delete |
+                <a asp-action="Manage" asp-route-userId="@bill.UserId" asp-route-billId="@bill.Id">Manage</a> |
+                <a asp-action="Delete" asp-route-userId="@bill.UserId" asp-route-billId="@bill.Id">Delete</a> |
                 Edit choice
             </td>
         </tr>

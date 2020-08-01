@@ -20,24 +20,33 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Home/{userId}/Bills/Index")]
+        [Route("Home/{userId}/Bill/")]
         public IActionResult Index(int userId)
         {
             var userBills = _usersDbAccessor.GetUserById(userId).Bills;
-
+            ViewData["userId"] = userId;
             return View(userBills);
         }
 
         [Authorize]
         [HttpGet]
-        [Route("Home/{userId}/Bill/Create/{billName}")]
-        public IActionResult Create(string billName)
+        [Route("Home/{userId}/Bill/Create")]
+        public IActionResult Create(int userId)
         {
-            var bill = new Bill(); //потом появится имя 
+            var bill = new Bill { UserId = userId };
+            return View(bill);
+        }
 
-            _billDbAccessor.AddBill(bill);
+        [Authorize]
+        [HttpPost]
+        [Route("Home/{userId}/Bill/Create")]
+        public IActionResult Create(int userId, Bill createdBill)
+        {
+            createdBill.UserId = userId;
 
-            return RedirectToAction(nameof(Manage), new { billId = bill.Id });
+            _billDbAccessor.AddBill(createdBill);
+
+            return RedirectToAction(nameof(Index), new { userId });
         }
 
         [Authorize]
@@ -45,7 +54,22 @@ namespace BillSplitter.Controllers
         [Route("Home/{userId}/Bill/{billId}/Manage")]
         public IActionResult Manage(int userId, int billId)
         {
-            var bill = _billDbAccessor.GetBillById(billId);
+            var bill = _usersDbAccessor.GetUserById(userId)
+                .Bills
+                .FirstOrDefault(b => b.Id == billId);
+
+            return View(bill);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Home/{userId}/Bill/{billId}/Delete")]
+        public IActionResult ConfirmDelete(int userId, int billId)
+        {
+            var bill = _usersDbAccessor.GetUserById(userId)
+                .Bills
+                .FirstOrDefault(b => b.Id == billId);
+
             return View(bill);
         }
 
@@ -54,17 +78,14 @@ namespace BillSplitter.Controllers
         [Route("Home/{userId}/Bill/{billId}/Delete")]
         public IActionResult Delete(int userId, int billId)
         {
-            if (!_billDbAccessor.DbContains(billId))
+            var bill = _usersDbAccessor.GetUserById(userId).Bills.FirstOrDefault(b => b.Id == billId);
+
+            if (bill == null)
                 throw new Exception();
 
             _billDbAccessor.DeleteById(billId);
 
-            return RedirectToAction(nameof(Index));
-        }
-
-        public int GetCurrentUserId()
-        {
-            return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
+            return RedirectToAction(nameof(Index), new {userId});
         }
     }
 }

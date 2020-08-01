@@ -1,0 +1,9 @@
+﻿@model Bill
+
+<form asp-action="Delete" asp-route-userId="@Model.UserId" asp-route-billId="@Model.Id">
+    <p>
+        Are you sure you want to delete this bill?
+    </p>
+    <input type="submit" value="Yes"/>
+    <a asp-action="Index" asp-route-userId="@Model.UserId">No</a>
+</form>

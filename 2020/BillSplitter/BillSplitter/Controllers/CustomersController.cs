@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;

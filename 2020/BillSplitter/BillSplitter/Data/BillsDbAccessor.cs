@@ -33,7 +33,6 @@ namespace BillSplitter.Data
 
         public void DeleteById(int billId)
         {
-            //не нужно ли сначала пройтись по всем кастомерам и позициям в билле и удалить их тоже?? или они сами удалятся???
             _context.Bill.Remove(GetBillById(billId));
             _context.SaveChanges();
         }

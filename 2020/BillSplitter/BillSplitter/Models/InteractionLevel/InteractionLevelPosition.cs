@@ -9,7 +9,7 @@
         public int QuantityDenomenator { get; set; } = 1;
         public bool Selected { get; set; } = false;
 
-        public Position ToPosition(int? billId = null)
+        public Position ToPosition(int billId)
         {
             return new Position
             {

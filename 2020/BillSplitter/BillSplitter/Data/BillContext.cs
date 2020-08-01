@@ -19,5 +19,20 @@ namespace BillSplitter.Data
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Customer>()
+                .HasMany(e => e.Orders)
+                .WithOne(e => e.Customer)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder
+                .Entity<Position>()
+                .HasMany<Order>(e => e.Orders)
+                .WithOne(e => e.Position)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

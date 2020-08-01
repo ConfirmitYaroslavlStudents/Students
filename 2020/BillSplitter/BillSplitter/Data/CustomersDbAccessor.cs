@@ -27,7 +27,11 @@ namespace BillSplitter.Data
 
         public void DeleteById(int customerId)
         {
+            var toDelete = _context.Orders.Where(order => order.CustomerId == customerId);
+            _context.Orders.RemoveRange(toDelete);
+
             _context.Customer.Remove(GetCustomerById(customerId));
+
             _context.SaveChanges();
         }
 

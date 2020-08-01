@@ -26,21 +26,19 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            User user = _usersAccessor.GetUserByName(model.Name);
+            if (user == null)
+                ModelState.AddModelError("Name", "No Such User");
+            else
             {
-                User user = _usersAccessor.GetUserByName(model.Name);
-                if (user != null)
-                {
-                    await Authenticate(user);
+                await Authenticate(user);
 
-                    if (returnUrl != null)
-                        return Redirect(returnUrl);
-                    else
-                        return RedirectToAction("Index", "Bills");
-                }
-                else
-                    ModelState.AddModelError("Name", "No Such User");
+                if (returnUrl != null)
+                    return Redirect(returnUrl);
+                return RedirectToAction("Index", "Bills");
             }
+
             return View(model);
         }
 
@@ -54,24 +52,23 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            User user = _usersAccessor.GetUserByName(model.Name);
+
+            if (user != null)
+                ModelState.AddModelError("Name", "UserName is already used");
+            else
             {
-                User user = _usersAccessor.GetUserByName(model.Name);
-                if (user == null)
-                {
-                    User new_user = new User { Name = model.Name };
-                    _usersAccessor.AddUser(new_user);
+                User newUser = new User {Name = model.Name};
+                _usersAccessor.AddUser(newUser);
 
-                    await Authenticate(new_user); 
+                await Authenticate(newUser);
 
-                    if (returnUrl != null)
-                        return Redirect(returnUrl);
-                    else
-                        return RedirectToAction("Index", "Bills");
-                }
-                else
-                    ModelState.AddModelError("Name", "UserName is already used");
+                if (returnUrl != null)
+                    return Redirect(returnUrl);
+                return RedirectToAction("Index", "Bills");
             }
+
             return View(model);
         }
 

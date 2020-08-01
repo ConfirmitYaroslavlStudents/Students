@@ -12,6 +12,7 @@ namespace BillSplitter.Controllers
         private readonly UsersDbAccessor _usersDbAccessor;
         private readonly BillsDbAccessor _billsDbAccessor;
         private UserIdVisitor _visitor;
+
         public CustomersController(BillContext context, UserIdVisitor visitor)
         {
             _customersDbAccessor = new CustomersDbAccessor(context);

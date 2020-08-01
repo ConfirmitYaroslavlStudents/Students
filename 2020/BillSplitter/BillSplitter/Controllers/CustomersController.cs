@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,63 +9,61 @@ namespace BillSplitter.Controllers
 {
     public class CustomersController : Controller
     {
-
         private readonly CustomersDbAccessor _customersDbAccessor;
-        private readonly BillsDbAccessor _billsDbAccessor;
+        private readonly UsersDbAccessor _usersDbAccessor;
         public CustomersController(BillContext context)
         {
             _customersDbAccessor = new CustomersDbAccessor(context);
-            _billsDbAccessor = new BillsDbAccessor(context);
+            _usersDbAccessor = new UsersDbAccessor(context);
         }
 
         [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Customers")]
-        public IActionResult Index(int billId)
+        [Route("/Home/{userId}/Bill/{billId}/Manage/Customers")]
+        public IActionResult Index(int userId, int billId)
         {
-            if (!_billsDbAccessor.DbContains(billId))
-                return View();//Можем че-то говорить, так возвращает вроде пустую страницу
+            var bill = GetUsersBill(userId, billId);
+            if (bill == null)
+                throw new NotImplementedException("Case is not implemented yet");
 
-            var customers = _billsDbAccessor.GetBillById(billId).Customers;
+            var customers = bill.Customers;
 
             return View(customers);
         }
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers")]
-        public void Post(int billId)
+        [Route("/Home/{userId}/Bill/{billId}/Customers")] // What route must be for this action?
+        public void Post(int userId, int billId)
         {
-            if (!_billsDbAccessor.DbContains(billId))
-                return;
-            
+            var bill = GetUsersBill(userId, billId);
+            if (bill == null)
+                throw new NotImplementedException("Case is not implemented yet");
+
             var customer = new Customer
             {
-                UserId = GetCurrentUserId(),
-                Name = HttpContext.User.Identity.Name
+                UserId = userId,
+                Name = _usersDbAccessor.GetUserById(userId).Name
             };
 
             _customersDbAccessor.AddCustomer(customer);
         }
 
-        public int GetCurrentUserId()
-        {
-            return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
-        }
-
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers/{customerId}")]
-        public IActionResult Delete(int billId, int customerId)
+        [Route("/Home/{userId}/Bill/{billId}/Manage/Customers/{customerId}/Delete")]
+        public IActionResult Delete(int userId, int billId, int customerId) // TODO Maybe delete confirmation?
         {
-            if (!_billsDbAccessor.DbContains(billId))
-                return RedirectToAction("", "Customers", new {billId = billId});
-            
+            var bill = GetUsersBill(userId, billId);
+            if (bill == null)
+                throw new NotImplementedException("Case is not implemented yet");
+
             _customersDbAccessor.DeleteById(customerId);
 
             return RedirectToAction(nameof(Index), new { billId = billId });
         }
 
-
+        private Bill GetUsersBill(int userId, int billId) 
+            => _usersDbAccessor.GetUserById(userId).Bills.FirstOrDefault(b => b.Id == billId);
     }
 }

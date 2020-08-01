@@ -4,11 +4,21 @@
 }
 <h1>Customers for this bill</h1>
 <table class="table">
-    
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
     @foreach (Customer customer in Model)
     {
         <tr>
-            <td width="200">
+            <td>
                 @customer.Name
             </td>
             <td>
@@ -18,7 +28,6 @@
             </td>
 
         </tr>
-           
     }
-  
+    </tbody>
 </table>

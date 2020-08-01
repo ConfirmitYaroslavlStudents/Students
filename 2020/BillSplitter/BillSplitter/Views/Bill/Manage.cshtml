@@ -2,7 +2,7 @@
 
 <ul>
     <li>
-        Manage customers <!-- TODO manage customers link -->
+        <a asp-controller="Customers" asp-action="Index" asp-route-userId="@Model.UserId" asp-route-billId="@Model.Id">Manage customers</a> 
     </li>
     <li>
         Manage content <!-- TODO manage content link -->

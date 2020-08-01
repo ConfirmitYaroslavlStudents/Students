@@ -58,17 +58,23 @@ namespace BillSplitter.Controllers
                 .Bills
                 .FirstOrDefault(b => b.Id == billId);
 
+            if (bill == null)
+                throw new NotImplementedException("Case is not implemented yet");
+
             return View(bill);
         }
 
         [Authorize]
         [HttpGet]
-        [Route("Home/{userId}/Bill/{billId}/Delete")]
+        [Route("Home/{userId}/Bill/{billId}/Delete")] // TODO Replace later with pop-up notification
         public IActionResult ConfirmDelete(int userId, int billId)
         {
             var bill = _usersDbAccessor.GetUserById(userId)
                 .Bills
                 .FirstOrDefault(b => b.Id == billId);
+
+            if (bill == null)
+                throw new NotImplementedException("Case is not implemented yet");
 
             return View(bill);
         }
@@ -81,7 +87,7 @@ namespace BillSplitter.Controllers
             var bill = _usersDbAccessor.GetUserById(userId).Bills.FirstOrDefault(b => b.Id == billId);
 
             if (bill == null)
-                throw new Exception();
+                throw new NotImplementedException("Case is not implemented yet");
 
             _billDbAccessor.DeleteById(billId);
 

@@ -1,0 +1,55 @@
+﻿@using BillSplitter.Models.InteractionLevel
+@model List<Position>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var position in Model)
+    {
+        <tr>
+            <td>
+                @position.Name
+            </td>
+            <td>
+                @position.Price
+            </td>
+            <td>
+                @position.Quantity
+            </td>
+            <td>
+                <form asp-action="Delete" asp-route-positionId="@position.Id" asp-route-billId="@position.BillId">
+                    <input type="submit" value="Delete" />
+                </form>
+                <button onclick="startUpdate()">Update</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+@await Html.PartialAsync("CreatePartial", new InteractionLevelPosition(), ViewData)
+@await Html.PartialAsync("UpdatePartial", new InteractionLevelPosition(), ViewData)
+
+<script>
+    function startUpdate() {
+        var updateForm = document.getElementById("updateForm");
+        updateForm.hidden = false;
+
+        var createForm = document.getElementById("createForm");
+        createForm.hidden = true;
+    }
+</script>

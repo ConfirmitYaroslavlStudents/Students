@@ -1,0 +1,16 @@
+﻿@model BillSplitter.Models.InteractionLevel.InteractionLevelPosition
+
+<form id="updateForm" asp-action="Update" asp-route-billId="@ViewData["billId"]"  hidden>
+    @await Html.PartialAsync("EnterPositionDataPartial", Model)
+    <input type="submit" value="Update position" onclick="submitUpdate()"/>
+</form>
+
+<script>
+    function submitUpdate() {
+        var updateForm = document.getElementById("updateForm");
+        updateForm.hidden = true;
+
+        var createForm = document.getElementById("createForm");
+        createForm.hidden = false;
+    }
+</script>

@@ -9,14 +9,12 @@ namespace BillSplitter.Controllers
     public class CustomersController : Controller
     {
         private readonly CustomersDbAccessor _customersDbAccessor;
-        private readonly UsersDbAccessor _usersDbAccessor;
         private readonly BillsDbAccessor _billsDbAccessor;
         private UserIdVisitor _visitor;
 
         public CustomersController(BillContext context, UserIdVisitor visitor)
         {
             _customersDbAccessor = new CustomersDbAccessor(context);
-            _usersDbAccessor = new UsersDbAccessor(context);
             _billsDbAccessor = new BillsDbAccessor(context);
             _visitor = visitor;
         }
@@ -47,7 +45,7 @@ namespace BillSplitter.Controllers
             {
                 BillId = billId,
                 UserId = _visitor.GetUserId(this),
-                Name = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Name
+                Name = _visitor.GetUserName(this)
             };
 
             _customersDbAccessor.AddCustomer(customer);

@@ -24,6 +24,11 @@ namespace BillSplitter
                     .Select(c => c.Value)
                     .SingleOrDefault() ?? string.Empty);
         }
+
+        public string GetUserName(Controller controller)
+        {
+            return controller.User.Identity.Name;
+        }
     }
 
     public class Startup

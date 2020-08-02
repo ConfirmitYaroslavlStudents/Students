@@ -22,25 +22,7 @@
     @foreach (var position in Model)
     {
         <tr>
-            <form  asp-action="Update" asp-route-positionId="@position.Id" asp-route-billId="@position.BillId" >
-                <td>
-                    <input name="Name" class="form-control"  value="@position.Name">
-                </td>
-                <td>
-                    <input name="Price" class="form-control" value="@position.Price">
-                </td>
-                <td>
-                    <input name="QuantityNumerator" class="form-control" value="@position.Quantity">
-                </td>
-                <td>
-                    <input type="submit" class="btn btn-outline-dark" value="Update" />
-                </td>
-            </form>
-            <td>
-                <form asp-action="Delete" asp-route-positionId="@position.Id" asp-route-billId="@position.BillId">
-                    <input type="submit" class="btn btn-outline-dark" value="Delete" />
-                </form>
-            </td>
+            @await Html.PartialAsync("PositionPartial", position.ToInteractionLevelPosition(), ViewData)
         </tr>
     }
     </tbody>

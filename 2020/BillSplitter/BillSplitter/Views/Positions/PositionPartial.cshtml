@@ -1,2 +1,22 @@
 ﻿@model BillSplitter.Models.InteractionLevel.InteractionLevelPosition
 
+
+<form asp-action="Update" asp-route-positionId="@Model.Id" asp-route-billId="@ViewData["BillId"]">
+    <td>
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+    </td>
+    <td>
+        @Html.TextBoxFor(model => model.Price, new { @class = "form-control" })
+    </td>
+    <td>
+        @Html.TextBoxFor(model => model.QuantityNumerator, new { @class = "form-control" })
+    </td>
+    <td>
+        <input type="submit" class="btn btn-outline-dark" value="Update" />
+    </td>
+</form>
+<td>
+    <form asp-action="Delete" asp-route-positionId="@Model.Id" asp-route-billId="@ViewData["BillId"]">
+        <input type="submit" class="btn btn-outline-dark" value="Delete" />
+    </form>
+</td>

@@ -26,8 +26,12 @@ namespace BillSplitter.Data
 
         public void UpdateById(int positionId, Position positionData)
         {
-            positionData.Id = positionId;
-            _context.Position.Update(positionData);
+            var position = GetPositionById(positionId);
+            
+            position.Name = positionData.Name;
+            position.Price = positionData.Price;
+            position.Quantity = positionData.Quantity;
+
             _context.SaveChanges();
         }
         public bool DbContains(int positionId)

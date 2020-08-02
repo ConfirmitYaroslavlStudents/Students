@@ -1,40 +1,36 @@
-﻿@using BillSplitter.Models.InteractionLevel
-@model List<Position>
+﻿@model List<Position>
 
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            Name
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th>
-            Actions
-        </th>
-    </tr>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var position in Model)
-    {
-        <tr>
-            @await Html.PartialAsync("PositionPartial", position.ToInteractionLevelPosition(), ViewData)
-        </tr>
-    }
+        @foreach (var position in Model)
+        {
+            <tr>
+                @await Html.PartialAsync("PositionPartial", position, ViewData)
+            </tr>
+        }
     </tbody>
 </table>
-@await Html.PartialAsync("CreatePartial", new InteractionLevelPosition(), ViewData)
+@await Html.PartialAsync("CreatePartial", new Position(), ViewData)
 
 <script>
-    function startUpdate() {
-        var updateForm = document.getElementById("updateForm");
-        updateForm.hidden = false;
-
-        var createForm = document.getElementById("createForm");
-        createForm.hidden = true;
+    function submitUpdatePosition(formName) {
+        var updateForm = document.getElementById(formName);
+        updateForm.submit();
     }
 </script>

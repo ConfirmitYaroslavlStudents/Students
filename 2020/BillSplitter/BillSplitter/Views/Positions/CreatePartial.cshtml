@@ -1,6 +1,6 @@
-﻿@model BillSplitter.Models.InteractionLevel.InteractionLevelPosition
+﻿@model Position
 
 <form id = "createForm" asp-action="Create" asp-route-billId = "@ViewData["billId"]">
-    @await Html.PartialAsync("EnterPositionDataPartial", Model)
+    @await Html.PartialAsync("EnterPositionDataPartial", Model, ViewData)
     <input type="submit" class="btn btn-outline-dark" value="Create new position"/>
 </form>

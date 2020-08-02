@@ -1,13 +1,12 @@
 ﻿using BillSplitter.Data;
-using BillSplitter.Models.InteractionLevel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
+using BillSplitter.Models;
 
 namespace BillSplitter.Controllers
 {
-    public class PositionsController : Controller
+    public class PositionsController : Controller // TODO ViewModels
     {
         private BillsDbAccessor _billDbAccessor;
         private PositionsDbAccessor _positionsDbAccessor;
@@ -35,19 +34,19 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}/Positions")]
-        public IActionResult Create(int billId, InteractionLevelPosition position)
+        public IActionResult Create(int billId, Position position)
         {
             if (!_billDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
 
-            _positionsDbAccessor.AddPosition(position.ToPosition(billId));
+            _positionsDbAccessor.AddPosition(position);
 
             return RedirectToAction(nameof(Index), new { billId }); 
         }
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}/Delete")]
+        [Route("Bills/{billId}/Positions/{positionId}")]
         public IActionResult Delete(int billId, int positionId)
         {
             if (!_billDbAccessor.DbContains(billId))
@@ -59,29 +58,14 @@ namespace BillSplitter.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        [Route("Bills/{billId}/Positions/{positionId}")]
-        public IActionResult UpdateGet(int billId, int positionId)
-        {
-            if (!_billDbAccessor.DbContains(billId))
-                throw new NotImplementedException("Case is not implemented yet");
-
-            var position = _billDbAccessor.GetBillById(billId)
-                .Positions
-                .FirstOrDefault(p => p.Id == positionId);
-
-            return View("UpdatePartial", position.ToInteractionLevelPosition());
-        }
-
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}/Update")]
-        public IActionResult Update(int billId, int positionId, InteractionLevelPosition position)
+        [Route("Bills/{billId}/Positions/{positionId}/Update")] // How to implement RESTful?
+        public IActionResult Update(int billId, int positionId, Position position)
         {
             if (!_billDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
 
-            _positionsDbAccessor.UpdateById(positionId, position.ToPosition(billId));
+            _positionsDbAccessor.UpdateById(positionId, position);
             return RedirectToAction(nameof(Index), new { billId });
         }
     }

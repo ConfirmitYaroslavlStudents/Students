@@ -2,7 +2,30 @@
 
 <p> Your own bills </p>
 
-<a asp-action="Create" asp-route-userId="@ViewData["userId"]">Create empty bill</a>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enterBillName">
+    Create empty bill
+</button>
+
+<div id="enterBillName" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Enter bill name</h4>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("EnterBillNamePartial", new Bill())
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitBillNameForm()">
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -17,11 +40,37 @@
         <tr>
             <td>@bill.Name</td>
             <td>
-                <a asp-action="ViewBill" asp-route-billId="@bill.Id">View bill</a> |
-                <a asp-action="Delete" asp-route-billId="@bill.Id">Delete</a> |
-                Edit choice
+                <form method="get" asp-action="ViewBill" asp-route-billId="@bill.Id">
+                    <input type="submit" class="btn btn-primary" value="View bill"/>
+                </form>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
+                    Delete bill
+                </button>
+                <button type="button" class="btn btn-primary">
+                    Edit choice
+                </button>
             </td>
         </tr>
+
+        <div id="deleteConfirmation" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Are you sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        You are now deleting bill. Are you sure you want to delete?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                        <form asp-action="Delete" asp-route-billId="@bill.Id">
+                            <input type="submit" class="btn btn-primary" value="Yes" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
     </tbody>
 </table>
+

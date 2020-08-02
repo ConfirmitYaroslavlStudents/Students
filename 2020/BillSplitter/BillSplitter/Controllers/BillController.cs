@@ -47,7 +47,7 @@ namespace BillSplitter.Controllers
 
             _billDbAccessor.AddBill(createdBill);
 
-            return RedirectToAction(nameof(Index), new { userId = _visitor.GetUserId(this) });
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize]
@@ -65,7 +65,7 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}")]
+        [Route("Bills/{billId}/Delete")]
         public IActionResult Delete(int billId)
         {
             var bill = _billDbAccessor.GetBillById(billId);
@@ -75,7 +75,7 @@ namespace BillSplitter.Controllers
 
             _billDbAccessor.DeleteById(billId);
 
-            return RedirectToAction(nameof(Index), new { userId = _visitor.GetUserId(this) });
+            return RedirectToAction(nameof(Index));
         }
     }
 }

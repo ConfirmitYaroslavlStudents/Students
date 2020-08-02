@@ -2,13 +2,13 @@
 
 <label>
     Name
-    @Html.TextBoxFor(model => model.Name)
+    @Html.TextBoxFor(model => model.Name, new { @class= "form-control" } )
 </label>
 <label>
     Price
-    @Html.TextBoxFor(model => model.Price)
+    @Html.TextBoxFor(model => model.Price, new { @class = "form-control" })
 </label>
 <label>
     Quantity
-    @Html.TextBoxFor(model => model.QuantityNumerator)
+    @Html.TextBoxFor(model => model.QuantityNumerator, new { @class = "form-control" })
 </label>

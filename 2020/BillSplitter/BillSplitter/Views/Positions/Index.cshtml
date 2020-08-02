@@ -22,27 +22,30 @@
     @foreach (var position in Model)
     {
         <tr>
-            <td>
-                @position.Name
-            </td>
-            <td>
-                @position.Price
-            </td>
-            <td>
-                @position.Quantity
-            </td>
+            <form  asp-action="Update" asp-route-positionId="@position.Id" asp-route-billId="@position.BillId" >
+                <td>
+                    <input name="Name" class="form-control"  value="@position.Name">
+                </td>
+                <td>
+                    <input name="Price" class="form-control" value="@position.Price">
+                </td>
+                <td>
+                    <input name="QuantityNumerator" class="form-control" value="@position.Quantity">
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-outline-dark" value="Update" />
+                </td>
+            </form>
             <td>
                 <form asp-action="Delete" asp-route-positionId="@position.Id" asp-route-billId="@position.BillId">
-                    <input type="submit" value="Delete" />
+                    <input type="submit" class="btn btn-outline-dark" value="Delete" />
                 </form>
-                <button onclick="startUpdate()">Update</button>
             </td>
         </tr>
     }
     </tbody>
 </table>
 @await Html.PartialAsync("CreatePartial", new InteractionLevelPosition(), ViewData)
-@await Html.PartialAsync("UpdatePartial", new InteractionLevelPosition(), ViewData)
 
 <script>
     function startUpdate() {

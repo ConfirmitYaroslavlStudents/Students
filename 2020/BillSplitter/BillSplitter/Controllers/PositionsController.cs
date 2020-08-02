@@ -81,8 +81,7 @@ namespace BillSplitter.Controllers
             if (!_billDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
 
-            _positionsDbAccessor.DeleteById(positionId);
-            _positionsDbAccessor.AddPosition(position.ToPosition(billId));
+            _positionsDbAccessor.UpdateById(positionId, position.ToPosition(billId));
             return RedirectToAction(nameof(Index), new { billId });
         }
     }

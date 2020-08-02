@@ -24,6 +24,12 @@ namespace BillSplitter.Data
             return _context.Position.FirstOrDefault(x => x.Id == positionId);
         }
 
+        public void UpdateById(int positionId, Position positionData)
+        {
+            positionData.Id = positionId;
+            _context.Position.Update(positionData);
+            _context.SaveChanges();
+        }
         public bool DbContains(int positionId)
         {
             return GetPositionById(positionId) != null;

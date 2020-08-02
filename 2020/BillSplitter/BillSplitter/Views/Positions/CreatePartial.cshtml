@@ -2,5 +2,5 @@
 
 <form id = "createForm" asp-action="Create" asp-route-billId = "@ViewData["billId"]">
     @await Html.PartialAsync("EnterPositionDataPartial", Model)
-    <input type="submit" value="Create new position"/>
+    <input type="submit" class="btn btn-outline-dark" value="Create new position"/>
 </form>

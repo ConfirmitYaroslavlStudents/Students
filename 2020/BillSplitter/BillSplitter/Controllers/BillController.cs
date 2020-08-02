@@ -30,17 +30,8 @@ namespace BillSplitter.Controllers
         }
 
         [Authorize]
-        [HttpGet]
-        [Route("Bills/Create")]
-        public IActionResult Create()
-        {
-            var bill = new Bill { UserId = _visitor.GetUserId(this) };
-            return View(bill);
-        }
-
-        [Authorize]
         [HttpPost]
-        [Route("Bills/Create")]
+        [Route("Bills/")]
         public IActionResult Create(Bill createdBill)
         {
             createdBill.UserId = _visitor.GetUserId(this);
@@ -65,7 +56,7 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Delete")]
+        [Route("Bills/{billId}")]
         public IActionResult Delete(int billId)
         {
             var bill = _billDbAccessor.GetBillById(billId);

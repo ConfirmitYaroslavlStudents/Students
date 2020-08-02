@@ -32,14 +32,33 @@ namespace BillSplitter.Controllers
             return View(positions); 
         }
 
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/{billId}/Positions/Create")]
+        public IActionResult Create(int billId)
+        {
+            if (!_billDbAccessor.DbContains(billId))
+                throw new NotImplementedException("Case is not implemented yet");
+           
+            ViewData["billId"] = billId;
+            
+            return View();
+        }
+
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions")]
+        [Route("Bills/{billId}/Positions/Create")]
         public IActionResult Create(int billId, InteractionLevelPosition position)
         {
             if (!_billDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
 
+            ViewData["billId"] = billId;
+
+            if (!ModelState.IsValid)
+                return View(position);
+        
             _positionsDbAccessor.AddPosition(position.ToPosition(billId));
 
             return RedirectToAction(nameof(Index), new { billId }); 
@@ -60,17 +79,19 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Positions/{positionId}")]
-        public IActionResult UpdateGet(int billId, int positionId)
+        [Route("Bills/{billId}/Positions/{positionId}/Update")]
+        public IActionResult Update(int billId, int positionId)
         {
             if (!_billDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
+
+            ViewData["billId"] = billId;
 
             var position = _billDbAccessor.GetBillById(billId)
                 .Positions
                 .FirstOrDefault(p => p.Id == positionId);
 
-            return View("UpdatePartial", position.ToInteractionLevelPosition());
+            return View(position.ToInteractionLevelPosition());
         }
 
         [Authorize]
@@ -80,8 +101,14 @@ namespace BillSplitter.Controllers
         {
             if (!_billDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
+           
+            ViewData["billId"] = billId;
+           
+            if (!ModelState.IsValid)
+               return View(position);
 
             _positionsDbAccessor.UpdateById(positionId, position.ToPosition(billId));
+          
             return RedirectToAction(nameof(Index), new { billId });
         }
     }

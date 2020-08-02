@@ -27,14 +27,4 @@
     }
     </tbody>
 </table>
-@await Html.PartialAsync("CreatePartial", new InteractionLevelPosition(), ViewData)
-
-<script>
-    function startUpdate() {
-        var updateForm = document.getElementById("updateForm");
-        updateForm.hidden = false;
-
-        var createForm = document.getElementById("createForm");
-        createForm.hidden = true;
-    }
-</script>
+@Html.ActionLink("Create New Position", "Create",new {billId=ViewData["BillId"]})

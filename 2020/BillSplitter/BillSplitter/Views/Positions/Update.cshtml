@@ -1,0 +1,5 @@
+﻿@model BillSplitter.Models.InteractionLevel.InteractionLevelPosition
+
+<h2>Update Position</h2>
+
+@await Html.PartialAsync("PositionFormPartial", Model, new ViewDataDictionary(ViewData) { { "Action", "Update" }, { "ActionName", "Update" } })

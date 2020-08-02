@@ -1,0 +1,4 @@
+﻿@model BillSplitter.Models.InteractionLevel.InteractionLevelPosition
+
+<h2> Create new Position </h2>
+@await Html.PartialAsync("PositionFormPartial", Model, new ViewDataDictionary(ViewData) { { "Action", "Create" }, {  "ActionName" , "Create Position" } })

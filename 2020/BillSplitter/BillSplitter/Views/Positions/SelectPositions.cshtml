@@ -1,0 +1,30 @@
+﻿@model List<Position>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Select
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var position in Model)
+    {
+        <tr>
+            <td>
+            </td>
+            @await Html.PartialAsync("PositionInfoPartial", position, ViewData)
+        </tr>
+    }
+    </tbody>
+</table>

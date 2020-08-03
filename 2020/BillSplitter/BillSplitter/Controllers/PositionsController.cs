@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using BillSplitter.Models;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BillSplitter.Controllers
 {
@@ -27,7 +28,7 @@ namespace BillSplitter.Controllers
             if (bill.UserId != _visitor.GetUserId(this))
                 return false;
 
-           return true;
+            return true;
         }
 
         private bool ValidatePosition(int billId, int positionId)
@@ -48,15 +49,26 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpGet]
         [Route("Bills/{billId}/Positions")]
-        public IActionResult Index(int billId)
+        public IActionResult Index(int billId, bool select)
         {
-            if (!ValidateUser(billId))
-                return Error();
+            if (!select)
+            {
+                if (!ValidateUser(billId))
+                    return Error();
 
-            ViewData["billId"] = billId;
-            var positions = _billDbAccessor.GetBillById(billId).Positions;
+                ViewData["billId"] = billId;
+                var positions = _billDbAccessor.GetBillById(billId).Positions;
 
-            return View(positions); 
+                return View(positions);
+            }
+
+            var bill = _billDbAccessor.GetBillById(billId);
+            var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
+
+            if (customer != null)
+                return View("SelectPositions", bill.Positions);
+
+            throw new NotImplementedException();
         }
 
         [Authorize]
@@ -69,7 +81,7 @@ namespace BillSplitter.Controllers
 
             _positionsDbAccessor.AddPosition(position);
 
-            return RedirectToAction(nameof(Index), new { billId }); 
+            return RedirectToAction(nameof(Index), new { billId, select = false }); 
         }
 
         [Authorize]
@@ -82,7 +94,7 @@ namespace BillSplitter.Controllers
 
             _positionsDbAccessor.DeleteById(positionId);
 
-            return RedirectToAction(nameof(Index), new { billId });
+            return RedirectToAction(nameof(Index), new { billId, select = false });
         }
 
         [Authorize]
@@ -94,7 +106,7 @@ namespace BillSplitter.Controllers
                 return Error();
 
             _positionsDbAccessor.UpdateById(positionId, position);
-            return RedirectToAction(nameof(Index), new { billId });
+            return RedirectToAction(nameof(Index), new { billId, select = false });
         }
     }
 }

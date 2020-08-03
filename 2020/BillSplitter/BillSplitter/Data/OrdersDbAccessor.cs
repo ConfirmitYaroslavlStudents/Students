@@ -32,5 +32,12 @@ namespace BillSplitter.Data
                 .Where(order => order.Quantity > double.Epsilon)); // part of validation, maybe move to validator
             _context.SaveChanges();
         }
+
+        public void DeleteById(int orderId)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
+        }
     }
 }

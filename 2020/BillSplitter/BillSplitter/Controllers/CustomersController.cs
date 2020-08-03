@@ -36,7 +36,7 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}/Customers")] // What route must be for this action?
-        public void Post(int billId)
+        public IActionResult Post(int billId)
         {
             if (!_billsDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
@@ -49,6 +49,8 @@ namespace BillSplitter.Controllers
             };
 
             _customersDbAccessor.AddCustomer(customer);
+
+            return RedirectToAction("Index", "Positions", new {billId, select = true});
         }
 
         [Authorize]

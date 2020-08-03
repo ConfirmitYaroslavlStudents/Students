@@ -36,41 +36,60 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var bill in Model)
-    {
-        <tr>
-            <td>@bill.Name</td>
-            <td>
+        @foreach (var bill in Model)
+        {
+            <tr>
+                <td>@bill.Name</td>
+                <td>
 
-                @Html.ActionLink("View Bill", "ViewBill", new { billId = @bill.Id}, new { @class = "btn btn-primary" })
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
-                    Delete bill
-                </button>
-                <button type="button" class="btn btn-primary">
-                    Edit choice
-                </button>
-            </td>
-        </tr>
+                    @Html.ActionLink("View Bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
+                        Delete bill
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#joinConfirmation">
+                        Join bill
+                    </button>
+                </td>
+            </tr>
 
-        <div id="deleteConfirmation" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Are you sure?</h4>
-                    </div>
-                    <div class="modal-body">
-                        You are now deleting bill. Are you sure you want to delete?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                        <form asp-action="Delete" asp-route-billId="@bill.Id">
-                            <input type="submit" class="btn btn-primary" value="Yes" />
-                        </form>
+            <div id="deleteConfirmation" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure?</h4>
+                        </div>
+                        <div class="modal-body">
+                            You are now deleting bill. Are you sure you want to delete?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                            <form asp-action="Delete" asp-route-billId="@bill.Id">
+                                <input type="submit" class="btn btn-primary" value="Yes" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+
+            <div id="joinConfirmation" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are you sure?</h4>
+                        </div>
+                        <div class="modal-body">
+                            You are now joining bill. Are you sure you want to join?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                            <form asp-controller="Customers" asp-action="Post" asp-route-billId="@bill.Id">
+                                <input type="submit" class="btn btn-primary" value="Yes" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </tbody>
 </table>
 

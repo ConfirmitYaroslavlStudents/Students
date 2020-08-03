@@ -21,7 +21,7 @@
         @foreach (var position in Model)
         {
             <tr>
-                @await Html.PartialAsync("PositionPartial", position, ViewData)
+                @await Html.PartialAsync("PositionInfoActionsPartial", position, ViewData)
             </tr>
         }
     </tbody>

@@ -88,6 +88,7 @@ namespace BillSplitter.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

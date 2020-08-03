@@ -8,9 +8,9 @@ namespace BillSplitter.Controllers
 {
     public class BillController : Controller
     {
-        private BillsDbAccessor _billDbAccessor;
-        private UsersDbAccessor _usersDbAccessor;
-        private UserIdVisitor _visitor;
+        private readonly BillsDbAccessor _billDbAccessor;
+        private readonly UsersDbAccessor _usersDbAccessor;
+        private readonly UserIdVisitor _visitor;
 
         public BillController(BillContext context, UserIdVisitor visitor)
         {

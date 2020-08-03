@@ -2,10 +2,11 @@
 
 <p> Your own bills </p>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enterBillName">
-    Create empty bill
-</button>
-
+<p>
+    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#enterBillName">
+        Create empty bill
+    </button>
+</p>
 <div id="enterBillName" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -40,9 +41,8 @@
         <tr>
             <td>@bill.Name</td>
             <td>
-                <form method="get" asp-action="ViewBill" asp-route-billId="@bill.Id">
-                    <input type="submit" class="btn btn-primary" value="View bill"/>
-                </form>
+
+                @Html.ActionLink("View Bill", "ViewBill", new { billId = @bill.Id}, new { @class = "btn btn-primary" })
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
                     Delete bill
                 </button>

@@ -17,12 +17,13 @@ namespace BillSplitter.Controllers
         {
             _customersDbAccessor = new CustomersDbAccessor(context);
             _billsDbAccessor = new BillsDbAccessor(context);
+            _ordersDbAccessor = new OrdersDbAccessor(context);
             _visitor = visitor;
         }
 
         [Authorize]
         [HttpPost]
-        [Route("Bill/{billId}/Positions/{positionId}/Orders")]
+        [Route("Bills/{billId}/Positions/{positionId}/Orders")]
         public IActionResult AddOrder(int billId, int positionId)
         {
             var customer = _billsDbAccessor.GetBillById(billId).Customers
@@ -34,15 +35,16 @@ namespace BillSplitter.Controllers
                 PositionId = positionId
             });
 
-            return RedirectToAction("Index", "Positions", new {billId, select = true});
+            return RedirectToAction("Index", "Positions", new { billId, select = true });
         }
 
         [Authorize]
-        [HttpPost]
-        [Route("Bill/{billId}/Positions/{positionId}/Orders/{orderId}")]
-        public IActionResult DeleteOrder(int billId, int positionId, int orderId)
+        [HttpDelete]
+        [Route("Bills/{billId}/Positions/{positionId}/Orders")]
+        public IActionResult DeleteOrder(int billId, int positionId)
         {
-            _ordersDbAccessor.DeleteById(orderId);
+            _ordersDbAccessor.DeleteByUserAndPosition(_visitor.GetUserId(this), positionId);
+
             return RedirectToAction("Index", "Positions", new { billId, select = true });
         }
     }

@@ -5,6 +5,8 @@ using System;
 using BillSplitter.Models;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BillSplitter.Controllers
 {
@@ -51,12 +53,14 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Positions")]
         public IActionResult Index(int billId, bool select)
         {
+            ViewData["billId"] = billId;
+
             if (!select)
             {
                 if (!ValidateUser(billId))
                     return Error();
 
-                ViewData["billId"] = billId;
+               
                 var positions = _billDbAccessor.GetBillById(billId).Positions;
 
                 return View(positions);
@@ -108,5 +112,21 @@ namespace BillSplitter.Controllers
             _positionsDbAccessor.UpdateById(positionId, position);
             return RedirectToAction(nameof(Index), new { billId, select = false });
         }
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/{billId}/Positions/{positionId}/Partial")] 
+        public PartialViewResult GetPositionPartial(int billId, int positionId)
+        {
+            Position position = _positionsDbAccessor.GetPositionById(positionId);
+            return new PartialViewResult
+            {
+                ViewName = "SelectPositionsPartial",
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+                {
+                    Model = position,
+                }
+            };
+        }
+
     }
 }

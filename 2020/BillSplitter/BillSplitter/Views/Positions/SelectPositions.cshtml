@@ -2,29 +2,91 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            Select
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Quantity
-        </th>
-    </tr>
+        <tr>
+            <th>
+                Select
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+               Already selected
+            </th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var position in Model)
-    {
-        <tr>
-            <td>
-            </td>
-            @await Html.PartialAsync("PositionInfoPartial", position, ViewData)
+
+        @foreach (var position in Model)
+        {
+        <tr id="partial_@position.Id">
+            @await Html.PartialAsync("SelectPositionsPartial",position)
         </tr>
-    }
+        }
     </tbody>
 </table>
+
+
+<script  type="text/javascript">
+
+
+    setInterval(function (){
+        ReloadAll()
+    }, 5000);
+
+  
+    function ReloadAll()
+    {
+       
+        @foreach (Position position in Model)
+        {
+           @:Reload(@position.Id);
+        }
+       
+      
+    }
+
+    function Reload(Id)
+    {
+        $("#partial_"+Id).load("Positions/"+Id+"/Partial"); 
+    }
+
+
+
+
+    //https://localhost:44374/Bills/2/Positions?select=True
+    function positionChecked(positionId)
+    {
+        var ch = $("#"+positionId).is(":checked");
+        if (ch) {
+            $.ajax("Positions/" + positionId + "/Orders", {
+                type: 'POST',  
+                success: function (data, status, xhr) {
+                    ReloadAll();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    ReloadAll();
+                }
+            });
+
+        }
+        else
+        {
+             $.ajax("Positions/" + positionId + "/Orders", {
+                 type: 'DELETE',  
+                 dataType: 'text',
+                success: function (data, status, xhr) {
+                    ReloadAll();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    ReloadAll();//Почему-то всегда возвращается ошибка, даже когда запрос выполнился корректно
+                 }
+            });
+        }
+    }
+</script>

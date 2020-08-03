@@ -33,9 +33,9 @@ namespace BillSplitter.Data
             _context.SaveChanges();
         }
 
-        public void DeleteById(int orderId)
+        public void DeleteByUserAndPosition(int userId, int positionId)
         {
-            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+            var order = _context.Orders.FirstOrDefault(o => (o.Customer.UserId==userId && o.PositionId==positionId ));
             _context.Orders.Remove(order);
             _context.SaveChanges();
         }

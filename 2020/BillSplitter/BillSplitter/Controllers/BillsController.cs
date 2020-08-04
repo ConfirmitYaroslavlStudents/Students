@@ -2,6 +2,7 @@
 using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
+using BillSplitter.Models.ViewModels.ViewBill;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,13 @@ namespace BillSplitter.Controllers
         public IActionResult Create(Bill createdBill)
         {
             createdBill.UserId = _visitor.GetUserId(this);
+            var customer = new Customer
+            {
+                Name = _visitor.GetUserName(this),
+                UserId = _visitor.GetUserId(this),
+                Bill = createdBill
+            };
+            createdBill.Customers.Add(customer);
 
             _billDbAccessor.AddBill(createdBill);
 
@@ -49,6 +57,9 @@ namespace BillSplitter.Controllers
             var bill = _billDbAccessor.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
 
+            if (customer == null)
+                return View("JoinBill", bill);
+
             var customersBill = new CustomerBillBuilder().Build(customer);
 
             var positions =
@@ -59,13 +70,14 @@ namespace BillSplitter.Controllers
                     from pos in bcPositions.DefaultIfEmpty()
                     select new ViewBillPositionModel()
                     {
+                        Id = bPos.Id,
                         Name = bPos.Name, 
                         Quantity = bPos.Quantity,
                         OriginalPrice = bPos.Price,
                         ActualPrice = pos?.Price ?? 0,
                         Selected = pos != null
                     }
-                ).ToList();
+                ).OrderBy(p => p.Id).ToList();
 
             var model = new ViewBillModel()
             {
@@ -87,7 +99,6 @@ namespace BillSplitter.Controllers
           
             return View(bill);
         }
-
 
         [Authorize]
         [HttpPost]

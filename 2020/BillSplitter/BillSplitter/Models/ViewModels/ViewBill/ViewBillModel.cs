@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BillSplitter.Models
+namespace BillSplitter.Models.ViewModels.ViewBill
 {
     public class ViewBillModel
     {

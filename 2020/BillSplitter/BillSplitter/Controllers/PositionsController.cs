@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BillSplitter.Controllers
 {
-    public class PositionsController : Controller // TODO ViewModels
+    public class PositionsController : Controller 
     {
         private readonly BillsDbAccessor _billDbAccessor;
         private readonly PositionsDbAccessor _positionsDbAccessor;
@@ -59,19 +59,19 @@ namespace BillSplitter.Controllers
             {
                 if (!ValidateUser(billId))
                     return Error();
-
                
-                var positions = _billDbAccessor.GetBillById(billId).Positions;
+                var positions = _billDbAccessor.GetBillById(billId).Positions
+                    .OrderBy(p => p.Id)
+                    .ToList();
 
                 return View(positions);
             }
 
-            ViewData["billId"] = billId;
             var bill = _billDbAccessor.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
 
             if (customer != null)
-                return View("SelectPositions", bill.Positions);
+                return View("SelectPositions", bill.Positions.OrderBy(p => p.Id).ToList());
 
             throw new NotImplementedException();
         }

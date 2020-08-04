@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -35,20 +36,26 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers")] // What route must be for this action?
+        [Route("Bills/{billId}/Customers")] 
         public IActionResult Post(int billId)
         {
             if (!_billsDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
-
-            var customer = new Customer
+            
+            var userId = _visitor.GetUserId(this);
+            var bill = _billsDbAccessor.GetBillById(billId);
+            
+            if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
             {
-                BillId = billId,
-                UserId = _visitor.GetUserId(this),
-                Name = _visitor.GetUserName(this)
-            };
+                var customer = new Customer
+                {
+                    BillId = billId,
+                    UserId = _visitor.GetUserId(this),
+                    Name = _visitor.GetUserName(this)
+                };
 
-            _customersDbAccessor.AddCustomer(customer);
+                _customersDbAccessor.AddCustomer(customer);
+            }
 
             return RedirectToAction("Index", "Positions", new {billId, select = true});
         }

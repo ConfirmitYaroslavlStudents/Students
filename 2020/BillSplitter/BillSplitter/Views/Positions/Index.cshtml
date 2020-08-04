@@ -28,6 +28,10 @@
 </table>
 @await Html.PartialAsync("CreatePartial", new Position(), ViewData)
 
+@Html.ActionLink("Choose your positions", "Index", new
+{
+    billId = ViewData["billId"], select=true
+}, new {@class = "btn btn-primary"})
 <script>
     function submitUpdatePosition(formName) {
         var updateForm = document.getElementById(formName);

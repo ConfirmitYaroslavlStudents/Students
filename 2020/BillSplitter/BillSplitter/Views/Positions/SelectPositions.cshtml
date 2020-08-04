@@ -15,7 +15,7 @@
         <th>
             Quantity
         </th>
-        <th>
+        <th colspan="2">
             Already selected
         </th>
     </tr>
@@ -48,12 +48,12 @@
         }
     }
 
-    function reload(Id) {
-        $("#partial_"+Id).load("Positions/"+Id+"/Partial"); 
+    function reload(id) {
+        $("#partial_" + id).load("Positions/" + id + "/Partial"); 
     }
 
     function positionChecked(positionId) {
-        var ch = $("#"+positionId).is(":checked");
+        var ch = $("#" + positionId).is(":checked");
         if (ch) {
             $.ajax("Positions/" + positionId + "/Orders", {
                 type: 'POST',  
@@ -72,7 +72,7 @@
                     reloadAll();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
-                    reloadAll();//Почему-то всегда возвращается ошибка, даже когда запрос выполнился корректно
+                    reloadAll();
                  }
             });
         }

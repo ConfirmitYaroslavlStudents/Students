@@ -51,7 +51,7 @@ namespace BillSplitter.Controllers
 
             var customersBill = new CustomerBillBuilder().Build(customer);
 
-            var postions =
+            var positions =
                 (
                     from bPos in bill.Positions
                     join cPos in customersBill on bPos.Id equals cPos.Id
@@ -61,7 +61,7 @@ namespace BillSplitter.Controllers
                     {
                         Name = bPos.Name, 
                         Quantity = bPos.Quantity,
-                        OriginalPrce = bPos.Price,
+                        OriginalPrice = bPos.Price,
                         ActualPrice = pos?.Price ?? 0,
                         Selected = pos != null
                     }
@@ -70,7 +70,7 @@ namespace BillSplitter.Controllers
             var model = new ViewBillModel()
             {
                 Bill = bill,
-                Positions = postions,
+                Positions = positions,
                 HasManageAccess = bill.UserId == _visitor.GetUserId(this),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };

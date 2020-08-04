@@ -12,19 +12,19 @@ namespace BillSplitter.Controllers
 {
     public class PositionsController : Controller 
     {
-        private readonly BillsDbAccessor _billDbAccessor;
+        private readonly BillsDbAccessor _billsDbAccessor;
         private readonly PositionsDbAccessor _positionsDbAccessor;
         private readonly UserIdVisitor _visitor;
         public PositionsController(BillContext context, UserIdVisitor userIdVisitor)
         {
-            _billDbAccessor = new BillsDbAccessor(context);
+            _billsDbAccessor = new BillsDbAccessor(context);
             _positionsDbAccessor = new PositionsDbAccessor(context);
             _visitor = userIdVisitor;
         }
 
         private bool ValidateUser(int billId)
         {
-            var bill = _billDbAccessor.GetBillById(billId);
+            var bill = _billsDbAccessor.GetBillById(billId);
             if (bill == null) 
                 return false;
             if (bill.UserId != _visitor.GetUserId(this))
@@ -35,7 +35,7 @@ namespace BillSplitter.Controllers
 
         private bool ValidatePosition(int billId, int positionId)
         {
-            var bill = _billDbAccessor.GetBillById(billId);
+            var bill = _billsDbAccessor.GetBillById(billId);
 
             if (bill.Positions.Find(x => x.Id == positionId) == null)
                 return false;
@@ -60,14 +60,14 @@ namespace BillSplitter.Controllers
                 if (!ValidateUser(billId))
                     return Error();
                
-                var positions = _billDbAccessor.GetBillById(billId).Positions
+                var positions = _billsDbAccessor.GetBillById(billId).Positions
                     .OrderBy(p => p.Id)
                     .ToList();
 
                 return View(positions);
             }
 
-            var bill = _billDbAccessor.GetBillById(billId);
+            var bill = _billsDbAccessor.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
 
             if (customer != null)

@@ -1,5 +1,8 @@
 ﻿@model List<Position>
 
+<p>
+    <a asp-controller="Bills" asp-action="ViewBill" class="btn btn btn-primary" asp-route-billId="@ViewData["billId"]">Back to Bill</a>
+</p>
 <table class="table">
     <thead>
         <tr>

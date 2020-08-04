@@ -1,4 +1,4 @@
-﻿@model List<Bill>
+﻿@model BillSplitter.Models.ViewModels.ViewBillsModel
 
 <p> Your own bills </p>
 
@@ -28,6 +28,7 @@
     </div>
 </div>
 
+<h1>Managed Bills</h1>
 <table class="table">
     <thead>
     <tr>
@@ -36,7 +37,7 @@
     </tr>
     </thead>
     <tbody>
-        @foreach (var bill in Model)
+        @foreach (var bill in Model.adminBills)
         {
             <tr>
                 <td>@bill.Name</td>
@@ -46,7 +47,7 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
                         Delete bill
                     </button>
-                    
+
                     @Html.ActionLink("Join bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
                 </td>
             </tr>
@@ -89,6 +90,33 @@
                 </div>
             </div>
         }
+
     </tbody>
 </table>
 
+
+<h1>Bills you are joined in</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+      
+        @foreach (var bill in Model.customerBills)
+        {
+            <tr>
+                <td>@bill.Name</td>
+                <td>
+
+                    @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
+
+                </td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>

@@ -29,6 +29,7 @@ namespace BillSplitter.Controllers
             if (bill.UserId != _visitor.GetUserId(this))
                 throw new NotImplementedException("Case is not implemented yet");
 
+            ViewData["billId"] = billId;
             var customers = bill.Customers;
 
             return View(customers);

@@ -3,6 +3,10 @@
     ViewData["Title"] = "Customers";
 }
 
+<p>
+   <a asp-controller="Bills" asp-action="ViewBill" class="btn btn btn-primary" asp-route-billId="@ViewData["billId"]">Back to Bill</a>
+</p>
+
 <h1>Customers for this bill</h1>
 <table class="table">
     <thead>

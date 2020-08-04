@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
@@ -18,6 +19,10 @@ namespace BillSplitter.Data
             _context.SaveChanges();
         }
 
+        public List<Bill> getBillsByCustomerUserId(int userId)
+        {
+            return _context.Customers.Where(c => c.UserId == userId).Select(c => c.Bill).Where(b => b.UserId != userId).ToList();
+        }
         public Bill GetBillById(int billId)
         {
             var bill = _context.Bills.FirstOrDefault(x => x.Id == billId);

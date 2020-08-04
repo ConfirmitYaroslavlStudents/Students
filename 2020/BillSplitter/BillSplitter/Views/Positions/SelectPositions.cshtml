@@ -2,34 +2,42 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                Select
-            </th>
-            <th>
-                Name
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Quantity
-            </th>
-            <th>
-               Already selected
-            </th>
-        </tr>
+    <tr>
+        <th>
+            Select
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Already selected
+        </th>
+    </tr>
     </thead>
     <tbody>
 
-        @foreach (var position in Model)
-        {
+    @foreach (var position in Model)
+    {
         <tr id="partial_@position.Id">
             @await Html.PartialAsync("SelectPositionsPartial",position)
         </tr>
-        }
+    }
     </tbody>
 </table>
+@Html.ActionLink("View results", "ViewBill", "Bills", new
+{
+    billId = ViewData["billId"]
+}, new
+{
+    @class = "btn btn-primary"
+})
+
 <script  type="text/javascript">
     setInterval(() => reloadAll(), 5000);
   

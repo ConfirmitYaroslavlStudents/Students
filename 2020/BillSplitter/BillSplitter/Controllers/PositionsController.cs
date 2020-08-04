@@ -66,6 +66,7 @@ namespace BillSplitter.Controllers
                 return View(positions);
             }
 
+            ViewData["billId"] = billId;
             var bill = _billDbAccessor.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
 

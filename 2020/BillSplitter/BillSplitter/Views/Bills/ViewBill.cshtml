@@ -1,25 +1,82 @@
-﻿@model Bill
+﻿@model ViewBillModel
 
-<p>This bill has</p>
-<ul>
-    <li>
-        @Model.Positions.Count position(s)
-    </li>
-    <li>
-        @Model.Customers.Count customer(s)
-    </li>
-</ul>
+<style>
+    .selected {
+        background: lightgreen
+    }
+    .notSelected {
+        background: lightsalmon
+    }
+</style>
 
-<ul>
-    <li>
-        <a asp-controller="Customers" asp-action="Index" asp-route-billId="@Model.Id">
-            Manage customers
-        </a> 
-    </li>
-    <li>
-        <a asp-controller="Positions" asp-action="Index" asp-route-billId="@Model.Id" asp-route-select="false">
-            Manage position
-        </a> 
-    </li>
-</ul>
+@if (Model.HasManageAccess)
+{
+    <p>This bill has</p>
+    <ul>
+        <li>
+            @Model.Bill.Positions.Count position(s)
+        </li>
+        <li>
+            @Model.Bill.Customers.Count customer(s)
+        </li>
+    </ul>
+}
+<h1>Your orders:</h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Your price
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var pos in Model.Positions)
+        {
+            var classType = pos.Selected ? "selected" : "notSelected";
+            <tr class="@classType">
+                <td>
+                    @pos.Name
+                </td>
+                <td>
+                    @pos.OriginalPrce
+                </td>
+                <td>
+                    @pos.Quantity
+                </td>
+                <td>
+                    @pos.ActualPrice
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
+<h1>
+    Your sum is @Model.CustomerSum
+</h1>
+
+@if (Model.HasManageAccess)
+{
+    <ul>
+        <li>
+            <a asp-controller="Customers" asp-action="Index" asp-route-billId="@Model.Bill.Id">
+                Manage customers
+            </a>
+        </li>
+        <li>
+            <a asp-controller="Positions" asp-action="Index" asp-route-billId="@Model.Bill.Id" asp-route-select="false">
+                Manage position
+            </a>
+        </li>
+    </ul>
+}

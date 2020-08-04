@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -46,11 +47,35 @@ namespace BillSplitter.Controllers
         public IActionResult ViewBill(int billId)
         {
             var bill = _billDbAccessor.GetBillById(billId);
+            var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
 
-            if (bill.UserId != _visitor.GetUserId(this))
-                throw new NotImplementedException("Case is not implemented yet");
+            var customersBill = new CustomerBillBuilder().Build(customer);
 
-            return View(bill);
+            var postions =
+                (
+                    from bPos in bill.Positions
+                    join cPos in customersBill on bPos.Id equals cPos.Id
+                        into bcPositions
+                    from pos in bcPositions.DefaultIfEmpty()
+                    select new ViewBillPositionModel()
+                    {
+                        Name = bPos.Name, 
+                        Quantity = bPos.Quantity,
+                        OriginalPrce = bPos.Price,
+                        ActualPrice = pos?.Price ?? 0,
+                        Selected = pos != null
+                    }
+                ).ToList();
+
+            var model = new ViewBillModel()
+            {
+                Bill = bill,
+                Positions = postions,
+                HasManageAccess = bill.UserId == _visitor.GetUserId(this),
+                CustomerSum = customersBill.Sum(p => p.Price)
+            };
+
+            return View(model);
         }
 
         [Authorize]

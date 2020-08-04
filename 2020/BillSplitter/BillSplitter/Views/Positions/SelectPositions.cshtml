@@ -41,13 +41,13 @@
     }
 
     function reload(Id) {
-        $("#partial_"+Id).load("Positionss/"+Id+"/Partial"); 
+        $("#partial_"+Id).load("Positions/"+Id+"/Partial"); 
     }
 
     function positionChecked(positionId) {
         var ch = $("#"+positionId).is(":checked");
         if (ch) {
-            $.ajax("Positionss/" + positionId + "/Orders", {
+            $.ajax("Positions/" + positionId + "/Orders", {
                 type: 'POST',  
                 success: function (data, status, xhr) {
                     reloadAll();
@@ -57,7 +57,7 @@
                 }
             });
         } else {
-             $.ajax("Positionss/" + positionId + "/Orders", {
+             $.ajax("Positions/" + positionId + "/Orders", {
                  type: 'DELETE',  
                  dataType: 'text',
                 success: function (data, status, xhr) {

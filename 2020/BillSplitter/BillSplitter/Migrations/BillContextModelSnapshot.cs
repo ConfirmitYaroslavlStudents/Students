@@ -75,9 +75,6 @@ namespace BillSplitter.Migrations
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");

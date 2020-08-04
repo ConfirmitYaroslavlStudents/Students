@@ -8,14 +8,14 @@ namespace BillSplitter.Data
     {
         public List<Position> Build(Customer customer)
         {
-            return customer
-                .Orders
-                .Select(order => new Position
-                {
-                    Name = order.Position.Name, 
-                    Price = order.Position.Price * (decimal)order.Quantity
-                })
-                .ToList();
+            var orders = customer.Orders;
+
+            return orders.Select(order => new Position()
+            {
+                Price = order.Position.Price / order.Position.Orders.Count,
+                Id = order.Position.Id,
+                Name = order.Position.Name
+            }).ToList();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
@@ -15,13 +14,13 @@ namespace BillSplitter.Data
 
         public void AddPosition(Position pos)
         {
-            _context.Position.Add(pos);
+            _context.Positions.Add(pos);
             _context.SaveChanges();
         }
 
         public Position GetPositionById(int positionId)
         {
-            return _context.Position.FirstOrDefault(x => x.Id == positionId);
+            return _context.Positions.FirstOrDefault(x => x.Id == positionId);
         }
 
         public void UpdateById(int positionId, Position positionData)
@@ -34,14 +33,10 @@ namespace BillSplitter.Data
 
             _context.SaveChanges();
         }
-        public bool DbContains(int positionId)
-        {
-            return GetPositionById(positionId) != null;
-        }
 
         public void DeleteById(int positionId)
         {
-            _context.Position.Remove(GetPositionById(positionId));
+            _context.Positions.Remove(GetPositionById(positionId));
             _context.SaveChanges();
         }
     }

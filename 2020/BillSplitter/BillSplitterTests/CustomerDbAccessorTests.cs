@@ -21,7 +21,7 @@ namespace BillSplitterTests
 
             accessor.AddCustomer(customer);
 
-            Assert.True(db.Customer.Contains(customer));
+            Assert.True(db.Customers.Contains(customer));
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace BillSplitterTests
                 Id = 2
             };
 
-            db.Customer.AddRange(customer1, customer2);
+            db.Customers.AddRange(customer1, customer2);
             db.SaveChanges();
 
             var expected = customer2;

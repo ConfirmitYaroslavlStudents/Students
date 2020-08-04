@@ -93,7 +93,7 @@ namespace BillSplitter
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Bill}/{action=Index}/{id?}");
+                    pattern: "{controller=Bills}/{action=Index}/{id?}");
             });
         }
     }

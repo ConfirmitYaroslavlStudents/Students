@@ -30,61 +30,41 @@
         }
     </tbody>
 </table>
-
-
 <script  type="text/javascript">
-
-
-    setInterval(function (){
-        ReloadAll()
-    }, 5000);
-
+    setInterval(() => reloadAll(), 5000);
   
-    function ReloadAll()
-    {
-       
+    function reloadAll() {
         @foreach (Position position in Model)
         {
-           @:Reload(@position.Id);
+           @:reload(@position.Id);
         }
-       
-      
     }
 
-    function Reload(Id)
-    {
-        $("#partial_"+Id).load("Positions/"+Id+"/Partial"); 
+    function reload(Id) {
+        $("#partial_"+Id).load("Positionss/"+Id+"/Partial"); 
     }
 
-
-
-
-    //https://localhost:44374/Bills/2/Positions?select=True
-    function positionChecked(positionId)
-    {
+    function positionChecked(positionId) {
         var ch = $("#"+positionId).is(":checked");
         if (ch) {
-            $.ajax("Positions/" + positionId + "/Orders", {
+            $.ajax("Positionss/" + positionId + "/Orders", {
                 type: 'POST',  
                 success: function (data, status, xhr) {
-                    ReloadAll();
+                    reloadAll();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
-                    ReloadAll();
+                    reloadAll();
                 }
             });
-
-        }
-        else
-        {
-             $.ajax("Positions/" + positionId + "/Orders", {
+        } else {
+             $.ajax("Positionss/" + positionId + "/Orders", {
                  type: 'DELETE',  
                  dataType: 'text',
                 success: function (data, status, xhr) {
-                    ReloadAll();
+                    reloadAll();
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
-                    ReloadAll();//Почему-то всегда возвращается ошибка, даже когда запрос выполнился корректно
+                    reloadAll();//Почему-то всегда возвращается ошибка, даже когда запрос выполнился корректно
                  }
             });
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BillSplitter.Models;
 
 namespace BillSplitter.Data
@@ -15,25 +14,25 @@ namespace BillSplitter.Data
 
         public void AddBill(Bill bill)
         {
-            _context.Bill.Add(bill);
+            _context.Bills.Add(bill);
             _context.SaveChanges();
         }
 
         public Bill GetBillById(int billId)
         {
-            var bill = _context.Bill.FirstOrDefault(x => x.Id == billId);
+            var bill = _context.Bills.FirstOrDefault(x => x.Id == billId);
 
             return bill;
         }
     
         public bool DbContains(int billId)
         {
-            return _context.Bill.FirstOrDefault(x => x.Id == billId) != null;
+            return _context.Bills.FirstOrDefault(x => x.Id == billId) != null;
         }
 
         public void DeleteById(int billId)
         {
-            _context.Bill.Remove(GetBillById(billId));
+            _context.Bills.Remove(GetBillById(billId));
             _context.SaveChanges();
         }
     }

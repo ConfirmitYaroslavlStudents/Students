@@ -14,9 +14,9 @@ namespace BillSplitter.Data
 
         }
 
-        public DbSet<Bill> Bill { get; set; }
-        public DbSet<Position> Position { get; set; }
-        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<User> Users { get; set; }
 

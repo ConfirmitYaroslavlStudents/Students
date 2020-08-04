@@ -1,207 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using BillSplitter.Models;
 using BillSplitter.Data;
-using BillSplitter.Models.InteractionLevel;
+using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
-using BillSplitter.Validators;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    [Obsolete]
     public class BillsController : Controller
     {
-        private BillsDbAccessor _billDbAccessor;
-        private CustomersDbAccessor _customerDbAccessor;
-        private OrdersDbAccessor _ordersDbAccessor;
-        private PositionsDbAccessor _positionsDbAccessor;
+        private readonly BillsDbAccessor _billDbAccessor;
+        private readonly UsersDbAccessor _usersDbAccessor;
+        private readonly UserIdVisitor _visitor;
 
-        private IValidator<InteractionLevelPosition> _addBillPositionValidator;
-        private IValidator<InteractionLevelPosition> _doneSelectValidator;
-
-        public BillsController(BillContext context)
-        {
-            InitializeAccessors(context);
-
-            InitializeValidators();
-        }
-
-        private void InitializeAccessors(BillContext context)
+        public BillsController(BillContext context, UserIdVisitor visitor)
         {
             _billDbAccessor = new BillsDbAccessor(context);
-            _customerDbAccessor = new CustomersDbAccessor(context);
-            _ordersDbAccessor = new OrdersDbAccessor(context);
-            _positionsDbAccessor = new PositionsDbAccessor(context);
+            _usersDbAccessor = new UsersDbAccessor(context);
+            _visitor = visitor;
         }
 
-        private void InitializeValidators()
-        {
-            _addBillPositionValidator = new Validator<InteractionLevelPosition>()
-                .AddValidation(x => x.Price > 0)
-                .AddValidation(x => !string.IsNullOrEmpty(x.Name.Trim()))
-                .AddValidation(x => x.QuantityDenomenator == 1)
-                .AddValidation(x => x.QuantityNumerator > 0);
-
-            _doneSelectValidator = new Validator<InteractionLevelPosition>()
-                .AddValidation(x => _positionsDbAccessor.DbContains(x.Id))
-                .AddValidation(x => x.QuantityDenomenator > 0)
-                .AddValidation(x => x.QuantityNumerator > 0);
-        }
-
+       [Authorize]
+        [HttpGet]
+      //  [Route("Bills")]
         public IActionResult Index()
         {
-            return View();
-        }
-       
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [Authorize]
-        [HttpGet] // HttpGet, but creates bill, idk how to sent post or put request via link.
-        [Route("Bills/InitEmptyBill")]
-        public IActionResult InitEmptyBill()
-        {
-            var bill = new Bill();
-            _billDbAccessor.AddBill(bill);
-            return RedirectToAction(nameof(BillPositions), new { billId = bill.Id });
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("Bills/BillPositions/{billId}")]
-        public IActionResult BillPositions(int billId)
-        {
-            if (!_billDbAccessor.DbContains(billId))
-                return Error();
-
-            ViewData["billId"] = billId;
-            var positions = _billDbAccessor.GetBillById(billId).Positions
-                .Select(pos => pos.ToInteractionLevelPosition())
-                .ToList();
-
-            return View(positions);
+            var userBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills;
+            ViewData["userId"] = _visitor.GetUserId(this);
+            return View(userBills);
         }
 
         [Authorize]
         [HttpPost]
-        [Route("Bills/AddBillPosition/{billId}")]
-        public IActionResult AddBillPosition(int billId, InteractionLevelPosition position)
+        [Route("Bills/")]
+        public IActionResult Create(Bill createdBill)
         {
-            if (!_addBillPositionValidator.Validate(position))
-                return Error();
+            createdBill.UserId = _visitor.GetUserId(this);
 
-            _positionsDbAccessor.AddPosition(position.ToPosition(billId));
+            _billDbAccessor.AddBill(createdBill);
 
-            return RedirectToAction(nameof(BillPositions), new {billId = billId});
+            return RedirectToAction(nameof(Index));
         }
-      
+
         [Authorize]
         [HttpGet]
-        [Route("Bills/SelectPositions/{billId}")]
-        public IActionResult SelectPositions(int billId)
+        [Route("Bills/{billId}")]
+        public IActionResult ViewBill(int billId)
         {
-            if (!_billDbAccessor.DbContains(billId))
-                return Error();
-            ViewData["billId"] = billId;
+            var bill = _billDbAccessor.GetBillById(billId);
 
-            var positions = _billDbAccessor.GetBillById(billId).Positions
-                .Select(pos => pos.ToInteractionLevelPosition())
-                .ToList();
+            if (bill.UserId != _visitor.GetUserId(this))
+                throw new NotImplementedException("Case is not implemented yet");
 
-            return View(positions);
+            return View(bill);
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/{billId}/Join")]
+        public IActionResult JoinBill(int billId)
+        {
+            var bill = _billDbAccessor.GetBillById(billId);
+          
+            return View(bill);
+        }
+
 
         [Authorize]
         [HttpPost]
-        public IActionResult DoneSelect(int billId, List<InteractionLevelPosition> positions)
+        [Route("Bills/{billId}")]
+        public IActionResult Delete(int billId)
         {
-            if (!_billDbAccessor.DbContains(billId))
-                return Error();
+            var bill = _billDbAccessor.GetBillById(billId);
 
-            var customer = new Customer {
-                BillId = billId,
-                UserId = GetCurrentUserId(),
-                Name = HttpContext.User.Identity.Name
-            };
+            if (bill.UserId != _visitor.GetUserId(this))
+                throw new NotImplementedException("Case is not implemented yet");
 
-            var selectedPositions = positions.Where(pos => pos.Selected).ToList();
+            _billDbAccessor.DeleteById(billId);
 
-            if (selectedPositions.All(_doneSelectValidator.Validate))
-            {
-                _customerDbAccessor.AddCustomer(customer);
-
-                _ordersDbAccessor.AddOrders(customer, selectedPositions);
-
-                return RedirectToAction(nameof(CustomerBill), new {customerId = customer.Id});
-            }
-
-            return Error();
+            return RedirectToAction(nameof(Index));
         }
-
-        [Authorize]
-        [HttpGet]
-        [Route("Bills/CustomerBill/{customerId}")]
-        public IActionResult CustomerBill(int customerId)
-        {
-            if (!_customerDbAccessor.DbContains(customerId))
-                return Error();
-
-            var result = new CustomerBillBuilder()
-                .Build(_customerDbAccessor.GetCustomerById(customerId));
-
-            ViewData["Sum"] = result.Sum(x => x.Price);
-            ViewData["customerId"] = customerId;
-            return View(result);
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("Bills/SummaryBill/{billId}")]
-        public IActionResult SummaryBill(int billId)
-        {
-            if (!_billDbAccessor.DbContains(billId))
-                return Error();
-
-            var currentCustomers = _billDbAccessor.GetBillById(billId).Customers;
-
-            var builder = new CustomerBillBuilder();
-
-            var customerInfos = new List<SummaryCustomerInfo>();
-
-            foreach(var customer in currentCustomers)
-            {
-                customerInfos.Add(new SummaryCustomerInfo
-                {
-                    Customer = customer, 
-                    Sum = builder.Build(customer).Sum(x => x.Price)
-                });
-            }
-
-            return View(customerInfos);
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("Bills/GetSummaryBill/{customerId}")]
-        public IActionResult GetSummaryBill(int customerId)
-        {
-            if (!_customerDbAccessor.DbContains(customerId))
-                return Error();
-
-            var customerBillId = _customerDbAccessor.GetCustomerById(customerId).BillId;
-
-            return RedirectToAction(nameof(SummaryBill), new { billId = customerBillId });
-        }
-        
-         public int GetCurrentUserId()
-         {
-            return int.Parse(HttpContext.User.Claims.Where(c => c.Type == "Id").Select(c => c.Value).SingleOrDefault());
-         }
     }
 }

@@ -22,7 +22,7 @@ namespace BillSplitterTests
 
             accessor.AddBill(bill);
 
-            Assert.True(db.Bill.Contains(bill));
+            Assert.True(db.Bills.Contains(bill));
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace BillSplitterTests
                 Id = 2
             };
 
-            db.Bill.AddRange(bill1, bill2);
+            db.Bills.AddRange(bill1, bill2);
             db.SaveChanges();
 
             var expected = bill2;

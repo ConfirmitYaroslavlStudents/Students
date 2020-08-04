@@ -10,60 +10,92 @@ namespace BillSplitterTests
         [Fact]
         public void Build_ReturnsRightBuildedPositions()
         {
+
+            Position a = new Position
+            {
+                Name = "a",
+                Price = 2,
+                Quantity = 10
+            };
+            Position b = new Position
+            {
+                Name = "b",
+                Price = 3,
+                Quantity = 20
+            };
+            Position c = new Position
+            {
+                Name = "c",
+                Price = 4,
+                Quantity = 30
+            };
             var customer = new Customer
             {
                 Orders = new List<Order>
                 {
                     new Order
                     {
-                        Position = new Position
-                        {
-                            Name = "a",
-                            Price = 2,
-                            Quantity = 10
-                        },
-                        Quantity = 0.5
+                        Position = a
                     },
                     new Order
                     {
-                        Position = new Position
-                        {
-                            Name = "b",
-                            Price = 3,
-                            Quantity = 20
-                        },
-                        Quantity = 0.5
+                        Position = b
+                       
                     },
                     new Order
                     {
-                        Position = new Position
-                        {
-                            Name = "c",
-                            Price = 4,
-                            Quantity = 30
-                        },
-                        Quantity = 0.5
+                       Position = c
                     }
                 }
             };
+
+            a.Orders = new List<Order>();
+            a.Orders.Add(new Order
+            {
+                Position = a
+            });
+            a.Orders.Add(new Order
+            {
+                Position = a
+            });
+
+            b.Orders = new List<Order>();
+            b.Orders.Add(new Order
+            {
+                Position = b
+            });
+            b.Orders.Add(new Order
+            {
+                Position = b
+            });
+            b.Orders.Add(new Order
+            {
+                Position = b
+            });
+            c.Orders = new List<Order>();
+            c.Orders.Add(new Order
+            {
+                Position = c
+            });
+
 
             var expected = new List<Position>
                 {
                    new Position
                         {
                             Name = "a",
-                            Price = 1.0m,
+                            Price = 10m,
                         },
 
                    new Position
                         {
                             Name = "b",
-                            Price = 1.5m,
+                            Price = 20m,
                         },
                     new  Position
                     {
                             Name = "c",
-                            Price = 2.0m,
+                            Price = 120m,
                     }
 
                 };

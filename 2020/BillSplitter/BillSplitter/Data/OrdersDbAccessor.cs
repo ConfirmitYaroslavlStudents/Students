@@ -26,10 +26,8 @@ namespace BillSplitter.Data
                 .Select(pos => new Order
                 {
                     CustomerId = customer.Id,
-                    PositionId = pos.Id,
-                    Quantity = 1.0 * pos.QuantityNumerator / pos.QuantityDenomenator
-                })
-                .Where(order => order.Quantity > double.Epsilon)); // part of validation, maybe move to validator
+                    PositionId = pos.Id
+                }));
             _context.SaveChanges();
         }
 

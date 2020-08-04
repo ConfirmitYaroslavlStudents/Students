@@ -61,40 +61,7 @@ namespace BillSplitterTests
             }
         }
 
-        [Fact]
-        public void AddOrders_AddOnlyFirstOrderInDb()
-        {
-            using var db = InMemoryContextBuilder.Build();
-            var accessor = new OrdersDbAccessor(db);
-
-            var customer = new Customer()
-            {
-                Id = 1
-            };
-
-            var positions = new List<InteractionLevelPosition>
-            {
-                new InteractionLevelPosition
-                {
-                    Id = 1,
-                    QuantityNumerator = 1,
-                    QuantityDenomenator = 2
-                },
-                new InteractionLevelPosition
-                {
-                    Id = 2,
-                    QuantityNumerator = 0,
-                    QuantityDenomenator = 2
-                }
-            };
-
-            accessor.AddOrders(customer, positions);
-
-            Assert.True(db.Orders.FirstOrDefault(x => x.PositionId == positions[0].Id) != null);
-
-            Assert.True(db.Orders.FirstOrDefault(x => x.PositionId == positions[1].Id) == null);
-
-        }
+      
 
     }
 }

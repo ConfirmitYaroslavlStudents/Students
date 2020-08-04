@@ -12,7 +12,7 @@ namespace BillSplitter.Data
 
             return orders.Select(order => new Position()
             {
-                Price = order.Position.Price / order.Position.Orders.Count,
+                Price = order.Position.Price*order.Position.Quantity / order.Position.Orders.Count,
                 Id = order.Position.Id,
                 Name = order.Position.Name
             }).ToList();

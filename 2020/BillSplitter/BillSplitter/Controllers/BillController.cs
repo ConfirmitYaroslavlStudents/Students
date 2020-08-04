@@ -19,9 +19,9 @@ namespace BillSplitter.Controllers
             _visitor = visitor;
         }
 
-        [Authorize]
+       [Authorize]
         [HttpGet]
-        [Route("Bills")]
+      //  [Route("Bills")]
         public IActionResult Index()
         {
             var userBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills;
@@ -53,6 +53,17 @@ namespace BillSplitter.Controllers
 
             return View(bill);
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/{billId}/Join")]
+        public IActionResult JoinBill(int billId)
+        {
+            var bill = _billDbAccessor.GetBillById(billId);
+          
+            return View(bill);
+        }
+
 
         [Authorize]
         [HttpPost]

@@ -46,9 +46,8 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation">
                         Delete bill
                     </button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#joinConfirmation">
-                        Join bill
-                    </button>
+                    
+                    @Html.ActionLink("Join Bill", "JoinBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
                 </td>
             </tr>
 

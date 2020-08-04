@@ -112,6 +112,7 @@ namespace BillSplitter.Controllers
             _positionsDbAccessor.UpdateById(positionId, position);
             return RedirectToAction(nameof(Index), new { billId, select = false });
         }
+
         [Authorize]
         [HttpGet]
         [Route("Bills/{billId}/Positions/{positionId}/Partial")] 
@@ -127,6 +128,5 @@ namespace BillSplitter.Controllers
                 }
             };
         }
-
     }
 }

@@ -19,9 +19,8 @@ namespace BillSplitter.Controllers
             _visitor = visitor;
         }
 
-       [Authorize]
+        [Authorize]
         [HttpGet]
-      //  [Route("Bills")]
         public IActionResult Index()
         {
             var userBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills;

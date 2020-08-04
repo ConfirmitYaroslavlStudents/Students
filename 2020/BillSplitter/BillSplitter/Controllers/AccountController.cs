@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
@@ -88,6 +89,40 @@ namespace BillSplitter.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var callbackUrl = Url.Action("ExternalLoginCallback", new { scheme = provider, returnUrl });
+
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = callbackUrl
+            };
+
+            return new ChallengeResult(provider, props);
+        }
+
+        public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
+        {
+            var result = await HttpContext.AuthenticateAsync("Google");
+            if (result?.Succeeded != true)
+                throw new Exception("External authentication error");
+
+            var externalUser = result.Principal;
+            if (externalUser == null)
+                throw new Exception("External authentication error");
+
+            var name = externalUser.Identity.Name;
+
+            await HttpContext.SignOutAsync("Cookies");
+
+            User user = _usersAccessor.GetUserByName(name);
+
+            if (user != null)
+                return await Login(new LoginModel { Name = name }, null);
+
+            return await Register(new RegisterModel { Name = name }, null);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Logout()

@@ -60,10 +60,16 @@ namespace BillSplitter
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => 
+                .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                });
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["App:GoogleClientId"];
+                    options.ClientSecret = Configuration["App:GoogleClientSecret"];
+                }); 
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

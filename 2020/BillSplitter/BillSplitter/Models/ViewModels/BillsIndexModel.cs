@@ -4,7 +4,7 @@ namespace BillSplitter.Models.ViewModels
 {
     public class BillsIndexModel
     {
-        public List<Bill> AdminBills;
-        public List<Bill> CustomerBills;
+        public List<Bill> AdminBills { get; set; }
+        public List<Bill> CustomerBills { get; set; }
     }
 }

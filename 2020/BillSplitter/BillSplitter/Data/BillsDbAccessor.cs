@@ -19,7 +19,7 @@ namespace BillSplitter.Data
             _context.SaveChanges();
         }
 
-        public List<Bill> getBillsByCustomerUserId(int userId)
+        public List<Bill> GetBillsByCustomerUserId(int userId)
         {
             return _context.Customers.Where(c => c.UserId == userId).Select(c => c.Bill).Where(b => b.UserId != userId).ToList();
         }

@@ -8,14 +8,13 @@ namespace BillSplitter.Controllers
 {
     public class OrdersController : Controller
     {
-        private CustomersDbAccessor _customersDbAccessor;
-        private BillsDbAccessor _billsDbAccessor;
-        private OrdersDbAccessor _ordersDbAccessor;
-        private UserIdVisitor _visitor;
+        private readonly BillsDbAccessor _billsDbAccessor;
+        private readonly OrdersDbAccessor _ordersDbAccessor;
+        private readonly UserIdVisitor _visitor;
 
         public OrdersController(BillContext context, UserIdVisitor visitor)
         {
-            _customersDbAccessor = new CustomersDbAccessor(context);
+            new CustomersDbAccessor(context);
             _billsDbAccessor = new BillsDbAccessor(context);
             _ordersDbAccessor = new OrdersDbAccessor(context);
             _visitor = visitor;

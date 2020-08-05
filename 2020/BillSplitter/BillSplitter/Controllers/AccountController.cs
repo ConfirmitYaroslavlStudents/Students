@@ -17,6 +17,7 @@ namespace BillSplitter.Controllers
         {
             _usersAccessor = new UsersDbAccessor(context);
         }
+
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -122,7 +123,6 @@ namespace BillSplitter.Controllers
 
             return await Register(new RegisterModel { Name = name }, null);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Logout()

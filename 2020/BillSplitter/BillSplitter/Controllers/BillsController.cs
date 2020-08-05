@@ -29,7 +29,7 @@ namespace BillSplitter.Controllers
             BillsIndexModel model = new BillsIndexModel
             {
                 AdminBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills,
-                CustomerBills = _billsDbAccessor.getBillsByCustomerUserId(_visitor.GetUserId(this))
+                CustomerBills = _billsDbAccessor.GetBillsByCustomerUserId(_visitor.GetUserId(this))
             };
 
             ViewData["userId"] = _visitor.GetUserId(this);

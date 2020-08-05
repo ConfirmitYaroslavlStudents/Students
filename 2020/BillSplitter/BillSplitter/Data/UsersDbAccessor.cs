@@ -5,7 +5,7 @@ namespace BillSplitter.Data
 {
     public class UsersDbAccessor
     {
-        private BillContext _context;
+        private readonly BillContext _context;
 
         public UsersDbAccessor(BillContext context)
         {

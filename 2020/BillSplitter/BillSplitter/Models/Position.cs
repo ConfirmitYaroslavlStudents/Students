@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using BillSplitter.Models.InteractionLevel;
 
 namespace BillSplitter.Models
 {
@@ -11,16 +10,5 @@ namespace BillSplitter.Models
         public string Name { get; set; }
         public virtual List<Order> Orders { get; set; }
         public int Quantity { get; set; }
-
-        public InteractionLevelPosition ToInteractionLevelPosition()
-        {
-            return new InteractionLevelPosition
-            {
-                Id = Id,
-                Name = Name,
-                Price = Price,
-                QuantityNumerator = Quantity
-            };
-        }
     }
 }

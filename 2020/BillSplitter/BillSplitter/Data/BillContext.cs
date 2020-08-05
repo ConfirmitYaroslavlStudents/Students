@@ -9,7 +9,7 @@ namespace BillSplitter.Data
         {
 
         }
-        public BillContext() : base()
+        public BillContext()
         {
 
         }

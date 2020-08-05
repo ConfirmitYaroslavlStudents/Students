@@ -1,4 +1,4 @@
-﻿@model BillSplitter.Models.ViewModels.ViewBillsModel
+﻿@model BillSplitter.Models.ViewModels.BillsIndexModel
 
 <p> Your own bills </p>
 
@@ -37,7 +37,7 @@
     </tr>
     </thead>
     <tbody>
-        @foreach (var bill in Model.adminBills)
+        @foreach (var bill in Model.AdminBills)
         {
             <tr>
                 <td>@bill.Name</td>
@@ -90,7 +90,6 @@
                 </div>
             </div>
         }
-
     </tbody>
 </table>
 
@@ -104,19 +103,14 @@
         </tr>
     </thead>
     <tbody>
-      
-        @foreach (var bill in Model.customerBills)
+        @foreach (var bill in Model.CustomerBills)
         {
             <tr>
                 <td>@bill.Name</td>
                 <td>
-
                     @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
-
                 </td>
             </tr>
-
         }
-
     </tbody>
 </table>

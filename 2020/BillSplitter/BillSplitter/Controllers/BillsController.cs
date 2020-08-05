@@ -26,9 +26,12 @@ namespace BillSplitter.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBillsModel model = new ViewBillsModel();
-            model.adminBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills;
-            model.customerBills = _billsDbAccessor.getBillsByCustomerUserId(_visitor.GetUserId(this));
+            BillsIndexModel model = new BillsIndexModel
+            {
+                AdminBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills,
+                CustomerBills = _billsDbAccessor.getBillsByCustomerUserId(_visitor.GetUserId(this))
+            };
+
             ViewData["userId"] = _visitor.GetUserId(this);
             
             return View(model);

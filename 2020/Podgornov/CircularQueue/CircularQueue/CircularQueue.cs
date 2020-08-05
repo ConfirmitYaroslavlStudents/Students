@@ -6,7 +6,7 @@ namespace CircularQueue
 {
     public class CircularQueue<T>:IEnumerable<T>
     {
-        private int Default_Size = 10;
+        public const int DefaultSize = 10;
 
         private T[] _items;
 
@@ -23,48 +23,47 @@ namespace CircularQueue
         private void Resize()
         {
             var newQueue = new T[2 * _items.Length];
-            Array.Copy(_items, Head, newQueue, 0, Size - Head);
-            Array.Copy(_items, 0, newQueue, Size - Head, Tail);
+            Array.Copy(_items, Head, newQueue, 0, Capacity - Head);
+            Array.Copy(_items, 0, newQueue, Capacity - Head, Tail);
             _items = newQueue;
             Head = 0;
-            Tail = Size / 2;
+            Tail = Capacity / 2;
         }
 
-        public CircularQueue()
+        public CircularQueue(int capacity = DefaultSize)
         {
-            _items = new T[Default_Size];
+            if (capacity <= 0) 
+                throw new ArgumentException("Capacity value was unacceptable.");
+            _items = new T[capacity];
         }
 
-        public int Count { get; private set; }
+        public int Size { get; private set; }
 
-        public int Size { get => _items.Length; }
+        public int Capacity => _items.Length;
 
         public void Enqueue(T value)
         {
-            if (Count == _items.Length)
+            if (Size == _items.Length)
                 Resize();
-            Count++;
+            Size++;
             _items[Tail++] = value;
         }
 
-        public T Dequeue()
+        public virtual T Dequeue()
         {
-            if (Count == 0)
+            if (Size == 0)
                 throw new InvalidOperationException("Queue was empty.");
-            Count--;
+            Size--;
             return _items[Head++];
         }
 
-        public T Peek()
-        {
-            return _items[Head];
-        }
+        public T Peek() => _items[Head];
 
         public IEnumerator<T> GetEnumerator()
         {
-            int count = 0;
-            int index = Head;
-            while (Count != count)
+            var count = 0;
+            var index = Head;
+            while (Size != count)
             {
                 count++;
                 yield return _items[index];

@@ -69,22 +69,29 @@ namespace BillSplitter.Controllers
 
             var customersBill = new CustomerBillBuilder().Build(customer);
 
-            var positions =
-                (
-                    from bPos in bill.Positions
-                    join cPos in customersBill on bPos.Id equals cPos.Id
-                        into bcPositions
-                    from pos in bcPositions.DefaultIfEmpty()
-                    select new ViewBillPositionModel()
+            var groupJoin = bill.Positions
+                .GroupJoin(customersBill,
+                    billPosition => billPosition.Id,
+                    customerPosition => customerPosition.Id,
+                    (billPosition, customerPositions) => new
                     {
-                        Id = bPos.Id,
-                        Name = bPos.Name, 
-                        Quantity = bPos.Quantity,
-                        OriginalPrice = bPos.Price,
-                        ActualPrice = pos?.Price ?? 0,
-                        Selected = pos != null
-                    }
-                ).OrderBy(p => p.Id).ToList();
+                        billPosition, 
+                        customerPositions = customerPositions.DefaultIfEmpty()
+                    });
+
+            var positions = groupJoin.SelectMany(
+                joined => joined.customerPositions, 
+                (joined, customerPosition) => new ViewBillPositionModel()
+                {
+                    Id = joined.billPosition.Id,
+                    Name = joined.billPosition.Name,
+                    Quantity = joined.billPosition.Quantity,
+                    OriginalPrice = joined.billPosition.Price,
+                    ActualPrice = customerPosition?.Price ?? 0,
+                    Selected = customerPosition != null
+                })
+                .OrderBy(pos => pos.Id)
+                .ToList();
 
             var model = new ViewBillModel()
             {

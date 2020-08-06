@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Data;
-using BillSplitter.LinqExtensions;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels;
 using BillSplitter.Models.ViewModels.ViewBill;
@@ -88,6 +87,7 @@ namespace BillSplitter.Controllers
                     ActualPrice = 0,
                     Selected = false
                 })
+                .OrderBy(p => p.Id)
                 .ToList();
 
             foreach (var pos in positions)

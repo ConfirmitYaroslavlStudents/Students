@@ -50,31 +50,37 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Positions")]
-        public IActionResult Index(int billId, bool select)
+        [Route("Bills/{billId}/PickPositions")]
+        public IActionResult PickPositions(int billId)
         {
             ViewData["billId"] = billId;
-
-            if (!select)
-            {
-                if (!ValidateUser(billId))
-                    return Error();
-               
-                var positions = _billsDbAccessor.GetBillById(billId).Positions
-                    .OrderBy(p => p.Id)
-                    .ToList();
-
-                return View(positions);
-            }
 
             var bill = _billsDbAccessor.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
 
             if (customer != null)
-                return View("SelectPositions", bill.Positions.OrderBy(p => p.Id).ToList());
+                return View(bill.Positions.OrderBy(p => p.Id).ToList());
 
-            throw new NotImplementedException();
+            return RedirectToAction("JoinBill", "Bills", new { billId });
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Bills/{billId}/ManagePositions")]
+        public IActionResult ManagePositions(int billId)
+        {
+            ViewData["billId"] = billId;
+
+            if (!ValidateUser(billId))
+                return Error();
+
+            var positions = _billsDbAccessor.GetBillById(billId).Positions
+                .OrderBy(p => p.Id)
+                .ToList();
+
+            return View(positions);
+        }
+
 
         [Authorize]
         [HttpPost]
@@ -86,7 +92,7 @@ namespace BillSplitter.Controllers
 
             _positionsDbAccessor.AddPosition(position);
 
-            return RedirectToAction(nameof(Index), new { billId, select = false }); 
+            return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
 
         [Authorize]
@@ -99,7 +105,7 @@ namespace BillSplitter.Controllers
 
             _positionsDbAccessor.DeleteById(positionId);
 
-            return RedirectToAction(nameof(Index), new { billId, select = false });
+            return RedirectToAction(nameof(ManagePositions), new { billId, });
         }
 
         [Authorize]
@@ -111,7 +117,7 @@ namespace BillSplitter.Controllers
                 return Error();
 
             _positionsDbAccessor.UpdateById(positionId, position);
-            return RedirectToAction(nameof(Index), new { billId, select = false });
+            return RedirectToAction(nameof(ManagePositions), new { billId });
         }
 
         [Authorize]
@@ -125,7 +131,7 @@ namespace BillSplitter.Controllers
                 ViewName = "SelectPositionsPartial",
                 ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                 {
-                    Model = position,
+                    Model = position
                 }
             };
         }

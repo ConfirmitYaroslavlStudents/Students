@@ -66,10 +66,9 @@
     Your sum is @Model.CustomerSum
 </h2>
 
-@Html.ActionLink("Select positions", "Index", "Positions", new
+@Html.ActionLink("Pick positions", "PickPositions", "Positions", new
 {
-    billId = Model.Bill.Id,
-    select = true
+    billId = Model.Bill.Id
 }, new { @class = "btn btn-primary" })
 @if (Model.HasManageAccess)
 {
@@ -78,9 +77,8 @@
         billId = Model.Bill.Id
     }, new { @class = "btn btn-primary" })
     @:
-    @Html.ActionLink("Manage positions", "Index", "Positions", new
+    @Html.ActionLink("Manage positions", "ManagePositions", "Positions", new
     {
         billId = Model.Bill.Id,
-        select = false
     }, new { @class = "btn btn-primary" })
 }

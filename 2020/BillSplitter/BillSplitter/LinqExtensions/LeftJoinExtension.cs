@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BillSplitter.LinqExtensions
 {
-    public static class LefJoinExtension
+    public static class LeftJoinExtension
     {
         public static IEnumerable<TResult> LeftJoin<TOuter, TInner, TKey, TResult>(
             this IEnumerable<TOuter> outer,

@@ -34,7 +34,7 @@ namespace BillSplitter.Controllers
                 PositionId = positionId
             });
 
-            return RedirectToAction("Index", "Positions", new { billId, select = true });
+            return RedirectToAction("PickPositions", "Positions", new { billId });
         }
 
         [Authorize]
@@ -44,7 +44,7 @@ namespace BillSplitter.Controllers
         {
             _ordersDbAccessor.DeleteByUserAndPosition(_visitor.GetUserId(this), positionId);
 
-            return RedirectToAction("Index", "Positions", new { billId, select = true });
+            return RedirectToAction("PickPositions", "Positions", new { billId });
         }
     }
 }

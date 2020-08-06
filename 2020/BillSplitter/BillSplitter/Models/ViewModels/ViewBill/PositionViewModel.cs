@@ -1,6 +1,6 @@
 ﻿namespace BillSplitter.Models.ViewModels.ViewBill
 {
-    public class ViewBillPositionModel
+    public class PositionViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

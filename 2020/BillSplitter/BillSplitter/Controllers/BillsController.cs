@@ -27,7 +27,7 @@ namespace BillSplitter.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            BillsIndexModel model = new BillsIndexModel
+            BillIndexViewModel viewModel = new BillIndexViewModel
             {
                 AdminBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills,
                 CustomerBills = _billsDbAccessor.GetBillsByCustomerUserId(_visitor.GetUserId(this))
@@ -35,7 +35,7 @@ namespace BillSplitter.Controllers
 
             ViewData["userId"] = _visitor.GetUserId(this);
             
-            return View(model);
+            return View(viewModel);
         }
 
         [Authorize]
@@ -75,7 +75,7 @@ namespace BillSplitter.Controllers
                     customersBill,
                     billPosition => billPosition.Id,
                     customerPosition => customerPosition.Id,
-                    (billPos, customerPos) => new ViewBillPositionModel
+                    (billPos, customerPos) => new PositionViewModel
                     {
                         Id = billPos.Id,
                         Name = billPos.Name,
@@ -87,7 +87,7 @@ namespace BillSplitter.Controllers
                 .OrderBy(positionModel => positionModel.Id)
                 .ToList();
 
-            var model = new ViewBillModel()
+            var model = new BillViewModel()
             {
                 Bill = bill,
                 Positions = positions,

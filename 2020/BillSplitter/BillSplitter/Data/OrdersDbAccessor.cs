@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using BillSplitter.Models;
-using BillSplitter.Models.InteractionLevel;
 
 namespace BillSplitter.Data
 {
@@ -17,17 +15,6 @@ namespace BillSplitter.Data
         public void AddOrder(Order order)
         {
             _context.Orders.Add(order);
-            _context.SaveChanges();
-        }
-        
-        public void AddOrders(Customer customer, List<InteractionLevelPosition> positions)
-        {
-            _context.AddRange(positions
-                .Select(pos => new Order
-                {
-                    CustomerId = customer.Id,
-                    PositionId = pos.Id
-                }));
             _context.SaveChanges();
         }
 

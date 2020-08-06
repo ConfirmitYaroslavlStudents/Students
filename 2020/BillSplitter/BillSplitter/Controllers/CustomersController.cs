@@ -58,7 +58,7 @@ namespace BillSplitter.Controllers
                 _customersDbAccessor.AddCustomer(customer);
             }
 
-            return RedirectToAction("Index", "Positions", new {billId, select = true});
+            return RedirectToAction("PickPositions", "Positions", new {billId});
         }
 
         [Authorize]

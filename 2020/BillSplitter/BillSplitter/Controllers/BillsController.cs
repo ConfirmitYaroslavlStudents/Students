@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Data;
+using BillSplitter.LinqExtensions;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels;
 using BillSplitter.Models.ViewModels.ViewBill;
@@ -69,34 +71,28 @@ namespace BillSplitter.Controllers
 
             var customersBill = new CustomerBillBuilder().Build(customer);
 
-            var groupJoin = bill.Positions
-                .GroupJoin(customersBill,
-                    billPosition => billPosition.Id,
-                    customerPosition => customerPosition.Id,
-                    (billPosition, customerPositions) => new
-                    {
-                        billPosition, 
-                        customerPositions = customerPositions.DefaultIfEmpty()
-                    });
+            var leftJoin = bill.Positions.LeftJoin(
+                customersBill,
+                billPosition => billPosition.Id,
+                customerPosition => customerPosition.Id);
 
-            var positions = groupJoin.SelectMany(
-                joined => joined.customerPositions, 
-                (joined, customerPosition) => new ViewBillPositionModel()
+            var positionsList = leftJoin
+                .Select(joined => new ViewBillPositionModel()
                 {
-                    Id = joined.billPosition.Id,
-                    Name = joined.billPosition.Name,
-                    Quantity = joined.billPosition.Quantity,
-                    OriginalPrice = joined.billPosition.Price,
-                    ActualPrice = customerPosition?.Price ?? 0,
-                    Selected = customerPosition != null
+                    Id = joined.OuterEntity.Id,
+                    Name = joined.OuterEntity.Name,
+                    Quantity = joined.OuterEntity.Quantity,
+                    OriginalPrice = joined.OuterEntity.Price,
+                    ActualPrice = joined.InnerEntity?.Price ?? 0,
+                    Selected = joined.InnerEntity != null
                 })
-                .OrderBy(pos => pos.Id)
+                .OrderBy(x => x.Id)
                 .ToList();
 
             var model = new ViewBillModel()
             {
                 Bill = bill,
-                Positions = positions,
+                Positions = positionsList,
                 HasManageAccess = bill.UserId == _visitor.GetUserId(this),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };

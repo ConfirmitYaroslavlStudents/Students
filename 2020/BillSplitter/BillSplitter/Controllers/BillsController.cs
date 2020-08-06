@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.LinqExtensions;
@@ -71,28 +70,27 @@ namespace BillSplitter.Controllers
 
             var customersBill = new CustomerBillBuilder().Build(customer);
 
-            var leftJoin = bill.Positions.LeftJoin(
-                customersBill,
-                billPosition => billPosition.Id,
-                customerPosition => customerPosition.Id);
-
-            var positionsList = leftJoin
-                .Select(joined => new ViewBillPositionModel()
-                {
-                    Id = joined.OuterEntity.Id,
-                    Name = joined.OuterEntity.Name,
-                    Quantity = joined.OuterEntity.Quantity,
-                    OriginalPrice = joined.OuterEntity.Price,
-                    ActualPrice = joined.InnerEntity?.Price ?? 0,
-                    Selected = joined.InnerEntity != null
-                })
-                .OrderBy(x => x.Id)
+            var positions = bill.Positions
+                .LeftJoin(
+                    customersBill,
+                    billPosition => billPosition.Id,
+                    customerPosition => customerPosition.Id,
+                    (billPos, customerPos) => new ViewBillPositionModel
+                    {
+                        Id = billPos.Id,
+                        Name = billPos.Name,
+                        Quantity = billPos.Quantity,
+                        OriginalPrice = billPos.Price,
+                        ActualPrice = customerPos?.Price ?? 0,
+                        Selected = customerPos != null
+                    })
+                .OrderBy(positionModel => positionModel.Id)
                 .ToList();
 
             var model = new ViewBillModel()
             {
                 Bill = bill,
-                Positions = positionsList,
+                Positions = positions,
                 HasManageAccess = bill.UserId == _visitor.GetUserId(this),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };

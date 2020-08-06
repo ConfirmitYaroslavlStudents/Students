@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,11 +6,12 @@ namespace BillSplitter.LinqExtensions
 {
     public static class LefJoinExtension
     {
-        public static IEnumerable<LeftJoinResult<TOuter, TInner>> LeftJoin<TOuter, TInner, TKey>(
+        public static IEnumerable<TResult> LeftJoin<TOuter, TInner, TKey, TResult>(
             this IEnumerable<TOuter> outer,
             IEnumerable<TInner> inner,
             Func<TOuter, TKey> outerKeySelector,
-            Func<TInner, TKey> innerKeySelector)
+            Func<TInner, TKey> innerKeySelector,
+            Func<TOuter, TInner, TResult> resultSelector)
         {
             var groupJoin = outer.GroupJoin(
                 inner, 
@@ -25,13 +25,7 @@ namespace BillSplitter.LinqExtensions
 
             var result = groupJoin.SelectMany(
                 joined => joined.InnerCollection,
-                (joined, innerEntity) => 
-                    new LeftJoinResult<TOuter, TInner>
-                    {
-                        OuterEntity = joined.OuterEntity,
-                        InnerEntity = innerEntity
-
-                    });
+                (joined, innerEntity) => resultSelector(joined.OuterEntity, innerEntity));
 
             return result;
         }

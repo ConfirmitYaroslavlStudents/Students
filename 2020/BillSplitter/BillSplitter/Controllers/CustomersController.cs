@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,13 +12,11 @@ namespace BillSplitter.Controllers
     {
         private readonly CustomersDbAccessor _customersDbAccessor;
         private readonly BillsDbAccessor _billsDbAccessor;
-        private readonly UserIdVisitor _visitor;
 
-        public CustomersController(BillContext context, UserIdVisitor visitor)
+        public CustomersController(BillContext context)
         {
             _customersDbAccessor = new CustomersDbAccessor(context);
             _billsDbAccessor = new BillsDbAccessor(context);
-            _visitor = visitor;
         }
 
         [Authorize]
@@ -26,7 +25,7 @@ namespace BillSplitter.Controllers
         public IActionResult Index(int billId)
         {
             var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill.UserId != _visitor.GetUserId(this))
+            if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
             ViewData["billId"] = billId;
@@ -43,7 +42,7 @@ namespace BillSplitter.Controllers
             if (!_billsDbAccessor.DbContains(billId))
                 throw new NotImplementedException("Case is not implemented yet");
             
-            var userId = _visitor.GetUserId(this);
+            var userId = this.GetUserId();
             var bill = _billsDbAccessor.GetBillById(billId);
             
             if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
@@ -51,8 +50,8 @@ namespace BillSplitter.Controllers
                 var customer = new Customer
                 {
                     BillId = billId,
-                    UserId = _visitor.GetUserId(this),
-                    Name = _visitor.GetUserName(this)
+                    UserId = this.GetUserId(),
+                    Name = this.GetUserName()
                 };
 
                 _customersDbAccessor.AddCustomer(customer);
@@ -67,7 +66,7 @@ namespace BillSplitter.Controllers
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
             var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill.UserId != _visitor.GetUserId(this))
+            if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
             _customersDbAccessor.DeleteById(customerId);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels;
@@ -14,13 +15,11 @@ namespace BillSplitter.Controllers
     {
         private readonly BillsDbAccessor _billsDbAccessor;
         private readonly UsersDbAccessor _usersDbAccessor;
-        private readonly UserIdVisitor _visitor;
 
-        public BillsController(BillContext context, UserIdVisitor visitor)
+        public BillsController(BillContext context)
         {
             _billsDbAccessor = new BillsDbAccessor(context);
             _usersDbAccessor = new UsersDbAccessor(context);
-            _visitor = visitor;
         }
 
         [Authorize]
@@ -29,11 +28,11 @@ namespace BillSplitter.Controllers
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
             {
-                AdminBills = _usersDbAccessor.GetUserById(_visitor.GetUserId(this)).Bills,
-                CustomerBills = _billsDbAccessor.GetBillsByCustomerUserId(_visitor.GetUserId(this))
+                AdminBills = _usersDbAccessor.GetUserById(this.GetUserId()).Bills,
+                CustomerBills = _billsDbAccessor.GetBillsByCustomerUserId(this.GetUserId())
             };
 
-            ViewData["userId"] = _visitor.GetUserId(this);
+            ViewData["userId"] = this.GetUserId();
             
             return View(viewModel);
         }
@@ -43,11 +42,11 @@ namespace BillSplitter.Controllers
         [Route("Bills/")]
         public IActionResult Create(Bill createdBill)
         {
-            createdBill.UserId = _visitor.GetUserId(this);
+            createdBill.UserId = this.GetUserId();
             var customer = new Customer
             {
-                Name = _visitor.GetUserName(this),
-                UserId = _visitor.GetUserId(this),
+                Name = this.GetUserName(),
+                UserId = this.GetUserId(),
                 Bill = createdBill
             };
             createdBill.Customers.Add(customer);
@@ -63,7 +62,7 @@ namespace BillSplitter.Controllers
         public IActionResult ViewBill(int billId)
         {
             var bill = _billsDbAccessor.GetBillById(billId);
-            var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
+            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer == null)
                 return View("JoinBill", bill);
@@ -105,7 +104,7 @@ namespace BillSplitter.Controllers
             {
                 Bill = bill,
                 Positions = positions,
-                HasManageAccess = bill.UserId == _visitor.GetUserId(this),
+                HasManageAccess = bill.UserId == this.GetUserId(),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };
             return model;
@@ -128,7 +127,7 @@ namespace BillSplitter.Controllers
         {
             var bill = _billsDbAccessor.GetBillById(billId);
 
-            if (bill.UserId != _visitor.GetUserId(this))
+            if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
             _billsDbAccessor.DeleteById(billId);

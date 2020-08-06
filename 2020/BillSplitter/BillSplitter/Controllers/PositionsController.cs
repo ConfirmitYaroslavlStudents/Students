@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
 using System.Diagnostics;
 using System.Linq;
+using BillSplitter.Controllers.Extensions;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -13,12 +14,11 @@ namespace BillSplitter.Controllers
     {
         private readonly BillsDbAccessor _billsDbAccessor;
         private readonly PositionsDbAccessor _positionsDbAccessor;
-        private readonly UserIdVisitor _visitor;
-        public PositionsController(BillContext context, UserIdVisitor userIdVisitor)
+
+        public PositionsController(BillContext context)
         {
             _billsDbAccessor = new BillsDbAccessor(context);
             _positionsDbAccessor = new PositionsDbAccessor(context);
-            _visitor = userIdVisitor;
         }
 
         private bool ValidateUser(int billId)
@@ -26,7 +26,7 @@ namespace BillSplitter.Controllers
             var bill = _billsDbAccessor.GetBillById(billId);
             if (bill == null) 
                 return false;
-            if (bill.UserId != _visitor.GetUserId(this))
+            if (bill.UserId != this.GetUserId())
                 return false;
 
             return true;
@@ -55,7 +55,7 @@ namespace BillSplitter.Controllers
             ViewData["billId"] = billId;
 
             var bill = _billsDbAccessor.GetBillById(billId);
-            var customer = bill.Customers.FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
+            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer != null)
                 return View(bill.Positions.OrderBy(p => p.Id).ToList());

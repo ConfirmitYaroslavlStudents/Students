@@ -13,6 +13,7 @@ namespace BillSplitter.Controllers
     public class AccountController : Controller
     {
         private readonly UsersDbAccessor _usersAccessor;
+
         public AccountController(BillContext context)
         {
             _usersAccessor = new UsersDbAccessor(context);

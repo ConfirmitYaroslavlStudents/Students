@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -10,14 +11,12 @@ namespace BillSplitter.Controllers
     {
         private readonly BillsDbAccessor _billsDbAccessor;
         private readonly OrdersDbAccessor _ordersDbAccessor;
-        private readonly UserIdVisitor _visitor;
 
-        public OrdersController(BillContext context, UserIdVisitor visitor)
+        public OrdersController(BillContext context)
         {
             new CustomersDbAccessor(context);
             _billsDbAccessor = new BillsDbAccessor(context);
             _ordersDbAccessor = new OrdersDbAccessor(context);
-            _visitor = visitor;
         }
 
         [Authorize]
@@ -26,7 +25,7 @@ namespace BillSplitter.Controllers
         public IActionResult AddOrder(int billId, int positionId)
         {
             var customer = _billsDbAccessor.GetBillById(billId).Customers
-                .FirstOrDefault(c => c.UserId == _visitor.GetUserId(this));
+                .FirstOrDefault(c => c.UserId == this.GetUserId());
 
             _ordersDbAccessor.AddOrder(new Order()
             {
@@ -42,7 +41,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Positions/{positionId}/Orders")]
         public IActionResult DeleteOrder(int billId, int positionId)
         {
-            _ordersDbAccessor.DeleteByUserAndPosition(_visitor.GetUserId(this), positionId);
+            _ordersDbAccessor.DeleteByUserAndPosition(this.GetUserId(), positionId);
 
             return RedirectToAction("PickPositions", "Positions", new { billId });
         }

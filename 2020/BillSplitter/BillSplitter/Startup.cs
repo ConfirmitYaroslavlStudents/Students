@@ -12,25 +12,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace BillSplitter
 {
-    public class UserIdVisitor // TODO Maybe move to another file
-    {
-        public int GetUserId(Controller controller)
-        {
-            return int.Parse(
-                controller
-                    .HttpContext
-                    .User.Claims
-                    .Where(c => c.Type == "Id")
-                    .Select(c => c.Value)
-                    .SingleOrDefault() ?? string.Empty);
-        }
-
-        public string GetUserName(Controller controller)
-        {
-            return controller.User.Identity.Name;
-        }
-    }
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -51,8 +32,6 @@ namespace BillSplitter
             });
 
             services.AddControllersWithViews();
-
-            services.AddSingleton<UserIdVisitor, UserIdVisitor>();
 
             services.AddDbContext<BillContext>(options =>
                 options

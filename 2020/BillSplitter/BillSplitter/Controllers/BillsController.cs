@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.LinqExtensions;
@@ -70,32 +71,44 @@ namespace BillSplitter.Controllers
 
             var customersBill = new CustomerBillBuilder().Build(customer);
 
+            var model = BuildVewModelForViewBill(bill, customersBill);
+
+            return View(model);
+        }
+
+        private BillViewModel BuildVewModelForViewBill(Bill bill, List<Position> customersBill)
+        {
             var positions = bill.Positions
-                .LeftJoin(
-                    customersBill,
-                    billPosition => billPosition.Id,
-                    customerPosition => customerPosition.Id,
-                    (billPos, customerPos) => new PositionViewModel
-                    {
-                        Id = billPos.Id,
-                        Name = billPos.Name,
-                        Quantity = billPos.Quantity,
-                        OriginalPrice = billPos.Price,
-                        ActualPrice = customerPos?.Price ?? 0,
-                        Selected = customerPos != null
-                    })
-                .OrderBy(positionModel => positionModel.Id)
+                .Select(position => new PositionViewModel
+                {
+                    Id = position.Id,
+                    Name = position.Name,
+                    OriginalPrice = position.Price,
+                    Quantity = position.Quantity,
+                    ActualPrice = 0,
+                    Selected = false
+                })
                 .ToList();
 
-            var model = new BillViewModel()
+            foreach (var pos in positions)
+            {
+                var customerPosition = customersBill
+                    .FirstOrDefault(p => p.Id == pos.Id);
+                if (customerPosition != null)
+                {
+                    pos.ActualPrice = customerPosition.Price;
+                    pos.Selected = true;
+                }
+            }
+
+            var model = new BillViewModel
             {
                 Bill = bill,
                 Positions = positions,
                 HasManageAccess = bill.UserId == _visitor.GetUserId(this),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };
-
-            return View(model);
+            return model;
         }
 
         [Authorize]

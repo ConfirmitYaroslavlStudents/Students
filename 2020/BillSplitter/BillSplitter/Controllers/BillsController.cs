@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels;
 using BillSplitter.Models.ViewModels.ViewBill;
+using BillSplitter.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class BillsController : Controller
+    public class BillsController : SuperController
     {
-        private readonly BillsDbAccessor _billsDbAccessor;
-        private readonly UsersDbAccessor _usersDbAccessor;
 
-        public BillsController(BillContext context)
+        public BillsController(BillContext context) : base(context)
         {
-            _billsDbAccessor = new BillsDbAccessor(context);
-            _usersDbAccessor = new UsersDbAccessor(context);
+           
         }
 
         [Authorize]
@@ -123,6 +120,7 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}")]
+        [ValidateUser]
         public IActionResult Delete(int billId)
         {
             var bill = _billsDbAccessor.GetBillById(billId);

@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Linq;
-using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
+using BillSplitter.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class CustomersController : Controller
+    public class CustomersController : SuperController
     {
-        private readonly CustomersDbAccessor _customersDbAccessor;
-        private readonly BillsDbAccessor _billsDbAccessor;
 
-        public CustomersController(BillContext context)
+
+
+        public CustomersController(BillContext context) : base(context)
         {
-            _customersDbAccessor = new CustomersDbAccessor(context);
-            _billsDbAccessor = new BillsDbAccessor(context);
+
         }
 
         [Authorize]
         [HttpGet]
         [Route("Bills/{billId}/Customers")]
+        [ValidateUser]
         public IActionResult Index(int billId)
         {
             var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill.UserId != this.GetUserId())
-                throw new NotImplementedException("Case is not implemented yet");
 
             ViewData["billId"] = billId;
             var customers = bill.Customers;
@@ -40,7 +38,7 @@ namespace BillSplitter.Controllers
         public IActionResult Post(int billId)
         {
             if (!_billsDbAccessor.DbContains(billId))
-                throw new NotImplementedException("Case is not implemented yet");
+                Error();
             
             var userId = this.GetUserId();
             var bill = _billsDbAccessor.GetBillById(billId);
@@ -63,11 +61,11 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}/Customers/{customerId}")]
+        [ValidateUser]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
             var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill.UserId != this.GetUserId())
-                throw new NotImplementedException("Case is not implemented yet");
+           
 
             _customersDbAccessor.DeleteById(customerId);
 

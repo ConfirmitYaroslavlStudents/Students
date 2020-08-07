@@ -4,21 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
 using System.Diagnostics;
 using System.Linq;
-using BillSplitter.Controllers.Extensions;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using BillSplitter.Validators;
 
 namespace BillSplitter.Controllers
 {
-    public class PositionsController : Controller 
+    public class PositionsController : SuperController
     {
-        private readonly BillsDbAccessor _billsDbAccessor;
-        private readonly PositionsDbAccessor _positionsDbAccessor;
+       
 
-        public PositionsController(BillContext context)
+        public PositionsController(BillContext context) : base(context)
         {
-            _billsDbAccessor = new BillsDbAccessor(context);
-            _positionsDbAccessor = new PositionsDbAccessor(context);
+           
         }
 
         private bool ValidateUser(int billId)
@@ -42,11 +40,6 @@ namespace BillSplitter.Controllers
             return true;
         }
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
         [Authorize]
         [HttpGet]
         [Route("Bills/{billId}/PickPositions")]
@@ -66,12 +59,11 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpGet]
         [Route("Bills/{billId}/ManagePositions")]
+        [ValidateUser]
         public IActionResult ManagePositions(int billId)
         {
             ViewData["billId"] = billId;
 
-            if (!ValidateUser(billId))
-                return Error();
 
             var positions = _billsDbAccessor.GetBillById(billId).Positions
                 .OrderBy(p => p.Id)
@@ -84,10 +76,9 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}/Positions")]
+        [ValidateUser]
         public IActionResult Create(int billId, Position position)
         {
-            if (!ValidateUser(billId))
-                return Error();
 
             _positionsDbAccessor.AddPosition(position);
 
@@ -97,9 +88,10 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}/Positions/{positionId}")]
+        [ValidateUser]
         public IActionResult Delete(int billId, int positionId)
         {
-            if (!ValidateUser(billId) || !ValidatePosition(billId, positionId))
+            if (!ValidatePosition(billId, positionId))
                 return Error();
 
             _positionsDbAccessor.DeleteById(positionId);
@@ -110,9 +102,10 @@ namespace BillSplitter.Controllers
         [Authorize]
         [HttpPost]
         [Route("Bills/{billId}/Positions/{positionId}/Update")] // How to implement RESTful?
+        [ValidateUser]
         public IActionResult Update(int billId, int positionId, Position position)
         {
-            if (!ValidateUser(billId) || !ValidatePosition(billId, positionId))
+            if (!ValidatePosition(billId, positionId))
                 return Error();
 
             _positionsDbAccessor.UpdateById(positionId, position);

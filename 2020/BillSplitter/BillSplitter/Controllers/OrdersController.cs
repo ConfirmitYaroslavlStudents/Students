@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -7,16 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class OrdersController : Controller
+    public class OrdersController : SuperController
     {
-        private readonly BillsDbAccessor _billsDbAccessor;
-        private readonly OrdersDbAccessor _ordersDbAccessor;
 
-        public OrdersController(BillContext context)
+  
+
+        public OrdersController(BillContext context) : base(context)
         {
-            new CustomersDbAccessor(context);
-            _billsDbAccessor = new BillsDbAccessor(context);
-            _ordersDbAccessor = new OrdersDbAccessor(context);
+           
         }
 
         [Authorize]

@@ -13,7 +13,6 @@ namespace BillSplitter.Controllers
 {
     public class BillsController : SuperController
     {
-
         public BillsController(BillContext context) : base(context)
         {
            

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Validators;
@@ -10,9 +9,6 @@ namespace BillSplitter.Controllers
 {
     public class CustomersController : SuperController
     {
-
-
-
         public CustomersController(BillContext context) : base(context)
         {
 

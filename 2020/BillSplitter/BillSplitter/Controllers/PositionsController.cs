@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -12,8 +11,6 @@ namespace BillSplitter.Controllers
 {
     public class PositionsController : SuperController
     {
-       
-
         public PositionsController(BillContext context) : base(context)
         {
            

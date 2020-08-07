@@ -11,7 +11,7 @@ namespace BillSplitter.Controllers
 {
     public class SuperController : Controller
     {
-       protected readonly UnitOfWork _uow;
+        protected readonly UnitOfWork _uow;
 
         public SuperController(BillContext context)
         {
@@ -40,6 +40,7 @@ namespace BillSplitter.Controllers
             if (bill == null) return false;
            return bill.UserId == GetUserId();
         }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

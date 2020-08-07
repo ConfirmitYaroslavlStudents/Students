@@ -8,9 +8,6 @@ namespace BillSplitter.Controllers
 {
     public class OrdersController : SuperController
     {
-
-  
-
         public OrdersController(BillContext context) : base(context)
         {
            

@@ -15,7 +15,6 @@ namespace BillSplitter.Data
         public void AddPosition(Position pos)
         {
             _context.Positions.Add(pos);
-            _context.SaveChanges();
         }
 
         public Position GetPositionById(int positionId)
@@ -30,14 +29,11 @@ namespace BillSplitter.Data
             position.Name = positionData.Name;
             position.Price = positionData.Price;
             position.Quantity = positionData.Quantity;
-
-            _context.SaveChanges();
         }
 
         public void DeleteById(int positionId)
         {
             _context.Positions.Remove(GetPositionById(positionId));
-            _context.SaveChanges();
         }
     }
 }

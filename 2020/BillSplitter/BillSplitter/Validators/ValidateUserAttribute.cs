@@ -20,7 +20,6 @@ namespace BillSplitter.Validators
         {
             var contr = filterContext.Controller as SuperController;
 
-
             if (!contr.CheckUserAccessToBill((int)filterContext.ActionArguments["billId"]))
             {
                 filterContext.Result = contr.Error();

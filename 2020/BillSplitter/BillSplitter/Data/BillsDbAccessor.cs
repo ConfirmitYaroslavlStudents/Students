@@ -16,7 +16,6 @@ namespace BillSplitter.Data
         public void AddBill(Bill bill)
         {
             _context.Bills.Add(bill);
-            _context.SaveChanges();
         }
 
         public List<Bill> GetBillsByCustomerUserId(int userId)
@@ -38,7 +37,7 @@ namespace BillSplitter.Data
         public void DeleteById(int billId)
         {
             _context.Bills.Remove(GetBillById(billId));
-            _context.SaveChanges();
+
         }
     }
 }

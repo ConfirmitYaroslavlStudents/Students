@@ -21,15 +21,15 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Positions/{positionId}/Orders")]
         public IActionResult AddOrder(int billId, int positionId)
         {
-            var customer = _billsDbAccessor.GetBillById(billId).Customers
+            var customer = _uow.Bills.GetBillById(billId).Customers
                 .FirstOrDefault(c => c.UserId == this.GetUserId());
 
-            _ordersDbAccessor.AddOrder(new Order()
+            _uow.Orders.AddOrder(new Order()
             {
                 CustomerId = customer.Id,
                 PositionId = positionId
             });
-
+            _uow.Save();
             return RedirectToAction("PickPositions", "Positions", new { billId });
         }
 
@@ -38,8 +38,8 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Positions/{positionId}/Orders")]
         public IActionResult DeleteOrder(int billId, int positionId)
         {
-            _ordersDbAccessor.DeleteByUserAndPosition(this.GetUserId(), positionId);
-
+            _uow.Orders.DeleteByUserAndPosition(this.GetUserId(), positionId);
+            _uow.Save();
             return RedirectToAction("PickPositions", "Positions", new { billId });
         }
     }

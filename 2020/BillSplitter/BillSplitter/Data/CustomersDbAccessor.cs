@@ -15,7 +15,6 @@ namespace BillSplitter.Data
         public void AddCustomer(Customer customer)
         {
             _context.Customers.Add(customer);
-            _context.SaveChanges();
         }
 
         public Customer GetCustomerById(int customerId)
@@ -30,7 +29,6 @@ namespace BillSplitter.Data
 
             _context.Customers.Remove(GetCustomerById(customerId));
 
-            _context.SaveChanges();
         }
     }
 }

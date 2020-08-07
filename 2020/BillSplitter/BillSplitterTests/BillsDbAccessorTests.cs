@@ -21,7 +21,7 @@ namespace BillSplitterTests
             };
 
             accessor.AddBill(bill);
-
+            _uow.Save();
             Assert.True(db.Bills.Contains(bill));
         }
 

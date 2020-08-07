@@ -25,8 +25,8 @@ namespace BillSplitter.Controllers
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
             {
-                AdminBills = _usersDbAccessor.GetUserById(this.GetUserId()).Bills,
-                CustomerBills = _billsDbAccessor.GetBillsByCustomerUserId(this.GetUserId())
+                AdminBills =_uow.Users.GetUserById(this.GetUserId()).Bills,
+                CustomerBills = _uow.Bills.GetBillsByCustomerUserId(this.GetUserId())
             };
 
             ViewData["userId"] = this.GetUserId();
@@ -46,10 +46,10 @@ namespace BillSplitter.Controllers
                 UserId = this.GetUserId(),
                 Bill = createdBill
             };
-            createdBill.Customers.Add(customer);
+            createdBill.Customers.Add(customer);//Так оставим или поменям, чтобы явно кастомер добавлялся? 
 
-            _billsDbAccessor.AddBill(createdBill);
-
+            _uow.Bills.AddBill(createdBill);
+            _uow.Save();
             return RedirectToAction(nameof(Index));
         }
 
@@ -58,7 +58,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}")]
         public IActionResult ViewBill(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = _uow.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer == null)
@@ -112,7 +112,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Join")]
         public IActionResult JoinBill(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = _uow.Bills.GetBillById(billId);
           
             return View(bill);
         }
@@ -123,13 +123,13 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Delete(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = _uow.Bills.GetBillById(billId);
 
             if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
-            _billsDbAccessor.DeleteById(billId);
-
+            _uow.Bills.DeleteById(billId);
+            _uow.Save();
             return RedirectToAction(nameof(Index));
         }
     }

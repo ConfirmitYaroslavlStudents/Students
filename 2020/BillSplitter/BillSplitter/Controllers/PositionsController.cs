@@ -21,7 +21,7 @@ namespace BillSplitter.Controllers
 
         private bool ValidateUser(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = _uow.Bills.GetBillById(billId);
             if (bill == null) 
                 return false;
             if (bill.UserId != this.GetUserId())
@@ -32,7 +32,7 @@ namespace BillSplitter.Controllers
 
         private bool ValidatePosition(int billId, int positionId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = _uow.Bills.GetBillById(billId);
 
             if (bill.Positions.Find(x => x.Id == positionId) == null)
                 return false;
@@ -47,7 +47,7 @@ namespace BillSplitter.Controllers
         {
             ViewData["billId"] = billId;
 
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = _uow.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer != null)
@@ -65,7 +65,7 @@ namespace BillSplitter.Controllers
             ViewData["billId"] = billId;
 
 
-            var positions = _billsDbAccessor.GetBillById(billId).Positions
+            var positions = _uow.Bills.GetBillById(billId).Positions
                 .OrderBy(p => p.Id)
                 .ToList();
 
@@ -80,8 +80,8 @@ namespace BillSplitter.Controllers
         public IActionResult Create(int billId, Position position)
         {
 
-            _positionsDbAccessor.AddPosition(position);
-
+             _uow.Positions.AddPosition(position);
+            _uow.Save();
             return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
 
@@ -94,8 +94,8 @@ namespace BillSplitter.Controllers
             if (!ValidatePosition(billId, positionId))
                 return Error();
 
-            _positionsDbAccessor.DeleteById(positionId);
-
+             _uow.Positions.DeleteById(positionId);
+            _uow.Save();
             return RedirectToAction(nameof(ManagePositions), new { billId, });
         }
 
@@ -108,7 +108,8 @@ namespace BillSplitter.Controllers
             if (!ValidatePosition(billId, positionId))
                 return Error();
 
-            _positionsDbAccessor.UpdateById(positionId, position);
+             _uow.Positions.UpdateById(positionId, position);
+            _uow.Save();
             return RedirectToAction(nameof(ManagePositions), new { billId });
         }
 
@@ -117,7 +118,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Positions/{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)
         {
-            Position position = _positionsDbAccessor.GetPositionById(positionId);
+            Position position =  _uow.Positions.GetPositionById(positionId);
             return new PartialViewResult
             {
                 ViewName = "SelectPositionsPartial",

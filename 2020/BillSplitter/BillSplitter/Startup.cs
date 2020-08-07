@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using BillSplitter.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +24,6 @@ namespace BillSplitter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
@@ -30,19 +31,23 @@ namespace BillSplitter
                 options.IdleTimeout = TimeSpan.FromMinutes(1);
             });
 
-
             services.AddControllersWithViews();
+
             services.AddDbContext<BillContext>(options =>
                 options
                     .UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
-
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => 
+                .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                });
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["App:GoogleClientId"];
+                    options.ClientSecret = Configuration["App:GoogleClientSecret"];
+                }); 
 
         }
 

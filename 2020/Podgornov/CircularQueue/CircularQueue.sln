@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1082
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularQueue", "CircularQueue\CircularQueue.csproj", "{E7DE3DD6-F489-4FE6-A00D-664E66DA9F31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularQueueTests", "CircularQueueTests\CircularQueueTests.csproj", "{DE2A9183-2493-4107-94E9-23D625E09AD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7DE3DD6-F489-4FE6-A00D-664E66DA9F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7DE3DD6-F489-4FE6-A00D-664E66DA9F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7DE3DD6-F489-4FE6-A00D-664E66DA9F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7DE3DD6-F489-4FE6-A00D-664E66DA9F31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E0A5DD3-BE76-429B-9D5D-42B2B5CBB333}
+	EndGlobalSection
+EndGlobal

@@ -26,9 +26,17 @@ namespace BillSplitter.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Bill");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bills");
                 });
 
             modelBuilder.Entity("BillSplitter.Models.Customer", b =>
@@ -51,7 +59,7 @@ namespace BillSplitter.Migrations
 
                     b.HasIndex("BillId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("BillSplitter.Models.Order", b =>
@@ -61,14 +69,11 @@ namespace BillSplitter.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -86,7 +91,7 @@ namespace BillSplitter.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BillId")
+                    b.Property<int>("BillId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -102,7 +107,7 @@ namespace BillSplitter.Migrations
 
                     b.HasIndex("BillId");
 
-                    b.ToTable("Position");
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("BillSplitter.Models.User", b =>
@@ -120,6 +125,15 @@ namespace BillSplitter.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BillSplitter.Models.Bill", b =>
+                {
+                    b.HasOne("BillSplitter.Models.User", "User")
+                        .WithMany("Bills")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BillSplitter.Models.Customer", b =>
                 {
                     b.HasOne("BillSplitter.Models.Bill", null)
@@ -131,11 +145,9 @@ namespace BillSplitter.Migrations
 
             modelBuilder.Entity("BillSplitter.Models.Order", b =>
                 {
-                    b.HasOne("BillSplitter.Models.Customer", null)
+                    b.HasOne("BillSplitter.Models.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("BillSplitter.Models.Position", "Position")
                         .WithMany("Orders")
@@ -148,7 +160,9 @@ namespace BillSplitter.Migrations
                 {
                     b.HasOne("BillSplitter.Models.Bill", null)
                         .WithMany("Positions")
-                        .HasForeignKey("BillId");
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

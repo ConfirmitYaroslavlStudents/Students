@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
@@ -12,10 +13,12 @@ namespace BillSplitter.Controllers
     public class AccountController : Controller
     {
         private readonly UsersDbAccessor _usersAccessor;
+
         public AccountController(BillContext context)
         {
             _usersAccessor = new UsersDbAccessor(context);
         }
+
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -26,21 +29,19 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            User user = _usersAccessor.GetUserByName(model.Name);
+            if (user == null)
+                ModelState.AddModelError("Name", "No Such User");
+            else
             {
-                User user = _usersAccessor.GetUserByName(model.Name);
-                if (user != null)
-                {
-                    await Authenticate(user);
+                await Authenticate(user);
 
-                    if (returnUrl != null)
-                        return Redirect(returnUrl);
-                    else
-                        return RedirectToAction("Index", "Bills");
-                }
-                else
-                    ModelState.AddModelError("Name", "No Such User");
+                if (returnUrl != null)
+                    return Redirect(returnUrl);
+                return RedirectToAction("Index", "Bills");
             }
+
             return View(model);
         }
 
@@ -54,24 +55,23 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            User user = _usersAccessor.GetUserByName(model.Name);
+
+            if (user != null)
+                ModelState.AddModelError("Name", "UserName is already used");
+            else
             {
-                User user = _usersAccessor.GetUserByName(model.Name);
-                if (user == null)
-                {
-                    User new_user = new User { Name = model.Name };
-                    _usersAccessor.AddUser(new_user);
+                User newUser = new User {Name = model.Name};
+                _usersAccessor.AddUser(newUser);
 
-                    await Authenticate(new_user); 
+                await Authenticate(newUser);
 
-                    if (returnUrl != null)
-                        return Redirect(returnUrl);
-                    else
-                        return RedirectToAction("Index", "Bills");
-                }
-                else
-                    ModelState.AddModelError("Name", "UserName is already used");
+                if (returnUrl != null)
+                    return Redirect(returnUrl);
+                return RedirectToAction("Index", "Bills");
             }
+
             return View(model);
         }
 
@@ -91,6 +91,40 @@ namespace BillSplitter.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var callbackUrl = Url.Action("ExternalLoginCallback", new { scheme = provider, returnUrl });
+
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = callbackUrl
+            };
+
+            return new ChallengeResult(provider, props);
+        }
+
+        public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
+        {
+            var result = await HttpContext.AuthenticateAsync("Google");
+            if (result?.Succeeded != true)
+                throw new Exception("External authentication error");
+
+            var externalUser = result.Principal;
+            if (externalUser == null)
+                throw new Exception("External authentication error");
+
+            var name = externalUser.Identity.Name;
+
+            await HttpContext.SignOutAsync("Cookies");
+
+            User user = _usersAccessor.GetUserByName(name);
+
+            if (user != null)
+                return await Login(new LoginModel { Name = name }, null);
+
+            return await Register(new RegisterModel { Name = name }, null);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

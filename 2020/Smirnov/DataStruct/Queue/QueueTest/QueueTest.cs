@@ -76,5 +76,21 @@ namespace QueueTest
             }
             Assert.AreEqual(false, queue.Contains(12));
         }
+        [TestMethod]
+        public void QueueWorkCorrectly()
+        {
+            Queue<int> queue = new Queue<int>();
+            int[] masQueue = new int[5]; 
+            for (int i = 0; i < 10; i++)
+            {
+                queue.Enqueue(i);
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                masQueue[i] = queue.Dequeue();
+            }       
+            Assert.AreEqual(5, queue.Count);
+            CollectionAssert.AreEqual(masQueue, new int[] { 0, 1 , 2 , 3 , 4 } );
+        }
     }
 }

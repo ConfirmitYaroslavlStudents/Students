@@ -5,7 +5,7 @@ namespace BillSplitter.Data
 {
     public class PositionsDbAccessor
     {
-        private BillContext _context;
+        private readonly BillContext _context;
 
         public PositionsDbAccessor(BillContext context)
         {
@@ -14,18 +14,30 @@ namespace BillSplitter.Data
 
         public void AddPosition(Position pos)
         {
-            _context.Position.Add(pos);
+            _context.Positions.Add(pos);
             _context.SaveChanges();
         }
 
         public Position GetPositionById(int positionId)
         {
-            return _context.Position.FirstOrDefault(x => x.Id == positionId);
+            return _context.Positions.FirstOrDefault(x => x.Id == positionId);
         }
 
-        public bool DbContains(int positionId)
+        public void UpdateById(int positionId, Position positionData)
         {
-            return GetPositionById(positionId) != null;
+            var position = GetPositionById(positionId);
+            
+            position.Name = positionData.Name;
+            position.Price = positionData.Price;
+            position.Quantity = positionData.Quantity;
+
+            _context.SaveChanges();
+        }
+
+        public void DeleteById(int positionId)
+        {
+            _context.Positions.Remove(GetPositionById(positionId));
+            _context.SaveChanges();
         }
     }
 }

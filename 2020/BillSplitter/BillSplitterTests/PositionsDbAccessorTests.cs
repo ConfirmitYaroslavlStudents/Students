@@ -22,7 +22,7 @@ namespace BillSplitterTests
 
             accessor.AddPosition(position);
 
-            Assert.True(db.Position.Contains(position));
+            Assert.True(db.Positions.Contains(position));
         }
     }
 }

@@ -1,0 +1,80 @@
+﻿@model List<Position>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Select
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th colspan="2">
+            Already selected
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (var position in Model)
+    {
+        <tr id="partial_@position.Id">
+            @await Html.PartialAsync("SelectPositionsPartial",position)
+        </tr>
+    }
+    </tbody>
+</table>
+@Html.ActionLink("View results", "ViewBill", "Bills", new
+{
+    billId = ViewData["billId"]
+}, new
+{
+    @class = "btn btn-primary"
+})
+
+<script  type="text/javascript">
+    setInterval(() => reloadAll(), 5000);
+  
+    function reloadAll() {
+        @foreach (Position position in Model)
+        {
+           @:reload(@position.Id);
+        }
+    }
+
+    function reload(id) {
+        $("#partial_" + id).load("Positions/" + id + "/Partial"); 
+    }
+
+    function positionChecked(positionId) {
+        var ch = $("#" + positionId).is(":checked");
+        if (ch) {
+            $.ajax("Positions/" + positionId + "/Orders", {
+                type: 'POST',  
+                success: function (data, status, xhr) {
+                    reloadAll();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    reloadAll();
+                }
+            });
+        } else {
+             $.ajax("Positions/" + positionId + "/Orders", {
+                 type: 'DELETE',  
+                 dataType: 'text',
+                success: function (data, status, xhr) {
+                    reloadAll();
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    reloadAll();
+                 }
+            });
+        }
+    }
+</script>

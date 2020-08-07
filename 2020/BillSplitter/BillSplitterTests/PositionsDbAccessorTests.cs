@@ -20,7 +20,7 @@ namespace BillSplitterTests
                 Id = 1
             };
 
-            accessor.AddPosition(position);
+            accessor.Add(position);
 
             Assert.True(db.Positions.Contains(position));
         }

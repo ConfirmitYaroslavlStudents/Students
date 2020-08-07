@@ -80,7 +80,7 @@ namespace BillSplitter.Controllers
         public IActionResult Create(int billId, Position position)
         {
 
-             _uow.Positions.AddPosition(position);
+             _uow.Positions.Add(position);
             _uow.Save();
             return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
@@ -118,7 +118,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Positions/{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)
         {
-            Position position =  _uow.Positions.GetPositionById(positionId);
+            Position position =  _uow.Positions.GetById(positionId);
             return new PartialViewResult
             {
                 ViewName = "SelectPositionsPartial",

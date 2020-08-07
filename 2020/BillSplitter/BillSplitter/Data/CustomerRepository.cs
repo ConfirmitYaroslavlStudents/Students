@@ -3,21 +3,21 @@ using BillSplitter.Models;
 
 namespace BillSplitter.Data
 {
-    public class CustomersDbAccessor
+    public class CustomerRepository
     {
         private readonly BillContext _context;
 
-        public CustomersDbAccessor(BillContext context)
+        public CustomerRepository(BillContext context)
         {
             _context = context;
         }
 
-        public void AddCustomer(Customer customer)
+        public void AddC(Customer customer)
         {
             _context.Customers.Add(customer);
         }
 
-        public Customer GetCustomerById(int customerId)
+        public Customer GetById(int customerId)
         {
             return _context.Customers.FirstOrDefault(x => x.Id == customerId);
         }
@@ -27,7 +27,7 @@ namespace BillSplitter.Data
             var toDelete = _context.Orders.Where(order => order.CustomerId == customerId);
             _context.Orders.RemoveRange(toDelete);
 
-            _context.Customers.Remove(GetCustomerById(customerId));
+            _context.Customers.Remove(GetById(customerId));
 
         }
     }

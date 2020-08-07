@@ -25,8 +25,8 @@ namespace BillSplitter.Controllers
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
             {
-                AdminBills =_uow.Users.GetUserById(this.GetUserId()).Bills,
-                CustomerBills = _uow.Bills.GetBillsByCustomerUserId(this.GetUserId())
+                AdminBills =_uow.Users.GetById(this.GetUserId()).Bills,
+                CustomerBills = _uow.Bills.GetByCustomerUserId(this.GetUserId())
             };
 
             ViewData["userId"] = this.GetUserId();
@@ -48,7 +48,7 @@ namespace BillSplitter.Controllers
             };
             createdBill.Customers.Add(customer);//Так оставим или поменям, чтобы явно кастомер добавлялся? 
 
-            _uow.Bills.AddBill(createdBill);
+            _uow.Bills.Add(createdBill);
             _uow.Save();
             return RedirectToAction(nameof(Index));
         }

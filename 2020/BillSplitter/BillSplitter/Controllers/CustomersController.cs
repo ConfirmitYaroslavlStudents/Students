@@ -37,7 +37,7 @@ namespace BillSplitter.Controllers
         [Route("Bills/{billId}/Customers")] 
         public IActionResult Post(int billId)
         {
-            if (!_uow.Bills.DbContains(billId))
+            if (!_uow.Bills.Exist(billId))
                 Error();
             
             var userId = this.GetUserId();
@@ -52,7 +52,7 @@ namespace BillSplitter.Controllers
                     Name = this.GetUserName()
                 };
 
-                _uow.Customers.AddCustomer(customer);
+                _uow.Customers.AddC(customer);
                 _uow.Save();
             }
 

@@ -28,7 +28,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user =_uow.Users.GetUserByName(model.Name);
+            User user =_uow.Users.GetByName(model.Name);
             if (user == null)
                 ModelState.AddModelError("Name", "No Such User");
             else
@@ -54,14 +54,14 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user =_uow.Users.GetUserByName(model.Name);
+            User user =_uow.Users.GetByName(model.Name);
 
             if (user != null)
                 ModelState.AddModelError("Name", "UserName is already used");
             else
             {
                 User newUser = new User {Name = model.Name};
-               _uow.Users.AddUser(newUser);
+               _uow.Users.Add(newUser);
                 _uow.Save();
                 await Authenticate(newUser);
 
@@ -115,7 +115,7 @@ namespace BillSplitter.Controllers
 
             await HttpContext.SignOutAsync("Cookies");
 
-            User user =_uow.Users.GetUserByName(name);
+            User user =_uow.Users.GetByName(name);
 
             if (user != null)
                 return await Login(new LoginModel { Name = name }, null);

@@ -12,19 +12,19 @@ namespace BillSplitter.Data
             _context = context;
         }
 
-        public void AddPosition(Position pos)
+        public void Add(Position pos)
         {
             _context.Positions.Add(pos);
         }
 
-        public Position GetPositionById(int positionId)
+        public Position GetById(int positionId)
         {
             return _context.Positions.FirstOrDefault(x => x.Id == positionId);
         }
 
         public void UpdateById(int positionId, Position positionData)
         {
-            var position = GetPositionById(positionId);
+            var position = GetById(positionId);
             
             position.Name = positionData.Name;
             position.Price = positionData.Price;
@@ -33,7 +33,7 @@ namespace BillSplitter.Data
 
         public void DeleteById(int positionId)
         {
-            _context.Positions.Remove(GetPositionById(positionId));
+            _context.Positions.Remove(GetById(positionId));
         }
     }
 }

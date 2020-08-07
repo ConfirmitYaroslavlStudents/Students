@@ -8,17 +8,17 @@ namespace BillSplitter.Data
     public class UnitOfWork
     {
         private readonly BillContext _context;
-        public readonly BillsDbAccessor Bills;
-        public readonly UsersDbAccessor Users;
-        public readonly CustomersDbAccessor Customers;
-        public readonly OrdersDbAccessor Orders;
+        public readonly BillRepository Bills;
+        public readonly UserRepository Users;
+        public readonly CustomerRepository Customers;
+        public readonly OrderRepository Orders;
         public readonly PositionsDbAccessor Positions;
         public UnitOfWork(BillContext context)
         {
-            Bills = new BillsDbAccessor(context);
-            Users = new UsersDbAccessor(context);
-            Customers = new CustomersDbAccessor(context);
-            Orders = new OrdersDbAccessor(context);
+            Bills = new BillRepository(context);
+            Users = new UserRepository(context);
+            Customers = new CustomerRepository(context);
+            Orders = new OrderRepository(context);
             Positions = new PositionsDbAccessor(context);
             _context = context;
         }

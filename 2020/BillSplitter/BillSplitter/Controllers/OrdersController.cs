@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
+    [Authorize]
+    [Route("Bills/{billId}/Positions/{positionId}/Orders")]
     public class OrdersController : SuperController
     {
         public OrdersController(BillContext context) : base(context)
@@ -13,9 +15,7 @@ namespace BillSplitter.Controllers
            
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}/Orders")]
         public IActionResult AddOrder(int billId, int positionId)
         {
             var customer = _uow.Bills.GetBillById(billId).Customers
@@ -30,9 +30,7 @@ namespace BillSplitter.Controllers
             return RedirectToAction("PickPositions", "Positions", new { billId });
         }
 
-        [Authorize]
         [HttpDelete]
-        [Route("Bills/{billId}/Positions/{positionId}/Orders")]
         public IActionResult DeleteOrder(int billId, int positionId)
         {
             _uow.Orders.DeleteByUserAndPosition(this.GetUserId(), positionId);

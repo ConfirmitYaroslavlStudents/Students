@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
+    [Authorize]
+    [Route("Bills")]
     public class BillsController : SuperController
     {
         public BillsController(BillContext context) : base(context)
@@ -18,8 +20,10 @@ namespace BillSplitter.Controllers
            
         }
 
-        [Authorize]
+
         [HttpGet]
+        [Route("/")]
+        [Route("")]
         public IActionResult Index()
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
@@ -33,9 +37,7 @@ namespace BillSplitter.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/")]
         public IActionResult Create(Bill createdBill)
         {
             createdBill.UserId = this.GetUserId();
@@ -52,9 +54,9 @@ namespace BillSplitter.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize]
+
         [HttpGet]
-        [Route("Bills/{billId}")]
+        [Route("{billId}")]
         public IActionResult ViewBill(int billId)
         {
             var bill = _uow.Bills.GetBillById(billId);
@@ -106,9 +108,8 @@ namespace BillSplitter.Controllers
             return model;
         }
 
-        [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Join")]
+        [Route("{billId}/Join")]
         public IActionResult JoinBill(int billId)
         {
             var bill = _uow.Bills.GetBillById(billId);
@@ -116,9 +117,8 @@ namespace BillSplitter.Controllers
             return View(bill);
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}")]
+        [Route("{billId}")]
         [ValidateUser]
         public IActionResult Delete(int billId)
         {

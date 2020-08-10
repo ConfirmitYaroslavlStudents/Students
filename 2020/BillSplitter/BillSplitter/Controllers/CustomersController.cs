@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
+    [Authorize]
+    [Route("Bills/{billId}/Customers")]
     public class CustomersController : SuperController
     {
         public CustomersController(BillContext context) : base(context)
         {
 
         }
-
-        [Authorize]
+        
         [HttpGet]
-        [Route("Bills/{billId}/Customers")]
         [ValidateUser]
         public IActionResult Index(int billId)
         {
@@ -28,9 +28,7 @@ namespace BillSplitter.Controllers
             return View(customers);
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers")] 
         public IActionResult Post(int billId)
         {
             if (!_uow.Bills.Exist(billId))
@@ -55,9 +53,8 @@ namespace BillSplitter.Controllers
             return RedirectToAction("PickPositions", "Positions", new {billId});
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers/{customerId}")]
+        [Route("{customerId}")]
         [ValidateUser]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {

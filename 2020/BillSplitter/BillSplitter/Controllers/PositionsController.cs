@@ -9,22 +9,13 @@ using BillSplitter.Validators;
 
 namespace BillSplitter.Controllers
 {
+    [Authorize]
+    [Route("Bills/{billId}/Positions")]
     public class PositionsController : SuperController
     {
         public PositionsController(BillContext context) : base(context)
         {
            
-        }
-
-        private bool ValidateUser(int billId)
-        {
-            var bill = _uow.Bills.GetBillById(billId);
-            if (bill == null) 
-                return false;
-            if (bill.UserId != this.GetUserId())
-                return false;
-
-            return true;
         }
 
         private bool ValidatePosition(int billId, int positionId)
@@ -37,9 +28,9 @@ namespace BillSplitter.Controllers
             return true;
         }
 
-        [Authorize]
+        
         [HttpGet]
-        [Route("Bills/{billId}/PickPositions")]
+        [Route("Pick")]
         public IActionResult PickPositions(int billId)
         {
             ViewData["billId"] = billId;
@@ -53,9 +44,8 @@ namespace BillSplitter.Controllers
             return RedirectToAction("JoinBill", "Bills", new { billId });
         }
 
-        [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/ManagePositions")]
+        [Route("Manage")]
         [ValidateUser]
         public IActionResult ManagePositions(int billId)
         {
@@ -69,10 +59,7 @@ namespace BillSplitter.Controllers
             return View(positions);
         }
 
-
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions")]
         [ValidateUser]
         public IActionResult Create(int billId, Position position)
         {
@@ -82,9 +69,8 @@ namespace BillSplitter.Controllers
             return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}")]
+        [Route("{positionId}")]
         [ValidateUser]
         public IActionResult Delete(int billId, int positionId)
         {
@@ -96,9 +82,8 @@ namespace BillSplitter.Controllers
             return RedirectToAction(nameof(ManagePositions), new { billId, });
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}/Update")] // How to implement RESTful?
+        [Route("{positionId}/Update")] // How to implement RESTful?
         [ValidateUser]
         public IActionResult Update(int billId, int positionId, Position position)
         {
@@ -112,7 +97,7 @@ namespace BillSplitter.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Positions/{positionId}/Partial")] 
+        [Route("{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)
         {
             Position position =  _uow.Positions.GetById(positionId);

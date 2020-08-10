@@ -62,9 +62,9 @@ namespace BillSplitter.Controllers
             {
                 User newUser = new User {Name = model.Name};
                _uow.Users.Add(newUser);
-                _uow.Save();
                 await Authenticate(newUser);
 
+                _uow.Save();
                 if (returnUrl != null)
                     return Redirect(returnUrl);
                 return RedirectToAction("Index", "Bills");

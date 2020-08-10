@@ -95,7 +95,6 @@ namespace BillSplitter.Controllers
             return RedirectToAction(nameof(ManagePositions), new { billId });
         }
 
-        [Authorize]
         [HttpGet]
         [Route("{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)

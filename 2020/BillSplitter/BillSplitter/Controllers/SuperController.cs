@@ -34,11 +34,9 @@ namespace BillSplitter.Controllers
             return User.Identity.Name;
         }
 
-        public bool CheckUserAccessToBill(int billId)
+        public Bill GetBillById(int billId)
         {
-            var bill = _uow.Bills.GetBillById(billId);
-            if (bill == null) return false;
-           return bill.UserId == GetUserId();
+            return _uow.Bills.GetBillById(billId); 
         }
 
         public IActionResult Error()

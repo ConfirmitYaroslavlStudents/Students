@@ -32,7 +32,7 @@ namespace BillSplitter.Controllers
             };
 
             ViewData["userId"] = this.GetUserId();
-            
+            ViewData["absoluteLink"] = string.Format("{0}://{1}", Request.Scheme,Request.Host);
             return View(viewModel);
         }
 

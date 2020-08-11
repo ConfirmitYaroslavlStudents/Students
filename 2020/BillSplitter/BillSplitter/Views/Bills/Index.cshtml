@@ -31,10 +31,10 @@
 <h1>Managed Bills</h1>
 <table class="table">
     <thead>
-    <tr>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var bill in Model.AdminBills)
@@ -47,8 +47,13 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation_@bill.Id">
                         Delete bill
                     </button>
+                    <button onclick="copyJoinLink(@bill.Id)" class="btn btn-primary">Copy Join Link</button>
+                    <!-- The text field -->
+                    <input type="text" class="invisible" value="@ViewData["absoluteLink"]@Url.Action("JoinBill", "Bills", new {  billId = bill.Id })" id="JoinLink_@bill.Id">
 
-                    @Html.ActionLink("Join bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
+                    <!-- The button used to copy the text -->
+
+
                 </td>
             </tr>
 
@@ -71,7 +76,7 @@
                 </div>
             </div>
 
-            
+
         }
     </tbody>
 </table>
@@ -97,3 +102,20 @@
         }
     </tbody>
 </table>
+<script type="text/javascript">
+    function copyJoinLink(id)
+    {
+      /* Get the text field */
+        var copyText = document.getElementById("JoinLink_"+id);
+
+      /* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+      /* Copy the text inside the text field */
+      document.execCommand("copy");
+
+      /* Alert the copied text */
+      alert("Copied the text: " + copyText.value);
+    }
+ </script>

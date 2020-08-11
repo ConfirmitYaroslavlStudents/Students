@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BillsDbAccessorTests.cs" />
+    <Compile Remove="CustomerDbAccessorTests.cs" />
+    <Compile Remove="OrdersDbAccessorTests.cs" />
+    <Compile Remove="PositionsDbAccessorTests.cs" />
+    <Compile Remove="UsersDbAccessorTests.cs" />
+    <Compile Remove="ValidatorTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.0" />

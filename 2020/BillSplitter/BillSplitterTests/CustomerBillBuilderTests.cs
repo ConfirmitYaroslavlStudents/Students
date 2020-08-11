@@ -8,105 +8,54 @@ namespace BillSplitterTests
     public class CustomerBillBuilderTests
     {
         [Fact]
-        public void Build_ReturnsRightBuildedPositions()
+        public void Build_ReturnsCorrectPrices()
         {
-
-            Position a = new Position
-            {
-                Name = "a",
-                Price = 2,
-                Quantity = 10
-            };
-            Position b = new Position
-            {
-                Name = "b",
-                Price = 3,
-                Quantity = 20
-            };
-            Position c = new Position
-            {
-                Name = "c",
-                Price = 4,
-                Quantity = 30
-            };
+            var positions = new PositionSeeder().Seed();
             var customer = new Customer
             {
                 Orders = new List<Order>
                 {
                     new Order
                     {
-                        Position = a
+                        Position = positions[2],
+                        Quantity = null
                     },
                     new Order
                     {
-                        Position = b
+                        Position = positions[2],
+                        Quantity = null
                        
                     },
                     new Order
                     {
-                       Position = c
+                       Position = positions[2],
+                       Quantity = 1.5m
                     }
                 }
             };
 
-            a.Orders = new List<Order>();
-            a.Orders.Add(new Order
-            {
-                Position = a
-            });
-            a.Orders.Add(new Order
-            {
-                Position = a
-            });
+            positions[2].Orders = customer.Orders;
 
-            b.Orders = new List<Order>();
-            b.Orders.Add(new Order
+            var expected = new List<Position>()
             {
-                Position = b
-            });
-            b.Orders.Add(new Order
-            {
-                Position = b
-            });
-            b.Orders.Add(new Order
-            {
-                Position = b
-            });
-            c.Orders = new List<Order>();
-            c.Orders.Add(new Order
-            {
-                Position = c
-            });
-
-
-            var expected = new List<Position>
+                new Position()
                 {
-                   new Position
-                        {
-                            Name = "a",
-                            Price = 10m,
-                        },
-
-                   new Position
-                        {
-                            Name = "b",
-                            Price = 20m,
-                        },
-                    new  Position
-                    {
-                            Name = "c",
-                            Price = 120m,
-                    }
-
-                };
+                    Price = 0.75m
+                },
+                new Position()
+                {
+                    Price = 0.75m
+                },
+                new Position()
+                {
+                    Price = 1.5m
+                }
+            };
 
             var actual = new CustomerBillBuilder().Build(customer);
 
             for (int i = 0; i < 3; i++)
-            {
-                Assert.Equal(expected[i].Name, actual[i].Name);
                 Assert.Equal(expected[i].Price, actual[i].Price);
-            }
         }
     }
 }

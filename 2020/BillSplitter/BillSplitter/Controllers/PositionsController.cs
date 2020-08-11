@@ -62,7 +62,7 @@ namespace BillSplitter.Controllers
                 Id = position.Id,
                 Selected = order != null,
                 UserQuantity =  order!=null ? order.Quantity : null,
-                PickedQuantity = position.Orders.Where(o => o.Quantity != null).Sum(o => o.Quantity * o.Position.Price).ToString() + "/" + position.Quantity,
+                PickedQuantity = position.Orders.Where(o => o.Quantity != null).Sum(o => o.Quantity).ToString() + "/" + position.Quantity,
                 Orders = position.Orders,
                 Price = position.Price
             };

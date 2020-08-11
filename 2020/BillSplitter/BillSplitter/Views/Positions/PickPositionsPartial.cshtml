@@ -4,8 +4,8 @@
     <input type="checkbox" checked="@Model.Selected" id="@Model.Id" onclick="positionChecked(@Model.Id)">
 </td>
 <td>
-    @Model.UserQuantity
-    <input type="number" value="1" id="quantity_@Model.Id" onblur="quantityEntered(@Model.Id)">
+   
+    <input type="text" value="@Model.UserQuantity" id="quantity_@Model.Id" onblur="quantityEntered(@Model.Id)">
 </td>
 
 <td>

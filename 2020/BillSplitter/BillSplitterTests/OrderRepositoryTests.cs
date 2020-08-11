@@ -5,7 +5,7 @@ using Xunit;
 
 namespace BillSplitterTests
 {
-    public class OrdersDbAccessorTests
+    public class OrderRepositoryTests
     {
         [Fact]
         public void AddOrder_AddNewOrderInDb()

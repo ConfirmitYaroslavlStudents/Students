@@ -1,32 +1,26 @@
-﻿using System;
-using System.Linq;
-using BillSplitter.Controllers.Extensions;
+﻿using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
+using BillSplitter.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class CustomersController : Controller
+    [Authorize]
+    [Route("Bills/{billId}/Customers")]
+    public class CustomersController : SuperController
     {
-        private readonly CustomersDbAccessor _customersDbAccessor;
-        private readonly BillsDbAccessor _billsDbAccessor;
-
-        public CustomersController(BillContext context)
+        public CustomersController(BillContext context) : base(context)
         {
-            _customersDbAccessor = new CustomersDbAccessor(context);
-            _billsDbAccessor = new BillsDbAccessor(context);
-        }
 
-        [Authorize]
+        }
+        
         [HttpGet]
-        [Route("Bills/{billId}/Customers")]
+        [ValidateUser]
         public IActionResult Index(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill.UserId != this.GetUserId())
-                throw new NotImplementedException("Case is not implemented yet");
+            var bill = Uow.Bills.GetBillById(billId);
 
             ViewData["billId"] = billId;
             var customers = bill.Customers;
@@ -34,16 +28,14 @@ namespace BillSplitter.Controllers
             return View(customers);
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers")] 
-        public IActionResult Post(int billId)
+        public IActionResult Post(int billId) // give more suitable name
         {
-            if (!_billsDbAccessor.DbContains(billId))
-                throw new NotImplementedException("Case is not implemented yet");
+            if (!Uow.Bills.Exist(billId))
+                Error();
             
             var userId = this.GetUserId();
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
             
             if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
             {
@@ -54,23 +46,23 @@ namespace BillSplitter.Controllers
                     Name = this.GetUserName()
                 };
 
-                _customersDbAccessor.AddCustomer(customer);
+                Uow.Customers.Add(customer);
+                Uow.Save();
             }
 
             return RedirectToAction("PickPositions", "Positions", new {billId});
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Customers/{customerId}")]
+        [Route("{customerId}")]
+        [ValidateUser]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill.UserId != this.GetUserId())
-                throw new NotImplementedException("Case is not implemented yet");
+            var bill = Uow.Bills.GetBillById(billId);
+           
 
-            _customersDbAccessor.DeleteById(customerId);
-
+            Uow.Customers.DeleteById(customerId);
+            Uow.Save();
             return RedirectToAction(nameof(Index), new { billId = billId });
         }
     }

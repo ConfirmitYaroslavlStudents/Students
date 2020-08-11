@@ -12,14 +12,14 @@ namespace BillSplitterTests
         public void AddCustomer_AddNewCustomerInDb()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new CustomersDbAccessor(db);
+            var accessor = new CustomerRepository(db);
 
             var customer = new Customer()
             {
                 Id = 1
             };
 
-            accessor.AddCustomer(customer);
+            accessor.Add(customer);
 
             Assert.True(db.Customers.Contains(customer));
         }
@@ -28,7 +28,7 @@ namespace BillSplitterTests
         public void GetCustomerById_ReturnsRightCustomer()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new CustomersDbAccessor(db);
+            var accessor = new CustomerRepository(db);
 
             var customer1 = new Customer()
             {
@@ -43,7 +43,7 @@ namespace BillSplitterTests
             db.SaveChanges();
 
             var expected = customer2;
-            var actual = accessor.GetCustomerById(2);
+            var actual = accessor.GetById(2);
 
             Assert.Equal(expected, actual);
         }
@@ -51,10 +51,10 @@ namespace BillSplitterTests
         public void GetCustomerById_ReturnsNull()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new CustomersDbAccessor(db);
+            var accessor = new CustomerRepository(db);
 
             Customer expected = null;
-            var actual = accessor.GetCustomerById(1);
+            var actual = accessor.GetById(1);
 
             Assert.Equal(expected, actual);
         }

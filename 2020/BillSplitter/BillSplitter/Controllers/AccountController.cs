@@ -10,13 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : SuperController
     {
-        private readonly UsersDbAccessor _usersAccessor;
 
-        public AccountController(BillContext context)
+        public AccountController(BillContext context): base(context)
         {
-            _usersAccessor = new UsersDbAccessor(context);
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user = _usersAccessor.GetUserByName(model.Name);
+            User user =Uow.Users.GetByName(model.Name);
             if (user == null)
                 ModelState.AddModelError("Name", "No Such User");
             else
@@ -56,17 +54,17 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user = _usersAccessor.GetUserByName(model.Name);
+            User user =Uow.Users.GetByName(model.Name);
 
             if (user != null)
                 ModelState.AddModelError("Name", "UserName is already used");
             else
             {
                 User newUser = new User {Name = model.Name};
-                _usersAccessor.AddUser(newUser);
-
+               Uow.Users.Add(newUser);
                 await Authenticate(newUser);
 
+                Uow.Save();
                 if (returnUrl != null)
                     return Redirect(returnUrl);
                 return RedirectToAction("Index", "Bills");
@@ -117,7 +115,7 @@ namespace BillSplitter.Controllers
 
             await HttpContext.SignOutAsync("Cookies");
 
-            User user = _usersAccessor.GetUserByName(name);
+            User user =Uow.Users.GetByName(name);
 
             if (user != null)
                 return await Login(new LoginModel { Name = name }, null);

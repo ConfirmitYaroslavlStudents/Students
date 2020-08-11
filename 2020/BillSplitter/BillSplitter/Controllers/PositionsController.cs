@@ -2,39 +2,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BillSplitter.Models;
-using System.Diagnostics;
 using System.Linq;
-using BillSplitter.Controllers.Extensions;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using BillSplitter.Validators;
 
 namespace BillSplitter.Controllers
 {
-    public class PositionsController : Controller 
+    [Authorize]
+    [Route("Bills/{billId}/Positions")]
+    public class PositionsController : SuperController
     {
-        private readonly BillsDbAccessor _billsDbAccessor;
-        private readonly PositionsDbAccessor _positionsDbAccessor;
-
-        public PositionsController(BillContext context)
+        public PositionsController(BillContext context) : base(context)
         {
-            _billsDbAccessor = new BillsDbAccessor(context);
-            _positionsDbAccessor = new PositionsDbAccessor(context);
+           
         }
 
-        private bool ValidateUser(int billId)
+        private bool ValidatePosition(int billId, int positionId) // Move to attribute
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
-            if (bill == null) 
-                return false;
-            if (bill.UserId != this.GetUserId())
-                return false;
-
-            return true;
-        }
-
-        private bool ValidatePosition(int billId, int positionId)
-        {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
 
             if (bill.Positions.Find(x => x.Id == positionId) == null)
                 return false;
@@ -42,19 +28,13 @@ namespace BillSplitter.Controllers
             return true;
         }
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/PickPositions")]
+        [Route("Pick")]
         public IActionResult PickPositions(int billId)
         {
             ViewData["billId"] = billId;
 
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer != null)
@@ -63,68 +43,66 @@ namespace BillSplitter.Controllers
             return RedirectToAction("JoinBill", "Bills", new { billId });
         }
 
-        [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/ManagePositions")]
+        [Route("Manage")]
+        [ValidateUser]
         public IActionResult ManagePositions(int billId)
         {
             ViewData["billId"] = billId;
 
-            if (!ValidateUser(billId))
-                return Error();
-
-            var positions = _billsDbAccessor.GetBillById(billId).Positions
+            var positions = Uow.Bills.GetBillById(billId).Positions
                 .OrderBy(p => p.Id)
                 .ToList();
 
             return View(positions);
         }
 
-
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions")]
+        [ValidateUser]
         public IActionResult Create(int billId, Position position)
         {
-            if (!ValidateUser(billId))
-                return Error();
+            Uow.Positions.Add(position);
 
-            _positionsDbAccessor.AddPosition(position);
+            Uow.Save();
 
             return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}")]
+        [Route("{positionId}")]
+        [ValidateUser]
         public IActionResult Delete(int billId, int positionId)
         {
-            if (!ValidateUser(billId) || !ValidatePosition(billId, positionId))
+            if (!ValidatePosition(billId, positionId))
                 return Error();
 
-            _positionsDbAccessor.DeleteById(positionId);
+            Uow.Positions.DeleteById(positionId);
+
+            Uow.Save();
 
             return RedirectToAction(nameof(ManagePositions), new { billId, });
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}/Positions/{positionId}/Update")] // How to implement RESTful?
+        [Route("{positionId}/Update")]
+        [ValidateUser]
         public IActionResult Update(int billId, int positionId, Position position)
         {
-            if (!ValidateUser(billId) || !ValidatePosition(billId, positionId))
+            if (!ValidatePosition(billId, positionId))
                 return Error();
 
-            _positionsDbAccessor.UpdateById(positionId, position);
+            Uow.Positions.UpdateById(positionId, position);
+
+            Uow.Save();
+
             return RedirectToAction(nameof(ManagePositions), new { billId });
         }
 
-        [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Positions/{positionId}/Partial")] 
+        [Route("{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)
         {
-            Position position = _positionsDbAccessor.GetPositionById(positionId);
+            Position position =  Uow.Positions.GetById(positionId);
             return new PartialViewResult
             {
                 ViewName = "SelectPositionsPartial",

@@ -1,5 +1,0 @@
-﻿@model Position
-
-<form id="@($"{Model.Id}")" asp-action="Update" asp-route-billId="@Model.BillId" asp-route-positionId="@Model.Id">
-    @await Html.PartialAsync("EnterPositionDataPartial", Model, ViewData)
-</form>

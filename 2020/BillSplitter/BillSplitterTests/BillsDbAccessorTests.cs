@@ -13,15 +13,15 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new BillsDbAccessor(db);
+            var accessor = new BillRepository(db);
 
             var bill = new Bill()
             {
                 Id = 1
             };
 
-            accessor.AddBill(bill);
-
+            accessor.Add(bill);
+            _uow.Save();
             Assert.True(db.Bills.Contains(bill));
         }
 
@@ -30,7 +30,7 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new BillsDbAccessor(db);
+            var accessor = new BillRepository(db);
 
             var bill1 = new Bill()
             {
@@ -55,7 +55,7 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new BillsDbAccessor(db);
+            var accessor = new BillRepository(db);
 
             var actual = accessor.GetBillById(1);
 
@@ -67,32 +67,32 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new BillsDbAccessor(db);
+            var accessor = new BillRepository(db);
 
             var bill = new Bill()
             {
                 Id = 1
             };
 
-            accessor.AddBill(bill);
+            accessor.Add(bill);
 
-            Assert.True(accessor.DbContains(1));
+            Assert.True(accessor.Exist(1));
         }
         [Fact]
         public void DbContains_ReturnsFalse()
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new BillsDbAccessor(db);
+            var accessor = new BillRepository(db);
 
             var bill1 = new Bill()
             {
                 Id = 1
             };
 
-            accessor.AddBill(bill1);
+            accessor.Add(bill1);
 
-            Assert.False(accessor.DbContains(2));
+            Assert.False(accessor.Exist(2));
         }
     }
 }

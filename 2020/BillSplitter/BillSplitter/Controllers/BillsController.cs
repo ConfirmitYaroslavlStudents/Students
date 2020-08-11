@@ -1,45 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BillSplitter.Controllers.Extensions;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels;
 using BillSplitter.Models.ViewModels.ViewBill;
+using BillSplitter.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class BillsController : Controller
+    [Authorize]
+    [Route("Bills")]
+    public class BillsController : SuperController
     {
-        private readonly BillsDbAccessor _billsDbAccessor;
-        private readonly UsersDbAccessor _usersDbAccessor;
-
-        public BillsController(BillContext context)
+        public BillsController(BillContext context) : base(context)
         {
-            _billsDbAccessor = new BillsDbAccessor(context);
-            _usersDbAccessor = new UsersDbAccessor(context);
+           
         }
 
-        [Authorize]
         [HttpGet]
+        [Route("/")] // ??
+        [Route("")] // ??
         public IActionResult Index()
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
             {
-                AdminBills = _usersDbAccessor.GetUserById(this.GetUserId()).Bills,
-                CustomerBills = _billsDbAccessor.GetBillsByCustomerUserId(this.GetUserId())
+                AdminBills = Uow.Users.GetById(this.GetUserId()).Bills,
+                CustomerBills = Uow.Bills.GetByCustomerUserId(this.GetUserId())
             };
 
             ViewData["userId"] = this.GetUserId();
-            
+            ViewData["absoluteLink"] = string.Format("{0}://{1}", Request.Scheme,Request.Host);
             return View(viewModel);
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/")]
         public IActionResult Create(Bill createdBill)
         {
             createdBill.UserId = this.GetUserId();
@@ -49,19 +46,21 @@ namespace BillSplitter.Controllers
                 UserId = this.GetUserId(),
                 Bill = createdBill
             };
-            createdBill.Customers.Add(customer);
 
-            _billsDbAccessor.AddBill(createdBill);
+            Uow.Bills.Add(createdBill);
+            Uow.Customers.Add(customer);
+
+            Uow.Save();
 
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize]
+
         [HttpGet]
-        [Route("Bills/{billId}")]
+        [Route("{billId}")]
         public IActionResult ViewBill(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer == null)
@@ -107,30 +106,31 @@ namespace BillSplitter.Controllers
                 HasManageAccess = bill.UserId == this.GetUserId(),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };
+
             return model;
         }
 
-        [Authorize]
         [HttpGet]
-        [Route("Bills/{billId}/Join")]
+        [Route("{billId}/Join")]
         public IActionResult JoinBill(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
           
             return View(bill);
         }
 
-        [Authorize]
         [HttpPost]
-        [Route("Bills/{billId}")]
+        [Route("{billId}")]
+        [ValidateUser]
         public IActionResult Delete(int billId)
         {
-            var bill = _billsDbAccessor.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
 
             if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
-            _billsDbAccessor.DeleteById(billId);
+            Uow.Bills.DeleteById(billId);
+            Uow.Save();
 
             return RedirectToAction(nameof(Index));
         }

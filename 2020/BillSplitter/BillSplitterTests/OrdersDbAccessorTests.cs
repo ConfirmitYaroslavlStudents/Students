@@ -11,7 +11,7 @@ namespace BillSplitterTests
         public void AddOrder_AddNewOrderInDb()
         {
             using var db = InMemoryContextBuilder.Build();
-            var accessor = new OrdersDbAccessor(db);
+            var accessor = new OrderRepository(db);
 
             var order = new Order()
             {

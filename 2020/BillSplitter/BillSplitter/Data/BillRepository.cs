@@ -4,22 +4,21 @@ using BillSplitter.Models;
 
 namespace BillSplitter.Data
 {
-    public class BillsDbAccessor
+    public class BillRepository
     {
         private BillContext _context;
 
-        public BillsDbAccessor(BillContext context)
+        public BillRepository(BillContext context)
         {
             _context = context;
         }
 
-        public void AddBill(Bill bill)
+        public void Add(Bill bill)
         {
             _context.Bills.Add(bill);
-            _context.SaveChanges();
         }
 
-        public List<Bill> GetBillsByCustomerUserId(int userId)
+        public List<Bill> GetByCustomerUserId(int userId)
         {
             return _context.Customers.Where(c => c.UserId == userId).Select(c => c.Bill).Where(b => b.UserId != userId).ToList();
         }
@@ -30,7 +29,7 @@ namespace BillSplitter.Data
             return bill;
         }
     
-        public bool DbContains(int billId)
+        public bool Exist(int billId)
         {
             return _context.Bills.FirstOrDefault(x => x.Id == billId) != null;
         }
@@ -38,7 +37,7 @@ namespace BillSplitter.Data
         public void DeleteById(int billId)
         {
             _context.Bills.Remove(GetBillById(billId));
-            _context.SaveChanges();
+
         }
     }
 }

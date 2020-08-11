@@ -49,13 +49,13 @@
     }
 
     function reload(id) {
-        $("#partial_" + id).load("Positions/" + id + "/Partial"); 
+        $("#partial_" + id).load( id + "/Partial"); 
     }
 
     function positionChecked(positionId) {
         var ch = $("#" + positionId).is(":checked");
         if (ch) {
-            $.ajax("Positions/" + positionId + "/Orders", {
+            $.ajax(positionId + "/Orders", {
                 type: 'POST',  
                 success: function (data, status, xhr) {
                     reloadAll();
@@ -65,7 +65,7 @@
                 }
             });
         } else {
-             $.ajax("Positions/" + positionId + "/Orders", {
+             $.ajax( positionId + "/Orders", {
                  type: 'DELETE',  
                  dataType: 'text',
                 success: function (data, status, xhr) {

@@ -23,9 +23,10 @@
     <tbody>
         @foreach (var position in Model)
         {
-            <tr>
-                @await Html.PartialAsync("PositionInfoActionsPartial", position, ViewData)
-            </tr>
+        <tr>
+            @await Html.PartialAsync("PositionInfoPartial", position, ViewData)
+            @await Html.PartialAsync("PositionActionsPartial", position, ViewData)
+        </tr>
         }
     </tbody>
 </table>
@@ -35,9 +36,3 @@
 {
     billId = ViewData["billId"]
 }, new {@class = "btn btn-primary"})
-<script>
-    function submitUpdatePosition(formName) {
-        var updateForm = document.getElementById(formName);
-        updateForm.submit();
-    }
-</script>

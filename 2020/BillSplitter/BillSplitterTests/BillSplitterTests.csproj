@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Remove="OrdersDbAccessorTests.cs" />
-    <Compile Remove="PositionsDbAccessorTests.cs" />
     <Compile Remove="UsersDbAccessorTests.cs" />
     <Compile Remove="ValidatorTests.cs" />
   </ItemGroup>

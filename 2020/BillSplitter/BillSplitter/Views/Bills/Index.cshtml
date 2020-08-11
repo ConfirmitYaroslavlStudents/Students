@@ -37,50 +37,49 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var bill in Model.AdminBills)
-        {
-            <tr>
-                <td>@bill.Name</td>
-                <td>
-
-                    @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteConfirmation_@bill.Id">
-                        Delete bill
-                    </button>
-                    <button onclick="copyJoinLink(@bill.Id)" class="btn btn-primary">Copy Join Link</button>
-                    <!-- The text field -->
-                    <input type="text" class="invisible" value="@ViewData["absoluteLink"]@Url.Action("JoinBill", "Bills", new {  billId = bill.Id })" id="JoinLink_@bill.Id">
-
-                    <!-- The button used to copy the text -->
-
-
-                </td>
-            </tr>
-
-            <div id="deleteConfirmation_@bill.Id" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Are you sure?</h4>
-                        </div>
-                        <div class="modal-body">
-                            You are now deleting bill. Are you sure you want to delete?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                            <form asp-action="Delete" asp-route-billId="@bill.Id">
-                                <input type="submit" class="btn btn-primary" value="Yes" />
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        }
+    @foreach (var bill in Model.AdminBills)
+    {
+        <tr>
+            <td>@bill.Name</td>
+            <td>
+                @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
+                <button type="button" class="open-dialog btn btn-primary" data-toggle="modal" data-target="#deleteConfirmationDialog"
+                        data-url="@Url.Action("Delete", new {billId = bill.Id})">
+                    Delete bill
+                </button>
+                <button onclick="copyJoinLink(@bill.Id)" class="btn btn-primary">Copy Join Link</button>
+                <input type="text" class="invisible" value="@ViewData["absoluteLink"]@Url.Action("JoinBill", "Bills", new {  billId = bill.Id })" id="JoinLink_@bill.Id">
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
 
+<div id="deleteConfirmationDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                You are now deleting bill. Are you sure you want to delete?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                <form id="deleteConfirmation" action="#" method="post">
+                    <input type="submit" class="btn btn-primary" value="Yes" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click", ".open-dialog", function() {
+        var url = $(this).data('url');
+        $("#deleteConfirmation").attr('action', url);
+    })
+</script>
 
 <h1>Bills you are joined in</h1>
 <table class="table">

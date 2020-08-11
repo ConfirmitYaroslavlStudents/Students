@@ -75,6 +75,9 @@ namespace BillSplitter.Migrations
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -136,7 +139,7 @@ namespace BillSplitter.Migrations
 
             modelBuilder.Entity("BillSplitter.Models.Customer", b =>
                 {
-                    b.HasOne("BillSplitter.Models.Bill", null)
+                    b.HasOne("BillSplitter.Models.Bill", "Bill")
                         .WithMany("Customers")
                         .HasForeignKey("BillId")
                         .OnDelete(DeleteBehavior.Cascade)

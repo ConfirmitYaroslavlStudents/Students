@@ -1,6 +1,5 @@
 ﻿using BillSplitter.Data;
 using BillSplitter.Models;
-using System;
 using System.Linq;
 using Xunit;
 

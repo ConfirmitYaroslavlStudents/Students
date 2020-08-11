@@ -7,5 +7,6 @@
         public int? CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
         public int Id { get; set; }
+        public decimal? Quantity { get; set; }
     }
 }

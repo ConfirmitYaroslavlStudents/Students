@@ -11,11 +11,37 @@ namespace BillSplitter.Data
             var orders = customer.Orders;
 
             return orders.Select(order => new Position()
-            {
-                Price = order.Position.Price*order.Position.Quantity / order.Position.Orders.Count,
-                Id = order.Position.Id,
-                Name = order.Position.Name
-            }).ToList();
+                {
+                    Price = CalculatePrice(order),
+                    Id = order.Position.Id,
+                    Name = order.Position.Name
+                })
+                .ToList();
+        }
+
+        private decimal CalculatePrice(Order order)
+        {
+            if (order.Quantity == null)
+                return CalculateEquallySharedPrice(order);
+
+            var onePiecePrice = order.Position.Price;
+            var overallPrice = onePiecePrice * order.Position.Quantity;
+
+            return (decimal)(order.Quantity * overallPrice);
+        }
+
+        private decimal CalculateEquallySharedPrice(Order order)
+        {
+            var onePiecePrice = order.Position.Price;
+            var overallPrice = onePiecePrice * order.Position.Quantity;
+
+            var equallySharedOrders = order.Position.Orders.Where(o => o.Quantity == null);
+            var specificallySharedOrders = order.Position.Orders.Where(o => o.Quantity != null);
+
+            var equallySharedPrice =
+                overallPrice - specificallySharedOrders.Sum(o => o.Quantity * onePiecePrice);
+
+            return (decimal)equallySharedPrice / equallySharedOrders.ToList().Count;
         }
     }
 }

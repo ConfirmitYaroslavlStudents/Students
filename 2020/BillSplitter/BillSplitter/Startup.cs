@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using BillSplitter.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +52,29 @@ namespace BillSplitter
                 {
                     options.ClientId = Configuration["App:GoogleClientId"];
                     options.ClientSecret = Configuration["App:GoogleClientSecret"];
+                })
+                .AddOAuth("VK", options => 
+                {
+                    options.ClientId = Configuration["App:VKClientId"];
+                    options.ClientSecret = Configuration["App:VKClientSecret"];
+                    options.ClaimsIssuer = "Vkontakte";
+                    options.CallbackPath = new PathString("/signin-vkontakte");
+                    options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
+                    options.TokenEndpoint = "https://oauth.vk.com/access_token";
+                    options.SaveTokens = true;
+
+                    options.Scope.Add("email");
+
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "email");
+                    options.Events = new OAuthEvents
+                    {
+                        OnCreatingTicket = context =>
+                        {
+                            context.RunClaimActions(context.TokenResponse.Response.RootElement);
+
+                            return Task.CompletedTask;
+                        }                    
+                    };
                 }); 
 
         }

@@ -6,6 +6,8 @@
 <p>OR use external login</p>
 
 <a asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Google">Google</a>
+<a asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="VK">Вконтактике</a>
+
 
 @using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
 {

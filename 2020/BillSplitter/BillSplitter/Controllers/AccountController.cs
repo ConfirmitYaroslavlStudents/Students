@@ -54,7 +54,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user =Uow.Users.GetByName(model.Name);
+            User user = Uow.Users.GetByName(model.Name);
 
             if (user != null)
                 ModelState.AddModelError("Name", "UserName is already used");
@@ -103,7 +103,7 @@ namespace BillSplitter.Controllers
 
         public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
         {
-            var result = await HttpContext.AuthenticateAsync("Google");
+            var result = await HttpContext.AuthenticateAsync(scheme);
             if (result?.Succeeded != true)
                 throw new Exception("External authentication error");
 
@@ -115,12 +115,12 @@ namespace BillSplitter.Controllers
 
             await HttpContext.SignOutAsync("Cookies");
 
-            User user =Uow.Users.GetByName(name);
+            User user = Uow.Users.GetByName(name);
 
             if (user != null)
-                return await Login(new LoginModel { Name = name }, null);
+                return await Login(new LoginModel { Name = name }, returnUrl);
 
-            return await Register(new RegisterModel { Name = name }, null);
+            return await Register(new RegisterModel { Name = name }, returnUrl);
         }
 
         [HttpGet]

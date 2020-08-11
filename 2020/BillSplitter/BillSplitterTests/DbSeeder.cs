@@ -106,7 +106,7 @@ namespace BillSplitterTests
 
             var anakinCola = new Order
             {
-                PositionId = positionsIds[11],
+                PositionId = positionsIds[1],
                 CustomerId = customersIds[1],
                 Quantity = null
             };

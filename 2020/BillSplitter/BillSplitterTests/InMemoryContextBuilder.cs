@@ -3,9 +3,9 @@ using BillSplitter.Data;
 
 namespace BillSplitterTests
 {
-    static class InMemoryContextBuilder
+    class InMemoryContextBuilder
     {
-        public static BillContext Build()
+        public BillContext Build()
         {
             var opt = 
                 new DbContextOptionsBuilder<BillContext>()

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BillsDbAccessorTests.cs" />
-    <Compile Remove="CustomerDbAccessorTests.cs" />
-    <Compile Remove="OrdersDbAccessorTests.cs" />
-    <Compile Remove="PositionsDbAccessorTests.cs" />
     <Compile Remove="UsersDbAccessorTests.cs" />
     <Compile Remove="ValidatorTests.cs" />
   </ItemGroup>

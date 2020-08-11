@@ -5,20 +5,22 @@ using Xunit;
 
 namespace BillSplitterTests
 {
-    public class OrdersDbAccessorTests
+    public class OrderRepositoryTests
     {
         [Fact]
         public void AddOrder_AddNewOrderInDb()
         {
-            using var db = InMemoryContextBuilder.Build();
-            var accessor = new OrderRepository(db);
+            using var db = new InMemoryContextBuilder().Build();
+            var uow = new UnitOfWork(db);
+            var repo = uow.Orders;
 
             var order = new Order()
             {
-                Id = 1,
+                Id = 1
             };
 
-            accessor.AddOrder(order);
+            repo.AddOrder(order);
+            uow.Save();
 
             Assert.True(db.Orders.Contains(order));
         }

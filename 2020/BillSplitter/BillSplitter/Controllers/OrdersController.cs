@@ -18,23 +18,27 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult AddOrder(int billId, int positionId)
         {
-            var customer = _uow.Bills.GetBillById(billId).Customers
+            var customer = Uow.Bills.GetBillById(billId).Customers
                 .FirstOrDefault(c => c.UserId == this.GetUserId());
 
-            _uow.Orders.AddOrder(new Order()
+            Uow.Orders.AddOrder(new Order()
             {
                 CustomerId = customer.Id,
                 PositionId = positionId
             });
-            _uow.Save();
+
+            Uow.Save();
+
             return RedirectToAction("PickPositions", "Positions", new { billId });
         }
 
         [HttpDelete]
         public IActionResult DeleteOrder(int billId, int positionId)
         {
-            _uow.Orders.DeleteByUserAndPosition(this.GetUserId(), positionId);
-            _uow.Save();
+            Uow.Orders.DeleteByUserAndPosition(this.GetUserId(), positionId);
+
+            Uow.Save();
+
             return RedirectToAction("PickPositions", "Positions", new { billId });
         }
     }

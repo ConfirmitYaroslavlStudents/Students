@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class SuperController : Controller
+    public class SuperController : Controller // DataController or something, but NOT SuperController
     {
-        protected readonly UnitOfWork _uow;
+        protected readonly UnitOfWork Uow;
 
         public SuperController(BillContext context)
         {
-            _uow = new UnitOfWork(context);
+            Uow = new UnitOfWork(context);
 
         }
 
-        public int GetUserId()
+        public int GetUserId() // Maybe move to extension method? This provides http context data...
         {
             return int.Parse(
                     HttpContext
@@ -34,15 +31,14 @@ namespace BillSplitter.Controllers
             return User.Identity.Name;
         }
 
-        public Bill GetBillById(int billId)
+        public Bill GetBillById(int billId) // ...and this provides db context data
         {
-            return _uow.Bills.GetBillById(billId); 
+            return Uow.Bills.GetBillById(billId); 
         }
 
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-       
     }
 }

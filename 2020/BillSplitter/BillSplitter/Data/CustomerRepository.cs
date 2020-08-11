@@ -12,7 +12,7 @@ namespace BillSplitter.Data
             _context = context;
         }
 
-        public void AddC(Customer customer)
+        public void Add(Customer customer)
         {
             _context.Customers.Add(customer);
         }
@@ -28,7 +28,6 @@ namespace BillSplitter.Data
             _context.Orders.RemoveRange(toDelete);
 
             _context.Customers.Remove(GetById(customerId));
-
         }
     }
 }

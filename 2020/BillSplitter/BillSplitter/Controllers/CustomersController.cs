@@ -20,7 +20,7 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Index(int billId)
         {
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
 
             ViewData["billId"] = billId;
             var customers = bill.Customers;
@@ -29,13 +29,13 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(int billId)
+        public IActionResult Post(int billId) // give more suitable name
         {
-            if (!_uow.Bills.Exist(billId))
+            if (!Uow.Bills.Exist(billId))
                 Error();
             
             var userId = this.GetUserId();
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
             
             if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
             {
@@ -46,8 +46,8 @@ namespace BillSplitter.Controllers
                     Name = this.GetUserName()
                 };
 
-                _uow.Customers.AddC(customer);
-                _uow.Save();
+                Uow.Customers.Add(customer);
+                Uow.Save();
             }
 
             return RedirectToAction("PickPositions", "Positions", new {billId});
@@ -58,11 +58,11 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
            
 
-            _uow.Customers.DeleteById(customerId);
-            _uow.Save();
+            Uow.Customers.DeleteById(customerId);
+            Uow.Save();
             return RedirectToAction(nameof(Index), new { billId = billId });
         }
     }

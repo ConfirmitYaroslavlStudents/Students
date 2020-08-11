@@ -19,7 +19,7 @@ namespace BillSplitterTests
                 Id = 1
             };
 
-            accessor.AddC(customer);
+            accessor.Add(customer);
 
             Assert.True(db.Customers.Contains(customer));
         }

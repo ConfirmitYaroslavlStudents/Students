@@ -18,9 +18,9 @@ namespace BillSplitter.Controllers
            
         }
 
-        private bool ValidatePosition(int billId, int positionId)
+        private bool ValidatePosition(int billId, int positionId) // Move to attribute
         {
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
 
             if (bill.Positions.Find(x => x.Id == positionId) == null)
                 return false;
@@ -28,14 +28,13 @@ namespace BillSplitter.Controllers
             return true;
         }
 
-        
         [HttpGet]
         [Route("Pick")]
         public IActionResult PickPositions(int billId)
         {
             ViewData["billId"] = billId;
 
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer != null)
@@ -51,8 +50,7 @@ namespace BillSplitter.Controllers
         {
             ViewData["billId"] = billId;
 
-
-            var positions = _uow.Bills.GetBillById(billId).Positions
+            var positions = Uow.Bills.GetBillById(billId).Positions
                 .OrderBy(p => p.Id)
                 .ToList();
 
@@ -63,9 +61,10 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Create(int billId, Position position)
         {
+            Uow.Positions.Add(position);
 
-             _uow.Positions.Add(position);
-            _uow.Save();
+            Uow.Save();
+
             return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
 
@@ -77,21 +76,25 @@ namespace BillSplitter.Controllers
             if (!ValidatePosition(billId, positionId))
                 return Error();
 
-             _uow.Positions.DeleteById(positionId);
-            _uow.Save();
+            Uow.Positions.DeleteById(positionId);
+
+            Uow.Save();
+
             return RedirectToAction(nameof(ManagePositions), new { billId, });
         }
 
         [HttpPost]
-        [Route("{positionId}/Update")] // How to implement RESTful?
+        [Route("{positionId}/Update")]
         [ValidateUser]
         public IActionResult Update(int billId, int positionId, Position position)
         {
             if (!ValidatePosition(billId, positionId))
                 return Error();
 
-             _uow.Positions.UpdateById(positionId, position);
-            _uow.Save();
+            Uow.Positions.UpdateById(positionId, position);
+
+            Uow.Save();
+
             return RedirectToAction(nameof(ManagePositions), new { billId });
         }
 
@@ -99,7 +102,7 @@ namespace BillSplitter.Controllers
         [Route("{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)
         {
-            Position position =  _uow.Positions.GetById(positionId);
+            Position position =  Uow.Positions.GetById(positionId);
             return new PartialViewResult
             {
                 ViewName = "SelectPositionsPartial",

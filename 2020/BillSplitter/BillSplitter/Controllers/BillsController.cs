@@ -20,16 +20,15 @@ namespace BillSplitter.Controllers
            
         }
 
-
         [HttpGet]
-        [Route("/")]
-        [Route("")]
+        [Route("/")] // ??
+        [Route("")] // ??
         public IActionResult Index()
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
             {
-                AdminBills =_uow.Users.GetById(this.GetUserId()).Bills,
-                CustomerBills = _uow.Bills.GetByCustomerUserId(this.GetUserId())
+                AdminBills = Uow.Users.GetById(this.GetUserId()).Bills,
+                CustomerBills = Uow.Bills.GetByCustomerUserId(this.GetUserId())
             };
 
             ViewData["userId"] = this.GetUserId();
@@ -47,10 +46,12 @@ namespace BillSplitter.Controllers
                 UserId = this.GetUserId(),
                 Bill = createdBill
             };
-            createdBill.Customers.Add(customer);//Так оставим или поменям, чтобы явно кастомер добавлялся? 
 
-            _uow.Bills.Add(createdBill);
-            _uow.Save();
+            Uow.Bills.Add(createdBill);
+            Uow.Customers.Add(customer);
+
+            Uow.Save();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -59,7 +60,7 @@ namespace BillSplitter.Controllers
         [Route("{billId}")]
         public IActionResult ViewBill(int billId)
         {
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer == null)
@@ -105,6 +106,7 @@ namespace BillSplitter.Controllers
                 HasManageAccess = bill.UserId == this.GetUserId(),
                 CustomerSum = customersBill.Sum(p => p.Price)
             };
+
             return model;
         }
 
@@ -112,7 +114,7 @@ namespace BillSplitter.Controllers
         [Route("{billId}/Join")]
         public IActionResult JoinBill(int billId)
         {
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
           
             return View(bill);
         }
@@ -122,13 +124,14 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Delete(int billId)
         {
-            var bill = _uow.Bills.GetBillById(billId);
+            var bill = Uow.Bills.GetBillById(billId);
 
             if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
-            _uow.Bills.DeleteById(billId);
-            _uow.Save();
+            Uow.Bills.DeleteById(billId);
+            Uow.Save();
+
             return RedirectToAction(nameof(Index));
         }
     }

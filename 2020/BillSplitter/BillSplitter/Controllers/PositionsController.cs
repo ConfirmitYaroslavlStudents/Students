@@ -6,6 +6,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using BillSplitter.Validators;
+using System.Collections.Generic;
+using BillSplitter.Models.ViewModels.PickPositions;
 
 namespace BillSplitter.Controllers
 {
@@ -38,10 +40,34 @@ namespace BillSplitter.Controllers
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer != null)
-                return View(bill.Positions.OrderBy(p => p.Id).ToList());
-
+            {
+                var positions = bill.Positions.OrderBy(p => p.Id).ToList();
+                var model = new List<PositionViewModel>();
+                foreach (var position in positions)
+                {
+                   
+                    model.Add(GetPositionViewModel(position));
+                }
+                return View(model);
+            }
             return RedirectToAction("JoinBill", "Bills", new { billId });
         }
+
+        private PositionViewModel GetPositionViewModel(Position position)
+        {
+            var order = position.Orders.Find(x => x.Customer.UserId == GetUserId());
+            return new PositionViewModel()
+            {
+                Name = position.Name,
+                Id = position.Id,
+                Selected = order != null,
+                UserQuantity = null,
+                PickedQuantity = position.Orders.Where(o => o.Quantity != null).Sum(o => o.Quantity * o.Position.Price).ToString() + "/" + position.Quantity,
+                Orders = position.Orders,
+                Price = position.Price
+            };
+        }
+
 
         [HttpGet]
         [Route("Manage")]
@@ -105,10 +131,10 @@ namespace BillSplitter.Controllers
             Position position =  Uow.Positions.GetById(positionId);
             return new PartialViewResult
             {
-                ViewName = "SelectPositionsPartial",
+                ViewName = "PickPositionsPartial",
                 ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                 {
-                    Model = position
+                    Model = GetPositionViewModel(position)
                 }
             };
         }

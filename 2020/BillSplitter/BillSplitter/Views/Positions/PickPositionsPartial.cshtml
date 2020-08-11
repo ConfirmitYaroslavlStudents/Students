@@ -1,10 +1,22 @@
-﻿@model Position
+﻿@model BillSplitter.Models.ViewModels.PickPositions.PositionViewModel
 
 <td>
-    <input type="checkbox" checked="@Model.Orders.Find(x=>x.Customer.Name == @Context.User.Identity.Name)" id="@Model.Id" onclick="positionChecked(@Model.Id)">
+    <input type="checkbox" checked="@Model.Selected" id="@Model.Id" onclick="positionChecked(@Model.Id)">
+</td>
+<td>
+    <input type="number" value="@Model.UserQuantity">
 </td>
 
-@await Html.PartialAsync("PositionInfoPartial", Model, ViewData)
+<td>
+    @Model.Name
+</td>
+<td>
+    @Model.Price
+</td>
+<td>
+    @Model.PickedQuantity
+</td>
+
 
 <td>
     @Model.Orders.Count

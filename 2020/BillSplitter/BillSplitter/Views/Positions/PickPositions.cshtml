@@ -1,31 +1,34 @@
-﻿@model List<Position>
+﻿@model List<BillSplitter.Models.ViewModels.PickPositions.PositionViewModel>
 
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            Select
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th colspan="2">
-            Already selected
-        </th>
-    </tr>
+        <tr>
+            <th>
+                Select
+            </th>
+            <th>
+                Quantity(Optional)
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Selected Quantity
+            </th>
+            <th colspan="2">
+                Already selected
+            </th>
+        </tr>
     </thead>
     <tbody>
 
     @foreach (var position in Model)
     {
         <tr id="partial_@position.Id">
-            @await Html.PartialAsync("SelectPositionsPartial",position)
+            @await Html.PartialAsync("PickPositionsPartial",position)
         </tr>
     }
     </tbody>
@@ -42,7 +45,7 @@
     setInterval(() => reloadAll(), 5000);
   
     function reloadAll() {
-        @foreach (Position position in Model)
+        @foreach (BillSplitter.Models.ViewModels.PickPositions.PositionViewModel position in Model)
         {
            @:reload(@position.Id);
         }

@@ -41,9 +41,9 @@
     @class = "btn btn-primary"
 })
 
-<script  type="text/javascript">
+<script type="text/javascript">
     setInterval(() => reloadAll(), 5000);
-  
+
     function reloadAll() {
         @foreach (BillSplitter.Models.ViewModels.PickPositions.PositionViewModel position in Model)
         {
@@ -52,24 +52,31 @@
     }
 
     function reload(id) {
-        $("#partial_" + id).load( id + "/Partial"); 
+        $("#partial_" + id).load( id + "/Partial");
     }
 
     function positionChecked(positionId) {
         var ch = $("#" + positionId).is(":checked");
+        var val = document.getElementById("quantity_" + positionId).value; 
+
+        var Order = { Quantity : parseInt(val)}
         if (ch) {
             $.ajax(positionId + "/Orders", {
-                type: 'POST',  
+                type: 'POST',
+                data: JSON.stringify(Order),//TODO прерeделац
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
                 success: function (data, status, xhr) {
                     reloadAll();
                 },
+
                 error: function (jqXhr, textStatus, errorMessage) {
                     reloadAll();
                 }
             });
         } else {
              $.ajax( positionId + "/Orders", {
-                 type: 'DELETE',  
+                 type: 'DELETE',
                  dataType: 'text',
                 success: function (data, status, xhr) {
                     reloadAll();
@@ -80,4 +87,17 @@
             });
         }
     }
+
+    function quantityEntered(positionId)
+    {
+        var val = document.getElementById("quantity_" + positionId).value; 
+
+        if (val == "" || val == "0")
+            document.getElementById(positionId).checked = false;
+        else
+            document.getElementById(positionId).checked = true;
+
+        positionChecked(positionId);
+    }
+
 </script>

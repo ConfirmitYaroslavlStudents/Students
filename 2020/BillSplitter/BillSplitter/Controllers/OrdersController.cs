@@ -16,15 +16,19 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrder(int billId, int positionId)
+        public IActionResult AddOrder(int billId, int positionId, [FromBody] Order order)
         {
+
             var customer = Uow.Bills.GetBillById(billId).Customers
                 .FirstOrDefault(c => c.UserId == this.GetUserId());
+           
+            Uow.Orders.DeleteByUserAndPosition(this.GetUserId(), positionId);
 
             Uow.Orders.AddOrder(new Order()
             {
                 CustomerId = customer.Id,
-                PositionId = positionId
+                PositionId = positionId,
+                Quantity = order.Quantity//немного костяльно, лучше по-другому сделать
             });
 
             Uow.Save();

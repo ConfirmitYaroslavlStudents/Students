@@ -114,7 +114,7 @@ namespace BillSplitter.Controllers
             var name = externalUser.Identity.Name;
 
             await HttpContext.SignOutAsync("Cookies");
-            \
+            
             User user = Uow.Users.GetByName(name);
 
             if (user != null)

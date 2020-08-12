@@ -68,12 +68,8 @@ namespace BillSplitter
                     options.UserInformationEndpoint = "https://api.vk.com/method/users.get.json";
 
                     options.Scope.Add("email");
-                    options.Scope.Add("user_id");
 
-
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "first_name");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "email");
 
                     options.SaveTokens = true;
 

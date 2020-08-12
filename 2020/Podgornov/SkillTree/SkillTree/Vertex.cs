@@ -4,38 +4,39 @@ using System.Linq;
 
 namespace SkillTree
 {
-    public class Vertex
+    public class Vertex<T>
     {
-        private event VertexDependence VertexDependence;
+        internal Dictionary<int, Vertex<T>> Vertexes;
 
-        private readonly List<Vertex> _dependencies;
+        public List<int> Dependencies { get; set; }
 
-        private bool _finish;
+        private bool _finished;
 
         private bool _available;
 
-        public Vertex(Skill skill, int id,bool available = true)
+        public Vertex(T value, int id, Dictionary<int, Vertex<T>> vertexes, bool available = true)
         {
-            Skill = skill;
+            Value = value;
             Id = id;
-            _dependencies = new List<Vertex>();
+            Vertexes = vertexes;
+            Dependencies = new List<int>();
             _available = available;
         }
 
         public int Id { get; set; }
 
-        public Skill Skill { get; set; }
+        public T Value { get; set; }
 
-        public bool Finish
+        public bool Finished
         {
-            get => _finish;
+            get => _finished;
             set
             {
-                if (_finish == value) return;
+                if (_finished == value) return;
                 if (value)
                 {
                     if (_available)
-                        _finish = true;
+                        _finished = true;
                     else
                         throw new ArgumentException("Vertex not available.");
                 }
@@ -51,94 +52,141 @@ namespace SkillTree
             {
                 if (_available == value) return;
                 var flag = FinishForAllDependencies();
-                if ((flag && !value) || (!flag && value))
+                if ((!flag || value) && (flag || !value))
+                {
+                    _available = value;
+                }
+                else
                 {
                     var argumentException = value
                         ? new ArgumentException("Vertex isn't available.")
                         : new ArgumentException("Vertex is available.");
                     throw argumentException;
                 }
-                else
+            }
+        }
+
+        public void Finish()
+        {
+            Finished = true;
+            foreach (var vertex in Vertexes.Values.Where(vertex => vertex.Dependencies.Contains(Id)))
+            {
+                if (vertex.FinishForAllDependencies())
                 {
-                    _available = value;
+                    vertex._available = true;
                 }
             }
         }
 
-        public void Recognize()
+        internal void AddDependence(Vertex<T> vertex)
         {
-            Finish = true;
-            VertexDependence?.Invoke(this, true);
-        }
-
-        internal void AddDependence(Vertex vertex)
-        {
-            if (_dependencies.Contains(vertex))
+            if (Dependencies.Contains(vertex.Id))
                 throw new GraphException("There was dependency.");
             if (vertex.Id == Id)
                 throw new GraphException("You can't add a dependency on yourself.");
-            if (!CycleWasFormed(vertex, this))
-            {
-                _dependencies.Add(vertex);
-                vertex.VertexDependence += RemoveDependence;
-                _available = false;
-            }
-            else
+            if (CycleWasFormed(vertex, this))
             {
                 throw new GraphException("Cycle was formed.");
             }
+            Dependencies.Add(vertex.Id);
+            _available = false;
         }
 
-        internal void RemoveDependence(Vertex vertex, bool flag = false)
+        internal void RemoveDependence(Vertex<T> vertex)
         {
-            if (!flag)
-            {
-                if (!_dependencies.Remove(vertex))
-                    throw new InvalidOperationException("There was no dependency.");
-                vertex.VertexDependence -= RemoveDependence;
-                if (_dependencies.Count == 0) _available = true;
-            }
-            else if (FinishForAllDependencies())
-            {
-                _available = true;
-            }
+            if (!Dependencies.Remove(vertex.Id))
+                throw new InvalidOperationException("There was no dependency.");
+            if (Dependencies.Count == 0) _available = true;
         }
 
         internal void DeletingAllLinks()
         {
-            foreach (var c in _dependencies) c.VertexDependence -= RemoveDependence;
-            VertexDependence?.Invoke(this);
+            foreach (var vertex in Vertexes.Values.Where(vertex => vertex.Dependencies.Contains(this.Id)))
+            {
+                vertex.Dependencies.Remove(Id);
+                if (vertex.FinishForAllDependencies())
+                {
+                    vertex._available = true;
+                }
+            }
         }
 
-        internal int[] GetVertexesDependenciesId() => _dependencies.Select((vertex) => vertex.Id).ToArray();
-
-        private bool CycleWasFormed(Vertex start, Vertex end)
+        private bool CycleWasFormed(Vertex<T> start, Vertex<T> end)
         {
-            var stack = new Stack<Vertex>();
+            var stack = new Stack<Vertex<T>>();
             stack.Push(start);
             while (stack.Count != 0)
             {
-                if (stack.Peek()._dependencies.Count == 0)
+                if (stack.Peek().Dependencies.Count == 0)
                 {
                     stack.Pop();
                     continue;
                 }
-                foreach (var ver in stack.Pop()._dependencies)
+                foreach (var id in stack.Pop().Dependencies)
                 {
-                    if (ver.Id == end.Id) return true;
-                    stack.Push(ver);
+                    if (id == end.Id) return true;
+                    stack.Push(Vertexes[id]);
                 }
             }
             return false;
         }
 
-        private bool FinishForAllDependencies() => _dependencies.TrueForAll(i => i.Finish);
-
-        public List<Vertex> GetDependencies() => _dependencies;
+        private bool FinishForAllDependencies() =>
+            (from id in Dependencies select Vertexes[id]).All(i => i.Finished);
 
         public override string ToString()
         {
-            return $"Skill{Id}";
+            return $"Element {Id}";
+        }
+
+        public IEnumerable<Vertex<T>> GetVertexes()
+        {
+            return GetAllDependencies();
+        }
+
+        private IEnumerable<Vertex<T>> GetAllDependencies()
+        {
+            var dictionary = new Dictionary<int, Vertex<T>>();
+            var stack = new Stack<Duplex<T>>();
+            stack.Push(new Duplex<T>(this));
+            while (stack.Count != 0) 
+            {
+                if (stack.Peek().IsMatch)
+                {
+                    var currentVertex = stack.Pop().Vertex;
+                    if(dictionary.ContainsKey(currentVertex.Id))
+                        continue;
+                    dictionary.Add(currentVertex.Id, currentVertex);
+                }
+                else if (dictionary.ContainsKey(stack.Peek().Vertex.Id))
+                {
+                    stack.Pop();
+                }
+                else
+                {
+                    stack.Peek().IsMatch = true;
+                    foreach (var vertex in stack.Peek().Vertex.Dependencies.Select(id => Vertexes[id]))
+                    {
+                        stack.Push(new Duplex<T>(vertex));
+                    }
+                }
+            }
+
+            dictionary.Remove(this.Id);
+            return dictionary.Values;
+        }
+    }
+
+    internal class Duplex<T>
+    {
+        public bool IsMatch { get; set; }
+
+        public Vertex<T> Vertex { get; set; }
+
+        public Duplex(Vertex<T> vertex)
+        {
+            Vertex = vertex;
+            IsMatch = false;
         }
     }
 }

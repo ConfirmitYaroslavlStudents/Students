@@ -11,6 +11,6 @@ namespace SkillTreeBoard
         public const string ContinueString = "Press any key to continue.";
 
         public const string DescriptionOfColors =
-            "**********\nwhite - finish skill\nred - not available skill\ngreen - available\n**********";
+            "**********\nwhite - finished\nred - not available\ngreen - available\n**********";
     }
 }

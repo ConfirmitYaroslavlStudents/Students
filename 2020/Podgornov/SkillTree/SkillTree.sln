@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTree", "SkillTree\Skil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTreeBoard", "SkillTreeBoard\SkillTreeBoard.csproj", "{35A90A1E-5B18-40A1-A170-B5F15ACED66A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTreeManager", "SkillTreeManager\SkillTreeManager.csproj", "{DC7B3050-A5B6-46A8-A101-3B3E8F8D6679}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillApplication", "SkillApplication\SkillApplication.csproj", "{51A251E5-A68A-4167-8CF7-814F04D51773}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTreeUnitTests", "SkillTreeUnitTests\SkillTreeUnitTests.csproj", "{A9BAFE7A-1DEC-4FB1-AC14-F6FC1682C39B}"
@@ -27,10 +25,6 @@ Global
 		{35A90A1E-5B18-40A1-A170-B5F15ACED66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35A90A1E-5B18-40A1-A170-B5F15ACED66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35A90A1E-5B18-40A1-A170-B5F15ACED66A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC7B3050-A5B6-46A8-A101-3B3E8F8D6679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC7B3050-A5B6-46A8-A101-3B3E8F8D6679}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC7B3050-A5B6-46A8-A101-3B3E8F8D6679}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC7B3050-A5B6-46A8-A101-3B3E8F8D6679}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51A251E5-A68A-4167-8CF7-814F04D51773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51A251E5-A68A-4167-8CF7-814F04D51773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51A251E5-A68A-4167-8CF7-814F04D51773}.Release|Any CPU.ActiveCfg = Release|Any CPU

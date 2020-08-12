@@ -3,20 +3,20 @@ using SkillTree;
 
 namespace SkillTreeBoard
 {
-    public interface ISkillTreeManager
+    public interface ISkillTreeManager:IEnumerable<Discipline>
     {
         bool IsUserDisciplinesOnFocus { get; set; }
 
-        void DownloadGraph(string name);
+        Graph<Discipline> DisciplinesGraph { get; }
 
-        Graph LoadGraph(string name);
+        void SaveCondition();
 
-        void SaveGraph(string name, Graph graph);
+        void DownloadGraph(Discipline discipline);
 
-        IEnumerable<string> GetNamesOfAllGraphs();
+        Graph<T> LoadGraph<T>(string name);
+
+        void SaveGraph<T>(string name, Graph<T> graph);
 
         void DeleteGraph(string name);
-
-        bool Contains(string name);
     }
 }

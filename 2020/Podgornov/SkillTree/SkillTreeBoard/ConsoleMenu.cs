@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace SkillTreeBoard
 {
-    public delegate TU MenuIndexator<in T, out TU>(T collection, int index); 
-
     internal class ConsoleMenu<T,TU> where T:IEnumerable<TU>
     {
         private readonly Func<TU, ConsoleColor> _paintInTheAppropriateColor;
@@ -15,8 +13,7 @@ namespace SkillTreeBoard
         private readonly T _collection;
 
         private readonly Action<TU>[] _actions;
-
-        private MenuIndexator<T,TU> _indexator;
+        private readonly bool _total;
 
         protected string Head { get; set; } =
             "****************" +
@@ -42,22 +39,22 @@ namespace SkillTreeBoard
             {
                 if (Count == 0) return; 
                 Console.SetCursorPosition(0, IndexPosition);
-                SimplePrint(_indexator(_collection, _index));
+                SimplePrint((_collection.ElementAt(_index)));
                 _index = value < 0 ? Count + value : value % Count;
                 Console.SetCursorPosition(0, IndexPosition);
-                PrintStringOnFocus(_indexator(_collection, _index).ToString());
+                PrintStringOnFocus((_collection.ElementAt(_index).ToString()));
             } 
         }
 
-        public ConsoleMenu(T collection, MenuIndexator<T,TU> indexator, Action<TU>[] actions)
+        public ConsoleMenu(T collection, Action<TU>[] actions,bool total = false)
         {
             _collection = collection;
             _actions = actions;
-            this._indexator = indexator;
+            _total = total;
         }
 
-        public ConsoleMenu(T collection, MenuIndexator<T,TU> indexator, Action<TU>[] actions,
-            Func<TU,ConsoleColor> paintInTheAppropriateColor , string colorDescription):this(collection, indexator, actions)
+        public ConsoleMenu(T collection, Action<TU>[] actions,
+            Func<TU,ConsoleColor> paintInTheAppropriateColor , string colorDescription , bool total = false):this(collection, actions, total)
         {
             _paintInTheAppropriateColor = paintInTheAppropriateColor;
             _colorDescription = colorDescription;
@@ -80,7 +77,7 @@ namespace SkillTreeBoard
                         break;
                     case ConsoleKey.Enter:
                         if (_actions != null && _actions.Length != 0)
-                            _actions[SelectedItemsIndex].Invoke(_indexator(_collection, SelectedItemsIndex));
+                            _actions[SelectedItemsIndex].Invoke(_collection.ElementAt(SelectedItemsIndex));
                         InitializeMenu();
                         break;
                     case ConsoleKey.Q:
@@ -107,12 +104,12 @@ namespace SkillTreeBoard
             {
                 if (i == _index)
                 {
-                    PrintStringOnFocus(_indexator(_collection, i).ToString());
+                    PrintStringOnFocus(_collection.ElementAt(i).ToString());
                     Console.WriteLine();
                 }
                 else
                 {
-                    SimplePrint(_indexator(_collection, i));
+                    SimplePrint(_collection.ElementAt(i));
                     Console.WriteLine();
                 }
             }
@@ -126,6 +123,9 @@ namespace SkillTreeBoard
             {
                 Console.WriteLine(_colorDescription);
             }
+
+            if (_total)
+                Console.WriteLine($"total : {_collection.Count()}");
             _topPosition = Console.CursorTop;
             Console.CursorVisible = false;
         }

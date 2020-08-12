@@ -4,8 +4,8 @@
     {
         static void Main()
         {
-            var manager = new SkillTreeManager.SkillTreeManager();
-            SkillTreeBoard.Program.CreateAndRunMenu(manager);
+            var manager = new SkillTreeManager();
+            SkillTreeBoard.Program.RunMenu(manager);
         }
     }
 }

@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillTreeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -55,9 +57,9 @@
       <Project>{35a90a1e-5b18-40a1-a170-b5f15aced66a}</Project>
       <Name>SkillTreeBoard</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SkillTreeManager\SkillTreeManager.csproj">
-      <Project>{dc7b3050-a5b6-46a8-a101-3b3e8f8d6679}</Project>
-      <Name>SkillTreeManager</Name>
+    <ProjectReference Include="..\SkillTree\SkillTree.csproj">
+      <Project>{8f0b7e09-19ff-47a9-b939-ca5416b781a0}</Project>
+      <Name>SkillTree</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

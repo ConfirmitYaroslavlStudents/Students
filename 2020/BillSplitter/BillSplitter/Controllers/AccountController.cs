@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
@@ -111,7 +112,7 @@ namespace BillSplitter.Controllers
             if (externalUser == null)
                 throw new Exception("External authentication error");
 
-            var name = externalUser.Identity.Name;
+            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
 
             await HttpContext.SignOutAsync("Cookies");
             

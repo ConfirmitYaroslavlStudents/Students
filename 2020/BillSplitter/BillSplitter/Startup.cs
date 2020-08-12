@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
+using BillSplitter.Oauth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -44,7 +45,7 @@ namespace BillSplitter
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.LoginPath = new PathString("/Account/Login");
                 })
                 .AddGoogle(options =>
                 {
@@ -52,37 +53,15 @@ namespace BillSplitter
                     options.ClientSecret = Configuration["App:GoogleClientSecret"];
                 })
                 .AddFacebook(options =>
-                { 
+                {
                     options.AppId = Configuration["App:FBClientId"];
                     options.AppSecret = Configuration["App:FBClientSecret"];
                 })
-                .AddOAuth("VK", options =>
-                {
-                    options.ClientId = Configuration["App:VKClientId"];
-                    options.ClientSecret = Configuration["App:VKClientSecret"];
-
-                    options.ClaimsIssuer = "Vkontakte";
-                    options.CallbackPath = new PathString("/signin-vkontakte");
-                    options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
-                    options.TokenEndpoint = "https://oauth.vk.com/access_token";
-                    options.UserInformationEndpoint = "https://api.vk.com/method/users.get.json";
-
-                    options.Scope.Add("email");
-
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "email");
-
-                    options.SaveTokens = true;
-
-                    options.Events = new OAuthEvents
-                    {
-                        OnCreatingTicket = context =>
-                        {
-                            context.RunClaimActions(context.TokenResponse.Response.RootElement);
-
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
+                .AddOAuth<VKOAuthOptions, VKOAuthHandler>("VK", "Vkontakte", options =>
+                 {
+                     options.ClientId = Configuration["App:VKClientId"];
+                     options.ClientSecret = Configuration["App:VKClientSecret"];
+                 });
 
         }
 

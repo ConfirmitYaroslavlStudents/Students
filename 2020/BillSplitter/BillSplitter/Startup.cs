@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,19 +51,32 @@ namespace BillSplitter
                     options.ClientId = Configuration["App:GoogleClientId"];
                     options.ClientSecret = Configuration["App:GoogleClientSecret"];
                 })
-                .AddOAuth("VK", options => 
+                .AddFacebook(options =>
+                { 
+                    options.AppId = Configuration["App:FBClientId"];
+                    options.AppSecret = Configuration["App:FBClientSecret"];
+                })
+                .AddOAuth("VK", options =>
                 {
                     options.ClientId = Configuration["App:VKClientId"];
                     options.ClientSecret = Configuration["App:VKClientSecret"];
+
                     options.ClaimsIssuer = "Vkontakte";
                     options.CallbackPath = new PathString("/signin-vkontakte");
                     options.AuthorizationEndpoint = "https://oauth.vk.com/authorize";
                     options.TokenEndpoint = "https://oauth.vk.com/access_token";
-                    options.SaveTokens = true;
+                    options.UserInformationEndpoint = "https://api.vk.com/method/users.get.json";
 
                     options.Scope.Add("email");
+                    options.Scope.Add("user_id");
 
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "email");
+
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "first_name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+
+                    options.SaveTokens = true;
+
                     options.Events = new OAuthEvents
                     {
                         OnCreatingTicket = context =>
@@ -73,9 +84,9 @@ namespace BillSplitter
                             context.RunClaimActions(context.TokenResponse.Response.RootElement);
 
                             return Task.CompletedTask;
-                        }                    
+                        }
                     };
-                }); 
+                });
 
         }
 
@@ -97,8 +108,8 @@ namespace BillSplitter
 
             app.UseRouting();
 
-            app.UseAuthentication();   
-            app.UseAuthorization();     
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseSession();
 

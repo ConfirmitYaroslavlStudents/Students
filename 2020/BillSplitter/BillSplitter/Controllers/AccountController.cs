@@ -89,6 +89,7 @@ namespace BillSplitter.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
+        [HttpPost]
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             var callbackUrl = Url.Action("ExternalLoginCallback", new { scheme = provider, returnUrl });
@@ -100,7 +101,6 @@ namespace BillSplitter.Controllers
 
             return new ChallengeResult(provider, props);
         }
-
         public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
         {
             var result = await HttpContext.AuthenticateAsync(scheme);
@@ -114,7 +114,7 @@ namespace BillSplitter.Controllers
             var name = externalUser.Identity.Name;
 
             await HttpContext.SignOutAsync("Cookies");
-
+            \
             User user = Uow.Users.GetByName(name);
 
             if (user != null)

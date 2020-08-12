@@ -1,29 +1,47 @@
 ﻿@model BillSplitter.Models.LoginModel
 
+<table>
 
-<a asp-action="Register" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl>Register</a>
-
-<p>OR use external login</p>
-
-<a asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Google">Google</a>
-<a asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="VK">Вконтактике</a>
+    <tr>
+        <a asp-action="Register" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl>Register</a>
 
 
-@using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
-{
-    <form asp-action="Login" asp-controller="Account">
-        <div class="validation" asp-validation-summary="ModelOnly" />
-        <div>
-            <div class="form-group">
-                <label asp-for="Name">Enter Name</label>
-                <input type="text" asp-for="Name" />
-                <span asp-validation-for="Name"> </span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="LogIn" class="btn btn-outline-dark" />
-            </div>
-        </div>
-    </form>
+        @using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
+        {
+            <form asp-action="Login" asp-controller="Account">
+                <div class="validation" asp-validation-summary="ModelOnly" />
+                <div>
+                    <div class="form-group">
+                        <label asp-for="Name">Enter Name</label>
+                        <input type="text" asp-for="Name" />
+                        <span asp-validation-for="Name"> </span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="LogIn" class="btn btn-outline-dark" />
+                    </div>
+                </div>
+            </form>
 
-}
+        }
+    </tr>
+    <tr>
+        <p class="h-100">or use other providers</p>
+
+        <td>
+            <form asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Google">
+                <input type="submit" class="btn btn-outline-dark" value="Google"></input>
+            </form>
+        </td>
+        <td>
+            <form asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Facebook">
+                <input type="submit" class="btn btn-outline-primary" value="Facebook"></input>
+            </form>
+        </td>
+        <td>
+            <form asp-action="ExternalLogin" asp-controller="Account" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="VK">
+                <input type="submit" class="btn btn-outline-dark" value="Вконтакте"></input>
+            </form>
+        </td>
+    </tr>
+</table>
 

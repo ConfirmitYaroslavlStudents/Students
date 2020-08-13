@@ -27,7 +27,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <h1>Managed Bills</h1>
 <table class="table">
     <thead>
@@ -43,12 +43,13 @@
             <td>@bill.Name</td>
             <td>
                 @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
-                <button type="button" class="open-dialog btn btn-primary" data-toggle="modal" data-target="#deleteConfirmationDialog"
-                        data-url="@Url.Action("Delete", new {billId = bill.Id})">
+                <button type="button" id="deleteButton" class="btn btn-primary" onclick="showDeleteConfirmationDialog(@bill.Id)">
                     Delete bill
                 </button>
-                <button onclick="copyJoinLink(@bill.Id)" class="btn btn-primary">Copy Join Link</button>
-                <input type="text" class="invisible" value="@ViewData["absoluteLink"]@Url.Action("JoinBill", "Bills", new {  billId = bill.Id })" id="JoinLink_@bill.Id">
+                <button class="copy-btn btn btn-primary" 
+                        data-clipboard-text="@Url.Action("JoinBill", "Bills", new {billId = bill.Id},Context.Request.Scheme)">
+                    Copy link to bill
+                </button>
             </td>
         </tr>
     }
@@ -66,20 +67,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                <form id="deleteConfirmation" action="#" method="post">
-                    <input type="submit" class="btn btn-primary" value="Yes" />
-                </form>
+                <button id="deleteSubmissionButton" type="button" class="btn btn-primary">Yes</button>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    $(document).on("click", ".open-dialog", function() {
-        var url = $(this).data('url');
-        $("#deleteConfirmation").attr('action', url);
-    })
-</script>
 
 <h1>Bills you are joined in</h1>
 <table class="table">
@@ -101,3 +93,22 @@
         }
     </tbody>
 </table>
+
+
+<script>
+    function showDeleteConfirmationDialog(billId) {
+        $(document).ready(() => {
+            $('#deleteSubmissionButton').on('click', (e) => {
+                $.post(`Bills/${billId}`);
+                $('#deleteConfirmationDialog').modal('toggle');
+                window.location.reload();
+            });
+
+            $('#deleteConfirmationDialog').modal('toggle');
+        });
+    }
+</script>
+<script>
+    var btns = document.querySelectorAll('.copy-btn');
+    var clipboard = new ClipboardJS(btns);
+</script>

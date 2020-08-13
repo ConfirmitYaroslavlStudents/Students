@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
@@ -54,7 +55,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user =Uow.Users.GetByName(model.Name);
+            User user = Uow.Users.GetByName(model.Name);
 
             if (user != null)
                 ModelState.AddModelError("Name", "UserName is already used");
@@ -89,6 +90,7 @@ namespace BillSplitter.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
+        [HttpPost]
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             var callbackUrl = Url.Action("ExternalLoginCallback", new { scheme = provider, returnUrl });
@@ -100,10 +102,9 @@ namespace BillSplitter.Controllers
 
             return new ChallengeResult(provider, props);
         }
-
         public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
         {
-            var result = await HttpContext.AuthenticateAsync("Google");
+            var result = await HttpContext.AuthenticateAsync(scheme);
             if (result?.Succeeded != true)
                 throw new Exception("External authentication error");
 
@@ -111,16 +112,16 @@ namespace BillSplitter.Controllers
             if (externalUser == null)
                 throw new Exception("External authentication error");
 
-            var name = externalUser.Identity.Name;
+            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
 
             await HttpContext.SignOutAsync("Cookies");
-
-            User user =Uow.Users.GetByName(name);
+            
+            User user = Uow.Users.GetByName(name);
 
             if (user != null)
-                return await Login(new LoginModel { Name = name }, null);
+                return await Login(new LoginModel { Name = name }, returnUrl);
 
-            return await Register(new RegisterModel { Name = name }, null);
+            return await Register(new RegisterModel { Name = name }, returnUrl);
         }
 
         [HttpGet]

@@ -1,10 +1,14 @@
 ﻿using System;
-using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using BillSplitter.Data;
+using BillSplitter.Oauth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,13 +45,23 @@ namespace BillSplitter
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                    options.LoginPath = new PathString("/Account/Login");
                 })
                 .AddGoogle(options =>
                 {
                     options.ClientId = Configuration["App:GoogleClientId"];
                     options.ClientSecret = Configuration["App:GoogleClientSecret"];
-                }); 
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = Configuration["App:FBClientId"];
+                    options.AppSecret = Configuration["App:FBClientSecret"];
+                })
+                .AddOAuth<VKOAuthOptions, VKOAuthHandler>("VK", "Vkontakte", options =>
+                 {
+                     options.ClientId = Configuration["App:VKClientId"];
+                     options.ClientSecret = Configuration["App:VKClientSecret"];
+                 });
 
         }
 
@@ -69,8 +83,8 @@ namespace BillSplitter
 
             app.UseRouting();
 
-            app.UseAuthentication();   
-            app.UseAuthorization();     
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseSession();
 

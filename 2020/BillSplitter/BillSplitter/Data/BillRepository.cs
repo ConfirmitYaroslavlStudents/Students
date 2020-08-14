@@ -1,42 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BillSplitter.Data
 {
-    public class BillRepository
+    public class BillRepository 
     {
-        private BillContext _context;
+        private DbContext _context;
 
-        public BillRepository(BillContext context)
+        public BillRepository(DbContext context)
         {
             _context = context;
         }
 
         public void Add(Bill bill)
         {
-            _context.Bills.Add(bill);
+            _context.Set<Bill>().Add(bill);
         }
 
         public List<Bill> GetByCustomerUserId(int userId)
         {
-            return _context.Customers.Where(c => c.UserId == userId).Select(c => c.Bill).Where(b => b.UserId != userId).ToList();
+            return _context.Set<Customer>().Where(c => c.UserId == userId).Select(c => c.Bill).Where(b => b.UserId != userId).ToList();
         }
         public Bill GetBillById(int billId)
         {
-            var bill = _context.Bills.FirstOrDefault(x => x.Id == billId);
+            var bill = _context.Set<Bill>().FirstOrDefault(x => x.Id == billId);
 
             return bill;
         }
     
         public bool Exist(int billId)
         {
-            return _context.Bills.FirstOrDefault(x => x.Id == billId) != null;
+            return _context.Set<Bill>().FirstOrDefault(x => x.Id == billId) != null;
         }
 
         public void DeleteById(int billId)
         {
-            _context.Bills.Remove(GetBillById(billId));
+            _context.Set<Bill>().Remove(GetBillById(billId));
         }
     }
 }

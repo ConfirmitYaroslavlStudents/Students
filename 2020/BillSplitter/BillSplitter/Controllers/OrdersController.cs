@@ -16,7 +16,7 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrder(int billId, int positionId, [FromBody] Order order)
+        public IActionResult AddOrder(int billId, int positionId, decimal quantity)
         {
 
             var customer = Db.Bills.GetBillById(billId).Customers
@@ -28,7 +28,7 @@ namespace BillSplitter.Controllers
             {
                 CustomerId = customer.Id,
                 PositionId = positionId,
-                Quantity = order.Quantity//немного костяльно, лучше по-другому сделать
+                Quantity = quantity
             });
 
             Db.Save();

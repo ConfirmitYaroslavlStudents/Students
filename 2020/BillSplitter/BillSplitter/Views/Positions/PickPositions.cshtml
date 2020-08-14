@@ -47,7 +47,7 @@
     function reloadAll() {
         @foreach (BillSplitter.Models.ViewModels.PickPositions.PositionViewModel position in Model)
         {
-           @:reload(@position.Id);
+          @:reload(@position.Id);
         }
     }
 
@@ -63,13 +63,12 @@
         var ch = $("#" + positionId).is(":checked");
         var val = document.getElementById("quantity_" + positionId).value; 
 
-        var Order = { Quantity: parseFloat(val)}
+        var quantity = parseFloat(val);
+
         if (ch) {
             $.ajax(positionId + "/Orders", {
                 type: 'POST',
-                data: JSON.stringify(Order),//TODO прерeделац
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
+                data: { quantity: quantity },
                 success: function (data, status, xhr) {
                     reloadAll();
                 },

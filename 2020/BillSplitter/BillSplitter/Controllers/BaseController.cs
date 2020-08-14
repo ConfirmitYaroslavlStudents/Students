@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,8 @@ namespace BillSplitter.Controllers
 
         public BaseController(UnitOfWork db)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en");
+
             Db = db;
         }
 

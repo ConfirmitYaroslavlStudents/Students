@@ -64,7 +64,8 @@
         var val = document.getElementById("quantity_" + positionId).value; 
 
         var quantity = parseFloat(val);
-
+        if (quantity <= 0)
+            quantity = null;
         if (ch) {
             $.ajax(positionId + "/Orders", {
                 type: 'POST',

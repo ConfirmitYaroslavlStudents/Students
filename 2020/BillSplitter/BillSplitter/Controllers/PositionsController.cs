@@ -13,16 +13,16 @@ namespace BillSplitter.Controllers
 {
     [Authorize]
     [Route("Bills/{billId}/Positions")]
-    public class PositionsController : SuperController
+    public class PositionsController : BaseController
     {
-        public PositionsController(BillContext context) : base(context)
+        public PositionsController(UnitOfWork db) : base(db)
         {
            
         }
 
         private bool ValidatePosition(int billId, int positionId) // Move to attribute
         {
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
 
             if (bill.Positions.Find(x => x.Id == positionId) == null)
                 return false;
@@ -36,18 +36,17 @@ namespace BillSplitter.Controllers
         {
             ViewData["billId"] = billId;
 
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer != null)
             {
                 var positions = bill.Positions.OrderBy(p => p.Id).ToList();
                 var model = new List<PositionViewModel>();
+
                 foreach (var position in positions)
-                {
-                   
                     model.Add(GetPositionViewModel(position));
-                }
+
                 return View(model);
             }
             return RedirectToAction("JoinBill", "Bills", new { billId });
@@ -56,16 +55,7 @@ namespace BillSplitter.Controllers
         private PositionViewModel GetPositionViewModel(Position position)
         {
             var order = position.Orders.Find(x => x.Customer.UserId == GetUserId());
-            return new PositionViewModel()
-            {
-                Name = position.Name,
-                Id = position.Id,
-                Selected = order != null,
-                UserQuantity =  order!=null ? order.Quantity : null,
-                PickedQuantity = position.Orders.Where(o => o.Quantity != null).Sum(o => o.Quantity).ToString() + "/" + position.Quantity,
-                Orders = position.Orders,
-                Price = position.Price
-            };
+            return new PositionViewModel(position, order);
         }
 
 
@@ -76,7 +66,7 @@ namespace BillSplitter.Controllers
         {
             ViewData["billId"] = billId;
 
-            var positions = Uow.Bills.GetBillById(billId).Positions
+            var positions = Db.Bills.GetBillById(billId).Positions
                 .OrderBy(p => p.Id)
                 .ToList();
 
@@ -87,9 +77,9 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Create(int billId, Position position)
         {
-            Uow.Positions.Add(position);
+            Db.Positions.Add(position);
 
-            Uow.Save();
+            Db.Save();
 
             return RedirectToAction(nameof(ManagePositions), new { billId }); 
         }
@@ -102,9 +92,9 @@ namespace BillSplitter.Controllers
             if (!ValidatePosition(billId, positionId))
                 return Error();
 
-            Uow.Positions.DeleteById(positionId);
+            Db.Positions.DeleteById(positionId);
 
-            Uow.Save();
+            Db.Save();
 
             return RedirectToAction(nameof(ManagePositions), new { billId, });
         }
@@ -117,9 +107,9 @@ namespace BillSplitter.Controllers
             if (!ValidatePosition(billId, positionId))
                 return Error();
 
-            Uow.Positions.UpdateById(positionId, position);
+            Db.Positions.UpdateById(positionId, position);
 
-            Uow.Save();
+            Db.Save();
 
             return RedirectToAction(nameof(ManagePositions), new { billId });
         }
@@ -128,7 +118,7 @@ namespace BillSplitter.Controllers
         [Route("{positionId}/Partial")] 
         public PartialViewResult GetPositionPartial(int billId, int positionId)
         {
-            Position position =  Uow.Positions.GetById(positionId);
+            Position position =  Db.Positions.GetById(positionId);
             return new PartialViewResult
             {
                 ViewName = "PickPositionsPartial",

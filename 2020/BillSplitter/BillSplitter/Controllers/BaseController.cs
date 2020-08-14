@@ -6,17 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class SuperController : Controller // DataController or something, but NOT SuperController
+    public class BaseController : Controller
     {
-        protected readonly UnitOfWork Uow;
+        protected readonly UnitOfWork Db;
 
-        public SuperController(BillContext context)
+        public BaseController(UnitOfWork db)
         {
-            Uow = new UnitOfWork(context);
-
+            Db = db;
         }
 
-        public int GetUserId() // Maybe move to extension method? This provides http context data...
+        public int GetUserId() // Maybe move to extension method? This provides http db data...
         {
             return int.Parse(
                     HttpContext
@@ -31,9 +30,9 @@ namespace BillSplitter.Controllers
             return User.Identity.Name;
         }
 
-        public Bill GetBillById(int billId) // ...and this provides db context data
+        public Bill GetBillById(int billId) // ...and this provides db db data
         {
-            return Uow.Bills.GetBillById(billId); 
+            return Db.Bills.GetBillById(billId); 
         }
 
         public IActionResult Error()

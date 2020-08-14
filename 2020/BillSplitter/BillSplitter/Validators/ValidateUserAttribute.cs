@@ -14,7 +14,7 @@ namespace BillSplitter.Validators
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var contr = filterContext.Controller as SuperController;
+            var contr = filterContext.Controller as BaseController;
 
             var bill = contr.GetBillById((int)filterContext.ActionArguments["billId"]);
 

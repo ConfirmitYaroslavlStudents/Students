@@ -42,6 +42,8 @@ namespace BillSplitter
                     .UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
+            services.AddScoped(provider => new UnitOfWork(provider.GetService<BillContext>()));
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

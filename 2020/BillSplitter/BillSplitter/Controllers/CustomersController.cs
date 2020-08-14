@@ -9,9 +9,9 @@ namespace BillSplitter.Controllers
 {
     [Authorize]
     [Route("Bills/{billId}/Customers")]
-    public class CustomersController : SuperController
+    public class CustomersController : BaseController
     {
-        public CustomersController(BillContext context) : base(context)
+        public CustomersController(UnitOfWork db) : base(db)
         {
 
         }
@@ -20,7 +20,7 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Index(int billId)
         {
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
 
             ViewData["billId"] = billId;
             var customers = bill.Customers;
@@ -31,11 +31,11 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult Post(int billId) // give more suitable name
         {
-            if (!Uow.Bills.Exist(billId))
+            if (!Db.Bills.Exist(billId))
                 Error();
             
             var userId = this.GetUserId();
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
             
             if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
             {
@@ -46,8 +46,8 @@ namespace BillSplitter.Controllers
                     Name = this.GetUserName()
                 };
 
-                Uow.Customers.Add(customer);
-                Uow.Save();
+                Db.Customers.Add(customer);
+                Db.Save();
             }
 
             return RedirectToAction("PickPositions", "Positions", new {billId});
@@ -58,11 +58,8 @@ namespace BillSplitter.Controllers
         [ValidateUser]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
-            var bill = Uow.Bills.GetBillById(billId);
-           
-
-            Uow.Customers.DeleteById(customerId);
-            Uow.Save();
+            Db.Customers.DeleteById(customerId);
+            Db.Save();
             return RedirectToAction(nameof(Index), new { billId = billId });
         }
     }

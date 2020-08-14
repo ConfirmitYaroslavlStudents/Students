@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
 {
-    public class AccountController : SuperController
+    public class AccountController : BaseController
     {
 
-        public AccountController(BillContext context): base(context)
+        public AccountController(UnitOfWork db): base(db)
         {
         }
 
@@ -29,7 +29,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user =Uow.Users.GetByName(model.Name);
+            User user =Db.Users.GetByName(model.Name);
             if (user == null)
                 ModelState.AddModelError("Name", "No Such User");
             else
@@ -55,16 +55,16 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user = Uow.Users.GetByName(model.Name);
+            User user = Db.Users.GetByName(model.Name);
 
             if (user != null)
                 ModelState.AddModelError("Name", "UserName is already used");
             else
             {
                 User newUser = new User {Name = model.Name};
-                Uow.Users.Add(newUser);
+                Db.Users.Add(newUser);
              
-                Uow.Save();
+                Db.Save();
                 await Authenticate(newUser);
                 if (returnUrl != null)
                     return Redirect(returnUrl);
@@ -116,7 +116,7 @@ namespace BillSplitter.Controllers
 
             await HttpContext.SignOutAsync("Cookies");
             
-            User user = Uow.Users.GetByName(name);
+            User user = Db.Users.GetByName(name);
 
             if (user != null)
                 return await Login(new LoginModel { Name = name }, returnUrl);

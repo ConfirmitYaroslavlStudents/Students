@@ -22,7 +22,6 @@ namespace BillSplitter.Controllers
 
         [HttpGet]
         [Route("~/")]
-        [Route("")]
         public IActionResult Index()
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
@@ -54,7 +53,6 @@ namespace BillSplitter.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
 
         [HttpGet]
         [Route("{billId}")]

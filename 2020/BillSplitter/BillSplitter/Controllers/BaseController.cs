@@ -34,11 +34,6 @@ namespace BillSplitter.Controllers
             return User.Identity.Name;
         }
 
-        public Bill GetBillById(int billId) // ...and this provides db db data
-        {
-            return Db.Bills.GetBillById(billId); 
-        }
-
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

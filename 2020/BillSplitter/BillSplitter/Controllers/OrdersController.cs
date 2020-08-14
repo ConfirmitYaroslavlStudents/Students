@@ -18,7 +18,6 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult AddOrder(int billId, int positionId, decimal? quantity)
         {
-
             var customer = Db.Bills.GetBillById(billId).Customers
                 .FirstOrDefault(c => c.UserId == this.GetUserId());
            

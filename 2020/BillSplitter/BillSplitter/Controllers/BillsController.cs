@@ -21,8 +21,8 @@ namespace BillSplitter.Controllers
         }
 
         [HttpGet]
-        [Route("/")] // ??
-        [Route("")] // ??
+        [Route("~/")]
+        [Route("")]
         public IActionResult Index()
         {
             BillIndexViewModel viewModel = new BillIndexViewModel

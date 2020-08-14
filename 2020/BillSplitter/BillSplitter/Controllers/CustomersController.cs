@@ -17,7 +17,7 @@ namespace BillSplitter.Controllers
         }
         
         [HttpGet]
-        [ValidateUser]
+        [ServiceFilter(typeof(ValidateUserAttribute))]
         public IActionResult Index(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);
@@ -55,7 +55,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{customerId}")]
-        [ValidateUser]
+        [ServiceFilter(typeof(ValidateUserAttribute))]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
             Db.Customers.DeleteById(customerId);

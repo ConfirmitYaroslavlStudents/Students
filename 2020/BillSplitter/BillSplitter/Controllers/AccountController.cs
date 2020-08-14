@@ -110,7 +110,6 @@ namespace BillSplitter.Controllers
             return new ChallengeResult(provider, props);
         }
 
-
         [Route("ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
         {

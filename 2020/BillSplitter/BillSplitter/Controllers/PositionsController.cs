@@ -58,7 +58,6 @@ namespace BillSplitter.Controllers
             return new PositionViewModel(position, order);
         }
 
-
         [HttpGet]
         [Route("Manage")]
         [ServiceFilter(typeof(ValidateUserAttribute))]

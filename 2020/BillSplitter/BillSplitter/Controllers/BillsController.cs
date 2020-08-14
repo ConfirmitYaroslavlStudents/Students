@@ -13,9 +13,9 @@ namespace BillSplitter.Controllers
 {
     [Authorize]
     [Route("Bills")]
-    public class BillsController : SuperController
+    public class BillsController : BaseController
     {
-        public BillsController(BillContext context) : base(context)
+        public BillsController(UnitOfWork db) : base(db)
         {
            
         }
@@ -27,8 +27,8 @@ namespace BillSplitter.Controllers
         {
             BillIndexViewModel viewModel = new BillIndexViewModel
             {
-                AdminBills = Uow.Users.GetById(this.GetUserId()).Bills,
-                CustomerBills = Uow.Bills.GetByCustomerUserId(this.GetUserId())
+                AdminBills = Db.Users.GetById(this.GetUserId()).Bills,
+                CustomerBills = Db.Bills.GetByCustomerUserId(this.GetUserId())
             };
 
             ViewData["userId"] = this.GetUserId();
@@ -47,10 +47,10 @@ namespace BillSplitter.Controllers
                 Bill = createdBill
             };
 
-            Uow.Bills.Add(createdBill);
-            Uow.Customers.Add(customer);
+            Db.Bills.Add(createdBill);
+            Db.Customers.Add(customer);
 
-            Uow.Save();
+            Db.Save();
 
             return RedirectToAction(nameof(Index));
         }
@@ -60,7 +60,7 @@ namespace BillSplitter.Controllers
         [Route("{billId}")]
         public IActionResult ViewBill(int billId)
         {
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             if (customer == null)
@@ -76,15 +76,7 @@ namespace BillSplitter.Controllers
         private BillViewModel BuildVewModelForViewBill(Bill bill, List<Position> customersBill)
         {
             var positions = bill.Positions
-                .Select(position => new PositionViewModel
-                {
-                    Id = position.Id,
-                    Name = position.Name,
-                    OriginalPrice = position.Price,
-                    Quantity = position.Quantity,
-                    ActualPrice = 0,
-                    Selected = false
-                })
+                .Select(position => new PositionViewModel(position))
                 .OrderBy(p => p.Id)
                 .ToList();
 
@@ -114,23 +106,23 @@ namespace BillSplitter.Controllers
         [Route("{billId}/Join")]
         public IActionResult JoinBill(int billId)
         {
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
           
             return View(bill);
         }
 
         [HttpPost]
         [Route("{billId}")]
-        [ValidateUser]
+        [ServiceFilter(typeof(ValidateUserAttribute))]
         public IActionResult Delete(int billId)
         {
-            var bill = Uow.Bills.GetBillById(billId);
+            var bill = Db.Bills.GetBillById(billId);
 
             if (bill.UserId != this.GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
-            Uow.Bills.DeleteById(billId);
-            Uow.Save();
+            Db.Bills.DeleteById(billId);
+            Db.Save();
 
             return RedirectToAction(nameof(Index));
         }

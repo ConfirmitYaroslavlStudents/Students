@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
 using BillSplitter.Oauth;
+using BillSplitter.Validators;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -41,6 +42,9 @@ namespace BillSplitter
                 options
                     .UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
+
+            services.AddScoped<UnitOfWork>();
+            services.AddScoped<ValidateUserAttribute>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

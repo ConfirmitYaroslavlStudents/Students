@@ -1,12 +1,18 @@
 ﻿using BillSplitter.Controllers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using BillSplitter.Data;
 
 namespace BillSplitter.Validators
 {
-    public class ValidateUserAttribute : Attribute, IActionFilter
+    public class ValidateUserAttribute : ActionFilterAttribute
     {
+        private UnitOfWork _db;
+        public ValidateUserAttribute(UnitOfWork db)
+        {
+            _db = db;
+        }
+
         public void OnActionExecuted(ActionExecutedContext context)
         {
             
@@ -14,14 +20,11 @@ namespace BillSplitter.Validators
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var contr = filterContext.Controller as SuperController;
+            var controller = filterContext.Controller as BaseController;
+            var bill = _db.Bills.GetBillById((int)filterContext.ActionArguments["billId"]);
 
-            var bill = contr.GetBillById((int)filterContext.ActionArguments["billId"]);
-
-            if (bill==null || bill.UserId != contr.GetUserId())
-            {
-                filterContext.Result = contr.Error();
-            }
+            if (bill == null || bill.UserId != controller.GetUserId())
+                filterContext.Result = controller.Error();
         }
     }
 }

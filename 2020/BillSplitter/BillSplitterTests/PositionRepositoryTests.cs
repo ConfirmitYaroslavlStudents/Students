@@ -1,5 +1,8 @@
-﻿using BillSplitter.Data;
+﻿using System.Collections.Generic;
+using BillSplitter.Data;
 using BillSplitter.Models;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace BillSplitterTests
@@ -9,10 +12,13 @@ namespace BillSplitterTests
         [Fact]
         public void AddPosition_AddNewPositionInDb()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
+            var customers = new List<Position>();
+            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
 
-            var repo = uow.Positions;
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Positions;
 
             var position = new Position()
             {
@@ -20,7 +26,7 @@ namespace BillSplitterTests
             };
 
             repo.Add(position);
-            uow.Save();
+            db.Save();
 
             Assert.True(repo.GetById(1) != null);
         }
@@ -28,10 +34,13 @@ namespace BillSplitterTests
         [Fact]
         public void GetById_ReturnsRightPosition()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
+            var customers = new List<Position>();
+            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
 
-            var repo = uow.Positions;
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Positions;
 
             var position1 = new Position()
             {
@@ -45,7 +54,7 @@ namespace BillSplitterTests
             repo.Add(position1);
             repo.Add(position2);
 
-            uow.Save();
+            db.Save();
 
             var expected = position1;
             var actual = repo.GetById(1);
@@ -56,10 +65,13 @@ namespace BillSplitterTests
         [Fact]
         public void GetById_PositionExists_ReturnsNotNull()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
+            var customers = new List<Position>();
+            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
 
-            var repo = uow.Positions;
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Positions;
 
             var position1 = new Position
             {
@@ -73,7 +85,7 @@ namespace BillSplitterTests
             repo.Add(position1);
             repo.Add(position2);
 
-            uow.Save();
+            db.Save();
 
             var actual = repo.GetById(1);
 
@@ -83,10 +95,13 @@ namespace BillSplitterTests
         [Fact]
         public void GetById_PositionDoesntExists_ReturnsNull()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
+            var customers = new List<Position>();
+            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
 
-            var repo = uow.Positions;
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Positions;
 
             var position1 = new Position
             {
@@ -95,7 +110,7 @@ namespace BillSplitterTests
 
             repo.Add(position1);
 
-            uow.Save();
+            db.Save();
 
             var actual = repo.GetById(2);
 
@@ -105,10 +120,13 @@ namespace BillSplitterTests
         [Fact]
         public void UpdateById_UpdatesPosition()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
+            var customers = new List<Position>();
+            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
 
-            var repo = uow.Positions;
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Positions;
 
             var position1 = new Position
             {
@@ -119,10 +137,10 @@ namespace BillSplitterTests
             };
 
             repo.Add(position1);
-            uow.Save();
+            db.Save();
 
             repo.UpdateById(1, new Position { Name = "b", Quantity = 2, Price = 3 });
-            uow.Save();
+            db.Save();
 
             var actual = repo.GetById(1);
             var expected = new Position {Name = "b", Quantity = 2, Price = 3};
@@ -135,10 +153,13 @@ namespace BillSplitterTests
         [Fact]
         public void DeleteById_DeletesRightPosition()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
+            var customers = new List<Position>();
+            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
 
-            var repo = uow.Positions;
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Positions;
 
             var position1 = new Position
             {
@@ -146,10 +167,10 @@ namespace BillSplitterTests
             };
 
             repo.Add(position1);
-            uow.Save();
+            db.Save();
 
             repo.DeleteById(1);
-            uow.Save();
+            db.Save();
 
             var actual = repo.GetById(1);
 

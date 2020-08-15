@@ -3,12 +3,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th colspan="2">
                 Select
             </th>
-            <th>
-                Quantity(Optional)
-            </th>
+
             <th>
                 Name
             </th>
@@ -16,10 +14,10 @@
                 Price
             </th>
             <th>
-                Selected Quantity
+                Quantity
             </th>
-            <th colspan="2">
-                Already selected
+            <th>
+                Already Selected By
             </th>
         </tr>
     </thead>
@@ -33,6 +31,11 @@
     }
     </tbody>
 </table>
+
+<div id="enterValueDialog" class="modal fade" role="dialog">
+
+</div>
+
 @Html.ActionLink("View results", "ViewBill", "Bills", new
 {
     billId = ViewData["billId"]
@@ -103,5 +106,26 @@
 
         positionChecked(positionId);
     }
+
+    function selectValue(id)
+    {
+        $("#enterValueDialog").load(id + "/DialogPartial", function () {
+            $('#enterValueDialog').modal('toggle');
+        });
+    }
+    function submitEnteredValue(id, upperBound)
+    {
+        var val = $("#enteredUserQuantity").val();
+        if (val < 0 || val > upperBound) {
+            $("#dialogError").text("invalid value " + val);
+        }
+        else
+        {
+            document.getElementById("quantity_" + id).value = val;
+            quantityEntered(id);
+            $('#enterValueDialog').modal('toggle');
+        }
+    }
+
 
 </script>

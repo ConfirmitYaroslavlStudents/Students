@@ -1,0 +1,27 @@
+﻿@model BillSplitter.Models.ViewModels.PickPositions.PositionViewModel
+
+
+
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title"> Enter Value for Position @Model.Name</h4>
+        </div>
+        <div class="modal-body">
+           <label> EnterValue in range (0, @Model.RemainsQuantity)</label>
+            <p>
+                <input type="number" id="enteredUserQuantity" value="@Model.UserQuantity" />
+            </p>
+            <p>
+                <span id="dialogError"></span>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cansel</button>
+            <button onclick="submitEnteredValue(@Model.Id ,@Model.RemainsQuantity)" type="button" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+
+
+    

@@ -127,5 +127,21 @@ namespace BillSplitter.Controllers
                 }
             };
         }
+
+
+        [HttpGet]
+        [Route("{positionId}/DialogPartial")]
+        public PartialViewResult GetPositionDialogPartial(int billId, int positionId)
+        {
+            Position position = Db.Positions.GetById(positionId);
+            return new PartialViewResult
+            {
+                ViewName = "EnterValueDialogPartial",
+                ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+                {
+                    Model = GetPositionViewModel(position)
+                }
+            };
+        }
     }
 }

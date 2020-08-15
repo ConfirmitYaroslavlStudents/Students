@@ -4,8 +4,12 @@
     <input type="checkbox" checked="@Model.Selected" id="@Model.Id" onclick="positionChecked(@Model.Id)">
 </td>
 <td>
-   
-    <input type="text" value="@Model.UserQuantity" id="quantity_@Model.Id" onblur="quantityEntered(@Model.Id)">
+
+    <input type="text" value="@Model.UserQuantity" style="visibility: @(Model.UserQuantity == null ? "hidden" : "visible") " id="quantity_@Model.Id" readonly>
+
+    <button type="button" class="btn btn-primary" onclick="selectValue(@Model.Id)">
+        Select Value
+    </button>
 </td>
 
 <td>
@@ -15,12 +19,7 @@
     @Model.Price
 </td>
 <td>
-    @Model.PickedQuantity
-</td>
-
-
-<td>
-    @Model.Orders.Count
+    @Model.Quantity
 </td>
 <td>
     <ul class="list-group list-group-horizontal">

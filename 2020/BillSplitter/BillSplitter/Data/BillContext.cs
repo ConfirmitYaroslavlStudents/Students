@@ -9,15 +9,30 @@ namespace BillSplitter.Data
         {
 
         }
-        public BillContext() : base()
+        public BillContext()
         {
 
         }
 
-        public DbSet<Bill> Bill { get; set; }
-        public DbSet<Position> Position { get; set; }
-        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Customer>()
+                .HasMany(e => e.Orders)
+                .WithOne(e => e.Customer)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder
+                .Entity<Position>()
+                .HasMany<Order>(e => e.Orders)
+                .WithOne(e => e.Position)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

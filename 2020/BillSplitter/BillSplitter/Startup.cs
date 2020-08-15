@@ -1,8 +1,15 @@
 ﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using BillSplitter.Data;
+using BillSplitter.Oauth;
+using BillSplitter.Validators;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +29,6 @@ namespace BillSplitter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
@@ -30,19 +36,36 @@ namespace BillSplitter
                 options.IdleTimeout = TimeSpan.FromMinutes(1);
             });
 
-
             services.AddControllersWithViews();
+
             services.AddDbContext<BillContext>(options =>
                 options
                     .UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
+            services.AddScoped<UnitOfWork>();
+            services.AddScoped<ValidateUserAttribute>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => 
+                .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                });
+                    options.LoginPath = new PathString("/Account/Login");
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["App:GoogleClientId"];
+                    options.ClientSecret = Configuration["App:GoogleClientSecret"];
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = Configuration["App:FBClientId"];
+                    options.AppSecret = Configuration["App:FBClientSecret"];
+                })
+                .AddOAuth<VKOAuthOptions, VKOAuthHandler>("VK", "Vkontakte", options =>
+                 {
+                     options.ClientId = Configuration["App:VKClientId"];
+                     options.ClientSecret = Configuration["App:VKClientSecret"];
+                 });
 
         }
 
@@ -64,16 +87,14 @@ namespace BillSplitter
 
             app.UseRouting();
 
-            app.UseAuthentication();   
-            app.UseAuthorization();     
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Bills}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

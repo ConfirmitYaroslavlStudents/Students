@@ -1,0 +1,6 @@
+﻿@model Bill
+
+<form asp-action="Create">
+    @Html.TextBoxFor(model => model.Name)
+    <input type="submit" value="Create empty bill"/>
+</form>

@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
+using BillSplitter.Models;
 using BillSplitter.Oauth;
 using BillSplitter.Validators;
 using Microsoft.AspNetCore.Authentication;

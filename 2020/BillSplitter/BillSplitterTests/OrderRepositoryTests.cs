@@ -1,6 +1,9 @@
-﻿using BillSplitter.Data;
+﻿using System.Collections.Generic;
+using BillSplitter.Data;
 using BillSplitter.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace BillSplitterTests
@@ -10,9 +13,15 @@ namespace BillSplitterTests
         [Fact]
         public void AddOrder_AddNewOrderInDb()
         {
-            using var db = new InMemoryContextBuilder().Build();
-            var uow = new UnitOfWork(db);
-            var repo = uow.Orders;
+            var orders = new List<Order>();
+
+            var orderDbSet = DbSetMockBuilder.BuildDbSet(orders);
+
+            var contextMock = new Mock<DbContext>();
+            contextMock.Setup(c => c.Set<Order>()).Returns(orderDbSet);
+
+            var db = new UnitOfWork(contextMock.Object);
+            var repo = db.Orders;
 
             var order = new Order()
             {
@@ -20,9 +29,9 @@ namespace BillSplitterTests
             };
 
             repo.AddOrder(order);
-            uow.Save();
+            db.Save();
 
-            Assert.True(db.Orders.Contains(order));
+            Assert.Contains(order, orders); // Maybe Exists method?
         }
     }
 }

@@ -1,25 +1,26 @@
 ﻿using System.Linq;
 using BillSplitter.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BillSplitter.Data
 {
     public class PositionsDbAccessor
     {
-        private readonly BillContext _context;
+        private readonly DbContext _context;
 
-        public PositionsDbAccessor(BillContext context)
+        public PositionsDbAccessor(DbContext context)
         {
             _context = context;
         }
 
         public void Add(Position pos)
         {
-            _context.Positions.Add(pos);
+            _context.Set<Position>().Add(pos);
         }
 
         public Position GetById(int positionId)
         {
-            return _context.Positions.FirstOrDefault(x => x.Id == positionId);
+            return _context.Set<Position>().FirstOrDefault(x => x.Id == positionId);
         }
 
         public void UpdateById(int positionId, Position positionData)
@@ -33,7 +34,7 @@ namespace BillSplitter.Data
 
         public void DeleteById(int positionId)
         {
-            _context.Positions.Remove(GetById(positionId));
+            _context.Set<Position>().Remove(GetById(positionId));
         }
     }
 }

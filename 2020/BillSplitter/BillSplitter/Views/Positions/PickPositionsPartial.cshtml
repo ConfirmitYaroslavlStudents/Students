@@ -23,13 +23,13 @@
 </td>
 <td>
     <ul class="list-group list-group-horizontal">
-        @for (int i = 0; i < Model.Orders.Count && i < 3; i++)
+        @for (int i = 0; i < Model.CustomerNames.Count && i < 3; i++)
         {
-            <li class="list-group-item">@Model.Orders[i].Customer.Name</li>
+            <li class="list-group-item">@Model.CustomerNames[i]</li>
         }
-        @if (Model.Orders.Count > 3)
+        @if (Model.CustomerNames.Count > 3)
         {
-            <li class="list-group-item">+@(Model.Orders.Count - 3)</li>
+            <li class="list-group-item">+@(Model.CustomerNames.Count - 3)</li>
         }
     </ul>
 </td>

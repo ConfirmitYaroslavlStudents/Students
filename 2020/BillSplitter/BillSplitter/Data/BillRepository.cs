@@ -21,7 +21,7 @@ namespace BillSplitter.Data
 
         public List<Bill> GetByCustomerUserId(int userId)
         {
-            return _context.Set<Customer>().Where(c => c.UserId == userId).Select(c => c.Bill).Where(b => b.UserId != userId).ToList();
+            return _context.Set<Customer>().Where(c => c.UserId == userId).Select(c => c.Bill).ToList();
         }
         public Bill GetBillById(int billId)
         {

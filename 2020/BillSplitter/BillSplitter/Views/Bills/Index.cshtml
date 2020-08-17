@@ -1,6 +1,4 @@
-﻿@model BillSplitter.Models.ViewModels.BillIndexViewModel
-
-<p> Your own bills </p>
+﻿@model List<BillSplitter.Models.ViewModels.ViewBill.BillViewModel>
 
 <p>
     <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#enterBillName">
@@ -28,7 +26,7 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
-<h1>Managed Bills</h1>
+<h1>Your Bills</h1>
 <table class="table">
     <thead>
         <tr>
@@ -37,17 +35,20 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var bill in Model.AdminBills)
+    @foreach (var bill in Model)
     {
         <tr>
-            <td>@bill.Name</td>
+            <td>@bill.Bill.Name</td>
             <td>
-                @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
-                <button type="button" id="deleteButton" class="btn btn-primary" onclick="showDeleteConfirmationDialog(@bill.Id)">
+                @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Bill.Id }, new { @class = "btn btn-primary" })
+               @if (bill.HasManageAccess)
+               {
+                <button type="button" id="deleteButton" class="btn btn-primary" onclick="showDeleteConfirmationDialog(@bill.Bill.Id)">
                     Delete bill
                 </button>
+               }
                 <button class="copy-btn btn btn-primary" 
-                        data-clipboard-text="@Url.Action("JoinBill", "Bills", new {billId = bill.Id},Context.Request.Scheme)">
+                        data-clipboard-text="@Url.Action("JoinBill", "Bills", new {billId = @bill.Bill.Id},Context.Request.Scheme)">
                     Copy link to bill
                 </button>
             </td>
@@ -73,26 +74,6 @@
     </div>
 </div>
 
-<h1>Bills you are joined in</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var bill in Model.CustomerBills)
-        {
-            <tr>
-                <td>@bill.Name</td>
-                <td>
-                    @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Id }, new { @class = "btn btn-primary" })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
 
 <script>

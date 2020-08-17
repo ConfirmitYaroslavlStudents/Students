@@ -24,15 +24,14 @@ namespace BillSplitter.Controllers
         [Route("~/")]
         public IActionResult Index()
         {
-            BillIndexViewModel viewModel = new BillIndexViewModel
-            {
-                AdminBills = Db.Users.GetById(this.GetUserId()).Bills,
-                CustomerBills = Db.Bills.GetByCustomerUserId(this.GetUserId())
-            };
 
-            ViewData["userId"] = this.GetUserId();
-            ViewData["absoluteLink"] = string.Format("{0}://{1}", Request.Scheme,Request.Host);
-            return View(viewModel);
+            List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(this.GetUserId()).Select(b => new BillViewModel()
+            {
+                Bill = b,
+                HasManageAccess = b.UserId == GetUserId()
+            }).ToList();
+
+            return View(bills);
         }
 
         [HttpPost]

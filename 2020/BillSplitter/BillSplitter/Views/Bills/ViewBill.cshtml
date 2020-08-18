@@ -53,8 +53,16 @@
 </table>
 
 <h2>
-    Your sum is @Model.CustomerSum
+    Your total sum is @Model.CustomerSum
 </h2>
+<ul>
+    @foreach (var payment in Model.Payments)
+    {
+        <li> You need to pay @payment.Value $ to <b>@payment.Key</b> </li>
+    }
+</ul>
+
+
 
 @Html.ActionLink("Pick positions", "PickPositions", "Positions", new
 {

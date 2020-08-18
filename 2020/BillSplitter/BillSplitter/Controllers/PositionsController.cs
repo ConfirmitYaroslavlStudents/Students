@@ -76,8 +76,10 @@ namespace BillSplitter.Controllers
         [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
         public IActionResult Create(int billId, Position position)
         {
-            Db.Positions.Add(position);
+            position.ManagingCustomerId = Db.Bills.GetBillById(billId).Customers.FirstOrDefault(c =>  c.UserId == GetUserId()).Id;
 
+            Db.Positions.Add(position);
+            
             Db.Save();
 
             return RedirectToAction(nameof(ManagePositions), new { billId }); 

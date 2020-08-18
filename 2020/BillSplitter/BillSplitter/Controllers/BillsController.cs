@@ -7,6 +7,7 @@ using BillSplitter.Models.ViewModels.ViewBill;
 using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace BillSplitter.Controllers
 {
@@ -76,7 +77,7 @@ namespace BillSplitter.Controllers
                 .Select(position => new PositionViewModel(position))
                 .OrderBy(p => p.Id)
                 .ToList();
-
+           
             foreach (var pos in positions)
             {
                 var customerPosition = customersBill
@@ -87,11 +88,22 @@ namespace BillSplitter.Controllers
                     pos.Selected = true;
                 }
             }
+            Dictionary<string, decimal> payments = new Dictionary<string, decimal>();
+            foreach (var pos in customersBill)
+            {
+                if (!payments.ContainsKey(pos.ManagingCustomer.Name))
+                    payments.Add(pos.ManagingCustomer.Name, 0);
+
+                payments[pos.ManagingCustomer.Name] += pos.Price;
+            }
+
             var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
+
             var model = new BillViewModel
             {
                 Bill = bill,
                 Positions = positions,
+                Payments = payments,
                 isAdmin = bill.Customers.FirstOrDefault(c => c.UserId== GetUserId()).Role=="Admin",
                 isModerator = customer.Role == "Admin" || customer.Role=="Moderator",
                 CustomerSum = customersBill.Sum(p => p.Price)

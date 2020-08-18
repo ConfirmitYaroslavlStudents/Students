@@ -27,11 +27,31 @@
                 @customer.Name
             </td>
             <td>
-                <form asp-action="Delete" asp-route-billId="@customer.BillId" asp-route-customerId="@customer.Id">
-                    <input type="submit" value="Delete" />
+                <form asp-action="UpdateRole" id="role_@customer.Id" asp-route-billId="@customer.BillId" asp-route-customerId="@customer.Id">
+                    <select @(customer.Role=="Admin" ? "disabled" : "")  name="role" onchange="SelectionChanged(@customer.Id)">
+                        @if (customer.Role == "Admin")
+                        {
+                            <option selected="@(customer.Role == "Admin")" value="Admin"> Admin </option>
+                        }
+                        <option selected="@(customer.Role=="Guest")" value="Guest"> Guest </option>
+                        <option selected="@(customer.Role=="Moderator")" value="Moderator"> Moderator </option>
+                    </select>
+                </form>
+            </td>
+            <td>
+                <form  asp-action="Delete" asp-route-billId="@customer.BillId" asp-route-customerId="@customer.Id">
+                    <input @(customer.Role=="Admin" ? "disabled" : "") type="submit" class="btn btn-primary" value="Delete" />
                 </form>
             </td>
         </tr>
     }
     </tbody>
 </table>
+
+<script>
+    function SelectionChanged(customerId)
+    {
+        alert(customerId);
+        $("#role_" + customerId).submit();
+    }
+</script>

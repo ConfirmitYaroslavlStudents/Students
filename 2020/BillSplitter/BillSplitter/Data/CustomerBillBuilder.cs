@@ -15,7 +15,8 @@ namespace BillSplitter.Data
                 {
                     Price = new OrderPriceCalculator().CalculatePrice(order),
                     Id = order.Position.Id,
-                    Name = order.Position.Name
+                    Name = order.Position.Name,
+                    ManagingCustomer = order.Position.ManagingCustomer
                 })
                 .ToList();
         }

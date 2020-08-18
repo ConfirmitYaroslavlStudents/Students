@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
-using BillSplitter.Models.ViewModels;
 using BillSplitter.Models.ViewModels.ViewBill;
 using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +24,7 @@ namespace BillSplitter.Controllers
         public IActionResult Index()
         {
 
-            List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(this.GetUserId()).Select(b => new BillViewModel()
+            List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(GetUserId()).Select(b => new BillViewModel()
             {
                 Bill = b,
                 HasManageAccess = b.UserId == GetUserId()
@@ -93,7 +92,7 @@ namespace BillSplitter.Controllers
             {
                 Bill = bill,
                 Positions = positions,
-                HasManageAccess = bill.UserId == this.GetUserId(),
+                HasManageAccess = bill.UserId == GetUserId(), // TODO: Update with roles, I wont update this, because this requires to update views 
                 CustomerSum = customersBill.Sum(p => p.Price)
             };
 

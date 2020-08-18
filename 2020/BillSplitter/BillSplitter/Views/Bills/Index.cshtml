@@ -41,7 +41,7 @@
             <td>@bill.Bill.Name</td>
             <td>
                 @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Bill.Id }, new { @class = "btn btn-primary" })
-               @if (bill.HasManageAccess)
+               @if (bill.isAdmin)
                {
                 <button type="button" id="deleteButton" class="btn btn-primary" onclick="showDeleteConfirmationDialog(@bill.Bill.Id)">
                     Delete bill

@@ -27,7 +27,7 @@ namespace BillSplitter.Controllers
             List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(GetUserId()).Select(b => new BillViewModel()
             {
                 Bill = b,
-                HasManageAccess = b.UserId == GetUserId()
+                isAdmin = b.Customers.FirstOrDefault(c => c.UserId == this.GetUserId()).Role=="Admin"
             }).ToList();
 
             return View(bills);
@@ -87,12 +87,13 @@ namespace BillSplitter.Controllers
                     pos.Selected = true;
                 }
             }
-
+            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
             var model = new BillViewModel
             {
                 Bill = bill,
                 Positions = positions,
-                HasManageAccess = bill.UserId == GetUserId(), // TODO: Update with roles, I wont update this, because this requires to update views 
+                isAdmin = bill.Customers.FirstOrDefault(c => c.UserId== GetUserId()).Role=="Admin",
+                isModerator = customer.Role == "Admin" || customer.Role=="Moderator",
                 CustomerSum = customersBill.Sum(p => p.Price)
             };
 

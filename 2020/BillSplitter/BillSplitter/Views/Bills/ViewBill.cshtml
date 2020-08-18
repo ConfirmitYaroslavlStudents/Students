@@ -10,19 +10,6 @@
     }
 </style>
 
-@if (Model.HasManageAccess)
-{
-    <p>This bill has</p>
-    <ul>
-        <li>
-            @Model.Bill.Positions.Count position(s)
-        </li>
-        <li>
-            @Model.Bill.Customers.Count customer(s)
-        </li>
-    </ul>
-}
-
 <h1> @Model.Bill.Name  </h1>
 
 <h1>Your orders:</h1>
@@ -73,13 +60,18 @@
 {
     billId = Model.Bill.Id
 }, new { @class = "btn btn-primary" })
-@if (Model.HasManageAccess)
+
+@if (Model.isAdmin)
 {
     @Html.ActionLink("Manage customers", "Index", "Customers", new
     {
         billId = Model.Bill.Id
     }, new { @class = "btn btn-primary" })
-    @:
+
+}
+
+@if (Model.isModerator)
+{
     @Html.ActionLink("Manage positions", "ManagePositions", "Positions", new
     {
         billId = Model.Bill.Id,

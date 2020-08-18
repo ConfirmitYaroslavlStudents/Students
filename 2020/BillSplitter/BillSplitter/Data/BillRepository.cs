@@ -37,6 +37,8 @@ namespace BillSplitter.Data
 
         public void DeleteById(int billId)
         {
+            var bill = GetBillById(billId);
+            bill.Positions.Clear();
             _context.Set<Bill>().Remove(GetBillById(billId));
         }
     }

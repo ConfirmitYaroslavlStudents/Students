@@ -17,7 +17,7 @@ namespace BillSplitter.Controllers
         }
         
         [HttpGet]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
         public IActionResult Index(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);
@@ -34,7 +34,7 @@ namespace BillSplitter.Controllers
             if (!Db.Bills.Exist(billId))
                 Error();
             
-            var userId = this.GetUserId();
+            var userId = GetUserId();
             var bill = Db.Bills.GetBillById(billId);
             
             if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
@@ -42,8 +42,8 @@ namespace BillSplitter.Controllers
                 var customer = new Customer
                 {
                     BillId = billId,
-                    UserId = this.GetUserId(),
-                    Name = this.GetUserName()
+                    UserId = GetUserId(),
+                    Name = GetUserName()
                 };
 
                 Db.Customers.Add(customer);
@@ -55,7 +55,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{customerId}")]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
         {
             Db.Customers.DeleteById(customerId);

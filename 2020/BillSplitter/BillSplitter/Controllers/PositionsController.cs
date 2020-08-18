@@ -60,7 +60,7 @@ namespace BillSplitter.Controllers
 
         [HttpGet]
         [Route("Manage")]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
         public IActionResult ManagePositions(int billId)
         {
             ViewData["billId"] = billId;
@@ -73,7 +73,7 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
         public IActionResult Create(int billId, Position position)
         {
             Db.Positions.Add(position);
@@ -85,7 +85,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{positionId}")]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
         public IActionResult Delete(int billId, int positionId)
         {
             if (!ValidatePosition(billId, positionId))
@@ -100,7 +100,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{positionId}/Update")]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
         public IActionResult Update(int billId, int positionId, Position position)
         {
             if (!ValidatePosition(billId, positionId))

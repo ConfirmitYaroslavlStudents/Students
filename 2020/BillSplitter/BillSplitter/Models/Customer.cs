@@ -11,5 +11,6 @@ namespace BillSplitter.Models
         public virtual Bill Bill { get; set; }
         public virtual List<Order> Orders { get; set; } = new List<Order>();
         public string Role { get; set; } // Admin > Moderator > Guest
+        public virtual List<Position> ManagedPositions { get; set; } = new List<Position>();
     }
 }

@@ -34,7 +34,16 @@ namespace BillSplitter.Data
             var toDelete = _context.Set<Order>().Where(order => order.CustomerId == customerId);
             _context.Set<Order>().RemoveRange(toDelete);
 
-            _context.Set<Customer>().Remove(GetById(customerId));
+            var customer = GetById(customerId);
+            var admin = customer.Bill.Customers.Find(c => c.Role == "Admin");
+
+            foreach (var position in customer.ManagedPositions)
+            {
+                position.ManagingCustomerId = admin.Id;
+                position.ManagingCustomer = admin;
+            }
+
+            _context.Set<Customer>().Remove(customer);
         }
     }
 }

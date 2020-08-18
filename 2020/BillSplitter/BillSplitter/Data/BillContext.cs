@@ -33,6 +33,12 @@ namespace BillSplitter.Data
                 .HasMany<Order>(e => e.Orders)
                 .WithOne(e => e.Position)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<Customer>()
+                .HasMany(c => c.ManagedPositions)
+                .WithOne(p => p.ManagingCustomer)
+                .OnDelete(DeleteBehavior.ClientNoAction);
         }
     }
 }

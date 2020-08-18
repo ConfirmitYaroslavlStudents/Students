@@ -100,6 +100,9 @@ namespace BillSplitter.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ManagingCustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -112,6 +115,8 @@ namespace BillSplitter.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");
+
+                    b.HasIndex("ManagingCustomerId");
 
                     b.ToTable("Positions");
                 });
@@ -169,6 +174,11 @@ namespace BillSplitter.Migrations
                         .HasForeignKey("BillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BillSplitter.Models.Customer", "ManagingCustomer")
+                        .WithMany("ManagedPositions")
+                        .HasForeignKey("ManagingCustomerId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
                 });
 #pragma warning restore 612, 618
         }

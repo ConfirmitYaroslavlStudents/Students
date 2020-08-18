@@ -26,7 +26,10 @@ namespace BillSplitter.Attributes
 
             var currentCustomer = bill.Customers.Find(c => c.UserId == controller.GetUserId());
 
-            if (currentCustomer == null || currentCustomer.Role != Role || currentCustomer.Role != "Admin")
+            if (currentCustomer == null)
+                filterContext.Result = controller.Error();
+
+            if (currentCustomer.Role != Role && currentCustomer.Role != "Admin")
                 filterContext.Result = controller.Error();
         }
     }

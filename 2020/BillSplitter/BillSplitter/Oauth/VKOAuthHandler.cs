@@ -50,9 +50,8 @@ namespace BillSplitter.Oauth
 
             var principal = new ClaimsPrincipal(identity);
             var context = new OAuthCreatingTicketContext(principal, properties, Context, Scheme, Options, Backchannel, tokens, payload);
-            context.RunClaimActions();
 
-            context.RunClaimActions(tokens.Response.RootElement);
+            context.RunClaimActions();
 
             await Options.Events.CreatingTicket(context);
 

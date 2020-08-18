@@ -33,16 +33,14 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
+
             User user = Db.Users.GetByName("LoginProvider", model.Name);
+
             if (user == null)
                 ModelState.AddModelError("Name", "No Such User");
             else
             {
-                await Authenticate(user);
-
-                if (returnUrl != null)
-                    return Redirect(returnUrl);
-                return RedirectToAction("Index", "Bills");
+                return await LoginConfirm(user, returnUrl);
             }
 
             return View(model);
@@ -61,6 +59,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
+
             User user = Db.Users.GetByName("LoginProvider", model.Name);
 
             if (user != null)
@@ -71,10 +70,7 @@ namespace BillSplitter.Controllers
                 Db.Users.Add(newUser);
                 Db.Save();
 
-                await Authenticate(newUser);
-                if (returnUrl != null)
-                    return Redirect(returnUrl);
-                return RedirectToAction("Index", "Bills");
+                return await LoginConfirm(newUser, returnUrl);
             }
 
             return View(model);
@@ -123,7 +119,7 @@ namespace BillSplitter.Controllers
             if (externalUser == null)
                 throw new Exception("External authentication error");
 
-            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
+            string name = GetNameFromExternalLogin(externalUser);
 
             await HttpContext.SignOutAsync("Cookies");
 
@@ -133,6 +129,11 @@ namespace BillSplitter.Controllers
                 return await LoginConfirm(user, returnUrl);
 
             return RedirectToAction("RegisterExternalConfirm", new { name, scheme, returnUrl });
+        }
+
+        private string GetNameFromExternalLogin(ClaimsPrincipal externalUser)
+        {
+            return externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
         }
 
         [Route("LoginConfirm")]

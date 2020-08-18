@@ -24,7 +24,6 @@ namespace BillSplitter.Controllers
         [Route("~/")]
         public IActionResult Index()
         {
-
             List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(this.GetUserId()).Select(b => new BillViewModel()
             {
                 Bill = b,

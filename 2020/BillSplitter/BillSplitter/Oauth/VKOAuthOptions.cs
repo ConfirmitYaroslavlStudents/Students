@@ -20,15 +20,12 @@ namespace BillSplitter.Oauth
             ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
             ClaimActions.MapJsonKey(ClaimTypes.GivenName, "first_name");
             ClaimActions.MapJsonKey(ClaimTypes.Surname, "last_name");
-            ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-            ClaimActions.MapJsonKey(ClaimTypes.Hash, "hash");
         }
         public ISet<string> Fields { get; } = new HashSet<string>
         {
             "id",
             "first_name",
             "last_name",
-            "hash"
         };
 
         public string ApiVersion { get; set; } = "5.78";

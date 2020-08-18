@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BillSplitter.Models
+namespace BillSplitter.Models.ViewModels.LoginAndRegister
 {
-    public class LoginModel
+    public class RegisterModel
     {
         [Required(ErrorMessage = "Name is Required")]
         public string Name { get; set; }

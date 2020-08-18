@@ -13,9 +13,9 @@ namespace BillSplitter.Data
             _context = context;
         }
 
-        public User GetByName(string name)
+        public User GetByName(string provider, string name)
         {
-            return _context.Set<User>().FirstOrDefault(u => u.Name == name);
+            return _context.Set<User>().FirstOrDefault(u => u.Name == name && u.Provider == provider);
         }
 
         public User GetById(int userId)

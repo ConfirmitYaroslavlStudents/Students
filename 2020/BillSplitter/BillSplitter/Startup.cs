@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using BillSplitter.Data;
-using BillSplitter.Models;
 using BillSplitter.Oauth;
 using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -56,6 +52,7 @@ namespace BillSplitter
                 {
                     options.ClientId = Configuration["App:GoogleClientId"];
                     options.ClientSecret = Configuration["App:GoogleClientSecret"];
+
                 })
                 .AddFacebook(options =>
                 {

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BillSplitter.Data;
 using BillSplitter.Models;
+using BillSplitter.Models.ViewModels.LoginAndRegister;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace BillSplitter.Controllers
     public class AccountController : BaseController
     {
 
-        public AccountController(UnitOfWork db): base(db)
+        public AccountController(UnitOfWork db) : base(db)
         {
         }
 
@@ -32,16 +33,14 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user =Db.Users.GetByName(model.Name);
+
+            User user = Db.Users.GetByName("LoginProvider", model.Name);
+
             if (user == null)
                 ModelState.AddModelError("Name", "No Such User");
             else
             {
-                await Authenticate(user);
-
-                if (returnUrl != null)
-                    return Redirect(returnUrl);
-                return RedirectToAction("Index", "Bills");
+                return await LoginConfirm(user, returnUrl);
             }
 
             return View(model);
@@ -60,20 +59,18 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            User user = Db.Users.GetByName(model.Name);
+
+            User user = Db.Users.GetByName("LoginProvider", model.Name);
 
             if (user != null)
                 ModelState.AddModelError("Name", "UserName is already used");
             else
             {
-                User newUser = new User {Name = model.Name};
+                User newUser = new User { Name = model.Name };
                 Db.Users.Add(newUser);
-             
                 Db.Save();
-                await Authenticate(newUser);
-                if (returnUrl != null)
-                    return Redirect(returnUrl);
-                return RedirectToAction("Index", "Bills");
+
+                return await LoginConfirm(newUser, returnUrl);
             }
 
             return View(model);
@@ -81,7 +78,6 @@ namespace BillSplitter.Controllers
 
         private async Task Authenticate(User user)
         {
-
             var claims = new List<Claim>
             {
                 new Claim("Id",user.Id.ToString()),
@@ -114,23 +110,52 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
         {
             var result = await HttpContext.AuthenticateAsync(scheme);
+
             if (result?.Succeeded != true)
                 throw new Exception("External authentication error");
 
             var externalUser = result.Principal;
+
             if (externalUser == null)
                 throw new Exception("External authentication error");
 
-            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
+            string name = GetNameFromExternalLogin(externalUser);
 
             await HttpContext.SignOutAsync("Cookies");
-            
-            User user = Db.Users.GetByName(name);
+
+            var user = Db.Users.GetByName(scheme, name);
 
             if (user != null)
-                return await Login(new LoginModel { Name = name }, returnUrl);
+                return await LoginConfirm(user, returnUrl);
 
-            return await Register(new RegisterModel { Name = name }, returnUrl);
+            return RedirectToAction("RegisterExternalConfirm", new { name, scheme, returnUrl });
+        }
+
+        private string GetNameFromExternalLogin(ClaimsPrincipal externalUser)
+        {
+            return externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
+        }
+
+        [Route("LoginConfirm")]
+        public async Task<IActionResult> LoginConfirm(User user, string returnUrl)
+        {
+            await Authenticate(user);
+
+            if (returnUrl != null)
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Index", "Bills");
+        }
+
+        [Route("RegisterExternalConfirm")]
+        public async Task<IActionResult> RegisterExternalConfirm(string name, string scheme, string returnUrl)
+        {
+            User newUser = new User { Name = name, Provider = scheme };
+
+            Db.Users.Add(newUser);
+            Db.Save();
+
+            return await LoginConfirm(newUser, returnUrl);
         }
 
         [HttpGet]
@@ -138,6 +163,7 @@ namespace BillSplitter.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return RedirectToAction("Index", "Bills");
         }
     }

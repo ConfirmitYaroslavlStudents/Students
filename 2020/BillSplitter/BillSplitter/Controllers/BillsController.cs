@@ -37,11 +37,12 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult Create(Bill createdBill)
         {
-            createdBill.UserId = this.GetUserId();
+            createdBill.UserId = GetUserId();
             var customer = new Customer
             {
-                Name = this.GetUserName(),
-                UserId = this.GetUserId(),
+                Name = GetUserName(),
+                UserId = GetUserId(),
+                Role = "Admin",
                 Bill = createdBill
             };
 
@@ -115,7 +116,7 @@ namespace BillSplitter.Controllers
         {
             var bill = Db.Bills.GetBillById(billId);
 
-            if (bill.UserId != this.GetUserId())
+            if (bill.UserId != GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
             Db.Bills.DeleteById(billId);

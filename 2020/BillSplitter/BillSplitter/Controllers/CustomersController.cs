@@ -29,7 +29,7 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(int billId) // give more suitable name
+        public IActionResult AddCustomerOrContinueToPick(int billId) // give more suitable name
         {
             if (!Db.Bills.Exist(billId))
                 Error();
@@ -43,6 +43,7 @@ namespace BillSplitter.Controllers
                 {
                     BillId = billId,
                     UserId = GetUserId(),
+                    Role = "Guest",
                     Name = GetUserName()
                 };
 

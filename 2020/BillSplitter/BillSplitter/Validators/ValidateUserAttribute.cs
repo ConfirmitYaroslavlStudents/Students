@@ -1,6 +1,5 @@
 ﻿using BillSplitter.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
 using BillSplitter.Data;
 
 namespace BillSplitter.Validators
@@ -13,12 +12,7 @@ namespace BillSplitter.Validators
             _db = db;
         }
 
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-            
-        }
-
-        public void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var controller = filterContext.Controller as BaseController;
             var bill = _db.Bills.GetBillById((int)filterContext.ActionArguments["billId"]);

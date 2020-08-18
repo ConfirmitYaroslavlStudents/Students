@@ -7,7 +7,6 @@ using BillSplitter.Models.ViewModels.ViewBill;
 using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace BillSplitter.Controllers
 {

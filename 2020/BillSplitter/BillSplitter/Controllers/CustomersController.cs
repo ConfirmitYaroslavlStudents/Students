@@ -55,6 +55,17 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
+        [Route("{customerId}/UpdateRole")]
+        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
+        public IActionResult UpdateRole(int billId, int customerId, string role)
+        {
+            Db.Customers.UpdateCustomerRoleById(customerId, role);
+            Db.Save();
+
+            return RedirectToAction(nameof(Index), new {billId = billId});
+        }
+
+        [HttpPost]
         [Route("{customerId}")]
         [ValidateUserAttributeFactory(RequestedRole = "Admin")]
         public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?

@@ -23,6 +23,12 @@ namespace BillSplitter.Data
             return _context.Set<Customer>().FirstOrDefault(x => x.Id == customerId);
         }
 
+        public void UpdateCustomerRoleById(int customerId, string role)
+        {
+            var customer = GetById(customerId);
+            customer.Role = role;
+        }
+
         public void DeleteById(int customerId)
         {
             var toDelete = _context.Set<Order>().Where(order => order.CustomerId == customerId);

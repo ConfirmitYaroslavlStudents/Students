@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using BillSplitter.Data;
 
-namespace BillSplitter.Validators
+namespace BillSplitter.Attributes
 {
     public class ValidateUserAttribute : ActionFilterAttribute
     {

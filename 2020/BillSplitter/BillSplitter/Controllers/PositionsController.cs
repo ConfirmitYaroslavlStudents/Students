@@ -5,7 +5,7 @@ using BillSplitter.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using BillSplitter.Validators;
+using BillSplitter.Attributes;
 using System.Collections.Generic;
 using BillSplitter.Models.ViewModels.PickPositions;
 

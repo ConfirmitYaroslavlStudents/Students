@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
-using BillSplitter.Validators;
+using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

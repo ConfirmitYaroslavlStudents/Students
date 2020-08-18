@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Oauth;
-using BillSplitter.Validators;
+using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;

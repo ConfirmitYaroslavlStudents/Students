@@ -10,5 +10,6 @@ namespace BillSplitter.Models
         public int BillId { get; set; }
         public virtual Bill Bill { get; set; }
         public virtual List<Order> Orders { get; set; } = new List<Order>();
+        public string Role { get; set; }
     }
 }

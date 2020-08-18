@@ -77,12 +77,13 @@
 
 
 <script>
-    function showDeleteConfirmationDialog(billId) {
+     function  showDeleteConfirmationDialog(billId) {
         $(document).ready(() => {
-            $('#deleteSubmissionButton').on('click', (e) => {
-                $.post(`Bills/${billId}`);
+            $('#deleteSubmissionButton').on('click', (e) =>  {
+                $.post(`Bills/${billId}`, function () {
+                    window.location.reload();
+                });
                 $('#deleteConfirmationDialog').modal('toggle');
-                window.location.reload();
             });
 
             $('#deleteConfirmationDialog').modal('toggle');

@@ -139,12 +139,7 @@ namespace SkillTree
             return $"Element {Id}";
         }
 
-        public IEnumerable<Vertex<T>> GetVertexes()
-        {
-            return GetAllDependencies();
-        }
-
-        private IEnumerable<Vertex<T>> GetAllDependencies()
+        public IEnumerable<Vertex<T>> GetAllDependencies()
         {
             var dictionary = new Dictionary<int, Vertex<T>>();
             var stack = new Stack<Duplex<T>>();

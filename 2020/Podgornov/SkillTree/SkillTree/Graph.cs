@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SkillTree
@@ -7,55 +9,57 @@ namespace SkillTree
     [JsonObject]
     public class Graph<T>:IEnumerable<Vertex<T>>
     {
-        private int _maxId;
+        private Dictionary<int, Vertex<T>> _vertexesDictionary;
 
-        public readonly Dictionary<int, Vertex<T>> Vertexes;
+        public ReadOnlyDictionary<int, Vertex<T>> VertexesDictionary => new ReadOnlyDictionary<int, Vertex<T>>(this._vertexesDictionary);
 
         public int MaxId
         {
-            get => _maxId;
-            set
-            {
-                if(_maxId == 0)
-                    AddLinksToVertexes();
-                _maxId = value;
-            }
+            get;
+            private set;
         }
 
         public Graph()
         {
-            Vertexes = new Dictionary<int, Vertex<T>>();
-        }        
+            _vertexesDictionary = new Dictionary<int, Vertex<T>>();
+        }
 
-        public Vertex<T> this[int id] => Vertexes[id];
+        public Graph(IDictionary<int,Vertex<T>> vertexesDictionary)
+        {
+            _vertexesDictionary = new Dictionary<int, Vertex<T>>(vertexesDictionary);
+            MaxId = _vertexesDictionary.Values.Select(i => i.Id).Max() + 1;
+            AddLinksToVertexes();
+        }
+
+        public Vertex<T> this[int id] => _vertexesDictionary[id];
 
         public void AddVertex(T value)
         {
-            var vertex = new Vertex<T>(value, MaxId, Vertexes);
-            Vertexes.Add(MaxId, vertex);
+            var vertex = new Vertex<T>(value, MaxId, _vertexesDictionary);
+            _vertexesDictionary.Add(MaxId, vertex);
             MaxId++;
         }
 
         public void RemoveVertex(int id)
         {
-            var vertex = Vertexes[id];          
+            var vertex = _vertexesDictionary[id];          
             vertex.DeletingAllLinks();
-            Vertexes.Remove(id);
+            _vertexesDictionary.Remove(id);
         }
 
-        public void AddDependence(int beginId, int endId) => Vertexes[endId].AddDependence(Vertexes[beginId]);
+        public void AddDependence(int beginId, int endId) => _vertexesDictionary[endId].AddDependence(_vertexesDictionary[beginId]);
 
-        public void RemoveDependence(int beginId, int endId) => Vertexes[endId].RemoveDependence(Vertexes[beginId]);
+        public void RemoveDependence(int beginId, int endId) => _vertexesDictionary[endId].RemoveDependence(_vertexesDictionary[beginId]);
 
-        public IEnumerator<Vertex<T>> GetEnumerator() => Vertexes.Values.GetEnumerator();
+        public IEnumerator<Vertex<T>> GetEnumerator() => _vertexesDictionary.Values.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private void AddLinksToVertexes()
         {
-            foreach (var vertex in Vertexes.Values)
+            foreach (var vertex in _vertexesDictionary.Values)
             {
-                vertex.Vertexes = this.Vertexes;
+                vertex.Vertexes = this._vertexesDictionary;
             }
         }
     }

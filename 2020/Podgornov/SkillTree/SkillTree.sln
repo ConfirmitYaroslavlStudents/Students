@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTree", "SkillTree\SkillTree.csproj", "{8F0B7E09-19FF-47A9-B939-CA5416B781A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTreeBoard", "SkillTreeBoard\SkillTreeBoard.csproj", "{35A90A1E-5B18-40A1-A170-B5F15ACED66A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8F0B7E09-19FF-47A9-B939-CA5416B781A0} = {8F0B7E09-19FF-47A9-B939-CA5416B781A0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillApplication", "SkillApplication\SkillApplication.csproj", "{51A251E5-A68A-4167-8CF7-814F04D51773}"
 EndProject

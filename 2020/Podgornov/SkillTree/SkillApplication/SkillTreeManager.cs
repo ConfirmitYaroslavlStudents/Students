@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -66,14 +67,14 @@ namespace SkillApplication
             var path = GetPath(name);
             if (File.Exists(path))
             {
-                Graph<T> graph;
+                IDictionary<int,Vertex<T>> vertexesDictionary;
                 using (var reader = new StreamReader(path))
                 {
-                    graph = JsonConvert.DeserializeObject<Graph<T>>(reader.ReadToEnd());
+                    vertexesDictionary = JsonConvert.DeserializeObject<IDictionary<int, Vertex<T>>>(reader.ReadToEnd());
                 }
-                if (graph == null)
-                    throw new ArgumentNullException(nameof(graph), "Failed to load the graph.");
-                return graph;
+                if (vertexesDictionary == null)
+                    throw new ArgumentNullException(nameof(vertexesDictionary), "Failed to load the graph.");
+                return new Graph<T>(new ReadOnlyDictionary<int, Vertex<T>>(vertexesDictionary));
             }
             else
                 throw new FileNotFoundException("File not found.");
@@ -82,7 +83,7 @@ namespace SkillApplication
         public void SaveGraph<T>(string name, Graph<T> graph)
         {
             var path = GetPath(name);
-            var result = JsonConvert.SerializeObject(graph, Formatting.Indented);
+            var result = JsonConvert.SerializeObject(graph.VertexesDictionary, Formatting.Indented);
             using (var writer = new StreamWriter(path))
             {
                 writer.Write(result);

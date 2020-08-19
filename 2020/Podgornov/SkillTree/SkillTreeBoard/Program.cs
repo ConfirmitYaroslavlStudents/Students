@@ -21,7 +21,6 @@ namespace SkillTreeBoard
             ).Start();
         }
 
-        #region User Menu
         private static void RunUserMenu(ISkillTreeManager manager)
         {
             var names = new [] {"User's Disciplines","Del User's Discipline", "Download Disciplines"};
@@ -151,10 +150,6 @@ namespace SkillTreeBoard
             }
         }
 
-        #endregion
-
-        #region Moderator Menu
-
         private static readonly string[] DisciplineConstructorNames = new[]
         {
             "All Disciplines","Add Discipline", "Del Discipline", "add ->","del ->"
@@ -242,8 +237,6 @@ namespace SkillTreeBoard
             }
         }
 
-        #region Moderator's Discipline Menu
-
         private static void RunModeratorDisciplineMenu(ISkillTreeManager manager , Discipline discipline)
         {
             var names = new [] {"Edit Discipline" ,"About" ,"Edit Name","Edit Description"};
@@ -279,8 +272,6 @@ namespace SkillTreeBoard
             Console.WriteLine(KeyWords.ContinueString);
             Console.ReadKey();
         }
-
-        #region Moderator's Discipline Menu (Edit)
 
         private static readonly string[] SkillConstructorNames = new string[]
         {
@@ -444,8 +435,6 @@ namespace SkillTreeBoard
             }
         }
 
-        #region Moderator's Skill Menu
-
         private static void RunSkillMenu(Vertex<Skill> vertex)
         {
             var names = new [] { "About skill", "Edit Description", "Edit Training Time", "Edit Complexity", "Dependencies" };
@@ -489,21 +478,22 @@ namespace SkillTreeBoard
 
         private static void SetSkillTrainingTime(Skill skill)
         {
-            Console.Clear();
             Console.CursorVisible = true;
-            Console.WriteLine("Training Time:");
-            skill.TrainingTime = Console.ReadLine();
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Training Time:");
+                var flag = int.TryParse(Console.ReadLine(), out var result);
+                if (!flag) 
+                {
+                    if (Check()) continue;
+                    break;
+                }
+
+                skill.TrainingTime = (result);
+                break;
+            }
         }
-
-        #endregion
-
-        #endregion
-
-        #endregion
-
-        #endregion
-
-        #region Сommon Functions
 
         private static bool Check()
         {
@@ -557,20 +547,30 @@ namespace SkillTreeBoard
             return vertex.Available ? ConsoleColor.Green : ConsoleColor.Red;
         }
 
-        private static void CreateAndRunSkillMenu<T>(Vertex<T> vertex)
+        private static void CreateAndRunSkillMenu(Vertex<Skill> vertex)
         {
             var names = new []
             {
-                "Dependencies", "About Value", "Finish"
+                "Dependencies", "About Value", "Finish","The time to study the branch."
             };
             var actions = new Action<string>[names.Length];
             actions[0] = (s => { PrintDependenciesOfVertex(vertex); });
             actions[1] = (s => { PrintVertexInformation(vertex.Value); });
             actions[2] = (s => { Recognize(vertex); });
+            actions[3] = s => { GetTimeToStudyTheBranch(vertex);};
             new ConsoleMenu<string[], string>(
                 names,
                 actions
             ).Start();
+        }
+
+        private static void GetTimeToStudyTheBranch(Vertex<Skill> vertex )
+        {
+            Console.Clear();
+            var time = vertex.GetAllDependencies().Select(i => i.Value.TrainingTime).Sum();
+            Console.WriteLine($"The time to study the branch : {time}");
+            Console.WriteLine(KeyWords.ContinueString);
+            Console.ReadKey();
         }
 
         private static void PrintVertexInformation<T>(T value)
@@ -584,7 +584,7 @@ namespace SkillTreeBoard
         private static void PrintDependenciesOfVertex<T>(Vertex<T> vertex)
         {
             new ConsoleMenu<IEnumerable<Vertex<T>>,Vertex<T>>(
-                vertex.GetVertexes(),
+                vertex.GetAllDependencies(),
                 null,
                 GetVertexColor,
                 KeyWords.DescriptionOfColors,
@@ -609,10 +609,6 @@ namespace SkillTreeBoard
                 Console.ReadKey();
             }
         }
-
-        #endregion
-
-
 
     }
 }

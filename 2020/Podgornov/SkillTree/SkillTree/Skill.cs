@@ -6,11 +6,11 @@
 
         public string Description { get; set; }
 
-        public string TrainingTime { get; set; }
+        public int TrainingTime { get; set; }
 
         public Skill() { }
 
-        public Skill(string description, string trainingTime, SkillComplexity complexity)
+        public Skill(string description, int trainingTime, SkillComplexity complexity)
         {
             this.Description = description;
             this.TrainingTime = trainingTime;

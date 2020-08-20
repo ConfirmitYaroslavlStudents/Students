@@ -62,6 +62,8 @@ namespace BillSplitter.Migrations
 
                     b.HasIndex("BillId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Customers");
                 });
 
@@ -72,7 +74,7 @@ namespace BillSplitter.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PositionId")
@@ -100,7 +102,7 @@ namespace BillSplitter.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ManagingCustomerId")
+                    b.Property<int>("ManagingCustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -155,13 +157,21 @@ namespace BillSplitter.Migrations
                         .HasForeignKey("BillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BillSplitter.Models.User", "User")
+                        .WithMany("Customers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BillSplitter.Models.Order", b =>
                 {
                     b.HasOne("BillSplitter.Models.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("BillSplitter.Models.Position", "Position")
                         .WithMany("Orders")
@@ -172,16 +182,17 @@ namespace BillSplitter.Migrations
 
             modelBuilder.Entity("BillSplitter.Models.Position", b =>
                 {
-                    b.HasOne("BillSplitter.Models.Bill", null)
+                    b.HasOne("BillSplitter.Models.Bill", "Bill")
                         .WithMany("Positions")
                         .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BillSplitter.Models.Customer", "ManagingCustomer")
                         .WithMany("ManagedPositions")
                         .HasForeignKey("ManagingCustomerId")
-                        .OnDelete(DeleteBehavior.ClientNoAction);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

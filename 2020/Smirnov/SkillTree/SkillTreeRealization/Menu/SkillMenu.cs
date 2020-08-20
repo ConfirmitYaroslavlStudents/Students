@@ -1,59 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using SkillTree;
-using SkillTreeRealization.SkillTree.Contorller;
-using SkillTreeRealization.SkillTree.GetInfo;
+using SkillTreeRealization.SkillTree;
+using System.Linq;
 
 namespace SkillTreeRealization.Menu
 {
     public class SkillMenu
     {
-        private const string _returnAllDisciplines = "1";
-        private const string _returnAllRequirementForDiscipline = "2";
-        private const string _addRequirementForSkill = "3";
-        private const string _returnAllInformationAboutSkill = "4";
-        private const string _saveAndExit = "5";
+        private const string AddRequirementForSkill = "1";
+        private const string GetAllInformationAboutSkill = "2";
+        private const string GetAllWayUptoSkill = "3";
+        private const string GetAllTimeUpToSkill = "4";
+        private const string SaveAndExit = "5";
 
         private static void WriteSkillMenu()
         {           
-            Console.WriteLine("1 Return all disciplines");
-            Console.WriteLine("2 Return all requirement for discipline");
-            Console.WriteLine("3 Add requirement for skill");
-            Console.WriteLine("4 Return all information about skill");
-            Console.WriteLine("5 Save and Exit");
+            Console.WriteLine("1 Add requirement for skill");
+            Console.WriteLine("2 Get all information about skill");
+            Console.WriteLine("3 Get all way up to skill");
+            Console.WriteLine("4 Get all time up to skill");
+            Console.WriteLine("5 Save and return");
         }
-        public static bool WorkWitchSkillMenu(List<Discipline> disciplines)
+        public static bool WorkWitchSkillMenu(DisciplineContainer disciplines)
         {
             WriteSkillMenu();
             var item = Console.ReadLine();
             var nameDiscipline = "";
+            var nameSkill = "";
             switch (item)
             {
-                case (_returnAllDisciplines):
-                    Console.Clear();
-                    foreach (var discipline in disciplines)
-                    {
-                        Console.Write($"{discipline.Name} ");
-                    }
-                    Console.WriteLine();
-
-                    break;
-                case (_returnAllRequirementForDiscipline):
-                    Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
-
-                    try
-                    {
-                        Console.WriteLine(DisciplineGetInfo.ReturnNameAllSkillsForDiscipline(nameDiscipline, disciplines));
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-
-                    break;
-                case (_addRequirementForSkill):
+                case (AddRequirementForSkill):
                     Console.Clear();
                     Console.WriteLine("Write name of discipline");
                     nameDiscipline = Console.ReadLine();
@@ -64,7 +41,7 @@ namespace SkillTreeRealization.Menu
 
                     try
                     {
-                        SkillController.AddRequirementForSkill(nameDiscipline, firstSkill, secondSkill, disciplines);
+                        disciplines.AddRequirementForSkill(nameDiscipline, firstSkill, secondSkill);
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -72,7 +49,7 @@ namespace SkillTreeRealization.Menu
                     }
 
                     break;
-                case (_returnAllInformationAboutSkill):
+                case (GetAllInformationAboutSkill):
                     Console.Clear();
                     Console.WriteLine("Write name of discipline");
                     nameDiscipline = Console.ReadLine();
@@ -80,7 +57,7 @@ namespace SkillTreeRealization.Menu
 
                     try
                     {
-                        Console.WriteLine(SkillGetInfo.ReturnAllInformationAboutSkill(nameDiscipline, Console.ReadLine(), disciplines));
+                        Console.WriteLine(disciplines.GetAllInformationAboutSkill(nameDiscipline, Console.ReadLine()));
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -88,9 +65,43 @@ namespace SkillTreeRealization.Menu
                     } 
 
                     break;
-                case (_saveAndExit):
+                case (GetAllWayUptoSkill):
+                    Console.Clear();
+                    Console.WriteLine("Write name of discipline");
+                    nameDiscipline = Console.ReadLine();
+                    Console.WriteLine("Write name of skill");
+                    nameSkill = Console.ReadLine();
 
-                    Loader.SkillTreeLoader.SaveDisciplines(disciplines);
+                    try
+                    {
+                        Console.WriteLine(disciplines.GetAllWayUptoSkill(nameDiscipline, nameSkill));
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
+                    break;
+                case (GetAllTimeUpToSkill):
+                    Console.Clear();
+                    Console.WriteLine("Write name of discipline");
+                    nameDiscipline = Console.ReadLine();
+                    Console.WriteLine("Write name of skill");
+                    nameSkill = Console.ReadLine();
+
+                    try
+                    {
+                        Console.WriteLine(disciplines.GetAllTimeUptoSkill(nameDiscipline, nameSkill));
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
+                    break;
+                case (SaveAndExit):
+
+                    Loader.SkillTreeLoader.SaveDisciplines(disciplines.Disciplines);
 
                     return false;
                 default:

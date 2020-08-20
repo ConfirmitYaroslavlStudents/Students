@@ -1,71 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using SkillTree;
-using SkillTreeRealization.SkillTree.GetInfo;
+using SkillTreeRealization.SkillTree;
 
 namespace SkillTreeRealization.Menu
 {
-    public class UserMenu // NotEnd
+    public class UserMenu
     {
-        private const string _returnAllDisciplines = "1";
-        private const string _returnAllRequirementForDiscipline = "2";
-        private const string _returnAllInformationAboutSkill = "3";
-        private const string _learnNewSkill = "4";
-        private const string _learnNewDiscipline = "5";
-        private const string _returnNameAllLearnedSkill = "6";
-        private const string _returnNameAllLearnedDisciplines = "7";
-        private const string _saveAndExit = "8";
+        private const string LearnNewSkill = "1";
+        private const string LearnNewDiscipline = "2";
+        private const string GetNameAllLearnedSkill = "3";
+        private const string GetNameAllLearnedDisciplines = "4";
+        private const string SaveAndExit = "5";
 
         private static void WriteDisciplineMenu()
         {
-            Console.WriteLine("1 Return all disciplines");
-            Console.WriteLine("2 Return all requirements for discipline");
-            Console.WriteLine("3 Return all information about skill");
-            Console.WriteLine("4 Learn new skill");
-            Console.WriteLine("5 Learn new disciplines");
-            Console.WriteLine("6 Return Name All Learned Skills");
-            Console.WriteLine("7 Return Name All Learned Disciplines");
-            Console.WriteLine("8 Save and exit");
+            Console.WriteLine("1 Learn new skill");
+            Console.WriteLine("2 Learn new disciplines");
+            Console.WriteLine("3 Get Name All Learned Skills");
+            Console.WriteLine("4 Get Name All Learned Disciplines");
+            Console.WriteLine("5 Save and return");
         }
-        public static bool WorkWitchUserMenu(User.User user, List<Discipline> disciplines)
+        public static bool WorkWitchUserMenu(UserContainer user, DisciplineContainer disciplines)
         {
             WriteDisciplineMenu();
             var item = Console.ReadLine();
-            var nameDiscipline = "";
+            var nameDiscipline = "";         
             switch (item)
             {
-                case (_returnAllDisciplines):
-                    Console.Clear();
-                    foreach (var discipline in disciplines)
-                    {
-                        Console.Write($"{discipline.Name} ");
-                    }
-                    Console.WriteLine();
-
-                    break;
-                case (_returnAllRequirementForDiscipline):
-                    Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
-                    try
-                    {
-                        Console.WriteLine(DisciplineGetInfo.ReturnNameAllSkillsForDiscipline(nameDiscipline, disciplines));
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-
-                    break;
-                case (_returnAllInformationAboutSkill):
+                case (LearnNewSkill):
                     Console.Clear();
                     Console.WriteLine("Write name of discipline");
                     nameDiscipline = Console.ReadLine();
                     Console.WriteLine("Write name of skill");
+                    var nameSkill = Console.ReadLine();                 
 
                     try
                     {
-                        Console.WriteLine(SkillGetInfo.ReturnAllInformationAboutSkill(nameDiscipline, Console.ReadLine(), disciplines));
+                        user.LearnNewSkill(disciplines.GetDiscipline(nameDiscipline).Graph.FindVertex(nameSkill));
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -73,23 +43,7 @@ namespace SkillTreeRealization.Menu
                     }
 
                     break;
-                case (_learnNewSkill):
-                    Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
-                    Console.WriteLine("Write name of skill");
-
-                    try
-                    {
-                        UserController.LearnNewSkill(nameDiscipline, Console.ReadLine(), disciplines, user);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-
-                    break;
-                case (_learnNewDiscipline):
+                case (LearnNewDiscipline):
 
                     Console.Clear();
                     Console.WriteLine("Write name of discipline");
@@ -97,7 +51,7 @@ namespace SkillTreeRealization.Menu
 
                     try
                     {
-                        UserController.LearnNewDiscipline(nameDiscipline, disciplines, user);
+                        user.LearnNewDiscipline(disciplines.GetDiscipline(nameDiscipline));
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -105,19 +59,19 @@ namespace SkillTreeRealization.Menu
                     }
 
                     break;
-               case(_returnNameAllLearnedSkill):
+               case(GetNameAllLearnedSkill):
 
-                    Console.WriteLine(UserGetInfo.ReturnNameAllLearnedSkills(user));
-
-                    break;
-                case (_returnNameAllLearnedDisciplines):
-
-                    Console.WriteLine(UserGetInfo.ReturnNameAllLearnedDisciplines(user));
+                    Console.WriteLine(user.GetNameAllLearnedSkills());
 
                     break;
-                case (_saveAndExit):
+                case (GetNameAllLearnedDisciplines):
 
-                    Loader.UserLoader.SaveUser(user);
+                    Console.WriteLine(user.GetNameAllLearnedDisciplines());
+
+                    break;
+                case (SaveAndExit):
+
+                    Loader.UserLoader.SaveUser(user.User);
 
                     return false;
                 default:

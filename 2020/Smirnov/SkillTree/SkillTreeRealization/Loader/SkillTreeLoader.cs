@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using SkillTree.Graph;
 using SkillTree;
 
@@ -17,7 +16,7 @@ namespace SkillTreeRealization.Loader
             var disciplines = new List<Discipline>();
             Directory.CreateDirectory(_folderDiscipline);
             var files = Directory.GetFiles(_folderDiscipline);
-            
+
             foreach (var file in files)
             {
                 disciplines.Add(new Discipline(file.Substring(_startNameDiscipline, file.Length - _endNameDiscipline),
@@ -27,6 +26,7 @@ namespace SkillTreeRealization.Loader
         }
         public static void SaveDisciplines(List<Discipline> disciplines)
         {
+            
             Directory.CreateDirectory(_folderDiscipline);
             foreach (var discipline in disciplines)
             {

@@ -9,7 +9,7 @@ namespace SkillTree.Graph
         {
             Vertices = new List<Vertex>();
         }
-        public List<Vertex> Vertices { get; }
+        public List<Vertex> Vertices { get; set; }
 
         public int Count 
         {
@@ -54,7 +54,36 @@ namespace SkillTree.Graph
                 }
             }
             return null;
-        }  
+        } 
+        public List<Vertex> BreadthFirstSearch(Vertex start)
+        {
+            var queue = new Queue<Vertex>();
+            var path = new List<Vertex>();
+            var visited = new Dictionary<string, bool>();
+
+            queue.Enqueue(start);
+            path.Add(start);
+
+            while (queue.Count > 0)
+            {
+                var vertex = queue.Dequeue();
+                foreach (var edge in FindVertex(vertex.Skill.Name).Edges)
+                {
+                    if (!visited.ContainsKey(edge.ConnectedVertex.Skill.Name))
+                    {
+                        visited.Add(edge.ConnectedVertex.Skill.Name, false);
+                    }
+                    if (!visited[edge.ConnectedVertex.Skill.Name])
+                    {
+                        queue.Enqueue(edge.ConnectedVertex);
+                        path.Add(edge.ConnectedVertex);
+                        visited[edge.ConnectedVertex.Skill.Name] = true;
+                    }
+                }
+            }
+
+            return path;
+        }
         public List<Vertex> ReturnAllVertices()
         {
             return Vertices;

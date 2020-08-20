@@ -9,6 +9,9 @@
             Name = name;
             Graph = new Graph.Graph();
         }
+        public Discipline()
+        {
+        }
         public Discipline(string name, Graph.Graph graph)
         {
             Name = name;

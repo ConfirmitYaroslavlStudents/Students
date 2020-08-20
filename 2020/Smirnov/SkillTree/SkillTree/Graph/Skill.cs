@@ -2,9 +2,10 @@
 
 namespace SkillTree.Graph
 {
-    [DebuggerDisplay("Name = {Name} Difficult = {Difficult} Specification = {Specification} Time = {Time}")]
+    //[DebuggerDisplay("Name = {Name} Difficult = {Difficult} Specification = {Specification} Time = {Time}")]
     public class Skill
     {
+        public Skill() { }
         public Skill(string name, string difficulty, string specification,  int time)
         {
             Name = name;
@@ -13,9 +14,9 @@ namespace SkillTree.Graph
             Time = time;
         }
 
-        public string Name { get; }
-        public string Difficult { get; }
-        public string Specification { get; }
-        public int Time { get; }
+        public string Name { get; set; }
+        public string Difficult { get; set; }
+        public string Specification { get; set; }
+        public int Time { get; set; }
     }
 }

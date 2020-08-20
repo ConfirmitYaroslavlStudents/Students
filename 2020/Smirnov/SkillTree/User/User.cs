@@ -17,8 +17,9 @@ namespace User
             LearnedSkills = learnedSkills;
             LearnedDisciplines = learnedDisciplines;
         }
-        public string Name { get; }
-        public List<Skill> LearnedSkills { get; }
-        public List<string> LearnedDisciplines { get; }
+        public User() { }
+        public string Name { get; set;  }
+        public List<Skill> LearnedSkills { get; set;  }
+        public List<string> LearnedDisciplines { get; set; }
     }
 }

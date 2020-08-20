@@ -2,11 +2,12 @@
 {
     public class Edge
     {
+        public Edge() { } 
         public Edge(Vertex connectedVertex)
         {
             ConnectedVertex = connectedVertex;
         }
 
-        public Vertex ConnectedVertex { get; }
+        public Vertex ConnectedVertex { get; set; }
     }
 }

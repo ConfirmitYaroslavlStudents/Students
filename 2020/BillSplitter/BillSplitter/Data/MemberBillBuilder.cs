@@ -5,18 +5,18 @@ using BillSplitter.Calculators;
 
 namespace BillSplitter.Data
 {
-    public class CustomerBillBuilder
+    public class MemberBillBuilder
     {
-        public List<Position> Build(Customer customer)
+        public List<Position> Build(Member member)
         {
-            var orders = customer.Orders;
+            var orders = member.Orders;
 
             return orders.Select(order => new Position()
                 {
                     Price = new OrderPriceCalculator().CalculatePrice(order),
                     Id = order.Position.Id,
                     Name = order.Position.Name,
-                    ManagingCustomer = order.Position.ManagingCustomer
+                    ManagingMember = order.Position.ManagingMember
                 })
                 .ToList();
         }

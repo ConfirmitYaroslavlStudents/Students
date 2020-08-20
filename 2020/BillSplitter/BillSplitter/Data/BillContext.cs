@@ -16,7 +16,7 @@ namespace BillSplitter.Data
 
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Position> Positions { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Member> Members { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -24,7 +24,7 @@ namespace BillSplitter.Data
         {
             modelBuilder
                 .Entity<User>()
-                .HasMany(u => u.Customers)
+                .HasMany(u => u.Members)
                 .WithOne(c => c.User)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -35,9 +35,9 @@ namespace BillSplitter.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder
-                .Entity<Customer>()
+                .Entity<Member>()
                 .HasMany(c => c.Orders)
-                .WithOne(o => o.Customer)
+                .WithOne(o => o.Member)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

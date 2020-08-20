@@ -24,10 +24,10 @@ namespace BillSplitter.Controllers
         public IActionResult Index()
         {
 
-            List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(GetUserId()).Select(b => new BillViewModel()
+            List<BillViewModel> bills = Db.Bills.GetByMemberUserId(GetUserId()).Select(b => new BillViewModel()
             {
                 Bill = b,
-                isAdmin = b.Customers.FirstOrDefault(c => c.UserId == this.GetUserId()).Role=="Admin"
+                isAdmin = b.Members.FirstOrDefault(c => c.UserId == this.GetUserId()).Role=="Admin"
             }).ToList();
 
             return View(bills);
@@ -37,7 +37,7 @@ namespace BillSplitter.Controllers
         public IActionResult Create(Bill createdBill)
         {
             createdBill.UserId = GetUserId();
-            var customer = new Customer
+            var member = new Member
             {
                 Name = GetUserName(),
                 UserId = GetUserId(),
@@ -46,7 +46,7 @@ namespace BillSplitter.Controllers
             };
 
             Db.Bills.Add(createdBill);
-            Db.Customers.Add(customer);
+            Db.Members.Add(member);
 
             Db.Save();
 
@@ -58,19 +58,19 @@ namespace BillSplitter.Controllers
         public IActionResult ViewBill(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);
-            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
+            var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
 
-            if (customer == null)
+            if (member == null)
                 return View("JoinBill", bill);
 
-            var customersBill = new CustomerBillBuilder().Build(customer);
+            var memberBill = new MemberBillBuilder().Build(member);
 
-            var model = BuildVewModelForViewBill(bill, customersBill);
+            var model = BuildVewModelForViewBill(bill, memberBill);
 
             return View(model);
         }
 
-        private BillViewModel BuildVewModelForViewBill(Bill bill, List<Position> customersBill)
+        private BillViewModel BuildVewModelForViewBill(Bill bill, List<Position> memberBill)
         {
             var positions = bill.Positions
                 .Select(position => new PositionViewModel(position))
@@ -79,33 +79,33 @@ namespace BillSplitter.Controllers
            
             foreach (var pos in positions)
             {
-                var customerPosition = customersBill
+                var memberPosition = memberBill
                     .FirstOrDefault(p => p.Id == pos.Id);
-                if (customerPosition != null)
+                if (memberPosition != null)
                 {
-                    pos.ActualPrice = customerPosition.Price;
+                    pos.ActualPrice = memberPosition.Price;
                     pos.Selected = true;
                 }
             }
             Dictionary<string, decimal> payments = new Dictionary<string, decimal>();
-            foreach (var pos in customersBill)
+            foreach (var pos in memberBill)
             {
-                if (!payments.ContainsKey(pos.ManagingCustomer.Name))
-                    payments.Add(pos.ManagingCustomer.Name, 0);
+                if (!payments.ContainsKey(pos.ManagingMember.Name))
+                    payments.Add(pos.ManagingMember.Name, 0);
 
-                payments[pos.ManagingCustomer.Name] += pos.Price;
+                payments[pos.ManagingMember.Name] += pos.Price;
             }
 
-            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
+            var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
 
             var model = new BillViewModel
             {
                 Bill = bill,
                 Positions = positions,
                 Payments = payments,
-                isAdmin = bill.Customers.FirstOrDefault(c => c.UserId== GetUserId()).Role=="Admin",
-                isModerator = customer.Role == "Admin" || customer.Role=="Moderator",
-                CustomerSum = customersBill.Sum(p => p.Price)
+                isAdmin = bill.Members.FirstOrDefault(c => c.UserId== GetUserId()).Role == "Admin",
+                isModerator = member.Role == "Admin" || member.Role == "Moderator",
+                MemberSum = memberBill.Sum(p => p.Price)
             };
 
             return model;

@@ -2,7 +2,7 @@
 
 namespace BillSplitter.Models
 {
-    public class Customer
+    public class Member
     {
         public int Id { get; set; }
         

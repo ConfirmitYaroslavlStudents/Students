@@ -20,7 +20,7 @@ namespace BillSplitter.Data
 
         public void DeleteByUserAndPosition(int userId, int positionId)
         {
-            var order = _context.Set<Order>().FirstOrDefault(o => (o.Customer.UserId==userId && o.PositionId==positionId ));
+            var order = _context.Set<Order>().FirstOrDefault(o => (o.Member.UserId == userId && o.PositionId == positionId ));
             if(order != null)
                 _context.Set<Order>().Remove(order);
         }

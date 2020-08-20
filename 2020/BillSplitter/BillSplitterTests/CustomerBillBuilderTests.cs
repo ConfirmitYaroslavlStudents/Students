@@ -11,7 +11,7 @@ namespace BillSplitterTests
         public void Build_ReturnsCorrectPrices()
         {
             var positions = new PositionSeeder().Seed();
-            var customer = new Customer
+            var customer = new Member
             {
                 Orders = new List<Order>
                 {
@@ -52,7 +52,7 @@ namespace BillSplitterTests
                 }
             };
 
-            var actual = new CustomerBillBuilder().Build(customer);
+            var actual = new MemberBillBuilder().Build(customer);
 
             for (int i = 0; i < 3; i++)
                 Assert.Equal(expected[i].Price, actual[i].Price);

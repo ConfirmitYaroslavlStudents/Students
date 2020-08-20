@@ -6,7 +6,7 @@ namespace BillSplitter.Data
     {
         public readonly BillRepository Bills;
         public readonly UserRepository Users;
-        public readonly CustomerRepository Customers;
+        public readonly MemberRepository Members;
         public readonly OrderRepository Orders;
         public readonly PositionsDbAccessor Positions;
 
@@ -21,7 +21,7 @@ namespace BillSplitter.Data
         {
             Bills = new BillRepository(context);
             Users = new UserRepository(context);
-            Customers = new CustomerRepository(context);
+            Members = new MemberRepository(context);
             Orders = new OrderRepository(context);
             Positions = new PositionsDbAccessor(context);
             _context = context;

@@ -24,12 +24,12 @@ namespace BillSplitter.Attributes
             if (bill == null)
                 filterContext.Result = controller.Error();
 
-            var currentCustomer = bill.Customers.Find(c => c.UserId == controller.GetUserId());
+            var currentMember = bill.Members.Find(c => c.UserId == controller.GetUserId());
 
-            if (currentCustomer == null)
+            if (currentMember == null)
                 filterContext.Result = controller.Error();
 
-            if (currentCustomer.Role != Role && currentCustomer.Role != "Admin")
+            if (currentMember.Role != Role && currentMember.Role != "Admin")
                 filterContext.Result = controller.Error();
         }
     }

@@ -9,6 +9,6 @@ namespace BillSplitter.Models.ViewModels.ViewBill
         public Bill Bill { get; set; }
         public Dictionary<string, decimal> Payments { get; set;}
         public List<PositionViewModel> Positions { get; set; }
-        public decimal CustomerSum { get; set; }
+        public decimal MemberSum { get; set; }
     }
 }

@@ -12,15 +12,15 @@ namespace BillSplitterTests
         [Fact]
         public void AddCustomer_AddNewCustomerInDb()
         {
-            var customers = new List<Customer>();
+            var customers = new List<Member>();
             var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
             var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Customer>()).Returns(dbSetMock);
+            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
 
             var db = new UnitOfWork(contextMock.Object);
-            var repo = db.Customers;
+            var repo = db.Members;
 
-            var customer = new Customer
+            var customer = new Member
             {
                 Id = 1
             };
@@ -34,20 +34,20 @@ namespace BillSplitterTests
         [Fact]
         public void GetCustomerById_ReturnsRightCustomer()
         {
-            var customers = new List<Customer>();
+            var customers = new List<Member>();
             var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
             var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Customer>()).Returns(dbSetMock);
+            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
 
             var db = new UnitOfWork(contextMock.Object);
-            var repo = db.Customers;
+            var repo = db.Members;
 
-            var customer1 = new Customer
+            var customer1 = new Member
             {
                 Id = 1
             };
 
-            var customer2 = new Customer
+            var customer2 = new Member
             {
                 Id = 2
             };
@@ -65,13 +65,13 @@ namespace BillSplitterTests
         [Fact]
         public void GetCustomerById_ReturnsNull()
         {
-            var customers = new List<Customer>();
+            var customers = new List<Member>();
             var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
             var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Customer>()).Returns(dbSetMock);
+            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
 
             var db = new UnitOfWork(contextMock.Object);
-            var repo = db.Customers;
+            var repo = db.Members;
 
             var actual = repo.GetById(1);
 
@@ -81,25 +81,25 @@ namespace BillSplitterTests
         [Fact]
         public void DeleteById_DeletesRightCustomer()
         {
-            var customers = new List<Customer>();
+            var customers = new List<Member>();
             var orders = new List<Order>();
 
             var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
             var orderDbSet = DbSetMockBuilder.BuildDbSet(orders);
 
             var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Customer>()).Returns(dbSetMock);
+            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
             contextMock.Setup(c => c.Set<Order>()).Returns(orderDbSet);
 
             var db = new UnitOfWork(contextMock.Object);
-            var repo = db.Customers;
+            var repo = db.Members;
 
-            var customer1 = new Customer
+            var customer1 = new Member
             {
                 Id = 1
             };
 
-            var customer2 = new Customer
+            var customer2 = new Member
             {
                 Id = 2
             };

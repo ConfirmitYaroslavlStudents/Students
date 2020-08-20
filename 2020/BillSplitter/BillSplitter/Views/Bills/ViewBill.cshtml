@@ -53,7 +53,7 @@
 </table>
 
 <h2>
-    Your total sum is @Model.CustomerSum
+    Your total sum is @Model.MemberSum
 </h2>
 <ul>
     @foreach (var payment in Model.Payments)
@@ -71,11 +71,10 @@
 
 @if (Model.isAdmin)
 {
-    @Html.ActionLink("Manage customers", "Index", "Customers", new
+    @Html.ActionLink("Manage members", "Index", "Members", new
     {
         billId = Model.Bill.Id
     }, new { @class = "btn btn-primary" })
-
 }
 
 @if (Model.isModerator)

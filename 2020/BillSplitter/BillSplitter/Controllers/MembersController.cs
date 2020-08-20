@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace BillSplitter.Controllers
 {
     [Authorize]
-    [Route("Bills/{billId}/Customers")]
-    public class CustomersController : BaseController
+    [Route("Bills/{billId}/Members")]
+    public class MembersController : BaseController
     {
-        public CustomersController(UnitOfWork db) : base(db)
+        public MembersController(UnitOfWork db) : base(db)
         {
 
         }
@@ -23,13 +23,13 @@ namespace BillSplitter.Controllers
             var bill = Db.Bills.GetBillById(billId);
 
             ViewData["billId"] = billId;
-            var customers = bill.Customers;
+            var members = bill.Members;
 
-            return View(customers);
+            return View(members);
         }
 
         [HttpPost]
-        public IActionResult AddCustomerOrContinueToPick(int billId) // give more suitable name
+        public IActionResult AddMemberOrContinueToPick(int billId) 
         {
             if (!Db.Bills.Exist(billId))
                 Error();
@@ -37,9 +37,9 @@ namespace BillSplitter.Controllers
             var userId = GetUserId();
             var bill = Db.Bills.GetBillById(billId);
             
-            if (bill.Customers.FirstOrDefault(c => c.UserId == userId) == null)
+            if (bill.Members.FirstOrDefault(c => c.UserId == userId) == null)
             {
-                var customer = new Customer
+                var member = new Member
                 {
                     BillId = billId,
                     UserId = GetUserId(),
@@ -47,7 +47,7 @@ namespace BillSplitter.Controllers
                     Name = GetUserName()
                 };
 
-                Db.Customers.Add(customer);
+                Db.Members.Add(member);
                 Db.Save();
             }
 
@@ -55,22 +55,22 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        [Route("{customerId}/UpdateRole")]
+        [Route("{memberId}/UpdateRole")]
         [ValidateUserAttributeFactory(RequestedRole = "Admin")]
-        public IActionResult UpdateRole(int billId, int customerId, string role)
+        public IActionResult UpdateRole(int billId, int memberId, string role)
         {
-            Db.Customers.UpdateCustomerRoleById(customerId, role);
+            Db.Members.UpdateMemberRoleById(memberId, role);
             Db.Save();
 
             return RedirectToAction(nameof(Index), new {billId = billId});
         }
 
         [HttpPost]
-        [Route("{customerId}")]
+        [Route("{memberId}")]
         [ValidateUserAttributeFactory(RequestedRole = "Admin")]
-        public IActionResult Delete(int billId, int customerId) // TODO Maybe delete confirmation?
+        public IActionResult Delete(int billId, int memberId) // TODO Maybe delete confirmation?
         {
-            Db.Customers.DeleteById(customerId);
+            Db.Members.DeleteById(memberId);
             Db.Save();
             return RedirectToAction(nameof(Index), new { billId = billId });
         }

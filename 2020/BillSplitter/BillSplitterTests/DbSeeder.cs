@@ -56,25 +56,25 @@ namespace BillSplitterTests
 
         private List<int> SeedCustomers(BillContext db, int billId)
         {
-            var obiWan = new Customer
+            var obiWan = new Member
             {
                 BillId = billId,
                 Name = "ObiWan"
             };
 
-            var anakin = new Customer
+            var anakin = new Member
             {
                 BillId = billId,
                 Name = "Anakin"
             };
 
-            var padme = new Customer
+            var padme = new Member
             {
                 BillId = billId,
                 Name = "Padme"
             };
 
-            db.Customers.AddRange(obiWan, anakin, padme);
+            db.Members.AddRange(obiWan, anakin, padme);
 
             db.SaveChanges();
 
@@ -86,42 +86,42 @@ namespace BillSplitterTests
             var obiWanPizza = new Order
             {
                 PositionId = positionsIds[0],
-                CustomerId = customersIds[0],
+                MemberId = customersIds[0],
                 Quantity = 0.25m
             };
 
             var obiWanCola = new Order
             {
                 PositionId = positionsIds[1],
-                CustomerId = customersIds[0],
+                MemberId = customersIds[0],
                 Quantity = 2
             };
 
             var anakinPizza = new Order
             {
                 PositionId = positionsIds[0],
-                CustomerId = customersIds[1],
+                MemberId = customersIds[1],
                 Quantity = null
             };
 
             var anakinCola = new Order
             {
                 PositionId = positionsIds[1],
-                CustomerId = customersIds[1],
+                MemberId = customersIds[1],
                 Quantity = null
             };
 
             var padmePizza = new Order
             {
                 PositionId = positionsIds[0],
-                CustomerId = customersIds[2],
+                MemberId = customersIds[2],
                 Quantity = null
             };
 
             var padmeCola = new Order
             {
                 PositionId = positionsIds[1],
-                CustomerId = customersIds[2],
+                MemberId = customersIds[2],
                 Quantity = null
             };
 

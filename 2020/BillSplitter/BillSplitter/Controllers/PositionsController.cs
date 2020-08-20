@@ -37,9 +37,9 @@ namespace BillSplitter.Controllers
             ViewData["billId"] = billId;
 
             var bill = Db.Bills.GetBillById(billId);
-            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
+            var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
 
-            if (customer != null)
+            if (member != null)
             {
                 var positions = bill.Positions.OrderBy(p => p.Id).ToList();
                 var model = new List<PositionViewModel>();
@@ -54,7 +54,7 @@ namespace BillSplitter.Controllers
 
         private PositionViewModel GetPositionViewModel(Position position)
         {
-            var order = position.Orders.Find(x => x.Customer.UserId == GetUserId());
+            var order = position.Orders.Find(x => x.Member.UserId == GetUserId());
             return new PositionViewModel(position, order);
         }
 
@@ -76,7 +76,7 @@ namespace BillSplitter.Controllers
         [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
         public IActionResult Create(int billId, Position position)
         {
-            position.ManagingCustomerId = Db.Bills.GetBillById(billId).Customers.FirstOrDefault(c =>  c.UserId == GetUserId()).Id;
+            position.ManagingMemberId = Db.Bills.GetBillById(billId).Members.FirstOrDefault(c =>  c.UserId == GetUserId()).Id;
 
             Db.Positions.Add(position);
             

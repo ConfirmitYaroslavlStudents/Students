@@ -60,7 +60,7 @@ namespace BillSplitter.Controllers
 
         [HttpGet]
         [Route("Manage")]
-        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
+        [RequireRoles("Admin, Moderator")]
         public IActionResult ManagePositions(int billId)
         {
             ViewData["billId"] = billId;
@@ -73,7 +73,7 @@ namespace BillSplitter.Controllers
         }
 
         [HttpPost]
-        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
+        [RequireRoles("Admin, Moderator")]
         public IActionResult Create(int billId, Position position)
         {
             position.ManagingMemberId = Db.Bills.GetBillById(billId).Members.FirstOrDefault(c =>  c.UserId == GetUserId()).Id;
@@ -87,7 +87,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{positionId}")]
-        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
+        [RequireRoles("Admin, Moderator")]
         public IActionResult Delete(int billId, int positionId)
         {
             if (!ValidatePosition(billId, positionId))
@@ -102,7 +102,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{positionId}/Update")]
-        [ValidateUserAttributeFactory(RequestedRole = "Moderator")]
+        [RequireRoles("Admin, Moderator")]
         public IActionResult Update(int billId, int positionId, Position position)
         {
             if (!ValidatePosition(billId, positionId))

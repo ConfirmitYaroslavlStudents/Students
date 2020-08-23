@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BillSplitter.Attributes
+namespace BillSplitter.Validation.Validators
 {
     public interface IValidator<T>
     {

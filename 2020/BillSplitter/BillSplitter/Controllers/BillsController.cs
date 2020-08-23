@@ -122,7 +122,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{billId}")]
-        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
+        [RequireRoles("Admin")]
         public IActionResult Delete(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);

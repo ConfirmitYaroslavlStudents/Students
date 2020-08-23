@@ -56,7 +56,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{memberId}/UpdateRole")]
-        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
+        [RequireRoles("Admin")]
         public IActionResult UpdateRole(int billId, int memberId, string role)
         {
             Db.Members.UpdateMemberRoleById(memberId, role);
@@ -67,7 +67,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{memberId}")]
-        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
+        [RequireRoles("Admin")]
         public IActionResult Delete(int billId, int memberId) // TODO Maybe delete confirmation?
         {
             Db.Members.DeleteById(memberId);

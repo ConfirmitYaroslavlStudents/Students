@@ -2,6 +2,8 @@
 using BillSplitter.Data;
 using BillSplitter.Oauth;
 using BillSplitter.Attributes;
+using BillSplitter.Validation.ValidationHandlers;
+using BillSplitter.Validation.ValidationMiddleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +43,8 @@ namespace BillSplitter
 
             services.AddScoped<UnitOfWork>();
             services.AddScoped<ValidateUserAttribute>();
+
+            services.AddSingleton<RoleHandler>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -88,6 +92,8 @@ namespace BillSplitter
             app.UseAuthorization();
 
             app.UseSession();
+
+            app.UseMiddleware<ValidationMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

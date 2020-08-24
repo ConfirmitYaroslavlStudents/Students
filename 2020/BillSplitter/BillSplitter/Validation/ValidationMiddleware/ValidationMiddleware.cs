@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using BillSplitter.Attributes;
-using BillSplitter.Data;
 using BillSplitter.Validation.ValidationHandlers;
 using Microsoft.AspNetCore.Http;
 
@@ -19,7 +17,7 @@ namespace BillSplitter.Validation.ValidationMiddleware
             _handler = roleHandler;
         }
 
-        public Task Invoke(HttpContext context, UnitOfWork db)
+        public Task Invoke(HttpContext context)
         {
             var endpoint = context.GetEndpoint();
             var rolesAttribute = endpoint.Metadata.GetMetadata<RequireRolesAttribute>();
@@ -27,27 +25,14 @@ namespace BillSplitter.Validation.ValidationMiddleware
             if (rolesAttribute == null)
                 return _next.Invoke(context);
 
-            if (!context.Request.RouteValues.ContainsKey("billId"))
-                return _next.Invoke(context);
+            var validationContext = new ValidationContext(context, endpoint, rolesAttribute.Roles);
 
-            var billId = int.Parse(context.Request.RouteValues["billId"].ToString()!);
-
-            var userId = int.Parse(
-                context
-                    .User.Claims
-                    .Where(c => c.Type == "Id")
-                    .Select(c => c.Value)
-                    .SingleOrDefault() ?? string.Empty);
-
-            var billMember = db.Bills
-                .GetBillById(billId)
-                .Members.FirstOrDefault(m => m.UserId == userId);
-
-            if (!_handler.Handle(billMember, rolesAttribute.Roles))
+            if (!_handler.Handle(validationContext))
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return Task.CompletedTask;
             }
+
             return _next.Invoke(context);
         }
     }

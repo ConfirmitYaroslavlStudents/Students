@@ -1,14 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BillSplitter.Models;
+﻿using System.Linq;
+using BillSplitter.Data;
+using BillSplitter.HttpContextExtension;
+using BillSplitter.Validation.ValidationMiddleware;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BillSplitter.Validation.ValidationHandlers
 {
     public class RoleHandler
     {
-        public bool Handle(Member member, IEnumerable<string> roles)
+        public bool Handle(ValidationContext context)
         {
-            return roles.Any(role => member.Role == role);
+            if (!context.HttpContext.Request.RouteValues.ContainsKey("billId"))
+                return true;
+
+            var billId = int.Parse(context.HttpContext.Request.RouteValues["billId"].ToString()!);
+
+            var userId = context.HttpContext.GetCurrentUserId();
+
+            var db = context.HttpContext.RequestServices.GetService<UnitOfWork>();
+
+            var billMember = db.Bills
+                .GetBillById(billId)
+                .Members
+                .FirstOrDefault(m => m.UserId == userId);
+            
+            return context.Roles.Contains(billMember.Role);
         }
     }
 }

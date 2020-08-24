@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BillSplitterTests
 {
-    public class TestsBase
+    public abstract class TestsBase
     {
-        public BillContext Context { get; }
-        public TestsBase()
+        protected BillContext Context { get; }
+
+        protected TestsBase()
         {
             var opt =
                 new DbContextOptionsBuilder<BillContext>()

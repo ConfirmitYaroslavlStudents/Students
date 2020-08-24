@@ -58,7 +58,8 @@ namespace BillSplitter.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+                return View(model);
 
             User user = Db.Users.GetByName("LoginProvider", model.Name);
 
@@ -66,7 +67,13 @@ namespace BillSplitter.Controllers
                 ModelState.AddModelError("Name", "UserName is already used");
             else
             {
-                User newUser = new User { Name = model.Name };
+                User newUser = new User
+                {
+                    Name = model.Name,
+                    GivenName = model.GivenName,
+                    Surname = model.Surname
+                };
+
                 Db.Users.Add(newUser);
                 Db.Save();
 
@@ -81,7 +88,7 @@ namespace BillSplitter.Controllers
             var claims = new List<Claim>
             {
                 new Claim("Id",user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, $"{user.Surname} {user.GivenName}")
             };
 
             var claimsIdentity = new ClaimsIdentity(
@@ -119,7 +126,7 @@ namespace BillSplitter.Controllers
             if (externalUser == null)
                 throw new Exception("External authentication error");
 
-            string name = GetNameFromExternalLogin(externalUser);
+            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             await HttpContext.SignOutAsync("Cookies");
 
@@ -128,12 +135,25 @@ namespace BillSplitter.Controllers
             if (user != null)
                 return await LoginConfirm(user, returnUrl);
 
-            return RedirectToAction("RegisterExternalConfirm", new { name, scheme, returnUrl });
+            user = CreateNewUser(externalUser, scheme);
+            return await RegisterExternalConfirm(user, returnUrl);
         }
 
-        private string GetNameFromExternalLogin(ClaimsPrincipal externalUser)
+        private User CreateNewUser(ClaimsPrincipal externalUser, string scheme)
         {
-            return externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value + ' ' + externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
+            var givenName = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value;
+
+            var surname = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
+
+            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
+            return new User
+            {
+                Provider = scheme,
+                Name = name,
+                Surname = surname,
+                GivenName = givenName
+            };
         }
 
         [Route("LoginConfirm")]
@@ -148,10 +168,8 @@ namespace BillSplitter.Controllers
         }
 
         [Route("RegisterExternalConfirm")]
-        public async Task<IActionResult> RegisterExternalConfirm(string name, string scheme, string returnUrl)
+        public async Task<IActionResult> RegisterExternalConfirm(User newUser, string returnUrl)
         {
-            User newUser = new User { Name = name, Provider = scheme };
-
             Db.Users.Add(newUser);
             Db.Save();
 

@@ -7,9 +7,19 @@
         <div class="validation" asp-validation-summary="ModelOnly" />
         <div>
             <div class="form-group">
-                <label asp-for="Name">Enter Name</label>
+                <label asp-for="Name">Login: </label>
                 <input type="text" asp-for="Name" />
                 <span asp-validation-for="Name"> </span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GivenName">Given name: </label>
+                <input type="text" asp-for="GivenName" />
+                <span asp-validation-for="GivenName"> </span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Surname">Surname: </label>
+                <input type="text" asp-for="Surname" />
+                <span asp-validation-for="Surname"> </span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-outline-dark" />

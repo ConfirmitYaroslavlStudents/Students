@@ -5,19 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
-namespace BillSplitterTests
+namespace BillSplitterTests.RepositoryTests
 {
-    public class CustomerRepositoryTests
+    public class CustomerRepositoryTests : TestsBase
     {
         [Fact]
         public void AddCustomer_AddNewCustomerInDb()
         {
-            var customers = new List<Member>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Members;
 
             var customer = new Member
@@ -34,12 +29,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetCustomerById_ReturnsRightCustomer()
         {
-            var customers = new List<Member>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Members;
 
             var customer1 = new Member
@@ -65,12 +55,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetCustomerById_ReturnsNull()
         {
-            var customers = new List<Member>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Members;
 
             var actual = repo.GetById(1);
@@ -81,17 +66,7 @@ namespace BillSplitterTests
         [Fact]
         public void DeleteById_DeletesRightCustomer()
         {
-            var customers = new List<Member>();
-            var orders = new List<Order>();
-
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var orderDbSet = DbSetMockBuilder.BuildDbSet(orders);
-
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Member>()).Returns(dbSetMock);
-            contextMock.Setup(c => c.Set<Order>()).Returns(orderDbSet);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Members;
 
             var customer1 = new Member

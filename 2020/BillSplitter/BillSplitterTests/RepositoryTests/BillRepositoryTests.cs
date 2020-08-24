@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
-namespace BillSplitterTests
+namespace BillSplitterTests.RepositoryTests
 {
-    public class BillRepositoryTests
+    public class BillRepositoryTests : TestsBase
     {
         [Fact]
         public void AddBill_AddsNewBillInDb()
         {
-            var bills = new List<Bill>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(bills);
-            var contextMock = new Mock<DbContext>();
-
-            contextMock.Setup(c => c.Set<Bill>()).Returns(dbSetMock);
-
-            var uow = new UnitOfWork(contextMock.Object);
+            var uow = new UnitOfWork(Context);
 
             var bill = new Bill()
             {
@@ -35,12 +27,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetBillById_ReturnsRightBill()
         {
-            var bills = new List<Bill>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(bills);
-            var contextMock = new Mock<DbContext>();
-
-            contextMock.Setup(c => c.Set<Bill>()).Returns(dbSetMock);
-            var uow = new UnitOfWork(contextMock.Object);
+            var uow = new UnitOfWork(Context);
 
             var bill1 = new Bill
             {
@@ -64,12 +51,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetBillById_ReturnsNull()
         {
-            var bills = new List<Bill>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(bills);
-            var contextMock = new Mock<DbContext>();
-
-            contextMock.Setup(c => c.Set<Bill>()).Returns(dbSetMock);
-            var uow = new UnitOfWork(contextMock.Object);
+            var uow = new UnitOfWork(Context);
 
             var actual = uow.Bills.GetBillById(1);
 
@@ -79,12 +61,7 @@ namespace BillSplitterTests
         [Fact]
         public void Exist_ReturnsTrue()
         {
-            var bills = new List<Bill>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(bills);
-            var contextMock = new Mock<DbContext>();
-
-            contextMock.Setup(c => c.Set<Bill>()).Returns(dbSetMock);
-            var uow = new UnitOfWork(contextMock.Object);
+            var uow = new UnitOfWork(Context);
 
             var bill = new Bill()
             {
@@ -100,12 +77,7 @@ namespace BillSplitterTests
         [Fact]
         public void DontExist_ReturnsFalse()
         {
-            var bills = new List<Bill>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(bills);
-            var contextMock = new Mock<DbContext>();
-
-            contextMock.Setup(c => c.Set<Bill>()).Returns(dbSetMock);
-            var uow = new UnitOfWork(contextMock.Object);
+            var uow = new UnitOfWork(Context);
 
             var bill = new Bill()
             {
@@ -121,12 +93,7 @@ namespace BillSplitterTests
         [Fact]
         public void DeleteById_DeletesBill()
         {
-            var bills = new List<Bill>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(bills);
-            var contextMock = new Mock<DbContext>();
-
-            contextMock.Setup(c => c.Set<Bill>()).Returns(dbSetMock);
-            var uow = new UnitOfWork(contextMock.Object);
+            var uow = new UnitOfWork(Context);
 
             var bill = new Bill()
             {

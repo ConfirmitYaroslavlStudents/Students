@@ -1,10 +1,8 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Validation.ValidationHandlers;
 using BillSplitter.Validation.ValidationMiddleware;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;

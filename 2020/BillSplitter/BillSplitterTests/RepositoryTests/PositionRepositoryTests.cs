@@ -5,19 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
-namespace BillSplitterTests
+namespace BillSplitterTests.RepositoryTests
 {
-    public class PositionRepositoryTests
+    public class PositionRepositoryTests : TestsBase
     {
         [Fact]
         public void AddPosition_AddNewPositionInDb()
         {
-            var customers = new List<Position>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Positions;
 
             var position = new Position()
@@ -34,12 +29,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetById_ReturnsRightPosition()
         {
-            var customers = new List<Position>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Positions;
 
             var position1 = new Position()
@@ -65,12 +55,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetById_PositionExists_ReturnsNotNull()
         {
-            var customers = new List<Position>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Positions;
 
             var position1 = new Position
@@ -95,12 +80,7 @@ namespace BillSplitterTests
         [Fact]
         public void GetById_PositionDoesntExists_ReturnsNull()
         {
-            var customers = new List<Position>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Positions;
 
             var position1 = new Position
@@ -120,12 +100,7 @@ namespace BillSplitterTests
         [Fact]
         public void UpdateById_UpdatesPosition()
         {
-            var customers = new List<Position>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Positions;
 
             var position1 = new Position
@@ -153,12 +128,7 @@ namespace BillSplitterTests
         [Fact]
         public void DeleteById_DeletesRightPosition()
         {
-            var customers = new List<Position>();
-            var dbSetMock = DbSetMockBuilder.BuildDbSet(customers);
-            var contextMock = new Mock<DbContext>();
-            contextMock.Setup(c => c.Set<Position>()).Returns(dbSetMock);
-
-            var db = new UnitOfWork(contextMock.Object);
+            var db = new UnitOfWork(Context);
             var repo = db.Positions;
 
             var position1 = new Position

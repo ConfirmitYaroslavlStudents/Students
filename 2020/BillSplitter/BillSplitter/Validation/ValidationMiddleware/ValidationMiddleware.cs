@@ -25,7 +25,7 @@ namespace BillSplitter.Validation.ValidationMiddleware
             if (rolesAttribute == null)
                 return _next.Invoke(context);
 
-            var validationContext = new ValidationContext(context, endpoint, rolesAttribute.Roles);
+            var validationContext = new ValidationContext(context, rolesAttribute.Roles);
 
             if (!_handler.Handle(validationContext))
             {

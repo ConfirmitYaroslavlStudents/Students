@@ -23,6 +23,9 @@ namespace BillSplitter.Validation.ValidationHandlers
                 .GetBillById(billId)
                 .Members
                 .FirstOrDefault(m => m.UserId == userId);
+
+            if (billMember == null)
+                return false;
             
             return context.Roles.Contains(billMember.Role);
         }

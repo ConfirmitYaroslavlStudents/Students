@@ -87,25 +87,19 @@ namespace BillSplitter.Controllers
                     pos.Selected = true;
                 }
             }
-            Dictionary<string, decimal> payments = new Dictionary<string, decimal>();
-            foreach (var pos in memberBill)
-            {
-                if (!payments.ContainsKey(pos.ManagingMember.Name))
-                    payments.Add(pos.ManagingMember.Name, 0);
-
-                payments[pos.ManagingMember.Name] += pos.Price;
-            }
-
             var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
 
+            Dictionary<string, decimal> payments = new MemberBillBuilder().CountPayments(member,memberBill);
+         
             var model = new BillViewModel
             {
                 Bill = bill,
                 Positions = positions,
-                Payments = payments,
-                isAdmin = bill.Members.FirstOrDefault(c => c.UserId== GetUserId()).Role == "Admin",
+                Payments = payments.Where(p => p.Value > 0).ToDictionary( p=> p.Key, p=> p.Value),
+                Debts = payments.Where(p => p.Value < 0).ToDictionary(p => p.Key, p => -p.Value),
+                isAdmin = bill.Members.FirstOrDefault(c => c.UserId == GetUserId()).Role == "Admin",
                 isModerator = member.Role == "Admin" || member.Role == "Moderator",
-                MemberSum = memberBill.Sum(p => p.Price)
+                MemberSum = payments.Values.Where(p => p >0).Sum()
             };
 
             return model;

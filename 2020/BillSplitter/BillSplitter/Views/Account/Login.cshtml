@@ -16,24 +16,20 @@
         <input type="submit" class="btn btn-primary btn-block" value="Sign in with Вконтакте" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="VK">
     </form>
     <p style="text-align:center"> OR </p>
-    @using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
-    {
-        <form asp-action="Login" asp-controller="Account">
-            <div class="validation" asp-validation-summary="ModelOnly" />
-            <div>
-                <div class="form-group">
-                    <input type="text" asp-for="Name" class="form-control" placeholder="Login" required autofocus="" />
-                    <span asp-validation-for="Name" style="color:red;"> </span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Sing in" class="btn btn-success btn-block" />
-                </div>
-            </div>
-        </form>
-    }
-    <hr style="text-align:center; width:400px;">
 
-    <form asp-controller="Account" method="get">
-        <input type="submit" asp-action="Register" asp-route-returnUrl=@ViewBag.returnUrl class="btn btn-primary btn-block" value="Sing up New Account" />
+    <form asp-action="Login" asp-controller="Account" asp-route-returnUrl="@ViewBag.returnUrl">
+        <div class="validation" asp-validation-summary="ModelOnly" />
+        <div>
+            <div class="form-group">
+                <input type="text" asp-for="Name" class="form-control" placeholder="Login" required autofocus="" />
+                <span asp-validation-for="Name" style="color:red;"> </span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sing in" class="btn btn-success btn-block" />
+            </div>
+        </div>
     </form>
+    <hr style="text-align:center; width:400px;">
+    @Html.ActionLink("Sign up New Account", "Register", new { returnUrl = ViewBag.returnUrl }, new { @class = "btn btn-primary btn-block", style = "margin:auto; width: 390px" })
+
 </div>

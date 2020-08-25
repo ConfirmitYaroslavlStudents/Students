@@ -1,5 +1,6 @@
 ﻿using System;
-using SkillTreeRealization.SkillTree;
+using System.Linq;
+using SkillTree;
 
 namespace SkillTreeRealization.Menu
 {
@@ -19,58 +20,61 @@ namespace SkillTreeRealization.Menu
             Console.WriteLine("4 Get Name All Learned Disciplines");
             Console.WriteLine("5 Save and return");
         }
-        public static bool WorkWitchUserMenu(UserContainer user, DisciplineContainer disciplines)
+        public static bool WorkWithUserMenu(UserContainer user, DisciplineContainer disciplines)
         {
+            Console.Clear();
             WriteDisciplineMenu();
             var item = Console.ReadLine();
-            var nameDiscipline = "";         
+            var chooseDiscipline = new Discipline();
             switch (item)
             {
                 case (LearnNewSkill):
                     Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
-                    Console.WriteLine("Write name of skill");
-                    var nameSkill = Console.ReadLine();                 
-
                     try
-                    {
-                        user.LearnNewSkill(disciplines.GetDiscipline(nameDiscipline).Graph.FindVertex(nameSkill));
+                    {                       
+                        Console.WriteLine("Write name of discipline");
+                        chooseDiscipline = disciplines.GetDiscipline(Console.ReadLine());
+                        Console.WriteLine("Write name of skill");
+                        var nameSkill = Console.ReadLine();
+
+                        user.LearnNewSkill(chooseDiscipline.Graph.TryGetVertex(nameSkill));
                     }
                     catch (InvalidOperationException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.Clear();
+                        Console.WriteLine(ex.Message == "Sequence contains no elements" ? "Discipline not found" : ex.Message);
+                        Console.ReadKey();
                     }
 
                     break;
                 case (LearnNewDiscipline):
 
                     Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
-
                     try
                     {
-                        user.LearnNewDiscipline(disciplines.GetDiscipline(nameDiscipline));
+                        Console.WriteLine("Write name of discipline");
+                        chooseDiscipline = disciplines.GetDiscipline(Console.ReadLine());
+
+                        user.LearnNewDiscipline(chooseDiscipline);
                     }
                     catch (InvalidOperationException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.Clear();
+                        Console.WriteLine(ex.Message == "Sequence contains no elements" ? "Discipline not found" : ex.Message);
+                        Console.ReadKey();
                     }
 
                     break;
                case(GetNameAllLearnedSkill):
-
-                    Console.WriteLine(user.GetNameAllLearnedSkills());
+                    Console.WriteLine(string.Join(" ", from skill in user.GetAllLearnedSkills()
+                                                       select skill.Name));
 
                     break;
                 case (GetNameAllLearnedDisciplines):
-
-                    Console.WriteLine(user.GetNameAllLearnedDisciplines());
+                    Console.WriteLine(string.Join(" ", user.GetNameAllLearnedDisciplines()));
 
                     break;
                 case (SaveAndExit):
-
                     Loader.UserLoader.SaveUser(user.User);
 
                     return false;

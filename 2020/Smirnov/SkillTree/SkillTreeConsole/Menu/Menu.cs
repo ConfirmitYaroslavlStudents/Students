@@ -1,8 +1,7 @@
 ﻿using System;
 using SkillTree;
-using SkillTreeRealization.SkillTree;
 
-namespace SkillTreeRealization.Menu
+namespace SkillTreeConsole.Menu
 {
     public class Menu
     {
@@ -27,23 +26,36 @@ namespace SkillTreeRealization.Menu
             do
             {
                 var mode = SelectMenu();
+                Console.Clear();
                 switch (mode)
                 {
                     case (_DisciplineMenu):
-                        while (DisciplineMenu.WorkWitchDisciplineMenu(disciplines)) ;
+                        while (DisciplineMenu.WorkWithDisciplineMenu(disciplines)) ;
 
                         break;
                     case (_SkillMenu):
-                        while (SkillMenu.WorkWitchSkillMenu(disciplines)) ;
-
+                        try
+                        {
+                            Console.WriteLine("Write name of discipline");
+                            var skillMenu = new SkillMenu(disciplines.GetDiscipline(Console.ReadLine()));
+                            Console.Clear();
+                            while (skillMenu.WorkWithSkillMenu(disciplines)) ;
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(ex.Message == "Sequence contains no elements" ? "Discipline not found" : ex.Message);
+                            Console.ReadKey();
+                        }
+                        
                         break;
                     case (_UserMenu):
                         if (user.User == null)
                         {
                             Console.WriteLine("Write name new user");
-                            user = new UserContainer(new User.User(Console.ReadLine()));
+                            user = new UserContainer(new User(Console.ReadLine()));
                         }
-                        while (UserMenu.WorkWitchUserMenu(user, disciplines)) ;
+                        while (UserMenu.WorkWithUserMenu(user, disciplines)) ;
 
                         break;
                     case (_SaveEndExit):

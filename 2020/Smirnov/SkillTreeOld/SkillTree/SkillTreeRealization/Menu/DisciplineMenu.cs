@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using SkillTree;
+using System.Linq;
 using SkillTree.Graph;
-using SkillTreeRealization.SkillTree;
 
 
 namespace SkillTreeRealization.Menu
@@ -23,16 +22,18 @@ namespace SkillTreeRealization.Menu
             Console.WriteLine("4 Get all requirements for discipline");
             Console.WriteLine("5 Save and return");
         }
-        public static bool WorkWitchDisciplineMenu(DisciplineContainer disciplines)
+        public static bool WorkWithDisciplineMenu(DisciplineContainer disciplines)
         {
+            Console.Clear();
             WriteDisciplineMenu();
             var item = Console.ReadLine();
-            var nameDiscipline = "";
+            var chooseDiscipline = new Discipline();
             switch (item)
             {
                 case (GetAllDisciplines):
                     Console.Clear();
-                    Console.WriteLine(disciplines.GetAllDisciplines());
+                    Console.WriteLine(string.Join(" ", from discipline in disciplines.GetAllDisciplines() 
+                                                       select discipline.Name));
                     Console.WriteLine();
 
                     break;
@@ -45,39 +46,50 @@ namespace SkillTreeRealization.Menu
                     }
                     catch (InvalidOperationException ex)
                     {
+                        Console.Clear();
                         Console.WriteLine(ex.Message);
+                        Console.ReadKey();
                     }
 
                     break;
                 case (AddRequirementForDiscipline):
-                    Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
-                    Console.WriteLine("Write iformation about skill in format\"name difficult specification time\"");
-                    string[] inputString = Console.ReadLine().Split();
                     try
                     {
-                        disciplines.AddRequirementForDiscipline(nameDiscipline, new Skill(inputString[0], inputString[1],
+                        Console.Clear();
+                        Console.WriteLine("Write name of discipline");
+                        chooseDiscipline = disciplines.GetDiscipline(Console.ReadLine());
+                        Console.WriteLine("Write information about skill in format\"name difficult specification time\"");
+                        string[] inputString = Console.ReadLine().Split();
+
+                        disciplines.AddRequirementForDiscipline(chooseDiscipline,
+                        new Skill(inputString[0], inputString[1],
                         inputString[2], int.Parse(inputString[3])));
                     }
-                    catch (InvalidOperationException ex)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.Clear();
+                        Console.WriteLine(ex.Message == "Index was outside the bounds of the array." ? "information about skill not correct"
+                                                                                                    : ex.Message);
+                        Console.ReadKey();
                     }
 
 
                     break;
                 case (ReturnAllRequirementForDiscipline):
-                    Console.Clear();
-                    Console.WriteLine("Write name of discipline");
-                    nameDiscipline = Console.ReadLine();
+                    Console.Clear();               
                     try
                     {
-                        Console.WriteLine(disciplines.GetNameAllSkillsForDiscipline(nameDiscipline));
+                        Console.WriteLine("Write name of discipline");
+                        chooseDiscipline = disciplines.GetDiscipline(Console.ReadLine());
+                    
+                        Console.WriteLine(string.Join(" ", from skill in disciplines.GetAllSkillsForDiscipline(chooseDiscipline)
+                                                           select skill.Name));
                     }
                     catch(InvalidOperationException ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.Clear();
+                        Console.WriteLine(ex.Message == "Sequence contains no elements" ? "Discipline not found" : ex.Message);
+                        Console.ReadKey();
                     }
 
                     break;

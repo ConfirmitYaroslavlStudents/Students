@@ -4,22 +4,20 @@ using System.Text.Json;
 using SkillTree.Graph;
 using SkillTree;
 
-namespace SkillTreeRealization.Loader
+namespace SkillTreeConsole.Loader
 {
     public class SkillTreeLoader
     {
-        private const string _folderDiscipline = "Discipline";
-        private const int _startNameDiscipline = 11;
-        private const int _endNameDiscipline = 16;
+        private const string FolderDiscipline = "Discipline";
         public static List<Discipline> LoadDisciplines()
         {
             var disciplines = new List<Discipline>();
-            Directory.CreateDirectory(_folderDiscipline);
-            var files = Directory.GetFiles(_folderDiscipline);
+            Directory.CreateDirectory(FolderDiscipline);
+            var files = Directory.GetFiles(FolderDiscipline);
 
             foreach (var file in files)
             {
-                disciplines.Add(new Discipline(file.Substring(_startNameDiscipline, file.Length - _endNameDiscipline),
+                disciplines.Add(new Discipline(Path.GetFileNameWithoutExtension(file),
                     JsonSerializer.Deserialize<Graph>(File.ReadAllText(file))));
             }
             return disciplines;
@@ -27,17 +25,13 @@ namespace SkillTreeRealization.Loader
         public static void SaveDisciplines(List<Discipline> disciplines)
         {
             
-            Directory.CreateDirectory(_folderDiscipline);
+            Directory.CreateDirectory(FolderDiscipline);
             foreach (var discipline in disciplines)
             {
                 var jsonString = JsonSerializer.Serialize(discipline.Graph);
-                File.WriteAllText(ReturnPath(discipline.Name, _folderDiscipline), jsonString);
+                File.WriteAllText(Path.Combine(FolderDiscipline, $"{discipline.Name}.json"), jsonString);
             }
                           
-        }
-        private static string ReturnPath(string fileName, string folderName)
-        {
-            return folderName + @"\" + fileName + ".json";
         }
     }
 }

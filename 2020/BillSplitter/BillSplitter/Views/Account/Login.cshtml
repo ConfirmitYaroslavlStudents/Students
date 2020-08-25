@@ -1,41 +1,39 @@
 ﻿@model BillSplitter.Models.ViewModels.LoginAndRegister.LoginModel
-    <style>
-        form {
-            width: 100%;
-            max-width: 410px;
-            padding: 15px;
-            margin: auto;
-        }
-    </style>
-    <div class="form">
-        <h1 class="h3 mb-3 font-weight-normal" style="text-align:center;"> Sign in</h1>
+<style>
+    form {
+        width: 100%;
+        max-width: 410px;
+        padding: 15px;
+        margin: auto;
+    }
+</style>
+<div class="form">
+    <h1 class="h3 mb-3 font-weight-normal" style="text-align:center;"> Sign in</h1>
 
-        <form asp-controller="Account">
-            <input class="btn btn-primary btn-block" type="submit" value="Sign in with Facebook" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Facebook">
-            <input type="submit" class="btn btn-danger btn-block" value="Sign in with Google" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Google">
-            <input type="submit" class="btn btn-primary btn-block" value="Sign in with Вконтакте" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="VK">
-        </form>
-
-        <p style="text-align:center"> OR </p>
-
-        @using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
-        {
-            <form asp-action="Login" asp-controller="Account">
-                <div class="validation" asp-validation-summary="ModelOnly" />
-                <div>
-                    <div class="form-group">
-                        <input type="text" asp-for="Name" class="form-control" placeholder="Login" required autofocus="" />
-                        <span asp-validation-for="Name" style="color:red;"> </span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Sing in" class="btn btn-success btn-block" />
-                    </div>
+    <form asp-controller="Account">
+        <input class="btn btn-primary btn-block" type="submit" value="Sign in with Facebook" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Facebook">
+        <input type="submit" class="btn btn-danger btn-block" value="Sign in with Google" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="Google">
+        <input type="submit" class="btn btn-primary btn-block" value="Sign in with Вконтакте" asp-action="ExternalLogin" asp-route-returnUrl=@ViewBag.returnUrl asp-route-provider="VK">
+    </form>
+    <p style="text-align:center"> OR </p>
+    @using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
+    {
+        <form asp-action="Login" asp-controller="Account">
+            <div class="validation" asp-validation-summary="ModelOnly" />
+            <div>
+                <div class="form-group">
+                    <input type="text" asp-for="Name" class="form-control" placeholder="Login" required autofocus="" />
+                    <span asp-validation-for="Name" style="color:red;"> </span>
                 </div>
-            </form>
-        }
-        <hr style="text-align:center; width:400px;">
-        <!-- <p>Don't have an account!</p>  -->
-        <form asp-controller="Account">
-            <input type="submit" asp-action="Register" asp-route-returnUrl=@ViewBag.returnUrl class="btn btn-primary btn-block" value="Sign up New Account">
+                <div class="form-group">
+                    <input type="submit" value="Sing in" class="btn btn-success btn-block" />
+                </div>
+            </div>
         </form>
-    </div>
+    }
+    <hr style="text-align:center; width:400px;">
+
+    <form asp-controller="Account" method="get">
+        <input type="submit" asp-action="Register" asp-route-returnUrl=@ViewBag.returnUrl class="btn btn-primary btn-block" value="Sing up New Account" />
+    </form>
+</div>

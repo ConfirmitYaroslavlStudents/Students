@@ -13,12 +13,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Bills" asp-action="Index">BillsSplitter</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="my-0 mr-md-auto">
+                <div class="my-2 mr-md-auto">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Bills" asp-action="Index">Home</a>
@@ -30,28 +25,29 @@
                 {
 
                     <div class="my-2 my-md-0 mr-md-3">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item" >
-                                <p class="nav-link text-dark">Hello, @Context.User.Identity.Name!</p>
-                            </li>
-                            <li class="nav-item">
+                        <table class="navbar-nav flex-sm-grow-1">
+                            <th class="nav-item">
+                                <a class="p-2 text-dark">Hello, @Context.User.Identity.Name!</a>
+                            </th>
+
+                            <th class="nav-item">
                                 <a class="btn btn-outline-primary" asp-area="" asp-controller="Account" asp-action="Logout">Sing out</a>
-                            </li>
-                        </ul>
+                            </th>
+                        </table>
                     </div>
                 }
                 else
                 {
                     <div class="my-2 my-md-0 mr-md-3">
-                        <ul class="navbar-nav flex-sm-grow-1">
-                            <li class="nav-item">
+                        <table class="navbar-nav flex-sm-grow-1">
+                            <th class="nav-item">
                                 <a class="btn btn-outline-primary" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
+                            </th>
 
-                            <li class="nav-item">
+                            <th class="nav-item">
                                 <a class="btn btn-outline-success" asp-area="" asp-controller="Account" asp-action="Login">Sing in</a>
-                            </li>
-                        </ul>
+                            </th>
+                        </table>
                     </div>
                 }
 

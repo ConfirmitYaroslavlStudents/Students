@@ -7,6 +7,7 @@ using BillSplitter.Models.ViewModels.ViewBill;
 using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BillSplitter.Calculators;
 
 namespace BillSplitter.Controllers
 {
@@ -89,7 +90,7 @@ namespace BillSplitter.Controllers
             }
             var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
 
-            Dictionary<string, decimal> payments = new MemberBillBuilder().CountPayments(member,memberBill);
+            Dictionary<string, decimal> payments = new DebtsCalculator().CalculateDebts(member,memberBill);
          
             var model = new BillViewModel
             {

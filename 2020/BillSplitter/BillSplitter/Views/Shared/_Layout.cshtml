@@ -7,37 +7,48 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="~/js/scripts.js" > </script>
+    <script src="~/js/scripts.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Bills" asp-action="Index">BillsSplitter</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="my-2 mr-md-auto">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Bills" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                         </li>
                     </ul>
                 </div>
 
                 @if (Context.User.Identities.Any(i => i.IsAuthenticated))
                 {
-                    <p>User: @Context.User.Identity.Name</p>
+
+                    <div class="my-2 my-md-0 mr-md-3">
+                        <table class="navbar-nav flex-sm-grow-1">
+                            <th class="nav-item">
+                                <a class="p-2 text-dark">Hello, @Context.User.Identity.Name!</a>
+                            </th>
+
+                            <th class="nav-item">
+                                <a class="btn btn-outline-primary" asp-area="" asp-controller="Account" asp-action="Logout">Sing out</a>
+                            </th>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="my-2 my-md-0 mr-md-3">
+                        <table class="navbar-nav flex-sm-grow-1">
+                            <th class="nav-item">
+                                <a class="btn btn-outline-primary" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </th>
+
+                            <th class="nav-item">
+                                <a class="btn btn-outline-success" asp-area="" asp-controller="Account" asp-action="Login">Sing in</a>
+                            </th>
+                        </table>
+                    </div>
                 }
 
             </div>
@@ -50,7 +61,6 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

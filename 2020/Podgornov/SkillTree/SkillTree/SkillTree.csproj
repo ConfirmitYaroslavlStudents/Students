@@ -46,6 +46,7 @@
     <Compile Include="Discipline.cs" />
     <Compile Include="GraphException.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="GraphStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skill.cs" />
     <Compile Include="SkillComplexity.cs" />

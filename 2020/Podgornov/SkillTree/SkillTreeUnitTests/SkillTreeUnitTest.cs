@@ -20,10 +20,11 @@ namespace SkillTreeUnitTests
         {
             var graph = new Graph<Skill>();
             var inputSkill = new Skill("skill1", 10, SkillComplexity.Easy);
-            graph.AddVertex(inputSkill);
-            Assert.IsTrue(graph[0].Available);
-            Assert.IsFalse(graph[0].Finished);
-            Assert.AreEqual(inputSkill, graph[0].Value);
+            var vertex = graph.AddVertex(inputSkill);
+            var gStatus = new GraphStatus<Skill>(graph);
+            Assert.IsTrue(gStatus.IsVertexAvailable(vertex));
+            Assert.IsFalse(gStatus.IsVertexFinished(vertex));
+            Assert.AreEqual(inputSkill, graph.GetVertexById(0).Value);
         }
 
         [TestMethod]
@@ -41,8 +42,8 @@ namespace SkillTreeUnitTests
         public void Graph_throwGraphEx_When_Add_Dependence_On_Yourself()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddDependence(0, 0);
+            var vertex = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            graph.AddDependence(vertex, vertex);
         }
 
         [TestMethod]
@@ -50,10 +51,10 @@ namespace SkillTreeUnitTests
         public void AddDependence_Graph_throwGraphEx_When_Circle_Was_Created()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            graph.AddDependence(0, 1);
-            graph.AddDependence(1, 0);
+            var vertex0 = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var vertex1 = graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
+            graph.AddDependence(vertex0, vertex1);
+            graph.AddDependence(vertex1, vertex0);
         }
 
         [TestMethod]
@@ -61,21 +62,23 @@ namespace SkillTreeUnitTests
         public void AddDependence_Graph_ThrowGraphEx_When_Dependence_Exist()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            graph.AddDependence(0, 1);
-            graph.AddDependence(0, 1);
+            var vertex0 = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var vertex1 = graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
+            graph.AddDependence(vertex0, vertex1);
+            graph.AddDependence(vertex0, vertex1);
         }
 
         [TestMethod]
         public void AddDependenceWorkCorrectly()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            Assert.IsTrue(graph[1].Available);
-            graph.AddDependence(0, 1);
-            Assert.IsFalse(graph[1].Available);
+            var vertex0 = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var vertex1 = graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
+            var gStatus1 = new GraphStatus<Skill>(graph);
+            Assert.IsTrue(gStatus1.IsVertexAvailable(vertex1));
+            graph.AddDependence(vertex0, vertex1);
+            var gStatus2 = new GraphStatus<Skill>(graph);
+            Assert.IsFalse(gStatus2.IsVertexAvailable(vertex1));
         }
 
         [TestMethod]
@@ -83,63 +86,38 @@ namespace SkillTreeUnitTests
         public void RemoveDependence_Throw_InvOprEx_When_No_Dependency()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            graph.AddDependence(0, 1);
-            graph.RemoveDependence(1, 0);
-        }
-
-        [TestMethod]
-        public void RemoveDependenceWorkCorrectly()
-        {
-            var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            Assert.IsTrue(graph[1].Available);
-            graph.AddDependence(0, 1);
-            Assert.IsFalse(graph[1].Available);
-            graph.RemoveDependence(0, 1);
-            Assert.IsTrue(graph[1].Available);
+            var vertex0 = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var vertex1 = graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
+            graph.AddDependence(vertex0, vertex1);
+            graph.RemoveDependence(vertex1, vertex0);
         }
 
         [TestMethod]
         public void RecognizeWorkCorrectly()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            Assert.IsFalse(graph[0].Finished);
-            graph[0].Finish();
-            Assert.IsTrue(graph[0].Finished);
+            var vertex = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var gStatus = new GraphStatus<Skill>(graph);
+            Assert.IsFalse(gStatus.IsVertexFinished(vertex));
+            gStatus.FinishVertex(vertex);
+            Assert.IsTrue(gStatus.IsVertexFinished(vertex));
         }
 
         [TestMethod]
         public void Skills_Open_When_All_Dependencies_Recognize()
         {
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            graph.AddVertex(new Skill("skill3", 10, SkillComplexity.Hard));
-            graph.AddDependence(0, 2);
-            graph.AddDependence(1, 2);
-            Assert.IsFalse(graph[2].Available);
-            graph[0].Finish();
-            Assert.IsFalse(graph[2].Available);
-            graph[1].Finish();
-            Assert.IsTrue(graph[1].Available);
-        }
-
-        [TestMethod]
-        public void Vertex_Stay_Available_When_Parent_Vertex_Remove()
-        {
-            var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            graph.AddVertex(new Skill("skill3", 10, SkillComplexity.Hard));
-            graph.AddDependence(0, 1);
-            graph.AddDependence(1, 2);
-            Assert.IsFalse(graph[2].Available);
-            graph.RemoveVertex(1);
-            Assert.IsTrue(graph[2].Available);
+            var vertex0 = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var vertex1 = graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
+            var vertex2 = graph.AddVertex(new Skill("skill3", 10, SkillComplexity.Hard));
+            graph.AddDependence(vertex0, vertex2);
+            graph.AddDependence(vertex1, vertex2);
+            var gStatus = new GraphStatus<Skill>(graph);
+            Assert.IsFalse(gStatus.IsVertexAvailable(vertex2));
+            gStatus.FinishVertex(vertex0);
+            Assert.IsFalse(gStatus.IsVertexAvailable(vertex2));
+            gStatus.FinishVertex(vertex1);
+            Assert.IsTrue(gStatus.IsVertexAvailable(vertex2));
         }
 
         [TestMethod]
@@ -154,24 +132,24 @@ namespace SkillTreeUnitTests
              *   5     2
              */
             var graph = new Graph<Skill>();
-            graph.AddVertex(new Skill("skill0", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
-            graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
-            graph.AddVertex(new Skill("skill3", 10, SkillComplexity.Hard));
-            graph.AddVertex(new Skill("skill4", 10, SkillComplexity.Hard));
-            graph.AddVertex(new Skill("skill4", 10, SkillComplexity.Hard));
-            graph.AddVertex(new Skill("skill6", 10, SkillComplexity.Hard));
-            graph.AddDependence(1, 0);
-            graph.AddDependence(2, 0);
-            graph.AddDependence(3, 1);
-            graph.AddDependence(3, 2);
-            graph.AddDependence(4, 3);
-            graph.AddDependence(5, 3);
-            graph.AddDependence(4, 6);
-            graph.AddDependence(6, 5);
+            var vertex0 = graph.AddVertex(new Skill("skill0", 10, SkillComplexity.Easy));
+            var vertex1 = graph.AddVertex(new Skill("skill1", 10, SkillComplexity.Easy));
+            var vertex2 = graph.AddVertex(new Skill("skill2", 10, SkillComplexity.Middle));
+            var vertex3 = graph.AddVertex(new Skill("skill3", 10, SkillComplexity.Hard));
+            var vertex4 = graph.AddVertex(new Skill("skill4", 10, SkillComplexity.Hard));
+            var vertex5 = graph.AddVertex(new Skill("skill4", 10, SkillComplexity.Hard));
+            var vertex6 = graph.AddVertex(new Skill("skill6", 10, SkillComplexity.Hard));
+            graph.AddDependence(vertex1, vertex0);
+            graph.AddDependence(vertex2, vertex0);
+            graph.AddDependence(vertex3, vertex1);
+            graph.AddDependence(vertex3, vertex2);
+            graph.AddDependence(vertex4, vertex3);
+            graph.AddDependence(vertex5, vertex3);
+            graph.AddDependence(vertex4, vertex6);
+            graph.AddDependence(vertex6, vertex5);
 
-            var real = graph[0].GetAllDependencies().Select(i => i.Id).ToArray();
-            CollectionAssert.AreEqual(new int[] {4, 6, 5, 3, 2, 1}, real);
+            var real = graph.GetAllDependencies(vertex0).Select(i => i.Id).ToArray();
+            CollectionAssert.AreEqual(new int[] { 4, 6, 5, 3, 2, 1 }, real);
         }
     }
 }

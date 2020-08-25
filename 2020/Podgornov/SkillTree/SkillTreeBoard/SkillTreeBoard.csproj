@@ -50,11 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleMenu.cs" />
-    <Compile Include="ISkillTreeMenager.cs" />
-    <Compile Include="KeyWords.cs" />
+    <Compile Include="DisciplineEditMenu.cs" />
+    <Compile Include="IManager.cs" />
+    <Compile Include="IUser.cs" />
+    <Compile Include="ModeratorMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillMenu.cs" />
+    <Compile Include="DisciplineMenuForUser.cs" />
+    <Compile Include="UserMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

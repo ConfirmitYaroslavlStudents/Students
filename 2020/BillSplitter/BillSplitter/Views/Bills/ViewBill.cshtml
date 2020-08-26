@@ -10,19 +10,6 @@
     }
 </style>
 
-@if (Model.HasManageAccess)
-{
-    <p>This bill has</p>
-    <ul>
-        <li>
-            @Model.Bill.Positions.Count position(s)
-        </li>
-        <li>
-            @Model.Bill.Customers.Count customer(s)
-        </li>
-    </ul>
-}
-
 <h1> @Model.Bill.Name  </h1>
 
 <h1>Your orders:</h1>
@@ -58,7 +45,7 @@
                     @pos.Quantity
                 </td>
                 <td>
-                    @pos.ActualPrice
+                    @pos.ActualPrice.ToString("F")$
                 </td>
             </tr>
         }
@@ -66,20 +53,43 @@
 </table>
 
 <h2>
-    Your sum is @Model.CustomerSum
+    Your total sum is @Model.MemberSum.ToString("F")
 </h2>
+<ul>
+    @if (Model.Payments.Any())
+    {
+        @foreach (var payment in Model.Payments)
+        {
+            <li> You need to pay @payment.Value.ToString("F")$ to <b>@payment.Key</b> </li>
+        }
+    }
+
+    @if (Model.Debts.Any())
+    {
+        @foreach (var payment in Model.Debts)
+        {
+            <li> <b>@payment.Key</b> Owes you @payment.Value.ToString("F")$ </li>
+        }
+    }
+</ul>
+
+
 
 @Html.ActionLink("Pick positions", "PickPositions", "Positions", new
 {
     billId = Model.Bill.Id
 }, new { @class = "btn btn-primary" })
-@if (Model.HasManageAccess)
+
+@if (Model.isAdmin)
 {
-    @Html.ActionLink("Manage customers", "Index", "Customers", new
+    @Html.ActionLink("Manage members", "Index", "Members", new
     {
         billId = Model.Bill.Id
     }, new { @class = "btn btn-primary" })
-    @:
+}
+
+@if (Model.isModerator)
+{
     @Html.ActionLink("Manage positions", "ManagePositions", "Positions", new
     {
         billId = Model.Bill.Id,

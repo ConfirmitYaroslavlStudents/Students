@@ -1,20 +1,34 @@
-﻿@model BillSplitter.Models.RegisterModel
+﻿@model BillSplitter.Models.ViewModels.LoginAndRegister.RegisterModel
 
-<h2>Регистрация</h2>
-@using (Html.BeginForm(new { returnUrl = ViewBag.returnUrl }))
-{
-    <form asp-action="Register" asp-controller="Account">
+<style>
+    form {
+        width: 100%;
+        max-width: 410px;
+    }
+</style>
+<div class="form">
+    <h2>Sing up</h2>
+
+    <form asp-action="Register" asp-controller="Account"  asp-route-returnUrl="@ViewBag.returnUrl">
         <div class="validation" asp-validation-summary="ModelOnly" />
         <div>
             <div class="form-group">
-                <label asp-for="Name">Enter Name</label>
-                <input type="text" asp-for="Name" />
-                <span asp-validation-for="Name"> </span>
+                <input type="text" asp-for="Name" class="form-control" placeholder="Login" />
+                <span asp-validation-for="Name" style="color:red;"> </span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-outline-dark" />
+                <input type="text" asp-for="GivenName" class="form-control" placeholder="Your name" />
+                <span asp-validation-for="GivenName" style="color:red;"> </span>
+            </div>
+            <div class="form-group">
+                <input type="text" asp-for="Surname" class="form-control" placeholder="Your surname" />
+                <span asp-validation-for="Surname" style="color:red;"> </span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-outline-dark btn-block"/>
             </div>
         </div>
     </form>
-}
+
+</div>
 

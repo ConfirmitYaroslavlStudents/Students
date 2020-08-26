@@ -1,0 +1,56 @@
+﻿@model List<BillSplitter.Models.Member>
+@{
+    ViewData["Title"] = "Members";
+}
+
+<p>
+   <a asp-controller="Bills" asp-action="ViewBill" class="btn btn btn-primary" asp-route-billId="@ViewData["billId"]">Back to Bill</a>
+</p>
+
+<h1>Members for this bill</h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (Member member in Model)
+    {
+        <tr>
+            <td>
+                @member.Name
+            </td>
+            <td>
+                <form asp-action="UpdateRole" id="role_@member.Id" asp-route-billId="@member.BillId" asp-route-memberId="@member.Id">
+                    <select @(member.Role=="Admin" ? "disabled" : "")  name="role" onchange="SelectionChanged(@member.Id)">
+                        @if (member.Role == "Admin")
+                        {
+                            <option selected="@(member.Role == "Admin")" value="Admin"> Admin </option>
+                        }
+                        <option selected="@(member.Role=="Guest")" value="Guest"> Guest </option>
+                        <option selected="@(member.Role=="Moderator")" value="Moderator"> Moderator </option>
+                    </select>
+                </form>
+            </td>
+            <td>
+                <form  asp-action="Delete" asp-route-billId="@member.BillId" asp-route-memberId="@member.Id">
+                    <input @(member.Role=="Admin" ? "disabled" : "") type="submit" class="btn btn-primary" value="Delete" />
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script>
+    function SelectionChanged(memberId)
+    {
+        $("#role_" + memberId).submit();
+    }
+</script>

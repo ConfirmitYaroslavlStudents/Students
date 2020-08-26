@@ -1,6 +1,6 @@
 ﻿@model Bill
 
 <h2> Join @Model.Name</h2>
-<form asp-controller="Customers" asp-action="Post" asp-route-billId="@Model.Id">
+<form asp-controller="Members" asp-action="AddMemberOrContinueToPick" asp-route-billId="@Model.Id">
     <input type="submit" class="btn btn-primary" value="Join bill" />
 </form>

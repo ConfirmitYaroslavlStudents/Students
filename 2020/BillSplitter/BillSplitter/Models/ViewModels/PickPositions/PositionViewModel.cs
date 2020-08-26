@@ -13,7 +13,7 @@ namespace BillSplitter.Models.ViewModels.PickPositions
             Quantity = position.Quantity;
             UserQuantity = order != null ? order.Quantity : null;
             RemainsQuantity = Quantity - (position.Orders.Where(o => o.Quantity != null).Sum(o => o.Quantity) ?? 0) + (UserQuantity ?? 0);
-            CustomerNames = position.Orders.Select(o => o.Customer.Name).ToList();
+            MemberNames = position.Orders.Select(o => o.Member.Name).ToList();
             Price = position.Price;
         }
 
@@ -24,6 +24,6 @@ namespace BillSplitter.Models.ViewModels.PickPositions
         public decimal RemainsQuantity { get; set; }
         public bool Selected { get; set; }
         public decimal Price { get; set; }
-        public List<string> CustomerNames { get; set; }
+        public List<string> MemberNames { get; set; }
     }
 }

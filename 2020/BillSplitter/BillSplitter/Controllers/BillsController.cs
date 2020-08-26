@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using BillSplitter.Data;
 using BillSplitter.Models;
-using BillSplitter.Models.ViewModels;
 using BillSplitter.Models.ViewModels.ViewBill;
-using BillSplitter.Validators;
+using BillSplitter.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BillSplitter.Calculators;
 
 namespace BillSplitter.Controllers
 {
@@ -25,10 +25,10 @@ namespace BillSplitter.Controllers
         public IActionResult Index()
         {
 
-            List<BillViewModel> bills = Db.Bills.GetByCustomerUserId(this.GetUserId()).Select(b => new BillViewModel()
+            List<BillViewModel> bills = Db.Bills.GetByMemberUserId(GetUserId()).Select(b => new BillViewModel()
             {
                 Bill = b,
-                HasManageAccess = b.UserId == GetUserId()
+                isAdmin = b.Members.FirstOrDefault(c => c.UserId == GetUserId()).Role=="Admin"
             }).ToList();
 
             return View(bills);
@@ -37,16 +37,17 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult Create(Bill createdBill)
         {
-            createdBill.UserId = this.GetUserId();
-            var customer = new Customer
+            createdBill.UserId = GetUserId();
+            var member = new Member
             {
-                Name = this.GetUserName(),
-                UserId = this.GetUserId(),
+                Name = GetUserName(),
+                UserId = GetUserId(),
+                Role = "Admin",
                 Bill = createdBill
             };
 
             Db.Bills.Add(createdBill);
-            Db.Customers.Add(customer);
+            Db.Members.Add(member);
 
             Db.Save();
 
@@ -58,32 +59,42 @@ namespace BillSplitter.Controllers
         public IActionResult ViewBill(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);
-            var customer = bill.Customers.FirstOrDefault(c => c.UserId == this.GetUserId());
+            var member = bill.Members.FirstOrDefault(c => c.UserId == GetUserId());
 
-            if (customer == null)
+            if (member == null)
                 return View("JoinBill", bill);
 
-            var customersBill = new CustomerBillBuilder().Build(customer);
-
-            var model = BuildVewModelForViewBill(bill, customersBill);
+            var model = BuildVewModelForViewBill(
+                bill, 
+                member, 
+                new MemberBillBuilder(new OrderPriceCalculator()));
 
             return View(model);
         }
 
-        private BillViewModel BuildVewModelForViewBill(Bill bill, List<Position> customersBill)
+        private BillViewModel BuildVewModelForViewBill(Bill bill, Member billMember, MemberBillBuilder billBuilder)
         {
-            var positions = bill.Positions
+            var memberBill = billBuilder.Build(billMember);
+            var member = bill.Members.FirstOrDefault(c => c.UserId == GetUserId());
+
+            var balanceCalculator = new BalanceCalculator(billBuilder.Calculator);
+
+            var debts = balanceCalculator.CalculateDebts(member);
+            var payments = balanceCalculator.CalculatePayments(member);
+
+            var billPositions = bill.Positions
                 .Select(position => new PositionViewModel(position))
                 .OrderBy(p => p.Id)
                 .ToList();
 
-            foreach (var pos in positions)
+            foreach (var pos in billPositions)
             {
-                var customerPosition = customersBill
+                var memberPosition = memberBill
                     .FirstOrDefault(p => p.Id == pos.Id);
-                if (customerPosition != null)
+
+                if (memberPosition != null)
                 {
-                    pos.ActualPrice = customerPosition.Price;
+                    pos.ActualPrice = memberPosition.Price;
                     pos.Selected = true;
                 }
             }
@@ -91,9 +102,12 @@ namespace BillSplitter.Controllers
             var model = new BillViewModel
             {
                 Bill = bill,
-                Positions = positions,
-                HasManageAccess = bill.UserId == this.GetUserId(),
-                CustomerSum = customersBill.Sum(p => p.Price)
+                Positions = billPositions,
+                Payments = payments,
+                Debts = debts,
+                isAdmin = bill.Members.FirstOrDefault(c => c.UserId == GetUserId()).Role == "Admin",
+                isModerator = member.Role == "Admin" || member.Role == "Moderator",
+                MemberSum = payments.Values.Sum()
             };
 
             return model;
@@ -110,12 +124,12 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("{billId}")]
-        [ServiceFilter(typeof(ValidateUserAttribute))]
+        [RequireRoles("Admin")]
         public IActionResult Delete(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);
 
-            if (bill.UserId != this.GetUserId())
+            if (bill.UserId != GetUserId())
                 throw new NotImplementedException("Case is not implemented yet");
 
             Db.Bills.DeleteById(billId);

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using BillSplitter.Data;
-using BillSplitter.Models;
 using BillSplitter.Oauth;
-using BillSplitter.Validators;
-using Microsoft.AspNetCore.Authentication;
+using BillSplitter.Validation.ValidationHandlers;
+using BillSplitter.Validation.ValidationMiddleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +41,8 @@ namespace BillSplitter
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
             services.AddScoped<UnitOfWork>();
-            services.AddScoped<ValidateUserAttribute>();
+
+            services.AddSingleton<RoleHandler>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -56,6 +53,7 @@ namespace BillSplitter
                 {
                     options.ClientId = Configuration["App:GoogleClientId"];
                     options.ClientSecret = Configuration["App:GoogleClientSecret"];
+
                 })
                 .AddFacebook(options =>
                 {
@@ -92,6 +90,8 @@ namespace BillSplitter
             app.UseAuthorization();
 
             app.UseSession();
+
+            app.UseMiddleware<ValidationMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using BillSplitter.Data;
+using BillSplitter.HttpContextExtension;
 using BillSplitter.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +19,9 @@ namespace BillSplitter.Controllers
             Db = db;
         }
 
-        public int GetUserId() // Maybe move to extension method? This provides http db data...
+        public int GetUserId() 
         {
-            return int.Parse(
-                    HttpContext
-                    .User.Claims
-                    .Where(c => c.Type == "Id")
-                    .Select(c => c.Value)
-                    .SingleOrDefault() ?? string.Empty);
+            return HttpContext.GetCurrentUserId();
         }
 
         public string GetUserName()

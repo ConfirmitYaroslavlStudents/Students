@@ -4,8 +4,8 @@
     {
         public int PositionId { get; set; }
         public virtual Position Position { get; set; }
-        public int? CustomerId { get; set; }
-        public virtual Customer Customer { get; set; }
+        public int MemberId { get; set; }
+        public virtual Member Member { get; set; }
         public int Id { get; set; }
         public decimal? Quantity { get; set; }
     }

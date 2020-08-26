@@ -41,9 +41,11 @@
             <td>@bill.Bill.Name</td>
             <td>
                 @Html.ActionLink("View bill", "ViewBill", new { billId = @bill.Bill.Id }, new { @class = "btn btn-primary" })
-               @if (bill.HasManageAccess)
+               @if (bill.isAdmin)
                {
-                <button type="button" id="deleteButton" class="btn btn-primary" onclick="showDeleteConfirmationDialog(@bill.Bill.Id)">
+                   <button type="button" id="deleteButton" class="btn btn-primary"
+                           data-billid="@bill.Bill.Id" onclick="setDeleteConfirmationIdDialog(event)"
+                           data-toggle="modal" data-target="#deleteConfirmationDialog">
                     Delete bill
                 </button>
                }
@@ -68,23 +70,24 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                <button id="deleteSubmissionButton" type="button" class="btn btn-primary">Yes</button>
+                <button id="deleteSubmissionButton" type="button" class="btn btn-primary" 
+                        onclick="submitDeletion()">Yes</button>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <script>
-    function showDeleteConfirmationDialog(billId) {
-        $(document).ready(() => {
-            $('#deleteSubmissionButton').on('click', (e) => {
-                $.post(`Bills/${billId}`);
-                $('#deleteConfirmationDialog').modal('toggle');
-                window.location.reload();
-            });
+    let BILL_ID = null;
 
+    function setDeleteConfirmationIdDialog(event) {
+        BILL_ID = $(event.target).data().billid;
+    }
+
+    function submitDeletion() {
+        let actionUrl = `Bills/${BILL_ID}`;
+        $.post(actionUrl, () => {
+            window.location.reload();
             $('#deleteConfirmationDialog').modal('toggle');
         });
     }

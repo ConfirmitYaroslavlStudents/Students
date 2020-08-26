@@ -18,14 +18,14 @@ namespace BillSplitter.Controllers
         [HttpPost]
         public IActionResult AddOrder(int billId, int positionId, decimal? quantity)
         {
-            var customer = Db.Bills.GetBillById(billId).Customers
-                .FirstOrDefault(c => c.UserId == this.GetUserId());
+            var member = Db.Bills.GetBillById(billId).Members
+                .FirstOrDefault(c => c.UserId == GetUserId());
            
             Db.Orders.DeleteByUserAndPosition(this.GetUserId(), positionId);
 
             Db.Orders.AddOrder(new Order()
             {
-                CustomerId = customer.Id,
+                MemberId = member.Id,
                 PositionId = positionId,
                 Quantity = quantity
             });

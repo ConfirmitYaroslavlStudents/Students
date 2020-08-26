@@ -19,10 +19,11 @@ namespace BillSplitter.Data
             _context.Set<Bill>().Add(bill);
         }
 
-        public List<Bill> GetByCustomerUserId(int userId)
+        public List<Bill> GetByMemberUserId(int userId)
         {
-            return _context.Set<Customer>().Where(c => c.UserId == userId).Select(c => c.Bill).ToList();
+            return _context.Set<Member>().Where(c => c.UserId == userId).Select(c => c.Bill).ToList();
         }
+
         public Bill GetBillById(int billId)
         {
             var bill = _context.Set<Bill>().FirstOrDefault(x => x.Id == billId);
@@ -37,7 +38,8 @@ namespace BillSplitter.Data
 
         public void DeleteById(int billId)
         {
-            _context.Set<Bill>().Remove(GetBillById(billId));
+            var bill = GetBillById(billId);
+            _context.Set<Bill>().Remove(bill);
         }
     }
 }

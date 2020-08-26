@@ -9,6 +9,6 @@ namespace BillSplitter.Models
         public int UserId { get; set; }
         public virtual User User { get; set; }
         public virtual List<Position> Positions { get; set; } = new List<Position>();
-        public virtual List<Customer> Customers { get; set; } = new List<Customer>();
+        public virtual List<Member> Members { get; set; } = new List<Member>();
     }
 }

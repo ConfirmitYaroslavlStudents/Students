@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BillSplitter.Controllers;
 
 namespace BillSplitter
 {
@@ -35,6 +36,7 @@ namespace BillSplitter
             });
 
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
 
             services.AddDbContext<BillContext>(options =>
                 options
@@ -42,6 +44,9 @@ namespace BillSplitter
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
             services.AddScoped<UnitOfWork>();
+
+            services.AddScoped<SignInManager>();
+
             services.AddScoped<ValidateUserAttribute>();
 
             services.AddSingleton<RoleHandler>();

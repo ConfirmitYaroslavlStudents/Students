@@ -1,4 +1,4 @@
-﻿@model BillSplitter.Models.ViewModels.LoginAndRegister.LoginModel
+﻿@model BillSplitter.Models.ViewModels.LoginAndRegister.LoginViewModel
 <style>
     form {
         width: 100%;
@@ -23,6 +23,10 @@
             <div class="form-group">
                 <input type="text" asp-for="Name" class="form-control" placeholder="Login" required autofocus="" />
                 <span asp-validation-for="Name" style="color:red;"> </span>
+            </div>
+            <div class="form-group">
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" required autofocus="" />
+                <span asp-validation-for="Password" style="color:red;"> </span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Sing in" class="btn btn-success btn-block" />

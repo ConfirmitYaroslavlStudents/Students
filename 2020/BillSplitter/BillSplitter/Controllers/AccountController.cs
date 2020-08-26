@@ -3,7 +3,6 @@ using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels.LoginAndRegister;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillSplitter.Controllers
@@ -28,7 +27,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        public IActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -36,7 +35,7 @@ namespace BillSplitter.Controllers
 
             if (user == null)
                 ModelState.AddModelError("Name", "No Such User");
-            else if(!_signInManager.CheckPassword(user, model.Password))
+            else if (!_signInManager.CheckPassword(user, model.Password))
                 ModelState.AddModelError("Password", "Wrong Password");
             else
             {
@@ -122,9 +121,9 @@ namespace BillSplitter.Controllers
 
         [HttpGet]
         [Route("Logout")]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            _signInManager.SignOut();
 
             return RedirectToAction("Index", "Bills");
         }

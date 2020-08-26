@@ -1,31 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BillSplitter.Calculators;
 using BillSplitter.Models;
 using Xunit;
 
-namespace BillSplitterTests
+namespace BillSplitterTests.CalculatorsTests
 {
     public class OrderPriceCalculatorTests
     {
         [Fact]
         public void CalculatePriceForEquallySharedOrder_ReturnsCorrectPrice()
         {
-            var position = new PositionSeeder().Seed().Last();
-
-            var specialOrder = new Order()
+            var position = new Position {Name = "A", Price = 1, Quantity = 3};
+            var specialOrder = new Order
             {
                 Position = position,
                 Quantity = 1.5m
             };
 
-            var equallySharedOrder1 = new Order()
+            var equallySharedOrder1 = new Order
             {
                 Position = position,
                 Quantity = null
             };
 
-            var equallySharedOrder2 = new Order()
+            var equallySharedOrder2 = new Order
             {
                 Position = position,
                 Quantity = null
@@ -42,21 +40,21 @@ namespace BillSplitterTests
         [Fact]
         public void CalculatePriceForSpecialOrder_ReturnsCorrectPrice()
         {
-            var position = new PositionSeeder().Seed().Last();
+            var position = new Position { Name = "A", Price = 1, Quantity = 3 };
 
-            var specialOrder = new Order()
+            var specialOrder = new Order
             {
                 Position = position,
                 Quantity = 1.5m
             };
 
-            var equallySharedOrder1 = new Order()
+            var equallySharedOrder1 = new Order
             {
                 Position = position,
                 Quantity = null
             };
 
-            var equallySharedOrder2 = new Order()
+            var equallySharedOrder2 = new Order
             {
                 Position = position,
                 Quantity = null

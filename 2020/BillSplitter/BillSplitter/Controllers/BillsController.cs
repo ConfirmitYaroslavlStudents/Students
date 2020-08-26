@@ -28,7 +28,7 @@ namespace BillSplitter.Controllers
             List<BillViewModel> bills = Db.Bills.GetByMemberUserId(GetUserId()).Select(b => new BillViewModel()
             {
                 Bill = b,
-                isAdmin = b.Members.FirstOrDefault(c => c.UserId == this.GetUserId()).Role=="Admin"
+                isAdmin = b.Members.FirstOrDefault(c => c.UserId == GetUserId()).Role=="Admin"
             }).ToList();
 
             return View(bills);
@@ -59,45 +59,52 @@ namespace BillSplitter.Controllers
         public IActionResult ViewBill(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);
-            var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
+            var member = bill.Members.FirstOrDefault(c => c.UserId == GetUserId());
 
             if (member == null)
                 return View("JoinBill", bill);
 
-            var memberBill = new MemberBillBuilder().Build(member);
-
-            var model = BuildVewModelForViewBill(bill, memberBill);
+            var model = BuildVewModelForViewBill(
+                bill, 
+                member, 
+                new MemberBillBuilder(new OrderPriceCalculator()));
 
             return View(model);
         }
 
-        private BillViewModel BuildVewModelForViewBill(Bill bill, List<Position> memberBill)
+        private BillViewModel BuildVewModelForViewBill(Bill bill, Member billMember, MemberBillBuilder billBuilder)
         {
-            var positions = bill.Positions
+            var memberBill = billBuilder.Build(billMember);
+            var member = bill.Members.FirstOrDefault(c => c.UserId == GetUserId());
+
+            var balanceCalculator = new BalanceCalculator(billBuilder.Calculator);
+
+            var debts = balanceCalculator.CalculateDebts(member);
+            var payments = balanceCalculator.CalculatePayments(member);
+
+            var billPositions = bill.Positions
                 .Select(position => new PositionViewModel(position))
                 .OrderBy(p => p.Id)
                 .ToList();
-           
-            foreach (var pos in positions)
+
+            foreach (var pos in billPositions)
             {
                 var memberPosition = memberBill
                     .FirstOrDefault(p => p.Id == pos.Id);
+
                 if (memberPosition != null)
                 {
                     pos.ActualPrice = memberPosition.Price;
                     pos.Selected = true;
                 }
             }
-            var member = bill.Members.FirstOrDefault(c => c.UserId == this.GetUserId());
 
-            Dictionary<string, decimal> payments = new DebtsCalculator().CalculateDebts(member,memberBill);
-         
             var model = new BillViewModel
             {
                 Bill = bill,
-                Positions = positions,
-                Payments = payments.Where(p => p.Value > 0).ToDictionary( p=> p.Key, p=> p.Value),
-                Debts = payments.Where(p => p.Value < 0).ToDictionary(p => p.Key, p => -p.Value),
+                Positions = billPositions,
+                Payments = payments,
+                Debts = debts,
                 isAdmin = bill.Members.FirstOrDefault(c => c.UserId == GetUserId()).Role == "Admin",
                 isModerator = member.Role == "Admin" || member.Role == "Moderator",
                 MemberSum = payments.Values.Where(p => p >0).Sum()

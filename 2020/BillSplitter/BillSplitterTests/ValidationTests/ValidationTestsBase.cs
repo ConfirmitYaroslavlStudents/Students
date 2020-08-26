@@ -58,7 +58,6 @@ namespace BillSplitterTests.ValidationTests
             };
             context.SetEndpoint(endpoint);
             context.User = user;
-            context.GetRouteValue("billId");
 
             return context;
         }

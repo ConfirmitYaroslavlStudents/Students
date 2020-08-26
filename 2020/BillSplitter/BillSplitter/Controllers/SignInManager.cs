@@ -43,7 +43,7 @@ namespace BillSplitter.Controllers
             return user.Password.Equals(password);
         }
 
-        public async Task<ClaimsPrincipal> GetExternalUserInfo(string scheme)
+        public async Task<ExternalUserInfo> GetExternalUserInfo(string scheme)
         {
             var result = await _contextAccessor.HttpContext.AuthenticateAsync(scheme);
 
@@ -57,35 +57,39 @@ namespace BillSplitter.Controllers
 
             await _contextAccessor.HttpContext.SignOutAsync("Cookies");
 
-            return externalUser;
-        }
-
-        public void ExternalSignIn(ClaimsPrincipal externalUser, string scheme)
-        {
-            var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
-
-            var user = _unitOfWork.Users.GetByName(scheme, name);
-
-            if (user == null)
-                user = CreateNewUser(externalUser, scheme);
-
-            SingIn(user);
-        }
-
-        public User CreateNewUser(ClaimsPrincipal externalUser, string scheme)
-        {
             var givenName = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName).Value;
 
             var surname = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname).Value;
 
             var name = externalUser.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
-            var newUser = new User
+            return new ExternalUserInfo
             {
                 Provider = scheme,
                 Name = name,
                 Surname = surname,
                 GivenName = givenName
+            };
+        }
+
+        public void ExternalSignIn(ExternalUserInfo externalUser)
+        {
+            var user = _unitOfWork.Users.GetByName(externalUser.Provider, externalUser.Name);
+
+            if (user == null)
+                user = CreateNewUser(externalUser);
+
+            SingIn(user);
+        }
+
+        public User CreateNewUser(ExternalUserInfo externalUser)
+        {
+            var newUser = new User
+            {
+                Provider = externalUser.Provider,
+                Name = externalUser.Name,
+                Surname = externalUser.Surname,
+                GivenName = externalUser.GivenName
             };
 
             CreateNewUser(newUser);

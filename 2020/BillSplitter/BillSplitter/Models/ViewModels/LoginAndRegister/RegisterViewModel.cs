@@ -2,7 +2,7 @@
 
 namespace BillSplitter.Models.ViewModels.LoginAndRegister
 {
-    public class RegisterModel
+    public class RegisterViewModel
     {
         [Required(ErrorMessage = "Name is Required")]
         public string Name { get; set; }

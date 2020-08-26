@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BillSplitter.Data;
 using BillSplitter.Models;
 using BillSplitter.Models.ViewModels.LoginAndRegister;
@@ -32,7 +28,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -61,7 +57,7 @@ namespace BillSplitter.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(RegisterModel model, string returnUrl)
+        public IActionResult Register(RegisterViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -105,11 +101,11 @@ namespace BillSplitter.Controllers
         }
 
         [Route("ExternalLoginCallback")]
-        public async Task<IActionResult> ExternalLoginCallback(string scheme, string returnUrl)
+        public IActionResult ExternalLoginCallback(string scheme, string returnUrl)
         {
             var externalUser = _signInManager.GetExternalUserInfo(scheme).Result;
 
-            _signInManager.ExternalSignIn(externalUser, scheme);
+            _signInManager.ExternalSignIn(externalUser);
 
             return RedirectTo(returnUrl);
         }

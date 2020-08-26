@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using BillSplitter.Data;
+﻿using BillSplitter.Data;
 using BillSplitter.Models;
-using Microsoft.EntityFrameworkCore;
-using Moq;
 using Xunit;
 
 namespace BillSplitterTests.RepositoryTests

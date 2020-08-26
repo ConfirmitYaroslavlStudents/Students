@@ -17,7 +17,7 @@ namespace BillSplitter.Controllers
         }
         
         [HttpGet]
-        [ValidateUserAttributeFactory(RequestedRole = "Admin")]
+        [RequireRoles("Admin")]
         public IActionResult Index(int billId)
         {
             var bill = Db.Bills.GetBillById(billId);

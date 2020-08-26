@@ -1,7 +1,6 @@
 ﻿using System;
 using BillSplitter.Data;
 using BillSplitter.Oauth;
-using BillSplitter.Attributes;
 using BillSplitter.Validation.ValidationHandlers;
 using BillSplitter.Validation.ValidationMiddleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -42,7 +41,6 @@ namespace BillSplitter
                     .UseSqlServer(Configuration.GetConnectionString("BillContext")));
 
             services.AddScoped<UnitOfWork>();
-            services.AddScoped<ValidateUserAttribute>();
 
             services.AddSingleton<RoleHandler>();
 

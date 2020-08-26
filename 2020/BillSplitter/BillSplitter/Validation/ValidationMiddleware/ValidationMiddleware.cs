@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using BillSplitter.Attributes;
 using BillSplitter.Validation.ValidationHandlers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 
 namespace BillSplitter.Validation.ValidationMiddleware
 {

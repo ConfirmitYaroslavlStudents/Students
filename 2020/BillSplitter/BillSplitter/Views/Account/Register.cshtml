@@ -25,7 +25,15 @@
                 <span asp-validation-for="Surname" style="color:red;"> </span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-outline-dark btn-block"/>
+                <input type="password" asp-for="Password" class="form-control" placeholder="Create new password" />
+                <span asp-validation-for="Password" style="color:red;"> </span>
+            </div>
+            <div class="form-group">
+                <input type="password" asp-for="PasswordConfirm" class="form-control" placeholder="Confirm password" />
+                <span asp-validation-for="PasswordConfirm" style="color:red;"> </span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-outline-dark btn-block" />
             </div>
         </div>
     </form>

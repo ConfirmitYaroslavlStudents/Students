@@ -7,10 +7,19 @@ namespace BillSplitter.Models.ViewModels.LoginAndRegister
         [Required(ErrorMessage = "Name is Required")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Can't be empty")]
+        [Required(ErrorMessage = "Name is Required")]
         public string GivenName { get; set; }
 
-        [Required(ErrorMessage = "Can't be empty")]
+        [Required(ErrorMessage = "Name is Required")]
         public string Surname { get; set; }
+
+        [Required(ErrorMessage = "Name is Required")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Name is Required")]
+        [Compare("Password", ErrorMessage = "Password mismatch")]
+        [DataType(DataType.Password)]
+        public string PasswordConfirm { get; set; }
     }
 }

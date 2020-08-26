@@ -107,7 +107,7 @@ namespace BillSplitter.Controllers
                 Debts = debts,
                 isAdmin = bill.Members.FirstOrDefault(c => c.UserId == GetUserId()).Role == "Admin",
                 isModerator = member.Role == "Admin" || member.Role == "Moderator",
-                MemberSum = payments.Values.Where(p => p >0).Sum()
+                MemberSum = payments.Values.Sum()
             };
 
             return model;

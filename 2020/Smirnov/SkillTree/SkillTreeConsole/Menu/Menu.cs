@@ -50,12 +50,12 @@ namespace SkillTreeConsole.Menu
                         
                         break;
                     case (_UserMenu):
-                        if (user.User == null)
+                        if (user.User.Name == null)
                         {
                             Console.WriteLine("Write name new user");
                             user = new UserContainer(new User(Console.ReadLine()));
                         }
-                        while (UserMenu.WorkWithUserMenu(user, disciplines)) ;
+                        while (UserMenu.WorkWithUserMenu(user, new DisciplineWithUserPath(disciplines, user.User))) ; // передаю другой класс
 
                         break;
                     case (_SaveEndExit):

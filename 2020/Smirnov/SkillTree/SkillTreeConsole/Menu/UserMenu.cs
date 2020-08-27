@@ -8,23 +8,25 @@ namespace SkillTreeConsole.Menu
     {
         private const string LearnNewSkill = "1";
         private const string LearnNewDiscipline = "2";
-        private const string GetNameAllLearnedSkill = "3";
-        private const string GetNameAllLearnedDisciplines = "4";
-        private const string SaveAndExit = "5";
+        private const string GetAllWayUptoSkill = "3";
+        private const string GetNameAllLearnedSkill = "4";
+        private const string GetNameAllLearnedDisciplines = "5";
+        private const string SaveAndExit = "6";
 
         private static void WriteDisciplineMenu()
         {
             Console.WriteLine("1 Learn new skill");
             Console.WriteLine("2 Learn new disciplines");
-            Console.WriteLine("3 Get Name All Learned Skills");
-            Console.WriteLine("4 Get Name All Learned Disciplines");
-            Console.WriteLine("5 Save and return");
+            Console.WriteLine("3 Get all way up to skill");
+            Console.WriteLine("4 Get Name All Learned Skills");
+            Console.WriteLine("5 Get Name All Learned Disciplines");
+            Console.WriteLine("6 Save and return");
         }
-        public static bool WorkWithUserMenu(UserContainer user, DisciplineContainer disciplines)
+        public static bool WorkWithUserMenu(UserContainer user, IDisciplineContainer disciplines) // Теперь принимает интерфейс
         {
-            Console.Clear();
             WriteDisciplineMenu();
             var item = Console.ReadLine();
+            var nameSkill = "";
             var chooseDiscipline = new Discipline();
             switch (item)
             {
@@ -35,7 +37,7 @@ namespace SkillTreeConsole.Menu
                         Console.WriteLine("Write name of discipline");
                         chooseDiscipline = disciplines.GetDiscipline(Console.ReadLine());
                         Console.WriteLine("Write name of skill");
-                        var nameSkill = Console.ReadLine();
+                        nameSkill = Console.ReadLine();
 
                         user.LearnNewSkill(chooseDiscipline.Graph.TryGetVertex(nameSkill));
                     }
@@ -65,7 +67,30 @@ namespace SkillTreeConsole.Menu
                     }
 
                     break;
-               case(GetNameAllLearnedSkill):
+                case (GetAllWayUptoSkill):
+
+                    Console.Clear();
+                    Console.WriteLine("Write name of discipline");
+                    chooseDiscipline = disciplines.GetDiscipline(Console.ReadLine());
+                    Console.WriteLine("Write name of skill");
+                    nameSkill = Console.ReadLine();
+
+
+                    try
+                    {
+                        Console.WriteLine(string.Join(" ", from skill in disciplines.GetAllWayUptoSkill(chooseDiscipline, nameSkill).Reverse()
+                                                           select skill.Name
+                                                           ));
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(ex.Message);
+                        Console.ReadKey();
+                    }
+
+                    break;
+                case (GetNameAllLearnedSkill):
                     Console.WriteLine(string.Join(" ", from skill in user.GetAllLearnedSkills()
                                                        select skill.Name));
 

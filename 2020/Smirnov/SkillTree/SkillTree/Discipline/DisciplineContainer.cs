@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SkillTree
 {
-    public class DisciplineContainer
+    public class DisciplineContainer: IDisciplineContainer
     {
         public DisciplineContainer(List<Discipline> disciplines)
         {

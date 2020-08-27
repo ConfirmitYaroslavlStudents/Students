@@ -24,7 +24,6 @@ namespace SkillTreeConsole.Menu
         }
         public static bool WorkWithDisciplineMenu(DisciplineContainer disciplines)
         {
-            Console.Clear();
             WriteDisciplineMenu();
             var item = Console.ReadLine();
             var chooseDiscipline = new Discipline();

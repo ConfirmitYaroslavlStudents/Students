@@ -1,0 +1,9 @@
+C:\Универ\Летняя школа\MyQueue\MyQueue\bin\Debug\netcoreapp3.1\MyQueue.deps.json
+C:\Универ\Летняя школа\MyQueue\MyQueue\bin\Debug\netcoreapp3.1\MyQueue.dll
+C:\Универ\Летняя школа\MyQueue\MyQueue\bin\Debug\netcoreapp3.1\MyQueue.pdb
+C:\Универ\Летняя школа\MyQueue\MyQueue\obj\Debug\netcoreapp3.1\MyQueue.csprojAssemblyReference.cache
+C:\Универ\Летняя школа\MyQueue\MyQueue\obj\Debug\netcoreapp3.1\MyQueue.AssemblyInfoInputs.cache
+C:\Универ\Летняя школа\MyQueue\MyQueue\obj\Debug\netcoreapp3.1\MyQueue.AssemblyInfo.cs
+C:\Универ\Летняя школа\MyQueue\MyQueue\obj\Debug\netcoreapp3.1\MyQueue.csproj.CoreCompileInputs.cache
+C:\Универ\Летняя школа\MyQueue\MyQueue\obj\Debug\netcoreapp3.1\MyQueue.dll
+C:\Универ\Летняя школа\MyQueue\MyQueue\obj\Debug\netcoreapp3.1\MyQueue.pdb

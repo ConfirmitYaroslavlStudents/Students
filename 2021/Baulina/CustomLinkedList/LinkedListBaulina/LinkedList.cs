@@ -5,9 +5,18 @@ using System.Collections.Generic;
 namespace LinkedListBaulina
 {
     public class LinkedList<T> : IEnumerable<T>
-    {
+    { 
+        class Node<T>
+        {
+            public Node(T data)
+            {
+                Data = data;
+            }
+            public T Data { get; }
+            public Node<T> Next { get; set; }
+        }
+
         private Node<T> _head; 
-        private Node<T> _tail; 
         private int _count;
 
         public int Count => _count;
@@ -16,13 +25,12 @@ namespace LinkedListBaulina
         public LinkedList()
         {
             _head = null;
-            _tail = null;
             _count = 0;
         }
 
-        public LinkedList(T[] inputArray)
+        public LinkedList(IEnumerable<T> inputCollection)
         {
-            foreach (var inputItem in inputArray)
+            foreach (var inputItem in inputCollection)
             {
                 Add(inputItem);
             }
@@ -30,40 +38,28 @@ namespace LinkedListBaulina
 
         public void Add(T data)
         {
-            var node = new Node<T>(data);
-            if (_head == null)
-                _head = node;
-            else
-                _tail.Next = node;
-            _tail = node;
-            _count++;
+            Insert(_count, data);
         }
 
         public void Remove(T data)
         {
+            if(!Contains(data)) 
+                throw new ArgumentException("Data not found");
+
             var current = _head;
             Node<T> previous = null;
+
             while (current != null)
             {
                 if (current.Data.Equals(data))
                 {
-                    //not a head node
                     if (previous != null)
                     {
-                        // remove current
                         previous.Next = current.Next;
-
-                        if (current.Next == null) //tail
-                            _tail = previous;
                     }
                     else
                     {
-                        //remove head
                         _head = _head.Next;
-
-                        // list is empty -> tail is null
-                         if (_head == null)
-                            _tail = null;
                     }
 
                     _count--;
@@ -73,16 +69,11 @@ namespace LinkedListBaulina
                 previous = current;
                 current = current.Next;
             }
-
-            throw new ArgumentException();
         }
-
-
 
         public void Clear()
         {
             _head = null;
-            _tail = null;
             _count = 0;
         }
 
@@ -101,18 +92,21 @@ namespace LinkedListBaulina
 
         public void AppendFirst(T data)
         {
-            var node = new Node<T>(data) { Next = _head };
-            _head = node;
-            if (_count == 0)
-                _tail = _head;
-            _count++;
+            Insert(0, data);
         }
 
         public void Insert(int index, T data)
         {
-            if (index == 0 && _count == 0) Add(data);
-            if (index < 0 || index >= _count) throw new IndexOutOfRangeException();
-            if (index == 0) AppendFirst(data);
+            if (index < 0 || index > _count) 
+                throw new IndexOutOfRangeException();
+
+            var nodeToBeInserted = new Node<T>(data);
+
+            if (index == 0)
+            {
+                nodeToBeInserted.Next = _head;
+                _head = nodeToBeInserted;
+            }
             else
             {
                 var currentNode = _head;
@@ -122,20 +116,17 @@ namespace LinkedListBaulina
                     previousNode = currentNode;
                     currentNode = currentNode.Next;
                 }
-
-                var nodeToBeInserted = new Node<T>(data);
                 previousNode.Next = nodeToBeInserted;
                 nodeToBeInserted.Next = currentNode;
-                _count++;
             }
+            _count++;
         }
-
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable) this).GetEnumerator();
+            return GetEnumerator();
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             var current = _head;
             while (current != null)

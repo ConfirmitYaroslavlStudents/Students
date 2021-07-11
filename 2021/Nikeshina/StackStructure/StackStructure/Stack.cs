@@ -5,38 +5,38 @@ namespace StackStructure
 {
     public class Stack<T>
     {
-        public int Count { get; private set; }
         private List<T> elements;
+
         public  Stack()
         {
             elements = new List<T>();
-            Count = 0;
         }
+
+        public int Count()
+        {
+            return elements.Count;
+        }
+
         public void Push(T current)
         {
-            if (elements.Count < Count)
-                elements[Count-1] = current;
-            else
-                elements.Add(current);
-            Count=Count+1;
+            elements.Add(current);
         }
+
         public T Pop()
         {
-            if (Count > 0)
-            {
-                Count--;
-                return elements[Count];
-            }
-            else
-                throw new NullReferenceException();
-            
+            if (elements.Count == 0)
+                throw new InvalidOperationException();
+
+            var item = elements[elements.Count - 1];
+            elements.RemoveAt(elements.Count - 1);
+            return item;   
         }
         public T Peek()
         {
-            if (Count > 0)
-                return elements[Count - 1];
-            else
-                throw new NullReferenceException();
+            if (elements.Count == 0)
+                throw new InvalidOperationException();
+
+            return elements[elements.Count - 1];
         }
     }
 }

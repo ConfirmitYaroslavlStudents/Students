@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StackStructure;
+using System;
 using System.Collections.Generic;
 
 namespace StackTesting
@@ -8,7 +9,7 @@ namespace StackTesting
     public class StackTesting
     {
         [TestMethod]
-        public void TestMethod1()
+        public void CompareCountAfterAddingElements()
         {
             var stack = new StackStructure.Stack<int>();
 
@@ -19,7 +20,26 @@ namespace StackTesting
         }
 
         [TestMethod]
-        public void TestMethod2()
+        public void CountOfEmptyStack()
+        {
+            var stack = new StackStructure.Stack<int>();
+
+            Assert.AreEqual(0, stack.Count());
+        }
+
+        public void CompareTheContents()
+        {
+            var stack = new StackStructure.Stack<int>();
+
+            for (var i = 0; i < 10; i++)
+                stack.Push(i);
+
+            for (var i = 9; i>= 0; i--)
+                 Assert.AreEqual(i, stack.Pop());
+        }
+
+        [TestMethod]
+        public void CountAfterClearingStack()
         {
             var stack = new StackStructure.Stack<int>();
 
@@ -33,7 +53,7 @@ namespace StackTesting
         }
 
         [TestMethod]
-        public void TestMethod3()
+        public void CompareTheContentAfterPop()
         {
             var stack = new StackStructure.Stack<int>();
             var list = new List<int>();
@@ -49,7 +69,7 @@ namespace StackTesting
         }
 
         [TestMethod]
-        public void TestMethod4()
+        public void NewPeekAfterPop()
         {
             var stack = new StackStructure.Stack<int>();
 
@@ -62,14 +82,21 @@ namespace StackTesting
         }
 
         [TestMethod]
-        public void TestMethod5()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ProhibitedDeleteElementFromEmptyStack()
         {
             var stack = new StackStructure.Stack<int>();
 
-            for (var i = 0; i < 100; i++)
-                stack.Push(i);
+            stack.Pop();
+        }
 
-            Assert.AreEqual(100, stack.Count());
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void PeekOfEmptyStack()
+        {
+            var stack = new StackStructure.Stack<int>();
+
+            stack.Peek();
         }
     }
 }

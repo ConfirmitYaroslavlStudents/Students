@@ -99,16 +99,16 @@ namespace ToDoListConsole
             var table = new Table();
             table.AddColumn("No.");
             table.AddColumn(new TableColumn("Task").Centered());
-            table.AddColumn(new TableColumn("State").Centered());
+            table.AddColumn(new TableColumn("IsCompleted").Centered());
 
             for (int i = 0; i < MyToDoList.Count; i++)
             {
-                var state = '\x2713';
-             //   var state = Convert.ToChar("\x2713").ToString();
+                var state = new Markup("[red]-[/]");
+                var number = i.ToString();
+                var description = MyToDoList[i].Description;
                 if (MyToDoList[i].IsComplete)
-                    // state = Convert.ToChar("\x2716").ToString();
-                    state = '\x2716';
-                table.AddRow(i.ToString(), MyToDoList[i].Description, state.ToString());
+                    state = new Markup("[green]+[/]");
+                table.AddRow(new Markup(number), new Markup(description), state);
             }
 
             return table;

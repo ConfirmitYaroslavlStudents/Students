@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace ToDoList
+namespace ToDoListProject
 {
     internal class Program
     {

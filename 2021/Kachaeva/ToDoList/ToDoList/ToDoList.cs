@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToDoList
+namespace ToDoListProject
 {
     [Serializable]
     public class ToDoList

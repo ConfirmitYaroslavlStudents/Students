@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ToDoList
+namespace ToDoListProject
 {
     [Serializable]
     public class Task

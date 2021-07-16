@@ -8,8 +8,13 @@ namespace ToDoListApp
         static void Main(string[] args)
         {
             var app = new Application();
-            WriteInstuction();
             app.Read();
+            ComandHandling(app);
+        }
+
+        private static void ComandHandling(Application app)
+        {
+            ClearScrean(app);
             var str = Console.ReadLine();
             while (str != null || str != "")
             {
@@ -23,15 +28,9 @@ namespace ToDoListApp
                         break;
                     case "У":
                         app.Delete();
-                        Console.Clear();
-                        WriteInstuction();
-                        app.Print();
                         break;
                     case "Р":
                         app.Edit();
-                        Console.Clear();
-                        WriteInstuction();
-                        app.Print();
                         break;
                     case "И":
                         app.ChangeStatus();
@@ -42,10 +41,20 @@ namespace ToDoListApp
                     default:
                         break;
                 }
+                ClearScrean(app);
+
                 str = Console.ReadLine();
             }
         }
-        public static void WriteInstuction()
+
+        private static void ClearScrean(Application app)
+        {
+            Console.Clear();
+            WriteInstuction();
+            app.Print();
+        }
+
+        private static void WriteInstuction()
         {
             Console.WriteLine("----------------------------------------------------------");
             Console.Write("С - список;  ");

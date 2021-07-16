@@ -5,34 +5,34 @@ namespace ToDoListNikeshina
 {
     public class ToDoList
     {
-        private List<Task> list;
-        private WorkWithFile fileEditor;
+        private List<Task> _list;
+        private WorkWithFile _fileEditor;
 
         public ToDoList()
         {
-            list = new List<Task>();
-            fileEditor = new WorkWithFile();
+            _list = new List<Task>();
+            _fileEditor = new WorkWithFile();
         }
 
         public int Count()
         {
-            return list.Count;
+            return _list.Count;
         }
 
         public void Read()
         {
-            list = fileEditor.Read();
+            _list = _fileEditor.Read();
         }
 
         public void Write()
         {
-            fileEditor.Write(list);
+            _fileEditor.Write(_list);
         }
 
         public void Print()
         {
             int i = 1;
-            foreach (var task in list)
+            foreach (var task in _list)
             {
                 Console.WriteLine(i + ". " + task.Print());
                 i++;
@@ -41,32 +41,24 @@ namespace ToDoListNikeshina
 
         public void Add(Task item)
         {
-            list.Add(item);
-            Print();
+            _list.Add(item);
         }
 
         public void Detete(int num)
         {
-            list.RemoveAt(num - 1);
+            _list.RemoveAt(num - 1);
         }
 
-        public void ChangeStatus(int num)
+        public void ChangeStatus(int index)
         {
-            list[num - 1].Status = (list[num - 1].Status + 1) % 2;
+            int indexInList = index - 1;
+            _list[indexInList].ChangeStatus();
         }
 
-        public void Edit(int index)
+        public void Edit(int index, string dscr)
         {
-            Console.Write("Введите новое название задачи: ");
-            var str = Console.ReadLine();
-            if (str.Length == 0)
-            {
-                Console.WriteLine("Введена некорректная строка ");
-                return;
-            }
-
-            list[index - 1].Name = str;
-            Print();
+            int indexInList = index - 1;
+            _list[indexInList].ChangeName(dscr);
         }
 
     }

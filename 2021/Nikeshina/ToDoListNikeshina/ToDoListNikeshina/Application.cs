@@ -6,99 +6,115 @@ namespace ToDoListNikeshina
 {
     public class Application
     {
-        private ToDoList list;
-
-        public Application()
-        {
-            list = new ToDoList();
-        }
+        private ToDoList _list = new ToDoList();
 
         public void Read()
         {
-            list.Read();
+            _list.Read();
         }
 
         public void Write()
         {
-            list.Write();
+            _list.Write();
         }
 
         public void Print()
         {
-            if (list.Count() == 0)
+            if (_list.Count() == 0)
             {
-                Console.WriteLine("Лист пуст");
+                MessageWriter.ToDoListIsEmpty();
                 return;
             }
 
-            list.Print();
+            _list.Print();
         }
 
         public void Add()
         {
-            Console.Write("Введите название миссии: ");
-            var name = Console.ReadLine();
-            if (name.Length == 0)
-            {
-                Console.WriteLine("Введена некорректная строка ");
+            MessageWriter.RequestDescription();
+
+            var dscr = Console.ReadLine();
+
+            if(!IsDataValidString(dscr))
                 return;
+
+            _list.Add(new Task(dscr, false));
+        }
+
+       public bool IsDataValidString(string dscr)
+        {
+            if (dscr.Length == 0)
+            {
+                MessageWriter.WrongFormatOfInputData();
+                return false;
             }
 
-            list.Add(new Task(name, 0));
+            return true;
+        }
+
+        private bool IsDataValidDigit(string input)
+        {
+            if (Int32.TryParse(input, out int num) && IsNumberCorrect(num))
+                return true;
+             
+            MessageWriter.WrongFormatOfInputData();
+            return false; ;
+        }
+         private bool IsNumberCorrect(int num)
+        {
+            if (num > 0 && num <= _list.Count())
+                return true;
+
+            return false;
         }
 
         public void Delete()
         {
-            Console.Write("num = ");
-            var inputStr = Console.ReadLine();
-            if (Int32.TryParse(inputStr, out int num) == false)
-            {
-                Console.WriteLine("Введены некорректные данные ");
-                return;
-            }
-            if (num < 1 || num > list.Count())
-            {
-                Console.WriteLine("Введена некорректная строка ");
-                return;
-            }
+            MessageWriter.RequestNumber();
 
-            list.Detete(num);
+            var inputStr = Console.ReadLine();
+
+            if (!IsDataValidDigit(inputStr))
+                return;
+
+            int num = int.Parse(inputStr);
+
+            _list.Detete(num);
         }
 
         public void Edit()
         {
-            Console.Write("num = ");
-            var inputStr = Console.ReadLine();
-            if (Int32.TryParse(inputStr, out int num) == false)
-            {
-                Console.WriteLine("Введены некорректные данные ");
-                return;
-            }
-            if (num < 1 || num > list.Count())
-            {
-                Console.WriteLine("Введена некорректная строка ");
-                return;
-            }
+            MessageWriter.RequestNumber();
 
-            list.Edit(num);
+            var inputStr = Console.ReadLine();
+
+            if (!IsDataValidDigit(inputStr))
+                return;
+
+            int num = int.Parse(inputStr);
+
+            MessageWriter.RequestDescription();
+
+            var dscr = Console.ReadLine();
+
+            if (!IsDataValidString(dscr))
+                return;
+
+            _list.Edit(num, dscr);
         }
 
         public void ChangeStatus()
         {
-            Console.Write("num = ");
-            var inputStr = Console.ReadLine();
-            if (Int32.TryParse(inputStr, out int num) == false)
-            {
-                Console.WriteLine("Введены некорректные данные ");
-                return;
-            }
-            if (num < 1 || num > list.Count())
-            {
-                Console.WriteLine("Введена некорректная строка ");
-                return;
-            }
+            MessageWriter.RequestNumber();
 
-            list.ChangeStatus(num);
+            var inputStr = Console.ReadLine();
+
+            if (!IsDataValidDigit(inputStr))
+                return;
+
+            int num = int.Parse(inputStr);
+
+            _list.ChangeStatus(num);
         }
 
     }

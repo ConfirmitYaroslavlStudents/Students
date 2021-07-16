@@ -8,19 +8,18 @@ namespace ToDoListConsole
         static void Main()
         {
             var uploadProcessor = new StartProcessor();
-            uploadProcessor.Process();
-            FirstExecutionDeterminer.DetermineWhetherItIsAFirstRun();
+            uploadProcessor.LoadTheList();
             var menuManager = new MenuManager(uploadProcessor.MyToDoList, new MessagePrinter());
             AppDomain.CurrentDomain.ProcessExit += Exit;
 
-            while (true)
+            while (menuManager.IsWorking)
             {
                 PrintMenu(menuManager);
             }
             
             void Exit(object sender, EventArgs e)
             {
-                DataSerializer.Serialize(menuManager.MyToDoList);
+                DataHandler.SaveToFile(menuManager.MyToDoList);
             }
         }
         
@@ -28,14 +27,14 @@ namespace ToDoListConsole
         {
             var operation = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("[bold plum3] What do you want to do? [/]")
-                    .PageSize(10)
+                    .Title("[bold lightgoldenrod2_1] What do you want to do? [/]")
+                    .PageSize(12)
                     .MoreChoicesText("[grey](Move up and down to reveal more operations)[/]")
                     .AddChoices("Add", "Edit", "Mark as complete", "Delete", "View all tasks", "Exit"));
-            OperationProcessor(operation, manager);
+            HandleOperation(operation, manager);
         }
 
-        public static void OperationProcessor(string operation, MenuManager manager)
+        public static void HandleOperation(string operation, MenuManager manager)
         {
             switch (operation)
             {

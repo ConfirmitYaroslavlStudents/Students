@@ -1,33 +1,31 @@
 ﻿using System;
 using MyToDoList;
 using Spectre.Console;
-using Spectre.Console.Rendering;
 
 namespace ToDoListConsole
 {
-    internal class MenuManager
+    public class MenuManager : IManage
     {
         public ToDoList MyToDoList { get; }
         private readonly MessagePrinter _messagePrinter;
 
-        internal bool Empty => MyToDoList.IsEmpty;
-
-        internal readonly string Path = System.IO.Path.Combine(Environment.GetFolderPath(
-            Environment.SpecialFolder.LocalApplicationData), "ToDoList.txt");
+        internal bool Empty => MyToDoList.Count == 0;
+        public bool IsWorking { get; private set; }
 
         public MenuManager(ToDoList inputList, MessagePrinter printer)
         {
             MyToDoList = new ToDoList(inputList);
             _messagePrinter = printer;
+            IsWorking = true;
         }
 
         public void Add()
         {
             var description = AnsiConsole.Prompt(
-                new TextPrompt<string>("[plum3]What do you need to do? [/]")
-                    .Validate(age =>
+                new TextPrompt<string>("[bold lightgoldenrod2_1]What do you need to do? [/]")
+                    .Validate(task =>
                     {
-                        return age switch
+                        return task switch
                         {
                             null => ValidationResult.Error("[red]Incorrect task[/]"),
                             _ => ValidationResult.Success(),
@@ -44,9 +42,10 @@ namespace ToDoListConsole
                 _messagePrinter.PrintErrorMessage();
                 return;
             }
+
             ViewAllTasks();
             var taskNumber = ChooseTaskNumber();
-            Console.WriteLine("Type in a new description");
+            _messagePrinter.PrintNewDescriptionRequest();
             var newDescription = Console.ReadLine();
             MyToDoList.EditDescription(taskNumber, newDescription);
             _messagePrinter.PrintDoneMessage();
@@ -74,13 +73,14 @@ namespace ToDoListConsole
             }
             ViewAllTasks();
             var taskNumber = ChooseTaskNumber();
-            MyToDoList.Remove(taskNumber);
+            MyToDoList.Delete(taskNumber);
             _messagePrinter.PrintDoneMessage();
         }
+
         public  void Exit()
         {
-            DataSerializer.Serialize(MyToDoList);
-            Environment.Exit(0);
+            DataHandler.SaveToFile(MyToDoList);
+            IsWorking = false;
         }
 
         public void ViewAllTasks()
@@ -90,33 +90,15 @@ namespace ToDoListConsole
                 _messagePrinter.PrintErrorMessage();
                 return;
             }
-            var table = FormATable();
+
+            var tableBuilder = new TableBuilder(MyToDoList);
+            var table = tableBuilder.FormATable();
             AnsiConsole.Render(table);
-        }
-
-        public IRenderable FormATable()
-        {
-            var table = new Table();
-            table.AddColumn("No.");
-            table.AddColumn(new TableColumn("Task").Centered());
-            table.AddColumn(new TableColumn("IsCompleted").Centered());
-
-            for (int i = 0; i < MyToDoList.Count; i++)
-            {
-                var state = new Markup("[red]-[/]");
-                var number = i.ToString();
-                var description = MyToDoList[i].Description;
-                if (MyToDoList[i].IsComplete)
-                    state = new Markup("[green]+[/]");
-                table.AddRow(new Markup(number), new Markup(description), state);
-            }
-
-            return table;
         }
 
         public int ChooseTaskNumber()
         {
-            AnsiConsole.MarkupLine("[lightgoldenrod2_1]Choose the task number[/]");
+            _messagePrinter.PrintTaskNumberRequest();
             while (true)
             {
                 var input = Console.ReadLine();
@@ -124,8 +106,8 @@ namespace ToDoListConsole
                 {
                     return number;
                 }
-                AnsiConsole.MarkupLine("[red]Incorrect number[/]");
-                AnsiConsole.MarkupLine("Choose the task number");
+                _messagePrinter.PrintIncorrectNumberWarning();
+                _messagePrinter.PrintTaskNumberRequest();
             }
         }
 

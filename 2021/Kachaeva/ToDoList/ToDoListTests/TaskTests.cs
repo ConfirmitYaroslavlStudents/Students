@@ -7,22 +7,13 @@ namespace ToDoListTests
     public class TaskTests
     {
         [TestMethod]
-        public void TaskIsCorrectAfterCreation()
-        {
-            var task = new Task("wash dishes");
-
-            Assert.AreEqual("wash dishes", task.text);
-            Assert.AreEqual(false, task.isDone);
-        }
-
-        [TestMethod]
         public void TextIsCorrectAfterChange()
         {
             var task = new Task("wash dishes");
 
             task.ChangeText("clean the room");
 
-            Assert.AreEqual("clean the room", task.text);
+            Assert.AreEqual("clean the room", task.Text);
         }
 
         [TestMethod]
@@ -32,7 +23,15 @@ namespace ToDoListTests
 
             task.ChangeStatus();
 
-            Assert.AreEqual(true, task.isDone);
+            Assert.AreEqual(true, task.IsDone);
+        }
+
+        [TestMethod]
+        public void ToStringReturnsCorrectValue()
+        {
+            var task = new Task("wash dishes");
+
+            Assert.AreEqual("wash dishes  [ ]", task.ToString());
         }
     }
 }

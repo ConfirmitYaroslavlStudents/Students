@@ -7,35 +7,29 @@ namespace ToDoListProject
     [Serializable]
     public class ToDoList
     {
-        private List<Task> tasks = new List<Task>();
-        public int Count { get { return tasks.Count; } }
+        private List<Task> _tasks = new List<Task>();
+        public int Count { get { return _tasks.Count; } }
 
         public Task this[int index]
         {
-            get { return tasks[index]; }
+            get { return _tasks[index]; }
         }
 
         public void Add(string task)
         {
-            tasks.Add(new Task(task));
+            _tasks.Add(new Task(task));
         }
 
         public void Remove(int number)
         {
-            tasks.RemoveAt(number);
+            _tasks.RemoveAt(number);
         }
 
         public override string ToString()
         {
             StringBuilder toDoList = new StringBuilder();
-            for (var i = 0; i < tasks.Count; i++)
-            {
-                toDoList.Append(i + 1 + ". " + tasks[i].text);
-                if (tasks[i].isDone)
-                    toDoList.AppendLine("  [v]");
-                else
-                    toDoList.AppendLine("  [ ]");
-            }
+            for (var i = 0; i < _tasks.Count; i++)
+                toDoList.AppendLine(i + 1 + ". " + _tasks[i].ToString());
             return toDoList.ToString();
         }
     }

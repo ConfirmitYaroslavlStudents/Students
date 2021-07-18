@@ -1,6 +1,4 @@
-﻿using System;
-using MyToDoList;
-using Spectre.Console;
+﻿using MyToDoList;
 
 namespace ToDoListConsole
 {
@@ -8,7 +6,6 @@ namespace ToDoListConsole
     {
         public ToDoList MyToDoList { get; }
         private readonly MessagePrinter _messagePrinter;
-
         internal bool Empty => MyToDoList.Count == 0;
         public bool IsWorking { get; private set; }
 
@@ -21,16 +18,7 @@ namespace ToDoListConsole
 
         public void Add()
         {
-            var description = AnsiConsole.Prompt(
-                new TextPrompt<string>("[bold lightgoldenrod2_1]What do you need to do? [/]")
-                    .Validate(task =>
-                    {
-                        return task switch
-                        {
-                            null => ValidationResult.Error("[red]Incorrect task[/]"),
-                            _ => ValidationResult.Success(),
-                        };
-                    }));
+            var description = _messagePrinter.GetDescription();
             MyToDoList.Add(description);
             _messagePrinter.PrintDoneMessage();
         }
@@ -46,7 +34,7 @@ namespace ToDoListConsole
             ViewAllTasks();
             var taskNumber = ChooseTaskNumber();
             _messagePrinter.PrintNewDescriptionRequest();
-            var newDescription = Console.ReadLine();
+            var newDescription = _messagePrinter.ReadLine();
             MyToDoList.EditDescription(taskNumber, newDescription);
             _messagePrinter.PrintDoneMessage();
         }
@@ -55,7 +43,7 @@ namespace ToDoListConsole
         {
             if (Empty)
             {
-                _messagePrinter.PrintDoneMessage();
+                _messagePrinter.PrintErrorMessage();
                 return;
             }
             ViewAllTasks();
@@ -93,7 +81,7 @@ namespace ToDoListConsole
 
             var tableBuilder = new TableBuilder(MyToDoList);
             var table = tableBuilder.FormATable();
-            AnsiConsole.Render(table);
+            _messagePrinter.RenderTable(table);
         }
 
         public int ChooseTaskNumber()
@@ -101,7 +89,7 @@ namespace ToDoListConsole
             _messagePrinter.PrintTaskNumberRequest();
             while (true)
             {
-                var input = Console.ReadLine();
+                var input = _messagePrinter.ReadLine();
                 if (int.TryParse(input, out var number) && number >= 0 && number < MyToDoList.Count)
                 {
                     return number;
@@ -111,9 +99,8 @@ namespace ToDoListConsole
             }
         }
 
-        public void PrintErrorMessage()
-        {
-            _messagePrinter.PrintErrorMessage();
-        }
+        public void PrintErrorMessage() => _messagePrinter.PrintErrorMessage();
+
+        public string GetMenuItemName() => _messagePrinter.GetMenuItemName();
     }
 }

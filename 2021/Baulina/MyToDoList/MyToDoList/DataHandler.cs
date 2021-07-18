@@ -10,6 +10,7 @@ namespace ToDoListConsole
     {
         static readonly string Path = System.IO.Path.Combine(Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData), "ToDoList.txt");
+
         public static void SaveToFile(ToDoList list)
         {
             var arrayToSerialize = list.ToArray();
@@ -19,13 +20,10 @@ namespace ToDoListConsole
 
         public static IEnumerable<ToDoItem> LoadFromFile()
         {
-            if (File.Exists(Path))
-            {
-                var json = File.ReadAllText(Path);
-                return JsonSerializer.Deserialize<ToDoItem[]>(json);
-            }
+            if (!File.Exists(Path)) return new List<ToDoItem>();
+            var json = File.ReadAllText(Path);
+            return JsonSerializer.Deserialize<ToDoItem[]>(json);
 
-            return new List<ToDoItem>();
         }
     }
 }

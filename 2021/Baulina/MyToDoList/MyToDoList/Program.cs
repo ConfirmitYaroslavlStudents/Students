@@ -1,5 +1,4 @@
 ﻿using System;
-using Spectre.Console;
 
 namespace ToDoListConsole
 {
@@ -9,7 +8,8 @@ namespace ToDoListConsole
         {
             var uploadProcessor = new StartProcessor();
             uploadProcessor.LoadTheList();
-            var menuManager = new MenuManager(uploadProcessor.MyToDoList, new MessagePrinter());
+            var console = new MyConsole();
+            var menuManager = new MenuManager(uploadProcessor.MyToDoList, new MessagePrinter(console));
             AppDomain.CurrentDomain.ProcessExit += Exit;
 
             while (menuManager.IsWorking)
@@ -25,12 +25,7 @@ namespace ToDoListConsole
         
         public static void PrintMenu(MenuManager manager)
         {
-            var operation = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("[bold lightgoldenrod2_1] What do you want to do? [/]")
-                    .PageSize(12)
-                    .MoreChoicesText("[grey](Move up and down to reveal more operations)[/]")
-                    .AddChoices("Add", "Edit", "Mark as complete", "Delete", "View all tasks", "Exit"));
+            var operation = manager.GetMenuItemName();
             HandleOperation(operation, manager);
         }
 

@@ -2,25 +2,31 @@
 
 namespace ToDoListProject
 {
-    [Serializable]
     public class Task
     {
-        public string text;
-        public bool isDone;
+        public string Text { get; private set; }
+        public bool IsDone { get; private set; }
 
         public Task(string text)
         {
-            this.text = text;
+            Text = text;
         }
 
         public void ChangeText(string newText)
         {
-            text = newText;
+            Text = newText;
         }
 
         public void ChangeStatus()
         {
-            isDone = !isDone;
+            IsDone = !IsDone;
+        }
+
+        public override string ToString()
+        {
+            if (IsDone)
+                return Text + "  [v]";
+            return Text + "  [ ]";
         }
     }
 }

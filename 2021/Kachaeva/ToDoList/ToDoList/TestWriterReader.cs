@@ -7,7 +7,14 @@ namespace ToDoListProject
     public class TestWriterReader : IWriterReader
     {
         public List<string> _messages = new List<string>();
-        public string _input;
+        public List<string> _inputs;
+        private int _inputIndex;
+
+        public TestWriterReader(List<string> inputs)
+        {
+            _inputs = inputs;
+            _inputIndex = -1;
+        }
 
         public void Write(string message)
         {
@@ -16,7 +23,8 @@ namespace ToDoListProject
 
         public string Read()
         {
-            return _input;
+            _inputIndex++;
+            return _inputs[_inputIndex];
         }
     }
 }

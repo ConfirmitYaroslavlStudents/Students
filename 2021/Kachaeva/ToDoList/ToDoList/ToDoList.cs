@@ -4,7 +4,6 @@ using System.Text;
 
 namespace ToDoListProject
 {
-    [Serializable]
     public class ToDoList
     {
         private List<Task> _tasks = new List<Task>();
@@ -15,9 +14,9 @@ namespace ToDoListProject
             get { return _tasks[index]; }
         }
 
-        public void Add(string task)
+        public void Add(Task task)
         {
-            _tasks.Add(new Task(task));
+            _tasks.Add(task);
         }
 
         public void Remove(int number)

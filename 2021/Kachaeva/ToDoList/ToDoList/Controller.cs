@@ -5,13 +5,13 @@ using System.Text;
 
 namespace ToDoListProject
 {
-    public class ConsoleController
+    public class Controller
     {
         private IToDoListLoaderSaver _loaderSaver;
         private IWriterReader _writerReader;
         private ToDoList _toDoList;
 
-        public ConsoleController(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader)
+        public Controller(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader)
         {
             _loaderSaver = loaderSaver;
             _writerReader = writerReader;
@@ -24,7 +24,7 @@ namespace ToDoListProject
             {
                 var selectedAction = GetActioinChoice();
 
-                if (selectedAction == "q")
+                if (selectedAction == Menu.quit)
                 {
                     _loaderSaver.Save(_toDoList);
                     break;
@@ -32,23 +32,23 @@ namespace ToDoListProject
 
                 switch (selectedAction)
                 {
-                    case "1":
+                    case Menu.displayToDoList:
                         HandleToDoListDisplay();
                         break;
 
-                    case "2":
+                    case Menu.addTask:
                         HandleTaskAddition();
                         break;
 
-                    case "3":
+                    case Menu.removeTask:
                         HandleTaskRemove();
                         break;
 
-                    case "4":
+                    case Menu.changeTaskText:
                         HandleTaskTextChange();
                         break;
 
-                    case "5":
+                    case Menu.changeTaskStatus:
                         HandleTaskStatusChange();
                         break;
 
@@ -56,19 +56,12 @@ namespace ToDoListProject
                         _writerReader.Write("Некорректная команда\r\n");
                         break;
                 }
-               
             }
         }
 
         private string GetActioinChoice()
         {
-            _writerReader.Write("Что вы хотели бы сделать? Введите:");
-            _writerReader.Write("1 - просмотреть список");
-            _writerReader.Write("2 - добавить задание");
-            _writerReader.Write("3 - удалить задание");
-            _writerReader.Write("4 - изменить текст задания");
-            _writerReader.Write("5 - изменить статус задания");
-            _writerReader.Write("q - выйти\r\n");
+            Menu.PrintMenu(_writerReader);
             var selectedAction = _writerReader.Read();
             _writerReader.Write("");
             return selectedAction;
@@ -86,7 +79,7 @@ namespace ToDoListProject
             try
             {
                 var newText = GetNewTaskText();
-                _toDoList.Add(newText);
+                _toDoList.Add(new Task(newText));
             }
             catch (ArgumentException e)
             {
@@ -148,9 +141,15 @@ namespace ToDoListProject
         {
             _writerReader.Write("Введите номер задания");
             if (!int.TryParse(_writerReader.Read(), out int number))
+            {
+                _writerReader.Write("");
                 throw new ArgumentException("Нужно ввести число\r\n");
+            }
             if (number > _toDoList.Count || number < 1)
+            {
+                _writerReader.Write("");
                 throw new ArgumentException("Задания с таким номером не существует\r\n");
+            }
             _writerReader.Write("");
             return number;
         }

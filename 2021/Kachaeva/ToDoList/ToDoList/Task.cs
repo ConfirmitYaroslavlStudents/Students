@@ -2,7 +2,6 @@
 
 namespace ToDoListProject
 {
-    [Serializable]
     public class Task
     {
         public string Text { get; private set; }

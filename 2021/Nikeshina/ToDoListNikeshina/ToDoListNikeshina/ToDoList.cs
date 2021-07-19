@@ -7,11 +7,13 @@ namespace ToDoListNikeshina
     {
         private List<Task> _list;
         private WorkWithFile _fileEditor;
+        ILogger _logger;
 
-        public ToDoList()
+        public ToDoList(ILogger logger)
         {
             _list = new List<Task>();
             _fileEditor = new WorkWithFile();
+            _logger = logger;
         }
 
         public int Count()
@@ -34,7 +36,7 @@ namespace ToDoListNikeshina
             int i = 1;
             foreach (var task in _list)
             {
-                Console.WriteLine(i + ". " + task.Print());
+                _logger.WriteLine(i + ". " + task.Print());
                 i++;
             }
         }
@@ -44,7 +46,7 @@ namespace ToDoListNikeshina
             _list.Add(item);
         }
 
-        public void Detete(int num)
+        public void Delete(int num)
         {
             _list.RemoveAt(num - 1);
         }

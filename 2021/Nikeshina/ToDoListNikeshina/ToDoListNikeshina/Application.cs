@@ -6,7 +6,16 @@ namespace ToDoListNikeshina
 {
     public class Application
     {
-        private ToDoList _list = new ToDoList();
+        internal ToDoList _list;
+        ILogger _logger;
+
+        public Application() { }
+
+        public Application(ILogger logger)
+        {
+            _logger = logger;
+            _list = new ToDoList(_logger);
+        }
 
         public void Read()
         {
@@ -22,7 +31,7 @@ namespace ToDoListNikeshina
         {
             if (_list.Count() == 0)
             {
-                MessageWriter.ToDoListIsEmpty();
+                _logger.WriteLine(Messages.ToDoListIsEmpty());
                 return;
             }
 
@@ -31,9 +40,9 @@ namespace ToDoListNikeshina
 
         public void Add()
         {
-            MessageWriter.RequestDescription();
+           _logger.WriteLine(Messages.RequestDescription());
 
-            var dscr = Console.ReadLine();
+            var dscr = _logger.ReadLine();
 
             if(!IsDataValidString(dscr))
                 return;
@@ -41,11 +50,11 @@ namespace ToDoListNikeshina
             _list.Add(new Task(dscr, false));
         }
 
-       public bool IsDataValidString(string dscr)
+       private bool IsDataValidString(string dscr)
         {
             if (dscr.Length == 0)
             {
-                MessageWriter.WrongFormatOfInputData();
+                _logger.WriteLine(Messages.WrongFormatOfInputData());
                 return false;
             }
 
@@ -57,7 +66,7 @@ namespace ToDoListNikeshina
             if (Int32.TryParse(input, out int num) && IsNumberCorrect(num))
                 return true;
              
-            MessageWriter.WrongFormatOfInputData();
+            _logger.WriteLine(Messages.WrongFormatOfInputData());
             return false; ;
         }
          private bool IsNumberCorrect(int num)
@@ -70,32 +79,32 @@ namespace ToDoListNikeshina
 
         public void Delete()
         {
-            MessageWriter.RequestNumber();
+            _logger.WriteLine(Messages.RequestNumber());
 
-            var inputStr = Console.ReadLine();
+            var inputStr = _logger.ReadLine();
 
             if (!IsDataValidDigit(inputStr))
                 return;
 
             int num = int.Parse(inputStr);
 
-            _list.Detete(num);
+            _list.Delete(num);
         }
 
         public void Edit()
         {
-            MessageWriter.RequestNumber();
+            _logger.WriteLine(Messages.RequestNumber());
 
-            var inputStr = Console.ReadLine();
+            var inputStr = _logger.ReadLine();
 
             if (!IsDataValidDigit(inputStr))
                 return;
 
             int num = int.Parse(inputStr);
 
-            MessageWriter.RequestDescription();
+            _logger.WriteLine(Messages.RequestDescription());
 
-            var dscr = Console.ReadLine();
+            var dscr = _logger.ReadLine();
 
             if (!IsDataValidString(dscr))
                 return;
@@ -105,9 +114,10 @@ namespace ToDoListNikeshina
 
         public void ChangeStatus()
         {
-            MessageWriter.RequestNumber();
+            _logger.WriteLine(Messages.RequestNumber());
+            
 
-            var inputStr = Console.ReadLine();
+            var inputStr = _logger.ReadLine();
 
             if (!IsDataValidDigit(inputStr))
                 return;
@@ -116,6 +126,5 @@ namespace ToDoListNikeshina
 
             _list.ChangeStatus(num);
         }
-
     }
 }

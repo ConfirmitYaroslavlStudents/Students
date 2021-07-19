@@ -7,7 +7,7 @@ namespace ToDoListApp
     {
         static void Main(string[] args)
         {
-            var app = new Application();
+            var app = new Application(new AppLogger());
             app.Read();
             ComandHandling(app);
         }
@@ -18,10 +18,10 @@ namespace ToDoListApp
             var str = Console.ReadLine();
             while (str != null || str != "")
             {
+                ClearScrean(app);
                 switch (str)
                 {
                     case "С":
-                        app.Print();
                         break;
                     case "Д":
                         app.Add();
@@ -41,7 +41,6 @@ namespace ToDoListApp
                     default:
                         break;
                 }
-                ClearScrean(app);
 
                 str = Console.ReadLine();
             }

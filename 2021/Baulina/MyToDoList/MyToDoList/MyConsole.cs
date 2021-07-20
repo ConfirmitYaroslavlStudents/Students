@@ -2,7 +2,7 @@
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
-namespace ToDoListConsole
+namespace ToDoApp
 {
     public interface IConsole
     {

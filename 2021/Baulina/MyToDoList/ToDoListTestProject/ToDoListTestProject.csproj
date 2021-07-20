@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyToDoList\ToDoListConsole.csproj" />
+    <ProjectReference Include="..\MyToDoList\ToDoApp.csproj" />
     <ProjectReference Include="..\ToDoList\MyToDoList.csproj" />
   </ItemGroup>
 

@@ -4,11 +4,11 @@ using System.IO;
 using System.Text.Json;
 using MyToDoList;
 
-namespace ToDoListConsole
+namespace ToDoApp
 {
     static class DataHandler
     {
-        static readonly string Path = System.IO.Path.Combine(Environment.GetFolderPath(
+        private static readonly string Path = System.IO.Path.Combine(Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData), "ToDoList.txt");
 
         public static void SaveToFile(ToDoList list)

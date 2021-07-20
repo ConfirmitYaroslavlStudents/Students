@@ -1,6 +1,6 @@
 ﻿using MyToDoList;
 
-namespace ToDoListConsole
+namespace ToDoApp
 {
     public class MenuManager : IManage
     {
@@ -87,6 +87,7 @@ namespace ToDoListConsole
         public int ChooseTaskNumber()
         {
             _messagePrinter.PrintTaskNumberRequest();
+
             while (true)
             {
                 var input = _messagePrinter.ReadLine();
@@ -98,9 +99,7 @@ namespace ToDoListConsole
                 _messagePrinter.PrintTaskNumberRequest();
             }
         }
-
-        public void PrintErrorMessage() => _messagePrinter.PrintErrorMessage();
-
+        
         public string GetMenuItemName() => _messagePrinter.GetMenuItemName();
     }
 }

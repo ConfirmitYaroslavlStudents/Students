@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace ToDoListConsole
+namespace ToDoApp
 {
     class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
             var uploadProcessor = new StartProcessor();
             uploadProcessor.LoadTheList();
@@ -16,13 +16,13 @@ namespace ToDoListConsole
             {
                 PrintMenu(menuManager);
             }
-            
+
             void Exit(object sender, EventArgs e)
             {
                 DataHandler.SaveToFile(menuManager.MyToDoList);
             }
         }
-        
+
         public static void PrintMenu(MenuManager manager)
         {
             var operation = manager.GetMenuItemName();
@@ -61,11 +61,6 @@ namespace ToDoListConsole
                 case "Exit":
                 {
                     manager.Exit();
-                    break;
-                }
-                default:
-                {
-                    manager.PrintErrorMessage();
                     break;
                 }
             }

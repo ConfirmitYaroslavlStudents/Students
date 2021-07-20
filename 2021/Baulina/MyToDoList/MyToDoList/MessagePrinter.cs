@@ -1,7 +1,7 @@
 ﻿using Spectre.Console;
 using Spectre.Console.Rendering;
 
-namespace ToDoListConsole
+namespace ToDoApp
 {
     public interface IAnsiConsolePrint
     {
@@ -16,10 +16,7 @@ namespace ToDoListConsole
     {
         private readonly IConsole _console;
 
-        public MessagePrinter(IConsole console)
-        {
-            _console = console;
-        }
+        public MessagePrinter(IConsole console) => _console = console;
 
         public void PrintErrorMessage()
         {

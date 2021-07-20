@@ -1,4 +1,4 @@
-﻿namespace ToDoListConsole
+﻿namespace ToDoApp
 {
     public interface IManage
     {

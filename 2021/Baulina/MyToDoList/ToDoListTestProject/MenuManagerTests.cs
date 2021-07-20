@@ -1,35 +1,9 @@
-﻿using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 using MyToDoList;
-using ToDoListConsole;
-using Spectre.Console.Rendering;
+using ToDoApp;
 
 namespace ToDoListTestProject
 {
-    class TestConsole : IConsole
-    {
-        public List<string> Messages = new List<string>();
-        private readonly List<string> _linesToRead = new List<string>();
-
-        public TestConsole() { }
-        public TestConsole(IEnumerable<string> linesToRead)
-        {
-            _linesToRead.AddRange(linesToRead);
-        }
-
-        public void WriteLine(string message) => Messages.Add(message);
-        public string ReadLine()
-        {
-            var result = _linesToRead[0];
-            _linesToRead.RemoveAt(0);
-            return result;
-        }
-        public void RenderTable(IRenderable table) => Messages.Add("Rendered");
-        public void Clear() => Messages.Add("Cleared");
-        public string GetDescription() => ReadLine();
-        public string GetMenuItemName() => ReadLine();
-    }
-
     public class MenuManagerTests
     {
         [Fact]
@@ -212,17 +186,6 @@ namespace ToDoListTestProject
             menuManager.ChooseTaskNumber();
 
             Assert.Contains("[red]Incorrect number[/]", console.Messages);
-        }
-
-        [Fact]
-        public void ErrorMessageIsPrintedWhenPrintErrorMessage()
-        {
-            var console = new TestConsole();
-            var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
-
-            menuManager.PrintErrorMessage();
-
-            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[0]);
         }
     }
 }

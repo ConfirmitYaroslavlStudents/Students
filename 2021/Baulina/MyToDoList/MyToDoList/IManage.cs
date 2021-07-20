@@ -7,6 +7,7 @@
         void MarkAsComplete();
         void Delete();
         void ViewAllTasks();
+        string GetMenuItemName();
     }
 
 }

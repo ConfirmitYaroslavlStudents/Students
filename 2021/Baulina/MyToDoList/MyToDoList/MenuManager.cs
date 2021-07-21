@@ -1,4 +1,5 @@
-﻿using MyToDoList;
+﻿using System;
+using MyToDoList;
 
 namespace ToDoApp
 {
@@ -16,11 +17,21 @@ namespace ToDoApp
             IsWorking = true;
         }
 
+        public void RunCommand(Action command)
+        {
+            command();
+            _messagePrinter.PrintDoneMessage();
+            ViewAllTasks();
+            DataHandler.SaveToFile(MyToDoList);
+        }
+
         public void Add()
         {
-            var description = _messagePrinter.GetDescription();
-            MyToDoList.Add(description);
-            _messagePrinter.PrintDoneMessage();
+            RunCommand(() =>
+            {
+                var description = _messagePrinter.GetDescription();
+                MyToDoList.Add(description);
+            });
         }
 
         public void Edit()
@@ -31,12 +42,13 @@ namespace ToDoApp
                 return;
             }
 
-            ViewAllTasks();
-            var taskNumber = ChooseTaskNumber();
-            _messagePrinter.PrintNewDescriptionRequest();
-            var newDescription = _messagePrinter.ReadLine();
-            MyToDoList.EditDescription(taskNumber, newDescription);
-            _messagePrinter.PrintDoneMessage();
+            RunCommand(() =>
+            {
+                var taskNumber = ChooseTaskNumber();
+                _messagePrinter.PrintNewDescriptionRequest();
+                var newDescription = _messagePrinter.ReadLine();
+                MyToDoList.EditDescription(taskNumber, newDescription);
+            });
         }
 
         public void MarkAsComplete()
@@ -46,10 +58,12 @@ namespace ToDoApp
                 _messagePrinter.PrintErrorMessage();
                 return;
             }
-            ViewAllTasks();
-            var taskNumber = ChooseTaskNumber();
-            MyToDoList.MarkAsComplete(taskNumber);
-            _messagePrinter.PrintDoneMessage();
+            
+            RunCommand(() =>
+            {
+                var taskNumber = ChooseTaskNumber();
+                MyToDoList.MarkAsComplete(taskNumber);
+            });
         }
 
         public void Delete()
@@ -59,15 +73,15 @@ namespace ToDoApp
                 _messagePrinter.PrintErrorMessage();
                 return;
             }
-            ViewAllTasks();
-            var taskNumber = ChooseTaskNumber();
-            MyToDoList.Delete(taskNumber);
-            _messagePrinter.PrintDoneMessage();
+            RunCommand(() =>
+            {
+                var taskNumber = ChooseTaskNumber();
+                MyToDoList.Delete(taskNumber);
+            });
         }
 
         public  void Exit()
         {
-            DataHandler.SaveToFile(MyToDoList);
             IsWorking = false;
         }
 
@@ -87,17 +101,8 @@ namespace ToDoApp
         public int ChooseTaskNumber()
         {
             _messagePrinter.PrintTaskNumberRequest();
-
-            while (true)
-            {
-                var input = _messagePrinter.ReadLine();
-                if (int.TryParse(input, out var number) && number >= 0 && number < MyToDoList.Count)
-                {
-                    return number;
-                }
-                _messagePrinter.PrintIncorrectNumberWarning();
-                _messagePrinter.PrintTaskNumberRequest();
-            }
+            var input = _messagePrinter.ReadLine();
+            return int.Parse(input);
         }
         
         public string GetMenuItemName() => _messagePrinter.GetMenuItemName();

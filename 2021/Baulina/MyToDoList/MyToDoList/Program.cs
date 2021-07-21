@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ToDoApp
+﻿namespace ToDoApp
 {
     class Program
     {
@@ -8,63 +6,16 @@ namespace ToDoApp
         {
             var uploadProcessor = new StartProcessor();
             uploadProcessor.LoadTheList();
-            var console = new MyConsole();
-            var menuManager = new MenuManager(uploadProcessor.MyToDoList, new MessagePrinter(console));
-            AppDomain.CurrentDomain.ProcessExit += Exit;
+            var isCommandLineExecuted = args.Length != 0;
+            var messagePrinter = isCommandLineExecuted
+                ? new MessagePrinter(new CommandLineParser(args))
+                : new MessagePrinter(new MyConsole());
+            IMenuProcessor menuProcessor =
+                isCommandLineExecuted ? new CommandLineProcessor() : new ConsoleMenuProcessor();
+            var menuManager = new MenuManager(uploadProcessor.MyToDoList, messagePrinter);
+            menuProcessor.MenuManager = menuManager;
 
-            while (menuManager.IsWorking)
-            {
-                PrintMenu(menuManager);
-            }
-
-            void Exit(object sender, EventArgs e)
-            {
-                DataHandler.SaveToFile(menuManager.MyToDoList);
-            }
+            menuProcessor.Run();
         }
-
-        public static void PrintMenu(MenuManager manager)
-        {
-            var operation = manager.GetMenuItemName();
-            HandleOperation(operation, manager);
-        }
-
-        public static void HandleOperation(string operation, MenuManager manager)
-        {
-            switch (operation)
-            {
-                case "Add":
-                {
-                    manager.Add();
-                    break;
-                }
-                case "Edit":
-                {
-                    manager.Edit();
-                    break;
-                }
-                case "Mark as complete":
-                {
-                    manager.MarkAsComplete();
-                    break;
-                }
-                case "Delete":
-                {
-                    manager.Delete();
-                        break;
-                }
-                case "View all tasks":
-                {
-                    manager.ViewAllTasks();
-                    break;
-                }
-                case "Exit":
-                {
-                    manager.Exit();
-                    break;
-                }
-            }
-        }
-
     }
 }

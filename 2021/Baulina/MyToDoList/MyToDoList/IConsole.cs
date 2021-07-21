@@ -41,7 +41,7 @@ namespace ToDoApp
                     .Title("[bold lightgoldenrod2_1] What do you want to do? [/]")
                     .PageSize(12)
                     .MoreChoicesText("[grey](Move up and down to reveal more operations)[/]")
-                    .AddChoices("Add", "Edit", "Mark as complete", "Delete", "View all tasks", "Exit"));
+                    .AddChoices("add", "edit", "mark as complete", "delete", "view all tasks", "exit"));
         }
     }
 }

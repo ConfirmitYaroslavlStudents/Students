@@ -9,7 +9,7 @@ namespace ToDoListTestProject
         [Fact]
         public void IsWorkingIsTrueAfterInitialization()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             Assert.True(menuManager.IsWorking);
@@ -18,7 +18,7 @@ namespace ToDoListTestProject
         [Fact]
         public void ToDoListCountIncreasesAfterAddOperation()
         {
-            var console = new TestConsole(new[] { "Water the plants" });
+            var console = new AppTestConsole(new[] { "Water the plants" });
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.Add();
@@ -29,7 +29,7 @@ namespace ToDoListTestProject
         [Fact]
         public void DoneMessageIsPrintedAfterAddIsChosen()
         {
-            var console = new TestConsole(new[] { "Water the plants" });
+            var console = new AppTestConsole(new[] { "Water the plants" });
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.Add();
@@ -40,7 +40,7 @@ namespace ToDoListTestProject
         [Fact]
         public void ErrorMessageIsPrintedWhenTryingToEditEmptyList()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.Edit();
@@ -51,7 +51,7 @@ namespace ToDoListTestProject
         [Fact]
         public void NewDescriptionRequestIsPrintedAfterEditIsChosen()
         {
-            var console = new TestConsole(new[] { "0", "Water the plants" });
+            var console = new AppTestConsole(new[] { "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -63,7 +63,7 @@ namespace ToDoListTestProject
         [Fact]
         public void DoneMessageIsPrintedAfterEditIsChosen()
         {
-            var console = new TestConsole(new[] { "0", "Water the plants" });
+            var console = new AppTestConsole(new[] { "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -75,7 +75,7 @@ namespace ToDoListTestProject
         [Fact]
         public void DoneMessageIsPrintedAfterMarkAsCompleteIsChosen()
         {
-            var console = new TestConsole(new[] { "0" });
+            var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -87,7 +87,7 @@ namespace ToDoListTestProject
         [Fact]
         public void ErrorMessageIsPrintedWhenTryingToMarkAsCompleteInEmptyList()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.MarkAsComplete();
@@ -98,7 +98,7 @@ namespace ToDoListTestProject
         [Fact]
         public void ErrorMessageIsPrintedWhenTryingToDeleteFromEmptyList()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.Delete();
@@ -109,7 +109,7 @@ namespace ToDoListTestProject
         [Fact]
         public void DoneMessageIsPrintedAfterDeleteIsChosen()
         {
-            var console = new TestConsole(new[] { "0" });
+            var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -121,7 +121,7 @@ namespace ToDoListTestProject
         [Fact]
         public void ToDoListCountDecreasesAfterDeleteOperation()
         {
-            var console = new TestConsole(new[] {"0"});
+            var console = new AppTestConsole(new[] {"0"});
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -133,7 +133,7 @@ namespace ToDoListTestProject
         [Fact]
         public void IsWorkingIsFalseAfterExitIsChosen()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.Exit();
@@ -144,7 +144,7 @@ namespace ToDoListTestProject
         [Fact]
         public void ErrorMessageIsPrintedWhenTryingToViewEmptyList()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var menuManager = new MenuManager(new ToDoList(), new MessagePrinter(console));
 
             menuManager.ViewAllTasks();
@@ -155,7 +155,7 @@ namespace ToDoListTestProject
         [Fact]
         public void TableIsPrintedWhenViewAllTasksIsChosen()
         {
-            var console = new TestConsole();
+            var console = new AppTestConsole();
             var toDoList = new ToDoList() {"Wash the dishes"};
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -167,7 +167,7 @@ namespace ToDoListTestProject
         [Fact]
         public void NumberRequestIsPrintedWhenChooseTaskNumber()
         {
-            var console = new TestConsole(new[] { "0" });
+            var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 
@@ -179,7 +179,7 @@ namespace ToDoListTestProject
         [Fact]
         public void IncorrectNumberWarningIsPrintedWhenChooseWrongTaskNumber()
         {
-            var console = new TestConsole(new []{"5","0"});
+            var console = new AppTestConsole(new []{"5","0"});
             var toDoList = new ToDoList() { "Wash the dishes" };
             var menuManager = new MenuManager(toDoList, new MessagePrinter(console));
 

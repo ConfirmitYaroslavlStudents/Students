@@ -11,11 +11,12 @@ namespace ToDoTest
         public void SaveAndLoad()
         {
             var file = new System.IO.FileInfo("testsave.nottxt");
-            MyTODO.ToDoList list = new MyTODO.ToDoList(null);
-
-            list.Add("A");
-            list.Add("B");
-            list.Add("C");
+            MyTODO.ToDoList list = new MyTODO.ToDoList(null)
+            {
+                "A",
+                "B",
+                "C"
+            };
             list[0].Delete();
             list[2].Complete();
             try

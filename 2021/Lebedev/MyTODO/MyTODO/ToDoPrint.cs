@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Linq;
 using System.IO;
 
 namespace MyTODO
@@ -15,7 +13,7 @@ namespace MyTODO
         static int count=0;
         static int menuindexX = 0;
         static int menuindexY = 0;
-        static FileInfo input = new FileInfo("TODOsave.txt");
+        static readonly FileInfo input = new FileInfo("TODOsave.txt");
 
         static void SetDefaultColor()
         {
@@ -44,7 +42,9 @@ namespace MyTODO
                 Console.ForegroundColor = ConsoleColor.Green;
             else
                 Console.ForegroundColor = ConsoleColor.Red;
+
             Console.Write(str);
+
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -58,44 +58,42 @@ namespace MyTODO
 
         static void PrintName(ToDoItem item, bool chosen)
         {
-            if (chosen) 
+            if (chosen)
                 SetChosenColor();
             if (item.Name.Length <= 20)
             {
                 SetNameColorAndPrint(item.Name, item.State);
                 for (int i = item.Name.Length; i < 19; i++)
                     Console.Write(" ");
+                SetDefaultColor();
+                return;
             }
-            else
+            int x = 0;
+            while (x < item.Name.Length)
             {
-                int x = 0;
-                while (x < item.Name.Length)
+                if (x != 0)
                 {
-                    if (x != 0)
-                    {
-                        if (chosen)
-                            SetChosenColor();
-                        Console.WriteLine("║ ║");
-                        Console.Write("║");
-                        if (chosen)
-                            SetDefaultColor();
-                    }
-                    for (int i = 0; i < 18; i++, x++)
-                        if (x < item.Name.Length)
-                            SetNameColorAndPrint(item.Name[x].ToString(), item.State);
-                        else
-                            Console.Write(" ");
+                    if (chosen)
+                        SetChosenColor();
+                    Console.WriteLine("║ ║");
+                    Console.Write("║");
+                    SetDefaultColor();
+                }
+                for (int i = 0; i < 18; i++, x++)
                     if (x < item.Name.Length)
-                        if (item.Name[x] != ' ')
-                            SetNameColorAndPrint("-", item.State);
-                        else
-                            SetNameColorAndPrint(item.Name[x++].ToString(), item.State);
+                        SetNameColorAndPrint(item.Name[x].ToString(), item.State);
                     else
                         Console.Write(" ");
-                }
+                if (x < item.Name.Length)
+                    if (item.Name[x] != ' ')
+                        SetNameColorAndPrint("-", item.State);
+                    else
+                        SetNameColorAndPrint(item.Name[x++].ToString(), item.State);
+                else
+                    Console.Write(" ");
             }
-            if (chosen)
-                SetDefaultColor();
+
+            SetDefaultColor();
         }
 
         static void PrintMenu()
@@ -113,29 +111,32 @@ namespace MyTODO
             for (int i = 0; i < 3; i++)
             {
                 if (menuindexX == 0 && menuindexY == i)
+                {
                     PrintChosen(menu[i]);
-                else
-                    switch (i)
-                    {
-                        case 0:
-                            Console.Write(menu[i]);
-                            break;
-                        case 1:
-                            PrintOk(menu[i], deleted);
-                            break;
-                        case 2:
-                            PrintOk(menu[i], completed);
-                            break;
-                    }
+                    Console.Write("║");
+                    continue;
+                }
+                switch (i)
+                {
+                    case 0:
+                        Console.Write(menu[i]);
+                        break;
+                    case 1:
+                        PrintOk(menu[i], deleted);
+                        break;
+                    case 2:
+                        PrintOk(menu[i], completed);
+                        break;
+                }
                 Console.Write("║");
             }
             Console.WriteLine();
+
             if (count == 0)
-            {
                 Console.WriteLine("╚═══╩═══════╩═════════╝");
-            }
             else
                 Console.WriteLine("╠═══╩═══════╩═══════╦═╣");
+
             int j = 0;
             foreach (var each in items)
             {
@@ -158,10 +159,11 @@ namespace MyTODO
                         state = "√";
                         break;
                 }
+                var iscompleted = each.State == (int)States.completed || each.State == (int)States.completeddeleted;
                 if (menuindexX == j + 1 && menuindexY == 1)
                     PrintChosen(state);
                 else
-                    PrintOk(state,each.State== (int)States.completed || each.State == (int)States.completeddeleted);
+                    PrintOk(state, iscompleted);
                 Console.WriteLine("║");
                 if (j + 1 == count)
                     Console.WriteLine("╚═══════════════════╩═╝\nDel to delete item");
@@ -205,12 +207,24 @@ namespace MyTODO
                     if (menuindexX == 0)
                         break;
                     item.Delete();
-                    ToDoListReducer.Save(input, todo);
                     if (!deleted)
                         count--;
                     break;
             }
         }
+
+        public static void AddClick()
+        {
+            string name = "";
+            while (string.IsNullOrEmpty(name))
+            {
+                Console.Clear();
+                Console.WriteLine("Write new TODO:");
+                name = Console.ReadLine();
+            }
+            todo.Add(name);
+        }
+
         public static void EnterClick()
         {
             if (menuindexX == 0)
@@ -218,15 +232,7 @@ namespace MyTODO
                 switch (menuindexY)
                 {
                     case 0:
-                        string name = "";
-                        while (string.IsNullOrEmpty(name))
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Write new TODO:");
-                            name = Console.ReadLine();
-                        }
-                        todo.Add(name);
-                        ToDoListReducer.Save(input, todo);
+                        AddClick();
                         break;
                     case 1:
                         deleted = !deleted;
@@ -242,32 +248,39 @@ namespace MyTODO
                 return;
             if (menuindexY == 0)
             {
-                Console.WriteLine("Write new name for {0}", todo[menuindexX - 1].Name);
+                Console.WriteLine("Write new name for {0}", item.Name);
                 string x = Console.ReadLine();
                 while (string.IsNullOrEmpty(x))
                 {
                     Console.Clear();
-                    Console.WriteLine("Write new name for {0}", todo[menuindexX - 1].Name);
+                    Console.WriteLine("Write new name for {0}", item.Name);
                     x = Console.ReadLine();
                 }
                 item.ChangeName(x);
-                ToDoListReducer.Save(input, todo);
             }
             else
             {
                 item.Complete();
-                ToDoListReducer.Save(input, todo);
                 if (!completed)
                     count--;
             }
         }
+
         static void Main(string[] args)
         {
             todo = new ToDoList(input);
+            if (args.Length != 0)
+            {
+                var ArgsWorker = new ToDoArgs(todo);
+                ArgsWorker.WorkWithArgs(args);
+                ToDoListReducer.Save(input, todo);
+                return;
+            }
             while (true)
             {
                 PrintMenu();
                 WorkWithMenu();
+                ToDoListReducer.Save(input, todo);
             }
         }
     }

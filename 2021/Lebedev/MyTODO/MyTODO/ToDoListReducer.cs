@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 
 namespace MyTODO
@@ -19,13 +18,11 @@ namespace MyTODO
         {
             if (file == null || !file.Exists)
                 return null;
-            List<ToDoItem> items = new List<ToDoItem>();
-            using (StreamReader reader = new StreamReader(file.FullName))
+            var items = new List<ToDoItem>();
+            using var reader = new StreamReader(file.FullName);
+            while (!reader.EndOfStream)
             {
-                while (!reader.EndOfStream)
-                {
-                    items.Add(new ToDoItem(reader.ReadLine(), int.Parse(reader.ReadLine())));
-                }
+                items.Add(new ToDoItem(reader.ReadLine(), int.Parse(reader.ReadLine())));
             }
             return items;
         }

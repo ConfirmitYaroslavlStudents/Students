@@ -4,12 +4,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ToDoTest
 {
     [TestClass]
-    public class TodoListTest
+    public class ToDoListTest
     {
         [TestMethod]
         public void AddNullItem()
         {
-            MyTODO.ToDoList list = new MyTODO.ToDoList(null);
+            var list = new MyTODO.ToDoList(null);
 
             Assert.ThrowsException<ArgumentException>(() => list.Add(null));
 
@@ -19,7 +19,7 @@ namespace ToDoTest
         [TestMethod]
         public void AddEmptyItem()
         {
-            MyTODO.ToDoList list = new MyTODO.ToDoList(null);
+            var list = new MyTODO.ToDoList(null);
 
             Assert.ThrowsException<ArgumentException>(() => list.Add(""));
 
@@ -29,7 +29,7 @@ namespace ToDoTest
         [TestMethod]
         public void AddItem()
         {
-            MyTODO.ToDoList list = new MyTODO.ToDoList(null);
+            var list = new MyTODO.ToDoList(null);
 
             list.Add("A");
             list.Add("A");

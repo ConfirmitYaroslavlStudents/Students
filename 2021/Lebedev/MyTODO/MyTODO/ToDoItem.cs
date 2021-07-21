@@ -42,12 +42,17 @@ namespace MyTODO
         
         public void Delete()
         {
-            if (State == (int)States.deleted || State == (int)States.completeddeleted)
-                return;
-            if (State == 0)
-                State = (int)States.deleted;
-            else
-                State = (int)States.completeddeleted;
+            switch(State)
+            {
+                case (int)States.uncompleted:
+                    State = (int)States.deleted;
+                    break;
+                case (int)States.completed:
+                    State = (int)States.completeddeleted;
+                    break;
+                default:
+                    return;
+            }
         }
         
         public void ChangeName(string name)
@@ -55,6 +60,27 @@ namespace MyTODO
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException();
             Name = name;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder(Name);
+            switch(State)
+            {
+                case (int)States.completed:
+                    builder.Append(" Completed");
+                    break;
+                case (int)States.completeddeleted:
+                    builder.Append(" Completed and Deleted");
+                    break;
+                case (int)States.deleted:
+                    builder.Append(" Deleted");
+                    break;
+                case (int)States.uncompleted:
+                    builder.Append(" Uncompleted");
+                    break;
+            }
+            return builder.ToString();
         }
     }
 }

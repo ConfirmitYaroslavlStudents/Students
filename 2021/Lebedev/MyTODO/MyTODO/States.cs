@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MyTODO
+﻿namespace MyTODO
 {
-    public enum States
+    public enum ToStates
     {
-        completed = 1,
-        uncompleted = 0,
-        deleted = -1,
-        completeddeleted = 2
+        Completed = 1,
+        Uncompleted = 0,
+        Deleted = -1,
+        CompletedDeleted = 2
     }
 }

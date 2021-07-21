@@ -1,33 +1,32 @@
 ﻿using System;
-using System.Text;
 using System.IO;
 
 namespace MyTODO
 {
-    class ToDoPrint
+    internal class ToDoPrint
     {
-        static ToDoList todo;
-        static bool deleted = false;
-        static bool completed = true;
-        static ToDoItem item;
-        static int count=0;
-        static int menuindexX = 0;
-        static int menuindexY = 0;
-        static readonly FileInfo input = new FileInfo("TODOsave.txt");
+        private static ToDoList _todo;
+        private static bool _deleted;
+        private static bool _completed = true;
+        private static ToDoItem _item;
+        private static int _count;
+        private static int _menuIndexX;
+        private static int _menuIndexY;
+        private static readonly FileInfo Input = new FileInfo("TODOsave.txt");
 
-        static void SetDefaultColor()
+        private static void SetDefaultColor()
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        static void SetChosenColor()
+        private static void SetChosenColor()
         {
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
         }
 
-        static void PrintChosen(string str)
+        private static void PrintChosen(string str)
         {
             SetChosenColor();
 
@@ -36,9 +35,9 @@ namespace MyTODO
             SetDefaultColor();
         }
 
-        static void PrintOk(string str, bool ok)
+        private static void PrintOk(string str, bool ok)
         {
-            if (ok)
+            if(ok)
                 Console.ForegroundColor = ConsoleColor.Green;
             else
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -48,15 +47,15 @@ namespace MyTODO
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        static void SetNameColorAndPrint(string str, int state)
+        private static void SetNameColorAndPrint(string str, int state)
         {
-            if(state == (int)States.deleted || state == (int)States.completeddeleted)
+            if(state == (int)ToStates.Deleted || state == (int)ToStates.CompletedDeleted)
                 PrintOk(str, false);
             else
                 Console.Write(str);
         }
 
-        static void PrintName(ToDoItem item, bool chosen)
+        private static void PrintName(ToDoItem item, bool chosen)
         {
             if (chosen)
                 SetChosenColor();
@@ -79,7 +78,7 @@ namespace MyTODO
                     Console.Write("║");
                     SetDefaultColor();
                 }
-                for (int i = 0; i < 18; i++, x++)
+                for (var i = 0; i < 18; i++, x++)
                     if (x < item.Name.Length)
                         SetNameColorAndPrint(item.Name[x].ToString(), item.State);
                     else
@@ -96,21 +95,21 @@ namespace MyTODO
             SetDefaultColor();
         }
 
-        static void PrintMenu()
+        private static void PrintMenu()
         {
             string[] menu = new string[] { "Add", "Deleted", "Completed" };
             Console.Clear();
             Console.WriteLine("╔═══╦═══════╦═════════╗");
             Console.Write("║");
-            var items = todo.FindAll(x => x.State == 0 || 
-                                         (x.State == (int)States.completed && completed) || 
-                                         (x.State == (int)States.deleted && deleted) || 
-                                         (x.State == (int)States.completeddeleted && deleted && completed));
-            count = items.Count;
-            menuindexX %= count + 1;
+            var items = _todo.FindAll(x => x.State == 0 || 
+                                         (x.State == (int)ToStates.Completed && _completed) || 
+                                         (x.State == (int)ToStates.Deleted && _deleted) || 
+                                         (x.State == (int)ToStates.CompletedDeleted && _deleted && _completed));
+            _count = items.Count;
+            _menuIndexX %= _count + 1;
             for (int i = 0; i < 3; i++)
             {
-                if (menuindexX == 0 && menuindexY == i)
+                if (_menuIndexX == 0 && _menuIndexY == i)
                 {
                     PrintChosen(menu[i]);
                     Console.Write("║");
@@ -122,17 +121,17 @@ namespace MyTODO
                         Console.Write(menu[i]);
                         break;
                     case 1:
-                        PrintOk(menu[i], deleted);
+                        PrintOk(menu[i], _deleted);
                         break;
                     case 2:
-                        PrintOk(menu[i], completed);
+                        PrintOk(menu[i], _completed);
                         break;
                 }
                 Console.Write("║");
             }
             Console.WriteLine();
 
-            if (count == 0)
+            if (_count == 0)
                 Console.WriteLine("╚═══╩═══════╩═════════╝");
             else
                 Console.WriteLine("╠═══╩═══════╩═══════╦═╣");
@@ -140,32 +139,32 @@ namespace MyTODO
             int j = 0;
             foreach (var each in items)
             {
-                if (menuindexX == j + 1)
-                    item = each;
+                if (_menuIndexX == j + 1)
+                    _item = each;
                 Console.Write("║");
-                PrintName(each, menuindexX == j + 1 && menuindexY == 0);
+                PrintName(each, _menuIndexX == j + 1 && _menuIndexY == 0);
                 Console.Write("║");
                 string state = "";
                 switch (each.State)
                 {
-                    case (int)States.deleted:
+                    case (int)ToStates.Deleted:
                         state = "X";
                         break;
-                    case (int)States.uncompleted:
+                    case (int)ToStates.Uncompleted:
                         state = " ";
                         break;
-                    case (int)States.completed:
-                    case (int)States.completeddeleted:
+                    case (int)ToStates.Completed:
+                    case (int)ToStates.CompletedDeleted:
                         state = "√";
                         break;
                 }
-                var iscompleted = each.State == (int)States.completed || each.State == (int)States.completeddeleted;
-                if (menuindexX == j + 1 && menuindexY == 1)
+                var isCompleted = each.State == (int)ToStates.Completed || each.State == (int)ToStates.CompletedDeleted;
+                if (_menuIndexX == j + 1 && _menuIndexY == 1)
                     PrintChosen(state);
                 else
-                    PrintOk(state, iscompleted);
+                    PrintOk(state, isCompleted);
                 Console.WriteLine("║");
-                if (j + 1 == count)
+                if (j + 1 == _count)
                     Console.WriteLine("╚═══════════════════╩═╝\nDel to delete item");
                 else
                     Console.WriteLine("╠═══════════════════╬═╣");
@@ -173,42 +172,42 @@ namespace MyTODO
             }
         }
 
-        static void WorkWithMenu()
+        private static void WorkWithMenu()
         {
-            menuindexX %= count + 1;
+            _menuIndexX %= _count + 1;
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.UpArrow:
-                    menuindexX = (count + menuindexX) % (count + 1);
-                    if (menuindexX != 0)
-                        menuindexY %= 2;
+                    _menuIndexX = (_count + _menuIndexX) % (_count + 1);
+                    if (_menuIndexX != 0)
+                        _menuIndexY %= 2;
                     break;
                 case ConsoleKey.DownArrow:
-                    menuindexX = (menuindexX + 1) % (count + 1);
-                    if (menuindexX != 0)
-                        menuindexY %= 2;
+                    _menuIndexX = (_menuIndexX + 1) % (_count + 1);
+                    if (_menuIndexX != 0)
+                        _menuIndexY %= 2;
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (menuindexX == 0)
-                        menuindexY = (menuindexY + 2) % 3;
+                    if (_menuIndexX == 0)
+                        _menuIndexY = (_menuIndexY + 2) % 3;
                     else
-                        menuindexY = (menuindexY + 1) % 2;
+                        _menuIndexY = (_menuIndexY + 1) % 2;
                     break;
                 case ConsoleKey.RightArrow:
-                    if (menuindexX == 0)
-                        menuindexY = (menuindexY + 1) % 3;
+                    if (_menuIndexX == 0)
+                        _menuIndexY = (_menuIndexY + 1) % 3;
                     else
-                        menuindexY = (menuindexY + 1) % 2;
+                        _menuIndexY = (_menuIndexY + 1) % 2;
                     break;
                 case ConsoleKey.Enter:
                     EnterClick();
                     break;
                 case ConsoleKey.Delete:
-                    if (menuindexX == 0)
+                    if (_menuIndexX == 0)
                         break;
-                    item.Delete();
-                    if (!deleted)
-                        count--;
+                    _item.Delete();
+                    if (!_deleted)
+                        _count--;
                     break;
             }
         }
@@ -222,65 +221,65 @@ namespace MyTODO
                 Console.WriteLine("Write new TODO:");
                 name = Console.ReadLine();
             }
-            todo.Add(name);
+            _todo.Add(name);
         }
 
         public static void EnterClick()
         {
-            if (menuindexX == 0)
+            if (_menuIndexX == 0)
             {
-                switch (menuindexY)
+                switch (_menuIndexY)
                 {
                     case 0:
                         AddClick();
                         break;
                     case 1:
-                        deleted = !deleted;
+                        _deleted = !_deleted;
                         break;
                     case 2:
-                        completed = !completed;
+                        _completed = !_completed;
                         break;
                 }
                 return;
             }
             Console.Clear();
-            if (menuindexX == 0)
+            if (_menuIndexX == 0)
                 return;
-            if (menuindexY == 0)
+            if (_menuIndexY == 0)
             {
-                Console.WriteLine("Write new name for {0}", item.Name);
+                Console.WriteLine("Write new name for {0}", _item.Name);
                 string x = Console.ReadLine();
                 while (string.IsNullOrEmpty(x))
                 {
                     Console.Clear();
-                    Console.WriteLine("Write new name for {0}", item.Name);
+                    Console.WriteLine("Write new name for {0}", _item.Name);
                     x = Console.ReadLine();
                 }
-                item.ChangeName(x);
+                _item.ChangeName(x);
             }
             else
             {
-                item.Complete();
-                if (!completed)
-                    count--;
+                _item.Complete();
+                if (!_completed)
+                    _count--;
             }
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            todo = new ToDoList(input);
+            _todo = new ToDoList(Input);
             if (args.Length != 0)
             {
-                var ArgsWorker = new ToDoArgs(todo);
-                ArgsWorker.WorkWithArgs(args);
-                ToDoListReducer.Save(input, todo);
+                var argsWorker = new ToDoArgs(_todo);
+                argsWorker.WorkWithArgs(args);
+                ToDoListReducer.Save(Input, _todo);
                 return;
             }
             while (true)
             {
                 PrintMenu();
                 WorkWithMenu();
-                ToDoListReducer.Save(input, todo);
+                ToDoListReducer.Save(Input, _todo);
             }
         }
     }

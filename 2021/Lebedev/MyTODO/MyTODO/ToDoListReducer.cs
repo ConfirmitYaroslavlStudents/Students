@@ -5,7 +5,7 @@ namespace MyTODO
 {
     public class ToDoListReducer
     {
-        static public void Save(FileInfo file, ToDoList list)
+        public static void Save(FileInfo file, ToDoList list)
         {
             using var writer = new StreamWriter(file.FullName);
             foreach (var each in list)
@@ -14,9 +14,9 @@ namespace MyTODO
             }
         }
 
-        static public IEnumerable<ToDoItem> Read(FileInfo file)
+        public static IEnumerable<ToDoItem> Read(FileInfo file)
         {
-            if (file == null || !file.Exists)
+            if (!(file is {Exists: true}))
                 return null;
             var items = new List<ToDoItem>();
             using var reader = new StreamReader(file.FullName);

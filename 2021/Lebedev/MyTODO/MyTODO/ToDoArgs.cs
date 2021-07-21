@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace MyTODO
 {
     public class ToDoArgs
     {
-        readonly ToDoList todo;
+        readonly ToDoList _todo;
 
         public ToDoArgs(ToDoList list)
         {
-            todo = list;
+            _todo = list;
         }
 
         int GetIndex(string arg)
         {
-            if (int.TryParse(arg, out int index) && index >= 0)
+            if (int.TryParse(arg, out var index) && index >= 0)
                 return index;
             else
                 Console.WriteLine("argument must be integer >= 0");
@@ -24,7 +23,7 @@ namespace MyTODO
 
         string GetName(string[] args, ref int index)
         {
-            var bufindex = index;
+            var bufIndex = index;
             if (args.Length <= index || args[index][0] != '*')
                 return "";
             var result = new StringBuilder(args[index++].Remove(0, 1));
@@ -37,7 +36,7 @@ namespace MyTODO
             if (index >= args.Length)
             {
                 Console.WriteLine("not found end of name");
-                index = bufindex;
+                index = bufIndex;
                 return "";
             }
             result.Append(args[index].Remove(args[index].Length - 1, 1));
@@ -67,7 +66,7 @@ namespace MyTODO
                     case "-a":
                         i++;
                         var name = GetName(args, ref i);
-                        todo.Add(name);
+                        _todo.Add(name);
                         break;
                     case "changename":
                     case "-cn":
@@ -76,21 +75,21 @@ namespace MyTODO
                             Console.WriteLine("insufficient number of arguments");
                             return;
                         }
-                        int index = GetIndex(args[i + 1]);
-                        if (index < 0 || index >= todo.Count)
+                        var index = GetIndex(args[i + 1]);
+                        if (index < 0 || index >= _todo.Count)
                             break;
                         i += 2;
                         name = GetName(args, ref i);
-                        todo[index].ChangeName(name);
+                        _todo[index].ChangeName(name);
                         break;
                     case "complete":
                     case "-co":
                         if (args.Length <= i + 1)
                             break;
                         index = GetIndex(args[i + 1]);
-                        if (index < 0 || index >= todo.Count)
+                        if (index < 0 || index >= _todo.Count)
                             break;
-                        todo[index].Complete();
+                        _todo[index].Complete();
                         i++;
                         break;
                     case "delete":
@@ -98,9 +97,9 @@ namespace MyTODO
                         if (args.Length <= i + 1)
                             break;
                         index = GetIndex(args[i + 1]);
-                        if (index < 0 || index >= todo.Count)
+                        if (index < 0 || index >= _todo.Count)
                             break;
-                        todo[index].Delete();
+                        _todo[index].Delete();
                         i++;
                         break;
                     case "show":
@@ -108,9 +107,9 @@ namespace MyTODO
                         if (args.Length <= i + 1)
                             break;
                         index = GetIndex(args[1]);
-                        if (index < 0 || index >= todo.Count)
+                        if (index < 0 || index >= _todo.Count)
                             break;
-                        Console.WriteLine(todo[index]);
+                        Console.WriteLine(_todo[index]);
                         i++;
                         break;
                     default:

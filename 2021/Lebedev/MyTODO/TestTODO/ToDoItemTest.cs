@@ -18,8 +18,8 @@ namespace ToDoTest
             subject1.Complete();
             subject2.Delete();
 
-            Assert.AreEqual((int)MyTODO.States.completed, subject1.State);
-            Assert.AreEqual((int)MyTODO.States.deleted, subject2.State);
+            Assert.AreEqual((int)MyTODO.ToStates.Completed, subject1.State);
+            Assert.AreEqual((int)MyTODO.ToStates.Deleted, subject2.State);
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace ToDoTest
 
             subject1.Complete();
 
-            Assert.AreEqual((int)MyTODO.States.deleted, subject1.State);
+            Assert.AreEqual((int)MyTODO.ToStates.Deleted, subject1.State);
         }
 
         [TestMethod]

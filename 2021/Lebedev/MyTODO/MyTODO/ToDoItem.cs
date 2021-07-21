@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace MyTODO
@@ -37,18 +36,18 @@ namespace MyTODO
         {
             if (State != 0 )
                 return;
-            State = (int)States.completed;
+            State = (int)ToStates.Completed;
         }
         
         public void Delete()
         {
             switch(State)
             {
-                case (int)States.uncompleted:
-                    State = (int)States.deleted;
+                case (int)ToStates.Uncompleted:
+                    State = (int)ToStates.Deleted;
                     break;
-                case (int)States.completed:
-                    State = (int)States.completeddeleted;
+                case (int)ToStates.Completed:
+                    State = (int)ToStates.CompletedDeleted;
                     break;
                 default:
                     return;
@@ -67,16 +66,16 @@ namespace MyTODO
             var builder = new StringBuilder(Name);
             switch(State)
             {
-                case (int)States.completed:
+                case (int)ToStates.Completed:
                     builder.Append(" Completed");
                     break;
-                case (int)States.completeddeleted:
+                case (int)ToStates.CompletedDeleted:
                     builder.Append(" Completed and Deleted");
                     break;
-                case (int)States.deleted:
+                case (int)ToStates.Deleted:
                     builder.Append(" Deleted");
                     break;
-                case (int)States.uncompleted:
+                case (int)ToStates.Uncompleted:
                     builder.Append(" Uncompleted");
                     break;
             }

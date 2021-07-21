@@ -132,7 +132,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-co 0".Split());
 
-            Assert.AreEqual((int)MyTODO.States.completed, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Completed, list[0].State);
         }
 
         [TestMethod]
@@ -144,7 +144,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-co".Split());
 
-            Assert.AreEqual((int)MyTODO.States.uncompleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Uncompleted, list[0].State);
         }
 
         [TestMethod]
@@ -156,7 +156,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-co -1".Split());
 
-            Assert.AreEqual((int)MyTODO.States.uncompleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Uncompleted, list[0].State);
         }
 
         [TestMethod]
@@ -168,7 +168,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-co 2".Split());
 
-            Assert.AreEqual((int)MyTODO.States.uncompleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Uncompleted, list[0].State);
         }
 
         [TestMethod]
@@ -180,7 +180,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-d 0".Split());
 
-            Assert.AreEqual((int)MyTODO.States.deleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Deleted, list[0].State);
         }
 
         [TestMethod]
@@ -192,7 +192,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-d".Split());
 
-            Assert.AreEqual((int)MyTODO.States.uncompleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Uncompleted, list[0].State);
         }
 
         [TestMethod]
@@ -204,7 +204,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-d -1".Split());
 
-            Assert.AreEqual((int)MyTODO.States.uncompleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Uncompleted, list[0].State);
         }
 
         [TestMethod]
@@ -216,7 +216,7 @@ namespace ToDoTest
 
             todoArgs.WorkWithArgs("-d 2".Split());
 
-            Assert.AreEqual((int)MyTODO.States.uncompleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.Uncompleted, list[0].State);
         }
 
         [TestMethod]
@@ -228,7 +228,7 @@ namespace ToDoTest
             todoArgs.WorkWithArgs("-a *new item* -cn 0 *not new* -co 0 -d 0".Split());
 
             Assert.AreEqual("not new", list[0].Name);
-            Assert.AreEqual((int)MyTODO.States.completeddeleted, list[0].State);
+            Assert.AreEqual((int)MyTODO.ToStates.CompletedDeleted, list[0].State);
         }
     }
 }

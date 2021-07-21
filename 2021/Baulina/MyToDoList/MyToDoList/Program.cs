@@ -8,7 +8,7 @@
             uploadProcessor.LoadTheList();
             var isCommandLineExecuted = args.Length != 0;
             var messagePrinter = isCommandLineExecuted
-                ? new MessagePrinter(new CommandLineParser(args))
+                ? new MessagePrinter(new CommandLineHandler(args))
                 : new MessagePrinter(new MyConsole());
             IMenuProcessor menuProcessor =
                 isCommandLineExecuted ? new CommandLineProcessor() : new ConsoleMenuProcessor();

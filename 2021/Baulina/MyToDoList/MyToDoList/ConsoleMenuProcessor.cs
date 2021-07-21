@@ -19,8 +19,11 @@ namespace ToDoApp
             {
                 try
                 {
-
                     ((IMenuProcessor) this).PrintMenu();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    ErrorPrinter.PrintIncorrectNumberWarning();
                 }
                 catch (Exception)
                 {

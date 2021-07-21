@@ -4,11 +4,11 @@ using Spectre.Console.Rendering;
 
 namespace ToDoApp
 {
-    public class CommandLineParser : IConsole
+    public class CommandLineHandler : IConsole
     {
         private readonly List<string> _commandLineArguments = new();
 
-        public CommandLineParser(IEnumerable<string> args)
+        public CommandLineHandler(IEnumerable<string> args)
         {
             _commandLineArguments.AddRange(args);
         }

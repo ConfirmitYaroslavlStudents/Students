@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace ToDoListProject
 {
     public class Controller
     {
-        private IToDoListLoaderSaver _loaderSaver;
-        private IWriterReader _writerReader;
-        private ToDoList _toDoList;
+        private readonly IToDoListLoaderSaver _loaderSaver;
+        private readonly IWriterReader _writerReader;
+        private readonly ToDoList _toDoList;
 
         public Controller(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader)
         {
@@ -22,49 +19,55 @@ namespace ToDoListProject
         {
             while (true)
             {
-                var selectedAction = GetActioinChoice();
+                var selectedAction = GetActionChoice();
 
-                if (selectedAction == Menu.quit)
+                if (selectedAction == Menu.Quit)
                 {
                     _loaderSaver.Save(_toDoList);
                     break;
                 }
 
-                switch (selectedAction)
-                {
-                    case Menu.displayToDoList:
-                        HandleToDoListDisplay();
-                        break;
-
-                    case Menu.addTask:
-                        HandleTaskAddition();
-                        break;
-
-                    case Menu.removeTask:
-                        HandleTaskRemove();
-                        break;
-
-                    case Menu.changeTaskText:
-                        HandleTaskTextChange();
-                        break;
-
-                    case Menu.changeTaskStatus:
-                        HandleTaskStatusChange();
-                        break;
-
-                    default:
-                        _writerReader.Write("Некорректная команда\r\n");
-                        break;
-                }
+                var command = GetCommand(selectedAction);
+                RunCommand(command);
             }
         }
 
-        private string GetActioinChoice()
+        private string GetActionChoice()
         {
             Menu.PrintMenu(_writerReader);
             var selectedAction = _writerReader.Read();
             _writerReader.Write("");
             return selectedAction;
+        }
+
+        private Action GetCommand(string selectedAction)
+        {
+            return selectedAction switch
+            {
+                Menu.DisplayToDoList => HandleToDoListDisplay,
+                Menu.AddTask => HandleTaskAddition,
+                Menu.RemoveTask => HandleTaskRemove,
+                Menu.ChangeTaskText => HandleTaskTextChange,
+                Menu.ChangeTaskStatus => HandleTaskStatusChange,
+                _ => HandleIncorrectCommand
+            };
+        }
+
+        private void RunCommand(Action command)
+        {
+            try
+            {
+                command();
+            }
+            catch(ArgumentException e)
+            {
+                _writerReader.Write(e.Message);
+            }
+        }
+
+        private void HandleIncorrectCommand()
+        {
+            throw new ArgumentException("Некорректная команда\r\n");
         }
 
         private void HandleToDoListDisplay()
@@ -76,55 +79,40 @@ namespace ToDoListProject
         }
         private void HandleTaskAddition()
         {
-            try
+            RunCommand(() =>
             {
                 var newText = GetNewTaskText();
                 _toDoList.Add(new Task(newText));
-            }
-            catch (ArgumentException e)
-            {
-                _writerReader.Write(e.Message);
-            }
+            });
         }
 
         private void HandleTaskRemove()
         {
-            try
+            RunCommand(() =>
             {
                 var number = GetTaskNumber();
                 _toDoList.Remove(number - 1);
-            }
-            catch (ArgumentException e)
-            {
-                _writerReader.Write(e.Message);
-            }
+            });
         }
 
         private void HandleTaskTextChange()
         {
-            try
+            RunCommand(() =>
             {
                 var number = GetTaskNumber();
                 var newText = GetNewTaskText();
-                _toDoList[number - 1].ChangeText(newText);
-            }
-            catch (ArgumentException e)
-            {
-                _writerReader.Write(e.Message);
-            }
+                _toDoList[number - 1].Text = newText;
+            });
         }
 
         private void HandleTaskStatusChange()
         {
-            try
+            RunCommand(() =>
             {
                 var number = GetTaskNumber();
-                _toDoList[number - 1].ChangeStatus();
-            }
-            catch (ArgumentException e)
-            {
-                _writerReader.Write(e.Message);
-            }
+                var task = _toDoList[number - 1];
+                task.IsDone = !task.IsDone;
+            });
         }
 
         private string GetNewTaskText()
@@ -140,17 +128,12 @@ namespace ToDoListProject
         private int GetTaskNumber()
         {
             _writerReader.Write("Введите номер задания");
-            if (!int.TryParse(_writerReader.Read(), out int number))
-            {
-                _writerReader.Write("");
-                throw new ArgumentException("Нужно ввести число\r\n");
-            }
-            if (number > _toDoList.Count || number < 1)
-            {
-                _writerReader.Write("");
-                throw new ArgumentException("Задания с таким номером не существует\r\n");
-            }
+            var input = _writerReader.Read();
             _writerReader.Write("");
+            if (!int.TryParse(input, out int number))
+                throw new ArgumentException("Нужно ввести число\r\n");
+            if (number > _toDoList.Count || number < 1)
+                throw new ArgumentException("Задания с таким номером не существует\r\n");
             return number;
         }
     }

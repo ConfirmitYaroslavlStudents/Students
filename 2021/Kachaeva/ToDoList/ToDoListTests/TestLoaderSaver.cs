@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToDoListProject
+﻿namespace ToDoListProject
 {
     public class TestLoaderSaver : IToDoListLoaderSaver
     {

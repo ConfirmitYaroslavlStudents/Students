@@ -15,14 +15,14 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Что вы хотели бы сделать? Введите:", testWriterReader._messages[0]);
-            Assert.AreEqual("1 - просмотреть список", testWriterReader._messages[1]);
-            Assert.AreEqual("2 - добавить задание", testWriterReader._messages[2]);
-            Assert.AreEqual("3 - удалить задание", testWriterReader._messages[3]);
-            Assert.AreEqual("4 - изменить текст задания", testWriterReader._messages[4]);
-            Assert.AreEqual("5 - изменить статус задания", testWriterReader._messages[5]);
-            Assert.AreEqual("q - выйти\r\n", testWriterReader._messages[6]);
-            Assert.AreEqual("", testWriterReader._messages[7]);
+            Assert.AreEqual("Что вы хотели бы сделать? Введите:", testWriterReader.Messages[0]);
+            Assert.AreEqual("1 - просмотреть список", testWriterReader.Messages[1]);
+            Assert.AreEqual("2 - добавить задание", testWriterReader.Messages[2]);
+            Assert.AreEqual("3 - удалить задание", testWriterReader.Messages[3]);
+            Assert.AreEqual("4 - изменить текст задания", testWriterReader.Messages[4]);
+            Assert.AreEqual("5 - изменить статус задания", testWriterReader.Messages[5]);
+            Assert.AreEqual("q - выйти\r\n", testWriterReader.Messages[6]);
+            Assert.AreEqual("", testWriterReader.Messages[7]);
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Список пуст\r\n", testWriterReader._messages[8]);
+            Assert.AreEqual("Список пуст\r\n", testWriterReader.Messages[8]);
         }
 
         [TestMethod]
@@ -44,8 +44,8 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Введите текст задания", testWriterReader._messages[8]);
-            Assert.AreEqual("1. wash dishes  [ ]\r\n", testWriterReader._messages[18]);
+            Assert.AreEqual("Введите текст задания", testWriterReader.Messages[8]);
+            Assert.AreEqual("1. wash dishes  [ ]\r\n", testWriterReader.Messages[18]);
         }
 
         [TestMethod]
@@ -56,8 +56,8 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Введите номер задания", testWriterReader._messages[18]);
-            Assert.AreEqual("Список пуст\r\n", testWriterReader._messages[28]);
+            Assert.AreEqual("Введите номер задания", testWriterReader.Messages[18]);
+            Assert.AreEqual("Список пуст\r\n", testWriterReader.Messages[28]);
         }
 
         [TestMethod]
@@ -68,9 +68,9 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Введите номер задания", testWriterReader._messages[18]);
-            Assert.AreEqual("Введите текст задания", testWriterReader._messages[20]);
-            Assert.AreEqual("1. clean the room  [ ]\r\n", testWriterReader._messages[30]);
+            Assert.AreEqual("Введите номер задания", testWriterReader.Messages[18]);
+            Assert.AreEqual("Введите текст задания", testWriterReader.Messages[20]);
+            Assert.AreEqual("1. clean the room  [ ]\r\n", testWriterReader.Messages[30]);
         }
 
         [TestMethod]
@@ -81,8 +81,8 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Введите номер задания", testWriterReader._messages[18]);
-            Assert.AreEqual("1. wash dishes  [v]\r\n", testWriterReader._messages[28]);
+            Assert.AreEqual("Введите номер задания", testWriterReader.Messages[18]);
+            Assert.AreEqual("1. wash dishes  [v]\r\n", testWriterReader.Messages[28]);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Некорректная команда\r\n", testWriterReader._messages[8]);
+            Assert.AreEqual("Некорректная команда\r\n", testWriterReader.Messages[8]);
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Нельзя добавить пустое задание\r\n", testWriterReader._messages[10]);
+            Assert.AreEqual("Нельзя добавить пустое задание\r\n", testWriterReader.Messages[10]);
         }
 
         [TestMethod]
@@ -115,7 +115,7 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Нужно ввести число\r\n", testWriterReader._messages[10]);
+            Assert.AreEqual("Нужно ввести число\r\n", testWriterReader.Messages[10]);
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace ToDoListTests
             var controller = new Controller(testLoaderSaver, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("Задания с таким номером не существует\r\n", testWriterReader._messages[10]);
+            Assert.AreEqual("Задания с таким номером не существует\r\n", testWriterReader.Messages[10]);
         }
     }
 }

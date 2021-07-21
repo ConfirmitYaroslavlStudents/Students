@@ -34,7 +34,7 @@ namespace ToDoListTests
             controller = new Controller(fileWorkHandler, testWriterReader);
             controller.HandleUsersInput();
 
-            Assert.AreEqual("1. wash dishes  [ ]\r\n", testWriterReader._messages[8]);
+            Assert.AreEqual("1. wash dishes  [ ]\r\n", testWriterReader.Messages[8]);
         }
     }
 }

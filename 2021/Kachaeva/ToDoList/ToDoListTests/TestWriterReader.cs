@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ToDoListProject
 {
     public class TestWriterReader : IWriterReader
     {
-        public List<string> _messages = new List<string>();
-        public List<string> _inputs;
+        private readonly List<string> _inputs;
         private int _inputIndex;
+        public List<string> Messages { get; private set; }
 
         public TestWriterReader(List<string> inputs)
         {
             _inputs = inputs;
             _inputIndex = -1;
+            Messages = new List<string>();
         }
 
         public void Write(string message)
         {
-            _messages.Add(message);
+            Messages.Add(message);
         }
 
         public string Read()

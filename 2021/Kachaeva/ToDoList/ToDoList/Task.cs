@@ -1,25 +1,14 @@
-﻿using System;
-
-namespace ToDoListProject
+﻿namespace ToDoListProject
 {
     public class Task
     {
-        public string Text { get; private set; }
-        public bool IsDone { get; private set; }
+        public string Text { get; set; }
+        public bool IsDone { get; set; }
 
-        public Task(string text)
+        public Task(string text, bool isDone = false)
         {
             Text = text;
-        }
-
-        public void ChangeText(string newText)
-        {
-            Text = newText;
-        }
-
-        public void ChangeStatus()
-        {
-            IsDone = !IsDone;
+            IsDone = isDone;
         }
 
         public override string ToString()

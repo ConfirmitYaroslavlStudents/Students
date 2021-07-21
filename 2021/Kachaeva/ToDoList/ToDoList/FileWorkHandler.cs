@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 
 namespace ToDoListProject
 {
     public class FileWorkHandler : IToDoListLoaderSaver
     {
-        private string _fileName;
+        private readonly string _fileName;
 
         public FileWorkHandler(string fileName)
         {
@@ -18,19 +15,26 @@ namespace ToDoListProject
         {
             if (!File.Exists(_fileName))
                 return new ToDoList();
-            var tasks = File.ReadLines(_fileName);
+
             var toDoList = new ToDoList();
-            foreach(var listItem in tasks)
+            var lines = File.ReadLines(_fileName);
+            foreach(var line in lines)
             {
-                int textStartIndex = listItem.IndexOf('.') + 2;
-                int textEndIndex = listItem.IndexOf('[') - 2;
-                string text = listItem.Substring(textStartIndex, textEndIndex - textStartIndex);
-                var task = new Task(text);
-                if (listItem[textEndIndex+3] == 'v')
-                    task.ChangeStatus();
+                var task = Parse(line);
                 toDoList.Add(task);
             }
             return toDoList;
+        }
+
+        private Task Parse(string line)
+        {
+            var textStartIndex = line.IndexOf('.') + 2;
+            var textEndIndex = line.IndexOf('[') - 2;
+            var text = line[textStartIndex..textEndIndex];
+            var isDone = false;
+            if (line[textEndIndex + 3] == 'v')
+                isDone = true;
+            return new Task(text, isDone);
         }
 
         public void Save (ToDoList toDoList)

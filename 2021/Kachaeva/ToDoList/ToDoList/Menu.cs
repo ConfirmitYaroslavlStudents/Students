@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToDoListProject
+﻿namespace ToDoListProject
 {
     public struct Menu
     {
-        public const string displayToDoList = "1";
-        public const string addTask = "2";
-        public const string removeTask = "3";
-        public const string changeTaskText = "4";
-        public const string changeTaskStatus = "5";
-        public const string quit = "q";
+        public const string DisplayToDoList = "1";
+        public const string AddTask = "2";
+        public const string RemoveTask = "3";
+        public const string ChangeTaskText = "4";
+        public const string ChangeTaskStatus = "5";
+        public const string Quit = "q";
 
         public static void PrintMenu(IWriterReader writerReader)
         {

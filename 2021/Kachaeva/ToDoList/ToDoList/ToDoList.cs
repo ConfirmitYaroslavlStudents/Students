@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace ToDoListProject
 {
     public class ToDoList
     {
-        private List<Task> _tasks = new List<Task>();
+        private readonly List<Task> _tasks = new List<Task>();
         public int Count { get { return _tasks.Count; } }
 
         public Task this[int index]

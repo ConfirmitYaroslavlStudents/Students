@@ -8,7 +8,7 @@ namespace ToDoApp
     {
         public ToDoList MyToDoList { get; }
         private readonly ConsoleHandler _consoleHandler;
-        private readonly ErrorPrinter _errorPrinter;
+        private readonly ErrorPrinter _errorPrinter = new(new MyConsole());
         internal bool Empty => MyToDoList.Count == 0;
         public bool IsWorking { get; private set; }
 
@@ -17,7 +17,6 @@ namespace ToDoApp
             MyToDoList = new ToDoList(inputList);
             _consoleHandler = printer;
             IsWorking = true;
-            _errorPrinter = new ErrorPrinter(printer);
         }
 
         public void RunCommand(Action command)

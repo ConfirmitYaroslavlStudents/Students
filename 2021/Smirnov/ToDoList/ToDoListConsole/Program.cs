@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Xml.Serialization;
-using ToDoListApp;
-
+﻿using ToDoListLib;
 
 namespace ToDoListConsole
 {
@@ -9,14 +6,22 @@ namespace ToDoListConsole
     {
         static void Main(string[] args)
         {
-            var serializer = new Serializer();
-            var ToDoListCollection = serializer.Deserialization();
+            var saveLoader = new SaveLoader();
 
-            var toDoListApp = new ToDoListApp.ToDoListApp(ToDoListCollection.Collection);
-            while (ToDoListMenu.WorkWithMenu(toDoListApp)) ;
+            ConsoleMenu toDoListMenu;
 
-            ToDoListCollection.Collection = toDoListApp.GetAllTask();
-            serializer.Serialization(ToDoListCollection);           
+            if (args.Length == 0)
+            {
+                toDoListMenu = new ConsoleMenu(saveLoader.Load(), new ConsoleReader());
+                while (toDoListMenu.StartMenu()) ;
+            }
+            else
+            {
+                toDoListMenu = new ConsoleMenu(saveLoader.Load(), new CmdReader(args));
+                toDoListMenu.StartMenu();
+            }
+
+            saveLoader.Save(toDoListMenu.ToDoList);
         }
     }
 }

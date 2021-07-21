@@ -7,6 +7,12 @@ namespace ToDoListNikeshina
 {
     public class WorkWithFile
     {
+        public ILogger _logger;
+        public WorkWithFile() { }
+        public WorkWithFile(ILogger logger)
+        {
+            this._logger = logger;
+        }
         public void Write(List<Task> list)
         {
             using (var sw = new StreamWriter("Tasks.txt"))
@@ -19,7 +25,8 @@ namespace ToDoListNikeshina
         {
             if (!File.Exists("Tasks.txt"))
             {
-                MessageWriter.ToDoListIsEmpty();
+                _logger.WriteLine(Messages.ToDoListIsEmpty());
+               
                 return new List<Task>();
             }
             
@@ -55,5 +62,50 @@ namespace ToDoListNikeshina
             }
             return sb.ToString();
         }
-    } 
+    }
+
+    public interface ILogger
+    {
+        public void WriteLine(string message);
+        public string ReadLine();
+    }
+
+    public class TestLogger : ILogger
+    {
+        public List<string> Messages = new List<string>();
+        public List<string> inputStrings = new List<string>();
+
+
+        public TestLogger() { }
+
+        public TestLogger(List<string> input)
+        {
+            inputStrings = input;
+        }
+
+        public string ReadLine()
+        {
+            var current=inputStrings[0];
+            inputStrings.RemoveAt(0);
+            return current;
+        }
+
+        public void WriteLine(string msg)
+        {
+            Messages.Add(msg);
+        }
+    }
+
+    public class AppLogger : ILogger
+    {
+        public string ReadLine()
+        {
+            return Console.ReadLine();
+        }
+
+        public void WriteLine(string msg)
+        {
+            Console.WriteLine(msg);
+        }
+    }
 }

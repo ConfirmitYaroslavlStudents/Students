@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoListNikeshina", "ToDoListNikeshina\ToDoListNikeshina.csproj", "{8DDA0AB3-AE20-4F38-B904-1715B8443D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoListNikeshina", "ToDoListNikeshina\ToDoListNikeshina.csproj", "{8DDA0AB3-AE20-4F38-B904-1715B8443D0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoListApp", "ToDoListApp\ToDoListApp.csproj", "{B908B988-060F-4A26-B43C-014007F4B026}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoListApp", "ToDoListApp\ToDoListApp.csproj", "{B908B988-060F-4A26-B43C-014007F4B026}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoListTests", "ToDoListTests\ToDoListTests.csproj", "{476BDE85-B65D-4153-8766-2C676A849342}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B908B988-060F-4A26-B43C-014007F4B026}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B908B988-060F-4A26-B43C-014007F4B026}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B908B988-060F-4A26-B43C-014007F4B026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{476BDE85-B65D-4153-8766-2C676A849342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{476BDE85-B65D-4153-8766-2C676A849342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{476BDE85-B65D-4153-8766-2C676A849342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{476BDE85-B65D-4153-8766-2C676A849342}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Spectre.Console.Rendering;
-using ToDoApp;
+using ConsoleInteractors;
 
 namespace ToDoListTestProject
 {
-    class AppTestConsole : IConsole
+    class AppTestConsole : IConsoleExtended
     {
         public List<string> Messages = new List<string>();
         private readonly List<string> _linesToRead = new List<string>();

@@ -2,19 +2,23 @@
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
-namespace ToDoApp
+namespace ConsoleInteractors
 {
     public interface IConsole
     {
         void WriteLine(string message);
         string ReadLine();
+    }
+
+    public interface IConsoleExtended : IConsole
+    {
         void RenderTable(IRenderable table);
         void Clear();
         string GetDescription();
         string GetMenuItemName();
     }
 
-    internal class MyConsole : IConsole
+    public class MyConsole : IConsoleExtended
     {
         public void WriteLine(string message) => AnsiConsole.MarkupLine(message);
         public string ReadLine() => Console.ReadLine();

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyToDoList", "ToDoList\MyTo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoListTestProject", "ToDoListTestProject\ToDoListTestProject.csproj", "{8A95A9DD-B8E7-4A99-BD70-932B4CAB01E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleInteractors", "ConsoleInteractors\ConsoleInteractors.csproj", "{B03B1F34-9001-49A8-9DE2-D3C3B3F91710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8A95A9DD-B8E7-4A99-BD70-932B4CAB01E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A95A9DD-B8E7-4A99-BD70-932B4CAB01E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A95A9DD-B8E7-4A99-BD70-932B4CAB01E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B03B1F34-9001-49A8-9DE2-D3C3B3F91710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B03B1F34-9001-49A8-9DE2-D3C3B3F91710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B03B1F34-9001-49A8-9DE2-D3C3B3F91710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B03B1F34-9001-49A8-9DE2-D3C3B3F91710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

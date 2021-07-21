@@ -1,4 +1,6 @@
-﻿namespace ToDoApp
+﻿using ConsoleInteractors;
+
+namespace ToDoApp
 {
     class Program
     {
@@ -7,15 +9,15 @@
             var uploadProcessor = new StartProcessor();
             uploadProcessor.LoadTheList();
             var isCommandLineExecuted = args.Length != 0;
-            var messagePrinter = isCommandLineExecuted
-                ? new MessagePrinter(new CommandLineHandler(args))
-                : new MessagePrinter(new MyConsole());
-            IMenuProcessor menuProcessor =
-                isCommandLineExecuted ? new CommandLineProcessor() : new ConsoleMenuProcessor();
-            var menuManager = new MenuManager(uploadProcessor.MyToDoList, messagePrinter);
-            menuProcessor.MenuManager = menuManager;
+            var consoleHandler = isCommandLineExecuted
+                ? new ConsoleHandler(new CommandLineHandler(args))
+                : new ConsoleHandler(new MyConsole());
+            var commandExecutor = new CommandExecutor(uploadProcessor.MyToDoList, consoleHandler);
+            var menuPrinter = new MenuHandler(new OperationGetter(consoleHandler), commandExecutor);
+            IMenuProcessor processor =
+                isCommandLineExecuted ? new CommandLineProcessor(menuPrinter) : new ConsoleMenuProcessor(menuPrinter);
 
-            menuProcessor.Run();
+            processor.Run();
         }
     }
 }

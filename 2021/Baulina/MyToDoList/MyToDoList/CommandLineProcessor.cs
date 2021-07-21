@@ -1,31 +1,22 @@
-﻿using System;
-
-namespace ToDoApp
+﻿namespace ToDoApp
 {
+    interface IMenuProcessor
+    {
+        void Run();
+    }
+
     class CommandLineProcessor : IMenuProcessor
     {
-        MenuManager IMenuProcessor.MenuManager { get; set; }
-        public ErrorPrinter ErrorPrinter { get; }
+        private readonly MenuHandler _menuProcessor;
 
-        public CommandLineProcessor()
+        public CommandLineProcessor(MenuHandler menuProcessor)
         {
-            ErrorPrinter = new ErrorPrinter();
+            _menuProcessor = menuProcessor;
         }
 
         public void Run()
         {
-            try
-            {
-                ((IMenuProcessor) this).PrintMenu();
-            }
-            catch (IndexOutOfRangeException)
-            {
-                ErrorPrinter.PrintIncorrectNumberWarning();
-            }
-            catch (Exception)
-            {
-                ErrorPrinter.PrintErrorMessage();
-            }
+            _menuProcessor.Handle();
         }
     }
 }

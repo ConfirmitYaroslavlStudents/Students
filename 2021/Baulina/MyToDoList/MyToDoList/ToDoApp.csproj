@@ -22,10 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.40.0" />
+    <PackageReference Include="Spectre.Console" Version="0.41.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConsoleInteractors\ConsoleInteractors.csproj" />
     <ProjectReference Include="..\ToDoList\MyToDoList.csproj" />
   </ItemGroup>
 

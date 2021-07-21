@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MyToDoList
 {
@@ -24,6 +25,8 @@ namespace MyToDoList
 
         public void EditDescription(int index, string newDescription)
         {
+            if (string.IsNullOrEmpty(newDescription))
+                throw new ArgumentNullException();
             EditDescription(this[index], newDescription);
         }
 

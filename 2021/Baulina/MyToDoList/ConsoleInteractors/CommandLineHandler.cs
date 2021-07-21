@@ -2,9 +2,9 @@
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
-namespace ToDoApp
+namespace ConsoleInteractors
 {
-    public class CommandLineHandler : IConsole
+    public class CommandLineHandler : IConsoleExtended
     {
         private readonly List<string> _commandLineArguments = new();
 

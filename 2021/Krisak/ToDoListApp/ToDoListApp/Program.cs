@@ -2,14 +2,17 @@
 using ToDoList;
 using System.Xml.Serialization;
 
-namespace ToDoListApp
+namespace Todo
 {
     class Program
     {
         static void Main(string[] args)
         {
             var ToDo = new ToDoConsole();
-            ToDo.DoWork();
+
+            if (args.Length == 0)
+                ToDo.DoWork();
+            else ToDo.DoWork(args);
         }
     }
 }

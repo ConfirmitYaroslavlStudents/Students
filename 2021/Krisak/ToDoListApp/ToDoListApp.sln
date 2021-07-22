@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoListApp", "ToDoListApp\ToDoListApp.csproj", "{10334B50-F98D-47B7-BD9A-29A5F75FD5FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo", "ToDoListApp\Todo.csproj", "{10334B50-F98D-47B7-BD9A-29A5F75FD5FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList", "ToDoList\ToDoList.csproj", "{B7068FDE-4924-40C0-ACC2-A543E20E700A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoList", "ToDoList\ToDoList.csproj", "{B7068FDE-4924-40C0-ACC2-A543E20E700A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProjectForToDoList", "TestProjectForToDoList\TestProjectForToDoList.csproj", "{6152ACA6-A317-4376-8687-11BBEE54CC77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProjectForToDoList", "TestProjectForToDoList\TestProjectForToDoList.csproj", "{6152ACA6-A317-4376-8687-11BBEE54CC77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

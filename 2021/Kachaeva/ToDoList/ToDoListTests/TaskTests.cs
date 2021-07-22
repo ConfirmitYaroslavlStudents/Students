@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ToDoListProject;
+using ToDo;
 
 namespace ToDoListTests
 {
@@ -7,32 +7,19 @@ namespace ToDoListTests
     public class TaskTests
     {
         [TestMethod]
-        public void TaskIsCorrectAfterCreation()
+        public void ToStringReturnsCorrectValueIfTaskIsNotDone()
         {
             var task = new Task("wash dishes");
 
-            Assert.AreEqual("wash dishes", task.text);
-            Assert.AreEqual(false, task.isDone);
+            Assert.AreEqual("wash dishes  [ ]", task.ToString());
         }
 
         [TestMethod]
-        public void TextIsCorrectAfterChange()
+        public void ToStringReturnsCorrectValueIfTaskIsDone()
         {
-            var task = new Task("wash dishes");
+            var task = new Task("wash dishes", true);
 
-            task.ChangeText("clean the room");
-
-            Assert.AreEqual("clean the room", task.text);
-        }
-
-        [TestMethod]
-        public void StatusIsCorrectAfterChange()
-        {
-            var task = new Task("wash dishes");
-
-            task.ChangeStatus();
-
-            Assert.AreEqual(true, task.isDone);
+            Assert.AreEqual("wash dishes  [v]", task.ToString());
         }
     }
 }

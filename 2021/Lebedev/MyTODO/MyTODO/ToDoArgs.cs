@@ -67,6 +67,7 @@ namespace MyTODO
                         i++;
                         var name = GetName(args, ref i);
                         _todo.Add(name);
+                        Console.WriteLine("item \"{0}\" added successfully", name);
                         break;
                     case "changename":
                     case "-cn":
@@ -77,38 +78,62 @@ namespace MyTODO
                         }
                         var index = GetIndex(args[i + 1]);
                         if (index < 0 || index >= _todo.Count)
+                        {
+                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
                             break;
+                        }
                         i += 2;
                         name = GetName(args, ref i);
                         _todo[index].ChangeName(name);
+                        Console.WriteLine("item's \"{0}\" name changed successfully", _todo[index].Name);
                         break;
                     case "complete":
                     case "-co":
                         if (args.Length <= i + 1)
-                            break;
+                        {
+                            Console.WriteLine("insufficient number of arguments");
+                            return;
+                        }
                         index = GetIndex(args[i + 1]);
                         if (index < 0 || index >= _todo.Count)
+                        {
+                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
                             break;
+                        }
                         _todo[index].Complete();
+                        Console.WriteLine("Item \"{0}\" completed successfully", _todo[index].Name);
                         i++;
                         break;
                     case "delete":
                     case "-d":
                         if (args.Length <= i + 1)
-                            break;
+                        {
+                            Console.WriteLine("insufficient number of arguments");
+                            return;
+                        }
                         index = GetIndex(args[i + 1]);
                         if (index < 0 || index >= _todo.Count)
+                        {
+                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
                             break;
+                        }
                         _todo[index].Delete();
+                        Console.WriteLine("Item \"{0}\" deleted successfully", _todo[index].Name);
                         i++;
                         break;
                     case "show":
                     case "-s":
                         if (args.Length <= i + 1)
-                            break;
+                        {
+                            Console.WriteLine("insufficient number of arguments");
+                            return;
+                        }
                         index = GetIndex(args[1]);
                         if (index < 0 || index >= _todo.Count)
+                        {
+                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
                             break;
+                        }
                         Console.WriteLine(_todo[index]);
                         i++;
                         break;

@@ -1,4 +1,4 @@
-﻿namespace ToDoListProject
+﻿namespace ToDo
 {
     internal class Program
     {
@@ -7,8 +7,12 @@
             var fileName = "ToDoList.txt";
             var fileWorkHandler = new FileWorkHandler(fileName);
             var consoleWriterReader = new ConsoleWriterReader();
-            var controller = new Controller(fileWorkHandler, consoleWriterReader);
-            controller.HandleUsersInput();
+            CommandHandler handler;
+            if (args.Length != 0)
+                handler = new CMDHandler(fileWorkHandler,consoleWriterReader, args);
+            else
+                handler = new ConsoleHandler(fileWorkHandler, consoleWriterReader);
+            handler.HandleUsersInput();
         }
     }
 }

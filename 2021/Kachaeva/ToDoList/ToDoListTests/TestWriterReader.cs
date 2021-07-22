@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ToDoListProject
+namespace ToDo
 {
     public class TestWriterReader : IWriterReader
     {
@@ -14,6 +14,8 @@ namespace ToDoListProject
             _inputIndex = -1;
             Messages = new List<string>();
         }
+
+        public TestWriterReader() : this(new List<string>()) { }
 
         public void Write(string message)
         {

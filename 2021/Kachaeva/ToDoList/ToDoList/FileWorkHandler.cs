@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ToDoListProject
+namespace ToDo
 {
     public class FileWorkHandler : IToDoListLoaderSaver
     {
@@ -41,6 +41,8 @@ namespace ToDoListProject
         {
             if (toDoList.Count != 0)
                 File.WriteAllText(_fileName, toDoList.ToString());
+            else
+                File.Delete(_fileName);
         }
     }
 }

@@ -1,43 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ToDoListProject
+namespace ToDo
 {
-    public class Controller
+    public abstract class CommandHandler
     {
-        private readonly IToDoListLoaderSaver _loaderSaver;
-        private readonly IWriterReader _writerReader;
-        private readonly ToDoList _toDoList;
+        protected readonly IToDoListLoaderSaver _loaderSaver;
+        protected readonly IWriterReader _writerReader;
+        protected readonly ToDoList _toDoList;
 
-        public Controller(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader)
+        public CommandHandler(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader)
         {
             _loaderSaver = loaderSaver;
             _writerReader = writerReader;
             _toDoList = _loaderSaver.Load();
         }
 
-        public void HandleUsersInput()
+        public abstract void HandleUsersInput();
+
+        protected void ExecuteCommand(string selectedAction)
         {
-            while (true)
-            {
-                var selectedAction = GetActionChoice();
-
-                if (selectedAction == Menu.Quit)
-                {
-                    _loaderSaver.Save(_toDoList);
-                    break;
-                }
-
-                var command = GetCommand(selectedAction);
-                RunCommand(command);
-            }
-        }
-
-        private string GetActionChoice()
-        {
-            Menu.PrintMenu(_writerReader);
-            var selectedAction = _writerReader.Read();
-            _writerReader.Write("");
-            return selectedAction;
+            var command = GetCommand(selectedAction);
+            RunCommand(command);
         }
 
         private Action GetCommand(string selectedAction)
@@ -59,15 +44,10 @@ namespace ToDoListProject
             {
                 command();
             }
-            catch(ArgumentException e)
+            catch (ArgumentException e)
             {
                 _writerReader.Write(e.Message);
             }
-        }
-
-        private void HandleIncorrectCommand()
-        {
-            throw new ArgumentException("Некорректная команда\r\n");
         }
 
         private void HandleToDoListDisplay()
@@ -77,12 +57,14 @@ namespace ToDoListProject
             else
                 _writerReader.Write(_toDoList.ToString());
         }
+
         private void HandleTaskAddition()
         {
             RunCommand(() =>
             {
                 var newText = GetNewTaskText();
                 _toDoList.Add(new Task(newText));
+                _writerReader.Write("Задание добавлено\r\n");
             });
         }
 
@@ -92,6 +74,7 @@ namespace ToDoListProject
             {
                 var number = GetTaskNumber();
                 _toDoList.Remove(number - 1);
+                _writerReader.Write("Задание удалено\r\n");
             });
         }
 
@@ -102,6 +85,7 @@ namespace ToDoListProject
                 var number = GetTaskNumber();
                 var newText = GetNewTaskText();
                 _toDoList[number - 1].Text = newText;
+                _writerReader.Write("Текст задания изменен\r\n");
             });
         }
 
@@ -112,29 +96,34 @@ namespace ToDoListProject
                 var number = GetTaskNumber();
                 var task = _toDoList[number - 1];
                 task.IsDone = !task.IsDone;
+                _writerReader.Write("Статус задания изменен\r\n");
             });
+        }
+
+        private void HandleIncorrectCommand()
+        {
+            throw new ArgumentException("Некорректная команда\r\n");
         }
 
         private string GetNewTaskText()
         {
-            _writerReader.Write("Введите текст задания");
-            var newText = _writerReader.Read();
-            _writerReader.Write("");
+            var newText = GetTextInput();
             if (String.IsNullOrEmpty(newText))
                 throw new ArgumentException("Нельзя добавить пустое задание\r\n");
             return newText;
         }
-
         private int GetTaskNumber()
         {
-            _writerReader.Write("Введите номер задания");
-            var input = _writerReader.Read();
-            _writerReader.Write("");
+            var input = GetNumberInput();
             if (!int.TryParse(input, out int number))
                 throw new ArgumentException("Нужно ввести число\r\n");
             if (number > _toDoList.Count || number < 1)
                 throw new ArgumentException("Задания с таким номером не существует\r\n");
             return number;
         }
+
+        protected abstract string GetTextInput();
+
+        protected abstract string GetNumberInput();
     }
 }

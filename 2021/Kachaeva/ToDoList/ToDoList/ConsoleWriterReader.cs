@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ToDoListProject
+namespace ToDo
 {
     public class ConsoleWriterReader : IWriterReader
     {

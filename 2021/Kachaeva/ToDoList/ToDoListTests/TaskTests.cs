@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ToDoListProject;
+using ToDo;
 
 namespace ToDoListTests
 {

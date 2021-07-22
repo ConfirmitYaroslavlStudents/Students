@@ -6,13 +6,13 @@ namespace ToDoListNikeshina
     public class ToDoList
     {
         private List<Task> _list;
-        private WorkWithFile _fileEditor;
+        private FileOperation _fileEditor;
         ILogger _logger;
 
         public ToDoList(ILogger logger)
         {
             _list = new List<Task>();
-            _fileEditor = new WorkWithFile();
+            _fileEditor = new FileOperation();
             _logger = logger;
         }
 

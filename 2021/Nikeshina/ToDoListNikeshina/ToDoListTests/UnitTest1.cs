@@ -11,63 +11,66 @@ namespace ToDoListTests
         public void MsgListIsEmpty()
         {
             var testLogger = new TestLogger();
-            var filehelper = new WorkWithFile(testLogger);
+            var filehelper = new FileOperation(testLogger);
 
             filehelper.Read();
 
-            Assert.AreEqual(testLogger.Messages[0], "Лист пуст");
+            Assert.AreEqual(testLogger.Messages[0], "List is empty(");
         }
 
         [TestMethod]
         public void WrongFormtInputData()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз" });
-            var app = new Application(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
-            Assert.AreEqual(testlogger.Messages[0], "Введите описание задачи: ");
+
+            Assert.AreEqual(testlogger.Messages[0], "Description: ");
         }
 
         [TestMethod]
         public void WrongFormtOfEditNumber()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "15"});
-            var app = new Application(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Edit();
 
-            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Введите описание задачи: ", "Введите порядковый номер задания: ", "Введенные данные некорректны" });
+            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Description: ",
+                "Number of the note: ", "Incorrect data" });
         }
 
         [TestMethod]
         public void WrongFormtOfString()
         {
             var testlogger = new TestLogger(new List<string> { "" });
-            var app = new Application(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
 
-            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Введите описание задачи: ", "Введенные данные некорректны" });
+            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Description: ", "Incorrect data" });
         }
 
         [TestMethod]
         public void WrongFormtOfEditString()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "1" ,""});
-            var app = new Application(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Edit();
 
-            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Введите описание задачи: ", "Введите порядковый номер задания: ", "Введите описание задачи: ", "Введенные данные некорректны" });
+            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Description: ", "Number of the note: ",
+                "Description: ", "Incorrect data" });
         }
 
         [TestMethod]
         public void PrintToDoList()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду", "Купить гантели","3","2","Вымыть чайник" });
-            var app = new Application(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Add();
@@ -76,12 +79,12 @@ namespace ToDoListTests
             app.Edit();
 
             var msgs = new List<string>();
-            msgs.Add("Введите описание задачи: ");
-            msgs.Add("Введите описание задачи: ");
-            msgs.Add("Введите описание задачи: ");
-            msgs.Add("Введите порядковый номер задания: ");
-            msgs.Add("Введите порядковый номер задания: ");
-            msgs.Add("Введите описание задачи: ");
+            msgs.Add("Description: ");
+            msgs.Add("Description: ");
+            msgs.Add("Description: ");
+            msgs.Add("Number of the note: ");
+            msgs.Add("Number of the note: ");
+            msgs.Add("Description: ");
 
             app.Print();
 
@@ -90,7 +93,6 @@ namespace ToDoListTests
             msgs.Add("3. Купить гантели True");
 
             CollectionAssert.AreEqual(testlogger.Messages, msgs);
-
         }
 
         [TestMethod]
@@ -98,7 +100,7 @@ namespace ToDoListTests
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду",
                 "Купить гантели", "3", "2", "Вымыть чайник","1","1","1" });
-            var app = new Application(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Add();
@@ -107,12 +109,12 @@ namespace ToDoListTests
             app.Edit();
 
             var msgs = new List<string>();
-            msgs.Add("Введите описание задачи: ");
-            msgs.Add("Введите описание задачи: ");
-            msgs.Add("Введите описание задачи: ");
-            msgs.Add("Введите порядковый номер задания: ");
-            msgs.Add("Введите порядковый номер задания: ");
-            msgs.Add("Введите описание задачи: ");
+            msgs.Add("Description: ");
+            msgs.Add("Description: ");
+            msgs.Add("Description: ");
+            msgs.Add("Number of the note: ");
+            msgs.Add("Number of the note: ");
+            msgs.Add("Description: ");
 
             app.Print();
 
@@ -124,16 +126,15 @@ namespace ToDoListTests
             app.Delete();
             app.Delete();
 
-            msgs.Add("Введите порядковый номер задания: ");
-            msgs.Add("Введите порядковый номер задания: ");
-            msgs.Add("Введите порядковый номер задания: ");
+            msgs.Add("Number of the note: ");
+            msgs.Add("Number of the note: ");
+            msgs.Add("Number of the note: ");
 
             app.Print();
 
-            msgs.Add("Лист пуст");
+            msgs.Add("List is empty(");
 
             CollectionAssert.AreEqual(testlogger.Messages, msgs);
-
         }
     }
 }

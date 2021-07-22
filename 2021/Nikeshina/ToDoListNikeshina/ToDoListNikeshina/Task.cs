@@ -26,7 +26,7 @@ namespace ToDoListNikeshina
         }
         public string Print()
         {
-            var str = Name+" " + Status;
+            var str = Name + " " + Status;
             return str;
         }
     }

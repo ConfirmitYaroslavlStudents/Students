@@ -1,5 +1,6 @@
 ﻿using System;
 using ToDoListNikeshina;
+using System.Text;
 
 namespace ToDoListApp
 {
@@ -7,61 +8,69 @@ namespace ToDoListApp
     {
         static void Main(string[] args)
         {
-            var app = new Application(new AppLogger());
-            app.Read();
-            ComandHandling(app);
-        }
-
-        private static void ComandHandling(Application app)
-        {
-            ClearScrean(app);
-            var str = Console.ReadLine();
-            while (str != null || str != "")
+            if (args.Length == 0)
+                DoCommand();
+            else
             {
-                ClearScrean(app);
-                switch (str)
-                {
-                    case "С":
-                        break;
-                    case "Д":
-                        app.Add();
-                        break;
-                    case "У":
-                        app.Delete();
-                        break;
-                    case "Р":
-                        app.Edit();
-                        break;
-                    case "И":
-                        app.ChangeStatus();
-                        break;
-                    case "В":
-                        app.Write();
-                        return;
-                    default:
-                        break;
-                }
-
-                str = Console.ReadLine();
+                var app = new CmdApp(new AppLogger(), args);
+                app.Read();
+                GetCommand(app, args[0]);
+                app.Write();
+                return;
             }
         }
 
-        private static void ClearScrean(Application app)
+        private static void DoCommand()
         {
-            Console.Clear();
+            var app = new ConsoleApp(new AppLogger());
+            app.Read();
             WriteInstuction();
-            app.Print();
+            var str = Console.ReadLine();
+            while (str != null || str != "")
+            {
+                if (str == "exit")
+                {
+                    app.Write();
+                    return;
+                }
+
+                GetCommand(app, str);
+                str = Console.ReadLine();
+            }
+        }
+        private static void GetCommand(IApp app, string command)
+        {
+            switch (command)
+            {
+                case "list":
+                    app.Print();
+                    break;
+                case "add":
+                    app.Add();
+                    break;
+                case "delete":
+                    app.Delete();
+                    break;
+                case "change":
+                    app.ChangeStatus();
+                    break;
+                case "edit":
+                    app.Edit();
+                    break;
+                default:
+                    return;
+            }
         }
 
         private static void WriteInstuction()
         {
             Console.WriteLine("----------------------------------------------------------");
-            Console.Write("С - список;  ");
-            Console.Write("Д - добавить запись;   ");
-            Console.Write("У - удалить запись;   ");
-            Console.Write("Р - редактировать запись;   ");
-            Console.Write("И - изменить статус;   ");
-            Console.WriteLine("В - выход");
+            Console.Write("list - print ToDoList  ");
+            Console.Write("add - add   ");
+            Console.Write("delete - delete    ");
+            Console.Write("edit - edit   ");
+            Console.Write("change - change status   ");
+            Console.WriteLine("exit - exit");
             Console.WriteLine("----------------------------------------------------------");
         }
     }

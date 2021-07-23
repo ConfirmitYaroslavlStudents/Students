@@ -1,22 +1,16 @@
 ﻿namespace ToDoApp
 {
-    interface IMenuProcessor
+    class CommandLineProcessor : AppEngine
     {
-        void Run();
-    }
-
-    class CommandLineProcessor : IMenuProcessor
-    {
-        private readonly MenuHandler _menuProcessor;
-
-        public CommandLineProcessor(MenuHandler menuProcessor)
+        public sealed override ToDoAppMenu ToDoAppMenu { get; }
+        public CommandLineProcessor(ToDoAppMenu toDoAppMenu)
         {
-            _menuProcessor = menuProcessor;
+            ToDoAppMenu = toDoAppMenu;
         }
 
-        public void Run()
+        public override void Run()
         {
-            _menuProcessor.Handle();
+            ToDoAppMenu.DoWork();
         }
     }
 }

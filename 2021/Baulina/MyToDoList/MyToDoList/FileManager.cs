@@ -6,24 +6,23 @@ using MyToDoList;
 
 namespace ToDoApp
 {
-    static class DataHandler
+    internal class FileManager
     {
-        private static readonly string Path = System.IO.Path.Combine(Environment.GetFolderPath(
+        private readonly string _path = Path.Combine(Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData), "ToDoList.txt");
 
-        public static void SaveToFile(ToDoList list)
+        public void SaveToFile(ToDoList list)
         {
             var arrayToSerialize = list.ToArray();
             var json = JsonSerializer.Serialize(arrayToSerialize);
-            File.WriteAllText(Path, json);
+            File.WriteAllText(_path, json);
         }
 
-        public static IEnumerable<ToDoItem> LoadFromFile()
+        public IEnumerable<ToDoItem> LoadFromFile()
         {
-            if (!File.Exists(Path)) return new List<ToDoItem>();
-            var json = File.ReadAllText(Path);
+            if (!File.Exists(_path)) return new List<ToDoItem>();
+            var json = File.ReadAllText(_path);
             return JsonSerializer.Deserialize<ToDoItem[]>(json);
-
         }
     }
 }

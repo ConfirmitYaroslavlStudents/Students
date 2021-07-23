@@ -2,13 +2,13 @@
 using Spectre.Console;
 using Spectre.Console.Rendering;
 
-namespace ConsoleInteractors
+namespace InputOutputManagers
 {
-    public class CommandLineHandler : IConsoleExtended
+    public class CommandLineInteractor : IConsoleExtended
     {
         private readonly List<string> _commandLineArguments = new();
 
-        public CommandLineHandler(IEnumerable<string> args)
+        public CommandLineInteractor(IEnumerable<string> args)
         {
             _commandLineArguments.AddRange(args);
         }
@@ -30,6 +30,5 @@ namespace ConsoleInteractors
         public string GetDescription() => ReadLine();
 
         public string GetMenuItemName() => _commandLineArguments[0].ToLower();
-
     }
 }

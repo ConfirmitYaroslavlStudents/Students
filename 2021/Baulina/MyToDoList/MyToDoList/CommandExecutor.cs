@@ -1,22 +1,28 @@
 ﻿using System;
 using MyToDoList;
-using ConsoleInteractors;
+using InputOutputManagers;
 
 namespace ToDoApp
 {
     public class CommandExecutor : IExecute
     {
         public ToDoList MyToDoList { get; }
-        private readonly ConsoleHandler _consoleHandler;
-        private readonly ErrorPrinter _errorPrinter = new(new MyConsole());
+        private readonly InputOutputManager _inputOutputManager;
+        private readonly ErrorPrinter _errorPrinter = new(new ConsoleInteractor());
         internal bool Empty => MyToDoList.Count == 0;
         public bool IsWorking { get; private set; }
 
-        public CommandExecutor(ToDoList inputList, ConsoleHandler printer)
+        public CommandExecutor(ToDoList inputList, InputOutputManager inputOutputManager)
         {
             MyToDoList = new ToDoList(inputList);
-            _consoleHandler = printer;
+            _inputOutputManager = inputOutputManager;
             IsWorking = true;
+        }
+
+        public CommandExecutor(ToDoList inputList, InputOutputManager inputOutputManager, ErrorPrinter errorPrinter) :
+            this(inputList, inputOutputManager)
+        {
+            _errorPrinter = errorPrinter;
         }
 
         public void RunCommand(Action command)
@@ -24,9 +30,9 @@ namespace ToDoApp
             try
             {
                 command();
-                _consoleHandler.PrintDoneMessage();
-                ViewAllTasks();
-                DataHandler.SaveToFile(MyToDoList);
+                _inputOutputManager.PrintDoneMessage();
+                List();
+                new FileManager().SaveToFile(MyToDoList);
 
             }
             catch (ArgumentOutOfRangeException)
@@ -43,7 +49,7 @@ namespace ToDoApp
         {
             RunCommand(() =>
             {
-                var description = _consoleHandler.GetDescription();
+                var description = _inputOutputManager.GetDescription();
                 MyToDoList.Add(description);
             });
         }
@@ -53,18 +59,18 @@ namespace ToDoApp
             RunCommand(() =>
             {
                 var taskNumber = ChooseTaskNumber();
-                _consoleHandler.PrintNewDescriptionRequest();
-                var newDescription = _consoleHandler.ReadLine();
+                _inputOutputManager.PrintNewDescriptionRequest();
+                var newDescription = _inputOutputManager.ReadLine();
                 MyToDoList.EditDescription(taskNumber, newDescription);
             });
         }
 
-        public void MarkAsComplete()
+        public void Complete()
         {
             RunCommand(() =>
             {
                 var taskNumber = ChooseTaskNumber();
-                MyToDoList.MarkAsComplete(taskNumber);
+                MyToDoList.Complete(taskNumber);
             });
         }
 
@@ -82,7 +88,7 @@ namespace ToDoApp
             IsWorking = false;
         }
 
-        public void ViewAllTasks()
+        public void List()
         {
             if (Empty)
             {
@@ -92,13 +98,13 @@ namespace ToDoApp
 
             var tableBuilder = new TableBuilder(MyToDoList);
             var table = tableBuilder.FormATable();
-            _consoleHandler.RenderTable(table);
+            _inputOutputManager.RenderTable(table);
         }
 
         public int ChooseTaskNumber()
         {
-            _consoleHandler.PrintTaskNumberRequest();
-            var input = _consoleHandler.ReadLine();
+            _inputOutputManager.PrintTaskNumberRequest();
+            var input = _inputOutputManager.ReadLine();
             var result = int.Parse(input);
             if (result < 0 || result >= MyToDoList.Count)
             {

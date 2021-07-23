@@ -1,4 +1,5 @@
-﻿using ConsoleInteractors;
+﻿using InputOutputManagers;
+using MyToDoList;
 
 namespace ToDoApp
 {
@@ -6,18 +7,17 @@ namespace ToDoApp
     {
         static void Main(string[] args)
         {
-            var uploadProcessor = new StartProcessor();
-            uploadProcessor.LoadTheList();
             var isCommandLineExecuted = args.Length != 0;
-            var consoleHandler = isCommandLineExecuted
-                ? new ConsoleHandler(new CommandLineHandler(args))
-                : new ConsoleHandler(new MyConsole());
-            var commandExecutor = new CommandExecutor(uploadProcessor.MyToDoList, consoleHandler);
-            var menuPrinter = new MenuHandler(new OperationGetter(consoleHandler), commandExecutor);
-            IMenuProcessor processor =
-                isCommandLineExecuted ? new CommandLineProcessor(menuPrinter) : new ConsoleMenuProcessor(menuPrinter);
+            var inputOutputManager = isCommandLineExecuted
+                ? new InputOutputManager(new CommandLineInteractor(args))
+                : new InputOutputManager(new ConsoleInteractor());
+            var toDoList = new ToDoList(new FileManager().LoadFromFile());
+            var commandExecutor = new CommandExecutor(toDoList, inputOutputManager);
+            var appMenu = new ToDoAppMenu(new OperationGetter(inputOutputManager), commandExecutor);
+            AppEngine appEngine =
+                isCommandLineExecuted ? new CommandLineProcessor(appMenu) : new ConsoleMenuProcessor(appMenu);
 
-            processor.Run();
+            appEngine.Run();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ToDoListTestProject
         {
             var list = new ToDoList {"Clean the house", "Do the laundry", "Iron the clothes"};
 
-            list.MarkAsComplete(2);
+            list.Complete(2);
 
             Assert.True(list[2].IsComplete);
         }

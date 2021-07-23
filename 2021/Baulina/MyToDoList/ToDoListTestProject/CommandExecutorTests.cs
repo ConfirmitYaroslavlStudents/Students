@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using MyToDoList;
 using ToDoApp;
-using ConsoleInteractors;
+using InputOutputManagers;
 
 namespace ToDoListTestProject
 {
@@ -11,7 +11,7 @@ namespace ToDoListTestProject
         public void IsWorkingIsTrueAfterInitialization()
         {
             var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
             Assert.True(commandExecutor.IsWorking);
         }
@@ -20,7 +20,7 @@ namespace ToDoListTestProject
         public void ToDoListCountIncreasesAfterAddOperation()
         {
             var console = new AppTestConsole(new[] { "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
             commandExecutor.Add();
 
@@ -31,22 +31,11 @@ namespace ToDoListTestProject
         public void DoneMessageIsPrintedAfterAddIsChosen()
         {
             var console = new AppTestConsole(new[] { "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
             commandExecutor.Add();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
-        }
-
-        [Fact]
-        public void ErrorMessageIsPrintedWhenTryingToEditEmptyList()
-        {
-            var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-
-            commandExecutor.Edit();
-
-            Assert.Contains("[red]Incorrect number[/]", console.Messages);
+            Assert.Contains("Done!", console.Messages[1]);
         }
 
         [Fact]
@@ -54,11 +43,11 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
             commandExecutor.Edit();
 
-            Assert.Contains("[lightgoldenrod2_1]Type in a new description[/]", console.Messages);
+            Assert.Contains("Type in a new description", console.Messages[1]);
         }
 
         [Fact]
@@ -66,11 +55,12 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
             commandExecutor.Edit();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
+            Assert.Equal("Water the plants", commandExecutor.MyToDoList[0].Description);
+            Assert.Contains("Done!", console.Messages[3]);
         }
 
         [Fact]
@@ -78,33 +68,12 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.MarkAsComplete();
+            commandExecutor.Complete();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
-        }
-
-        [Fact]
-        public void ErrorMessageIsPrintedWhenTryingToMarkAsCompleteInEmptyList()
-        {
-            var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-
-            commandExecutor.MarkAsComplete();
-
-            Assert.Contains("[red]Incorrect number[/]", console.Messages); 
-        }
-
-        [Fact]
-        public void ErrorMessageIsPrintedWhenTryingToDeleteFromEmptyList()
-        {
-            var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-
-            commandExecutor.Delete();
-
-            Assert.Contains("[red]Incorrect number[/]", console.Messages);
+            Assert.True(commandExecutor.MyToDoList[0].IsComplete);
+            Assert.Contains("Done!", console.Messages[2]);
         }
 
         [Fact]
@@ -112,19 +81,19 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
             commandExecutor.Delete();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
+            Assert.Contains("Done!", console.Messages[2]);
         }
 
         [Fact]
         public void ToDoListCountDecreasesAfterDeleteOperation()
         {
-            var console = new AppTestConsole(new[] {"0"});
+            var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
             commandExecutor.Delete();
 
@@ -135,7 +104,7 @@ namespace ToDoListTestProject
         public void IsWorkingIsFalseAfterExitIsChosen()
         {
             var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
             commandExecutor.Exit();
 
@@ -146,10 +115,10 @@ namespace ToDoListTestProject
         public void TableIsPrintedWhenViewAllTasksIsChosen()
         {
             var console = new AppTestConsole();
-            var toDoList = new ToDoList() {"Wash the dishes"};
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var toDoList = new ToDoList() { "Wash the dishes" };
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.ViewAllTasks();
+            commandExecutor.List();
 
             Assert.Contains("Rendered", console.Messages);
         }
@@ -159,35 +128,12 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
             commandExecutor.ChooseTaskNumber();
 
             Assert.Contains("Choose the task number", console.Messages[0]);
         }
-
-        [Fact]
-        public void IncorrectNumberMessageIsPrintedWhenChooseWrongTaskNumber()
-        {
-            var console = new AppTestConsole(new[] {"5", "0"});
-            var toDoList = new ToDoList() {"Wash the dishes"};
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-
-            commandExecutor.MarkAsComplete();
-
-            Assert.Contains("[red]Incorrect number[/]", console.Messages);
-        }
-
-        [Fact]
-        public void ErrorMessageIsPrintedWhenChooseTaskNumberCantIntParse()
-        {
-            var console = new AppTestConsole(new[] { "nrtbfv" });
-            var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-
-            commandExecutor.MarkAsComplete();
-
-            Assert.Contains("[red]Something went wrong...You might want to try one more time[/]", console.Messages);
-        }
     }
 }
+

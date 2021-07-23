@@ -1,4 +1,4 @@
-﻿using ConsoleInteractors;
+﻿using InputOutputManagers;
 
 namespace ToDoApp
 {
@@ -9,14 +9,14 @@ namespace ToDoApp
 
     public class OperationGetter:IOperationGetter
     {
-        private readonly IConsoleExtended _consoleHandler;
-        public OperationGetter(IConsoleExtended consoleHandler)
+        private readonly IConsoleExtended _console;
+        public OperationGetter(IConsoleExtended console)
         {
-            _consoleHandler = consoleHandler;
+            _console = console;
         }
         public string GetOperationName()
         {
-            return _consoleHandler.GetMenuItemName();
+            return _console.GetMenuItemName();
         }
     }
 }

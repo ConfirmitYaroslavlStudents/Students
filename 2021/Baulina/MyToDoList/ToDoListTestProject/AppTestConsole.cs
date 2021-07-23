@@ -1,30 +1,30 @@
 ﻿using System.Collections.Generic;
 using Spectre.Console.Rendering;
-using ConsoleInteractors;
+using InputOutputManagers;
 
 namespace ToDoListTestProject
 {
     class AppTestConsole : IConsoleExtended
     {
         public List<string> Messages = new List<string>();
-        private readonly List<string> _linesToRead = new List<string>();
+        public readonly List<string> LinesToRead = new List<string>();
 
         public AppTestConsole() { }
         public AppTestConsole(IEnumerable<string> linesToRead)
         {
-            _linesToRead.AddRange(linesToRead);
+            LinesToRead.AddRange(linesToRead);
         }
 
         public void WriteLine(string message) => Messages.Add(message);
-        public string ReadLine()
+        public virtual string ReadLine()
         {
-            var result = _linesToRead[0];
-            _linesToRead.RemoveAt(0);
+            var result = LinesToRead[0];
+            LinesToRead.RemoveAt(0);
             return result;
         }
         public void RenderTable(IRenderable table) => Messages.Add("Rendered");
         public void Clear() => Messages.Add("Cleared");
         public string GetDescription() => ReadLine();
-        public string GetMenuItemName() => ReadLine();
+        public virtual string GetMenuItemName() => ReadLine();
     }
 }

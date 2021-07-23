@@ -1,10 +1,11 @@
-﻿namespace ConsoleInteractors
+﻿namespace InputOutputManagers
 {
     interface IErrorHandler
     {
         void PrintErrorMessage();
         void PrintIncorrectNumberWarning();
     }
+
     public class ErrorPrinter : IErrorHandler, IConsole
     {
         private readonly IConsoleExtended _console;

@@ -1,20 +1,12 @@
-﻿using Spectre.Console;
-using Spectre.Console.Rendering;
+﻿using Spectre.Console.Rendering;
 
-namespace ConsoleInteractors
+namespace InputOutputManagers
 {
-    public interface IAnsiConsolePrint
-    {
-        void PrintNewDescriptionRequest();
-        void PrintDoneMessage();
-        void PrintTaskNumberRequest();
-    }
-
-    public class ConsoleHandler : IAnsiConsolePrint, IConsoleExtended
+    public class InputOutputManager : IConsoleExtended
     {
         private readonly IConsoleExtended _console;
 
-        public ConsoleHandler(IConsoleExtended console) => _console = console;
+        public InputOutputManager(IConsoleExtended console) => _console = console;
 
         public void PrintNewDescriptionRequest()
         {

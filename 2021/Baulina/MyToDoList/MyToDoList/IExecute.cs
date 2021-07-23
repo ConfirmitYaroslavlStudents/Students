@@ -4,9 +4,9 @@
     {
         void Add();
         void Edit();
-        void MarkAsComplete();
+        void Complete();
         void Delete();
-        void ViewAllTasks();
+        void List();
     }
 
 }

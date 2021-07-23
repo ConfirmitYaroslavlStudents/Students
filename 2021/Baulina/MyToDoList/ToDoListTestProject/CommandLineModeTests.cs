@@ -1,7 +1,7 @@
 ﻿using MyToDoList;
 using ToDoApp;
 using Xunit;
-using ConsoleInteractors;
+using InputOutputManagers;
 
 namespace ToDoListTestProject
 {
@@ -10,8 +10,8 @@ namespace ToDoListTestProject
         [Fact]
         public void GetMenuItemNameIsNotCaseSensitive()
         {
-            var cmdParserOne = new CommandLineHandler(new []{"Add"});
-            var cmdParserTwo = new CommandLineHandler(new[] {"aDD"});
+            var cmdParserOne = new CommandLineInteractor(new []{"Add"});
+            var cmdParserTwo = new CommandLineInteractor(new[] {"aDD"});
             
             Assert.Equal("add",cmdParserOne.GetMenuItemName());
             Assert.Equal("add",cmdParserTwo.GetMenuItemName());
@@ -21,10 +21,10 @@ namespace ToDoListTestProject
         public void ToDoListCountIncreasesAfterAddOperation()
         {
             var console = new ClTestConsole(new[] {"Add", "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
             Assert.Single(commandExecutor.MyToDoList);
         }
@@ -33,24 +33,24 @@ namespace ToDoListTestProject
         public void DoneMessageIsPrintedAfterAddIsChosen()
         {
             var console = new ClTestConsole(new[] { "Add", "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
+            Assert.Contains("Done!", console.Messages[1]);
         }
 
         [Fact]
         public void ErrorNumberMessageIsPrintedWhenTryingToEditEmptyList()
         {
             var console = new ClTestConsole(new[] { "Edit"});
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[red]Something went wrong...You might want to try one more time[/]", console.Messages);
+            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
 
         [Fact]
@@ -58,12 +58,13 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Edit", "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[lightgoldenrod2_1]Type in a new description[/]", console.Messages);
+            Assert.Contains("Type in a new description", console.Messages[1]);
+            Assert.Single(commandExecutor.MyToDoList);
         }
 
         [Fact]
@@ -71,49 +72,50 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Edit", "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
+            Assert.Contains("Done!", console.Messages[3]);
         }
 
         [Fact]
         public void DoneMessageIsPrintedAfterMarkAsCompleteIsChosen()
         {
-            var console = new ClTestConsole(new[] {"Mark as complete", "0" });
+            var console = new ClTestConsole(new[] {"Complete", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
+            Assert.Contains("Done!", console.Messages[2]);
+            Assert.True(commandExecutor.MyToDoList[0].IsComplete);
         }
 
         [Fact]
         public void ErrorMessageIsPrintedWhenTryingToMarkAsCompleteInEmptyList()
         {
-            var console = new ClTestConsole(new[] {"Mark as complete"});
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var console = new ClTestConsole(new[] {"Complete"});
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[red]Something went wrong...You might want to try one more time[/]", console.Messages);
+            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
 
         [Fact]
         public void ErrorMessageIsPrintedWhenTryingToDeleteFromEmptyList()
         {
             var console = new ClTestConsole(new[] { "Delete" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[red]Something went wrong...You might want to try one more time[/]", console.Messages);
+            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
 
         [Fact]
@@ -121,12 +123,12 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Delete", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[bold green]Done![/]", console.Messages);
+            Assert.Contains("Done!", console.Messages[2]);
         }
 
         [Fact]
@@ -134,10 +136,10 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Delete", "0"});
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
             Assert.Empty(commandExecutor.MyToDoList);
         }
@@ -146,10 +148,10 @@ namespace ToDoListTestProject
         public void IsWorkingIsFalseAfterExitIsChosen()
         {
             var console = new ClTestConsole(new []{"Exit"});
-            var commandExecutor = new CommandExecutor(new ToDoList(), new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
             Assert.False(commandExecutor.IsWorking);
         }
@@ -157,12 +159,12 @@ namespace ToDoListTestProject
         [Fact]
         public void TableIsPrintedWhenViewAllTasksIsChosen()
         {
-            var console = new ClTestConsole(new[] {"View all tasks"});
+            var console = new ClTestConsole(new[] {"List"});
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
             Assert.Contains("Rendered", console.Messages);
         }
@@ -172,12 +174,12 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Delete"});
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[red]Something went wrong...You might want to try one more time[/]", console.Messages);
+            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
 
         [Fact]
@@ -185,12 +187,12 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Edit", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new ConsoleHandler(console));
-            var menuHandler = new MenuHandler(new OperationGetter(console), commandExecutor);
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
+            var appMenu = new ToDoAppMenu(new OperationGetter(console), commandExecutor);
 
-            menuHandler.Handle();
+            appMenu.DoWork();
 
-            Assert.Contains("[red]Something went wrong...You might want to try one more time[/]", console.Messages);
+            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[2]);
         }
     }
 }

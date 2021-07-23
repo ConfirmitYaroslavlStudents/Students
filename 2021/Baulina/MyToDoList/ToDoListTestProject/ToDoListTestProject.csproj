@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleInteractors\ConsoleInteractors.csproj" />
+    <ProjectReference Include="..\ConsoleInteractors\InputOutputManagers.csproj" />
     <ProjectReference Include="..\MyToDoList\ToDoApp.csproj" />
     <ProjectReference Include="..\ToDoList\MyToDoList.csproj" />
   </ItemGroup>

@@ -27,24 +27,14 @@ namespace MyToDoList
         {
             if (string.IsNullOrEmpty(newDescription))
                 throw new ArgumentNullException();
-            EditDescription(this[index], newDescription);
+            this[index].Description = newDescription;
         }
 
-        private void EditDescription(ToDoItem item, string newDescription)
+        public void Complete(int index)
         {
-            item.Description = newDescription;
+            this[index].IsComplete = true;
         }
 
-        public void MarkAsComplete(int index)
-        {
-            MarkAsComplete(this[index]);
-        }
-
-        private void MarkAsComplete(ToDoItem item)
-        {
-            item.IsComplete = true;
-        }
-        
         public void Delete(int index)
         {
             Remove(this[index]);

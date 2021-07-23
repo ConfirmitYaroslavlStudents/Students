@@ -1,4 +1,4 @@
-﻿using ConsoleInteractors;
+﻿using InputOutputManagers;
 
 namespace ToDoApp
 {
@@ -30,9 +30,9 @@ namespace ToDoApp
                 {_commandExecutor.Edit();
                     break;
                 }
-                case "mark as complete":
+                case "complete":
                 {
-                    _commandExecutor.MarkAsComplete();
+                    _commandExecutor.Complete();
                     break;
                 }
                 case "delete":
@@ -40,9 +40,9 @@ namespace ToDoApp
                     _commandExecutor.Delete();
                     break;
                 }
-                case "view all tasks":
+                case "list":
                 {
-                    _commandExecutor.ViewAllTasks();
+                    _commandExecutor.List();
                     break;
                 }
                 case "exit":

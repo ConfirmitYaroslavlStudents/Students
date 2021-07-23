@@ -1,19 +1,19 @@
 ﻿namespace ToDoApp
 {
-    class ConsoleMenuProcessor : IMenuProcessor
+    class ConsoleMenuProcessor : AppEngine
     {
-        private readonly MenuHandler _menuProcessor;
+        public sealed override ToDoAppMenu ToDoAppMenu { get; }
 
-        public ConsoleMenuProcessor(MenuHandler menuProcessor)
+        public ConsoleMenuProcessor(ToDoAppMenu toDoAppMenu)
         {
-            _menuProcessor = menuProcessor;
+            ToDoAppMenu = toDoAppMenu;
         }
-
-        public void Run()
+        
+        public override void Run()
         {
-            while (_menuProcessor.CommandExecutor.IsWorking)
+            while (ToDoAppMenu.CommandExecutor.IsWorking)
             {
-                _menuProcessor.Handle();
+                ToDoAppMenu.DoWork();
             }
         }
     }

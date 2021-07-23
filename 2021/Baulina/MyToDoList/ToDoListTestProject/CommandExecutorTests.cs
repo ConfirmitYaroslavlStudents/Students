@@ -22,7 +22,7 @@ namespace ToDoListTestProject
             var console = new AppTestConsole(new[] { "Water the plants" });
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
-            commandExecutor.Add();
+            commandExecutor.RunCommand(commandExecutor.Add());
 
             Assert.Single(commandExecutor.MyToDoList);
         }
@@ -33,7 +33,7 @@ namespace ToDoListTestProject
             var console = new AppTestConsole(new[] { "Water the plants" });
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
-            commandExecutor.Add();
+            commandExecutor.RunCommand(commandExecutor.Add());
 
             Assert.Contains("Done!", console.Messages[1]);
         }
@@ -45,7 +45,7 @@ namespace ToDoListTestProject
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.Edit();
+            commandExecutor.RunCommand(commandExecutor.Edit());
 
             Assert.Contains("Type in a new description", console.Messages[1]);
         }
@@ -57,7 +57,7 @@ namespace ToDoListTestProject
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.Edit();
+            commandExecutor.RunCommand(commandExecutor.Edit());
 
             Assert.Equal("Water the plants", commandExecutor.MyToDoList[0].Description);
             Assert.Contains("Done!", console.Messages[3]);
@@ -70,7 +70,7 @@ namespace ToDoListTestProject
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.Complete();
+            commandExecutor.RunCommand(commandExecutor.Complete());
 
             Assert.True(commandExecutor.MyToDoList[0].IsComplete);
             Assert.Contains("Done!", console.Messages[2]);
@@ -83,7 +83,7 @@ namespace ToDoListTestProject
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.Delete();
+            commandExecutor.RunCommand(commandExecutor.Delete());
 
             Assert.Contains("Done!", console.Messages[2]);
         }
@@ -95,7 +95,7 @@ namespace ToDoListTestProject
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.Delete();
+            commandExecutor.RunCommand(commandExecutor.Delete());
 
             Assert.Empty(commandExecutor.MyToDoList);
         }
@@ -106,7 +106,7 @@ namespace ToDoListTestProject
             var console = new AppTestConsole();
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
 
-            commandExecutor.Exit();
+            commandExecutor.RunCommand(commandExecutor.Exit());
 
             Assert.False(commandExecutor.IsWorking);
         }
@@ -118,7 +118,7 @@ namespace ToDoListTestProject
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
 
-            commandExecutor.List();
+            commandExecutor.RunCommand(commandExecutor.List());
 
             Assert.Contains("Rendered", console.Messages);
         }

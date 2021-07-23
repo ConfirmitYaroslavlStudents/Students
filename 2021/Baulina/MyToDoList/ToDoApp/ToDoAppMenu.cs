@@ -1,25 +1,20 @@
-﻿using InputOutputManagers;
-
-namespace ToDoApp
+﻿namespace ToDoApp
 {
     public class ToDoAppMenu
     {
         private readonly OperationGetter _operationGetter;
-        private readonly OperationHandler _operationHandler;
-        public CommandExecutor CommandExecutor { get; }
+        private readonly CommandExecutor _commandExecutor;
 
         public ToDoAppMenu(OperationGetter operationGetter, CommandExecutor commandExecutor)
         {
             _operationGetter = operationGetter;
-            CommandExecutor = commandExecutor;
-            _operationHandler =
-                new OperationHandler(CommandExecutor, new ErrorPrinter(new InputOutputManager(new ConsoleInteractor())));
+            _commandExecutor = commandExecutor;
         }
 
         public void DoWork()
         {
-            var operation = _operationGetter.GetOperationName();
-            _operationHandler.HandleOperation(operation);
+            var operation = _operationGetter.GetOperation();
+            _commandExecutor.RunCommand(operation);
         }
     }
 }

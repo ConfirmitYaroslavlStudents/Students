@@ -30,8 +30,6 @@ namespace ToDoApp
             try
             {
                 command();
-                _inputOutputManager.PrintDoneMessage();
-                List();
                 new FileManager().SaveToFile(MyToDoList);
 
             }
@@ -45,60 +43,73 @@ namespace ToDoApp
             }
         }
 
-        public void Add()
+        public Action Add()
         {
-            RunCommand(() =>
+            return () =>
             {
                 var description = _inputOutputManager.GetDescription();
                 MyToDoList.Add(description);
-            });
+                _inputOutputManager.PrintDoneMessage();
+                RunCommand(List());
+            };
         }
 
-        public void Edit()
+        public Action Edit()
         {
-            RunCommand(() =>
+            return () =>
             {
                 var taskNumber = ChooseTaskNumber();
                 _inputOutputManager.PrintNewDescriptionRequest();
                 var newDescription = _inputOutputManager.ReadLine();
                 MyToDoList.EditDescription(taskNumber, newDescription);
-            });
+                _inputOutputManager.PrintDoneMessage();
+                RunCommand(List());
+            };
         }
 
-        public void Complete()
+        public Action Complete()
         {
-            RunCommand(() =>
+            return () =>
             {
                 var taskNumber = ChooseTaskNumber();
                 MyToDoList.Complete(taskNumber);
-            });
+                _inputOutputManager.PrintDoneMessage();
+                RunCommand(List());
+            };
         }
 
-        public void Delete()
+        public Action Delete()
         {
-            RunCommand(() =>
+            return () =>
             {
                 var taskNumber = ChooseTaskNumber();
                 MyToDoList.Delete(taskNumber);
-            });
+                _inputOutputManager.PrintDoneMessage();
+                RunCommand(List());
+            };
         }
 
-        public void Exit()
+        public Action Exit()
         {
-            IsWorking = false;
-        }
-
-        public void List()
-        {
-            if (Empty)
+            return () =>
             {
-                _errorPrinter.PrintErrorMessage();
-                return;
-            }
+                IsWorking = false;
+            };
+        }
 
-            var tableBuilder = new TableBuilder(MyToDoList);
-            var table = tableBuilder.FormATable();
-            _inputOutputManager.RenderTable(table);
+        public Action List()
+        {
+            return () =>
+            {
+                var tableBuilder = new TableBuilder(MyToDoList);
+                var table = tableBuilder.FormATable();
+                _inputOutputManager.RenderTable(table);
+            };
+        }
+
+        public Action Error()
+        {
+            return () => _errorPrinter.PrintErrorMessage();
         }
 
         public int ChooseTaskNumber()

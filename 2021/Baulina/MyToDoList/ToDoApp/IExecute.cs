@@ -1,12 +1,15 @@
-﻿namespace ToDoApp
+﻿using System;
+
+namespace ToDoApp
 {
     public interface IExecute
     {
-        void Add();
-        void Edit();
-        void Complete();
-        void Delete();
-        void List();
+        Action Add();
+        Action Edit();
+        Action Complete();
+        Action Delete();
+        Action List();
+        Action Error();
     }
 
 }

@@ -2,7 +2,7 @@
 {
     abstract class AppEngine
     {
-        public abstract ToDoAppMenu ToDoAppMenu { get; }
+        public abstract AppController ToDoAppController { get; }
 
         public abstract void Run();
     }

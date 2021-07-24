@@ -22,9 +22,9 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Add", "Water the plants" });
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Single(commandExecutor.MyToDoList);
         }
@@ -34,9 +34,9 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Add", "Water the plants" });
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Done!", console.Messages[1]);
         }
@@ -46,9 +46,9 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Edit"});
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
@@ -59,9 +59,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] {"Edit", "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Type in a new description", console.Messages[1]);
             Assert.Single(commandExecutor.MyToDoList);
@@ -73,9 +73,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] {"Edit", "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Done!", console.Messages[3]);
         }
@@ -86,9 +86,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] {"Complete", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Done!", console.Messages[2]);
             Assert.True(commandExecutor.MyToDoList[0].IsComplete);
@@ -99,9 +99,9 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Complete"});
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
@@ -111,9 +111,9 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Delete" });
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
@@ -124,9 +124,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] {"Delete", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Done!", console.Messages[2]);
         }
@@ -137,9 +137,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] {"Delete", "0"});
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Empty(commandExecutor.MyToDoList);
         }
@@ -149,9 +149,9 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new []{"Exit"});
             var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.False(commandExecutor.IsWorking);
         }
@@ -162,9 +162,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] {"List"});
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Rendered", console.Messages);
         }
@@ -175,9 +175,9 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] { "Delete"});
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[1]);
         }
@@ -188,11 +188,24 @@ namespace ToDoListTestProject
             var console = new ClTestConsole(new[] { "Edit", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
             var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
-            var appMenu = new ToDoAppMenu(new OperationGetter(console, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, console);
 
-            appMenu.DoWork();
+            appController.SendOperationToExecutor();
 
             Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[2]);
+        }
+
+        [Fact]
+        public void ErrorMessageIsPrintedWhenIncorrectCommand()
+        {
+            var console = new ClTestConsole(new[] { "fdntgrj6d", "0" });
+            var toDoList = new ToDoList() { "Wash the dishes" };
+            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
+            var appController = new AppController(commandExecutor, console);
+
+            appController.SendOperationToExecutor();
+
+            Assert.Contains("Something went wrong...You might want to try one more time", console.Messages[0]);
         }
     }
 }

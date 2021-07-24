@@ -2,15 +2,15 @@
 {
     class CommandLineProcessor : AppEngine
     {
-        public sealed override ToDoAppMenu ToDoAppMenu { get; }
-        public CommandLineProcessor(ToDoAppMenu toDoAppMenu)
+        public sealed override AppController ToDoAppController { get; }
+        public CommandLineProcessor(AppController toDoAppMenu)
         {
-            ToDoAppMenu = toDoAppMenu;
+            ToDoAppController = toDoAppMenu;
         }
 
         public override void Run()
         {
-            ToDoAppMenu.DoWork();
+            ToDoAppController.SendOperationToExecutor();
         }
     }
 }

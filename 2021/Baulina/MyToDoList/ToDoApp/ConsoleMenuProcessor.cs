@@ -2,18 +2,18 @@
 {
     class ConsoleMenuProcessor : AppEngine
     {
-        public sealed override ToDoAppMenu ToDoAppMenu { get; }
+        public sealed override AppController ToDoAppController { get; }
 
-        public ConsoleMenuProcessor(ToDoAppMenu toDoAppMenu)
+        public ConsoleMenuProcessor(AppController toDoAppMenu)
         {
-            ToDoAppMenu = toDoAppMenu;
+            ToDoAppController = toDoAppMenu;
         }
         
         public override void Run()
         {
-            while (ToDoAppMenu.CommandExecutor.IsWorking)
+            while (ToDoAppController.CommandExecutor.IsWorking)
             {
-                ToDoAppMenu.DoWork();
+                ToDoAppController.SendOperationToExecutor();
             }
         }
     }

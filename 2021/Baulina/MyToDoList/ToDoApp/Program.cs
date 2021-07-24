@@ -13,9 +13,9 @@ namespace ToDoApp
                 : new InputOutputManager(new ConsoleInteractor());
             var toDoList = new ToDoList(new FileManager().LoadFromFile());
             var commandExecutor = new CommandExecutor(toDoList, inputOutputManager);
-            var appMenu = new ToDoAppMenu(new OperationGetter(inputOutputManager, commandExecutor), commandExecutor);
+            var appController = new AppController(commandExecutor, inputOutputManager);
             AppEngine appEngine =
-                isCommandLineExecuted ? new CommandLineProcessor(appMenu) : new ConsoleMenuProcessor(appMenu);
+                isCommandLineExecuted ? new CommandLineProcessor(appController) : new ConsoleMenuProcessor(appController);
 
             appEngine.Run();
         }

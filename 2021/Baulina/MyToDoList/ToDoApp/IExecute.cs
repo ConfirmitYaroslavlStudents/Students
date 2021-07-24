@@ -4,12 +4,14 @@ namespace ToDoApp
 {
     public interface IExecute
     {
-        Action Add();
-        Action Edit();
-        Action Complete();
-        Action Delete();
-        Action List();
-        Action Error();
+        void ProcessOperation(string operationName);
+        void RunCommand(Action command);
+        void Add();
+        void Edit();
+        void Complete();
+        void Delete();
+        void List();
+        void Error();
     }
 
 }

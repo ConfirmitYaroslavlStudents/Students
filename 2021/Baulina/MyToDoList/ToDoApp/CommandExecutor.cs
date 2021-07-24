@@ -25,6 +25,48 @@ namespace ToDoApp
             _errorPrinter = errorPrinter;
         }
 
+        public void ProcessOperation(string operationName)
+        {
+            switch (operationName)
+            {
+                case "add":
+                    {
+                        RunCommand(Add);
+                        break;
+                    }
+                case "edit":
+                {
+                    RunCommand(Edit);
+                    break;
+                }
+                case "complete":
+                {
+                    RunCommand(Complete);
+                    break;
+                }
+                case "delete":
+                {
+                    RunCommand(Delete);
+                    break;
+                }
+                case "list":
+                {
+                    RunCommand(List);
+                    break;
+                }
+                case "exit":
+                {
+                    RunCommand(Exit);
+                    break;
+                }
+                default:
+                {
+                    RunCommand(Error);
+                    break;
+                }
+            }
+        }
+
         public void RunCommand(Action command)
         {
             try
@@ -43,73 +85,55 @@ namespace ToDoApp
             }
         }
 
-        public Action Add()
+        public void Add()
         {
-            return () =>
-            {
-                var description = _inputOutputManager.GetDescription();
-                MyToDoList.Add(description);
-                _inputOutputManager.PrintDoneMessage();
-                RunCommand(List());
-            };
+            var description = _inputOutputManager.GetDescription();
+            MyToDoList.Add(description);
+            _inputOutputManager.PrintDoneMessage();
+            List();
         }
 
-        public Action Edit()
+        public void Edit()
         {
-            return () =>
-            {
-                var taskNumber = ChooseTaskNumber();
-                _inputOutputManager.PrintNewDescriptionRequest();
-                var newDescription = _inputOutputManager.ReadLine();
-                MyToDoList.EditDescription(taskNumber, newDescription);
-                _inputOutputManager.PrintDoneMessage();
-                RunCommand(List());
-            };
+            var taskNumber = ChooseTaskNumber();
+            _inputOutputManager.PrintNewDescriptionRequest();
+            var newDescription = _inputOutputManager.ReadLine();
+            MyToDoList.EditDescription(taskNumber, newDescription);
+            _inputOutputManager.PrintDoneMessage();
+            List();
         }
 
-        public Action Complete()
+        public void Complete()
         {
-            return () =>
-            {
-                var taskNumber = ChooseTaskNumber();
-                MyToDoList.Complete(taskNumber);
-                _inputOutputManager.PrintDoneMessage();
-                RunCommand(List());
-            };
+            var taskNumber = ChooseTaskNumber();
+            MyToDoList.Complete(taskNumber);
+            _inputOutputManager.PrintDoneMessage();
+            List();
         }
 
-        public Action Delete()
+        public void Delete()
         {
-            return () =>
-            {
-                var taskNumber = ChooseTaskNumber();
+            var taskNumber = ChooseTaskNumber();
                 MyToDoList.Delete(taskNumber);
                 _inputOutputManager.PrintDoneMessage();
-                RunCommand(List());
-            };
+            List();
         }
 
-        public Action Exit()
+        public void Exit()
         {
-            return () =>
-            {
-                IsWorking = false;
-            };
+            IsWorking = false;
         }
 
-        public Action List()
+        public void List()
         {
-            return () =>
-            {
-                var tableBuilder = new TableBuilder(MyToDoList);
-                var table = tableBuilder.FormATable();
-                _inputOutputManager.RenderTable(table);
-            };
+            var tableBuilder = new TableBuilder(MyToDoList);
+            var table = tableBuilder.FormATable();
+            _inputOutputManager.RenderTable(table);
         }
 
-        public Action Error()
+        public void Error()
         {
-            return () => _errorPrinter.PrintErrorMessage();
+            _errorPrinter.PrintErrorMessage();
         }
 
         public int ChooseTaskNumber()

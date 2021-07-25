@@ -2,13 +2,15 @@
 {
     public class TestLoaderSaver : IToDoListLoaderSaver
     {
+        public ToDoList ToDoList=new ToDoList();
         public ToDoList Load()
         {
-            return new ToDoList();
+            return ToDoList;
         }
 
         public void Save(ToDoList toDoList)
         {
+            ToDoList = toDoList;
         }
     }
 }

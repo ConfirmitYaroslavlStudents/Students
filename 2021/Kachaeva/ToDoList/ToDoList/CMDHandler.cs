@@ -7,29 +7,37 @@ namespace ToDo
     public class CMDHandler : CommandHandler
     {
         private readonly string[] _input;
+        private int _inputIndex;
 
-        public CMDHandler(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader, string[] input) : base(loaderSaver, writerReader)
+        public CMDHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, string[] input) : base(loaderSaver, logger)
         {
             _input = input;
+            _inputIndex = 0;
         }
 
         public override void HandleUsersInput()
         {
-            var selectedAction = _input[0];
-            ExecuteCommand(selectedAction);
+            while (_inputIndex < _input.Length)
+            {
+                var selectedAction = _input[_inputIndex];
+                _inputIndex++;
+                TryToRunCommand(selectedAction);
+            }
             _loaderSaver.Save(_toDoList);
         }
 
-        protected override string GetTextInput()
+        protected override string GetTaskTextInput()
         {
-            if(_input.Length==2)
-                return _input[1];
-            return _input[2];
+            var taskTextInput = _input[_inputIndex];
+            _inputIndex++;
+            return taskTextInput;
         }
 
-        protected override string GetNumberInput()
+        protected override string GetTaskNumberInput()
         {
-            return _input[1];
+            var taskNumberInput = _input[_inputIndex];
+            _inputIndex++;
+            return taskNumberInput;
         }
     }
 }

@@ -7,123 +7,116 @@ namespace ToDo
     public abstract class CommandHandler
     {
         protected readonly IToDoListLoaderSaver _loaderSaver;
-        protected readonly IWriterReader _writerReader;
+        protected readonly ILogger _logger;
         protected readonly ToDoList _toDoList;
 
-        public CommandHandler(IToDoListLoaderSaver loaderSaver, IWriterReader writerReader)
+        public CommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger)
         {
             _loaderSaver = loaderSaver;
-            _writerReader = writerReader;
+            _logger = logger;
             _toDoList = _loaderSaver.Load();
         }
 
         public abstract void HandleUsersInput();
 
-        protected void ExecuteCommand(string selectedAction)
-        {
-            var command = GetCommand(selectedAction);
-            RunCommand(command);
-        }
-
-        private Action GetCommand(string selectedAction)
-        {
-            return selectedAction switch
-            {
-                Menu.DisplayToDoList => HandleToDoListDisplay,
-                Menu.AddTask => HandleTaskAddition,
-                Menu.RemoveTask => HandleTaskRemove,
-                Menu.ChangeTaskText => HandleTaskTextChange,
-                Menu.ChangeTaskStatus => HandleTaskStatusChange,
-                _ => HandleIncorrectCommand
-            };
-        }
-
-        private void RunCommand(Action command)
+        protected void TryToRunCommand(string selectedAction)
         {
             try
             {
-                command();
+                RunCommand(selectedAction);
             }
             catch (ArgumentException e)
             {
-                _writerReader.Write(e.Message);
+                _logger.Log(e.Message);
+            }
+        }
+
+        private void RunCommand(string selectedAction)
+        {
+            switch (selectedAction)
+            {
+                case ToDoListCommands.DisplayToDoList:
+                    HandleToDoListDisplay();
+                    break;
+                case ToDoListCommands.AddTask:
+                    var taskText = GetTaskText();
+                    HandleTaskAddition(taskText);
+                    break;
+                case ToDoListCommands.RemoveTask:
+                    var taskNumber = GetTaskNumber();
+                    HandleTaskRemove(taskNumber);
+                    break;
+                case ToDoListCommands.ChangeTaskText:
+                    taskNumber = GetTaskNumber();
+                    taskText = GetTaskText();
+                    HandleTaskTextChange(taskNumber, taskText);
+                    break;
+                case ToDoListCommands.ToggleTaskStatus:
+                    taskNumber = GetTaskNumber();
+                    HandleTaskStatusToggle(taskNumber);
+                    break;
+                default:
+                    HandleIncorrectCommand();
+                    break;
             }
         }
 
         private void HandleToDoListDisplay()
         {
             if (_toDoList.Count == 0)
-                _writerReader.Write("Список пуст\r\n");
-            else
-                _writerReader.Write(_toDoList.ToString());
+                throw new ArgumentException("Список пуст");
+            _logger.Log(_toDoList.ToString());
         }
 
-        private void HandleTaskAddition()
+        private void HandleTaskAddition(string taskText)
         {
-            RunCommand(() =>
-            {
-                var newText = GetNewTaskText();
-                _toDoList.Add(new Task(newText));
-                _writerReader.Write("Задание добавлено\r\n");
-            });
+            _toDoList.Add(new Task(taskText));
+            _logger.Log("Задание добавлено");
         }
 
-        private void HandleTaskRemove()
+        private void HandleTaskRemove(int taskNumber)
         {
-            RunCommand(() =>
-            {
-                var number = GetTaskNumber();
-                _toDoList.Remove(number - 1);
-                _writerReader.Write("Задание удалено\r\n");
-            });
+            _toDoList.Remove(taskNumber - 1);
+            _logger.Log("Задание удалено");
         }
 
-        private void HandleTaskTextChange()
+        private void HandleTaskTextChange(int taskNumber, string taskText)
         {
-            RunCommand(() =>
-            {
-                var number = GetTaskNumber();
-                var newText = GetNewTaskText();
-                _toDoList[number - 1].Text = newText;
-                _writerReader.Write("Текст задания изменен\r\n");
-            });
+            _toDoList[taskNumber - 1].Text = taskText;
+            _logger.Log("Текст задания изменен");
         }
 
-        private void HandleTaskStatusChange()
+        private void HandleTaskStatusToggle(int taskNumber)
         {
-            RunCommand(() =>
-            {
-                var number = GetTaskNumber();
-                var task = _toDoList[number - 1];
-                task.IsDone = !task.IsDone;
-                _writerReader.Write("Статус задания изменен\r\n");
-            });
+            var task = _toDoList[taskNumber - 1];
+            task.IsDone = !task.IsDone;
+            _logger.Log("Статус задания изменен");
         }
 
         private void HandleIncorrectCommand()
         {
-            throw new ArgumentException("Некорректная команда\r\n");
+            throw new ArgumentException("Некорректная команда");
         }
 
-        private string GetNewTaskText()
+        private string GetTaskText()
         {
-            var newText = GetTextInput();
+            var newText = GetTaskTextInput();
             if (String.IsNullOrEmpty(newText))
-                throw new ArgumentException("Нельзя добавить пустое задание\r\n");
+                throw new ArgumentException("Нельзя добавить пустое задание");
             return newText;
         }
+
         private int GetTaskNumber()
         {
-            var input = GetNumberInput();
-            if (!int.TryParse(input, out int number))
-                throw new ArgumentException("Нужно ввести число\r\n");
-            if (number > _toDoList.Count || number < 1)
-                throw new ArgumentException("Задания с таким номером не существует\r\n");
-            return number;
+            var taskNumberInput = GetTaskNumberInput();
+            if (!int.TryParse(taskNumberInput, out int taskNumber))
+                throw new ArgumentException("Нужно ввести число");
+            if (taskNumber > _toDoList.Count || taskNumber < 1)
+                throw new ArgumentException("Задания с таким номером не существует");
+            return taskNumber;
         }
 
-        protected abstract string GetTextInput();
-
-        protected abstract string GetNumberInput();
+        protected abstract string GetTaskTextInput();
+        protected abstract string GetTaskNumberInput();
     }
 }

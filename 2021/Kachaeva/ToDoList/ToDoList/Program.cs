@@ -6,12 +6,13 @@
         {
             var fileName = "ToDoList.txt";
             var fileWorkHandler = new FileWorkHandler(fileName);
-            var consoleWriterReader = new ConsoleWriterReader();
+            var logger = new ConsoleLogger();
+            var reader = new ConsoleReader();
             CommandHandler handler;
             if (args.Length != 0)
-                handler = new CMDHandler(fileWorkHandler,consoleWriterReader, args);
+                handler = new CMDHandler(fileWorkHandler,logger, args);
             else
-                handler = new ConsoleHandler(fileWorkHandler, consoleWriterReader);
+                handler = new MenuCommandHandler(fileWorkHandler, logger, reader);
             handler.HandleUsersInput();
         }
     }

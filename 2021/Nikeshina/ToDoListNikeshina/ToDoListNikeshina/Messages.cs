@@ -6,7 +6,7 @@ namespace ToDoListNikeshina
 {
     public static class Messages
     {
-        internal static string WrongFormatOfInputData()
+        public static string WrongFormatOfInputData()
         {
             return ("Incorrect data");
         }
@@ -27,6 +27,20 @@ namespace ToDoListNikeshina
         internal static string IsDone()
         {
             return ("Done! ");
+        }
+
+        public static string WriteInstuction()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("----------------------------------------------------------");
+            sb.Append("list - print ToDoList  ");
+            sb.Append("add - add   ");
+            sb.Append("delete - delete    ");
+            sb.Append("edit - edit   ");
+            sb.Append("change - change status   ");
+            sb.AppendLine("exit - exit");
+            sb.AppendLine("----------------------------------------------------------");
+            return sb.ToString();
         }
     }
 }

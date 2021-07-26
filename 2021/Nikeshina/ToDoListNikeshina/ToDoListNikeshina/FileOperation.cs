@@ -5,27 +5,29 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public class FileOperation
+    public  class FileOperation
     {
         public ILogger _logger;
-        public FileOperation() { }
+
         public FileOperation(ILogger logger)
         {
             _logger = logger;
         }
-        public void Write(List<Task> list)
+
+        public void Save(List<Task> list)
         {
             using (var sw = new StreamWriter("Tasks.txt"))
             {
                 foreach (var task in list)
-                    sw.WriteLine(task.Print());
+                    sw.WriteLine(task.ToString());
             }
         }
-        public List<Task> Read()
+
+        public List<Task> Load()
         {
             if (!File.Exists("Tasks.txt"))
             {
-                _logger.WriteLine(Messages.ListIsEmpty());
+                _logger.Recording(Messages.ListIsEmpty());
 
                 return new List<Task>();
             }
@@ -43,6 +45,7 @@ namespace ToDoListNikeshina
             }
             return tasks;
         }
+
         private bool GetStatus(string[] words)
         {
             var count = words.Length;

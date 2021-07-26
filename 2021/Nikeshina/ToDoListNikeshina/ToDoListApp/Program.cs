@@ -8,70 +8,51 @@ namespace ToDoListApp
     {
         static void Main(string[] args)
         {
+            ILogger logger;
+            App application;
             if (args.Length == 0)
-                DoCommand();
+                application = new App(logger=new AppLogger());
+            else
+                application = new App(logger=new CmdLogger(args));
+
+            logger.Recording(Messages.WriteInstuction());
+
+            if (logger as AppLogger != null)
+                while (GetCommand(application, logger.TakeData())) ;
             else
             {
-                var app = new CmdApp(new AppLogger(), args);
-                app.Read();
-                GetCommand(app, args[0]);
-                app.Write();
-                return;
+                GetCommand(application, logger.TakeData());
+                application.Save();
             }
-        }
 
-        private static void DoCommand()
-        {
-            var app = new ConsoleApp(new AppLogger());
-            app.Read();
-            WriteInstuction();
-            var str = Console.ReadLine();
-            while (str != null || str != "")
-            {
-                if (str == "exit")
-                {
-                    app.Write();
-                    return;
-                }
-
-                GetCommand(app, str);
-                str = Console.ReadLine();
-            }
         }
-        private static void GetCommand(IApp app, string command)
+        public static bool GetCommand(App app, string command)
         {
             switch (command)
             {
                 case "list":
                     app.Print();
-                    break;
+                    return true;
                 case "add":
                     app.Add();
-                    break;
+                    return true;
                 case "delete":
                     app.Delete();
-                    break;
+                    return true;
                 case "change":
                     app.ChangeStatus();
-                    break;
+                    return true;
                 case "edit":
                     app.Edit();
-                    break;
+                    return true;
+                case "exit":
+                    app.Save();
+                    return false;
                 default:
-                    return;
+                    return true;
             }
         }
 
-        private static void WriteInstuction()
-        {
-            Console.WriteLine("----------------------------------------------------------");
-            Console.Write("list - print ToDoList  ");
-            Console.Write("add - add   ");
-            Console.Write("delete - delete    ");
-            Console.Write("edit - edit   ");
-            Console.Write("change - change status   ");
-            Console.WriteLine("exit - exit");
-            Console.WriteLine("----------------------------------------------------------");
-        }
+       
     }
 }

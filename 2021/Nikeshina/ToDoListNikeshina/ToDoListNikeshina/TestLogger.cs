@@ -17,14 +17,14 @@ namespace ToDoListNikeshina
             inputStrings = input;
         }
 
-        public string ReadLine()
+        public string TakeData()
         {
             var current = inputStrings[0];
             inputStrings.RemoveAt(0);
             return current;
         }
 
-        public void WriteLine(string msg)
+        public void Recording(string msg)
         {
             Messages.Add(msg);
         }

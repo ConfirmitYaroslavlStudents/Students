@@ -6,8 +6,7 @@ namespace ToDoListNikeshina
 {
     public interface IApp
     {
-        public void Read();
-        public void Write();
+        public void Save();
         public void Print();
         public void Add();
         public void Delete();

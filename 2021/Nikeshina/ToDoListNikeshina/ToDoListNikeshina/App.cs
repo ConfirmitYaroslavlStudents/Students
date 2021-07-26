@@ -1,75 +1,124 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public abstract class App : IApp
+    public class App : IApp
     {
         public ToDoList List { get; set; }
         public ILogger Logger { get; set; }
 
-        public App() { }
         public App(ILogger logger)
         {
             Logger = logger;
-            List = new ToDoList(logger);
+            List = new ToDoList(new FileOperation(Logger).Load());
         }
 
-        public abstract void Add();
-
-        public abstract void ChangeStatus();
-
-        public abstract void Delete();
-
-        public abstract void Edit();
-
-        public bool IsDataValidString(string dscr)
+        public void Add()
         {
-            if (dscr.Length == 0)
+            Logger.Recording(Messages.RequestDescription());
+
+            var dscr = Logger.TakeData();
+
+            if (!Validator.IsStringValid(dscr))
             {
-                Logger.WriteLine(Messages.WrongFormatOfInputData());
-                return false;
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return;
             }
 
-            return true;
+            List.Add(new Task(dscr, false));
+            Logger.Recording(Messages.IsDone());
         }
 
-        public bool IsDataValidDigit(string input)
+        public void ChangeStatus()
         {
-            if (Int32.TryParse(input, out int num) && IsNumberCorrect(num))
-                return true;
 
-            Logger.WriteLine(Messages.WrongFormatOfInputData());
-            return false; ;
+            Logger.Recording(Messages.RequestNumber());
+
+
+            var inputStr = Logger.TakeData();
+
+            if (!Validator.IsDigitValid(inputStr, List.Count()))
+            {
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return;
+            }
+
+            int num = int.Parse(inputStr);
+
+            List.ChangeStatus(num);
+            Logger.Recording(Messages.IsDone());
         }
-        public bool IsNumberCorrect(int num)
+
+        public void Delete()
         {
-            if (num > 0 && num <= List.Count())
-                return true;
+            Logger.Recording(Messages.RequestNumber());
 
-            return false;
+            var inputStr = Logger.TakeData();
+
+            if (!Validator.IsDigitValid(inputStr, List.Count()))
+            {
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return;
+            }
+
+            int num = int.Parse(inputStr);
+
+            List.Delete(num);
+            Logger.Recording(Messages.IsDone());
         }
+
+        public void Edit()
+        {
+            Logger.Recording(Messages.RequestNumber());
+
+            var inputStr = Logger.TakeData();
+
+            if (!Validator.IsDigitValid(inputStr, List.Count()))
+            {
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return;
+            }
+
+            int num = int.Parse(inputStr);
+
+            Logger.Recording(Messages.RequestDescription());
+
+            var dscr = Logger.TakeData();
+
+            if (!Validator.IsStringValid(dscr))
+            {
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return;
+            }
+
+            List.Edit(num, dscr);
+            Logger.Recording(Messages.IsDone());
+        }
+
 
         public void Print()
         {
             if (List.Count() == 0)
             {
-                Logger.WriteLine(Messages.ListIsEmpty());
+                Logger.Recording(Messages.ListIsEmpty());
                 return;
             }
 
-            List.Print();
+             int i = 1;
+            foreach (var task in List._list)
+            {
+                Logger.Recording(i + ". " + task.ToString());
+                i++;
+            }
         }
 
-        public void Read()
+        public void Save()
         {
-            List.Read();
-        }
-
-        public void Write()
-        {
-            List.Write();
+            var fileOperation = new FileOperation(Logger);
+            fileOperation.Save(List._list);
         }
     }
 }

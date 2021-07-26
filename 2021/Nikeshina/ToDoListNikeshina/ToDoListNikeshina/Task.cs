@@ -24,7 +24,7 @@ namespace ToDoListNikeshina
         {
             Name = newName;
         }
-        public string Print()
+        public override string ToString()
         {
             var str = Name + " " + Status;
             return str;

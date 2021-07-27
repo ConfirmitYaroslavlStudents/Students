@@ -11,7 +11,7 @@ namespace ToDoListTestProject
         public void IsWorkingIsTrueAfterInitialization()
         {
             var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
 
             Assert.True(commandExecutor.IsWorking);
         }
@@ -20,7 +20,7 @@ namespace ToDoListTestProject
         public void ToDoListCountIncreasesAfterAddOperation()
         {
             var console = new AppTestConsole(new[] { "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
 
             commandExecutor.RunCommand(() => commandExecutor.Add());
 
@@ -31,7 +31,7 @@ namespace ToDoListTestProject
         public void DoneMessageIsPrintedAfterAddIsChosen()
         {
             var console = new AppTestConsole(new[] { "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
 
             commandExecutor.RunCommand(() => commandExecutor.Add());
 
@@ -43,7 +43,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.RunCommand(() => commandExecutor.Edit());
 
@@ -55,7 +55,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.RunCommand(() => commandExecutor.Edit());
 
@@ -68,7 +68,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.RunCommand(() => commandExecutor.Complete());
 
@@ -81,7 +81,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.RunCommand(() => commandExecutor.Delete());
 
@@ -93,7 +93,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.RunCommand(() => commandExecutor.Delete());
 
@@ -104,7 +104,7 @@ namespace ToDoListTestProject
         public void IsWorkingIsFalseAfterExitIsChosen()
         {
             var console = new AppTestConsole();
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
 
             commandExecutor.RunCommand(() => commandExecutor.Exit());
 
@@ -116,7 +116,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole();
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.RunCommand(() => commandExecutor.List());
 
@@ -128,7 +128,7 @@ namespace ToDoListTestProject
         {
             var console = new AppTestConsole(new[] { "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
 
             commandExecutor.ChooseTaskNumber();
 

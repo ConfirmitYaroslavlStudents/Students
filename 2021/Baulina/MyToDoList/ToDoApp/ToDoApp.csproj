@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FileManager\FileCommunicator.csproj" />
     <ProjectReference Include="..\InputOutputManagers\InputOutputManagers.csproj" />
     <ProjectReference Include="..\MyToDoList\MyToDoList.csproj" />
   </ItemGroup>

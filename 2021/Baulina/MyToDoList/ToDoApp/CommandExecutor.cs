@@ -1,28 +1,22 @@
 ﻿using System;
 using MyToDoList;
 using InputOutputManagers;
+using FileCommunicator;
 
 namespace ToDoApp
 {
     public class CommandExecutor : IExecute
     {
         public ToDoList MyToDoList { get; }
-        private readonly InputOutputManager _inputOutputManager;
-        private readonly ErrorPrinter _errorPrinter = new(new ConsoleInteractor());
+        private readonly IConsoleExtended _console;
         internal bool Empty => MyToDoList.Count == 0;
         public bool IsWorking { get; private set; }
 
-        public CommandExecutor(ToDoList inputList, InputOutputManager inputOutputManager)
+        public CommandExecutor(ToDoList inputList, IConsoleExtended console)
         {
             MyToDoList = new ToDoList(inputList);
-            _inputOutputManager = inputOutputManager;
+            _console = console;
             IsWorking = true;
-        }
-
-        public CommandExecutor(ToDoList inputList, InputOutputManager inputOutputManager, ErrorPrinter errorPrinter) :
-            this(inputList, inputOutputManager)
-        {
-            _errorPrinter = errorPrinter;
         }
 
         public void ProcessOperation(string operationName)
@@ -77,29 +71,29 @@ namespace ToDoApp
             }
             catch (ArgumentOutOfRangeException)
             {
-                _errorPrinter.PrintIncorrectNumberWarning();
+                _console.PrintIncorrectNumberWarning();
             }
             catch (Exception)
             {
-                _errorPrinter.PrintErrorMessage();
+                _console.PrintErrorMessage();
             }
         }
 
         public void Add()
         {
-            var description = _inputOutputManager.GetDescription();
+            var description = _console.GetDescription();
             MyToDoList.Add(description);
-            _inputOutputManager.PrintDoneMessage();
+            _console.PrintDoneMessage();
             List();
         }
 
         public void Edit()
         {
             var taskNumber = ChooseTaskNumber();
-            _inputOutputManager.PrintNewDescriptionRequest();
-            var newDescription = _inputOutputManager.ReadLine();
+            _console.PrintNewDescriptionRequest();
+            var newDescription = _console.ReadLine();
             MyToDoList.EditDescription(taskNumber, newDescription);
-            _inputOutputManager.PrintDoneMessage();
+            _console.PrintDoneMessage();
             List();
         }
 
@@ -107,7 +101,7 @@ namespace ToDoApp
         {
             var taskNumber = ChooseTaskNumber();
             MyToDoList.Complete(taskNumber);
-            _inputOutputManager.PrintDoneMessage();
+            _console.PrintDoneMessage();
             List();
         }
 
@@ -115,7 +109,7 @@ namespace ToDoApp
         {
             var taskNumber = ChooseTaskNumber();
                 MyToDoList.Delete(taskNumber);
-                _inputOutputManager.PrintDoneMessage();
+                _console.PrintDoneMessage();
             List();
         }
 
@@ -128,18 +122,18 @@ namespace ToDoApp
         {
             var tableBuilder = new TableBuilder(MyToDoList);
             var table = tableBuilder.FormATable();
-            _inputOutputManager.RenderTable(table);
+            _console.RenderTable(table);
         }
 
         public void Error()
         {
-            _errorPrinter.PrintErrorMessage();
+            _console.PrintErrorMessage();
         }
 
         public int ChooseTaskNumber()
         {
-            _inputOutputManager.PrintTaskNumberRequest();
-            var input = _inputOutputManager.ReadLine();
+            _console.PrintTaskNumberRequest();
+            var input = _console.ReadLine();
             var result = int.Parse(input);
             if (result < 0 || result >= MyToDoList.Count)
             {

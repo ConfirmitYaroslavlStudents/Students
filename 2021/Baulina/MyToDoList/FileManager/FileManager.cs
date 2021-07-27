@@ -4,9 +4,9 @@ using System.IO;
 using System.Text.Json;
 using MyToDoList;
 
-namespace ToDoApp
+namespace FileCommunicator
 {
-    internal class FileManager
+    public class FileManager
     {
         private readonly string _path = Path.Combine(Environment.GetFolderPath(
             Environment.SpecialFolder.LocalApplicationData), "ToDoList.txt");

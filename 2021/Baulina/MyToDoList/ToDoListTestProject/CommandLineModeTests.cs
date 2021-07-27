@@ -21,7 +21,7 @@ namespace ToDoListTestProject
         public void ToDoListCountIncreasesAfterAddOperation()
         {
             var console = new ClTestConsole(new[] {"Add", "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -33,7 +33,7 @@ namespace ToDoListTestProject
         public void DoneMessageIsPrintedAfterAddIsChosen()
         {
             var console = new ClTestConsole(new[] { "Add", "Water the plants" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -45,7 +45,7 @@ namespace ToDoListTestProject
         public void ErrorNumberMessageIsPrintedWhenTryingToEditEmptyList()
         {
             var console = new ClTestConsole(new[] { "Edit"});
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -58,7 +58,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Edit", "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -72,7 +72,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Edit", "0", "Water the plants" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -85,7 +85,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Complete", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -98,7 +98,7 @@ namespace ToDoListTestProject
         public void ErrorMessageIsPrintedWhenTryingToMarkAsCompleteInEmptyList()
         {
             var console = new ClTestConsole(new[] {"Complete"});
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -110,7 +110,7 @@ namespace ToDoListTestProject
         public void ErrorMessageIsPrintedWhenTryingToDeleteFromEmptyList()
         {
             var console = new ClTestConsole(new[] { "Delete" });
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console), new ErrorPrinter(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -123,7 +123,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Delete", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -136,7 +136,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"Delete", "0"});
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -148,7 +148,7 @@ namespace ToDoListTestProject
         public void IsWorkingIsFalseAfterExitIsChosen()
         {
             var console = new ClTestConsole(new []{"Exit"});
-            var commandExecutor = new CommandExecutor(new ToDoList(), new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -161,7 +161,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] {"List"});
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -174,7 +174,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Delete"});
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -187,7 +187,7 @@ namespace ToDoListTestProject
         {
             var console = new ClTestConsole(new[] { "Edit", "0" });
             var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
+            var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();
@@ -199,8 +199,7 @@ namespace ToDoListTestProject
         public void ErrorMessageIsPrintedWhenIncorrectCommand()
         {
             var console = new ClTestConsole(new[] { "fdntgrj6d", "0" });
-            var toDoList = new ToDoList() { "Wash the dishes" };
-            var commandExecutor = new CommandExecutor(toDoList, new InputOutputManager(console), new ErrorPrinter(console));
+            var commandExecutor = new CommandExecutor(new ToDoList(), console);
             var appController = new AppController(commandExecutor, console);
 
             appController.SendOperationToExecutor();

@@ -12,7 +12,7 @@ namespace ToDoListTests
         {
             string fileName = "TestToDoList.txt";
             File.Delete(fileName);
-            var fileWorkHandler = new FileWorkHandler(fileName);
+            var fileWorkHandler = new FileLoaderSaver(fileName);
 
             fileWorkHandler.Save(new ToDoList());
 
@@ -24,7 +24,7 @@ namespace ToDoListTests
         {
             string fileName = "TestToDoList.txt";
             File.Delete(fileName);
-            var fileWorkHandler = new FileWorkHandler(fileName);
+            var fileWorkHandler = new FileLoaderSaver(fileName);
             var toDoList = new ToDoList();
 
             toDoList.Add(new Task("wash dishes"));
@@ -38,7 +38,7 @@ namespace ToDoListTests
         {
             string fileName = "TestToDoList.txt";
             File.Delete(fileName);
-            var fileWorkHandler = new FileWorkHandler(fileName);
+            var fileWorkHandler = new FileLoaderSaver(fileName);
             var toDoList = new ToDoList();
 
             toDoList.Add(new Task("wash dishes"));

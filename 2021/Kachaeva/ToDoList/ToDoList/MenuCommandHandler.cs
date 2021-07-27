@@ -2,16 +2,24 @@
 
 namespace ToDo
 {
-    public class MenuCommandHandler : CommandHandler
+    public class MenuCommandHandler
     {
+        private readonly IToDoListLoaderSaver _loaderSaver;
+        private readonly ILogger _logger;
+        private readonly ToDoList _toDoList;
         private readonly IReader _reader;
+        private readonly CommandHandler _commandHandler;
 
-        public MenuCommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, IReader reader) : base(loaderSaver, logger)
+        public MenuCommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, IReader reader) 
         {
+            _loaderSaver = loaderSaver;
+            _logger = logger;
+            _toDoList = _loaderSaver.Load();
             _reader = reader;
+            _commandHandler = new CommandHandler(_loaderSaver, _logger, GetTaskTextInput, GetTaskNumberInput);
         }
 
-        public override void HandleUsersInput()
+        public void HandleUsersInput()
         {
             while (true)
             {
@@ -23,7 +31,7 @@ namespace ToDo
                     break;
                 }
 
-                TryToRunCommand(selectedAction);
+                _commandHandler.TryToRunCommand(selectedAction);
             }
             _loaderSaver.Save(_toDoList);
 
@@ -36,13 +44,13 @@ namespace ToDo
             return selectedAction;
         }
 
-        protected override string GetTaskTextInput()
+        private string GetTaskTextInput()
         {
             _logger.Log("Введите текст задания");
             return _reader.ReadLine();
         }
 
-        protected override string GetTaskNumberInput()
+        private string GetTaskNumberInput()
         {
             _logger.Log("Введите номер задания");
             return _reader.ReadLine();

@@ -4,11 +4,22 @@ using System.Text;
 
 namespace ToDo
 {
-    public abstract class CommandHandler
+    public class CommandHandler
     {
         protected readonly IToDoListLoaderSaver _loaderSaver;
         protected readonly ILogger _logger;
         protected readonly ToDoList _toDoList;
+        protected Func<string> _getTaskTextInput;
+        protected Func<string> _getTaskNumberInput;
+
+        public CommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, Func<string> getTaskTextInput, Func<string> getTaskNumberInput)
+        {
+            _loaderSaver = loaderSaver;
+            _logger = logger;
+            _toDoList = _loaderSaver.Load();
+            _getTaskTextInput = getTaskTextInput;
+            _getTaskNumberInput = getTaskNumberInput;
+        }
 
         public CommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger)
         {
@@ -17,9 +28,8 @@ namespace ToDo
             _toDoList = _loaderSaver.Load();
         }
 
-        public abstract void HandleUsersInput();
 
-        protected void TryToRunCommand(string selectedAction)
+        public void TryToRunCommand(string selectedAction)
         {
             try
             {
@@ -100,15 +110,15 @@ namespace ToDo
 
         private string GetTaskText()
         {
-            var newText = GetTaskTextInput();
-            if (String.IsNullOrEmpty(newText))
+            var taskTextInput = _getTaskTextInput();
+            if (String.IsNullOrEmpty(taskTextInput))
                 throw new ArgumentException("Нельзя добавить пустое задание");
-            return newText;
+            return taskTextInput;
         }
 
         private int GetTaskNumber()
         {
-            var taskNumberInput = GetTaskNumberInput();
+            var taskNumberInput = _getTaskNumberInput();
             if (!int.TryParse(taskNumberInput, out int taskNumber))
                 throw new ArgumentException("Нужно ввести число");
             if (taskNumber > _toDoList.Count || taskNumber < 1)
@@ -116,7 +126,5 @@ namespace ToDo
             return taskNumber;
         }
 
-        protected abstract string GetTaskTextInput();
-        protected abstract string GetTaskNumberInput();
     }
 }

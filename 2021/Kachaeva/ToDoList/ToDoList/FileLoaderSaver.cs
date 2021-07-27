@@ -2,11 +2,11 @@
 
 namespace ToDo
 {
-    public class FileWorkHandler : IToDoListLoaderSaver
+    public class FileLoaderSaver : IToDoListLoaderSaver
     {
         private readonly string _fileName;
 
-        public FileWorkHandler(string fileName)
+        public FileLoaderSaver(string fileName)
         {
             _fileName = fileName;
         }

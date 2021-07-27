@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ToDo
 {
-    public class ToDoList
+    public class ToDoList : IEnumerable
     {
         private readonly List<Task> _tasks = new List<Task>();
         public int Count { get { return _tasks.Count; } }
@@ -29,6 +30,12 @@ namespace ToDo
             for (var i = 0; i < _tasks.Count; i++)
                 toDoList.AppendLine(i + 1 + ". " + _tasks[i].ToString());
             return toDoList.ToString();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            foreach (var task in _tasks)
+                yield return task;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ToDoListLib
+﻿namespace ToDoListLib.Models
 {
     public enum TaskStatus
     {

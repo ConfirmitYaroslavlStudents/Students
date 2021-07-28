@@ -1,9 +1,10 @@
-﻿namespace ToDoListConsole
+﻿namespace ToDoListApp.Reader
 {
     public interface IReader
     {
         public string GetDescription();
-        public int GetNumberTask();
+        public int GetTaskId();
         public ToDoListMenuEnum GetSelectedAction();
+        public bool ContinueWork();
     }
 }

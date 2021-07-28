@@ -1,9 +1,9 @@
-﻿namespace ToDoListConsole
+﻿namespace ToDoListApp.Reader
 {
-    public class CmdReader : IReader
+    public class CommandReader : IReader
     {
         private readonly string[] _consoleCommand;
-        public CmdReader(string[] consoleCommand)
+        public CommandReader(string[] consoleCommand)
         {
             _consoleCommand = consoleCommand;
         }
@@ -21,7 +21,7 @@
             };
         }
 
-        public int GetNumberTask()
+        public int GetTaskId()
         {
             return int.Parse(_consoleCommand[1]) - 1;
         }
@@ -29,6 +29,11 @@
         public string GetDescription()
         {
             return _consoleCommand[^1];
+        }
+
+        public bool ContinueWork()
+        {
+            return false;
         }
     }
 }

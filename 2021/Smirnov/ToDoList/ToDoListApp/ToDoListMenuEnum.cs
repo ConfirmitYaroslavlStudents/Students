@@ -1,4 +1,4 @@
-﻿namespace ToDoListConsole
+﻿namespace ToDoListApp
 {
     public enum ToDoListMenuEnum
     {

@@ -5,4 +5,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>bin\Debug\netcoreapp3.1\Newtonsoft_Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

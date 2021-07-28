@@ -1,5 +1,1 @@
-1. wash dishes  [ ]
-2. clean the room  [v]
-3. wash  [ ]
-4. br  [ ]
-5. dd  [ ]
+[{"Text":"walk the dog","IsDone":true},{"Text":"new task","IsDone":false},{"Text":"clean the room","IsDone":false},{"Text":"wash dishes","IsDone":false}]

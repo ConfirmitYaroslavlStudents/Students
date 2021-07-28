@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ToDoApi\ToDoApi.csproj" />
     <ProjectReference Include="..\ToDoList\ToDo.csproj" />
   </ItemGroup>
 

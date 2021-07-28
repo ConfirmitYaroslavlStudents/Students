@@ -1,6 +1,6 @@
 ﻿namespace ToDo
 {
-    public interface IToDoListLoaderSaver
+    public interface ILoaderSaver
     {
         public ToDoList Load();
         public void Save(ToDoList toDoList);

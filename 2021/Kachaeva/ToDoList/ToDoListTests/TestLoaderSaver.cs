@@ -1,6 +1,6 @@
 ﻿namespace ToDo
 {
-    public class TestLoaderSaver : IToDoListLoaderSaver
+    public class TestLoaderSaver : ILoaderSaver
     {
         public ToDoList ToDoList=new ToDoList();
         public ToDoList Load()

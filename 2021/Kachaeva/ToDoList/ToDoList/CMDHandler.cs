@@ -6,14 +6,14 @@ namespace ToDo
 {
     public class CMDHandler
     {
-        private readonly IToDoListLoaderSaver _loaderSaver;
+        private readonly ILoaderSaver _loaderSaver;
         private readonly ILogger _logger;
         private readonly ToDoList _toDoList;
         private readonly string[] _input;
         private int _inputIndex;
         private readonly CommandHandler _commandHandler;
 
-        public CMDHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, string[] input)
+        public CMDHandler(ILoaderSaver loaderSaver, ILogger logger, string[] input)
         {
             _loaderSaver = loaderSaver;
             _logger = logger;

@@ -34,7 +34,7 @@ namespace ToDoListTests
 
             toDoList.Add(new Task("wash dishes"));
             toDoList.Add(new Task("clean the room"));
-            toDoList.Remove(0);
+            toDoList.RemoveAt(0);
 
             Assert.AreEqual(1, toDoList.Count);
             Assert.AreEqual("clean the room", toDoList[0].Text);

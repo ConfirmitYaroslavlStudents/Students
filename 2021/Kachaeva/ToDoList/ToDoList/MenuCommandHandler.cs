@@ -4,13 +4,13 @@ namespace ToDo
 {
     public class MenuCommandHandler
     {
-        private readonly IToDoListLoaderSaver _loaderSaver;
+        private readonly ILoaderSaver _loaderSaver;
         private readonly ILogger _logger;
         private readonly ToDoList _toDoList;
         private readonly IReader _reader;
         private readonly CommandHandler _commandHandler;
 
-        public MenuCommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, IReader reader) 
+        public MenuCommandHandler(ILoaderSaver loaderSaver, ILogger logger, IReader reader) 
         {
             _loaderSaver = loaderSaver;
             _logger = logger;

@@ -6,13 +6,13 @@ namespace ToDo
 {
     public class CommandHandler
     {
-        protected readonly IToDoListLoaderSaver _loaderSaver;
+        protected readonly ILoaderSaver _loaderSaver;
         protected readonly ILogger _logger;
         protected readonly ToDoList _toDoList;
         protected Func<string> _getTaskTextInput;
         protected Func<string> _getTaskNumberInput;
 
-        public CommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger, Func<string> getTaskTextInput, Func<string> getTaskNumberInput)
+        public CommandHandler(ILoaderSaver loaderSaver, ILogger logger, Func<string> getTaskTextInput, Func<string> getTaskNumberInput)
         {
             _loaderSaver = loaderSaver;
             _logger = logger;
@@ -21,7 +21,7 @@ namespace ToDo
             _getTaskNumberInput = getTaskNumberInput;
         }
 
-        public CommandHandler(IToDoListLoaderSaver loaderSaver, ILogger logger)
+        public CommandHandler(ILoaderSaver loaderSaver, ILogger logger)
         {
             _loaderSaver = loaderSaver;
             _logger = logger;
@@ -86,7 +86,7 @@ namespace ToDo
 
         private void HandleTaskRemove(int taskNumber)
         {
-            _toDoList.Remove(taskNumber - 1);
+            _toDoList.RemoveAt(taskNumber - 1);
             _logger.Log("Задание удалено");
         }
 

@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using Newtonsoft.Json;
 
 namespace ToDo
 {
-    public class FileLoaderSaver : IToDoListLoaderSaver
+    public class FileLoaderSaver : ILoaderSaver
     {
         private readonly string _fileName;
 
@@ -15,34 +16,19 @@ namespace ToDo
         {
             if (!File.Exists(_fileName))
                 return new ToDoList();
-
-            var toDoList = new ToDoList();
-            var lines = File.ReadLines(_fileName);
-            foreach(var line in lines)
-            {
-                var task = Parse(line);
-                toDoList.Add(task);
-            }
-            return toDoList;
-        }
-
-        private Task Parse(string line)
-        {
-            var textStartIndex = line.IndexOf('.') + 2;
-            var textEndIndex = line.IndexOf('[') - 2;
-            var text = line[textStartIndex..textEndIndex];
-            var isDone = false;
-            if (line[textEndIndex + 3] == 'v')
-                isDone = true;
-            return new Task(text, isDone);
+            return JsonConvert.DeserializeObject<ToDoList>(File.ReadAllText(_fileName));
+            
         }
 
         public void Save (ToDoList toDoList)
         {
-            if (toDoList.Count != 0)
-                File.WriteAllText(_fileName, toDoList.ToString());
+            if (toDoList.Count == 0)
+            {
+                if(File.Exists(_fileName))
+                    File.Delete(_fileName);
+            }
             else
-                File.Delete(_fileName);
+                File.WriteAllText(_fileName, JsonConvert.SerializeObject(toDoList));
         }
     }
 }

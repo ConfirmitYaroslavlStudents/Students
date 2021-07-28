@@ -1,32 +1,35 @@
 ﻿using System;
-using System.IO;
 
 namespace MyTODO
 {
-    internal class ToDoPrint
+    class ToDoMenu
     {
-        private static ToDoList _todo;
-        private static bool _deleted;
-        private static bool _completed = true;
-        private static ToDoItem _item;
-        private static int _count;
-        private static int _menuIndexX;
-        private static int _menuIndexY;
-        private static readonly FileInfo Input = new FileInfo("TODOsave.txt");
+        private bool _deleted;
+        private bool _completed = true;
+        private ToDoItem _item;
+        private ToDoList _todo;
+        private int _count;
+        private int _menuIndexX;
+        private int _menuIndexY;
 
-        private static void SetDefaultColor()
+        public ToDoMenu(ToDoList todolist)
+        {
+            _todo = todolist;
+        }
+
+        private void SetDefaultColor()
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        private static void SetChosenColor()
+        private void SetChosenColor()
         {
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
         }
 
-        private static void PrintChosen(string str)
+        private void PrintChosen(string str)
         {
             SetChosenColor();
 
@@ -35,9 +38,9 @@ namespace MyTODO
             SetDefaultColor();
         }
 
-        private static void PrintOk(string str, bool ok)
+        private void PrintOk(string str, bool ok)
         {
-            if(ok)
+            if (ok)
                 Console.ForegroundColor = ConsoleColor.Green;
             else
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -47,67 +50,70 @@ namespace MyTODO
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        private static void SetNameColorAndPrint(string str, int state)
+        private void PrintItemPart(string part, bool completed, bool deleted)
         {
-            if(state == (int)ToStates.Deleted || state == (int)ToStates.CompletedDeleted)
-                PrintOk(str, false);
+            if (!completed && !deleted)
+                Console.Write(part);
             else
-                Console.Write(str);
+                PrintOk(part, !deleted);
         }
 
-        private static void PrintName(ToDoItem item, bool chosen)
+        private void PrintName(ToDoItem item, bool chosen)
         {
+            Console.Write("║");
             if (chosen)
                 SetChosenColor();
             if (item.Name.Length <= 20)
             {
-                SetNameColorAndPrint(item.Name, item.State);
-                for (int i = item.Name.Length; i < 19; i++)
+                PrintItemPart(item.Name, item.Completed, item.Deleted);
+                for (var i = item.Name.Length; i < 19; i++)
                     Console.Write(" ");
                 SetDefaultColor();
                 return;
             }
-            int x = 0;
+            var x = 0;
             while (x < item.Name.Length)
             {
                 if (x != 0)
                 {
-                    if (chosen)
-                        SetChosenColor();
                     Console.WriteLine("║ ║");
                     Console.Write("║");
-                    SetDefaultColor();
                 }
+                if (chosen)
+                    SetChosenColor();
                 for (var i = 0; i < 18; i++, x++)
                     if (x < item.Name.Length)
-                        SetNameColorAndPrint(item.Name[x].ToString(), item.State);
+                        PrintItemPart(item.Name[x].ToString(), item.Completed, item.Deleted);
                     else
                         Console.Write(" ");
                 if (x < item.Name.Length)
                     if (item.Name[x] != ' ')
-                        SetNameColorAndPrint("-", item.State);
+                        PrintItemPart("-", item.Completed, item.Deleted);
                     else
-                        SetNameColorAndPrint(item.Name[x++].ToString(), item.State);
+                        PrintItemPart(item.Name[x++].ToString(), item.Completed, item.Deleted);
                 else
                     Console.Write(" ");
+                SetDefaultColor();
             }
 
             SetDefaultColor();
         }
-
-        private static void PrintMenu()
+        
+        public void PrintMenu()
         {
-            string[] menu = new string[] { "Add", "Deleted", "Completed" };
+            var items = _todo.FindAll(_completed, _deleted);
+            PrintMenuHeader(items);
+            PrintMenuBody(items);
+        }
+
+        void PrintMenuHeader(ToDoList items)
+        {
+            var menu = new[] {"Add", "Deleted", "Completed"};
             Console.Clear();
-            Console.WriteLine("╔═══╦═══════╦═════════╗");
-            Console.Write("║");
-            var items = _todo.FindAll(x => x.State == 0 || 
-                                         (x.State == (int)ToStates.Completed && _completed) || 
-                                         (x.State == (int)ToStates.Deleted && _deleted) || 
-                                         (x.State == (int)ToStates.CompletedDeleted && _deleted && _completed));
+            Console.Write("╔═══╦═══════╦═════════╗\n║");
             _count = items.Count;
             _menuIndexX %= _count + 1;
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 if (_menuIndexX == 0 && _menuIndexY == i)
                 {
@@ -115,6 +121,7 @@ namespace MyTODO
                     Console.Write("║");
                     continue;
                 }
+
                 switch (i)
                 {
                     case 0:
@@ -127,42 +134,37 @@ namespace MyTODO
                         PrintOk(menu[i], _completed);
                         break;
                 }
+
                 Console.Write("║");
             }
+
             Console.WriteLine();
 
             if (_count == 0)
                 Console.WriteLine("╚═══╩═══════╩═════════╝");
             else
                 Console.WriteLine("╠═══╩═══════╩═══════╦═╣");
+        }
 
-            int j = 0;
+        void PrintMenuBody(ToDoList items)
+        {
+            var j = 0;
             foreach (var each in items)
             {
                 if (_menuIndexX == j + 1)
                     _item = each;
-                Console.Write("║");
                 PrintName(each, _menuIndexX == j + 1 && _menuIndexY == 0);
-                Console.Write("║");
-                string state = "";
-                switch (each.State)
-                {
-                    case (int)ToStates.Deleted:
+                var state = " ";
+                if(each.Completed)
+                    state = "√";
+                else
+                    if(each.Deleted)
                         state = "X";
-                        break;
-                    case (int)ToStates.Uncompleted:
-                        state = " ";
-                        break;
-                    case (int)ToStates.Completed:
-                    case (int)ToStates.CompletedDeleted:
-                        state = "√";
-                        break;
-                }
-                var isCompleted = each.State == (int)ToStates.Completed || each.State == (int)ToStates.CompletedDeleted;
+                Console.Write("║");
                 if (_menuIndexX == j + 1 && _menuIndexY == 1)
                     PrintChosen(state);
                 else
-                    PrintOk(state, isCompleted);
+                    PrintOk(state, each.Completed);
                 Console.WriteLine("║");
                 if (j + 1 == _count)
                     Console.WriteLine("╚═══════════════════╩═╝\nDel to delete item");
@@ -172,7 +174,7 @@ namespace MyTODO
             }
         }
 
-        private static void WorkWithMenu()
+        public void WorkWithMenu()
         {
             _menuIndexX %= _count + 1;
             switch (Console.ReadKey().Key)
@@ -212,7 +214,7 @@ namespace MyTODO
             }
         }
 
-        public static void AddClick()
+        public void AddClick()
         {
             string name = "";
             while (string.IsNullOrEmpty(name))
@@ -224,7 +226,7 @@ namespace MyTODO
             _todo.Add(name);
         }
 
-        public static void EnterClick()
+        public void EnterClick()
         {
             if (_menuIndexX == 0)
             {
@@ -248,7 +250,7 @@ namespace MyTODO
             if (_menuIndexY == 0)
             {
                 Console.WriteLine("Write new name for {0}", _item.Name);
-                string x = Console.ReadLine();
+                var x = Console.ReadLine();
                 while (string.IsNullOrEmpty(x))
                 {
                     Console.Clear();
@@ -262,24 +264,6 @@ namespace MyTODO
                 _item.Complete();
                 if (!_completed)
                     _count--;
-            }
-        }
-
-        private static void Main(string[] args)
-        {
-            _todo = new ToDoList(Input);
-            if (args.Length != 0)
-            {
-                var argsWorker = new ToDoArgs(_todo);
-                argsWorker.WorkWithArgs(args);
-                ToDoListReducer.Save(Input, _todo);
-                return;
-            }
-            while (true)
-            {
-                PrintMenu();
-                WorkWithMenu();
-                ToDoListReducer.Save(Input, _todo);
             }
         }
     }

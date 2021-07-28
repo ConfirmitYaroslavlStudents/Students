@@ -1,5 +1,6 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MyTODO;
 
 namespace ToDoTest
 {
@@ -9,7 +10,7 @@ namespace ToDoTest
         [TestMethod]
         public void AddNullItem()
         {
-            var list = new MyTODO.ToDoList(null);
+            var list = new ToDoList();
 
             Assert.ThrowsException<ArgumentException>(() => list.Add(null));
 
@@ -19,7 +20,7 @@ namespace ToDoTest
         [TestMethod]
         public void AddEmptyItem()
         {
-            var list = new MyTODO.ToDoList(null);
+            var list = new ToDoList();
 
             Assert.ThrowsException<ArgumentException>(() => list.Add(""));
 
@@ -29,7 +30,7 @@ namespace ToDoTest
         [TestMethod]
         public void AddItem()
         {
-            var list = new MyTODO.ToDoList(null);
+            var list = new ToDoList();
 
             list.Add("A");
             list.Add("A");

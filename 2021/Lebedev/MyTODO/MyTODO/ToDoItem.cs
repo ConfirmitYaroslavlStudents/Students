@@ -8,50 +8,54 @@ namespace MyTODO
         public string Name
         {
             get;
-            private set;
+            set;
         }
-        public int State
+
+        public bool Completed
         {
             get;
-            private set;
+            set;
         }
-        
+
+        public bool Deleted
+        {
+            get;
+            set;
+        }
+
+        public ToDoItem()
+        {
+            Name = "";
+        }
+
         public ToDoItem(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException();
             Name = name;
-            State = 0;
+            Completed = false;
+            Deleted = false;
         }
 
-        public ToDoItem(string name, int done)
+        public ToDoItem(string name, bool completed, bool deleted)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException();
             Name = name;
-            State = done;
+            Completed = completed;
+            Deleted = deleted;
         }
 
         public void Complete()
         {
-            if (State != 0 )
+            if (Deleted)
                 return;
-            State = (int)ToStates.Completed;
+            Completed = true;
         }
         
         public void Delete()
         {
-            switch(State)
-            {
-                case (int)ToStates.Uncompleted:
-                    State = (int)ToStates.Deleted;
-                    break;
-                case (int)ToStates.Completed:
-                    State = (int)ToStates.CompletedDeleted;
-                    break;
-                default:
-                    return;
-            }
+            Deleted = true;
         }
         
         public void ChangeName(string name)
@@ -64,21 +68,13 @@ namespace MyTODO
         public override string ToString()
         {
             var builder = new StringBuilder(Name);
-            switch(State)
-            {
-                case (int)ToStates.Completed:
-                    builder.Append(" Completed");
-                    break;
-                case (int)ToStates.CompletedDeleted:
-                    builder.Append(" Completed and Deleted");
-                    break;
-                case (int)ToStates.Deleted:
-                    builder.Append(" Deleted");
-                    break;
-                case (int)ToStates.Uncompleted:
-                    builder.Append(" Uncompleted");
-                    break;
-            }
+            builder.Append('\n');
+            if (Completed)
+                builder.Append("Completed\n");
+            else
+                builder.Append("\n");
+            if (Deleted)
+                builder.Append("Deleted");
             return builder.ToString();
         }
     }

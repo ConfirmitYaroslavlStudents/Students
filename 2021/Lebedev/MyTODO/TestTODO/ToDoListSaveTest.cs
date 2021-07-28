@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MyTODO;
 
 namespace ToDoTest
 {
@@ -10,8 +10,8 @@ namespace ToDoTest
         [TestMethod]
         public void SaveAndLoad()
         {
-            var file = new System.IO.FileInfo("testsave.nottxt");
-            MyTODO.ToDoList list = new MyTODO.ToDoList(null)
+            var file = new FileInfo("testsave.nottxt");
+            var list = new ToDoList()
             {
                 "A",
                 "B",
@@ -21,14 +21,16 @@ namespace ToDoTest
             list[2].Complete();
             try
             {
-                MyTODO.ToDoListReducer.Save(file, list);
-                MyTODO.ToDoList list1 = new MyTODO.ToDoList(file);
+                var restorer = new ToDoListRestorer(file);
+                restorer.Save(list);
+                var list1 = new ToDoList(restorer.Read());
 
                 Assert.AreEqual(3, list1.Count);
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
-                    Assert.AreEqual(list1[i].Name, list[i].Name);
-                    Assert.AreEqual(list1[i].State, list[i].State);
+                    Assert.AreEqual(list[i].Name, list1[i].Name);
+                    Assert.AreEqual(list[i].Deleted, list1[i].Deleted);
+                    Assert.AreEqual(list[i].Completed, list1[i].Completed);
                 }
             }
             finally

@@ -5,30 +5,37 @@ namespace MyTODO
 {
     public class ToDoArgs
     {
-        readonly ToDoList _todo;
+        private readonly ToDoList _todo;
 
-        public ToDoArgs(ToDoList list)
+        public ToDoArgs(ToDoList todolist)
         {
-            _todo = list;
+            _todo = todolist;
         }
 
-        int GetIndex(string arg)
+        int GetAndCheckInt(string[] args, ref int index)
         {
-            if (int.TryParse(arg, out var index) && index >= 0)
-                return index;
+            if (args.Length <= index + 1)
+            {
+                Console.WriteLine("insufficient number of arguments");
+                return -1;
+            }
+            index++;
+            if (int.TryParse(args[index], out var i) && i >= 0 && i < _todo.Count)
+                return i;
             else
-                Console.WriteLine("argument must be integer >= 0");
+                Console.WriteLine("argument must be integer >= 0 and less than number of items");
             return -1;
         }
 
-        string GetName(string[] args, ref int index)
+        string GetString(string[] args, ref int index)
         {
+            index++;
             var bufIndex = index;
-            if (args.Length <= index || args[index][0] != '*')
+            if (args.Length <= index || args[index][0] != '\"')
                 return "";
             var result = new StringBuilder(args[index++].Remove(0, 1));
             result.Append(' ');
-            while (index < args.Length && !args[index].EndsWith('*'))
+            while (index < args.Length && !args[index].EndsWith('\"'))
             {
                 result.Append(args[index++]);
                 result.Append(' ');
@@ -43,99 +50,98 @@ namespace MyTODO
             return result.ToString();
         }
 
+        public void PrintHelp()
+        {
+            Console.WriteLine("Usage:\nMyTODO.exe [add \"[name]\"|\n" +
+                              "changename [index] \"[name]\"|\n" +
+                              "complete [index]|\n" +
+                              "delete [index]|\n" +
+                              "show [index]]\n" +
+                              "Parameters:\n" +
+                              "add        | -a  add new task to ToDo list with specified name\n" +
+                              "changename | -cn changes name to task with specified index\n" +
+                              "complete   | -co setting completed status to task with specified index\n" +
+                              "delete     | -d  setting deleting status to task with specified index\n" +
+                              "show       | -s  shows task with specified index\n");
+        }
+
+        void AddItem(string[] args, ref int index)
+        {
+            var name = GetString(args, ref index);
+            _todo.Add(name);
+            Console.WriteLine("item \"{0}\" added successfully", name);
+        }
+
+        void ChangeName(string[] args, ref int index)
+        {
+
+            if (args.Length <= index + 2)
+            {
+                Console.WriteLine("insufficient number of arguments");
+                return;
+            }
+            var i = GetAndCheckInt(args, ref index);
+            if (i < 0)
+                return;
+            var name = GetString(args, ref index);
+            _todo[i].ChangeName(name);
+            Console.WriteLine("item's \"{0}\" name changed successfully", _todo[i].Name);
+        }
+
+        void CompleteTask(string[] args, ref int index)
+        {
+            var i = GetAndCheckInt(args, ref index);
+            if (i < 0)
+                return;
+            _todo[i].Complete();
+            Console.WriteLine("Item \"{0}\" completed successfully", _todo[i].Name);
+        }
+
+        void DeleteTask(string[] args, ref int index)
+        {
+            var i = GetAndCheckInt(args, ref index);
+            if (i < 0)
+                return;
+            _todo[i].Delete();
+            Console.WriteLine("Item \"{0}\" deleted successfully", _todo[i].Name);
+        }
+
+        void ShowTask(string[] args, ref int index)
+        {
+            var i = GetAndCheckInt(args, ref index);
+            if (i < 0)
+                return;
+            Console.WriteLine(_todo[i]);
+        }
+
         public void WorkWithArgs(string[] args)
         {
-            for (int i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Length; i++)
             {
                 switch (args[i].ToLower())
                 {
                     case "help":
-                        Console.WriteLine("Usage:\nMyTODO.exe [add *[name]*|\n" +
-                            "changename [index] *[name]*|\n" +
-                            "complete [index]|\n" +
-                            "delete [index]|\n" +
-                            "show [index]]\n" +
-                            "Parameters:\n" +
-                            "add        | -a  add new task to ToDo list with specified name\n" +
-                            "changename | -cn changes name to task with specified index\n" +
-                            "complete   | -co setting completed status to task with specified index\n" +
-                            "delete     | -d  setting deleting status to task with specified index\n" +
-                            "show       | -s  shows task with specified index\n");
+                        PrintHelp();
                         break;
                     case "add":
                     case "-a":
-                        i++;
-                        var name = GetName(args, ref i);
-                        _todo.Add(name);
-                        Console.WriteLine("item \"{0}\" added successfully", name);
+                        AddItem(args, ref i);
                         break;
                     case "changename":
                     case "-cn":
-                        if (args.Length <= i + 2)
-                        {
-                            Console.WriteLine("insufficient number of arguments");
-                            return;
-                        }
-                        var index = GetIndex(args[i + 1]);
-                        if (index < 0 || index >= _todo.Count)
-                        {
-                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
-                            break;
-                        }
-                        i += 2;
-                        name = GetName(args, ref i);
-                        _todo[index].ChangeName(name);
-                        Console.WriteLine("item's \"{0}\" name changed successfully", _todo[index].Name);
+                        ChangeName(args, ref i);
                         break;
                     case "complete":
                     case "-co":
-                        if (args.Length <= i + 1)
-                        {
-                            Console.WriteLine("insufficient number of arguments");
-                            return;
-                        }
-                        index = GetIndex(args[i + 1]);
-                        if (index < 0 || index >= _todo.Count)
-                        {
-                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
-                            break;
-                        }
-                        _todo[index].Complete();
-                        Console.WriteLine("Item \"{0}\" completed successfully", _todo[index].Name);
-                        i++;
+                        CompleteTask(args, ref i);
                         break;
                     case "delete":
                     case "-d":
-                        if (args.Length <= i + 1)
-                        {
-                            Console.WriteLine("insufficient number of arguments");
-                            return;
-                        }
-                        index = GetIndex(args[i + 1]);
-                        if (index < 0 || index >= _todo.Count)
-                        {
-                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
-                            break;
-                        }
-                        _todo[index].Delete();
-                        Console.WriteLine("Item \"{0}\" deleted successfully", _todo[index].Name);
-                        i++;
+                        DeleteTask(args, ref i);
                         break;
                     case "show":
                     case "-s":
-                        if (args.Length <= i + 1)
-                        {
-                            Console.WriteLine("insufficient number of arguments");
-                            return;
-                        }
-                        index = GetIndex(args[1]);
-                        if (index < 0 || index >= _todo.Count)
-                        {
-                            Console.WriteLine("argument must be integer >= 0 and less than number of items");
-                            break;
-                        }
-                        Console.WriteLine(_todo[index]);
-                        i++;
+                        ShowTask(args, ref i);
                         break;
                     default:
                         Console.WriteLine("unknown command: {0}, type \"help\" to see list of commands", args[0]);

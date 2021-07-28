@@ -5,16 +5,13 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public class App : IApp
+    public abstract class App 
     {
         public ToDoList List { get; set; }
         public ILogger Logger { get; set; }
 
-        public App(ILogger logger)
-        {
-            Logger = logger;
-            List = new ToDoList(new FileOperation(Logger).Load());
-        }
+        internal Stack<ToDoList> _lastLists = new Stack<ToDoList>();
+
 
         public void Add()
         {
@@ -28,6 +25,7 @@ namespace ToDoListNikeshina
                 return;
             }
 
+            PushListToStack();
             List.Add(new Task(dscr, false));
             Logger.Recording(Messages.IsDone());
         }
@@ -35,12 +33,12 @@ namespace ToDoListNikeshina
         public void ChangeStatus()
         {
 
-            Logger.Recording(Messages.RequestNumber());
+            Logger.Recording(Messages.RequestNumberOfString());
 
 
             var inputStr = Logger.TakeData();
 
-            if (!Validator.IsDigitValid(inputStr, List.Count()))
+            if (!Validator.IsNumberValid(inputStr, List.Count()))
             {
                 Logger.Recording(Messages.WrongFormatOfInputData());
                 return;
@@ -48,17 +46,18 @@ namespace ToDoListNikeshina
 
             int num = int.Parse(inputStr);
 
+            PushListToStack();
             List.ChangeStatus(num);
             Logger.Recording(Messages.IsDone());
         }
 
         public void Delete()
         {
-            Logger.Recording(Messages.RequestNumber());
+            Logger.Recording(Messages.RequestNumberOfString());
 
             var inputStr = Logger.TakeData();
 
-            if (!Validator.IsDigitValid(inputStr, List.Count()))
+            if (!Validator.IsNumberValid(inputStr, List.Count()))
             {
                 Logger.Recording(Messages.WrongFormatOfInputData());
                 return;
@@ -66,17 +65,18 @@ namespace ToDoListNikeshina
 
             int num = int.Parse(inputStr);
 
+            PushListToStack();
             List.Delete(num);
             Logger.Recording(Messages.IsDone());
         }
 
         public void Edit()
         {
-            Logger.Recording(Messages.RequestNumber());
+            Logger.Recording(Messages.RequestNumberOfString());
 
             var inputStr = Logger.TakeData();
 
-            if (!Validator.IsDigitValid(inputStr, List.Count()))
+            if (!Validator.IsNumberValid(inputStr, List.Count()))
             {
                 Logger.Recording(Messages.WrongFormatOfInputData());
                 return;
@@ -94,6 +94,7 @@ namespace ToDoListNikeshina
                 return;
             }
 
+            PushListToStack();
             List.Edit(num, dscr);
             Logger.Recording(Messages.IsDone());
         }
@@ -119,6 +120,45 @@ namespace ToDoListNikeshina
         {
             var fileOperation = new FileOperation(Logger);
             fileOperation.Save(List._list);
+        }
+
+        public abstract void Rollback();
+
+        private void PushListToStack()
+        {
+            _lastLists.Push(new ToDoList(List.CopyList()));
+        }
+
+        public abstract void StringHandling();
+
+        public bool GetCommand(string command)
+        {
+            switch (command)
+            {
+                case "list":
+                    Print();
+                    return true;
+                case "add":
+                    Add();
+                    return true;
+                case "delete":
+                    Delete();
+                    return true;
+                case "change":
+                    ChangeStatus();
+                    return true;
+                case "edit":
+                    Edit();
+                    return true;
+                case "rollback":
+                    Rollback();
+                    return true;
+                case "exit":
+                    Save();
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }

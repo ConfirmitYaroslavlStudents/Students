@@ -5,11 +5,15 @@ namespace ToDoListNikeshina
 {
     public class ToDoList
     {
-        internal List<Task> _list;
+        internal List<Task> _list = new List<Task>();
 
         public ToDoList(List<Task> inputList)
         {
             _list = inputList;
+        }
+        public ToDoList(Task [] inputList)
+        {
+            _list.AddRange(inputList);
         }
 
         public int Count()
@@ -39,5 +43,16 @@ namespace ToDoListNikeshina
             _list[indexInList].ChangeName(dscr);
         }
 
+        internal List<Task> CopyList()
+        {
+            var newItem = new List<Task>();
+            foreach(var task in _list)
+            {
+                var newtask = new Task(task.Name, task.Status);
+                newItem.Add(newtask);
+            }
+
+            return newItem;
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace ToDoListNikeshina
 {
     public static class Validator
     {
-        public static bool IsStringValid(string dscr)
+        internal static bool IsStringValid(string dscr)
         {
             if (dscr.Length == 0)
                 return false;
@@ -14,19 +14,20 @@ namespace ToDoListNikeshina
             return true;
         }
 
-        public static bool IsDigitValid(string input, int count)
+        internal static bool IsNumberValid(string input, int count)
         {
             if (Int32.TryParse(input, out int num) && IsNumberCorrect(num, count))
                 return true;
 
-            return false; ;
+            return false;
         }
-        public static bool IsNumberCorrect(int num, int count)
+        private static bool IsNumberCorrect(int num, int count)
         {
             if (num > 0 && num <= count)
                 return true;
 
             return false;
         }
+
     }
 }

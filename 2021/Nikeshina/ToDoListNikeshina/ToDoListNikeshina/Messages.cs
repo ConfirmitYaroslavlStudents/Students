@@ -8,25 +8,31 @@ namespace ToDoListNikeshina
     {
         public static string WrongFormatOfInputData()
         {
-            return ("Incorrect data");
+            return "Incorrect data";
         }
         internal static  string ListIsEmpty()
         {
-            return ("List is empty(");
+            return "List is empty(";
         }
-        internal static string RequestNumber()
+        internal static string RequestNumberOfString()
         {
-            return("Number of the note: ");
+            return "Number of the note: ";
         }
+
+        internal static string RequestNumberOfCommand()
+        {
+            return "Number of commands: ";
+        }
+
 
         internal static string RequestDescription()
         {
-            return("Description: ");
+            return "Description: " ;
         }
 
         internal static string IsDone()
         {
-            return ("Done! ");
+            return "Done! ";
         }
 
         public static string WriteInstuction()

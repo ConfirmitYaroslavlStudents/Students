@@ -10,7 +10,7 @@ namespace ToDoHost.Controllers
     [ApiController]
     [Route("[controller]")]
     public class ToDoListController : ControllerBase
-    {
+    { 
         ToDoListRestorer _restorer = new ToDoListRestorer(new FileInfo("TODOsave.txt"));
 
         public ToDoList Todo
@@ -29,7 +29,8 @@ namespace ToDoHost.Controllers
         [HttpGet]
         public IEnumerable<ToDoItem> GetList()
         {
-            _logger.Log(logLevel: LogLevel.Information, "Sent full todo list");
+            if (_logger != null)
+                _logger.Log(logLevel: LogLevel.Information, "Sent full todo list");
             return Todo;
         }
         
@@ -38,7 +39,7 @@ namespace ToDoHost.Controllers
         {
             try
             {
-                if(index>0 && index<Todo.Count)
+                if(index>0 && index<Todo.Count && _logger != null)
                     _logger.Log(logLevel: LogLevel.Information, $"Sent todo item {index}");
                 return Todo[index];
             }
@@ -56,7 +57,8 @@ namespace ToDoHost.Controllers
                 var state = JsonConvert.DeserializeObject<ToDoItem>(item.ToString());
                 Todo.Add(state);
                 _restorer.Save(Todo); 
-                _logger.Log(logLevel: LogLevel.Information, $"Deleted todo item {Todo.Count-1} created");
+                if(_logger != null)
+                    _logger.Log(logLevel: LogLevel.Information, $"Deleted todo item {Todo.Count-1} created");
                 return "Post Completed";
             }
             catch
@@ -72,7 +74,7 @@ namespace ToDoHost.Controllers
             {
                 Todo[index].Delete();
                 _restorer.Save(Todo);
-                if (index > 0 && index < Todo.Count)
+                if (index > 0 && index < Todo.Count && _logger != null)
                     _logger.Log(logLevel: LogLevel.Information, $"Deleted todo item {index}");
                 return "Delete Completed";
             }

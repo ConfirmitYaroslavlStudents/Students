@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDoApi;
 using ToDo;
 
@@ -10,6 +7,19 @@ namespace ToDoListTests
     [TestClass]
     public class ToDoControllerTests
     {
+        [TestMethod]
+        public void GetReturnsCorrectEmptyList()
+        {
+            var loaderSaver = new TestLoaderSaver();
+            var logger = new TestLogger();
+            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+
+            var actualToDoList = controller.GetToDoList();
+
+            Assert.AreEqual("Список пуст", logger.Messages[0]);
+            Assert.AreEqual("", actualToDoList);
+        }
+
         [TestMethod]
         public void GetReturnsCorrectList()
         {
@@ -33,6 +43,7 @@ namespace ToDoListTests
             controller.PostTask("wash dishes");
             var actualToDoList = controller.GetToDoList();
 
+            Assert.AreEqual("Задание добавлено", logger.Messages[0]);
             Assert.AreEqual("1. wash dishes  [ ]\r\n", actualToDoList);
         }
 
@@ -47,6 +58,7 @@ namespace ToDoListTests
             controller.DeleteTask(1);
             var actualToDoList = controller.GetToDoList();
 
+            Assert.AreEqual("Задание удалено", logger.Messages[0]);
             Assert.AreEqual("", actualToDoList);
         }
 
@@ -61,6 +73,7 @@ namespace ToDoListTests
             controller.PutTaskText(new PutTaskTextRequest { TaskNumber = 1, TaskText = "clean the room" });
             var actualToDoList = controller.GetToDoList();
 
+            Assert.AreEqual("Текст задания изменен", logger.Messages[0]);
             Assert.AreEqual("1. clean the room  [ ]\r\n", actualToDoList);
         }
 
@@ -75,7 +88,9 @@ namespace ToDoListTests
             controller.PutTaskStatus(1);
             var actualToDoList = controller.GetToDoList();
 
+            Assert.AreEqual("Статус задания изменен", logger.Messages[0]);
             Assert.AreEqual("1. wash dishes  [v]\r\n", actualToDoList);
         }
     }
 }
+

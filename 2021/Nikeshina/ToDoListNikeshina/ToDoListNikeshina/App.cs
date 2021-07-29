@@ -12,18 +12,14 @@ namespace ToDoListNikeshina
 
         internal Stack<ToDoList> _lastLists = new Stack<ToDoList>();
 
-
         public void Add()
         {
             Logger.Recording(Messages.RequestDescription());
 
             var dscr = Logger.TakeData();
 
-            if (!Validator.IsStringValid(dscr))
-            {
-                Logger.Recording(Messages.WrongFormatOfInputData());
+            if (!IsStringValid(dscr))
                 return;
-            }
 
             PushListToStack();
             List.Add(new Task(dscr, false));
@@ -32,42 +28,13 @@ namespace ToDoListNikeshina
 
         public void ChangeStatus()
         {
-
-            Logger.Recording(Messages.RequestNumberOfString());
-
-
-            var inputStr = Logger.TakeData();
-
-            if (!Validator.IsNumberValid(inputStr, List.Count()))
-            {
-                Logger.Recording(Messages.WrongFormatOfInputData());
-                return;
-            }
-
-            int num = int.Parse(inputStr);
-
-            PushListToStack();
-            List.ChangeStatus(num);
-            Logger.Recording(Messages.IsDone());
+            DoCommandWithRequestNumber(List.ChangeStatus);
+            
         }
 
         public void Delete()
         {
-            Logger.Recording(Messages.RequestNumberOfString());
-
-            var inputStr = Logger.TakeData();
-
-            if (!Validator.IsNumberValid(inputStr, List.Count()))
-            {
-                Logger.Recording(Messages.WrongFormatOfInputData());
-                return;
-            }
-
-            int num = int.Parse(inputStr);
-
-            PushListToStack();
-            List.Delete(num);
-            Logger.Recording(Messages.IsDone());
+            DoCommandWithRequestNumber(List.Delete);
         }
 
         public void Edit()
@@ -76,29 +43,56 @@ namespace ToDoListNikeshina
 
             var inputStr = Logger.TakeData();
 
-            if (!Validator.IsNumberValid(inputStr, List.Count()))
-            {
-                Logger.Recording(Messages.WrongFormatOfInputData());
+            if (!IsNumberValid(inputStr))
                 return;
-            }
 
             int num = int.Parse(inputStr);
-
             Logger.Recording(Messages.RequestDescription());
-
             var dscr = Logger.TakeData();
 
-            if (!Validator.IsStringValid(dscr))
-            {
-                Logger.Recording(Messages.WrongFormatOfInputData());
+            if (!IsStringValid(dscr))
                 return;
-            }
 
             PushListToStack();
             List.Edit(num, dscr);
             Logger.Recording(Messages.IsDone());
         }
 
+        private bool IsStringValid(string str)
+        {
+            if (!Validator.IsStringValid(str))
+            {
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsNumberValid(string num)
+        {
+            if (!Validator.IsNumberValid(num, List.Count()))
+            {
+                Logger.Recording(Messages.WrongFormatOfInputData());
+                return false;
+            }
+
+            return true;
+        }
+
+        private void DoCommandWithRequestNumber(Action<int> comand)
+        {
+            Logger.Recording(Messages.RequestNumberOfString());
+            var inputStr = Logger.TakeData();
+
+            if (!IsNumberValid(inputStr))
+                return;
+
+            int num = int.Parse(inputStr);
+            PushListToStack();
+            comand(num);
+            Logger.Recording(Messages.IsDone());
+        }
 
         public void Print()
         {

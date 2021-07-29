@@ -12,13 +12,21 @@ namespace ToDoListNikeshina
             List = new ToDoList(new FileOperation(Logger).Load());
         }
 
+
+        public CmdApp(ILogger logger)
+        {
+            Logger = logger;
+            List = new ToDoList(new FileOperation(Logger).Load());
+        }
+
         public override void Rollback()
         { }
 
         public override void StringHandling()
         {
             GetCommand(Logger.TakeData());
-            Save();
+            if(Logger as CmdLogger !=null)
+                 Save();
         }
     }
 }

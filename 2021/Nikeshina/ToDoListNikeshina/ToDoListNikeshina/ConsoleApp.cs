@@ -12,6 +12,12 @@ namespace ToDoListNikeshina
             List = new ToDoList(new FileOperation(Logger).Load());
         }
 
+        public ConsoleApp(ILogger logger)
+        {
+            Logger = logger;
+            List = new ToDoList(new FileOperation(Logger).Load());
+        }
+
         public override void Rollback()
         {
             Logger.Recording(Messages.RequestNumberOfCommand());

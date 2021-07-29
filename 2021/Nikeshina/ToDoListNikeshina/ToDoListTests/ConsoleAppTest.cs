@@ -5,7 +5,7 @@ using ToDoListNikeshina;
 namespace ToDoListTests
 {
     [TestClass]
-    public class ApplicationTest
+    public class ConsoleAppTest
     {
         [TestMethod]
         public void MsgListIsEmpty()
@@ -22,7 +22,7 @@ namespace ToDoListTests
         public void AddNewItem()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз" });
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
             app.Add();
 
             CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "List is empty(", "Description: ", "Done! " });
@@ -32,7 +32,7 @@ namespace ToDoListTests
         public void WrongFormtOfEditNumber()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "15"});
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Edit();
@@ -45,7 +45,7 @@ namespace ToDoListTests
         public void WrongFormtOfString()
         {
             var testlogger = new TestLogger(new List<string> { "" });
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
 
@@ -56,7 +56,7 @@ namespace ToDoListTests
         public void WrongFormtOfEditString()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "1" ,""});
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Edit();
@@ -69,7 +69,7 @@ namespace ToDoListTests
         public void WrongFormtOfStringNumber()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "2"});
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Edit();
@@ -82,7 +82,7 @@ namespace ToDoListTests
         public void PrintToDoList()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду"});
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Add();
@@ -106,7 +106,7 @@ namespace ToDoListTests
         public void ListIsEmptyAfterDelete()
         {
             var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду",  "1","1" });
-            var app = new App(testlogger);
+            var app = new ConsoleApp(testlogger);
 
             app.Add();
             app.Add();
@@ -135,10 +135,9 @@ namespace ToDoListTests
         [TestMethod]
         public void ChangeStatus()
         {
-            var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду", "2" });
-            var app = new App(testlogger);
+            var testlogger = new TestLogger(new List<string> { "Купить арбуз", "1" });
+            var app = new ConsoleApp(testlogger);
 
-            app.Add();
             app.Add();
             app.ChangeStatus();
 
@@ -146,25 +145,21 @@ namespace ToDoListTests
             msgs.Add("List is empty(");
             msgs.Add("Description: ");
             msgs.Add("Done! ");
-            msgs.Add("Description: ");
-            msgs.Add("Done! ");
             msgs.Add("Number of the note: ");
             msgs.Add("Done! ");
 
             app.Print();
 
-            msgs.Add("1. Купить арбуз False");
-            msgs.Add("2. Вымыть посуду True");
+            msgs.Add("1. Купить арбуз True");
 
             CollectionAssert.AreEqual(testlogger.Messages, msgs);
         }
         [TestMethod]
         public void EditDescription()
         {
-            var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду", "2", "Вымыть чайник" });
-            var app = new App(testlogger);
+            var testlogger = new TestLogger(new List<string> { "Купить арбуз", "1", "Вымыть чайник" });
+            var app = new ConsoleApp(testlogger);
 
-            app.Add();
             app.Add();
             app.Edit();
 
@@ -172,19 +167,42 @@ namespace ToDoListTests
             msgs.Add("List is empty(");
             msgs.Add("Description: ");
             msgs.Add("Done! ");
-            msgs.Add("Description: ");
-            msgs.Add("Done! ");
             msgs.Add("Number of the note: ");
             msgs.Add("Description: ");
             msgs.Add("Done! ");
 
             app.Print();
 
-            msgs.Add("1. Купить арбуз False");
-            msgs.Add("2. Вымыть чайник False");
+            msgs.Add("1. Вымыть чайник False");
 
             CollectionAssert.AreEqual(testlogger.Messages, msgs);
         }
     
+        [TestMethod]
+        public void CheckRollback()
+        {
+            var testlogger = new TestLogger(new List<string> { "Купить арбуз", "Вымыть посуду", "1", "2"});
+            var app = new ConsoleApp(testlogger);
+
+            app.Add();
+            app.Add();
+
+            var msgs = new List<string>();
+            msgs.Add("List is empty(");
+            msgs.Add("Description: ");
+            msgs.Add("Done! ");
+            msgs.Add("Description: ");
+            msgs.Add("Done! ");
+
+            app.ChangeStatus();
+            app.Rollback();
+            msgs.Add("Number of the note: ");
+            msgs.Add("Done! ");
+            msgs.Add("Number of commands: ");
+            msgs.Add("Done! ");
+            app.Print();
+            msgs.Add("1. Купить арбуз False");
+            CollectionAssert.AreEqual(testlogger.Messages, msgs);
+        }
     }
 }

@@ -14,30 +14,19 @@ namespace ToDoList
             _fileName = fileName;
         }
 
-        public void Save(List<string> notes)
+        public void Save(List<Note> notes)
         {
-                File.WriteAllLines(_fileName, notes);
+            File.WriteAllLines(_fileName, ConvertNoteToSaveAndLoad.ConvertNoteToSave(notes));
         }
 
         public List<Note> Load ()
         {
             if (!File.Exists(_fileName))
-                throw new FileNotFoundException();
+                throw new FileNotFoundException("Saved data was not found. New list created.");
 
-            var notesList = File.ReadAllLines(_fileName);
-            List<Note> newNotesList = new List<Note>();
+            var lines = File.ReadAllLines(_fileName);
 
-            foreach (var note in notesList)
-                newNotesList.Add(ConvertingNote(note));
-
-            return newNotesList;
-        }
-
-        private static Note ConvertingNote(string note)
-        {
-            if (note.IndexOf("X ") == 0)
-                return new Note{Text = note.Substring(2), isCompleted = true };
-            return new Note { Text = note, isCompleted = false };
+            return new List<Note>(ConvertNoteToSaveAndLoad.ConvertLinesAfterLoading(lines));
         }
     }
 }

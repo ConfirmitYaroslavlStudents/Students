@@ -8,11 +8,16 @@ namespace Todo
     {
         static void Main(string[] args)
         {
-            var ToDo = new ToDoConsole();
-
             if (args.Length == 0)
+            {
+                var ToDo = new ToDoConsole();
                 ToDo.DoWork();
-            else ToDo.DoWork(args);
+            }
+            else
+            {
+                var ToDo = new ToDoCMD();
+                ToDo.DoWork(args);
+            }
         }
     }
 }

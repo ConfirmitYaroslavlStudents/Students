@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToDoList
+namespace ToDoList.Loggers
 {
-    public class Logger
+    public class ConsoleLogger: ILogger
     {
         public void Log(string message)
         {

@@ -7,20 +7,11 @@ namespace ToDoList
 {
     public class ToDoConsole
     {
-        private SaveAndLoadNotes _saveAndLoad = new SaveAndLoadNotes("MyNotes.txt");
         List<Note> _notes = new List<Note>();
-        Logger _logger = new Logger();
+        HandlingEnteredCommandInConsole _handlingEnteredCommandInConsol = new HandlingEnteredCommandInConsole();
         bool isWork;
-        string[] _formatInputHelp = new string[]
-        {
-            "Input format:",
-            "Сreating new note: \"add *notes*\"",
-            "Edit note: \"edit 00 *new notes*\"",
-            "Toggle progress status note: \"toggle 00\"",
-            "Delete note: \"delete 00\"",
-            "Show all list: \"show\"",
-            "Exit: \"bye\"",
-        };
+        Loggers.ConsoleLogger _consoleLogger = new Loggers.ConsoleLogger();
+        SaveAndLoadNotes _saveAndLoad = new SaveAndLoadNotes("MyNotes.txt");
 
         public ToDoConsole()
         {
@@ -30,124 +21,40 @@ namespace ToDoList
         public void DoWork()
         {
             isWork = true;
-            
+
             while (isWork)
             {
-                DisplayFormatInputHelp();
+                PrintingConsoleMenuToDo.PrintHelp();
+
                 try
                 {
-                    DisplaySeparator();
+                    _handlingEnteredCommandInConsol.HandleInput(_notes, Console.ReadLine());
 
-                    var choise = Console.ReadLine().Split(" ");
-
-                    DisplaySeparator();
-
-                    SelectionChoise(choise);
                     SaveNotes();
+
+                    if (_handlingEnteredCommandInConsol.IsFinished)
+                        isWork = false;
                 }
-                catch
+
+                catch (WrongEnteredCommandException e)
                 {
-                    _logger.Log("You entered wrong command!");
+                    _consoleLogger.Log(e.Message);
+                }
+
+                catch (Exception e)
+                {
+                    var fileAndConsoleLogger = new Loggers.FileLoggerDecorator(_consoleLogger, "Log.txt");
+                    fileAndConsoleLogger.Log(DateTime.Now.ToString());
+                    fileAndConsoleLogger.Log(e.Message);
                 }
             }
 
-            Console.WriteLine("Bye Bye ^-^");
-            Console.ReadKey();
-        }
-
-        public void DoWork (string[] command)
-        {
-            try
-            {
-                SelectionChoise(command);
-                SaveNotes();
-            }
-            catch
-            {
-                _logger.Log("You entered wrong command!");
-            }
-        }
-
-        void SelectionChoise(string[] choise)
-        {
-            var command = choise[0];
-            switch (command)
-            {
-                case "add":
-                    Add(ConvertNoteToString(1,choise));
-                    break;
-
-                case "edit":
-                    Edit(CorrectnessEnteringIndex(choise[1]),ConvertNoteToString(2,choise));
-                    break;
-
-                case "toggle":
-                    ToggleIsCompleted(CorrectnessEnteringIndex(choise[1]));
-                    break;
-
-                case "delete":
-                    Delete(CorrectnessEnteringIndex(choise[1]));
-                    break;
-                case "show":
-                    DisplayAllNotes();
-                    break;
-
-                case "bye":
-                    isWork = false;
-                    break;
-
-                default: { throw new ArgumentException(); }
-            }
-        }
-
-        void Add(string note)
-        {           
-            _notes.Add(new Note { Text = note, isCompleted = false });
-        }
-        void Edit(int index, string newNote)
-        {
-            _notes[index].Text = newNote;
-        }
-        string ConvertNoteToString(int index,string[] part)
-        {
-            if (part.Length < 3)
-                throw new ArgumentException();
-
-            var newNote = new StringBuilder("");
-
-            for (var i = index; i < part.Length; i++)
-                newNote.Append(part[i] + " ");
-
-            return newNote.ToString().Trim();
-        }
-
-        void ToggleIsCompleted(int index)
-        {
-            _notes[index].isCompleted = !_notes[index].isCompleted;
-        }
-
-        void Delete(int index)
-        {
-            _notes.RemoveAt(index);
-        }
-
-        int CorrectnessEnteringIndex(string inputIndex)
-        {
-            var result = 0;
-            int.TryParse(inputIndex, out result);
-            if (result <= 0 || result > _notes.Count)
-                throw new ArgumentException();
-
-            return result - 1;
+            PrintingConsoleMenuToDo.PrintGoodbye();
         }
 
         private void SaveNotes()
-        { 
-            var newNotesList = new List<string>();
-            foreach (var note in _notes)
-                newNotesList.Add(note.ToString());
-
-            _saveAndLoad.Save(newNotesList);
+        {
+            _saveAndLoad.Save(_notes);
         }
 
         private void LoadNotes()
@@ -156,29 +63,20 @@ namespace ToDoList
             {
                 _notes = _saveAndLoad.Load();
             }
-            catch
+
+            catch (FileNotFoundException e)
             {
                 _notes = new List<Note>();
-                _logger.Log("Saved data was not found. New list created.");
+             
+                _consoleLogger.Log(e.Message);
             }
-        }
 
-        void DisplayAllNotes()
-        {
-            for (var i = 0; i < _notes.Count; i++)
-                Console.WriteLine("{0}. {1}", i + 1, _notes[i].ToString());
-            DisplaySeparator();
-        }
-
-        void DisplayFormatInputHelp()
-        {
-            for (var i = 0; i < _formatInputHelp.Length; i++)
-                Console.WriteLine(_formatInputHelp[i]);
-        }
-
-        void DisplaySeparator()
-        {
-            Console.WriteLine("---------------");
+            catch (Exception e)
+            {
+                var fileAndConsoleLogger = new Loggers.FileLoggerDecorator(_consoleLogger, "Log.txt");
+                fileAndConsoleLogger.Log(DateTime.Now.ToString());
+                fileAndConsoleLogger.Log(e.Message);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo", "ToDoListApp\Todo.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoList", "ToDoList\ToDoList.csproj", "{B7068FDE-4924-40C0-ACC2-A543E20E700A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProjectForToDoList", "TestProjectForToDoList\TestProjectForToDoList.csproj", "{6152ACA6-A317-4376-8687-11BBEE54CC77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsForToDoList", "TestProjectForToDoList\TestsForToDoList.csproj", "{6152ACA6-A317-4376-8687-11BBEE54CC77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

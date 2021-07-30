@@ -11,7 +11,7 @@ namespace ToDoApp
             IConsoleExtended console = isCommandLineExecuted
                 ? new CommandLineInteractor(args)
                 : new ConsoleInteractor();
-            var toDoList = new ToDoList(new FileManager().LoadFromFile());
+            var toDoList = new ToDoList(new FileSaveAndLoad().LoadTheList());
             var commandExecutor = new CommandExecutor(toDoList, console);
             var appController = new AppController(commandExecutor, console);
             AppEngine appEngine =

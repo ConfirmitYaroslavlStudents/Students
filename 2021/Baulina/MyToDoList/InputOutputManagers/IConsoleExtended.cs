@@ -21,7 +21,7 @@ namespace InputOutputManagers
 
         public static void PrintIncorrectNumberWarning(this IConsoleExtended console)
         {
-            console.WriteLine("[red]Incorrect number[/]");
+            console.WriteLine("[red]Incorrect id[/]");
         }
 
         public static void PrintNewDescriptionRequest(this IConsoleExtended console)

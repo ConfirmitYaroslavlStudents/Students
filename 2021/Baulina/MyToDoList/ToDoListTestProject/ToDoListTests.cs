@@ -30,5 +30,15 @@ namespace ToDoListTestProject
 
             Assert.True(list[2].IsComplete);
         }
+
+        [Fact]
+        public void ToDoItemIdIsSetCorrectAfterAddition()
+        {
+            var list = new ToDoList { "Clean the house", "Do the laundry" };
+            
+            list.Add("Iron the clothes");
+
+            Assert.Equal(2, list[2].Id);
+        }
     }
 }

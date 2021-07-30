@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using ToDoListTestProject.ConsoleModeTests;
 
-namespace ToDoListTestProject
+namespace ToDoListTestProject.CMDModeTests
 {
     class ClConsoleFake : AppConsoleFake
     {

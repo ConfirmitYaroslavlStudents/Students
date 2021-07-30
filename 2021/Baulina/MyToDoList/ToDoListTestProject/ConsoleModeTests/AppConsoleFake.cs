@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Spectre.Console.Rendering;
 using InputOutputManagers;
+using Spectre.Console.Rendering;
 
-namespace ToDoListTestProject
+namespace ToDoListTestProject.ConsoleModeTests
 {
     class AppConsoleFake : IConsoleExtended
     {

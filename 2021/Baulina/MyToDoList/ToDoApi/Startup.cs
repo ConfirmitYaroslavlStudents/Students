@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyToDoList;
 
 namespace ToDoApi
 {
@@ -19,7 +20,7 @@ namespace ToDoApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<IToDoListProvider, FileToDoListProvider>();
+            services.AddScoped<IListSaveAndLoad, FileSaveAndLoad>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

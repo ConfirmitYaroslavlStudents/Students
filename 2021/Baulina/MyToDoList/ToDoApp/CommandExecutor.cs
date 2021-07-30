@@ -43,10 +43,10 @@ namespace ToDoApp
             try
             {
                 command();
-                new FileManager().SaveToFile(MyToDoList);
+                new FileSaveAndLoad().SaveTheList(MyToDoList);
 
             }
-            catch (ArgumentOutOfRangeException)
+            catch (InvalidOperationException)
             {
                 _console.PrintIncorrectNumberWarning();
             }

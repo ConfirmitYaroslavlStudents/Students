@@ -1,27 +1,32 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
+using MyToDoList;
 using Newtonsoft.Json;
-using ToDoApi;
 using Xunit;
+using System.Linq;
+using System.Text;
 
-namespace ToDoListTestProject
+namespace ToDoListTestProject.ApiIntegrationTests
 {
     public static class ContentHelper
     {
         public static StringContent GetStringContent(object obj)
             => new StringContent(JsonConvert.SerializeObject(obj), Encoding.Default, "application/json");
     }
-
-    public class ToDoApiIntegrationTests:IClassFixture<WebApplicationFactory<Startup>>
+    
+    public class ToDoApiTests : IDisposable
     {
+        private readonly WebApplicationFactory _factory;
         private readonly HttpClient _client;
 
-        public ToDoApiIntegrationTests(WebApplicationFactory<Startup> factory)
+        public ToDoApiTests()
         {
-            _client = factory.CreateClient();
+            Environment.SetEnvironmentVariable("RawConfigProperty", "OverriddenValue");
+            _factory = new WebApplicationFactory();
+            _client = _factory.CreateClient();
         }
 
         [Fact]
@@ -127,28 +132,38 @@ namespace ToDoListTestProject
         public async Task GetWithCorrectParameterReturnsOk()
         {
             var response = await _client.GetAsync("todoItems");
+            var responseString = await response.Content.ReadAsStringAsync();
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var toDoList = JsonConvert.DeserializeObject<IEnumerable<ToDoItem>>(responseString).ToList();
+            Assert.Equal(_factory.ToDoList, toDoList);
         }
 
         [Fact]
         public async Task PostWithCorrectParameterReturnsOk()
         {
             var response = await _client.PostAsync("todoItems", ContentHelper.GetStringContent("Walk the dog"));
+            var getResponse = await _client.GetAsync("todoItems");
+            var responseString = await getResponse.Content.ReadAsStringAsync();
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await _client.GetAsync("todoItems");
+            var toDoList = JsonConvert.DeserializeObject<IEnumerable<ToDoItem>>(responseString).ToList();
+            Assert.Contains(toDoList[2].Description, "Walk the dog");
         }
 
         [Fact]
         public async Task DeleteWithCorrectParameterReturnsOk()
         {
             var response = await _client.DeleteAsync("todoItems/0");
+            var getResponse = await _client.GetAsync("todoItems");
+            var responseString = await getResponse.Content.ReadAsStringAsync();
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var toDoList = JsonConvert.DeserializeObject<IEnumerable<ToDoItem>>(responseString).ToList();
+            Assert.Single(toDoList);
         }
 
         [Fact]
@@ -162,9 +177,19 @@ namespace ToDoListTestProject
             };
 
             var response = await _client.PutAsync("todoItems", ContentHelper.GetStringContent(requestBody));
+            var getResponse = await _client.GetAsync("todoItems");
+            var responseString = await getResponse.Content.ReadAsStringAsync();
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var toDoList = JsonConvert.DeserializeObject<IEnumerable<ToDoItem>>(responseString).ToList();
+            Assert.Equal("Walk the dog", toDoList[0].Description);
+        }
+
+        public void Dispose()
+        {
+            Environment.SetEnvironmentVariable("RawConfigProperty", "");
+            _factory?.Dispose();
         }
     }
-}
+}    

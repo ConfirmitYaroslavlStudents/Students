@@ -1,8 +1,8 @@
-﻿using Xunit;
-using MyToDoList;
+﻿using MyToDoList;
 using ToDoApp;
+using Xunit;
 
-namespace ToDoListTestProject
+namespace ToDoListTestProject.ConsoleModeTests
 {
     public class CommandExecutorTests
     {

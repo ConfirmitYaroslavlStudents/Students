@@ -1,9 +1,9 @@
-﻿using MyToDoList;
+﻿using InputOutputManagers;
+using MyToDoList;
 using ToDoApp;
 using Xunit;
-using InputOutputManagers;
 
-namespace ToDoListTestProject
+namespace ToDoListTestProject.CMDModeTests
 {
     public class CommandLineModeTests
     {

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MyToDoList;
 
@@ -13,31 +12,20 @@ namespace ToDoApi.Controllers
     public class ToDoItemsController : ControllerBase
     {
         public ToDoList ToDoList { get; }
-        private readonly FileManager _fileManager = new FileManager();
+        private readonly IListSaveAndLoad _listSaveAndLoad;
         private readonly ILogger<ToDoItemsController> _logger;
 
-        public ToDoItemsController(ILogger<ToDoItemsController> logger, IToDoListProvider toDoListProvider)
+        public ToDoItemsController(ILogger<ToDoItemsController> logger, IListSaveAndLoad listSaveAndLoad)
         {
             _logger = logger;
-            ToDoList = new ToDoList(toDoListProvider.GetToDoList());
+            _listSaveAndLoad = listSaveAndLoad;
+            ToDoList = new ToDoList(_listSaveAndLoad.LoadTheList());
         }
 
         [HttpGet]
-        public Task<IEnumerable<ToDoViewItem>> GetAllToDoItemsAsync()
+        public IEnumerable<ToDoItem> GetAllToDoItems()
         {
-            return Task.FromResult(GetAllToDoItems());
-        }
-
-        private IEnumerable<ToDoViewItem> GetAllToDoItems()
-        {
-            return ConvertListOfToDoItemsToListOfToDoViewItems();
-        }
-
-        private IEnumerable<ToDoViewItem> ConvertListOfToDoItemsToListOfToDoViewItems()
-        {
-            var list = ToDoList.Select((toDoItem, i) => new ToDoViewItem()
-                { Description = toDoItem.Description, Index = i, IsComplete = toDoItem.IsComplete }).ToList();
-            return list;
+            return ToDoList;
         }
 
         [HttpPost]
@@ -73,9 +61,9 @@ namespace ToDoApi.Controllers
             try
             {
                 request();
-                _fileManager.SaveToFile(ToDoList);
+                _listSaveAndLoad.SaveTheList(ToDoList);
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (InvalidOperationException e)
             {
                 _logger.LogInformation(e.Message, request.Method.Name);
                 _logger.LogError(e, e.Message, request.Method.Name);

@@ -2,11 +2,11 @@
 
 namespace ToDo
 {
-    public class TestLogger : ILogger
+    public class FakeLogger : ILogger
     {
         public List<string> Messages { get; private set; }
 
-        public TestLogger()
+        public FakeLogger()
         {
             Messages = new List<string>();
         }

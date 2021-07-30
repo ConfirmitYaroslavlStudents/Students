@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace ToDo
 {
-    public class FileLoaderSaver : ILoaderSaver
+    public class FileLoaderAndSaver : ILoaderAndSaver
     {
         private readonly string _fileName;
 
-        public FileLoaderSaver(string fileName)
+        public FileLoaderAndSaver(string fileName)
         {
             _fileName = fileName;
         }
@@ -23,10 +23,7 @@ namespace ToDo
         public void Save (ToDoList toDoList)
         {
             if (toDoList.Count == 0)
-            {
-                if(File.Exists(_fileName))
-                    File.Delete(_fileName);
-            }
+                File.Delete(_fileName);
             else
                 File.WriteAllText(_fileName, JsonConvert.SerializeObject(toDoList));
         }

@@ -5,20 +5,20 @@ using ToDo;
 
 namespace ToDoListTests
 {
-    public class TestReader : IReader
+    public class FakeReader : IReader
     {
-        private readonly List<string> _inputs;
+        private readonly List<string> _input;
         private int _inputIndex;
 
-        public TestReader(List<string> inputs)
+        public FakeReader(List<string> inputs)
         {
-            _inputs = inputs;
+            _input = inputs;
             _inputIndex = -1;
         }
         public string ReadLine()
         {
             _inputIndex++;
-            return _inputs[_inputIndex];
+            return _input[_inputIndex];
         }
     }
 }

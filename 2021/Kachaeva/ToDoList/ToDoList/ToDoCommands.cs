@@ -2,7 +2,7 @@
 
 namespace ToDo
 {
-    public struct ToDoListCommands
+    public struct ToDoCommands
     {
         public const string DisplayToDoList = "list";
         public const string AddTask = "add";

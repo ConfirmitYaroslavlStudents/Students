@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ToDoApi;
 using ToDo;
+using ToDoApi.Controllers;
 
 namespace ToDoListTests
 {
@@ -8,11 +8,11 @@ namespace ToDoListTests
     public class ToDoControllerTests
     {
         [TestMethod]
-        public void GetReturnsCorrectEmptyList()
+        public void GetWorksCorrectlyWithEmptyList()
         {
-            var loaderSaver = new TestLoaderSaver();
-            var logger = new TestLogger();
-            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+            var loaderSaver = new FakeLoaderAndSaver();
+            var logger = new FakeLogger();
+            var controller = new ToDoController(loaderSaver, logger);
 
             var actualToDoList = controller.GetToDoList();
 
@@ -23,10 +23,10 @@ namespace ToDoListTests
         [TestMethod]
         public void GetReturnsCorrectList()
         {
-            var loaderSaver = new TestLoaderSaver();
+            var loaderSaver = new FakeLoaderAndSaver();
             loaderSaver.ToDoList.Add(new Task("wash dishes"));
-            var logger = new TestLogger();
-            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+            var logger = new FakeLogger();
+            var controller = new ToDoController(loaderSaver, logger);
 
             var actualToDoList = controller.GetToDoList();
 
@@ -36,9 +36,9 @@ namespace ToDoListTests
         [TestMethod]
         public void TaskExistsAfterPost()
         {
-            var loaderSaver = new TestLoaderSaver();
-            var logger = new TestLogger();
-            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+            var loaderSaver = new FakeLoaderAndSaver();
+            var logger = new FakeLogger();
+            var controller = new ToDoController(loaderSaver, logger);
 
             controller.PostTask("wash dishes");
             var actualToDoList = controller.GetToDoList();
@@ -50,10 +50,10 @@ namespace ToDoListTests
         [TestMethod]
         public void TaskDoesNotExistAfterDelete()
         {
-            var loaderSaver = new TestLoaderSaver();
+            var loaderSaver = new FakeLoaderAndSaver();
             loaderSaver.ToDoList.Add(new Task("wash dishes"));
-            var logger = new TestLogger();
-            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+            var logger = new FakeLogger();
+            var controller = new ToDoController(loaderSaver, logger);
 
             controller.DeleteTask(1);
             var actualToDoList = controller.GetToDoList();
@@ -63,32 +63,32 @@ namespace ToDoListTests
         }
 
         [TestMethod]
-        public void TaskTextChangesAfterPut()
+        public void TaskTextChangesAfterPatch()
         {
-            var loaderSaver = new TestLoaderSaver();
+            var loaderSaver = new FakeLoaderAndSaver();
             loaderSaver.ToDoList.Add(new Task("wash dishes"));
-            var logger = new TestLogger();
-            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+            var logger = new FakeLogger();
+            var controller = new ToDoController(loaderSaver, logger);
 
-            controller.PutTaskText(new PutTaskTextRequest { TaskNumber = 1, TaskText = "clean the room" });
+            controller.PatchTaskText(1, "clean the room");
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("Текст задания изменен", logger.Messages[0]);
+            Assert.AreEqual("Текст задания обновлен", logger.Messages[0]);
             Assert.AreEqual("1. clean the room  [ ]\r\n", actualToDoList);
         }
 
         [TestMethod]
-        public void TaskStatusTogglesAfterPut()
+        public void TaskStatusTogglesAfterPatch()
         {
-            var loaderSaver = new TestLoaderSaver();
+            var loaderSaver = new FakeLoaderAndSaver();
             loaderSaver.ToDoList.Add(new Task("wash dishes"));
-            var logger = new TestLogger();
-            var controller = new ToDoApi.Controllers.ToDoController(loaderSaver, logger);
+            var logger = new FakeLogger();
+            var controller = new ToDoController(loaderSaver, logger);
 
-            controller.PutTaskStatus(1);
+            controller.PatchTaskStatus(1, true);
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("Статус задания изменен", logger.Messages[0]);
+            Assert.AreEqual("Статус задания обновлен", logger.Messages[0]);
             Assert.AreEqual("1. wash dishes  [v]\r\n", actualToDoList);
         }
     }

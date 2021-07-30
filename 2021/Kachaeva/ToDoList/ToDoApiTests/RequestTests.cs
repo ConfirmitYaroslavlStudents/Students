@@ -30,55 +30,70 @@ namespace ToDoApiTests
         }
 
         [Fact]
-        public async Task GetToDoList()
+        public async Task GetToDoListSuccess()
         {
             var response = await _client.GetAsync(url);
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            //Assert.Equal("", response.ToString());
         }
 
         [Fact]
-        public async Task PostTask()
+        public async Task PostTaskSuccess()
         {
             var body = GetBody("wash dishes");
 
             var response = await _client.PostAsync(url, body);
+            //var toDoList = ?
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            //Assert.Equal("1. wash dishes  [ ]\r\n", toDoList);
         }
 
         [Fact]
-        public async Task DeleteTask()
+        public async Task DeleteTaskSuccess()
         {
+            var body = GetBody("wash dishes");
+            await _client.PostAsync(url, body);
+
             var response = await _client.DeleteAsync(url+"/1");
+            //var toDoList = 
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            //Assert.Equal("", toDoList);
         }
 
         [Fact]
-        public async Task PutTaskText()
+        public async Task PatchTaskTextSuccess()
         {
-            var body = GetBody(new { TaskNumber = 1, TaskText = "clean the room" });
+            var body = GetBody("wash dishes");
+            await _client.PostAsync(url, body);
+            var body2 = GetBody("clean the room");
 
-            var response = await _client.PutAsync(url, body);
+            var response = await _client.PatchAsync(url + "/1", body2);
+            //var toDoList = 
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            //Assert.Equal("1. wash dishes  [v]\r\n", toDoList;
         }
 
-        [Theory]
-        [InlineData("PUT", 1)]
-        public async Task PutTaskStatus(string method, int? taskNumber = null)
+        [Fact]
+        public async Task PatchTaskStatusSuccess()
         {
-            var request = new HttpRequestMessage(new HttpMethod(method), $"https://localhost:44329/todo/ {taskNumber}");
+            var body = GetBody("wash dishes");
+            await _client.PostAsync(url, body);
+            var body2 = GetBody(true);
 
-            var response = await _client.SendAsync(request);
+            var response = await _client.PatchAsync(url + "/1", body2);
+            //var toDoList = 
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            //Assert.Equal("1. wash dishes  [v]\r\n", toDoList;
         }
     }
 }

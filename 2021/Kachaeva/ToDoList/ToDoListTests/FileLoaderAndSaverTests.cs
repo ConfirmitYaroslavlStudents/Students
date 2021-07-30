@@ -5,16 +5,16 @@ using ToDo;
 namespace ToDoListTests
 {
     [TestClass]
-    public class FileLoaderSaverTests
+    public class FileLoaderAndSaverTests
     {
         [TestMethod]
         public void EmtyToDoListDoesNotSaves()
         {
             string fileName = "TestToDoList.txt";
             File.Delete(fileName);
-            var fileLoaderSaver = new FileLoaderSaver(fileName);
+            var fileLoaderAndSaver = new FileLoaderAndSaver(fileName);
 
-            fileLoaderSaver.Save(new ToDoList());
+            fileLoaderAndSaver.Save(new ToDoList());
 
             Assert.IsFalse(File.Exists(fileName));
         }
@@ -24,12 +24,12 @@ namespace ToDoListTests
         {
             string fileName = "TestToDoList.txt";
             File.Delete(fileName);
-            var fileLoaderSaver = new FileLoaderSaver(fileName);
+            var fileLoaderAndSaver = new FileLoaderAndSaver(fileName);
             var toDoList = new ToDoList();
 
             toDoList.Add(new Task("wash dishes"));
-            fileLoaderSaver.Save(toDoList);
-            var loadedToDoList = fileLoaderSaver.Load();
+            fileLoaderAndSaver.Save(toDoList);
+            var loadedToDoList = fileLoaderAndSaver.Load();
 
             Assert.AreEqual(toDoList.ToString(), loadedToDoList.ToString());
         }

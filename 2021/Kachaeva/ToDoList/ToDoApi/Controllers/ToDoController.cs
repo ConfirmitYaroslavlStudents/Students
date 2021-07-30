@@ -7,15 +7,15 @@ namespace ToDoApi.Controllers
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
-        private readonly ILoaderSaver _loaderSaver;
+        private readonly ILoaderAndSaver _loaderAndSaver;
         private readonly ToDo.ILogger _logger;
         private readonly ToDoList _toDoList;
 
-        public ToDoController(ILoaderSaver loaderSaver, ToDo.ILogger logger)
+        public ToDoController(ILoaderAndSaver loaderSaver, ToDo.ILogger logger)
         {
-            _loaderSaver = loaderSaver;
+            _loaderAndSaver = loaderSaver;
             _logger = logger;
-            _toDoList = _loaderSaver.Load();
+            _toDoList = _loaderAndSaver.Load();
         }
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace ToDoApi.Controllers
         {
             _toDoList.Add(new ToDo.Task(taskText));
             _logger.Log("Задание добавлено");
-            _loaderSaver.Save(_toDoList);
+            _loaderAndSaver.Save(_toDoList);
         }
 
         [HttpDelete ("{taskNumber}")]
@@ -39,24 +39,24 @@ namespace ToDoApi.Controllers
         {
             _toDoList.RemoveAt(taskNumber - 1);
             _logger.Log("Задание удалено");
-            _loaderSaver.Save(_toDoList);
+            _loaderAndSaver.Save(_toDoList);
         }
 
-        [HttpPut]
-        public void PutTaskText([FromBody] PutTaskTextRequest taskRequest)
+        [HttpPatch("{taskNumber}")]
+        public void PatchTaskText(int taskNumber, [FromBody] string taskText)
         {
-            _toDoList[taskRequest.TaskNumber - 1].Text = taskRequest.TaskText;
-            _logger.Log("Текст задания изменен");
-            _loaderSaver.Save(_toDoList);
+            _toDoList[taskNumber - 1].Text = taskText;
+            _logger.Log("Текст задания обновлен");
+            _loaderAndSaver.Save(_toDoList);
         }
 
-        [HttpPut("{taskNumber}")]
-        public void PutTaskStatus(int taskNumber)
+        [HttpPatch("{taskNumber}")]
+        public void PatchTaskStatus(int taskNumber, [FromBody] bool taskStatus)
         {
             var task = _toDoList[taskNumber - 1];
-            task.IsDone = !task.IsDone;
-            _logger.Log("Статус задания изменен");
-            _loaderSaver.Save(_toDoList);
+            task.IsDone = taskStatus;
+            _logger.Log("Статус задания обновлен");
+            _loaderAndSaver.Save(_toDoList);
         }
     }
 }

@@ -5,18 +5,18 @@
         private static void Main(string[] args)
         {
             var fileName = "ToDoList.txt";
-            var fileWorkHandler = new FileLoaderSaver(fileName);
+            var loaderAndSaver = new FileLoaderAndSaver(fileName);
             var logger = new ConsoleLogger();
             var reader = new ConsoleReader();
             if (args.Length != 0)
             {
-                var CMDHandler= new CMDHandler(fileWorkHandler, logger, args);
-                CMDHandler.HandleUsersInput();
+                var CMDInputHandler= new CMDInputHandler(loaderAndSaver, logger, args);
+                CMDInputHandler.HandleUsersInput();
             }
             else
             {
-                var menuCommandHandler = new MenuCommandHandler(fileWorkHandler, logger, reader);
-                menuCommandHandler.HandleUsersInput();
+                var menuInputHandler = new MenuInputHandler(loaderAndSaver, logger, reader);
+                menuInputHandler.HandleUsersInput();
             }
         }
     }

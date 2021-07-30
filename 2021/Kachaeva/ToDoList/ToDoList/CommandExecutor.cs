@@ -1,39 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ToDo
 {
-    public class CommandHandler
+    public class CommandExecutor
     {
-        protected readonly ILoaderSaver _loaderSaver;
-        protected readonly ILogger _logger;
-        protected readonly ToDoList _toDoList;
-        protected Func<string> _getTaskTextInput;
-        protected Func<string> _getTaskNumberInput;
+        private readonly ILogger _logger;
+        private readonly ToDoList _toDoList;
 
-        public CommandHandler(ILoaderSaver loaderSaver, ILogger logger, Func<string> getTaskTextInput, Func<string> getTaskNumberInput)
+        public CommandExecutor(ILogger logger, ToDoList toDoList)
         {
-            _loaderSaver = loaderSaver;
             _logger = logger;
-            _toDoList = _loaderSaver.Load();
-            _getTaskTextInput = getTaskTextInput;
-            _getTaskNumberInput = getTaskNumberInput;
+            _toDoList = toDoList;
         }
 
-        public CommandHandler(ILoaderSaver loaderSaver, ILogger logger)
-        {
-            _loaderSaver = loaderSaver;
-            _logger = logger;
-            _toDoList = _loaderSaver.Load();
-        }
-
-
-        public void TryToRunCommand(string selectedAction)
+        public void TryToRunCommand(string command, string[] arguments)
         {
             try
             {
-                RunCommand(selectedAction);
+                RunCommand(command, arguments);
             }
             catch (ArgumentException e)
             {
@@ -41,32 +25,29 @@ namespace ToDo
             }
         }
 
-        private void RunCommand(string selectedAction)
+        private void RunCommand(string command, string[] arguments)
         {
-            switch (selectedAction)
+            switch (command)
             {
-                case ToDoListCommands.DisplayToDoList:
+                case ToDoCommands.DisplayToDoList:
                     HandleToDoListDisplay();
                     break;
-                case ToDoListCommands.AddTask:
-                    var taskText = GetTaskText();
+                case ToDoCommands.AddTask:
+                    var taskText = GetValidTaskText(arguments[0]);
                     HandleTaskAddition(taskText);
                     break;
-                case ToDoListCommands.RemoveTask:
-                    var taskNumber = GetTaskNumber();
+                case ToDoCommands.RemoveTask:
+                    var taskNumber = GetValidTaskNumber(arguments[0]);
                     HandleTaskRemove(taskNumber);
                     break;
-                case ToDoListCommands.ChangeTaskText:
-                    taskNumber = GetTaskNumber();
-                    taskText = GetTaskText();
+                case ToDoCommands.ChangeTaskText:
+                    taskNumber = GetValidTaskNumber(arguments[0]);
+                    taskText = GetValidTaskText(arguments[1]);
                     HandleTaskTextChange(taskNumber, taskText);
                     break;
-                case ToDoListCommands.ToggleTaskStatus:
-                    taskNumber = GetTaskNumber();
+                case ToDoCommands.ToggleTaskStatus:
+                    taskNumber = GetValidTaskNumber(arguments[0]);
                     HandleTaskStatusToggle(taskNumber);
-                    break;
-                default:
-                    HandleIncorrectCommand();
                     break;
             }
         }
@@ -103,22 +84,15 @@ namespace ToDo
             _logger.Log("Статус задания изменен");
         }
 
-        private void HandleIncorrectCommand()
+        private string GetValidTaskText(string taskTextInput)
         {
-            throw new ArgumentException("Некорректная команда");
-        }
-
-        private string GetTaskText()
-        {
-            var taskTextInput = _getTaskTextInput();
             if (String.IsNullOrEmpty(taskTextInput))
                 throw new ArgumentException("Нельзя добавить пустое задание");
             return taskTextInput;
         }
 
-        private int GetTaskNumber()
+        private int GetValidTaskNumber(string taskNumberInput)
         {
-            var taskNumberInput = _getTaskNumberInput();
             if (!int.TryParse(taskNumberInput, out int taskNumber))
                 throw new ArgumentException("Нужно ввести число");
             if (taskNumber > _toDoList.Count || taskNumber < 1)

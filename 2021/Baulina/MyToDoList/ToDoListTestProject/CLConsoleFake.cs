@@ -2,10 +2,10 @@
 
 namespace ToDoListTestProject
 {
-    class ClTestConsole : AppTestConsole
+    class ClConsoleFake : AppConsoleFake
     {
-        public ClTestConsole() { }
-        public ClTestConsole(IEnumerable<string> linesToRead)
+        public ClConsoleFake() { }
+        public ClConsoleFake(IEnumerable<string> linesToRead)
         {
             LinesToRead.AddRange(linesToRead);
         }

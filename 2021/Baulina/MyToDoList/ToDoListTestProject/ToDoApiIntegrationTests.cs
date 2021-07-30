@@ -27,9 +27,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task GetWithIntParameterReturnsBadRequest()
         {
-            var request = "todoItems/8";
-
-            var response = await _client.GetAsync(request);
+            var response = await _client.GetAsync("todoItems/8");
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
@@ -38,9 +36,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task GetWithStringParameterReturnsBadRequest()
         {
-            var request = "todoItems/something";
-
-            var response = await _client.GetAsync(request);
+            var response = await _client.GetAsync("todoItems/something");
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
@@ -49,13 +45,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PostWithIncorrectBodyReturnsBadRequest()
         {
-            var request = new
-            {
-                Url = "todoItems",
-                Body = 8
-            };
-
-            var response = await _client.PostAsync(request.Url, ContentHelper.GetStringContent(request.Body));
+            var response = await _client.PostAsync("todoItems", ContentHelper.GetStringContent(8));
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -64,13 +54,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PostWithParametersAndBodyIsNotAllowed()
         {
-            var request = new
-            {
-                Url = "todoItems/something",
-                Body = 8
-            };
-
-            var response = await _client.PostAsync(request.Url, ContentHelper.GetStringContent(request.Body));
+            var response = await _client.PostAsync("todoItems/something", ContentHelper.GetStringContent(8));
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
@@ -79,9 +63,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PostWithParametersIsNotAllowed()
         {
-            var request = "todoItems/something";
-
-            var response = await _client.PostAsync(request, null);
+            var response = await _client.PostAsync("todoItems/something", null);
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
@@ -90,9 +72,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task DeleteWithIncorrectParametersReturnsBadRequest()
         {
-            var request = "todoItems/something";
-
-            var response = await _client.DeleteAsync(request);
+            var response = await _client.DeleteAsync("todoItems/something");
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -101,9 +81,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task DeleteWithoutParametersIsNotAllowed()
         {
-            var request = "todoItems";
-
-            var response = await _client.DeleteAsync(request);
+            var response = await _client.DeleteAsync("todoItems");
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
@@ -112,9 +90,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task DeleteWithOutOfRangeParametersReturnsNotFound()
         {
-            var request = "todoItems/-1";
-
-            var response = await _client.DeleteAsync(request);
+            var response = await _client.DeleteAsync("todoItems/-1");
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -123,13 +99,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PutWithoutParametersWithIncorrectBodyReturnsBadRequest()
         {
-            var request = new
-            {
-                Url = "todoItems",
-                Body = 5
-            };
-
-            var response = await _client.PutAsync(request.Url, ContentHelper.GetStringContent(request.Body));
+            var response = await _client.PutAsync("todoItems", ContentHelper.GetStringContent(5));
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -138,9 +108,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PutWithoutParametersAndBodyReturnsUnsupportedMediaType()
         {
-            var request = "todoItems";
-
-            var response = await _client.PutAsync(request, null);
+            var response = await _client.PutAsync("todoItems", null);
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
@@ -149,9 +117,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PutWithIncorrectParameterReturnsBadRequest()
         {
-            var request = "todoItems/something";
-
-            var response = await _client.PutAsync(request, null);
+            var response = await _client.PutAsync("todoItems/something", null);
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -160,9 +126,7 @@ namespace ToDoListTestProject
         [Fact]
         public async Task GetWithCorrectParameterReturnsOk()
         {
-            var request = "todoItems";
-
-            var response = await _client.GetAsync(request);
+            var response = await _client.GetAsync("todoItems");
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -171,24 +135,17 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PostWithCorrectParameterReturnsOk()
         {
-            var request = new
-            {
-                Url = "todoItems",
-                Body = "Walk the dog"
-            };
-
-            var response = await _client.PostAsync(request.Url, ContentHelper.GetStringContent(request.Body));
+            var response = await _client.PostAsync("todoItems", ContentHelper.GetStringContent("Walk the dog"));
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var result = await _client.GetAsync("todoItems");
         }
 
         [Fact]
         public async Task DeleteWithCorrectParameterReturnsOk()
         {
-            var request = "todoItems/0";
-
-            var response = await _client.DeleteAsync(request);
+            var response = await _client.DeleteAsync("todoItems/0");
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -197,17 +154,14 @@ namespace ToDoListTestProject
         [Fact]
         public async Task PutWithCorrectBodyReturnsOk()
         {
-            var request = new
+            var requestBody = new
             {
-                Url = "todoItems",
-                Body = new
-                {
-                    Index = 0,
-                    NewDescription = "Walk the dog"
-                }
+                Index = 0,
+                NewDescription = "Walk the dog"
+
             };
 
-            var response = await _client.PutAsync(request.Url, ContentHelper.GetStringContent(request.Body));
+            var response = await _client.PutAsync("todoItems", ContentHelper.GetStringContent(requestBody));
 
             Assert.True(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

@@ -1,7 +1,6 @@
 ﻿using System;
 using MyToDoList;
 using InputOutputManagers;
-using FileCommunicator;
 
 namespace ToDoApp
 {
@@ -19,46 +18,24 @@ namespace ToDoApp
             IsWorking = true;
         }
 
+        public Action GetCommand(string operationName)
+        {
+            return operationName switch
+            {
+                "add" => Add,
+                "edit" => Edit,
+                "complete" => Complete,
+                "delete" => Delete,
+                "list" => List,
+                "exit" => Exit,
+                _ => Error
+            };
+        }
+
         public void ProcessOperation(string operationName)
         {
-            switch (operationName)
-            {
-                case "add":
-                    {
-                        RunCommand(Add);
-                        break;
-                    }
-                case "edit":
-                {
-                    RunCommand(Edit);
-                    break;
-                }
-                case "complete":
-                {
-                    RunCommand(Complete);
-                    break;
-                }
-                case "delete":
-                {
-                    RunCommand(Delete);
-                    break;
-                }
-                case "list":
-                {
-                    RunCommand(List);
-                    break;
-                }
-                case "exit":
-                {
-                    RunCommand(Exit);
-                    break;
-                }
-                default:
-                {
-                    RunCommand(Error);
-                    break;
-                }
-            }
+            var command = GetCommand(operationName);
+            RunCommand(command);
         }
 
         public void RunCommand(Action command)

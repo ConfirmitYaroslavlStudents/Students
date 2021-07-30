@@ -4,13 +4,13 @@ using InputOutputManagers;
 
 namespace ToDoListTestProject
 {
-    class AppTestConsole : IConsoleExtended
+    class AppConsoleFake : IConsoleExtended
     {
         public List<string> Messages = new List<string>();
         public readonly List<string> LinesToRead = new List<string>();
 
-        public AppTestConsole() { }
-        public AppTestConsole(IEnumerable<string> linesToRead)
+        public AppConsoleFake() { }
+        public AppConsoleFake(IEnumerable<string> linesToRead)
         {
             LinesToRead.AddRange(linesToRead);
         }

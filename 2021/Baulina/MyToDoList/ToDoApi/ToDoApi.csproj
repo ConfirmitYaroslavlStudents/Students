@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileManager\FileCommunicator.csproj" />
     <ProjectReference Include="..\MyToDoList\MyToDoList.csproj" />
   </ItemGroup>
 

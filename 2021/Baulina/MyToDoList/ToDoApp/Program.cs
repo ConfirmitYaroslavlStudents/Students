@@ -1,6 +1,5 @@
 ﻿using InputOutputManagers;
 using MyToDoList;
-using FileCommunicator;
 
 namespace ToDoApp
 {

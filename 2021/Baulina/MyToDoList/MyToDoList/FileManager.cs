@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using MyToDoList;
 
-namespace FileCommunicator
+namespace MyToDoList
 {
     public class FileManager
     {

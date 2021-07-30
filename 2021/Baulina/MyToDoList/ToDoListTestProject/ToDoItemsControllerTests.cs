@@ -76,7 +76,7 @@ namespace ToDoListTestProject
 
             var result = await controller.AddToDoItem("Iron the clothes");
 
-            Assert.IsType<OkResult>(result.Result);
+            Assert.IsType<OkResult>(result);
             Assert.Single(controller.ToDoList);
         }
 

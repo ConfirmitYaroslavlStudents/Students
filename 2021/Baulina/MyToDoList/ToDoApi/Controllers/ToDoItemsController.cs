@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MyToDoList;
-using FileCommunicator;
 
 namespace ToDoApi.Controllers
 {
@@ -23,76 +22,72 @@ namespace ToDoApi.Controllers
             ToDoList = new ToDoList(toDoListProvider.GetToDoList());
         }
 
+        [HttpGet]
+        public Task<IEnumerable<ToDoViewItem>> GetAllToDoItemsAsync()
+        {
+            return Task.FromResult(GetAllToDoItems());
+        }
+
         private IEnumerable<ToDoViewItem> GetAllToDoItems()
         {
             return ConvertListOfToDoItemsToListOfToDoViewItems();
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<ToDoViewItem>> GetAllToDoItemsAsync()
+        private IEnumerable<ToDoViewItem> ConvertListOfToDoItemsToListOfToDoViewItems()
         {
-            return await Task.FromResult(GetAllToDoItems());
+            var list = ToDoList.Select((toDoItem, i) => new ToDoViewItem()
+                { Description = toDoItem.Description, Index = i, IsComplete = toDoItem.IsComplete }).ToList();
+            return list;
         }
 
         [HttpPost]
-        public async Task<ActionResult<ToDoItem>> AddToDoItem([FromBody] string value)
+        public Task<IActionResult> AddToDoItem([FromBody] string value)
         {
-            await ProcessTheRequest(() =>
+            return ProcessTheRequest(() =>
             {
                 var toDoItem = new ToDoItem { Description = value, IsComplete = false };
                 ToDoList.Add(toDoItem);
             });
-            return Ok();
         }
 
         [HttpDelete("{index}")]
-        public async Task<IActionResult> DeleteToDoItem(int index)
+        public Task<IActionResult> DeleteToDoItem(int index)
         {
-            return await ProcessTheRequest(() => ToDoList.Delete(index));
+            return ProcessTheRequest(() => ToDoList.Delete(index));
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditToDoItemDescription([FromBody] EditRequest editRequest)
+        public Task<IActionResult> EditToDoItemDescription([FromBody] EditRequest editRequest)
         {
-            return await ProcessTheRequest(() => ToDoList.EditDescription(editRequest.Index, editRequest.NewDescription));
+            return ProcessTheRequest(() => ToDoList.EditDescription(editRequest.Index, editRequest.NewDescription));
         }
 
         [HttpPut("{index}")]
-        public async Task<IActionResult> CompleteToDoItem(int index)
+        public Task<IActionResult> CompleteToDoItem(int index)
         {
-            return await ProcessTheRequest(() => ToDoList.Complete(index));
+            return ProcessTheRequest(() => ToDoList.Complete(index));
         }
 
-        private async Task<IActionResult> ProcessTheRequest(Action request)
+        private Task<IActionResult> ProcessTheRequest(Action request)
         {
             try
             {
                 request();
+                _fileManager.SaveToFile(ToDoList);
             }
             catch (ArgumentOutOfRangeException e)
             {
                 _logger.LogInformation(e.Message, request.Method.Name);
                 _logger.LogError(e, e.Message, request.Method.Name);
-                return NotFound();
+                return Task.FromResult<IActionResult>(NotFound());
             }
             catch (Exception e)
             {
                 _logger.LogInformation(e.Message, request.Method.Name);
                 _logger.LogError(e, e.Message, request.Method.Name);
-                return BadRequest();
+                return Task.FromResult<IActionResult>(BadRequest());
             }
-            finally
-            {
-                _fileManager.SaveToFile(ToDoList);
-            }
-            return Ok();
-        }
-
-        private IEnumerable<ToDoViewItem> ConvertListOfToDoItemsToListOfToDoViewItems()
-        {
-            var list = ToDoList.Select((toDoItem, i) => new ToDoViewItem()
-                {Description = toDoItem.Description, Index = i, IsComplete = toDoItem.IsComplete}).ToList();
-            return list;
+            return Task.FromResult<IActionResult>(Ok());
         }
     }
 }

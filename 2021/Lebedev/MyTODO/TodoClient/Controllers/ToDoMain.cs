@@ -17,7 +17,7 @@ namespace ToDoClient.Controllers
                 manager.Save(todo);
                 return;
             }
-            var menu = new ToDoMenu(new ToDoApiConnector("bane"));
+            var menu = new ToDoMenu(new ToDoApiConnector());
             while (true)
             {
                 menu.PrintMenu();

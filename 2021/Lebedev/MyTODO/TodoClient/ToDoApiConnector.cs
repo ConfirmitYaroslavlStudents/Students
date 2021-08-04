@@ -10,9 +10,8 @@ namespace ToDoClient
     class ToDoApiConnector:IToDoConnector
     {
         private readonly string _url = "http://localhost:5000/todolist";
-        public ToDoApiConnector(string login)
+        public ToDoApiConnector()
         {
-            _url += "/" + login;
         }
 
 

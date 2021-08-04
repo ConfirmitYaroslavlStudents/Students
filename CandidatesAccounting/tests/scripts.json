@@ -1,4 +1,0 @@
-{
-  "tests": "testcafe --screenshots .\\tests\\__screenshots__\\ chrome .\\tests\\*Tests.js & npm run utility",
-  "utility": "..\\ScreenshotHandlerUtility\\dist\\win-unpacked\\ScreenshotHandlerUtility.exe -M C:\\Users\\DmitryB\\Documents\\Students\\CandidatesAccounting\\tests\\__screenshots__\\.metadata.json"
-}

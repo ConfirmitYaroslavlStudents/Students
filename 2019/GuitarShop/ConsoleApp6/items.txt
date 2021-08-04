@@ -1,3 +1,0 @@
-﻿ItemType ID Price Model Builder Type
-Guitar 1 500 Stratocastor Fender Acoustic
-Guitar 2 1000 Stratocatstor Fender Electric

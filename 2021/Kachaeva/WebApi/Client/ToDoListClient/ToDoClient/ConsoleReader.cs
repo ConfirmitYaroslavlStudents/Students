@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ToDo
+namespace ToDoClient
 {
     public class ConsoleReader : IReader
     {

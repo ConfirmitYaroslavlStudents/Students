@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ToDoList\ToDo.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\ToDoList\bin\Debug\netcoreapp3.1\Newtonsoft_Json.dll</HintPath>
     </Reference>

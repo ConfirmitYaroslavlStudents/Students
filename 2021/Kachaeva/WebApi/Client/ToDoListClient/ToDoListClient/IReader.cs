@@ -1,4 +1,4 @@
-﻿namespace ToDo
+﻿namespace ToDoListClient
 {
     public interface IReader
     {

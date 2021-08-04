@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\ToDoList\ToDoList\bin\Debug\netcoreapp3.1\Newtonsoft_Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -22,9 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WebApi\Server\ConsoleApp1\ToDoList\ToDoList.csproj" />
+    <ProjectReference Include="..\..\ToDoListWebApi\Server\ToDoApi\ToDoList\ToDo.csproj" />
     <ProjectReference Include="..\ToDoApi\ToDoApi.csproj" />
     <ProjectReference Include="..\ToDoListTests\ToDoListTests.csproj" />
+    <ProjectReference Include="..\ToDoList\ToDo.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,22 +1,18 @@
 ﻿using System;
 
-namespace ToDo
+namespace ToDoListClient
 {
     public class MenuInputHandler
     {
-        private readonly ILoaderAndSaver _loaderAndSaver;
         private readonly ILogger _logger;
         private readonly IReader _reader;
-        private readonly ToDoList _toDoList;
         private readonly CommandExecutor _commandExecutor;
 
-        public MenuInputHandler(ILoaderAndSaver loaderAndSaver, ILogger logger, IReader reader) 
+        public MenuInputHandler(ILogger logger, IReader reader) 
         {
-            _loaderAndSaver = loaderAndSaver;
             _logger = logger;
             _reader = reader;
-            _toDoList = _loaderAndSaver.Load();
-            _commandExecutor = new CommandExecutor(_logger,_toDoList);
+            _commandExecutor = new CommandExecutor();
         }
 
         public void HandleUsersInput()
@@ -25,9 +21,9 @@ namespace ToDo
             {
                 GetCommands();
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-                _logger.Log("Некорректная команда");
+                _logger.Log(e.Message);
             }
         }
 
@@ -38,30 +34,34 @@ namespace ToDo
                 var command = GetCommandChoice();
 
                 if (command == ToDoCommands.Quit)
-                {
-                    _loaderAndSaver.Save(_toDoList);
                     break;
-                }
                 switch (command)
                 {
                     case ToDoCommands.DisplayToDoList:
-                        _commandExecutor.TryToRunCommand(command, new string[] { });
+                        _commandExecutor.HandleToDoListDisplay();
                         break;
                     case ToDoCommands.AddTask:
-                        _commandExecutor.TryToRunCommand(command, new string[] { GetTaskTextInput() });
+                        var taskText = InputVerifier.GetValidTaskText(GetTaskTextInput());
+                        _commandExecutor.HandleTaskAddition(taskText);
                         break;
                     case ToDoCommands.RemoveTask:
+                        var taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
+                        _commandExecutor.HandleTaskRemove(taskNumber);
+                        break;
                     case ToDoCommands.ToggleTaskStatus:
-                        _commandExecutor.TryToRunCommand(command, new string[] { GetTaskNumberInput() });
+                        taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
+                        var taskStatus = InputVerifier.GetValidTaskStatus(GetTaskStatusInput());
+                        _commandExecutor.HandleTaskStatusToggle(taskNumber, taskStatus);
                         break;
                     case ToDoCommands.ChangeTaskText:
-                        _commandExecutor.TryToRunCommand(command, new string[] { GetTaskNumberInput(), GetTaskTextInput() });
+                        taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
+                        taskText = InputVerifier.GetValidTaskText(GetTaskTextInput());
+                        _commandExecutor.HandleTaskTextChange(taskNumber,taskText);
                         break;
                     default:
-                        throw new ArgumentException();
+                        throw new ArgumentException("Некорректная команда");
                 }
             }
-            _loaderAndSaver.Save(_toDoList);
         }
 
         private string GetCommandChoice()
@@ -80,6 +80,12 @@ namespace ToDo
         private string GetTaskNumberInput()
         {
             _logger.Log("Введите номер задания");
+            return _reader.ReadLine();
+        }
+
+        private string GetTaskStatusInput()
+        {
+            _logger.Log("Введите статус задания");
             return _reader.ReadLine();
         }
     }

@@ -4,8 +4,8 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public interface ILogger
+    public class Logger:ILogger
     {
-        public void Log(string message);
+        public void Log(string message) => Console.WriteLine(message);
     }
 }

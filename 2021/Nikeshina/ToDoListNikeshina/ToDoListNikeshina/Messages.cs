@@ -6,36 +6,19 @@ namespace ToDoListNikeshina
 {
     public static class Messages
     {
-        public static string WrongFormatOfInputData()
-        {
-            return "Incorrect data";
-        }
-        internal static  string ListIsEmpty()
-        {
-            return "List is empty(";
-        }
-        internal static string RequestNumberOfString()
-        {
-            return "Number of the note: ";
-        }
+        internal static string WrongFormatOfInputData()=> "Incorrect data";
 
-        internal static string RequestNumberOfCommand()
-        {
-            return "Number of commands: ";
-        }
+        internal static  string ListIsEmpty()=> "List is empty(";
 
+        internal static string RequestNumberOfString() => "Number of the note: ";
 
-        internal static string RequestDescription()
-        {
-            return "Description: " ;
-        }
+        internal static string RequestNumberOfCommand()=>"Number of commands: ";
 
-        internal static string IsDone()
-        {
-            return "Done! ";
-        }
+        internal static string RequestDescription()=> "Description: " ;
 
-        public static string WriteInstuction()
+        internal static string Completed()=> "Done! ";
+
+        public static string InsructionText()
         {
             var sb = new StringBuilder();
             sb.AppendLine("----------------------------------------------------------");

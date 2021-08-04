@@ -4,29 +4,73 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public class CmdApp : App
+    public class CmdApp
     {
-        public CmdApp(string[] args)
+        private readonly ILogger _logger;
+        public IGetterInputData DataGetter { get;private set; }
+        private ToDoList List { get; set; }
+        private readonly FileManager _fileManager;
+        private readonly CommonOperationWithToDo _printer;
+        private  int _countTasksInProgress;
+
+        public CmdApp(ILogger logger, IGetterInputData dataGetter)
         {
-            Logger = new CmdLogger(args);
-            List = new ToDoList(new FileOperation(Logger).Load());
+            _logger = logger;
+            DataGetter = dataGetter;
+            _fileManager = new FileManager();
+            List = new ToDoList(_fileManager.Load());
+            _printer = new CommonOperationWithToDo(_logger, DataGetter, List);
+            _countTasksInProgress = _fileManager.GetCountOfTaskInProgress();
         }
 
-
-        public CmdApp(ILogger logger)
+        public void AddNewTask()
         {
-            Logger = logger;
-            List = new ToDoList(new FileOperation(Logger).Load());
+            _printer.Add();
         }
 
-        public override void Rollback()
-        { }
-
-        public override void StringHandling()
+        public void ChangeStatus()
         {
-            GetCommand(Logger.TakeData());
-            if(Logger as CmdLogger !=null)
-                 Save();
+            if (_printer.ChangeTaskStatus(_countTasksInProgress))
+                _countTasksInProgress = _printer.GetCountOfTaskInProgress();
         }
+
+        public void Delete()
+        {
+            if (_printer.Delete(_countTasksInProgress))
+                _countTasksInProgress = _printer.GetCountOfTaskInProgress();
+        }
+
+        public void EditDescription()
+        {
+            var inputStr = DataGetter.GetInputData();
+
+            if (!Validator.IsNumberValid(inputStr,List.Count()))
+            {
+                _logger.Log(Messages.WrongFormatOfInputData());
+                return;
+            }
+
+            int num = int.Parse(inputStr);
+            var dscr = DataGetter.GetInputData();
+
+            if (!Validator.IsStringValid(dscr))
+            {
+                _logger.Log(Messages.WrongFormatOfInputData());
+                return;
+            }
+
+            List.Edit(num, dscr);
+            _logger.Log(Messages.Completed());
+        }
+
+        public void Save() => _fileManager.Save(List._list);
+
+        public void Print()
+        {
+            _printer.Print();
+        }
+
+        public List<Task> GetListOfTask() => List.GetListOfTask();
+
     }
 }

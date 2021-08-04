@@ -10,28 +10,36 @@ namespace ToDoListTests
         [TestMethod]
         public void PrintTask()
         {
-            var task = new Task("clean room", true);
+            var task = new Task("clean room", 0);
 
-            Assert.AreEqual("clean room True", task.ToString());
+            Assert.AreEqual("clean room Todo", task.PrintTask());
         }
         [TestMethod]
         public void printAfterChangeStatus()
         {
-            var task = new Task("clean room", true);
+            var task = new Task("clean room",0);
 
             task.ChangeStatus();
 
-            Assert.AreEqual("clean room False", task.ToString());
+            Assert.AreEqual("clean room InProgress", task.PrintTask());
         }
 
         [TestMethod]
         public void PrintAfterChangeStatus()
         {
-            var task = new Task("clean room", true);
+            var task = new Task("clean room", 2);
 
             task.ChangeName("not clean room");
 
-            Assert.AreEqual("not clean room True", task.ToString());
+            Assert.AreEqual("not clean room Done", task.PrintTask());
+        }
+
+        [TestMethod]
+        public void CompareTasks()
+        {
+            var task1 = new Task("do homework", 0);
+            var task2 = new Task("do homework", 0);
+            Assert.AreEqual(task1, task2);
         }
     }
 }

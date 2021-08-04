@@ -8,7 +8,8 @@ namespace ToDoListNikeshina
     {
         internal static bool IsStringValid(string dscr)
         {
-            if (dscr.Length == 0)
+            var length = dscr.Length;
+            if (length == 0 || length>50)
                 return false;
 
             return true;

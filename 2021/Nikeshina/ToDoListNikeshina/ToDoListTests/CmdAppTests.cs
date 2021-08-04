@@ -8,137 +8,121 @@ namespace ToDoListTests
     public class CmdAppTests
     {
         [TestMethod]
-        public void MsgListIsEmpty()
-        {
-            var testLogger = new CmdTestLogger(new List<string>());
-            var filehelper = new FileOperation(testLogger);
-
-            filehelper.Load();
-
-            Assert.AreEqual(testLogger.Messages.Count, 0);
-        }
-
-        [TestMethod]
         public void AddNewItem()
         {
-            var testlogger = new CmdTestLogger(new List<string> { "add", "Купить арбуз" });
-            var app = new CmdApp(testlogger);
-            app.StringHandling();
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple" }));
 
-            CollectionAssert.AreEqual(testlogger.Messages, new List<string> {  "Done! " });
+            app.AddNewTask();
+            var msg = new List<string> {"Done! " };
+            CollectionAssert.AreEqual(logger.Messages, msg);
+            CollectionAssert.AreEqual(app.GetListOfTask(), new List<Task> { new Task("buy apple", 0) });
         }
 
         [TestMethod]
         public void WrongFormtOfEditNumber()
         {
-            var testlogger = new CmdTestLogger(new List<string> {"add", "Купить арбуз","edit", "15" });
-            var app = new CmdApp(testlogger);
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "15" }));
 
-            app.StringHandling();
-            app.StringHandling();
+            app.AddNewTask();
+            app.EditDescription();
 
-            CollectionAssert.AreEqual(testlogger.Messages, new List<string> { "Done! ", "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Done! ", "Incorrect data" });
         }
 
         [TestMethod]
-        public void WrongFormtOfString()
+        public void LongDescriptionString()
         {
-            var testlogger = new CmdTestLogger(new List<string> {"add", "" });
-            var app = new CmdApp(testlogger);
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }));
 
-            app.StringHandling();
+            app.AddNewTask();
 
-            CollectionAssert.AreEqual(testlogger.Messages, new List<string> {  "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> {"Incorrect data" });
         }
-
 
         [TestMethod]
         public void PrintToDoList()
         {
-            var testlogger = new CmdTestLogger(new List<string> {"add", "Купить арбуз", "add", "Вымыть посуду", "list" });
-            var app = new CmdApp(testlogger);
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "make tea", "1" }));
+            var checkinglist = new List<Task> { new Task("buy apple", 1), new Task("make tea", 0) };
 
-            app.StringHandling();
-            app.StringHandling();
+            app.AddNewTask();
+            app.AddNewTask();
+            app.ChangeStatus();
 
             var msgs = new List<string>();
             msgs.Add("Done! ");
             msgs.Add("Done! ");
+            msgs.Add("Done! ");
 
-            app.StringHandling();
 
-            msgs.Add("1. Купить арбуз False");
-            msgs.Add("2. Вымыть посуду False");
+            app.Print();
 
-            CollectionAssert.AreEqual(testlogger.Messages, msgs);
+            msgs.Add("1. buy apple InProgress");
+            msgs.Add("2. make tea Todo");
+
+            CollectionAssert.AreEqual(logger.Messages, msgs);
+            CollectionAssert.AreEqual(checkinglist, app.GetListOfTask());
         }
 
         [TestMethod]
         public void ListIsEmptyAfterDelete()
         {
-            var testlogger = new CmdTestLogger(new List<string> {"add", "Купить арбуз","delete", "1" });
-            var app = new CmdApp(testlogger);
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "1" }));
 
-            app.StringHandling();
-            var msgs = new List<string>();
-            msgs.Add("Done! ");
-
-            app.StringHandling();
-            msgs.Add("Done! ");
-
-
-
-            CollectionAssert.AreEqual(testlogger.Messages, msgs);
-        }
-        [TestMethod]
-        public void ChangeStatus()
-        {
-            var testlogger = new CmdTestLogger(new List<string> { "add","Купить арбуз","change", "1" ,"list"});
-            var app = new CmdApp(testlogger);
-
-            app.StringHandling(); ;
-            app.StringHandling();
+            app.AddNewTask();
+            app.Delete();
 
             var msgs = new List<string>();
             msgs.Add("Done! ");
             msgs.Add("Done! ");
 
-            app.StringHandling();
+            app.Print();
+            msgs.Add("List is empty(");
 
-            msgs.Add("1. Купить арбуз True");
-
-            CollectionAssert.AreEqual(testlogger.Messages, msgs);
+            CollectionAssert.AreEqual(logger.Messages, msgs);
+            CollectionAssert.AreEqual(new List<Task>(), app.GetListOfTask());
         }
+
         [TestMethod]
         public void EditDescription()
         {
-            var testlogger = new CmdTestLogger(new List<string> {"add", "Купить арбуз","edit", "1", "Вымыть чайник","list" });
-            var app = new CmdApp(testlogger);
-
-            app.StringHandling();
-            app.StringHandling();
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "1", "buy pineapple" }));
 
             var msgs = new List<string>();
+
+            app.AddNewTask();
             msgs.Add("Done! ");
+
+            app.EditDescription();
             msgs.Add("Done! ");
 
-            app.StringHandling();
-
-            msgs.Add("1. Вымыть чайник False");
-
-            CollectionAssert.AreEqual(testlogger.Messages, msgs);
+            CollectionAssert.AreEqual(logger.Messages, msgs);
+            CollectionAssert.AreEqual(new List<Task> { new Task("buy pineapple", 0) }, app.GetListOfTask());
         }
 
+
         [TestMethod]
-        public void CheckRollback()
+        public void AddFourTasksInProgress()
         {
-            var testlogger = new CmdTestLogger(new List<string> { "rollback", "1" });
-            var app = new CmdApp(testlogger);
+            var logger = new TestLogger();
+            var app = new CmdApp(logger, new CmdGetterInput(new string[]
+            { "buy apple", "wash dishes", "do tasks", "buy pineapple","1" ,"2","4","3" }));
 
-            app.StringHandling();
-            var msgs = new List<string>();
+            for (int i = 0; i < 4; i++)
+                app.AddNewTask();
+            for (int i = 0; i < 4; i++)
+                app.ChangeStatus();
 
-            CollectionAssert.AreEqual(testlogger.Messages, msgs);
+            var checkingList = new List<Task> { new Task("buy apple", 1), new Task("wash dishes", 1),
+                                                new Task("do tasks", 0), new Task("buy pineapple", 1) };
+
+            CollectionAssert.AreEqual(checkingList, app.GetListOfTask());
         }
     }
 }

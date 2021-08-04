@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="MyTODO">
+      <HintPath>..\..\Server\ToDoHost\bin\Debug\netcoreapp3.1\MyTODO.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

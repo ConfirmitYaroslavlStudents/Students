@@ -31,9 +31,9 @@ namespace ToDoClient
             _logger.Log(toDoList.Length == 0 ? "Список пуст" : toDoList);
         }
 
-        public async Task HandleTaskAddition(string taskText)
+        public async Task HandleTaskAddition(string taskText, bool taskStatus)
         {
-            var response=await _client.PostAsync(Url,GetBody(taskText));
+            var response=await _client.PostAsync(Url,GetBody(new {Text=taskText, IsDone=taskStatus}));
             _logger.Log("Задание добавлено");
         }
 
@@ -43,14 +43,16 @@ namespace ToDoClient
             _logger.Log("Задание удалено");
         }
 
-        public async Task HandleTaskTextChange(int taskNumber, string taskText)
+        public async Task HandleTaskTextUpdate(int taskNumber, string taskText)
         {
-            //Patch
+            await _client.PatchAsync(Url + $"/{taskNumber}", GetBody(new {Text = taskText}));
+                _logger.Log("Текст задания обновлен");
         }
 
-        public async Task HandleTaskStatusToggle(int taskNumber, bool taskStatus)
+        public async Task HandleTaskStatusUpdate(int taskNumber, bool taskStatus)
         {
-            //Patch
+            await _client.PatchAsync(Url + $"/{taskNumber}", GetBody(new{IsDone=taskStatus}));
+            _logger.Log("Статус задания обновлен");
         }
     }
 }

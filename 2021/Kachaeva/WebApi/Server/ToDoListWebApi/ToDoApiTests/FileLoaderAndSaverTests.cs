@@ -27,7 +27,7 @@ namespace ToDoListTests
             var fileLoaderAndSaver = new FileLoaderAndSaver(fileName);
             var toDoList = new ToDoList();
 
-            toDoList.Add(new Task("wash dishes"));
+            toDoList.Add(new Task("wash dishes", false));
             fileLoaderAndSaver.Save(toDoList);
             var loadedToDoList = fileLoaderAndSaver.Load();
 

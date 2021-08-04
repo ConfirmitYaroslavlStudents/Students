@@ -43,21 +43,22 @@ namespace ToDoClient
                         break;
                     case ToDoCommands.AddTask:
                         var taskText = InputVerifier.GetValidTaskText(GetTaskTextInput());
-                        await _commandExecutor.HandleTaskAddition(taskText);
+                        var taskStatus = InputVerifier.GetValidTaskStatus(GetTaskStatusInput());
+                        await _commandExecutor.HandleTaskAddition(taskText, taskStatus);
                         break;
                     case ToDoCommands.RemoveTask:
                         var taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
                         await _commandExecutor.HandleTaskRemove(taskNumber);
                         break;
-                    case ToDoCommands.ToggleTaskStatus:
+                    case ToDoCommands.UpdateTaskStatus:
                         taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
-                        var taskStatus = InputVerifier.GetValidTaskStatus(GetTaskStatusInput());
-                        await _commandExecutor.HandleTaskStatusToggle(taskNumber, taskStatus);
+                        taskStatus = InputVerifier.GetValidTaskStatus(GetTaskStatusInput());
+                        await _commandExecutor.HandleTaskStatusUpdate(taskNumber,taskStatus);
                         break;
-                    case ToDoCommands.ChangeTaskText:
+                    case ToDoCommands.UpdateTaskText:
                         taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
                         taskText = InputVerifier.GetValidTaskText(GetTaskTextInput());
-                        await _commandExecutor.HandleTaskTextChange(taskNumber,taskText);
+                        await _commandExecutor.HandleTaskTextUpdate(taskNumber,taskText);
                         break;
                     default:
                         throw new ArgumentException("Некорректная команда");

@@ -11,7 +11,7 @@ namespace ToDoListTests
         {
             var toDoList = new ToDoList();
 
-            toDoList.Add(new Task("wash dishes"));
+            toDoList.Add(new Task("wash dishes", false));
             toDoList.Add(new Task("clean the room", true));
 
             Assert.AreEqual("1. wash dishes  [ ]\r\n2. clean the room  [v]\r\n", toDoList.ToString());

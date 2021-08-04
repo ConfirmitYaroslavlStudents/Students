@@ -22,7 +22,7 @@ namespace ToDoApiTests
         public void GetReturnsCorrectList()
         {
             var loaderSaver = new FakeLoaderAndSaver();
-            loaderSaver.ToDoList.Add(new Task("wash dishes"));
+            loaderSaver.ToDoList.Add(new Task("wash dishes", false));
             var controller = new ToDoController(loaderSaver);
 
             var actualToDoList = controller.GetToDoList();
@@ -36,18 +36,17 @@ namespace ToDoApiTests
             var loaderSaver = new FakeLoaderAndSaver();
             var controller = new ToDoController(loaderSaver);
 
-            controller.PostTask("wash dishes");
-            controller.PostTask("clean the room");
+            controller.PostTask(new Task("wash dishes", false));
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("1. wash dishes  [ ]\r\n2. clean the room  [ ]\r\n", actualToDoList);
+            Assert.AreEqual("1. wash dishes  [ ]\r\n", actualToDoList);
         }
 
         [TestMethod]
         public void TaskDoesNotExistAfterDelete()
         {
             var loaderSaver = new FakeLoaderAndSaver();
-            loaderSaver.ToDoList.Add(new Task("wash dishes"));
+            loaderSaver.ToDoList.Add(new Task("wash dishes", false));
             var controller = new ToDoController(loaderSaver);
 
             controller.DeleteTask(1);
@@ -56,35 +55,31 @@ namespace ToDoApiTests
             Assert.AreEqual("", actualToDoList);
         }
 
-        //[TestMethod]
-        //public void TaskTextChangesAfterPatch()
-        //{
-        //    var loaderSaver = new FakeLoaderAndSaver();
-        //    loaderSaver.ToDoList.Add(new Task("wash dishes"));
-        //    var logger = new FakeLogger();
-        //    var controller = new ToDoController(loaderSaver, logger);
+        [TestMethod]
+        public void TaskTextChangesAfterPatch()
+        {
+            var loaderSaver = new FakeLoaderAndSaver();
+            loaderSaver.ToDoList.Add(new Task("wash dishes" , false));
+            var controller = new ToDoController(loaderSaver);
 
-        //    controller.PatchTaskText(1, "clean the room");
-        //    var actualToDoList = controller.GetToDoList();
+            controller.PatchTask(1, new Task("clean the room"));
+            var actualToDoList = controller.GetToDoList();
 
-        //    Assert.AreEqual("Текст задания обновлен", logger.Messages[0]);
-        //    Assert.AreEqual("1. clean the room  [ ]\r\n", actualToDoList);
-        //}
+            Assert.AreEqual("1. clean the room  [ ]\r\n", actualToDoList);
+        }
 
-        //[TestMethod]
-        //public void TaskStatusTogglesAfterPatch()
-        //{
-        //    var loaderSaver = new FakeLoaderAndSaver();
-        //    loaderSaver.ToDoList.Add(new Task("wash dishes"));
-        //    var logger = new FakeLogger();
-        //    var controller = new ToDoController(loaderSaver, logger);
+        [TestMethod]
+        public void TaskStatusTogglesAfterPatch()
+        {
+            var loaderSaver = new FakeLoaderAndSaver();
+            loaderSaver.ToDoList.Add(new Task("wash dishes", false));
+            var controller = new ToDoController(loaderSaver);
 
-        //    controller.PatchTaskStatus(1, true);
-        //    var actualToDoList = controller.GetToDoList();
+            controller.PatchTask(1, new Task(true));
+            var actualToDoList = controller.GetToDoList();
 
-        //    Assert.AreEqual("Статус задания обновлен", logger.Messages[0]);
-        //    Assert.AreEqual("1. wash dishes  [v]\r\n", actualToDoList);
-        //}
+            Assert.AreEqual("1. wash dishes  [v]\r\n", actualToDoList);
+        }
     }
 }
 

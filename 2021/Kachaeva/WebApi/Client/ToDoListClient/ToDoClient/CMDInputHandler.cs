@@ -47,25 +47,26 @@ namespace ToDoClient
                         break;
                     case ToDoCommands.AddTask:
                         var taskText = InputVerifier.GetValidTaskText(_input[_inputIndex]);
-                        _inputIndex++;
-                        await _commandExecutor.HandleTaskAddition(taskText);
+                        var taskStatus = InputVerifier.GetValidTaskStatus(_input[_inputIndex + 1]);
+                        _inputIndex+=2;
+                        await _commandExecutor.HandleTaskAddition(taskText, taskStatus);
                         break;
                     case ToDoCommands.RemoveTask:
                         var taskNumber = InputVerifier.GetValidTaskNumber(_input[_inputIndex]);
                         _inputIndex++;
                         await _commandExecutor.HandleTaskRemove(taskNumber);
                         break;
-                    case ToDoCommands.ToggleTaskStatus:
+                    case ToDoCommands.UpdateTaskStatus:
                         taskNumber = InputVerifier.GetValidTaskNumber(_input[_inputIndex]);
-                        var taskStatus = InputVerifier.GetValidTaskStatus(_input[_inputIndex + 1]);
+                        taskStatus = InputVerifier.GetValidTaskStatus(_input[_inputIndex + 1]);
                         _inputIndex+=2;
-                        await _commandExecutor.HandleTaskStatusToggle(taskNumber, taskStatus);
+                        await _commandExecutor.HandleTaskStatusUpdate(taskNumber, taskStatus);
                         break;
-                    case ToDoCommands.ChangeTaskText:
+                    case ToDoCommands.UpdateTaskText:
                         taskNumber = InputVerifier.GetValidTaskNumber(_input[_inputIndex]);
                         taskText = InputVerifier.GetValidTaskText(_input[_inputIndex + 1]);
                         _inputIndex+=2;
-                        await _commandExecutor.HandleTaskTextChange(taskNumber,taskText);
+                        await _commandExecutor.HandleTaskTextUpdate(taskNumber,taskText);
                         break;
                     default:
                         throw new ArgumentException("Некорректная команда");

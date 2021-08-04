@@ -7,8 +7,8 @@ namespace ToDoClient
         public const string DisplayToDoList = "list";
         public const string AddTask = "add";
         public const string RemoveTask = "remove";
-        public const string ChangeTaskText = "text";
-        public const string ToggleTaskStatus = "status";
+        public const string UpdateTaskText = "text";
+        public const string UpdateTaskStatus = "status";
         public const string Quit = "q";
 
         public static string GetMenu()
@@ -18,8 +18,8 @@ namespace ToDoClient
             menu.AppendLine($"{DisplayToDoList} - просмотреть список");
             menu.AppendLine($"{AddTask} - добавить задание");
             menu.AppendLine($"{RemoveTask} - удалить задание");
-            menu.AppendLine($"{ChangeTaskText} - изменить текст задания");
-            menu.AppendLine($"{ToggleTaskStatus} - изменить статус задания");
+            menu.AppendLine($"{UpdateTaskText} - обновить текст задания");
+            menu.AppendLine($"{UpdateTaskStatus} - обновить статус задания");
             menu.AppendLine($"{Quit} - выйти");
             return menu.ToString();
         }

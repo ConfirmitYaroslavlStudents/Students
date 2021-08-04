@@ -24,9 +24,9 @@ namespace ToDoApi.Controllers
         }
 
         [HttpPost]
-        public void PostTask([FromBody] string taskText)
+        public void PostTask([FromBody] Task task)
         {
-            _toDoList.Add(new Task(taskText));
+            _toDoList.Add(task);
             _loaderAndSaver.Save(_toDoList);
         }
 
@@ -38,21 +38,14 @@ namespace ToDoApi.Controllers
         }
 
         [HttpPatch("{taskNumber}")]
-        public void PatchTaskText(int taskNumber, [FromBody] Task task)
+        public void PatchTask(int taskNumber, [FromBody] Task task)
         {
-            //var oldTask = _toDoList[taskNumber - 1];
-            //if (task.Text != null && task.Text != oldTask.Text) 
-            //{
-            //    oldTask.Text = task.Text;
-            //    _logger.Log("Текст задания обновлен");
-            //}
-
-            //if (task.IsDone != oldTask.IsDone)
-            //{
-            //    oldTask.IsDone
-            //}
-
-            //_loaderAndSaver.Save(_toDoList);
+            var oldTask = _toDoList[taskNumber];
+            if (task.Text != null)
+                oldTask.Text = task.Text;
+            if (task.IsDone != null)
+                oldTask.IsDone = task.IsDone;
+            _loaderAndSaver.Save(_toDoList);
         }
     }
 }

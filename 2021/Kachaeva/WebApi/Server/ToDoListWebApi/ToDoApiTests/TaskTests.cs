@@ -9,7 +9,7 @@ namespace ToDoListTests
         [TestMethod]
         public void ToStringReturnsCorrectValueIfTaskIsNotDone()
         {
-            var task = new Task("wash dishes");
+            var task = new Task("wash dishes", false);
 
             Assert.AreEqual("wash dishes  [ ]", task.ToString());
         }

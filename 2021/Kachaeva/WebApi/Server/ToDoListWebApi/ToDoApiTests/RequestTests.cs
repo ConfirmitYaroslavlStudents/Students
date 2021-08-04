@@ -46,8 +46,7 @@ namespace ToDoApiTests
         [TestMethod]
         public async Task PostTaskSuccess()
         {
-            var body = GetBody("wash dishes");
-
+            var body = GetBody(new {Text = "wash dishes", IsDone = false});
             var response = await _client.PostAsync(Url, body);
             var getResponse = await _client.GetAsync(Url);
             var toDoList=await getResponse.Content.ReadAsStringAsync();
@@ -60,7 +59,7 @@ namespace ToDoApiTests
         [TestMethod]
         public async Task DeleteTaskSuccess()
         {
-            var body = GetBody("wash dishes");
+            var body = GetBody(new {Text = "wash dishes", IsDone = false});
             await _client.PostAsync(Url, body);
 
             var response = await _client.DeleteAsync(Url+"/1");
@@ -72,36 +71,36 @@ namespace ToDoApiTests
             Assert.AreEqual("", toDoList);
         }
 
-        //[TestMethod]
-        //public async Task PatchTaskTextSuccess()
-        //{
-        //    var body = GetBody("wash dishes");
-        //    await _client.PostAsync(Url, body);
-        //    var body2 = GetBody("clean the room");
+        [TestMethod]
+        public async Task PatchTaskTextSuccess()
+        {
+            var body = GetBody(new {Text = "wash dishes", IsDone = false});
+            await _client.PostAsync(Url, body);
+            var body2 = GetBody(new {Text = "clean the room"});
 
-        //    var response = await _client.PatchAsync(Url + "/1", body2);
-        //    var getResponse = await _client.GetAsync(Url);
-        //    var toDoList=await getResponse.Content.ReadAsStringAsync();
+            var response = await _client.PatchAsync(Url + "/1", body2);
+            var getResponse = await _client.GetAsync(Url);
+            var toDoList = await getResponse.Content.ReadAsStringAsync();
 
-        //    response.EnsureSuccessStatusCode();
-        //    Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-        //    Assert.AreEqual("1. clean  the room  [ ]\r\n", toDoList);
-        //}
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual("1. clean the room  [ ]\r\n", toDoList);
+        }
 
-        //[TestMethod]
-        //public async Task PatchTaskStatusSuccess()
-        //{
-        //    var body = GetBody("wash dishes");
-        //    await _client.PostAsync(Url, body);
-        //    var body2 = GetBody(true);
+        [TestMethod]
+        public async Task PatchTaskStatusSuccess()
+        {
+            var body = GetBody(new {Text = "wash dishes", IsDone = false});
+            await _client.PostAsync(Url, body);
+            var body2 = GetBody(new {IsDone=true});
 
-        //    var response = await _client.PatchAsync(Url + "/1", body2);
-        //    var getResponse = await _client.GetAsync(Url);
-        //    var toDoList=await getResponse.Content.ReadAsStringAsync();
+            var response = await _client.PatchAsync(Url + "/1", body2);
+            var getResponse = await _client.GetAsync(Url);
+            var toDoList = await getResponse.Content.ReadAsStringAsync();
 
-        //    response.EnsureSuccessStatusCode();
-        //    Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-        //    Assert.AreEqual("1. wash dishes  [v]\r\n", toDoList);
-        //}
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual("1. wash dishes  [v]\r\n", toDoList);
+        }
     }
 }

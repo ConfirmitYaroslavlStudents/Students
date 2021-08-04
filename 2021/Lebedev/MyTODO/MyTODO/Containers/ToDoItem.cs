@@ -5,19 +5,23 @@ namespace MyTODO
 {
     public class ToDoItem
     {
-        public string Name
+        public int id
+        {
+            get;
+            set;
+        }
+        public string name
+        {
+            get;
+            set;
+        }
+        public bool completed
         {
             get;
             set;
         }
 
-        public bool Completed
-        {
-            get;
-            set;
-        }
-
-        public bool Deleted
+        public bool deleted
         {
             get;
             set;
@@ -25,55 +29,62 @@ namespace MyTODO
 
         public ToDoItem()
         {
-            Name = "";
         }
 
-        public ToDoItem(string name)
+        public ToDoItem(int id)
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException();
-            Name = name;
-            Completed = false;
-            Deleted = false;
+            this.id = id;
+            name = "";
         }
 
-        public ToDoItem(string name, bool completed, bool deleted)
+        public ToDoItem(int id, string name)
         {
+            this.id = id;
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException();
-            Name = name;
-            Completed = completed;
-            Deleted = deleted;
+            this.name = name;
+            completed = false;
+            deleted = false;
+        }
+
+        public ToDoItem(int id, string name, bool completed, bool deleted)
+        {
+            this.id = id;
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException();
+            this.name = name;
+            this.completed = completed;
+            this.deleted = deleted;
         }
 
         public void Complete()
         {
-            if (Deleted)
+            if (deleted)
                 return;
-            Completed = true;
+            completed = true;
         }
         
         public void Delete()
         {
-            Deleted = true;
+            deleted = true;
         }
         
-        public void ChangeName(string name)
+        public void ChangeName(string newName)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(newName))
                 throw new ArgumentException();
-            Name = name;
+            name = newName;
         }
 
         public override string ToString()
         {
-            var builder = new StringBuilder(Name);
+            var builder = new StringBuilder(name);
             builder.Append('\n');
-            if (Completed)
+            if (completed)
                 builder.Append("Completed\n");
             else
                 builder.Append("\n");
-            if (Deleted)
+            if (deleted)
                 builder.Append("Deleted");
             return builder.ToString();
         }

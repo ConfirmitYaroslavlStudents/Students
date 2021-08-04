@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace MyTODO
 {
-    public class ToDoListRestorer
+    public class ToDoFileManager
     {
         private FileInfo _file;
 
-        public ToDoListRestorer(FileInfo file)
+        public ToDoFileManager(FileInfo file)
         {
             _file = file;
         }
@@ -29,7 +29,7 @@ namespace MyTODO
             using var reader = new StreamReader(_file.FullName);
             while (!reader.EndOfStream)
             {
-                items.Add(new ToDoItem(reader.ReadLine(), 
+                items.Add(new ToDoItem(items.Count,reader.ReadLine(), 
                                    !string.IsNullOrEmpty(reader.ReadLine()), 
                                    !string.IsNullOrEmpty(reader.ReadLine())));
             }

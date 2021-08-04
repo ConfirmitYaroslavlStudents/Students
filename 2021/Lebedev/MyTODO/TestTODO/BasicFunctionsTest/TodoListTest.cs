@@ -36,9 +36,9 @@ namespace ToDoTest
             list.Add("A");
             list.Add("B");
 
-            Assert.AreEqual(list[0].Name,"A");
-            Assert.AreEqual(list[1].Name, "A");
-            Assert.AreEqual(list[2].Name, "B");
+            Assert.AreEqual(list[0].name,"A");
+            Assert.AreEqual(list[1].name, "A");
+            Assert.AreEqual(list[2].name, "B");
         }
     }
 }

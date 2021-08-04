@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace MyTODO
+namespace MyTODO.Controllers
 {
     public class ToDoArgs
     {
@@ -85,7 +85,7 @@ namespace MyTODO
                 return;
             var name = GetString(args, ref index);
             _todo[i].ChangeName(name);
-            Console.WriteLine("item's \"{0}\" name changed successfully", _todo[i].Name);
+            Console.WriteLine("item's \"{0}\" name changed successfully", _todo[i].name);
         }
 
         void CompleteTask(string[] args, ref int index)
@@ -94,7 +94,7 @@ namespace MyTODO
             if (i < 0)
                 return;
             _todo[i].Complete();
-            Console.WriteLine("Item \"{0}\" completed successfully", _todo[i].Name);
+            Console.WriteLine("Item \"{0}\" completed successfully", _todo[i].name);
         }
 
         void DeleteTask(string[] args, ref int index)
@@ -103,7 +103,7 @@ namespace MyTODO
             if (i < 0)
                 return;
             _todo[i].Delete();
-            Console.WriteLine("Item \"{0}\" deleted successfully", _todo[i].Name);
+            Console.WriteLine("Item \"{0}\" deleted successfully", _todo[i].name);
         }
 
         void ShowTask(string[] args, ref int index)

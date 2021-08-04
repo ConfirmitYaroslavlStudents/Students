@@ -1,18 +1,18 @@
 ﻿using System;
 
-namespace MyTODO
+namespace MyTODO.Controllers
 {
-    class ToDoMenu
+    public class ToDoMenu
     {
         private bool _deleted;
         private bool _completed = true;
-        private ToDoItem _item;
-        private ToDoList _todo;
+        private IToDoConnector _todo;
+        private int _chosenid;
         private int _count;
         private int _menuIndexX;
         private int _menuIndexY;
 
-        public ToDoMenu(ToDoList todolist)
+        public ToDoMenu(IToDoConnector todolist)
         {
             _todo = todolist;
         }
@@ -63,16 +63,16 @@ namespace MyTODO
             Console.Write("║");
             if (chosen)
                 SetChosenColor();
-            if (item.Name.Length <= 20)
+            if (item.name.Length <= 20)
             {
-                PrintItemPart(item.Name, item.Completed, item.Deleted);
-                for (var i = item.Name.Length; i < 19; i++)
+                PrintItemPart(item.name, item.completed, item.deleted);
+                for (var i = item.name.Length; i < 19; i++)
                     Console.Write(" ");
                 SetDefaultColor();
                 return;
             }
             var x = 0;
-            while (x < item.Name.Length)
+            while (x < item.name.Length)
             {
                 if (x != 0)
                 {
@@ -82,15 +82,15 @@ namespace MyTODO
                 if (chosen)
                     SetChosenColor();
                 for (var i = 0; i < 18; i++, x++)
-                    if (x < item.Name.Length)
-                        PrintItemPart(item.Name[x].ToString(), item.Completed, item.Deleted);
+                    if (x < item.name.Length)
+                        PrintItemPart(item.name[x].ToString(), item.completed, item.deleted);
                     else
                         Console.Write(" ");
-                if (x < item.Name.Length)
-                    if (item.Name[x] != ' ')
-                        PrintItemPart("-", item.Completed, item.Deleted);
+                if (x < item.name.Length)
+                    if (item.name[x] != ' ')
+                        PrintItemPart("-", item.completed, item.deleted);
                     else
-                        PrintItemPart(item.Name[x++].ToString(), item.Completed, item.Deleted);
+                        PrintItemPart(item.name[x++].ToString(), item.completed, item.deleted);
                 else
                     Console.Write(" ");
                 SetDefaultColor();
@@ -98,7 +98,7 @@ namespace MyTODO
 
             SetDefaultColor();
         }
-        
+
         public void PrintMenu()
         {
             var items = _todo.FindAll(_completed, _deleted);
@@ -108,7 +108,7 @@ namespace MyTODO
 
         void PrintMenuHeader(ToDoList items)
         {
-            var menu = new[] {"Add", "Deleted", "Completed"};
+            var menu = new[] { "Add", "Deleted", "Completed" };
             Console.Clear();
             Console.Write("╔═══╦═══════╦═════════╗\n║");
             _count = items.Count;
@@ -152,19 +152,19 @@ namespace MyTODO
             foreach (var each in items)
             {
                 if (_menuIndexX == j + 1)
-                    _item = each;
+                    _chosenid = each.id;
                 PrintName(each, _menuIndexX == j + 1 && _menuIndexY == 0);
                 var state = " ";
-                if(each.Completed)
+                if (each.completed)
                     state = "√";
                 else
-                    if(each.Deleted)
-                        state = "X";
+                    if (each.deleted)
+                    state = "X";
                 Console.Write("║");
                 if (_menuIndexX == j + 1 && _menuIndexY == 1)
                     PrintChosen(state);
                 else
-                    PrintOk(state, each.Completed);
+                    PrintOk(state, each.completed);
                 Console.WriteLine("║");
                 if (j + 1 == _count)
                     Console.WriteLine("╚═══════════════════╩═╝\nDel to delete item");
@@ -207,7 +207,7 @@ namespace MyTODO
                 case ConsoleKey.Delete:
                     if (_menuIndexX == 0)
                         break;
-                    _item.Delete();
+                    _todo.Delete(_chosenid);
                     if (!_deleted)
                         _count--;
                     break;
@@ -249,19 +249,19 @@ namespace MyTODO
                 return;
             if (_menuIndexY == 0)
             {
-                Console.WriteLine("Write new name for {0}", _item.Name);
+                Console.WriteLine("Write new name for {0}", _todo.GetItem(_chosenid).name);
                 var x = Console.ReadLine();
                 while (string.IsNullOrEmpty(x))
                 {
                     Console.Clear();
-                    Console.WriteLine("Write new name for {0}", _item.Name);
+                    Console.WriteLine("Write new name for {0}", _todo.GetItem(_chosenid).name);
                     x = Console.ReadLine();
                 }
-                _item.ChangeName(x);
+                _todo.ChangeName(_chosenid, x);
             }
             else
             {
-                _item.Complete();
+                _todo.Complete(_chosenid);
                 if (!_completed)
                     _count--;
             }

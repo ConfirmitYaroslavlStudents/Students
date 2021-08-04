@@ -1,26 +1,26 @@
 ﻿using System.IO;
 
-namespace MyTODO
+namespace MyTODO.Controllers
 {
     internal class ToDoMain
     {
         private static void Main(string[] args)
         {
-            var restorer = new ToDoListRestorer(new FileInfo("TODOsave.txt"));
-            var todo = new ToDoList(restorer.Read());
+            var manager = new ToDoFileManager(new FileInfo("TODOsave.txt"));
+            var todo = new ToDoList(manager.Read());
             if (args.Length != 0)
             {
                 var argsWorker = new ToDoArgs(todo);
                 argsWorker.WorkWithArgs(args);
-                restorer.Save(todo);
+                manager.Save(todo);
                 return;
             }
-            var menu = new ToDoMenu(todo);
+            var menu = new ToDoMenu(new ToDoForConsoleConnector(todo));
             while (true)
             {
                 menu.PrintMenu();
                 menu.WorkWithMenu();
-                restorer.Save(todo);
+                manager.Save(todo);
             }
         }
     }

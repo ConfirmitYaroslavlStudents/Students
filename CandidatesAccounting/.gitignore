@@ -1,7 +1,0 @@
-/node_modules
-/.idea
-/.vs
-/dist
-*.pdf
-*stats*.json
-/tests

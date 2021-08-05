@@ -35,8 +35,7 @@ namespace ToDoApi.Controllers
         {
             return ProcessTheRequest(() =>
             {
-                var toDoItem = new ToDoItem { Description = value, IsComplete = false };
-                ToDoList.Add(toDoItem);
+                ToDoList.Add(value);
                 _logger.LogInformation("The task has been added");
             });
         }

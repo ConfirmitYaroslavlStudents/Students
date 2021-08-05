@@ -10,12 +10,12 @@ namespace ToDoClient
         private int _inputIndex;
         private readonly CommandExecutor _commandExecutor;
 
-        public CMDInputHandler(ILogger logger, string[] input)
+        public CMDInputHandler(ILogger logger, string[] input, IApiClient client)
         {
             _logger = logger;
             _input = input;
             _inputIndex = 0;
-            _commandExecutor = new CommandExecutor(_logger);
+            _commandExecutor = new CommandExecutor(_logger, client);
         }
 
         public async Task HandleUsersInput()

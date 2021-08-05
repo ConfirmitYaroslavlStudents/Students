@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ToDoClient;
 
-namespace ToDoListTests
+namespace ClientTests
 {
     public class FakeLogger : ILogger
     {

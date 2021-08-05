@@ -9,11 +9,11 @@ namespace ToDoClient
         private readonly IReader _reader;
         private readonly CommandExecutor _commandExecutor;
 
-        public MenuInputHandler(ILogger logger, IReader reader) 
+        public MenuInputHandler(ILogger logger, IReader reader, IApiClient client) 
         {
             _logger = logger;
             _reader = reader;
-            _commandExecutor = new CommandExecutor(_logger);
+            _commandExecutor = new CommandExecutor(_logger, client);
         }
 
         public async Task HandleUsersInput()

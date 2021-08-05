@@ -8,14 +8,15 @@ namespace ToDoClient
         {
             var logger = new ConsoleLogger();
             var reader = new ConsoleReader();
+            var client = new WrappedHttpClient();
             if (args.Length != 0)
             {
-                var CMDInputHandler= new CMDInputHandler(logger, args);
+                var CMDInputHandler= new CMDInputHandler(logger, args, client);
                 await CMDInputHandler.HandleUsersInput();
             }
             else
             {
-                var menuInputHandler = new MenuInputHandler(logger, reader);
+                var menuInputHandler = new MenuInputHandler(logger, reader, client);
                 await menuInputHandler.HandleUsersInput();
             }
         }

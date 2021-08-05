@@ -5,13 +5,13 @@ using ToDoListNikeshina;
 namespace ToDoListTests
 {
     [TestClass]
-    public class CmdAppTests
+    public class CmdTests
     {
         [TestMethod]
         public void AddNewItem()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple" }));
 
             app.AddNewTask();
             var msg = new List<string> {"Done! " };
@@ -23,7 +23,7 @@ namespace ToDoListTests
         public void WrongFormtOfEditNumber()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "15" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "15" }));
 
             app.AddNewTask();
             app.EditDescription();
@@ -35,7 +35,7 @@ namespace ToDoListTests
         public void LongDescriptionString()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }));
 
             app.AddNewTask();
 
@@ -46,7 +46,7 @@ namespace ToDoListTests
         public void PrintToDoList()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "make tea", "1" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "make tea", "1" }));
             var checkinglist = new List<Task> { new Task("buy apple", 1), new Task("make tea", 0) };
 
             app.AddNewTask();
@@ -72,7 +72,7 @@ namespace ToDoListTests
         public void ListIsEmptyAfterDelete()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "1" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1" }));
 
             app.AddNewTask();
             app.Delete();
@@ -92,7 +92,7 @@ namespace ToDoListTests
         public void EditDescription()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[] { "buy apple", "1", "buy pineapple" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1", "buy pineapple" }));
 
             var msgs = new List<string>();
 
@@ -111,7 +111,7 @@ namespace ToDoListTests
         public void AddFourTasksInProgress()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdGetterInput(new string[]
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[]
             { "buy apple", "wash dishes", "do tasks", "buy pineapple","1" ,"2","4","3" }));
 
             for (int i = 0; i < 4; i++)

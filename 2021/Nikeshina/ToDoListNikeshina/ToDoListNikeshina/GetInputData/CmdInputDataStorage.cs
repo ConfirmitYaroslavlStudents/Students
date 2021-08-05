@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public class CmdGetterInput : IGetterInputData
+    public class CmdInputDataStorage : IGetInputData
     {
         public List<string> inputStrings = new List<string>();
 
-        public CmdGetterInput(string[] input)
+        public CmdInputDataStorage(string[] input)
         {
             inputStrings.AddRange(input);
         }

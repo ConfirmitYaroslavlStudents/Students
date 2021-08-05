@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public interface IGetterInputData
+    public interface IGetInputData
     {
         public string GetInputData();
     }

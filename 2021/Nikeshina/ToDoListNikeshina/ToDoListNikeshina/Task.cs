@@ -34,7 +34,7 @@ namespace ToDoListNikeshina
         {
             Name = newName;
         }
-        public string PrintTask()
+        public string StringFormat()
         {
             var str = Name + " " + Status;
             return str;

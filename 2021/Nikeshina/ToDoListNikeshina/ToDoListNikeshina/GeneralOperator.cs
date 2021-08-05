@@ -4,14 +4,14 @@ using System.Text;
 
 namespace ToDoListNikeshina
 {
-    public class CommonOperationWithToDo
+    public class GeneralOperator
     {
         private readonly ILogger _logger;
-        private readonly IGetterInputData _dataGetter;
+        private readonly IGetInputData _dataGetter;
         private ToDoList _list;
         private int _countOfTaskInpro;
 
-        public CommonOperationWithToDo(ILogger logger, IGetterInputData dataGetter, ToDoList list)
+        public GeneralOperator(ILogger logger, IGetInputData dataGetter, ToDoList list)
         {
             _logger = logger;
             _dataGetter = dataGetter;
@@ -26,7 +26,7 @@ namespace ToDoListNikeshina
                 int i = 1;
                 foreach (var task in _list._list)
                 {
-                    _logger.Log(i + ". " + task.PrintTask());
+                    _logger.Log(i + ". " + task.StringFormat());
                     i++;
                 }
             }

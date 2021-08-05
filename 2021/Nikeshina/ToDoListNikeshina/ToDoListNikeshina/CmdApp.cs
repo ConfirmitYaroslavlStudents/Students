@@ -7,68 +7,63 @@ namespace ToDoListNikeshina
     public class CmdApp
     {
         private readonly ILogger _logger;
-        public IGetterInputData DataGetter { get;private set; }
-        private ToDoList List { get; set; }
         private readonly FileManager _fileManager;
-        private readonly CommonOperationWithToDo _printer;
-        private  int _countTasksInProgress;
+        private readonly GeneralOperator _operator;
+        private int _countTasksInProgress;
+        public IGetInputData DataGetter { get;private set; }
+        private ToDoList List { get; set; }
+        
 
-        public CmdApp(ILogger logger, IGetterInputData dataGetter)
+        public CmdApp(ILogger logger, IGetInputData dataGetter)
         {
             _logger = logger;
             DataGetter = dataGetter;
             _fileManager = new FileManager();
             List = new ToDoList(_fileManager.Load());
-            _printer = new CommonOperationWithToDo(_logger, DataGetter, List);
+            _operator = new GeneralOperator(_logger, DataGetter, List);
             _countTasksInProgress = _fileManager.GetCountOfTaskInProgress();
         }
 
-        public void AddNewTask()
-        {
-            _printer.Add();
-        }
+        public void AddNewTask()=> _operator.Add();
 
         public void ChangeStatus()
         {
-            if (_printer.ChangeTaskStatus(_countTasksInProgress))
-                _countTasksInProgress = _printer.GetCountOfTaskInProgress();
+            if (_operator.ChangeTaskStatus(_countTasksInProgress))
+                _countTasksInProgress = _operator.GetCountOfTaskInProgress();
         }
 
         public void Delete()
         {
-            if (_printer.Delete(_countTasksInProgress))
-                _countTasksInProgress = _printer.GetCountOfTaskInProgress();
+            if (_operator.Delete(_countTasksInProgress))
+                _countTasksInProgress = _operator.GetCountOfTaskInProgress();
         }
 
         public void EditDescription()
         {
-            var inputStr = DataGetter.GetInputData();
+            var inputString = DataGetter.GetInputData();
 
-            if (!Validator.IsNumberValid(inputStr,List.Count()))
+            if (!Validator.IsNumberValid(inputString,List.Count()))
             {
                 _logger.Log(Messages.WrongFormatOfInputData());
                 return;
             }
 
-            int num = int.Parse(inputStr);
-            var dscr = DataGetter.GetInputData();
+            int noteNumber = int.Parse(inputString);
+            var newDescription = DataGetter.GetInputData();
 
-            if (!Validator.IsStringValid(dscr))
+            if (!Validator.IsStringValid(newDescription))
             {
                 _logger.Log(Messages.WrongFormatOfInputData());
                 return;
             }
 
-            List.Edit(num, dscr);
+            List.Edit(noteNumber, newDescription);
             _logger.Log(Messages.Completed());
         }
 
         public void Save() => _fileManager.Save(List._list);
 
-        public void Print()
-        {
-            _printer.Print();
-        }
+        public void Print()=> _operator.Print();
 
         public List<Task> GetListOfTask() => List.GetListOfTask();
 

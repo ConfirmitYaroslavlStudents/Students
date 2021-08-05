@@ -11,14 +11,14 @@ namespace ToDoListNikeshina
             var logger = new Logger();
             if (args.Length == 0)
             {
-               var app = new ConsoleApp(logger, new AppGetterInput());
+               var app = new ConsoleApp(logger, new ConsoleInputDataStorage());
                 logger.Log(Messages.InsructionText());
                 while (SwitchForConsoleApp(app)) ;
                 app.Save();
             }
             else
             {
-               var app = new CmdApp(logger, new CmdGetterInput(args));
+               var app = new CmdApp(logger, new CmdInputDataStorage(args));
                 SwitchForCmdApp(app);
                 app.Save();
             }

@@ -11,10 +11,10 @@ namespace ToDoListNikeshina
 
         public void Save(List<Task> list)
         {
-            using (var sw = new StreamWriter("Tasks.txt"))
+            using (var sw = new StreamWriter(FileConfig.FilePath))
             {
                 foreach (var task in list)
-                    sw.WriteLine(task.PrintTask());
+                    sw.WriteLine(task.StringFormat());
             }
         }
 
@@ -24,7 +24,7 @@ namespace ToDoListNikeshina
                 return new List<Task>();
 
             List<Task> tasks = new List<Task>();
-            using (var sr = new StreamReader("Tasks.txt"))
+            using (var sr = new StreamReader(FileConfig.FilePath))
             {
                 var str = sr.ReadLine();
                 while (str != null && str != "")
@@ -40,12 +40,18 @@ namespace ToDoListNikeshina
         private int GetStatus(string[] words)
         {
             var count = words.Length;
-            int currentTaskStatus = int.Parse(words[count - 1]);
+            var currentTaskStatus = words[count - 1];
 
-            if (currentTaskStatus == 1)
+            if (currentTaskStatus == "InProgress")
+            {
                 _countNotesInProgress++;
+                return 1;
+            }
+            else if (currentTaskStatus == "Todo")
+                return 0;
+            else
+                return 2;
 
-            return int.Parse(words[count - 1]);
         }
 
         public int GetCountOfTaskInProgress() => _countNotesInProgress;

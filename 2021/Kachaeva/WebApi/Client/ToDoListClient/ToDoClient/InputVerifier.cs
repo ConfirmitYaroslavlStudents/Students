@@ -15,8 +15,6 @@ namespace ToDoClient
         {
             if (!int.TryParse(taskNumberInput, out int taskNumber))
                 throw new ArgumentException("Нужно ввести число");
-            if (/*taskNumber > _toDoList.Count ||*/ taskNumber < 1)  //Count from Get
-                throw new ArgumentException("Задания с таким номером не существует");
             return taskNumber;
         }
 

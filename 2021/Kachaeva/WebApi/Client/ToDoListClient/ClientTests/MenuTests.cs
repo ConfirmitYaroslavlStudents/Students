@@ -35,7 +35,6 @@ namespace ClientTests
             Assert.AreEqual("Введите текст задания", logger.Messages[1]);
             Assert.AreEqual("Введите статус задания", logger.Messages[2]);
             Assert.AreEqual("Задание добавлено", logger.Messages[3]);
-            //Assert.AreEqual("1. wash dishes  [ ]\r\n", logger.Messages[4]);
         }
 
         [TestMethod]
@@ -50,7 +49,6 @@ namespace ClientTests
 
             Assert.AreEqual("Введите номер задания", logger.Messages[5]);
             Assert.AreEqual("Задание удалено", logger.Messages[6]);
-            //Assert.AreEqual("Список пуст", logger.Messages[7]);
         }
 
         [TestMethod]
@@ -66,7 +64,6 @@ namespace ClientTests
             Assert.AreEqual("Введите номер задания", logger.Messages[5]);
             Assert.AreEqual("Введите текст задания", logger.Messages[6]);
             Assert.AreEqual("Текст задания обновлен", logger.Messages[7]);
-            //Assert.AreEqual("1. clean the room  [ ]\r\n", logger.Messages[8]);
         }
 
         [TestMethod]
@@ -82,24 +79,7 @@ namespace ClientTests
             Assert.AreEqual("Введите номер задания", logger.Messages[5]);
             Assert.AreEqual("Введите статус задания", logger.Messages[6]);
             Assert.AreEqual("Статус задания обновлен", logger.Messages[7]);
-            //Assert.AreEqual("1. wash dishes  [v]\r\n", logger.Messages[8]);
         }
-
-        //[TestMethod]
-        //public async void ListSavesAndLoadsCorrectly()
-        //{
-        //    var logger = new FakeLogger();
-        //    var reader = new FakeReader(new List<string> { "add", "wash dishes", "q" });
-        //    var reader2 = new FakeReader(new List<string> {"list", "q"});
-        //    var client = new FakeApiClient();
-        //    var menuInputHandler = new MenuInputHandler(logger, reader, client);
-
-        //    await menuInputHandler.HandleUsersInput();
-        //    menuInputHandler = new MenuInputHandler(logger, reader2, client);
-        //    await menuInputHandler.HandleUsersInput();
-
-        //    Assert.AreEqual("1. wash dishes  [ ]\r\n", logger.Messages[5]);
-        //}
 
         [TestMethod]
         public void CanNotChooseNonExistentMenuItem()

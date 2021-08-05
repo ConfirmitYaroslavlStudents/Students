@@ -17,7 +17,6 @@ namespace ClientTests
             CMDInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Задание добавлено", logger.Messages[0]);
-            //Assert.AreEqual("1. wash dishes  [ ]\r\n", logger.Messages[1]);
         }
 
         [TestMethod]
@@ -31,7 +30,6 @@ namespace ClientTests
             CMDInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Задание удалено", logger.Messages[1]);
-            //Assert.AreEqual("Список пуст", logger.Messages[2]);
         }
 
         [TestMethod]
@@ -45,7 +43,6 @@ namespace ClientTests
             CMDInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Текст задания обновлен", logger.Messages[1]);
-            //Assert.AreEqual("1. clean the room  [ ]\r\n", logger.Messages[2]);
         }
 
         [TestMethod]
@@ -59,25 +56,8 @@ namespace ClientTests
             CMDInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Статус задания обновлен", logger.Messages[1]);
-            //Assert.AreEqual("1. wash dishes  [v]\r\n", logger.Messages[2]);
         }
-
-        //[TestMethod]
-        //public void ListSavesAndLoadsCorrectly()
-        //{
-        //    var logger = new FakeLogger();
-        //    var input = new string[] {"add", "wash dishes", "q"};
-        //    var input2 = new string[] {"list", "q"};
-        //    var client = new FakeApiClient();
-        //    var menuInputHandler = new CMDInputHandler(logger, input, client);
-
-        //    menuInputHandler.HandleUsersInput();
-        //    menuInputHandler = new CMDInputHandler(logger, input2, client);
-        //    menuInputHandler.HandleUsersInput();
-
-        //    Assert.AreEqual("1. wash dishes  [ ]\r\n", logger.Messages[2]);
-        //}
-
+        
         [TestMethod]
         public void CanNotChooseNonExistentMenuItem()
         {

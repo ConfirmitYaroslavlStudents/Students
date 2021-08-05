@@ -52,9 +52,7 @@ namespace ToDoListClientTests
             var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Edit();
-
-            var list = await commandExecutor.GetActualToDoList();
-            Assert.Equal("Water the plants", list.First().Description);
+            
             Assert.Contains("Done!", console.Messages[3]);
         }
 
@@ -66,9 +64,7 @@ namespace ToDoListClientTests
             var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Complete();
-
-            var list = await commandExecutor.GetActualToDoList();
-            Assert.True(list.First().IsComplete);
+            
             Assert.Contains("Done!", console.Messages[2]);
         }
 

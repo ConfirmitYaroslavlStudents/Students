@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ToDoApp;
 using ToDoListClientTests.Models;
@@ -8,43 +6,26 @@ using Xunit;
 
 namespace ToDoListClientTests
 {
-    public class CommandExecutorTests : IDisposable
+    public class CommandExecutorTests
     {
-        private readonly WebApplicationFactory _factory;
-        private readonly HttpClient _client;
-
-        public CommandExecutorTests()
-        {
-            _factory = new WebApplicationFactory();
-            _client = _factory.CreateClient();
-        }
+       
 
         [Fact]
         public void IsWorkingIsTrueAfterInitialization()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake();
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             Assert.True(commandExecutor.IsWorking);
-        }
-
-        [Fact]
-        public async Task ToDoListCountIncreasesAfterAddOperation()
-        {
-            var console = new AppConsoleFake(new[] { "Water the plants" });
-            var commandExecutor = new CommandExecutor(console, _client);
-
-            await commandExecutor.Add();
-
-            var list = await commandExecutor.GetActualToDoList();
-            Assert.Equal(3, list.Count());
         }
 
         [Fact]
         public async Task DoneMessageIsPrintedAfterAddOperation()
         {
             var console = new AppConsoleFake(new[] { "Water the plants" });
-            var commandExecutor = new CommandExecutor(console, _client);
+            var httpClient = HttpClientFake.GetFakeHttpClient();
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Add();
 
@@ -54,8 +35,9 @@ namespace ToDoListClientTests
         [Fact]
         public async Task NewDescriptionRequestIsPrintedAfterEditOperation()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake(new[] { "0", "Water the plants" });
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Edit();
 
@@ -65,8 +47,9 @@ namespace ToDoListClientTests
         [Fact]
         public async Task DoneMessageIsPrintedAfterEditOperation()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake(new[] { "0", "Water the plants" });
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Edit();
 
@@ -78,8 +61,9 @@ namespace ToDoListClientTests
         [Fact]
         public async Task DoneMessageIsPrintedAfterCompleteOperation()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake(new[] { "0" });
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Complete();
 
@@ -91,8 +75,9 @@ namespace ToDoListClientTests
         [Fact]
         public async Task DoneMessageIsPrintedAfterDeleteOperation()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake(new[] { "0" });
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Delete();
 
@@ -100,22 +85,11 @@ namespace ToDoListClientTests
         }
 
         [Fact]
-        public async Task ToDoListCountDecreasesAfterDeleteOperation()
-        {
-            var console = new AppConsoleFake(new[] { "0" });
-            var commandExecutor = new CommandExecutor(console, _client);
-
-            await commandExecutor.Delete();
-
-            var list = await commandExecutor.GetActualToDoList();
-            Assert.Single(list);
-        }
-
-        [Fact]
         public async Task IsWorkingIsFalseAfterExitOperation()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake();
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.Exit();
 
@@ -125,8 +99,9 @@ namespace ToDoListClientTests
         [Fact]
         public async Task TableIsPrintedWhenListOperation()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake();
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             await commandExecutor.List();
 
@@ -136,18 +111,14 @@ namespace ToDoListClientTests
         [Fact]
         public async Task NumberRequestIsPrintedWhenChooseTaskNumber()
         {
+            var httpClient = HttpClientFake.GetFakeHttpClient();
             var console = new AppConsoleFake(new[] { "0" });
-            var commandExecutor = new CommandExecutor(console, _client);
+            var commandExecutor = new CommandExecutor(console, httpClient);
 
             var list = await commandExecutor.GetActualToDoList();
             commandExecutor.ChooseTaskNumber(list);
 
             Assert.Contains("Choose the task number", console.Messages[0]);
-        }
-
-        public void Dispose()
-        {
-            _factory.Dispose();
         }
     }
 }

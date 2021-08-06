@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToDoList
+﻿namespace ToDoLibrary
 {
-   public class BaseLoggerDecorator: Loggers.ILogger
+    public class BaseLoggerDecorator : Loggers.ILogger
     {
         private Loggers.ILogger _logger;
 
@@ -12,7 +8,7 @@ namespace ToDoList
         {
             _logger = logger;
         }
-       public virtual void Log(string message)
+        public virtual void Log(string message)
         {
             _logger.Log(message);
         }

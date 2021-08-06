@@ -1,34 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
-namespace ToDoList
+namespace ToDoLibrary
 {
-   public static class ValidationNumberInCommands
+    public static class ValidationNumberInCommands
     {
-        public static int IntTryParseInputIndex(string inputIndex)
+        public static int IntTryParseAndSubtract(string inputIndex)
         {
-            int result;
-            if (!int.TryParse(inputIndex, out result))
-                throw new WrongEnteredCommandException("Wrong note index.");
+            if (!int.TryParse(inputIndex, out var result))
+                throw new WrongEnteredCommandException("Wrong index.");
 
-            return result - 1;
+            return result-1;
         }
 
-        public static int IntTryParseInputCountForRollback(string inputCount)
+        public static int IntTryParse(string inputIndex)
         {
-            int result;
-            if (!int.TryParse(inputCount, out result))
-                throw new WrongEnteredCommandException("Wrong note index.");
+            if (!int.TryParse(inputIndex, out var result))
+                throw new WrongEnteredCommandException("Wrong number.");
 
             return result;
-        }
-
-        public static bool IsIndexInRange(int index, int lowerLimit, int upperLimit)
-        {
-            if (index >= lowerLimit && index <= upperLimit)
-                return true;
-            return false;
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToDoList.Loggers
+﻿namespace ToDoLibrary.Loggers
 {
-   public interface ILogger
+    public interface ILogger
     {
+
         public void Log(string message);
     }
 }

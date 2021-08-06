@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ToDoList
+namespace ToDoLibrary
 {
-    public class WrongEnteredCommandException: Exception
+    public class WrongEnteredCommandException : Exception
     {
-        public WrongEnteredCommandException(string message): base(message) { }
+        public WrongEnteredCommandException(string message) : base(message) { }
     }
 }

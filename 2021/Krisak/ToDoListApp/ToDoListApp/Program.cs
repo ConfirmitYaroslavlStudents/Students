@@ -1,6 +1,5 @@
-﻿using System;
-using ToDoList;
-using System.Xml.Serialization;
+﻿using ToDoLibrary;
+using ToDoLibrary.Loggers;
 
 namespace Todo
 {
@@ -8,15 +7,15 @@ namespace Todo
     {
         static void Main(string[] args)
         {
+            var logger = new ConsoleLogger();
+            var toDoApp = new ToDoApp(logger);
             if (args.Length == 0)
             {
-                var ToDo = new ToDoConsole();
-                ToDo.DoWork();
+                toDoApp.WorkWithConsole(new UserInputFromConsole());
             }
             else
             {
-                var ToDo = new ToDoCMD();
-                ToDo.DoWork(args);
+                toDoApp.WorkWithConsole(new UserInputFromCmd(args));
             }
         }
     }

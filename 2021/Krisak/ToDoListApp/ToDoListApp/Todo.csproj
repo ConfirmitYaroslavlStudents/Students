@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ToDoList\ToDoList.csproj" />
+    <ProjectReference Include="..\ToDoList\ToDoLibrary.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ToDoList.Loggers
+namespace ToDoLibrary.Loggers
 {
-    public class ConsoleLogger: ILogger
+    public class ConsoleLogger : ILogger
     {
         public void Log(string message)
         {

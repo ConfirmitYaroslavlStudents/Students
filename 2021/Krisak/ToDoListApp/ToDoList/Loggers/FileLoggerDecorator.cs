@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 
-namespace ToDoList.Loggers
+namespace ToDoLibrary.Loggers
 {
     public class FileLoggerDecorator : BaseLoggerDecorator
     {
         private string _fileName;
-        public FileLoggerDecorator (ILogger logger, string fileName) : base(logger) 
+        public FileLoggerDecorator(ILogger logger, string fileName) : base(logger)
         {
             _fileName = fileName;
         }

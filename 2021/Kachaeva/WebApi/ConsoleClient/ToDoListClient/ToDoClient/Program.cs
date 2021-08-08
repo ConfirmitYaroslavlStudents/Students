@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace ToDoClient
 {
@@ -11,8 +13,8 @@ namespace ToDoClient
             var client = new WrappedHttpClient();
             if (args.Length != 0)
             {
-                var CMDInputHandler= new CMDInputHandler(logger, args, client);
-                await CMDInputHandler.HandleUsersInput();
+                var cmdInputHandler = new CmdInputHandler(logger, args, client);
+                await cmdInputHandler.HandleUsersInput();
             }
             else
             {

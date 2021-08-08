@@ -1,16 +1,16 @@
 ﻿using System;
-using  System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace ToDoClient
 {
-    public class CMDInputHandler
+    public class CmdInputHandler
     {
-        private readonly ILogger _logger;
+        private readonly IToDoLogger _logger;
         private readonly string[] _input;
         private int _inputIndex;
         private readonly CommandExecutor _commandExecutor;
 
-        public CMDInputHandler(ILogger logger, string[] input, IApiClient client)
+        public CmdInputHandler(IToDoLogger logger, string[] input, IApiClient client)
         {
             _logger = logger;
             _input = input;
@@ -24,11 +24,11 @@ namespace ToDoClient
             {
                 await GetCommands();
             }
-            catch(ArgumentException e)
+            catch (ArgumentException e)
             {
                 _logger.Log(e.Message);
             }
-            catch(IndexOutOfRangeException)
+            catch (IndexOutOfRangeException)
             {
                 _logger.Log("Некорректные аргументы");
             }
@@ -40,34 +40,39 @@ namespace ToDoClient
             {
                 var command = _input[_inputIndex];
                 _inputIndex++;
-                switch(command)
+                switch (command)
                 {
                     case ToDoCommands.DisplayToDoList:
                         await _commandExecutor.HandleToDoListDisplay();
                         break;
+
                     case ToDoCommands.AddTask:
                         var taskText = InputVerifier.GetValidTaskText(_input[_inputIndex]);
                         var taskStatus = InputVerifier.GetValidTaskStatus(_input[_inputIndex + 1]);
-                        _inputIndex+=2;
+                        _inputIndex += 2;
                         await _commandExecutor.HandleTaskAddition(taskText, taskStatus);
                         break;
+
                     case ToDoCommands.RemoveTask:
-                        var taskNumber = InputVerifier.GetValidTaskNumber(_input[_inputIndex]);
+                        var taskId = InputVerifier.GetValidtaskId(_input[_inputIndex]);
                         _inputIndex++;
-                        await _commandExecutor.HandleTaskRemove(taskNumber);
+                        await _commandExecutor.HandleTaskRemove(taskId);
                         break;
+
                     case ToDoCommands.UpdateTaskStatus:
-                        taskNumber = InputVerifier.GetValidTaskNumber(_input[_inputIndex]);
+                        taskId = InputVerifier.GetValidtaskId(_input[_inputIndex]);
                         taskStatus = InputVerifier.GetValidTaskStatus(_input[_inputIndex + 1]);
-                        _inputIndex+=2;
-                        await _commandExecutor.HandleTaskStatusUpdate(taskNumber, taskStatus);
+                        _inputIndex += 2;
+                        await _commandExecutor.HandleTaskStatusUpdate(taskId, taskStatus);
                         break;
+
                     case ToDoCommands.UpdateTaskText:
-                        taskNumber = InputVerifier.GetValidTaskNumber(_input[_inputIndex]);
+                        taskId = InputVerifier.GetValidtaskId(_input[_inputIndex]);
                         taskText = InputVerifier.GetValidTaskText(_input[_inputIndex + 1]);
-                        _inputIndex+=2;
-                        await _commandExecutor.HandleTaskTextUpdate(taskNumber,taskText);
+                        _inputIndex += 2;
+                        await _commandExecutor.HandleTaskTextUpdate(taskId, taskText);
                         break;
+
                     default:
                         throw new ArgumentException("Некорректная команда");
                 }

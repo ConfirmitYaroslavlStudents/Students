@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Text;
 
-namespace ToDo
+namespace ToDoApiDependencies
 {
-    public class ToDoList : Dictionary<int, Task>
+    public class ToDoList : Dictionary<int, ToDoTask>
     {
         private int _id;
 
@@ -13,19 +13,20 @@ namespace ToDo
             _id = 1;
         }
 
-        public void Add(Task task)
+        public void Add(ToDoTask toDoTask)
         {
             if(Count!=0)
                 _id = Keys.Last() + 1;
-            base.Add(_id,task);
+            toDoTask.Id = _id;
+            base.Add(_id,toDoTask);
         }
 
         public override string ToString()
         {
             StringBuilder toDoList = new StringBuilder();
-            foreach (var task in this)
+            foreach (var toDoTask in this)
             {
-                toDoList.AppendLine($"{task.Key}. {task.Value.ToString()}");
+                toDoList.AppendLine(toDoTask.Value.ToString());
             }
             return toDoList.ToString();
         }

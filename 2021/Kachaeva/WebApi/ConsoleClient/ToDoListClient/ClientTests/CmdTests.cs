@@ -1,98 +1,99 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDoClient;
+using  System.Threading.Tasks;
 
 namespace ClientTests
 {
     [TestClass]
-    public class CMDTests
+    public class CmdTests
     {
         [TestMethod]
-        public void TaskAddsCorrectly()
+        public async Task TaskAddsCorrectly()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "add", "wash dishes", "false", "list" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Задание добавлено", logger.Messages[0]);
         }
 
         [TestMethod]
-        public void TaskRemovesCorrectly()
+        public async Task TaskRemovesCorrectly()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "add", "wash dishes", "false", "remove", "1", "list" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Задание удалено", logger.Messages[1]);
         }
 
         [TestMethod]
-        public void TaskTextChangesCorrectly()
+        public async Task TaskTextChangesCorrectly()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "add", "wash dishes", "false", "text", "1", "clean the room", "list" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Текст задания обновлен", logger.Messages[1]);
         }
 
         [TestMethod]
-        public void TaskStatusChangesCorrectly()
+        public async Task TaskStatusChangesCorrectly()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "add", "wash dishes", "false", "status", "1", "true", "list" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Статус задания обновлен", logger.Messages[1]);
         }
         
         [TestMethod]
-        public void CanNotChooseNonExistentMenuItem()
+        public async Task CanNotChooseNonExistentMenuItem()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "print" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Некорректная команда", logger.Messages[0]);
         }
 
         [TestMethod]
-        public void CanNotAddEmptyTask()
+        public async Task CanNotAddEmptyTask()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "add", "" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Нельзя добавить пустое задание", logger.Messages[0]);
         }
 
         [TestMethod]
-        public void CanNotInputNotIntegerInNumberChoice()
+        public async Task CanNotInputNotIntegerInNumberChoice()
         {
-            var logger = new FakeLogger();
+            var logger = new FakeToDoLogger();
             var input = new string[] { "remove", "wrong input" };
             var client = new FakeApiClient();
-            var CMDInputHandler = new CMDInputHandler(logger, input, client);
+            var cmdInputHandler = new CmdInputHandler(logger, input, client);
 
-            CMDInputHandler.HandleUsersInput();
+            await cmdInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Нужно ввести число", logger.Messages[0]);
         }

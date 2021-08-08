@@ -1,6 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ToDo;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ToDoApiDependencies;
 using ToDoApi.Controllers;
+using System.Threading.Tasks;
 
 namespace ToDoApiTests
 {
@@ -15,19 +17,20 @@ namespace ToDoApiTests
 
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("", actualToDoList);
+            Assert.AreEqual(0, actualToDoList.Count());
         }
 
         [TestMethod]
         public void GetReturnsCorrectList()
         {
             var loaderSaver = new FakeLoaderAndSaver();
-            loaderSaver.ToDoList.Add(new Task("wash dishes", false));
+            loaderSaver.ToDoList.Add(new ToDoTask("wash dishes", false));
             var controller = new ToDoController(loaderSaver);
 
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("1. wash dishes  [ ]\r\n", actualToDoList);
+            Assert.AreEqual(1, actualToDoList.Count());
+            Assert.AreEqual("1. wash dishes  [ ]", actualToDoList.First().ToString());
         }
 
         [TestMethod]
@@ -36,50 +39,53 @@ namespace ToDoApiTests
             var loaderSaver = new FakeLoaderAndSaver();
             var controller = new ToDoController(loaderSaver);
 
-            controller.PostTask(new Task("wash dishes", false));
+            controller.PostTask(new ToDoTask("wash dishes", false));
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("1. wash dishes  [ ]\r\n", actualToDoList);
+            Assert.AreEqual(1, actualToDoList.Count());
+            Assert.AreEqual("1. wash dishes  [ ]", actualToDoList.First().ToString());
+;
         }
 
         [TestMethod]
         public void TaskDoesNotExistAfterDelete()
         {
             var loaderSaver = new FakeLoaderAndSaver();
-            loaderSaver.ToDoList.Add(new Task("wash dishes", false));
+            loaderSaver.ToDoList.Add(new ToDoTask("wash dishes", false));
             var controller = new ToDoController(loaderSaver);
 
             controller.DeleteTask(1);
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("", actualToDoList);
+            Assert.AreEqual(0, actualToDoList.Count());
         }
 
         [TestMethod]
         public void TaskTextChangesAfterPatch()
         {
             var loaderSaver = new FakeLoaderAndSaver();
-            loaderSaver.ToDoList.Add(new Task("wash dishes" , false));
+            loaderSaver.ToDoList.Add(new ToDoTask("wash dishes" , false));
             var controller = new ToDoController(loaderSaver);
 
-            controller.PatchTask(1, new Task("clean the room"));
+            controller.PatchTask(1, new PatchToDoTask{Text="clean the room"});
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("1. clean the room  [ ]\r\n", actualToDoList);
+            Assert.AreEqual(1, actualToDoList.Count());
+            Assert.AreEqual("1. clean the room  [ ]", actualToDoList.First().ToString());
         }
 
         [TestMethod]
         public void TaskStatusTogglesAfterPatch()
         {
             var loaderSaver = new FakeLoaderAndSaver();
-            loaderSaver.ToDoList.Add(new Task("wash dishes", false));
+            loaderSaver.ToDoList.Add(new ToDoTask("wash dishes", false));
             var controller = new ToDoController(loaderSaver);
 
-            controller.PatchTask(1, new Task(true));
+            controller.PatchTask(1, new PatchToDoTask{IsDone = true});
             var actualToDoList = controller.GetToDoList();
 
-            Assert.AreEqual("1. wash dishes  [v]\r\n", actualToDoList);
+            Assert.AreEqual(1, actualToDoList.Count());
+            Assert.AreEqual("1. wash dishes  [v]", actualToDoList.First().ToString());
         }
     }
 }
-

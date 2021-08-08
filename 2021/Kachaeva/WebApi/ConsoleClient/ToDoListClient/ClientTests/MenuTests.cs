@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using ToDoClient;
+using System.Threading.Tasks;
 
 namespace ClientTests
 {
@@ -8,14 +9,14 @@ namespace ClientTests
     public class MenuTests
     {
         [TestMethod]
-        public void MenuDisplaysCorrectly()
+        public async Task MenuDisplaysCorrectly()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Что вы хотели бы сделать? Введите:\r\nlist - просмотреть список\r\n" +
                 "add - добавить задание\r\nremove - удалить задание\r\ntext - обновить текст задания\r\n" +
@@ -23,14 +24,14 @@ namespace ClientTests
         }
 
         [TestMethod]
-        public void TaskAddsCorrectly()
+        public async Task TaskAddsCorrectly()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "add", "wash dishes", "false", "list", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "add", "wash dishes", "false", "list", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Введите текст задания", logger.Messages[1]);
             Assert.AreEqual("Введите статус задания", logger.Messages[2]);
@@ -38,28 +39,28 @@ namespace ClientTests
         }
 
         [TestMethod]
-        public void TaskRemovesCorrectly()
+        public async Task TaskRemovesCorrectly()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "add", "wash dishes", "false", "remove", "1", "list", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "add", "wash dishes", "false", "remove", "1", "list", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Введите номер задания", logger.Messages[5]);
             Assert.AreEqual("Задание удалено", logger.Messages[6]);
         }
 
         [TestMethod]
-        public void TaskTextChangesCorrectly()
+        public async Task TaskTextChangesCorrectly()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "add", "wash dishes", "false", "text", "1", "clean the room", "list", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "add", "wash dishes", "false", "text", "1", "clean the room", "list", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Введите номер задания", logger.Messages[5]);
             Assert.AreEqual("Введите текст задания", logger.Messages[6]);
@@ -67,14 +68,14 @@ namespace ClientTests
         }
 
         [TestMethod]
-        public void TaskStatusChangesCorrectly()
+        public async Task TaskStatusChangesCorrectly()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "add", "wash dishes", "false", "status", "1", "true", "list", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "add", "wash dishes", "false", "status", "1", "true", "list", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Введите номер задания", logger.Messages[5]);
             Assert.AreEqual("Введите статус задания", logger.Messages[6]);
@@ -82,40 +83,40 @@ namespace ClientTests
         }
 
         [TestMethod]
-        public void CanNotChooseNonExistentMenuItem()
+        public async Task CanNotChooseNonExistentMenuItem()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "print", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "print", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Некорректная команда", logger.Messages[1]);
         }
 
         [TestMethod]
-        public void CanNotAddEmptyTask()
+        public async Task CanNotAddEmptyTask()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "add", "", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "add", "", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Нельзя добавить пустое задание", logger.Messages[2]);
         }
 
         [TestMethod]
-        public void CanNotInputNotIntegerInNumberChoice()
+        public async Task CanNotInputNotIntegerInNumberChoice()
         {
-            var logger = new FakeLogger();
-            var reader = new FakeReader(new List<string> { "remove", "wrong input", "q" });
+            var logger = new FakeToDoLogger();
+            var reader = new FakeToDoReader(new List<string> { "remove", "wrong input", "q" });
             var client = new FakeApiClient();
             var menuInputHandler = new MenuInputHandler(logger, reader, client);
 
-            menuInputHandler.HandleUsersInput();
+            await menuInputHandler.HandleUsersInput();
 
             Assert.AreEqual("Нужно ввести число", logger.Messages[2]);
         }

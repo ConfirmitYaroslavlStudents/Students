@@ -3,12 +3,12 @@ using ToDoClient;
 
 namespace ClientTests
 {
-    public class FakeReader : IReader
+    public class FakeToDoReader : IToDoReader
     {
         private readonly List<string> _input;
         private int _inputIndex;
 
-        public FakeReader(List<string> inputs)
+        public FakeToDoReader(List<string> inputs)
         {
             _input = inputs;
             _inputIndex = -1;

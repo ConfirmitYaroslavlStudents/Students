@@ -2,7 +2,7 @@
 
 namespace ToDoClient
 {
-    public class ConsoleReader : IReader
+    public class ConsoleReader : IToDoReader
     {
         public string ReadLine()
         {

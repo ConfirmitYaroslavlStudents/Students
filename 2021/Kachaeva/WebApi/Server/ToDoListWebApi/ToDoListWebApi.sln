@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoApi", "ToDoApi\ToDoApi.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoApiTests", "ToDoApiTests\ToDoApiTests.csproj", "{6E0426E1-A9A7-4589-82D4-6D95062C4C21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo", "ToDo\ToDo.csproj", "{05629D9A-987D-459E-8795-FC1C3CCDE362}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoApiDependencies", "ToDo\ToDoApiDependencies.csproj", "{05629D9A-987D-459E-8795-FC1C3CCDE362}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ToDo;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
+using Newtonsoft.Json;
+using ToDoApiDependencies;
 
 namespace ToDoApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("todo")]
     public class ToDoController : ControllerBase
     {
         private readonly ILoaderAndSaver _loaderAndSaver;
@@ -18,34 +23,52 @@ namespace ToDoApi.Controllers
         }
 
         [HttpGet]
-        public string GetToDoList()
+        public IEnumerable<ToDoTask> GetToDoList()
         {
-            return _toDoList.ToString();
+            foreach (var toDoTask in _toDoList)
+            {
+                yield return toDoTask.Value;
+            }
+        }
+
+        [HttpGet("{taskId}")]
+        public ActionResult<ToDoTask> GetToDoTask(int taskId)
+        {
+            if (!_toDoList.ContainsKey(taskId))
+                return NotFound();
+            return _toDoList[taskId];
         }
 
         [HttpPost]
-        public void PostTask([FromBody] Task task)
+        public IActionResult PostTask([FromBody] ToDoTask toDoTask)
         {
-            _toDoList.Add(task);
+            _toDoList.Add(toDoTask);
             _loaderAndSaver.Save(_toDoList);
+            return CreatedAtAction(nameof(GetToDoTask), new {taskId = toDoTask.Id}, toDoTask);
         }
 
-        [HttpDelete ("{taskNumber}")]
-        public void DeleteTask(int taskNumber)
+        [HttpDelete ("{taskId}")]
+        public IActionResult DeleteTask(int taskId)
         {
-            _toDoList.Remove(taskNumber);
+            if (!_toDoList.ContainsKey(taskId))
+                return NotFound();
+            _toDoList.Remove(taskId);
             _loaderAndSaver.Save(_toDoList);
+            return NoContent();
         }
 
-        [HttpPatch("{taskNumber}")]
-        public void PatchTask(int taskNumber, [FromBody] Task task)
+        [HttpPatch("{taskId}")]
+        public IActionResult PatchTask(int taskId, [FromBody] PatchToDoTask toDoTask)
         {
-            var oldTask = _toDoList[taskNumber];
-            if (task.Text != null)
-                oldTask.Text = task.Text;
-            if (task.IsDone != null)
-                oldTask.IsDone = task.IsDone;
+            if (!_toDoList.ContainsKey(taskId))
+                return NotFound();
+            var oldToDoTask = _toDoList[taskId];
+            if (toDoTask.IsPatchContainsText)
+                oldToDoTask.Text = toDoTask.Text;
+            if (toDoTask.IsPatchContainsIsDone)
+                oldToDoTask.IsDone = toDoTask.IsDone;
             _loaderAndSaver.Save(_toDoList);
+            return NoContent();
         }
     }
 }

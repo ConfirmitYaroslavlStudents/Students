@@ -3,11 +3,11 @@ using ToDoClient;
 
 namespace ClientTests
 {
-    public class FakeLogger : ILogger
+    public class FakeToDoLogger : IToDoLogger
     {
         public List<string> Messages { get; private set; }
 
-        public FakeLogger()
+        public FakeToDoLogger()
         {
             Messages = new List<string>();
         }

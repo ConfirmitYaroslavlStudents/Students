@@ -1,35 +1,36 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using ToDo;
+using ToDoApiDependencies;
 
-namespace ToDoListTests
+namespace ToDoApiTests
 {
     [TestClass]
     public class FileLoaderAndSaverTests
     {
-        [TestMethod]
-        public void EmtyToDoListDoesNotSaves()
+        private const string FileName = "TestToDoList.txt";
+        private readonly FileLoaderAndSaver _fileLoaderAndSaver = new FileLoaderAndSaver(FileName);
+
+        [TestInitialize]
+        public void InitializeTests()
         {
-            string fileName = "TestToDoList.txt";
-            File.Delete(fileName);
-            var fileLoaderAndSaver = new FileLoaderAndSaver(fileName);
+            File.Delete(FileName);
+        }
 
-            fileLoaderAndSaver.Save(new ToDoList());
+        [TestMethod]
+        public void EmptyToDoListDoesNotSaves()
+        {
+            _fileLoaderAndSaver.Save(new ToDoList());
 
-            Assert.IsFalse(File.Exists(fileName));
+            Assert.IsFalse(File.Exists(FileName));
         }
 
         [TestMethod]
         public void ToDoListSavesAndLoadsCorrectly()
         {
-            string fileName = "TestToDoList.txt";
-            File.Delete(fileName);
-            var fileLoaderAndSaver = new FileLoaderAndSaver(fileName);
-            var toDoList = new ToDoList();
+            var toDoList = new ToDoList {new ToDoTask("wash dishes", false)};
 
-            toDoList.Add(new Task("wash dishes", false));
-            fileLoaderAndSaver.Save(toDoList);
-            var loadedToDoList = fileLoaderAndSaver.Load();
+            _fileLoaderAndSaver.Save(toDoList);
+            var loadedToDoList = _fileLoaderAndSaver.Load();
 
             Assert.AreEqual(toDoList.ToString(), loadedToDoList.ToString());
         }

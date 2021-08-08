@@ -5,11 +5,11 @@ namespace ToDoClient
 {
     public class MenuInputHandler
     {
-        private readonly ILogger _logger;
-        private readonly IReader _reader;
+        private readonly IToDoLogger _logger;
+        private readonly IToDoReader _reader;
         private readonly CommandExecutor _commandExecutor;
 
-        public MenuInputHandler(ILogger logger, IReader reader, IApiClient client) 
+        public MenuInputHandler(IToDoLogger logger, IToDoReader reader, IApiClient client)
         {
             _logger = logger;
             _reader = reader;
@@ -41,25 +41,30 @@ namespace ToDoClient
                     case ToDoCommands.DisplayToDoList:
                         await _commandExecutor.HandleToDoListDisplay();
                         break;
+
                     case ToDoCommands.AddTask:
                         var taskText = InputVerifier.GetValidTaskText(GetTaskTextInput());
                         var taskStatus = InputVerifier.GetValidTaskStatus(GetTaskStatusInput());
                         await _commandExecutor.HandleTaskAddition(taskText, taskStatus);
                         break;
+
                     case ToDoCommands.RemoveTask:
-                        var taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
-                        await _commandExecutor.HandleTaskRemove(taskNumber);
+                        var taskId = InputVerifier.GetValidtaskId(GettaskIdInput());
+                        await _commandExecutor.HandleTaskRemove(taskId);
                         break;
+
                     case ToDoCommands.UpdateTaskStatus:
-                        taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
+                        taskId = InputVerifier.GetValidtaskId(GettaskIdInput());
                         taskStatus = InputVerifier.GetValidTaskStatus(GetTaskStatusInput());
-                        await _commandExecutor.HandleTaskStatusUpdate(taskNumber,taskStatus);
+                        await _commandExecutor.HandleTaskStatusUpdate(taskId, taskStatus);
                         break;
+
                     case ToDoCommands.UpdateTaskText:
-                        taskNumber = InputVerifier.GetValidTaskNumber(GetTaskNumberInput());
+                        taskId = InputVerifier.GetValidtaskId(GettaskIdInput());
                         taskText = InputVerifier.GetValidTaskText(GetTaskTextInput());
-                        await _commandExecutor.HandleTaskTextUpdate(taskNumber,taskText);
+                        await _commandExecutor.HandleTaskTextUpdate(taskId, taskText);
                         break;
+
                     default:
                         throw new ArgumentException("Некорректная команда");
                 }
@@ -79,7 +84,7 @@ namespace ToDoClient
             return _reader.ReadLine();
         }
 
-        private string GetTaskNumberInput()
+        private string GettaskIdInput()
         {
             _logger.Log("Введите номер задания");
             return _reader.ReadLine();

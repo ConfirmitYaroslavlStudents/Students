@@ -1,6 +1,6 @@
 ﻿namespace ToDoClient
 {
-    public interface ILogger
+    public interface IToDoLogger
     {
         public void Log(string message);
     }

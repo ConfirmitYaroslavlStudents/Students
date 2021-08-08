@@ -2,7 +2,7 @@
 
 namespace ToDoClient
 {
-    public class ConsoleLogger : ILogger
+    public class ConsoleLogger : IToDoLogger
     {
         public void Log(string message)
         {

@@ -1,6 +1,6 @@
 ﻿namespace ToDoClient
 {
-    public interface IReader
+    public interface IToDoReader
     {
         public string ReadLine();
     }

@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ToDo;
+using ToDoApiDependencies;
 
-namespace ToDoListTests
+namespace ToDoApiTests
 {
     [TestClass]
     public class ToDoListTests
@@ -9,10 +9,7 @@ namespace ToDoListTests
         [TestMethod]
         public void ToStringReturnsCorrectValue()
         {
-            var toDoList = new ToDoList();
-
-            toDoList.Add(new Task("wash dishes", false));
-            toDoList.Add(new Task("clean the room", true));
+            var toDoList = new ToDoList {new ToDoTask("wash dishes", false), new ToDoTask("clean the room", true)};
 
             Assert.AreEqual("1. wash dishes  [ ]\r\n2. clean the room  [v]\r\n", toDoList.ToString());
         }

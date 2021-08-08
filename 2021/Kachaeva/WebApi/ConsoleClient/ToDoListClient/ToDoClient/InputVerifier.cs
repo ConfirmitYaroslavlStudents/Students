@@ -11,11 +11,11 @@ namespace ToDoClient
             return taskTextInput;
         }
 
-        public static int GetValidTaskNumber(string taskNumberInput)
+        public static int GetValidtaskId(string taskIdInput)
         {
-            if (!int.TryParse(taskNumberInput, out int taskNumber))
+            if (!int.TryParse(taskIdInput, out int taskId))
                 throw new ArgumentException("Нужно ввести число");
-            return taskNumber;
+            return taskId;
         }
 
         public static bool GetValidTaskStatus(string taskStatusInput)

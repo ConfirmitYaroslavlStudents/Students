@@ -30,6 +30,11 @@ namespace ToDoApp.CustomClient
             return _client.GetAsync(_requestUri);
         }
 
+        public Task<HttpResponseMessage> GetItemsStartingWith(string prefix)
+        {
+            return _client.GetAsync($"{_requestUri}/{prefix}");
+        }
+
         public Task<HttpResponseMessage> GetToDoItem(int taskId)
         {
             return _client.GetAsync($"{_requestUri}/{taskId}");

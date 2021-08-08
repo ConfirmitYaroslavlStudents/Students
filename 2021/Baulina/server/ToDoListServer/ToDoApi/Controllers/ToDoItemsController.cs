@@ -34,11 +34,11 @@ namespace ToDoApi.Controllers
             return ToDoList.FindToDoItem(id);
         }
 
-        [HttpGet("{prefix}")]
-        public IEnumerable<ToDoItem> GetTodoItemsStartingWith([FromQuery] string prefix)
-        {
-            return ToDoList.GetItemsStartingWith(prefix);
-        }
+        //[HttpGet("{prefix:string}")]
+        //public IEnumerable<ToDoItem> GetTodoItemsStartingWith(string prefix)
+        //{
+        //    return ToDoList.GetItemsStartingWith(prefix);
+        //}
 
         [HttpPost]
         public IActionResult AddToDoItem([FromBody] ToDoItem toDoItem)
@@ -61,13 +61,9 @@ namespace ToDoApi.Controllers
         [HttpPatch("{id}")]
         public IActionResult EditToDoItem(int id, [FromBody] JsonPatchDocument<ToDoItem> requestPatchDocument)
         {
-            if (requestPatchDocument == null)
-            {
-                return BadRequest();
-            }
-            
             var existingToDoItem = ToDoList.FindToDoItem(id);
-            requestPatchDocument.ApplyTo(existingToDoItem);
+            requestPatchDocument.ApplyToSafely(existingToDoItem, ToDoList);
+
             _logger.LogInformation("The task has been edited");
             _listSaveAndLoad.SaveTheList(ToDoList);
             return NoContent();

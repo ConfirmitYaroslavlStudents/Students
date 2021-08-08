@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using ToDoApp.CustomClient;
 using ToDoApp.Models;
@@ -11,7 +12,7 @@ namespace ToDoListClientTests.IntegrationTests
     public class IntegrationTests : IDisposable
     {
         private readonly Client _client;
-        private readonly string _prefix = "TeskTask_";
+        private readonly string _prefix = "TestTask_";
 
         public IntegrationTests()
         {
@@ -24,101 +25,106 @@ namespace ToDoListClientTests.IntegrationTests
         }
 
         [Fact]
-        public void PostToDoItemSuccess()
+        public async Task PostToDoItemSuccess()
         {
-            var response = _client.Post(new ToDoItem {Description = "Walk the dog", Status = ToDoItemStatus.NotComplete});
-            var id = GetToDoItemID(response.Result);
-            var todoItem = _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>().Result;
+            var response = await _client.Post(new ToDoItem {Description = "Walk the dog", Status = ToDoItemStatus.NotComplete});
+            var id = GetToDoItemID(response);
+            var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
             Assert.Equal("Walk the dog", todoItem.Description);
             Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
 
         [Fact]
-        public void PostToDoItemWithIncorrectStatusReturnsBadRequest()
+        public async Task PostToDoItemWithIncorrectStatusReturnsBadRequest()
         {
-            var response = _client.Post(new ToDoItem {Description = "Walk the dog", Status = (ToDoItemStatus) 10});
+            var response = await _client.Post(new ToDoItem {Description = "Walk the dog", Status = (ToDoItemStatus) 10});
 
-            Assert.False(response.Result.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.Result.StatusCode);
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
         
         [Fact]
-        public void EditToDoItemDescriptionSuccess()
+        public async Task EditToDoItemDescriptionSuccess()
         {
             var response =
-                _client.Post(new ToDoItem {Description = "Walk the dog", Status = ToDoItemStatus.NotComplete});
-            var id = GetToDoItemID(response.Result);
+                await _client.Post(new ToDoItem {Description = "Walk the dog", Status = ToDoItemStatus.NotComplete});
+            var id = GetToDoItemID(response);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Description, "Wipe the table");
-            _client.Patch(id, patchDoc);
-            var todoItem = _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>().Result;
+            await _client.Patch(id, patchDoc);
+            var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
             Assert.Equal("Wipe the table", todoItem.Description);
             Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
         
         [Fact]
-        public void CompleteToDoItemSuccess()
+        public async Task CompleteToDoItemSuccess()
         {
-            var response = _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.NotComplete });
-            var id = GetToDoItemID(response.Result);
+            var response = await _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.NotComplete });
+            var id = GetToDoItemID(response);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Status, ToDoItemStatus.Complete);
-            _client.Patch(id, patchDoc);
-            var todoItem = _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>().Result;
+            await _client.Patch(id, patchDoc);
+            var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
             Assert.Equal("Walk the dog", todoItem.Description);
             Assert.Equal(ToDoItemStatus.Complete, todoItem.Status);
         }
 
         [Fact]
-        public void ChangeToDoItemStatusToIncorrectReturnsBadRequest()
+        public async Task ChangeToDoItemStatusToIncorrectReturnsBadRequest()
         {
-            var postResponse = _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.NotComplete });
-            var id = GetToDoItemID(postResponse.Result);
+            var postResponse = await _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.NotComplete });
+            var id = GetToDoItemID(postResponse);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Status, (ToDoItemStatus) 10);
-            var response = _client.Patch(id, patchDoc);
+            var response = await _client.Patch(id, patchDoc);
 
-            Assert.False(response.Result.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.Result.StatusCode);
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
-        public void IncompleteToDoItemSuccess()
+        public async Task IncompleteToDoItemSuccess()
         {
-            var response = _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.Complete });
-            var id = GetToDoItemID(response.Result);
+            var response = await _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.Complete });
+            var id = GetToDoItemID(response);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Status, ToDoItemStatus.NotComplete);
-            _client.Patch(id, patchDoc);
-            var todoItem = _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>().Result;
+            await _client.Patch(id, patchDoc);
+            var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
             Assert.Equal("Walk the dog", todoItem.Description);
-            Assert.Equal(ToDoItemStatus.Complete, todoItem.Status);
+            Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
 
         [Fact]
-        public void DeleteToDoItemSuccess()
+        public async Task DeleteToDoItemSuccess()
         {
-            var response = _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.Complete });
-            var id = GetToDoItemID(response.Result);
-            _client.Delete(id);
-            var result = _client.GetToDoItem(id).Result;
+            var response = await _client.Post(new ToDoItem { Description = "Walk the dog", Status = ToDoItemStatus.Complete });
+            var id = GetToDoItemID(response);
+            await _client.Delete(id);
+            var result = await _client.GetToDoItem(id);
             
             Assert.False(result.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
         }
 
         [Fact]
-        public void DeleteNonExistingToDoItemReturnsNotFound()
+        public async Task DeleteNonExistingToDoItemReturnsNotFound()
         {
-            var response = _client.Delete(int.MinValue);
+            var response = await _client.Delete(int.MinValue);
 
-            Assert.False(response.Result.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.NotFound, response.Result.StatusCode);
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            //var response = _client.GetItemsStartingWith(_prefix);
+            //var items = response.Result.Content.ReadAsAsync<IEnumerable<ToDoItem>>().Result;
+            //foreach (var item in items)
+            //{
+            //    _client.Delete(item.Id);
+            //}
         }
     }
 }

@@ -41,6 +41,17 @@ namespace ToDoListServerTests.IntegrationTests
         }
 
         [Fact]
+        public async Task GetTodoItemsStartingWithNonExistingPrefixReturnsEmptyCollection()
+        {
+            var response = await _client.GetAsync("todo-list/word");
+            var result = await response.Content.ReadAsAsync<IEnumerable<ToDoItem>>();
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Empty(result);
+        }
+
+        [Fact]
         public async Task PostWithParametersAndBodyIsNotAllowed()
         {
             var response = await _client.PostAsync("todo-list/something", RequestContentHelper.GetStringContent(8));

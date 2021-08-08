@@ -14,8 +14,12 @@ namespace ToDoListServerTests.IntegrationTests
 {
     public class WebApplicationFactory : WebApplicationFactory<Startup>
     {
-        public ToDoList ToDoList { get; private set; } = new ToDoList { "Test task", "Another test task" };
-        private readonly LoggerFake _loggerFake = new LoggerFake();
+        public ToDoList ToDoList { get; private set; } = new()
+        {
+            new ToDoItem {Description = "Test task"},
+            new ToDoItem {Description = "Another test task"}
+        };
+        private readonly LoggerFake _loggerFake = new();
 
         public WebApplicationFactory() { }
         public WebApplicationFactory(LoggerFake loggerFake)

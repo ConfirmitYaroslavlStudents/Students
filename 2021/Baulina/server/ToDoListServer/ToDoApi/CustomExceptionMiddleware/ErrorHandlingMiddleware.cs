@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -40,9 +41,9 @@ namespace ToDoApi.CustomExceptionMiddleware
 
             response.StatusCode = exception switch
             {
+                InvalidEnumArgumentException _ => (int)HttpStatusCode.BadRequest,
                 ArgumentNullException _ => (int)HttpStatusCode.BadRequest,
                 ArgumentOutOfRangeException _ => (int)HttpStatusCode.NotFound,
-                KeyNotFoundException _ => (int)HttpStatusCode.NotFound,
                 InvalidOperationException _ => (int)HttpStatusCode.NotFound,
                 JsonPatchException _ => (int)HttpStatusCode.BadRequest,
                 _ => (int) HttpStatusCode.BadRequest

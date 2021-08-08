@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,15 +14,25 @@ namespace ToDoListServerTests.ApiControllerTests
 {
     public class ToDoItemsControllerTests
     {
+        private readonly Mock<ILogger<ToDoItemsController>> _loggerMock;
+
+        public ToDoItemsControllerTests()
+        {
+            _loggerMock = new Mock<ILogger<ToDoItemsController>>();
+        }
+
        [Fact]
         public  void GetReturnsAllItemsWhenNotEmptyToDoList()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
-            var toDoList = new ToDoList {"Clean the house", "Water the plants"};
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-            var result = controller.GetAllToDoItems().ToList();
+            var result = controller.GetAllToDoItems().Value.ToList();
 
             Assert.IsAssignableFrom<IEnumerable<ToDoItem>>(result);
             Assert.Equal(controller.ToDoList.Count, result.Count());
@@ -32,112 +42,180 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void GetReturnsEmptyCollectionWhenToDoListIsEmpty()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
             var toDoListProvider = new ListSaveAndLoadFake(new ToDoList());
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-            var result = controller.GetAllToDoItems();
+            var result = controller.GetAllToDoItems().Value;
 
             Assert.IsAssignableFrom<IEnumerable<ToDoItem>>(result);
             Assert.Empty(result);
         }
 
         [Fact]
-        public async Task ToDoListCountIncreasesWhenAddToDoItem()
+        public void ToDoListCountIncreasesWhenAddToDoItem()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
             var toDoListProvider = new ListSaveAndLoadFake(new ToDoList());
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-            var result = await controller.AddToDoItem("Iron the clothes");
+            var result = controller.AddToDoItem(new ToDoItem {Description = "Iron the clothes"});
 
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<CreatedAtActionResult>(result);
             Assert.Single(controller.ToDoList);
-            Assert.Equal(LogLevel.Information, loggerMock.Invocations[0].Arguments[0]);
+            Assert.Equal(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         }
 
         [Fact]
-        public async Task ToDoListCountDecreasesAfterCorrectDeleteRequest()
+        public void ToDoListCountDecreasesAfterCorrectDeleteRequest()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
-            var toDoList = new ToDoList {"Clean the house", "Water the plants"};
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-            var result = await controller.DeleteToDoItem(0);
-
-            Assert.IsType<OkResult>(result);
+            var result = controller.DeleteToDoItem(0);
+            
+            Assert.IsType<NoContentResult>(result);
             Assert.Single(controller.ToDoList);
-            Assert.Equal(LogLevel.Information, loggerMock.Invocations[0].Arguments[0]);
+            Assert.Equal(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         }
 
         [Fact]
-        public async Task ErrorNotFoundWhenDeleteFromEmptyList()
+        public void ErrorNotFoundWhenDeleteFromEmptyList()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
             var toDoListProvider = new ListSaveAndLoadFake(new ToDoList());
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.DeleteToDoItem(0));
+            Assert.Throws<InvalidOperationException>(() => controller.DeleteToDoItem(0));
         }
 
         [Fact]
-        public async Task ErrorNotFoundWhenDeleteRequestWithIndexOutOfRange()
+        public void ErrorNotFoundWhenGetToDoItemWithIncorrectIndex()
         {
-            var toDoList = new ToDoList {"Clean the house", "Water the plants"};
-            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var toDoListProvider = new ListSaveAndLoadFake(new ToDoList());
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.DeleteToDoItem(8));
+            Assert.Throws<InvalidOperationException>(() => controller.DeleteToDoItem(-1));
         }
 
         [Fact]
-        public async Task DescriptionChangedWhenEditToDoItemDescription()
+        public void ErrorNotFoundWhenDeleteRequestWithIndexOutOfRange()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
-            var toDoList = new ToDoList {"Clean the house", "Water the plants"};
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+
+            Assert.Throws<InvalidOperationException>(() => controller.DeleteToDoItem(8));
+        }
+
+        [Fact]
+        public void DescriptionChangedWhenEditToDoItemDescription()
+        {
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
+            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
                 .Replace(o => o.Description, "Go grocery shopping");
 
-            var result = await controller.EditToDoItem(0, patchDoc);
+            var result = controller.EditToDoItem(0, patchDoc);
 
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<NoContentResult>(result);
             Assert.Equal("Go grocery shopping", controller.ToDoList[0].Description);
-            Assert.Equal(LogLevel.Information, loggerMock.Invocations[0].Arguments[0]);
+            Assert.Equal(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         }
 
         [Fact]
-        public async Task IsCompleteChangedWhenCompleteToDoItem()
+        public void ToDoItemStatusChangedWhenCompleteToDoItem()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
-            var toDoList = new ToDoList {"Clean the house", "Water the plants"};
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
-                .Replace(o => o.IsComplete, true);
+                .Replace(o => o.Status, ToDoItemStatus.Complete);
 
-            var result = await controller.EditToDoItem(0, patchDoc);
+            var result = controller.EditToDoItem(0, patchDoc);
 
-            Assert.IsType<OkResult>(result);
-            Assert.True(controller.ToDoList[0].IsComplete);
-            Assert.Equal(LogLevel.Information, loggerMock.Invocations[0].Arguments[0]);
+            Assert.IsType<NoContentResult>(result);
+            Assert.Equal(ToDoItemStatus.Complete, controller.ToDoList[0].Status);
+            Assert.Equal(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         }
 
         [Fact]
-        public async Task ErrorNotFoundWhenCompleteWithIndexOutOfRange()
+        public void ErrorNotFoundWhenCompleteWithIndexOutOfRange()
         {
-            var loggerMock = new Mock<ILogger<ToDoItemsController>>();
-            var toDoList = new ToDoList {"Clean the house", "Water the plants"};
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-            var controller = new ToDoItemsController(loggerMock.Object, toDoListProvider);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
-                .Replace(o => o.IsComplete, true);
+                .Replace(o => o.Status, ToDoItemStatus.Complete);
 
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => controller.EditToDoItem(9, patchDoc));
+            Assert.Throws<InvalidOperationException>(() => controller.EditToDoItem(9, patchDoc));
+        }
+
+        [Fact]
+        public void ErrorWhenAddToDoItemWithIncorrectStatus()
+        {
+            var toDoListProvider = new ListSaveAndLoadFake(new ToDoList());
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+
+            Assert.Throws<InvalidEnumArgumentException>(() =>
+                controller.AddToDoItem(new() {Description = "Iron the clothes", Status = (ToDoItemStatus) 4}));
+        }
+
+        [Fact]
+        public void RenumberIdAutomaticallyWhenAddToDoItemWithAlreadyExistingId()
+        {
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
+            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+
+            var createdResponse = controller.AddToDoItem(new() {Description = "Iron the clothes", Id = 0}) as CreatedAtActionResult;
+            var toDoItem = createdResponse?.Value as ToDoItem;
+
+            Assert.IsType<CreatedAtActionResult>(createdResponse);
+            Assert.IsType<ToDoItem>(toDoItem);
+            Assert.Equal(2, toDoItem.Id);
+            Assert.Equal(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
+        }
+
+        [Fact]
+        public void GetTodoItemsStartingWithSuccess()
+        {
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Clean the toilet"}
+            });
+            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+
+            var result = controller.GetTodoItemsStartingWith("Clean");
+
+            Assert.IsAssignableFrom<IEnumerable<ToDoItem>>(result);
+            Assert.Equal(2, result.Count());
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using ToDoApi.SaveAndLoad;
 using ToDoApi.Models;
@@ -10,7 +8,7 @@ using ToDoApi.Models;
 namespace ToDoApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("todo-list")]
     public class ToDoItemsController : ControllerBase
     {
         public ToDoList ToDoList { get; }
@@ -25,52 +23,55 @@ namespace ToDoApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ToDoItem> GetAllToDoItems()
+        public ActionResult<IEnumerable<ToDoItem>> GetAllToDoItems()
         {
             return ToDoList;
         }
 
-        [HttpPost]
-        public Task<IActionResult> AddToDoItem([FromBody] string value)
+        [HttpGet("{id}")]
+        public ActionResult<ToDoItem> GetTodoItem(int id)
         {
-            return ProcessTheRequest(() =>
-            {
-                ToDoList.Add(value);
-                _logger.LogInformation("The task has been added");
-            });
+            return ToDoList.FindToDoItem(id);
+        }
+
+        [HttpGet("{prefix}")]
+        public IEnumerable<ToDoItem> GetTodoItemsStartingWith([FromQuery] string prefix)
+        {
+            return ToDoList.GetItemsStartingWith(prefix);
+        }
+
+        [HttpPost]
+        public IActionResult AddToDoItem([FromBody] ToDoItem toDoItem)
+        {
+            ToDoList.AddToDoItem(toDoItem);
+            _logger.LogInformation("The task has been added");
+            _listSaveAndLoad.SaveTheList(ToDoList);
+            return CreatedAtAction(nameof(GetTodoItem), new { id = toDoItem.Id }, toDoItem);
         }
 
         [HttpDelete("{index}")]
-        public Task<IActionResult> DeleteToDoItem(int index)
+        public IActionResult DeleteToDoItem(int index)
         {
-            return ProcessTheRequest(() =>
-            {
-                ToDoList.Delete(index);
-                _logger.LogInformation("The task has been deleted");
-            });
+            ToDoList.Delete(index);
+            _logger.LogInformation("The task has been deleted");
+            _listSaveAndLoad.SaveTheList(ToDoList);
+            return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public Task<IActionResult> EditToDoItem(int id,[FromBody] JsonPatchDocument<ToDoItem> requestPatchDocument)
+        public IActionResult EditToDoItem(int id, [FromBody] JsonPatchDocument<ToDoItem> requestPatchDocument)
         {
             if (requestPatchDocument == null)
             {
-                return Task.FromResult<IActionResult>(BadRequest());
+                return BadRequest();
             }
             
-            return ProcessTheRequest(() =>
-            {
-                var existingToDoItem = ToDoList.FindTask(id);
-                requestPatchDocument.ApplyTo(existingToDoItem);
-                _logger.LogInformation("The task has been edited");
-            });
+            var existingToDoItem = ToDoList.FindToDoItem(id);
+            requestPatchDocument.ApplyTo(existingToDoItem);
+            _logger.LogInformation("The task has been edited");
+            _listSaveAndLoad.SaveTheList(ToDoList);
+            return NoContent();
         }
 
-        private Task<IActionResult> ProcessTheRequest(Action request)
-        {
-            request();
-            _listSaveAndLoad.SaveTheList(ToDoList);
-            return Task.FromResult<IActionResult>(Ok());
-        }
     }
 }

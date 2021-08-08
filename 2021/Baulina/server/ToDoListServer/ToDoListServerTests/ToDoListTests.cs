@@ -14,9 +14,13 @@ namespace ToDoListServerTests
         [Fact]
         public void ToDoItemIdIsSetCorrectAfterAddition()
         {
-            var list = new ToDoList { "Clean the house", "Do the laundry" };
-            
-            list.Add("Iron the clothes");
+            var list = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Water the plants"}
+            });
+
+            list.AddToDoItem(new() {Description = "Iron the clothes"});
 
             Assert.Equal(2, list[2].Id);
         }

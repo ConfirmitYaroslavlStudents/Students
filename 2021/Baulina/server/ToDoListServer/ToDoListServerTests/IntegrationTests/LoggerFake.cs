@@ -15,6 +15,6 @@ namespace ToDoListServerTests.IntegrationTests
 
         public bool IsEnabled(LogLevel logLevel) => true;
 
-        public IDisposable? BeginScope<TState>(TState state) => null;
+        public IDisposable BeginScope<TState>(TState state) => null;
     }
 }

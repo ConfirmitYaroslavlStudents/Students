@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace ToDoApi.Models
 {
-    public class ToDoItem : IEquatable<ToDoItem>
+    public class ToDoItem
     {
         public int Id { get; set; }
-        public bool IsComplete { get; set; }
+        public ToDoItemStatus Status { get; set; }
         public string Description { get; set; }
-        public bool Equals(ToDoItem other)
-        {
-            return other != null && Id == other.Id && IsComplete == other.IsComplete && Description.Equals(other.Description);
-        }
     }
 
     public class ToDoList : List<ToDoItem>
@@ -21,12 +18,15 @@ namespace ToDoApi.Models
 
         public ToDoList(IEnumerable<ToDoItem> other)
         {
-            AddRange(other);
+            foreach (var toDoItem in other)
+            {
+                AddToDoItem(toDoItem);
+            }
         }
 
-        public void Add(string description)
+        public void AddToDoItem(ToDoItem toDoItem)
         {
-            var toDoItem = new ToDoItem { Description = description };
+            if (!Enum.IsDefined(typeof(ToDoItemStatus),toDoItem.Status)) throw new InvalidEnumArgumentException();
             if (Count > 0)
                 toDoItem.Id = this[^1].Id + 1;
             Add(toDoItem);
@@ -34,12 +34,17 @@ namespace ToDoApi.Models
 
         public void Delete(int id)
         {
-            Remove(FindTask(id));
+            Remove(FindToDoItem(id));
         }
 
-        public ToDoItem FindTask(long id)
+        public ToDoItem FindToDoItem(int id)
         {
             return this.First(x => x.Id == id);
+        }
+
+        public IEnumerable<ToDoItem> GetItemsStartingWith(string prefix)
+        {
+            return FindAll(x => x.Description.StartsWith(prefix));
         }
     }
 }

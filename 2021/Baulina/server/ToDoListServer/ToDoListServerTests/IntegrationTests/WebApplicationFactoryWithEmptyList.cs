@@ -13,7 +13,7 @@ namespace ToDoListServerTests.IntegrationTests
 {
     public class WebApplicationFactoryWithEmptyList: WebApplicationFactory<Startup>
     {
-        public ToDoList ToDoList { get; private set; } = new ToDoList();
+        public ToDoList ToDoList { get; private set; } = new();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {

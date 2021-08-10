@@ -166,8 +166,7 @@ namespace ToDoListServerTests.ApiControllerTests
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
                 .Replace(o => o.Status, ToDoItemStatus.Complete);
-
-
+            
             Assert.Throws<InvalidOperationException>(() => controller.EditToDoItem(9, patchDoc));
         }
 
@@ -201,21 +200,21 @@ namespace ToDoListServerTests.ApiControllerTests
             Assert.Equal(LogLevel.Information, _loggerMock.Invocations[0].Arguments[0]);
         }
 
-        //[Fact]
-        //public void GetTodoItemsStartingWithSuccess()
-        //{
-        //    var toDoList = new ToDoList(new[]
-        //    {
-        //        new ToDoItem {Description = "Clean the house"},
-        //        new() {Description = "Clean the toilet"}
-        //    });
-        //    var toDoListProvider = new ListSaveAndLoadFake(toDoList);
-        //    var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+        [Fact]
+        public void GetTodoItemsStartingWithSuccess()
+        {
+            var toDoList = new ToDoList(new[]
+            {
+                new ToDoItem {Description = "Clean the house"},
+                new() {Description = "Clean the toilet"}
+            });
+            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
-        //    var result = controller.GetTodoItemsStartingWith("Clean");
+            var result = controller.GetTodoItemsStartingWith("Clean");
 
-        //    Assert.IsAssignableFrom<IEnumerable<ToDoItem>>(result);
-        //    Assert.Equal(2, result.Count());
-        //}
+            Assert.IsAssignableFrom<IEnumerable<ToDoItem>>(result);
+            Assert.Equal(2, result.Count());
+        }
     }
 }

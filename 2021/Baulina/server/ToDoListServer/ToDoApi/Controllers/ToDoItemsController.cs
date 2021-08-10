@@ -28,17 +28,17 @@ namespace ToDoApi.Controllers
             return ToDoList;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public ActionResult<ToDoItem> GetTodoItem(int id)
         {
             return ToDoList.FindToDoItem(id);
         }
 
-        //[HttpGet("{prefix:string}")]
-        //public IEnumerable<ToDoItem> GetTodoItemsStartingWith(string prefix)
-        //{
-        //    return ToDoList.GetItemsStartingWith(prefix);
-        //}
+        [HttpGet("{prefix}")]
+        public IEnumerable<ToDoItem> GetTodoItemsStartingWith(string prefix)
+        {
+            return ToDoList.GetItemsStartingWith(prefix);
+        }
 
         [HttpPost]
         public IActionResult AddToDoItem([FromBody] ToDoItem toDoItem)

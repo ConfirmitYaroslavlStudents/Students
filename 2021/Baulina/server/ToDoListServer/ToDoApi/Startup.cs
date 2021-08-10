@@ -34,7 +34,7 @@ namespace ToDoApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware)); ;
 
             app.UseHttpsRedirection();
 

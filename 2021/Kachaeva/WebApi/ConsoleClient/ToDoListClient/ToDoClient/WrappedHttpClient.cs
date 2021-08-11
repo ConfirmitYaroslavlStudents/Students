@@ -6,6 +6,12 @@ namespace ToDoClient
     public class WrappedHttpClient : IApiClient
     {
         private readonly HttpClient _client = new HttpClient();
+        public string BaseApiServiceUrl { get; }
+
+        public WrappedHttpClient(string url)
+        {
+            BaseApiServiceUrl = url;
+        }
 
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {

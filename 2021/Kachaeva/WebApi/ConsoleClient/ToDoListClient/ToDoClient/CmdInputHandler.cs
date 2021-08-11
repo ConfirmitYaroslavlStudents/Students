@@ -54,20 +54,20 @@ namespace ToDoClient
                         break;
 
                     case ToDoCommands.RemoveTask:
-                        var taskId = InputVerifier.GetValidtaskId(_input[_inputIndex]);
+                        var taskId = InputVerifier.GetValidTaskId(_input[_inputIndex]);
                         _inputIndex++;
                         await _commandExecutor.HandleTaskRemove(taskId);
                         break;
 
                     case ToDoCommands.UpdateTaskStatus:
-                        taskId = InputVerifier.GetValidtaskId(_input[_inputIndex]);
+                        taskId = InputVerifier.GetValidTaskId(_input[_inputIndex]);
                         taskStatus = InputVerifier.GetValidTaskStatus(_input[_inputIndex + 1]);
                         _inputIndex += 2;
                         await _commandExecutor.HandleTaskStatusUpdate(taskId, taskStatus);
                         break;
 
                     case ToDoCommands.UpdateTaskText:
-                        taskId = InputVerifier.GetValidtaskId(_input[_inputIndex]);
+                        taskId = InputVerifier.GetValidTaskId(_input[_inputIndex]);
                         taskText = InputVerifier.GetValidTaskText(_input[_inputIndex + 1]);
                         _inputIndex += 2;
                         await _commandExecutor.HandleTaskTextUpdate(taskId, taskText);

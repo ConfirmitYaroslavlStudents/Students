@@ -5,6 +5,8 @@ namespace ToDoClient
 {
     public interface IApiClient
     {
+        public string BaseApiServiceUrl { get; }
+
         public Task<HttpResponseMessage> GetAsync(string requestUri);
 
         public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content);

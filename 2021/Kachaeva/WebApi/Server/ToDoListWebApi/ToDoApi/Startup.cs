@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ToDoApiDependencies;
+using Microsoft.AspNetCore.Cors;
 
 namespace ToDoApi
 {
@@ -19,6 +20,14 @@ namespace ToDoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    });
+            });
             services.AddScoped<ILoaderAndSaver>(_ => new FileLoaderAndSaver("ToDoList.txt"));
             services.AddControllers();
         }
@@ -34,6 +43,8 @@ namespace ToDoApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

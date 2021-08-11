@@ -35,7 +35,7 @@ namespace ClientTests
 
             Assert.AreEqual("Введите текст задания", logger.Messages[1]);
             Assert.AreEqual("Введите статус задания", logger.Messages[2]);
-            Assert.AreEqual("Задание добавлено", logger.Messages[3]);
+            Assert.AreEqual("Задание добавлено под номером 1", logger.Messages[3]);
         }
 
         [TestMethod]

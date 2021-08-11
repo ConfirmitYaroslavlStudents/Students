@@ -4,9 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
 using System;
-using System.Data;
 using System.Net;
 
 namespace ToDoClient
@@ -14,14 +12,14 @@ namespace ToDoClient
     public class CommandExecutor
     {
         private readonly IApiClient _client;
-        private readonly string _url = ConfigurationManager.AppSettings["Url"];
-        
         private readonly IToDoLogger _logger;
+        private readonly string _url;
 
         public CommandExecutor(IToDoLogger logger, IApiClient client)
         {
             _logger = logger;
             _client = client;
+            _url = _client.BaseApiServiceUrl;
         }
 
         public async Task HandleToDoListDisplay()

@@ -9,6 +9,8 @@ namespace ClientTests
 {
     public class FakeApiClient : IApiClient
     {
+        public string BaseApiServiceUrl { get; }
+
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             return new HttpResponseMessage {StatusCode = HttpStatusCode.OK};
@@ -16,7 +18,7 @@ namespace ClientTests
 
         public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
-            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Headers = { Location = new Uri("https://localhost:44314/todo/1") } };
         }
 
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)

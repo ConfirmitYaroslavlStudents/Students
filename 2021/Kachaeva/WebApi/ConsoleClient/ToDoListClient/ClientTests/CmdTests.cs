@@ -17,7 +17,7 @@ namespace ClientTests
 
             await cmdInputHandler.HandleUsersInput();
 
-            Assert.AreEqual("Задание добавлено", logger.Messages[0]);
+            Assert.AreEqual("Задание добавлено под номером 1", logger.Messages[0]);
         }
 
         [TestMethod]

@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Newtonsoft.Json;
 using ToDoApiDependencies;
+using Microsoft.AspNetCore.Cors;
 
 namespace ToDoApi.Controllers
 {
     [ApiController]
     [Route("todo")]
+    
+    [EnableCors("MyPolicy")]
     public class ToDoController : ControllerBase
     {
         private readonly ILoaderAndSaver _loaderAndSaver;

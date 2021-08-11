@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List </title>
+    <style>
+        h2, p,table,h4, div {
+            margin-left: 40px; 
+        }
+    </style>
+</head>
+<body>
+    <h2>To-Do List</h2>
+    <div id="addForm">
+        <form action="javascript:void(0);" method="POST" onsubmit="addToDoItem()">
+            <input type="text" id="add-name" placeholder="E.g. Go grocery shopping">
+            <input type="submit" value="Add">
+        </form>
+    </div>
+
+    <div id="editForm">
+        <h4>Edit</h4>
+        <form action="javascript:void(0);" onsubmit="editToDoItem()">
+            <input type="hidden" id="edit-id">
+            <input type="checkbox" id="edit-isComplete">
+            <input type="text" id="edit-name">
+            <input type="submit" value="Save">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <p id="counter"></p>
+
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Task</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="todo-items"></tbody>
+</table>
+    
+<script src="errorHandler.js"></script>
+<script src="enum.js"></script>
+<script src="index.js" asp-append-version="true"></script>
+<script type="text/javascript">
+    closeInput();
+    getToDoItems();
+</script>
+</body>
+</html>

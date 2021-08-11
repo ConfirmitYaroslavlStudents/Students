@@ -22,7 +22,7 @@ namespace ToDoApi
         {
             services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
             {
-                builder.WithOrigins("https://localhost:5001", "http://localhost:5000").AllowAnyMethod()
+                builder.AllowAnyOrigin().AllowAnyMethod()
                     .AllowAnyHeader();
             }));
             services.AddSingleton<ILogger, FileLogger>();

@@ -12,7 +12,7 @@ namespace ToDoListClientTests.IntegrationTests
     public class IntegrationTests : IAsyncLifetime
     {
         private readonly Client _client;
-        private readonly string _prefix = "TestTask_";
+        private const string Prefix = "TestTask_";
 
         public IntegrationTests()
         {
@@ -27,29 +27,29 @@ namespace ToDoListClientTests.IntegrationTests
         [Fact]
         public async Task PostToDoItemSuccess()
         {
-            var response = await _client.Post(new ToDoItem {Description = _prefix +"Walk the dog", Status = ToDoItemStatus.NotComplete});
+            var response = await _client.Post(new ToDoItem {Description = $"{Prefix}Walk the dog", Status = ToDoItemStatus.NotComplete});
             var id = GetToDoItemID(response);
             var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
-            Assert.Equal(_prefix+"Walk the dog", todoItem.Description);
+            Assert.Equal($"{Prefix}Walk the dog", todoItem.Description);
             Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
 
         [Fact]
         public async Task PostEmptyToDoItemSuccess()
         {
-            var response = await _client.Post(new ToDoItem { Description = _prefix, Status = ToDoItemStatus.NotComplete });
+            var response = await _client.Post(new ToDoItem { Description = Prefix, Status = ToDoItemStatus.NotComplete });
             var id = GetToDoItemID(response);
             var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
-            Assert.Equal(_prefix, todoItem.Description);
+            Assert.Equal(Prefix, todoItem.Description);
             Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
 
         [Fact]
         public async Task PostToDoItemWithIncorrectStatusReturnsBadRequest()
         {
-            var response = await _client.Post(new ToDoItem {Description = _prefix+"Walk the dog", Status = (ToDoItemStatus) 10});
+            var response = await _client.Post(new ToDoItem {Description = $"{Prefix}Walk the dog", Status = (ToDoItemStatus) 10});
 
             Assert.False(response.IsSuccessStatusCode);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -59,33 +59,33 @@ namespace ToDoListClientTests.IntegrationTests
         public async Task EditToDoItemDescriptionSuccess()
         {
             var response =
-                await _client.Post(new ToDoItem {Description = _prefix + "Walk the dog", Status = ToDoItemStatus.NotComplete});
+                await _client.Post(new ToDoItem {Description = $"{Prefix}Walk the dog", Status = ToDoItemStatus.NotComplete});
             var id = GetToDoItemID(response);
-            var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Description, "Wipe the table");
+            var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Description, $"{Prefix}Wipe the table");
             await _client.Patch(id, patchDoc);
             var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
-            Assert.Equal("Wipe the table", todoItem.Description);
+            Assert.Equal($"{Prefix}Wipe the table", todoItem.Description);
             Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
         
         [Fact]
         public async Task CompleteToDoItemSuccess()
         {
-            var response = await _client.Post(new ToDoItem { Description = _prefix + "Walk the dog", Status = ToDoItemStatus.NotComplete });
+            var response = await _client.Post(new ToDoItem { Description = $"{Prefix}Walk the dog", Status = ToDoItemStatus.NotComplete });
             var id = GetToDoItemID(response);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Status, ToDoItemStatus.Complete);
             await _client.Patch(id, patchDoc);
             var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
-            Assert.Equal(_prefix+"Walk the dog", todoItem.Description);
+            Assert.Equal($"{Prefix}Walk the dog", todoItem.Description);
             Assert.Equal(ToDoItemStatus.Complete, todoItem.Status);
         }
 
         [Fact]
         public async Task ChangeToDoItemStatusToIncorrectReturnsBadRequest()
         {
-            var postResponse = await _client.Post(new ToDoItem { Description = _prefix + "Walk the dog", Status = ToDoItemStatus.NotComplete });
+            var postResponse = await _client.Post(new ToDoItem { Description = $"{Prefix}Walk the dog", Status = ToDoItemStatus.NotComplete });
             var id = GetToDoItemID(postResponse);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Status, (ToDoItemStatus) 10);
             var response = await _client.Patch(id, patchDoc);
@@ -97,20 +97,20 @@ namespace ToDoListClientTests.IntegrationTests
         [Fact]
         public async Task IncompleteToDoItemSuccess()
         {
-            var response = await _client.Post(new ToDoItem { Description = _prefix + "Walk the dog", Status = ToDoItemStatus.Complete });
+            var response = await _client.Post(new ToDoItem { Description = $"{Prefix}Walk the dog", Status = ToDoItemStatus.Complete });
             var id = GetToDoItemID(response);
             var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(t => t.Status, ToDoItemStatus.NotComplete);
             await _client.Patch(id, patchDoc);
             var todoItem = await _client.GetToDoItem(id).Result.Content.ReadAsAsync<ToDoItem>();
 
-            Assert.Equal(_prefix + "Walk the dog", todoItem.Description);
+            Assert.Equal($"{Prefix}Walk the dog", todoItem.Description);
             Assert.Equal(ToDoItemStatus.NotComplete, todoItem.Status);
         }
 
         [Fact]
         public async Task DeleteToDoItemSuccess()
         {
-            var response = await _client.Post(new ToDoItem { Description = _prefix + "Walk the dog", Status = ToDoItemStatus.Complete });
+            var response = await _client.Post(new ToDoItem { Description = $"{Prefix}Walk the dog", Status = ToDoItemStatus.Complete });
             var id = GetToDoItemID(response);
             await _client.Delete(id);
             var result = await _client.GetToDoItem(id);
@@ -132,7 +132,7 @@ namespace ToDoListClientTests.IntegrationTests
 
         public async Task DisposeAsync()
         {
-            var response = await _client.GetItemsStartingWith(_prefix);
+            var response = await _client.GetItemsStartingWith(Prefix);
             var items = response.Content.ReadAsAsync<IEnumerable<ToDoItem>>().Result;
             foreach (var item in items)
             {

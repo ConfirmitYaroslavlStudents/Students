@@ -1,6 +1,4 @@
-import { Enum } from "./enum.js"
-
-const url = "http://localhost:5000/todo-list";
+const url = "https://localhost:5001/todo-list";
 let todoItems = [];
 let toDoItemStatus = Enum({ NotComplete: "0", Complete: "1" });
 
@@ -37,9 +35,10 @@ function addToDoItem() {
 }
 
 function deleteToDoItem(id) {
-    fetch(`${url}/${id}`, {
-        method: "DELETE"
-    })
+    fetch(`${url}/${id}`,
+            {
+                method: "DELETE"
+            })
         .then(() => getToDoItems())
         .catch(error => console.error("Unable to delete item.", error));
 }

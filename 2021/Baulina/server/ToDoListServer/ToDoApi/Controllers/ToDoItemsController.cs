@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.JsonPatch;
 using ToDoApi.SaveAndLoad;
 using ToDoApi.Models;
@@ -9,6 +10,7 @@ namespace ToDoApi.Controllers
 {
     [ApiController]
     [Route("todo-list")]
+    [EnableCors("ApiCorsPolicy")]
     public class ToDoItemsController : ControllerBase
     {
         public ToDoList ToDoList { get; }

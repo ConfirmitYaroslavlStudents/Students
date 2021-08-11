@@ -10,14 +10,14 @@ namespace ToDoListTests
         [TestMethod]
         public void PrintTask()
         {
-            var task = new Task("clean room", 0);
+            var task = new Task("clean room", StatusOfTask.Todo);
 
             Assert.AreEqual("clean room Todo", task.StringFormat());
         }
         [TestMethod]
         public void printAfterChangeStatus()
         {
-            var task = new Task("clean room",0);
+            var task = new Task("clean room", StatusOfTask.Todo);
 
             task.ChangeStatus();
 
@@ -27,7 +27,7 @@ namespace ToDoListTests
         [TestMethod]
         public void PrintAfterChangeStatus()
         {
-            var task = new Task("clean room", 2);
+            var task = new Task("clean room", StatusOfTask.Done);
 
             task.ChangeName("not clean room");
 
@@ -37,8 +37,8 @@ namespace ToDoListTests
         [TestMethod]
         public void CompareTasks()
         {
-            var task1 = new Task("do homework", 0);
-            var task2 = new Task("do homework", 0);
+            var task1 = new Task("do homework", StatusOfTask.Todo);
+            var task2 = new Task("do homework", StatusOfTask.Todo);
             Assert.AreEqual(task1, task2);
         }
     }

@@ -6,27 +6,30 @@ namespace ToDoListNikeshina
 {
     public class ComandHandler
     {
-        public void HandlerWork(string [] args)
+        public void HandlerWork(string[] args)
         {
             var logger = new Logger();
+            var fm = new FileManager();
+            var startedList = fm.Load();
+            IApp app;
+
             if (args.Length == 0)
             {
-               var app = new ConsoleApp(logger, new ConsoleInputDataStorage());
+                app = new ConsoleApp(logger, new ConsoleInputDataStorage(), startedList);
                 logger.Log(Messages.InsructionText());
-                while (SwitchForConsoleApp(app)) ;
-                app.Save();
+                while (SwitchForConsoleApp((ConsoleApp)app)) ;
             }
             else
             {
-               var app = new CmdApp(logger, new CmdInputDataStorage(args));
-                SwitchForCmdApp(app);
-                app.Save();
+                app = new CmdApp(logger, new CmdInputDataStorage(args), startedList);
+                SwitchForCmdApp((CmdApp)app);
             }
-            
+
+            fm.Save(app.GetListOfTask());
         }
         private bool SwitchForConsoleApp(ConsoleApp app)
         {
-            var comand = app.DataGetter.GetInputData();
+            var comand = app.dataGetter.GetInputData();
             switch (comand)
             {
                 case "list":
@@ -55,7 +58,7 @@ namespace ToDoListNikeshina
         }
         private void SwitchForCmdApp(CmdApp app)
         {
-            var comand = app.DataGetter.GetInputData();
+            var comand = app.dataGetter.GetInputData();
             switch (comand)
             {
                 case "list":

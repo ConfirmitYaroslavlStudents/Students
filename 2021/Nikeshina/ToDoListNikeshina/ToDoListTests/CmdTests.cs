@@ -7,23 +7,25 @@ namespace ToDoListTests
     [TestClass]
     public class CmdTests
     {
+        List<Task> list = new List<Task>();
+
         [TestMethod]
         public void AddNewItem()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple" }), list);
 
             app.AddNewTask();
-            var msg = new List<string> {"Done! " };
+            var msg = new List<string> { "Done! " };
             CollectionAssert.AreEqual(logger.Messages, msg);
-            CollectionAssert.AreEqual(app.GetListOfTask(), new List<Task> { new Task("buy apple", 0) });
+            CollectionAssert.AreEqual(app.GetListOfTask(), new List<Task> { new Task("buy apple", StatusOfTask.Todo) });
         }
 
         [TestMethod]
         public void WrongFormtOfEditNumber()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "15" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "15" }), list);
 
             app.AddNewTask();
             app.EditDescription();
@@ -35,19 +37,19 @@ namespace ToDoListTests
         public void LongDescriptionString()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }), list);
 
             app.AddNewTask();
 
-            CollectionAssert.AreEqual(logger.Messages, new List<string> {"Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Incorrect data" });
         }
 
         [TestMethod]
         public void PrintToDoList()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "make tea", "1" }));
-            var checkinglist = new List<Task> { new Task("buy apple", 1), new Task("make tea", 0) };
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "make tea", "1" }), list);
+            var checkinglist = new List<Task> { new Task("buy apple", StatusOfTask.InProgress), new Task("make tea", StatusOfTask.Todo) };
 
             app.AddNewTask();
             app.AddNewTask();
@@ -72,7 +74,7 @@ namespace ToDoListTests
         public void ListIsEmptyAfterDelete()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1" }), list);
 
             app.AddNewTask();
             app.Delete();
@@ -92,7 +94,7 @@ namespace ToDoListTests
         public void EditDescription()
         {
             var logger = new TestLogger();
-            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1", "buy pineapple" }));
+            var app = new CmdApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1", "buy pineapple" }),list);
 
             var msgs = new List<string>();
 
@@ -103,7 +105,7 @@ namespace ToDoListTests
             msgs.Add("Done! ");
 
             CollectionAssert.AreEqual(logger.Messages, msgs);
-            CollectionAssert.AreEqual(new List<Task> { new Task("buy pineapple", 0) }, app.GetListOfTask());
+            CollectionAssert.AreEqual(new List<Task> { new Task("buy pineapple", StatusOfTask.Todo) }, app.GetListOfTask());
         }
 
 
@@ -112,15 +114,15 @@ namespace ToDoListTests
         {
             var logger = new TestLogger();
             var app = new CmdApp(logger, new CmdInputDataStorage(new string[]
-            { "buy apple", "wash dishes", "do tasks", "buy pineapple","1" ,"2","4","3" }));
+            { "buy apple", "wash dishes", "do tasks", "buy pineapple","1" ,"2","4","3" }),list);
 
             for (int i = 0; i < 4; i++)
                 app.AddNewTask();
             for (int i = 0; i < 4; i++)
                 app.ChangeStatus();
 
-            var checkingList = new List<Task> { new Task("buy apple", 1), new Task("wash dishes", 1),
-                                                new Task("do tasks", 0), new Task("buy pineapple", 1) };
+            var checkingList = new List<Task> { new Task("buy apple", StatusOfTask.InProgress), new Task("wash dishes", StatusOfTask.InProgress),
+                                                new Task("do tasks", StatusOfTask.Todo), new Task("buy pineapple", StatusOfTask.InProgress) };
 
             CollectionAssert.AreEqual(checkingList, app.GetListOfTask());
         }

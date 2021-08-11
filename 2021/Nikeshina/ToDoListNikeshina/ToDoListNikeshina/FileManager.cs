@@ -27,7 +27,7 @@ namespace ToDoListNikeshina
             using (var sr = new StreamReader(FileConfig.FilePath))
             {
                 var str = sr.ReadLine();
-                while (str != null && str != "")
+                while (str!=null && str != "")
                 {
                     var words = str.Split(' ');
                     tasks.Add(new Task(GetName(words), GetStatus(words)));
@@ -37,7 +37,7 @@ namespace ToDoListNikeshina
             return tasks;
         }
 
-        private int GetStatus(string[] words)
+        private StatusOfTask GetStatus(string[] words)
         {
             var count = words.Length;
             var currentTaskStatus = words[count - 1];
@@ -45,12 +45,12 @@ namespace ToDoListNikeshina
             if (currentTaskStatus == "InProgress")
             {
                 _countNotesInProgress++;
-                return 1;
+                return StatusOfTask.InProgress;
             }
             else if (currentTaskStatus == "Todo")
-                return 0;
+                return StatusOfTask.Todo;
             else
-                return 2;
+                return StatusOfTask.Done;
 
         }
 

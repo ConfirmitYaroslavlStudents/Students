@@ -48,11 +48,28 @@ namespace ToDoListNikeshina
             var newItem = new List<Task>();
             foreach(var task in _list)
             {
-                var newtask = new Task(task.Name, (int)task.Status);
+                var newtask = new Task(task.Name, task.Status);
                 newItem.Add(newtask);
             }
 
             return newItem;
+        }
+        public Task this[int index]
+        {
+            get { return _list[index]; }
+        }
+
+        public int GetCountTasksInProgress()
+        {
+            var count = 0;
+
+            foreach(var task in _list)
+            {
+                if (task.Status == StatusOfTask.InProgress)
+                    count++;
+            }
+
+            return count;
         }
 
         public List<Task> GetListOfTask() => _list;

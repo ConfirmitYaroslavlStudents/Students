@@ -9,7 +9,7 @@ namespace ToDoListNikeshina
         private readonly ILogger _logger;
         private readonly IGetInputData _dataGetter;
         private ToDoList _list;
-        private int _countOfTaskInpro;
+        private int count;
 
         public GeneralOperator(ILogger logger, IGetInputData dataGetter, ToDoList list)
         {
@@ -20,68 +20,68 @@ namespace ToDoListNikeshina
         public void Print()
         {
             if (_list.Count() == 0)
-                _logger.Log(Messages.ListIsEmpty());
+                _logger.Log(Messages.listIsEmpty);
             else
             {
                 int i = 1;
-                foreach (var task in _list._list)
+                foreach (var task in GetListOfTask())
                 {
                     _logger.Log(i + ". " + task.StringFormat());
                     i++;
                 }
             }
         }
-        public bool Delete(int taskCountInProgress)
+        public bool Delete()
         {
-            return DoCommandWithRequestNumber(taskCountInProgress,_list.Delete, DecrementCountTasksInProgres);
+            return DoCommandWithRequestNumber(_list.Delete, ChangeCountTaskInProgressDuringDelete);
         }
 
-        public bool ChangeTaskStatus(int taskCountInProgress)
+        public bool ChangeTaskStatus()
         {
-            return DoCommandWithRequestNumber(taskCountInProgress,_list.ChangeStatus, IncrementCountTasksInProgres);
+            return DoCommandWithRequestNumber(_list.ChangeStatus,ChangeCountTaskInProgressDuringChangeStatus);
         }
 
-        private bool DoCommandWithRequestNumber(int countTasksInProgressBefore,Action<int> comand, Action<int> checkCountTaskInProgress)
+        private bool DoCommandWithRequestNumber(Action<int> comand, Action<int> checkCountInProgress)
         {
             var inputStr = _dataGetter.GetInputData();
-            _countOfTaskInpro = countTasksInProgressBefore;
 
 
             if (!Validator.IsNumberValid(inputStr, _list.Count()))
             {
-                _logger.Log(Messages.WrongFormatOfInputData());
+                _logger.Log(Messages.wrongFormatOfInputData);
                 return false;
             }
-            
+
             int num = int.Parse(inputStr);
+            checkCountInProgress(num);
 
-                
-                checkCountTaskInProgress(num-1);
-                if (_countOfTaskInpro > 3)
 
-                {
-                    
-                    _logger.Log(Messages.WrongFormatOfInputData());
-                     return false;
-                }
-                comand(num);
-                _logger.Log(Messages.Completed());
+            if (count>3)
+            {
+                _logger.Log(Messages.wrongFormatOfInputData);
+                return false;
+            }
+
+            comand(num);
+            _logger.Log(Messages.completed);
 
             return true;
         }
 
-        private void IncrementCountTasksInProgres(int index)
+        private void ChangeCountTaskInProgressDuringDelete(int index)
         {
-            if(_list._list[index].Status==0)
-                _countOfTaskInpro++;
-            else if (_list._list[index].Status== StatusOfTask.InProgress)
-                _countOfTaskInpro--;
+            count = _list.GetCountTasksInProgress();
+            if (_list[index - 1].Status == StatusOfTask.InProgress)
+                count--;
         }
 
-        private void DecrementCountTasksInProgres(int index)
+        private void ChangeCountTaskInProgressDuringChangeStatus(int index)
         {
-            if (_list._list[index].Status==StatusOfTask.InProgress)
-                _countOfTaskInpro--;
+            count = _list.GetCountTasksInProgress();
+            if (_list[index - 1].Status == StatusOfTask.InProgress)
+                count--;
+            else if (_list[index - 1].Status == StatusOfTask.Todo)
+                count++;
         }
 
         public bool Add()
@@ -90,17 +90,15 @@ namespace ToDoListNikeshina
 
             if (!Validator.IsStringValid(dscr))
             {
-                _logger.Log(Messages.WrongFormatOfInputData());
+                _logger.Log(Messages.wrongFormatOfInputData);
                 return false;
             }
 
-            _list.Add(new Task(dscr, 0));
-            _logger.Log(Messages.Completed());
+            _list.Add(new Task(dscr, StatusOfTask.Todo));
+            _logger.Log(Messages.completed);
             return true;
         }
         public void UpdateToDo(ToDoList newItem) => _list = newItem;
         public List<Task> GetListOfTask() => _list.GetListOfTask();
-
-        public int GetCountOfTaskInProgress() => _countOfTaskInpro;
     }
 }

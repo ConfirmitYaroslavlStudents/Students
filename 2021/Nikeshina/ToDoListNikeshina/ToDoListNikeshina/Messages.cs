@@ -6,17 +6,12 @@ namespace ToDoListNikeshina
 {
     public static class Messages
     {
-        internal static string WrongFormatOfInputData()=> "Incorrect data";
-
-        internal static  string ListIsEmpty()=> "List is empty(";
-
-        internal static string RequestNumberOfString() => "Number of the note: ";
-
-        internal static string RequestNumberOfCommand()=>"Number of commands: ";
-
-        internal static string RequestDescription()=> "Description: " ;
-
-        internal static string Completed()=> "Done! ";
+        public const string wrongFormatOfInputData = "Incorrect data";
+        public const string listIsEmpty = "List is empty(";
+        public const string requestNumberOfString = "Number of the note: ";
+        public const string  requestNumberOfCommand="Number of commands: ";
+        public const string requestDescription = "Description: " ;
+        public const string completed = "Done! ";
 
         public static string InsructionText()
         {

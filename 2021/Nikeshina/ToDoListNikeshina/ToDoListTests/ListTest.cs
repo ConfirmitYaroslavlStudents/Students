@@ -12,7 +12,7 @@ namespace ToDoListTests
         {
             var list = new ToDoList(new List<Task>());
             var task = new Task("Win the competitions", 0);
-            var testList = new List<Task> { new Task("Win the competitions",0) };
+            var testList = new List<Task> { new Task("Win the competitions",StatusOfTask.Todo) };
 
             list.Add(task);
 
@@ -25,7 +25,7 @@ namespace ToDoListTests
         {
             var list = new ToDoList(new List<Task>());
 
-            list.Add(new Task("Win the competitions", 0));
+            list.Add(new Task("Win the competitions", StatusOfTask.Todo));
             list.Delete(1);
 
             Assert.AreEqual(0, list.Count());
@@ -44,11 +44,11 @@ namespace ToDoListTests
         public void CompareToDoAfterDifferentOperations()
         {
             var list = new ToDoList(new List<Task>());
-            list.Add(new Task("Buy car", 0));
-            list.Add(new Task("Go to shop", 0));
+            list.Add(new Task("Buy car", StatusOfTask.Todo));
+            list.Add(new Task("Go to shop", StatusOfTask.Todo));
             list.ChangeStatus(2);
             list.Edit(1, "Pass exams");
-            var checkingList = new List<Task> { new Task("Pass exams",0), new Task("Go to shop", 1) };
+            var checkingList = new List<Task> { new Task("Pass exams",StatusOfTask.Todo), new Task("Go to shop", StatusOfTask.InProgress) };
 
             CollectionAssert.AreEqual(list.GetListOfTask(), checkingList);
         }

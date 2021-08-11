@@ -16,18 +16,18 @@ namespace ToDoListNikeshina
         public string Name { get; private set; }
         public StatusOfTask Status { get;private set; }
 
-        public Task(string name, int status)
+        public Task(string name, StatusOfTask status)
         {
             Name = name;
-            Status = (StatusOfTask)status;
+            Status = status;
         }
 
         public void ChangeStatus()
         {
             if (Status == StatusOfTask.Todo)
-                Status =(StatusOfTask) 1;
-            else if(Status == StatusOfTask.InProgress)
-                Status = (StatusOfTask)2;
+                Status = StatusOfTask.InProgress;
+            else if (Status == StatusOfTask.InProgress)
+                Status = StatusOfTask.Done;
         }
 
         public void ChangeName(string newName)

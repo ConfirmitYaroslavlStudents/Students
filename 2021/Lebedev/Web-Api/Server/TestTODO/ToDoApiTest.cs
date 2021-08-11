@@ -38,7 +38,7 @@ namespace ToDoTest
 
             var result = controller.GetItem(0);
 
-            Assert.AreEqual("A", result.name);
+            Assert.AreEqual("A", result.Name);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ToDoTest
             };
             var controller = new ToDoListController(new BadLogger()) { Todo = todo };
 
-            Assert.ThrowsException<WebException>(() => controller.GetItem(-1));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => controller.GetItem(-1));
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace ToDoTest
             };
             var controller = new ToDoListController(new BadLogger()) {Todo = todo};
 
-            Assert.ThrowsException<WebException>(() => controller.GetItem(1));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => controller.GetItem(1));
         }
 
         [TestMethod]
@@ -75,12 +75,12 @@ namespace ToDoTest
             };
             var controller = new ToDoListController(new BadLogger()) { Todo = todo };
 
-            var result = controller.PostItem("bill");
+            var result = controller.PostItem(new ToDoItem(0, "bill"));
 
             Assert.AreEqual("Post Completed", result);
-            Assert.AreEqual(todo[1].name, item.name);
-            Assert.AreEqual(todo[1].completed, item.completed);
-            Assert.AreEqual(todo[1].deleted, item.deleted);
+            Assert.AreEqual(todo[1].Name, item.Name);
+            Assert.AreEqual(todo[1].Completed, item.Completed);
+            Assert.AreEqual(todo[1].Deleted, item.Deleted);
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace ToDoTest
             var result = controller.DeleteItem(0);
 
             Assert.AreEqual("Delete Completed", result);
-            Assert.IsTrue(todo[0].deleted);
+            Assert.IsTrue((bool)todo[0].Deleted);
         }
 
         [TestMethod]

@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-        <ProjectReference Include="..\MyTODO\MyTODO.csproj" />
-        <ProjectReference Include="..\ToDoHost\ToDoHost.csproj" />
+    <ProjectReference Include="..\MyTODO\MyTODO.csproj" />
+    <ProjectReference Include="..\ToDoHost\ToDoHost.csproj" />
   </ItemGroup>
 
 </Project>

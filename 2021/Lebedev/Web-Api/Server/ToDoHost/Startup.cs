@@ -8,6 +8,7 @@ namespace ToDoHost
 {
     public class ToStartup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public ToStartup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -18,6 +19,18 @@ namespace ToDoHost
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://todolist.com",
+                            "http://www.contoso.com")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin();
+                    });
+            });
             services.AddControllers();
         }
 
@@ -28,6 +41,12 @@ namespace ToDoHost
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseDefaultFiles();
+            
+            app.UseStaticFiles();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseRouting();
 

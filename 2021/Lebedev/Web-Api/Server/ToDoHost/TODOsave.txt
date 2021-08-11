@@ -1,13 +1,13 @@
-gala
-Completed
-Deleted
+galad
+
+
 the most longest todo item i've seen
 Completed
-Deleted
+
 java
 
 Deleted
-bbb
+bbbd
 Completed
 Deleted
 Bob
@@ -18,4 +18,7 @@ Completed
 Deleted
 new todo
 Completed
+Deleted
+joker
+
 Deleted

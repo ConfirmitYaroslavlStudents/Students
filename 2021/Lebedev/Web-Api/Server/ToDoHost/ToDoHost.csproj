@@ -6,10 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="MyTODO">
-      <HintPath>bin\Debug\netcoreapp3.1\MyTODO.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\MyTODO\MyTODO.csproj" />
   </ItemGroup>
-
 
 </Project>

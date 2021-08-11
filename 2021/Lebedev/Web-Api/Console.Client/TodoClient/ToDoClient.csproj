@@ -6,9 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="MyTODO">
-      <HintPath>..\..\Server\ToDoHost\bin\Debug\netcoreapp3.1\MyTODO.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyTODO\MyTODO.csproj" />
   </ItemGroup>
 
 </Project>

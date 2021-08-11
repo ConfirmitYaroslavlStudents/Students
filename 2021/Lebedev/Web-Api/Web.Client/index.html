@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>MyToDo</title>
+</head>
+<body>
+    <h3>ToDoList</h3>
+    <table border="solid">
+        <tr>
+            <th>Is Completed ?</th>
+            <th>Is Deleted ?</th>
+            <th>Name</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="ToDoTable"></tbody>
+    </table>
+
+    <h3>Add</h3>
+    <form action="javascript:void(0);" method="POST" onsubmit="AddItem()">
+        <input type="text" id="AddName" placeholder="New ToDo">
+        <input type="submit" value="Add">
+    </form>
+
+    <div id="EditForm" style="display:none">
+        <h3>Edit</h3>
+        <form action="javascript:void(0);" onsubmit="PatchItem()">
+            <input type="hidden" id="EditId">
+            <input type="checkbox" id="EditComplete">
+            <input type="checkbox" id="EditDelete">
+            <input type="text" id="EditName">
+            <input type="submit" value="Save">
+            <a onclick="HideEdit()">Close</a>
+        </form>
+    </div>
+
+    <script src="index.js"></script>
+    <script type="text/javascript">
+        GetToDoList();
+    </script>
+</body>
+</html>

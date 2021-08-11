@@ -6,9 +6,9 @@ namespace ToDoClient.Controllers
 {
     public class ToDoArgs
     {
-        private readonly ToDoList _todo;
+        private readonly IToDoConnector _todo;
 
-        public ToDoArgs(ToDoList todolist)
+        public ToDoArgs(IToDoConnector todolist)
         {
             _todo = todolist;
         }
@@ -21,7 +21,7 @@ namespace ToDoClient.Controllers
                 return -1;
             }
             index++;
-            if (int.TryParse(args[index], out var i) && i >= 0 && i < _todo.Count)
+            if (int.TryParse(args[index], out var i) && i >= 0 && i < _todo.FindAll(true,true).Count)
                 return i;
             else
                 Console.WriteLine("argument must be integer >= 0 and less than number of items");
@@ -43,7 +43,7 @@ namespace ToDoClient.Controllers
             }
             if (index >= args.Length)
             {
-                Console.WriteLine("not found end of name");
+                Console.WriteLine("not found end of Name");
                 index = bufIndex;
                 return "";
             }
@@ -53,14 +53,14 @@ namespace ToDoClient.Controllers
 
         public void PrintHelp()
         {
-            Console.WriteLine("Usage:\nMyTODO.exe [add \"[name]\"|\n" +
-                              "changename [index] \"[name]\"|\n" +
+            Console.WriteLine("Usage:\nMyTODO.exe [add \"[Name]\"|\n" +
+                              "changename [index] \"[Name]\"|\n" +
                               "complete [index]|\n" +
                               "delete [index]|\n" +
                               "show [index]]\n" +
                               "Parameters:\n" +
-                              "add        | -a  add new task to ToDo list with specified name\n" +
-                              "changename | -cn changes name to task with specified index\n" +
+                              "add        | -a  add new task to ToDo list with specified Name\n" +
+                              "changename | -cn changes Name to task with specified index\n" +
                               "complete   | -co setting completed status to task with specified index\n" +
                               "delete     | -d  setting deleting status to task with specified index\n" +
                               "show       | -s  shows task with specified index\n");
@@ -85,8 +85,8 @@ namespace ToDoClient.Controllers
             if (i < 0)
                 return;
             var name = GetString(args, ref index);
-            _todo[i].ChangeName(name);
-            Console.WriteLine("item's \"{0}\" name changed successfully", _todo[i].name);
+            _todo.ChangeName(i, name);
+            Console.WriteLine("item's \"{0}\" Name changed successfully", _todo.GetItem(i).Name);
         }
 
         void CompleteTask(string[] args, ref int index)
@@ -94,8 +94,8 @@ namespace ToDoClient.Controllers
             var i = GetAndCheckInt(args, ref index);
             if (i < 0)
                 return;
-            _todo[i].Complete();
-            Console.WriteLine("Item \"{0}\" completed successfully", _todo[i].name);
+            _todo.Complete(i);
+            Console.WriteLine("Item \"{0}\" completed successfully", _todo.GetItem(i).Name);
         }
 
         void DeleteTask(string[] args, ref int index)
@@ -103,8 +103,8 @@ namespace ToDoClient.Controllers
             var i = GetAndCheckInt(args, ref index);
             if (i < 0)
                 return;
-            _todo[i].Delete();
-            Console.WriteLine("Item \"{0}\" deleted successfully", _todo[i].name);
+            _todo.Delete(i);
+            Console.WriteLine("Item \"{0}\" Deleted successfully", _todo.GetItem(i).Name);
         }
 
         void ShowTask(string[] args, ref int index)
@@ -112,7 +112,7 @@ namespace ToDoClient.Controllers
             var i = GetAndCheckInt(args, ref index);
             if (i < 0)
                 return;
-            Console.WriteLine(_todo[i]);
+            Console.WriteLine(_todo.GetItem(i));
         }
 
         public void WorkWithArgs(string[] args)

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using MyTODO;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace ToDoClient
 {
@@ -28,7 +28,7 @@ namespace ToDoClient
             using var responseStream = webResponse.GetResponseStream();
             using var reader = new StreamReader(responseStream);
             var answer = reader.ReadToEnd();
-            var list = JsonSerializer.Deserialize<List<ToDoItem>>(answer);
+            var list = JsonConvert.DeserializeObject<List<ToDoItem>>(answer);
             return (new ToDoList(list)).FindAll(completed, deleted);
         }
 
@@ -37,7 +37,7 @@ namespace ToDoClient
             var webRequest = (HttpWebRequest)WebRequest.Create(_url);
             webRequest.Method = "PATCH";
             webRequest.ContentType = "application/json";
-            var serializedData = JsonSerializer.Serialize(new ToDoItem(id){completed = true});
+            var serializedData = JsonConvert.SerializeObject(new ToDoItem(id) {Completed = true});
             var encodedData = Encoding.UTF8.GetBytes(serializedData);
             webRequest.ContentLength = encodedData.Length;
             using var requestStream = webRequest.GetRequestStream();
@@ -58,7 +58,7 @@ namespace ToDoClient
             var webRequest = (HttpWebRequest)WebRequest.Create(_url);
             webRequest.Method = "PATCH";
             webRequest.ContentType = "application/json";
-            var serializedData = JsonSerializer.Serialize(new ToDoItem(){id=id, name = name});
+            var serializedData = JsonConvert.SerializeObject(new ToDoItem(){Id=id, Name = name});
             var encodedData = Encoding.UTF8.GetBytes(serializedData);
             webRequest.ContentLength = encodedData.Length;
             using var requestStream = webRequest.GetRequestStream();
@@ -72,7 +72,7 @@ namespace ToDoClient
             var webRequest = (HttpWebRequest)WebRequest.Create(_url);
             webRequest.Method = "POST";
             webRequest.ContentType = "application/json"; 
-            var serializedData = JsonSerializer.Serialize(name);
+            var serializedData = JsonConvert.SerializeObject(new ToDoItem(0, name));
             var encodedData = Encoding.UTF8.GetBytes(serializedData);
             webRequest.ContentLength = encodedData.Length;
             using var requestStream = webRequest.GetRequestStream();
@@ -83,13 +83,13 @@ namespace ToDoClient
 
         public ToDoItem GetItem(int id)
         {
-            var webRequest = (HttpWebRequest) WebRequest.Create(_url + "/" + + id);
+            var webRequest = (HttpWebRequest) WebRequest.Create(_url + "/" + id);
             webRequest.Method = "GET";
             using var webResponse = webRequest.GetResponse();
             using var responseStream = webResponse.GetResponseStream();
             using var reader = new StreamReader(responseStream);
             var answer = reader.ReadToEnd();
-            var item = JsonSerializer.Deserialize<ToDoItem>(answer);
+            var item = JsonConvert.DeserializeObject<ToDoItem>(answer);
             return item;
         }
     }

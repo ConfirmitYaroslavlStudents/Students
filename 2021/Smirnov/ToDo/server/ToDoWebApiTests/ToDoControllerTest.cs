@@ -143,7 +143,7 @@ namespace ToDoWebApiTests
 
             builder.UseInMemoryDatabase("todo_db");
             builder.UseInternalServiceProvider(serviceProvider);
-
+            
             return new ToDoContext(builder.Options);
         }
 

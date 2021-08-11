@@ -10,6 +10,7 @@ namespace ToDoWebApi
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -19,6 +20,17 @@ namespace ToDoWebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
+
             //services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddDbContext<ToDoContext>(options => options.UseInMemoryDatabase("ToDoItem"));
             services.AddControllers().AddNewtonsoftJson(options =>
@@ -32,10 +44,12 @@ namespace ToDoWebApi
         {
             app.UseDeveloperExceptionPage();
 
-            //app.UseHttpsRedirection();
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseCors();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

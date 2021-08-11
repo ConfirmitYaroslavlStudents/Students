@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ToDoWebApi.Models
 {
@@ -7,7 +9,8 @@ namespace ToDoWebApi.Models
     {
         [StringLength(1000)]
         public string Description { set; get; }
-        [Range(0, 1)]
+        [EnumDataType(typeof(ToDoItemStatus))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public ToDoItemStatus Status { set; get; }
     }
     public abstract class PatchDtoBase

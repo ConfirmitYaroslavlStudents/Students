@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDo</title>
+</head>
+<body>
+<h2>ToDo List</h2>
+<form name="toDoItemsForm">
+    <input type="hidden" name="id" value="0" />
+    <div>
+        <label>Description:</label>
+        <input name="description" />
+    </div>
+    <div>
+        <label>Status:</label>
+        <select name="status">
+            <option value="NotDone">Not Done</option>
+            <option value="Done">Done</option>
+        </select>
+    </div>
+    <div>
+        <input name="add" value="Add" type="submit" id="submit">
+    </div>
+</form>
+<table id ="toDoList">
+    <thead><tr><th>id</th><th>description</th><th>status</th><th></th></tr></thead>
+    <tbody>
+    </tbody>
+</table>
+<script src="index.js"></script>
+<script>
+    GetToDoItems();
+</script>
+</body>
+</html>

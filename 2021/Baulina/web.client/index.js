@@ -1,9 +1,11 @@
-const uri = "todo-list";
+import { Enum } from "./enum.js"
+
+const url = "http://localhost:5000/todo-list";
 let todoItems = [];
-let ToDoItemStatus = Enum({ NotComplete: "0", Complete: "1" });
+let toDoItemStatus = Enum({ NotComplete: "0", Complete: "1" });
 
 function getToDoItems() {
-    fetch(uri)
+    fetch(url)
         .then(response => response.json())
         .then(data => _displayItems(data))
         .catch(error => console.error("Unable to get items.", error));
@@ -13,11 +15,11 @@ function addToDoItem() {
     const addNameTextBox = document.getElementById("add-name");
 
     const toDoItem = {                     
-        Status: ToDoItemStatus.NotComplete,
+        Status: toDoItemStatus.NotComplete,
         Description: addNameTextBox.value.trim()
     };
 
-    fetch(uri,
+    fetch(url,
             {
                 method: "POST",
                 headers: {
@@ -35,7 +37,7 @@ function addToDoItem() {
 }
 
 function deleteToDoItem(id) {
-    fetch(`${uri}/${id}`, {
+    fetch(`${url}/${id}`, {
         method: "DELETE"
     })
         .then(() => getToDoItems())
@@ -47,7 +49,7 @@ function displayEditForm(id) {
 
     document.getElementById("edit-name").value = toDoItem.name;
     document.getElementById("edit-id").value = toDoItem.id;
-    if (toDoItem.Status === ToDoItemStatus.Complete)
+    if (toDoItem.Status === toDoItemStatus.Complete)
         document.getElementById("edit-isComplete").checked = true;
     else document.getElementById("edit-isComplete").checked = false;
     document.getElementById("editForm").style.display = "block";
@@ -57,15 +59,15 @@ function editToDoItem() {
     const itemId = document.getElementById("edit-id").value;
     var status;
     if (document.getElementById("edit-isComplete").checked)
-        status = ToDoItemStatus.Complete;
-    else status = ToDoItemStatus.NotComplete;
+        status = toDoItemStatus.Complete;
+    else status = toDoItemStatus.NotComplete;
     const requestBody =
     [
         { op: "replace", path: "/Description", value: document.getElementById("edit-name").value.trim() },
         { op: "replace", path: "/Status", value: status }
     ];
 
-    fetch(`${uri}/${itemId}`,
+    fetch(`${url}/${itemId}`,
             {
                 method: "PATCH",
                 headers: {
@@ -104,7 +106,7 @@ function _displayItems(data) {
         let isCompleteCheckbox = document.createElement("input");
         isCompleteCheckbox.type = "checkbox";
         isCompleteCheckbox.disabled = true;
-        if (item.Status === ToDoItemStatus.Complete)
+        if (item.Status === toDoItemStatus.Complete)
             isCompleteCheckbox.checked = true;
         else isCompleteCheckbox.checked = false;
 

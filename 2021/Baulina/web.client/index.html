@@ -5,36 +5,37 @@
     <title>To-Do List </title>
 </head>
 <body>
-<h2>To-Do List</h2>
-<h3>Add</h3>
-<form action="javascript:void(0);" method="POST" onsubmit="addToDoItem()">
-    <input type="text" id="add-name" placeholder="E.g. Go grocery shopping">
-    <input type="submit" value="Add">
-</form>
-
-<div id="editForm">
-    <h3>Edit</h3>
-    <form action="javascript:void(0);" onsubmit="editToDoItem()">
-        <input type="hidden" id="edit-id">
-        <input type="checkbox" id="edit-isComplete">
-        <input type="text" id="edit-name">
-        <input type="submit" value="Save">
-        <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+    <h2>To-Do List</h2>
+    <h3>Add</h3>
+    <form action="javascript:void(0);" method="POST" onsubmit="addToDoItem()">
+        <input type="text" id="add-name" placeholder="E.g. Go grocery shopping">
+        <input type="submit" value="Add">
     </form>
-</div>
 
-<p id="counter"></p>
+    <div id="editForm">
+        <h3>Edit</h3>
+        <form action="javascript:void(0);" onsubmit="editToDoItem()">
+            <input type="hidden" id="edit-id">
+            <input type="checkbox" id="edit-isComplete">
+            <input type="text" id="edit-name">
+            <input type="submit" value="Save">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
 
-<table>
-    <tr>
-        <th>Status</th>
-        <th>Task</th>
-        <th></th>
-        <th></th>
-    </tr>
-    <tbody id="todo-items"></tbody>
+    <p id="counter"></p>
+
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Task</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="todo-items"></tbody>
 </table>
-
+    
+<script src="enum.js"></script>
 <script src="index.js" asp-append-version="true"></script>
 <script type="text/javascript">
     getToDoItems();

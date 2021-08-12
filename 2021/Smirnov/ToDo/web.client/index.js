@@ -9,7 +9,7 @@ async function GetToDoItems() {
         const toDoItems = await response.json();
         let rows = document.querySelector("tbody");
         toDoItems.forEach(toDoItem => {
-            rows.append(row(toDoItem));
+            rows.append(Row(toDoItem));
         });
     }
 }
@@ -40,9 +40,9 @@ async function CreateToDoItem(description, status) {
     });
     if (response.ok === true) {
         const toDoItem = await response.json();
-        document.querySelector("tbody").append(row(toDoItem));
+        document.querySelector("tbody").append(Row(toDoItem));
     }
-    reset();
+    Reset();
 }
 
 async function EditToDoItem(id, description, status) {
@@ -57,9 +57,9 @@ async function EditToDoItem(id, description, status) {
         });
     if (response.ok === true) {
         const toDoItem = await response.json();
-        document.getElementById(id).replaceWith(row(toDoItem));
+        document.getElementById(id).replaceWith(Row(toDoItem));
     }
-    reset();
+    Reset();
 }
 
 async function DeleteToDoItem(id) {
@@ -72,14 +72,14 @@ async function DeleteToDoItem(id) {
     }
 }
 
-function reset() {
+function Reset() {
     const form = document.forms["toDoItemsForm"];
     form.reset();
     form.elements["id"].value = 0;
     document.forms["toDoItemsForm"].elements["add"].value = "Add";
 }
 
-function row(toDoItem) {
+function Row(toDoItem) {
 
     const tr = document.createElement("tr");
     tr.setAttribute("id", toDoItem.Id);
@@ -118,10 +118,10 @@ function row(toDoItem) {
     removeLink.setAttribute("data-id", toDoItem.id);
     removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
 
-    const Deleteimg = document.createElement('img');
-    Deleteimg.src = "https://localhost:5001/Delete.svg";
-    Deleteimg.alt = "Delete";
-    removeLink.appendChild(Deleteimg);
+    const deleteimg = document.createElement('img');
+    deleteimg.src = "https://localhost:5001/Delete.svg";
+    deleteimg.alt = "Delete";
+    removeLink.appendChild(deleteimg);
 
     removeLink.addEventListener("click", e => {
 

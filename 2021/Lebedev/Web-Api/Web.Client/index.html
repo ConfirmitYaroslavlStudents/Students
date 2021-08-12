@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>MyToDo</title>
+    <script src="index.js"></script>
 </head>
 <body>
     <h3>ToDoList</h3>
@@ -12,7 +13,11 @@
             <th></th>
             <th></th>
         </tr>
-        <tbody id="ToDoTable"></tbody>
+        <tbody id="ToDoTable">
+            <script type="text/javascript">
+                GetToDoList();
+            </script>
+        </tbody>
     </table>
 
     <h3>Add</h3>
@@ -32,10 +37,5 @@
             <input type="button" onclick="HideEdit()" value="Close">
         </form>
     </div>
-
-    <script src="index.js"></script>
-    <script type="text/javascript">
-        GetToDoList();
-    </script>
 </body>
 </html>

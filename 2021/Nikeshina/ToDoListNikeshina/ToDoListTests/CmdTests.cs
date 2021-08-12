@@ -30,7 +30,7 @@ namespace ToDoListTests
             app.AddNewTask();
             app.EditDescription();
 
-            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Done! ", "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Done! ", "Incorrect number of the task!" });
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace ToDoListTests
 
             app.AddNewTask();
 
-            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Invalid description length!" });
         }
 
         [TestMethod]

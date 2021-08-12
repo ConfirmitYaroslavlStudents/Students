@@ -16,7 +16,7 @@ namespace ToDoListTests
             var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple" }),list);
 
             app.AddNewTask();
-            var msg = new List<string> { "Description: ", "Done! " };
+            var msg = new List<string> { "Enter the description", "Done! " };
             CollectionAssert.AreEqual(logger.Messages, msg);
             CollectionAssert.AreEqual(app.GetListOfTask(), new List<Task> { new Task("buy apple", StatusOfTask.Todo) });
         }
@@ -30,8 +30,8 @@ namespace ToDoListTests
             app.AddNewTask();
             app.EditDescription();
 
-            CollectionAssert.AreEqual(logger.Messages, new List<string> {"Description: ", "Done! ",
-                "Number of the note: ", "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> {"Enter the description", "Done! ",
+                "First enter the number on a new line and then the new description","Incorrect number of the task!" });
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace ToDoListTests
 
             app.AddNewTask();
 
-            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Description: ", "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Enter the description", "Invalid description length!" });
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace ToDoListTests
 
             app.AddNewTask();
 
-            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Description: ",  "Incorrect data" });
+            CollectionAssert.AreEqual(logger.Messages, new List<string> { "Enter the description", "Invalid description length!" });
         }
 
         [TestMethod]
@@ -68,11 +68,11 @@ namespace ToDoListTests
             app.ChangeStatus();
 
             var msgs = new List<string>();
-            msgs.Add("Description: ");
+            msgs.Add("Enter the description");
             msgs.Add("Done! ");
-            msgs.Add("Description: ");
+            msgs.Add("Enter the description");
             msgs.Add("Done! ");
-            msgs.Add("Number of the note: ");
+            msgs.Add("Enter the number of the task");
             msgs.Add("Done! ");
 
 
@@ -95,9 +95,9 @@ namespace ToDoListTests
             app.Delete();
 
             var msgs = new List<string>();
-            msgs.Add("Description: ");
+            msgs.Add("Enter the description");
             msgs.Add("Done! ");
-            msgs.Add("Number of the note: ");
+            msgs.Add("Enter the number of the task");
             msgs.Add("Done! ");
 
             app.Print();
@@ -116,12 +116,11 @@ namespace ToDoListTests
             var msgs = new List<string>();
 
             app.AddNewTask();
-            msgs.Add("Description: ");
+            msgs.Add("Enter the description");
             msgs.Add("Done! ");
 
             app.EditDescription();
-            msgs.Add("Number of the note: ");
-            msgs.Add("Description: ");
+            msgs.Add("First enter the number on a new line and then the new description");
             msgs.Add("Done! ");
 
             CollectionAssert.AreEqual(logger.Messages, msgs);
@@ -139,20 +138,19 @@ namespace ToDoListTests
             var msgs = new List<string>();
 
             app.AddNewTask();
-            msgs.Add("Description: ");
+            msgs.Add("Enter the description");
             msgs.Add("Done! ");
 
             app.ChangeStatus();
-            msgs.Add("Number of the note: ");
+            msgs.Add("Enter the number of the task");
             msgs.Add("Done! ");
 
             app.EditDescription();
-            msgs.Add("Number of the note: ");
-            msgs.Add("Description: ");
+            msgs.Add("First enter the number on a new line and then the new description");
             msgs.Add("Done! ");
 
             app.Rollback();
-            msgs.Add("Number of commands: ");
+            msgs.Add("Enter the number of commands");
             msgs.Add("Done! ");
 
             CollectionAssert.AreEqual(logger.Messages, msgs);
@@ -169,8 +167,8 @@ namespace ToDoListTests
             var msgs = new List<string>();
 
             app.AddNewTask();
-            msgs.Add("Description: ");
-            msgs.Add("Incorrect data");
+            msgs.Add("Enter the description");
+            msgs.Add("Invalid description length!");
 
             CollectionAssert.AreEqual(logger.Messages, msgs);
             CollectionAssert.AreEqual(new List<Task>(), app.GetListOfTask());

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ToDoListNikeshina.Validators;
 
 namespace ToDoListNikeshina
 {
@@ -9,7 +10,6 @@ namespace ToDoListNikeshina
         private readonly ILogger _logger;
         private readonly IGetInputData _dataGetter;
         private ToDoList _list;
-        private int count;
 
         public GeneralOperator(ILogger logger, IGetInputData dataGetter, ToDoList list)
         {
@@ -17,6 +17,7 @@ namespace ToDoListNikeshina
             _dataGetter = dataGetter;
             _list = list;
         }
+
         public void Print()
         {
             if (_list.Count() == 0)
@@ -31,74 +32,63 @@ namespace ToDoListNikeshina
                 }
             }
         }
+
+        public bool Edit()
+        {
+            var numberVlidator = new ValidatorTaskNumber(_dataGetter, _list.Count(), _logger);
+            var descriptionValidator = new CheckLengthDescription(_dataGetter, _logger);
+            numberVlidator.SetNext(descriptionValidator);
+            if (!numberVlidator.Validate())
+                return false;
+
+            _list.Edit(numberVlidator.GetTaskNumber(), descriptionValidator.GetDescription());
+            _logger.Log(Messages.completed);
+            return true;
+        }
+
         public bool Delete()
         {
-            return DoCommandWithRequestNumber(_list.Delete, ChangeCountTaskInProgressDuringDelete);
+            var validator = new ValidatorTaskNumber(_dataGetter,_list.Count(), _logger);
+
+            if (!validator.Validate())
+                return false;
+
+            int index = validator.GetTaskNumber();
+            _list.Delete(index);
+            _logger.Log(Messages.completed);
+            return true;
         }
 
         public bool ChangeTaskStatus()
         {
-            return DoCommandWithRequestNumber(_list.ChangeStatus,ChangeCountTaskInProgressDuringChangeStatus);
-        }
+            var numberValidator = new ValidatorTaskNumber(_dataGetter, _list.Count(), _logger);
+            var countInProgresValidator = new ValidatorCheckTaskCountInProgress(_logger, _list, numberValidator);
+            numberValidator.SetNext(countInProgresValidator);
 
-        private bool DoCommandWithRequestNumber(Action<int> comand, Action<int> checkCountInProgress)
-        {
-            var inputStr = _dataGetter.GetInputData();
-
-
-            if (!Validator.IsNumberValid(inputStr, _list.Count()))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
+            if (!numberValidator.Validate())
                 return false;
-            }
 
-            int num = int.Parse(inputStr);
-            checkCountInProgress(num);
-
-
-            if (count>3)
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
-                return false;
-            }
-
-            comand(num);
+            int index = numberValidator.GetTaskNumber();
+            _list.ChangeStatus(index);
             _logger.Log(Messages.completed);
-
             return true;
-        }
 
-        private void ChangeCountTaskInProgressDuringDelete(int index)
-        {
-            count = _list.GetCountTasksInProgress();
-            if (_list[index - 1].Status == StatusOfTask.InProgress)
-                count--;
-        }
-
-        private void ChangeCountTaskInProgressDuringChangeStatus(int index)
-        {
-            count = _list.GetCountTasksInProgress();
-            if (_list[index - 1].Status == StatusOfTask.InProgress)
-                count--;
-            else if (_list[index - 1].Status == StatusOfTask.Todo)
-                count++;
         }
 
         public bool Add()
         {
-            var dscr = _dataGetter.GetInputData();
-
-            if (!Validator.IsStringValid(dscr))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
+            var validator = new CheckLengthDescription(_dataGetter, _logger);
+            if (!validator.Validate())
                 return false;
-            }
 
-            _list.Add(new Task(dscr, StatusOfTask.Todo));
+            var description = validator.GetDescription();
+            _list.Add(new Task(description, StatusOfTask.Todo));
             _logger.Log(Messages.completed);
             return true;
         }
+
         public void UpdateToDo(ToDoList newItem) => _list = newItem;
+
         public List<Task> GetListOfTask() => _list.GetListOfTask();
     }
 }

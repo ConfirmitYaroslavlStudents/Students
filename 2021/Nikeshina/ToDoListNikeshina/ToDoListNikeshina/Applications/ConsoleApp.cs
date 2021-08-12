@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ToDoListNikeshina.Validators;
 
 namespace ToDoListNikeshina
 {
@@ -8,7 +9,7 @@ namespace ToDoListNikeshina
     {
         private readonly ILogger _logger;
         private readonly GeneralOperator _operator;
-        private Stack<ToDoList> _pastListStates = new Stack<ToDoList>();
+        private Stack<ToDoList> _pastLStates = new Stack<ToDoList>();
 
         public IGetInputData dataGetter;
         private ToDoList List { get; set; }
@@ -25,34 +26,21 @@ namespace ToDoListNikeshina
         public void Rollback()
         {
             _logger.Log(Messages.requestNumberOfCommand);
-
-            var inputString = dataGetter.GetInputData();
-
-            if (!Validator.IsNumberValid(inputString, _pastListStates.Count))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
+            var validator = new ValidatorCountOfActions(dataGetter,_pastLStates.Count, _logger);
+            if (!validator.Validate())
                 return;
-            }
 
-            int inputNumber = int.Parse(inputString);
-
-            List = new ToDoList(GetLastList(inputNumber));
+            List = new ToDoList(GetLastList(validator.GetActionsCount()));
             _operator.UpdateToDo(List);
             _logger.Log(Messages.completed);
         }
 
         private List<Task> GetLastList(int countOfStep)
         {
-            if (countOfStep >= _pastListStates.Count)
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
-                return List.GetListOfTask();
-            }
-
             for (int i = 0; i < countOfStep; i++)
-                _pastListStates.Pop();
+                _pastLStates.Pop();
 
-            return _pastListStates.Pop().GetListOfTask();
+            return _pastLStates.Peek().GetListOfTask();
         }
 
         public void AddNewTask()
@@ -66,7 +54,7 @@ namespace ToDoListNikeshina
 
         private void PushListToStack()
         {
-            _pastListStates.Push(new ToDoList(List.CopyList()));
+            _pastLStates.Push(new ToDoList(List.CopyList()));
         }
 
         public void Delete()
@@ -79,29 +67,10 @@ namespace ToDoListNikeshina
 
         public void EditDescription()
         {
-            _logger.Log(Messages.requestNumberOfString);
+            _logger.Log(Messages.requestNumberAndDescription);
 
-            var inputString = dataGetter.GetInputData();
-
-            if (!Validator.IsNumberValid(inputString, List.Count()))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
-                return;
-            }
-
-            int inputNoteNumber = int.Parse(inputString);
-            _logger.Log(Messages.requestDescription);
-            var newDescription = dataGetter.GetInputData();
-
-            if (!Validator.IsStringValid(newDescription))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
-                return;
-            }
-
-            List.Edit(inputNoteNumber, newDescription);
-            PushListToStack();
-            _logger.Log(Messages.completed);
+            if(_operator.Edit())
+                PushListToStack();
         }
 
         public void ChangeStatus()

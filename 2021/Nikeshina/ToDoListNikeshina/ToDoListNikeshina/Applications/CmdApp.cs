@@ -34,25 +34,7 @@ namespace ToDoListNikeshina
 
         public void EditDescription()
         {
-            var inputString = dataGetter.GetInputData();
-
-            if (!Validator.IsNumberValid(inputString,List.Count()))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
-                return;
-            }
-
-            int noteNumber = int.Parse(inputString);
-            var newDescription = dataGetter.GetInputData();
-
-            if (!Validator.IsStringValid(newDescription))
-            {
-                _logger.Log(Messages.wrongFormatOfInputData);
-                return;
-            }
-
-            List.Edit(noteNumber, newDescription);
-            _logger.Log(Messages.completed);
+            _operator.Edit();
         }
 
         public void Print()=> _operator.Print();

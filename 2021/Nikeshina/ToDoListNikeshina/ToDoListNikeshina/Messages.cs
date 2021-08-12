@@ -6,11 +6,18 @@ namespace ToDoListNikeshina
 {
     public static class Messages
     {
-        public const string wrongFormatOfInputData = "Incorrect data";
+        public const string incorrectCommandsNumber = "Incorrect number!";
+        public const string incorrectDescriptionLength = "Invalid description length!";
+        public const string incorrectCountTasksInProgress = "Only three tasks are possible InProgress!";
+        public const string incorrectTaskNumber = "Incorrect number of the task!";
+
         public const string listIsEmpty = "List is empty(";
-        public const string requestNumberOfString = "Number of the note: ";
-        public const string  requestNumberOfCommand="Number of commands: ";
-        public const string requestDescription = "Description: " ;
+
+        public const string requestNumberOfString = "Enter the number of the task";
+        public const string requestNumberAndDescription = "First enter the number on a new line and then the new description";
+        public const string requestNumberOfCommand="Enter the number of commands";
+        public const string requestDescription = "Enter the description" ;
+
         public const string completed = "Done! ";
 
         public static string InsructionText()

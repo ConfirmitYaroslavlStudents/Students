@@ -29,7 +29,6 @@ function AddItem()
     },
     body: JSON.stringify(item)
   })
-    .then(response => response.json())
     .then(() => 
     {
       GetToDoList();

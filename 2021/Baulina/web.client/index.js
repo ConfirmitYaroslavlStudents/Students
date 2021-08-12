@@ -78,12 +78,12 @@ function editToDoItem() {
         .then(() => getToDoItems())
         .catch(error => console.error("Unable to update item.", error));
 
-    closeInput();
+    hideEditForm();
 
     return false;
 }
 
-function closeInput() {
+function hideEditForm() {
     document.getElementById("editForm").style.display = "none";
 }
 
@@ -93,49 +93,38 @@ function _displayCount(itemCount) {
     document.getElementById("counter").innerText = `${itemCount} ${name}`;
 }
 
-function _displayItems(data) {
+function _displayItems(toDoList) {
     const tBody = document.getElementById("todo-items");
     tBody.innerHTML = "";
 
-    _displayCount(data.length);
+    _displayCount(toDoList.length);
 
     const button = document.createElement("button");
-    console.log(toDoItemStatus.Complete.description.value);
-    console.log(toDoItemStatus.Complete.description.Number);
-    console.log(toDoItemStatus.Complete.description.valueAsNumber);
-    console.log(toDoItemStatus.Complete.description.numberValue);
 
-    data.forEach(item => {
+    toDoList.forEach(item => {
+        let tableRow = tBody.insertRow();
+
         let isCompleteCheckbox = document.createElement("input");
         isCompleteCheckbox.type = "checkbox";
         isCompleteCheckbox.disabled = true;
         if (item.status == toDoItemStatus.Complete.description)
             isCompleteCheckbox.checked = true;
         else isCompleteCheckbox.checked = false;
+        tableRow.insertCell(0).appendChild(isCompleteCheckbox);
+
+        let textNode = document.createTextNode(item.description);
+        tableRow.insertCell(1).appendChild(textNode);
 
         let editButton = button.cloneNode(false);
         editButton.innerText = "Edit";
         editButton.setAttribute("onclick", `displayEditForm(${item.id})`);
+        tableRow.insertCell(2).appendChild(editButton);
 
         let deleteButton = button.cloneNode(false);
         deleteButton.innerText = "Delete";
         deleteButton.setAttribute("onclick", `deleteToDoItem(${item.id})`);
-
-        let tr = tBody.insertRow();
-
-        let td1 = tr.insertCell(0);
-        td1.appendChild(isCompleteCheckbox);
-
-        let td2 = tr.insertCell(1);
-        let textNode = document.createTextNode(item.description);
-        td2.appendChild(textNode);
-
-        let td3 = tr.insertCell(2);
-        td3.appendChild(editButton);
-
-        let td4 = tr.insertCell(3);
-        td4.appendChild(deleteButton);
+        tableRow.insertCell(3).appendChild(deleteButton);
     });
 
-    todoItems = data;
+    todoItems = toDoList;
 }

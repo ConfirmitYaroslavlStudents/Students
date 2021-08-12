@@ -25,7 +25,7 @@
             <input type="checkbox" id="edit-isComplete">
             <input type="text" id="edit-name">
             <input type="submit" value="Save">
-            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+            <a onclick="hideEditForm()" aria-label="Close">&#10006;</a>
         </form>
     </div>
 
@@ -45,7 +45,7 @@
 <script src="enum.js"></script>
 <script src="index.js" asp-append-version="true"></script>
 <script type="text/javascript">
-    closeInput();
+    hideEditForm();
     getToDoItems();
 </script>
 </body>

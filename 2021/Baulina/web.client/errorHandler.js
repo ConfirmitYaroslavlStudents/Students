@@ -4,5 +4,4 @@ function CheckError(response) {
     } else {
         throw Error(response.statusText);
     }
-} 
-
+}  

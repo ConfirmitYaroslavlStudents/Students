@@ -1,16 +1,17 @@
-﻿using ToDoListApp.Client;
+﻿using System.Threading.Tasks;
+using ToDoListApp.Client;
 using ToDoListApp.Reader;
 using ToDoListApp.Writer;
 
 namespace ToDoListApp
 {
-    internal class Program
+    public class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var toDoListMenu = args.Length == 0 ? new Menu(new HttpRequestGenerator(), new UserInputReader(), new ConsoleWriter()) : 
                                                   new Menu(new HttpRequestGenerator(), new CommandReader(args), new ConsoleWriter());
-            toDoListMenu.StartMenu();
+            await toDoListMenu.StartMenu();
         }
     }
 }

@@ -4,10 +4,10 @@ namespace ToDoListApp.Reader
 {
     class UserInputReader : IReader
     {
-        public ToDoListMenuEnum GetSelectedAction()
+        public ListCommandMenu GetCommand()
         {
             WriteMenu();
-            return (ToDoListMenuEnum)int.Parse(Console.ReadLine());
+            return (ListCommandMenu)int.Parse(Console.ReadLine());
         }
         private static void WriteMenu()
         {

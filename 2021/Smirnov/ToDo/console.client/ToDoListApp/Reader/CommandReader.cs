@@ -8,16 +8,16 @@
             _consoleCommand = consoleCommand;
         }
 
-        public ToDoListMenuEnum GetSelectedAction()
+        public ListCommandMenu GetCommand()
         {
             return _consoleCommand[0] switch
             {
-                "create" => ToDoListMenuEnum.CreateTask,
-                "delete" => ToDoListMenuEnum.DeleteTask,
-                "change" => ToDoListMenuEnum.ChangeDescription,
-                "complete" => ToDoListMenuEnum.CompleteTask,
-                "list" => ToDoListMenuEnum.WriteAllTask,
-                _ => ToDoListMenuEnum.SaveAndExit
+                "create" => ListCommandMenu.CreateTask,
+                "delete" => ListCommandMenu.DeleteTask,
+                "change" => ListCommandMenu.ChangeDescription,
+                "complete" => ListCommandMenu.CompleteTask,
+                "list" => ListCommandMenu.WriteTasks,
+                _ => ListCommandMenu.SaveAndExit
             };
         }
 

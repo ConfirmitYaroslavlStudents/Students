@@ -4,7 +4,7 @@
     {
         public string GetDescription();
         public int GetTaskId();
-        public ToDoListMenuEnum GetSelectedAction();
+        public ListCommandMenu GetCommand();
         public bool ContinueWork();
     }
 }

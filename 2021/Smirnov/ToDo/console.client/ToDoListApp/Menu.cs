@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using ToDoListApp.Client;
 using ToDoListApp.Reader;
 using ToDoListApp.Writer;
@@ -18,15 +20,15 @@ namespace ToDoListApp
             _writer = writer;
         }
 
-        public void StartMenu()
+        public async Task StartMenu()
         {
             do
             {
                 try
                 {
-                    var selectedAction = _reader.GetSelectedAction();
+                    var selectedAction = _reader.GetCommand();
 
-                    if (selectedAction == ToDoListMenuEnum.SaveAndExit)
+                    if (selectedAction == ListCommandMenu.SaveAndExit)
                         return;
 
                     var action = GetAction(selectedAction);
@@ -37,65 +39,79 @@ namespace ToDoListApp
                         return;
                     }
 
-                    action();
+                    await action();
+
                 }
                 catch (Exception e)
                 {
                     _writer.WriteExceptionMessage(e);
                 }
 
-            } while (ContinueWork());
+            } while (_reader.ContinueWork());
 
         }
-        private bool ContinueWork()
-        {
-            return _reader.ContinueWork();
-        }
 
-        private Action GetAction(ToDoListMenuEnum selectedAction)
+        private Func<Task> GetAction(ListCommandMenu selectedAction)
         {
             return selectedAction switch
             {
-                ToDoListMenuEnum.CreateTask => CreateTask,
-                ToDoListMenuEnum.DeleteTask => DeleteTask,
-                ToDoListMenuEnum.ChangeDescription => ChangeDescription,
-                ToDoListMenuEnum.CompleteTask => CompleteTask,
-                ToDoListMenuEnum.WriteAllTask => WriteAllTask,
+                ListCommandMenu.CreateTask => CreateTask,
+                ListCommandMenu.DeleteTask => DeleteTask,
+                ListCommandMenu.ChangeDescription => ChangeDescription,
+                ListCommandMenu.CompleteTask => CompleteTask,
+                ListCommandMenu.WriteTasks => WriteAllTask,
                 _ => null
             };
         }
 
-        private void CreateTask()
-        { 
-            _httpRequestGenerator.AddTask(_reader.GetDescription());
+        private async Task CreateTask()
+        {
+            await _httpRequestGenerator.AddTask(_reader.GetDescription());
             _writer.WriteTaskCreated();
         }
 
-        private void ChangeDescription()
+        private async Task ChangeDescription()
         {
-            var request = _httpRequestGenerator.ChangeTaskDescription(_reader.GetTaskId(), _reader.GetDescription());
+            var request = await _httpRequestGenerator.ChangeTaskDescription(_reader.GetTaskId(), _reader.GetDescription());
 
-            Console.WriteLine(request.Status.ToString());
-            _writer.WriteDescriptionChanged();
+            if (request.StatusCode == HttpStatusCode.OK)
+                _writer.WriteDescriptionChanged();
+            else
+            {
+                if(request.StatusCode == HttpStatusCode.NotFound)
+                    _writer.WriteTaskNotFound();
+            }
         }
 
-        private void DeleteTask()
+        private async Task DeleteTask()
         {
-            _httpRequestGenerator.DeleteTask(_reader.GetTaskId());
-            _writer.WriteTaskDeleted();
+            var request = await _httpRequestGenerator.DeleteTask(_reader.GetTaskId());
+            if (request.StatusCode == HttpStatusCode.OK)
+                _writer.WriteTaskDeleted();
+            else
+            {
+                if (request.StatusCode == HttpStatusCode.NotFound)
+                    _writer.WriteTaskNotFound();
+            }
         }
 
-        private void CompleteTask()
+        private async Task CompleteTask()
         {
-            _httpRequestGenerator.CompleteTask(_reader.GetTaskId());
-            _writer.WriteTaskCompleted();
+            var request = await _httpRequestGenerator.DeleteTask(_reader.GetTaskId());
+            if (request.StatusCode == HttpStatusCode.OK)
+                _writer.WriteTaskCompleted();
+            else
+            {
+                if (request.StatusCode == HttpStatusCode.NotFound)
+                    _writer.WriteTaskNotFound();
+            }
         }
 
-        private void WriteAllTask()
+        private async Task WriteAllTask()
         {
-            _httpRequestGenerator.GetAllTask();
+            await _httpRequestGenerator.GetAllTask();
 
-            _writer.WriteAllTask(_httpRequestGenerator.GetAllTask().Result.Content.ReadAsStringAsync().Result);
+            _writer.WriteTasks(_httpRequestGenerator.GetAllTask().Result.Content.ReadAsStringAsync().Result);
         }
     }
 }

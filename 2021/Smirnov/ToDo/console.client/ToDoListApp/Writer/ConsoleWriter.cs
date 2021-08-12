@@ -7,6 +7,10 @@ namespace ToDoListApp.Writer
         {
             Console.WriteLine("Incorrect command");
         }
+        public void WriteTaskNotFound()
+        {
+            Console.WriteLine("Task not found");
+        }
 
         public void WriteExceptionMessage(Exception e)
         {
@@ -33,7 +37,7 @@ namespace ToDoListApp.Writer
             Console.WriteLine("Task deleted");
         }
 
-        public void WriteAllTask(string allTask)
+        public void WriteTasks(string allTask)
         {
             Console.WriteLine("......................................");
             Console.WriteLine(allTask);

@@ -1,12 +1,12 @@
 ﻿namespace ToDoListApp
 {
-    public enum ToDoListMenuEnum
+    public enum ListCommandMenu
     {
         CreateTask = 1,
         DeleteTask = 2,
         ChangeDescription = 3,
         CompleteTask = 4,
-        WriteAllTask = 5,
+        WriteTasks = 5,
         SaveAndExit = 6
     }
 }

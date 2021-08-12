@@ -14,7 +14,7 @@ namespace ToDoWebApiTests
         public async void AddToDoItem_DescriptionTest()
         {
             //arrange
-            var toDoContext = createToDoContext();
+            var toDoContext = CreateToDoContext();
 
             var controller = new ToDoItemsController(toDoContext);
             //act
@@ -28,8 +28,9 @@ namespace ToDoWebApiTests
         public void GetToDoItems_ShouldReturnToDoItems()
         {
             //arrange
-            var toDoContext = createToDoContext();
-            toDoContext.AddRange(new List<ToDoItem>{new ToDoItem {Description = "test1"}, new ToDoItem {Description = "test2", Status = ToDoItemStatus.Done}});
+            var toDoContext = CreateToDoContext();
+            toDoContext.AddRange(new List<ToDoItem>{new ToDoItem {Description = "test1"},
+                                 new ToDoItem {Description = "test2", Status = ToDoItemStatus.Done}});
 
             var controller = new ToDoItemsController(toDoContext);
             //act
@@ -50,8 +51,9 @@ namespace ToDoWebApiTests
         public void GetToDoItem_ShouldReturnToDoItem()
         {
             //arrange
-            var toDoContext = createToDoContext();
-            toDoContext.AddRange(new List<ToDoItem> { new ToDoItem { Description = "test1" }, new ToDoItem { Description = "test2", Status = ToDoItemStatus.Done } });
+            var toDoContext = CreateToDoContext();
+            toDoContext.AddRange(new List<ToDoItem> { new ToDoItem { Description = "test1" }, 
+                                 new ToDoItem { Description = "test2", Status = ToDoItemStatus.Done } });
 
             var controller = new ToDoItemsController(toDoContext);
             //act
@@ -66,7 +68,7 @@ namespace ToDoWebApiTests
         public async void PatchToDoItem_NewDescriptionTestPatch()
         {
             //arrange
-            var toDoContext = createToDoContext();
+            var toDoContext = CreateToDoContext();
             toDoContext.Add(new ToDoItem { Description = "test1" });
             var controller = new ToDoItemsController(toDoContext);
 
@@ -84,7 +86,7 @@ namespace ToDoWebApiTests
         public async void PatchToDoItem_NewStatusDone()
         {
             //arrange
-            var toDoContext = createToDoContext();
+            var toDoContext = CreateToDoContext();
             toDoContext.Add(new ToDoItem { Description = "test1" });
             var controller = new ToDoItemsController(toDoContext);
 
@@ -102,7 +104,7 @@ namespace ToDoWebApiTests
         public async void PatchToDoItem_NewDescriptionTestPatch_newStatusDone()
         {
             //arrange
-            var toDoContext = createToDoContext();
+            var toDoContext = CreateToDoContext();
             toDoContext.Add(new ToDoItem { Description = "test1" });
             var controller = new ToDoItemsController(toDoContext);
 
@@ -121,7 +123,7 @@ namespace ToDoWebApiTests
         public async void DeleteToDoItem_ShouldDeleteToDoItem()
         {
             //arrange
-            var toDoContext = createToDoContext();
+            var toDoContext = CreateToDoContext();
 
             toDoContext.Add(new ToDoItem { Description = "test1" });
 
@@ -133,7 +135,7 @@ namespace ToDoWebApiTests
             Assert.Null(toDoContext.ToDoItems.Find(1L));
 
         }
-        private ToDoContext createToDoContext()
+        private ToDoContext CreateToDoContext()
         {
             var serviceProvider = new ServiceCollection()
                 .AddEntityFrameworkInMemoryDatabase()

@@ -1,1 +1,1 @@
-{"1":{"Id":1,"Text":"wash dishes","IsDone":false},"2":{"Id":2,"Text":"clean the room","IsDone":false},"3":{"Id":3,"Text":"dgh","IsDone":false},"4":{"Id":4,"Text":"cgn","IsDone":false},"5":{"Id":5,"Text":"cnv","IsDone":true},"6":{"Id":6,"Text":"fhh","IsDone":false},"7":{"Id":7,"Text":"cook food","IsDone":true}}
+{"1":{"Id":1,"Text":"wash dishes","IsDone":false},"3":{"Id":3,"Text":"cook food","IsDone":true},"4":{"Id":4,"Text":"clean the room","IsDone":true}}

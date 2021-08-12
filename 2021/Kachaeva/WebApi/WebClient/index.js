@@ -1,15 +1,13 @@
-var url = 'https://localhost:44314/todo';
+const url = 'https://localhost:44314/todo';
 
         function GetToDoList() {
             fetch(url).then(function (response) { response.json().then(function (toDoList) { DisplayToDoList(toDoList); }); });
-            //fetch(url).then(function (response) { response.json().then(function (data) { console.log(data); }); });
         }
 
         function DisplayToDoList(toDoList) {
             var table = document.getElementById('toDoTable');
             table.innerHTML = "";
             var caption = document.getElementById('toDoListCaption');
-            caption.style.visibility = 'visible';
 
             if (toDoList.length == 0) {
                 caption.innerHTML = "Your to do list is empty";
@@ -19,6 +17,7 @@ var url = 'https://localhost:44314/todo';
             caption.innerHTML = "Here is your to do list:";
             for (var i = 0; i < toDoList.length; i++) {
                 var task = toDoList[i];
+                var id = task.id;
                 var row = table.insertRow();
 
                 var idCell = row.insertCell();
@@ -27,12 +26,14 @@ var url = 'https://localhost:44314/todo';
 
                 var taskTextCell = row.insertCell();
                 var taskInput = document.createElement('input');
+                taskInput.id = 'text' + id;
                 taskInput.type = 'text';
                 taskInput.value = task.text;
                 taskTextCell.appendChild(taskInput);
 
                 var taskStatusCell = row.insertCell();
                 var statusCheckbox = document.createElement('input');
+                statusCheckbox.id = 'status' + id;
                 statusCheckbox.type = 'checkbox';
                 if (task.isDone == true) {
                     statusCheckbox.checked = true;
@@ -42,31 +43,25 @@ var url = 'https://localhost:44314/todo';
                 var saveCell = row.insertCell();
                 var saveButton = document.createElement('button');
                 saveButton.innerHTML = "Save changes";
-                //saveButton.onClick = EditToDoTask();
+                saveButton.onclick = (function (id) {
+                    return function () { EditToDoTask(id); }
+                })(id);
                 saveCell.appendChild(saveButton);
 
                 var deleteCell = row.insertCell();
                 var deleteButton = document.createElement('button');
                 deleteButton.innerHTML = "Delete task";
-                //var id = task.id;
-                //deleteButton.onclick = (function (id) {
-                //    return function () { DeleteToDoTask(id); }})(id);
+                deleteButton.onclick = (function (id) {
+                    return function () { DeleteToDoTask(id); }})(id);
                 deleteCell.appendChild(deleteButton);
             }
         }
 
-        function DoThing(id) {
-            console.log(id);
-        }
-
         async function AddTask() {
-            //получаем новое задание (task status undefined если задаем через конструктор??)
-            let newTaskText = document.getElementById('taskTextInput').value;
-            let newTaskStatus = document.getElementById('taskStatusInput').checked;
-            const newTaskBody = { Text: newTaskText, IsDone: newTaskStatus };
+            var newTaskText = document.getElementById('taskTextInput').value;
+            var newTaskStatus = document.getElementById('taskStatusInput').checked;
+            var newTaskBody = { Text: newTaskText, IsDone: newTaskStatus };
 
-            
-            //добавляем задание в список
             let response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -75,23 +70,33 @@ var url = 'https://localhost:44314/todo';
                 body: JSON.stringify(newTaskBody)
             });
 
-            //очищаем поля
             document.getElementById('taskTextInput').value = "";
             document.getElementById('taskStatusInput').checked = false;
 
-            //отображаем обновленный список
             GetToDoList();
         }
 
-        async function DeleteToDoTask() {
+        async function DeleteToDoTask(taskId) {
 
             let response = await fetch(url + '/' + taskId, {
                 method: 'DELETE'
             })
+
             GetToDoList();
         }
 
-        async function EditToDoTask() {
-            //вызываем патч от новых текста и статуса
+        async function EditToDoTask(taskId) {
+            var taskText = document.getElementById('text'+taskId).value;
+            var taskStatus = document.getElementById('status'+taskId).checked;
+            var taskBody = { Text: taskText, IsDone: taskStatus };
+
+            let response = await fetch(url + '/' + taskId, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(taskBody)
+            })
+
             GetToDoList();
         }

@@ -4,49 +4,46 @@
     <meta charset="UTF-8">
     <title>To-Do List </title>
     <style>
-        h2, p,table,h4, div {
-            margin-left: 40px; 
+        h2, p, table, h4, div {
+            margin-left: 40px;
         }
     </style>
+    <script src="errorHandler.js"></script>
+    <script src="index.js"></script>
 </head>
 <body>
-    <h2>To-Do List</h2>
-    <div id="addForm">
-        <form action="javascript:void(0);" method="POST" onsubmit="addToDoItem()">
-            <input type="text" id="add-name" placeholder="E.g. Go grocery shopping">
-            <input type="submit" value="Add">
-        </form>
+
+<h2>To-Do List</h2>
+<div id="addForm">
+    <div>
+        <input type="text" id="add-name" placeholder="E.g. Go grocery shopping">
+        <input type="button" value="Add" onclick="addToDoItem()">
+    </div>
     </div>
 
-    <div id="editForm">
-        <h4>Edit</h4>
-        <form action="javascript:void(0);" onsubmit="editToDoItem()">
-            <input type="hidden" id="edit-id">
-            <input type="checkbox" id="edit-isComplete">
-            <input type="text" id="edit-name">
-            <input type="submit" value="Save">
-            <a onclick="hideEditForm()" aria-label="Close">&#10006;</a>
-        </form>
-    </div>
+<div id="editForm" style="display:none">
+    <h4>Edit</h4>
+    <input type="hidden" id="edit-id">
+    <input type="checkbox" id="edit-isComplete">
+    <input type="text" id="edit-name">
+    <input type="button" onclick="editToDoItem()" value="Save">
+    <a onclick="hideEditForm()" aria-label="Close">&#10006;</a>
+</div>
 
-    <p id="counter"></p>
+<p id="counter"></p>
 
-    <table>
-        <tr>
-            <th>Status</th>
-            <th>Task</th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tbody id="todo-items"></tbody>
+<table>
+    <tr>
+        <th>Status</th>
+        <th>Task</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tbody id="todo-items"></tbody>
 </table>
-    
-<script src="errorHandler.js"></script>
-<script src="enum.js"></script>
-<script src="index.js" asp-append-version="true"></script>
+
 <script type="text/javascript">
-    hideEditForm();
-    getToDoItems();
+    updateItemsDisplay();
 </script>
 </body>
 </html>

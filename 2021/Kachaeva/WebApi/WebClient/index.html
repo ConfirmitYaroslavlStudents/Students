@@ -1,16 +1,28 @@
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <title>ToDoList</title>
-    <script src="index.js"></script>
+  <meta charset="utf-8">
+  <title>ToDoList</title>
+  <script src="index.js"></script>
 </head>
-<body>
-<h2>ToDoList</h2>
-<form>
-    <p><input type="button" value="Get all tasks" onclick="GetToDoList()"></p>
-    <table><tr><td><input type="text" id="taskTextInput" /></td><td><input type="checkbox" id="taskStatusInput" /></td><td><input type="button" value="Add task" onclick="AddTask()" /></td></tr></table>
-    <h3 id="toDoListCaption"></h3>
-    <table id="toDoTable"></table>
-</form>
+
+<body onload="displayToDoList()">
+  <h2>ToDoList</h2>
+  <table>
+    <tr>
+      <td>
+        <input type="text" id="taskTextInput" />
+      </td>
+      <td>
+        <input type="checkbox" id="taskStatusInput" />
+      </td>
+      <td>
+        <input type="button" value="Add task" onclick="addTask()" />
+      </td>
+    </tr>
+  </table>
+  <h3 id="toDoListCaption"></h3>
+  <table id="toDoTable"></table>
 </body>
+
 </html>

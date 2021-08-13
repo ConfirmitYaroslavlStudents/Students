@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -28,10 +29,7 @@ namespace ToDoApi.Controllers
         [HttpGet]
         public IEnumerable<ToDoTask> GetToDoList()
         {
-            foreach (var toDoTask in _toDoList)
-            {
-                yield return toDoTask.Value;
-            }
+            return _toDoList.Select(toDoTask => toDoTask.Value);
         }
 
         [HttpGet("{taskId}")]

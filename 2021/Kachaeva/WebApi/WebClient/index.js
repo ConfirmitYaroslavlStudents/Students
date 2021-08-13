@@ -1,102 +1,152 @@
 const url = 'https://localhost:44314/todo';
 
-        function GetToDoList() {
-            fetch(url).then(function (response) { response.json().then(function (toDoList) { DisplayToDoList(toDoList); }); });
-        }
+async function displayToDoList() {
+	let toDoList = await getToDoList();
+    let table = getEmptyTable();
+    setCaption(toDoList);
+	
+    for (let i = 0; i < toDoList.length; i++) {
+        let task = toDoList[i];
+        let row = table.insertRow();
+		
+        createIdCell(row, task.id);
+		createTaskTextCell(row, task.id, task.text);
+		createTaskStatusCell(row, task.id, task.isDone);
+		createSaveCell(row,task.id);
+		createDeleteCell(row, task.id);
+    }
+}
 
-        function DisplayToDoList(toDoList) {
-            var table = document.getElementById('toDoTable');
-            table.innerHTML = "";
-            var caption = document.getElementById('toDoListCaption');
+async function getToDoList() {
+	let response = await fetch(url);
+	let toDoList = await response.json();
+	return toDoList;
+}
 
-            if (toDoList.length == 0) {
-                caption.innerHTML = "Your to do list is empty";
-                return;
-            }
+function getEmptyTable(){
+	let table = document.getElementById('toDoTable');
+    table.innerHTML = "";
+	return table;
+}
 
-            caption.innerHTML = "Here is your to do list:";
-            for (var i = 0; i < toDoList.length; i++) {
-                var task = toDoList[i];
-                var id = task.id;
-                var row = table.insertRow();
+function setCaption(toDoList){
+	let caption = document.getElementById('toDoListCaption');
+	
+    if (toDoList.length == 0) {
+        caption.innerHTML = "Your to do list is empty";
+    }
+	else{
+		caption.innerHTML = "Here is your to do list:";
+	}    
+}
 
-                var idCell = row.insertCell();
-                idCell.align = 'right';
-                idCell.innerHTML = task.id;
+function createIdCell(row, taskId){
+	let idCell = row.insertCell();
+    idCell.align = 'right';
+    idCell.innerHTML = taskId;
+}
 
-                var taskTextCell = row.insertCell();
-                var taskInput = document.createElement('input');
-                taskInput.id = 'text' + id;
-                taskInput.type = 'text';
-                taskInput.value = task.text;
-                taskTextCell.appendChild(taskInput);
+function createTaskTextCell(row, taskId, taskText){
+	let taskTextCell = row.insertCell();
+    let taskInput = document.createElement('input');
+    taskInput.id = 'text' + taskId;
+    taskInput.type = 'text';
+    taskInput.value = taskText;
+    taskTextCell.appendChild(taskInput);
+}
 
-                var taskStatusCell = row.insertCell();
-                var statusCheckbox = document.createElement('input');
-                statusCheckbox.id = 'status' + id;
-                statusCheckbox.type = 'checkbox';
-                if (task.isDone == true) {
-                    statusCheckbox.checked = true;
-                }
-                taskStatusCell.appendChild(statusCheckbox);
+function createTaskStatusCell(row, taskId, taskStatus){
+	let taskStatusCell = row.insertCell();
+    let statusCheckbox = document.createElement('input');
+    statusCheckbox.id = 'status' + taskId;
+    statusCheckbox.type = 'checkbox';
+    statusCheckbox.checked = taskStatus;
+    taskStatusCell.appendChild(statusCheckbox);
+}
 
-                var saveCell = row.insertCell();
-                var saveButton = document.createElement('button');
-                saveButton.innerHTML = "Save changes";
-                saveButton.onclick = (function (id) {
-                    return function () { EditToDoTask(id); }
-                })(id);
-                saveCell.appendChild(saveButton);
+function createSaveCell(row, taskId){
+	let saveCell = row.insertCell();
+    let saveButton = document.createElement('button');
+    saveButton.innerHTML = "Save changes";
+    saveButton.onclick = (function () {
+		editTask(taskId);
+	});
+    saveCell.appendChild(saveButton);
+}
 
-                var deleteCell = row.insertCell();
-                var deleteButton = document.createElement('button');
-                deleteButton.innerHTML = "Delete task";
-                deleteButton.onclick = (function (id) {
-                    return function () { DeleteToDoTask(id); }})(id);
-                deleteCell.appendChild(deleteButton);
-            }
-        }
+function createDeleteCell(row, taskId){
+	let deleteCell = row.insertCell();
+    let deleteButton = document.createElement('button');
+    deleteButton.innerHTML = "Delete task";
+    deleteButton.onclick = (function () {
+        deleteTask(taskId);
+	});
+    deleteCell.appendChild(deleteButton);
+}
 
-        async function AddTask() {
-            var newTaskText = document.getElementById('taskTextInput').value;
-            var newTaskStatus = document.getElementById('taskStatusInput').checked;
-            var newTaskBody = { Text: newTaskText, IsDone: newTaskStatus };
+async function addTask() {
+    let taskBody = getTaskBodyForAdd();
+	await sendPostRequest(taskBody);
+	clearAddFields();
+    displayToDoList();
+}
 
-            let response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type' : 'application/json'
-                },
-                body: JSON.stringify(newTaskBody)
-            });
+function getTaskBodyForAdd(){
+	let taskText = document.getElementById('taskTextInput').value;
+    let taskStatus = document.getElementById('taskStatusInput').checked;
+    return { text: taskText, isDone: taskStatus };
+}
 
-            document.getElementById('taskTextInput').value = "";
-            document.getElementById('taskStatusInput').checked = false;
+async function sendPostRequest(taskBody){
+	await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(taskBody)
+    });
+}
 
-            GetToDoList();
-        }
+function clearAddFields(){
+	document.getElementById('taskTextInput').value = "";
+    document.getElementById('taskStatusInput').checked = false;
+}
 
-        async function DeleteToDoTask(taskId) {
+async function deleteTask(taskId) {
+	let urlWithTaskId = getUrlWithTaskId(taskId);
+	await sendDeleteRequest(urlWithTaskId);
+    displayToDoList();
+}
 
-            let response = await fetch(url + '/' + taskId, {
-                method: 'DELETE'
-            })
+function getUrlWithTaskId(taskId){
+	return url + '/' + taskId;
+}
 
-            GetToDoList();
-        }
+async function sendDeleteRequest(urlWithTaskId){
+	await fetch(urlWithTaskId, {
+        method: 'DELETE'
+    })
+}
 
-        async function EditToDoTask(taskId) {
-            var taskText = document.getElementById('text'+taskId).value;
-            var taskStatus = document.getElementById('status'+taskId).checked;
-            var taskBody = { Text: taskText, IsDone: taskStatus };
+async function editTask(taskId) {
+    let urlWithTaskId = getUrlWithTaskId(taskId);
+	let taskBody = getTaskBodyForEdit(taskId);
+	await sendPatchRequest(urlWithTaskId, taskBody);
+    displayToDoList();
+}
 
-            let response = await fetch(url + '/' + taskId, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(taskBody)
-            })
+function getTaskBodyForEdit(taskId){
+	let taskText = document.getElementById('text'+taskId).value;
+    let taskStatus = document.getElementById('status'+taskId).checked;
+    return { text: taskText, isDone: taskStatus };
+}
 
-            GetToDoList();
-        }
+async function sendPatchRequest(urlWithTaskId, taskBody){
+	await fetch(urlWithTaskId, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(taskBody)
+    })
+}

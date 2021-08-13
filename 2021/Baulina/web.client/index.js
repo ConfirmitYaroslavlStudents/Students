@@ -19,13 +19,6 @@ async function updateItemsDisplay() {
 }
 
 async function addToDoItem() {
-    const addNameTextBox = document.getElementById("add-name"); 
-
-    const toDoItem = {
-        status: toDoItemStatus.NotComplete,
-        description: addNameTextBox.value.trim()
-    };
-
     try {
         const response = await fetch(url,
             {
@@ -33,15 +26,32 @@ async function addToDoItem() {
                 headers: {
                     'Content-Type': "application/json"
                 },
-                body: JSON.stringify(toDoItem)
+                body: JSON.stringify(_getToDoItemToAdd())
             });
         if (response.ok) {
-            addNameTextBox.value = ""; 
+            _clearAddForm();
             updateItemsDisplay();
         } else handleError(response);
     } catch (err) {
-        console.error("Unable to get items.", error);
+        console.error("Unable to add the item.", error);
     }
+}
+
+function _getToDoItemToAdd() {
+    var status;
+    if (document.getElementById("add-isComplete").checked)
+        status = toDoItemStatus.Complete;
+    else status = toDoItemStatus.NotComplete;
+
+    return {
+        status: status,
+        description: document.getElementById("add-description").value.trim()
+    };
+}
+
+function _clearAddForm() {
+    document.getElementById("add-description").value = "";
+    document.getElementById("add-isComplete").checked = false;
 }
 
 async function deleteToDoItem(id) {
@@ -54,47 +64,51 @@ async function deleteToDoItem(id) {
             updateItemsDisplay();
         } else handleError(response);
     } catch (err) {
-        console.error("Unable to get items.", error);
+        console.error("Unable to delete the item.", error);
     }
 }
 
 function displayEditForm(id) {
     const toDoItem = todoItems.find(item => item.id === id);
 
-    document.getElementById("edit-name").value = toDoItem.description;
+    document.getElementById("edit-description").value = toDoItem.description;
     document.getElementById("edit-id").value = toDoItem.id;
     document.getElementById("edit-isComplete").checked = toDoItem.status === toDoItemStatus.Complete;
     document.getElementById("editForm").style.display = "block";
 }
 
 async function editToDoItem() {
-    const itemId = document.getElementById("edit-id").value;
-    var status;
-    if (document.getElementById("edit-isComplete").checked)
-        status = toDoItemStatus.Complete;
-    else status = toDoItemStatus.NotComplete;
-    const requestBody =
-    [
-        { op: "replace", path: "/Description", value: document.getElementById("edit-name").value.trim() },
-        { op: "replace", path: "/Status", value: status }
-    ];
-
     try {
-        const response = await fetch(`${url}/${itemId}`,
+        const response = await fetch(`${url}/${_getIdOfItemToBeEdited()}`,
             {
                 method: "PATCH",
                 headers: {
                     'Content-Type': "application/json-patch+json"
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(_getPatchRequestBody())
             });
         if (response.ok) {
             hideEditForm();
             updateItemsDisplay();
         } else handleError(response);
     } catch (err) {
-        console.error("Unable to get items.", error);
+        console.error("Unable to edit the item.", error);
     }
+}
+
+function _getIdOfItemToBeEdited() {                        
+    return document.getElementById("edit-id").value;
+}
+
+function _getPatchRequestBody() {
+    var status;
+    if (document.getElementById("edit-isComplete").checked)
+        status = toDoItemStatus.Complete;
+    else status = toDoItemStatus.NotComplete;
+    return [
+        { op: "replace", path: "/Description", value: document.getElementById("edit-description").value.trim() },
+        { op: "replace", path: "/Status", value: status }
+    ];
 }
 
 function hideEditForm() {
@@ -106,34 +120,50 @@ function _displayCount(itemCount) {
     document.getElementById("counter").innerText = `${itemCount} ${name}`;
 }
 
-function displayItems() {
+function _clearTable() {
     const tBody = document.getElementById("todo-items");
     tBody.innerHTML = "";
+}
 
+function displayItems() {
+    _clearTable();
     _displayCount(todoItems.length);
 
-    const button = document.createElement("button");
+    const tBody = document.getElementById("todo-items");
 
     todoItems.forEach(item => {
-        let tableRow = tBody.insertRow();
-
-        let isCompleteCheckbox = document.createElement("input");
-        isCompleteCheckbox.type = "checkbox";
-        isCompleteCheckbox.disabled = true;
-        isCompleteCheckbox.checked = item.status === toDoItemStatus.Complete;
-        tableRow.insertCell(0).appendChild(isCompleteCheckbox);
-
-        let textNode = document.createTextNode(item.description);
-        tableRow.insertCell(1).appendChild(textNode);
-
-        let editButton = button.cloneNode(false);
-        editButton.innerText = "Edit";
-        editButton.onclick = function() { displayEditForm(item.id) };
-        tableRow.insertCell(2).appendChild(editButton);
-
-        let deleteButton = button.cloneNode(false);
-        deleteButton.innerText = "Delete";
-        deleteButton.onclick = function() { deleteToDoItem(item.id) };
-        tableRow.insertCell(3).appendChild(deleteButton);
+        _generateTableRow(tBody.insertRow(), item);
     });
+}
+
+function _generateTableRow(tableRow, item) {
+    tableRow.insertCell(0).appendChild(_createIsCompleteCheckbox(item));
+    
+    tableRow.insertCell(1).appendChild(document.createTextNode(item.description));
+
+    tableRow.insertCell(2).appendChild(_createEditButton(item));
+
+    tableRow.insertCell(3).appendChild(_createDeleteButton(item));
+}
+
+function _createIsCompleteCheckbox(item) {
+    const isCompleteCheckbox = document.createElement("input");
+    isCompleteCheckbox.type = "checkbox";
+    isCompleteCheckbox.disabled = true;
+    isCompleteCheckbox.checked = item.status === toDoItemStatus.Complete;
+    return isCompleteCheckbox;
+}
+
+function _createEditButton(item) {
+    const editButton = document.createElement("button");
+    editButton.innerText = "Edit";
+    editButton.onclick = function () { displayEditForm(item.id) };
+    return editButton;
+}
+
+function _createDeleteButton(item) {
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete";
+    deleteButton.onclick = function () { deleteToDoItem(item.id) };
+    return deleteButton;
 }

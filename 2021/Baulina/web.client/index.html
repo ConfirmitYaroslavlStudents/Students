@@ -14,18 +14,18 @@
 <body>
 
 <h2>To-Do List</h2>
+
 <div id="addForm">
-    <div>
-        <input type="text" id="add-name" placeholder="E.g. Go grocery shopping">
+    <input type="checkbox" id="add-isComplete">
+        <input type="text" id="add-description" placeholder="E.g. Go grocery shopping">
         <input type="button" value="Add" onclick="addToDoItem()">
-    </div>
-    </div>
+</div>
 
 <div id="editForm" style="display:none">
     <h4>Edit</h4>
     <input type="hidden" id="edit-id">
     <input type="checkbox" id="edit-isComplete">
-    <input type="text" id="edit-name">
+    <input type="text" id="edit-description">
     <input type="button" onclick="editToDoItem()" value="Save">
     <a onclick="hideEditForm()" aria-label="Close">&#10006;</a>
 </div>

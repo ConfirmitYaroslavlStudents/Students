@@ -20,7 +20,6 @@ namespace ToDoApp
             var services = new ServiceCollection();
             var config = LoadConfiguration();
             services.Configure<ClientSettingsConfiguration>(config.GetSection("ClientSettings"));
-            services.AddControllers();
             services.AddTransient<App>();
 
             return services;

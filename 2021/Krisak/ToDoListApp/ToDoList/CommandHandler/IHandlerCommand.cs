@@ -2,6 +2,6 @@
 {
     public interface IHandlerCommand
     {
-        public void Handling(string[] partsOfCommands);
+        public ResultHandler CommandHandler(string[] partsOfCommands);
     }
 }

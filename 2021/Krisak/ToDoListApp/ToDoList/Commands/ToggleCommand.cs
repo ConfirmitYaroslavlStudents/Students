@@ -1,33 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ToDoLibrary.ChainOfResponsibility;
 using ToDoLibrary.ChainOfResponsibility.ForToggleStatus;
+using ToDoLibrary.ChainOfResponsibility.ValidatorForUserInput;
 
 namespace ToDoLibrary.Commands
 {
     public class ToggleCommand: ICommand
     {
-        public int Index;
-        public StatusTask Status;
-        public List<Task> Tasks;
+        public  int Index { get; private set; }
+        public  StatusTask Status { get; private set; }
 
-        public void PerformCommand()
+        public List<Task> PerformCommand(List<Task> tasks)
         {
-            GetChainOfResponsibility().HandlerResponsibility(this);
-
-            Tasks[Index].Status = Status;
+            tasks[Index].Status = Status;
+            return tasks;
         }
 
-        private IHandlerResponsibility GetChainOfResponsibility()
+        public void RunValidate(List<Task> tasks)
         {
-            var correctToggleOfStatusesResponsibility = new CorrectToggleOfStatusesResponsibility();
-            var limitOfStatusesToggleResponsibility = new LimitOfStatusesToggleResponsibility();
-            var indexInRangeToggleResponsibility = new IndexInRangeToggleResponsibility();
+            var validator = ChainsOfValidationСompiler.CompileForToggleCommand(tasks);
+            ValidatorRunner.Run(validator, this);
+        }
 
-            indexInRangeToggleResponsibility.SetNext(limitOfStatusesToggleResponsibility)
-                .SetNext(correctToggleOfStatusesResponsibility);
-            
-            return indexInRangeToggleResponsibility;
+        public void SetParameters(string[] partsCommand)
+        {
+            var validator = new TryParseIntValidator(false);
+            var statusValidator = new TryParseStatusTaskValidator(false);
+
+            validator.SetNext(statusValidator);
+            ValidatorRunner.Run(validator, partsCommand);
+
+            Index = int.Parse(partsCommand[1])-1;
+            Enum.TryParse(typeof(StatusTask), partsCommand[2], true, out var newStatus);
+            Status = (StatusTask)newStatus;
         }
     }
 }

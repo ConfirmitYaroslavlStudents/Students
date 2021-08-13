@@ -8,13 +8,16 @@ namespace TestProjectForToDoLibrary
     [TestClass]
     public class TestsForHandlerCommandsFromConsole
     {
+        private TaskStorage _storage = new TaskStorage();
+
         [TestMethod]
         public void CorrectHandleAddCommand_OneWord()
         {
-            var task = new List<Task>();
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
-            handlerCommandsFromConsole.Handling(new string[] { "add", "world" });
+            handlerCommandsFromConsole.CommandHandler(new [] { "add", "world" });
+
+            var task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world", task[0].ToString());
@@ -23,10 +26,11 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void CorrectHandleAddCommand_SeveralWords()
         {
-            var task = new List<Task>();
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
-            handlerCommandsFromConsole.Handling(new string[] { "add", "world", "or", "war" });
+            handlerCommandsFromConsole.CommandHandler(new string[] { "add", "world", "or", "war" });
+
+            var task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world or war", task[0].ToString());
@@ -36,9 +40,13 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleEditCommand_OneWord()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new string[] { "edit", "1", "world" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+
+            handlerCommandsFromConsole.CommandHandler(new string[] { "edit", "1", "world" });
+
+            task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world", task[0].ToString());
@@ -48,9 +56,13 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleEditCommand_SeveralWords()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new string[] { "edit", "1", "world", "or", "war" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+
+            handlerCommandsFromConsole.CommandHandler(new string[] { "edit", "1", "world", "or", "war" });
+
+             task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world or war", task[0].ToString());
@@ -59,29 +71,43 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void CorrectHandleToggleCommand()
         {
-            var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            var task = new List<Task> 
+            { 
+                new Task{Text = "world"},
+                new Task{Text = "war"},
+            };
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new string[] { "toggle", "1", "1" });
-            handlerCommandsFromConsole.Handling(new string[] { "toggle", "1", "2" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
-            Assert.AreEqual(1, task.Count);
-            Assert.AreEqual("war [X]", task[0].ToString());
+            handlerCommandsFromConsole.CommandHandler(new string[] { "toggle", "1", "1" });
+            handlerCommandsFromConsole.CommandHandler(new string[] { "toggle", "1", "2" });
+            handlerCommandsFromConsole.CommandHandler(new string[] { "toggle", "2", "1" });
+
+            task = _storage.Get();
+
+            Assert.AreEqual(2, task.Count);
+            Assert.AreEqual("world [X]", task[0].ToString());
+            Assert.AreEqual("war []", task[1].ToString());
         }
 
         [TestMethod]
         public void CorrectHandleDeleteCommand()
         {
             var task = new List<Task>
-                {
-                    new Task{Text = "world"},
-                    new Task{Text = "war"},
-                    new Task {Text = "peace"}
-                };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+                        {
+                            new Task{Text = "world"},
+                            new Task{Text = "war"},
+                            new Task {Text = "peace"}
+                        };
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new[] { "delete", "1" });
-            handlerCommandsFromConsole.Handling(new[] { "delete", "2" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "2" });
+
+            task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("war", task[0].ToString());
@@ -90,11 +116,12 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void CorrectHandleRollbackAddCommand()
         {
-            var task = new List<Task>();
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
-            handlerCommandsFromConsole.Handling(new[] { "add", "world" });
-            handlerCommandsFromConsole.Handling(new[] { "rollback", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "add", "world" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "1" });
+
+            var task = _storage.Get();
 
             Assert.AreEqual(0, task.Count);
         }
@@ -103,11 +130,14 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleRollbackEdit()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new[] { "edit", "1", "world" });
-            handlerCommandsFromConsole.Handling(new[] { "rollback", "1" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
+            handlerCommandsFromConsole.CommandHandler(new[] { "edit", "1", "world" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "1" });
+
+            task = _storage.Get();
             Assert.AreEqual("war", task[0].ToString());
         }
 
@@ -115,10 +145,14 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleRollbackToggleCommand()
         {
             var task = new List<Task> { new Task { Text = "war", Status = StatusTask.IsProgress } };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new[] { "toggle", "1", "2" });
-            handlerCommandsFromConsole.Handling(new[] { "rollback", "1" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+
+            handlerCommandsFromConsole.CommandHandler(new[] { "toggle", "1", "2" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "1" });
+
+            task = _storage.Get();
 
             Assert.AreEqual("war []", task[0].ToString());
         }
@@ -127,10 +161,14 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleRollbackDeleteCommand()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            _storage.Set(task);
 
-            handlerCommandsFromConsole.Handling(new[] { "delete", "1" });
-            handlerCommandsFromConsole.Handling(new[] { "rollback", "1" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "1" });
+
+            task = _storage.Get();
 
             Assert.AreEqual("war", task[0].ToString());
         }
@@ -138,20 +176,21 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void CorrectHandlingRollbackCommand_OneRollback()
         {
-            var task = new List<Task> { };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
-            handlerCommandsFromConsole.Handling(new[] { "add", "world" });
-            handlerCommandsFromConsole.Handling(new[] { "add", "war" });
-            handlerCommandsFromConsole.Handling(new[] { "toggle", "2", "1" });
-            handlerCommandsFromConsole.Handling(new[] { "add", "peace", "or", "war" });
-            handlerCommandsFromConsole.Handling(new[] { "delete", "2" });
-            handlerCommandsFromConsole.Handling(new[] { "edit","2","war" });
-            handlerCommandsFromConsole.Handling(new[] { "toggle", "1","0" });
-            handlerCommandsFromConsole.Handling(new[] { "edit", "1", "war" });
-            handlerCommandsFromConsole.Handling(new[] { "delete", "2" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "add", "world" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "add", "war" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "toggle", "2", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "add", "peace", "or", "war" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "2" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "edit", "2", "war" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "toggle", "1", "0" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "edit", "1", "war" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "2" });
 
-            handlerCommandsFromConsole.Handling(new[] { "rollback","9"});
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "9" });
+
+            var task = _storage.Get();
 
             Assert.AreEqual(task.Count, 0);
         }
@@ -159,25 +198,29 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void CorrectHandleRollbackCommand_SeveralRollback()
         {
-            var tasks = new List<Task> { new Task{Text = "war"}};
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(tasks);
+            var tasks = new List<Task> { new Task { Text = "war" } };
+            _storage.Set(tasks);
 
-            handlerCommandsFromConsole.Handling(new [] { "toggle", "1","1" });
-            handlerCommandsFromConsole.Handling(new [] { "add", "world" });
-            handlerCommandsFromConsole.Handling(new [] { "edit","2","peace" });
-            handlerCommandsFromConsole.Handling(new [] { "toggle", "2", "1" });
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
 
-            handlerCommandsFromConsole.Handling(new[] {"rollback", "2"});
-            
-            handlerCommandsFromConsole.Handling(new [] { "delete", "1" });
-            handlerCommandsFromConsole.Handling(new [] { "delete", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "toggle", "1", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "add", "world" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "edit", "2", "peace" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "toggle", "2", "1" });
 
-            handlerCommandsFromConsole.Handling(new[] {"rollback", "1"});
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "2" });
 
-            handlerCommandsFromConsole.Handling(new [] { "edit", "1", "peace" });
-            handlerCommandsFromConsole.Handling(new [] { "toggle", "1", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "1" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "delete", "1" });
 
-            handlerCommandsFromConsole.Handling(new[] { "rollback", "5" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "1" });
+
+            handlerCommandsFromConsole.CommandHandler(new[] { "edit", "1", "peace" });
+            handlerCommandsFromConsole.CommandHandler(new[] { "toggle", "1", "1" });
+
+            handlerCommandsFromConsole.CommandHandler(new[] { "rollback", "5" });
+
+            tasks = _storage.Get();
 
             Assert.AreEqual(1, tasks.Count);
             Assert.AreEqual("war", tasks[0].ToString());
@@ -187,18 +230,16 @@ namespace TestProjectForToDoLibrary
         [ExpectedException(typeof(WrongEnteredCommandException))]
         public void ExceptionEnteringWrongCommand()
         {
-            var task = new List<Task> { };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
-            handlerCommandsFromConsole.Handling(new []{"IDoNothing"});
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+            handlerCommandsFromConsole.CommandHandler(new[] { "IDoNothing" });
         }
 
         [TestMethod]
         [ExpectedException(typeof(WrongEnteredCommandException))]
         public void ExceptionEnteringEmptyCommand()
         {
-            var task = new List<Task> { };
-            var handlerCommandsFromConsole = new HandlerCommandsFromConsole(task);
-            handlerCommandsFromConsole.Handling(new string[] {});
+            var handlerCommandsFromConsole = new CommandsFromConsoleHandler(_storage);
+            handlerCommandsFromConsole.CommandHandler(new string[] { });
         }
     }
-}
+    }

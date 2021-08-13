@@ -4,10 +4,19 @@ namespace ToDoLibrary.Commands
 {
     public class ShowCommand: ICommand
     {
-        public List<Task> Tasks;
-        public void PerformCommand()
+        private IShowTasks _show;
+
+        public ShowCommand(IShowTasks showTasks) => _show = showTasks;
+
+        public void PerformCommand(TaskStorage repository)
         {
-            ShowInformationToUser.ShowAllNotesInConsole(Tasks);
+            _show.ShowTasks(repository.Get());
+        }
+
+        public List<Task> PerformCommand(List<Task> tasks)
+        {
+            _show.ShowTasks(tasks);
+            return tasks;
         }
     }
 }

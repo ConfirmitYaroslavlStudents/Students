@@ -2,13 +2,12 @@
 
 namespace ToDoLibrary.Commands
 {
-    public class DeleteRollbackCommand: ICommand
+    public class DeleteRollbackCommand : ICommand
     {
-        public List<Task> Tasks;
-
-        public void PerformCommand()
+        public List<Task> PerformCommand(List<Task> tasks)
         {
-            Tasks.RemoveAt(Tasks.Count-1);
+            tasks.RemoveAt(tasks.Count - 1);
+            return tasks;
         }
     }
 }

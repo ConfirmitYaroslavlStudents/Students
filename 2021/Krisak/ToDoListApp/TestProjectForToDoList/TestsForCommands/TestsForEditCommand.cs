@@ -11,30 +11,73 @@ namespace TestsForToDoList.TestsForCommands
         [TestMethod]
         public void CorrectPerformCommand()
         {
-            var tasks = new List<Task> { new Task { Text = "war" }};
+            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new EditCommand {Index = 0, Tasks = tasks, Text = "world"};
-            command.PerformCommand();
-            
-            Assert.AreEqual("world", tasks[0].ToString());
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "1", "war" });
+            var result = command.PerformCommand(tasks);
+
+            Assert.AreEqual("war []", result[0].ToString());
+        }
+
+        [TestMethod]
+        public void CorrectSetParameters_OneWord()
+        {
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "1", "war" });
+
+            Assert.AreEqual(0, command.Index);
+            Assert.AreEqual("war", command.Text);
+        }
+
+        [TestMethod]
+        public void CorrectSetParameters_SeveralWords()
+        {
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "1", "war", "or", "world" });
+            Assert.AreEqual(0, command.Index);
+            Assert.AreEqual("war or world", command.Text);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(WrongEnteredCommandException))]
+        public void ExceptionWhenWrongIndex()
+        {
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "odin", "world" });
         }
 
         [TestMethod]
         [ExpectedException(typeof(WrongEnteredCommandException))]
         public void ExceptionWhenEnteredIndexIsNegative()
         {
-            var command = new EditCommand {Index = -1};
-            command.PerformCommand();
+            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
+
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "-1", "war" });
+            command.RunValidate(tasks);
         }
 
         [TestMethod]
         [ExpectedException(typeof(WrongEnteredCommandException))]
         public void ExceptionWhenEnteredIndexIsGreaterThanCount()
         {
-            var tasks = new List<Task> {new Task()};
+            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new EditCommand { Index = 1,Tasks = tasks};
-            command.PerformCommand();
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "2", "war" });
+            command.RunValidate(tasks);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(WrongEnteredCommandException))]
+        public void ExceptionValidateWithLongTask()
+        {
+            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
+
+
+            var command = new EditCommand();
+            command.SetParameters(new[] { "edit", "1", new string('o', 51) });
+            command.RunValidate(tasks);
         }
     }
 }

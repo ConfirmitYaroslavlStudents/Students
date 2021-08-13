@@ -15,7 +15,7 @@ namespace Todo
             }
             else
             {
-                toDoApp.WorkWithConsole(new UserInputFromCmd(args));
+                toDoApp.WorkWithCmd(new UserInputFromCmd(args));
             }
         }
     }

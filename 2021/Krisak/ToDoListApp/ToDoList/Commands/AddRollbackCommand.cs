@@ -4,16 +4,19 @@ namespace ToDoLibrary.Commands
 {
     public class AddRollbackCommand: ICommand
     {
-        public int Index;
-        public Task @Task;
-        public List<Task> Tasks;
+        public  int Index { get; private set; }
+        public Task Task { get; private set; }
 
-        public void PerformCommand()
+        public List<Task> PerformCommand(List<Task> tasks)
         {
-            if (Index < 0 || Index > Tasks.Count)
-                throw new WrongEnteredCommandException($"Task not found with number {Index + 1}.");
+            tasks.Insert(Index, Task);
+            return tasks;
+        }
 
-            Tasks.Insert(Index, Task);
+        public void SetParameters(DeleteCommand command, List<Task> tasks)
+        {
+            Index = command.Index;
+            Task = tasks[command.Index];
         }
     }
 }

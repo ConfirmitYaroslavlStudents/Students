@@ -2,18 +2,21 @@
 
 namespace ToDoLibrary.Commands
 {
-    public class EditRollbackCommand: ICommand
+    public class EditRollbackCommand : ICommand
     {
-        public int Index;
-        public string Text;
-        public List<Task> Tasks;
-
-        public void PerformCommand()
+        public int Index { get; private set; }
+        public string Text { get; private set; }
+        
+        public List<Task> PerformCommand(List<Task> tasks)
         {
-            if (Index < 0 || Index >= Tasks.Count)
-                throw new WrongEnteredCommandException($"Task not found with number {Index + 1}.");
+            tasks[Index].Text = Text;
+            return tasks;
+        }
 
-            Tasks[Index].Text = Text;
+        public void SetParameters(EditCommand command, List<Task> tasks)
+        {
+            Index = command.Index;
+            Text = tasks[command.Index].Text;
         }
     }
 }

@@ -6,6 +6,6 @@ namespace ToDoLibrary.Commands
 {
     public interface ICommand
     {
-        void PerformCommand();
+        public List<Task> PerformCommand(List<Task> tasks);
     }
 }

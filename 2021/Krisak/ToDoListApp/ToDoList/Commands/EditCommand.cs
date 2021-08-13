@@ -1,19 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Text;
+using ToDoLibrary.ChainOfResponsibility;
+using ToDoLibrary.ChainOfResponsibility.ValidatorForUserInput;
 
 namespace ToDoLibrary.Commands
 {
-    public class EditCommand: ICommand
+    public class EditCommand : ICommand
     {
-        public int Index;
-        public string Text;
-        public List<Task> Tasks;
-
-        public void PerformCommand()
+        public  int Index { get; private set; }
+        public  string Text { get; private set; }
+        
+        public List<Task> PerformCommand(List<Task> tasks)
         {
-            if (Index < 0 || Index >= Tasks.Count)
-                throw new WrongEnteredCommandException($"Task not found with number {Index + 1}.");
+            tasks[Index].Text = Text;
+            return tasks;
+        }
 
-            Tasks[Index].Text = Text;
+        public void RunValidate(List<Task> tasks)
+        {
+            var validator = ChainsOfValidationСompiler.CompileForEditCommand(tasks);
+            ValidatorRunner.Run(validator, this);
+        }
+
+        public void SetParameters(string[] partsCommand)
+        {
+            var validator = new TryParseIntValidator(false);
+            ValidatorRunner.Run(validator, partsCommand);
+
+            Index = int.Parse(partsCommand[1]) - 1;
+            Text = string.Join(' ', partsCommand, 2, partsCommand.Length - 2);
         }
     }
 }

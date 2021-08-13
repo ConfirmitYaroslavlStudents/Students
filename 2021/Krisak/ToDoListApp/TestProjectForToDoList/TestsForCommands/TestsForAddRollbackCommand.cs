@@ -11,32 +11,35 @@ namespace TestsForToDoList.TestsForCommands
         [TestMethod]
         public void CorrectPerformCommand()
         {
-            var tasks = new List<Task> { new Task { Text = "world" }, new Task { Text = "war" } };
-            var task = new Task { Text = "or" };
+            var tasks = new List<Task> {new Task {Text = "world", Status = StatusTask.IsProgress}};
 
-            var command = new AddRollbackCommand() { Index = 1, Tasks = tasks, Task = task};
-            command.PerformCommand();
+            var command = new DeleteCommand();
+            command.SetParameters(new[] {"delete", "1"});
 
-            Assert.AreEqual(3,tasks.Count);
-            Assert.AreEqual("or", tasks[1].ToString());
+            var rollbackCommand = new AddRollbackCommand();
+            rollbackCommand.SetParameters(command, tasks);
+
+            tasks.Clear();
+
+            var result = rollbackCommand.PerformCommand(tasks);
+
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("world []", result[0].ToString());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenEnteredIndexIsNegative()
+        public void CorrectSetParameters()
         {
-            var command = new AddRollbackCommand() { Index = -1 };
-            command.PerformCommand();
-        }
+            var tasks = new List<Task> {new Task {Text = "world", Status = StatusTask.IsProgress}};
 
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenEnteredIndexIsGreaterThanCount()
-        {
-            var tasks = new List<Task> { };
+            var command = new DeleteCommand();
+            command.SetParameters(new[] {"delete", "1"});
 
-            var command = new AddRollbackCommand() { Index = 1, Tasks = tasks };
-            command.PerformCommand();
+            var rollbackCommand = new AddRollbackCommand();
+            rollbackCommand.SetParameters(command, tasks);
+
+            Assert.AreEqual(0, rollbackCommand.Index);
+            Assert.AreEqual("world []", rollbackCommand.Task.ToString());
         }
     }
 }

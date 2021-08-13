@@ -1,18 +1,31 @@
 ﻿using System.Collections.Generic;
+using ToDoLibrary.ChainOfResponsibility;
+using ToDoLibrary.ChainOfResponsibility.ValidatorForUserInput;
 
 namespace ToDoLibrary.Commands
 {
     public class DeleteCommand: ICommand
     {
-        public int Index;
-        public List<Task> Tasks;
+        public int Index { get; private set; }
 
-        public void PerformCommand()
+        public List<Task> PerformCommand(List<Task> tasks)
         {
-            if (Index < 0 || Index >= Tasks.Count)
-                throw new WrongEnteredCommandException($"Task not found with number {Index + 1}.");
+            tasks.RemoveAt(Index);
+            return tasks;
+        }
 
-            Tasks.RemoveAt(Index);
+        public void RunValidate(List<Task> tasks)
+        {
+            var validator = ChainsOfValidationСompiler.CompileForDeleteCommand(tasks);
+            ValidatorRunner.Run(validator, this);
+        }
+
+        public void SetParameters(string[] partsCommand)
+        {
+            var validator = new TryParseIntValidator(false);
+            ValidatorRunner.Run(validator, partsCommand);
+
+            Index = int.Parse(partsCommand[1]) - 1;
         }
     }
 }

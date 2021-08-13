@@ -1,9 +1,9 @@
-﻿namespace ToDoLibrary.Commands
+﻿using System.Collections.Generic;
+
+namespace ToDoLibrary.Commands
 {
     public class ExitCommand: ICommand
     {
-        public void PerformCommand()
-        {
-        }
+        public List<Task> PerformCommand(List<Task> tasks) => tasks;
     }
 }

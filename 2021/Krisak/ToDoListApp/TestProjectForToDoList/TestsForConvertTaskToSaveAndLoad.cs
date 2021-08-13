@@ -25,11 +25,11 @@ namespace TestProjectForToDoLibrary
                 new Task{Text = "IThird",Status = StatusTask.Done}
             };
 
-            var result = new List<Task>(ConvertTaskToSaveAndLoad.ConvertLinesAfterLoading(lines));
+            var result = new List<Task>(TaskToSaveAndLoadConverter.ConvertLinesAfterLoading(lines));
 
             for (var i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(tasks[i].Text,result[i].Text );
+                Assert.AreEqual(tasks[i].Text, result[i].Text);
                 Assert.AreEqual(tasks[i].Status, result[i].Status);
             };
         }
@@ -49,11 +49,11 @@ namespace TestProjectForToDoLibrary
                 new Task{Text = "I Incorrect HA-HA",Status = StatusTask.ToDo}
             };
 
-            var result = new List<Task>(ConvertTaskToSaveAndLoad.ConvertLinesAfterLoading(lines));
+            var result = new List<Task>(TaskToSaveAndLoadConverter.ConvertLinesAfterLoading(lines));
 
             for (var i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(notes[i].Text, result[i].Text );
+                Assert.AreEqual(notes[i].Text, result[i].Text);
                 Assert.AreEqual(notes[i].Status, result[i].Status);
             };
         }
@@ -75,7 +75,7 @@ namespace TestProjectForToDoLibrary
                 "IThird=Done"
             };
 
-            var result = new List<string>(ConvertTaskToSaveAndLoad.ConvertNoteToSave(notes));
+            var result = new List<string>(TaskToSaveAndLoadConverter.ConvertNoteToSave(notes));
 
             for (var i = 0; i < result.Count; i++)
             {

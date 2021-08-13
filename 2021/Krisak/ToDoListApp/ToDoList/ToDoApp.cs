@@ -9,9 +9,9 @@ namespace ToDoLibrary
 {
     public class ToDoApp
     {
-        private List<Task> _tasks = new List<Task>();
+        private TaskStorage _taskStorage = new TaskStorage();
         private readonly ILogger _logger;
-        private readonly SaveAndLoadNotes _saveAndLoad = new SaveAndLoadNotes(Data.SaveAndLoadFileName);
+        private readonly TasksSaverAndLoader _tasksSaverAndLoad = new TasksSaverAndLoader(Data.SaveAndLoadFileName);
 
         public ToDoApp(ILogger logger)
         {
@@ -21,42 +21,30 @@ namespace ToDoLibrary
 
         public void WorkWithConsole(IUserInput userInput)
         {
-            var handlerCommandFromConsole = new HandlerCommandsFromConsole(_tasks);
+            var result = ResultHandler.Working;
+            var handlerCommandFromConsole = new CommandsFromConsoleHandler(_taskStorage);
 
-            while (!handlerCommandFromConsole.IsFinished)
+            while (result!=ResultHandler.Completed)
             {
-                ShowInformationToUser.ShowHelpInConsole();
-
-                try
-                {
-                    handlerCommandFromConsole.Handling(userInput.GetCommand());
-
-                    SaveNotes();
-                }
-
-                catch (WrongEnteredCommandException e)
-                {
-                    _logger.Log(e.Message);
-                }
-
-                catch (Exception e)
-                {
-                    var fileAndConsoleLogger = new Loggers.FileLoggerDecorator(_logger, Data.LogFileName);
-                    fileAndConsoleLogger.Log(e.Message);
-                }
+                ShowInformationInConsole.ShowHelpInConsole();
+                result = RunHandler(userInput, handlerCommandFromConsole);
             }
 
-            ShowInformationToUser.ShowGoodbyeInConsole();
+            ShowInformationInConsole.ShowGoodbyeInConsole();
         }
 
         public void WorkWithCmd(IUserInput userInput)
         {
-            var handlerCommandsFromCmd = new HandlerCommandFromCmd(_tasks);
+            var handlerCommandsFromCmd = new CommandFromCmdHandler(_taskStorage);
+            RunHandler(userInput, handlerCommandsFromCmd);
+        }
 
+        public ResultHandler RunHandler(IUserInput userInput,IHandlerCommand handlerCommand)
+        {
+            var result = ResultHandler.Working;
             try
             {
-                handlerCommandsFromCmd.Handling(userInput.GetCommand());
-
+                result = handlerCommand.CommandHandler(userInput.GetCommand());
                 SaveNotes();
             }
 
@@ -71,24 +59,24 @@ namespace ToDoLibrary
                 fileAndConsoleLogger.Log(e.Message);
             }
 
-            ShowInformationToUser.ShowGoodbyeInConsole();
+            return result;
         }
 
         private void SaveNotes()
         {
-            _saveAndLoad.Save(_tasks);
+            _tasksSaverAndLoad.Save(_taskStorage.Get());
         }
 
         private void LoadNotes()
         {
             try
             {
-                _tasks = _saveAndLoad.Load();
+                _taskStorage.Set(_tasksSaverAndLoad.Load());
             }
 
             catch (FileNotFoundException e)
             {
-                _tasks = new List<Task>();
+                _taskStorage.Set(new List<Task>());
 
                 _logger.Log(e.Message);
             }

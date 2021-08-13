@@ -8,13 +8,16 @@ namespace TestProjectForToDoLibrary
     [TestClass]
     public class TestsForHandlerCommandFromCmd
     {
+        private TaskStorage _storage = new TaskStorage();
+
         [TestMethod]
         public void CorrectHandleAddCommand_OneWord()
         {
-            var task = new List<Task>();
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
 
-            handlerCommandFromCmd.Handling(new [] { "add", "world" });
+            handlerCommandFromCmd.CommandHandler(new[] { "add", "world" });
+
+            var task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world", task[0].ToString());
@@ -23,10 +26,11 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void CorrectHandleAddCommand_SeveralWords()
         {
-            var task = new List<Task>();
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
 
-            handlerCommandFromCmd.Handling(new [] { "add", "world", "or", "war" });
+            handlerCommandFromCmd.CommandHandler(new[] { "add", "world", "or", "war" });
+
+            var task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world or war", task[0].ToString());
@@ -36,9 +40,13 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleEditCommand_OneWord()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
+            _storage.Set(task);
 
-            handlerCommandFromCmd.Handling(new [] { "edit", "1", "world" });
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
+
+            handlerCommandFromCmd.CommandHandler(new[] { "edit", "1", "world" });
+
+            task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world", task[0].ToString());
@@ -48,9 +56,13 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleEditCommand_SeveralWords()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
+            _storage.Set(task);
 
-            handlerCommandFromCmd.Handling(new [] { "edit", "1", "world", "or", "war" });
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
+
+            handlerCommandFromCmd.CommandHandler(new[] { "edit", "1", "world", "or", "war" });
+
+            task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("world or war", task[0].ToString());
@@ -60,10 +72,14 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleToggleCommand()
         {
             var task = new List<Task> { new Task { Text = "war" } };
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
+            _storage.Set(task);
 
-            handlerCommandFromCmd.Handling(new [] { "toggle", "1", "1" });
-            handlerCommandFromCmd.Handling(new [] { "toggle", "1", "2" });
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
+
+            handlerCommandFromCmd.CommandHandler(new[] { "toggle", "1", "1" });
+            handlerCommandFromCmd.CommandHandler(new[] { "toggle", "1", "2" });
+
+            task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("war [X]", task[0].ToString());
@@ -73,15 +89,19 @@ namespace TestProjectForToDoLibrary
         public void CorrectHandleDeleteCommand()
         {
             var task = new List<Task>
-                {
-                    new Task{Text = "world"},
-                    new Task{Text = "war"},
-                    new Task {Text = "peace"}
-                };
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
+                    {
+                        new Task{Text = "world"},
+                        new Task{Text = "war"},
+                        new Task {Text = "peace"}
+                    };
+            _storage.Set(task);
 
-            handlerCommandFromCmd.Handling(new[] { "delete", "1" });
-            handlerCommandFromCmd.Handling(new[] { "delete", "2" });
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
+
+            handlerCommandFromCmd.CommandHandler(new[] { "delete", "1" });
+            handlerCommandFromCmd.CommandHandler(new[] { "delete", "2" });
+
+            task = _storage.Get();
 
             Assert.AreEqual(1, task.Count);
             Assert.AreEqual("war", task[0].ToString());
@@ -91,9 +111,8 @@ namespace TestProjectForToDoLibrary
         [ExpectedException(typeof(WrongEnteredCommandException))]
         public void ExceptionEnteringWrongCommand()
         {
-            var task = new List<Task> { };
-            var handlerCommandFromCmd = new HandlerCommandFromCmd(task);
-            handlerCommandFromCmd.Handling(new[] { "IDoNothing" });
+            var handlerCommandFromCmd = new CommandFromCmdHandler(_storage);
+            handlerCommandFromCmd.CommandHandler(new[] { "IDoNothing" });
         }
     }
 }

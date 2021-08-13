@@ -11,13 +11,12 @@ namespace TestsForToDoList.TestsForCommands
         [TestMethod]
         public void CorrectPerformCommand()
         {
-            var tasks = new List<Task> { new Task{Text = "world"},new Task { Text = "war" } };
+            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new DeleteRollbackCommand() { Tasks = tasks};
-            command.PerformCommand();
+            var rollbackCommand = new DeleteRollbackCommand();
+            var result = rollbackCommand.PerformCommand(tasks);
 
-            Assert.AreEqual(1,tasks.Count);
-            Assert.AreEqual("world", tasks[0].ToString());
+            Assert.AreEqual(0, result.Count);
         }
     }
 }

@@ -21,21 +21,17 @@
     </table>
 
     <h3>Add</h3>
-    <form action="javascript:void(0);" method="POST" onsubmit="AddItem()">
-        <input type="text" id="AddName" placeholder="New ToDo">
-        <input type="submit" value="Add">
-    </form>
+    <input type="text" id="AddName" placeholder="New ToDo">
+    <input type="submit" value="Add" action="javascript:void(0);" method="POST" onclick="AddItem()">
 
     <div id="EditForm" style="display:none">
         <h3>Edit</h3>
-        <form action="javascript:void(0);" onsubmit="PatchItem()">
-            <input type="hidden" id="EditId">
-            <input type="checkbox" id="EditComplete">
-            <input type="checkbox" id="EditDelete">
-            <input type="text" id="EditName">
-            <input type="submit" value="Save">
-            <input type="button" onclick="HideEdit()" value="Close">
-        </form>
+        <input type="hidden" id="EditId">
+        <input type="checkbox" id="EditComplete">
+        <input type="checkbox" id="EditDelete">
+        <input type="text" id="EditName">
+        <input type="button" value="Save" action="javascript:void(0);" onclick="PatchItem()">
+        <input type="button" onclick="HideEdit()" value="Close">
     </div>
 </body>
 </html>

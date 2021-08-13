@@ -66,7 +66,11 @@ function PatchItem()
     completed: document.getElementById('EditComplete').checked,
     deleted: document.getElementById('EditDelete').checked
   };
-
+  SendPatchReqest(item);
+  HideEdit();
+}
+function SendPatchReqest(item)
+{
   fetch(`${url}`, 
   {
     method: 'PATCH',
@@ -77,8 +81,6 @@ function PatchItem()
     body: JSON.stringify(item)
   })
   .then(() => GetToDoList());
-
-  HideEdit();
 }
 
 function HideEdit() 

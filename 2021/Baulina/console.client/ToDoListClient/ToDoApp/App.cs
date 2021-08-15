@@ -1,18 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using InputOutputManagers;
-using Microsoft.Extensions.Options;
 using ToDoApp.CustomClient;
-using ToDoApp.Settings;
 
 namespace ToDoApp
 {
     public class App
     {
-        private readonly IOptions<ClientSettingsConfiguration> _configuration;
+        private readonly Client _client;
 
-        public App(IOptions<ClientSettingsConfiguration> configuration)
+        public App(Client client)
         {
-            _configuration = configuration;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         public async Task Run(string[] args)
@@ -21,7 +20,7 @@ namespace ToDoApp
             IConsoleExtended console = isCommandLineExecuted
                 ? new CommandLineInteractor(args)
                 : new ConsoleInteractor();
-            var commandExecutor = new CommandExecutor(console, new Client(_configuration));
+            var commandExecutor = new CommandExecutor(console, _client);
             var appController = new AppController(commandExecutor, console);
             AppEngine appEngine =
                 isCommandLineExecuted

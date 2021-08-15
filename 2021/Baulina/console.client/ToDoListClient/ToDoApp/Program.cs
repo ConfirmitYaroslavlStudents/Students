@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDoApp.CustomClient;
 using ToDoApp.Settings;
 
 namespace ToDoApp
@@ -21,6 +22,7 @@ namespace ToDoApp
             var config = LoadConfiguration();
             services.Configure<ClientSettingsConfiguration>(config.GetSection("ClientSettings"));
             services.AddTransient<App>();
+            services.AddTransient<Client>();
 
             return services;
         }
@@ -29,7 +31,7 @@ namespace ToDoApp
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("Settings/appsettings.json", optional: true, reloadOnChange: true);
 
             return builder.Build();
         }

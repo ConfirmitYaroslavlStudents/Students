@@ -18,9 +18,8 @@ namespace ToDoApp.CustomClient
             _client = client;
         }
 
-        public Client(IOptions<ClientSettingsConfiguration> config)
+        public Client(IOptions<ClientSettingsConfiguration> configuration)
         {
-            var configuration = config;
             _client = new HttpClient {BaseAddress = new Uri(configuration.Value.Parameters.ApplicationUrl)};
             _requestUri = configuration.Value.Parameters.RequestUri;
         }

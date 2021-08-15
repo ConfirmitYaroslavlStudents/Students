@@ -1,52 +1,46 @@
 const url = 'http://localhost:5000/todolist';
 let toDoList = [];
 
-function GetToDoList() 
+async function apiRequestSender(fetchArgs, urlEnd = '')
 {
-  fetch(url)
-    .then(response => response.json())
-    .then(list => DisplayToDoList(list));
+  const response = await fetch(url+urlEnd, fetchArgs)
+  if(fetchArgs === undefined || fetchArgs.method === 'GET'){
+    const json = await response.json();
+    return json;
+  }
 }
 
-function AddItem() 
-{
+async function addItem() {
   const addNameTextbox = document.getElementById('AddName');
 
-  const item = 
-  {
+  const item = {
     id: 0,
     completed: false,
     deleted: false,
     name: addNameTextbox.value.trim()
   };
 
-  fetch(url, 
-    {
+  await apiRequestSender({
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(item)
-  })
-    .then(() => 
-    {
-      GetToDoList();
-      addNameTextbox.value = '';
-    });
+  });
+  await displayToDoList();
+  addNameTextbox.value = '';
 }
 
-function DeleteItem(id) 
-{
-  fetch(`${url}/${id}`, 
-  {
+async function deleteItem(id) {
+  await apiRequestSender({
     method: 'DELETE'
-  })
-  .then(() => GetToDoList());
+  },
+  `/${id}`);
+  await displayToDoList();
 }
 
-function ShowEdit(id) 
-{
+function showEdit(id) {
   const item = toDoList.find(item => item.id === id);
   
   document.getElementById('EditName').value = item.name;
@@ -56,23 +50,20 @@ function ShowEdit(id)
   document.getElementById('EditForm').style.display = 'block';
 }
 
-function PatchItem() 
-{
+async function patchItem() {
   const itemId = document.getElementById('EditId').value;
-  const item = 
-  {
+  const item = {
     id: parseInt(itemId, 10),
     name: document.getElementById('EditName').value.trim(),
     completed: document.getElementById('EditComplete').checked,
     deleted: document.getElementById('EditDelete').checked
   };
-  SendPatchReqest(item);
-  HideEdit();
+  await sendPatchReqest(item);
+  hideEdit();
 }
-function SendPatchReqest(item)
-{
-  fetch(`${url}`, 
-  {
+
+async function sendPatchReqest(item) {
+  await apiRequestSender({
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
@@ -80,22 +71,20 @@ function SendPatchReqest(item)
     },
     body: JSON.stringify(item)
   })
-  .then(() => GetToDoList());
+  await displayToDoList();
 }
 
-function HideEdit() 
-{
+function hideEdit() {
   document.getElementById('EditForm').style.display = 'none';
 }
 
-function DisplayToDoList(list) 
-{
+async function displayToDoList() {
+  list = await apiRequestSender();
   const tableBody = document.getElementById('ToDoTable');
   tableBody.innerHTML = '';
   toDoList = list;
 
-  list.forEach(item => 
-  {
+  list.forEach(item => {
     let tr = tableBody.insertRow();
 
     let completedCheckbox = document.createElement('input');
@@ -115,12 +104,12 @@ function DisplayToDoList(list)
 
     let editButton = document.createElement('button');
     editButton.innerText = 'Edit';
-    editButton.setAttribute('onclick', `ShowEdit(${item.id})`);
+    editButton.setAttribute('onclick', `showEdit(${item.id})`);
     tr.insertCell().appendChild(editButton);
 
     let deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete';
-    deleteButton.setAttribute('onclick', `DeleteItem(${item.id})`);
+    deleteButton.setAttribute('onclick', `deleteItem(${item.id})`);
     tr.insertCell().appendChild(deleteButton);
   });
 }

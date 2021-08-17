@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <script src="react.development.js"></script>
     <script src="react-dom.development.js"></script>
+    <script src="babel.js"></script>
+    <script src="index.jsx" type="text/babel"></script>
+    <script src="apiWorker.js"></script>
 </head>
 <body>
     <h3>ToDoList</h3>
@@ -35,11 +38,5 @@
     <h3>Add</h3>
     <input type="text" id="AddName" placeholder="New ToDo">
     <input type="submit" id="AddItemButton" value="Add" action="javascript:void(0);" method="POST">
-    
-    <script src="index.js"></script>
-    <script src="apiWorker.js"></script>
-    <script type="text/javascript">
-        start();
-    </script>
 </body>
 </html>

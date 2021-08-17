@@ -1,7 +1,7 @@
 const url = 'http://localhost:5000/todolist';
 
 async function getToDoListUpdate() {
-  const response = await fetch(url);
+  const response = await fetch(`${url}`);
   const list = await response.json();
   return list;
 }
@@ -21,7 +21,7 @@ async function sendAddItem(itemName, container) {
     name: itemName
   };
   
-  await fetch(url,{
+  await fetch(`${url}`,{
     method: 'POST',
     headers: {
     'Accept': 'application/json',
@@ -50,7 +50,7 @@ function hideEdit() {
 
 async function start() {
   const domContainer = document.getElementById('ToDOListContainer');
-  const response = await fetch(url)
+  const response = await fetch(`${url}`)
   const list = await response.json();
   ReactDOM.render(create(ToDoListPrinter,{toDoList: list}), domContainer);
 }

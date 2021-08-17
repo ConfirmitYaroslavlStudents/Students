@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import ToDoListPrinter from './App';
+import ToDoListPrinter from './ToDoListPrinter';
 
 const url = 'http://localhost:5000/todolist';
 

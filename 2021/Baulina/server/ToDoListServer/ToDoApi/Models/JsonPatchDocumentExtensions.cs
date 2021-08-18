@@ -39,6 +39,7 @@ namespace ToDoApi.Models
             {
                 ToDoItemStatus _ => Enum.IsDefined(typeof(ToDoItemStatus), value),
                 long l => Enum.IsDefined(typeof(ToDoItemStatus), (int) l),
+                string s => Enum.IsDefined(typeof(ToDoItemStatus), int.Parse(s)),
                 _ => false
             };
         }

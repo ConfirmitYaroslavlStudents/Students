@@ -1,0 +1,11 @@
+#addEditModal{
+    display: block;
+}
+
+#addEditModalHeader{
+    background-color: rgb(132, 181, 233);
+}
+
+#descriptionCell, #statusCell{
+    font-size: 20px;
+}

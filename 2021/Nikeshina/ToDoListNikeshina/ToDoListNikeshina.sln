@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoListApp", "ToDoListApp\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoListTests", "ToDoListTests\ToDoListTests.csproj", "{476BDE85-B65D-4153-8766-2C676A849342}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "..\..\..\..\WebApplication1\WebApplication1\WebApplication1.csproj", "{55314A95-469D-4027-AF02-5A962EB38C61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebToDo", "..\..\..\..\WebApplication1\WebApplication1\WebToDo.csproj", "{55314A95-469D-4027-AF02-5A962EB38C61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

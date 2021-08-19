@@ -26,3 +26,14 @@ export async function deleteToDoItem(id){
 					headers: { "Accept": "application/json", "Content-Type": "application/json" },
 					});
 }
+
+export async function editToDoItem(toDoItem){
+		await fetch(url + toDoItem.id, {
+					method: "PATCH",
+					headers: { "Accept": "application/json", "Content-Type": "application/json" },
+					body: JSON.stringify({
+						description: toDoItem.description,
+						status: toDoItem.status
+					})
+        });
+}

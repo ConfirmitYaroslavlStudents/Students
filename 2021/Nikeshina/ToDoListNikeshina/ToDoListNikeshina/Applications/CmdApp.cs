@@ -39,7 +39,7 @@ namespace ToDoListNikeshina
 
         public void Print()=> _operator.Print();
 
-        public List<Task> GetListOfTask() => List.GetListOfTask();
+        public List<Task> GetListOfTask() => List.GetListOfTasks();
 
     }
 }

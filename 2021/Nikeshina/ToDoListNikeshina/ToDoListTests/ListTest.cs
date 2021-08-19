@@ -17,7 +17,7 @@ namespace ToDoListTests
             list.Add(task);
 
             Assert.AreEqual(1, list.Count());
-            CollectionAssert.AreEqual(testList, list.GetListOfTask());
+            CollectionAssert.AreEqual(testList, list.GetListOfTasks());
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace ToDoListTests
             var list = new ToDoList(new List<Task>());
 
             Assert.AreEqual(0, list.Count());
-            CollectionAssert.AreEqual(new List<Task>(), list.GetListOfTask());
+            CollectionAssert.AreEqual(new List<Task>(), list.GetListOfTasks());
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ToDoListTests
             list.Edit(1, "Pass exams");
             var checkingList = new List<Task> { new Task("Pass exams",StatusOfTask.Todo), new Task("Go to shop", StatusOfTask.InProgress) };
 
-            CollectionAssert.AreEqual(list.GetListOfTask(), checkingList);
+            CollectionAssert.AreEqual(list.GetListOfTasks(), checkingList);
         }
     }
 }

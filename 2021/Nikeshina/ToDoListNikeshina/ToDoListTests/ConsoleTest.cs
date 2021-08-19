@@ -133,7 +133,7 @@ namespace ToDoListTests
         public void CheckRollback()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1", "1","buy pineapple","2" }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1", "1","buy pineapple","2" ,"1"}),list);
 
             var msgs = new List<string>();
 
@@ -155,6 +155,9 @@ namespace ToDoListTests
 
             CollectionAssert.AreEqual(logger.Messages, msgs);
             CollectionAssert.AreEqual(new List<Task> { new Task("buy apple", StatusOfTask.Todo) },app.GetListOfTask());
+
+            app.Rollback();
+            CollectionAssert.AreEqual(new List<Task>(), app.GetListOfTask());
         }
 
         [TestMethod]

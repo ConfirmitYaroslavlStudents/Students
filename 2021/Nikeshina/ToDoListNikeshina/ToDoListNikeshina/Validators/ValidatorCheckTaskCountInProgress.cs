@@ -9,8 +9,9 @@ namespace ToDoListNikeshina.Validators
         private ILogger logger;
         private ToDoList _toDo;
         private ValidatorTaskNumber indexValidator;
-        public ValidatorCheckTaskCountInProgress(ILogger logger, ToDoList list, ValidatorTaskNumber validator)
+        public ValidatorCheckTaskCountInProgress(bool abort, ILogger logger, ToDoList list, ValidatorTaskNumber validator)
         {
+            isAbortable = abort;
             this.logger = logger;
             _toDo = list;
             indexValidator = validator;
@@ -18,19 +19,22 @@ namespace ToDoListNikeshina.Validators
 
         public override bool Validate()
         {
+            bool result;
             int index = indexValidator.GetTaskNumber();
             int countInProgress = _toDo.GetCountTasksInProgress();
             if (countInProgress == 3 && _toDo[index - 1].Status == StatusOfTask.Todo)
-                logger.Log(Messages.incorrectCountTasksInProgress);
-            else
             {
-                if (_nextValidator != null)
-                    return _nextValidator.Validate();
-                else
-                    return true;
+                loggerMessages.Add(Messages.incorrectCountTasksInProgress);
+                result = false;
             }
+            else
+                result = true;
 
-            return false;
+            if (_nextValidator != null && ContinueCheck(result, isAbortable))
+                result = (_nextValidator.Validate() && result);
+
+            PrintMessages(logger);
+            return result; ;
         }
     }
 }

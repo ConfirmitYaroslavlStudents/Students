@@ -35,8 +35,8 @@ namespace ToDoListNikeshina
 
         public bool Edit()
         {
-            var numberVlidator = new ValidatorTaskNumber(_dataGetter, _list.Count(), _logger);
-            var descriptionValidator = new CheckLengthDescription(_dataGetter, _logger);
+            var numberVlidator = new ValidatorTaskNumber(true,_dataGetter, _list.Count(), _logger);
+            var descriptionValidator = new CheckLengthDescription(false, _dataGetter, _logger);
             numberVlidator.SetNext(descriptionValidator);
             if (!numberVlidator.Validate())
                 return false;
@@ -48,7 +48,7 @@ namespace ToDoListNikeshina
 
         public bool Delete()
         {
-            var validator = new ValidatorTaskNumber(_dataGetter,_list.Count(), _logger);
+            var validator = new ValidatorTaskNumber(true, _dataGetter,_list.Count(), _logger);
 
             if (!validator.Validate())
                 return false;
@@ -61,8 +61,8 @@ namespace ToDoListNikeshina
 
         public bool ChangeTaskStatus()
         {
-            var numberValidator = new ValidatorTaskNumber(_dataGetter, _list.Count(), _logger);
-            var countInProgresValidator = new ValidatorCheckTaskCountInProgress(_logger, _list, numberValidator);
+            var numberValidator = new ValidatorTaskNumber(true, _dataGetter, _list.Count(), _logger);
+            var countInProgresValidator = new ValidatorCheckTaskCountInProgress(true, _logger, _list, numberValidator);
             numberValidator.SetNext(countInProgresValidator);
 
             if (!numberValidator.Validate())
@@ -77,7 +77,7 @@ namespace ToDoListNikeshina
 
         public bool Add()
         {
-            var validator = new CheckLengthDescription(_dataGetter, _logger);
+            var validator = new CheckLengthDescription(false, _dataGetter, _logger);
             if (!validator.Validate())
                 return false;
 
@@ -89,6 +89,6 @@ namespace ToDoListNikeshina
 
         public void UpdateToDo(ToDoList newItem) => _list = newItem;
 
-        public List<Task> GetListOfTask() => _list.GetListOfTask();
+        public List<Task> GetListOfTask() => _list.GetListOfTasks();
     }
 }

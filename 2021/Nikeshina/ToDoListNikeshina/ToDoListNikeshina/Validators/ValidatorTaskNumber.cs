@@ -6,31 +6,39 @@ namespace ToDoListNikeshina.Validators
 {
     public class ValidatorTaskNumber : AbstractValidator
     {
-        protected IGetInputData dataResource;
-        protected int listCount;
+        private IGetInputData dataResource;
+        private int listCount;
         private ILogger logger;
-        public ValidatorTaskNumber(IGetInputData resource, int count, ILogger logger)
+        
+        public ValidatorTaskNumber(bool abort, IGetInputData resource, int count, ILogger logger)
         {
+            isAbortable = abort;
             listCount = count;
             dataResource = resource;
             this.logger = logger;
         }
         public override bool Validate()
         {
+            bool result;
             var inputNumber = dataResource.GetInputData();
             int index;
             if (int.TryParse(inputNumber, out index) && index > 0 && index <= listCount)
             {
                 _taskNumber = index;
-                if (_nextValidator != null)
-                    return _nextValidator.Validate();
-                else
-                    return true;
+                result = true;
             }
             else
-                logger.Log(Messages.incorrectTaskNumber);
+            {
+                loggerMessages.Add(Messages.incorrectTaskNumber);
+                result = false;
+            }
 
-            return false;
+            if (_nextValidator != null && ContinueCheck(result,isAbortable))
+                result = _nextValidator.Validate() && result;
+
+            PrintMessages(logger);
+            return result;
         }
+        
     }
 }

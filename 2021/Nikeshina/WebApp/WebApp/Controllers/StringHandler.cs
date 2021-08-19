@@ -11,7 +11,7 @@ namespace WebApp.Controllers
     [Route("myapp")]
     public class StringHandler : ControllerBase
     {
-        private int sum;
+        private static int sum;
 
         private readonly ILogger<StringHandler> _logger;
 
@@ -21,14 +21,14 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public int Get()
+        public ActionResult<int> Get()
         {
             _logger.LogInformation(sum.ToString());
             return sum;
         }
 
         [HttpPost]
-        public int Post([FromBody] string text)
+        public ActionResult<int> Post([FromBody] string text)
         {
             sum += text.Length;
             _logger.LogInformation(sum.ToString());

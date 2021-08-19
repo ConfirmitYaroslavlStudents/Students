@@ -72,6 +72,6 @@ namespace ToDoListNikeshina
             return count;
         }
 
-        public List<Task> GetListOfTask() => _list;
+        public List<Task> GetListOfTasks() => _list;
     }
 }

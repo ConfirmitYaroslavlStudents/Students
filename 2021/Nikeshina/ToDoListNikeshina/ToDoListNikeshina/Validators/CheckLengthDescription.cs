@@ -6,30 +6,38 @@ namespace ToDoListNikeshina.Validators
 {
     public class CheckLengthDescription : AbstractValidator
     {
-        protected IGetInputData dataResource;
-        protected ILogger logger;
+        private IGetInputData dataResource;
+        private ILogger logger;
 
-        public CheckLengthDescription(IGetInputData resource, ILogger logger)
+        public CheckLengthDescription(bool abort, IGetInputData resource, ILogger logger)
         {
+            isAbortable = abort;
             dataResource = resource;
             this.logger = logger;
         }
 
         public override bool Validate()
         {
+            bool result;
+
             var inputDescription = dataResource.GetInputData();
             if (inputDescription.Length > 0 && inputDescription.Length <= 50)
             {
                 _description = inputDescription;
-                if (_nextValidator != null)
-                    return _nextValidator.Validate();
-                else
-                    return true;
+                result = true;
             }
             else
-                logger.Log(Messages.incorrectDescriptionLength);
+            {
+                loggerMessages.Add(Messages.incorrectDescriptionLength);
+                result = false;
+            }
 
-            return false;
+            if (_nextValidator != null && ContinueCheck(result, isAbortable))
+                result = _nextValidator.Validate() && result;
+
+            PrintMessages(logger);
+            return result;
+
         }
     }
 

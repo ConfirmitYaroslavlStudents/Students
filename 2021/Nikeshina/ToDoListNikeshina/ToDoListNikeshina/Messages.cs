@@ -10,6 +10,7 @@ namespace ToDoListNikeshina
         public const string incorrectDescriptionLength = "Invalid description length!";
         public const string incorrectCountTasksInProgress = "Only three tasks are possible InProgress!";
         public const string incorrectTaskNumber = "Incorrect number of the task!";
+        public const string incorrectInputData = "Incorrect command!";
 
         public const string listIsEmpty = "List is empty(";
 

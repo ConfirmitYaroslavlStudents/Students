@@ -5,12 +5,14 @@ using ToDoListNikeshina.Validators;
 
 namespace ToDoListNikeshina
 {
-    public abstract class AbstractValidator : IValidate
+    public abstract class AbstractValidator 
     {
-        protected IValidate _nextValidator;
+        protected AbstractValidator _nextValidator;
         protected int _taskNumber;
         protected string _description;
         protected int _actionsCount;
+        protected bool isAbortable;
+        protected List<string> loggerMessages = new List<string>();
 
         public int GetTaskNumber() => _taskNumber;
 
@@ -18,12 +20,24 @@ namespace ToDoListNikeshina
 
         public int GetActionsCount() => _actionsCount;
 
-        public IValidate SetNext(IValidate validator)
+        public AbstractValidator SetNext(AbstractValidator validator)
         {
             _nextValidator = validator;
             return _nextValidator;
         }
 
+        protected void PrintMessages(ILogger logger)
+        {
+            foreach (var message in loggerMessages)
+                logger.Log(message);
+        }
+
+        protected bool ContinueCheck(bool itemResult, bool isAbort)
+        {
+            if (itemResult == false && isAbort == true)
+                return false;
+            return true;
+        }
         public abstract bool Validate();
     }
 }

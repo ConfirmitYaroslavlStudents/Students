@@ -26,7 +26,7 @@ namespace ToDoListNikeshina
         public void Rollback()
         {
             _logger.Log(Messages.requestNumberOfCommand);
-            var validator = new ValidatorCountOfActions(dataGetter,_pastLStates.Count, _logger);
+            var validator = new ValidatorCountOfActions(true, dataGetter,_pastLStates.Count, _logger);
             if (!validator.Validate())
                 return;
 
@@ -40,7 +40,7 @@ namespace ToDoListNikeshina
             for (int i = 0; i < countOfStep; i++)
                 _pastLStates.Pop();
 
-            return _pastLStates.Peek().GetListOfTask();
+            return _pastLStates.Peek().GetListOfTasks();
         }
 
         public void AddNewTask()
@@ -83,6 +83,6 @@ namespace ToDoListNikeshina
 
         public void Print() => _operator.Print();
 
-        public List<Task> GetListOfTask() => List.GetListOfTask();
+        public List<Task> GetListOfTask() => List.GetListOfTasks();
     }
 }

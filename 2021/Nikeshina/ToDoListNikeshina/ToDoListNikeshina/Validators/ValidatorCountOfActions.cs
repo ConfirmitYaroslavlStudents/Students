@@ -10,28 +10,34 @@ namespace ToDoListNikeshina.Validators
         protected int countOfActions;
         private ILogger logger;
 
-        public ValidatorCountOfActions(IGetInputData resource, int count, ILogger logger)
+        public ValidatorCountOfActions(bool abort, IGetInputData resource, int count, ILogger logger)
         {
+            isAbortable = abort;
             countOfActions = count;
             dataResource = resource;
             this.logger = logger;
         }
         public override bool Validate()
         {
+            bool result;
             var inputNumber = dataResource.GetInputData();
             int count;
             if (int.TryParse(inputNumber, out count) && count > 0 && count <= countOfActions)
             {
                 _actionsCount = count;
-                if (_nextValidator != null)
-                    return _nextValidator.Validate();
-                else
-                    return true;
+                result = true;
             }
             else
-                logger.Log(Messages.incorrectCommandsNumber);
+            {
+                loggerMessages.Add(Messages.incorrectCommandsNumber);
+                return false;
+            }
 
-            return false;
+            if (_nextValidator != null && ContinueCheck(result,isAbortable))
+                result = _nextValidator.Validate() && result;
+
+            PrintMessages(logger);
+            return result;
         }
     }
 }

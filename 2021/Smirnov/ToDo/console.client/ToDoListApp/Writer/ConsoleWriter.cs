@@ -1,4 +1,6 @@
 ﻿using System;
+using ToDoListApp.Models;
+
 namespace ToDoListApp.Writer
 {
     public class ConsoleWriter: IWriter
@@ -7,29 +9,28 @@ namespace ToDoListApp.Writer
         {
             Console.WriteLine("Incorrect command");
         }
-        public void WriteTaskNotFound()
-        {
-            Console.WriteLine("Task not found");
-        }
 
         public void WriteExceptionMessage(Exception e)
         {
             Console.WriteLine(e.Message);
         }
 
-        public void WriteTaskCreated()
+        public void WriteTaskCreated(ToDoItem createdTask)
         {
             Console.WriteLine("Task created");
+            Console.WriteLine(createdTask);
         }
 
-        public void WriteDescriptionChanged()
+        public void WriteDescriptionChanged(ToDoItem changedTask)
         {
             Console.WriteLine("Description changed");
+            Console.WriteLine(changedTask);
         }   
 
-        public void WriteTaskCompleted()
+        public void WriteTaskCompleted(ToDoItem changedTask)
         {
             Console.WriteLine("Task completed");
+            Console.WriteLine(changedTask);
         }
 
         public void WriteTaskDeleted()

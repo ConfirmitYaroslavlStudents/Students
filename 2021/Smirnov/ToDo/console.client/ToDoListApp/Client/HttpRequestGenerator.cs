@@ -1,47 +1,56 @@
-﻿using System.Net.Http;
+﻿using System.Collections;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ToDoListApp.Client
 {
     public class HttpRequestGenerator
     {
-        private readonly PathForRequest _pathForRequest;
-        private readonly BodyForRequest _bodyForRequest;
+        private readonly string _appPath;
+        private readonly string _requestPath;
 
-        public HttpRequestGenerator()
+        public HttpRequestGenerator(string appPath, string requestPath)
         {
-            _pathForRequest = new PathForRequest();
-            _bodyForRequest = new BodyForRequest();
+            _appPath = appPath;
+            _requestPath = requestPath;
         }
-        public async Task<HttpResponseMessage> GetAllTask()
+        public async Task<HttpResponseMessage> GetToDoItems()
         {
             using var client = new HttpClient();
-            return await client.GetAsync(_pathForRequest.GetPathForGetRequest());
+            return await client.GetAsync($"{_appPath}/{_requestPath}");
         }
-
-        public async Task<HttpResponseMessage> AddTask(string description)
+        public async Task<HttpResponseMessage> GetToDoItem(long id)
         {
             using var client = new HttpClient();
-            return await client.PostAsync(_pathForRequest.GetPathForPostRequest(), _bodyForRequest.GetBodyForPostRequest(description));
-
+            return await client.GetAsync($"{_appPath}/{_requestPath}/{id}");
         }
 
-        public async Task<HttpResponseMessage> ChangeTaskDescription(long id, string description)
+        public async Task<HttpResponseMessage> AddToDoItem(string description, string status = "NotDone")
         {
             using var client = new HttpClient();
-            return await client.PatchAsync(_pathForRequest.GetPathForPatchRequest(id), _bodyForRequest.GetBodyForPatchRequest(description));
+            return await client.PostAsync($"{_appPath}/{_requestPath}", GetBodyForRequest(description, status));
         }
 
-        public async Task<HttpResponseMessage> CompleteTask(long id)
+        public async Task<HttpResponseMessage> ChangeToDoItem(long id, string description, string status)
         {
             using var client = new HttpClient();
-            return await client.PatchAsync(_pathForRequest.GetPathForPatchRequest(id), _bodyForRequest.GetBodyForPatchRequest(1L));
+            return await client.PatchAsync($"{_appPath}/{_requestPath}/{id}", GetBodyForRequest(description, status));
         }
 
-        public async Task<HttpResponseMessage> DeleteTask(long id)
+        public async Task<HttpResponseMessage> DeleteToDoItem(long id)
         {
             using var client = new HttpClient();
-            return await client.DeleteAsync(_pathForRequest.GetPathForDeleteRequest(id));
+            return await client.DeleteAsync($"{_appPath}/{_requestPath}/{id}");
+        }
+        private StringContent GetBodyForRequest(string description, string status)
+        {
+            return new StringContent(JsonConvert.SerializeObject(new
+            {
+                Description = description,
+                Status = status
+            }), Encoding.UTF8, "application/json");
         }
     }
 }

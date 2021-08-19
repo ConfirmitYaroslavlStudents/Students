@@ -108,8 +108,8 @@ function Row(toDoItem) {
     editLink.appendChild(editImg);
 
     editLink.addEventListener("click", e => {
-        document.forms["toDoItemsForm"].elements["add"].value = "Change";
         e.preventDefault();
+        document.forms["toDoItemsForm"].elements["add"].value = "Change";
         GetToDoItem(toDoItem.Id);
     });
     linksTd.append(editLink);
@@ -124,8 +124,7 @@ function Row(toDoItem) {
     removeLink.appendChild(deleteimg);
 
     removeLink.addEventListener("click", e => {
-
-        e.preventDefault();
+        //e.preventDefault();
         DeleteToDoItem(toDoItem.Id);
     });
     linksTd.append(removeLink);

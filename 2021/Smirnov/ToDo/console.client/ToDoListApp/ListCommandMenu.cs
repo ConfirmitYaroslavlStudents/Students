@@ -7,6 +7,6 @@
         ChangeDescription = 3,
         CompleteTask = 4,
         WriteTasks = 5,
-        SaveAndExit = 6
+        Exit = 6
     }
 }

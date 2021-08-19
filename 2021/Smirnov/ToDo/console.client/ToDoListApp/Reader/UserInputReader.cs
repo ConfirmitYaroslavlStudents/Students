@@ -2,12 +2,18 @@
 
 namespace ToDoListApp.Reader
 {
-    class UserInputReader : IReader
+    public class UserInputReader : IReader
     {
+        private readonly IConsoleInput _consoleInput;
+
+        public UserInputReader(IConsoleInput consoleInput)
+        {
+            _consoleInput = consoleInput;
+        }
         public ListCommandMenu GetCommand()
         {
             WriteMenu();
-            return (ListCommandMenu)int.Parse(Console.ReadLine());
+            return (ListCommandMenu)int.Parse(_consoleInput.ReadLine());
         }
         private static void WriteMenu()
         {
@@ -25,14 +31,13 @@ namespace ToDoListApp.Reader
         {
             Console.WriteLine("Choose Id of task");
 
-            return int.Parse(Console.ReadLine());
+            return int.Parse(_consoleInput.ReadLine());
         }
 
-        public string GetDescription()
+        public string GetTaskDescription()
         {
             Console.WriteLine("Write description of task");
-
-            return Console.ReadLine();
+            return _consoleInput.ReadLine();
         }
 
         public bool ContinueWork()

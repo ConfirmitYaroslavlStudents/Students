@@ -10,23 +10,23 @@
 
         public ListCommandMenu GetCommand()
         {
-            return _consoleCommand[0] switch
+            return _consoleCommand[0].ToLower() switch
             {
                 "create" => ListCommandMenu.CreateTask,
                 "delete" => ListCommandMenu.DeleteTask,
                 "change" => ListCommandMenu.ChangeDescription,
                 "complete" => ListCommandMenu.CompleteTask,
                 "list" => ListCommandMenu.WriteTasks,
-                _ => ListCommandMenu.SaveAndExit
+                _ => ListCommandMenu.Exit
             };
         }
 
         public int GetTaskId()
         {
-            return int.Parse(_consoleCommand[1]) - 1;
+            return int.Parse(_consoleCommand[1]);
         }
 
-        public string GetDescription()
+        public string GetTaskDescription()
         {
             return _consoleCommand[^1];
         }

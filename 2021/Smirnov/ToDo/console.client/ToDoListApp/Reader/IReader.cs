@@ -2,7 +2,7 @@
 {
     public interface IReader
     {
-        public string GetDescription();
+        public string GetTaskDescription();
         public int GetTaskId();
         public ListCommandMenu GetCommand();
         public bool ContinueWork();

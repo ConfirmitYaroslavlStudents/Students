@@ -9,7 +9,7 @@ namespace ToDoListAppTests
         public string Description { set; get; }
         public ListCommandMenu Command { set; get; }
 
-        public string GetDescription()
+        public string GetTaskDescription()
         {
             return Description;
         }

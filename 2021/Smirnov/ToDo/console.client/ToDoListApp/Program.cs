@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Configuration;
+using System.Threading.Tasks;
 using ToDoListApp.Client;
 using ToDoListApp.Reader;
 using ToDoListApp.Writer;
@@ -9,8 +10,13 @@ namespace ToDoListApp
     {
         private static async Task Main(string[] args)
         {
-            var toDoListMenu = args.Length == 0 ? new Menu(new HttpRequestGenerator(), new UserInputReader(), new ConsoleWriter()) : 
-                                                  new Menu(new HttpRequestGenerator(), new CommandReader(args), new ConsoleWriter());
+            var appSettings = ConfigurationManager.AppSettings;
+
+            var toDoListMenu = args.Length == 0 ? new Menu(new HttpRequestGenerator(appSettings["AppPath"], appSettings["RequestPath"]),
+                                                           new UserInputReader(new ConsoleInput()), new ConsoleWriter()) : 
+                                                  new Menu(new HttpRequestGenerator(appSettings["AppPath"], appSettings["RequestPath"]), 
+                                                           new CommandReader(args), new ConsoleWriter());
+
             await toDoListMenu.StartMenu();
         }
     }

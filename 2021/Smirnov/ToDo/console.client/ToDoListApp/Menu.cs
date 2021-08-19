@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ToDoListApp.Client;
+using ToDoListApp.Models;
 using ToDoListApp.Reader;
 using ToDoListApp.Writer;
+
 
 namespace ToDoListApp
 {
@@ -22,13 +25,14 @@ namespace ToDoListApp
 
         public async Task StartMenu()
         {
+
             do
             {
                 try
                 {
                     var selectedAction = _reader.GetCommand();
 
-                    if (selectedAction == ListCommandMenu.SaveAndExit)
+                    if (selectedAction == ListCommandMenu.Exit)
                         return;
 
                     var action = GetAction(selectedAction);
@@ -59,59 +63,66 @@ namespace ToDoListApp
                 ListCommandMenu.DeleteTask => DeleteTask,
                 ListCommandMenu.ChangeDescription => ChangeDescription,
                 ListCommandMenu.CompleteTask => CompleteTask,
-                ListCommandMenu.WriteTasks => WriteAllTask,
+                ListCommandMenu.WriteTasks => WriteTasks,
                 _ => null
             };
         }
 
         private async Task CreateTask()
         {
-            await _httpRequestGenerator.AddTask(_reader.GetDescription());
-            _writer.WriteTaskCreated();
+            var request = await _httpRequestGenerator.AddToDoItem(_reader.GetTaskDescription());
+            if(request.StatusCode == HttpStatusCode.Created)
+                _writer.WriteTaskCreated(JsonConvert.DeserializeObject<ToDoItem>(request.Content.ReadAsStringAsync().Result));
+            else
+                throw new InvalidOperationException(request.ReasonPhrase);
         }
 
         private async Task ChangeDescription()
         {
-            var request = await _httpRequestGenerator.ChangeTaskDescription(_reader.GetTaskId(), _reader.GetDescription());
+            var toDoItem = GetToDoItem().Result;
+            var request = await _httpRequestGenerator.ChangeToDoItem(toDoItem.Id, _reader.GetTaskDescription(), toDoItem.Status);
 
             if (request.StatusCode == HttpStatusCode.OK)
-                _writer.WriteDescriptionChanged();
+                _writer.WriteDescriptionChanged(JsonConvert.DeserializeObject<ToDoItem>(request.Content.ReadAsStringAsync().Result));
             else
-            {
-                if(request.StatusCode == HttpStatusCode.NotFound)
-                    _writer.WriteTaskNotFound();
-            }
+                throw new InvalidOperationException(request.ReasonPhrase);
+        }
+        private async Task CompleteTask()
+        {
+            var toDoItem = GetToDoItem().Result;
+
+            var request = await _httpRequestGenerator.ChangeToDoItem(toDoItem.Id, toDoItem.Description, "Done");
+
+            if (request.StatusCode == HttpStatusCode.OK)
+                _writer.WriteTaskCompleted(JsonConvert.DeserializeObject<ToDoItem>(request.Content.ReadAsStringAsync().Result));
+            else
+                throw new InvalidOperationException(request.ReasonPhrase);
         }
 
         private async Task DeleteTask()
         {
-            var request = await _httpRequestGenerator.DeleteTask(_reader.GetTaskId());
-            if (request.StatusCode == HttpStatusCode.OK)
+            var request = await _httpRequestGenerator.DeleteToDoItem(_reader.GetTaskId());
+            if (request.StatusCode == HttpStatusCode.NoContent)
                 _writer.WriteTaskDeleted();
             else
-            {
-                if (request.StatusCode == HttpStatusCode.NotFound)
-                    _writer.WriteTaskNotFound();
-            }
+                throw new InvalidOperationException(request.ReasonPhrase);
+        }
+        private async Task WriteTasks()
+        {
+            var request = await _httpRequestGenerator.GetToDoItems();
+            _writer.WriteTasks(request.Content.ReadAsStringAsync().Result);
         }
 
-        private async Task CompleteTask()
+        private async Task<ToDoItem> GetToDoItem()
         {
-            var request = await _httpRequestGenerator.DeleteTask(_reader.GetTaskId());
-            if (request.StatusCode == HttpStatusCode.OK)
-                _writer.WriteTaskCompleted();
-            else
+            var request = await _httpRequestGenerator.GetToDoItem(_reader.GetTaskId());
+
+            if (request.StatusCode == HttpStatusCode.NotFound)
             {
-                if (request.StatusCode == HttpStatusCode.NotFound)
-                    _writer.WriteTaskNotFound();
+                throw new InvalidOperationException(request.ReasonPhrase);
             }
-        }
 
-        private async Task WriteAllTask()
-        {
-            await _httpRequestGenerator.GetAllTask();
-
-            _writer.WriteTasks(_httpRequestGenerator.GetAllTask().Result.Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<ToDoItem>(request.Content.ReadAsStringAsync().Result);
         }
     }
 }

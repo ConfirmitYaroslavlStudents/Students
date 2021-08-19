@@ -9,7 +9,7 @@ namespace ToDoWebApi.Models
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
-
+            property.PropertyName = property.PropertyName.ToLower();
             property.SetIsSpecified += (obj, obj1) =>
             {
                 if (obj is PatchDtoBase patchDtoBase)

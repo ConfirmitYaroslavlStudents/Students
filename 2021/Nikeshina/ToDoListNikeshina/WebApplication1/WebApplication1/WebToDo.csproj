@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Students\2021\Nikeshina\ToDoListNikeshina\ToDoListNikeshina\ToDoListNikeshina.csproj" />
+  </ItemGroup>
+
+
+</Project>

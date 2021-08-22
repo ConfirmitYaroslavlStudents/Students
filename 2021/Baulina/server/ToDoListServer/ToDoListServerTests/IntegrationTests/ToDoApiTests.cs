@@ -204,6 +204,22 @@ namespace ToDoListServerTests.IntegrationTests
         }
 
         [Fact]
+        public async Task PatchWithCorrectBodyChangesTagsAndReturnsNoContent()
+        {
+            var tags = new List<Tag>(new[]
+                {new Tag {Name = "important"}, new() {Name = "home"}, new() {Name = "weekend"}});
+            var requestPatchDoc = new JsonPatchDocument<ToDoItem>()
+                .Replace(o => o.Tags, tags);
+
+            var response = await _client.PatchAsync("todo-list/0", RequestContentHelper.GetPatchStringContent(requestPatchDoc));
+            var toDoList = await GetActualToDoList();
+
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Equal(3, toDoList[0].Tags.Count());
+        }
+
+        [Fact]
         public async Task PatchWithCorrectBodyChangesDescriptionAndReturnsNoContent()
         {
             var requestPatchDoc = new JsonPatchDocument<ToDoItem>()

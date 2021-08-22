@@ -10,6 +10,7 @@ namespace ToDoApi.Models
         public int Id { get; set; }
         public ToDoItemStatus Status { get; set; }
         public string Description { get; set; }
+        public IEnumerable<Tag> Tags { get; set; }
     }
 
     public class ToDoList : List<ToDoItem>
@@ -26,7 +27,7 @@ namespace ToDoApi.Models
 
         public void AddToDoItem(ToDoItem toDoItem)
         {
-            if (!Enum.IsDefined(typeof(ToDoItemStatus),toDoItem.Status)) throw new InvalidEnumArgumentException();
+            if (!Enum.IsDefined(typeof(ToDoItemStatus), toDoItem.Status)) throw new InvalidEnumArgumentException();
             if (Count > 0)
                 toDoItem.Id = this[^1].Id + 1;
             Add(toDoItem);

@@ -15,20 +15,25 @@ namespace ToDoListServerTests.ApiControllerTests
     public class ToDoItemsControllerTests
     {
         private readonly Mock<ILogger<ToDoItemsController>> _loggerMock;
+        private readonly IEnumerable<ToDoItem> _toDoList;
 
         public ToDoItemsControllerTests()
         {
             _loggerMock = new Mock<ILogger<ToDoItemsController>>();
+            _toDoList = new[]
+            {
+                new ToDoItem
+                {
+                    Description = "Clean the house", Tags = new[] {new Tag {Name = "important"}, new() {Name = "home"}}
+                },
+                new() {Description = "Clean the toilet"}
+            };
         }
 
        [Fact]
         public  void GetReturnsAllItemsWhenNotEmptyToDoList()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
@@ -67,11 +72,7 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void ToDoListCountDecreasesAfterCorrectDeleteRequest()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
@@ -103,11 +104,7 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void ErrorNotFoundWhenDeleteRequestWithIndexOutOfRange()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
@@ -117,11 +114,7 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void DescriptionChangedWhenEditToDoItemDescription()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
@@ -137,11 +130,7 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void ToDoItemStatusChangedWhenCompleteToDoItem()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
@@ -157,11 +146,7 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void ErrorNotFoundWhenCompleteWithIndexOutOfRange()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
             var patchDoc = new JsonPatchDocument<ToDoItem>()
@@ -183,11 +168,7 @@ namespace ToDoListServerTests.ApiControllerTests
         [Fact]
         public void RenumberIdAutomaticallyWhenAddToDoItemWithAlreadyExistingId()
         {
-            var toDoList = new ToDoList(new[]
-            {
-                new ToDoItem {Description = "Clean the house"},
-                new() {Description = "Water the plants"}
-            });
+            var toDoList = new ToDoList(_toDoList);
             var toDoListProvider = new ListSaveAndLoadFake(toDoList);
             var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
 
@@ -215,6 +196,34 @@ namespace ToDoListServerTests.ApiControllerTests
 
             Assert.IsAssignableFrom<IEnumerable<ToDoItem>>(result);
             Assert.Equal(2, result.Count());
+        }
+
+        [Fact]
+        public void PatchTodoItemWithLessTagsSuccess()
+        {
+            var toDoList = new ToDoList(_toDoList);
+            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+            var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(o => o.Tags, new[] {new Tag {Name = "important"}});
+
+            controller.EditToDoItem(0, patchDoc);
+
+            Assert.Single(toDoList[0].Tags);
+        }
+
+        [Fact]
+        public void PatchTodoItemWithMoreTagsSuccess()
+        {
+            var toDoList = new ToDoList(_toDoList);
+            var toDoListProvider = new ListSaveAndLoadFake(toDoList);
+            var controller = new ToDoItemsController(_loggerMock.Object, toDoListProvider);
+            var tags = new List<Tag>(new[]
+                {new Tag {Name = "important"}, new() {Name = "home"}, new() {Name = "weekend"}});
+            var patchDoc = new JsonPatchDocument<ToDoItem>().Replace(o => o.Tags, tags);
+
+            controller.EditToDoItem(0, patchDoc);
+
+            Assert.Equal(3,toDoList[0].Tags.Count());
         }
     }
 }

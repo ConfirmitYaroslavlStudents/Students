@@ -12,7 +12,7 @@ namespace ToDoListTests
         {
             var task = new Task("clean room", StatusOfTask.Todo);
 
-            Assert.AreEqual("clean room Todo", task.StringFormat());
+            Assert.AreEqual("0 clean room Todo", task.StringFormat());
         }
         [TestMethod]
         public void printAfterChangeStatus()
@@ -21,7 +21,7 @@ namespace ToDoListTests
 
             task.ChangeStatus();
 
-            Assert.AreEqual("clean room InProgress", task.StringFormat());
+            Assert.AreEqual("0 clean room InProgress", task.StringFormat());
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace ToDoListTests
 
             task.ChangeName("not clean room");
 
-            Assert.AreEqual("not clean room Done", task.StringFormat());
+            Assert.AreEqual("0 not clean room Done", task.StringFormat());
         }
 
         [TestMethod]

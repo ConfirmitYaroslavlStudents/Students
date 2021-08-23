@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace ToDoListNikeshina
 {
     public class ComandHandler
@@ -15,13 +12,13 @@ namespace ToDoListNikeshina
 
             if (args.Length == 0)
             {
-                app = new ConsoleApp(logger, new ConsoleInputDataStorage(), startedList);
+                app = new ConsoleApp(logger, new ConsoleInputDataStorage(), startedList.Key, startedList.Value);
                 logger.Log(Messages.InsructionText());
                 while (SwitchForConsoleApp((ConsoleApp)app)) ;
             }
             else
             {
-                app = new CmdApp(logger, new CmdInputDataStorage(args), startedList);
+                app = new CmdApp(logger, new CmdInputDataStorage(args), startedList.Key, startedList.Value);
                 SwitchForCmdApp((CmdApp)app);
             }
 

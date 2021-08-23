@@ -1,44 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ToDoListNikeshina.Validators
 {
     public class ValidatorTaskNumber : AbstractValidator
     {
         private IGetInputData dataResource;
-        private int listCount;
+        private List<Task> _list;
         private ILogger logger;
-        
-        public ValidatorTaskNumber(bool abort, IGetInputData resource, int count, ILogger logger)
+        private readonly int id;
+
+        public ValidatorTaskNumber(bool abort, IGetInputData resource, ToDoList list, ILogger logger)
         {
             isAbortable = abort;
-            listCount = count;
+            _list = list.GetListOfTasks();
             dataResource = resource;
             this.logger = logger;
         }
+
+        public ValidatorTaskNumber(bool abort, ToDoList list, int id)
+        {
+            _list = list.GetListOfTasks();
+            this.id = id;
+            isAbortable = abort;
+        }
+
         public override bool Validate()
         {
             bool result;
+            if (dataResource == null)
+                result = ValidateWithInputParameters();
+            else
+                result = ValidateWithRequestData();
+
+
+            if (_nextValidator != null && ContinueCheck(result, isAbortable))
+                result = _nextValidator.Validate() && result;
+
+            if (logger != null)
+                PrintMessages(logger);
+            return result;
+        }
+
+        private bool ValidateWithRequestData()
+        {
             var inputNumber = dataResource.GetInputData();
             int index;
-            if (int.TryParse(inputNumber, out index) && index > 0 && index <= listCount)
+            if (int.TryParse(inputNumber, out index) && ListContainsId(index))
             {
                 _taskNumber = index;
-                result = true;
+                return true;
             }
             else
             {
                 loggerMessages.Add(Messages.incorrectTaskNumber);
-                result = false;
+                return false;
+            }
+        }
+
+        private bool ValidateWithInputParameters()
+        {
+            if (ListContainsId(id))
+            {
+                _taskNumber = id;
+                return true;
             }
 
-            if (_nextValidator != null && ContinueCheck(result,isAbortable))
-                result = _nextValidator.Validate() && result;
-
-            PrintMessages(logger);
-            return result;
+            return false;
         }
-        
+
+        private bool ListContainsId(int id)
+        {
+            foreach (var task in _list)
+                if (task._id == id)
+                    return true;
+            return false;
+        }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -18,23 +17,32 @@ namespace ToDoListNikeshina
             }
         }
 
-        public List<Task> Load()
+        public KeyValuePair<List<Task>,int> Load()
         {
             if (!File.Exists("Tasks.txt"))
-                return new List<Task>();
+                return new KeyValuePair<List<Task>, int>(new List<Task>(),-1);
 
             List<Task> tasks = new List<Task>();
+            var idcount = 0;
             using (var sr = new StreamReader(FileConfig.FilePath))
             {
                 var str = sr.ReadLine();
                 while (str!=null && str != "")
                 {
                     var words = str.Split(' ');
-                    tasks.Add(new Task(GetName(words), GetStatus(words)));
+                    int id = GetTaskId(words);
+                    if (id > idcount)
+                        idcount = id;
+                    tasks.Add(new Task(GetName(words), GetStatus(words),id));
                     str = sr.ReadLine();
                 }
             }
-            return tasks;
+            return new KeyValuePair<List<Task>, int>(tasks,idcount);
+        }
+
+        private int GetTaskId(string [] words)
+        {
+            return int.Parse(words[0]);
         }
 
         private StatusOfTask GetStatus(string[] words)
@@ -61,7 +69,7 @@ namespace ToDoListNikeshina
             var count = words.Length;
             var sb = new StringBuilder();
 
-            for (int i = 0; i < count - 2; i++)
+            for (int i = 1; i < count - 2; i++)
                 sb.Append(words[i] + " ");
 
             sb.Append(words[count - 2]);

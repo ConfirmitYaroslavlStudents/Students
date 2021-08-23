@@ -4,7 +4,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:49843",
+      "applicationUrl": "http://localhost:59009",
       "sslPort": 0
     }
   },
@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "WebApplication1": {
+    "WebToDoApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/todo-items",

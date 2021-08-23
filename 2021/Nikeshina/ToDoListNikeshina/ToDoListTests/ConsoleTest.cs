@@ -13,7 +13,7 @@ namespace ToDoListTests
         public void AddNewItem()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple" }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple" }),list,-1);
 
             app.AddNewTask();
             var msg = new List<string> { "Enter the description", "Done! " };
@@ -25,7 +25,7 @@ namespace ToDoListTests
         public void WrongFormtOfEditNumber()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple","15" }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple","15" }),list,-1);
 
             app.AddNewTask();
             app.EditDescription();
@@ -38,7 +38,7 @@ namespace ToDoListTests
         public void WrongFormtOfString()
         {
              var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "" }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "" }),list,-1);
 
             app.AddNewTask();
 
@@ -49,7 +49,7 @@ namespace ToDoListTests
         public void LongDescriptionString()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "hvghcfcgh gfc ddfzf gfhggfc d xghv ghgd xszdhgvghdgcxszdggjh es rfxszd     tygj  ft hjghgf " }),list,-1);
 
             app.AddNewTask();
 
@@ -60,7 +60,7 @@ namespace ToDoListTests
         public void PrintToDoList()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "make tea","1" }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "make tea","0" }),list,-1);
             var checkinglist = new List<Task> { new Task("buy apple", StatusOfTask.InProgress), new Task("make tea", StatusOfTask.Todo) };
 
             app.AddNewTask();
@@ -78,8 +78,8 @@ namespace ToDoListTests
 
             app.Print();
 
-            msgs.Add("1. buy apple InProgress");
-            msgs.Add("2. make tea Todo");
+            msgs.Add("0 buy apple InProgress");
+            msgs.Add("1 make tea Todo");
 
             CollectionAssert.AreEqual(logger.Messages, msgs);
             CollectionAssert.AreEqual(checkinglist, app.GetListOfTask());
@@ -89,7 +89,7 @@ namespace ToDoListTests
         public void ListIsEmptyAfterDelete()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1" }),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "0" }),list,-1);
 
             app.AddNewTask();
             app.Delete();
@@ -111,7 +111,7 @@ namespace ToDoListTests
         public void EditDescription()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple",  "1" , "buy pineapple"}),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple",  "0" , "buy pineapple"}),list,-1);
 
             var msgs = new List<string>();
 
@@ -133,7 +133,7 @@ namespace ToDoListTests
         public void CheckRollback()
         {
             var logger = new TestLogger();
-            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "1", "1","buy pineapple","2" ,"1"}),list);
+            var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple", "0", "0","buy pineapple","2" ,"1"}),list,-1);
 
             var msgs = new List<string>();
 
@@ -165,7 +165,7 @@ namespace ToDoListTests
         {
             var logger = new TestLogger();
             var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[] { "buy apple yrg   gv yghgb jhb ujhjn jh ghg  dfx cfjghv hgykh gkhlgkbgj hg cgf " +
-                "cfgcjm kgytfhfgvytftcd gvt  tf yvgvYTTCHVky2" }),list);
+                "cfgcjm kgytfhfgvytftcd gvt  tf yvgvYTTCHVky2" }),list,-1);
 
             var msgs = new List<string>();
 
@@ -182,7 +182,7 @@ namespace ToDoListTests
         {
             var logger = new TestLogger();
             var app = new ConsoleApp(logger, new CmdInputDataStorage(new string[]
-            { "buy apple", "wash dishes", "do tasks", "buy pineapple","1" ,"2","4","3" }),list);
+            { "buy apple", "wash dishes", "do tasks", "buy pineapple","0" ,"1","3","2" }),list,-1);
 
             for(int i=0;i<4;i++)
                app.AddNewTask();

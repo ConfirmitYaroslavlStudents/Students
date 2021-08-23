@@ -1,43 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ToDoListNikeshina
 {
-    public class CmdApp:IApp
+    public class CmdApp : IApp
     {
         private readonly ILogger _logger;
         private readonly GeneralOperator _operator;
         public IGetInputData dataGetter;
         private ToDoList List { get; set; }
-        
 
-        public CmdApp(ILogger logger, IGetInputData dataGetter, List<Task> listFromFile)
+
+        public CmdApp(ILogger logger, IGetInputData dataGetter, List<Task> listFromFile, int countId)
         {
             _logger = logger;
             this.dataGetter = dataGetter;
-            List = new ToDoList(listFromFile);
+            List = new ToDoList(listFromFile, countId);
             _operator = new GeneralOperator(_logger, this.dataGetter, List);
         }
 
-        public void AddNewTask()=> _operator.Add();
+        public void AddNewTask() => _operator.Add();
 
-        public void ChangeStatus()
-        {
-            _operator.ChangeTaskStatus();
-        }
+        public void ChangeStatus() => _operator.ChangeTaskStatus();
 
-        public void Delete()
-        {
-            _operator.Delete();
-        }
+        public void Delete() => _operator.Delete();
 
-        public void EditDescription()
-        {
-            _operator.Edit();
-        }
+        public void EditDescription() => _operator.Edit();
 
-        public void Print()=> _operator.Print();
+        public void Print() => _operator.Print();
 
         public List<Task> GetListOfTask() => List.GetListOfTasks();
 

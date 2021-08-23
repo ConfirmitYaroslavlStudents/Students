@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ToDoListNikeshina.Validators;
 
 namespace ToDoListNikeshina
@@ -23,19 +21,13 @@ namespace ToDoListNikeshina
             if (_list.Count() == 0)
                 _logger.Log(Messages.listIsEmpty);
             else
-            {
-                int i = 1;
                 foreach (var task in GetListOfTask())
-                {
-                    _logger.Log(i + ". " + task.StringFormat());
-                    i++;
-                }
-            }
+                    _logger.Log(task.StringFormat());
         }
 
         public bool Edit()
         {
-            var numberVlidator = new ValidatorTaskNumber(true,_dataGetter, _list.Count(), _logger);
+            var numberVlidator = new ValidatorTaskNumber(true,_dataGetter, _list, _logger);
             var descriptionValidator = new CheckLengthDescription(false, _dataGetter, _logger);
             numberVlidator.SetNext(descriptionValidator);
             if (!numberVlidator.Validate())
@@ -48,7 +40,7 @@ namespace ToDoListNikeshina
 
         public bool Delete()
         {
-            var validator = new ValidatorTaskNumber(true, _dataGetter,_list.Count(), _logger);
+            var validator = new ValidatorTaskNumber(true, _dataGetter,_list, _logger);
 
             if (!validator.Validate())
                 return false;
@@ -61,7 +53,7 @@ namespace ToDoListNikeshina
 
         public bool ChangeTaskStatus()
         {
-            var numberValidator = new ValidatorTaskNumber(true, _dataGetter, _list.Count(), _logger);
+            var numberValidator = new ValidatorTaskNumber(true, _dataGetter, _list, _logger);
             var countInProgresValidator = new ValidatorCheckTaskCountInProgress(true, _logger, _list, numberValidator);
             numberValidator.SetNext(countInProgresValidator);
 
@@ -82,7 +74,7 @@ namespace ToDoListNikeshina
                 return false;
 
             var description = validator.GetDescription();
-            _list.Add(new Task(description, StatusOfTask.Todo));
+            _list.Add(description, StatusOfTask.Todo);
             _logger.Log(Messages.completed);
             return true;
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using ToDoListNikeshina.Validators;
 
 namespace ToDoListNikeshina
@@ -14,11 +12,11 @@ namespace ToDoListNikeshina
         public IGetInputData dataGetter;
         private ToDoList List { get; set; }
 
-        public ConsoleApp(ILogger logger, IGetInputData dataGettter, List<Task> tasksFormFile)
+        public ConsoleApp(ILogger logger, IGetInputData dataGettter, List<Task> tasksFormFile, int idCount)
         {
             _logger = logger;
             dataGetter = dataGettter;
-            List = new ToDoList(tasksFormFile);
+            List = new ToDoList(tasksFormFile,idCount);
             _operator = new GeneralOperator(_logger, dataGetter, List);
             PushListToStack();
         }
@@ -29,18 +27,18 @@ namespace ToDoListNikeshina
             var validator = new ValidatorCountOfActions(true, dataGetter,_pastLStates.Count, _logger);
             if (!validator.Validate())
                 return;
-
-            List = new ToDoList(GetLastList(validator.GetActionsCount()));
+            
+            List = GetLastList(validator.GetActionsCount());
             _operator.UpdateToDo(List);
             _logger.Log(Messages.completed);
         }
 
-        private List<Task> GetLastList(int countOfStep)
+        private ToDoList GetLastList(int countOfStep)
         {
             for (int i = 0; i < countOfStep; i++)
                 _pastLStates.Pop();
 
-            return _pastLStates.Peek().GetListOfTasks();
+            return _pastLStates.Peek();
         }
 
         public void AddNewTask()
@@ -54,7 +52,7 @@ namespace ToDoListNikeshina
 
         private void PushListToStack()
         {
-            _pastLStates.Push(new ToDoList(List.CopyList()));
+            _pastLStates.Push(List.CopyList());
         }
 
         public void Delete()

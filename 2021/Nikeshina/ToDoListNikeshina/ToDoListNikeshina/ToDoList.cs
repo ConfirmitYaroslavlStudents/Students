@@ -1,69 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ToDoListNikeshina
 {
     public class ToDoList
     {
         internal List<Task> _list = new List<Task>();
+        private int _countOfId;
+        private List<int> listOfId;
 
-        public ToDoList(List<Task> inputList)
+        public ToDoList(List<Task> inputList, int idCount)
         {
             _list = inputList;
-        }
-        public ToDoList(Task [] inputList)
-        {
-            _list.AddRange(inputList);
+            _countOfId = idCount;
+            listOfId = new List<int>();
         }
 
-        public int Count()
-        {
-            return _list.Count;
-        }
+        //public ToDoList(Task [] inputList, int idCount)
+        //{
+        //    _list.AddRange(inputList);
+        //    _countOfId = idCount;
+        //}
 
-        public void Add(Task item)
+        public int Count() => _list.Count;
+
+        
+        public void Add(string description, StatusOfTask status, int id)
         {
+            var item = new Task(description, status, id);
             _list.Add(item);
+            listOfId.Add(id);
         }
 
-        public void Delete(int num)
+        public void Add(string description, StatusOfTask status)
         {
-            _list.RemoveAt(num - 1);
+            _countOfId++;
+            var item = new Task(description,status, _countOfId);
+            _list.Add(item);
+            listOfId.Add(_countOfId);
         }
 
-        public void ChangeStatus(int index)
+        public void Delete(int id)
         {
-            int indexInList = index - 1;
-            _list[indexInList].ChangeStatus();
+            _list.RemoveAt(id);
+            listOfId.Remove(id);
         }
 
-        public void Edit(int index, string dscr)
+        public void ChangeStatus(int id)
         {
-            int indexInList = index - 1;
-            _list[indexInList].ChangeName(dscr);
+            _list[id].ChangeStatus();
         }
 
-        internal List<Task> CopyList()
+        public void ChangeStatus(int id, StatusOfTask status)
         {
+            this[id].ChangeStatus(status);
+        }
+
+        public void Edit(int id, string description)
+        {
+            this[id].ChangeName(description);
+        }
+
+        internal ToDoList CopyList()
+        {
+            int maxId = 0;
             var newItem = new List<Task>();
-            foreach(var task in _list)
+            foreach (var task in _list)
             {
-                var newtask = new Task(task.Name, task.Status);
+                var newtask = new Task(task.Name, task.Status, task._id);
                 newItem.Add(newtask);
+                if (task._id > maxId)
+                    maxId = task._id;
             }
 
-            return newItem;
+            return new ToDoList(newItem,maxId);
         }
-        public Task this[int index]
+        public Task this[int id]
         {
-            get { return _list[index]; }
+            get 
+            {
+                var item = FindTaskWithId(id);
+                return item.Value;
+            }
         }
 
         public int GetCountTasksInProgress()
         {
             var count = 0;
 
-            foreach(var task in _list)
+            foreach (var task in _list)
             {
                 if (task.Status == StatusOfTask.InProgress)
                     count++;
@@ -73,5 +97,14 @@ namespace ToDoListNikeshina
         }
 
         public List<Task> GetListOfTasks() => _list;
+
+        private KeyValuePair<bool, Task> FindTaskWithId(int id)
+        {
+            foreach (var task in _list)
+                if (task._id == id)
+                    return new KeyValuePair<bool, Task>(true, task);
+
+            return new KeyValuePair<bool, Task>(false,null);
+        }
     }
 }

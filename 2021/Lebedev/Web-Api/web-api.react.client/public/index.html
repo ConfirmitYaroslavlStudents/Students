@@ -2,41 +2,9 @@
 <head>
     <title>MyToDo</title>
     <meta charset="UTF-8">
-    <script src="react.development.js"></script>
-    <script src="react-dom.development.js"></script>
-    <script src="babel.js"></script>
-    <script src="index.jsx" type="text/babel"></script>
-    <script src="apiWorker.js"></script>
 </head>
 <body>
-    <h3>ToDoList</h3>
-
-    <table border="solid">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Completed</th>
-            <th>Deleted</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody id="ToDOListContainer">
-        </tbody>
-    </table>
-
-    <div id="EditForm" style="display:none">
-        <h3>Edit</h3>
-        <input type="hidden" id="EditId">
-        <input type="checkbox" id="EditComplete">
-        <input type="checkbox" id="EditDelete">
-        <input type="text" id="EditName">
-        <input type="button" value="Save" action="javascript:void(0);" id="SaveEditButton">
-        <input type="button" onclick="hideEdit()" value="Close">
+    <div id="root">
     </div>
-
-    <h3>Add</h3>
-    <input type="text" id="AddName" placeholder="New ToDo">
-    <input type="submit" id="AddItemButton" value="Add" action="javascript:void(0);" method="POST">
 </body>
 </html>

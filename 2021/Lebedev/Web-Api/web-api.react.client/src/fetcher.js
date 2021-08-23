@@ -1,12 +1,19 @@
 const url = 'http://localhost:5000/todolist';
 
-async function getToDoListUpdate() {
-    const response = await fetch(`${url}`);
-    const list = await response.json();
-    return list;
-}
-
 class fetcher {
+
+    async getToDoListUpdate() {
+        const response = await fetch(`${url}`);
+        const list = await response.json();
+        return list;
+    }
+    
+    async getToDoItemUpdate(id) {
+        const response = await fetch(`${url}/${id}`);
+        const item = await response.json();
+        return item;
+    }
+
     async sendDelete(id) {
         await fetch(`${url}/${id}`, {
             headers: {
@@ -14,8 +21,7 @@ class fetcher {
                 'mode': 'no-cors'
             },
             method: 'DELETE'
-        })
-        return await getToDoListUpdate();
+        });
     }
 
     async sendAddItem(itemName) {
@@ -34,8 +40,7 @@ class fetcher {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(item)
-        })
-        return await getToDoListUpdate();
+        });
     }
 
     async sendPatchReqest(item) {
@@ -48,7 +53,7 @@ class fetcher {
             },
             body: JSON.stringify(item)
         });
-        return await getToDoListUpdate();
     }
 }
+
 export default fetcher;

@@ -1,16 +1,20 @@
 import React from 'react';
 import fetcher from './fetcher';
-import ToDoItemPrinter from './ToDoItemPrinter';
+import ToDoItem from './ToDoItem';
 
-class ToDoListPrinter extends React.Component {
+class ToDoList extends React.Component {
 
   fetchSender;
 
   constructor(props) {
     super(props);
     this.fetchSender = new fetcher();
-    this.state = { items: [] };
-    this.state.items = props.toDoList;
+    this.state = { 
+      items: props.toDoList, 
+      adder:props.connector.getAdder(),
+      editor:props.connector.getEditor()
+     };
+     this.state.adder.setState( {onClick:() => this.addItem()});
   }
 
   async addItem() {
@@ -22,11 +26,9 @@ class ToDoListPrinter extends React.Component {
   }
 
   render() {
-    document.getElementById('AddItemButton').onclick = () => this.addItem();
     return this.state.items.map((item) => (
-      <ToDoItemPrinter toDoItem={item}>
-      </ToDoItemPrinter>));
+      <ToDoItem toDoItem={item} editor={this.state.editor}/>));
   }
 }
 
-export default ToDoListPrinter;
+export default ToDoList;

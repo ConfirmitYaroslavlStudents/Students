@@ -7,7 +7,7 @@ class fetcher {
         const list = await response.json();
         return list;
     }
-    
+
     async getToDoItemUpdate(id) {
         const response = await fetch(`${url}/${id}`);
         const item = await response.json();

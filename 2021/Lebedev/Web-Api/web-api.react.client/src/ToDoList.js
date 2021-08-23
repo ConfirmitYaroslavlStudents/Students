@@ -9,12 +9,12 @@ class ToDoList extends React.Component {
   constructor(props) {
     super(props);
     this.fetchSender = new fetcher();
-    this.state = { 
-      items: props.toDoList, 
-      adder:props.connector.getAdder(),
-      editor:props.connector.getEditor()
-     };
-     this.state.adder.setState( {onClick:() => this.addItem()});
+    this.state = {
+      items: props.toDoList,
+      adder: props.connector.getAdder(),
+      editor: props.connector.getEditor()
+    };
+    this.state.adder.setState({ onClick: () => this.addItem() });
   }
 
   async addItem() {
@@ -27,7 +27,7 @@ class ToDoList extends React.Component {
 
   render() {
     return this.state.items.map((item) => (
-      <ToDoItem toDoItem={item} editor={this.state.editor}/>));
+      <ToDoItem toDoItem={item} editor={this.state.editor} />));
   }
 }
 

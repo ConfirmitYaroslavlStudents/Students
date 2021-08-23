@@ -8,6 +8,7 @@ import Editor from './Editor';
 const url = 'http://localhost:5000/todolist';
 var adder;
 var editor;
+
 class Connector {
   setAdder(adderProp) {
     adder = adderProp;
@@ -41,8 +42,8 @@ async function start() {
   ReactDOM.render(
     <div>
       <h3>ToDoList</h3>
-      <Adder connector={connector}/>
-      <Editor connector={connector}/>
+      <Adder connector={connector} />
+      <Editor connector={connector} />
       <table border="solid">
         <thead>
           <tr>

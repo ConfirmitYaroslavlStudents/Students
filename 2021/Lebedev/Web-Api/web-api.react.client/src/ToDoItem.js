@@ -17,7 +17,7 @@ class ToDoItem extends React.Component {
   editItem() {
     this.state.editor.setState({
       prevState: this.state.editor.state,
-      item: this 
+      item: this
     });
   }
 

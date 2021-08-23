@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ToDoListNikeshina\ToDoListNikeshina.csproj" />
+    <ProjectReference Include="..\WebToDoApp\WebToDoApp.csproj" />
   </ItemGroup>
 
 </Project>

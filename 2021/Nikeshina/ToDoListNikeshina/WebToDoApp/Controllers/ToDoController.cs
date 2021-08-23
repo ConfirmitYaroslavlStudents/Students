@@ -14,14 +14,14 @@ namespace WebToDoApp.Controllers
         private ToDoList _list;
         private FileManager _fileManager = new FileManager();
 
-        public ToDoController(ILogger<ToDoController> logger)
+        public ToDoController( FileManager fileManager, ToDoList list)
         {
-            var startedlist = _fileManager.Load();
-            _list = new ToDoList(startedlist.Key, startedlist.Value);
+            _fileManager = fileManager;
+            _list = list;
         }
 
         [HttpGet]
-        public ActionResult<List<Task>> GetToDoList() => _list.GetListOfTasks();
+        public List<Task> GetToDoList() => _list.GetListOfTasks();
 
         [HttpPost]
         public ActionResult AddToDoItem([FromBody] string description)
@@ -59,12 +59,16 @@ namespace WebToDoApp.Controllers
                 return BadRequest();
 
 
-            if (item.Name == null || item.Name == "")
+            if (item.Name == null)
             {
                 _list.ChangeStatus(id, item.Status);
             }
             else
             {
+                var descriptionValidator = new CheckLengthDescription(true, item.Name);
+                if (!descriptionValidator.Validate())
+                    return BadRequest();
+
                 _list.ChangeStatus(id, item.Status);
                 _list.Edit(id, item.Name);
             }

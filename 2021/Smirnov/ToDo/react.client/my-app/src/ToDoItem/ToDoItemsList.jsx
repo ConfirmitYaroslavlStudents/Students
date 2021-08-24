@@ -1,12 +1,12 @@
 import React from 'react';
-import {addToDoItem, getToDoItems, deleteToDoItem, editToDoItem} from './service/RequestsToDoItem';
+import {addToDoItem, getToDoItems, deleteToDoItem, editToDoItem} from '../service/RequestsToDoItem';
 import {ToDoItem} from './ToDoItem';
 import {ToDoItemForm} from './ToDoItemForm';
 
 export class ToDoItemsList extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = { toDoItems: [], id : 0, description : "new description", status : "NotDone", submitValue:"Add" };
+        this.state = { toDoItems: [], id : 0, description : "", status : "", submitValue:"" };
     }
 	
 	onDescriptionChange = e => {
@@ -19,7 +19,6 @@ export class ToDoItemsList extends React.Component {
 	onAddToDoItem = async toDoItem => {
 		await addToDoItem(toDoItem);
 		await this.loadData();
-		this.setState({id : 0, description : "new description", status : "NotDone"});
 	}
 	onDeleteToDoItem = async toDoItem => {
 		await deleteToDoItem(toDoItem.id);	
@@ -35,9 +34,8 @@ export class ToDoItemsList extends React.Component {
 	}
 	
 	loadData = async () => {
-		const response = await getToDoItems();
-		const data = await response.json();
-        this.setState({ toDoItems: data });
+		const data = await getToDoItems();
+        this.setState({ toDoItems: data, id : 0, description : "", status : "NotDone", submitValue:"Add" });
     }
     componentDidMount = () => {
         this.loadData();

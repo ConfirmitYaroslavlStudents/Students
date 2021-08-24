@@ -8,7 +8,7 @@ export class ToDoItem extends React.Component {
 	 onClickDelete = e =>{
 		this.props.onDeleteToDoItem(this.state.toDoItem);
 	}
-	onClickEdit  = e =>{
+	onClickEdit = e =>{
 		this.props.onGetToDoItem(this.state.toDoItem);
 	}
 	

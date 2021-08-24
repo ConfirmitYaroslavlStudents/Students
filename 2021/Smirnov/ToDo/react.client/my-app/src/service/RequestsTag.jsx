@@ -1,17 +1,16 @@
-const url = 'https://localhost:5001/api/ToDoItems/';
+const url = 'https://localhost:5001/api/Tags/';
 
-export const addToDoItem = async toDoItem => {
+export const addTag = async tag => {
 	await fetch(url, {
 				method: "POST",
 				headers: { "Accept": "application/json", "Content-Type": "application/json" },
 				body: JSON.stringify({
-										description: toDoItem.description,
-										status: toDoItem.status
+										name: tag.name
 									})
 				});
 }
 						
-export const getToDoItems = async () =>{
+export const getTags = async () =>{
 	const response = await fetch(url, {
 					method: "GET",
 					headers: { "Accept": "application/json", "Content-Type": "application/json" }
@@ -20,20 +19,20 @@ export const getToDoItems = async () =>{
 	return await response.json();
 }
 
-export const deleteToDoItem = async id =>{
+export const deleteTag = async id =>{
 		await fetch(url + id, {
 					method: "DELETE",
 					headers: { "Accept": "application/json", "Content-Type": "application/json" },
 					});
 }
 
-export const editToDoItem = async toDoItem =>{
-		await fetch(url + toDoItem.id, {
-					method: "PATCH",
+export const editTag = async tag =>{
+		await fetch(url + tag.id, {
+					method: "PUT",
 					headers: { "Accept": "application/json", "Content-Type": "application/json" },
 					body: JSON.stringify({
-						description: toDoItem.description,
-						status: toDoItem.status
+						id: tag.id,
+						name: tag.name
 					})
         });
 }

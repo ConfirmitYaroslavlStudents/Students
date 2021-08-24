@@ -14,7 +14,7 @@ class ToDoList extends React.Component{
       }
     }
   
-    componentDidMount = async() =>{
+    componentDidMount = async() => {
       await this.updateToDoList();
     }
   
@@ -23,9 +23,9 @@ class ToDoList extends React.Component{
     }
   
     getToDoList = async() => {
-        let response = await fetch(url);
-        let toDoList = await response.json();
-        return toDoList;
+      let response = await fetch(url);
+      let toDoList = await response.json();
+      return toDoList;
     }
   
     render() {
@@ -68,52 +68,64 @@ class ToDoList extends React.Component{
     }
   
     changeTaskTags = e => {
-      this.setState({newTaskTags: e.target.value});
+      this.setState({newTaskTags: e.target.value.split(/\s*,\s*/)});
     }
   
     renderToDoListTable = () => {
       if (this.state.toDoList.length === 0) {
-        return(<h3>Your to do list is empty</h3>);
+        return(<h5>Your to do list is empty</h5>);
       }
       return(
         <div>
           <h5>Here is your to do list:</h5>
-          <table>
-            {this.state.toDoList.map(task => <ToDoTask id={task.id} text={task.text} status={task.isDone} tags={task.tags} update={this.updateToDoList}></ToDoTask>)}
+          <font size="2">
+            <table>
+              <thead align="center" >
+                <tr>
+                  <th>Id</th>
+                  <th>Text</th>
+                  <th>Status</th>
+                  <th>Tags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.toDoList.map(task => <ToDoTask id={task.id} text={task.text} status={task.isDone} tags={task.tags} update={this.updateToDoList}></ToDoTask>)}
+              </tbody>
           </table>
+          </font>
         </div>
       );
     }
   
     addTask = async() => {
       let taskBody = this.getTaskBodyForAdd();
-        await this.sendPostRequest(taskBody);
-        this.clearAddFields();
+      await this.sendPostRequest(taskBody);
+      this.clearAddFields();
       await this.updateToDoList();
     }
   
     getTaskBodyForAdd = () => {
       let taskText = this.state.newTaskText;
-    let taskStatus = this.state.newTaskStatus;
-    let taskTags=this.state.newTaskTags;
-    return { text: taskText, isDone: taskStatus, tags: taskTags };
+      let taskStatus = this.state.newTaskStatus;
+      let taskTags=this.state.newTaskTags;
+      return { text: taskText, isDone: taskStatus, tags: taskTags };
     }
   
     sendPostRequest = async taskBody => {
-        await fetch(url, {
-        method: 'POST',
+      await fetch(url, {
+      method: 'POST',
         headers: {
           'Content-Type' : 'application/json'
         },
-        body: JSON.stringify(taskBody)
+      body: JSON.stringify(taskBody)
       });
     }
   
     clearAddFields = () => {
-        this.setState({
-        newTaskText: "",
-        newTaskStatus: false,
-        newTaskTags: ""
+      this.setState({
+      newTaskText: "",
+      newTaskStatus: false,
+      newTaskTags: ""
       });
     }
   }

@@ -44,7 +44,7 @@ class ToDoTask extends React.Component{
   }
 
   changeTaskTags = e => {
-    this.setState({tags: e.target.value});
+    this.setState({tags: e.target.value.split(/\s*,\s*/)});
   }
 
   deleteTask = async () => {

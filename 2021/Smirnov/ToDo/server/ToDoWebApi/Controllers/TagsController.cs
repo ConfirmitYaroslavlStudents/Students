@@ -27,14 +27,14 @@ namespace ToDoWebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Tag>> GetTag(long id)
         {
-            var toDoTag = await _context.Tags.FindAsync(id);
+            var tag = await _context.Tags.FindAsync(id);
 
-            if (toDoTag == null)
+            if (tag == null)
             {
                 return NotFound();
             }
 
-            return toDoTag;
+            return tag;
         }
         [HttpPost]
         public async Task<ActionResult<Tag>> PostTag(Tag tag)

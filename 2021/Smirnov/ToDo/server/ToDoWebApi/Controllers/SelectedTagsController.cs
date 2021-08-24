@@ -37,18 +37,18 @@ namespace ToDoWebApi.Controllers
             return selectedTag;
         }
         [HttpPost]
-        public async Task<ActionResult<SelectedTag>> PostSelectedTag(SelectedTag tag)
+        public async Task<ActionResult<SelectedTag>> PostSelectedTag(SelectedTag selectedTag)
         {
-            _context.SelectedTags.Add(tag);
+            _context.SelectedTags.Add(selectedTag);
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSelectedTag), new { id = tag.Id }, tag);
+            return CreatedAtAction(nameof(GetSelectedTag), new { id = selectedTag.Id }, selectedTag);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutSelectedTag(long id, SelectedTag tag)
+        public async Task<ActionResult> PutSelectedTag(long id, SelectedTag selectedTag)
         {
-            if (id != tag.Id)
+            if (id != selectedTag.Id)
             {
                return BadRequest();
             }
@@ -58,7 +58,7 @@ namespace ToDoWebApi.Controllers
                 return NotFound();
             }
 
-            _context.Entry(tag).State = EntityState.Modified;
+            _context.Entry(selectedTag).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -67,14 +67,14 @@ namespace ToDoWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSelectedTag(long id)
         {
-            var tag = await _context.SelectedTags.FindAsync(id);
+            var selectedTag = await _context.SelectedTags.FindAsync(id);
 
-            if (tag == null)
+            if (selectedTag == null)
             {
                 return NotFound();
             }
 
-            _context.SelectedTags.Remove(tag);
+            _context.SelectedTags.Remove(selectedTag);
             await _context.SaveChangesAsync();
 
             return NoContent();

@@ -27,28 +27,28 @@ namespace ToDoWebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TagToDoItem>> GetTagToDoItem(long id)
         {
-            var toDoTag = await _context.TagToDoItems.FindAsync(id);
+            var tagToDoItem = await _context.TagToDoItems.FindAsync(id);
 
-            if (toDoTag == null)
+            if (tagToDoItem == null)
             {
                 return NotFound();
             }
 
-            return toDoTag;
+            return tagToDoItem;
         }
         [HttpPost]
-        public async Task<ActionResult<TagToDoItem>> PostTagToDoItem(TagToDoItem TagToDoItem)
+        public async Task<ActionResult<TagToDoItem>> PostTagToDoItem(TagToDoItem tagToDoItem)
         {
-            _context.TagToDoItems.Add(TagToDoItem);
+            _context.TagToDoItems.Add(tagToDoItem);
 
             await _context.SaveChangesAsync();
 
-            return base.CreatedAtAction(nameof(GetTagToDoItem), new { id = TagToDoItem.Id }, TagToDoItem);
+            return base.CreatedAtAction(nameof(GetTagToDoItem), new { id = tagToDoItem.Id }, tagToDoItem);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutTagToDoItem(long id, TagToDoItem TagToDoItem)
+        public async Task<ActionResult> PutTagToDoItem(long id, TagToDoItem tagToDoItem)
         {
-            if (id != TagToDoItem.Id)
+            if (id != tagToDoItem.Id)
             {
                return BadRequest();
             }
@@ -58,7 +58,7 @@ namespace ToDoWebApi.Controllers
                 return NotFound();
             }
 
-            _context.Entry(TagToDoItem).State = EntityState.Modified;
+            _context.Entry(tagToDoItem).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -67,14 +67,14 @@ namespace ToDoWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTagToDoItem(long id)
         {
-            var tag = await _context.TagToDoItems.FindAsync(id);
+            var tagToDoItem = await _context.TagToDoItems.FindAsync(id);
 
-            if (tag == null)
+            if (tagToDoItem == null)
             {
                 return NotFound();
             }
 
-            _context.TagToDoItems.Remove(tag);
+            _context.TagToDoItems.Remove(tagToDoItem);
             await _context.SaveChangesAsync();
 
             return NoContent();

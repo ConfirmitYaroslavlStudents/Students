@@ -68,6 +68,8 @@ namespace ToDoApi.Controllers
                 oldToDoTask.Text = toDoTask.Text;
             if (toDoTask.IsPatchContainsIsDone)
                 oldToDoTask.IsDone = toDoTask.IsDone;
+            if (toDoTask.IsPatchContainsTags)
+                oldToDoTask.Tags = toDoTask.Tags;
             _loaderAndSaver.Save(_toDoList);
             return NoContent();
         }

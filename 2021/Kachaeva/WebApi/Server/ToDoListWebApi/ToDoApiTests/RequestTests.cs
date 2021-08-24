@@ -56,7 +56,7 @@ namespace ToDoApiTests
         [TestMethod]
         public async Task PostTaskSuccess()
         {
-            var body = GetBody(new { Text = "wash dishes", IsDone = false });
+            var body = GetBody(new { Text = "wash dishes", IsDone = false, Tags= new[] { "home", "important" } });
 
             var response = await _client.PostAsync(Url, body);
             var getResponse = await _client.GetAsync(Url);
@@ -65,13 +65,13 @@ namespace ToDoApiTests
             response.EnsureSuccessStatusCode();
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
             Assert.AreEqual(1, toDoList.Count);
-            Assert.AreEqual("1. wash dishes  [ ]", toDoList[0].ToString());
+            Assert.AreEqual("1. wash dishes  [ ] home important ", toDoList[0].ToString());
         }
 
         [TestMethod]
         public async Task DeleteTaskSuccess()
         {
-            var body = GetBody(new { Text = "wash dishes", IsDone = false });
+            var body = GetBody(new { Text = "wash dishes", IsDone = false, Tags = new[] { "home", "important" } });
             await _client.PostAsync(Url, body);
 
             var response = await _client.DeleteAsync(Url + "/1");
@@ -86,7 +86,7 @@ namespace ToDoApiTests
         [TestMethod]
         public async Task PatchTaskTextSuccess()
         {
-            var body = GetBody(new { Text = "wash dishes", IsDone = false });
+            var body = GetBody(new { Text = "wash dishes", IsDone = false, Tags = new[] { "home", "important" } });
             await _client.PostAsync(Url, body);
             var body2 = GetBody(new { Text = "clean the room" });
 
@@ -97,13 +97,13 @@ namespace ToDoApiTests
             response.EnsureSuccessStatusCode();
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
             Assert.AreEqual(1, toDoList.Count);
-            Assert.AreEqual("1. clean the room  [ ]", toDoList[0].ToString());
+            Assert.AreEqual("1. clean the room  [ ] home important ", toDoList[0].ToString());
         }
 
         [TestMethod]
         public async Task PatchTaskStatusSuccess()
         {
-            var body = GetBody(new { Text = "wash dishes", IsDone = false });
+            var body = GetBody(new { Text = "wash dishes", IsDone = false, Tags = new[] { "home", "important" } });
             await _client.PostAsync(Url, body);
             var body2 = GetBody(new { IsDone = true });
 
@@ -114,7 +114,24 @@ namespace ToDoApiTests
             response.EnsureSuccessStatusCode();
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
             Assert.AreEqual(1, toDoList.Count);
-            Assert.AreEqual("1. wash dishes  [v]", toDoList[0].ToString());
+            Assert.AreEqual("1. wash dishes  [v] home important ", toDoList[0].ToString());
+        }
+
+        [TestMethod]
+        public async Task PatchTaskTagsSuccess()
+        {
+            var body = GetBody(new { Text = "wash dishes", IsDone = false, Tags = new[] { "home", "important" } });
+            await _client.PostAsync(Url, body);
+            var body2 = GetBody(new { Tags = new[] { "not important" } });
+
+            var response = await _client.PatchAsync(Url + "/1", body2);
+            var getResponse = await _client.GetAsync(Url);
+            var toDoList = (await getResponse.Content.ReadAsAsync<IEnumerable<ToDoTask>>()).ToList();
+
+            response.EnsureSuccessStatusCode();
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            Assert.AreEqual(1, toDoList.Count);
+            Assert.AreEqual("1. wash dishes  [ ] not important ", toDoList[0].ToString());
         }
     }
 }

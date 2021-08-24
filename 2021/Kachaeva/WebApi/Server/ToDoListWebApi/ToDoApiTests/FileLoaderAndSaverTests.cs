@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using ToDoApiDependencies;
+using System.Collections.Generic;
 
 namespace ToDoApiTests
 {
@@ -27,7 +28,7 @@ namespace ToDoApiTests
         [TestMethod]
         public void ToDoListSavesAndLoadsCorrectly()
         {
-            var toDoList = new ToDoList {new ToDoTask("wash dishes", false)};
+            var toDoList = new ToDoList {new ToDoTask("wash dishes", false, new List<string> { "home", "important" }) };
 
             _fileLoaderAndSaver.Save(toDoList);
             var loadedToDoList = _fileLoaderAndSaver.Load();

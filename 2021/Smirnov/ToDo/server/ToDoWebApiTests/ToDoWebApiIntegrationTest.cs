@@ -175,7 +175,7 @@ namespace ToDoWebApiTests
 
         private string StringFormatter(string id, string description, string status)
         {
-            return $@"{{""Id"":{id},""Description"":""{description}"",""Status"":""{status}""}}";
+            return $@"{{""id"":{id},""description"":""{description}"",""status"":""{status}""}}";
         }
     }
 }

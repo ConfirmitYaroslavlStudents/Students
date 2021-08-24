@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoWebApi.Database;
 using ToDoWebApi.Models;
+using ToDoWebApi.Models.Patch;
 
 namespace ToDoWebApi.Controllers
 {
@@ -16,6 +17,8 @@ namespace ToDoWebApi.Controllers
         public ToDoItemsController(ToDoContext context)
         {
             _context = context;
+
+            _context.Database.EnsureCreated();
         }
 
         [HttpGet]

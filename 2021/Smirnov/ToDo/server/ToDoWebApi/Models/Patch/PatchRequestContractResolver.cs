@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace ToDoWebApi.Models
+namespace ToDoWebApi.Models.Patch
 {
     public class PatchRequestContractResolver : DefaultContractResolver
     {

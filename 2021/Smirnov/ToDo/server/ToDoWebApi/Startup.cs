@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ToDoWebApi.Database;
-using ToDoWebApi.Models;
+using ToDoWebApi.Models.Patch;
 
 namespace ToDoWebApi
 {

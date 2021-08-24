@@ -5,10 +5,12 @@ using Xunit;
 using ToDoWebApi.Controllers;
 using ToDoWebApi.Database;
 using ToDoWebApi.Models;
+using ToDoWebApi.Models.Patch;
+using System.Linq;
 
-namespace ToDoWebApiTests
+namespace ToDoWebApiTests.UnitTests
 {
-    public class ToDoControllerTest
+    public class ToDoItemsControllerTest
     {
         [Fact]
         public async void AddToDoItem_DescriptionTest()
@@ -25,27 +27,27 @@ namespace ToDoWebApiTests
             Assert.Equal(ToDoItemStatus.NotDone, toDoContext.ToDoItems.Find(1L).Status);
         }
         [Fact]
-        public void GetToDoItems_ShouldReturnToDoItems()
+        public async void GetToDoItems_ShouldReturnToDoItems()
         {
             //arrange
             var toDoContext = CreateToDoContext();
             toDoContext.AddRange(new List<ToDoItem>{new ToDoItem {Description = "test1"},
                                  new ToDoItem {Description = "test2", Status = ToDoItemStatus.Done}});
 
+            toDoContext.SaveChanges();
+
             var controller = new ToDoItemsController(toDoContext);
             //act
-            var listToDoItem = controller.GetToDoItems().Result.Value;
+            var listToDoItem = (await controller.GetToDoItems()).Value.ToList();
 
             //assert
-            foreach (var toDoItem in listToDoItem)
-            {
-                Assert.Equal(1, toDoItem.Id);
-                Assert.Equal("test1", toDoItem.Description);
-                Assert.Equal(ToDoItemStatus.NotDone, toDoItem.Status);
-                Assert.Equal(2, toDoItem.Id);
-                Assert.Equal("test2", toDoItem.Description);
-                Assert.Equal(ToDoItemStatus.Done, toDoItem.Status);
-            }
+            Assert.Equal(2, listToDoItem.Count);
+            Assert.Equal(1, listToDoItem[0].Id);
+            Assert.Equal("test1", listToDoItem[0].Description);
+            Assert.Equal(ToDoItemStatus.NotDone, listToDoItem[0].Status);
+            Assert.Equal(2, listToDoItem[1].Id);
+            Assert.Equal("test2", listToDoItem[1].Description);
+            Assert.Equal(ToDoItemStatus.Done, listToDoItem[1].Status);
         }
         [Fact]
         public void GetToDoItem_ShouldReturnToDoItem()
@@ -54,6 +56,8 @@ namespace ToDoWebApiTests
             var toDoContext = CreateToDoContext();
             toDoContext.AddRange(new List<ToDoItem> { new ToDoItem { Description = "test1" }, 
                                  new ToDoItem { Description = "test2", Status = ToDoItemStatus.Done } });
+
+            toDoContext.SaveChanges();
 
             var controller = new ToDoItemsController(toDoContext);
             //act
@@ -70,6 +74,9 @@ namespace ToDoWebApiTests
             //arrange
             var toDoContext = CreateToDoContext();
             toDoContext.Add(new ToDoItem { Description = "test1" });
+
+            toDoContext.SaveChanges();
+
             var controller = new ToDoItemsController(toDoContext);
 
             var patchToDoItemDto = new PatchToDoItemDto { Description = "TestPatch"};
@@ -88,6 +95,9 @@ namespace ToDoWebApiTests
             //arrange
             var toDoContext = CreateToDoContext();
             toDoContext.Add(new ToDoItem { Description = "test1" });
+
+            toDoContext.SaveChanges();
+
             var controller = new ToDoItemsController(toDoContext);
 
             var patchToDoItemDto = new PatchToDoItemDto {Status = ToDoItemStatus.Done};
@@ -106,6 +116,9 @@ namespace ToDoWebApiTests
             //arrange
             var toDoContext = CreateToDoContext();
             toDoContext.Add(new ToDoItem { Description = "test1" });
+
+            toDoContext.SaveChanges();
+
             var controller = new ToDoItemsController(toDoContext);
 
             var patchToDoItemDto = new PatchToDoItemDto { Description = "TestPatch", Status = ToDoItemStatus.Done };
@@ -126,6 +139,8 @@ namespace ToDoWebApiTests
             var toDoContext = CreateToDoContext();
 
             toDoContext.Add(new ToDoItem { Description = "test1" });
+
+            toDoContext.SaveChanges();
 
             var controller = new ToDoItemsController(toDoContext);
             //act

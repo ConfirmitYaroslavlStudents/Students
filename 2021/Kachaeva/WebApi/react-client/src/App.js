@@ -2,14 +2,89 @@ import React from "react";
 
 const url = 'https://localhost:44314/todo';
 
-class App extends React.Component{
+class ToDoTask extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
-      status: false,
+      text: this.props.text,
+      status: this.props.status
+    }
+  }
+
+  render(){
+    return(
+      <tr>
+        <td align='right'>{this.props.id}</td>
+        <td>
+          <input type='text' onChange={this.changeTaskText} value={this.state.text}></input>
+        </td>
+        <td>
+          <input type='checkbox' onChange={this.changeTaskStatus} checked={this.state.status}></input>
+        </td>
+        <td>
+          <button onClick={this.editTask}>Save changes</button>
+        </td>
+        <td>
+          <button onClick={this.deleteTask}>Delete task</button>
+        </td>
+      </tr>
+    )
+  }
+
+  changeTaskText = e => {
+    this.setState({ text: e.target.value });
+  }
+
+  changeTaskStatus = e => {
+    this.setState({ status: e.target.checked });
+  }
+
+  deleteTask = async () => {
+	  let urlWithTaskId = this.getUrlWithTaskId();
+	  await this.sendDeleteRequest(urlWithTaskId);
+    await this.props.onUpdate();
+  }
+
+  getUrlWithTaskId = () => {
+	  return url + '/' + this.props.id;
+  }
+
+  sendDeleteRequest = async urlWithTaskId => {
+	  await fetch(urlWithTaskId, {
+      method: 'DELETE'
+    });
+  }
+
+  editTask = async () => {
+    let urlWithTaskId = this.getUrlWithTaskId();
+	  let taskBody = this.getTaskBodyForEdit();
+	  await this.sendPatchRequest(urlWithTaskId, taskBody);
+    await this.props.onUpdate();
+  }
+
+  getTaskBodyForEdit = () => {
+    return { text: this.state.text, isDone: this.state.status };
+  }
+
+  sendPatchRequest = async(urlWithTaskId, taskBody) => {
+	  await fetch(urlWithTaskId, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(taskBody)
+    });
+  }
+}
+
+class ToDoList extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      newTaskText: "",
+      newTaskStatus: false,
       toDoList: []
-    };
+    }
   }
 
   componentDidMount = async() =>{
@@ -41,10 +116,10 @@ class App extends React.Component{
       <table>
         <tr>
           <td>
-            <input type="text" id="taskTextInput" onChange={this.changeTaskText} value={this.state.text} />
+            <input type="text" onChange={this.changeTaskText} value={this.state.newTaskText} />
           </td>
           <td>
-            <input type="checkbox" id="taskStatusInput" onChange={this.changeTaskStatus} checked={this.state.status}/>
+            <input type="checkbox" onChange={this.changeTaskStatus} checked={this.state.newTaskStatus}/>
           </td>
           <td>
             <input type="button" defaultValue="Add task" onClick={this.addTask}/>
@@ -55,11 +130,11 @@ class App extends React.Component{
   }
 
   changeTaskText = e => {
-    this.setState({ text: e.target.value });
+    this.setState({ newTaskText: e.target.value });
   }
 
   changeTaskStatus = e => {
-    this.setState({ status: e.target.checked });
+    this.setState({ newTaskStatus: e.target.checked });
   }
 
   renderToDoListTable = () => {
@@ -70,30 +145,10 @@ class App extends React.Component{
       <div>
         <h5>Here is your to do list:</h5>
         <table>
-          {this.state.toDoList.map(task => this.renderRow(task))}
+          {this.state.toDoList.map(task => <ToDoTask id={task.id} text={task.text} status={task.isDone} onUpdate={this.updateToDoList}></ToDoTask>)}
         </table>
       </div>
     );
-  }
-
-  renderRow = task => {
-    return(
-      <tr>
-        <td align='right'>{task.id}</td>
-        <td>
-          <input type='text' value={task.text}></input>
-        </td>
-        <td>
-          <input type='checkbox' checked={task.isDone}></input>
-        </td>
-        <td>
-          <button onClick={() => this.editTask(task.id, task.text, task.isDone)}>Save changes</button>
-        </td>
-        <td>
-          <button onClick={() => this.deleteTask(task.id)}>Delete task</button>
-        </td>
-      </tr>
-    )
   }
 
   addTask = async() => {
@@ -104,8 +159,8 @@ class App extends React.Component{
   }
 
   getTaskBodyForAdd = () => {
-	let taskText = this.state.text;
-  let taskStatus = this.state.status;
+	let taskText = this.state.newTaskText;
+  let taskStatus = this.state.newTaskStatus;
   return { text: taskText, isDone: taskStatus };
   }
 
@@ -121,47 +176,10 @@ class App extends React.Component{
 
   clearAddFields = () => {
 	  this.setState({
-      text: "",
-      status: false
+      newTaskText: "",
+      newTaskStatus: false
     });
   }
+}
 
-  deleteTask = async taskId => {
-	  let urlWithTaskId = this.getUrlWithTaskId(taskId);
-	  await this.sendDeleteRequest(urlWithTaskId);
-    await this.updateToDoList();
-  }
-
-  getUrlWithTaskId = taskId => {
-	  return url + '/' + taskId;
-  }
-
-  sendDeleteRequest = async urlWithTaskId => {
-	  await fetch(urlWithTaskId, {
-      method: 'DELETE'
-    });
-  }
-
-  editTask = async (taskId, taskText, taskStatus) => {
-    let urlWithTaskId = this.getUrlWithTaskId(taskId);
-	  let taskBody = this.getTaskBodyForEdit(taskText, taskStatus);
-	  await this.sendPatchRequest(urlWithTaskId, taskBody);
-    await this.updateToDoList();
-  }
-
-  getTaskBodyForEdit = (taskText, taskStatus) => {
-    return { text: taskText, isDone: taskStatus };
-  }
-
-  sendPatchRequest = async(urlWithTaskId, taskBody) => {
-	  await fetch(urlWithTaskId, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(taskBody)
-    });
-  }
-};
-
-export default App;
+export default ToDoList;

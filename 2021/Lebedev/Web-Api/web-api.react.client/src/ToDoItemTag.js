@@ -8,7 +8,7 @@ class ToDoItemTag extends React.Component {
       ToDoItemTag: props.listOfTags,
       editor: props.editor
     };
-    if(this.state.ToDoItemTag === undefined)
+    if (this.state.ToDoItemTag === undefined)
       this.state.ToDoItemTag = [];
   }
 
@@ -16,14 +16,14 @@ class ToDoItemTag extends React.Component {
     return (
       <table>
         <tbody>
-        {
-          this.state.ToDoItemTag.map((tag)=>
-          (<tr>
-            <td>
-              {tag}
-            </td>
-          </tr>))
-        }
+          {
+            this.state.ToDoItemTag.map((tag) =>
+            (<tr>
+              <td>
+                {tag}
+              </td>
+            </tr>))
+          }
         </tbody>
       </table>);
   }

@@ -12,12 +12,12 @@ class Editor extends React.Component {
         this.state = { item: {} };
         this.state.item.ToDoItemTag = [];
         this.item = this.state.item;
-        this.newTag="";
+        this.newTag = "";
         props.connector.setEditor(this);
     }
 
     hideEdit() {
-        this.newTag="";
+        this.newTag = "";
         this.setState({ item: {} });
     }
 
@@ -55,7 +55,7 @@ class Editor extends React.Component {
         this.hideEdit();
         return;
     }
-    
+
     async addTag() {
         this.item.tag.push(this.newTag);
         await this.fetchSender.sendPatchReqest(this.item);
@@ -82,12 +82,11 @@ class Editor extends React.Component {
     render() {
         if (this.state.item.state === undefined)
             this.item = {};
-        else
-        {
+        else {
             this.item = this.state.item.state.item;
         }
-        if(this.item.tag=== undefined)
-            this.item.tag=[];
+        if (this.item.tag === undefined)
+            this.item.tag = [];
         return (
             <div style={{ display: this.item.id === undefined ? 'none' : '' }}>
                 <h3>Edit</h3>
@@ -95,21 +94,21 @@ class Editor extends React.Component {
                 <input type="checkbox" checked={this.item.completed} onChange={() => this.completedChanged()} id="EditComplete"></input>
                 <input type="checkbox" checked={this.item.deleted} onChange={() => this.deletedChanged()} id="EditDelete"></input>
                 <input type="text" value={this.item.name} onChange={() => this.nameChanged()} id="EditName"></input>
-                <input type="text" value = {this.newTag} onChange={() => this.newTagChanged()} placeholder="New Tag" id="TagName"></input>
+                <input type="text" value={this.newTag} onChange={() => this.newTagChanged()} placeholder="New Tag" id="TagName"></input>
                 <input type="button" value="Add" onClick={() => this.addTag()} id="SaveEditButton"></input>
                 <table>
                     <tbody>
-                    {
-                        this.item.tag.map((tag) =>
-                        (<tr>
-                            <td>
-                                {tag}
-                            </td>
-                            <td>
-                                <input type="button" value="X" onClick={() => this.deleteTag(tag)}></input>
-                            </td>
-                        </tr>))
-                    }
+                        {
+                            this.item.tag.map((tag) =>
+                            (<tr>
+                                <td>
+                                    {tag}
+                                </td>
+                                <td>
+                                    <input type="button" value="X" onClick={() => this.deleteTag(tag)}></input>
+                                </td>
+                            </tr>))
+                        }
                     </tbody>
                 </table>
                 <input type="button" value="Save" onClick={() => this.patchItem()} id="SaveEditButton"></input>

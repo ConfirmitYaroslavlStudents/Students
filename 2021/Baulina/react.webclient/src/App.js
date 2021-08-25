@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
-import { ToDoList } from './components/todo/toDoList';
+import { TodoList } from './components/todo/todoList';
 import NotFound from './components/errorPages/NotFound';
 import BadRequest from './components/errorPages/BadRequest';
-import ItemNotFound from './components/errorPages/ItemNotFound';
 
 
 class App extends Component {
   render() {
     return (
       <div className="App container">
-        <h3 className="d-flex justify-content-center mt-3 mb-4">
+        <Toaster/>
+        <h3 className="App-header">
           To-Do List
         </h3>
       <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={ToDoList} />
-            <Route path="/error" component = {BadRequest}/>            
-            <Route path="/notfound" component = {ItemNotFound}/>
+            <Route exact path="/" component={TodoList} />
+            <Route path="/error" component = {BadRequest}/>      
             <Route path="*" component={NotFound} />
           </Switch>
       </BrowserRouter>

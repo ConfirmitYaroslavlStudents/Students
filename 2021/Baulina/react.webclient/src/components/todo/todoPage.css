@@ -1,0 +1,55 @@
+#addEditModal{
+    display: block;
+}
+
+.modal-header{
+    background-color: rgb(132, 181, 233);
+}
+
+.modal-body{
+    display: flex;
+    flex-direction: row;
+}
+
+.addTask-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.searchByTagBar {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+}
+
+.tagsContainer{
+    display: flex;
+    justify-content: center;
+    margin: 0.5rem;
+}
+
+.input-group{
+    margin-bottom: 1rem;
+}
+
+.todoTableCell{
+    font-size: 20px;
+    max-width: 45vw;
+    min-width: 8vw;
+    word-wrap: break-word;
+}
+
+.searchSelect {
+    min-width: 15vw;
+}
+
+.form-check-label{
+    font-style: italic;
+}
+
+.todoItemTag {
+    font-size: 16px;
+    background-color: rgba(252, 255, 102, 0.959);
+    width: fit-content;
+}

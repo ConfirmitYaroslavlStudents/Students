@@ -1,8 +1,9 @@
 import  handleError from './errorHandler';
+import configData from "../../config.json";
 
-const url = "https://localhost:5001/todo-list";
+const url = configData.SERVER_URL;
 
-export async function sendGetRequest(){
+export async function getAllItems(){
     try {
         const response = await fetch(url);
         if (response.ok) {
@@ -14,52 +15,44 @@ export async function sendGetRequest(){
     }
 }
 
-export async function sendPostRequest(requestBody){
-    try {
-        const response = await fetch(url,
-            {
+export async function addTodoItem(newItem){
+    const response = await fetch(url,
+        {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json"
                 },
-                body: JSON.stringify(requestBody)
-            });
-        if (response.ok) {
-            return true;
-        } else handleError(response);
-    } catch (error) {
-        console.error(error);
-    }
+                body: JSON.stringify(newItem)
+        });
+    return handleResponse(response);
 }
 
-export async function sendPatchRequest(id, requestBody){
-    try {
-        const response = await fetch(`${url}/${id}`,
-            {
+export async function editTodoItem(id, adjustments){
+    const response = await fetch(`${url}/${id}`,
+        {
                 method: "PATCH",
                 headers: {
                     'Content-Type': "application/json-patch+json"
                 },
-                body: JSON.stringify(requestBody)
-            });
-        if (response.ok) {
-            return true;
-        } else handleError(response);
-    } catch (error) {
-        console.error(error);
-    }
+                body: JSON.stringify(adjustments)
+        });
+    return handleResponse(response);
 }
 
-export async function sendDeleteRequest(id){
-    try {
-        const response = await fetch(`${url}/${id}`,
+export async function deleteTodoItem(id){
+    const response = await fetch(`${url}/${id}`,
             {
                 method: "DELETE"
             });
+    return handleResponse(response);
+}
+
+function handleResponse(response){
+    try {
         if (response.ok) {
             return true;
         } else handleError(response);
     } catch (error) {
         console.error(error);
     }
-}
+} 

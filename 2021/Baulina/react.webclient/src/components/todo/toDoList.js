@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
-import { ReactComponent as DeleteLogo } from '../../assets/deleteLogo.svg';
-import { ReactComponent as EditLogo } from '../../assets/editLogo.svg';
-import { sendGetRequest, sendPatchRequest, sendPostRequest, sendDeleteRequest } from './serverRequests';
-import './toDoList.css'
+import Enumerable from 'linq';
+import { getAllItems, editTodoItem, addTodoItem, deleteTodoItem } from './serverRequests';
+import './todoPage.css';
+import AddTaskBtn from './addTaskButton';
+import Table from './todoTable';
+import Modal from './addEditModal'  
+import SearchSelect from './searchByTagBar';
 
-const toDoItemStatus = { "Not Complete": 0, "Complete": 1 };
+export const todoItemStatus = { notCompleted: 0, completed: 1 };
 
-export class ToDoList extends Component {
+export class TodoList extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             todoItems: [],
-            modalTitle: "",
-            id: 0,
-            description: "",
-            status: toDoItemStatus.NotComplete,
-            isShowModal : false
+            id: Number,
+            tags: [],
+            description: String,
+            status: todoItemStatus.notCompleted,
+            isShowModal : false,
+            isEditMode : false,
+            filteredItems: [],
+            isSearchModeOr : false
         }
     }
 
-    async refreshList() {
-       const newState = await sendGetRequest();
+    refreshList = async () => {
+       const newState = await getAllItems();
        if(!!newState) {
            this.setState(newState);
        }
     }
 
-    async componentDidMount() {
+    componentDidMount = async () => {
         await this.refreshList();
     }
 
@@ -37,221 +43,141 @@ export class ToDoList extends Component {
     }
 
     changeStatus = (e) => {
-        if(isNaN(e.target.value)){
-            alert("You haven't selected the status");
-        }
-        else this.setState({ status: e.target.value });
+        this.setState({ status: e.target.value });
     }
 
-    addClick() {
+    changeTags = (e) => {
+        var selectedTags = this.getTagsFromSelect(e);
+        this.setState({tags: selectedTags});
+    }
+
+    getTagsFromSelect = (e) => {
+        return Enumerable.from(e).select(e => e.value).toArray();
+    }
+
+    onCreateClick = () => {
         this.setState({
+            isEditMode : false,
             isShowModal : true,
-            modalTitle: "Add task",
             description: "",
-            status: toDoItemStatus.NotComplete,
+            status: todoItemStatus.notCompleted,
+            tags: []
         });
     }
 
-    editClick(todoItem) {
+    onUpdateClick = (e) => {
+        const todoItem = e.currentTarget.dataset;
         this.setState({
+            isEditMode : true,
             isShowModal : true,
             id: todoItem.id,
-            modalTitle: "Edit",
             description: todoItem.description,
-            status: todoItem.status
+            status: todoItem.status,
+            tags: JSON.parse(todoItem.tags)
         });
     }
 
-    async createClick() {
-       const successResult = await sendPostRequest(this.getToDoItemToAdd());
-       if(successResult){
+    createNewTodoItem = async () => {
+       const isSuccess = await addTodoItem(this.getTodoItemToAdd());
+       if(isSuccess){
            this.hideModal();
            this.refreshList();  
        }
     }
 
-    hideModal(){
+    hideModal = () => {
         this.setState({isShowModal : false});
     }
 
-    getToDoItemToAdd() {
+    getTodoItemToAdd = () => {
         return {
             status: this.state.status,
-            description: this.state.description
+            description: this.state.description,
+            tags : this.state.tags.map(tag => ({name: tag}))
         }
     }
 
-    async updateClick() {
-        const successResult = await sendPatchRequest(this.state.id, this.getPatchRequestBody());
-        if(successResult){
+    editTodoItem = async () => {
+        const isSuccess = await editTodoItem(this.state.id, this.getPatchRequestBody());
+        if(isSuccess){
             this.hideModal();
-            this.refreshList();            
+            await this.refreshList();            
         }
     }
 
-    getPatchRequestBody() {
+    getPatchRequestBody = () => {
         return [
             { op: "replace", path: "/Description", value: this.state.description },
-            { op: "replace", path: "/Status", value: this.state.status }
+            { op: "replace", path: "/Status", value: this.state.status },
+            { op: "replace", path: "/Tags", value: this.state.tags.map(tag => ({name: tag}))}
         ];
     }
 
-    async deleteClick(id) {
+    deleteTodoItem = async (e) => {
         if (window.confirm('Are you sure?')) {
-            const successResult = await sendDeleteRequest(id);
-            if(successResult){
-                this.refreshList();
+            const id = parseInt(e.currentTarget.value);
+            const isSuccess = await deleteTodoItem(id);
+            if(isSuccess){
+                await this.refreshList();
             }
         }
+    }
+
+    getAllTags = () => {
+        const todoItemsWithNotNullTags = this.state.todoItems.filter(t=> t.tags && t.tags.length>0);
+        const allTags = todoItemsWithNotNullTags.flatMap(i => i.tags).map(t => t.name);
+        return Enumerable.from(allTags).distinct().toArray();
+    }
+
+    searchByTags = async (e) => {
+        const tagsToSearchBy = e.map(o => o.value);
+        if(tagsToSearchBy.length===0){
+            this.setState({filteredItems: []});
+            await this.refreshList();
+            return;
+        }
+        if(this.state.isSearchModeOr)
+            return this.getItemsMatchingAnyOfTags(tagsToSearchBy);
+        return this.getItemsMatchingAllTags(tagsToSearchBy);
+    }
+
+    getItemsMatchingAnyOfTags = (tagsToSearchBy) => {
+        const result = this.state.todoItems.filter(t => t.tags
+            && tagsToSearchBy.some(i => t.tags.map(t => t.name).includes(i)));
+        this.setState({filteredItems: result});
+    }
+
+    getItemsMatchingAllTags = (tagsToSearchBy) => {
+        const result = this.state.todoItems.filter(t => t.tags
+            && tagsToSearchBy.every(i => t.tags.map(t => t.name).includes(i)));
+        this.setState({filteredItems: result});
+    }
+
+    changeSearchMode = (data) => {
+        this.setState({isSearchModeOr: !this.state.isSearchModeOr}, () => {
+            this.searchByTags(data)
+        })
     }
 
     render() {
         const {
             todoItems,
-            modalTitle,
-            description,
-            isShowModal
+            filteredItems
         } = this.state;
+        const allTags = this.getAllTags();
+        const todoItemsToDisplay = filteredItems.length===0 ? todoItems : filteredItems;
 
         return (
             <div>
-                {this.renderAddTaskButton()}                
-                {this.renderToDoTable(todoItems)}
-                {this.renderModal(modalTitle, description, isShowModal)}
+                <AddTaskBtn onClick={this.onCreateClick}/>     
+                <SearchSelect allTags = {allTags} searchByTags={this.searchByTags} changeSearchMode={this.changeSearchMode}/>
+                <Table todoItems={todoItemsToDisplay} onUpdateClick={this.onUpdateClick} 
+                    deleteTodoItem ={this.deleteTodoItem}/>
+                <Modal {...this.state} hideModal={this.hideModal} editTodoItem = {this.editTodoItem} 
+                    createNewTodoItem = {this.createNewTodoItem} changeStatus = {this.changeStatus} 
+                    changeTaskDescription = {this.changeTaskDescription} changeTags = {this.changeTags}
+                    allTags = {allTags}/>
             </div>
         )
-    }
-
-    renderAddTaskButton() {
-        return <div className="d-flex justify-content-end">
-            <button type="button" className="btn btn-primary mb-4" onClick={() => this.addClick()}>
-                Add task
-            </button>
-        </div>;
-    }
-
-    renderToDoTable(todoItems) {
-        return <table className="table table-bordered">
-            {this.renderToDoTableHead()}
-            {this.renderToDoTableBody(todoItems)}
-        </table>;
-    }
-
-    renderToDoTableHead() {
-        return <thead className="thead-dark">
-            <tr>
-                <th className="text-center">
-                    Task
-                </th>
-                <th className="text-center">
-                    Status
-                </th>
-                <th className="text-center">
-                    Options
-                </th>
-            </tr>
-        </thead>;
-    }
-
-    renderToDoTableBody(todoItems) {
-        return <tbody>
-            {todoItems.map(todoItem => 
-            this.generateToDoTableRow(todoItem)
-            )}
-        </tbody>;
-    }
-
-    generateToDoTableRow(todoItem) {
-        return <tr key={todoItem.id}>
-            <td id="descriptionCell">{todoItem.description}</td>
-            <td id="statusCell">
-                {todoItem.status===toDoItemStatus["Not Complete"]?
-                        <span role="img" aria-label="cross">❌</span>
-                    :   <span role="img" aria-label="check">✔️</span>
-                }
-            </td>
-            <td>
-                <button type="button"
-                    className="btn btn-outline-dark mr-2"
-                    onClick={() => this.editClick(todoItem)}>
-                    <EditLogo />
-                </button>
-
-                <button type="button"
-                    className="btn btn-outline-danger mr-1"
-                    onClick={() => this.deleteClick(todoItem.id)}>
-                    <DeleteLogo />
-                </button>
-
-            </td>
-        </tr>;
-    }
-
-    renderModal(modalTitle, description, isShowModal) {
-        return isShowModal?
-         <div className="modal" id="addEditModal" data-backdrop="static" 
-            data-keyboard="false" tabIndex="-1" role="document">
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                    {this.generateModalHeader(modalTitle)}
-                    <div className="modal-body">
-                        <div className="d-flex flex-row">
-
-                            <div className="p-2 flex-fill">
-                                {this.renderTaskInputGroup(description)}
-                                {this.renderStatusInputGroup()}
-                            </div>
-                        </div>
-                    </div>
-                    {this.renderModalFooter(modalTitle)}
-                </div>
-            </div>
-        </div>
-        : null
-    }
-
-    generateModalHeader(modalTitle) {
-        return <div className="modal-header" id="addEditModalHeader">
-            <h5 className="modal-title">{modalTitle}</h5>
-            <button type="button" className="close" onClick={()=> this.hideModal()} aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>;
-    }
-
-    renderStatusInputGroup() {
-        return <div className="input-group mb-3 input-group-lg">
-            <div className="input-group-prepend">
-                <span className="input-group-text">Status</span>
-            </div>
-            <select className="custom-select" onChange={this.changeStatus}>
-                <option defaultValue>Select status</option>
-                {Object.entries(toDoItemStatus).map(([key, value]) => <option defaultValue value={value} key={value}>{key}</option>)}
-            </select>
-        </div>;
-    }
-
-    renderTaskInputGroup(description) {
-        return <div className="input-group mb-3 input-group-lg">
-            <div className="input-group-prepend">
-                <span className="input-group-text">Task</span>
-            </div>
-            <input type="text" className="form-control" placeholder="What do you need to do?"
-                value={description}
-                onChange={this.changeTaskDescription} />
-        </div>;
-    }
-
-    renderModalFooter(modalTitle) {
-        return <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={() => this.hideModal()} >Close</button>
-            {modalTitle === "Add task" ?
-                <button type="button" className="btn btn-primary float-start" onClick={() => this.createClick()}>
-                    Create
-                </button>
-                : <button type="button" className="btn btn-primary float-start" onClick={() => this.updateClick()}>
-                    Update
-                </button>}
-        </div>;
     }
 }

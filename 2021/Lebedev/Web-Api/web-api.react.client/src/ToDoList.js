@@ -14,12 +14,13 @@ class ToDoList extends React.Component {
       adder: props.connector.getAdder(),
       editor: props.connector.getEditor()
     };
-    this.state.adder.setState({ onClick: () => this.addItem() });
+    this.state.adder.setState({ onClickFunc: () => this.addItem() });
   }
 
   async addItem() {
     const addNameTextbox = document.getElementById('AddName');
-    let list = await this.fetchSender.sendAddItem(addNameTextbox.value.trim());
+    await this.fetchSender.sendAddItem(addNameTextbox.value.trim());
+    let list = await this.fetchSender.getToDoListUpdate();
     this.setState({ items: list });
     addNameTextbox.value = '';
     return;

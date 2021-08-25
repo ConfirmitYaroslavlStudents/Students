@@ -48,6 +48,7 @@ async function start() {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Tags</th>
             <th>Completed</th>
             <th>Deleted</th>
             <th></th>

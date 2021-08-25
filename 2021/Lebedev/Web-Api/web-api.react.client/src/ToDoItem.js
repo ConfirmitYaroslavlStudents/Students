@@ -36,16 +36,16 @@ class ToDoItem extends React.Component {
     const item = this.state.item;
     return (
       <tr key={item.id}>
-        <td key={item.name}>
+        <td key={item.name+item.id}>
           {item.name}
         </td>
         <td key={`${item.tag}`}>
           <ToDoItemTag listOfTags={item.tag} editor={this.state.editor}/>
         </td>
-        <td key={`Delete${item.id}`}>
+        <td key={`Completed${item.id}`}>
           <input type="checkbox" checked={this.state.item.completed} disabled={true} ></input>
         </td>
-        <td key={`Complete${item.id}`}>
+        <td key={`Deleted${item.id}`}>
           <input type="checkbox" checked={this.state.item.deleted} disabled={true} ></input>
         </td>
         <td key={`Edit${item.id}`}>

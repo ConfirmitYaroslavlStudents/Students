@@ -35,15 +35,9 @@ namespace MyTODO
 
         public ToDoItem()
         {
+            Tag = new string[]{};
         }
 
-        public ToDoItem(int id)
-        {
-            this.Id = id;
-            Name = "";
-            Completed = false;
-            Deleted = false;
-        }
 
         public ToDoItem(int id, string name)
         {
@@ -53,16 +47,6 @@ namespace MyTODO
             this.Name = name;
             Completed = false;
             Deleted = false;
-        }
-
-        public ToDoItem(int id, string name, bool completed, bool deleted)
-        {
-            this.Id = id;
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException();
-            this.Name = name;
-            this.Completed = completed;
-            this.Deleted = deleted;
         }
 
         public void SetCompletedTrue()

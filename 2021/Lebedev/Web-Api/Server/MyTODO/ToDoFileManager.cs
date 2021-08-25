@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using Ne
+using Newtonsoft.Json;
 
 namespace MyTODO
 {
@@ -16,10 +16,8 @@ namespace MyTODO
         public void Save(ToDoList list)
         {
             using var writer = new StreamWriter(_file.FullName);
-            foreach (var each in list)
-            {
-                writer.WriteLine(each);
-            }
+            writer.WriteLine(JsonConvert.SerializeObject(list));
+            writer.Close();
         }
 
         public IEnumerable<ToDoItem> Read()
@@ -28,12 +26,8 @@ namespace MyTODO
                 return null;
             var items = new List<ToDoItem>();
             using var reader = new StreamReader(_file.FullName);
-            while (!reader.EndOfStream)
-            {
-                items.Add(new ToDoItem(items.Count,reader.ReadLine(), 
-                                   !string.IsNullOrEmpty(reader.ReadLine()), 
-                                   !string.IsNullOrEmpty(reader.ReadLine())));
-            }
+            if (!reader.EndOfStream)
+                items = new List<ToDoItem>(JsonConvert.DeserializeObject<List<ToDoItem>>(reader.ReadLine()));
             return items;
         }
     }

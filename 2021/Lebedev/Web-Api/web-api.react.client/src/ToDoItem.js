@@ -1,5 +1,6 @@
 import React from 'react';
 import fetcher from './fetcher';
+import ToDoItemTag from './ToDoItemTag';
 
 class ToDoItem extends React.Component {
 
@@ -32,21 +33,25 @@ class ToDoItem extends React.Component {
   }
 
   render() {
+    const item = this.state.item;
     return (
-      <tr key={this.state.item.id}>
-        <td key={`${this.state.item.id * 6 + 1}`}>
-          {this.state.item.name}
+      <tr key={item.id}>
+        <td key={item.name}>
+          {item.name}
         </td>
-        <td key={`${this.state.item.id * 6 + 2}`}>
+        <td key={`${item.tag}`}>
+          <ToDoItemTag listOfTags={item.tag} editor={this.state.editor}/>
+        </td>
+        <td key={`Delete${item.id}`}>
           <input type="checkbox" checked={this.state.item.completed} disabled={true} ></input>
         </td>
-        <td key={`${this.state.item.id * 6 + 3}`}>
+        <td key={`Complete${item.id}`}>
           <input type="checkbox" checked={this.state.item.deleted} disabled={true} ></input>
         </td>
-        <td key={`${this.state.item.id * 6 + 4}`}>
+        <td key={`Edit${item.id}`}>
           <input type="button" value="Edit" onClick={() => this.editItem()} ></input>
         </td>
-        <td key={`${this.state.item.id * 6 + 5}`}>
+        <td key={`Delete${item.id}`}>
           <input type="button" value="Delete" onClick={() => this.deleteItem()} ></input>
         </td>
       </tr>);

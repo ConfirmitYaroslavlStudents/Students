@@ -27,6 +27,12 @@ namespace MyTODO
             set;
         }
 
+        public string[] Tag
+        {
+            get;
+            set;
+        }
+
         public ToDoItem()
         {
         }

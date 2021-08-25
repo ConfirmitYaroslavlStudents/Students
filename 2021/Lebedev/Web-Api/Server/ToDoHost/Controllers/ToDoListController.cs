@@ -79,6 +79,7 @@ namespace ToDoHost.Controllers
                 Todo[^1].SetCompletedTrue();
             if ((bool)item.Deleted)
                 Todo[^1].SetDeletedTrue();
+            Todo[^1].Tag = item.Tag;
             _manager.Save(Todo);
             _logger.Log(logLevel: LogLevel.Information, $"Posted todo item {Todo.Count - 1} created");
             return "Post Completed";

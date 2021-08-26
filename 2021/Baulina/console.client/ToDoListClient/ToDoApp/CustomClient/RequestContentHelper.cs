@@ -1,0 +1,15 @@
+﻿using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
+
+namespace ToDoApp.CustomClient
+{
+    public static class RequestContentHelper
+    {
+        public static StringContent GetStringContent(object obj)
+            => new(JsonConvert.SerializeObject(obj), Encoding.Default, "application/json");
+
+        public static StringContent GetPatchStringContent(object obj )
+            => new(JsonConvert.SerializeObject(obj), Encoding.Default, "application/json-patch+json");
+    }
+}

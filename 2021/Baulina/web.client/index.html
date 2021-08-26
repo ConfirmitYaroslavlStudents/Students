@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List </title>
+    <style>
+        h2, p, table, h4, div {
+            margin-left: 40px;
+        }
+    </style>
+    <script src="errorHandler.js"></script>
+    <script src="index.js"></script>
+</head>
+<body>
+
+<h2>To-Do List</h2>
+
+<div id="addForm">
+    <input type="checkbox" id="add-isComplete">
+        <input type="text" id="add-description" placeholder="E.g. Go grocery shopping">
+        <input type="button" value="Add" onclick="addToDoItem()">
+</div>
+
+<div id="editForm" style="display:none">
+    <h4>Edit</h4>
+    <input type="hidden" id="edit-id">
+    <input type="checkbox" id="edit-isComplete">
+    <input type="text" id="edit-description">
+    <input type="button" onclick="editToDoItem()" value="Save">
+    <a onclick="hideEditForm()" aria-label="Close">&#10006;</a>
+</div>
+
+<p id="counter"></p>
+
+<table>
+    <tr>
+        <th>Status</th>
+        <th>Task</th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tbody id="todo-items"></tbody>
+</table>
+
+<script type="text/javascript">
+    updateItemsDisplay();
+</script>
+</body>
+</html>

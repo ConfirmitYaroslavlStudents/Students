@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import Enumerable from 'linq';
 import { getAllItems, editTodoItem, addTodoItem, deleteTodoItem } from './serverRequests';
-import './todoPage.css';
-import AddTaskBtn from './addTaskButton';
-import Table from './todoTable';
-import Modal from './addEditModal'  
-import SearchSelect from './searchByTagBar';
+import AddTaskBtn from './addTaskBtn/addTaskButton';
+import Table from './todoTable/todoTable';
+import Modal from './addEditModal/addEditModal'  
+import SearchSelect from './searchBar/searchByTagBar';
 
 export const todoItemStatus = { notCompleted: 0, completed: 1 };
 

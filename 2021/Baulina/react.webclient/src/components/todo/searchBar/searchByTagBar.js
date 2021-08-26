@@ -1,6 +1,6 @@
 import Select, { components } from 'react-select';
 import React, { useRef } from 'react';
-import './todoPage.css';
+import './searchByTagBar.css';
 
 const MultiValueContainer = props => {
     return <components.MultiValueContainer {...props} />

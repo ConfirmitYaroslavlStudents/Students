@@ -1,6 +1,6 @@
 import CreatableSelect from 'react-select/creatable';
-import './todoPage.css';
-import { todoItemStatus } from './todoList';
+import './addEditModal.css';
+import { todoItemStatus } from '../todoList';
 
 const statusToText = (status) => {
     switch (status){

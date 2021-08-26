@@ -1,0 +1,14 @@
+.searchByTagBar {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+}
+
+.searchSelect {
+    min-width: 15vw;
+}
+
+.form-check-label{
+    font-style: italic;
+}

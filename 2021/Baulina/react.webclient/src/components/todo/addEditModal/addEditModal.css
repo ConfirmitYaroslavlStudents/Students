@@ -1,0 +1,12 @@
+#addEditModal{
+    display: block;
+}
+
+.modal-header{
+    background-color: rgb(132, 181, 233);
+}
+
+.modal-body{
+    display: flex;
+    flex-direction: row;
+}

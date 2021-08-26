@@ -1,6 +1,7 @@
-import { ReactComponent as DeleteLogo } from '../../assets/deleteLogo.svg';
-import { ReactComponent as EditLogo } from '../../assets/editLogo.svg';
-import { todoItemStatus } from './todoList';
+import { ReactComponent as DeleteLogo } from '../../../assets/deleteLogo.svg';
+import { ReactComponent as EditLogo } from '../../../assets/editLogo.svg';
+import './todoTable.css'
+import { todoItemStatus } from '../todoList';
 
 const table = (props) => {
     return <table className="table table-bordered">

@@ -51,18 +51,15 @@ namespace WebToDoApp.Controllers
         public ActionResult ChangeToDoItem(int id, [FromBody] Task item)
         {
             var validator = new ValidatorTaskNumber(true, _list, id);
+            var validatorCounttaskInProgress = new ValidatorCheckTaskCountInProgress(true, _list, validator, item.Status);
+            validator.SetNext(validatorCounttaskInProgress);
+
             if (!validator.Validate())
                 return NotFound();
 
-            var validatorCounttaskInProgress = new ValidatorCheckTaskCountInProgress(true, _list, validator, item.Status);
-            if (!validatorCounttaskInProgress.Validate())
-                return BadRequest();
-
 
             if (item.Name == null)
-            {
                 _list.ChangeStatus(id, item.Status);
-            }
             else
             {
                 var descriptionValidator = new CheckLengthDescription(true, item.Name);

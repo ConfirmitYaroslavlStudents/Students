@@ -6,20 +6,14 @@ namespace ToDoListNikeshina
     {
         internal List<Task> _list = new List<Task>();
         private int _countOfId;
-        private List<int> listOfId;
+        private List<int> _listOfId;
 
         public ToDoList(List<Task> inputList, int idCount)
         {
             _list = inputList;
             _countOfId = idCount;
-            listOfId = new List<int>();
+            _listOfId = new List<int>();
         }
-
-        //public ToDoList(Task [] inputList, int idCount)
-        //{
-        //    _list.AddRange(inputList);
-        //    _countOfId = idCount;
-        //}
 
         public int Count() => _list.Count;
 
@@ -28,7 +22,7 @@ namespace ToDoListNikeshina
         {
             var item = new Task(description, status, id);
             _list.Add(item);
-            listOfId.Add(id);
+            _listOfId.Add(id);
         }
 
         public void Add(string description, StatusOfTask status)
@@ -36,13 +30,13 @@ namespace ToDoListNikeshina
             _countOfId++;
             var item = new Task(description,status, _countOfId);
             _list.Add(item);
-            listOfId.Add(_countOfId);
+            _listOfId.Add(_countOfId);
         }
 
         public void Delete(int id)
         {
             _list.RemoveAt(id);
-            listOfId.Remove(id);
+            _listOfId.Remove(id);
         }
 
         public void ChangeStatus(int id)
@@ -78,8 +72,7 @@ namespace ToDoListNikeshina
         {
             get 
             {
-                var item = FindTaskWithId(id);
-                return item.Value;
+                return FindTaskWithId(id);
             }
         }
 
@@ -98,13 +91,13 @@ namespace ToDoListNikeshina
 
         public List<Task> GetListOfTasks() => _list;
 
-        private KeyValuePair<bool, Task> FindTaskWithId(int id)
+        private Task FindTaskWithId(int id)
         {
             foreach (var task in _list)
                 if (task._id == id)
-                    return new KeyValuePair<bool, Task>(true, task);
+                    return task;
 
-            return new KeyValuePair<bool, Task>(false,null);
+            return null;
         }
     }
 }

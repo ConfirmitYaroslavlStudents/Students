@@ -57,8 +57,8 @@ namespace ToDoListNikeshina
         {
             var other = (Task)obj;
 
-            return this.Name == other.Name &&
-                this.Status == other.Status;
+            return Name == other.Name &&
+                Status == other.Status;
         }
     }
 }

@@ -6,7 +6,7 @@ import {ToDoItemForm} from './ToDoItemForm';
 export class ToDoItemsList extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = { toDoItems: [], id : 0, description : "", status : "", submitValue:"" };
+        this.state = { toDoItems: [], id : 0, description : "", status : "", command:"" };
     }
 	
 	onDescriptionChange = e => {
@@ -25,7 +25,7 @@ export class ToDoItemsList extends React.Component {
 		await this.loadData();
 	}
 	onGetToDoItem = async newToDoItem => {	
-		this.setState({id: newToDoItem.id, description : newToDoItem.description, status: newToDoItem.status, submitValue:"Edit"});
+		this.setState({id: newToDoItem.id, description : newToDoItem.description, status: newToDoItem.status, command:"Edit"});
 	}	
 	
 	onEditToDoItem = async toDoItem => {
@@ -35,7 +35,7 @@ export class ToDoItemsList extends React.Component {
 	
 	loadData = async () => {
 		const data = await getToDoItems();
-        this.setState({ toDoItems: data, id : 0, description : "", status : "NotDone", submitValue:"Add" });
+        this.setState({ toDoItems: data, id : 0, description : "", status : "NotDone", command:"Add" });
     }
     componentDidMount = () => {
         this.loadData();
@@ -43,11 +43,17 @@ export class ToDoItemsList extends React.Component {
 	render(){
 		return (
 			<div>
-				<ToDoItemForm toDoItem={{id: this.state.id, description : this.state.description, status: this.state.status}} submitValue={this.state.submitValue}
+				<label>
+					ToDoItemList
+				</label>
+				<ToDoItemForm toDoItem={{id: this.state.id, description : this.state.description, status: this.state.status}} command={this.state.command}
 				onDescriptionChange={this.onDescriptionChange} onStatusChange={this.onStatusChange} onEditToDoItem={this.onEditToDoItem} onAddToDoItem={this.onAddToDoItem} />		
-				<table id ="toDoList">
+				<table>
 					<thead>
 						<tr>
+							<th>
+								id
+							</th>
 							<th>
 								description
 							</th>

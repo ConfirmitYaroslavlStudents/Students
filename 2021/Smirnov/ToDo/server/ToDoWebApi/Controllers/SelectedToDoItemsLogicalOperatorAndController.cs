@@ -35,7 +35,7 @@ namespace ToDoWebApi.Controllers
                             ToDoItems.Description,
                             ToDoItems.Status
                         } into g
-                        where g.Count() == 2
+                        where g.Count() == selectedTags.Count
                         select new ToDoItem
                         {
                             Id = g.Key.Id,

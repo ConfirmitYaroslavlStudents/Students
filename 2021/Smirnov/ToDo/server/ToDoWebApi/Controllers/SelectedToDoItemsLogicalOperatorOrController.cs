@@ -31,6 +31,6 @@ namespace ToDoWebApi.Controllers
                             select  toDoItem).Distinct();
 
             return await toDoItems.ToListAsync();
-                    }
+        }
     }
 }

@@ -1,9 +1,12 @@
 import React from 'react';
+import {Tag} from '../Tag/Tag';
+import {getSelectedTagsForToDoItem} from '../service/RequestsSelectedTagsForToDoItem';
+import {deleteTag, editTag} from '../service/RequestsTag';
 
 export class ToDoItem extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = {toDoItem: props.toDoItem};
+        this.state = {toDoItem: this.props.toDoItem, tags:[]};
 	}
 	 onClickDelete = e =>{
 		this.props.onDeleteToDoItem(this.state.toDoItem);
@@ -12,9 +15,27 @@ export class ToDoItem extends React.Component {
 		this.props.onGetToDoItem(this.state.toDoItem);
 	}
 	
+	loadData = async () => {
+		const data = await getSelectedTagsForToDoItem(this.state.toDoItem.id);
+        this.setState({ tags: data});
+    }
+		onDeleteTag = async tag => {
+		await deleteTag(tag.id);	
+		await this.loadData();
+	}
+		onEditTag = async tag => {
+		await editTag(tag);
+		await this.loadData();
+	}
+    componentDidMount = () => {
+        this.loadData();
+    }	
 	render(){
 		return (
 			<tr>
+			<td>
+					{this.state.toDoItem.id}
+				</td>
 				<td>
 					{this.state.toDoItem.description}
 				</td>
@@ -30,6 +51,13 @@ export class ToDoItem extends React.Component {
 					<button onClick={this.onClickDelete}>
 						delete
 					</button>
+				</td> 
+				<td>
+					{
+						this.state.tags.map((tag) => {
+						return 	<Tag key ={tag.id} tag={tag} onGetTag={this.onEditTag} onDeleteTag={this.onDeleteTag}/>
+						})
+					}	
 				</td> 
 			</tr>
 		);

@@ -6,7 +6,7 @@ import {TagForm} from './TagForm';
 export class TagsList extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = { tags: [],id : 0, name: "", submitValue: "" };
+        this.state = { tags: [],id : 0, name: "", command: "" };
     }
 	
 	onNameChange = e => {
@@ -22,7 +22,7 @@ export class TagsList extends React.Component {
 		await this.loadData();
 	}
 	onGetTag = async tag => {	
-		this.setState({id: tag.id, name : tag.name, submitValue:"Edit"});
+		this.setState({id: tag.id, name : tag.name, command:"Edit"});
 	}	
 	
 	onEditTag = async tag => {
@@ -32,7 +32,7 @@ export class TagsList extends React.Component {
 	
 	loadData = async () => {
 		const data = await getTags();
-        this.setState({ tags: data, id: 0, name: "", submitValue:"Add" });
+        this.setState({ tags: data, id: 0, name: "", command:"Add" });
     }
     componentDidMount = () => {
         this.loadData();
@@ -40,11 +40,17 @@ export class TagsList extends React.Component {
 	render(){
 		return (
 			<div>
-				<TagForm tag={{id: this.state.id, name : this.state.name}} submitValue={this.state.submitValue}
+				<label>
+					TagsList
+				</label>
+				<TagForm tag={{id: this.state.id, name : this.state.name}} command={this.state.command}
 				onNameChange={this.onNameChange} onEditTag={this.onEditTag} onAddTag={this.onAddTag} />		
-				<table id ="toDoList">
+				<table>
 					<thead>
 						<tr>
+							<th>
+								id
+							</th>
 							<th>
 								name
 							</th>

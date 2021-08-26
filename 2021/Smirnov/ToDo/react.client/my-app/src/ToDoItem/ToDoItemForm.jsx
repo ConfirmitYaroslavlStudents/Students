@@ -1,11 +1,6 @@
 import React from 'react';
 
 export class ToDoItemForm extends React.Component {
-	constructor(props) {
-        super(props);
-        this.state = {submitValue: "Add"};
-	}
-
 	
     onSubmit = async e => {
         e.preventDefault();
@@ -22,17 +17,17 @@ export class ToDoItemForm extends React.Component {
 		return (
 			<div>
 				<label>Description:
-					<input id="ToDoItemDescription" onChange={this.props.onDescriptionChange} value={this.props.toDoItem.description}  />
+					<input onChange={this.props.onDescriptionChange} value={this.props.toDoItem.description}  />
 				</label>
 				<label>
 					Status:
-					<select id="ToDoItemStatus" onChange={this.props.onStatusChange} value={this.props.toDoItem.status}>
+					<select onChange={this.props.onStatusChange} value={this.props.toDoItem.status}>
 						<option value="NotDone">NotDone</option>
 						<option value="Done">Done</option>
 					</select>
 				</label>
-				<button onClick={this.onSubmit} name="add" value={this.props.submitValue} type="submit" id="submit">
-					{this.props.submitValue}
+				<button onClick={this.onSubmit}>
+					{this.props.command}
 				</button>
 			</div>
 		);

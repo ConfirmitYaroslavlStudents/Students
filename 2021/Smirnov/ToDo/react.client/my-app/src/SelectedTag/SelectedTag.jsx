@@ -1,25 +1,25 @@
 import React from 'react';
 
-export class Tag extends React.Component {
+export class SelectedTag extends React.Component {
 	constructor(props) {
         super(props);
-        this.state = {tag: this.props.tag};
+        this.state = {selectedTag: this.props.selectedTag};
 	}
 	 onClickDelete = e =>{
-		this.props.onDeleteTag(this.state.tag);
+		this.props.onDeleteSelectedTag(this.state.selectedTag);
 	}
 	onClickEdit = e =>{
-		this.props.onGetTag(this.state.tag);
+		this.props.onGetSelectedTag(this.state.selectedTag);
 	}
 	
 	render(){
 		return (
 			<tr>
 				<td>
-					{this.state.tag.id}
+					{this.state.selectedTag.id}
 				</td>
 				<td>
-					{this.state.tag.name}
+					{this.state.selectedTag.tagId}
 				</td>
 				<td>
 					<button onClick={this.onClickEdit}>

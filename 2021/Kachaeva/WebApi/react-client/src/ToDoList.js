@@ -13,6 +13,7 @@ class ToDoList extends React.Component{
         tagsForSearch: [],
         searchCondition: "AND",
         filteredTasks: [],
+        filteredTasksVisible: false,
         toDoList: []
       }
     }
@@ -75,7 +76,32 @@ class ToDoList extends React.Component{
       this.setState({searchCondition: e.target.value});
     }
 
+    getFilteredTasks = () => {
+      this.setState({filteredTasksVisible: true});
+      let toDoList=this.state.toDoList;
+      let tagsForSearch=this.state.tagsForSearch;
+      let filteredTasks;
+      if(this.state.searchCondition==="AND"){
+        filteredTasks=this.getFilteredTasksWithAnd(toDoList, tagsForSearch);
+      }
+      else{
+        filteredTasks=this.getFilteredTasksWithOr(toDoList, tagsForSearch);
+      }
+      this.setState({filteredTasks: filteredTasks});
+    }
+
+    getFilteredTasksWithAnd = (toDoList, tagsForSearch) => {
+      return toDoList.filter(function(task) {return tagsForSearch.every(tag=>task.tags.includes(tag))});
+    }
+
+    getFilteredTasksWithOr = (toDoList, tagsForSearch) => {
+      return toDoList.filter(function(task) {return tagsForSearch.some(tag=>task.tags.includes(tag))});
+    }
+
     renderFilteredTasksTable = () => {
+      if(!this.state.filteredTasksVisible) {
+        return null;
+      }
       if (this.state.filteredTasks.length === 0) {
         return(<h4 style={{background:'#e0ffff'}}>No matches!</h4>);
       }
@@ -115,27 +141,6 @@ class ToDoList extends React.Component{
         </div>
       );
     }
-
-    getFilteredTasks = () => {
-      let toDoList=this.state.toDoList;
-      let tagsForSearch=this.state.tagsForSearch;
-      let filteredTasks;
-      if(this.state.searchCondition==="AND"){
-        filteredTasks=this.getFilteredTasksWithAnd(toDoList, tagsForSearch);
-      }
-      else{
-        filteredTasks=this.getFilteredTasksWithOr(toDoList, tagsForSearch);
-      }
-      this.setState({filteredTasks: filteredTasks});
-    }
-
-    getFilteredTasksWithAnd = (toDoList, tagsForSearch) => {
-      return toDoList.filter(function(task) {return tagsForSearch.every(tag=>task.tags.includes(tag))});
-    }
-
-    getFilteredTasksWithOr = (toDoList, tagsForSearch) => {
-      return toDoList.filter(function(task) {return tagsForSearch.some(tag=>task.tags.includes(tag))});
-    }
   
     renderAddTaskTable = () => {
       return(
@@ -172,33 +177,7 @@ class ToDoList extends React.Component{
     changeTaskTags = e => {
       this.setState({newTaskTags: e.target.value.split(/\s*,\s*/)});
     }
-  
-    renderToDoListTable = () => {
-      if (this.state.toDoList.length === 0) {
-        return(<h4 style={{background:'#ffebcd'}}>Your to do list is empty</h4>);
-      }
-      return(
-        <div style={{background:'#ffebcd'}}>
-          <h4>Here is your to do list:</h4>
-          <font size="2">
-            <table>
-              <thead align="center" >
-                <tr>
-                  <th>Id</th>
-                  <th>Text</th>
-                  <th>Status</th>
-                  <th>Tags</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.toDoList.map(task => <ToDoTask id={task.id} text={task.text} status={task.isDone} tags={task.tags} update={this.updateToDoList}></ToDoTask>)}
-              </tbody>
-          </table>
-          </font>
-        </div>
-      );
-    }
-  
+    
     addTask = async() => {
       let taskBody = this.getTaskBodyForAdd();
       await this.sendPostRequest(taskBody);
@@ -229,6 +208,32 @@ class ToDoList extends React.Component{
       newTaskStatus: false,
       newTaskTags: ""
       });
+    }
+  
+    renderToDoListTable = () => {
+      if (this.state.toDoList.length === 0) {
+        return(<h4 style={{background:'#ffebcd'}}>Your to do list is empty</h4>);
+      }
+      return(
+        <div style={{background:'#ffebcd'}}>
+          <h4>Here is your to do list:</h4>
+          <font size="2">
+            <table>
+              <thead align="center" >
+                <tr>
+                  <th>Id</th>
+                  <th>Text</th>
+                  <th>Status</th>
+                  <th>Tags</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.toDoList.map(task => <ToDoTask id={task.id} text={task.text} status={task.isDone} tags={task.tags}></ToDoTask>)}
+              </tbody>
+            </table>
+          </font>
+        </div>
+      );
     }
   }
 

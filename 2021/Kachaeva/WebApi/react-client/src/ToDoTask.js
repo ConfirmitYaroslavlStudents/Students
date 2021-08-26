@@ -8,11 +8,15 @@ class ToDoTask extends React.Component{
     this.state = {
       text: this.props.text,
       status: this.props.status,
-      tags: this.props.tags
+      tags: this.props.tags,
+      isDeleted: false
     }
   }
 
   render(){
+    if(this.state.isDeleted){
+      return null;
+    }
     return(
       <tr>
         <td align='right'>{this.props.id}</td>
@@ -32,7 +36,7 @@ class ToDoTask extends React.Component{
           <button onClick={this.deleteTask}>Delete task</button>
         </td>
       </tr>
-    )
+      )
   }
 
   changeTaskText = e => {
@@ -48,9 +52,9 @@ class ToDoTask extends React.Component{
   }
 
   deleteTask = async () => {
-	let urlWithTaskId = this.getUrlWithTaskId();
-	await this.sendDeleteRequest(urlWithTaskId);
-    await this.props.update();
+	  let urlWithTaskId = this.getUrlWithTaskId();
+	  await this.sendDeleteRequest(urlWithTaskId);
+    this.setState({isDeleted:true});
   }
 
   getUrlWithTaskId = () => {
@@ -58,16 +62,15 @@ class ToDoTask extends React.Component{
   }
 
   sendDeleteRequest = async urlWithTaskId => {
-	await fetch(urlWithTaskId, {
-    method: 'DELETE'
+	  await fetch(urlWithTaskId, {
+      method: 'DELETE'
     });
   }
 
   editTask = async () => {
     let urlWithTaskId = this.getUrlWithTaskId();
-	let taskBody = this.getTaskBodyForEdit();
-	await this.sendPatchRequest(urlWithTaskId, taskBody);
-    await this.props.update();
+	  let taskBody = this.getTaskBodyForEdit();
+	  await this.sendPatchRequest(urlWithTaskId, taskBody);
   }
 
   getTaskBodyForEdit = () => {
@@ -75,7 +78,7 @@ class ToDoTask extends React.Component{
   }
 
   sendPatchRequest = async(urlWithTaskId, taskBody) => {
-	await fetch(urlWithTaskId, {
+	  await fetch(urlWithTaskId, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'

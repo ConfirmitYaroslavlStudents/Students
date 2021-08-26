@@ -1,46 +1,45 @@
 import React from 'react';
-import fetcher from './fetcher';
+import { sendDelete, getToDoItemUpdate } from './Fetcher';
 import ToDoItemTag from './ToDoItemTag';
 
 class ToDoItem extends React.Component {
-
-  fetchSender;
+  editor;
 
   constructor(props) {
     super(props);
-    this.fetchSender = new fetcher();
     this.state = {
-      item: props.toDoItem,
-      editor: props.editor
+      item: props.toDoItem
     };
   }
 
   editItem() {
-    this.state.editor.setState({
-      prevState: this.state.editor.state,
+    this.editor.newTag = "";
+    this.editor.setState({
+      prevState: this.editor.state,
       item: this
     });
   }
 
   async deleteItem() {
-    await this.fetchSender.sendDelete(this.state.item.id);
-    let itemUpdated = await this.fetchSender.getToDoItemUpdate(this.state.item.id)
+    await sendDelete(this.state.item.id);
+    let itemUpdated = await getToDoItemUpdate(this.state.item.id)
     this.setState({
-      prevState: this.state.editor.state,
       item: itemUpdated
     });
     return;
   }
 
   render() {
+    this.editor = this.props.editorNew;
     const item = this.state.item;
+
     return (
       <tr key={item.id}>
         <td key={item.name + item.id}>
           {item.name}
         </td>
         <td key={`${item.tag}`}>
-          <ToDoItemTag listOfTags={item.tag} editor={this.state.editor} />
+          <ToDoItemTag listOfTags={item.tag} editor={this.editor} />
         </td>
         <td key={`Completed${item.id}`}>
           <input type="checkbox" checked={this.state.item.completed} disabled={true} ></input>

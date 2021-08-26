@@ -62,8 +62,8 @@ namespace ToDoHost.Controllers
                 Todo[(int)item.Id].Deleted = item.Deleted;
             if (!string.IsNullOrEmpty(item.Name))
                 Todo[(int)item.Id].ChangeName(item.Name);
-            if (item.Tag != null)
-                Todo[(int) item.Id].Tag = item.Tag;
+            if (item.Tags != null)
+                Todo[(int) item.Id].Tags = item.Tags;
             _manager.Save(Todo);
             _logger.Log(logLevel: LogLevel.Information, $"Patch item {item.Id} completed");
             return $"Patch item {item.Id} completed";
@@ -79,8 +79,8 @@ namespace ToDoHost.Controllers
                 Todo[^1].SetCompletedTrue();
             if ((bool)item.Deleted)
                 Todo[^1].SetDeletedTrue();
-            if (item.Tag != null)
-                Todo[^1].Tag = item.Tag;
+            if (item.Tags != null)
+                Todo[^1].Tags = item.Tags;
             _manager.Save(Todo);
             _logger.Log(logLevel: LogLevel.Information, $"Posted todo item {Todo.Count - 1} created");
             return "Post Completed";

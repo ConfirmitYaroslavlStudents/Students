@@ -1,5 +1,5 @@
 import React from 'react';
-import fetcher from './fetcher';
+import { sendPatchReqest, getToDoItemUpdate } from './Fetcher';
 
 class Editor extends React.Component {
     item;
@@ -8,12 +8,15 @@ class Editor extends React.Component {
 
     constructor(props) {
         super(props);
-        this.fetchSender = new fetcher();
         this.state = { item: {} };
         this.state.item.ToDoItemTag = [];
         this.item = this.state.item;
         this.newTag = "";
-        props.connector.setEditor(this);
+        props.connector(this);
+        this.newTagChanged = this.newTagChanged.bind(this);
+        this.completedChanged = this.completedChanged.bind(this);
+        this.deletedChanged = this.deletedChanged.bind(this);
+        this.nameChanged = this.nameChanged.bind(this);
     }
 
     hideEdit() {
@@ -21,23 +24,23 @@ class Editor extends React.Component {
         this.setState({ item: {} });
     }
 
-    completedChanged() {
-        this.item.completed = (!this.item.completed);
+    completedChanged(e) {
+        this.item.completed = e.target.checked;
         this.setState({ prevState: this.state });
     }
 
-    deletedChanged() {
-        this.item.deleted = (!this.item.deleted);
+    deletedChanged(e) {
+        this.item.completed = e.target.checked;
         this.setState({ prevState: this.state });
     }
 
-    nameChanged() {
-        this.item.name = document.getElementById("EditName").value;
+    nameChanged(e) {
+        this.item.name = e.target.value;
         this.setState({ prevState: this.state });
     }
 
-    newTagChanged() {
-        this.newTag = document.getElementById("TagName").value;
+    newTagChanged(e) {
+        this.newTag = e.target.value;
         this.setState({ prevState: this.state });
     }
 
@@ -46,8 +49,8 @@ class Editor extends React.Component {
         if (i >= 0) {
             this.item.tag.splice(i, 1);
         }
-        await this.fetchSender.sendPatchReqest(this.item);
-        let itemUpdated = await this.fetchSender.getToDoItemUpdate(this.item.id)
+        await sendPatchReqest(this.item);
+        let itemUpdated = await getToDoItemUpdate(this.item.id)
         this.state.item.setState({
             prevState: this.state.item.state,
             item: itemUpdated
@@ -57,11 +60,11 @@ class Editor extends React.Component {
     }
 
     async addTag() {
-        if(this.item.tag.indexOf(this.newTag) >= 0)
+        if (this.item.tag.indexOf(this.newTag) >= 0)
             return;
         this.item.tag.push(this.newTag);
-        await this.fetchSender.sendPatchReqest(this.item);
-        let itemUpdated = await this.fetchSender.getToDoItemUpdate(this.item.id)
+        await sendPatchReqest(this.item);
+        let itemUpdated = await getToDoItemUpdate(this.item.id)
         this.state.item.setState({
             prevState: this.state.item.state,
             item: itemUpdated
@@ -71,8 +74,8 @@ class Editor extends React.Component {
     }
 
     async patchItem() {
-        await this.fetchSender.sendPatchReqest(this.item);
-        let itemUpdated = await this.fetchSender.getToDoItemUpdate(this.item.id)
+        await sendPatchReqest(this.item);
+        let itemUpdated = await getToDoItemUpdate(this.item.id)
         this.state.item.setState({
             prevState: this.state.item.state,
             item: itemUpdated
@@ -93,10 +96,10 @@ class Editor extends React.Component {
             <div style={{ display: this.item.id === undefined ? 'none' : '' }}>
                 <h3>Edit</h3>
                 <input type="hidden" value={this.item.id}></input>
-                <input type="checkbox" checked={this.item.completed} onChange={() => this.completedChanged()} id="EditComplete"></input>
-                <input type="checkbox" checked={this.item.deleted} onChange={() => this.deletedChanged()} id="EditDelete"></input>
-                <input type="text" value={this.item.name} onChange={() => this.nameChanged()} id="EditName"></input>
-                <input type="text" value={this.newTag} onChange={() => this.newTagChanged()} placeholder="New Tag" id="TagName"></input>
+                <input type="checkbox" checked={this.item.completed} onChange={this.completedChanged} id="EditComplete"></input>
+                <input type="checkbox" checked={this.item.deleted} onChange={this.deletedChanged} id="EditDelete"></input>
+                <input type="text" value={this.item.name} onChange={this.nameChanged} id="EditName"></input>
+                <input type="text" value={this.newTag} onChange={this.newTagChanged} placeholder="New Tag" id="TagName"></input>
                 <input type="button" value="Add" onClick={() => this.addTag()} id="SaveEditButton"></input>
                 <table>
                     <tbody>

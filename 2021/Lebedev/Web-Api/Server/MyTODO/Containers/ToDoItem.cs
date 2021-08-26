@@ -27,7 +27,7 @@ namespace MyTODO
             set;
         }
 
-        public string[] Tag
+        public string[] Tags
         {
             get;
             set;
@@ -35,7 +35,7 @@ namespace MyTODO
 
         public ToDoItem()
         {
-            Tag = new string[]{};
+            Tags = new string[]{};
         }
 
 

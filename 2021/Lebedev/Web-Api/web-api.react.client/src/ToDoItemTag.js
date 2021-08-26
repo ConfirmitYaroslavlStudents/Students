@@ -17,12 +17,13 @@ class ToDoItemTag extends React.Component {
       <table>
         <tbody>
           {
-            this.state.ToDoItemTag.map((tag) =>
-            (<tr>
-              <td>
-                {tag}
-              </td>
-            </tr>))
+            this.state.ToDoItemTag.map((tag) => (
+              <tr>
+                <td>
+                  {tag}
+                </td>
+              </tr>
+            ))
           }
         </tbody>
       </table>);

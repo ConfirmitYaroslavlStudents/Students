@@ -57,6 +57,8 @@ class Editor extends React.Component {
     }
 
     async addTag() {
+        if(this.item.tag.indexOf(this.newTag) >= 0)
+            return;
         this.item.tag.push(this.newTag);
         await this.fetchSender.sendPatchReqest(this.item);
         let itemUpdated = await this.fetchSender.getToDoItemUpdate(this.item.id)

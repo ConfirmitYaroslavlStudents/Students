@@ -22,7 +22,7 @@ namespace ToDoWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItems()
         {
-            var selectedTags = await _context.SelectedTags.Select(e => e.TagId).ToListAsync();
+            var selectedTags = _context.SelectedTags.Select(e => e.TagId);
 
             var toDoItems = (from toDoItem in _context.ToDoItems
                             join tagToDoItem in _context.TagToDoItems on toDoItem.Id equals tagToDoItem.ToDoItemId

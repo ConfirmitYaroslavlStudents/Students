@@ -1,6 +1,7 @@
 const url = 'https://localhost:5001/api/ToDoItems/';
 
 export const addToDoItem = async toDoItem => {
+	try{
 	await fetch(url, {
 				method: "POST",
 				headers: { "Accept": "application/json", "Content-Type": "application/json" },
@@ -9,25 +10,41 @@ export const addToDoItem = async toDoItem => {
 										status: toDoItem.status
 									})
 				});
+	}
+	catch(err){
+		alert(err);
+	}
 }
 						
 export const getToDoItems = async () =>{
-	const response = await fetch(url, {
+	try{
+		const response = await fetch(url, {
 					method: "GET",
 					headers: { "Accept": "application/json", "Content-Type": "application/json" }
 					});
 					
-	return await response.json();
+		return await response.json();
+	}
+	catch(err){
+		alert(err);
+		return [];
+	}
 }
 
 export const deleteToDoItem = async id =>{
+	try{
 		await fetch(url + id, {
 					method: "DELETE",
 					headers: { "Accept": "application/json", "Content-Type": "application/json" },
 					});
+	}
+	catch(err){
+		alert(err);
+	}
 }
 
 export const editToDoItem = async toDoItem =>{
+	try{
 		await fetch(url + toDoItem.id, {
 					method: "PATCH",
 					headers: { "Accept": "application/json", "Content-Type": "application/json" },
@@ -36,4 +53,8 @@ export const editToDoItem = async toDoItem =>{
 						status: toDoItem.status
 					})
         });
+	}
+	catch(err){
+		alert(err);
+	}
 }

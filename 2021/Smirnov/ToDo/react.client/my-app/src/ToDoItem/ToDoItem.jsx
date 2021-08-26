@@ -53,11 +53,25 @@ export class ToDoItem extends React.Component {
 					</button>
 				</td> 
 				<td>
+				<table>
+					<thead>
+						<tr>
+							<th>
+								id
+							</th>
+							<th>
+								name
+							</th>
+						</tr>
+					</thead>
+					<tbody>
 					{
 						this.state.tags.map((tag) => {
 						return 	<Tag key ={tag.id} tag={tag} onGetTag={this.onEditTag} onDeleteTag={this.onDeleteTag}/>
 						})
 					}	
+					</tbody>
+				</table>	
 				</td> 
 			</tr>
 		);

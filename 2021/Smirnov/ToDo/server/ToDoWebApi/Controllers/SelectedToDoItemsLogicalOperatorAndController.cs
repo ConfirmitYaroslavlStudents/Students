@@ -22,7 +22,7 @@ namespace ToDoWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItems()
         {
-            var selectedTags = await _context.SelectedTags.Select(e => e.TagId).ToListAsync();
+            var selectedTags = _context.SelectedTags.Select(e => e.TagId);
 
             var toDoItems = from ToDoItems in _context.ToDoItems
                         join TagToDoItems in _context.TagToDoItems on new { Id = ToDoItems.Id } equals new { Id = TagToDoItems.ToDoItemId }
@@ -35,7 +35,7 @@ namespace ToDoWebApi.Controllers
                             ToDoItems.Description,
                             ToDoItems.Status
                         } into g
-                        where g.Count() == selectedTags.Count
+                        where g.Count() == selectedTags.Count()
                         select new ToDoItem
                         {
                             Id = g.Key.Id,

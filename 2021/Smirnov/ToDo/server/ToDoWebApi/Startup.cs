@@ -30,8 +30,8 @@ namespace ToDoWebApi
                     });
             });
 
-            //services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
-            services.AddDbContext<ToDoContext>(options => options.UseInMemoryDatabase("ToDoItem"));
+            services.AddDbContext<ToDoContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            //services.AddDbContext<ToDoContext>(options => options.UseInMemoryDatabase("ToDoItem"));
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new PatchRequestContractResolver();

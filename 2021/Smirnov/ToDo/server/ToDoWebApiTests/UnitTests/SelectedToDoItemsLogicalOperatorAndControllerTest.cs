@@ -38,7 +38,9 @@ namespace ToDoWebApiTests.UnitTests
             //act
             var selectedToDoItems = (await selectedToDoItemsLogicalOperatoinAndController.GetToDoItems()).Value.ToList();
             //assert
-            Assert.Empty(selectedToDoItems);
+            Assert.Equal(2, selectedToDoItems.Count);
+            Assert.Contains(selectedToDoItems, e => e.Description == "test tag work");
+            Assert.Contains(selectedToDoItems, e => e.Description == "test tag work and home");
         }
         [Fact]
         public async Task GetSelectedToDoItems_SelectTagHome_ShouldReturnSelectedToDoItemsCount2()
@@ -53,7 +55,9 @@ namespace ToDoWebApiTests.UnitTests
             //act
             var selectedToDoItems = (await selectedToDoItemsLogicalOperatoinAndController.GetToDoItems()).Value.ToList();
             //assert
-            Assert.Empty(selectedToDoItems);
+            Assert.Equal(2, selectedToDoItems.Count);
+            Assert.Contains(selectedToDoItems, e => e.Description == "test tag home");
+            Assert.Contains(selectedToDoItems, e => e.Description == "test tag work and home");
         }
         [Fact]
         public async Task GetSelectedToDoItems_SelectTagWorkAndHome_ShouldReturnSelectedToDoItemsCount2()
@@ -70,7 +74,7 @@ namespace ToDoWebApiTests.UnitTests
             var selectedToDoItems = (await selectedToDoItemsLogicalOperatoinAndController.GetToDoItems()).Value.ToList();
             //assert
             Assert.Single(selectedToDoItems);
-            Assert.Contains(selectedToDoItems, e => e.Description == "test tag wrok and home");
+            Assert.Contains(selectedToDoItems, e => e.Description == "test tag work and home");
         }
         public ToDoContext CreateToDoContext(List<SelectedTag> selectedTag)
         {
@@ -88,7 +92,7 @@ namespace ToDoWebApiTests.UnitTests
             {
                 new ToDoItem { Description = "test tag work"}, // id = 1 
                 new ToDoItem { Description = "test tag home"}, // id = 2
-                new ToDoItem { Description = "test tag wrok and home"}, // id = 3
+                new ToDoItem { Description = "test tag work and home"}, // id = 3
                 new ToDoItem { Description = "test tag"} // id = 4
             };
             var tags = new List<Tag>

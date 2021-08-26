@@ -1,7 +1,7 @@
 import React from 'react';
 import Editor from './Editor';
 import Filter from './Filter';
-import { sendAddItem, getToDoListUpdate } from './Fetcher';
+import { sendAddItem, getToDoListUpdate } from './FetchSender';
 import Adder from './Adder';
 import ToDoItem from './ToDoItem';
 

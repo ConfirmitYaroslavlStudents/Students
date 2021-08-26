@@ -1,9 +1,8 @@
 import React from 'react';
-import { sendPatchReqest, getToDoItemUpdate } from './Fetcher';
+import { sendPatchReqest, getToDoItemUpdate } from './FetchSendernder';
 
 class Editor extends React.Component {
     item;
-    fetchSender;
     newTag;
 
     constructor(props) {

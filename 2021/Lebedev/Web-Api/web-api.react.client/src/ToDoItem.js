@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendDelete, getToDoItemUpdate } from './Fetcher';
+import { sendDelete, getToDoItemUpdate } from './FetchSender';
 import ToDoItemTag from './ToDoItemTag';
 
 class ToDoItem extends React.Component {

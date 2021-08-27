@@ -13,62 +13,21 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "0" });
+            var command = new ToggleStatusCommand{TaskId = 0,Status = StatusTask.ToDo};
+
             var result = command.PerformCommand(tasks);
 
-            Assert.AreEqual("world", result[0].ToString());
+            Assert.AreEqual("[0] world", result[0].ToString());
         }
 
         [TestMethod]
-        public void CorrectSetParameters()
+        [ExpectedException(typeof(WrongEnteredCommandException))]
+        public void ExceptionWhenIdNotExist()
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "0" });
-
-            Assert.AreEqual(0, command.Index);
-            Assert.AreEqual(StatusTask.ToDo, command.Status);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenWrongIndex()
-        {
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "odin", "1" });
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenWrongStatus()
-        {
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "3" });
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenEnteredIndexIsNegative()
-        {
-            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
-
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "-1", "2" });
-            command.RunValidate(tasks);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenEnteredIndexIsGreaterThanCount()
-        {
-            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
-
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "2", "2" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand() { TaskId = 1,Status = StatusTask.ToDo};
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -76,16 +35,15 @@ namespace TestsForToDoList.TestsForCommands
         public void ExceptionWhenLimitOfNotesIsExceeded_InProgressStatus()
         {
             var tasks = new List<Task>
-                {
-                    new Task { Status = StatusTask.IsProgress},
-                    new Task { Status = StatusTask.IsProgress},
-                    new Task { Status = StatusTask.IsProgress},
-                    new Task { Status = StatusTask.ToDo},
-                };
+                    {
+                        new Task { Status = StatusTask.IsProgress, TaskId = 1},
+                        new Task { Status = StatusTask.IsProgress, TaskId = 2},
+                        new Task { Status = StatusTask.IsProgress, TaskId = 3},
+                        new Task { Status = StatusTask.ToDo, TaskId = 4},
+                    };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "4", "2" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand{TaskId = 4,Status = StatusTask.IsProgress};
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -93,9 +51,8 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.ToDo } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "1" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand{TaskId = 0,Status = StatusTask.IsProgress};
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -104,9 +61,8 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.ToDo } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "2" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand { TaskId = 0, Status = StatusTask.Done };
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -114,9 +70,8 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "0" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand { TaskId = 0, Status = StatusTask.ToDo };
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -124,9 +79,8 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "2" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand { TaskId = 0, Status = StatusTask.Done };
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -134,9 +88,8 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.Done } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "0" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand { TaskId = 0, Status = StatusTask.ToDo };
+            command.PerformCommand(tasks);
         }
 
         [TestMethod]
@@ -145,9 +98,8 @@ namespace TestsForToDoList.TestsForCommands
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.Done } };
 
-            var command = new ToggleCommand();
-            command.SetParameters(new[] { "toggle", "1", "1" });
-            command.RunValidate(tasks);
+            var command = new ToggleStatusCommand { TaskId = 0, Status = StatusTask.IsProgress };
+            command.PerformCommand(tasks);
         }
     }
 }

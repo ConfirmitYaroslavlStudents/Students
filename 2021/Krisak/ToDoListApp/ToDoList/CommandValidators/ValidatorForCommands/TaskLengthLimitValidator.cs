@@ -1,40 +1,32 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using ToDoLibrary.Commands;
+﻿using ToDoLibrary.Commands;
 
-namespace ToDoLibrary.ChainOfResponsibility
+namespace ToDoLibrary.CommandValidators.ValidatorForCommands
 {
     public class TaskLengthLimitValidator : AbstractValidator
     {
         private readonly int _limit;
+        private readonly string _text;
 
-        public TaskLengthLimitValidator(bool isAbort, int limit) : base(isAbort)
+        private TaskLengthLimitValidator(bool isAbort, int limit) : base(isAbort)
+            => _limit = limit;
+
+        public TaskLengthLimitValidator(bool isAbort, int limit, AddCommand addCommand) : this(isAbort, limit)
+            => _text = addCommand.NewTask.Text;
+
+        public TaskLengthLimitValidator(bool isAbort, int limit, EditTextCommand editTextCommand) : this(isAbort, limit)
+            => _text = editTextCommand.Text;
+
+
+        public override void Validate()
         {
-            _limit = limit;
-        }
-
-        public override void Validate(ICommand command)
-        {
-            var text = GetText(command);
-
-            if (text.Length > _limit)
+            if (_text.Length >_limit)
             {
-                base.Exceptions.Add($"Task length must not be more than {_limit} characters.");
-                if (base.IsAbort)
+                ExceptionMessages.Add($"Task length must not be more than {_limit} characters.");
+                if (IsAbort)
                     return;
             }
 
-            base.Validate( command);
-        }
-
-        private string GetText(ICommand command)
-        {
-            return command switch
-            {
-                AddCommand addCommand => addCommand.NewTask.Text,
-                EditCommand editCommand => editCommand.Text,
-                _ => ""
-            };
+            base.Validate();
         }
     }
 }

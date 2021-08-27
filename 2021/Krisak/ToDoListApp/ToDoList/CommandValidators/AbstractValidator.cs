@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using ToDoLibrary.Commands;
 
-namespace ToDoLibrary.ChainOfResponsibility
+namespace ToDoLibrary.CommandValidators
 {
     public abstract class AbstractValidator
     {
         private AbstractValidator _next;
         protected readonly bool IsAbort;
-        public List<string> Exceptions { get; protected set; } = new List<string>();
+        public List<string> ExceptionMessages { get; protected set; } = new List<string>();
 
         public AbstractValidator (bool isAbort)
         {
@@ -17,18 +15,14 @@ namespace ToDoLibrary.ChainOfResponsibility
 
         public AbstractValidator SetNext(AbstractValidator validator)
         {
-            validator.Exceptions = Exceptions;
+            validator.ExceptionMessages = ExceptionMessages;
             _next = validator;
             return validator;
         }
-        public virtual void Validate(ICommand command)
-        {
-            _next?.Validate(command);
-        }
 
-        public virtual void Validate(string[] partsOfCommand)
+        public virtual void Validate()
         {
-            _next?.Validate(partsOfCommand);
+            _next?.Validate();
         }
     }
 }

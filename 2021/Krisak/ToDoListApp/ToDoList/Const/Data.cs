@@ -1,4 +1,4 @@
-﻿namespace ToDoLibrary
+﻿namespace ToDoLibrary.Const
 {
     public static class Data
     {

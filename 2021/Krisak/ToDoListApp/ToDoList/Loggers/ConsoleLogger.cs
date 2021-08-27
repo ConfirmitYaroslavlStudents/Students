@@ -1,12 +1,25 @@
 ﻿using System;
+using System.IO;
+using ToDoLibrary.Const;
 
 namespace ToDoLibrary.Loggers
 {
     public class ConsoleLogger : ILogger
     {
-        public void Log(string message)
+        public void Log(Exception e)
         {
-            Console.WriteLine(message);
+            switch (e)
+            {
+                case WrongEnteredCommandException _:
+                case FileNotFoundException _:
+                    Console.WriteLine(e.Message);
+                    break;
+
+                default:
+                    var fileLogger = new FileLogger(Data.LogFileName);
+                    fileLogger.Log(e);
+                    break; ;
+            }
         }
     }
 }

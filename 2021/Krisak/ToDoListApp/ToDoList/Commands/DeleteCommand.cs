@@ -1,31 +1,24 @@
 ﻿using System.Collections.Generic;
-using ToDoLibrary.ChainOfResponsibility;
-using ToDoLibrary.ChainOfResponsibility.ValidatorForUserInput;
+using ToDoLibrary.CommandValidators;
 
 namespace ToDoLibrary.Commands
 {
     public class DeleteCommand: ICommand
     {
-        public int Index { get; private set; }
+        public long TaskId;
 
         public List<Task> PerformCommand(List<Task> tasks)
         {
-            tasks.RemoveAt(Index);
+            RunValidate(tasks);
+
+            tasks.RemoveAll((task)=> task.TaskId == TaskId);
             return tasks;
         }
 
-        public void RunValidate(List<Task> tasks)
+        private void RunValidate(List<Task> tasks)
         {
-            var validator = ChainsOfValidationСompiler.CompileForDeleteCommand(tasks);
-            ValidatorRunner.Run(validator, this);
-        }
-
-        public void SetParameters(string[] partsCommand)
-        {
-            var validator = new TryParseIntValidator(false);
-            ValidatorRunner.Run(validator, partsCommand);
-
-            Index = int.Parse(partsCommand[1]) - 1;
+            var validator = ChainsOfValidationСompiler.CompileForDeleteCommand(tasks,this);
+            ValidationRunner.Run(validator);
         }
     }
 }

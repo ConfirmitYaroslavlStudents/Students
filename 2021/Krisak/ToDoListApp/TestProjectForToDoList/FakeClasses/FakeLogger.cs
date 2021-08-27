@@ -1,19 +1,13 @@
-﻿using ToDoLibrary.Loggers;
-using System.IO;
+﻿using System;
+using ToDoLibrary.Loggers;
 
 namespace TestProjectForToDoLibrary
 {
     public class FakeLogger: ILogger
     {
-        public string Message;
+        public Exception @Exception;
 
-        public FakeLogger()
-        {
-            File.Delete("MyNotes.txt");
-        }
-        public void Log(string message)
-        {
-            Message = message;
-        }
+        public void Log(Exception e)
+            => @Exception = e;
     }
 }

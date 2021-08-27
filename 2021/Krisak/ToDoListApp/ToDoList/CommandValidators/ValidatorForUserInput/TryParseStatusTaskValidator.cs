@@ -1,22 +1,24 @@
-﻿using System;
-
-namespace ToDoLibrary.ChainOfResponsibility.ValidatorForUserInput
+﻿namespace ToDoLibrary.CommandValidators.ValidatorForUserInput
 {
     public class TryParseStatusTaskValidator : AbstractValidator
     {
-        public TryParseStatusTaskValidator(bool isAbort) : base(isAbort) { }
+        private readonly string _status;
 
-        public override void Validate(string[] partsOfCommand)
+        public TryParseStatusTaskValidator(bool isAbort, string status) : base(isAbort)
+            => _status = status;
+
+        public override void Validate()
         {
-            if (!int.TryParse(partsOfCommand[2], out int result) || result < 0 || result > 2)
+            var intStatus = int.Parse(_status);
+            if (intStatus < 0 || intStatus > 2)
             {
-                base.Exceptions.Add("Wrong status number.");
+                ExceptionMessages.Add("Wrong status number.");
 
                 if (IsAbort)
                     return;
             }
 
-            base.Validate(partsOfCommand);
+            base.Validate();
         }
     }
 }

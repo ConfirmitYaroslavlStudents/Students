@@ -11,52 +11,22 @@ namespace TestsForToDoList.TestsForCommands
         [TestMethod]
         public void CorrectPerformCommand()
         {
-            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
+            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress,TaskId= 1 } };
 
-            var command = new DeleteCommand();
-            command.SetParameters(new[] { "delete", "1" });
-            var result = command.PerformCommand(tasks);
+            var command = new DeleteCommand {TaskId = 1};
+            command.PerformCommand(tasks);
 
             Assert.AreEqual(0, tasks.Count);
         }
 
         [TestMethod]
-        public void CorrectSetParameters()
-        {
-            var command = new DeleteCommand();
-            command.SetParameters(new[] { "delete", "1" });
-
-            Assert.AreEqual(0, command.Index);
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenWrongIndex()
-        {
-            var command = new DeleteCommand();
-            command.SetParameters(new[] { "delete", "odin" });
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenEnteredIndexIsNegative()
+        public void ExceptionWhenIdNotExist()
         {
             var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
 
-            var command = new DeleteCommand();
-            command.SetParameters(new[] { "delete", "-1" });
-            command.RunValidate(tasks);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(WrongEnteredCommandException))]
-        public void ExceptionWhenEnteredIndexIsGreaterThanCount()
-        {
-            var tasks = new List<Task> { new Task { Text = "world", Status = StatusTask.IsProgress } };
-
-            var command = new DeleteCommand();
-            command.SetParameters(new[] { "delete", "2" });
-            command.RunValidate(tasks);
+            var command = new DeleteCommand{TaskId = 1};
+            command.PerformCommand(tasks);
         }
     }
 }

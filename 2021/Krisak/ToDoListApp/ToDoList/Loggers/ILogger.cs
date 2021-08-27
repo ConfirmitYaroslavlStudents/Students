@@ -1,8 +1,9 @@
-﻿namespace ToDoLibrary.Loggers
+﻿using System;
+
+namespace ToDoLibrary.Loggers
 {
     public interface ILogger
     {
-
-        public void Log(string message);
+        public void Log(Exception e);
     }
 }

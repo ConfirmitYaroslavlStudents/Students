@@ -1,9 +1,11 @@
 ﻿using ToDoLibrary.Commands;
 
-namespace ToDoLibrary.HandlerСommand
+namespace ToDoLibrary.CommandCreator
+
 {
     public interface ICreator
     {
-        ICommand TryGetCommand(string[] partsOfCommand);
+        ICommand GetCommand();
+        ICreator SetNext(ICreator creator);
     }
 }

@@ -2,32 +2,31 @@
 using System.Linq;
 using ToDoLibrary.Commands;
 
-namespace ToDoLibrary.ChainOfResponsibility.ForToggleStatus
+namespace ToDoLibrary.CommandValidators.ValidatorForCommands
 {
     public class LimitOfStatusesValidator: AbstractValidator
     {
         private const int LimitOfTaskInProgressStatus = 3;
 
-        private List<Task> _tasks;
+        private readonly List<Task> _tasks;
+        private readonly StatusTask _status;
 
-        public LimitOfStatusesValidator(bool isAbort, List<Task>tasks) : base(isAbort)
+        public LimitOfStatusesValidator(bool isAbort, List<Task>tasks, ToggleStatusCommand command) : base(isAbort)
         {
             _tasks = tasks;
+            _status = command.Status;
         }
 
-        public override void Validate(ICommand command)
+        public override void Validate()
         {
-            var toggleCommand = command as ToggleCommand;
-            var status = toggleCommand.Status;
-
-            if (status == StatusTask.IsProgress && CountTasksInProgressStatus() >= LimitOfTaskInProgressStatus)
+            if (_status == StatusTask.IsProgress && CountTasksInProgressStatus() >= LimitOfTaskInProgressStatus)
             { 
-                base.Exceptions.Add($"Number of tasks in \"In Progress\" status should not exceed {LimitOfTaskInProgressStatus}.");
+                ExceptionMessages.Add($"Number of tasks in \"In Progress\" status should not exceed {LimitOfTaskInProgressStatus}.");
                 if (IsAbort)
                     return;
             }
 
-            base.Validate(command);
+            base.Validate();
         }
 
         private int CountTasksInProgressStatus()

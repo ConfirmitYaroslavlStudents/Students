@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using ToDoLibrary;
+using ToDoLibrary.SaveAndLoad;
 
 namespace TestProjectForToDoLibrary
 {
@@ -11,7 +12,7 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void ConvertLoadedCorrectStrings()
         {
-            var lines = new string[]
+            var lines = new []
             {
                 "IFirst=ToDo",
                 "ISecond=InProgress",
@@ -25,7 +26,7 @@ namespace TestProjectForToDoLibrary
                 new Task{Text = "IThird",Status = StatusTask.Done}
             };
 
-            var result = new List<Task>(TaskToSaveAndLoadConverter.ConvertLinesAfterLoading(lines));
+            var result = new List<Task>(TasksToSaveAndLoadConverter.ConvertTasksAfterLoading(lines));
 
             for (var i = 0; i < result.Count; i++)
             {
@@ -37,7 +38,7 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void ConvertLoadedIncorrectStrings()
         {
-            var lines = new string[]
+            var lines = new []
             {
                 "=Done=ToDo=Inprogress",
                 "I Incorrect HA-HA"
@@ -49,7 +50,7 @@ namespace TestProjectForToDoLibrary
                 new Task{Text = "I Incorrect HA-HA",Status = StatusTask.ToDo}
             };
 
-            var result = new List<Task>(TaskToSaveAndLoadConverter.ConvertLinesAfterLoading(lines));
+            var result = new List<Task>(TasksToSaveAndLoadConverter.ConvertTasksAfterLoading(lines));
 
             for (var i = 0; i < result.Count; i++)
             {
@@ -61,21 +62,21 @@ namespace TestProjectForToDoLibrary
         [TestMethod]
         public void ConvertTaskToSave()
         {
-            var notes = new Task[]
+            var tasks = new []
             {
                 new Task{Text ="IFirst",Status = StatusTask.ToDo},
                 new Task{Text = "ISecond",Status = StatusTask.IsProgress},
                 new Task{Text = "IThird",Status = StatusTask.Done}
             };
 
-            var lines = new string[]
+            var lines = new []
             {
                 "IFirst=ToDo",
                 "ISecond=InProgress",
                 "IThird=Done"
             };
 
-            var result = new List<string>(TaskToSaveAndLoadConverter.ConvertNoteToSave(notes));
+            var result = new List<string>(TasksToSaveAndLoadConverter.ConvertTasksToSave(tasks));
 
             for (var i = 0; i < result.Count; i++)
             {

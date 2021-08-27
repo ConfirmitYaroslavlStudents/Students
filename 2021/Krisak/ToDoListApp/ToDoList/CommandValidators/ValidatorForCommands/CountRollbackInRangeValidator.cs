@@ -1,30 +1,28 @@
-﻿using System.Collections.Generic;
-using ToDoLibrary.Commands;
+﻿using ToDoLibrary.Commands;
 
-namespace ToDoLibrary.ChainOfResponsibility
+namespace ToDoLibrary.CommandValidators.ValidatorForCommands
 {
     public class CountRollbackInRangeValidator: AbstractValidator
     {
-        private readonly Stack<ICommand> _rollbacks;
+        private readonly int _rollbackCount;
+        private readonly int _count;
 
-        public CountRollbackInRangeValidator(bool isAbort, Stack<ICommand> rollbacks) : base(isAbort)
+        public CountRollbackInRangeValidator(bool isAbort, int rollbackCount, StartRollbackCommand command) : base(isAbort)
         {
-            _rollbacks = rollbacks;
+            _rollbackCount = rollbackCount;
+            _count = command.Count;
         }
 
-        public override void Validate(ICommand command)
+        public override void Validate()
         {
-            var rollbackCommand = command as RollbackCommand;
-            var count = rollbackCommand.Count;
-
-            if (count < 0 || count > _rollbacks.Count)
+            if (_count < 0 || _count > _rollbackCount)
             {
-                base.Exceptions.Add("Wrong count of rollback steps");
-                if (base.IsAbort)
+                ExceptionMessages.Add("Wrong count of rollback steps");
+                if (IsAbort)
                     return;
             }
 
-            base.Validate(command);
+            base.Validate();
         }
     }
 }

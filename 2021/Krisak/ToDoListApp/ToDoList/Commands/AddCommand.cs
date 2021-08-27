@@ -1,29 +1,30 @@
 ﻿using System.Collections.Generic;
-using System.Text;
-using ToDoLibrary.ChainOfResponsibility;
+using ToDoLibrary.CommandValidators;
+using ToDoLibrary.Storages;
 
 namespace ToDoLibrary.Commands
 {
     public class AddCommand : ICommand
     {
-        public Task NewTask { get; private set; }
+        public Task NewTask;
 
         public List<Task> PerformCommand(List<Task> tasks)
         {
+            RunValidate();
+
+            if (tasks.Count == 0)
+                NewTask.TaskId = 1;
+            else
+                NewTask.TaskId = tasks[^1].TaskId + 1;
+
             tasks.Add(NewTask);
             return tasks;
         }
 
-        public void RunValidate()
+        private void RunValidate()
         {
-            var validator = ChainsOfValidationСompiler.CompileForAddCommand();
-            ValidatorRunner.Run(validator,this);
-        }
-
-        public void SetParameters(string[] partsCommand)
-        {
-            var text = string.Join(' ', partsCommand, 1, partsCommand.Length - 1);
-            NewTask = new Task { Text = text};
+            var validator = ChainsOfValidationСompiler.CompileForAddCommand(this);
+            ValidationRunner.Run(validator);
         }
     }
 }

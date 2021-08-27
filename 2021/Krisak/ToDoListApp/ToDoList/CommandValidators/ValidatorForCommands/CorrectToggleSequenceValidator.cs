@@ -1,41 +1,42 @@
 ﻿using System.Collections.Generic;
 using ToDoLibrary.Commands;
 
-namespace ToDoLibrary.ChainOfResponsibility.ForToggleStatus
+namespace ToDoLibrary.CommandValidators.ValidatorForCommands
 {
-    public class CorrectToggleSequenceValidator: AbstractValidator
+    public class CorrectToggleSequenceValidator : AbstractValidator
     {
         private readonly List<Task> _tasks;
-        public CorrectToggleSequenceValidator(bool isAbort, List<Task> tasks) : base(isAbort)
+        private readonly ToggleStatusCommand _command;
+
+        public CorrectToggleSequenceValidator(bool isAbort, List<Task> tasks, ToggleStatusCommand command) : base(isAbort)
         {
+            _command = command;
             _tasks = tasks;
         }
 
-        public override void Validate (ICommand command)
+        public override void Validate()
         {
-            var toggleCommand = command as ToggleCommand;
-            var status = toggleCommand.Status;
-            var previousStatus = _tasks[toggleCommand.Index].Status;
-
-            switch (status)
+            var newStatus = _command.Status;
+            var previousStatus = _tasks.Find((t) => t.TaskId == _command.TaskId).Status;
+            switch (newStatus)
             {
                 case StatusTask.IsProgress when previousStatus != StatusTask.ToDo:
-                {
-                    base.Exceptions.Add("Status \"In Progress\" can only be toggled from status \"To Do\".");
-                    if (base.IsAbort)
-                        return;
-                    break;
-                }
+                    {
+                        ExceptionMessages.Add("Status \"In Progress\" can only be toggled from status \"To Do\".");
+                        if (IsAbort)
+                            return;
+                        break;
+                    }
                 case StatusTask.Done when previousStatus != StatusTask.IsProgress:
-                {
-                    base.Exceptions.Add("Status \"Done\" can only be toggled from status \"In Progress\".");
-                    if (base.IsAbort)
-                        return;
-                    break;
-                }
+                    {
+                        ExceptionMessages.Add("Status \"Done\" can only be toggled from status \"In Progress\".");
+                        if (IsAbort)
+                            return;
+                        break;
+                    }
             }
 
-            base.Validate(command);
+            base.Validate();
         }
     }
 }

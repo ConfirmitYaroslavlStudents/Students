@@ -1,1 +1,1 @@
-{"1":{"Id":1,"Text":"wash dishes","IsDone":false,"Tags":["home","important"]},"2":{"Id":2,"Text":"clean the room","IsDone":false,"Tags":["home","today"]},"3":{"Id":3,"Text":"some task","IsDone":false,"Tags":["important"]}}
+{"1":{"Id":1,"Text":"wash dishes","IsDone":false,"Tags":["home","important"]},"2":{"Id":2,"Text":"clean the room","IsDone":false,"Tags":["home","today"]},"3":{"Id":3,"Text":"some task","IsDone":false,"Tags":["important"]},"4":{"Id":4,"Text":"new task","IsDone":false,"Tags":["home"]}}

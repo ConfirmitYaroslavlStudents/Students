@@ -21,13 +21,13 @@ class ToDoTask extends React.Component{
       <tr>
         <td align='right'>{this.props.id}</td>
         <td>
-          <input type='text' onChange={this.changeTaskText} value={this.state.text}></input>
+          <input title="text" type='text' onChange={this.changeTaskText} value={this.state.text}></input>
         </td>
         <td>
-          <input type='checkbox' onChange={this.changeTaskStatus} checked={this.state.status}></input>
+          <input title="status"  type='checkbox' onChange={this.changeTaskStatus} checked={this.state.status}></input>
         </td>
         <td>
-          <input type='text' onChange={this.changeTaskTags} value={this.state.tags}></input>
+          <input title="tags" type='text' onChange={this.changeTaskTags} value={this.state.tags}></input>
         </td>
         <td>
           <button onClick={this.editTask}>Save changes</button>
@@ -52,7 +52,7 @@ class ToDoTask extends React.Component{
   }
 
   deleteTask = async () => {
-	  let urlWithTaskId = this.getUrlWithTaskId();
+	  const urlWithTaskId = this.getUrlWithTaskId();
 	  await this.sendDeleteRequest(urlWithTaskId);
     this.setState({isDeleted:true});
   }
@@ -68,8 +68,8 @@ class ToDoTask extends React.Component{
   }
 
   editTask = async () => {
-    let urlWithTaskId = this.getUrlWithTaskId();
-	  let taskBody = this.getTaskBodyForEdit();
+    const urlWithTaskId = this.getUrlWithTaskId();
+	  const taskBody = this.getTaskBodyForEdit();
 	  await this.sendPatchRequest(urlWithTaskId, taskBody);
   }
 

@@ -23,9 +23,10 @@ class ToDoList extends React.Component{
     }
   
     updateToDoList = async() => {
-      this.setState({ toDoList: await this.getToDoList() });
+      const toDoList=await this.getToDoList();
+      this.setState({ toDoList: toDoList });
     }
-  
+
     getToDoList = async() => {
       let response = await fetch(url);
       let toDoList = await response.json();
@@ -49,12 +50,13 @@ class ToDoList extends React.Component{
         <div style={{background:'#e0ffff'}}>
           <h4>Enter tags: </h4>
           <table>
+            <tbody>
             <tr>
               <td>
-                <input type="text" onChange={this.changeTagsForSearch} value={this.state.tagsForSearch} />
+                <input type="text" title="tagsForSearch" onChange={this.changeTagsForSearch} value={this.state.tagsForSearch} />
               </td>
               <td>
-                <select onChange={this.changeSearchCondition}>
+                <select title="searchCondition" onChange={this.changeSearchCondition}>
                   <option>AND</option>
                   <option>OR</option>
                 </select>
@@ -63,6 +65,7 @@ class ToDoList extends React.Component{
                 <input type="button" defaultValue="Search" onClick={this.getFilteredTasks}/>
               </td>
             </tr>
+            </tbody>
           </table>
         </div>
       )
@@ -78,26 +81,16 @@ class ToDoList extends React.Component{
 
     getFilteredTasks = () => {
       this.setState({filteredTasksVisible: true});
-      let toDoList=this.state.toDoList;
-      let tagsForSearch=this.state.tagsForSearch;
-      let filteredTasks;
-      if(this.state.searchCondition==="AND"){
-        filteredTasks=this.getFilteredTasksWithAnd(toDoList, tagsForSearch);
-      }
-      else{
-        filteredTasks=this.getFilteredTasksWithOr(toDoList, tagsForSearch);
-      }
+      const fn = (taskTags) => this.state.searchCondition === "AND" ? this.state.tagsForSearch.every((tag=>taskTags.includes(tag))) : this.state.tagsForSearch.some((tag=>taskTags.includes(tag)));
+      const filteredTasks = this.state.toDoList.filter(function(task) {return fn(task.tags)});
       this.setState({filteredTasks: filteredTasks});
     }
 
-    getFilteredTasksWithAnd = (toDoList, tagsForSearch) => {
-      return toDoList.filter(function(task) {return tagsForSearch.every(tag=>task.tags.includes(tag))});
+    getFilteredTasksWithOp = (toDoList, tagsForSearch,op) => {
+      const fn = (tagsForSearch,taskTags) => op === "AND" ? tagsForSearch.every((tag=>taskTags.includes(tag))) : tagsForSearch.some((tag=>taskTags.includes(tag)));
+      return toDoList.filter(function(task) {return fn(tagsForSearch,task.tags)});
     }
-
-    getFilteredTasksWithOr = (toDoList, tagsForSearch) => {
-      return toDoList.filter(function(task) {return tagsForSearch.some(tag=>task.tags.includes(tag))});
-    }
-
+    
     renderFilteredTasksTable = () => {
       if(!this.state.filteredTasksVisible) {
         return null;
@@ -120,7 +113,7 @@ class ToDoList extends React.Component{
               </thead>
               <tbody>
                 {this.state.filteredTasks.map(task => 
-                  <tr>
+                  <tr key={task.id}>
                     <td>
                       <label>{task.id}</label>
                     </td>
@@ -128,7 +121,7 @@ class ToDoList extends React.Component{
                       <label>{task.text}</label>
                     </td>
                     <td>
-                      <input type='checkbox' checked={task.isDone}></input>
+                      <input title="status" type='checkbox' checked={task.isDone} readOnly={true}></input>
                     </td>
                     <td>
                       <label>{task.tags.join()}</label>
@@ -141,26 +134,28 @@ class ToDoList extends React.Component{
         </div>
       );
     }
-  
+
     renderAddTaskTable = () => {
       return(
         <div style={{background:'#e6e6fa'}}>
           <h4>Enter a new task: </h4>
           <table>
+            <tbody>
             <tr>
               <td>
-                <input type="text" onChange={this.changeTaskText} value={this.state.newTaskText} />
+                <input title="newTaskText" type="text" onChange={this.changeTaskText} value={this.state.newTaskText} />
               </td>
               <td>
-                <input type="checkbox" onChange={this.changeTaskStatus} checked={this.state.newTaskStatus}/>
+                <input title="newTaskStatus" type="checkbox" onChange={this.changeTaskStatus} checked={this.state.newTaskStatus}/>
               </td>
               <td>
-                <input type="text" onChange={this.changeTaskTags} value={this.state.newTaskTags} />
+                <input title="newTaskTags" type="text" onChange={this.changeTaskTags} value={this.state.newTaskTags} />
               </td>
               <td>
                 <input type="button" defaultValue="Add task" onClick={this.addTask}/>
               </td>
             </tr>
+            </tbody>
           </table>
         </div>
       )
@@ -179,17 +174,14 @@ class ToDoList extends React.Component{
     }
     
     addTask = async() => {
-      let taskBody = this.getTaskBodyForAdd();
+      const taskBody = this.getTaskBodyForAdd();
       await this.sendPostRequest(taskBody);
       this.clearAddFields();
       await this.updateToDoList();
     }
   
     getTaskBodyForAdd = () => {
-      let taskText = this.state.newTaskText;
-      let taskStatus = this.state.newTaskStatus;
-      let taskTags=this.state.newTaskTags;
-      return { text: taskText, isDone: taskStatus, tags: taskTags };
+      return { text: this.state.newTaskText, isDone: this.state.newTaskStatus, tags: this.state.newTaskTags };
     }
   
     sendPostRequest = async taskBody => {
@@ -228,7 +220,7 @@ class ToDoList extends React.Component{
                 </tr>
               </thead>
               <tbody>
-                {this.state.toDoList.map(task => <ToDoTask id={task.id} text={task.text} status={task.isDone} tags={task.tags}></ToDoTask>)}
+                {this.state.toDoList.map(task => <ToDoTask key={task.id} id={task.id} text={task.text} status={task.isDone} tags={task.tags}></ToDoTask>)}
               </tbody>
             </table>
           </font>

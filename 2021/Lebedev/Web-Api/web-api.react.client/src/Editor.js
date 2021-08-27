@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendPatchReqest, getToDoItemUpdate } from './FetchSendernder';
+import { sendPatchReqest, getToDoItemUpdate } from './FetchSender';
 
 class Editor extends React.Component {
     item;

@@ -4,14 +4,17 @@ class Filter extends React.Component {
     newTag;
     tags;
     list;
+    type;
 
     constructor(props) {
         super(props);
         this.list = props.connector;
         this.tags = [];
         this.newTag = "";
+        this.type = "and";
         this.newTagChanged = this.newTagChanged.bind(this);
         this.addTag = this.addTag.bind(this);
+        this.switchTypeOfFilter = this.switchTypeOfFilter.bind(this);
     }
 
     newTagChanged(e) {
@@ -24,7 +27,8 @@ class Filter extends React.Component {
             this.tags.push(this.newTag);
             this.list.setState({
                 prevState: this.list.state,
-                filter: this.tags
+                filter: this.tags,
+                filterType: this.type
             });
         }
     }
@@ -35,17 +39,34 @@ class Filter extends React.Component {
             this.tags.splice(i, 1);
             this.list.setState({
                 prevState: this.list.state,
-                filter: this.tags
+                filter: this.tags,
+                filterType: this.type
             });
         }
+    }
+
+    switchTypeOfFilter(e) {
+        if (e.target.value === "and") {
+            this.type = "or";
+            e.target.value = "or";
+        }
+        else {
+            this.type = "and";
+            e.target.value = "and";
+        }
+        this.list.setState({
+            prevState: this.list.state,
+            filter: this.tags,
+            filterType: this.type
+        });
     }
 
     render() {
         return (
             <div>
                 <h3>Filter</h3>
-                <input type="text" value={this.newTag} onChange={this.newTagChanged} placeholder="New Tag" id="TagName"></input>
-                <input type="button" value="Add" onClick={this.addTag} id="SaveEditButton"></input>
+                <input type="text" value={this.newTag} onChange={this.newTagChanged} placeholder="New Tag" id="TagName" />
+                <input type="button" value="Add" onClick={this.addTag} id="SaveEditButton" />
                 <table>
                     <tbody>
                         {
@@ -55,12 +76,13 @@ class Filter extends React.Component {
                                     {tag}
                                 </td>
                                 <td>
-                                    <input type="button" value="X" onClick={() => this.deleteTag(tag)}></input>
+                                    <input type="button" value="X" onClick={() => this.deleteTag(tag)} />
                                 </td>
                             </tr>))
                         }
                     </tbody>
                 </table>
+                <input type="button" value={this.type} onClick={this.switchTypeOfFilter} />
             </div>);
 
     }

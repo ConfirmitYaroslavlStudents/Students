@@ -52,12 +52,20 @@ class ToDoList extends React.Component {
           </thead>
           <tbody>{
             this.state.items.map((item) => {
-              let flag = true;
-              this.state.filter.forEach((tag) => {
-                if (!(item.tag.indexOf(tag) >= 0))
-                  flag = false;
-              });
-              if (flag)
+              let flag;
+              if (this.state.filter.length === 0)
+                flag = true;
+              else
+                this.state.filter.forEach((tag) => {
+                  if (item.tag.indexOf(tag) >= 0 && flag !== false)
+                    flag = true;
+                  else {
+                    if (this.state.filterType === "and") {
+                      flag = false;
+                    }
+                  }
+                });
+              if (flag === true)
                 return (
                   <ToDoItem toDoItem={item} editorNew={this.state.editor} key={`${item.id}_${item.name}`} />)
             })

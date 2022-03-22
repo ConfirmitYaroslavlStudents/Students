@@ -20,7 +20,7 @@
     "confirmit-react-components": "file:../../confirmitPackages/confirmit-react-components.tgz",
     "confirmit-react-utils": "file:../../confirmitPackages/confirmit-react-utils.tgz",
     "confirmit-themes": "file:../../confirmitPackages/confirmit-themes.tgz",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "path": "^0.12.7",
     "popper.js": "^1.12.9",
     "prop-types": "^15.6.2",

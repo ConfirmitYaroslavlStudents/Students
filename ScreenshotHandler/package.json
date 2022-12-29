@@ -10,6 +10,6 @@
   "dependencies": {
     "path": "^0.12.7",
     "resemblejs": "^2.10.3",
-    "testcafe": "^0.20.4"
+    "testcafe": "^2.2.0"
   }
 }

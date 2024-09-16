@@ -1,0 +1,38 @@
+﻿@model List<Position>
+
+<p>
+    <a asp-controller="Bills" asp-action="ViewBill" class="btn btn btn-primary" asp-route-billId="@ViewData["billId"]">Back to Bill</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var position in Model)
+        {
+        <tr>
+            @await Html.PartialAsync("PositionInfoPartial", position, ViewData)
+            @await Html.PartialAsync("PositionActionsPartial", position, ViewData)
+        </tr>
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("CreatePartial", new Position(), ViewData)
+
+@Html.ActionLink("Pick your positions", "PickPositions", new
+{
+    billId = ViewData["billId"]
+}, new {@class = "btn btn-primary"})

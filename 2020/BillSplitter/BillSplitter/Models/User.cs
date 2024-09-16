@@ -1,8 +1,11 @@
-﻿namespace BillSplitter.Models
+﻿using System.Collections.Generic;
+
+namespace BillSplitter.Models
 {
     public class User
     {
         public  int Id { get; set; }
+        public virtual List<Bill> Bills { get; set; }
         public string Name { get; set; }
     }
 }

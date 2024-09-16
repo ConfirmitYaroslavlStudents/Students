@@ -13,14 +13,14 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new UsersDbAccessor(db);
+            var accessor = new UserRepository(db);
 
             var user = new User()
             {
                 Id = 1
             };
 
-            accessor.AddUser(user);
+            accessor.Add(user);
 
             Assert.True(db.Users.Contains(user));
         }
@@ -30,7 +30,7 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new UsersDbAccessor(db);
+            var accessor = new UserRepository(db);
 
             var user = new User()
             {
@@ -40,7 +40,7 @@ namespace BillSplitterTests
             db.Add(user);
             db.SaveChanges();
 
-            var actual = accessor.GetUserByName("name");
+            var actual = accessor.GetByName("name");
 
             Assert.Equal(user, actual);
         }
@@ -50,7 +50,7 @@ namespace BillSplitterTests
         {
             using var db = InMemoryContextBuilder.Build();
 
-            var accessor = new UsersDbAccessor(db);
+            var accessor = new UserRepository(db);
 
             var user = new User()
             {
@@ -60,7 +60,7 @@ namespace BillSplitterTests
             db.Add(user);
             db.SaveChanges();
 
-            var actual = accessor.GetUserByName("a");
+            var actual = accessor.GetByName("a");
 
             Assert.Null(actual);
         }

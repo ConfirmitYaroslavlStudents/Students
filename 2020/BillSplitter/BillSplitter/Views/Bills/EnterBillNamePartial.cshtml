@@ -1,0 +1,10 @@
+﻿@model Bill
+
+<form asp-action="Create" id="billNameForm">
+    @Html.TextBoxFor(model => model.Name, 
+        new
+        {
+            @class = "form-control"
+        })
+</form>
+

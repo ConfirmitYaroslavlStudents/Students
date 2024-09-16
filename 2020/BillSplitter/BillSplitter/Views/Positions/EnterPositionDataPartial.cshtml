@@ -1,0 +1,14 @@
+﻿@model Position
+
+<label>
+    Name
+    @Html.TextBoxFor(model => model.Name, new { @class= "form-control" } )
+</label>
+<label>
+    Price
+    @Html.TextBoxFor(model => model.Price, new { @class = "form-control" })
+</label>
+<label>
+    Quantity
+    @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control" })
+</label>

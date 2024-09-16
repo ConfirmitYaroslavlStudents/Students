@@ -1,0 +1,35 @@
+﻿@model BillSplitter.Models.ViewModels.PickPositions.PositionViewModel
+
+<td>
+    <input type="checkbox" checked="@Model.Selected" id="@Model.Id" onclick="positionChecked(@Model.Id)">
+</td>
+<td>
+
+    <input type="text" value="@Model.UserQuantity" style="visibility: @(Model.UserQuantity == null ? "hidden" : "visible") " id="quantity_@Model.Id" readonly>
+
+    <button type="button" class="btn btn-primary" onclick="selectValue(@Model.Id)">
+        Select Value
+    </button>
+</td>
+
+<td>
+    @Model.Name
+</td>
+<td>
+    @Model.Price
+</td>
+<td>
+    @Model.Quantity
+</td>
+<td>
+    <ul class="list-group list-group-horizontal">
+        @for (int i = 0; i < Model.CustomerNames.Count && i < 3; i++)
+        {
+            <li class="list-group-item">@Model.CustomerNames[i]</li>
+        }
+        @if (Model.CustomerNames.Count > 3)
+        {
+            <li class="list-group-item">+@(Model.CustomerNames.Count - 3)</li>
+        }
+    </ul>
+</td>

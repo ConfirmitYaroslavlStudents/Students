@@ -1,6 +1,7 @@
 ﻿using BillSplitter.Models;
 using System.Collections.Generic;
 using System.Linq;
+using BillSplitter.Calculators;
 
 namespace BillSplitter.Data
 {
@@ -8,12 +9,13 @@ namespace BillSplitter.Data
     {
         public List<Position> Build(Customer customer)
         {
-            return customer
-                .Orders
-                .Select(order => new Position
+            var orders = customer.Orders;
+
+            return orders.Select(order => new Position()
                 {
-                    Name = order.Position.Name, 
-                    Price = order.Position.Price * (decimal)order.Quantity
+                    Price = new OrderPriceCalculator().CalculatePrice(order),
+                    Id = order.Position.Id,
+                    Name = order.Position.Name
                 })
                 .ToList();
         }

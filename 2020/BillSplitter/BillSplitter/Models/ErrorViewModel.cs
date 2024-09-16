@@ -1,5 +1,3 @@
-using System;
-
 namespace BillSplitter.Models
 {
     public class ErrorViewModel

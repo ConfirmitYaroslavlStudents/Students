@@ -8,6 +8,7 @@ namespace BillSplitter.Models
         public int UserId { get; set; }
         public string Name { get; set; }
         public int BillId { get; set; }
-        public virtual List<Order> Orders { get; set; }
+        public virtual Bill Bill { get; set; }
+        public virtual List<Order> Orders { get; set; } = new List<Order>();
     }
 }

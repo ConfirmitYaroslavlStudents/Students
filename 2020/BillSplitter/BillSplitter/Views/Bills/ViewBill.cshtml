@@ -1,0 +1,87 @@
+﻿@model BillSplitter.Models.ViewModels.ViewBill.BillViewModel
+
+<style>
+    .selected {
+        background: lightgreen
+    }
+
+    .notSelected {
+        background: lightsalmon
+    }
+</style>
+
+@if (Model.HasManageAccess)
+{
+    <p>This bill has</p>
+    <ul>
+        <li>
+            @Model.Bill.Positions.Count position(s)
+        </li>
+        <li>
+            @Model.Bill.Customers.Count customer(s)
+        </li>
+    </ul>
+}
+
+<h1> @Model.Bill.Name  </h1>
+
+<h1>Your orders:</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Your price
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pos in Model.Positions)
+        {
+            var classType = pos.Selected ? "selected" : "notSelected";
+            <tr class="@classType">
+                <td>
+                    @pos.Name
+                </td>
+                <td>
+                    @pos.OriginalPrice
+                </td>
+                <td>
+                    @pos.Quantity
+                </td>
+                <td>
+                    @pos.ActualPrice
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>
+    Your sum is @Model.CustomerSum
+</h2>
+
+@Html.ActionLink("Pick positions", "PickPositions", "Positions", new
+{
+    billId = Model.Bill.Id
+}, new { @class = "btn btn-primary" })
+@if (Model.HasManageAccess)
+{
+    @Html.ActionLink("Manage customers", "Index", "Customers", new
+    {
+        billId = Model.Bill.Id
+    }, new { @class = "btn btn-primary" })
+    @:
+    @Html.ActionLink("Manage positions", "ManagePositions", "Positions", new
+    {
+        billId = Model.Bill.Id,
+    }, new { @class = "btn btn-primary" })
+}

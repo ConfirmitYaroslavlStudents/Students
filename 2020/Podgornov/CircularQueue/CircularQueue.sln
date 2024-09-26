@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularQueue", "CircularQu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularQueueTests", "CircularQueueTests\CircularQueueTests.csproj", "{DE2A9183-2493-4107-94E9-23D625E09AD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckExceptionLoggersProject", "CheckExceptionLoggersProject\CheckExceptionLoggersProject.csproj", "{B09C198D-1EBD-4408-9B38-5A1A7C2651F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE2A9183-2493-4107-94E9-23D625E09AD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B09C198D-1EBD-4408-9B38-5A1A7C2651F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B09C198D-1EBD-4408-9B38-5A1A7C2651F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B09C198D-1EBD-4408-9B38-5A1A7C2651F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B09C198D-1EBD-4408-9B38-5A1A7C2651F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

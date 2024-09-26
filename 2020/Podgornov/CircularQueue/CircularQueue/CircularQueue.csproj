@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CircularQueue.cs" />
+    <Compile Include="CircularQueueExceptionConsoleLogger.cs" />
+    <Compile Include="CircularQueueExceptionFileLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
